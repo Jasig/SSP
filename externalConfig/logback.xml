@@ -1,0 +1,73 @@
+<!-- 
+     Add debug="true" to configuration element to debug logback configuration.
+     
+     Adding scan="true" to configuration element allows logback to automatically 
+     update itself from this config file without restarting the app. 
+-->
+
+<configuration debug="false" scan="true">
+
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>DEV - %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+    
+	<appender name="rollingFileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.home}/logs/ssp.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${catalina.home}/logs/ssp.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<append>true</append>
+		<encoder>
+			<pattern>DEV - %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+    
+    
+    <!-- ************************************************************************ -->
+    <!-- ************************************************************************ -->
+    <!-- Be sure to set the username, password, to, from, and subject fields      -->
+    <!-- ************************************************************************ -->
+    <!-- ************************************************************************ -->
+	<appender name="smtpAppender" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>smtp.gmail.com</smtpHost>
+        <smtpPort>587</smtpPort>
+        <STARTTLS>true</STARTTLS>
+        <username>shawn.gormley@sinclair.edu</username>
+        <password></password>
+		
+		<to>shawn.gormley@sinclair.edu</to>
+		<from>shawn.gormley@sinclair.edu</from>
+		<subject>SSP Exception at shawn DEV: %logger{20} - %m</subject>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>DEV - %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </layout>
+	</appender>
+
+
+	<logger name="edu.sinclair.ssp" level="info" />
+	<logger name="org.springframework.core" level="info" />
+	<logger name="org.springframework.beans" level="info" />
+	<logger name="org.springframework.context" level="info" />
+	<logger name="org.springframework.web" level="info" />
+	<logger name="org.springframework.orm" level="info" />
+	<logger name="org.springframework.security" level="info" />
+
+
+	<root level="info">
+        <!-- It might be prudent to turn the consoleAppender off in prod, as it is already being logged in the rolling File Appender -->
+		<appender-ref ref="consoleAppender" />
+		
+		<!-- Likewise from above, it would be fine to turn off the rolling File appender and the smtpAppender in DEV -->
+		<!-- appender-ref ref="rollingFileAppender" /> 
+		<appender-ref ref="smtpAppender"/ -->
+	</root>
+
+</configuration>

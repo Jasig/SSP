@@ -1,0 +1,29 @@
+dn: cn=student0,dc=springframework,dc=org
+objectClass: uidObject
+objectClass: person
+objectClass: top
+objectClass: organizationalPerson
+uid: student0
+userPassword: student0
+cn: student
+sn: jones
+
+dn: cn=student1,dc=springframework,dc=org
+objectClass: uidObject
+objectClass: person
+objectClass: top
+objectClass: organizationalPerson
+uid: student1
+userPassword: student1
+cn: student
+sn: jones
+
+dn: cn=advisor1,dc=springframework,dc=org
+objectClass: uidObject
+objectClass: person
+objectClass: top
+objectClass: organizationalPerson
+uid: advisor1
+userPassword: advisor1
+cn: advisor
+sn: jones

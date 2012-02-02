@@ -1,0 +1,41 @@
+package edu.sinclair.ssp.security;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.transaction.annotation.Transactional;
+
+import edu.sinclair.ssp.security.exception.*;
+
+@Transactional(readOnly = true)
+public class SspUserDetailsService implements UserDetailsService { 
+
+	private Logger logger = LoggerFactory.getLogger(SspUserDetailsService.class);
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UserNotAuthorizedException, EmailNotFoundException {
+
+		logger.debug("BEGIN : loadUserByUsername()");
+		
+		SspUser sspUser = null;
+
+		if (sspUser == null) {
+			logger.error("Unable to load user's record for: {}", username);
+			throw new UserNotAuthorizedException("Unable to load user's record, support has been notified.");
+		} else if (!sspUser.isEnabled()) {
+			logger.error("User is disabled: {}", username);
+			throw new UserNotEnabledException("User is disabled.");
+		} else if (sspUser.getEmailAddress() == null) {
+			logger.error("User {} has no email address", username);
+			throw new EmailNotFoundException("User does not have an assigned email address, support has been notified.");
+		}
+		
+		logger.debug("User: {}", sspUser.toString());
+		
+		logger.debug("END : loadUserByUsername()");
+		
+		return sspUser;
+	}
+
+}

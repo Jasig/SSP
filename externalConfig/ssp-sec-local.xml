@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+        xmlns:beans="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+        <authentication-manager>
+                <authentication-provider ref="localLdapAuthenticationProvider" />
+        </authentication-manager>
+
+        <ldap-server root="dc=springframework,dc=org" ldif="file:/usr/local/etc/ssp/users.ldif"/>
+
+        <beans:bean id="localSpringSecurityContextSource" class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+                <beans:constructor-arg value="ldap://127.0.0.1:33389/dc=springframework,dc=org" />
+        </beans:bean>
+                                        
+        <beans:bean id="localLdapAuthenticationProvider" class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+                <beans:constructor-arg>
+                        <beans:bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
+                                <beans:constructor-arg ref="localSpringSecurityContextSource" />
+                                <beans:property name="userDnPatterns">
+                                        <beans:list>
+                                                <beans:value>cn={0}</beans:value>
+                                        </beans:list>
+                                </beans:property>
+                        </beans:bean>
+                </beans:constructor-arg>
+                <beans:constructor-arg>
+                        <beans:bean class="edu.sinclair.ssp.security.SspLdapAuthoritiesPopulator">
+                                <beans:constructor-arg ref="sspUserDetailsService" />
+                        </beans:bean>
+                </beans:constructor-arg>
+                <beans:property name="userDetailsContextMapper" ref="sspUserDetailsContextMapper" />
+        </beans:bean>
+
+</beans:beans>

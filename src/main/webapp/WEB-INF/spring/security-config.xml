@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.0.xsd
+		http://www.springframework.org/schema/util	  http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<beans:import resource="file:/usr/local/etc/ssp/ssp-sec-local.xml"/>
+
+	<!-- Properties file configuration of existing beans -->
+	<util:properties id="configProperties" location="file:/usr/local/etc/ssp/ssp-config.properties"/>
+	
+	<http use-expressions="true">
+		<intercept-url pattern="/images/**" filters="none" />
+		<intercept-url pattern="/styles/**" filters="none" />
+		<intercept-url pattern="/scripts/**" filters="none" />
+		<intercept-url pattern="/login.jsp" access="isAnonymous()" />
+
+		<intercept-url pattern="/web/student/**" access="hasAnyRole('ROLE_STUDENT')" />
+		<intercept-url pattern="/web/header/**" access="hasAnyRole('ROLE_STUDENT', 'ROLE_ADVISOR','ROLE_FACULTY_ADVISOR', 'ROLE_ADMINISTRATOR')" />
+		<intercept-url pattern="/web/session/**" access="hasAnyRole('ROLE_STUDENT', 'ROLE_ADVISOR','ROLE_FACULTY_ADVISOR', 'ROLE_ADMINISTRATOR')" />
+		<intercept-url pattern="/web/**" access="hasAnyRole('ROLE_ADVISOR','ROLE_FACULTY_ADVISOR', 'ROLE_ADMINISTRATOR')" />
+		
+		
+		<form-login login-page="/login.jsp" 
+			authentication-success-handler-ref="sspAuthenticationSuccessHandler"
+			authentication-failure-url="/login.jsp?login_error=1" />
+			
+		<access-denied-handler error-page="/accessDenied.htm" />
+		
+		<session-management>
+			<concurrency-control expired-url="/login.jsp" />
+		</session-management>
+
+		<remember-me data-source-ref="sspDataSource" />
+
+		<logout logout-success-url="/login.jsp" />
+	</http>
+	
+	<global-method-security secured-annotations="enabled" />
+		
+	<beans:bean id="sspAuthenticationSuccessHandler" class="edu.sinclair.ssp.security.SspAuthenticationSuccessHandler">
+	</beans:bean>
+
+	<beans:bean id="sspUserDetailsService" class="edu.sinclair.ssp.security.SspUserDetailsService">
+		<!-- beans:property name="institutionId" value="#{configProperties.inst_id}" -->
+	</beans:bean>
+
+	<beans:bean id="sspUserDetailsContextMapper" class="edu.sinclair.ssp.security.SspUserDetailsContextMapper">
+	</beans:bean>
+	
+</beans:beans>
