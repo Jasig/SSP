@@ -17,11 +17,8 @@
 		<intercept-url pattern="/styles/**" filters="none" />
 		<intercept-url pattern="/scripts/**" filters="none" />
 		<intercept-url pattern="/login.jsp" access="isAnonymous()" />
-
-		<intercept-url pattern="/web/student/**" access="hasAnyRole('ROLE_STUDENT')" />
-		<intercept-url pattern="/web/header/**" access="hasAnyRole('ROLE_STUDENT', 'ROLE_ADVISOR','ROLE_FACULTY_ADVISOR', 'ROLE_ADMINISTRATOR')" />
-		<intercept-url pattern="/web/session/**" access="hasAnyRole('ROLE_STUDENT', 'ROLE_ADVISOR','ROLE_FACULTY_ADVISOR', 'ROLE_ADMINISTRATOR')" />
-		<intercept-url pattern="/web/**" access="hasAnyRole('ROLE_ADVISOR','ROLE_FACULTY_ADVISOR', 'ROLE_ADMINISTRATOR')" />
+		<intercept-url pattern="/web/**" access="isAnonymous()" />
+		<!-- intercept-url pattern="/web/**" access="hasAnyRole('ROLE_ADVISOR','ROLE_FACULTY_ADVISOR', 'ROLE_ADMINISTRATOR')" / -->
 		
 		
 		<form-login login-page="/login.jsp" 
