@@ -1,0 +1,24 @@
+/*	
+
+	Less+ by Jimmy Rosén, http://www.angrycreative.se/projekt/less-framework
+	Based on Less Framework 4 by Joni Korpi, http://lessframework.com
+	
+*/
+
+/*		Mobile Layout: 320px.
+		Gutters: 24px.
+		Outer margins: 34px.
+---------------------------------------------
+cols    1     2      3
+px      68    160    252    */
+
+	body {
+		width: 252px;
+		padding: 48px 34px 60px;
+	}
+
+
+#example {
+	height: 600px;
+	background: #FF0;
+}

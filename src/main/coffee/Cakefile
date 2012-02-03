@@ -1,0 +1,34 @@
+{ exec } = require 'child_process'
+
+PRODUCT  = "SSP"
+VERSION  = "4.0"
+FILENAME = "#{ PRODUCT }-#{ VERSION }"
+
+OUTPUT_PATH = "../webapp/scripts"
+
+# TODO: Remove - temporarily added until next build of coffee-script is released.
+PATH = "/Users/shawn.gormley/Documents/projects/coffee-script/bin"
+
+exec "#{ PATH }/coffee --join #{ FILENAME }.js --output #{ OUTPUT_PATH } --compile ssp", ( error, stdout, stderr ) ->
+
+task "build", "Builds #{ PRODUCT } JavaScript (and minified JavaScript) implementation from CoffeeScript source code", ->
+	console.log "Building #{ PRODUCT } version #{ VERSION }"
+	console.log "Compiling SSP/**.coffee to #{ OUTPUT_PATH }/#{ FILENAME }.js"
+	exec "coffee --join #{ FILENAME }.js --output #{ OUTPUT_PATH } --compile ssp", ( error, stdout, stderr ) ->
+		console.log stdout + stderr if stdout or stderr
+		if error
+			throw error
+		else
+			console.log "Minifying #{ OUTPUT_PATH }/#{ FILENAME }.js to #{ OUTPUT_PATH }/#{ FILENAME }.min.js"
+			exec "closure --js #{ OUTPUT_PATH }/#{ FILENAME }.js --js_output_file #{ OUTPUT_PATH }/#{ FILENAME }.min.js", ( error, stdout, stderr ) ->
+				console.log stdout + stderr if stdout or stderr
+				throw error if error
+
+task "build-document-scripts", "Builds #{ PRODUCT } document script JavaScript implementation(s) from CoffeeScript source code", ->
+	console.log "Building #{ PRODUCT } document scripts"
+	console.log "Compiling *.coffee to #{ OUTPUT_PATH }/*.js"
+	exec "#{ PATH }/coffee --output #{ OUTPUT_PATH } --compile *.coffee", ( error, stdout, stderr ) ->
+		console.log stdout + stderr if stdout or stderr
+		if error
+			throw error
+		# TODO: minify

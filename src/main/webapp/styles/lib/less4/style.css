@@ -1,0 +1,25 @@
+/*	
+
+	Less+ by Jimmy Rosén, http://www.angrycreative.se/projekt/less-framework
+	Based on Less Framework 4 by Joni Korpi, http://lessframework.com
+	
+*/
+
+/*  
+	THIS DOCUMENT IS FOR GLOBAL DEFINITIONS ONLY.
+	NO HEIGHTS, WIDTHS, PADDINGS OR MARGINS THAT WON'T BE APPLICABLE FOR ALL SCREEN RESOLUTIONS.
+*/
+
+body {
+	background: rgb(232,232,232);
+	margin: 0px auto;
+	
+	/* Prevents Mobile Safari from bumping up font sizes in landscape */
+	-webkit-text-size-adjust: 100%; 
+	-webkit-tap-highlight-color: rgb(255,255,0);
+}
+
+::selection 	 	{background: rgb(255,255,0);}
+::-moz-selection 	{background: rgb(255,255,0);}
+img::selection 		{background: transparent;}
+img::-moz-selection {background: transparent;}

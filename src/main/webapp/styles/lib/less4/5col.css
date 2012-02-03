@@ -1,0 +1,23 @@
+/*	
+
+	Less+ by Jimmy Rosén, http://www.angrycreative.se/projekt/less-framework
+	Based on Less Framework 4 by Joni Korpi, http://lessframework.com
+	
+*/
+
+/*	5-column layout
+	60 px columns, 24 px gutters, 42 px margins, 480 px total
+	---------------------------------------------------------
+	1     2      3      4      5
+	60px  144px  228px  312px  396px	*/
+
+
+	body {
+		width: 436px;
+		padding: 36px 22px 48px;
+	}
+
+#example {
+	height: 600px;
+	background: #F03;
+}

@@ -1,0 +1,31 @@
+#wrap { background-color:#ccc; }
+#header { background-color:#fff;}
+
+#topnav {
+	width: 100%;
+	float: left;
+	margin: 0 0 3em 0;
+	padding: 0;
+	list-style: none;
+	background-color: #f2f2f2;
+	border-bottom: 1px solid #ccc; 
+	border-top: 1px solid #ccc; }
+#topnav li {
+	float: left; }
+#topnav li a {
+	display: block;
+	padding: 8px 15px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #069;
+	border-right: 1px solid #ccc; }
+#topnav li a:hover {
+	color: #c00;
+	background-color: #fff; }
+
+a { color: #069; }
+
+#tools .nav { display: inline; list-style-type: none; padding-left: 10px; }
+#tools { float: left; }
+#studentintake { float: right; }
+#footer { clear: both; background-color:#fff; }

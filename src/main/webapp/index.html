@@ -1,0 +1,134 @@
+<!doctype html>
+<html xmlns:ng="http://angularjs.org/">
+<head>
+  <meta charset="utf-8">
+  <title>Student Success Plan</title>
+
+	<!-- Temporary inline styles to resemble some structure. Will be removed --> 
+ 	<link rel="stylesheet" href="/ssp/styles/app_styles.css" type="text/css" />
+
+  	<!-- Apprise Styles -->
+  	<link rel="stylesheet" href="/ssp/styles/lib/apprise.min.css" type="text/css" />
+	
+	<!-- Global Stylesheets -->
+	<link rel="stylesheet" href="/ssp/styles/lib/less4/reset.css" media="screen" />
+	<link rel="stylesheet" href="/ssp/styles/lib/less4/fonts.css" media="screen" />
+	<link rel="stylesheet" href="/ssp/styles/lib/less4/style.css" media="screen" />
+	 
+	<!-- Fallback if browser does not support media queries + javascript (Read: Internet Explorer < 9) -->
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="/ssp/styles/lib/less4/8col.css" media="screen" />
+	<![endif]-->
+	 
+	<!-- Media Queries / Less -->
+	<link rel="stylesheet" href="/ssp/styles/lib/less4/10col.css" media="only screen and (min-width: 1212px)" />
+	<link rel="stylesheet" href="/ssp/styles/lib/less4/8col.css" media="only screen and (max-width: 1211px) and (min-width: 768px)" />
+	<link rel="stylesheet" href="/ssp/styles/lib/less4/5col.css" media="only screen and (max-width: 767px) and (min-width: 480px)" />
+	<link rel="stylesheet" href="/ssp/styles/lib/less4/3col.css" media="only screen and (max-width: 479px)" />
+		 
+	<!-- Jquery -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+	<script src="/ssp/styles/lib/less4/js/jquery.mediaqueries1.19.js"></script>
+	
+	<!-- Misc Libs -->
+	<script src="/ssp/scripts/lib/angular/angular.js" ng:autobind></script>
+	<script type="text/javascript" src="/ssp/scripts/lib/apprise-1.5.min.js"></script>
+	<script type="text/javascript" src="/ssp/scripts/lib/json2.js"></script>
+	<script type="text/javascript" src="/ssp/scripts/lib/namespace.min.js"></script>
+	<script type="text/javascript" src="/ssp/scripts/SSP-4.0.js"></script>
+</head>
+<body ng:controller="ssp.controller.AppController">
+	
+	<div id="wrap">
+		
+		<div id="header">
+			<h2>Student Success Plan</h2>
+		</div>
+		
+		<div>
+			<ul id="topnav">
+				<li><a href="#">View</a></li>
+				<li><a href="#">Admin</a></li>
+				<li><a href="#">Reports</a></li>
+			</ul>
+		</div>	
+			
+		<div id="tools">
+			<ul class="nav">
+				<li><a href="#">Profile</a></li>
+				<li><a href="#" ng:click="loadStudent( '1234567' )">Student Intake</a></li>
+			</ul>
+		</div>
+	
+		<div id="studentintake">
+			<table>
+				<tbody>
+					<tr>
+						<td><label>First:</label></td>
+						<td><input type="text" value="{{student.firstName}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Middle:</label></td>
+						<td><input type="text" value="{{student.middleInitial}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Last:</label></td>
+						<td><input type="text" value="{{student.lastName}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Tartan ID:</label></td>
+						<td><input type="text" value="{{student.uniqueSchoolUserID}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Birth Date:</label></td>
+						<td><input type="text" value="{{student.birthDate}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Email (School):</label></td>
+						<td><input type="text" value="{{student.emailSchool}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Email (Home):</label></td>
+						<td><input type="text" value="{{student.emailHome}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Home Phone:</label></td>
+						<td><input type="text" value="{{student.homePhone}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Work Phone:</label></td>
+						<td><input type="text" value="{{student.workPhone}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Cell Phone:</label></td>
+						<td><input type="text" value="{{student.cellPhone}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Address:</label></td>
+						<td><input type="text" value="{{student.address}}" /></td>
+					</tr>
+					<tr>
+						<td><label>City:</label></td>
+						<td><input type="text" value="{{student.city}}" /></td>
+					</tr>
+					<tr>
+						<td><label>State:</label></td>
+						<td><input type="text" value="{{student.state}}" /></td>
+					</tr>
+					<tr>
+						<td><label>Zip Code:</label></td>
+						<td><input type="text" value="{{student.zipCode}}" /></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div id="footer">
+			<p>Copyright Sinclair Community College.</p>
+		</div>
+	</div>
+
+	<!-- <ng:view></ng:view> -->
+
+</body>
+</html>

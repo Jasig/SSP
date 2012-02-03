@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+		<!-- Meta -->
+		<title>Less test</title>
+		<meta charset="utf-8" />
+        
+        <!-- Disable phone number linking -->
+		<meta name="format-detection" content="telephone=no" />     
+        
+		<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+        
+		<!-- Global Stylesheets -->
+		<link rel="stylesheet" href="reset.css" media="all" />
+		<link rel="stylesheet" href="fonts.css" media="all" />
+		<link rel="stylesheet" href="style.css" media="all" />
+        
+		<!-- Fallback if browser does not support media queries + javascript (Read: Internet Explorer 7 - 8) -->
+		<link rel="stylesheet" href="10col.css" media="all" />
+    
+		<!-- Media Queries / LESS -->
+		<link rel="stylesheet" href="10col.css" media="only screen and (min-width: 992px)" />
+		<link rel="stylesheet" href="8col.css" media="only screen and (min-width: 768px) and (max-width: 991px)" />
+		<link rel="stylesheet" href="3col.css" media="only screen and (max-width: 767px)" />
+		<link rel="stylesheet" href="5col.css" media="only screen and (min-width: 480px) and (max-width: 767px)" />
+
+		<!-- Smartphone stuff -->
+		<meta name="viewport" content="width=device-width; initial-scale=1"/>
+		<!-- Add "maximum-scale=1.0, user-scalable=no" to fix the Mobile Safari auto-zoom bug on orientation changes, but keep in mind that it will disable user-zooming completely. Bad for accessibility. -->   
+       
+		<!-- Favicons, 16x16 -->
+		<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+		<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+        
+		<!-- Fancy Apple icons, 144x144 -->
+		<link rel="apple-touch-icon" sizes="114x114" href="assets/114-icon.png"/> 
+        
+		<!-- Fancy Apple 'fake webapp' support -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<link rel="apple-touch-startup-image" href="images/splash.png">
+                       
+		<!-- Jquery -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+        
+        <!-- Development tool: Less Grid by @RnowM, http://arnaumarch.com/en/less-grid.html -->
+        <script src="js/less-grid-4.js"></script>
+       
+		<!-- Media Queries for IE --> 
+		<script src="js/jquery.mediaqueries1.19.js"></script>
+
+	</head>
+
+	<body>
+		<div id="example"></div>
+	</body>
+	
+</html>
