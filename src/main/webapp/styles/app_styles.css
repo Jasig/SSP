@@ -25,7 +25,9 @@
 
 a { color: #069; }
 
-#tools .nav { display: inline; list-style-type: none; padding-left: 10px; }
-#tools { float: left; }
-#studentintake { float: right; }
+#tools-nav .nav { display: inline; list-style-type: none; padding-left: 10px; }
+#tools-nav { float: left; }
+#tools { float: right; padding: 20px; }
+#personal-left { float:left; }
+#personal-right { float: right; }
 #footer { clear: both; background-color:#fff; }

@@ -7,6 +7,9 @@
 	<!-- Temporary inline styles to resemble some structure. Will be removed --> 
  	<link rel="stylesheet" href="/ssp/styles/app_styles.css" type="text/css" />
 
+	<!-- JQuery-UI -->
+	<link rel="stylesheet" href="/ssp/styles/lib/jquery-ui-1.8.17.css" type="text/css" />
+
   	<!-- Apprise Styles -->
   	<link rel="stylesheet" href="/ssp/styles/lib/apprise.min.css" type="text/css" />
 	
@@ -29,6 +32,7 @@
 	<!-- Jquery -->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 	<script src="/ssp/styles/lib/less4/js/jquery.mediaqueries1.19.js"></script>
+	<script src="/ssp/scripts/lib/jquery-ui-1.8.17.min.js"></script>
 	
 	<!-- Misc Libs -->
 	<script src="/ssp/scripts/lib/angular/angular.js" ng:autobind></script>
@@ -36,11 +40,32 @@
 	<script type="text/javascript" src="/ssp/scripts/lib/json2.js"></script>
 	<script type="text/javascript" src="/ssp/scripts/lib/namespace.min.js"></script>
 	<script type="text/javascript" src="/ssp/scripts/SSP-4.0.js"></script>
+
+
+  <script>
+  		/* keep this around as an example of routing templates
+	    function MainCntl($route, $location) {
+	      this.$route = $route;
+	      this.$location = $location;
+	   
+	      $route.when('/studentintake', {template: 'partials/student-intake-personal.html', controller: ssp.controller.AppController});
+	      $route.onChange(function() {
+	        $route.current.scope.params = $route.current.params;
+	      });
+	    }
+  		*/
+  		 $(document).ready(function() {
+  		    $("#tabs").tabs();
+  		  });
+   </script>
+
+   
 </head>
 <body ng:controller="ssp.controller.AppController">
 	
+	
 	<div id="wrap">
-		
+	
 		<div id="header">
 			<h2>Student Success Plan</h2>
 		</div>
@@ -53,82 +78,106 @@
 			</ul>
 		</div>	
 			
-		<div id="tools">
+		<div id="tools-nav">
 			<ul class="nav">
 				<li><a href="#">Profile</a></li>
 				<li><a href="#" ng:click="loadStudent( '1234567' )">Student Intake</a></li>
 			</ul>
 		</div>
 	
-		<div id="studentintake">
-			<table>
-				<tbody>
-					<tr>
-						<td><label>First:</label></td>
-						<td><input type="text" value="{{student.firstName}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Middle:</label></td>
-						<td><input type="text" value="{{student.middleInitial}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Last:</label></td>
-						<td><input type="text" value="{{student.lastName}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Tartan ID:</label></td>
-						<td><input type="text" value="{{student.uniqueSchoolUserID}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Birth Date:</label></td>
-						<td><input type="text" value="{{student.birthDate}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Email (School):</label></td>
-						<td><input type="text" value="{{student.emailSchool}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Email (Home):</label></td>
-						<td><input type="text" value="{{student.emailHome}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Home Phone:</label></td>
-						<td><input type="text" value="{{student.homePhone}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Work Phone:</label></td>
-						<td><input type="text" value="{{student.workPhone}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Cell Phone:</label></td>
-						<td><input type="text" value="{{student.cellPhone}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Address:</label></td>
-						<td><input type="text" value="{{student.address}}" /></td>
-					</tr>
-					<tr>
-						<td><label>City:</label></td>
-						<td><input type="text" value="{{student.city}}" /></td>
-					</tr>
-					<tr>
-						<td><label>State:</label></td>
-						<td><input type="text" value="{{student.state}}" /></td>
-					</tr>
-					<tr>
-						<td><label>Zip Code:</label></td>
-						<td><input type="text" value="{{student.zipCode}}" /></td>
-					</tr>
-				</tbody>
-			</table>
+		<div id="tools">
+			<div id="profile">
+		    	<h3>Profile</h3>
+		    </div>
+		    
+		    <div id="tabs">
+				<ul>
+			        <li><a href="#personal">Personal</a></li>
+			        <li><a href="#demographics">Demographics</a></li>
+			        <li><a href="#educational-plan"><span>EduPlan</span></a></li>
+			    </ul>
+			    <div id="personal">
+					<div id="personal-left">
+						<table>
+							<tbody>
+								<tr>
+									<td><label>First:</label></td>
+									<td><input type="text" value="{{student.firstName}}" /></td>
+								</tr>
+								<tr>
+									<td><label>Middle:</label></td>
+									<td><input type="text" value="{{student.middleInitial}}" /></td>
+								</tr>
+								<tr>
+									<td><label>Last:</label></td>
+									<td><input type="text" value="{{student.lastName}}" /></td>
+								</tr>
+								<tr>
+									<td><label>Tartan ID:</label></td>
+									<td><input type="text" value="{{student.uniqueSchoolUserID}}" /></td>
+								</tr>
+								<tr>
+									<td><label>Birth Date:</label></td>
+									<td><input type="text" value="{{student.birthDate}}" /></td>
+								</tr>
+								<tr>
+									<td><label>Email (School):</label></td>
+									<td><input type="text" value="{{student.emailSchool}}" /></td>
+								</tr>
+								<tr>
+									<td><label>Email (Home):</label></td>
+									<td><input type="text" value="{{student.emailHome}}" /></td>
+								</tr>					
+							</tbody>
+						</table>
+					</div>
+					<div id="personal-right">
+						<table>
+							<tbody>
+								<tr>
+									<td><label>Home Phone:</label></td>
+									<td><input type="text" value="{{student.homePhone}}" /></td>
+								</tr>
+								<tr>
+									<td><label>Work Phone:</label></td>
+									<td><input type="text" value="{{student.workPhone}}" /></td>
+								</tr>
+								<tr>
+									<td><label>Cell Phone:</label></td>
+									<td><input type="text" value="{{student.cellPhone}}" /></td>
+								</tr>
+								<tr>
+									<td><label>Address:</label></td>
+									<td><input type="text" value="{{student.address}}" /></td>
+								</tr>
+								<tr>
+									<td><label>City:</label></td>
+									<td><input type="text" value="{{student.city}}" /></td>
+								</tr>
+								<tr>
+									<td><label>State:</label></td>
+									<td><input type="text" value="{{student.state}}" /></td>
+								</tr>
+								<tr>
+									<td><label>Zip Code:</label></td>
+									<td><input type="text" value="{{student.zipCode}}" /></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div id="demographics">
+					<h3>Demographics</h3>
+				</div>
+				<div id="educational-plan">
+					<h3>Educational Plan</h3>
+				</div>
+			</div>		
 		</div>
-		
+
 		<div id="footer">
 			<p>Copyright Sinclair Community College.</p>
 		</div>
 	</div>
-
-	<!-- <ng:view></ng:view> -->
-
 </body>
 </html>
