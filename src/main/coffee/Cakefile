@@ -6,15 +6,10 @@ FILENAME = "#{ PRODUCT }-#{ VERSION }"
 
 OUTPUT_PATH = "../webapp/scripts"
 
-# TODO: Remove - temporarily added until next build of coffee-script is released.
-PATH = "/Users/shawn.gormley/Documents/projects/coffee-script/bin"
-
-exec "#{ PATH }/coffee --join #{ FILENAME }.js --output #{ OUTPUT_PATH } --compile ssp", ( error, stdout, stderr ) ->
-
 task "build", "Builds #{ PRODUCT } JavaScript (and minified JavaScript) implementation from CoffeeScript source code", ->
 	console.log "Building #{ PRODUCT } version #{ VERSION }"
-	console.log "Compiling SSP/**.coffee to #{ OUTPUT_PATH }/#{ FILENAME }.js"
-	exec "coffee --join #{ FILENAME }.js --output #{ OUTPUT_PATH } --compile ssp", ( error, stdout, stderr ) ->
+	console.log "Compiling ssp/**.coffee to #{ OUTPUT_PATH }/#{ FILENAME }.js"
+	exec "coffee --join #{ FILENAME }.js --output #{ OUTPUT_PATH } --compile ssp/controller/*.coffee ssp/service/*.coffee ssp/model/*.coffee ssp/model/studentintake/*.coffee", ( error, stdout, stderr ) ->
 		console.log stdout + stderr if stdout or stderr
 		if error
 			throw error
