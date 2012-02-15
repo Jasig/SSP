@@ -1,0 +1,132 @@
+Connecting:
+[ssh]   ssh -i .ssh/SinclairBuildServer.pem ubuntu@107.21.202.155
+        	sudo -u postgres bash      (elevate priviledges)
+[sftp]   sftp -i .ssh/SinclairBuildServer.pem ubuntu@107.21.202.155
+[web]  https://107.21.202.155/jenkins/
+[db]   ssh -i .ssh/SinclairBuildServer.pem ubuntu@107.21.202.155 -L 5436:localhost:5432  (gives a command prompt and a port (5436) on your local machine to connect your preferred db client)
+
+ssh requires a key
+the db postgres, db sspadmin and the apache infinum usernames share the same password
+the db ssp user has a unique password
+
+
+
+
+
+Creating the server:
+Fire up 32Bit small ec2 instance using ami from:  https://help.ubuntu.com/community/EC2StartersGuide
+
+Connect to it 
+ssh -i SinclairBuildServer.pem ubuntu@107.21.202.155
+
+configure the timezone: 
+sudo dpkg-reconfigure tzdata
+
+get the latest packages:
+sudo apt-get update; sudo apt-get upgrade
+
+Install necessary apps:
+sudo apt-get install openjdk-6-jdk tomcat6 apache2 lynx tree unzip subversion git postgresql
+openjdk-6-jdk - jdk for performing builds
+tomcat6 - app server for java
+apache2 provide frontend for tomcat
+lynx - command line browser for testing local connections
+tree - file system viewer
+unzip - unzip .zip files
+subversion git - version control access
+postgresql - postgres server
+
+Configure apache:
+Install necessary modules
+sudo a2enmod proxy_ajp       // make apache a frontend for tomcat
+sudo a2enmod ssl             // ssl for apache
+sudo a2enmod rewrite         // using this to send all http traffic to the same location on https
+sudo a2enmod authn_dbm       // blocks access to certain web urls on this machine
+sudo a2ensite default-ssl    // enable the default ssl site
+install self-signed ssl cert  https://help.ubuntu.com/11.10/serverguide/C/certificates-and-security.html
+
+Modify http and https config files:
+sudo vi /etc/apache2/sites-enabled/000-default
+Replace contents with:
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        RewriteEngine on
+        ReWriteCond %{SERVER_PORT} !^443$
+        RewriteRule ^/(.*) https://%{HTTP_HOST}/$1 [NC,R,L]
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+sudo vi /etc/apache2/sites-enabled/default-ssl
+Add this to the virtualhost in the ssl site in apache:
+<Location /jenkins>
+        ProxyPass ajp://127.0.0.1:8009/jenkins
+        AuthName "Build Server"
+        AuthType Basic
+        AuthBasicProvider dbm
+        AuthDBMUserFile /etc/apache2/.htBuildServer
+        Require valid-user
+        SSLRequireSSL
+</Location>
+
+//Create a user access database - add the infinum user to it:
+sudo dbmmanage /etc/apache2/.htBuildServer adduser infinum
+
+//Resart Apache
+sudo service apache2 restart
+
+
+//Enable ec2-api-tools if you want them.  Though all actions should be possible through the management console
+sudo vi sources.list
+---- uncomment multiverse
+sudo apt-get update; sudo apt-get upgrade
+sudo apt-get install ec2-api-tools
+---- copy pem file to server to authorize ec2 actions
+ec2-authorize default -p 443 -K key.pem -C x509.pem
+
+Configure postgres
+Enable access by password
+sudo vi /etc/postgresql/9.1/main/pg_hba.conf
+sudo service postgresql restart
+Change password of the postgresql user
+Connect with pgadmin, create the ssp, sspadmin users and the ssp database
+
+Install jenkins:
+Create the work directory for Jenkins
+sudo mkdir /var/local/jenkins
+sudo chown -R tomcat6 /var/local/jenkins
+Add following lines to /usr/share/tomcat6/bin/catalina.sh
+  JENKINS_HOME=/var/local/jenkins
+  export JENKINS_HOME
+
+Get the latest Jenkins
+cd ~
+wget http://mirrors.jenkins-ci.org/war/latest/jenkins.war
+sudo cp jenkins.war /var/lib/tomcat6/webapps/
+uncomment ajp connector in /etc/tomcat5/server.xml
+
+Add a local maven repository for the tomcat user to use
+sudo mkdir /var/local/m2
+sudo chown -R tomcat6 /var/local/m2
+sudo ln -s /var/local/m2 /usr/share/tomcat6/.m2
+
+Configure Jenkins
+add plugins
+add maven instance to jenkins (let jenkins install it)
+Add subversion credentials to jenkins
+
+//Create local config files
+sudo mkdir /usr/local/etc/ssp
+sftp config files for ssp into /usr/local/etc/ssp
+sudo chown -R tomcat6 /usr/local/etc/ssp
+sudo chmod 700 /usr/local/etc/ssp
+
+//create some symlinks for ease of use
+cd ~
+mkdir tomcat6
+ln -s /etc/tomcat6 tomcat6/etc
+ln -s /usr/share/tomcat6 tomcat6/usr
+ln -s /var/lib/tomcat6 tomcat6/var
