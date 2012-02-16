@@ -1,0 +1,78 @@
+<class-diagram version="1.0.7" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.web.api.reference.VeteranStatusController" 
+    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/web/api/reference/VeteranStatusController.java" 
+    binary="false">    
+    <position height="65" width="162" x="183" y="98"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.web.api.reference.EthnicityController" 
+    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/web/api/reference/EthnicityController.java" binary="false">    
+    <position height="129" width="169" x="385" y="98"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.web.api.reference.FundingSourceController" 
+    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/web/api/reference/FundingSourceController.java" 
+    binary="false">    
+    <position height="129" width="203" x="594" y="98"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.web.api.reference.ChallengeController" 
+    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/web/api/reference/ChallengeController.java" binary="false">    
+    <position height="129" width="178" x="837" y="98"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.transferobject.EthnicityTO" 
+    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/transferobject/EthnicityTO.java" binary="false">    
+    <position height="-1" width="-1" x="466" y="399"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.transferobject.FundingSourceTO" 
+    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/transferobject/FundingSourceTO.java" binary="false">    
+    <position height="-1" width="-1" x="690" y="423"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.transferobject.ChallengeTO" 
+    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/transferobject/ChallengeTO.java" binary="false">    
+    <position height="-1" width="-1" x="927" y="423"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <dependency id="8">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="9">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

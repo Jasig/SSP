@@ -1,4 +1,3 @@
-
 Proposed classes diagrammed with Umlet:
 http://www.umlet.com
 File Extension:  uxf
