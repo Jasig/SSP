@@ -17,9 +17,13 @@ public class ExampleController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ExampleController.class);
 	
-
+	@RequestMapping(method = RequestMethod.GET)
+	public @ResponseBody Map<String, String> defaultMethod() throws Exception {
+		return get();
+	}
+	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody Map<String, String> getForm() throws Exception {
+	public @ResponseBody Map<String, String> get() throws Exception {
 		logger.info("get called");
 		
 		Map<String,String> val = new HashMap<String,String>();

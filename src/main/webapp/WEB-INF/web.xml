@@ -38,7 +38,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
-    <url-pattern>/web/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>login.jsp</welcome-file>

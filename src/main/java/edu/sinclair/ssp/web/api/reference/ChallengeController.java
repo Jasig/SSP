@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import edu.sinclair.ssp.model.transferobject.ChallengeTO;
 
 @Controller
-@RequestMapping("/api/reference/challenge")
+@RequestMapping("/reference/challenge")
 public class ChallengeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ChallengeController.class);

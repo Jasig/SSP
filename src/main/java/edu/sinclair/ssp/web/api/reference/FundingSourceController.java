@@ -17,7 +17,7 @@ import edu.sinclair.ssp.model.transferobject.ChallengeTO;
 import edu.sinclair.ssp.model.transferobject.FundingSourceTO;
 
 @Controller
-@RequestMapping("/api/reference/fundingSource")
+@RequestMapping("/reference/fundingSource")
 public class FundingSourceController {
 
 	private static final Logger logger = LoggerFactory.getLogger(FundingSourceController.class);
