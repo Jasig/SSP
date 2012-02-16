@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>70</x>
+      <y>60</y>
+      <w>170</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>MySimple Class
+--
+property
+--
+method1
+method2</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
