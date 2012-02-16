@@ -12,7 +12,6 @@ public class SspUser extends User {
 			boolean accountNonLocked, Collection<GrantedAuthority> authorities) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired,
 				accountNonLocked, authorities);
-		// TODO Auto-generated constructor stub
 	}
 
 	private static final long serialVersionUID = -8125829986440987725L;

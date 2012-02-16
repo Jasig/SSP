@@ -1,12 +1,20 @@
 package edu.sinclair.ssp.security;
 
+import java.util.Collection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.security.exception.*;
+import com.google.common.collect.Lists;
+
+import edu.sinclair.ssp.security.exception.EmailNotFoundException;
+import edu.sinclair.ssp.security.exception.UserNotAuthorizedException;
+import edu.sinclair.ssp.security.exception.UserNotEnabledException;
 
 @Transactional(readOnly = true)
 public class SspUserDetailsService implements UserDetailsService { 
@@ -18,7 +26,11 @@ public class SspUserDetailsService implements UserDetailsService {
 
 		logger.debug("BEGIN : loadUserByUsername()");
 		
-		SspUser sspUser = null;
+		Collection<GrantedAuthority> authorities = Lists.newArrayList();
+		authorities.add(new GrantedAuthorityImpl("ROLE_USER"));
+		
+		SspUser sspUser = new SspUser(username, "password", true, true, true, true, authorities);
+		sspUser.setEmailAddress("test.user@infinum.com");
 
 		if (sspUser == null) {
 			logger.error("Unable to load user's record for: {}", username);
