@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.web;
+package edu.sinclair.ssp.web.api.reference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import edu.sinclair.ssp.model.transferobject.EthnicityTO;
 
 @Controller
-@RequestMapping("/api/ethnicity")
+@RequestMapping("/api/reference/ethnicity")
 public class EthnicityController {
 
 	private static final Logger logger = LoggerFactory.getLogger(EthnicityController.class);
@@ -34,7 +34,7 @@ public class EthnicityController {
 	}
 	
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-	public @ResponseBody EthnicityTO getAll(@PathVariable String id) throws Exception {
+	public @ResponseBody EthnicityTO get(@PathVariable String id) throws Exception {
 		return new EthnicityTO(UUID.randomUUID().toString(), "Caucasian");
 	}
 	

@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.web;
+package edu.sinclair.ssp.web.api.reference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import edu.sinclair.ssp.model.transferobject.ChallengeTO;
 import edu.sinclair.ssp.model.transferobject.FundingSourceTO;
 
 @Controller
-@RequestMapping("/api/fundingsource")
+@RequestMapping("/api/reference/fundingSource")
 public class FundingSourceController {
 
 	private static final Logger logger = LoggerFactory.getLogger(FundingSourceController.class);
