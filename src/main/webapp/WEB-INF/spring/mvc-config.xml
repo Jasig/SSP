@@ -44,7 +44,7 @@
 	    <property name="basename" value="views"/>
 	</bean>
 
-	<bean id="webProperties" class="edu.sinclair.ssp.web.WebProperties" factory-method="getInstance"></bean>
+	<bean id="webProperties" class="edu.sinclair.ssp.config.WebProperties" factory-method="getInstance"></bean>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
