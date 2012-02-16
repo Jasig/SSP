@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.config;
+package edu.sinclair.ssp.config.logging;
 
 import java.io.File;
 import java.io.IOException;

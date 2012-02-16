@@ -1,14 +1,15 @@
-package edu.sinclair.ssp.config;
+package edu.sinclair.ssp.config.logging;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
 
 /**
  * Simple utility listener to load certain properties before Spring Starts up.
  * 
  * Add this entry to your web.xml:
  * <pre><listener>
-    <listener-class>edu.sinclair.ssp.config.ExternalConfigLoaderContextListener</listener-class>
+    <listener-class>edu.sinclair.ssp.config.logging.ExternalConfigLoaderContextListener</listener-class>
   </listener></pre>
  * 
  * @author daniel
