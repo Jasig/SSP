@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +44,12 @@ public class EthnicityController implements ReferenceController<EthnicityTO>{
 	
 	@Override
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody EthnicityTO save(@Valid EthnicityTO ethnicity) throws Exception {
+	public @ResponseBody EthnicityTO save(@Valid EthnicityTO ethnicity, BindingResult result) throws Exception {
+		if(result.hasErrors()){
+			logger.debug("There were " + result.getErrorCount() + " errors.");
+			return null;
+		}
+		
 		return ethnicity;
 	}
 	

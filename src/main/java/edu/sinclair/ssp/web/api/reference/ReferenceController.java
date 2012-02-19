@@ -3,6 +3,8 @@ package edu.sinclair.ssp.web.api.reference;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.validation.BindingResult;
+
 /**
  * All the Methods a Reference Controller needs to be useful.
  * @author daniel
@@ -15,7 +17,7 @@ public interface ReferenceController<T> {
 	
 	public T get(UUID id) throws Exception;
 	
-	public T save(T obj) throws Exception;
+	public T save(T obj, BindingResult result) throws Exception;
 	
 	public void delete(UUID id) throws Exception;
 }

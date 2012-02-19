@@ -4,12 +4,15 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class EthnicityTO {
 
 	@NotNull
 	private UUID id;
 	
 	@NotNull
+	@NotEmpty
 	private String name;
 	
 	public EthnicityTO() {}
