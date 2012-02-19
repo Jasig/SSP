@@ -2,8 +2,16 @@ package edu.sinclair.ssp.util;
 
 import java.util.UUID;
 
+/**
+ * Utilities for working with UUIDs
+ * @author daniel
+ *
+ */
 public class UuidUtils {
 
+	/**
+	 * Is the parameter a UUID?
+	 */
 	public static boolean isUUID(String str) {
 		
 		if (str == null)
@@ -19,6 +27,9 @@ public class UuidUtils {
 			return true;
 	}
 	
+	/**
+	 * Turn the parameter into a string
+	 */
 	public static String uuidToString(UUID val){
 		if(null!=val){
 			return val.toString();

@@ -31,7 +31,7 @@
 			<concurrency-control expired-url="/login.jsp" />
 		</session-management>
 
-		<remember-me data-source-ref="sspDataSource" />
+		<!-- remember-me data-source-ref="sspDataSource" / -->
 
 		<logout logout-success-url="/login.jsp" />
 	</http>
