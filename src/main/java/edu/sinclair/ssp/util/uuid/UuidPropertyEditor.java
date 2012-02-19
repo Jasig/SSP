@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.util;
+package edu.sinclair.ssp.util.uuid;
 
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;

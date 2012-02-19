@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.util;
+package edu.sinclair.ssp.util.uuid;
 
 import static org.junit.Assert.*;
 import java.beans.PropertyEditor;
@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class UuidPropertyEditorTest {
 
