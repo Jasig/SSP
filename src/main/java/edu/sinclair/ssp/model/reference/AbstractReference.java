@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.model.transferobject;
+package edu.sinclair.ssp.model.reference;
 
 import java.util.UUID;
 
@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class FundingSourceTO {
+public abstract class AbstractReference {
 
 	@NotNull
 	private UUID id;
@@ -17,9 +17,14 @@ public class FundingSourceTO {
 	
 	private String description;
 	
-	public FundingSourceTO() {}
+	public AbstractReference() {}
 	
-	public FundingSourceTO(UUID id, String name, String description) {
+	public AbstractReference(UUID id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	
+	public AbstractReference(UUID id, String name, String description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -43,4 +48,5 @@ public class FundingSourceTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 }

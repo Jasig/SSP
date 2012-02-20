@@ -6,40 +6,37 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.model.reference.FundingSource;
-import edu.sinclair.ssp.service.reference.FundingSourceService;
+import edu.sinclair.ssp.model.reference.MaritalStatus;
+import edu.sinclair.ssp.service.reference.MaritalStatusService;
 
-@Controller
-@RequestMapping("/reference/fundingSource")
-public class FundingSourceController implements ReferenceController<FundingSource>{
+public class MaritalStatusController implements
+		ReferenceController<MaritalStatus> {
 
-	private static final Logger logger = LoggerFactory.getLogger(FundingSourceController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MaritalStatusController.class);
 
 	@Autowired
-	private FundingSourceService service;
+	private MaritalStatusService service;
 	
 	@Override
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
-	public @ResponseBody List<FundingSource> getAll() throws Exception {
+	public List<MaritalStatus> getAll() throws Exception {
 		return service.getAll();
 	}
 	
 	@Override
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-	public @ResponseBody FundingSource get(@PathVariable UUID id) throws Exception {
+	public MaritalStatus get(UUID id) throws Exception {
 		return service.get(id);
 	}
 	
 	@Override
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody FundingSource save(FundingSource obj, BindingResult result) throws Exception {
+	public MaritalStatus save(MaritalStatus obj, BindingResult result)
+			throws Exception {
 		if(result.hasErrors()){
 			logger.debug("There were " + result.getErrorCount() + " errors.");
 			return null;
@@ -53,5 +50,5 @@ public class FundingSourceController implements ReferenceController<FundingSourc
 	public void delete(UUID id) throws Exception {
 		service.delete(id);
 	}
-	
+
 }

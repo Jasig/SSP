@@ -220,7 +220,7 @@
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-lgpl</artifactId>
-			<version>1.5.4</version>
+			<version>1.9.4</version>
 		</dependency>
 		
 		<!-- Apache directory service used for running a local directory server for development purposes -->
