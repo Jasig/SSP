@@ -13,7 +13,7 @@
 		http://www.springframework.org/schema/util     http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties" location="file:/usr/local/etc/ssp/ssp-config.properties"/>
+	<util:properties id="configProperties" location="file:/usr/local/etc/ssp/ssp-test-config.properties"/>
 	
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
 	<context:component-scan base-package="edu.sinclair.ssp.dao" />

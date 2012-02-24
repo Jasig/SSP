@@ -1,56 +1,59 @@
-<!-- 
-     Add debug="true" to configuration element to debug logback configuration.
-     
-     Adding scan="true" to configuration element allows logback to automatically 
-     update itself from this config file without restarting the app. 
+<!--
+	 Add debug="true" to configuration element to debug logback configuration.
+
+	 Adding scan="true" to configuration element allows logback to automatically
+	 update itself from this config file without restarting the app.
+
+	 If you modify this file while the app is running, and it appears not to load,
+	 but also does not give you an error message, then you likely have an xml syntax error.
 -->
 
-<configuration debug="false" scan="true">
+<configuration debug="true" scan="true">
+
+	<property file="/usr/local/etc/ssp/ssp-config.properties" />
 
 	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>DEV - %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-    
+
 	<appender name="rollingFileAppender"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${catalina.home}/logs/ssp.log</file>
+		<file>${catalina.home:-target}/logs/ssp.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover -->
-			<fileNamePattern>${catalina.home}/logs/ssp.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>${catalina.home:-target}/logs/ssp.%d{yyyy-MM-dd}.log</fileNamePattern>
 
 			<!-- keep 30 days' worth of history -->
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 		<append>true</append>
 		<encoder>
-			<pattern>DEV - %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
-    
-    
-    <!-- ************************************************************************ -->
-    <!-- ************************************************************************ -->
-    <!-- Be sure to set the username, password, to, from, and subject fields      -->
-    <!-- ************************************************************************ -->
-    <!-- ************************************************************************ -->
-	<appender name="smtpAppender" class="ch.qos.logback.classic.net.SMTPAppender">
-        <smtpHost>smtp.gmail.com</smtpHost>
-        <smtpPort>587</smtpPort>
-        <STARTTLS>true</STARTTLS>
-        <username>shawn.gormley@sinclair.edu</username>
-        <password></password>
-		
-		<to>shawn.gormley@sinclair.edu</to>
-		<from>shawn.gormley@sinclair.edu</from>
-		<subject>SSP Exception at shawn DEV: %logger{20} - %m</subject>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>DEV - %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </layout>
-	</appender>
 
+
+	<!-- ************************************************************************ -->
+	<!-- ************************************************************************ -->
+	<!-- Be sure to set the username, password, to, from, and subject fields	  -->
+	<!-- ************************************************************************ -->
+	<!-- ************************************************************************ -->
+	<appender name="smtpAppender" class="ch.qos.logback.classic.net.SMTPAppender">
+		<SMTPHost>${smtp_host}</SMTPHost>
+		<SMTPPort>${smtp_port}</SMTPPort>
+		<SSL>true</SSL>
+		<Username>${smtp_username}</Username>
+		<Password>${smtp_password}</Password>
+		<To>${ssp_admins_email_addresses}</To>
+		<From>${smtp_username}</From>
+		<Subject>${system_id}: %logger{20} - %m</Subject>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</layout>
+	</appender>
 
 	<logger name="edu.sinclair.ssp" level="info" />
 	<logger name="org.springframework.core" level="info" />
@@ -62,7 +65,7 @@
 
 
 	<root level="info">
-        <!-- It might be prudent to turn the consoleAppender off in prod, as it is already being logged in the rolling File Appender -->
+		<!-- It might be prudent to turn the consoleAppender off in prod, as it is already being logged in the rolling File Appender -->
 		<appender-ref ref="consoleAppender" />
 		
 		<!-- Likewise from above, it would be fine to turn off the rolling File appender and the smtpAppender in DEV -->
