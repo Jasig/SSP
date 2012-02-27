@@ -17,7 +17,7 @@ public class SspLdapAuthoritiesPopulator implements LdapAuthoritiesPopulator {
 	
 	@Override
 	public Collection<GrantedAuthority> getGrantedAuthorities(DirContextOperations userData, String username) {
-		return userDetailsService.loadUserByUsername(username).getAuthorities();
+		return (Collection<GrantedAuthority>) userDetailsService.loadUserByUsername(username).getAuthorities();
 	}
 
 }
