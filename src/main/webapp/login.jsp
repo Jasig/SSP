@@ -41,7 +41,7 @@
 							</div>
 						</div>
 						<div class="row">
-							<input type="image" src="linktobutton" class="submit" alt="submit button" />
+							<input type="image" src="/ssp/images/login.png" class="submit" alt="submit button" id="submitButton" name="submitButton" />
 						</div>
 					</fieldset>
 				</form>

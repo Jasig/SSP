@@ -10,7 +10,7 @@
 		<authentication-provider ref="localLdapAuthenticationProvider" />
 	</authentication-manager>
 
-	<ldap-server root="dc=springframework,dc=org" ldif="file:/usr/local/etc/ssp/users.ldif" />
+	<ldap-server ldif="file:/usr/local/etc/ssp/users.ldif" />
 
 	<beans:bean id="localSpringSecurityContextSource"
 		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">

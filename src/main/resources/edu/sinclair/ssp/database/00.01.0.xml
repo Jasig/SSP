@@ -6,6 +6,41 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	
+	<changeSet author="daniel.bower" id="spring-security persistent logins">
+		<!-- generated from this sql in the spring security guide 
+		create table persistent_logins (
+				username varchar(64) not null,
+				series varchar(64) primary key,
+				token varchar(64) not null,
+				last_used timestamp not null) -->
+		
+		<createTable tableName="persistent_logins">
+			<column name="username" type="character varying(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="series" type="character varying(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="token" type="character varying(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="last_used" type="datetime">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<sql>grant all on persistent_logins to ssp</sql>
+		<rollback>
+			<dropTable tableName="persistent_logins"/>
+		</rollback>
+		
+		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
+		Specifying "Without" timezone-->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+		</modifySql>
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add reference tables'>
 		<createTable tableName="challenge">
@@ -29,5 +64,7 @@
 		</rollback>
 		
 	</changeSet>
+	
+	<!-- Insert reference data with the creatTable's of the other types? -->
 	
 </databaseChangeLog>

@@ -28,27 +28,19 @@
 		<intercept-url pattern="/**" access="denyAll" />
 
 		<form-login login-page="/login.jsp" 
-			authentication-success-handler-ref="sspAuthenticationSuccessHandler"
+			default-target-url="/index.html"
 			authentication-failure-url="/login.jsp?login_error=1" />
 
 		<access-denied-handler error-page="/accessDenied.htm" />
 
-		<session-management>
-			<concurrency-control expired-url="/login.jsp" />
-		</session-management>
-
-		<!-- remember-me data-source-ref="sspDataSource" / -->
+		<remember-me data-source-ref="sspDataSource" />
 
 		<logout logout-success-url="/login.jsp" />
 	</http>
 
 	<global-method-security secured-annotations="enabled" />
 
-	<beans:bean id="sspAuthenticationSuccessHandler" class="edu.sinclair.ssp.security.SspAuthenticationSuccessHandler">
-	</beans:bean>
-
 	<beans:bean id="sspUserDetailsService" class="edu.sinclair.ssp.security.SspUserDetailsService">
-		<!-- beans:property name="institutionId" value="#{configProperties.inst_id}" -->
 	</beans:bean>
 
 	<beans:bean id="sspUserDetailsContextMapper" class="edu.sinclair.ssp.security.SspUserDetailsContextMapper">

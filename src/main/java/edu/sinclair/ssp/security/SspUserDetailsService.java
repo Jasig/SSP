@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,7 @@ public class SspUserDetailsService implements UserDetailsService {
 		logger.debug("BEGIN : loadUserByUsername()");
 		
 		Collection<GrantedAuthority> authorities = Lists.newArrayList();
-		authorities.add(new GrantedAuthorityImpl("ROLE_USER"));
+		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 		
 		SspUser sspUser = new SspUser(username, "password", true, true, true, true, authorities);
 		sspUser.setEmailAddress("test.user@infinum.com");
