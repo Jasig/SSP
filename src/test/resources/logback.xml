@@ -1,0 +1,34 @@
+<!-- 
+     Add debug="true" to configuration element to debug logback configuration.
+     
+     Adding scan="true" to configuration element allows logback to automatically 
+     update itself from this config file without restarting the app. 
+-->
+
+<configuration debug="false" scan="true">
+
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>DEV - %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="edu.sinclair" level="debug" />
+	<logger name="org.springframework.core" level="info" />
+	<logger name="org.springframework.beans" level="info" />
+	<logger name="org.springframework.context" level="info" />
+	<logger name="org.springframework.web" level="info" />
+	<logger name="org.springframework.orm" level="info" />
+	<logger name="org.springframework.security" level="info" />
+
+
+	<root level="info">
+        <!-- It might be prudent to turn the consoleAppender off in prod, as it is already being logged in the rolling File Appender -->
+		<appender-ref ref="consoleAppender" />
+		
+		<!-- Likewise from above, it would be fine to turn off the rolling File appender and the smtpAppender in DEV -->
+		<!-- appender-ref ref="rollingFileAppender" /> 
+		<appender-ref ref="smtpAppender"/ -->
+	</root>
+
+</configuration>

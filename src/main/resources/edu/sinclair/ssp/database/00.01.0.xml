@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet author='daniel.bower' id='Add reference tables'>
+		<createTable tableName="challenge">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(25)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="character varying(150)">
+				<constraints nullable="true" />
+			</column>
+			<column name="optlock" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<sql>grant all on challenge to ssp</sql>
+		<rollback>
+			<dropTable tableName="challenge"/>
+		</rollback>
+		
+	</changeSet>
+	
+</databaseChangeLog>
