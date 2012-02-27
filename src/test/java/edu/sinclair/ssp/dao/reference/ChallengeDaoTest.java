@@ -46,16 +46,13 @@ public class ChallengeDaoTest {
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
-		
-		dao.delete(obj);
-	}
 
-	@Test
-	public void testGetAll() {
 		List<Challenge> all = dao.getAll();
 		assertNotNull(all);
 		assertTrue(all.size()>0);
 		assertList(all);
+		
+		dao.delete(obj);
 	}
 
 	private void assertList(List<Challenge> objects){
