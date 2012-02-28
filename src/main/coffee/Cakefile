@@ -6,6 +6,9 @@ FILENAME = "#{ PRODUCT }-#{ VERSION }"
 
 OUTPUT_PATH = "../webapp/scripts"
 
+# TODO: Remove - temporarily added until next build of coffee-script is released.
+PATH = "/Users/shawn.gormley/Documents/projects/coffee-script/bin"
+
 task "build", "Builds #{ PRODUCT } JavaScript (and minified JavaScript) implementation from CoffeeScript source code", ->
 	console.log "Building #{ PRODUCT } version #{ VERSION }"
 	console.log "Compiling ssp/**.coffee to #{ OUTPUT_PATH }/#{ FILENAME }.js"

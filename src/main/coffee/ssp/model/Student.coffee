@@ -5,11 +5,12 @@ namespace 'ssp.model'
 		class Student
 		
 			constructor: ( studentId, firstName, middleInitial, lastName, uniqueSchoolUserID, birthDate, emailSchool, emailHome, homePhone, workPhone, cellPhone, address, city, state, zipCode ) ->
+				@profilePicUrl = '/ssp/images/student-pic-small.png'
 				@studentId = studentId
 				@firstName = firstName
 				@middleInitial = middleInitial
 				@lastName = lastName
-				@uniqueSchoolUserID = lastName
+				@uniqueSchoolUserID = uniqueSchoolUserID
 				@birthDate = birthDate
 				@emailSchool = emailSchool
 				@emailHome = emailHome

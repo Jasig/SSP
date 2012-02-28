@@ -5,7 +5,6 @@ namespace 'ssp.controller'
 		class AppController
 		
 			constructor: () ->
-
 				@studentService = new ssp.service.StudentService "/ssp/web/example"
 				@student ||= new ssp.model.Student
 					
