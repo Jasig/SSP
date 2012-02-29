@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import edu.sinclair.ssp.model.reference.FundingSource;
 import edu.sinclair.ssp.service.reference.FundingSourceService;
 
+@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/fundingSource")
-public class FundingSourceController implements ReferenceController<FundingSource>{
+public class FundingSourceController extends ReferenceController<FundingSource>{
 
 	private static final Logger logger = LoggerFactory.getLogger(FundingSourceController.class);
 

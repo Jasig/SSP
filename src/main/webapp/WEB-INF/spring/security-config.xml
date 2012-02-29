@@ -4,7 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.0.xsd
 		http://www.springframework.org/schema/util	  http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
 	<beans:import resource="file:/usr/local/etc/ssp/ssp-sec-local.xml"/>
@@ -12,21 +12,22 @@
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties" location="file:/usr/local/etc/ssp/ssp-config.properties"/>
 
-	<http pattern="/images/**" security="none"  />
-	<http pattern="/scripts/**" security="none"  />
-	<http pattern="/styles/**" security="none"  />
+	<global-method-security pre-post-annotations="enabled" />
 
 	<http use-expressions="true">
+		<intercept-url pattern="/images/**" access="permitAll" />
+		<intercept-url pattern="/scripts/**" access="permitAll" />
+		<intercept-url pattern="/styles/**" access="permitAll" />
 		<intercept-url pattern="/login.jsp" access="isAnonymous()" />
 		<intercept-url pattern="/404.jsp" access="permitAll"/>
 		<intercept-url pattern="/500.jsp" access="permitAll"/>
 		<intercept-url pattern="/accessDenied.htm" access="permitAll"/>
 		<intercept-url pattern="/invalidSession.htm" access="permitAll"/>
+		<intercept-url pattern="/secTest.jsp" access="permitAll"/>
+		<intercept-url pattern="/api/example" access="hasAnyRole('ROLE_USER')"/>
 		
 		<intercept-url pattern="/index.html" access="hasAnyRole('ROLE_USER')" />
-		<intercept-url pattern="/api/**" access="hasAnyRole('ROLE_USER')" />
-		<intercept-url pattern="/**" access="denyAll" />
-
+		
 		<form-login login-page="/login.jsp" 
 			default-target-url="/index.html"
 			authentication-failure-url="/login.jsp?login_error=1" />
@@ -37,8 +38,6 @@
 
 		<logout logout-success-url="/login.jsp" />
 	</http>
-
-	<global-method-security secured-annotations="enabled" />
 
 	<beans:bean id="sspUserDetailsService" class="edu.sinclair.ssp.security.SspUserDetailsService">
 	</beans:bean>

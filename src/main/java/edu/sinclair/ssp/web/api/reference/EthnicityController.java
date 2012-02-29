@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import edu.sinclair.ssp.model.reference.Ethnicity;
 import edu.sinclair.ssp.service.reference.EthnicityService;
 
+@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/ethnicity")
-public class EthnicityController implements ReferenceController<Ethnicity>{
+public class EthnicityController extends ReferenceController<Ethnicity>{
 
 	private static final Logger logger = LoggerFactory.getLogger(EthnicityController.class);
 

@@ -12,8 +12,6 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.model.reference.FundingSource;
@@ -24,7 +22,7 @@ import edu.sinclair.ssp.service.reference.VeteranStatusService;
 
 public class StudentIntakeServiceTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(StudentIntakeServiceTest.class);
+	//private static final Logger logger = LoggerFactory.getLogger(StudentIntakeServiceTest.class);
 	
 	private StudentIntakeService service;
 	private ChallengeService challengeService;

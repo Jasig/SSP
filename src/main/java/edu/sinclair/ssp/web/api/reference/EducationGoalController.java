@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.sinclair.ssp.model.reference.EducationGoal;
 import edu.sinclair.ssp.service.reference.EducationGoalService;
 
-public class EducationGoalController implements
+@PreAuthorize("hasRole('ROLE_USER')")
+@Controller
+@RequestMapping("/reference/educationGoal")
+public class EducationGoalController extends
 		ReferenceController<EducationGoal> {
 
 	private static final Logger logger = LoggerFactory.getLogger(EducationGoalController.class);

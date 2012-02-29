@@ -2,8 +2,6 @@ package edu.sinclair.ssp.service.tool;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +14,7 @@ import edu.sinclair.ssp.service.reference.VeteranStatusService;
 @Service
 public class StudentIntakeService {
 
-	private static final Logger logger = LoggerFactory.getLogger(StudentIntakeService.class);
+	//private static final Logger logger = LoggerFactory.getLogger(StudentIntakeService.class);
 
 	@Autowired
 	private ChallengeService challengeService;

@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +12,7 @@ import edu.sinclair.ssp.model.reference.Challenge;
 @Repository
 public class ChallengeDao implements ReferenceDao<Challenge>{
 
-	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(ChallengeDao.class);
+	//private static final Logger logger = LoggerFactory.getLogger(ChallengeDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -30,11 +27,7 @@ public class ChallengeDao implements ReferenceDao<Challenge>{
 
 	@Override
 	public Challenge get(UUID id) {
-		return (Challenge) this.sessionFactory.getCurrentSession()
-				.createQuery("from Challenge " +
-							"where id = ? ")
-				.setParameter(0, id)
-				.list().get(0);
+		return (Challenge) this.sessionFactory.getCurrentSession().get(Challenge.class, id); 
 	}
 
 	@Override

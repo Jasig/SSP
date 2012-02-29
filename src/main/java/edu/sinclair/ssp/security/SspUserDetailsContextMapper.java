@@ -18,7 +18,7 @@ public class SspUserDetailsContextMapper implements UserDetailsContextMapper {
 	
 	@Override
 	public UserDetails mapUserFromContext(DirContextOperations ctx,
-			String username, Collection<? extends GrantedAuthority> authorities) {
+			String username, Collection<GrantedAuthority> authorities) {
 
 		logger.debug("BEGIN : mapUserFromContext()");
 		
@@ -28,7 +28,7 @@ public class SspUserDetailsContextMapper implements UserDetailsContextMapper {
 											true,
 											true,
 											true,
-											(Collection<GrantedAuthority>) authorities);
+											authorities);
 		
 		logger.debug("User: {}", sspUser.toString());
 		

@@ -19,7 +19,9 @@
 	<util:properties id="configProperties" location="file:/usr/local/etc/ssp/ssp-config.properties"/>
 	
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
-	<context:component-scan base-package="edu.sinclair.ssp" />
+	<context:component-scan base-package="edu.sinclair.ssp">
+		<context:exclude-filter type="regex" expression=".*Controller"/>
+	</context:component-scan>
 	
 	<!-- Util -->
 	<bean id="velocityTemplateHelper" class="edu.sinclair.ssp.util.VelocityTemplateHelper" />

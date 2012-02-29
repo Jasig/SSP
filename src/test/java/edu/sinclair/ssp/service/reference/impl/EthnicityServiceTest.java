@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.reference;
+package edu.sinclair.ssp.service.reference.impl;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -9,20 +9,21 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.sinclair.ssp.model.reference.MaritalStatus;
+import edu.sinclair.ssp.model.reference.Ethnicity;
+import edu.sinclair.ssp.service.reference.impl.EthnicityServiceImpl;
 
-public class MaritalStatusServiceTest {
+public class EthnicityServiceTest {
 
-	private MaritalStatusService service;
+	private EthnicityServiceImpl service;
 	
 	@Before
 	public void setup(){
-		service = new MaritalStatusService();
+		service = new EthnicityServiceImpl();
 	}
 	
 	@Test
 	public void testGetAll() {
-		List<MaritalStatus> all = service.getAll();
+		List<Ethnicity> all = service.getAll();
 		assertTrue(all.size()>0);
 	}
 
@@ -33,7 +34,7 @@ public class MaritalStatusServiceTest {
 
 	@Test
 	public void testSave() {
-		assertNotNull(service.save(new MaritalStatus(UUID.randomUUID(), "test status")));
+		assertNotNull(service.save(new Ethnicity(UUID.randomUUID(), "test ethnicity")));
 	}
 
 	@Test

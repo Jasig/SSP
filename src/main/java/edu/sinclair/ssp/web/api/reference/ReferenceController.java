@@ -11,13 +11,13 @@ import org.springframework.validation.BindingResult;
  *
  * @param <T> The TO type this controller works with.
  */
-public interface ReferenceController<T> {
+public abstract class ReferenceController<T> {
 
-	public List<T> getAll() throws Exception;
+	public abstract List<T> getAll() throws Exception;
 	
-	public T get(UUID id) throws Exception;
+	public abstract T get(UUID id) throws Exception;
 	
-	public T save(T obj, BindingResult result) throws Exception;
+	public abstract T save(T obj, BindingResult result) throws Exception;
 	
-	public void delete(UUID id) throws Exception;
+	public abstract void delete(UUID id) throws Exception;
 }

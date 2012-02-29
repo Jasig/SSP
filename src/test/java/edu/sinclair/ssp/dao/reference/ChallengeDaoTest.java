@@ -1,6 +1,7 @@
 package edu.sinclair.ssp.dao.reference;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -53,6 +54,14 @@ public class ChallengeDaoTest {
 		assertList(all);
 		
 		dao.delete(obj);
+	}
+
+	@Test
+	public void testNull(){
+		UUID id = UUID.randomUUID();
+		Challenge challenge = dao.get(id);
+		
+		assertNull(challenge);
 	}
 
 	private void assertList(List<Challenge> objects){
