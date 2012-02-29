@@ -1,0 +1,20 @@
+{
+	success: true,
+    tools: [
+		    {
+		        name: "Profile",
+		        toolType: "Profile"
+		    },{
+		        name: "Student Intake",
+		        toolType: "StudentIntake"
+		    },
+		    {
+		        name: "Journal",
+		        toolType: "Journal"
+		    },
+		    {
+		        name: "Action Plan",
+		        toolType: "ActionPlan"
+		    }
+	]
+}

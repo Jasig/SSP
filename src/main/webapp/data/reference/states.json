@@ -1,0 +1,20 @@
+{
+	success: true,
+    states: [
+		    {
+		        id: "1",
+		        name: "Arizona",
+		        abbr: "AZ"
+		    },
+		    {
+		        id: "2",
+		        name: "Indiana",
+		        abbr: "IN"
+		    },
+		    {
+		        id: "3",
+		        name: "Ohio",
+		        abbr: "OH"
+		    }
+	]
+}

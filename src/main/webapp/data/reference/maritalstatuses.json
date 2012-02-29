@@ -1,0 +1,30 @@
+{
+	success: true,
+    maritalStatuses: [
+		    {
+		        id: "1",
+		        name: "Single",
+		        description: "Single"
+		    },
+		    {
+		        id: "2",
+		        name: "Married",
+		        description: "Married"
+		    },
+		    {
+		        id: "3",
+		        name: "Divorced",
+		        description: "Divorced"
+		    },
+		    {
+		        id: "4",
+		        name: "Separated",
+		        description: "Separated"
+		    },
+		    {
+		        id: "5",
+		        name: "Widowed",
+		        description: "Widowed"
+		    }
+	]
+}

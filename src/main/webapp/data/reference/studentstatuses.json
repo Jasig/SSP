@@ -1,0 +1,30 @@
+{
+	success: true,
+    studentStatuses: [
+		    {
+		        id: "1",
+		        name: "Pre-College/ESP",
+		        description: "Pre-College/ESP"
+		    },
+		    {
+		        id: "2",
+		        name: "New",
+		        description: "New"
+		    },
+		    {
+		        id: "3",
+		        name: "Current",
+		        description: "Current"
+		    },
+		    {
+		        id: "4",
+		        name: "Former",
+		        description: "Former"
+		    },
+		    {
+		        id: "5",
+		        name: "Transfer",
+		        description: "Transfer"
+		    }
+	]
+}

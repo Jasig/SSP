@@ -1,0 +1,259 @@
+{
+	success: true,
+    students: [
+		    {
+		        id: "1",
+		        studentIntakeCreatedDate: "01/21/2012",
+		        photoUrl: "/ssp/images/student-pic-small.png",
+		        uniqueSchoolUserId: '0123456',
+		        name: "Julia R. Johnson",
+		        firstName: "Julia",
+		        middleInitial: "R",
+		        lastName: "Johnson",
+		        homePhone: "555-555-5555",
+		        cellPhone: "937-555-5555",
+		        workPhone: "512-555-5555",
+		        address: "333 Dayton Rd.",
+		        city: "Dayton",
+		        state: "OH",
+		        zipCode: "55555-5555",
+		        emailPrimary: "student.email@my.sinclair.edu",
+		        emailSecondary: "student.email@yahoo.com",
+		        dateOfBirth: "1/27/1994",
+		        studentType: "ILP",
+		        programStatus: "Active",
+		        registrationStatus: "Y",
+		        paymentStatus: "0",
+		        cumGPA: "3.1",
+		        academicPrograms: "Engineering",
+		        tools: [{
+					        name: "Profile",
+					        toolType: "Profile"
+					    },{
+					        name: "Student Intake",
+					        toolType: "StudentIntake"
+					    },
+					    {
+					        name: "Journal",
+					        toolType: "Journal"
+					    },
+					    {
+					        name: "Action Plan",
+					        toolType: "ActionPlan"
+					    }
+					]
+		    },
+		    {
+		        id: "2",
+		        photoUrl: "/ssp/images/student-pic2-small.png",
+		        uniqueSchoolUserId: '0123457',
+		        name: "Abigail T. Allen",
+		        firstName: "Abigail",
+		        middleInitial: "T",
+		        lastName: "Allen",
+		        homePhone: "555-555-5555",
+		        cellPhone: "937-555-5555",
+		        workPhone: "512-555-5555",
+		        address: "333 Indiana Rd.",
+		        city: "Bloomington",
+		        state: "IN",
+		        zipCode: "55555-5555",
+		        emailPrimary: "student.email@my.sinclair.edu",
+		        emailSecondary: "student.email@yahoo.com",
+		        dateOfBirth: "3/13/1990",
+		        studentType: "CAP",
+		        programStatus: "Transitioned",
+		        registrationStatus: "Y",
+		        paymentStatus: "0",
+		        cumGPA: "2.5",
+		        academicPrograms: "Nursing",
+		        tools: [{
+					        name: "Profile",
+					        toolType: "Profile"
+					    },{
+					        name: "Student Intake",
+					        toolType: "StudentIntake"
+					    }
+					]     
+		    },
+		    {
+		        id: "3",
+		        photoUrl: "/ssp/images/student-pic3-small.png",
+		        uniqueSchoolUserId: '0123458',
+		        name: "Maria F. Stillwater",
+		        firstName: "Maria",
+		        middleInitial: "F",
+		        lastName: "Stillwater",
+		        homePhone: "555-555-5555",
+		        cellPhone: "937-555-5555",
+		        workPhone: "512-555-5555",
+		        address: "333 Dayton Rd.",
+		        city: "Dayton",
+		        state: "OH",
+		        zipCode: "55555-5555",
+		        emailPrimary: "student.email@my.sinclair.edu",
+		        emailSecondary: "student.email@yahoo.com",
+		        dateOfBirth: "4/01/1985",
+		        studentType: "DSW",
+		        programStatus: "Active",
+		        registrationStatus: "N",
+		        paymentStatus: "0",
+		        cumGPA: "2.9",
+		        academicPrograms: "Pre-Med",
+		        tools: [{
+					        name: "Profile",
+					        toolType: "Profile"
+					    }
+					]  
+		    },
+		    {
+		        id: "4",
+		        photoUrl: "/ssp/images/student-pic4-small.png",
+		        uniqueSchoolUserId: '0123459',
+		        name: "Robert S. Coltraine",
+		        firstName: "Robert",
+		        middleInitial: "S",
+		        lastName: "Coltraine",
+		        homePhone: "555-555-5555",
+		        cellPhone: "937-555-5555",
+		        workPhone: "512-555-5555",
+		        address: "333 Dayton Rd.",
+		        city: "Dayton",
+		        state: "OH",
+		        zipCode: "55555-5555",
+		        emailPrimary: "student.email@my.sinclair.edu",
+		        emailSecondary: "student.email@yahoo.com",
+		        dateOfBirth: "1/12/1997",
+		        studentType: "ARC",
+		        programStatus: "Active",
+		        registrationStatus: "Y",
+		        paymentStatus: "0",
+		        cumGPA: "3.1",
+		        academicPrograms: "Advanced Placement Pre-College",
+		        tools: [{
+					        name: "Profile",
+					        toolType: "Profile"
+					    },{
+					        name: "Student Intake",
+					        toolType: "StudentIntake"
+					    },
+					    {
+					        name: "Journal",
+					        toolType: "Journal"
+					    },
+					    {
+					        name: "Action Plan",
+					        toolType: "ActionPlan"
+					    }
+					]  
+		    },
+		    {
+		        id: "5",
+		        photoUrl: "/ssp/images/student-pic5-small.png",
+		        uniqueSchoolUserId: '0123555',
+		        name: "Jessie A. Roberts",
+		        firstName: "Jessie",
+		        middleInitial: "A",
+		        lastName: "Roberts",
+		        homePhone: "555-555-5555",
+		        cellPhone: "937-555-5555",
+		        workPhone: "512-555-5555",
+		        address: "333 Dayton Rd.",
+		        city: "Dayton",
+		        state: "OH",
+		        zipCode: "55555-5555",
+		        emailPrimary: "student.email@my.sinclair.edu",
+		        emailSecondary: "student.email@yahoo.com",
+		        dateOfBirth: "6/27/1992",
+		        studentType: "PTC",
+		        programStatus: "Active",
+		        registrationStatus: "Y",
+		        paymentStatus: "Balance due: $359",
+		        cumGPA: "3.9",
+		        academicPrograms: "Aerospace Engineering",
+		        tools: [{
+					        name: "Profile",
+					        toolType: "Profile"
+					    },{
+					        name: "Student Intake",
+					        toolType: "StudentIntake"
+					    },
+					    {
+					        name: "Action Plan",
+					        toolType: "ActionPlan"
+					    }
+					]
+		    },
+		    {
+		        id: "6",
+		        photoUrl: "/ssp/images/student-pic6-small.png",
+		        uniqueSchoolUserId: '0123458',
+		        name: "Jessica E. Murano",
+		        firstName: "Jessica",
+		        middleInitial: "E",
+		        lastName: "Murano",
+		        homePhone: "555-555-5555",
+		        cellPhone: "937-555-5555",
+		        workPhone: "512-555-5555",
+		        address: "333 Dayton Rd.",
+		        city: "Dayton",
+		        state: "OH",
+		        zipCode: "55555-5555",
+		        emailPrimary: "student.email@my.sinclair.edu",
+		        emailSecondary: "student.email@yahoo.com",
+		        dateOfBirth: "2/12/1991",
+		        studentType: "DL",
+		        programStatus: "Active",
+		        registrationStatus: "Y",
+		        paymentStatus: "0",
+		        cumGPA: "3.2",
+		        academicPrograms: "Nursing",
+		        tools: [{
+					        name: "Profile",
+					        toolType: "Profile"
+					    },{
+					        name: "Student Intake",
+					        toolType: "StudentIntake"
+					    },
+					    {
+					        name: "Journal",
+					        toolType: "Journal"
+					    },
+					    {
+					        name: "Action Plan",
+					        toolType: "ActionPlan"
+					    }
+					]
+		    },
+		    {
+		        id: "7",
+		        photoUrl: "/ssp/images/student-pic7-small.png",
+		        uniqueSchoolUserId: '1323456',
+		        name: "Kimberly R. Thompson",
+		        firstName: "Kimberly",
+		        middleInitial: "R",
+		        lastName: "Thompson",
+		        homePhone: "555-555-5555",
+		        cellPhone: "937-555-5555",
+		        workPhone: "512-555-5555",
+		        address: "333 Dayton Rd.",
+		        city: "Dayton",
+		        state: "OH",
+		        zipCode: "55555-5555",
+		        emailPrimary: "student.email@my.sinclair.edu",
+		        emailSecondary: "student.email@yahoo.com",
+		        dateOfBirth: "9/27/1994",
+		        studentType: "PTC",
+		        programStatus: "Active",
+		        registrationStatus: "Y",
+		        paymentStatus: "Balance Due: $200",
+		        cumGPA: "2.5",
+		        academicPrograms: "Art",
+		        tools: [{
+					        name: "Profile",
+					        toolType: "Profile"
+					    }
+					]
+		    }
+	]
+}

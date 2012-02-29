@@ -1,0 +1,21 @@
+{
+	success: true,
+    items: [
+		    {
+		        id: "1st",
+		        name: "1st"
+		    },
+		    {
+		        id: "2nd",
+		        name: "2nd"
+		    },
+		    {
+		        id: "3rd",
+		        name: "3rd"
+		    },
+		    {
+		        id: "N/A",
+		        name: "Not Applicable"
+		    }
+	]
+}

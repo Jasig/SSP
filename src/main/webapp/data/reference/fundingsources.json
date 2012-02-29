@@ -1,0 +1,40 @@
+{
+	success: true,
+    fundingSources: [
+		    {
+		        id: "1",
+		        name: "Assistance Needed",
+		        description: "Assistance Needed"
+		    },
+		    {
+		        id: "2",
+		        name: "Employer",
+		        description: "Employer"
+		    },
+		    {
+		        id: "3",
+		        name: "Financial Aid",
+		        description: "Financial Aid"
+		    },
+		    {
+		        id: "4",
+		        name: "GI Bill",
+		        description: "GI Bill"
+		    },
+		    {
+		        id: "5",
+		        name: "Military Tuition Assistance",
+		        description: "Military Tuition Assistance"
+		    },
+		    {
+		        id: "6",
+		        name: "Other",
+		        description: "Other"
+		    },
+		    {
+		        id: "7",
+		        name: "Trade Adjustment Act (TAA)",
+		        description: "Trade Adjustment Act (TAA)"
+		    }
+	]
+}

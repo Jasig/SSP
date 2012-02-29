@@ -1,0 +1,30 @@
+{
+	success: true,
+    veteranStatuses: [
+		    {
+		        id: "1",
+		        name: "Dependent of Veteran",
+		        description: "Dependent of Veteran"
+		    },
+		    {
+		        id: "2",
+		        name: "Montgomery County Active Duty",
+		        description: "Montgomery County Active Duty"
+		    },
+		    {
+		        id: "3",
+		        name: "Montgomery County Reservist",
+		        description: "Montgomery County Reservist"
+		    },
+		    {
+		        id: "4",
+		        name: "VEAP",
+		        description: "VEAP"
+		    },
+		    {
+		        id: "5",
+		        name: "Veteran",
+		        description: "Veteran"
+		    }
+	]
+}

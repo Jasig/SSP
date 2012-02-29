@@ -1,0 +1,13 @@
+{
+	success: true,
+    items: [
+		    {
+		        id: "Y",
+		        name: "Yes"
+		    },
+		    {
+		        id: "N",
+		        name: "No"
+		    }
+	]
+}

@@ -1,0 +1,45 @@
+{
+	success: true,
+    educationLevels: [
+		    {
+		        id: "1",
+		        name: "No Diploma/No GED",
+		        description: "No Diploma/GED"
+		    },
+		    {
+		        id: "2",
+		        name: "GED",
+		        description: "GED"
+		    },
+		    {
+		        id: "3",
+		        name: "Attending High School",
+		        description: "Attending High School"
+		    },
+		    {
+		        id: "4",
+		        name: "High School Graduation",
+		        description: "High School Graduation"
+		    },
+		    {
+		        id: "5",
+		        name: "Some College Credits",
+		        description: "Some College Credits"
+		    },
+		    {
+		        id: "6",
+		        name: "College Graduate - 2 year degree",
+		        description: "College Graduate - 2 year degree"
+		    },
+		    {
+		        id: "7",
+		        name: "College Graduate - 4 year degree",
+		        description: "College Graduate - 4 year degree"
+		    },
+		    {
+		        id: "8",
+		        name: "Other",
+		        description: "Other"
+		    }
+	]
+}
