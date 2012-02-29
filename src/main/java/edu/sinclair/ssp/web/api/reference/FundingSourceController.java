@@ -3,6 +3,8 @@ package edu.sinclair.ssp.web.api.reference;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,7 @@ public class FundingSourceController extends ReferenceController<FundingSource>{
 	
 	@Override
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody FundingSource save(FundingSource obj, BindingResult result) throws Exception {
+	public @ResponseBody FundingSource save(@Valid FundingSource obj, BindingResult result) throws Exception {
 		if(result.hasErrors()){
 			logger.debug("There were " + result.getErrorCount() + " errors.");
 			return null;
@@ -52,7 +54,7 @@ public class FundingSourceController extends ReferenceController<FundingSource>{
 
 	@Override
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-	public void delete(UUID id) throws Exception {
+	public void delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
 	}
 	

@@ -3,14 +3,18 @@ package edu.sinclair.ssp.web.api.reference;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.model.reference.EducationLevel;
 import edu.sinclair.ssp.service.reference.EducationLevelService;
@@ -27,19 +31,19 @@ public class EducationLevelController extends ReferenceController<EducationLevel
 	
 	@Override
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
-	public List<EducationLevel> getAll() throws Exception {
+	public @ResponseBody List<EducationLevel> getAll() throws Exception {
 		return service.getAll();
 	}
 	
 	@Override
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-	public EducationLevel get(UUID id) throws Exception {
+	public @ResponseBody EducationLevel get(@PathVariable UUID id) throws Exception {
 		return service.get(id);
 	}
 	
 	@Override
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public EducationLevel save(EducationLevel obj, BindingResult result)
+	public @ResponseBody EducationLevel save(@Valid EducationLevel obj, BindingResult result)
 			throws Exception {
 		if(result.hasErrors()){
 			logger.debug("There were " + result.getErrorCount() + " errors.");
@@ -51,7 +55,7 @@ public class EducationLevelController extends ReferenceController<EducationLevel
 
 	@Override
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-	public void delete(UUID id) throws Exception {
+	public void delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
 	}
 

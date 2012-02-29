@@ -3,6 +3,8 @@ package edu.sinclair.ssp.web.api.reference;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +37,13 @@ public class ChallengeController extends ReferenceController<Challenge>{
 	
 	@Override
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-	public Challenge get(@PathVariable UUID id) throws Exception {
+	public @ResponseBody Challenge get(@PathVariable UUID id) throws Exception {
 		return service.get(id);
 	}
 	
 	@Override
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public Challenge save(Challenge obj, BindingResult result) throws Exception {
+	public @ResponseBody Challenge save(@Valid Challenge obj, BindingResult result) throws Exception {
 		if(result.hasErrors()){
 			logger.debug("There were " + result.getErrorCount() + " errors.");
 			return null;
@@ -52,7 +54,7 @@ public class ChallengeController extends ReferenceController<Challenge>{
 
 	@Override
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-	public void delete(UUID id) throws Exception {
+	public void delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
 	}
 	

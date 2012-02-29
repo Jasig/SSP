@@ -14,7 +14,7 @@ import org.springframework.validation.BindingResult;
 public abstract class ReferenceController<T> {
 
 	public abstract List<T> getAll() throws Exception;
-	
+
 	public abstract T get(UUID id) throws Exception;
 	
 	public abstract T save(T obj, BindingResult result) throws Exception;
