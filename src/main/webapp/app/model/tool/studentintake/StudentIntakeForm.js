@@ -1,4 +1,4 @@
-Ext.define('Ssp.model.tool.studentintake.StudentIntakeFormTO', {
+Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
     extend: 'Ext.data.Model',
     fields: ['studentId',
              'referenceData',

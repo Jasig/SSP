@@ -45,7 +45,7 @@ Ext.define('Ssp.controller.Tool', {
 				break;
 			
 			case 'StudentIntake':
-				Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeFormTO');
+				Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
 				Form.load(123,{
 					success: function( formData ) {
 						console.log( formData.data.student );

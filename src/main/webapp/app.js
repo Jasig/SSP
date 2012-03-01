@@ -25,8 +25,7 @@ ssp = Ext.create('Ext.app.Application', {
 			  'reference.Genders',
 			  'reference.MaritalStatuses',
 			  'reference.VeteranStatuses',
-			  'reference.YesNo',
-			  'tool.studentintake.StudentIntakeForm'], 
+			  'reference.YesNo'], 
 	
 	controllers: [
         	'Search','Tool','Main'
