@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import edu.sinclair.ssp.model.reference.*;
 
-public class Student {
+public class PersonDemographics {
 
 	private UUID id;
 	

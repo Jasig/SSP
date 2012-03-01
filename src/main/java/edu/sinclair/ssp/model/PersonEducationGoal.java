@@ -4,13 +4,13 @@ import java.util.UUID;
 
 import edu.sinclair.ssp.model.reference.EducationGoal;
 
-public class StudentEducationGoal {
+public class PersonEducationGoal {
 
 	private UUID id;
 	
 	private String description;
 	
-	private Student student;
+	private Person person;
 	
 	private EducationGoal educationGoal;
 	
@@ -34,12 +34,12 @@ public class StudentEducationGoal {
 		this.description = description;
 	}
 
-	public Student getStudent() {
-		return student;
+	public Person getPerson() {
+		return person;
 	}
 
-	public void setStudent(Student student) {
-		this.student = student;
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 	public EducationGoal getEducationGoal() {

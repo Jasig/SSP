@@ -1,267 +1,259 @@
 <class-diagram version="1.0.7" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.StudentChallenge" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/StudentChallenge.java" binary="false">    
-    <position height="-1" width="-1" x="700" y="238"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="2" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.ChildCareArrangement" 
-    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/ChildCareArrangement.java" binary="false">    
-    <position height="-1" width="-1" x="168" y="205"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="3" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.StudentFunding" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/StudentFunding.java" binary="false">    
-    <position height="-1" width="-1" x="448" y="474"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="4" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.EducationGoal" 
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.EducationGoal" 
     project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/EducationGoal.java" binary="false">    
-    <position height="-1" width="-1" x="1447" y="406"/>    
+    <position height="-1" width="-1" x="1328" y="162"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="5" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.StudentEducationPlan" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/StudentEducationPlan.java" binary="false">    
-    <position height="-1" width="-1" x="447" y="876"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="6" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.StudentStatus" 
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.StudentStatus" 
     project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/StudentStatus.java" binary="false">    
-    <position height="-1" width="-1" x="118" y="771"/>    
+    <position height="-1" width="-1" x="113" y="720"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="7" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.Student" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/Student.java" binary="false">    
-    <position height="-1" width="-1" x="787" y="1051"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="8" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.StudentEducationGoal" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/StudentEducationGoal.java" binary="false">    
-    <position height="-1" width="-1" x="1118" y="486"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="9" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.FundingSource" 
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.FundingSource" 
     project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/FundingSource.java" binary="false">    
-    <position height="-1" width="-1" x="160" y="405"/>    
+    <position height="-1" width="-1" x="208" y="141"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="10" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.Citizenship" project="ssp" 
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.Citizenship" project="ssp" 
     file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/Citizenship.java" binary="false">    
-    <position height="-1" width="-1" x="185" y="1144"/>    
+    <position height="-1" width="-1" x="1642" y="1033"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="11" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.StudentEducationLevel" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/StudentEducationLevel.java" binary="false">    
-    <position height="-1" width="-1" x="1132" y="860"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="12" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.Challenge" project="ssp" 
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.Challenge" project="ssp" 
     file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/Challenge.java" binary="false">    
-    <position height="-1" width="-1" x="440" y="163"/>    
+    <position height="-1" width="-1" x="982" y="84"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="13" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.VeteranStatus" 
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.VeteranStatus" 
     project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/VeteranStatus.java" binary="false">    
-    <position height="-1" width="-1" x="213" y="1281"/>    
+    <position height="-1" width="-1" x="1654" y="1232"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="14" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.EducationLevel" 
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.EducationLevel" 
     project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/EducationLevel.java" binary="false">    
-    <position height="-1" width="-1" x="1414" y="774"/>    
+    <position height="-1" width="-1" x="155" y="1422"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="15" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.Ethnicity" project="ssp" 
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.Ethnicity" project="ssp" 
     file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/Ethnicity.java" binary="false">    
-    <position height="-1" width="-1" x="445" y="1560"/>    
+    <position height="-1" width="-1" x="1681" y="1714"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="16" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.MaritalStatus" 
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.MaritalStatus" 
     project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/MaritalStatus.java" binary="false">    
-    <position height="-1" width="-1" x="279" y="1424"/>    
+    <position height="-1" width="-1" x="1661" y="1471"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="17" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.Person" project="ssp" 
+  <class id="10" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.Person" project="ssp" 
     file="/ssp/src/main/java/edu/sinclair/ssp/model/Person.java" binary="false">    
-    <position height="-1" width="-1" x="1394" y="1487"/>    
+    <position height="-1" width="-1" x="796" y="1058"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <association id="18">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="19" name="educationGoal"/>      
-      <multiplicity id="20" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="21">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="22" name="student"/>      
-      <multiplicity id="23" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="24">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="25" name="veteranStatus"/>      
-      <multiplicity id="26" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="27">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="28" name="educationLevel"/>      
-      <multiplicity id="29" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="30">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="31" name="student"/>      
-      <multiplicity id="32" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="33">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="34" name="ethnicity"/>      
-      <multiplicity id="35" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="36">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="37" name="person"/>      
-      <multiplicity id="38" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="39">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="40" name="coach"/>      
-      <multiplicity id="41" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="42">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="43" name="student"/>      
-      <multiplicity id="44" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="45">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="46" name="citizenship"/>      
-      <multiplicity id="47" minimum="0" maximum="1"/>    
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonFunding" project="ssp" 
+    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonFunding.java" binary="false">    
+    <position height="226" width="241" x="339" y="359"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonChallenge" project="ssp" 
+    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonChallenge.java" binary="false">    
+    <position height="-1" width="-1" x="783" y="297"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="13" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonEducationGoal" project="ssp" 
+    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonEducationGoal.java" binary="false">    
+    <position height="322" width="235" x="1009" y="297"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="14" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonDemographics" project="ssp" 
+    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonDemographics.java" binary="false">    
+    <position height="-1" width="-1" x="1273" y="1256"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="15" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonEducationPlan" project="ssp" 
+    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonEducationPlan.java" binary="false">    
+    <position height="-1" width="-1" x="422" y="915"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="16" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonEducationLevel" project="ssp" 
+    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonEducationLevel.java" binary="false">    
+    <position height="-1" width="-1" x="464" y="1310"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association id="17">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="18" name="person"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="48">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="49" name="studentStatus"/>      
-      <multiplicity id="50" minimum="0" maximum="1"/>    
+  <association id="20">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="21" name="educationGoal"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
+    <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="51">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="52" name="challenge"/>      
-      <multiplicity id="53" minimum="0" maximum="1"/>    
+  <association id="23">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="24" name="citizenship"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
+    <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="54">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="55" name="maritalStatus"/>      
-      <multiplicity id="56" minimum="0" maximum="1"/>    
+  <association id="26">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="27" name="coach"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
+    <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="57">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="58" name="student"/>      
-      <multiplicity id="59" minimum="0" maximum="1"/>    
+  <association id="29">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="30" name="person"/>      
+      <multiplicity id="31" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="32">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="33" name="person"/>      
+      <multiplicity id="34" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="35">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="36" name="educationLevel"/>      
+      <multiplicity id="37" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="60">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="61" name="fundingSource"/>      
-      <multiplicity id="62" minimum="0" maximum="1"/>    
+  <association id="38">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="39" name="challenge"/>      
+      <multiplicity id="40" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="41">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="42" name="maritalStatus"/>      
+      <multiplicity id="43" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="63">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="64" name="student"/>      
-      <multiplicity id="65" minimum="0" maximum="1"/>    
+  <association id="44">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="45" name="person"/>      
+      <multiplicity id="46" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="48" name="studentStatus"/>      
+      <multiplicity id="49" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="50">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="51" name="person"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="53">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="54" name="veteranStatus"/>      
+      <multiplicity id="55" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="56">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="57" name="fundingSource"/>      
+      <multiplicity id="58" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="59">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="60" name="ethnicity"/>      
+      <multiplicity id="61" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="62">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="63" name="person"/>      
+      <multiplicity id="64" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    

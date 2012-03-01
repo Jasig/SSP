@@ -2,11 +2,9 @@ package edu.sinclair.ssp.model.reference;
 
 import java.util.UUID;
 
+public class Citizenship extends AbstractReference {
 
-
-public class Citizenship extends AbstractReference{
-
-	public Citizenship(){
+	public Citizenship() {
 		super();
 	}
 	

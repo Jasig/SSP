@@ -4,13 +4,13 @@ import java.util.UUID;
 
 import edu.sinclair.ssp.model.reference.FundingSource;
 
-public class StudentFunding {
+public class PersonFunding {
 
 	private UUID id;
 	
 	private String description;
 	
-	private Student student;
+	private Person person;
 	
 	private FundingSource fundingSource;
 
@@ -30,12 +30,12 @@ public class StudentFunding {
 		this.description = description;
 	}
 
-	public Student getStudent() {
-		return student;
+	public Person getPerson() {
+		return person;
 	}
 
-	public void setStudent(Student student) {
-		this.student = student;
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 	public FundingSource getFundingSource() {

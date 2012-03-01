@@ -4,13 +4,13 @@ import java.util.UUID;
 
 import edu.sinclair.ssp.model.reference.Challenge;
 
-public class StudentChallenge {
+public class PersonChallenge {
 	
 	private UUID id;
 	
 	private String description;
 	
-	private Student student;
+	private Person person;
 	
 	private Challenge challenge;
 
@@ -30,12 +30,12 @@ public class StudentChallenge {
 		this.description = description;
 	}
 
-	public Student getStudent() {
-		return student;
+	public Person getPerson() {
+		return person;
 	}
 
-	public void setStudent(Student student) {
-		this.student = student;
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 	public Challenge getChallenge() {
