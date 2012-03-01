@@ -3,45 +3,89 @@ package edu.sinclair.ssp.model;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotEmpty;
+
+@Entity
+@Table(name = "person", schema = "public")
 public class Person {
 
+	public static UUID SYSTEM_ADMINISTRATOR_ID = UUID.fromString("58ba5ee3-734e-4ae9-b9c5-943774b4de41");
+	
+	@Id
+	@Type(type="pg-uuid")
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@NotNull
 	private UUID id;
-	
+
+	@Column(name = "first_name", nullable = false, length=50)
+	@NotNull
+	@NotEmpty
 	private String firstName;
-	
+
+	@Column(name = "middle_initial", nullable = false, length=1)
 	private String middleInitial;
-	
+
+	@Column(name = "last_name", nullable = false, length=50)
+	@NotNull
+	@NotEmpty
 	private String lastName;
-	
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "birth_date")
 	private Date birthDate;
-	
+
+	@Column(name = "primary_email_address", length=100)
 	private String primaryEmailAddress;
-	
+
+	@Column(name = "secondary_email_address", length=100)
 	private String secondaryEmailAddress;
-	
+
+	@Column(length=25)
 	private String username;
-	
-	private String password;
-	
+
+	@Column(name = "home_phone", length=25)
 	private String homePhone;
-	
+
+	@Column(name = "work_phone", length=25)
 	private String workPhone;
-	
+
+	@Column(name = "cell_phone", length=25)
 	private String cellPhone;
-	
+
+	@Column(name = "address_line_1", length=50)
 	private String addressLine1;
-	
+
+	@Column(name = "address_line_2", length=50)
 	private String addressLine2;
-	
+
+	@Column(length=50)
 	private String city;
-	
+
+	@Column(length=2)
 	private String state;
-	
+
+	@Column(name = "zip_code", length=10)
 	private String zipCode;
-	
+
+	@Column(name = "photo_url", length=100)
 	private String photoUrl;
-	
+
+	@Column(name = "school_id", length=50)
 	private String schoolId;
+
+	private boolean enabled;
 
 	public UUID getId() {
 		return id;
@@ -105,14 +149,6 @@ public class Person {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getHomePhone() {
@@ -193,6 +229,14 @@ public class Person {
 
 	public void setSchoolId(String schoolId) {
 		this.schoolId = schoolId;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 	
 }

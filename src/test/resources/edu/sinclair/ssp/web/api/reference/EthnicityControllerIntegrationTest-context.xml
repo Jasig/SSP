@@ -28,7 +28,7 @@
 				<property name="password" value="#{configProperties.db_admin_password}" />
 			</bean>
 		</property>
-		<property name="changeLog" value="classpath:edu/sinclair/ssp/database/masterChangeLog.xml" />
+		<property name="changeLog" value="classpath:edu/sinclair/ssp/database/masterChangeLog-test.xml" />
 	</bean>
 
 	<!-- Hibernate -->

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.sinclair.ssp.dao.PersonDao;
+import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.reference.Challenge;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,12 +32,17 @@ public class ChallengeDaoTest {
 
 	@Autowired
 	private ChallengeDao dao;
+	
+	@Autowired
+	private PersonDao personDao;
 
 	@Test
 	public void testSaveNew(){
 		UUID saved;
 		
 		Challenge obj = new Challenge();
+		obj.setCreatedDate(new Date());
+		obj.setCreatedBy(personDao.get(Person.SYSTEM_ADMINISTRATOR_ID));
 		obj.setName("new name");
 		dao.save(obj);
 		

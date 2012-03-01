@@ -64,6 +64,123 @@
 		</rollback>
 		
 	</changeSet>
+
+	<changeSet id="person table" author="daniel.bower">
+		<createTable tableName="person">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="first_name" type="character varying(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="middle_initial" type="char(1)">
+				<constraints nullable="true" />
+			</column>
+			<column name="last_name" type="character varying(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="birth_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+			<column name="primary_email_address" type="character varying(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="secondary_email_address" type="character varying(100)">
+				<constraints nullable="true" />
+			</column>
+			<column name="username" type="character varying(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="home_phone" type="character varying(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="work_phone" type="character varying(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="cell_phone" type="character varying(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_line_1" type="character varying(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_line_2" type="character varying(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="city" type="character varying(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="state" type="char(2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="zip_code" type="char(10)">
+				<constraints nullable="true" />
+			</column>
+			<column name="photo_url" type="character varying(100)">
+				<constraints nullable="true" />
+			</column>
+			<column name="school_id" type="character varying(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="enabled" type="boolean" defaultValueBoolean="false"/>
+		</createTable>
+		
+		<sql>grant all on person to ssp</sql>
+		<rollback>
+			<dropTable tableName="person"/>
+		</rollback>
+		
+	</changeSet>
+
+	<changeSet id="additional std props for ref tables" author="daniel.bower">
+		<addColumn tableName="challenge">
+			<column name="created_date" type="datetime">
+				<constraints nullable="false"/>
+			</column>
+			<column name="modified_date" type="datetime"/>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" 
+					foreignKeyName="challenge_created_by_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="challenge_modified_by_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+		
+		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
+		Specifying "Without" timezone-->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+		</modifySql>
+	</changeSet>
+	
+	<changeSet id="create system person" author="">
+		<insert tableName="person">
+			<column name="id" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="first_name" value="System" />
+			<column name="last_name" value="Administrator" />
+			<column name="primary_email_address" value="test@sinclair.edu" />
+			<column name="secondary_email_address" value="test@sinclair.edu" />
+			<column name="username" value="system" />
+			<column name="work_phone" value="000-000-0000" />
+			<column name="address_line_1" value="444 West Third Street" />
+			<column name="city" value="Dayton" />
+			<column name="state" value="OH" />
+			<column name="zip_code" value="45402" />
+			<column name="photo_url" value="" />
+			<column name="school_id" value="system" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="person">
+				<where>id='58ba5ee3-734e-4ae9-b9c5-943774b4de41'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 	
 	<!-- changeSet author='daniel.bower' id='Add more reference tables'>
 		<createTable tableName="citizenship">
