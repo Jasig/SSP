@@ -1,5 +1,5 @@
 Ext.define('Ssp.model.reference.MaritalStatusTO', {
-    extend: 'Ext.data.Model',
-    fields: ['id','name','description']
+	extend: 'Ssp.model.reference.AbstractReferenceTO',
+    fields: []
     
 });

@@ -1,5 +1,5 @@
 Ext.define('Ssp.model.reference.EthnicityTO', {
-    extend: 'Ext.data.Model',
-    fields: ['id','name','description']
+	extend: 'Ssp.model.reference.AbstractReferenceTO',
+    fields: []
     
 });

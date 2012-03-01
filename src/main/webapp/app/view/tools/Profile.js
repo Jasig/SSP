@@ -18,23 +18,20 @@ Ext.define('Ssp.view.tools.Profile', {
     items: [{
             xtype: 'fieldset',
             title: 'Student Profile',
-            defaultType: 'textfield',
+            defaultType: 'displayfield',
             defaults: {
                 anchor: '100%'
             },
        items: 
        [{
-	        xtype: 'displayfield',
 	        fieldLabel: 'Student',
 	        name: 'name'
 	    }, {
 	        fieldLabel: 'Tartan ID',
 	        name: 'uniqueSchoolUserId'
 	    }, {
-	        xtype: 'displayfield',
 	        fieldLabel: 'Date of Birth',
-	        name: 'dateOfBirth',
-	        allowBlank: false
+	        name: 'birthDate'
 	    }, {
 	        fieldLabel: 'Home Phone',
 	        name: 'homePhone'

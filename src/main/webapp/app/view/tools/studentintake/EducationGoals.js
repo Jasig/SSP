@@ -1,6 +1,6 @@
 Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 	extend: "Ext.form.Panel",
-	id : "StudentIntakeEducationGoals",
+	id : "StudentIntakeEducationGoal",
     
     width: "100%",
     height: "100%",
@@ -26,15 +26,15 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
             fieldLabel: "Education/Career Goal",
             columns: 1,
             items: [
-                {boxLabel: "Uncertain", name: "goal"},
-                {boxLabel: "Associates Degree", name: "goal"},
-                {boxLabel: "Certificate", name: "goal"},
-                {boxLabel: "Short Term Certificate", name: "goal"},
-                {boxLabel: "Bachelor's", name: "goal"},
-                {boxLabel: "Workforce", name: "goal"},
-                {boxLabel: "Tech School", name: "goal"},
-                {boxLabel: "Military", name: "goal"},
-                {boxLabel: "Other", name: "goal"}
+                {boxLabel: "Uncertain", name: "educationGoal", inputValue:"1"},
+                {boxLabel: "Associates Degree", name: "educationGoal", inputValue:"2"},
+                {boxLabel: "Certificate", name: "educationGoal", inputValue:"3"},
+                {boxLabel: "Short Term Certificate", name: "educationGoal", inputValue:"4"},
+                {boxLabel: "Bachelor's", name: "educationGoal", inputValue:"5"},
+                {boxLabel: "Workforce", name: "educationGoal", inputValue:"6"},
+                {boxLabel: "Tech School", name: "educationGoal", inputValue:"7"},
+                {boxLabel: "Military", name: "educationGoal", inputValue:"8"},
+                {boxLabel: "Other", name: "educationGoal", inputValue:"9"}
         		]
         },
         {
@@ -42,11 +42,11 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
             fieldLabel: "How sure are you about your major?",
             columns: 1,
             items: [
-                {boxLabel: "Very Unsure", name: "confidenceInMajor", value: 1},
-                {boxLabel: "", name: "confidenceInMajor", value: 2},
-                {boxLabel: "", name: "confidenceInMajor", value: 3},
-                {boxLabel: "", name: "confidenceInMajor", value: 4},
-                {boxLabel: "Very Sure", name: "confidenceInMajor", value: 5}
+                {boxLabel: "Very Unsure", name: "howSureAboutMajor", inputValue: "1"},
+                {boxLabel: "", name: "howSureAboutMajor", inputValue: "2"},
+                {boxLabel: "", name: "howSureAboutMajor", inputValue: "3"},
+                {boxLabel: "", name: "howSureAboutMajor", inputValue: "4"},
+                {boxLabel: "Very Sure", name: "howSureAboutMajor", inputValue: "5"}
         		]
         },{
         fieldLabel: 'What is your planned occupation?',

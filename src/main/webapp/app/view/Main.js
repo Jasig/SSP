@@ -6,5 +6,21 @@ Ext.define('Ssp.view.Main', {
     layout: {
     	type: 'hbox',
     	align: 'stretch'
-    } 
+    },
+    dockedItems: {
+        itemId: 'toolbar',
+        xtype: 'toolbar',
+        items: [ 
+		        {
+		            xtype: 'button',
+		            text: 'Student Record'
+		        }, {
+		            xtype: 'button',
+		            text: 'Admin'
+		        }, {
+		            xtype: 'button',
+		            text: 'Reports'
+		        }
+        ]
+    }
 });	

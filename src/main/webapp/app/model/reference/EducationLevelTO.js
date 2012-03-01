@@ -1,5 +1,5 @@
 Ext.define('Ssp.model.reference.EducationLevelTO', {
-    extend: 'Ext.data.Model',
-    fields: ['id','name','description']
+	extend: 'Ssp.model.reference.AbstractReferenceTO',
+    fields: []
     
 });

@@ -1,5 +1,5 @@
 Ext.define('Ssp.model.reference.AbstractReferenceTO', {
-    extend: 'Ext.data.Model',
-    fields: ['id','name']
+    extend: 'Ssp.model.AbstractBaseTO',
+    fields: ['id','name','description','createdDate','createdByPersonId','modifiedDate','modifiedByPersonId','objectStatus']
     
 });

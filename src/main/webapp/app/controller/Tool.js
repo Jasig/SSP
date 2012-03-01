@@ -36,6 +36,7 @@ Ext.define('Ssp.controller.Tool', {
 		var toolsView = Ext.getCmp('Tools');
 		var comp = Ext.create('Ssp.view.tools.'+toolType);
 		var tabs;
+		var Form = "";
 		
 		switch(toolType)
 		{
@@ -44,51 +45,43 @@ Ext.define('Ssp.controller.Tool', {
 				break;
 			
 			case 'StudentIntake':
-				Ext.getCmp('StudentIntakePersonal').loadRecord( this.application.currentStudent );
-				Ext.getCmp('StudentIntakeDemographics').loadRecord( this.application.currentStudent );
-				Ext.getCmp('StudentIntakeEducationPlans').loadRecord( this.application.currentStudent );
-
-				// Education Levels Check Boxes
-				var form = Ext.getCmp('StudentIntakeEducationLevels');
-				var store = Ext.getStore('reference.EducationLevels');
-				for (var i=0; i<store.data.items.length; i++)
-				{
-					var cb = {xtype:'checkbox'};
-					var item = store.data.items[i];
-					cb.boxLabel = item.get('name');
-					cb.inputValue = item.get('id');
-					form.insert(form.items.length,cb);
-				}
-				form.doLayout();
-				form.loadRecord( this.application.currentStudent );
-				
-				// Funding Check Boxes
-				var form = Ext.getCmp('StudentIntakeFunding');
-				var store = Ext.getStore('reference.FundingSources');
-				for (var i=0; i<store.data.items.length; i++)
-				{
-					var cb = {xtype:'checkbox'};
-					var item = store.data.items[i];
-					cb.boxLabel = item.get('name');
-					cb.inputValue = item.get('id');
-					form.insert(form.items.length,cb);
-				}
-				form.doLayout();
-				form.loadRecord( this.application.currentStudent );
-				
-				// Challenges
-				form = Ext.getCmp('StudentIntakeChallenges');
-				store = Ext.getStore('reference.Challenges');
-				for (i=0; i<store.data.items.length; i++)
-				{
-					var cb = {xtype:'checkbox'};
-					var item = store.data.items[i];
-					cb.boxLabel = item.get('name');
-					cb.inputValue = item.get('id');
-					form.insert(form.items.length,cb);
-				}
-				form.doLayout();
-				form.loadRecord( this.application.currentStudent );
+				Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeFormTO');
+				Form.load(123,{
+					success: function( formData ) {
+						console.log( formData.data.student );
+						Ext.getStore('reference.States').loadData( formData.data.referenceData.states );
+						Ext.getStore('reference.Challenges').loadData( formData.data.referenceData.challenges );
+						Ext.getStore('reference.ChildCareArrangements').loadData( formData.data.referenceData.childCareArrangements );
+						Ext.getStore('reference.Citizenships').loadData( formData.data.referenceData.citizenships );
+						Ext.getStore('reference.EducationalGoals').loadData( formData.data.referenceData.educationalGoals );
+						Ext.getStore('reference.EducationLevels').loadData( formData.data.referenceData.educationLevels );
+						Ext.getStore('reference.EmploymentShifts').loadData( formData.data.referenceData.employmentShifts );
+						Ext.getStore('reference.Ethnicities').loadData( formData.data.referenceData.ethnicities );
+						Ext.getStore('reference.FundingSources').loadData( formData.data.referenceData.fundingSources );
+						Ext.getStore('reference.Genders').loadData( formData.data.referenceData.genders );
+						Ext.getStore('reference.MaritalStatuses').loadData( formData.data.referenceData.maritalStatuses );
+						Ext.getStore('reference.VeteranStatuses').loadData( formData.data.referenceData.veteranStatuses ); 
+						Ext.getStore('reference.YesNo').loadData( formData.data.referenceData.yesNo );						
+						
+						
+						// Load records for each of the forms
+						Ext.getCmp('StudentIntakePersonal').loadRecord( formData.data.student );
+						Ext.getCmp('StudentIntakeDemographics').loadRecord( formData.data.student );
+						Ext.getCmp('StudentIntakeEducationPlans').loadRecord( formData.data.studentEducationPlan );
+						Ext.getCmp('StudentIntakeEducationGoal').loadRecord( formData.data.studentEducationGoal );
+						
+						formUtils = Ext.create('Ssp.util.FormRendererUtils');
+						
+						// Education Levels
+						formUtils.createCheckBoxForm('StudentIntakeEducationLevels', formData.data.referenceData.educationLevels, formData.data.studentEducationLevels, 'id');
+						
+						// Funding Sources
+						formUtils.createCheckBoxForm('StudentIntakeFunding', formData.data.referenceData.fundingSources, formData.data.studentFundingSources, 'id');						
+						
+						// Challenges
+						formUtils.createCheckBoxForm('StudentIntakeChallenges', formData.data.referenceData.challenges, formData.data.studentChallenges, 'id');
+					}
+				});
 				break;
 		}
 		

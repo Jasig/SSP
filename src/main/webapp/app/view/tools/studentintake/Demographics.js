@@ -107,17 +107,17 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         fieldLabel: 'If you have children, please indicate below'
     },{
         xtype: 'numberfield',
-        name: 'howManyChildren',
+        name: 'numberOfChildren',
         fieldLabel: 'How many?',
         value: 0,
         minValue: 0,
         maxValue: 50
     },{
         fieldLabel: 'Ages? Separate each age with a comma. (1,5,12)',
-        name: 'ages'
+        name: 'childAges'
     },{
         xtype: 'combobox',
-        name: 'childcareNeeded',
+        name: 'childCareNeeded',
         fieldLabel: 'Childcare needed?',
         emptyText: 'Select One',
         store: Ext.getStore('reference.YesNo'),
@@ -129,7 +129,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         allowBlank: true
 	},{
         xtype: 'combobox',
-        name: 'childCareArrangements',
+        name: 'childCareArrangement',
         fieldLabel: 'If yes, what are your childcare arrangments?',
         emptyText: 'Select One',
         store: Ext.getStore('reference.ChildCareArrangements'),
@@ -153,10 +153,10 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         allowBlank: true
 	},{
         fieldLabel: 'Place of employment',
-        name: 'company'
+        name: 'placeOfEmployment'
     },{
         xtype: 'combobox',
-        name: 'employmentShift',
+        name: 'shift',
         fieldLabel: 'Shift',
         emptyText: 'Select One',
         store: Ext.getStore('reference.EmploymentShifts'),
@@ -171,7 +171,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         name: 'wage'
     },{
         fieldLabel: 'Total hours worked weekly while attending school',
-        name: 'hoursWorkedPerWeek'
+        name: 'totalHoursWorkedPerWeek'
     }]
     }],
 	

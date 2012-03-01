@@ -42,12 +42,12 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
         fieldLabel: 'Check all that you have completed',
         columns: 1,
         items: [
-            {boxLabel: 'New Student Orientation', name: 'newStudentOrientation'},
+            {boxLabel: 'New Student Orientation', name: 'newOrientationComplete'},
             {boxLabel: 'Registered for Classes', name: 'registeredForClasses'}
         ]
     },{
         xtype: 'combobox',
-        name: 'parentsObtainedADegree',
+        name: 'collegeDegreeForParents',
         fieldLabel: 'Have your parents obtained a college degree?',
         emptyText: 'Select One',
         store: Ext.getStore('reference.YesNo'),
@@ -59,7 +59,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
         allowBlank: true
 	},{
         xtype: 'combobox',
-        name: 'requireSpecialAccommodation',
+        name: 'specialNeeds',
         fieldLabel: 'Require Special Accommodation',
         emptyText: 'Select One',
         store: Ext.getStore('reference.YesNo'),
@@ -74,15 +74,15 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
             fieldLabel: 'What grade did you typically earn at your highest level of education?',
             columns: 1,
             items: [
-                {boxLabel: 'A', name: 'averageGradeInSchool'},
-                {boxLabel: 'A-B', name: 'averageGradeInSchool'},
-                {boxLabel: 'B', name: 'averageGradeInSchool'},
-                {boxLabel: 'B-C', name: 'averageGradeInSchool'},
-                {boxLabel: 'C', name: 'averageGradeInSchool'},
-                {boxLabel: 'C-D', name: 'averageGradeInSchool'},
-                {boxLabel: 'D', name: 'averageGradeInSchool'},
-                {boxLabel: 'D-F', name: 'averageGradeInSchool'},
-                {boxLabel: 'F', name: 'averageGradeInSchool'}
+                {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "A"},
+                {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "A-B"},
+                {boxLabel: 'B', name: 'gradeTypicallyEarned', inputValue: "B"},
+                {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "B-C"},
+                {boxLabel: 'C', name: 'gradeTypicallyEarned', inputValue: "C"},
+                {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "C-D"},
+                {boxLabel: 'D', name: 'gradeTypicallyEarned', inputValue: "D"},
+                {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "D-F"},
+                {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
         		]
         }]
     }],

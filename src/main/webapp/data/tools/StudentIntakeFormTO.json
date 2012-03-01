@@ -1,62 +1,176 @@
 {
 	success: true,
-    StudentIntakeFormTO: { 
+    StudentIntakeForm: { 
 	       
-	       studentId: "1",
+	        studentId: "1",
+	       		
+       		student: {
+		        studentId: "1",
+		        studentIntakeCreatedDate: "01/21/2012",
+		        photoUrl: "/ssp/images/student-pic-small.png",
+		        uniqueSchoolUserId: '0123456',
+		        name: "Julia R. Johnson",
+		        firstName: "Julia",
+		        middleInitial: "R",
+		        lastName: "Johnson",
+		        homePhone: "555-555-5555",
+		        cellPhone: "937-555-5555",
+		        workPhone: "512-555-5555",
+		        address: "333 Dayton Rd.",
+		        city: "Dayton",
+		        state: "OH",
+		        zipCode: "55555-5555",
+		        emailPrimary: "student.email@my.sinclair.edu",
+		        emailSecondary: "student.email@yahoo.com",
+		        birthDate: "1/27/1994",
+		        abilityToBenefit: "y",
+		        anticipatedStartTerm: "WI",
+		        anticipatedStartYear: "2012",
+		        isLocal: "true",
+		        countryOfResidence: "United States",
+		        paymentStatus: "",
+       			maritalStatus: "1",
+       			ethnicity: "African American",
+       			gender: "Female",
+       			citizenship: "US Citizen",
+       			veteranStatus: "Veteran",
+       			countryOfCitizenship: "United States",
+       			primaryCaregiver: "Y",
+       			caregiverTypeChild: "",
+       			numberOfChildren: "3",
+       			childAges: "1,5,7",
+       			childCareNeeded: "Y",
+       			childCareArrangement: "Daycare",
+       			employed: "Y",
+       			placeOfEmployment: "Sinclair Community College",
+       			wage: "$8.00",
+       			shift: "3rd",
+       			totalHoursWorkedPerWeek: "25"
+       		},
+       		
+       		studentEducationGoal: {
+       			id: "1",
+       			studentId: "1",
+       			educationGoal: "4",
+       			description: "",
+				howSureAboutMajor: "2",
+				plannedOccupation: "Web Developer"	
+       		},
+       		
+       		studentEducationLevels: [{
+       			studentId: "1",
+       			id: "1",
+       			educationLevelCounter: "3",
+       			schoolName: "",
+       			graduated: "",
+       			graduatedYear: "",
+       			highestGradeCompleted: "",
+       			lastYearAttended: "",
+       			otherEducationLevelDesc: ""
+       		}],
+       		
+       		studentEducationPlan: {
+       			id: "1",
+       			studentId: "1",
+       			studentStatus: "1",
+       			newOrientationComplete: "true",
+       			registeredForClasses: "true",
+       			gradeTypicallyEarned: "A",
+       			collegeDegreeForParents: "Y",
+       			specialNeeds: "N"
+       		},
+       		
+       		studentFundingSources: [
+       			{ id: "1" },
+       			{ id: "4" }
+       		
+       		],
+       		
+       		studentChallenges: [
+       			{ id: "1" },
+       			{ id: "3" }
+       		],
 	       
-	       StudentIntakeTO: {
-	       		
-	       		personal: {
-	       		
-	       		
-	       		},
-	       		
-	       		demographics: {
-	       		
-	       		
-	       		},
-	       		
-	       		educationalGoals: {
-	       		
-	       		
-	       		},
-	       		
-	       		educationLevels: {
-	       		
-	       		
-	       		},
-	       		
-	       		educationPlans: {
-	       		
-	       		
-	       		},
-	       		
-	       		fundingSources: {
-	       		
-	       		
-	       		},
-	       		
-	       		challenges: {
-	       		
-	       		
-	       		}
-	       
-	       },
-	       
-	       StudentIntakeReferenceDataTO: {
+	        referenceData: {
 
-	       			challenges: [
-						    {
-						        id: "1",
-						        name: "Child or Adult Care",
-						        description: "Child or Adult Care"
-						    },
-						    {
-						        id: "2",
-						        name: "Classroom Issues",
-						        description: "Classroom Issues"
-						    }
-					],
+	       			    challenges: [{
+								        id: "1",
+								        name: "Child or Adult Care",
+								        description: "Child or Adult Care",
+								        createdDate: "01/01/2012",
+								        createdByPersonId: "1",
+								        modifiedDate: "",
+								        modifiedByPersonId: "",
+								        objectStatus: "1",
+								        showInStudentIntake: "1"
+								    },
+								    {
+								        id: "2",
+								        name: "Classroom Issues",
+								        description: "Classroom Issues",
+								        createdDate: "01/01/2012",
+								        createdByPersonId: "1",
+								        modifiedDate: "",
+								        modifiedByPersonId: "",
+								        objectStatus: "1",
+								        showInStudentIntake: "1"
+								    },
+								    {
+								        id: "3",
+								        name: "Computer/Email",
+								        description: "Computer/Email",
+								        createdDate: "01/01/2012",
+								        createdByPersonId: "1",
+								        modifiedDate: "",
+								        modifiedByPersonId: "",
+								        objectStatus: "1",
+								        showInStudentIntake: "1"
+								    },
+								    {
+								        id: "4",
+								        name: "Finances - Education",
+								        description: "Finances - Education",
+								        createdDate: "01/01/2012",
+								        createdByPersonId: "1",
+								        modifiedDate: "",
+								        modifiedByPersonId: "",
+								        objectStatus: "1",
+								        showInStudentIntake: "1"
+								    },
+								    {
+								        id: "5",
+								        name: "Finances - Personal",
+								        description: "Finances - Personal",
+								        createdDate: "01/01/2012",
+								        createdByPersonId: "1",
+								        modifiedDate: "",
+								        modifiedByPersonId: "",
+								        objectStatus: "1",
+								        showInStudentIntake: "1"
+								    },
+								    {
+								        id: "6",
+								        name: "Other",
+								        description: "Other",
+								        createdDate: "01/01/2012",
+								        createdByPersonId: "1",
+								        modifiedDate: "",
+								        modifiedByPersonId: "",
+								        objectStatus: "1",
+								        showInStudentIntake: "1"
+								    },
+								    {
+								        id: "7",
+								        name: "Transportation",
+								        description: "Transportation",
+								        createdDate: "01/01/2012",
+								        createdByPersonId: "1",
+								        modifiedDate: "",
+								        modifiedByPersonId: "",
+								        objectStatus: "1",
+								        showInStudentIntake: "1"
+								    }
+							],
 
 				    childCareArrangements: [
 						    {
