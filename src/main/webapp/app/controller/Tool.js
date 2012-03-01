@@ -60,13 +60,14 @@ Ext.define('Ssp.controller.Tool', {
 						Ext.getStore('reference.FundingSources').loadData( formData.data.referenceData.fundingSources );
 						Ext.getStore('reference.Genders').loadData( formData.data.referenceData.genders );
 						Ext.getStore('reference.MaritalStatuses').loadData( formData.data.referenceData.maritalStatuses );
+						Ext.getStore('reference.StudentStatuses').loadData( formData.data.referenceData.studentStatuses );
 						Ext.getStore('reference.VeteranStatuses').loadData( formData.data.referenceData.veteranStatuses ); 
 						Ext.getStore('reference.YesNo').loadData( formData.data.referenceData.yesNo );						
 						
 						
 						// Load records for each of the forms
 						Ext.getCmp('StudentIntakePersonal').loadRecord( formData.data.student );
-						Ext.getCmp('StudentIntakeDemographics').loadRecord( formData.data.student );
+						Ext.getCmp('StudentIntakeDemographics').loadRecord( formData.data.studentDemographics );
 						Ext.getCmp('StudentIntakeEducationPlans').loadRecord( formData.data.studentEducationPlan );
 						Ext.getCmp('StudentIntakeEducationGoal').loadRecord( formData.data.studentEducationGoal );
 						

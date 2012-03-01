@@ -46,33 +46,22 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
             {boxLabel: 'Registered for Classes', name: 'registeredForClasses'}
         ]
     },{
-        xtype: 'combobox',
-        name: 'collegeDegreeForParents',
-        fieldLabel: 'Have your parents obtained a college degree?',
-        emptyText: 'Select One',
-        store: Ext.getStore('reference.YesNo'),
-        valueField: 'id',
-        displayField: 'name',
-        mode: 'local',
-        typeAhead: true,
-        queryMode: 'local',
-        allowBlank: true
-	},{
-        xtype: 'combobox',
-        name: 'specialNeeds',
-        fieldLabel: 'Require Special Accommodation',
-        emptyText: 'Select One',
-        store: Ext.getStore('reference.YesNo'),
-        valueField: 'id',
-        displayField: 'name',
-        mode: 'local',
-        typeAhead: true,
-        queryMode: 'local',
-        allowBlank: true
-	},{
+        xtype: "radiogroup",
+        fieldLabel: "Have your parents obtained a college degree?",
+        columns: 1,
+        items: [
+            {boxLabel: "Yes", name: "collegeDegreeForParents", inputValue:"Y"},
+            {boxLabel: "No", name: "collegeDegreeForParents", inputValue:"N"}]
+    },{
+        xtype: "radiogroup",
+        fieldLabel: "Require special accommodations?",
+        columns: 1,
+        items: [
+            {boxLabel: "Yes", name: "specialNeeds", inputValue:"Y"},
+            {boxLabel: "No", name: "specialNeeds", inputValue:"N"}]
+    },{
             xtype: 'radiogroup',
             fieldLabel: 'What grade did you typically earn at your highest level of education?',
-            columns: 1,
             items: [
                 {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "A"},
                 {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "A-B"},

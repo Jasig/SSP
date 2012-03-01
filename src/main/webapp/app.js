@@ -3,6 +3,8 @@ ssp = Ext.create('Ext.app.Application', {
 	requires: ['Ext.container.Viewport',
 			   'Ssp.model.StudentTO',
 			   'Ssp.model.security.UserTO',
+			   'Ssp.model.tool.studentintake.StudentIntakeForm',
+			   'Ssp.model.tool.studentintake.StudentDemographics',
 			   'Ssp.model.tool.studentintake.StudentEducationGoal',
 			   'Ssp.model.tool.studentintake.StudentEducationPlan'],
 			   
@@ -24,6 +26,7 @@ ssp = Ext.create('Ext.app.Application', {
 			  'reference.FundingSources',
 			  'reference.Genders',
 			  'reference.MaritalStatuses',
+			  'reference.StudentStatuses',
 			  'reference.VeteranStatuses',
 			  'reference.YesNo'], 
 	

@@ -39,7 +39,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
         name: 'lastName'
     },{
         fieldLabel: 'Tartan ID',
-        name: 'uniqueSchoolUserId'
+        name: 'schoolId'
     },{
         fieldLabel: 'Home Phone',
         name: 'homePhone',
@@ -85,11 +85,11 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
         name: 'zipCode'
     },{
         fieldLabel: 'Email School',
-        name: 'emailPrimary',
+        name: 'primaryEmailAddress',
         vtype:'email'
     },{
         fieldLabel: 'Email Alternate',
-        name: 'emailSecondary',
+        name: 'secondaryEmailAddress',
         vtype:'email'
     }]
     }],

@@ -11,6 +11,15 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 		            return student;
 		      	}
              },
+             {name: 'studentDemographics', 
+   		      convert: function(value, record) {
+		            var studentDemographics  = new Ssp.model.tool.studentintake.StudentDemographics();
+		            
+		            studentDemographics.populateFromGenericObject( value );
+		
+		            return studentDemographics;
+		      	}
+             },
              {name: 'studentEducationGoal', 
    		      convert: function(value, record) {
    		            var studentEducationGoal  = new Ssp.model.tool.studentintake.StudentEducationGoal();
@@ -37,7 +46,7 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
     proxy: {
 		type: 'ajax',
 		api: {
-			read: 'data/tools/StudentIntakeFormTO.json'
+			read: 'data/tools/StudentIntakeForm.json'
 		},
 		reader: {
 			type: 'json',

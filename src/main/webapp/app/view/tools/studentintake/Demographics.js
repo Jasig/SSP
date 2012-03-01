@@ -91,18 +91,13 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         queryMode: 'local',
         allowBlank: true
 	},{
-        xtype: 'combobox',
-        name: 'primaryCaregiver',
-        fieldLabel: 'Are you a primary caregiver?',
-        emptyText: 'Select One',
-        store: Ext.getStore('reference.YesNo'),
-        valueField: 'id',
-        displayField: 'name',
-        mode: 'local',
-        typeAhead: true,
-        queryMode: 'local',
-        allowBlank: true
-	}, {
+        xtype: "radiogroup",
+        fieldLabel: "Are you a Primary Caregiver?",
+        columns: 1,
+        items: [
+            {boxLabel: "Yes", name: "primaryCaregiver", inputValue:"Y"},
+            {boxLabel: "No", name: "primaryCaregiver", inputValue:"N"}]
+    }, {
         xtype: 'displayfield',
         fieldLabel: 'If you have children, please indicate below'
     },{
@@ -116,18 +111,13 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         fieldLabel: 'Ages? Separate each age with a comma. (1,5,12)',
         name: 'childAges'
     },{
-        xtype: 'combobox',
-        name: 'childCareNeeded',
-        fieldLabel: 'Childcare needed?',
-        emptyText: 'Select One',
-        store: Ext.getStore('reference.YesNo'),
-        valueField: 'id',
-        displayField: 'name',
-        mode: 'local',
-        typeAhead: true,
-        queryMode: 'local',
-        allowBlank: true
-	},{
+        xtype: "radiogroup",
+        fieldLabel: "Childcare Needed?",
+        columns: 1,
+        items: [
+            {boxLabel: "Yes", name: "childCareNeeded", inputValue:"Y"},
+            {boxLabel: "No", name: "childCareNeeded", inputValue:"N"}]
+    },{
         xtype: 'combobox',
         name: 'childCareArrangement',
         fieldLabel: 'If yes, what are your childcare arrangments?',
@@ -140,18 +130,13 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         queryMode: 'local',
         allowBlank: true
 	},{
-        xtype: 'combobox',
-        name: 'employed',
-        fieldLabel: 'Are you employed?',
-        emptyText: 'Select One',
-        store: Ext.getStore('reference.YesNo'),
-        valueField: 'id',
-        displayField: 'name',
-        mode: 'local',
-        typeAhead: true,
-        queryMode: 'local',
-        allowBlank: true
-	},{
+        xtype: "radiogroup",
+        fieldLabel: "Are you employed?",
+        columns: 1,
+        items: [
+            {boxLabel: "Yes", name: "employed", inputValue:"Y"},
+            {boxLabel: "No", name: "employed", inputValue:"N"}]
+    },{
         fieldLabel: 'Place of employment',
         name: 'placeOfEmployment'
     },{
