@@ -8,18 +8,18 @@ Ext.define('Ssp.view.Main', {
     	align: 'stretch'
     },
     dockedItems: {
+    	id: 'MainNav',
         itemId: 'toolbar',
         xtype: 'toolbar',
         items: [ 
 		        {
 		            xtype: 'button',
-		            text: 'Student Record'
+		            id: 'studentViewNav',
+		            text: 'Students'
 		        }, {
 		            xtype: 'button',
+		            id: 'adminViewNav',
 		            text: 'Admin'
-		        }, {
-		            xtype: 'button',
-		            text: 'Reports'
 		        }
         ]
     }

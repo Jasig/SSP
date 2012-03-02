@@ -1,6 +1,6 @@
 Ext.require('Ext.tab.*');
 Ext.define('Ssp.controller.Tool', {
-    extend: 'Ext.app.Controller',
+    extend: 'Ssp.controller.AbstractController',
     
 	views: [
         'ToolsMenu'
@@ -17,7 +17,9 @@ Ext.define('Ssp.controller.Tool', {
 				scope: this
 			}
 			
-		});  
+		}); 
+		
+		this.superclass.init.call(this, arguments);
     },
  
  	/*
@@ -85,10 +87,9 @@ Ext.define('Ssp.controller.Tool', {
 				});
 				break;
 		}
-		
-		toolsView.removeAll();			
-		toolsView.add( comp );
-		//toolsView.doLayout();	
+
+		this.formRendererUtils.cleanItems(toolsView);
+		toolsView.add( comp );	
 	}
     
 });

@@ -15,6 +15,7 @@ ssp = Ext.create('Ext.app.Application', {
 			  'ApplicationForms', 
 			  'Tools',
 			  'security.Roles',
+			  'admin.AdminMenus',
 			  'reference.States', 
 			  'reference.Challenges',
 			  'reference.ChildCareArrangements',
@@ -31,7 +32,7 @@ ssp = Ext.create('Ext.app.Application', {
 			  'reference.YesNo'], 
 	
 	controllers: [
-        	'Search','Tool','Main'
+        	'AbstractController','Search','Tool','Main'
     ],
           		
     launch: function( app ) {
@@ -45,6 +46,7 @@ ssp = Ext.create('Ext.app.Application', {
 		// Load the initial data for the application
 		Ext.getStore('Students').load();
 		Ext.getStore('security.Roles').load();
+		Ext.getStore('admin.AdminMenus').load();
 
                					 		
    		// Build the UI

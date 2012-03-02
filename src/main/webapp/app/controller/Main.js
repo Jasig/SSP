@@ -1,17 +1,19 @@
 Ext.define('Ssp.controller.Main', {
-    extend: 'Ext.app.Controller',
-    requires: 'Ext.window.*',
+    extend: 'Ssp.controller.AbstractController',
+    requires: ['Ext.window.*'],
 	
 	models: ['security.UserTO'],
     
 	views: [
-        'Main','security.Login','security.Roles'
+        'Main',
+        'security.Login',
+        'security.Roles'
     ],
  
 		
 	init: function() {
         console.log('Initialized Main View Controller!');
-		
+		        
 		this.control({
 			'#securityLoginButton': {
 				click: this.loginButtonClick,
@@ -21,8 +23,21 @@ Ext.define('Ssp.controller.Main', {
 			'#securityRolesButton': {
 				click: this.roleSelectionClick,
 				scope: this
-			}
-		});  
+			},
+			
+			'#studentViewNav': {
+				click: this.studentRecordViewNavClick,
+				scope: this
+			},
+
+			'#adminViewNav': {
+				click: this.adminViewNavClick,
+				scope: this
+			},
+			
+		}); 
+		
+		this.superclass.init.call(this, arguments);
     },
   
 	/*
@@ -38,6 +53,20 @@ Ext.define('Ssp.controller.Main', {
 	roleSelectionClick: function(obj, eObj){ 
 		this.displayApplication();
 	},
+
+	/*
+	 * Handle the studentRecordViewNav click.
+	 */    
+	studentRecordViewNavClick: function(obj, eObj){ 
+		this.displayStudentRecordView();
+	},	
+	
+	/*
+	 * Handle the adminViewNav click.
+	 */    
+	adminViewNavClick: function(obj, eObj){ 
+		this.displayAdminView();
+	},	
 	
 	displayLoginWindow: function(){
 		var sspView = Ext.getCmp('sspView');
@@ -73,25 +102,50 @@ Ext.define('Ssp.controller.Main', {
 	},
  
     displayApplication: function(){
-		// var loginWin = Ext.getCmp('loginWin');
-		var sspView = Ext.getCmp('sspView');
-										
-		var appView = Ext.create('Ssp.view.Main',
-								 {items: [
-								 		  Ext.create('Ssp.view.SearchResults', {flex:2}),
-								 		  
-								 		  Ext.create('Ssp.view.StudentRecord',
-											{items:[Ext.create('Ssp.view.ToolsMenu',{ flex:1 }), 
-											Ext.create('Ssp.view.Tools',{ flex:4, bodyPadding:5 }) 
-											],flex:4})
-								 		 ]
-								 });
-								 
+    	// var loginWin = Ext.getCmp('loginWin');
+    	
 		// Hide the login window
 		// loginWin.hide();
+
+		var sspView = Ext.getCmp('sspView');
 		
-		// Add the application view
-		sspView.add( appView );
+		var appView = Ext.create('Ssp.view.Main');
+								 
+		// Add the Student Record View
+		sspView.add( appView );    	
+    	
+		// display the default student record view
+    	this.displayStudentRecordView();
+    },
+    
+    displayStudentRecordView: function(){
+		var mainView = Ext.getCmp('Main');
+		var arrViewItems = [
+		 		  Ext.create('Ssp.view.SearchResults', {flex:2}),
+		 		  
+		 		  Ext.create('Ssp.view.StudentRecord',
+					{items:[Ext.create('Ssp.view.ToolsMenu',{ flex:1 }), 
+					Ext.create('Ssp.view.Tools',{ flex:4, bodyPadding:5 }) 
+					],flex:4})
+		 		 ];
+		
+		
+		this.formRendererUtils.cleanItems(mainView);
+		mainView.add( arrViewItems );
+    },    
+    
+    displayAdminView: function() { 
+		var mainView = Ext.getCmp('Main');
+		var arrViewItems = [
+		 		  Ext.create('Ssp.view.admin.AdminMain',
+					{items:[
+					        Ext.create('Ssp.view.admin.AdminMenu',{ flex:2 }), 
+					        Ext.create('Ssp.view.admin.AdminForms',{ flex:4, bodyPadding:4 }) 
+					],flex:4})
+		 		 ];
+		
+		this.formRendererUtils.cleanItems(mainView, this);
+		mainView.add( arrViewItems );    	
     }
 	
 });

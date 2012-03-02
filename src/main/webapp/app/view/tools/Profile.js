@@ -28,7 +28,7 @@ Ext.define('Ssp.view.tools.Profile', {
 	        name: 'name'
 	    }, {
 	        fieldLabel: 'Tartan ID',
-	        name: 'uniqueSchoolUserId'
+	        name: 'schoolId'
 	    }, {
 	        fieldLabel: 'Date of Birth',
 	        name: 'birthDate'
@@ -52,10 +52,10 @@ Ext.define('Ssp.view.tools.Profile', {
 	        name: 'zipCode'
 	    }, {
 	        fieldLabel: 'School Email',
-	        name: 'emailPrimary'
+	        name: 'primaryEmailAddress'
 	    }, {
 	        fieldLabel: 'Alternate Email',
-	        name: 'emailSecondary'
+	        name: 'secondaryEmailAddress'
 	    }, {
 	        fieldLabel: 'Student Type',
 	        name: 'studentType'

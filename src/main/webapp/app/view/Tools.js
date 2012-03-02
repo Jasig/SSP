@@ -7,5 +7,5 @@ Ext.define('Ssp.view.Tools', {
 	    
 	initComponent: function() {	
 		this.superclass.initComponent.call(this, arguments);
-	}	
+	}
 });

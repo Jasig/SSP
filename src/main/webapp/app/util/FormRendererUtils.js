@@ -1,12 +1,21 @@
 Ext.define('Ssp.util.FormRendererUtils',{
 	
 	extend: 'Ext.Component',
+
+    cleanItems: function(view){
+    	var i = view.items.length;
+    	while (view.items.length > 0)
+    	{
+    		view.remove(view.items.getAt(i));
+    		i=i-1;
+    	}
+    },	
 	
     getProfileFormItems: function(){
 		var cleaner = Ext.create( 'Ssp.util.TemplateDataUtil' );
 		var applicationFormsStore =  Ext.getStore('ApplicationForms');
         return cleaner.prepareTemplateData(  applicationFormsStore );  	
-    },
+    },    
     
     createCheckBoxForm: function( formId, itemsArr, selectedItemsArr, idFieldName ){
     	form = Ext.getCmp(formId);
