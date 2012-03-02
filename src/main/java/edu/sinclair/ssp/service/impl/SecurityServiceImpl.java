@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service;
+package edu.sinclair.ssp.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.sinclair.ssp.security.SspUser;
+import edu.sinclair.ssp.service.SecurityService;
 
 @Transactional(readOnly = true)
 @Service
