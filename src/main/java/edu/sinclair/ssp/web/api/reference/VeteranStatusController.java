@@ -5,12 +5,9 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +21,7 @@ import edu.sinclair.ssp.service.reference.VeteranStatusService;
 @RequestMapping("/reference/veteranStatus")
 public class VeteranStatusController extends ReferenceController<VeteranStatus>{
 
-	private static final Logger logger = LoggerFactory.getLogger(VeteranStatusController.class);
+	//private static final Logger logger = LoggerFactory.getLogger(VeteranStatusController.class);
 
 	@Autowired
 	private VeteranStatusService service;
@@ -43,13 +40,8 @@ public class VeteranStatusController extends ReferenceController<VeteranStatus>{
 
 	@Override
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody VeteranStatus save(@Valid VeteranStatus obj, BindingResult result)
+	public @ResponseBody VeteranStatus save(@Valid VeteranStatus obj)
 			throws Exception {
-		if(result.hasErrors()){
-			logger.debug("There were " + result.getErrorCount() + " errors.");
-			return null;
-		}
-		
 		return service.save(obj);
 	}
 

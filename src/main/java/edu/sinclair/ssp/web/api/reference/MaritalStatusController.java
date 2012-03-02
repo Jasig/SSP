@@ -5,12 +5,9 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +22,7 @@ import edu.sinclair.ssp.service.reference.MaritalStatusService;
 public class MaritalStatusController extends
 		ReferenceController<MaritalStatus> {
 
-	private static final Logger logger = LoggerFactory.getLogger(MaritalStatusController.class);
+	//private static final Logger logger = LoggerFactory.getLogger(MaritalStatusController.class);
 
 	@Autowired
 	private MaritalStatusService service;
@@ -44,13 +41,8 @@ public class MaritalStatusController extends
 	
 	@Override
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody MaritalStatus save(@Valid MaritalStatus obj, BindingResult result)
+	public @ResponseBody MaritalStatus save(@Valid MaritalStatus obj)
 			throws Exception {
-		if(result.hasErrors()){
-			logger.debug("There were " + result.getErrorCount() + " errors.");
-			return null;
-		}
-		
 		return service.save(obj);
 	}
 

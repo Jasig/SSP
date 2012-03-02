@@ -5,12 +5,9 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +21,7 @@ import edu.sinclair.ssp.service.reference.FundingSourceService;
 @RequestMapping("/reference/fundingSource")
 public class FundingSourceController extends ReferenceController<FundingSource>{
 
-	private static final Logger logger = LoggerFactory.getLogger(FundingSourceController.class);
+	//private static final Logger logger = LoggerFactory.getLogger(FundingSourceController.class);
 
 	@Autowired
 	private FundingSourceService service;
@@ -43,12 +40,7 @@ public class FundingSourceController extends ReferenceController<FundingSource>{
 	
 	@Override
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody FundingSource save(@Valid FundingSource obj, BindingResult result) throws Exception {
-		if(result.hasErrors()){
-			logger.debug("There were " + result.getErrorCount() + " errors.");
-			return null;
-		}
-		
+	public @ResponseBody FundingSource save(@Valid FundingSource obj) throws Exception {
 		return service.save(obj);
 	}
 

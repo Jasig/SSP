@@ -5,12 +5,9 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +21,7 @@ import edu.sinclair.ssp.service.reference.ChildCareArrangementService;
 @RequestMapping("/reference/childCareArrangement")
 public class ChildCareArrangementController extends ReferenceController<ChildCareArrangement>{
 
-	private static final Logger logger = LoggerFactory.getLogger(ChildCareArrangementController.class);
+	//private static final Logger logger = LoggerFactory.getLogger(ChildCareArrangementController.class);
 
 	@Autowired
 	private ChildCareArrangementService service;
@@ -43,13 +40,7 @@ public class ChildCareArrangementController extends ReferenceController<ChildCar
 	
 	@Override
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody ChildCareArrangement save(@Valid ChildCareArrangement obj,
-			BindingResult result) throws Exception {
-		if(result.hasErrors()){
-			logger.debug("There were " + result.getErrorCount() + " errors.");
-			return null;
-		}
-		
+	public @ResponseBody ChildCareArrangement save(@Valid ChildCareArrangement obj) throws Exception {
 		return service.save(obj);
 	}
 
