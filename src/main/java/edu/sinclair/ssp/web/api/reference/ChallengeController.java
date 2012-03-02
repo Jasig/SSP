@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.model.reference.Challenge;
+import edu.sinclair.ssp.model.transferobject.Form;
 import edu.sinclair.ssp.model.transferobject.factory.IChallengeTOFactory;
 import edu.sinclair.ssp.model.transferobject.reference.ChallengeTO;
 import edu.sinclair.ssp.service.reference.ChallengeService;
@@ -36,18 +37,32 @@ public class ChallengeController extends ReferenceController<ChallengeTO>{
 	private IChallengeTOFactory toFactory;
 	
 	@Override
-	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody List<ChallengeTO> getAll() throws Exception {
 		return toFactory.toTOList(service.getAll());
 	}
 	
 	@Override
-	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody ChallengeTO get(@PathVariable UUID id) throws Exception {
-		return toFactory.toTO(service.get(id));
+		Challenge challenge = service.get(id);
+		if(challenge!=null){
+			return toFactory.toTO(challenge);
+		}else{
+			return null;
+		}
+	}
+	
+	@Override
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public @ResponseBody Form<ChallengeTO> create() throws Exception {
+		Form<ChallengeTO> form = new Form<ChallengeTO>();
+		form.setModel(new ChallengeTO(UUID.randomUUID()));
+		return form;
 	}
 
-	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	@Override
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody ChallengeTO save(@Valid @RequestBody ChallengeTO obj) throws Exception {
 		Challenge model = toFactory.toModel(obj);
 		Challenge saveResult = service.save(model);
@@ -55,9 +70,10 @@ public class ChallengeController extends ReferenceController<ChallengeTO>{
 	}
 
 	@Override
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-	public void delete(@PathVariable UUID id) throws Exception {
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public @ResponseBody boolean delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
+		return true;
 	}
 	
 	@ExceptionHandler(Exception.class)

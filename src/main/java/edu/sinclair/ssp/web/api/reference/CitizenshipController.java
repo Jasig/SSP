@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.model.reference.Citizenship;
+import edu.sinclair.ssp.model.transferobject.Form;
 import edu.sinclair.ssp.service.reference.CitizenshipService;
 
 @PreAuthorize("hasRole('ROLE_USER')")
@@ -47,8 +48,15 @@ public class CitizenshipController extends ReferenceController<Citizenship>{
 
 	@Override
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-	public void delete(@PathVariable UUID id) throws Exception {
+	public boolean delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
+		return true;
+	}
+
+	@Override
+	public Form<Citizenship> create() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

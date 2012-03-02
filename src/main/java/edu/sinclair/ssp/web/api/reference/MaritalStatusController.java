@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.model.reference.MaritalStatus;
+import edu.sinclair.ssp.model.transferobject.Form;
 import edu.sinclair.ssp.service.reference.MaritalStatusService;
 
 @PreAuthorize("hasRole('ROLE_USER')")
@@ -48,8 +49,15 @@ public class MaritalStatusController extends
 
 	@Override
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-	public void delete(@PathVariable UUID id) throws Exception {
+	public boolean delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
+		return true;
+	}
+
+	@Override
+	public Form<MaritalStatus> create() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
