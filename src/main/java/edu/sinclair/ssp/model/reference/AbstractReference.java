@@ -13,10 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -64,9 +62,9 @@ public abstract class AbstractReference {
 	@Column(name = "object_status")
 	private ObjectStatus objectStatus;
 
-	@JsonIgnore
+	/**
 	@Version
-	private int optlock;
+	private int optlock;*/
 	
 	public AbstractReference() {}
 	
@@ -147,14 +145,6 @@ public abstract class AbstractReference {
 
 	public void setObjectStatus(ObjectStatus objectStatus) {
 		this.objectStatus = objectStatus;
-	}
-
-	public int getOptlock() {
-		return optlock;
-	}
-
-	public void setOptlock(int optlock) {
-		this.optlock = optlock;
 	}
 
 	public String toString(){

@@ -1,9 +1,7 @@
-package edu.sinclair.ssp.web.api.reference;
+package edu.sinclair.ssp.web.api;
 
 import java.util.List;
 import java.util.UUID;
-
-import edu.sinclair.ssp.transferobject.Form;
 
 /**
  * All the Methods a Reference Controller needs to be useful.
@@ -11,15 +9,15 @@ import edu.sinclair.ssp.transferobject.Form;
  *
  * @param <T> The TO type this controller works with.
  */
-public abstract class ReferenceController<T> {
+public abstract class RestController<T> {
 
 	public abstract List<T> getAll() throws Exception;
 
 	public abstract T get(UUID id) throws Exception;
 	
-	public abstract Form<T> create() throws Exception;
+	public abstract boolean create(T obj) throws Exception;
 	
-	public abstract T save(T obj) throws Exception;
+	public abstract boolean save(UUID id, T obj) throws Exception;
 	
 	public abstract boolean delete(UUID id) throws Exception;
 }

@@ -182,6 +182,17 @@
 		</rollback>
 	</changeSet>
 	
+	<changeSet author='daniel.bower' id='drop optimistic locking for now'>
+		<dropColumn tableName="challenge" columnName="optlock"/>
+		<rollback>
+			<addColumn tableName="challenge">
+				<column name="optlock" type="int" valueNumeric="0">
+					<constraints nullable="false" />
+				</column>
+			</addColumn>
+		</rollback>
+	</changeSet>
+	
 	<!-- changeSet author='daniel.bower' id='Add more reference tables'>
 		<createTable tableName="citizenship">
 			<column name="id" type="uuid">

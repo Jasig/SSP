@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.transferobject.factory;
+package edu.sinclair.ssp.factory.reference.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
+import edu.sinclair.ssp.factory.reference.ChallengeTOFactory;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.service.PersonService;
 import edu.sinclair.ssp.service.reference.ChallengeService;

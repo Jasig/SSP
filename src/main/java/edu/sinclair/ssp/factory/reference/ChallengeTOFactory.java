@@ -1,7 +1,8 @@
-package edu.sinclair.ssp.transferobject.factory;
+package edu.sinclair.ssp.factory.reference;
 
 import java.util.List;
 
+import edu.sinclair.ssp.factory.TransferObjectFactory;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
 

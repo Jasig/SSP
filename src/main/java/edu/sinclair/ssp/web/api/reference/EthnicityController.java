@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.model.reference.Ethnicity;
 import edu.sinclair.ssp.service.reference.EthnicityService;
-import edu.sinclair.ssp.transferobject.Form;
+import edu.sinclair.ssp.web.api.RestController;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/ethnicity")
-public class EthnicityController extends ReferenceController<Ethnicity>{
+public class EthnicityController extends RestController<Ethnicity>{
 
 	//private static final Logger logger = LoggerFactory.getLogger(EthnicityController.class);
 
@@ -41,8 +41,9 @@ public class EthnicityController extends ReferenceController<Ethnicity>{
 	
 	@Override
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody Ethnicity save(@Valid Ethnicity ethnicity) throws Exception {
-		return service.save(ethnicity);
+	public @ResponseBody boolean save(@PathVariable UUID id, @Valid Ethnicity ethnicity) throws Exception {
+		service.save(ethnicity);
+		return true;
 	}
 	
 	@Override
@@ -53,9 +54,10 @@ public class EthnicityController extends ReferenceController<Ethnicity>{
 	}
 
 	@Override
-	public Form<Ethnicity> create() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public @ResponseBody boolean create(@Valid Ethnicity ethnicity) throws Exception {
+		service.save(ethnicity);
+		return true;
 	}
 	
 }

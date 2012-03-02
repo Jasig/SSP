@@ -36,7 +36,7 @@ public class ChallengeDao implements ReferenceDao<Challenge>{
 		if(obj.getObjectStatus()==null){
 			obj.setObjectStatus(ObjectStatus.ACTIVE);
 		}
-		this.sessionFactory.getCurrentSession().save(obj);
+		this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		return obj;
 	}
 

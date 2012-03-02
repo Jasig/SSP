@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.transferobject.factory;
+package edu.sinclair.ssp.factory;
 
 import java.util.List;
 

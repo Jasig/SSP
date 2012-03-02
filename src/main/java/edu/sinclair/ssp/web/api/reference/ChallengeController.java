@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.sinclair.ssp.factory.reference.ChallengeTOFactory;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.service.reference.ChallengeService;
-import edu.sinclair.ssp.transferobject.Form;
-import edu.sinclair.ssp.transferobject.factory.ChallengeTOFactory;
 import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
+import edu.sinclair.ssp.web.api.RestController;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/challenge")
-public class ChallengeController extends ReferenceController<ChallengeTO>{
+public class ChallengeController extends RestController<ChallengeTO>{
 
 	private static final Logger logger = LoggerFactory.getLogger(ChallengeController.class);
 
@@ -54,19 +54,19 @@ public class ChallengeController extends ReferenceController<ChallengeTO>{
 	}
 	
 	@Override
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public @ResponseBody Form<ChallengeTO> create() throws Exception {
-		Form<ChallengeTO> form = new Form<ChallengeTO>();
-		form.setModel(new ChallengeTO(UUID.randomUUID()));
-		return form;
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public @ResponseBody boolean create(@Valid @RequestBody ChallengeTO obj) throws Exception {
+		service.save(toFactory.toModel(obj));
+		return true;
 	}
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public @ResponseBody ChallengeTO save(@Valid @RequestBody ChallengeTO obj) throws Exception {
+	public @ResponseBody boolean save(@PathVariable UUID id, @Valid @RequestBody ChallengeTO obj) throws Exception {
 		Challenge model = toFactory.toModel(obj);
-		Challenge saveResult = service.save(model);
-		return toFactory.toTO(saveResult);
+		model.setId(id);
+		service.save(model);
+		return true;
 	}
 
 	@Override
