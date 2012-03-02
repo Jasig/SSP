@@ -1,0 +1,12 @@
+{
+	success: true,
+    menus: [
+		    {
+		        title: "Challenges",
+		        form: "ChallengeAdmin"
+		    },{
+		        title: "Ethnicity",
+		        form: "EthnicityAdmin"
+		    }
+	]
+}
