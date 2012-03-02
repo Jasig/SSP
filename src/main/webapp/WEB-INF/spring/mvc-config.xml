@@ -15,13 +15,24 @@
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties" location="file:/usr/local/etc/ssp/ssp-config.properties"/>
 
-	<context:component-scan base-package="edu.sinclair.ssp.web" />
+	<context:component-scan base-package="edu.sinclair.ssp.web"/>
+		<!-- context:include-filter type="regex" expression=".*Controller"/>
+	</context:component-scan -->
+	
 	<security:global-method-security pre-post-annotations="enabled" />
+	
 	<mvc:annotation-driven />
-
+	
+	<mvc:interceptors>
+		<bean class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">
+			<property name="sessionFactory" ref="sessionFactory" />
+		</bean>
+	</mvc:interceptors>
+	
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="cacheSeconds" value="0" />
 		<property name="webBindingInitializer">
+			<!-- Allows binding of UUIDs -->
 			<bean class="edu.sinclair.ssp.util.BindingInitializer" />
 		</property>
 	</bean>

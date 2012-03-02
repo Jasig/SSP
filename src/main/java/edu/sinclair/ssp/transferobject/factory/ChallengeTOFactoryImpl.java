@@ -2,7 +2,6 @@ package edu.sinclair.ssp.transferobject.factory;
 
 import java.util.List;
 
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +22,9 @@ public class ChallengeTOFactoryImpl implements ChallengeTOFactory{
 	
 	@Autowired
 	private ChallengeService challengeService;
-	
-	@Autowired
-	private SessionFactory sessionFactory;
 
 	@Override
 	public ChallengeTO toTO(Challenge from) {
-		from = (Challenge) this.sessionFactory.getCurrentSession().load(Challenge.class, from.getId()); 
 		
 		ChallengeTO to = new ChallengeTO();
 		to.setId(from.getId());
@@ -55,8 +50,6 @@ public class ChallengeTOFactoryImpl implements ChallengeTOFactory{
 			model = challengeService.get(from.getId());
 			if(model==null){
 				model = new Challenge(from.getId());
-			}else{
-				model = (Challenge) this.sessionFactory.getCurrentSession().load(Challenge.class, from.getId());
 			}
 		}else{
 			model = new Challenge();
