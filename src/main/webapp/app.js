@@ -1,12 +1,15 @@
 ssp = Ext.create('Ext.app.Application', {
 	
-	requires: ['Ext.container.Viewport',
+	requires: ['Ext.data.UuidGenerator',
+	           'Ext.container.Viewport',
 			   'Ssp.model.StudentTO',
 			   'Ssp.model.security.UserTO',
 			   'Ssp.model.tool.studentintake.StudentIntakeForm',
 			   'Ssp.model.tool.studentintake.StudentDemographics',
 			   'Ssp.model.tool.studentintake.StudentEducationGoal',
-			   'Ssp.model.tool.studentintake.StudentEducationPlan'],
+			   'Ssp.model.tool.studentintake.StudentEducationPlan',
+			   'Ssp.view.admin.forms.Challenges',
+			   'Ssp.view.admin.forms.Ethnicity'],
 			   
     name: 'Ssp',
     appFolder: 'app',
@@ -32,15 +35,19 @@ ssp = Ext.create('Ext.app.Application', {
 			  'reference.YesNo'], 
 	
 	controllers: [
-        	'AbstractController','Search','Tool','Main'
+        	'AbstractController',
+        	'Admin',
+        	'Main',
+        	'Search',
+        	'Tool'     	
     ],
           		
     launch: function( app ) {
-		
+	    	
 		// Define a global student model
 		Ext.apply( this, {currentStudent: new Ssp.model.StudentTO({id:"0"}, {}),
 						  currentUser: new Ssp.model.security.UserTO({id:"0"})
-						});
+		});
 		
 		
 		// Load the initial data for the application

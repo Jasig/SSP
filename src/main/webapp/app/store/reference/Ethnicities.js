@@ -5,14 +5,13 @@ Ext.define('Ssp.store.reference.Ethnicities', {
 	autoLoad: false,
 
     proxy: {
-		type: 'ajax',
+		type: 'rest',
 		api: {
 			read: 'data/reference/ethnicities.json'
+			// read: '/ssp/api/reference/ethnicity/'
 		},
 		reader: {
-			type: 'json',
-			root: 'ethnicities',
-			successProperty: 'success'
+			type: 'json'
 		}
 	}	
 	

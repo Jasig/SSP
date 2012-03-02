@@ -1,5 +1,5 @@
 # $ext_path: This should be the path of the Ext JS SDK relative to this file
-$ext_path = "../../ext-4.0"
+$ext_path = "../../js/libs/ext-4.0"
 
 # sass_path: the directory your Sass files are in. THIS file should also be in the Sass folder
 # Generally this will be in a resources/sass folder

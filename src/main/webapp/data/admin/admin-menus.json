@@ -3,10 +3,10 @@
     menus: [
 		    {
 		        title: "Challenges",
-		        form: "ChallengeAdmin"
+		        form: "Challenges"
 		    },{
 		        title: "Ethnicity",
-		        form: "EthnicityAdmin"
+		        form: "Ethnicity"
 		    }
 	]
 }

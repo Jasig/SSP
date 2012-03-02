@@ -90,8 +90,8 @@
        		],
        		
        		studentChallenges: [
-       			{ id: "1" },
-       			{ id: "3" }
+       			{ id: "429d0c68-fe11-40e5-8a7e-58a9d8f86584" },
+       			{ id: "a5f1a2c3-5d09-4562-bcb9-c35b15bd9f89" }
        		],
 	       
 	        referenceData: {

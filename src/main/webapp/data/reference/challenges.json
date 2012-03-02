@@ -1,82 +1,79 @@
-{
-	success: true,
-    challenges: [
-		    {
-		        id: "1",
-		        name: "Child or Adult Care",
-		        description: "Child or Adult Care",
-		        createdDate: "01/01/2012",
-		        createdByPersonId: "1",
-		        modifiedDate: "",
-		        modifiedByPersonId: "",
-		        objectStatus: "1",
-		        showInStudentIntake: "1"
-		    },
-		    {
-		        id: "2",
-		        name: "Classroom Issues",
-		        description: "Classroom Issues",
-		        createdDate: "01/01/2012",
-		        createdByPersonId: "1",
-		        modifiedDate: "",
-		        modifiedByPersonId: "",
-		        objectStatus: "1",
-		        showInStudentIntake: "1"
-		    },
-		    {
-		        id: "3",
-		        name: "Computer/Email",
-		        description: "Computer/Email",
-		        createdDate: "01/01/2012",
-		        createdByPersonId: "1",
-		        modifiedDate: "",
-		        modifiedByPersonId: "",
-		        objectStatus: "1",
-		        showInStudentIntake: "1"
-		    },
-		    {
-		        id: "4",
-		        name: "Finances - Education",
-		        description: "Finances - Education",
-		        createdDate: "01/01/2012",
-		        createdByPersonId: "1",
-		        modifiedDate: "",
-		        modifiedByPersonId: "",
-		        objectStatus: "1",
-		        showInStudentIntake: "1"
-		    },
-		    {
-		        id: "5",
-		        name: "Finances - Personal",
-		        description: "Finances - Personal",
-		        createdDate: "01/01/2012",
-		        createdByPersonId: "1",
-		        modifiedDate: "",
-		        modifiedByPersonId: "",
-		        objectStatus: "1",
-		        showInStudentIntake: "1"
-		    },
-		    {
-		        id: "6",
-		        name: "Other",
-		        description: "Other",
-		        createdDate: "01/01/2012",
-		        createdByPersonId: "1",
-		        modifiedDate: "",
-		        modifiedByPersonId: "",
-		        objectStatus: "1",
-		        showInStudentIntake: "1"
-		    },
-		    {
-		        id: "7",
-		        name: "Transportation",
-		        description: "Transportation",
-		        createdDate: "01/01/2012",
-		        createdByPersonId: "1",
-		        modifiedDate: "",
-		        modifiedByPersonId: "",
-		        objectStatus: "1",
-		        showInStudentIntake: "1"
-		    }
-	]
-}
+[
+	{
+        id: "1",
+        name: "Child or Adult Care",
+        description: "Child or Adult Care",
+        createdDate: "01/01/2012",
+        createdByPersonId: "1",
+        modifiedDate: "",
+        modifiedByPersonId: "",
+        objectStatus: "1",
+        showInStudentIntake: "1"
+    },
+    {
+        id: "2",
+        name: "Classroom Issues",
+        description: "Classroom Issues",
+        createdDate: "01/01/2012",
+        createdByPersonId: "1",
+        modifiedDate: "",
+        modifiedByPersonId: "",
+        objectStatus: "1",
+        showInStudentIntake: "1"
+    },
+    {
+        id: "3",
+        name: "Computer/Email",
+        description: "Computer/Email",
+        createdDate: "01/01/2012",
+        createdByPersonId: "1",
+        modifiedDate: "",
+        modifiedByPersonId: "",
+        objectStatus: "1",
+        showInStudentIntake: "1"
+    },
+    {
+        id: "4",
+        name: "Finances - Education",
+        description: "Finances - Education",
+        createdDate: "01/01/2012",
+        createdByPersonId: "1",
+        modifiedDate: "",
+        modifiedByPersonId: "",
+        objectStatus: "1",
+        showInStudentIntake: "1"
+    },
+    {
+        id: "5",
+        name: "Finances - Personal",
+        description: "Finances - Personal",
+        createdDate: "01/01/2012",
+        createdByPersonId: "1",
+        modifiedDate: "",
+        modifiedByPersonId: "",
+        objectStatus: "1",
+        showInStudentIntake: "1"
+    },
+    {
+        id: "6",
+        name: "Other",
+        description: "Other",
+        createdDate: "01/01/2012",
+        createdByPersonId: "1",
+        modifiedDate: "",
+        modifiedByPersonId: "",
+        objectStatus: "1",
+        showInStudentIntake: "1"
+    },
+    {
+        id: "7",
+        name: "Transportation",
+        description: "Transportation",
+        createdDate: "01/01/2012",
+        createdByPersonId: "1",
+        modifiedDate: "",
+        modifiedByPersonId: "",
+        objectStatus: "1",
+        showInStudentIntake: "1"
+    }
+]

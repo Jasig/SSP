@@ -52,13 +52,17 @@ Ext.define('Ssp.controller.Tool', {
 					success: function( formData ) {
 						console.log( formData.data.student );
 						Ext.getStore('reference.States').loadData( formData.data.referenceData.states );
-						Ext.getStore('reference.Challenges').loadData( formData.data.referenceData.challenges );
+						// Ext.getStore('reference.Challenges').loadData( formData.data.referenceData.challenges );
+						var challengesStore = Ext.getStore('reference.Challenges');
+						// challengesStore.load();
 						Ext.getStore('reference.ChildCareArrangements').loadData( formData.data.referenceData.childCareArrangements );
 						Ext.getStore('reference.Citizenships').loadData( formData.data.referenceData.citizenships );
 						Ext.getStore('reference.EducationalGoals').loadData( formData.data.referenceData.educationalGoals );
 						Ext.getStore('reference.EducationLevels').loadData( formData.data.referenceData.educationLevels );
 						Ext.getStore('reference.EmploymentShifts').loadData( formData.data.referenceData.employmentShifts );
-						Ext.getStore('reference.Ethnicities').loadData( formData.data.referenceData.ethnicities );
+						// Ext.getStore('reference.Ethnicities').loadData( formData.data.referenceData.ethnicities );
+						var ethnicitiesStore = Ext.getStore('reference.Ethnicities');
+						ethnicitiesStore.load();
 						Ext.getStore('reference.FundingSources').loadData( formData.data.referenceData.fundingSources );
 						Ext.getStore('reference.Genders').loadData( formData.data.referenceData.genders );
 						Ext.getStore('reference.MaritalStatuses').loadData( formData.data.referenceData.maritalStatuses );
@@ -75,6 +79,9 @@ Ext.define('Ssp.controller.Tool', {
 						
 						formUtils = Ext.create('Ssp.util.FormRendererUtils');
 						
+						console.log( ethnicitiesStore );
+						console.log( challengesStore );
+						
 						// Education Levels
 						formUtils.createCheckBoxForm('StudentIntakeEducationLevels', formData.data.referenceData.educationLevels, formData.data.studentEducationLevels, 'id');
 						
@@ -82,7 +89,7 @@ Ext.define('Ssp.controller.Tool', {
 						formUtils.createCheckBoxForm('StudentIntakeFunding', formData.data.referenceData.fundingSources, formData.data.studentFundingSources, 'id');						
 						
 						// Challenges
-						formUtils.createCheckBoxForm('StudentIntakeChallenges', formData.data.referenceData.challenges, formData.data.studentChallenges, 'id');
+						formUtils.createCheckBoxFormFromStore('StudentIntakeChallenges', challengesStore.data.items, formData.data.studentChallenges, 'id'); // formData.data.referenceData.challenges
 					}
 				});
 				break;

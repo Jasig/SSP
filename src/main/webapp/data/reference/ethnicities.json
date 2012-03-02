@@ -1,40 +1,37 @@
-{
-	success: true,
-    ethnicities: [
-		    {
-		        id: "1",
-		        name: "African American/Black",
-		        description: "Child or Adult Care"
-		    },
-		    {
-		        id: "2",
-		        name: "American Indian/Alaskan Native",
-		        description: "American Indian/Alaskan Native"
-		    },
-		    {
-		        id: "3",
-		        name: "Asian Pacific Islander",
-		        description: "Asian Pacific Islander"
-		    },
-		    {
-		        id: "4",
-		        name: "Caucasian/White",
-		        description: "Caucasian/White"
-		    },
-		    {
-		        id: "5",
-		        name: "Hispanic/Latino",
-		        description: "Hispanic/Latino"
-		    },
-		    {
-		        id: "6",
-		        name: "Other",
-		        description: "Other"
-		    },
-		    {
-		        id: "7",
-		        name: "Prefer Not To Answer",
-		        description: "Prefer Not To Answer"
-		    }
-	]
-}
+[
+    {
+        id: "1",
+        name: "African American/Black",
+        description: "Child or Adult Care"
+    },
+    {
+        id: "2",
+        name: "American Indian/Alaskan Native",
+        description: "American Indian/Alaskan Native"
+    },
+    {
+        id: "3",
+        name: "Asian Pacific Islander",
+        description: "Asian Pacific Islander"
+    },
+    {
+        id: "4",
+        name: "Caucasian/White",
+        description: "Caucasian/White"
+    },
+    {
+        id: "5",
+        name: "Hispanic/Latino",
+        description: "Hispanic/Latino"
+    },
+    {
+        id: "6",
+        name: "Other",
+        description: "Other"
+    },
+    {
+        id: "7",
+        name: "Prefer Not To Answer",
+        description: "Prefer Not To Answer"
+    }
+]

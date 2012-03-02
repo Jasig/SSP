@@ -2,18 +2,27 @@ Ext.define('Ssp.store.reference.Challenges', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.reference.ChallengeTO',
     storeId: 'challengesReferenceStore',
-	autoLoad: false,
+	autoLoad: true,
+	autoSync: true,
 
     proxy: {
-		type: 'ajax',
+		type: 'rest',
+		url: '/ssp/api/reference/challenge/',
+		/*
 		api: {
 			read: 'data/reference/challenges.json'
 		},
+		*/
+		actionMethods: {create: "POST", 
+			read: "GET", 
+			update: "PUT", 
+			destroy: "DELETE"},
 		reader: {
-			type: 'json',
-			root: 'challenges',
-			successProperty: 'success'
-		}
-	}	
+			type: 'json'
+		},
+        writer: {
+            type: 'json'
+        }
+	}
 	
 });
