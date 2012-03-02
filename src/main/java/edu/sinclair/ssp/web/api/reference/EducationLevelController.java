@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.model.reference.EducationLevel;
-import edu.sinclair.ssp.model.transferobject.Form;
 import edu.sinclair.ssp.service.reference.EducationLevelService;
+import edu.sinclair.ssp.transferobject.Form;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller

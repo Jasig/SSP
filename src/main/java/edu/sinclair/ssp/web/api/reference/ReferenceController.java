@@ -3,7 +3,7 @@ package edu.sinclair.ssp.web.api.reference;
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.transferobject.Form;
+import edu.sinclair.ssp.transferobject.Form;
 
 /**
  * All the Methods a Reference Controller needs to be useful.

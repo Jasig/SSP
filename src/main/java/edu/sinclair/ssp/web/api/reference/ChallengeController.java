@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.model.transferobject.Form;
-import edu.sinclair.ssp.model.transferobject.factory.IChallengeTOFactory;
-import edu.sinclair.ssp.model.transferobject.reference.ChallengeTO;
 import edu.sinclair.ssp.service.reference.ChallengeService;
+import edu.sinclair.ssp.transferobject.Form;
+import edu.sinclair.ssp.transferobject.factory.ChallengeTOFactory;
+import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
@@ -34,7 +34,7 @@ public class ChallengeController extends ReferenceController<ChallengeTO>{
 	private ChallengeService service;
 	
 	@Autowired
-	private IChallengeTOFactory toFactory;
+	private ChallengeTOFactory toFactory;
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
