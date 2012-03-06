@@ -31,7 +31,8 @@ Ext.define('Ssp.controller.Admin', {
 	
 	loadAdmin: function( form ) {
 		var adminFormsView = Ext.getCmp('AdminForms');
-		var comp = Ext.create('Ssp.view.admin.forms.'+form);
+		var store = Ext.getStore('reference.' + form)
+		var comp = Ext.create('Ssp.view.admin.forms.AbstractReferenceAdmin', {store: store}); // +form
 		this.formRendererUtils.cleanItems(adminFormsView);
 		adminFormsView.add( comp );
 	}

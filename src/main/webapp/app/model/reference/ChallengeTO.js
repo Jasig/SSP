@@ -2,6 +2,7 @@ Ssp.ChallengeTO = Ext.define('Ssp.model.reference.ChallengeTO', {
     extend: 'Ssp.model.reference.AbstractReferenceTO',
     fields: [],
     
+    /*
 	proxy: {
 		type: 'ajax',
 		url: '/ssp/api/reference/challenge/',
@@ -19,5 +20,6 @@ Ssp.ChallengeTO = Ext.define('Ssp.model.reference.ChallengeTO', {
             type: 'json'
         }
 	}
+	*/
 
 });

@@ -50,7 +50,8 @@ Ext.define('Ssp.controller.Tool', {
 				Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
 				Form.load(123,{
 					success: function( formData ) {
-						console.log( formData.data.student );
+						// console.log( formData.data.student );
+												
 						Ext.getStore('reference.States').loadData( formData.data.referenceData.states );
 						// Ext.getStore('reference.Challenges').loadData( formData.data.referenceData.challenges );
 						var challengesStore = Ext.getStore('reference.Challenges');
@@ -79,8 +80,8 @@ Ext.define('Ssp.controller.Tool', {
 						
 						formUtils = Ext.create('Ssp.util.FormRendererUtils');
 						
-						console.log( ethnicitiesStore );
-						console.log( challengesStore );
+						// console.log( ethnicitiesStore );
+						// console.log( challengesStore );
 						
 						// Education Levels
 						formUtils.createCheckBoxForm('StudentIntakeEducationLevels', formData.data.referenceData.educationLevels, formData.data.studentEducationLevels, 'id');

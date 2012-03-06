@@ -1,5 +1,6 @@
 Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
-    extend: 'Ext.data.Model',
+	extend: 'Ext.data.Model',
+	autoLoad: false,
     fields: ['studentId',
              'referenceData',
              {name: 'student', 
@@ -41,7 +42,6 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
              'studentEducationLevels',
              'studentFundingSources',
              'studentChallenges'],
-    autoLoad: true,
    
     proxy: {
 		type: 'ajax',

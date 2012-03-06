@@ -26,7 +26,14 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 	        }
 		}
 	 * 
-	 */	
+	 */
+    buttons: [ 
+    
+           { text: 'Save',
+        	 id: 'SaveStudentIntakeButton'
+           }
+    
+    ],
 	
 	initComponent: function() {	
 		this.items = [ Ext.createWidget('tabpanel', {

@@ -67,6 +67,16 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			form.insert(form.items.length,cb);
 		}
 		form.doLayout();
+    },
+    
+    getSelectedValuesAsTransferObject: function( values, modelType ){
+		var selectedItems = [];
+		for ( prop in values )
+		{
+			var obj = Ext.create(modelType,{id: values[prop]} );
+			selectedItems.push( obj );
+		}
+		return selectedItems;
     }
 	
 });

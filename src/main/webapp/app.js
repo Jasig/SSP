@@ -8,6 +8,7 @@ ssp = Ext.create('Ext.app.Application', {
 			   'Ssp.model.tool.studentintake.StudentDemographics',
 			   'Ssp.model.tool.studentintake.StudentEducationGoal',
 			   'Ssp.model.tool.studentintake.StudentEducationPlan',
+			   'Ssp.view.admin.forms.AbstractReferenceAdmin',
 			   'Ssp.view.admin.forms.Challenges',
 			   'Ssp.view.admin.forms.Ethnicity'],
 			   
@@ -39,6 +40,7 @@ ssp = Ext.create('Ext.app.Application', {
         	'Admin',
         	'Main',
         	'Search',
+        	'StudentIntakeTool',
         	'Tool'     	
     ],
           		
