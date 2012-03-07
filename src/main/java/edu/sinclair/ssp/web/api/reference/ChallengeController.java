@@ -69,11 +69,14 @@ public class ChallengeController extends RestController<ChallengeTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public @ResponseBody ServiceResponse save(@PathVariable UUID id, @Valid @RequestBody ChallengeTO obj) throws Exception {
+	public @ResponseBody ChallengeTO save(@PathVariable UUID id, @Valid @RequestBody ChallengeTO obj) throws Exception {
 		Challenge model = toFactory.toModel(obj);
 		model.setId(id);
-		service.save(model);
-		return new ServiceResponse(true);
+		Challenge savedChallenge = service.save(model);
+		if(null!=savedChallenge){
+			return toFactory.toTO(savedChallenge);
+		}
+		return null;
 	}
 
 	@Override

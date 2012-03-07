@@ -19,7 +19,7 @@ public abstract class RestController<T> {
 	
 	public abstract T create(T obj) throws Exception;
 	
-	public abstract ServiceResponse save(UUID id, T obj) throws Exception;
+	public abstract T save(UUID id, T obj) throws Exception;
 	
 	public abstract ServiceResponse delete(UUID id) throws Exception;
 	
