@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import edu.sinclair.ssp.factory.reference.ChallengeTOFactory;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.service.reference.ChallengeService;
+import edu.sinclair.ssp.transferobject.ServiceResponse;
 import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
 import edu.sinclair.ssp.web.api.RestController;
 
@@ -55,30 +56,31 @@ public class ChallengeController extends RestController<ChallengeTO>{
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public @ResponseBody boolean create(@Valid @RequestBody ChallengeTO obj) throws Exception {
+	public @ResponseBody ServiceResponse create(@Valid @RequestBody ChallengeTO obj) throws Exception {
 		service.save(toFactory.toModel(obj));
-		return true;
+		return new ServiceResponse(true);
 	}
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public @ResponseBody boolean save(@PathVariable UUID id, @Valid @RequestBody ChallengeTO obj) throws Exception {
+	public @ResponseBody ServiceResponse save(@PathVariable UUID id, @Valid @RequestBody ChallengeTO obj) throws Exception {
 		Challenge model = toFactory.toModel(obj);
 		model.setId(id);
 		service.save(model);
-		return true;
+		return new ServiceResponse(true);
 	}
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody boolean delete(@PathVariable UUID id) throws Exception {
+	public @ResponseBody ServiceResponse delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
-		return true;
+		return new ServiceResponse(true);
 	}
 	
+	@Override
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody Exception handle(Exception e){
+	public @ResponseBody ServiceResponse handle(Exception e){
 		logger.error("Error: ", e);
-		return e;
+		return new ServiceResponse(false, e.getMessage());
 	}
 }

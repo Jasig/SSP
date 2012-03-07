@@ -22,9 +22,8 @@ import com.google.common.collect.Maps;
 import edu.sinclair.ssp.factory.reference.ChallengeTOFactory;
 import edu.sinclair.ssp.factory.tool.StudentIntakeTOFactory;
 import edu.sinclair.ssp.service.reference.ChallengeService;
-import edu.sinclair.ssp.service.reference.FundingSourceService;
-import edu.sinclair.ssp.service.reference.VeteranStatusService;
 import edu.sinclair.ssp.service.tool.StudentIntakeService;
+import edu.sinclair.ssp.transferobject.ServiceResponse;
 import edu.sinclair.ssp.transferobject.tool.StudentIntakeFormTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
@@ -46,11 +45,11 @@ public class StudentIntakeController {
 	@Autowired
 	private ChallengeTOFactory challengeTOFactory;
 
-	@Autowired
-	private FundingSourceService fundingSourceService;
+	//@Autowired
+	//private FundingSourceService fundingSourceService;
 
-	@Autowired
-	private VeteranStatusService veteranStatusService;
+	//@Autowired
+	//private VeteranStatusService veteranStatusService;
 
 	public static final String REF_TITLE_CHALLENGES = "challenges";
 	public static final String REF_TITLE_FUNDING_SOURCES = "fundingSources";
@@ -61,15 +60,15 @@ public class StudentIntakeController {
 		Map<String, Object> referenceData =  Maps.newHashMap();
 		
 		referenceData.put(REF_TITLE_CHALLENGES, challengeTOFactory.toTOList(challengeService.getAll()));
-		referenceData.put(REF_TITLE_FUNDING_SOURCES, fundingSourceService.getAll());
-		referenceData.put(REF_TITLE_VETERAN_STATUSES, veteranStatusService.getAll());
+		//referenceData.put(REF_TITLE_FUNDING_SOURCES, fundingSourceService.getAll());
+		//referenceData.put(REF_TITLE_VETERAN_STATUSES, veteranStatusService.getAll());
 		
 		return referenceData;
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public @ResponseBody boolean save(@PathVariable UUID studentId, @Valid @RequestBody StudentIntakeFormTO obj) throws Exception {
-		return service.save(toFactory.toModel(obj));
+	public @ResponseBody ServiceResponse save(@PathVariable UUID studentId, @Valid @RequestBody StudentIntakeFormTO obj) throws Exception {
+		return new ServiceResponse(service.save(toFactory.toModel(obj)));
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

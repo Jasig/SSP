@@ -14,12 +14,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration
-//@ContextConfiguration("/base-context.xml")
-public class EthnicityControllerIntegrationTest {
+@ContextConfiguration("ControllerIntegrationTests-context.xml")
+public class ChallengeControllerIntegrationTest {
 
 	@Autowired
-	private EthnicityController controller;
+	private ChallengeController controller;
 	
 	@Test
 	public void integrationTest(){

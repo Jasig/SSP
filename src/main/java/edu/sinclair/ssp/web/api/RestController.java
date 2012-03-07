@@ -3,6 +3,8 @@ package edu.sinclair.ssp.web.api;
 import java.util.List;
 import java.util.UUID;
 
+import edu.sinclair.ssp.transferobject.ServiceResponse;
+
 /**
  * All the Methods a Reference Controller needs to be useful.
  * @author daniel
@@ -15,9 +17,11 @@ public abstract class RestController<T> {
 
 	public abstract T get(UUID id) throws Exception;
 	
-	public abstract boolean create(T obj) throws Exception;
+	public abstract ServiceResponse create(T obj) throws Exception;
 	
-	public abstract boolean save(UUID id, T obj) throws Exception;
+	public abstract ServiceResponse save(UUID id, T obj) throws Exception;
 	
-	public abstract boolean delete(UUID id) throws Exception;
+	public abstract ServiceResponse delete(UUID id) throws Exception;
+	
+	public abstract ServiceResponse handle(Exception e);
 }
