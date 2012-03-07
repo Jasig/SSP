@@ -192,32 +192,7 @@
 			</addColumn>
 		</rollback>
 	</changeSet>
-	
-	<!-- changeSet author='daniel.bower' id='Add more reference tables'>
-		<createTable tableName="citizenship">
-			<column name="id" type="uuid">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
-			<column name="name" type="character varying(25)">
-				<constraints nullable="false" />
-			</column>
-			<column name="description" type="character varying(150)">
-				<constraints nullable="true" />
-			</column>
-			<column name="optlock" type="int">
-				<constraints nullable="false" />
-			</column>
-		</createTable>
-		
-		<sql>grant all on citizenship to ssp</sql>
-		<rollback>
-			<dropTable tableName="citizenship"/>
-		</rollback>
-		
-	</changeSet -->
-	
-	
-	
+
 	<!-- Insert reference data with the creatTable's of the other types? -->
-	
-</databaseChangeLog>
+
+ </databaseChangeLog>
