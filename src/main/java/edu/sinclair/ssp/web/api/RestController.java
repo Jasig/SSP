@@ -17,7 +17,7 @@ public abstract class RestController<T> {
 
 	public abstract T get(UUID id) throws Exception;
 	
-	public abstract ServiceResponse create(T obj) throws Exception;
+	public abstract T create(T obj) throws Exception;
 	
 	public abstract ServiceResponse save(UUID id, T obj) throws Exception;
 	

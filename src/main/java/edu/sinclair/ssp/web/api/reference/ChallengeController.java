@@ -56,9 +56,15 @@ public class ChallengeController extends RestController<ChallengeTO>{
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public @ResponseBody ServiceResponse create(@Valid @RequestBody ChallengeTO obj) throws Exception {
-		service.save(toFactory.toModel(obj));
-		return new ServiceResponse(true);
+	public @ResponseBody ChallengeTO create(@Valid @RequestBody ChallengeTO obj) throws Exception {
+		Challenge challenge = toFactory.toModel(obj);
+		if(null!=challenge){
+			Challenge savedChallenge = service.save(challenge);
+			if(null!=challenge){
+				return toFactory.toTO(savedChallenge);
+			}
+		}
+		return null;
 	}
 
 	@Override
