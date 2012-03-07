@@ -87,6 +87,11 @@ public class Person {
 
 	private boolean enabled;
 
+	public Person(){}
+	public Person(UUID id){
+		this.id = id;
+	}
+	
 	public UUID getId() {
 		return id;
 	}
