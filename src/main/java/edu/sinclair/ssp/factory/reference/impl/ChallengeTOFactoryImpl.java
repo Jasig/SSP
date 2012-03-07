@@ -28,18 +28,32 @@ public class ChallengeTOFactoryImpl implements ChallengeTOFactory{
 	public ChallengeTO toTO(Challenge from) {
 		
 		ChallengeTO to = new ChallengeTO();
-		to.setId(from.getId());
-		to.setName(from.getName());
-		to.setDescription(from.getDescription());
+		
+		if(from.getId()!=null){
+			to.setId(from.getId());
+		}
+		if(from.getName()!=null){
+			to.setName(from.getName());
+		}
+		if(from.getDescription()!=null){
+			to.setDescription(from.getDescription());
+		}
 		if(from.getCreatedBy()!=null){
 			to.setCreatedById(from.getCreatedBy().getId());
 		}
 		if(from.getModifiedBy()!=null){
 			to.setModifiedById(from.getModifiedBy().getId());
 		}
-		to.setCreatedDate(from.getCreatedDate());
-		to.setModifiedDate(from.getModifiedDate());
-		to.setObjectStatus(from.getObjectStatus());
+		if(from.getCreatedDate()!=null){
+			to.setCreatedDate(from.getCreatedDate());
+		}
+		if(from.getModifiedDate()!=null){
+			to.setModifiedDate(from.getModifiedDate());
+		}
+		if(from.getObjectStatus()!=null){
+			to.setObjectStatus(from.getObjectStatus());
+		}
+		
 		return to;
 	}
 
@@ -56,11 +70,21 @@ public class ChallengeTOFactoryImpl implements ChallengeTOFactory{
 			model = new Challenge();
 		}
 		
-		model.setName(from.getName());
-		model.setDescription(from.getDescription());
-		model.setCreatedDate(from.getCreatedDate());
-		model.setModifiedDate(from.getModifiedDate());
-		model.setObjectStatus(from.getObjectStatus());
+		if(from.getName()!=null){
+			model.setName(from.getName());
+		}
+		if(from.getDescription()!=null){
+			model.setDescription(from.getDescription());
+		}
+		if(from.getCreatedDate()!=null){
+			model.setCreatedDate(from.getCreatedDate());
+		}
+		if(from.getModifiedDate()!=null){
+			model.setModifiedDate(from.getModifiedDate());
+		}
+		if(from.getObjectStatus()!=null){
+			model.setObjectStatus(from.getObjectStatus());
+		}
 		
 		if(from.getCreatedById()!=null){
 			model.setCreatedBy(personService.personFromId(from.getCreatedById()));
@@ -84,7 +108,19 @@ public class ChallengeTOFactoryImpl implements ChallengeTOFactory{
 
 	@Override
 	public List<Challenge> toModelList(List<ChallengeTO> from) {
-		return null;
+		List<Challenge> toList = Lists.newArrayList();
+		for(ChallengeTO c : from){
+			toList.add(toModel(c));
+		}
+		return toList;
+	}
+
+	protected void setPersonService(PersonService personService) {
+		this.personService = personService;
+	}
+
+	protected void setChallengeService(ChallengeService challengeService) {
+		this.challengeService = challengeService;
 	}
 
 }
