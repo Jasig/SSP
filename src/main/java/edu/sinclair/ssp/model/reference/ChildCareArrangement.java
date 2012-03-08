@@ -8,23 +8,23 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "veteran_status", schema = "public")
+@Table(name = "child_care_arrangement", schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class VeteranStatus extends AbstractReference{
+public class ChildCareArrangement extends AbstractReference{
 
-	public VeteranStatus() {
+	public ChildCareArrangement() {
 		super();
 	}
 	
-	public VeteranStatus(UUID id) {
+	public ChildCareArrangement(UUID id) {
 		super(id);
 	}
 	
-	public VeteranStatus(UUID id, String name) {
+	public ChildCareArrangement(UUID id, String name) {
 		super(id, name);
 	}
 
-	public VeteranStatus(UUID id, String name, String description) {
+	public ChildCareArrangement(UUID id, String name, String description) {
 		super(id, name, description);
 	}
 
