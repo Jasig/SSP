@@ -19,6 +19,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.sinclair.ssp.dao.PersonDao;
+import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.reference.Challenge;
 
@@ -44,6 +45,7 @@ public class ChallengeDaoTest {
 		obj.setCreatedDate(new Date());
 		obj.setCreatedBy(personDao.get(Person.SYSTEM_ADMINISTRATOR_ID));
 		obj.setName("new name");
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 		
 		assertNotNull(obj.getId());
@@ -56,7 +58,7 @@ public class ChallengeDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		List<Challenge> all = dao.getAll();
+		List<Challenge> all = dao.getAll(ObjectStatus.ACTIVE);
 		assertNotNull(all);
 		assertTrue(all.size()>0);
 		assertList(all);

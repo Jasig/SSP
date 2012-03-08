@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.service.reference.ChallengeService;
 
@@ -39,7 +40,7 @@ public class StudentIntakeServiceTest {
 	@Ignore
 	@Test
 	public void testReferenceData() {
-		expect(challengeService.getAll()).andReturn(new ArrayList<Challenge>());
+		expect(challengeService.getAll(ObjectStatus.ACTIVE)).andReturn(new ArrayList<Challenge>());
 		//expect(fundingSourceService.getAll()).andReturn(new ArrayList<FundingSource>());
 		//expect(veteranStatusService.getAll()).andReturn(new ArrayList<VeteranStatus>());
 		

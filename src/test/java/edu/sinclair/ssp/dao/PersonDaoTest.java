@@ -38,5 +38,10 @@ public class PersonDaoTest {
 		
 		assertNull(person);
 	}
+	
+	@Test
+	public void testFromUsername(){
+		assertEquals(Person.SYSTEM_ADMINISTRATOR_ID, dao.fromUsername("system").getId());
+	}
 
 }

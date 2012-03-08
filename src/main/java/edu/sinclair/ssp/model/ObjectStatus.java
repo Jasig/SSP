@@ -5,5 +5,5 @@ package edu.sinclair.ssp.model;
  *
  */
 public enum ObjectStatus {
-	ACTIVE, INACTIVE, DELETED;
+	ALL, ACTIVE, INACTIVE, DELETED;
 }

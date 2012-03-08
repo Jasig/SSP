@@ -2,11 +2,14 @@ package edu.sinclair.ssp.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.security.SspUser;
+import edu.sinclair.ssp.service.PersonService;
 import edu.sinclair.ssp.service.SecurityService;
 
 @Transactional(readOnly = true)
@@ -14,6 +17,9 @@ import edu.sinclair.ssp.service.SecurityService;
 public class SecurityServiceImpl implements SecurityService{
 
 	private Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
+	
+	@Autowired
+	private PersonService personService;
 	
 	@Override
 	public SspUser currentlyLoggedInSspUser() {
@@ -28,6 +34,14 @@ public class SecurityServiceImpl implements SecurityService{
 				logger.error("Just tried to get an sspUser object from an object that is really a " + principal.toString());
 			}
 		}
+		
+		if(sspUser.getPerson()==null){
+			Person person = personService.personFromUsername(sspUser.getUsername());
+			if(person!=null){
+				sspUser.setPerson(person);
+			}
+		}
+		
 		return sspUser;
 	}
 }

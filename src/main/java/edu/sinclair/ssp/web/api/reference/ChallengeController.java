@@ -15,14 +15,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.factory.reference.ChallengeTOFactory;
+import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.service.reference.ChallengeService;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
 import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
 import edu.sinclair.ssp.web.api.RestController;
+import edu.sinclair.ssp.web.api.validation.ValidationException;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
@@ -39,8 +42,11 @@ public class ChallengeController extends RestController<ChallengeTO>{
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody List<ChallengeTO> getAll() throws Exception {
-		return toFactory.toTOList(service.getAll());
+	public @ResponseBody List<ChallengeTO> getAll(@RequestParam(required = false) ObjectStatus status) throws Exception {
+		if(status==null){
+			status = ObjectStatus.ACTIVE;
+		}
+		return toFactory.toTOList(service.getAll(status));
 	}
 	
 	@Override
@@ -57,11 +63,16 @@ public class ChallengeController extends RestController<ChallengeTO>{
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody ChallengeTO create(@Valid @RequestBody ChallengeTO obj) throws Exception {
-		Challenge challenge = toFactory.toModel(obj);
-		if(null!=challenge){
-			Challenge savedChallenge = service.save(challenge);
-			if(null!=challenge){
-				return toFactory.toTO(savedChallenge);
+		if(obj.getId()!=null){
+			throw new ValidationException("You submitted a challenge with an id to the create method.  Did you mean to save?");
+		}
+		
+		Challenge model = toFactory.toModel(obj);
+		
+		if(null!=model){
+			Challenge createdModel = service.create(model);
+			if(null!=createdModel){
+				return toFactory.toTO(createdModel);
 			}
 		}
 		return null;
@@ -70,8 +81,13 @@ public class ChallengeController extends RestController<ChallengeTO>{
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody ChallengeTO save(@PathVariable UUID id, @Valid @RequestBody ChallengeTO obj) throws Exception {
+		if(id==null){
+			throw new ValidationException("You submitted a challenge without an id to the save method.  Did you mean to create?");
+		}
+		
 		Challenge model = toFactory.toModel(obj);
 		model.setId(id);
+		
 		Challenge savedChallenge = service.save(model);
 		if(null!=savedChallenge){
 			return toFactory.toTO(savedChallenge);

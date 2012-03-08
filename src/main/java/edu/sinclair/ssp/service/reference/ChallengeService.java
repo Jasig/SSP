@@ -3,16 +3,20 @@ package edu.sinclair.ssp.service.reference;
 import java.util.List;
 import java.util.UUID;
 
+import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
+import edu.sinclair.ssp.service.ObjectNotFoundException;
 
 public interface ChallengeService {
 
-	public List<Challenge> getAll();
+	public List<Challenge> getAll(ObjectStatus status);
 
-	public Challenge get(UUID id);
+	public Challenge get(UUID id) throws ObjectNotFoundException;
 
-	public Challenge save(Challenge obj);
+	public Challenge create(Challenge obj);
 
-	public void delete(UUID id);
+	public Challenge save(Challenge obj) throws ObjectNotFoundException;
+
+	public void delete(UUID id) throws ObjectNotFoundException;
 
 }

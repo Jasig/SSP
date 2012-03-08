@@ -21,6 +21,7 @@ import com.google.common.collect.Maps;
 
 import edu.sinclair.ssp.factory.reference.ChallengeTOFactory;
 import edu.sinclair.ssp.factory.tool.StudentIntakeTOFactory;
+import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.service.reference.ChallengeService;
 import edu.sinclair.ssp.service.tool.StudentIntakeService;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
@@ -59,7 +60,7 @@ public class StudentIntakeController {
 	public @ResponseBody Map<String, Object> create() throws Exception {
 		Map<String, Object> referenceData =  Maps.newHashMap();
 		
-		referenceData.put(REF_TITLE_CHALLENGES, challengeTOFactory.toTOList(challengeService.getAll()));
+		referenceData.put(REF_TITLE_CHALLENGES, challengeTOFactory.toTOList(challengeService.getAll(ObjectStatus.ACTIVE)));
 		//referenceData.put(REF_TITLE_FUNDING_SOURCES, fundingSourceService.getAll());
 		//referenceData.put(REF_TITLE_VETERAN_STATUSES, veteranStatusService.getAll());
 		

@@ -74,4 +74,29 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="create test student" author="daniel.bower">
+		<insert tableName="person">
+			<column name="id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="first_name" value="James" />
+			<column name="middle_initial" value="A" />
+			<column name="last_name" value="Gosling" />
+			<column name="primary_email_address" value="test@sinclair.edu" />
+			<column name="secondary_email_address" value="test@sinclair.edu" />
+			<column name="username" value="student0" />
+			<column name="home_phone" value="908-123-4567" />
+			<column name="work_phone" value="123-456-7654" />
+			<column name="address_line_1" value="444 West Third Street" />
+			<column name="city" value="San Francisco" />
+			<column name="state" value="CA" />
+			<column name="zip_code" value="94102" />
+			<column name="photo_url" value="" />
+			<column name="school_id" value="student0" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="person">
+				<where>id='1010e4a0-1001-0110-1011-4ffc02fe81ff'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

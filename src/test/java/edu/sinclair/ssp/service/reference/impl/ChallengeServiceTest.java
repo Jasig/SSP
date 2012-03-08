@@ -4,8 +4,8 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -14,22 +14,36 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.core.GrantedAuthority;
 
 import edu.sinclair.ssp.dao.reference.ChallengeDao;
+import edu.sinclair.ssp.model.ObjectStatus;
+import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.service.reference.impl.ChallengeServiceImpl;
+import edu.sinclair.ssp.security.MockUser;
+import edu.sinclair.ssp.security.SspUser;
+import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.SecurityService;
 
 public class ChallengeServiceTest {
 
 	private ChallengeServiceImpl service;
 	private ChallengeDao dao;
+	private SecurityService securityService;
+	
+	private SspUser testUser;
 	
 	@Before
 	public void setup(){
 		service = new ChallengeServiceImpl();
 		dao = createMock(ChallengeDao.class);
-		
+		securityService = createMock(SecurityService.class);
+
 		service.setDao(dao);
+		service.setSecurityService(securityService);
+		
+		testUser = new MockUser(new Person(), "testuser", new ArrayList<GrantedAuthority>());
+		
 	}
 	
 	@Test
@@ -37,17 +51,17 @@ public class ChallengeServiceTest {
 		List<Challenge> daoAll = new ArrayList<Challenge>();
 		daoAll.add(new Challenge());
 		
-		expect(dao.getAll()).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE)).andReturn(daoAll);
 		
 		replay(dao);
 		
-		List<Challenge> all = service.getAll();
+		List<Challenge> all = service.getAll(ObjectStatus.ACTIVE);
 		assertTrue(all.size()>0);
 		verify(dao);
 	}
 
 	@Test
-	public void testGet() {
+	public void testGet() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		Challenge daoOne = new Challenge(id);
 		
@@ -60,33 +74,47 @@ public class ChallengeServiceTest {
 	}
 
 	@Test
-	public void testSave() {
-		Challenge daoOne = new Challenge();
-		
-		expect(dao.save(daoOne)).andReturn(daoOne);
-		
-		replay(dao);
-		
-		assertNotNull(service.save(daoOne));
-		verify(dao);
-	}
-
-	@Test
-	public void testDelete() {
+	public void testSave() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		Challenge daoOne = new Challenge(id);
 		
 		expect(dao.get(id)).andReturn(daoOne);
-		dao.delete(daoOne);
-		expect(dao.get(id)).andReturn(null);
+		expect(dao.save(daoOne)).andReturn(daoOne);
+		expect(securityService.currentlyLoggedInSspUser()).andReturn(testUser);
 		
 		replay(dao);
+		replay(securityService);
+		
+		assertNotNull(service.save(daoOne));
+		verify(dao);
+		verify(securityService);
+	}
+
+	@Test
+	public void testDelete() throws ObjectNotFoundException {
+		UUID id = UUID.randomUUID();
+		Challenge daoOne = new Challenge(id);
+		
+		expect(dao.get(id)).andReturn(daoOne).times(2);
+		expect(dao.save(daoOne)).andReturn(daoOne);
+		expect(dao.get(id)).andReturn(null);
+		expect(securityService.currentlyLoggedInSspUser()).andReturn(testUser);
+		
+		replay(dao);
+		replay(securityService);
 		
 		service.delete(id);
-		Challenge ghost = service.get(id);
 		
-		assertNull(ghost);
+		boolean found = true;
+		try{
+			service.get(id);
+		}catch(ObjectNotFoundException e){
+			found = false;
+		}
+		
+		assertFalse(found);
 		verify(dao);
+		verify(securityService);
 	}
 
 }

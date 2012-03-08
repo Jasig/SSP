@@ -3,7 +3,10 @@ package edu.sinclair.ssp.dao.reference;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,10 +23,16 @@ public class ChallengeDao implements ReferenceDao<Challenge>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Challenge> getAll() {
-		return (List<Challenge>) this.sessionFactory.getCurrentSession()
-				.createQuery("from Challenge ")
-				.list();
+	public List<Challenge> getAll(ObjectStatus status) {
+		Criteria query = this.sessionFactory.getCurrentSession()
+				.createCriteria(Challenge.class);
+		query.addOrder(Order.asc("name"));
+		
+		if(status!=ObjectStatus.ALL){
+			query.add(Restrictions.eq("objectStatus", status));;
+		}
+		
+		return query.list();
 	}
 
 	@Override
@@ -33,9 +42,6 @@ public class ChallengeDao implements ReferenceDao<Challenge>{
 
 	@Override
 	public Challenge save(Challenge obj) {
-		if(obj.getObjectStatus()==null){
-			obj.setObjectStatus(ObjectStatus.ACTIVE);
-		}
 		this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		return obj;
 	}

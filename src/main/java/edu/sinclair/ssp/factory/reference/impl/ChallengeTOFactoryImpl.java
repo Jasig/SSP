@@ -2,27 +2,16 @@ package edu.sinclair.ssp.factory.reference.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
 import edu.sinclair.ssp.factory.reference.ChallengeTOFactory;
 import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.reference.ChallengeService;
 import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
 
 @Service
-@Transactional(readOnly = true)
 public class ChallengeTOFactoryImpl implements ChallengeTOFactory{
-	
-	@Autowired
-	private PersonService personService;
-	
-	@Autowired
-	private ChallengeService challengeService;
 
 	@Override
 	public ChallengeTO toTO(Challenge from) {
@@ -59,15 +48,10 @@ public class ChallengeTOFactoryImpl implements ChallengeTOFactory{
 
 	@Override
 	public Challenge toModel(ChallengeTO from) {
-		Challenge model = null;
+		Challenge model = new Challenge();
 		
 		if(from.getId()!=null){
-			model = challengeService.get(from.getId());
-			if(model==null){
-				model = new Challenge(from.getId());
-			}
-		}else{
-			model = new Challenge();
+			model.setId(from.getId());
 		}
 		
 		if(from.getName()!=null){
@@ -76,22 +60,8 @@ public class ChallengeTOFactoryImpl implements ChallengeTOFactory{
 		if(from.getDescription()!=null){
 			model.setDescription(from.getDescription());
 		}
-		if(from.getCreatedDate()!=null){
-			model.setCreatedDate(from.getCreatedDate());
-		}
-		if(from.getModifiedDate()!=null){
-			model.setModifiedDate(from.getModifiedDate());
-		}
 		if(from.getObjectStatus()!=null){
 			model.setObjectStatus(from.getObjectStatus());
-		}
-		
-		if(from.getCreatedById()!=null){
-			model.setCreatedBy(personService.personFromId(from.getCreatedById()));
-		}
-		
-		if(from.getModifiedById()!=null){
-			model.setModifiedBy(personService.personFromId(from.getModifiedById()));
 		}
 		
 		return model;
@@ -113,14 +83,6 @@ public class ChallengeTOFactoryImpl implements ChallengeTOFactory{
 			toList.add(toModel(c));
 		}
 		return toList;
-	}
-
-	protected void setPersonService(PersonService personService) {
-		this.personService = personService;
-	}
-
-	protected void setChallengeService(ChallengeService challengeService) {
-		this.challengeService = challengeService;
 	}
 
 }

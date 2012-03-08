@@ -3,6 +3,7 @@ package edu.sinclair.ssp.web.api;
 import java.util.List;
 import java.util.UUID;
 
+import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
 
 /**
@@ -13,7 +14,7 @@ import edu.sinclair.ssp.transferobject.ServiceResponse;
  */
 public abstract class RestController<T> {
 
-	public abstract List<T> getAll() throws Exception;
+	public abstract List<T> getAll(ObjectStatus status) throws Exception;
 
 	public abstract T get(UUID id) throws Exception;
 	
