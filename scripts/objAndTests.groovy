@@ -124,6 +124,9 @@ class Templater{
 				if(newFile.exists() && !overwrite){
 					println "The file $newFileName already exists, skipping"
 				}else{
+					if(newFile.exists() ){
+						newFile.text = ""
+					}
 					println "Writing $newFileName"
 					exampleFile.getFile().eachLine { String line ->
 						String newLine = line.replaceAll(modelName, newModelName)
@@ -226,7 +229,7 @@ class Templater{
 class ReferenceDataTemplater {
 	String templateModel = "Challenge"
 	List<String> subpackage = ["reference"]
-	List<String> referenceDataModels = ["ChildCareArrangement"]
+	List<String> referenceDataModels = ["ChildCareArrangement", "Citizenship", "EducationGoal", "EducationLevel", "Ethnicity", "FundingSource", "MaritalStatus", "StudentStatus", "VeteranStatus"]
 
 	public void run(boolean create, boolean overwrite, boolean dryRun, boolean displayFileContents){
 		Templater templater = new Templater(create, overwrite, dryRun, displayFileContents)
