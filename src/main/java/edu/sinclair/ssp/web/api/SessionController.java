@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.security.SspUser;
+import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
 
@@ -24,8 +24,8 @@ public class SessionController {
 	private SecurityService service;
 	
 	@RequestMapping(value="getAuthenticatedPerson", method = RequestMethod.GET)
-	public @ResponseBody SspUser getAuthenticatedPerson() throws Exception {
-		return service.currentlyLoggedInSspUser();
+	public @ResponseBody Person getAuthenticatedPerson() throws Exception {
+		return service.currentlyLoggedInSspUser().getPerson();
 	}
 
 	@ExceptionHandler(Exception.class)
