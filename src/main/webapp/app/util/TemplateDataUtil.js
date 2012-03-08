@@ -1,6 +1,11 @@
 Ext.define('Ssp.util.TemplateDataUtil',{
-	
 	extend: 'Ext.Component',
+
+	init: function() {
+        console.log('Initialized util.TemplateDataUtil!');
+		
+		this.superclass.init.call(this, arguments);
+    },
 	
 	prepareTemplateData: function( dataStore )
 	{

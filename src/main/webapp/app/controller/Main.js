@@ -125,7 +125,7 @@ Ext.define('Ssp.controller.Main', {
 		 		  
 		 		  Ext.create('Ssp.view.StudentRecord',
 					{items:[Ext.create('Ssp.view.ToolsMenu',{ flex:1 }), 
-					Ext.create('Ssp.view.Tools',{ flex:4, bodyPadding:5 }) 
+					Ext.create('Ssp.view.Tools',{ flex:4 }) 
 					],flex:4})
 		 		 ];
 		
@@ -140,11 +140,11 @@ Ext.define('Ssp.controller.Main', {
 		 		  Ext.create('Ssp.view.admin.AdminMain',
 					{items:[
 					        Ext.create('Ssp.view.admin.AdminMenu',{ flex:2 }), 
-					        Ext.create('Ssp.view.admin.AdminForms',{ flex:4, bodyPadding:4 }) 
+					        Ext.create('Ssp.view.admin.AdminForms',{ flex:4 }) 
 					],flex:4})
 		 		 ];
 		
-		this.formRendererUtils.cleanItems(mainView, this);
+		this.formRendererUtils.cleanItems(mainView);
 		mainView.add( arrViewItems );    	
     }
 	

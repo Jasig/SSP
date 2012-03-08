@@ -1,7 +1,12 @@
-Ext.define('Ssp.util.Util', {
-    
+Ext.define('Ssp.util.Util', {  
     extend: 'Ext.Component',   		
-        		        
+	
+    init: function() {
+        console.log('Initialized util.Utils!');
+		
+		this.superclass.init.call(this, arguments);
+    }, 
+    
     loaderXTemplateRenderer: function(loader, response, active) {
         var tpl = new Ext.XTemplate(response.responseText);
         var targetComponent = loader.getTarget();

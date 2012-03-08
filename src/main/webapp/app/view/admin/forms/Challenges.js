@@ -4,7 +4,9 @@ Ext.define('Ssp.view.admin.forms.Challenges', {
 	title: 'Challenges Admin',
 	id: 'ChallengesAdmin',
     store: Ext.getStore('reference.Challenges'),
-    plugins: [Ext.create('Ext.grid.plugin.RowEditing')], 
+    plugins: [
+              Ext.create('Ext.grid.plugin.RowEditing')
+    ], 
     columns: [
          { header: 'Name',  
            dataIndex: 'name',

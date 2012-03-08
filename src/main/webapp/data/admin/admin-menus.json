@@ -4,9 +4,54 @@
 		    {
 		        title: "Challenges",
 		        form: "Challenges"
-		    },{
-		        title: "Ethnicity",
-		        form: "Ethnicity"
+		    }
+		    ,{
+		        title: "Child Care Arrangements",
+		        form: "ChildCareArrangements"
+		    }
+		    ,{
+		        title: "Citizenships",
+		        form: "Citizenships"
+		    }
+		    ,{
+		        title: "Educational Goals",
+		        form: "EducationalGoals"
+		    }
+		    ,{
+		        title: "Education Levels",
+		        form: "EducationLevels"
+		    }
+		    ,{
+		        title: "EmploymentShifts",
+		        form: "EmploymentShifts"
+		    }
+		    ,{
+		        title: "Ethnicities",
+		        form: "Ethnicities"
+		    }
+		    ,{
+		        title: "Funding Sources",
+		        form: "FundingSources"
+		    }
+		    ,{
+		        title: "Genders",
+		        form: "Genders"
+		    }
+		    ,{
+		        title: "Marital Statuses",
+		        form: "MaritalStatuses"
+		    }
+		    ,{
+		        title: "States",
+		        form: "States"
+		    }
+		    ,{
+		        title: "Student Statuses",
+		        form: "StudentStatuses"
+		    }
+		    ,{
+		        title: "Veteran Statuses",
+		        form: "VeteranStatuses"
 		    }
 	]
 }

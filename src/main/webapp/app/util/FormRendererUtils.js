@@ -1,12 +1,19 @@
-Ext.define('Ssp.util.FormRendererUtils',{
-	
+Ext.define('Ssp.util.FormRendererUtils',{	
 	extend: 'Ext.Component',
 
+	init: function() {
+        console.log('Initialized util.FormRendererUtils!');
+		
+		this.superclass.init.call(this, arguments);
+    },	
+	
     cleanItems: function(view){
     	var i = view.items.length;
     	while (view.items.length > 0)
     	{
-    		view.remove(view.items.getAt(i));
+    		var item = view.items.getAt(i);
+    		if (item != undefined)
+    			view.remove(item, true);
     		i=i-1;
     	}
     },	

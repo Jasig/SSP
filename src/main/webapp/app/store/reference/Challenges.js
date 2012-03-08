@@ -2,7 +2,7 @@ Ext.define('Ssp.store.reference.Challenges', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.reference.ChallengeTO',
     storeId: 'challengesReferenceStore',
-	autoLoad: true,
+	autoLoad: false,
 	autoSync: true,
 
     proxy: {
@@ -13,15 +13,24 @@ Ext.define('Ssp.store.reference.Challenges', {
 			read: 'data/reference/challenges.json'
 		},
 		*/
-		actionMethods: {create: "POST", 
+		actionMethods: {
+			create: "POST", 
 			read: "GET", 
 			update: "PUT", 
-			destroy: "DELETE"},
+			destroy: "DELETE"
+		},
 		reader: {
 			type: 'json'
 		},
         writer: {
-            type: 'json'
+            type: 'json',
+            successProperty: 'success'
+        },
+        
+    	beforesync: function(options, eOpts) {
+            console.log('Exception occurred in store.reference.Challenges');
+            console.log(options);
+            console.log(eOpts);
         }
 	}
 	
