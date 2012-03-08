@@ -42,7 +42,12 @@ public class EthnicityDao implements ReferenceDao<Ethnicity>{
 
 	@Override
 	public Ethnicity save(Ethnicity obj) {
-		this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+		if(obj.getId()!=null){
+			this.sessionFactory.getCurrentSession().merge(obj);
+		}else{
+			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+		}
+		
 		return obj;
 	}
 

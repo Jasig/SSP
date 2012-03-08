@@ -42,7 +42,12 @@ public class EducationLevelDao implements ReferenceDao<EducationLevel>{
 
 	@Override
 	public EducationLevel save(EducationLevel obj) {
-		this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+		if(obj.getId()!=null){
+			this.sessionFactory.getCurrentSession().merge(obj);
+		}else{
+			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+		}
+		
 		return obj;
 	}
 

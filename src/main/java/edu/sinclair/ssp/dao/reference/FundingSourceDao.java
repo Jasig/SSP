@@ -42,7 +42,12 @@ public class FundingSourceDao implements ReferenceDao<FundingSource>{
 
 	@Override
 	public FundingSource save(FundingSource obj) {
-		this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+		if(obj.getId()!=null){
+			this.sessionFactory.getCurrentSession().merge(obj);
+		}else{
+			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+		}
+		
 		return obj;
 	}
 
