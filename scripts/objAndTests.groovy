@@ -119,6 +119,8 @@ class Templater{
 
 			String newFileName = exampleFile.pathWithModelName(newModelName)
 			File newFile = new File(newFileName)
+			
+			String tableName = modelNameToTableName(newModelName)
 	
 			if(create){
 				if(newFile.exists() && !overwrite){
@@ -129,8 +131,14 @@ class Templater{
 					}
 					println "Writing $newFileName"
 					exampleFile.getFile().eachLine { String line ->
-						String newLine = line.replaceAll(modelName, newModelName)
-						newLine = newLine.replaceAll(camelCased(modelName), camelCased(newModelName))
+						String newLine;
+						if(line.startsWith("@Table(name = ")){
+							newLine = """@Table(name = "${tableName}", schema = "public")"""
+						}else{
+							newLine = line.replaceAll(modelName, newModelName)
+							newLine = newLine.replaceAll(camelCased(modelName), camelCased(newModelName))
+						}
+						
 						if(dryRun){
 							if(displayFileContents){
 								println newLine 
@@ -141,7 +149,7 @@ class Templater{
 					}
 					
 					if(exampleFile.isModel()){
-						createTableForModel(newModelName)
+						createTableForModel(tableName)
 					}
 				}
 			}else{
@@ -154,10 +162,28 @@ class Templater{
 					println "File did not exist, cannot delete"
 				}
 			}
-		}   
+		}
 	}
 
-	public void createTableForModel(String newModelName){
+	public String modelNameToTableName(String newModelName){
+		StringBuilder tableName = new StringBuilder()
+		
+		tableName.append(newModelName[0].toLowerCase())
+		
+		for(int i = 1; i< newModelName.size(); i++){
+			Character c = newModelName[i]
+			if(c.isUpperCase()){
+				tableName.append('_')
+				tableName.append(c.toLowerCase())
+			}else{
+				tableName.append(c)
+			}
+		}
+	
+		return tableName.toString()
+	}
+	
+	public void createTableForModel(String tableName){
 		File lcl = new File(liquibaseChangeLogLocation)
 		if(!lcl.canWrite()) {
 			println "Cannot write to liquibaseChangeLog"
@@ -176,8 +202,8 @@ class Templater{
 
 		//add the table
 		newChangeLog.append """
-	<changeSet author='daniel.bower' id='Add ${newModelName} table'>
-		<createTable tableName="${newModelName}">
+	<changeSet author='daniel.bower' id='Add ${tableName} table'>
+		<createTable tableName="${tableName}">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
@@ -193,11 +219,11 @@ class Templater{
 			<column name="modified_date" type="datetime"/>
 			<column name="created_by" type="uuid">
 				<constraints nullable="false" 
-					foreignKeyName="${newModelName}_created_by_person_id"
+					foreignKeyName="${tableName}_created_by_person_id"
 					references="person(id)"/>
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="${newModelName}_modified_by_person_id"
+				<constraints nullable="true" foreignKeyName="${tableName}_modified_by_person_id"
 					references="person(id)"/>
 			</column>
 			<column name="object_status" type="int">
@@ -205,9 +231,9 @@ class Templater{
 			</column>
 		</createTable>
 		
-		<sql>grant all on challenge to ssp</sql>
+		<sql>grant all on ${tableName} to ssp</sql>
 		<rollback>
-			<dropTable tableName="${newModelName}"/>
+			<dropTable tableName="${tableName}"/>
 		</rollback>
 		
 		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
@@ -240,4 +266,4 @@ class ReferenceDataTemplater {
 }
 
 
-new ReferenceDataTemplater().run(true, true, true, false)
+new ReferenceDataTemplater().run(true, true, false, false)
