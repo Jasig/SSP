@@ -72,7 +72,7 @@ public class VeteranStatusServiceImpl implements ReferenceService<VeteranStatus>
 			current.setObjectStatus(obj.getObjectStatus());
 		}
 		
-		return dao.save(obj);
+		return dao.save(current);
 	}
 
 	@Override

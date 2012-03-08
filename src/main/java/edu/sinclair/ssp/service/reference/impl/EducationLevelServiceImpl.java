@@ -72,7 +72,7 @@ public class EducationLevelServiceImpl implements ReferenceService<EducationLeve
 			current.setObjectStatus(obj.getObjectStatus());
 		}
 		
-		return dao.save(obj);
+		return dao.save(current);
 	}
 
 	@Override

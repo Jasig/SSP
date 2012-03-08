@@ -72,7 +72,7 @@ public class CitizenshipServiceImpl implements ReferenceService<Citizenship>, Ci
 			current.setObjectStatus(obj.getObjectStatus());
 		}
 		
-		return dao.save(obj);
+		return dao.save(current);
 	}
 
 	@Override

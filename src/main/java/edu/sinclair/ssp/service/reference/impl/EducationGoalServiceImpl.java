@@ -72,7 +72,7 @@ public class EducationGoalServiceImpl implements ReferenceService<EducationGoal>
 			current.setObjectStatus(obj.getObjectStatus());
 		}
 		
-		return dao.save(obj);
+		return dao.save(current);
 	}
 
 	@Override

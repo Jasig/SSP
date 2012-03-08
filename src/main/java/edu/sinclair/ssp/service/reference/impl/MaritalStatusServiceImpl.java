@@ -72,7 +72,7 @@ public class MaritalStatusServiceImpl implements ReferenceService<MaritalStatus>
 			current.setObjectStatus(obj.getObjectStatus());
 		}
 		
-		return dao.save(obj);
+		return dao.save(current);
 	}
 
 	@Override

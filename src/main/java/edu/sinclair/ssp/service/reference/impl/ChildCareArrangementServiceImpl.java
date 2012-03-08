@@ -72,7 +72,7 @@ public class ChildCareArrangementServiceImpl implements ReferenceService<ChildCa
 			current.setObjectStatus(obj.getObjectStatus());
 		}
 		
-		return dao.save(obj);
+		return dao.save(current);
 	}
 
 	@Override
