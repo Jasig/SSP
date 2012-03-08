@@ -23,6 +23,11 @@ public class PersonServiceImpl implements PersonService {
 	public Person personFromId(UUID id) {
 		return dao.get(id);
 	}
+
+	@Override
+	public Person personFromUsername(String username) {
+		return dao.fromUsername(username);
+	}
 	
 	
 }
