@@ -10,11 +10,12 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import edu.sinclair.ssp.dao.AuditableCrudDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.StudentStatus;
 
 @Repository
-public class StudentStatusDao implements ReferenceDao<StudentStatus>{
+public class StudentStatusDao implements AuditableCrudDao<StudentStatus>{
 
 	//private static final Logger logger = LoggerFactory.getLogger(StudentStatusDao.class);
 

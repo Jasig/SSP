@@ -1,11 +1,11 @@
-package edu.sinclair.ssp.dao.reference;
+package edu.sinclair.ssp.dao;
 
 import java.util.List;
 import java.util.UUID;
 
 import edu.sinclair.ssp.model.ObjectStatus;
 
-public interface ReferenceDao<T>{
+public interface AuditableCrudDao<T>{
 	public List<T> getAll(ObjectStatus status);
 	
 	public T get(UUID id);
