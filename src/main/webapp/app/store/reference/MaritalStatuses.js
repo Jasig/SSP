@@ -3,17 +3,24 @@ Ext.define('Ssp.store.reference.MaritalStatuses', {
     model: 'Ssp.model.reference.MaritalStatusTO',
     storeId: 'maritalStatusesReferenceStore',
 	autoLoad: false,
+	autoSync: true,
 
     proxy: {
-		type: 'ajax',
-		api: {
-			read: 'data/reference/maritalstatuses.json'
+		type: 'rest',
+		url: '/ssp/api/reference/maritalStatus/',
+		actionMethods: {
+			create: "POST", 
+			read: "GET", 
+			update: "PUT", 
+			destroy: "DELETE"
 		},
 		reader: {
-			type: 'json',
-			root: 'maritalStatuses',
-			successProperty: 'success'
-		}
-	}	
+			type: 'json'
+		},
+        writer: {
+            type: 'json',
+            successProperty: 'success'
+        }
+	}
 	
 });

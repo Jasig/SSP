@@ -3,17 +3,24 @@ Ext.define('Ssp.store.reference.EducationLevels', {
     model: 'Ssp.model.reference.EducationLevelTO',
     storeId: 'educationLevelsReferenceStore',
 	autoLoad: false,
+	autoSync: true,
 
     proxy: {
-		type: 'ajax',
-		api: {
-			read: 'data/reference/educationlevels.json'
+		type: 'rest',
+		url: '/ssp/api/reference/educationLevel/',
+		actionMethods: {
+			create: "POST", 
+			read: "GET", 
+			update: "PUT", 
+			destroy: "DELETE"
 		},
 		reader: {
-			type: 'json',
-			root: 'educationLevels',
-			successProperty: 'success'
-		}
+			type: 'json'
+		},
+        writer: {
+            type: 'json',
+            successProperty: 'success'
+        }
 	}	
 	
 });

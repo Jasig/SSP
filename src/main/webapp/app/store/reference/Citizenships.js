@@ -3,17 +3,24 @@ Ext.define('Ssp.store.reference.Citizenships', {
     model: 'Ssp.model.reference.CitizenshipTO',
     storeId: 'citizenshipsReferenceStore',
 	autoLoad: false,
+	autoSync: true,
 
     proxy: {
-		type: 'ajax',
-		api: {
-			read: 'data/reference/citizenships.json'
+		type: 'rest',
+		url: '/ssp/api/reference/citizenship/',
+		actionMethods: {
+			create: "POST", 
+			read: "GET", 
+			update: "PUT", 
+			destroy: "DELETE"
 		},
 		reader: {
-			type: 'json',
-			root: 'citizenships',
-			successProperty: 'success'
-		}
+			type: 'json'
+		},
+        writer: {
+            type: 'json',
+            successProperty: 'success'
+        }
 	}	
 	
 });

@@ -3,17 +3,24 @@ Ext.define('Ssp.store.reference.StudentStatuses', {
     model: 'Ssp.model.reference.StudentStatusTO',
     storeId: 'studentStatusesReferenceStore',
 	autoLoad: false,
+	autoSync: true,
 
     proxy: {
-		type: 'ajax',
-		api: {
-			read: 'data/reference/studentstatuses.json'
+		type: 'rest',
+		url: '/ssp/api/reference/studentStatus/',
+		actionMethods: {
+			create: "POST", 
+			read: "GET", 
+			update: "PUT", 
+			destroy: "DELETE"
 		},
 		reader: {
-			type: 'json',
-			root: 'studentStatuses',
-			successProperty: 'success'
-		}
+			type: 'json'
+		},
+        writer: {
+            type: 'json',
+            successProperty: 'success'
+        }
 	}	
 	
 });

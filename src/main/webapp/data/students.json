@@ -32,14 +32,6 @@
 					    },{
 					        name: "Student Intake",
 					        toolType: "StudentIntake"
-					    },
-					    {
-					        name: "Journal",
-					        toolType: "Journal"
-					    },
-					    {
-					        name: "Action Plan",
-					        toolType: "ActionPlan"
 					    }
 					]
 		    },
@@ -107,13 +99,13 @@
 					]  
 		    },
 		    {
-		        id: "4",
-		        photoUrl: "/ssp/images/student-pic4-small.png",
+		        id: "252de4a0-7c06-4254-b7d8-4ffc02fe81ff",
+		        photoUrl: "/ssp/images/alan_turing.png",
 		        schoolId: '0123459',
-		        name: "Robert S. Coltraine",
-		        firstName: "Robert",
-		        middleInitial: "S",
-		        lastName: "Coltraine",
+		        name: "Alan M Turing",
+		        firstName: "Alan",
+		        middleInitial: "M",
+		        lastName: "Turing",
 		        homePhone: "555-555-5555",
 		        cellPhone: "937-555-5555",
 		        workPhone: "512-555-5555",
@@ -136,14 +128,6 @@
 					    },{
 					        name: "Student Intake",
 					        toolType: "StudentIntake"
-					    },
-					    {
-					        name: "Journal",
-					        toolType: "Journal"
-					    },
-					    {
-					        name: "Action Plan",
-					        toolType: "ActionPlan"
 					    }
 					]  
 		    },
@@ -177,10 +161,6 @@
 					    },{
 					        name: "Student Intake",
 					        toolType: "StudentIntake"
-					    },
-					    {
-					        name: "Action Plan",
-					        toolType: "ActionPlan"
 					    }
 					]
 		    },
@@ -214,14 +194,6 @@
 					    },{
 					        name: "Student Intake",
 					        toolType: "StudentIntake"
-					    },
-					    {
-					        name: "Journal",
-					        toolType: "Journal"
-					    },
-					    {
-					        name: "Action Plan",
-					        toolType: "ActionPlan"
 					    }
 					]
 		    },

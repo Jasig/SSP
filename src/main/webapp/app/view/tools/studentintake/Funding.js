@@ -1,7 +1,7 @@
 Ext.define('Ssp.view.tools.studentintake.Funding', {
 	extend: 'Ext.form.Panel',
 	id : 'StudentIntakeFunding',
-    
+	autoScroll: true,    
     width: '100%',
     height: '100%',
     bodyPadding: 5,

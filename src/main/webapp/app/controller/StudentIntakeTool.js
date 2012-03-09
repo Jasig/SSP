@@ -65,19 +65,19 @@ Ext.define('Ssp.controller.StudentIntakeTool', {
 			
 			// save the full model
 			studentIntakeFormModel = new Ssp.model.tool.studentintake.StudentIntakeForm();
-			studentIntakeFormModel.set('student', personalFormModel.data );
-			studentIntakeFormModel.set('studentDemographics', demographicsFormModel.data);
-			studentIntakeFormModel.set('studentEducationGoal', educationGoalFormModel.data);
-			studentIntakeFormModel.set('studentEducationPlan', educationPlansFormModel.data);
+			studentIntakeFormModel.set('person', personalFormModel.data );
+			studentIntakeFormModel.set('personDemographics', demographicsFormModel.data);
+			studentIntakeFormModel.set('personEducationGoal', educationGoalFormModel.data);
+			studentIntakeFormModel.set('personEducationPlan', educationPlansFormModel.data);
 
 			selectedEducationLevels = formUtils.getSelectedValuesAsTransferObject( educationLevelsForm.getValues(), 'Ssp.model.reference.EducationLevelTO' );
-			studentIntakeFormModel.set('studentEducationLevels', selectedEducationLevels );			
+			studentIntakeFormModel.set('personEducationLevels', selectedEducationLevels );			
 			
 			selectedFunding = formUtils.getSelectedValuesAsTransferObject( fundingForm.getValues(), 'Ssp.model.reference.FundingSourceTO' );
-			studentIntakeFormModel.set('studentFundingSources', selectedFunding );
+			studentIntakeFormModel.set('personFundingSources', selectedFunding );
 
 			selectedChallenges = formUtils.getSelectedValuesAsTransferObject( challengesForm.getValues(), 'Ssp.model.reference.ChallengeTO' );
-			studentIntakeFormModel.set('studentChallenges', selectedChallenges );
+			studentIntakeFormModel.set('personChallenges', selectedChallenges );
 
 			// Save the Student Intake Model
 			console.log( studentIntakeFormModel );

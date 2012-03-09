@@ -8,11 +8,6 @@ Ext.define('Ssp.store.reference.Challenges', {
     proxy: {
 		type: 'rest',
 		url: '/ssp/api/reference/challenge/',
-		/*
-		api: {
-			read: 'data/reference/challenges.json'
-		},
-		*/
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 
@@ -25,12 +20,6 @@ Ext.define('Ssp.store.reference.Challenges', {
         writer: {
             type: 'json',
             successProperty: 'success'
-        },
-        
-    	beforesync: function(options, eOpts) {
-            console.log('Exception occurred in store.reference.Challenges');
-            console.log(options);
-            console.log(eOpts);
         }
 	}
 	

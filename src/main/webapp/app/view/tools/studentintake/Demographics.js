@@ -3,7 +3,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 	id : 'StudentIntakeDemographics',
     width: '100%',
     height: '100%',
-
+    autoScroll: true,
 	stores: ['reference.ChildCareArrangements',
 			 'reference.Citizenships',
 			 'reference.EducationalGoals',

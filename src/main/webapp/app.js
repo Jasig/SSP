@@ -20,6 +20,7 @@ ssp = Ext.create('Ext.app.Application', {
 			  'Tools',
 			  'security.Roles',
 			  'admin.AdminMenus',
+			  'admin.AdminTreeMenus',
 			  'reference.States', 
 			  'reference.Challenges',
 			  'reference.ChildCareArrangements',

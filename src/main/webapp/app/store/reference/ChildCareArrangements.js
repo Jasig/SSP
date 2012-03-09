@@ -3,15 +3,11 @@ Ext.define('Ssp.store.reference.ChildCareArrangements', {
     model: 'Ssp.model.reference.ChildCareArrangementTO',
     storeId: 'childCareArrangementsReferenceStore',
 	autoLoad: false,
+	autoSync: true,
 
     proxy: {
-		type: 'ajax',
-		url: '/ssp/api/reference/childCareArrangements/',
-		/*
-		api: {
-			read: 'data/reference/childcarearrangements.json'
-		},
-		*/	
+		type: 'rest',
+		url: '/ssp/api/reference/childCareArrangement/',	
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 
@@ -20,8 +16,6 @@ Ext.define('Ssp.store.reference.ChildCareArrangements', {
 		},
 		reader: {
 			type: 'json'
-			// ,root: 'childCareArrangements'
-			// ,successProperty: 'success'
 		},
         writer: {
             type: 'json',

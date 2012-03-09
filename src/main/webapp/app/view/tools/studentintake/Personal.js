@@ -1,7 +1,7 @@
 Ext.define('Ssp.view.tools.studentintake.Personal', {
 	extend: 'Ext.form.Panel',
 	id: 'StudentIntakePersonal',
-    url:'save-form.php',
+	autoScroll: true,
     width: '100%',
     height: '100%',
     fieldDefaults: {
@@ -92,14 +92,6 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
         name: 'secondaryEmailAddress',
         vtype:'email'
     }]
-    }],
-    /*,
-
-    buttons: [{
-        text: 'Save'
-    },{
-        text: 'Cancel'
-    }]
-    */ 
+    }] 
 
 });

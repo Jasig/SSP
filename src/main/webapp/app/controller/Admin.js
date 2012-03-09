@@ -3,7 +3,7 @@ Ext.define('Ssp.controller.Admin', {
     extend: 'Ssp.controller.AbstractController',
     
     views: [
-        'admin.AdminMenu', 'admin.forms.AbstractReferenceAdmin'
+        'admin.AdminMenu', 'admin.AdminTreeMenu', 'admin.forms.AbstractReferenceAdmin'
     ],
 
     stores: ['reference.Challenges',
@@ -25,6 +25,11 @@ Ext.define('Ssp.controller.Admin', {
 				scope: this
 			},
 			
+			'AdminTreeMenu': {
+				itemclick : this.treeItemClick,
+				scope: this
+			},
+			
 			'AbstractReferenceAdmin': {
 				edit: this.adminGridEdit,
 				scope: this
@@ -39,14 +44,25 @@ Ext.define('Ssp.controller.Admin', {
 	 * Load the selected admin tool.
 	 */  
 	itemClick: function(grid,record,item,index){ 
-		this.loadAdmin( record.get('form') );		
+		this.loadAdmin( record.get('title'), record.get('form') );		
 	},
 	
-	loadAdmin: function( form ) {
+	/*
+	 * Handle selecting an item in the tree grid
+	 */
+	treeItemClick: function(view,record,item,index,eventObj) {
+		
+		if (record.raw != undefined )
+			if ( record.raw.form != "")
+				this.loadAdmin( record.raw.title, record.raw.form );         
+	},
+	
+	loadAdmin: function( title ,form ) {
 		var adminFormsView = Ext.getCmp('AdminForms');
 		var store = Ext.getStore('reference.' + form)
-		var comp = adminFormsView.getComponent('AbstractReferenceAdmin'); 
+		var comp = adminFormsView.getComponent('AbstractReferenceAdmin');
 		// this.formRendererUtils.cleanItems(adminFormsView);				
+		
 		if (comp == undefined)
 		{
 			comp = Ext.create('Ssp.view.admin.forms.AbstractReferenceAdmin',{store:store}); // +form			
@@ -69,6 +85,7 @@ Ext.define('Ssp.controller.Admin', {
 				          }
 				     ]; 
 		*/
+		comp.setTitle(title + ' Admin');
 		comp.reconfigure(store); // ,columns
 		comp.getStore().load();		
 	},

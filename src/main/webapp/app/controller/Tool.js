@@ -39,16 +39,18 @@ Ext.define('Ssp.controller.Tool', {
 		var comp = Ext.create('Ssp.view.tools.'+toolType);
 		var tabs;
 		var Form = "";
+		var currentStudent = this.application.currentStudent;
+		var currentStudentId = currentStudent.get('id');
 		
 		switch(toolType)
 		{
 			case 'Profile':
-				comp.loadRecord( this.application.currentStudent );
+				comp.loadRecord( currentStudent );
 				break;
 			
 			case 'StudentIntake':
 				Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
-				Form.load(123,{
+				Form.load(currentStudentId,{
 					success: function( formData ) {
 						// console.log( formData.data.student );
 												
@@ -73,10 +75,10 @@ Ext.define('Ssp.controller.Tool', {
 						
 						
 						// Load records for each of the forms
-						Ext.getCmp('StudentIntakePersonal').loadRecord( formData.data.student );
-						Ext.getCmp('StudentIntakeDemographics').loadRecord( formData.data.studentDemographics );
-						Ext.getCmp('StudentIntakeEducationPlans').loadRecord( formData.data.studentEducationPlan );
-						Ext.getCmp('StudentIntakeEducationGoal').loadRecord( formData.data.studentEducationGoal );
+						Ext.getCmp('StudentIntakePersonal').loadRecord( formData.data.person );
+						Ext.getCmp('StudentIntakeDemographics').loadRecord( formData.data.personDemographics );
+						Ext.getCmp('StudentIntakeEducationPlans').loadRecord( formData.data.personEducationPlan );
+						Ext.getCmp('StudentIntakeEducationGoal').loadRecord( formData.data.personEducationGoal );
 						
 						formUtils = Ext.create('Ssp.util.FormRendererUtils');
 						
@@ -84,13 +86,14 @@ Ext.define('Ssp.controller.Tool', {
 						// console.log( challengesStore );
 						
 						// Education Levels
-						formUtils.createCheckBoxForm('StudentIntakeEducationLevels', formData.data.referenceData.educationLevels, formData.data.studentEducationLevels, 'id');
+						formUtils.createCheckBoxForm('StudentIntakeEducationLevels', formData.data.referenceData.educationLevels, formData.data.personEducationLevels, 'id');
 						
 						// Funding Sources
-						formUtils.createCheckBoxForm('StudentIntakeFunding', formData.data.referenceData.fundingSources, formData.data.studentFundingSources, 'id');						
+						formUtils.createCheckBoxForm('StudentIntakeFunding', formData.data.referenceData.fundingSources, formData.data.personFundingSources, 'id');						
 						
 						// Challenges
-						formUtils.createCheckBoxForm('StudentIntakeChallenges', formData.data.referenceData.challenges, formData.data.studentChallenges, 'id'); // formData.data.referenceData.challenges
+						//formUtils.createCheckBoxFormFromStore('StudentIntakeChallenges', challengesStore.data.items, formData.data.personChallenges, 'id');
+						formUtils.createCheckBoxForm('StudentIntakeChallenges', formData.data.referenceData.challenges, formData.data.personChallenges, 'id'); // formData.data.referenceData.challenges
 					}
 				});
 				break;

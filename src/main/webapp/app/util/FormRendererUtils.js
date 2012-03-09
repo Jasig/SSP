@@ -73,6 +73,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			
 			form.insert(form.items.length,cb);
 		}
+		
 		form.doLayout();
     },
     

@@ -14,16 +14,12 @@
 		        form: "Citizenships"
 		    }
 		    ,{
-		        title: "Educational Goals",
+		        title: "Education Goals",
 		        form: "EducationalGoals"
 		    }
 		    ,{
 		        title: "Education Levels",
 		        form: "EducationLevels"
-		    }
-		    ,{
-		        title: "EmploymentShifts",
-		        form: "EmploymentShifts"
 		    }
 		    ,{
 		        title: "Ethnicities",
@@ -34,16 +30,8 @@
 		        form: "FundingSources"
 		    }
 		    ,{
-		        title: "Genders",
-		        form: "Genders"
-		    }
-		    ,{
 		        title: "Marital Statuses",
 		        form: "MaritalStatuses"
-		    }
-		    ,{
-		        title: "States",
-		        form: "States"
 		    }
 		    ,{
 		        title: "Student Statuses",

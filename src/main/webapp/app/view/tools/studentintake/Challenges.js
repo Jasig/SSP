@@ -1,18 +1,16 @@
 Ext.define('Ssp.view.tools.studentintake.Challenges', {
 	extend: 'Ext.form.Panel',
 	id : 'StudentIntakeChallenges',
-    
+	autoScroll: true,
     width: '100%',
     height: '100%',
     bodyPadding: 5,
 
-    // Fields will be arranged vertically, stretched to full width
-    layout: 'vbox',
+    layout: 'anchor',
     defaults: {
-        autoScroll: true,
-		autoHeight: true
-        
+        anchor: '100%'
     },
+    
 
     // The fields
     defaultType: 'checkbox',

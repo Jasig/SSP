@@ -1,47 +1,47 @@
 Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 	extend: 'Ext.data.Model',
 	autoLoad: false,
-    fields: ['studentId',
+    fields: ['personId',
              'referenceData',
-             {name: 'student', 
+             {name: 'person', 
 		      convert: function(value, record) {
-		            var student  = new Ssp.model.StudentTO();
+		            var person  = new Ssp.model.StudentTO();
 		            
-		            student.populateFromGenericObject( value );
+		            person.populateFromGenericObject( value );
 		
-		            return student;
+		            return person;
 		      	}
              },
-             {name: 'studentDemographics', 
+             {name: 'personDemographics', 
    		      convert: function(value, record) {
-		            var studentDemographics  = new Ssp.model.tool.studentintake.StudentDemographics();
+		            var personDemographics  = new Ssp.model.tool.studentintake.StudentDemographics();
 		            
-		            studentDemographics.populateFromGenericObject( value );
+		            personDemographics.populateFromGenericObject( value );
 		
-		            return studentDemographics;
+		            return personDemographics;
 		      	}
              },
-             {name: 'studentEducationGoal', 
+             {name: 'personEducationGoal', 
    		      convert: function(value, record) {
-   		            var studentEducationGoal  = new Ssp.model.tool.studentintake.StudentEducationGoal();
+   		            var personEducationGoal  = new Ssp.model.tool.studentintake.StudentEducationGoal();
    		            
-   		            studentEducationGoal.populateFromGenericObject( value );
+   		            personEducationGoal.populateFromGenericObject( value );
    		
-   		            return studentEducationGoal;
+   		            return personEducationGoal;
    		      	}
              },
-             {name: 'studentEducationPlan', 
+             {name: 'personEducationPlan', 
       		  convert: function(value, record) {
-      		            var studentEducationPlan  = new Ssp.model.tool.studentintake.StudentEducationPlan();
+      		            var personEducationPlan  = new Ssp.model.tool.studentintake.StudentEducationPlan();
       		            
-      		            studentEducationPlan.populateFromGenericObject( value );
+      		            personEducationPlan.populateFromGenericObject( value );
       		
-      		            return studentEducationPlan;
+      		            return personEducationPlan;
       		    }
              },
-             'studentEducationLevels',
-             'studentFundingSources',
-             'studentChallenges'],
+             'personEducationLevels',
+             'personFundingSources',
+             'personChallenges'],
    
     proxy: {
 		type: 'ajax',
@@ -49,9 +49,7 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 			read: 'data/tools/StudentIntakeForm.json'
 		},
 		reader: {
-			type: 'json',
-			root: 'StudentIntakeForm',
-			successProperty: 'success'
+			type: 'json'
 		}
 	}
     

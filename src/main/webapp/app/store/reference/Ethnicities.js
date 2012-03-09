@@ -3,16 +3,24 @@ Ext.define('Ssp.store.reference.Ethnicities', {
     model: 'Ssp.model.reference.EthnicityTO',
     storeId: 'ethnicitiesReferenceStore',
 	autoLoad: false,
+	autoSync: true,
 
     proxy: {
 		type: 'rest',
-		api: {
-			read: 'data/reference/ethnicities.json'
-			// read: '/ssp/api/reference/ethnicity/'
+		url: '/ssp/api/reference/ethnicity/',
+		actionMethods: {
+			create: "POST", 
+			read: "GET", 
+			update: "PUT", 
+			destroy: "DELETE"
 		},
 		reader: {
 			type: 'json'
-		}
+		},
+        writer: {
+            type: 'json',
+            successProperty: 'success'
+        }
 	}	
 	
 });

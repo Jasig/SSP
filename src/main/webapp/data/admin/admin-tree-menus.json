@@ -1,0 +1,22 @@
+{
+	"success": true,
+	"menus": 
+		{
+			"title": "Student Intake",
+			"expanded": true,
+			"children": [
+					{
+						"title": "Challenges",
+						"leaf": true
+					},
+					{
+						"title": "Child Care Arrangements",
+						"leaf": true
+					},
+					{
+						"title": "Citizenships",
+						"leaf": true
+					}
+			]
+		}
+}

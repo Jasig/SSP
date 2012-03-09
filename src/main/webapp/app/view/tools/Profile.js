@@ -1,7 +1,6 @@
 Ext.define('Ssp.view.tools.Profile', {
 	extend: 'Ext.form.Panel',
 	alias : 'widget.Profile',
-    title: 'Profile',
     
     width: '100%',
     height: '100%',

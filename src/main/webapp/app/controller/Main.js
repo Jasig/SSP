@@ -139,9 +139,9 @@ Ext.define('Ssp.controller.Main', {
 		var arrViewItems = [
 		 		  Ext.create('Ssp.view.admin.AdminMain',
 					{items:[
-					        Ext.create('Ssp.view.admin.AdminMenu',{ flex:2 }), 
-					        Ext.create('Ssp.view.admin.AdminForms',{ flex:4 }) 
-					],flex:4})
+					        Ext.create('Ssp.view.admin.AdminTreeMenu',{ flex:1 }), 
+					        Ext.create('Ssp.view.admin.AdminForms',{ flex:5 }) 
+					],flex:6})
 		 		 ];
 		
 		this.formRendererUtils.cleanItems(mainView);

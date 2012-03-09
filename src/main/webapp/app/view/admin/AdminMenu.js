@@ -3,6 +3,6 @@ Ext.define('Ssp.view.admin.AdminMenu', {
 	alias : 'widget.AdminMenu',
 	id: 'AdminMenu',
 	store: Ext.getStore('admin.AdminMenus'),
-	columns:[ {header: "Admin",  dataIndex: "title", flex:100} ]
+	columns:[ {header: "",  dataIndex: "title", flex:100} ]
 	
 });
