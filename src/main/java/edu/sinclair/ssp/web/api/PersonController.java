@@ -8,6 +8,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +26,9 @@ import edu.sinclair.ssp.transferobject.PersonTO;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
 import edu.sinclair.ssp.web.api.validation.ValidationException;
 
+@PreAuthorize("hasRole('ROLE_USER')")
+@Controller
+@RequestMapping("/person")
 public class PersonController extends RestController<PersonTO>{
 
 	private static final Logger logger = LoggerFactory.getLogger(PersonController.class);
@@ -47,16 +52,6 @@ public class PersonController extends RestController<PersonTO>{
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody PersonTO get(@PathVariable UUID id) throws Exception {
 		Person model = service.get(id);
-		if(model!=null){
-			return toFactory.toTO(model);
-		}else{
-			return null;
-		}
-	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody PersonTO getByUsername(@PathVariable String username) throws Exception {
-		Person model = service.personFromUsername(username);
 		if(model!=null){
 			return toFactory.toTO(model);
 		}else{
