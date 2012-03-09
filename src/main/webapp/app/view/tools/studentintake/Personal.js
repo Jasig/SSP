@@ -30,43 +30,67 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
     },{
         fieldLabel: 'First Name',
         name: 'firstName',
+        maxLength: 50,
         allowBlank:false
     },{
         fieldLabel: 'Middle Initial',
-        name: 'middleInitial'
+        name: 'middleInitial',
+        maxLength: 1,
+        allowBlank:true
     },{
         fieldLabel: 'Last Name',
-        name: 'lastName'
+        name: 'lastName',
+        maxLength: 50,
+        allowBlank:false
     },{
         fieldLabel: 'Tartan ID',
-        name: 'schoolId'
+        name: 'schoolId',
+        minLength: 7,
+        maxLength: 7,
+        allowBlank:false
+    },{
+        fieldLabel: 'Birth Date',
+        name: 'birthDate',
+        vtype:'date',
+        maxLength: 10,
+        allowBlank:false    	
     },{
         fieldLabel: 'Home Phone',
         name: 'homePhone',
         emptyText: 'xxx-xxx-xxxx',
         maskRe: /[\d\-]/,
         regex: /^\d{3}-\d{3}-\d{4}$/,
-        regexText: 'Must be in the format xxx-xxx-xxxx'
+        regexText: 'Must be in the format xxx-xxx-xxxx',
+        maxLength: 12,
+        allowBlank:true
     },{
         fieldLabel: 'Work Phone',
         name: 'workPhone',
         emptyText: 'xxx-xxx-xxxx',
         maskRe: /[\d\-]/,
         regex: /^\d{3}-\d{3}-\d{4}$/,
-        regexText: 'Must be in the format xxx-xxx-xxxx'
+        regexText: 'Must be in the format xxx-xxx-xxxx',
+        maxLength: 12,
+        allowBlank:true
     },{
         fieldLabel: 'Cell Phone',
         name: 'cellPhone',
         emptyText: 'xxx-xxx-xxxx',
         maskRe: /[\d\-]/,
         regex: /^\d{3}-\d{3}-\d{4}$/,
-        regexText: 'Must be in the format xxx-xxx-xxxx'
+        regexText: 'Must be in the format xxx-xxx-xxxx',
+        maxLength: 12,
+        allowBlank:true
     },{
         fieldLabel: 'Address',
-        name: 'address'
+        name: 'address',
+        maxLength: 50,
+        allowBlank:true
     },{
         fieldLabel: 'City',
-        name: 'city'
+        name: 'city',
+        maxLength: 50,
+        allowBlank:true
     },{
         xtype: 'combobox',
         name: 'state',
@@ -78,19 +102,25 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
         mode: 'local',
         typeAhead: true,
         queryMode: 'local',
-        allowBlank: false,
+        allowBlank: true,
         forceSelection: true
 	},{
         fieldLabel: 'Zip Code',
-        name: 'zipCode'
+        name: 'zipCode',
+        maxLength: 10,
+        allowBlank:true
     },{
         fieldLabel: 'Email School',
         name: 'primaryEmailAddress',
-        vtype:'email'
+        vtype:'email',
+        maxLength: 100,
+        allowBlank:true
     },{
         fieldLabel: 'Email Alternate',
         name: 'secondaryEmailAddress',
-        vtype:'email'
+        vtype:'email',
+        maxLength: 100,
+        allowBlank:true
     }]
     }] 
 
