@@ -216,14 +216,16 @@ class Templater{
 			<column name="created_date" type="datetime">
 				<constraints nullable="false"/>
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false"/>
+			</column>
 			<column name="created_by" type="uuid">
 				<constraints nullable="false" 
 					foreignKeyName="${tableName}_created_by_person_id"
 					references="person(id)"/>
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="${tableName}_modified_by_person_id"
+				<constraints nullable="false" foreignKeyName="${tableName}_modified_by_person_id"
 					references="person(id)"/>
 			</column>
 			<column name="object_status" type="int">
