@@ -4,7 +4,8 @@ Ext.define('Ssp.store.Students', {
     storeId: 'studentsStore',
 	autoLoad: false,
 
-    proxy: {
+	/*    
+	proxy: {
 		type: 'ajax',
 		api: {
 			read: 'data/students.json'
@@ -14,6 +15,25 @@ Ext.define('Ssp.store.Students', {
 			root: 'students',
 			successProperty: 'success'
 		}
-	}	
+	}
+*/
+    proxy: {
+		type: 'rest',
+		url: '/ssp/api/person/',
+		actionMethods: {
+			create: "POST", 
+			read: "GET", 
+			update: "PUT", 
+			destroy: "DELETE"
+		},
+		reader: {
+			type: 'json'
+		},
+        writer: {
+            type: 'json',
+            successProperty: 'success'
+        }
+	}
+	
 	
 });

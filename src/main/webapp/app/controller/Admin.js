@@ -61,6 +61,7 @@ Ext.define('Ssp.controller.Admin', {
 		var adminFormsView = Ext.getCmp('AdminForms');
 		var store = Ext.getStore('reference.' + form)
 		var comp = adminFormsView.getComponent('AbstractReferenceAdmin');
+		var pager = null;
 		// this.formRendererUtils.cleanItems(adminFormsView);				
 		
 		if (comp == undefined)
@@ -86,6 +87,8 @@ Ext.define('Ssp.controller.Admin', {
 				     ]; 
 		*/
 		comp.setTitle(title + ' Admin');
+		pager = comp.getDockedComponent('abstractReferenceAdminPager');
+    	pager.bindStore(store);
 		comp.reconfigure(store); // ,columns
 		comp.getStore().load();		
 	},

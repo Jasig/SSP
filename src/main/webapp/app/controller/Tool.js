@@ -53,47 +53,53 @@ Ext.define('Ssp.controller.Tool', {
 				Form.load(currentStudentId,{
 					success: function( formData ) {
 						// console.log( formData.data.student );
-												
-						Ext.getStore('reference.States').loadData( formData.data.referenceData.states );
-						Ext.getStore('reference.Challenges').loadData( formData.data.referenceData.challenges );
-						//var challengesStore = Ext.getStore('reference.Challenges');
-						//challengesStore.load();
-						Ext.getStore('reference.ChildCareArrangements').loadData( formData.data.referenceData.childCareArrangements );
-						Ext.getStore('reference.Citizenships').loadData( formData.data.referenceData.citizenships );
-						Ext.getStore('reference.EducationalGoals').loadData( formData.data.referenceData.educationalGoals );
-						Ext.getStore('reference.EducationLevels').loadData( formData.data.referenceData.educationLevels );
-						Ext.getStore('reference.EmploymentShifts').loadData( formData.data.referenceData.employmentShifts );
-						Ext.getStore('reference.Ethnicities').loadData( formData.data.referenceData.ethnicities );
-						//var ethnicitiesStore = Ext.getStore('reference.Ethnicities');
-						//ethnicitiesStore.load();
-						Ext.getStore('reference.FundingSources').loadData( formData.data.referenceData.fundingSources );
-						Ext.getStore('reference.Genders').loadData( formData.data.referenceData.genders );
-						Ext.getStore('reference.MaritalStatuses').loadData( formData.data.referenceData.maritalStatuses );
-						Ext.getStore('reference.StudentStatuses').loadData( formData.data.referenceData.studentStatuses );
-						Ext.getStore('reference.VeteranStatuses').loadData( formData.data.referenceData.veteranStatuses ); 
-						Ext.getStore('reference.YesNo').loadData( formData.data.referenceData.yesNo );						
+						var formUtils = Ext.create('Ssp.util.FormRendererUtils');
+						var person = formData.data.person;
+						//var personDemographics = formData.data.personDemographics;
+						//var personEducationPlan = formData.data.personEducationPlan;
+						//var personEducationGoal = formData.data.personEducationGoal;
+						//var personEducationLevels = formData.data.personEducationLevels;
+						//var personFundingSources = formData.data.personFundingSources;
+						// formData.data.personChallenges
+						var personChallenges = [
+						               			{ id: "f53920f4-59f6-454f-a3db-d57b721fed5c" },
+						               			{ id: "eba26bb7-c36b-41d3-857e-00673b231a5d" }
+						               		]; 
 						
+						var challenges = formData.data.referenceData.challenges;
+						Ext.getStore('reference.Challenges').loadData( challenges );
+						//var childCareArrangements = formData.data.referenceData.childCareArrangements;
+						//var citizenships = formData.data.referenceData.citizenships;
+						//var educationGoals = formData.data.referenceData.educationGoals;
+						//var educationLevels = formData.data.referenceData.educationLevels;
+						//var ethnicities = formData.data.referenceData.ethnicities;
+						//var fundingSources = formData.data.referenceData.fundingSources;
+						//var maritalStatuses = formData.data.referenceData.maritalStatuses;
+						//var studentStatuses = formData.data.referenceData.studentStatuses;
+						//var veteranStatuses = formData.data.referenceData.veteranStatuses;
+
+						Ext.getStore('reference.States').load();
+						Ext.getStore('reference.ChildCareArrangements').load();
+						Ext.getStore('reference.Citizenships').load();
+						Ext.getStore('reference.EducationalGoals').load();
+						Ext.getStore('reference.EducationLevels').load();
+						Ext.getStore('reference.EmploymentShifts').load();
+						Ext.getStore('reference.Ethnicities').load();
+						Ext.getStore('reference.FundingSources').load();
+						Ext.getStore('reference.Genders').load();
+						Ext.getStore('reference.MaritalStatuses').load();
+						Ext.getStore('reference.StudentStatuses').load();
+						Ext.getStore('reference.VeteranStatuses').load(); 
+						Ext.getStore('reference.YesNo').load();						
 						
 						// Load records for each of the forms
-						Ext.getCmp('StudentIntakePersonal').loadRecord( formData.data.person );
-						Ext.getCmp('StudentIntakeDemographics').loadRecord( formData.data.personDemographics );
-						Ext.getCmp('StudentIntakeEducationPlans').loadRecord( formData.data.personEducationPlan );
-						Ext.getCmp('StudentIntakeEducationGoal').loadRecord( formData.data.personEducationGoal );
-						
-						formUtils = Ext.create('Ssp.util.FormRendererUtils');
-						
-						// console.log( ethnicitiesStore );
-						// console.log( challengesStore );
-						
-						// Education Levels
-						formUtils.createCheckBoxForm('StudentIntakeEducationLevels', formData.data.referenceData.educationLevels, formData.data.personEducationLevels, 'id');
-						
-						// Funding Sources
-						formUtils.createCheckBoxForm('StudentIntakeFunding', formData.data.referenceData.fundingSources, formData.data.personFundingSources, 'id');						
-						
-						// Challenges
-						//formUtils.createCheckBoxFormFromStore('StudentIntakeChallenges', challengesStore.data.items, formData.data.personChallenges, 'id');
-						formUtils.createCheckBoxForm('StudentIntakeChallenges', formData.data.referenceData.challenges, formData.data.personChallenges, 'id'); // formData.data.referenceData.challenges
+						Ext.getCmp('StudentIntakePersonal').loadRecord( person );
+						//Ext.getCmp('StudentIntakeDemographics').loadRecord( personDemographics );
+						//Ext.getCmp('StudentIntakeEducationPlans').loadRecord( personEducationPlan );
+						//Ext.getCmp('StudentIntakeEducationGoal').loadRecord( personEducationGoal );
+						//formUtils.createCheckBoxForm('StudentIntakeEducationLevels', educationLevels, personEducationLevels, 'id');
+						//formUtils.createCheckBoxForm('StudentIntakeFunding', fundingSources, personFundingSources, 'id');	
+						formUtils.createCheckBoxForm('StudentIntakeChallenges', challenges, personChallenges, 'id');
 					}
 				});
 				break;

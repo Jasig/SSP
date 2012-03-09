@@ -15,7 +15,7 @@ Ext.define('Ssp.controller.StudentIntakeTool', {
 			}
 			
 		}); 
-		
+				
 		this.superclass.init.call(this, arguments);
     },
  

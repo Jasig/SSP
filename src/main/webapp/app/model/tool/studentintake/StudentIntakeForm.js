@@ -1,8 +1,7 @@
 Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 	extend: 'Ext.data.Model',
 	autoLoad: false,
-    fields: ['personId',
-             'referenceData',
+    fields: [
              {name: 'person', 
 		      convert: function(value, record) {
 		            var person  = new Ssp.model.StudentTO();
@@ -12,6 +11,7 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 		            return person;
 		      	}
              },
+             /*
              {name: 'personDemographics', 
    		      convert: function(value, record) {
 		            var personDemographics  = new Ssp.model.tool.studentintake.StudentDemographics();
@@ -41,8 +41,13 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
              },
              'personEducationLevels',
              'personFundingSources',
-             'personChallenges'],
+             'personChallenges',
+             */
+             'referenceData',
+             
+             ],
    
+    /*
     proxy: {
 		type: 'ajax',
 		api: {
@@ -51,6 +56,25 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 		reader: {
 			type: 'json'
 		}
+	}
+	*/
+
+	proxy: {
+		type: 'rest',
+		url: '/ssp/api/tool/studentIntake/',
+		actionMethods: {
+			create: "POST", 
+			read: "GET", 
+			update: "PUT", 
+			destroy: "DELETE"
+		},
+		reader: {
+			type: 'json'
+		},
+	    writer: {
+	        type: 'json',
+	        successProperty: 'success'
+	    }
 	}
     
 });

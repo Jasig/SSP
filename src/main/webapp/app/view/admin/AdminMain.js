@@ -7,4 +7,4 @@ Ext.define('Ssp.view.admin.AdminMain', {
     	type: 'hbox',
     	align: 'stretch'
     }
-});	
+});

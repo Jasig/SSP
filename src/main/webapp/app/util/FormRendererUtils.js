@@ -44,7 +44,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 				}
 			}
 			
-			form.insert(form.items.length,cb);
+			form.insert(i-1,cb);
 		}
 		form.doLayout();
     },

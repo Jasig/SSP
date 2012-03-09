@@ -49,10 +49,9 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
         maxLength: 7,
         allowBlank:false
     },{
-        fieldLabel: 'Birth Date',
+    	xtype: 'datefield',
+    	fieldLabel: 'Birth Date',
         name: 'birthDate',
-        vtype:'date',
-        maxLength: 10,
         allowBlank:false    	
     },{
         fieldLabel: 'Home Phone',

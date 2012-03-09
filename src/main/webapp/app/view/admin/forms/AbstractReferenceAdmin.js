@@ -3,6 +3,9 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	alias : 'widget.AbstractReferenceAdmin',
 	title: 'Admin',
 	id: 'AbstractReferenceAdmin',
+	autoScroll: true,
+	height: '100%',
+	width: '100%',
     plugins: [
 		Ext.create('Ext.grid.plugin.RowEditing', { 
 			id: 'AbstractReferenceAdminRowEditing',
@@ -26,7 +29,15 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
          }
     ],  
     
-    dockedItems: [{
+    dockedItems: [
+		{
+			xtype: 'pagingtoolbar',
+			id: 'abstractReferenceAdminPager',
+		    dock: 'bottom',
+		    displayInfo: true
+		},
+		
+       {
         xtype: 'toolbar',
         items: [{
             text: 'Add',
@@ -47,7 +58,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                 }
             }
         }]
-    }],
+    }], 
     
     initComponent: function(){
     	this.callParent();

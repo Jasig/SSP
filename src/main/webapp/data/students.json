@@ -4,7 +4,7 @@
 		    {
 		        id: "1",
 		        studentIntakeCreatedDate: "01/21/2012",
-		        photoUrl: "/ssp/images/student-pic-small.png",
+		        photoUrl: "images/student-pic-small.png",
 		        schoolId: '0123456',
 		        name: "Julia R. Johnson",
 		        firstName: "Julia",
@@ -37,7 +37,7 @@
 		    },
 		    {
 		        id: "2",
-		        photoUrl: "/ssp/images/student-pic2-small.png",
+		        photoUrl: "images/student-pic2-small.png",
 		        schoolId: '0123457',
 		        name: "Abigail T. Allen",
 		        firstName: "Abigail",
@@ -70,7 +70,7 @@
 		    },
 		    {
 		        id: "3",
-		        photoUrl: "/ssp/images/student-pic3-small.png",
+		        photoUrl: "images/student-pic3-small.png",
 		        schoolId: '0123458',
 		        name: "Maria F. Stillwater",
 		        firstName: "Maria",
@@ -100,7 +100,7 @@
 		    },
 		    {
 		        id: "252de4a0-7c06-4254-b7d8-4ffc02fe81ff",
-		        photoUrl: "/ssp/images/alan_turing.png",
+		        photoUrl: "images/alan_turing.png",
 		        schoolId: '0123459',
 		        name: "Alan M Turing",
 		        firstName: "Alan",
@@ -133,7 +133,7 @@
 		    },
 		    {
 		        id: "5",
-		        photoUrl: "/ssp/images/student-pic5-small.png",
+		        photoUrl: "images/student-pic5-small.png",
 		        schoolId: '0123555',
 		        name: "Jessie A. Roberts",
 		        firstName: "Jessie",
@@ -166,7 +166,7 @@
 		    },
 		    {
 		        id: "6",
-		        photoUrl: "/ssp/images/student-pic6-small.png",
+		        photoUrl: "images/student-pic6-small.png",
 		        schoolId: '0123458',
 		        name: "Jessica E. Murano",
 		        firstName: "Jessica",
@@ -199,7 +199,7 @@
 		    },
 		    {
 		        id: "7",
-		        photoUrl: "/ssp/images/student-pic7-small.png",
+		        photoUrl: "images/student-pic7-small.png",
 		        schoolId: '1323456',
 		        name: "Kimberly R. Thompson",
 		        firstName: "Kimberly",
