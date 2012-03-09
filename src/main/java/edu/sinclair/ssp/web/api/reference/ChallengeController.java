@@ -52,9 +52,9 @@ public class ChallengeController extends RestController<ChallengeTO>{
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody ChallengeTO get(@PathVariable UUID id) throws Exception {
-		Challenge challenge = service.get(id);
-		if(challenge!=null){
-			return toFactory.toTO(challenge);
+		Challenge model = service.get(id);
+		if(model!=null){
+			return toFactory.toTO(model);
 		}else{
 			return null;
 		}
