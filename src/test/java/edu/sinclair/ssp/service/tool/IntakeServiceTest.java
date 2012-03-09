@@ -15,18 +15,18 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.service.reference.ChallengeService;
 
-public class StudentIntakeServiceTest {
+public class IntakeServiceTest {
 
 	//private static final Logger logger = LoggerFactory.getLogger(StudentIntakeServiceTest.class);
 	
-	private StudentIntakeService service;
+	private IntakeService service;
 	private ChallengeService challengeService;
 	//private FundingSourceService fundingSourceService;
 	//private VeteranStatusService veteranStatusService;
 	
 	@Before
 	public void setup() {
-		service = new StudentIntakeService();
+		service = new IntakeService();
 		
 		challengeService = createMock(ChallengeService.class);
 		//fundingSourceService = createMock(FundingSourceService.class);
