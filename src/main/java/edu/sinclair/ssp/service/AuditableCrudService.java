@@ -1,12 +1,11 @@
-package edu.sinclair.ssp.service.reference;
+package edu.sinclair.ssp.service;
 
 import java.util.List;
 import java.util.UUID;
 
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
 
-public interface ReferenceService<T> {
+public interface AuditableCrudService<T> {
 
 	public List<T> getAll(ObjectStatus status);
 	

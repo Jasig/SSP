@@ -14,13 +14,13 @@ import edu.sinclair.ssp.dao.reference.VeteranStatusDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.VeteranStatusService;
-import edu.sinclair.ssp.service.reference.ReferenceService;
 
 @Service
 @Transactional
-public class VeteranStatusServiceImpl implements ReferenceService<VeteranStatus>, VeteranStatusService {
+public class VeteranStatusServiceImpl implements AuditableCrudService<VeteranStatus>, VeteranStatusService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(VeteranStatusServiceImpl.class);

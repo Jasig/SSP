@@ -14,13 +14,13 @@ import edu.sinclair.ssp.dao.reference.CitizenshipDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Citizenship;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.CitizenshipService;
-import edu.sinclair.ssp.service.reference.ReferenceService;
 
 @Service
 @Transactional
-public class CitizenshipServiceImpl implements ReferenceService<Citizenship>, CitizenshipService {
+public class CitizenshipServiceImpl implements AuditableCrudService<Citizenship>, CitizenshipService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(CitizenshipServiceImpl.class);

@@ -15,6 +15,10 @@ public class ObjectNotFoundException extends Exception {
 		this.name = name;
 	}
 	
+	public ObjectNotFoundException(String message){
+		super(message);
+	}
+	
 	private static String message(UUID objectId, String name){
 		return "Unable to access " + name + " with id " + objectId.toString();
 	}

@@ -14,13 +14,13 @@ import edu.sinclair.ssp.dao.reference.FundingSourceDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.FundingSource;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.FundingSourceService;
-import edu.sinclair.ssp.service.reference.ReferenceService;
 
 @Service
 @Transactional
-public class FundingSourceServiceImpl implements ReferenceService<FundingSource>, FundingSourceService {
+public class FundingSourceServiceImpl implements AuditableCrudService<FundingSource>, FundingSourceService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(FundingSourceServiceImpl.class);

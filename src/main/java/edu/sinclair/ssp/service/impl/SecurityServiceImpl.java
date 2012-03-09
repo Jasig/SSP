@@ -7,8 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.security.SspUser;
+import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonService;
 import edu.sinclair.ssp.service.SecurityService;
 
@@ -36,9 +36,11 @@ public class SecurityServiceImpl implements SecurityService{
 		}
 		
 		if(sspUser.getPerson()==null){
-			Person person = personService.personFromUsername(sspUser.getUsername());
-			if(person!=null){
-				sspUser.setPerson(person);
+			try {
+				sspUser.setPerson(
+						personService.personFromUsername(sspUser.getUsername()));
+			} catch (ObjectNotFoundException e) {
+				logger.error("Did not find the person's domain object");
 			}
 		}
 		

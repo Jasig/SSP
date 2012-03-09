@@ -1,58 +1,64 @@
 package edu.sinclair.ssp.transferobject.reference;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import edu.sinclair.ssp.model.ObjectStatus;
+import edu.sinclair.ssp.model.reference.AbstractReference;
+import edu.sinclair.ssp.transferobject.AuditableTO;
 
-public abstract class AbstractReferenceTO {
+public abstract class AbstractReferenceTO extends AuditableTO {
 
-	private UUID id;
-	
 	//validator
 	@NotNull
 	@NotEmpty
 	private String name;
 	
 	private String description;
-	
-	private Date createdDate;
 
-	private UUID createdById;
 
-	private Date modifiedDate;
-	
-	private UUID modifiedById;
-	
-	private ObjectStatus objectStatus;
-	
-	public AbstractReferenceTO() {}
+	public AbstractReferenceTO() {
+		super();
+	}
 	
 	public AbstractReferenceTO(UUID id){
-		this.id = id;
+		super(id);
 	}
 	
 	public AbstractReferenceTO(UUID id, String name) {
-		this.id = id;
+		super(id);
 		this.name = name;
 	}
 	
 	public AbstractReferenceTO(UUID id, String name, String description) {
-		this.id = id;
+		this(id);
 		this.name = name;
 		this.description = description;
 	}
 
-	public UUID getId() {
-		return id;
-	}
 
-	public void setId(UUID id) {
-		this.id = id;
+	public void fromModel(AbstractReference model){
+		super.fromModel(model);
+		
+		if(model.getName()!=null){
+			setName(model.getName());
+		}
+		if(model.getDescription()!=null){
+			setDescription(model.getDescription());
+		}
+	}
+	
+	public void addToModel(AbstractReference model){
+		super.addToModel(model);
+		
+		if(getName()!=null){
+			model.setName(getName());
+		}
+		if(getDescription()!=null){
+			model.setDescription(getDescription());
+		}
 	}
 
 	public String getName() {
@@ -69,46 +75,6 @@ public abstract class AbstractReferenceTO {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public UUID getCreatedById() {
-		return createdById;
-	}
-
-	public void setCreatedById(UUID createdById) {
-		this.createdById = createdById;
-	}
-
-	public Date getModifiedDate() {
-		return modifiedDate;
-	}
-
-	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-
-	public UUID getModifiedById() {
-		return modifiedById;
-	}
-
-	public void setModifiedById(UUID modifiedById) {
-		this.modifiedById = modifiedById;
-	}
-
-	public ObjectStatus getObjectStatus() {
-		return objectStatus;
-	}
-
-	public void setObjectStatus(ObjectStatus objectStatus) {
-		this.objectStatus = objectStatus;
 	}
 
 }

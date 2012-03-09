@@ -1,6 +1,5 @@
 package edu.sinclair.ssp.service.reference.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.sinclair.ssp.dao.reference.ChallengeDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
+import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.ChallengeService;
-import edu.sinclair.ssp.service.reference.ReferenceService;
 
 @Service
 @Transactional
-public class ChallengeServiceImpl implements ReferenceService<Challenge>, ChallengeService {
+public class ChallengeServiceImpl implements AuditableCrudService<Challenge>, ChallengeService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ChallengeServiceImpl.class);
@@ -47,11 +46,8 @@ public class ChallengeServiceImpl implements ReferenceService<Challenge>, Challe
 
 	@Override
 	public Challenge create(Challenge obj) {
-		obj.setCreatedBy(securityService.currentlyLoggedInSspUser().getPerson());
-		obj.setCreatedDate(new Date());
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setModifiedBy(obj.getCreatedBy());
-		obj.setModifiedDate(obj.getCreatedDate());
+		obj.setRequiredOnCreate(
+				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
@@ -59,8 +55,8 @@ public class ChallengeServiceImpl implements ReferenceService<Challenge>, Challe
 	public Challenge save(Challenge obj) throws ObjectNotFoundException {
 		Challenge current = get(obj.getId());
 		
-		current.setModifiedBy(securityService.currentlyLoggedInSspUser().getPerson());
-		current.setModifiedDate(new Date());
+		current.setRequiredOnModify(
+				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());

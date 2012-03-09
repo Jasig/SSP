@@ -57,6 +57,20 @@ public abstract class Auditable {
 	public Auditable(UUID id){
 		this.id = id;
 	}
+	
+	public void setRequiredOnCreate(Person createdBy){
+		Date now = new Date();
+		setCreatedBy(createdBy);
+		setCreatedDate(now);
+		setObjectStatus(ObjectStatus.ACTIVE);
+		setModifiedBy(createdBy);
+		setModifiedDate(now);
+	}
+	
+	public void setRequiredOnModify(Person modifiedBy){
+		setModifiedBy(modifiedBy);
+		setModifiedDate(new Date());
+	}
 
 
 	public UUID getId() {

@@ -14,13 +14,13 @@ import edu.sinclair.ssp.dao.reference.EthnicityDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Ethnicity;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.EthnicityService;
-import edu.sinclair.ssp.service.reference.ReferenceService;
 
 @Service
 @Transactional
-public class EthnicityServiceImpl implements ReferenceService<Ethnicity>, EthnicityService {
+public class EthnicityServiceImpl implements AuditableCrudService<Ethnicity>, EthnicityService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(EthnicityServiceImpl.class);

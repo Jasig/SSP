@@ -6,8 +6,9 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface ChallengeService {
+public interface ChallengeService extends AuditableCrudService<Challenge>{
 
 	public List<Challenge> getAll(ObjectStatus status);
 

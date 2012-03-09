@@ -14,13 +14,13 @@ import edu.sinclair.ssp.dao.reference.MaritalStatusDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.MaritalStatusService;
-import edu.sinclair.ssp.service.reference.ReferenceService;
 
 @Service
 @Transactional
-public class MaritalStatusServiceImpl implements ReferenceService<MaritalStatus>, MaritalStatusService {
+public class MaritalStatusServiceImpl implements AuditableCrudService<MaritalStatus>, MaritalStatusService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(MaritalStatusServiceImpl.class);

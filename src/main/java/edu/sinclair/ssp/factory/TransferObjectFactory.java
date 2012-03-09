@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface TransferObjectFactory <T,U> {
 
-	public T toTO(U from);
+	public abstract T toTO(U from);
 	
-	public U toModel(T from);
+	public abstract U toModel(T from);
 	
 	public List<T> toTOList(List<U> from);
 	

@@ -14,13 +14,13 @@ import edu.sinclair.ssp.dao.reference.StudentStatusDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.StudentStatus;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.StudentStatusService;
-import edu.sinclair.ssp.service.reference.ReferenceService;
 
 @Service
 @Transactional
-public class StudentStatusServiceImpl implements ReferenceService<StudentStatus>, StudentStatusService {
+public class StudentStatusServiceImpl implements AuditableCrudService<StudentStatus>, StudentStatusService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(StudentStatusServiceImpl.class);

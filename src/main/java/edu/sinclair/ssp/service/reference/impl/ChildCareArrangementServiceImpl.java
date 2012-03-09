@@ -14,13 +14,13 @@ import edu.sinclair.ssp.dao.reference.ChildCareArrangementDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.ChildCareArrangement;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.ChildCareArrangementService;
-import edu.sinclair.ssp.service.reference.ReferenceService;
 
 @Service
 @Transactional
-public class ChildCareArrangementServiceImpl implements ReferenceService<ChildCareArrangement>, ChildCareArrangementService {
+public class ChildCareArrangementServiceImpl implements AuditableCrudService<ChildCareArrangement>, ChildCareArrangementService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ChildCareArrangementServiceImpl.class);

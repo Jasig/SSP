@@ -14,13 +14,13 @@ import edu.sinclair.ssp.dao.reference.EducationGoalDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.EducationGoal;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.EducationGoalService;
-import edu.sinclair.ssp.service.reference.ReferenceService;
 
 @Service
 @Transactional
-public class EducationGoalServiceImpl implements ReferenceService<EducationGoal>, EducationGoalService {
+public class EducationGoalServiceImpl implements AuditableCrudService<EducationGoal>, EducationGoalService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(EducationGoalServiceImpl.class);
