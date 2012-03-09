@@ -5,29 +5,21 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "person", schema = "public")
-public class Person {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Person extends Auditable{
 
 	public static UUID SYSTEM_ADMINISTRATOR_ID = UUID.fromString("58ba5ee3-734e-4ae9-b9c5-943774b4de41");
-	
-	@Id
-	@Type(type="pg-uuid")
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@NotNull
-	private UUID id;
 
 	@Column(name = "first_name", nullable = false, length=50)
 	@NotNull
@@ -47,6 +39,8 @@ public class Person {
 	private Date birthDate;
 
 	@Column(name = "primary_email_address", length=100)
+	@NotNull
+	@NotEmpty
 	private String primaryEmailAddress;
 
 	@Column(name = "secondary_email_address", length=100)
@@ -89,15 +83,7 @@ public class Person {
 
 	public Person(){}
 	public Person(UUID id){
-		this.id = id;
-	}
-	
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
+		super(id);
 	}
 
 	public String getFirstName() {
