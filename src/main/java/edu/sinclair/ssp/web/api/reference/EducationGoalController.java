@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.reference.EducationGoalTOFactory;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.EducationGoal;
 import edu.sinclair.ssp.service.reference.EducationGoalService;
@@ -37,8 +37,7 @@ public class EducationGoalController extends RestController<EducationGoalTO>{
 	@Autowired
 	private EducationGoalService service;
 	
-	@Autowired
-	private EducationGoalTOFactory toFactory;
+	private TransferObjectListFactory<EducationGoalTO, EducationGoal> listFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(EducationGoalTO.class);
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,15 +45,15 @@ public class EducationGoalController extends RestController<EducationGoalTO>{
 		if(status==null){
 			status = ObjectStatus.ACTIVE;
 		}
-		return toFactory.toTOList(service.getAll(status));
+		return listFactory.toTOList(service.getAll(status));
 	}
 	
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody EducationGoalTO get(@PathVariable UUID id) throws Exception {
-		EducationGoal educationGoal = service.get(id);
-		if(educationGoal!=null){
-			return toFactory.toTO(educationGoal);
+		EducationGoal model = service.get(id);
+		if(model!=null){
+			return new EducationGoalTO(model);
 		}else{
 			return null;
 		}
@@ -67,12 +66,12 @@ public class EducationGoalController extends RestController<EducationGoalTO>{
 			throw new ValidationException("You submitted a educationGoal with an id to the create method.  Did you mean to save?");
 		}
 		
-		EducationGoal model = toFactory.toModel(obj);
+		EducationGoal model = obj.asModel();
 		
 		if(null!=model){
 			EducationGoal createdModel = service.create(model);
 			if(null!=createdModel){
-				return toFactory.toTO(createdModel);
+				return new EducationGoalTO(createdModel);
 			}
 		}
 		return null;
@@ -85,12 +84,12 @@ public class EducationGoalController extends RestController<EducationGoalTO>{
 			throw new ValidationException("You submitted a educationGoal without an id to the save method.  Did you mean to create?");
 		}
 		
-		EducationGoal model = toFactory.toModel(obj);
+		EducationGoal model = obj.asModel();
 		model.setId(id);
 		
 		EducationGoal savedEducationGoal = service.save(model);
 		if(null!=savedEducationGoal){
-			return toFactory.toTO(savedEducationGoal);
+			return new EducationGoalTO(savedEducationGoal);
 		}
 		return null;
 	}

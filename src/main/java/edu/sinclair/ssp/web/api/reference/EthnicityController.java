@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.reference.EthnicityTOFactory;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Ethnicity;
 import edu.sinclair.ssp.service.reference.EthnicityService;
@@ -37,8 +37,7 @@ public class EthnicityController extends RestController<EthnicityTO>{
 	@Autowired
 	private EthnicityService service;
 	
-	@Autowired
-	private EthnicityTOFactory toFactory;
+	private TransferObjectListFactory<EthnicityTO, Ethnicity> listFactory = new TransferObjectListFactory<EthnicityTO, Ethnicity>(EthnicityTO.class);
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,15 +45,15 @@ public class EthnicityController extends RestController<EthnicityTO>{
 		if(status==null){
 			status = ObjectStatus.ACTIVE;
 		}
-		return toFactory.toTOList(service.getAll(status));
+		return listFactory.toTOList(service.getAll(status));
 	}
 	
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody EthnicityTO get(@PathVariable UUID id) throws Exception {
-		Ethnicity ethnicity = service.get(id);
-		if(ethnicity!=null){
-			return toFactory.toTO(ethnicity);
+		Ethnicity model = service.get(id);
+		if(model!=null){
+			return new EthnicityTO(model);
 		}else{
 			return null;
 		}
@@ -67,12 +66,12 @@ public class EthnicityController extends RestController<EthnicityTO>{
 			throw new ValidationException("You submitted a ethnicity with an id to the create method.  Did you mean to save?");
 		}
 		
-		Ethnicity model = toFactory.toModel(obj);
+		Ethnicity model = obj.asModel();
 		
 		if(null!=model){
 			Ethnicity createdModel = service.create(model);
 			if(null!=createdModel){
-				return toFactory.toTO(createdModel);
+				return new EthnicityTO(createdModel);
 			}
 		}
 		return null;
@@ -85,12 +84,12 @@ public class EthnicityController extends RestController<EthnicityTO>{
 			throw new ValidationException("You submitted a ethnicity without an id to the save method.  Did you mean to create?");
 		}
 		
-		Ethnicity model = toFactory.toModel(obj);
+		Ethnicity model = obj.asModel();
 		model.setId(id);
 		
 		Ethnicity savedEthnicity = service.save(model);
 		if(null!=savedEthnicity){
-			return toFactory.toTO(savedEthnicity);
+			return new EthnicityTO(savedEthnicity);
 		}
 		return null;
 	}

@@ -59,14 +59,15 @@ class ExampleFile {
 
 class Templater{
 
-	Templater(boolean create, boolean overwrite, boolean dryRun, boolean displayFileContents){
+	Templater(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
 		this.create = create
 		this.overwrite = overwrite
+		this.writeLiquibaseScript = writeLiquibaseScript
 		this.dryRun = dryRun
 		this.displayFileContents = displayFileContents
 	}
 
-	boolean create, overwrite, dryRun, displayFileContents
+	boolean create, overwrite, dryRun, displayFileContents, writeLiquibaseScript
 
 	/*
 	 * Set some paths to access the files
@@ -101,12 +102,12 @@ class Templater{
 					new ExampleFile(javaMainPath, appPath, ["service"] + subpackage, modelName, "Service.java"),
 					new ExampleFile(javaMainPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceImpl.java"),
 					new ExampleFile(javaMainPath, appPath, ["web", "api"] + subpackage, modelName, "Controller.java"),
-					new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage, modelName, "TOFactory.java"),
-					new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryImpl.java"),
+					//new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage, modelName, "TOFactory.java"),
+					//new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryImpl.java"),
 					new ExampleFile(javaMainPath, appPath, ["transferobject"] + subpackage, modelName, "TO.java"),
 					new ExampleFile(javaTestPath, appPath, ["dao"] + subpackage, modelName, "DaoTest.java"),
-					new ExampleFile(javaTestPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceTest.java"),
-					new ExampleFile(javaTestPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryTest.java")
+					new ExampleFile(javaTestPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceTest.java")
+					//new ExampleFile(javaTestPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryTest.java")
 					]
 		
 		println "\n\n"
@@ -184,6 +185,11 @@ class Templater{
 	}
 	
 	public void createTableForModel(String tableName){
+		if(!writeLiquibaseScript){
+			println "Skipping append to Liquibase Script"
+			return
+		}
+		
 		File lcl = new File(liquibaseChangeLogLocation)
 		if(!lcl.canWrite()) {
 			println "Cannot write to liquibaseChangeLog"
@@ -259,8 +265,8 @@ class ReferenceDataTemplater {
 	List<String> subpackage = ["reference"]
 	List<String> referenceDataModels = ["ChildCareArrangement", "Citizenship", "EducationGoal", "EducationLevel", "Ethnicity", "FundingSource", "MaritalStatus", "StudentStatus", "VeteranStatus"]
 
-	public void run(boolean create, boolean overwrite, boolean dryRun, boolean displayFileContents){
-		Templater templater = new Templater(create, overwrite, dryRun, displayFileContents)
+	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
+		Templater templater = new Templater(create, overwrite, writeLiquibaseScript, dryRun, displayFileContents)
 		referenceDataModels.each{
 			templater.run(templateModel, it, subpackage)
 		}
@@ -268,4 +274,4 @@ class ReferenceDataTemplater {
 }
 
 
-new ReferenceDataTemplater().run(true, true, false, false)
+new ReferenceDataTemplater().run(true, true, false, false, false)

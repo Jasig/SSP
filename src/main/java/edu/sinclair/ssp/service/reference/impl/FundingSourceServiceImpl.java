@@ -1,6 +1,5 @@
 package edu.sinclair.ssp.service.reference.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,13 +13,12 @@ import edu.sinclair.ssp.dao.reference.FundingSourceDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.FundingSource;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.FundingSourceService;
 
 @Service
 @Transactional
-public class FundingSourceServiceImpl implements AuditableCrudService<FundingSource>, FundingSourceService {
+public class FundingSourceServiceImpl implements FundingSourceService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(FundingSourceServiceImpl.class);
@@ -47,11 +45,8 @@ public class FundingSourceServiceImpl implements AuditableCrudService<FundingSou
 
 	@Override
 	public FundingSource create(FundingSource obj) {
-		obj.setCreatedBy(securityService.currentlyLoggedInSspUser().getPerson());
-		obj.setCreatedDate(new Date());
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setModifiedBy(obj.getCreatedBy());
-		obj.setModifiedDate(obj.getCreatedDate());
+		obj.setRequiredOnCreate(
+				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
@@ -59,8 +54,8 @@ public class FundingSourceServiceImpl implements AuditableCrudService<FundingSou
 	public FundingSource save(FundingSource obj) throws ObjectNotFoundException {
 		FundingSource current = get(obj.getId());
 		
-		current.setModifiedBy(securityService.currentlyLoggedInSspUser().getPerson());
-		current.setModifiedDate(new Date());
+		current.setRequiredOnModify(
+				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());

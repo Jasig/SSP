@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.reference.ChildCareArrangementTOFactory;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.ChildCareArrangement;
 import edu.sinclair.ssp.service.reference.ChildCareArrangementService;
@@ -37,8 +37,7 @@ public class ChildCareArrangementController extends RestController<ChildCareArra
 	@Autowired
 	private ChildCareArrangementService service;
 	
-	@Autowired
-	private ChildCareArrangementTOFactory toFactory;
+	private TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> listFactory = new TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement>(ChildCareArrangementTO.class);
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,15 +45,15 @@ public class ChildCareArrangementController extends RestController<ChildCareArra
 		if(status==null){
 			status = ObjectStatus.ACTIVE;
 		}
-		return toFactory.toTOList(service.getAll(status));
+		return listFactory.toTOList(service.getAll(status));
 	}
 	
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody ChildCareArrangementTO get(@PathVariable UUID id) throws Exception {
-		ChildCareArrangement childCareArrangement = service.get(id);
-		if(childCareArrangement!=null){
-			return toFactory.toTO(childCareArrangement);
+		ChildCareArrangement model = service.get(id);
+		if(model!=null){
+			return new ChildCareArrangementTO(model);
 		}else{
 			return null;
 		}
@@ -67,12 +66,12 @@ public class ChildCareArrangementController extends RestController<ChildCareArra
 			throw new ValidationException("You submitted a childCareArrangement with an id to the create method.  Did you mean to save?");
 		}
 		
-		ChildCareArrangement model = toFactory.toModel(obj);
+		ChildCareArrangement model = obj.asModel();
 		
 		if(null!=model){
 			ChildCareArrangement createdModel = service.create(model);
 			if(null!=createdModel){
-				return toFactory.toTO(createdModel);
+				return new ChildCareArrangementTO(createdModel);
 			}
 		}
 		return null;
@@ -85,12 +84,12 @@ public class ChildCareArrangementController extends RestController<ChildCareArra
 			throw new ValidationException("You submitted a childCareArrangement without an id to the save method.  Did you mean to create?");
 		}
 		
-		ChildCareArrangement model = toFactory.toModel(obj);
+		ChildCareArrangement model = obj.asModel();
 		model.setId(id);
 		
 		ChildCareArrangement savedChildCareArrangement = service.save(model);
 		if(null!=savedChildCareArrangement){
-			return toFactory.toTO(savedChildCareArrangement);
+			return new ChildCareArrangementTO(savedChildCareArrangement);
 		}
 		return null;
 	}

@@ -1,6 +1,5 @@
 package edu.sinclair.ssp.service.reference.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,13 +13,12 @@ import edu.sinclair.ssp.dao.reference.ChildCareArrangementDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.ChildCareArrangement;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.ChildCareArrangementService;
 
 @Service
 @Transactional
-public class ChildCareArrangementServiceImpl implements AuditableCrudService<ChildCareArrangement>, ChildCareArrangementService {
+public class ChildCareArrangementServiceImpl implements ChildCareArrangementService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ChildCareArrangementServiceImpl.class);
@@ -47,11 +45,8 @@ public class ChildCareArrangementServiceImpl implements AuditableCrudService<Chi
 
 	@Override
 	public ChildCareArrangement create(ChildCareArrangement obj) {
-		obj.setCreatedBy(securityService.currentlyLoggedInSspUser().getPerson());
-		obj.setCreatedDate(new Date());
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setModifiedBy(obj.getCreatedBy());
-		obj.setModifiedDate(obj.getCreatedDate());
+		obj.setRequiredOnCreate(
+				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
@@ -59,8 +54,8 @@ public class ChildCareArrangementServiceImpl implements AuditableCrudService<Chi
 	public ChildCareArrangement save(ChildCareArrangement obj) throws ObjectNotFoundException {
 		ChildCareArrangement current = get(obj.getId());
 		
-		current.setModifiedBy(securityService.currentlyLoggedInSspUser().getPerson());
-		current.setModifiedDate(new Date());
+		current.setRequiredOnModify(
+				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());

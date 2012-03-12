@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.reference.EducationLevelTOFactory;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.EducationLevel;
 import edu.sinclair.ssp.service.reference.EducationLevelService;
@@ -37,8 +37,7 @@ public class EducationLevelController extends RestController<EducationLevelTO>{
 	@Autowired
 	private EducationLevelService service;
 	
-	@Autowired
-	private EducationLevelTOFactory toFactory;
+	private TransferObjectListFactory<EducationLevelTO, EducationLevel> listFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(EducationLevelTO.class);
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,15 +45,15 @@ public class EducationLevelController extends RestController<EducationLevelTO>{
 		if(status==null){
 			status = ObjectStatus.ACTIVE;
 		}
-		return toFactory.toTOList(service.getAll(status));
+		return listFactory.toTOList(service.getAll(status));
 	}
 	
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody EducationLevelTO get(@PathVariable UUID id) throws Exception {
-		EducationLevel educationLevel = service.get(id);
-		if(educationLevel!=null){
-			return toFactory.toTO(educationLevel);
+		EducationLevel model = service.get(id);
+		if(model!=null){
+			return new EducationLevelTO(model);
 		}else{
 			return null;
 		}
@@ -67,12 +66,12 @@ public class EducationLevelController extends RestController<EducationLevelTO>{
 			throw new ValidationException("You submitted a educationLevel with an id to the create method.  Did you mean to save?");
 		}
 		
-		EducationLevel model = toFactory.toModel(obj);
+		EducationLevel model = obj.asModel();
 		
 		if(null!=model){
 			EducationLevel createdModel = service.create(model);
 			if(null!=createdModel){
-				return toFactory.toTO(createdModel);
+				return new EducationLevelTO(createdModel);
 			}
 		}
 		return null;
@@ -85,12 +84,12 @@ public class EducationLevelController extends RestController<EducationLevelTO>{
 			throw new ValidationException("You submitted a educationLevel without an id to the save method.  Did you mean to create?");
 		}
 		
-		EducationLevel model = toFactory.toModel(obj);
+		EducationLevel model = obj.asModel();
 		model.setId(id);
 		
 		EducationLevel savedEducationLevel = service.save(model);
 		if(null!=savedEducationLevel){
-			return toFactory.toTO(savedEducationLevel);
+			return new EducationLevelTO(savedEducationLevel);
 		}
 		return null;
 	}

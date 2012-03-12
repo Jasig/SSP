@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import edu.sinclair.ssp.model.Person;
 
-public class PersonTO extends AuditableTO{
+public class PersonTO extends AuditableTO implements TransferObject<Person>{
 
 	private String firstName, middleInitial, lastName;
 	private Date birthDate;
@@ -18,14 +18,21 @@ public class PersonTO extends AuditableTO{
 	private boolean enabled;
 
 
-	public PersonTO(){}
+	public PersonTO(){
+		super();
+	}
 
 	public PersonTO(UUID id){
 		super(id);
 	}
 
+	public PersonTO(Person person){
+		super();
+		pullAttributesFromModel(person);
+	}
 
-	public void fromModel(Person model){
+
+	public void pullAttributesFromModel(Person model){
 		super.fromModel(model);
 		
 		if(model.getFirstName()!=null){
@@ -99,7 +106,7 @@ public class PersonTO extends AuditableTO{
 		setEnabled(model.isEnabled());
 	}
 
-	public void addToModel(Person model){
+	public Person pushAttributesToModel(Person model){
 		super.addToModel(model);
 		
 		if(getFirstName()!=null){
@@ -171,6 +178,12 @@ public class PersonTO extends AuditableTO{
 		}
 		
 		model.setEnabled(isEnabled());
+		
+		return model;
+	}
+
+	public Person asModel(){
+		return pushAttributesToModel(new Person());
 	}
 
 

@@ -2,7 +2,10 @@ package edu.sinclair.ssp.transferobject.reference;
 
 import java.util.UUID;
 
-public class FundingSourceTO extends AbstractReferenceTO {
+import edu.sinclair.ssp.model.reference.FundingSource;
+import edu.sinclair.ssp.transferobject.TransferObject;
+
+public class FundingSourceTO extends AbstractReferenceTO implements TransferObject<FundingSource>{
 
 	public FundingSourceTO () {
 		super();
@@ -19,4 +22,26 @@ public class FundingSourceTO extends AbstractReferenceTO {
 	public FundingSourceTO (UUID id, String name, String description) {
 		super(id, name, description);
 	}
+	
+	public FundingSourceTO(FundingSource model){
+		super();
+		pullAttributesFromModel(model);
+	}
+
+	@Override
+	public void pullAttributesFromModel(FundingSource model) {
+		super.fromModel(model);
+	}
+
+	@Override
+	public FundingSource pushAttributesToModel(FundingSource model) {
+		super.addToModel(model);
+		return model;
+	}
+	
+	@Override 
+	public FundingSource asModel(){
+		return pushAttributesToModel(new FundingSource());
+	}
+
 }

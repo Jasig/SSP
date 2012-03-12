@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.reference.VeteranStatusTOFactory;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 import edu.sinclair.ssp.service.reference.VeteranStatusService;
@@ -37,8 +37,7 @@ public class VeteranStatusController extends RestController<VeteranStatusTO>{
 	@Autowired
 	private VeteranStatusService service;
 	
-	@Autowired
-	private VeteranStatusTOFactory toFactory;
+	private TransferObjectListFactory<VeteranStatusTO, VeteranStatus> listFactory = new TransferObjectListFactory<VeteranStatusTO, VeteranStatus>(VeteranStatusTO.class);
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,15 +45,15 @@ public class VeteranStatusController extends RestController<VeteranStatusTO>{
 		if(status==null){
 			status = ObjectStatus.ACTIVE;
 		}
-		return toFactory.toTOList(service.getAll(status));
+		return listFactory.toTOList(service.getAll(status));
 	}
 	
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody VeteranStatusTO get(@PathVariable UUID id) throws Exception {
-		VeteranStatus veteranStatus = service.get(id);
-		if(veteranStatus!=null){
-			return toFactory.toTO(veteranStatus);
+		VeteranStatus model = service.get(id);
+		if(model!=null){
+			return new VeteranStatusTO(model);
 		}else{
 			return null;
 		}
@@ -67,12 +66,12 @@ public class VeteranStatusController extends RestController<VeteranStatusTO>{
 			throw new ValidationException("You submitted a veteranStatus with an id to the create method.  Did you mean to save?");
 		}
 		
-		VeteranStatus model = toFactory.toModel(obj);
+		VeteranStatus model = obj.asModel();
 		
 		if(null!=model){
 			VeteranStatus createdModel = service.create(model);
 			if(null!=createdModel){
-				return toFactory.toTO(createdModel);
+				return new VeteranStatusTO(createdModel);
 			}
 		}
 		return null;
@@ -85,12 +84,12 @@ public class VeteranStatusController extends RestController<VeteranStatusTO>{
 			throw new ValidationException("You submitted a veteranStatus without an id to the save method.  Did you mean to create?");
 		}
 		
-		VeteranStatus model = toFactory.toModel(obj);
+		VeteranStatus model = obj.asModel();
 		model.setId(id);
 		
 		VeteranStatus savedVeteranStatus = service.save(model);
 		if(null!=savedVeteranStatus){
-			return toFactory.toTO(savedVeteranStatus);
+			return new VeteranStatusTO(savedVeteranStatus);
 		}
 		return null;
 	}

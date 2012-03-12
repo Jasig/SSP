@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.reference.ChallengeTOFactory;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.service.reference.ChallengeService;
@@ -37,8 +37,7 @@ public class ChallengeController extends RestController<ChallengeTO>{
 	@Autowired
 	private ChallengeService service;
 	
-	@Autowired
-	private ChallengeTOFactory toFactory;
+	private TransferObjectListFactory<ChallengeTO, Challenge> listFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(ChallengeTO.class);
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,7 +45,7 @@ public class ChallengeController extends RestController<ChallengeTO>{
 		if(status==null){
 			status = ObjectStatus.ACTIVE;
 		}
-		return toFactory.toTOList(service.getAll(status));
+		return listFactory.toTOList(service.getAll(status));
 	}
 	
 	@Override
@@ -54,7 +53,7 @@ public class ChallengeController extends RestController<ChallengeTO>{
 	public @ResponseBody ChallengeTO get(@PathVariable UUID id) throws Exception {
 		Challenge model = service.get(id);
 		if(model!=null){
-			return toFactory.toTO(model);
+			return new ChallengeTO(model);
 		}else{
 			return null;
 		}
@@ -67,12 +66,12 @@ public class ChallengeController extends RestController<ChallengeTO>{
 			throw new ValidationException("You submitted a challenge with an id to the create method.  Did you mean to save?");
 		}
 		
-		Challenge model = toFactory.toModel(obj);
+		Challenge model = obj.asModel();
 		
 		if(null!=model){
 			Challenge createdModel = service.create(model);
 			if(null!=createdModel){
-				return toFactory.toTO(createdModel);
+				return new ChallengeTO(createdModel);
 			}
 		}
 		return null;
@@ -85,12 +84,12 @@ public class ChallengeController extends RestController<ChallengeTO>{
 			throw new ValidationException("You submitted a challenge without an id to the save method.  Did you mean to create?");
 		}
 		
-		Challenge model = toFactory.toModel(obj);
+		Challenge model = obj.asModel();
 		model.setId(id);
 		
 		Challenge savedChallenge = service.save(model);
 		if(null!=savedChallenge){
-			return toFactory.toTO(savedChallenge);
+			return new ChallengeTO(savedChallenge);
 		}
 		return null;
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.sinclair.ssp.model.Person;
+import edu.sinclair.ssp.model.PersonDemographics;
 import edu.sinclair.ssp.model.tool.IntakeForm;
 import edu.sinclair.ssp.transferobject.PersonChallengeTO;
 import edu.sinclair.ssp.transferobject.PersonDemographicsTO;
@@ -32,23 +33,36 @@ public class IntakeFormTO implements TransferObject<IntakeForm>{
 	
 	private Map<String, Object> referenceData;
 
+	public IntakeFormTO(IntakeForm model){
+		super();
+		pullAttributesFromModel(model);
+	}
 
 	@Override
-	public void fromModel(IntakeForm model) {
+	public void pullAttributesFromModel(IntakeForm model) {
 		if(model.getPerson()!=null){
-			PersonTO person = new PersonTO();
-			person.fromModel(model.getPerson());
-			setPerson(person);
+			setPerson(new PersonTO(model.getPerson()));
+		}
+		if(model.getPersonDemographics()!=null){
+			setPersonDemographics(new PersonDemographicsTO(model.getPersonDemographics()));
 		}
 	}
 
 	@Override
-	public void addToModel(IntakeForm model) {
+	public IntakeForm pushAttributesToModel(IntakeForm model) {
 		if(getPerson()!=null){
-			Person person = new Person();
-			getPerson().addToModel(person);
-			model.setPerson(person);
+			model.setPerson(getPerson().pushAttributesToModel(new Person()));
 		}
+		if(getPersonDemographics()!=null){
+			model.setPersonDemographics(
+					getPersonDemographics().pushAttributesToModel(new PersonDemographics()));
+		}
+		return model;
+	}
+
+	@Override
+	public IntakeForm asModel(){
+		return pushAttributesToModel(new IntakeForm());
 	}
 	
 	public PersonTO getPerson() {

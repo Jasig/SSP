@@ -6,8 +6,9 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.EducationLevel;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface EducationLevelService {
+public interface EducationLevelService extends AuditableCrudService<EducationLevel>{
 
 	public List<EducationLevel> getAll(ObjectStatus status);
 

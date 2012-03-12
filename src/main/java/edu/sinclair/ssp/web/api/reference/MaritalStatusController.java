@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.reference.MaritalStatusTOFactory;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.service.reference.MaritalStatusService;
@@ -37,8 +37,7 @@ public class MaritalStatusController extends RestController<MaritalStatusTO>{
 	@Autowired
 	private MaritalStatusService service;
 	
-	@Autowired
-	private MaritalStatusTOFactory toFactory;
+	private TransferObjectListFactory<MaritalStatusTO, MaritalStatus> listFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(MaritalStatusTO.class);
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,15 +45,15 @@ public class MaritalStatusController extends RestController<MaritalStatusTO>{
 		if(status==null){
 			status = ObjectStatus.ACTIVE;
 		}
-		return toFactory.toTOList(service.getAll(status));
+		return listFactory.toTOList(service.getAll(status));
 	}
 	
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody MaritalStatusTO get(@PathVariable UUID id) throws Exception {
-		MaritalStatus maritalStatus = service.get(id);
-		if(maritalStatus!=null){
-			return toFactory.toTO(maritalStatus);
+		MaritalStatus model = service.get(id);
+		if(model!=null){
+			return new MaritalStatusTO(model);
 		}else{
 			return null;
 		}
@@ -67,12 +66,12 @@ public class MaritalStatusController extends RestController<MaritalStatusTO>{
 			throw new ValidationException("You submitted a maritalStatus with an id to the create method.  Did you mean to save?");
 		}
 		
-		MaritalStatus model = toFactory.toModel(obj);
+		MaritalStatus model = obj.asModel();
 		
 		if(null!=model){
 			MaritalStatus createdModel = service.create(model);
 			if(null!=createdModel){
-				return toFactory.toTO(createdModel);
+				return new MaritalStatusTO(createdModel);
 			}
 		}
 		return null;
@@ -85,12 +84,12 @@ public class MaritalStatusController extends RestController<MaritalStatusTO>{
 			throw new ValidationException("You submitted a maritalStatus without an id to the save method.  Did you mean to create?");
 		}
 		
-		MaritalStatus model = toFactory.toModel(obj);
+		MaritalStatus model = obj.asModel();
 		model.setId(id);
 		
 		MaritalStatus savedMaritalStatus = service.save(model);
 		if(null!=savedMaritalStatus){
-			return toFactory.toTO(savedMaritalStatus);
+			return new MaritalStatusTO(savedMaritalStatus);
 		}
 		return null;
 	}

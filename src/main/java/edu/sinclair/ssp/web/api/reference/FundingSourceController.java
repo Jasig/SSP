@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.reference.FundingSourceTOFactory;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.FundingSource;
 import edu.sinclair.ssp.service.reference.FundingSourceService;
@@ -37,8 +37,7 @@ public class FundingSourceController extends RestController<FundingSourceTO>{
 	@Autowired
 	private FundingSourceService service;
 	
-	@Autowired
-	private FundingSourceTOFactory toFactory;
+	private TransferObjectListFactory<FundingSourceTO, FundingSource> listFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(FundingSourceTO.class);
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,15 +45,15 @@ public class FundingSourceController extends RestController<FundingSourceTO>{
 		if(status==null){
 			status = ObjectStatus.ACTIVE;
 		}
-		return toFactory.toTOList(service.getAll(status));
+		return listFactory.toTOList(service.getAll(status));
 	}
 	
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody FundingSourceTO get(@PathVariable UUID id) throws Exception {
-		FundingSource fundingSource = service.get(id);
-		if(fundingSource!=null){
-			return toFactory.toTO(fundingSource);
+		FundingSource model = service.get(id);
+		if(model!=null){
+			return new FundingSourceTO(model);
 		}else{
 			return null;
 		}
@@ -67,12 +66,12 @@ public class FundingSourceController extends RestController<FundingSourceTO>{
 			throw new ValidationException("You submitted a fundingSource with an id to the create method.  Did you mean to save?");
 		}
 		
-		FundingSource model = toFactory.toModel(obj);
+		FundingSource model = obj.asModel();
 		
 		if(null!=model){
 			FundingSource createdModel = service.create(model);
 			if(null!=createdModel){
-				return toFactory.toTO(createdModel);
+				return new FundingSourceTO(createdModel);
 			}
 		}
 		return null;
@@ -85,12 +84,12 @@ public class FundingSourceController extends RestController<FundingSourceTO>{
 			throw new ValidationException("You submitted a fundingSource without an id to the save method.  Did you mean to create?");
 		}
 		
-		FundingSource model = toFactory.toModel(obj);
+		FundingSource model = obj.asModel();
 		model.setId(id);
 		
 		FundingSource savedFundingSource = service.save(model);
 		if(null!=savedFundingSource){
-			return toFactory.toTO(savedFundingSource);
+			return new FundingSourceTO(savedFundingSource);
 		}
 		return null;
 	}

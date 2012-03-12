@@ -1,6 +1,5 @@
 package edu.sinclair.ssp.service.reference.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,13 +13,12 @@ import edu.sinclair.ssp.dao.reference.StudentStatusDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.StudentStatus;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.StudentStatusService;
 
 @Service
 @Transactional
-public class StudentStatusServiceImpl implements AuditableCrudService<StudentStatus>, StudentStatusService {
+public class StudentStatusServiceImpl implements StudentStatusService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(StudentStatusServiceImpl.class);
@@ -47,11 +45,8 @@ public class StudentStatusServiceImpl implements AuditableCrudService<StudentSta
 
 	@Override
 	public StudentStatus create(StudentStatus obj) {
-		obj.setCreatedBy(securityService.currentlyLoggedInSspUser().getPerson());
-		obj.setCreatedDate(new Date());
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setModifiedBy(obj.getCreatedBy());
-		obj.setModifiedDate(obj.getCreatedDate());
+		obj.setRequiredOnCreate(
+				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
@@ -59,8 +54,8 @@ public class StudentStatusServiceImpl implements AuditableCrudService<StudentSta
 	public StudentStatus save(StudentStatus obj) throws ObjectNotFoundException {
 		StudentStatus current = get(obj.getId());
 		
-		current.setModifiedBy(securityService.currentlyLoggedInSspUser().getPerson());
-		current.setModifiedDate(new Date());
+		current.setRequiredOnModify(
+				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.PersonTOFactory;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.service.PersonService;
@@ -36,8 +36,7 @@ public class PersonController extends RestController<PersonTO>{
 	@Autowired
 	private PersonService service;
 	
-	@Autowired
-	private PersonTOFactory toFactory;
+	private TransferObjectListFactory<PersonTO, Person> toFactory = new TransferObjectListFactory<PersonTO, Person>(PersonTO.class);
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -53,7 +52,7 @@ public class PersonController extends RestController<PersonTO>{
 	public @ResponseBody PersonTO get(@PathVariable UUID id) throws Exception {
 		Person model = service.get(id);
 		if(model!=null){
-			return toFactory.toTO(model);
+			return new PersonTO(model);
 		}else{
 			return null;
 		}
@@ -66,12 +65,12 @@ public class PersonController extends RestController<PersonTO>{
 			throw new ValidationException("You submitted a person with an id to the create method.  Did you mean to save?");
 		}
 		
-		Person model = toFactory.toModel(obj);
+		Person model = obj.asModel();
 		
 		if(null!=model){
 			Person createdModel = service.create(model);
 			if(null!=createdModel){
-				return toFactory.toTO(createdModel);
+				return new PersonTO(createdModel);
 			}
 		}
 		return null;
@@ -84,12 +83,12 @@ public class PersonController extends RestController<PersonTO>{
 			throw new ValidationException("You submitted a person without an id to the save method.  Did you mean to create?");
 		}
 		
-		Person model = toFactory.toModel(obj);
+		Person model = obj.asModel();
 		model.setId(id);
 		
 		Person savedPerson = service.save(model);
 		if(null!=savedPerson){
-			return toFactory.toTO(savedPerson);
+			return new PersonTO(savedPerson);
 		}
 		return null;
 	}

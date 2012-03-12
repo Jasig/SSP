@@ -6,8 +6,9 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.ChildCareArrangement;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface ChildCareArrangementService {
+public interface ChildCareArrangementService extends AuditableCrudService<ChildCareArrangement>{
 
 	public List<ChildCareArrangement> getAll(ObjectStatus status);
 

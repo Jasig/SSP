@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.reference.CitizenshipTOFactory;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Citizenship;
 import edu.sinclair.ssp.service.reference.CitizenshipService;
@@ -37,8 +37,7 @@ public class CitizenshipController extends RestController<CitizenshipTO>{
 	@Autowired
 	private CitizenshipService service;
 	
-	@Autowired
-	private CitizenshipTOFactory toFactory;
+	private TransferObjectListFactory<CitizenshipTO, Citizenship> listFactory = new TransferObjectListFactory<CitizenshipTO, Citizenship>(CitizenshipTO.class);
 	
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,15 +45,15 @@ public class CitizenshipController extends RestController<CitizenshipTO>{
 		if(status==null){
 			status = ObjectStatus.ACTIVE;
 		}
-		return toFactory.toTOList(service.getAll(status));
+		return listFactory.toTOList(service.getAll(status));
 	}
 	
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody CitizenshipTO get(@PathVariable UUID id) throws Exception {
-		Citizenship citizenship = service.get(id);
-		if(citizenship!=null){
-			return toFactory.toTO(citizenship);
+		Citizenship model = service.get(id);
+		if(model!=null){
+			return new CitizenshipTO(model);
 		}else{
 			return null;
 		}
@@ -67,12 +66,12 @@ public class CitizenshipController extends RestController<CitizenshipTO>{
 			throw new ValidationException("You submitted a citizenship with an id to the create method.  Did you mean to save?");
 		}
 		
-		Citizenship model = toFactory.toModel(obj);
+		Citizenship model = obj.asModel();
 		
 		if(null!=model){
 			Citizenship createdModel = service.create(model);
 			if(null!=createdModel){
-				return toFactory.toTO(createdModel);
+				return new CitizenshipTO(createdModel);
 			}
 		}
 		return null;
@@ -85,12 +84,12 @@ public class CitizenshipController extends RestController<CitizenshipTO>{
 			throw new ValidationException("You submitted a citizenship without an id to the save method.  Did you mean to create?");
 		}
 		
-		Citizenship model = toFactory.toModel(obj);
+		Citizenship model = obj.asModel();
 		model.setId(id);
 		
 		Citizenship savedCitizenship = service.save(model);
 		if(null!=savedCitizenship){
-			return toFactory.toTO(savedCitizenship);
+			return new CitizenshipTO(savedCitizenship);
 		}
 		return null;
 	}

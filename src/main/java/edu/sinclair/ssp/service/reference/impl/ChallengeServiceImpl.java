@@ -12,14 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.sinclair.ssp.dao.reference.ChallengeDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.ChallengeService;
 
 @Service
 @Transactional
-public class ChallengeServiceImpl implements AuditableCrudService<Challenge>, ChallengeService {
+public class ChallengeServiceImpl implements ChallengeService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ChallengeServiceImpl.class);
