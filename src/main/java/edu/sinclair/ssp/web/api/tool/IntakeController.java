@@ -33,7 +33,17 @@ import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.model.reference.States;
 import edu.sinclair.ssp.model.reference.StudentStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
+import edu.sinclair.ssp.model.tool.IntakeForm;
 import edu.sinclair.ssp.service.reference.ChallengeService;
+import edu.sinclair.ssp.service.reference.ChildCareArrangementService;
+import edu.sinclair.ssp.service.reference.CitizenshipService;
+import edu.sinclair.ssp.service.reference.EducationGoalService;
+import edu.sinclair.ssp.service.reference.EducationLevelService;
+import edu.sinclair.ssp.service.reference.EthnicityService;
+import edu.sinclair.ssp.service.reference.FundingSourceService;
+import edu.sinclair.ssp.service.reference.MaritalStatusService;
+import edu.sinclair.ssp.service.reference.StudentStatusService;
+import edu.sinclair.ssp.service.reference.VeteranStatusService;
 import edu.sinclair.ssp.service.tool.IntakeService;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
 import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
@@ -58,43 +68,68 @@ public class IntakeController {
 	@Autowired
 	private IntakeService service;
 
+	@Autowired private ChallengeService challengeService;
+	@Autowired private ChildCareArrangementService childCareArrangementService;
+	@Autowired private CitizenshipService citizenshipService;
+	@Autowired private EducationGoalService educationGoalService;
+	@Autowired private EducationLevelService educationLevelService;
+	@Autowired private EthnicityService ethnicityService;
+	@Autowired private FundingSourceService fundingSourceService;
+	@Autowired private MaritalStatusService maritalStatusService;
+	@Autowired private StudentStatusService studentStatusService;
+	@Autowired private VeteranStatusService veteranStatusService;
+
 	private TransferObjectListFactory<ChallengeTO, Challenge> challengeToFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(ChallengeTO.class);
 	private TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> childCareArrangementToFactory = new TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement>(ChildCareArrangementTO.class);
 	private TransferObjectListFactory<CitizenshipTO, Citizenship> citizenshipToFactory = new TransferObjectListFactory<CitizenshipTO, Citizenship>(CitizenshipTO.class);
 	private TransferObjectListFactory<EducationGoalTO, EducationGoal> educationGoalToFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(EducationGoalTO.class);
-	private TransferObjectListFactory<EducationLevelTO, EducationLevel> educationlevelToFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(EducationLevelTO.class);
+	private TransferObjectListFactory<EducationLevelTO, EducationLevel> educationLevelToFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(EducationLevelTO.class);
 	private TransferObjectListFactory<EthnicityTO, Ethnicity> ethnicityToFactory = new TransferObjectListFactory<EthnicityTO, Ethnicity>(EthnicityTO.class);
-	private TransferObjectListFactory<FundingSourceTO, FundingSource> fundingsourceToFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(FundingSourceTO.class);
-	private TransferObjectListFactory<MaritalStatusTO, MaritalStatus> maritalstatusToFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(MaritalStatusTO.class);
-	private TransferObjectListFactory<StudentStatusTO, StudentStatus> studentstatusToFactory = new TransferObjectListFactory<StudentStatusTO, StudentStatus>(StudentStatusTO.class);
-	private TransferObjectListFactory<VeteranStatusTO, VeteranStatus> veteranstatusToFactory = new TransferObjectListFactory<VeteranStatusTO, VeteranStatus>(VeteranStatusTO.class);
-
-
-	@Autowired
-	private ChallengeService challengeService;
-
+	private TransferObjectListFactory<FundingSourceTO, FundingSource> fundingSourceToFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(FundingSourceTO.class);
+	private TransferObjectListFactory<MaritalStatusTO, MaritalStatus> maritalStatusToFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(MaritalStatusTO.class);
+	private TransferObjectListFactory<StudentStatusTO, StudentStatus> studentStatusToFactory = new TransferObjectListFactory<StudentStatusTO, StudentStatus>(StudentStatusTO.class);
+	private TransferObjectListFactory<VeteranStatusTO, VeteranStatus> veteranStatusToFactory = new TransferObjectListFactory<VeteranStatusTO, VeteranStatus>(VeteranStatusTO.class);
 
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.PUT)
 	public @ResponseBody ServiceResponse save(@PathVariable UUID studentId, @Valid @RequestBody IntakeFormTO obj) throws Exception {
-		return new ServiceResponse(service.save(obj.asModel()));
+		IntakeForm model = obj.asModel();
+		model.getPerson().setId(studentId);
+		return new ServiceResponse(service.save(model));
 	}
 
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
 	public @ResponseBody IntakeFormTO load(@PathVariable UUID studentId) throws Exception{
 		IntakeFormTO formTO =  new IntakeFormTO(service.loadForPerson(studentId));
-		
+	
 		Map<String, Object> refData = new HashMap<String, Object>();
-		
-		refData.put(
-				"challenges", challengeToFactory.toTOList(
-						challengeService.getAll(ObjectStatus.ACTIVE)));
+	
+		refData.put("challenges", challengeToFactory.toTOList(
+				challengeService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("childCareArrangements", childCareArrangementToFactory.toTOList(
+				childCareArrangementService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("citizenships", citizenshipToFactory.toTOList(
+				citizenshipService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("educationGoals", educationGoalToFactory.toTOList(
+				educationGoalService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("educationLevels", educationLevelToFactory.toTOList(
+				educationLevelService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("ethnicitys", ethnicityToFactory.toTOList(
+				ethnicityService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("fundingSources", fundingSourceToFactory.toTOList(
+				fundingSourceService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("maritalStatuss", maritalStatusToFactory.toTOList(
+				maritalStatusService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("studentStatuss", studentStatusToFactory.toTOList(
+				studentStatusService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("veteranStatuss", veteranStatusToFactory.toTOList(
+				veteranStatusService.getAll(ObjectStatus.ACTIVE)));
+	
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());
 		refData.put("states", States.values());
-		
+	
 		formTO.setReferenceData(refData);
-		
-		
+	
 		return formTO;
 	}
 
