@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	
+	<changeSet author='daniel.bower' id='Add auditing to person table'>
+		<addColumn tableName="person">
+			<column name="created_date" type="datetime" valueDate="2012-03-09">
+				<constraints nullable="true"/>
+			</column>
+			<column name="modified_date" type="datetime" valueDate="2012-03-09">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_by" type="uuid" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41">
+				<constraints nullable="true" 
+					foreignKeyName="person_created_by_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="modified_by" type="uuid" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41">
+				<constraints nullable="true" foreignKeyName="person_modified_by_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="object_status" type="int" value="1">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<addNotNullConstraint tableName="person" columnName="created_date"/>
+		<addNotNullConstraint tableName="person" columnName="modified_date"/>
+		<addNotNullConstraint tableName="person" columnName="created_by"/>
+		<addNotNullConstraint tableName="person" columnName="modified_by"/>
+		<addNotNullConstraint tableName="person" columnName="object_status"/>
+	</changeSet>
+	
+	<changeSet author='shawn.gormley' id='Modify Name field length in Reference tables.'>
+		<!-- Adjust data length on reference tables to accommodate longer admin entries. -->		
+		<modifyDataType tableName="challenge" columnName="name" newDataType="character varying(50)" />
+		<modifyDataType tableName="child_care_arrangement" columnName="name" newDataType="character varying(50)" />
+		<modifyDataType tableName="citizenship" columnName="name" newDataType="character varying(50)" />
+		<modifyDataType tableName="education_goal" columnName="name" newDataType="character varying(50)" />
+		<modifyDataType tableName="education_level" columnName="name" newDataType="character varying(50)" />
+		<modifyDataType tableName="ethnicity" columnName="name" newDataType="character varying(50)" />
+		<modifyDataType tableName="funding_source" columnName="name" newDataType="character varying(50)" />
+		<modifyDataType tableName="marital_status" columnName="name" newDataType="character varying(50)" />
+		<modifyDataType tableName="student_status" columnName="name" newDataType="character varying(50)" />
+		<modifyDataType tableName="veteran_status" columnName="name" newDataType="character varying(50)" />
+		
+		<rollback>
+			<modifyDataType tableName="challenge" columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="child_care_arrangement" columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="citizenship" columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="education_goal" columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="education_level" columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="ethnicity" columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="funding_source" columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="marital_status" columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="student_status" columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="veteran_status" columnName="name" newDataType="character varying(25)" />
+		</rollback>	
+	</changeSet>
+ </databaseChangeLog>
