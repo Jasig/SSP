@@ -10,7 +10,7 @@
 	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
 	http://www.springframework.org/schema/util	 http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<util:properties id="configProperties" location="file:/usr/local/etc/ssp/ssp-config.properties"/>
+	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
 
 	<!-- Mail Server Configuration -->
 		<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
