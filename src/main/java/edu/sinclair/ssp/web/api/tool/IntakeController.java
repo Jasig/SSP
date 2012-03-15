@@ -100,9 +100,13 @@ public class IntakeController {
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
 	public @ResponseBody IntakeFormTO load(@PathVariable UUID studentId) throws Exception{
 		IntakeFormTO formTO =  new IntakeFormTO(service.loadForPerson(studentId));
-	
+		formTO.setReferenceData(referenceData());
+		return formTO;
+	}
+
+	public Map<String, Object> referenceData() throws Exception {
 		Map<String, Object> refData = new HashMap<String, Object>();
-	
+		
 		refData.put("challenges", challengeToFactory.toTOList(
 				challengeService.getAll(ObjectStatus.ACTIVE)));
 		refData.put("childCareArrangements", childCareArrangementToFactory.toTOList(
@@ -128,9 +132,7 @@ public class IntakeController {
 		refData.put("genders", Genders.values());
 		refData.put("states", States.values());
 	
-		formTO.setReferenceData(refData);
-	
-		return formTO;
+		return refData;
 	}
 
 	@ExceptionHandler(Exception.class)
