@@ -1,7 +1,6 @@
 package edu.sinclair.ssp.transferobject;
 
 import java.util.Date;
-import java.util.UUID;
 
 import edu.sinclair.ssp.model.Person;
 
@@ -22,13 +21,9 @@ public class PersonTO extends AuditableTO implements TransferObject<Person>{
 		super();
 	}
 
-	public PersonTO(UUID id){
-		super(id);
-	}
-
-	public PersonTO(Person person){
+	public PersonTO(Person model){
 		super();
-		pullAttributesFromModel(person);
+		pullAttributesFromModel(model);
 	}
 
 
