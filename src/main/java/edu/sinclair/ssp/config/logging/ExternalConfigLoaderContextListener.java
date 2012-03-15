@@ -23,7 +23,11 @@ public class ExternalConfigLoaderContextListener implements ServletContextListen
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		String configLocation = System.getenv("SSP_CONFIGDIR"); 
+		String configLocation = sce.getServletContext().getInitParameter("SSP_CONFIGDIR");
+		if(configLocation == null){
+			configLocation = System.getenv("SSP_CONFIGDIR"); 
+		}
+		
 		try{
 			new LogBackConfigLoader(configLocation + "logback.xml");
 		}catch(Exception e){

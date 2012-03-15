@@ -10,7 +10,7 @@
 	<beans:import resource="file:${SSP_CONFIGDIR}ssp-sec-local.xml"/>
 
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties" location="file:#{systemEnvironment['SSP_CONFIGDIR']}ssp-config.properties"/>
+	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
 
 	<global-method-security pre-post-annotations="enabled" />
 
