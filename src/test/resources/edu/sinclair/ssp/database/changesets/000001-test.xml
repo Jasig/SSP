@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="create 1st test person" author="daniel.bower">
+		<insert tableName="person">
+			<column name="id" value="252de4a0-7c06-4254-b7d8-4ffc02fe81ff" />
+			<column name="first_name" value="Alan" />
+			<column name="middle_initial" value="M" />
+			<column name="last_name" value="Turing" />
+			<column name="primary_email_address" value="test@sinclair.edu" />
+			<column name="secondary_email_address" value="test@sinclair.edu" />
+			<column name="username" value="amt" />
+			<column name="home_phone" value="908-123-4567" />
+			<column name="work_phone" value="123-456-7654" />
+			<column name="address_line_1" value="444 West Third Street" />
+			<column name="city" value="Wilmslow" />
+			<column name="state" value="NJ" />
+			<column name="zip_code" value="01010" />
+			<column name="photo_url" value="" />
+			<column name="school_id" value="turing.1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194" />
+			<column name="first_name" value="Dennis" />
+			<column name="middle_initial" value="M" />
+			<column name="last_name" value="Ritchie" />
+			<column name="primary_email_address" value="test@sinclair.edu" />
+			<column name="secondary_email_address" value="test@sinclair.edu" />
+			<column name="username" value="dmr" />
+			<column name="home_phone" value="908-123-4567" />
+			<column name="work_phone" value="123-456-7654" />
+			<column name="address_line_1" value="444 West Third Street" />
+			<column name="city" value="Berkeley Heights" />
+			<column name="state" value="NJ" />
+			<column name="zip_code" value="07922" />
+			<column name="photo_url" value="" />
+			<column name="school_id" value="dmr.1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="first_name" value="Kenneth" />
+			<column name="middle_initial" value="L" />
+			<column name="last_name" value="Thompson" />
+			<column name="primary_email_address" value="test@sinclair.edu" />
+			<column name="secondary_email_address" value="test@sinclair.edu" />
+			<column name="username" value="ken" />
+			<column name="home_phone" value="908-123-4567" />
+			<column name="work_phone" value="123-456-7654" />
+			<column name="address_line_1" value="444 West Third Street" />
+			<column name="city" value="Murray Hill" />
+			<column name="state" value="NJ" />
+			<column name="zip_code" value="07974" />
+			<column name="photo_url" value="" />
+			<column name="school_id" value="ken.1" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="person">
+				<where>id='252de4a0-7c06-4254-b7d8-4ffc02fe81ff'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='f549ecab-5110-4cc1-b2bb-369cac854dea'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create test student" author="daniel.bower">
+		<insert tableName="person">
+			<column name="id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="first_name" value="James" />
+			<column name="middle_initial" value="A" />
+			<column name="last_name" value="Gosling" />
+			<column name="primary_email_address" value="test@sinclair.edu" />
+			<column name="secondary_email_address" value="test@sinclair.edu" />
+			<column name="username" value="student0" />
+			<column name="home_phone" value="908-123-4567" />
+			<column name="work_phone" value="123-456-7654" />
+			<column name="address_line_1" value="444 West Third Street" />
+			<column name="city" value="San Francisco" />
+			<column name="state" value="CA" />
+			<column name="zip_code" value="94102" />
+			<column name="photo_url" value="" />
+			<column name="school_id" value="student0" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="person">
+				<where>id='1010e4a0-1001-0110-1011-4ffc02fe81ff'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+</databaseChangeLog>
