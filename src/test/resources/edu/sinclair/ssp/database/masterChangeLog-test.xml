@@ -7,14 +7,17 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-	
+
+	<property name="inTestEnvironment" />
+
+
 	<!-- Script can only run as user sspDbAdmin -->
 	<preConditions onFail="HALT">
 		<runningAs username="sspadmin" />
 	</preConditions>
 
-	<include file="edu/sinclair/ssp/database/masterChangeLog.xml"/>
-	
-	<include file="edu/sinclair/ssp/database/00.01.0-test.xml"/>
+	<include file="edu/sinclair/ssp/database/changesets/000001.xml"/>
+	<include file="edu/sinclair/ssp/database/changesets/000001-test.xml"/>
+	<include file="edu/sinclair/ssp/database/changesets/000002.xml"/>
 
 </databaseChangeLog>
