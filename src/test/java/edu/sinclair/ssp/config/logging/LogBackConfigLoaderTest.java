@@ -19,21 +19,11 @@ public class LogBackConfigLoaderTest {
 	private Logger logger = LoggerFactory
 			.getLogger(LogBackConfigLoaderTest.class);
 
-	private Properties config;
-
-	@Before
-	public void before() throws IOException {
-		config = new Properties();
-
-		Resource file = new ClassPathResource("testConfig.properties");
-		config.load(file.getInputStream());
-	}
-
 	@Test
 	public void test() {
 		try {
 			assertNotNull(new LogBackConfigLoader(
-					config.getProperty("testConfigDirectory") + "logback.xml"));
+					System.getenv("SSP_TESTCONFIGDIR") + "logback.xml"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
