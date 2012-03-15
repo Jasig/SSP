@@ -13,7 +13,7 @@
 		http://www.springframework.org/schema/util	 http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties" location="file:/usr/local/etc/ssp/ssp-config.properties"/>
+	<util:properties id="configProperties" location="file:#{systemEnvironment['SSP_CONFIGDIR']}ssp-config.properties"/>
 
 	<context:component-scan base-package="edu.sinclair.ssp.web"/>
 		<!-- context:include-filter type="regex" expression=".*Controller"/>
