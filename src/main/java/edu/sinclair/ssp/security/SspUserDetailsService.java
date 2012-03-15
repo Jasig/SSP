@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,11 +16,16 @@ import com.google.common.collect.Lists;
 import edu.sinclair.ssp.security.exception.EmailNotFoundException;
 import edu.sinclair.ssp.security.exception.UserNotAuthorizedException;
 import edu.sinclair.ssp.security.exception.UserNotEnabledException;
+import edu.sinclair.ssp.service.ObjectNotFoundException;
+import edu.sinclair.ssp.service.PersonService;
 
 @Transactional(readOnly = true)
 public class SspUserDetailsService implements UserDetailsService { 
 
 	private Logger logger = LoggerFactory.getLogger(SspUserDetailsService.class);
+
+	@Autowired
+	private PersonService personService;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UserNotAuthorizedException, EmailNotFoundException {
@@ -32,7 +38,13 @@ public class SspUserDetailsService implements UserDetailsService {
 		SspUser sspUser = new SspUser(username, "password", true, true, true, true, authorities);
 		sspUser.setEmailAddress("test.user@infinum.com");
 
-		if (sspUser == null) {
+		try {
+			sspUser.setPerson(personService.personFromUsername(username));
+		} catch (ObjectNotFoundException e) {
+			logger.error("Did not find the person's domain object");
+		}
+		
+		if (sspUser.getPerson() == null) {
 			logger.error("Unable to load user's record for: {}", username);
 			throw new UserNotAuthorizedException("Unable to load user's record, support has been notified.");
 		} else if (!sspUser.isEnabled()) {
