@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -24,14 +25,17 @@ public class Person extends Auditable{
 	@Column(name = "first_name", nullable = false, length=50)
 	@NotNull
 	@NotEmpty
+	@Size(max = 50)
 	private String firstName;
 
-	@Column(name = "middle_initial", nullable = false, length=1)
+	@Column(name = "middle_initial", nullable = true, length=1)
+	@Size(max = 1)
 	private String middleInitial;
 
 	@Column(name = "last_name", nullable = false, length=50)
 	@NotNull
 	@NotEmpty
+	@Size(max = 50)
 	private String lastName;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -41,42 +45,55 @@ public class Person extends Auditable{
 	@Column(name = "primary_email_address", length=100)
 	@NotNull
 	@NotEmpty
+	@Size(max = 100)
 	private String primaryEmailAddress;
 
 	@Column(name = "secondary_email_address", length=100)
+	@Size(max = 100)
 	private String secondaryEmailAddress;
 
 	@Column(length=25)
+	@Size(max = 25)
 	private String username;
 
 	@Column(name = "home_phone", length=25)
+	@Size(max = 25)
 	private String homePhone;
 
 	@Column(name = "work_phone", length=25)
+	@Size(max = 25)
 	private String workPhone;
 
 	@Column(name = "cell_phone", length=25)
+	@Size(max = 25)
 	private String cellPhone;
 
 	@Column(name = "address_line_1", length=50)
+	@Size(max = 50)
 	private String addressLine1;
 
 	@Column(name = "address_line_2", length=50)
+	@Size(max = 50)
 	private String addressLine2;
 
 	@Column(length=50)
+	@Size(max = 50)
 	private String city;
 
 	@Column(length=2)
+	@Size(max = 2)
 	private String state;
 
 	@Column(name = "zip_code", length=10)
+	@Size(max = 10)
 	private String zipCode;
 
 	@Column(name = "photo_url", length=100)
+	@Size(max = 100)
 	private String photoUrl;
 
 	@Column(name = "school_id", length=50)
+	@Size(max = 50)
 	private String schoolId;
 
 	private boolean enabled;
