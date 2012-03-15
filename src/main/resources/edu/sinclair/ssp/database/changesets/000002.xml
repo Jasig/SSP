@@ -61,4 +61,105 @@
 			<modifyDataType tableName="veteran_status" columnName="name" newDataType="character varying(25)" />
 		</rollback>	
 	</changeSet>
+	
+	<changeSet author='daniel.bower' id='Add person_demographics table'>
+		<createTable tableName="person_demographics">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false"/>
+			</column>
+			<column name="modified_date" type="datetime"/>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" 
+					foreignKeyName="person_demographics_created_by_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_demographics_modified_by_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="person_demographics_person_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="ability_to_benefit" type="boolean" defaultValueBoolean="false"/>
+			<column name="local" type="boolean" defaultValueBoolean="true"/>
+			<column name="primary_caregiver" type="boolean" defaultValueBoolean="false"/>
+			<column name="child_care_needed" type="boolean" defaultValueBoolean="false"/>
+			<column name="employed" type="boolean" defaultValueBoolean="false"/>
+			<column name="anticipated_start_term" type="character varying(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="anticipated_start_year" type="character varying(4)">
+				<constraints nullable="true" />
+			</column>
+			<column name="country_of_residence" type="character varying(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="payment_status" type="character varying(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="country_of_citizenship" type="character varying(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="number_of_children" type="int">
+				<constraints nullable="true" />
+			</column>
+			<column name="child_ages" type="character varying(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="place_of_employment" type="character varying(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="wage" type="character varying(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="total_hours_worked_per_week" type="character varying(3)">
+				<constraints nullable="true" />
+			</column>
+			<column name="shift" type="character varying(12)">
+				<constraints nullable="true" />
+			</column>
+			<column name="gender" type="character varying(12)">
+				<constraints nullable="true" />
+			</column>
+			<column name="marital_status_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_demographics_marital_status_id_marital_status_id"
+					references="marital_status(id)"/>
+			</column>
+			<column name="ethnicity_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_demographics_ethnicity_id_ethnicity_id"
+					references="ethnicity(id)"/>
+			</column>
+			<column name="citizenship_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_demographics_citizenship_id_citizenship_id"
+					references="citizenship(id)"/>
+			</column>
+			<column name="veteran_status_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_demographics_veteran_status_id_veteran_status_id"
+					references="veteran_status(id)"/>
+			</column>
+			<column name="coach_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_demographics_coach_id_person_id"
+					references="person(id)"/>
+			</column>
+		</createTable>
+		
+		<sql>grant all on person_demographics to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_demographics"/>
+		</rollback>
+		
+		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
+		Specifying "Without" timezone-->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+		</modifySql>
+
+	</changeSet> 
  </databaseChangeLog>

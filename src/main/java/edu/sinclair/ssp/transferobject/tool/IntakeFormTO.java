@@ -3,8 +3,10 @@ package edu.sinclair.ssp.transferobject.tool;
 import java.util.List;
 import java.util.Map;
 
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonDemographics;
+import edu.sinclair.ssp.factory.TransferObjectListFactory;
+import edu.sinclair.ssp.model.PersonChallenge;
+import edu.sinclair.ssp.model.PersonEducationLevel;
+import edu.sinclair.ssp.model.PersonFunding;
 import edu.sinclair.ssp.model.tool.IntakeForm;
 import edu.sinclair.ssp.transferobject.PersonChallengeTO;
 import edu.sinclair.ssp.transferobject.PersonDemographicsTO;
@@ -18,21 +20,27 @@ import edu.sinclair.ssp.transferobject.TransferObject;
 public class IntakeFormTO implements TransferObject<IntakeForm>{
 
 	private PersonTO person;
-	
+
 	private PersonDemographicsTO personDemographics;
-	
+
 	private PersonEducationGoalTO personEducationGoal;
-	
-	private List<PersonEducationLevelTO> personEducationLevels;
-	
+
 	private PersonEducationPlanTO personEducationPlan;
-	
+
+	private List<PersonEducationLevelTO> personEducationLevels;
+
 	private List<PersonFundingTO> personFundingSources;
-	
+
 	private List<PersonChallengeTO> personChallenges;
-	
+
+
 	private Map<String, Object> referenceData;
 
+
+	private TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel> personEducationLevelToFactory = new TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel>(PersonEducationLevelTO.class);
+	private TransferObjectListFactory<PersonFundingTO, PersonFunding> personFundingToFactory = new TransferObjectListFactory<PersonFundingTO, PersonFunding>(PersonFundingTO.class);
+	private TransferObjectListFactory<PersonChallengeTO, PersonChallenge> personChallengeToFactory = new TransferObjectListFactory<PersonChallengeTO, PersonChallenge>(PersonChallengeTO.class);
+	
 	public IntakeFormTO(IntakeForm model){
 		super();
 		pullAttributesFromModel(model);
@@ -46,17 +54,47 @@ public class IntakeFormTO implements TransferObject<IntakeForm>{
 		if(model.getPersonDemographics()!=null){
 			setPersonDemographics(new PersonDemographicsTO(model.getPersonDemographics()));
 		}
+		if(model.getPersonEducationGoal()!=null){
+			setPersonEducationGoal(new PersonEducationGoalTO(model.getPersonEducationGoal()));
+		}
+		if(model.getPersonEducationPlan()!=null){
+			setPersonEducationPlan(new PersonEducationPlanTO(model.getPersonEducationPlan()));
+		}
+		if(model.getPersonEducationLevels()!=null && model.getPersonEducationLevels().size()>0){
+			setPersonEducationLevels(personEducationLevelToFactory.toTOList(model.getPersonEducationLevels()));
+		}
+		if(model.getPersonFundingSources()!=null && model.getPersonFundingSources().size()>0){
+			setPersonFundingSources(personFundingToFactory.toTOList(model.getPersonFundingSources()));
+		}
+		if(model.getPersonChallenges()!=null && model.getPersonChallenges().size()>0){
+			setPersonChallenges(personChallengeToFactory.toTOList(model.getPersonChallenges()));
+		}
 	}
 
 	@Override
 	public IntakeForm pushAttributesToModel(IntakeForm model) {
 		if(getPerson()!=null){
-			model.setPerson(getPerson().pushAttributesToModel(new Person()));
+			model.setPerson(getPerson().asModel());
 		}
 		if(getPersonDemographics()!=null){
-			model.setPersonDemographics(
-					getPersonDemographics().pushAttributesToModel(new PersonDemographics()));
+			model.setPersonDemographics(getPersonDemographics().asModel());
 		}
+		if(getPersonEducationGoal()!=null){
+			model.setPersonEducationGoal(getPersonEducationGoal().asModel());
+		}
+		if(getPersonEducationPlan()!=null){
+			model.setPersonEducationPlan(getPersonEducationPlan().asModel());
+		}
+		if(getPersonEducationLevels()!=null && getPersonEducationLevels().size()>0){
+			model.setPersonEducationLevels(personEducationLevelToFactory.toModelList(getPersonEducationLevels()));
+		}
+		if(getPersonFundingSources()!=null && getPersonFundingSources().size()>0){
+			model.setPersonFundingSources(personFundingToFactory.toModelList(getPersonFundingSources()));
+		}
+		if(getPersonChallenges()!=null && getPersonChallenges().size()>0){
+			model.setPersonChallenges(personChallengeToFactory.toModelList(getPersonChallenges()));
+		}
+		
 		return model;
 	}
 
@@ -129,7 +167,4 @@ public class IntakeFormTO implements TransferObject<IntakeForm>{
 	public void setReferenceData(Map<String, Object> referenceData) {
 		this.referenceData = referenceData;
 	}
-
-
-	
 }
