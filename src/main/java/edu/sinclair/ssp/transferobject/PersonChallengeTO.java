@@ -1,5 +1,33 @@
 package edu.sinclair.ssp.transferobject;
 
-public class PersonChallengeTO {
+import edu.sinclair.ssp.model.PersonChallenge;
+
+public class PersonChallengeTO implements TransferObject<PersonChallenge>{
+
+	public PersonChallengeTO(){
+		super();
+	}
+
+	public PersonChallengeTO(PersonChallenge model){
+		super();
+		pullAttributesFromModel(model);
+	}
+	
+	@Override
+	public void pullAttributesFromModel(PersonChallenge model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public PersonChallenge pushAttributesToModel(PersonChallenge model) {
+		// TODO Auto-generated method stub
+		return model;
+	}
+	
+	@Override
+	public PersonChallenge asModel(){
+		return pushAttributesToModel(new PersonChallenge());
+	}
 
 }
