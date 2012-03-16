@@ -1,31 +1,42 @@
 package edu.sinclair.ssp.model;
 
-import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.EducationGoal;
 
-public class PersonEducationGoal {
+@Entity
+@Table(name = "person_education_goal", schema = "public")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class PersonEducationGoal extends Auditable{
 
-	private UUID id;
-	
-	private String description;
-	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "person_id", nullable = false, updatable = false)
 	private Person person;
 	
-	private EducationGoal educationGoal;
+	@Column(length=50)
+	@Size(max = 50)
+	private String description;
+
+	@Column(name = "planned_occupation", length=50)
+	@Size(max = 50)
+	private String plannedOccupation;
 	
+	@Column(name = "how_sure_about_major")
 	private int howSureAboutMajor;
 	
-	private String plannedOccupation;
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
-
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "education_goal_id", nullable = true, updatable = true)
+	private EducationGoal educationGoal;
+	
+	
 	public String getDescription() {
 		return description;
 	}

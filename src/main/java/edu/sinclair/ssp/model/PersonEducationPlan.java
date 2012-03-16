@@ -1,34 +1,45 @@
 package edu.sinclair.ssp.model;
 
-import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.StudentStatus;
 
-public class PersonEducationPlan {
-
-	private UUID id;
+@Entity
+@Table(name = "person_education_plan", schema = "public")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class PersonEducationPlan extends Auditable{
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "person_id", nullable = false, updatable = false)
 	private Person person;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "student_status_id", nullable = true, updatable = true)
 	private StudentStatus studentStatus;
 	
+	@Column(name = "new_orientation_complete")
 	private boolean newOrientationComplete;
-	
+
+	@Column(name = "registered_for_classes")
 	private boolean registeredForClasses;
-	
+
+	@Column(name = "college_degree_for_parents")
 	private boolean collegeDegreeForParents;
-	
+
+	@Column(name = "special_needs")
 	private boolean specialNeeds;
-	
+
+	@Column(name = "grade_typically_earned", length=2)
+	@Size(max = 2)
 	private String gradeTypicallyEarned;
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
 
 	public Person getPerson() {
 		return person;
