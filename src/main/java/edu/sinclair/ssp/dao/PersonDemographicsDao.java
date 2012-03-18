@@ -29,7 +29,7 @@ public class PersonDemographicsDao implements
 				.createCriteria(PersonDemographics.class);
 
 		if(status!=ObjectStatus.ALL){
-			query.add(Restrictions.eq("objectStatus", status));;
+			query.add(Restrictions.eq("objectStatus", status));
 		}
 		
 		return query.list();

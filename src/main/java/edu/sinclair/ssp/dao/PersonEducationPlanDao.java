@@ -28,7 +28,7 @@ public class PersonEducationPlanDao implements AuditableCrudDao<PersonEducationP
 				.createCriteria(PersonEducationPlan.class);
 
 		if(status!=ObjectStatus.ALL){
-			query.add(Restrictions.eq("objectStatus", status));;
+			query.add(Restrictions.eq("objectStatus", status));
 		}
 		
 		return query.list();

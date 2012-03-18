@@ -30,7 +30,7 @@ public class PersonDao implements AuditableCrudDao<Person>{
 				.addOrder(Order.asc("firstName"));
 		
 		if(status!=ObjectStatus.ALL){
-			query.add(Restrictions.eq("objectStatus", status));;
+			query.add(Restrictions.eq("objectStatus", status));
 		}
 		
 		return query.list();
