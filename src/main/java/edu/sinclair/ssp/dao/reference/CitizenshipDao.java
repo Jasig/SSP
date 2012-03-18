@@ -30,7 +30,7 @@ public class CitizenshipDao implements AuditableCrudDao<Citizenship>{
 		query.addOrder(Order.asc("name"));
 		
 		if(status!=ObjectStatus.ALL){
-			query.add(Restrictions.eq("objectStatus", status));;
+			query.add(Restrictions.eq("objectStatus", status));
 		}
 		
 		return query.list();
