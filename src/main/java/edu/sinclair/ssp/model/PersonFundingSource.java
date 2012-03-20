@@ -10,12 +10,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import edu.sinclair.ssp.model.reference.EducationLevel;
+import edu.sinclair.ssp.model.reference.FundingSource;
 
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonEducationLevel extends Auditable {
+public class PersonFundingSource extends Auditable {
 
 	@Column(length = 255)
 	@Size(max = 255)
@@ -26,8 +26,8 @@ public class PersonEducationLevel extends Auditable {
 	private Person person;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "education_level_id", nullable = false, updatable = false)
-	private EducationLevel educationLevel;
+	@JoinColumn(name = "funding_source_id", nullable = false, updatable = false)
+	private FundingSource fundingSource;
 
 	public String getDescription() {
 		return description;
@@ -45,12 +45,12 @@ public class PersonEducationLevel extends Auditable {
 		this.person = person;
 	}
 
-	public EducationLevel getEducationLevel() {
-		return educationLevel;
+	public FundingSource getFundingSource() {
+		return fundingSource;
 	}
 
-	public void setEducationLevel(EducationLevel educationLevel) {
-		this.educationLevel = educationLevel;
+	public void setFundingSource(FundingSource fundingSource) {
+		this.fundingSource = fundingSource;
 	}
 
 }

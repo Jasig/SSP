@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.sinclair.ssp.model.PersonChallenge;
 import edu.sinclair.ssp.model.PersonEducationLevel;
-import edu.sinclair.ssp.model.PersonFunding;
+import edu.sinclair.ssp.model.PersonFundingSource;
 import edu.sinclair.ssp.model.tool.IntakeForm;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonDemographicsService;
@@ -47,7 +47,7 @@ public class IntakeServiceImpl implements IntakeService {
 		form.setPersonEducationGoal(personEducationGoalService.forPerson(form.getPerson()));
 		form.setPersonEducationPlan(personEducationPlanService.forPerson(form.getPerson()));
 		form.setPersonEducationLevels(new ArrayList<PersonEducationLevel>());
-		form.setPersonFundingSources(new ArrayList<PersonFunding>());
+		form.setPersonFundingSources(new ArrayList<PersonFundingSource>());
 		form.setPersonChallenges(new ArrayList<PersonChallenge>());
 		
 		return form;

@@ -20,43 +20,43 @@ import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 
 @Entity
-@Table(name = "person_demographics", schema = "public")
+@Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonDemographics extends Auditable{
+public class PersonDemographics extends Auditable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="person_id", nullable = false, updatable = false)
+	@JoinColumn(name = "person_id", nullable = false, updatable = false)
 	private Person person;
 
 	@Column
 	private boolean abilityToBenefit;
 
-	@Column(length=25)
+	@Column(length = 25)
 	@Size(max = 25)
 	private String anticipatedStartTerm;
 
-	@Column(length=4)
+	@Column(length = 4)
 	@Size(max = 4)
 	private String anticipatedStartYear;
 
 	private boolean local;
 
-	@Column(length=50)
+	@Column(length = 50)
 	@Size(max = 50)
 	private String countryOfResidence;
 
-	@Column(length=25)
+	@Column(length = 25)
 	@Size(max = 25)
 	private String paymentStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="marital_status_id", nullable = true, updatable = true)
+	@JoinColumn(name = "marital_status_id", nullable = true, updatable = true)
 	private MaritalStatus maritalStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ethnicity_id", nullable = true, updatable = true)
+	@JoinColumn(name = "ethnicity_id", nullable = true, updatable = true)
 	private Ethnicity ethnicity;
-	
+
 	@Enumerated(EnumType.STRING)
 	private Genders gender;
 
@@ -64,12 +64,12 @@ public class PersonDemographics extends Auditable{
 	@JoinColumn(name = "citizenship_id", nullable = true, updatable = true)
 	private Citizenship citizenship;
 
-	@Column(length=50)
+	@Column(length = 50)
 	@Size(max = 50)
 	private String countryOfCitizenship;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="veteran_status_id", nullable = true, updatable = true)
+	@JoinColumn(name = "veteran_status_id", nullable = true, updatable = true)
 	private VeteranStatus veteranStatus;
 
 	@Column
@@ -78,7 +78,7 @@ public class PersonDemographics extends Auditable{
 	@Column
 	private int numberOfChildren;
 
-	@Column(length=50)
+	@Column(length = 50)
 	@Size(max = 50)
 	private String childAges;
 
@@ -87,23 +87,23 @@ public class PersonDemographics extends Auditable{
 
 	private boolean employed;
 
-	@Column(length=50)
+	@Column(length = 50)
 	@Size(max = 50)
 	private String placeOfEmployment;
 
 	@Enumerated(EnumType.STRING)
 	private EmploymentShifts shift;
 
-	@Column(length=50)
+	@Column(length = 50)
 	@Size(max = 50)
 	private String wage;
 
-	@Column(length=3)
+	@Column(length = 3)
 	@Size(max = 3)
 	private String totalHoursWorkedPerWeek;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="coach_id", nullable = true, updatable = true)
+	@JoinColumn(name = "coach_id", nullable = true, updatable = true)
 	private Person coach;
 
 	public Person getPerson() {
