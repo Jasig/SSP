@@ -7,6 +7,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -15,28 +16,26 @@ import edu.sinclair.ssp.model.reference.EducationGoal;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonEducationGoal extends Auditable{
+public class PersonEducationGoal extends Auditable {
+
+	@OneToOne(mappedBy = "person_id", fetch = FetchType.LAZY)
+	private Person person;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "person_id", nullable = false, updatable = false)
-	private Person person;
-	
-	@Column(length=50)
+	@JoinColumn(name = "education_goal_id", nullable = true, insertable = false, updatable = true)
+	private EducationGoal educationGoal;
+
+	@Column(length = 50)
 	@Size(max = 50)
 	private String description;
 
-	@Column(length=50)
+	@Column(length = 50)
 	@Size(max = 50)
 	private String plannedOccupation;
-	
+
 	@Column()
 	private int howSureAboutMajor;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="education_goal_id", nullable = true, updatable = true)
-	private EducationGoal educationGoal;
-	
-	
+
 	public String getDescription() {
 		return description;
 	}
@@ -76,5 +75,5 @@ public class PersonEducationGoal extends Auditable{
 	public void setPlannedOccupation(String plannedOccupation) {
 		this.plannedOccupation = plannedOccupation;
 	}
-	
+
 }

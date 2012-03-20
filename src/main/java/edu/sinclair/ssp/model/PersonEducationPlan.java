@@ -7,6 +7,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -15,16 +16,15 @@ import edu.sinclair.ssp.model.reference.StudentStatus;
 @Entity
 @Table(name = "person_education_plan", schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonEducationPlan extends Auditable{
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "person_id", nullable = false, updatable = false)
+public class PersonEducationPlan extends Auditable {
+
+	@OneToOne(mappedBy = "person_id", fetch = FetchType.LAZY)
 	private Person person;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "student_status_id", nullable = true, updatable = true)
+	@JoinColumn(name = "student_status_id", nullable = true, insertable = true, updatable = true)
 	private StudentStatus studentStatus;
-	
+
 	@Column
 	private boolean newOrientationComplete;
 
@@ -37,7 +37,7 @@ public class PersonEducationPlan extends Auditable{
 	@Column
 	private boolean specialNeeds;
 
-	@Column(length=2)
+	@Column(length = 2)
 	@Size(max = 2)
 	private String gradeTypicallyEarned;
 

@@ -2,16 +2,26 @@ package edu.sinclair.ssp.model;
 
 import java.util.UUID;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import edu.sinclair.ssp.model.reference.FundingSource;
 
 public class PersonFunding {
 
 	private UUID id;
-	
+
 	private String description;
-	
+
+	/**
+	 * Associated person. Changes to this Person are not persisted.
+	 */
+	@ManyToOne()
+	@JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
 	private Person person;
-	
+
+	@ManyToOne()
+	@JoinColumn(name = "funding_source_id", nullable = false, insertable = false, updatable = false)
 	private FundingSource fundingSource;
 
 	public UUID getId() {
@@ -45,5 +55,5 @@ public class PersonFunding {
 	public void setFundingSource(FundingSource fundingSource) {
 		this.fundingSource = fundingSource;
 	}
-	
+
 }

@@ -21,7 +21,7 @@ import org.hibernate.annotations.Type;
 public abstract class Auditable {
 	// jpa
 	@Id
-	@Type(type="pg-uuid")
+	@Type(type = "pg-uuid")
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	private UUID id;
@@ -37,36 +37,34 @@ public abstract class Auditable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date modifiedDate;
-	
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	private Person modifiedBy;
-	
+
 	@Enumerated
 	@Column(nullable = false)
 	private ObjectStatus objectStatus;
 
 	/**
-	@Version
-	private int optlock;*/
+	 * @Version private int optlock;
+	 */
 
-
-	public Auditable(){}
-
-	public Auditable(UUID id){
-		this.id = id;
+	public Auditable() {
 	}
 
+	public Auditable(UUID id) {
+		this.id = id;
+	}
 
 	public UUID getId() {
 		return id;
 	}
-	
+
 	public void setId(UUID id) {
 		this.id = id;
 	}
-	
+
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -107,10 +105,10 @@ public abstract class Auditable {
 		this.objectStatus = objectStatus;
 	}
 
-	public String toString(){
-		if(null!=id){
+	public String toString() {
+		if (null != id) {
 			return id.toString();
-		}else{
+		} else {
 			return super.toString();
 		}
 	}

@@ -1,12 +1,17 @@
 package edu.sinclair.ssp.model;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,21 +23,22 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Person extends Auditable{
+public class Person extends Auditable {
 
-	public static UUID SYSTEM_ADMINISTRATOR_ID = UUID.fromString("58ba5ee3-734e-4ae9-b9c5-943774b4de41");
+	public static UUID SYSTEM_ADMINISTRATOR_ID = UUID
+			.fromString("58ba5ee3-734e-4ae9-b9c5-943774b4de41");
 
-	@Column(nullable = false, length=50)
+	@Column(nullable = false, length = 50)
 	@NotNull
 	@NotEmpty
 	@Size(max = 50)
 	private String firstName;
 
-	@Column(nullable = true, length=1)
+	@Column(nullable = true, length = 1)
 	@Size(max = 1)
 	private String middleInitial;
 
-	@Column(nullable = false, length=50)
+	@Column(nullable = false, length = 50)
 	@NotNull
 	@NotEmpty
 	@Size(max = 50)
@@ -42,64 +48,112 @@ public class Person extends Auditable{
 	@Column(name = "birth_date")
 	private Date birthDate;
 
-	@Column(length=100)
+	@Column(length = 100)
 	@NotNull
 	@NotEmpty
 	@Size(max = 100)
 	private String primaryEmailAddress;
 
-	@Column(length=100)
+	@Column(length = 100)
 	@Size(max = 100)
 	private String secondaryEmailAddress;
 
-	@Column(length=25)
+	@Column(length = 25)
 	@Size(max = 25)
 	private String username;
 
-	@Column(length=25)
+	@Column(length = 25)
 	@Size(max = 25)
 	private String homePhone;
 
-	@Column(length=25)
+	@Column(length = 25)
 	@Size(max = 25)
 	private String workPhone;
 
-	@Column(length=25)
+	@Column(length = 25)
 	@Size(max = 25)
 	private String cellPhone;
 
-	@Column(length=50, name="address_line_1")
+	@Column(length = 50, name = "address_line_1")
 	@Size(max = 50)
 	private String addressLine1;
 
-	@Column(length=50, name="address_line_2")
+	@Column(length = 50, name = "address_line_2")
 	@Size(max = 50)
 	private String addressLine2;
 
-	@Column(length=50)
+	@Column(length = 50)
 	@Size(max = 50)
 	private String city;
 
-	@Column(length=2)
+	@Column(length = 2)
 	@Size(max = 2)
 	private String state;
 
-	@Column(length=10)
+	@Column(length = 10)
 	@Size(max = 10)
 	private String zipCode;
 
-	@Column(length=100)
+	@Column(length = 100)
 	@Size(max = 100)
 	private String photoUrl;
 
-	@Column(length=50)
+	@Column(length = 50)
 	@Size(max = 50)
 	private String schoolId;
 
+	@Nullable()
+	/**
+	 * Marks the user account able to authenticate in the system.
+	 * 
+	 * Usually only marked false for former administrators, counselors, 
+	 * and non-students who no longer use the system anymore.
+	 */
 	private boolean enabled;
 
-	public Person(){}
-	public Person(UUID id){
+	@Nullable()
+	@ManyToOne()
+	@Column(unique = true, nullable = true)
+	private PersonDemographics demographics;
+
+	@Nullable()
+	@ManyToOne()
+	@Column(unique = true, nullable = true)
+	private PersonEducationGoal educationGoal;
+
+	@Nullable()
+	@ManyToOne()
+	@Column(unique = true, nullable = true)
+	private PersonEducationPlan educationPlan;
+
+	/**
+	 * Education levels. Changes to this set are persisted.
+	 */
+	@Nullable()
+	@OneToMany
+	@JoinColumn(name = "person_education_level")
+	private Set<PersonEducationLevel> educationLevels;
+
+	/**
+	 * Funding sources. Changes to this set are persisted.
+	 */
+	@Nullable()
+	@OneToMany
+	@JoinColumn(name = "person_funding")
+	private Set<PersonFunding> fundingSources;
+
+	/**
+	 * Challenges. Changes to this set are persisted.
+	 */
+	@Nullable()
+	@OneToMany
+	@JoinColumn(name = "person_challenges")
+	private Set<PersonChallenge> challenges;
+
+	public Person() {
+	}
+
+	public Person(UUID id) {
 		super(id);
 	}
 
@@ -246,5 +300,53 @@ public class Person extends Auditable{
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+
+	public PersonDemographics getDemographics() {
+		return demographics;
+	}
+
+	public void setDemographics(PersonDemographics demographics) {
+		this.demographics = demographics;
+	}
+
+	public PersonEducationGoal getEducationGoal() {
+		return educationGoal;
+	}
+
+	public void setEducationGoal(PersonEducationGoal educationGoal) {
+		this.educationGoal = educationGoal;
+	}
+
+	public PersonEducationPlan getEducationPlan() {
+		return educationPlan;
+	}
+
+	public void setEducationPlan(PersonEducationPlan educationPlan) {
+		this.educationPlan = educationPlan;
+	}
+
+	public Set<PersonEducationLevel> getEducationLevels() {
+		return educationLevels;
+	}
+
+	public void setEducationLevels(Set<PersonEducationLevel> educationLevels) {
+		this.educationLevels = educationLevels;
+	}
+
+	public Set<PersonFunding> getFundingSources() {
+		return fundingSources;
+	}
+
+	public void setFundingSources(Set<PersonFunding> fundingSources) {
+		this.fundingSources = fundingSources;
+	}
+
+	public Set<PersonChallenge> getChallenges() {
+		return challenges;
+	}
+
+	public void setChallenges(Set<PersonChallenge> challenges) {
+		this.challenges = challenges;
+	}
+
 }
