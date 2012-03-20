@@ -20,11 +20,12 @@ import edu.sinclair.ssp.service.reference.VeteranStatusService;
 public class VeteranStatusServiceImpl implements VeteranStatusService {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(VeteranStatusServiceImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(VeteranStatusServiceImpl.class);
 
 	@Autowired
 	private VeteranStatusDao dao;
-	
+
 	@Override
 	public List<VeteranStatus> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -33,7 +34,7 @@ public class VeteranStatusServiceImpl implements VeteranStatusService {
 	@Override
 	public VeteranStatus get(UUID id) throws ObjectNotFoundException {
 		VeteranStatus obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "VeteranStatus");
 		}
 		return obj;
@@ -47,31 +48,31 @@ public class VeteranStatusServiceImpl implements VeteranStatusService {
 	@Override
 	public VeteranStatus save(VeteranStatus obj) throws ObjectNotFoundException {
 		VeteranStatus current = get(obj.getId());
-		
-		if(obj.getName()!=null){
+
+		if (obj.getName() != null) {
 			current.setName(obj.getName());
 		}
-		if(obj.getDescription()!=null){
+		if (obj.getDescription() != null) {
 			current.setDescription(obj.getDescription());
 		}
-		if(obj.getObjectStatus()!=null){
+		if (obj.getObjectStatus() != null) {
 			current.setObjectStatus(obj.getObjectStatus());
 		}
-		
+
 		return dao.save(current);
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException{
+	public void delete(UUID id) throws ObjectNotFoundException {
 		VeteranStatus current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}
 	}
 
-	protected void setDao(VeteranStatusDao dao){
+	protected void setDao(VeteranStatusDao dao) {
 		this.dao = dao;
 	}
 

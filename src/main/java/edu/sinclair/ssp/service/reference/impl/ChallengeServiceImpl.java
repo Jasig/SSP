@@ -20,7 +20,8 @@ import edu.sinclair.ssp.service.reference.ChallengeService;
 public class ChallengeServiceImpl implements ChallengeService {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(ChallengeServiceImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ChallengeServiceImpl.class);
 
 	@Autowired
 	private ChallengeDao dao;
@@ -33,7 +34,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 	@Override
 	public Challenge get(UUID id) throws ObjectNotFoundException {
 		Challenge obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "Challenge");
 		}
 		return obj;
@@ -47,31 +48,31 @@ public class ChallengeServiceImpl implements ChallengeService {
 	@Override
 	public Challenge save(Challenge obj) throws ObjectNotFoundException {
 		Challenge current = get(obj.getId());
-		
-		if(obj.getName()!=null){
+
+		if (obj.getName() != null) {
 			current.setName(obj.getName());
 		}
-		if(obj.getDescription()!=null){
+		if (obj.getDescription() != null) {
 			current.setDescription(obj.getDescription());
 		}
-		if(obj.getObjectStatus()!=null){
+		if (obj.getObjectStatus() != null) {
 			current.setObjectStatus(obj.getObjectStatus());
 		}
-		
+
 		return dao.save(current);
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException{
+	public void delete(UUID id) throws ObjectNotFoundException {
 		Challenge current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}
 	}
 
-	protected void setDao(ChallengeDao dao){
+	protected void setDao(ChallengeDao dao) {
 		this.dao = dao;
 	}
 

@@ -20,11 +20,12 @@ import edu.sinclair.ssp.service.reference.MaritalStatusService;
 public class MaritalStatusServiceImpl implements MaritalStatusService {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(MaritalStatusServiceImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(MaritalStatusServiceImpl.class);
 
 	@Autowired
 	private MaritalStatusDao dao;
-	
+
 	@Override
 	public List<MaritalStatus> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -33,7 +34,7 @@ public class MaritalStatusServiceImpl implements MaritalStatusService {
 	@Override
 	public MaritalStatus get(UUID id) throws ObjectNotFoundException {
 		MaritalStatus obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "MaritalStatus");
 		}
 		return obj;
@@ -47,31 +48,31 @@ public class MaritalStatusServiceImpl implements MaritalStatusService {
 	@Override
 	public MaritalStatus save(MaritalStatus obj) throws ObjectNotFoundException {
 		MaritalStatus current = get(obj.getId());
-		
-		if(obj.getName()!=null){
+
+		if (obj.getName() != null) {
 			current.setName(obj.getName());
 		}
-		if(obj.getDescription()!=null){
+		if (obj.getDescription() != null) {
 			current.setDescription(obj.getDescription());
 		}
-		if(obj.getObjectStatus()!=null){
+		if (obj.getObjectStatus() != null) {
 			current.setObjectStatus(obj.getObjectStatus());
 		}
-		
+
 		return dao.save(current);
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException{
+	public void delete(UUID id) throws ObjectNotFoundException {
 		MaritalStatus current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}
 	}
 
-	protected void setDao(MaritalStatusDao dao){
+	protected void setDao(MaritalStatusDao dao) {
 		this.dao = dao;
 	}
 

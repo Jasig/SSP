@@ -20,11 +20,12 @@ import edu.sinclair.ssp.service.reference.CitizenshipService;
 public class CitizenshipServiceImpl implements CitizenshipService {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(CitizenshipServiceImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(CitizenshipServiceImpl.class);
 
 	@Autowired
 	private CitizenshipDao dao;
-	
+
 	@Override
 	public List<Citizenship> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -33,7 +34,7 @@ public class CitizenshipServiceImpl implements CitizenshipService {
 	@Override
 	public Citizenship get(UUID id) throws ObjectNotFoundException {
 		Citizenship obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "Citizenship");
 		}
 		return obj;
@@ -47,31 +48,31 @@ public class CitizenshipServiceImpl implements CitizenshipService {
 	@Override
 	public Citizenship save(Citizenship obj) throws ObjectNotFoundException {
 		Citizenship current = get(obj.getId());
-		
-		if(obj.getName()!=null){
+
+		if (obj.getName() != null) {
 			current.setName(obj.getName());
 		}
-		if(obj.getDescription()!=null){
+		if (obj.getDescription() != null) {
 			current.setDescription(obj.getDescription());
 		}
-		if(obj.getObjectStatus()!=null){
+		if (obj.getObjectStatus() != null) {
 			current.setObjectStatus(obj.getObjectStatus());
 		}
-		
+
 		return dao.save(current);
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException{
+	public void delete(UUID id) throws ObjectNotFoundException {
 		Citizenship current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}
 	}
 
-	protected void setDao(CitizenshipDao dao){
+	protected void setDao(CitizenshipDao dao) {
 		this.dao = dao;
 	}
 

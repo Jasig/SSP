@@ -20,11 +20,12 @@ import edu.sinclair.ssp.service.reference.EducationLevelService;
 public class EducationLevelServiceImpl implements EducationLevelService {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(EducationLevelServiceImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(EducationLevelServiceImpl.class);
 
 	@Autowired
 	private EducationLevelDao dao;
-	
+
 	@Override
 	public List<EducationLevel> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -33,7 +34,7 @@ public class EducationLevelServiceImpl implements EducationLevelService {
 	@Override
 	public EducationLevel get(UUID id) throws ObjectNotFoundException {
 		EducationLevel obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "EducationLevel");
 		}
 		return obj;
@@ -47,31 +48,31 @@ public class EducationLevelServiceImpl implements EducationLevelService {
 	@Override
 	public EducationLevel save(EducationLevel obj) throws ObjectNotFoundException {
 		EducationLevel current = get(obj.getId());
-		
-		if(obj.getName()!=null){
+
+		if (obj.getName() != null) {
 			current.setName(obj.getName());
 		}
-		if(obj.getDescription()!=null){
+		if (obj.getDescription() != null) {
 			current.setDescription(obj.getDescription());
 		}
-		if(obj.getObjectStatus()!=null){
+		if (obj.getObjectStatus() != null) {
 			current.setObjectStatus(obj.getObjectStatus());
 		}
-		
+
 		return dao.save(current);
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException{
+	public void delete(UUID id) throws ObjectNotFoundException {
 		EducationLevel current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}
 	}
 
-	protected void setDao(EducationLevelDao dao){
+	protected void setDao(EducationLevelDao dao) {
 		this.dao = dao;
 	}
 

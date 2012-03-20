@@ -20,11 +20,12 @@ import edu.sinclair.ssp.service.reference.FundingSourceService;
 public class FundingSourceServiceImpl implements FundingSourceService {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(FundingSourceServiceImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(FundingSourceServiceImpl.class);
 
 	@Autowired
 	private FundingSourceDao dao;
-	
+
 	@Override
 	public List<FundingSource> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -33,7 +34,7 @@ public class FundingSourceServiceImpl implements FundingSourceService {
 	@Override
 	public FundingSource get(UUID id) throws ObjectNotFoundException {
 		FundingSource obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "FundingSource");
 		}
 		return obj;
@@ -47,31 +48,31 @@ public class FundingSourceServiceImpl implements FundingSourceService {
 	@Override
 	public FundingSource save(FundingSource obj) throws ObjectNotFoundException {
 		FundingSource current = get(obj.getId());
-		
-		if(obj.getName()!=null){
+
+		if (obj.getName() != null) {
 			current.setName(obj.getName());
 		}
-		if(obj.getDescription()!=null){
+		if (obj.getDescription() != null) {
 			current.setDescription(obj.getDescription());
 		}
-		if(obj.getObjectStatus()!=null){
+		if (obj.getObjectStatus() != null) {
 			current.setObjectStatus(obj.getObjectStatus());
 		}
-		
+
 		return dao.save(current);
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException{
+	public void delete(UUID id) throws ObjectNotFoundException {
 		FundingSource current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}
 	}
 
-	protected void setDao(FundingSourceDao dao){
+	protected void setDao(FundingSourceDao dao) {
 		this.dao = dao;
 	}
 

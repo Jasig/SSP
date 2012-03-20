@@ -20,11 +20,12 @@ import edu.sinclair.ssp.service.reference.EthnicityService;
 public class EthnicityServiceImpl implements EthnicityService {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(EthnicityServiceImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(EthnicityServiceImpl.class);
 
 	@Autowired
 	private EthnicityDao dao;
-	
+
 	@Override
 	public List<Ethnicity> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -33,7 +34,7 @@ public class EthnicityServiceImpl implements EthnicityService {
 	@Override
 	public Ethnicity get(UUID id) throws ObjectNotFoundException {
 		Ethnicity obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "Ethnicity");
 		}
 		return obj;
@@ -47,31 +48,31 @@ public class EthnicityServiceImpl implements EthnicityService {
 	@Override
 	public Ethnicity save(Ethnicity obj) throws ObjectNotFoundException {
 		Ethnicity current = get(obj.getId());
-		
-		if(obj.getName()!=null){
+
+		if (obj.getName() != null) {
 			current.setName(obj.getName());
 		}
-		if(obj.getDescription()!=null){
+		if (obj.getDescription() != null) {
 			current.setDescription(obj.getDescription());
 		}
-		if(obj.getObjectStatus()!=null){
+		if (obj.getObjectStatus() != null) {
 			current.setObjectStatus(obj.getObjectStatus());
 		}
-		
+
 		return dao.save(current);
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException{
+	public void delete(UUID id) throws ObjectNotFoundException {
 		Ethnicity current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}
 	}
 
-	protected void setDao(EthnicityDao dao){
+	protected void setDao(EthnicityDao dao) {
 		this.dao = dao;
 	}
 
