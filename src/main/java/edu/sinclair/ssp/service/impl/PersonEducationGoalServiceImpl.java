@@ -12,6 +12,7 @@ import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonEducationGoal;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonEducationGoalService;
+import edu.sinclair.ssp.service.PersonService;
 import edu.sinclair.ssp.service.reference.EducationGoalService;
 
 @Service
@@ -22,6 +23,9 @@ public class PersonEducationGoalServiceImpl implements PersonEducationGoalServic
 	
 	@Autowired
 	private EducationGoalService educationGoalService;
+
+	@Autowired
+	private PersonService personService;
 	
 	@Override
 	public List<PersonEducationGoal> getAll(ObjectStatus status) {
@@ -51,18 +55,16 @@ public class PersonEducationGoalServiceImpl implements PersonEducationGoalServic
 	public PersonEducationGoal save(PersonEducationGoal obj) throws ObjectNotFoundException{
 		PersonEducationGoal current = get(obj.getId());
 		
-		if(obj.getObjectStatus()!=null){
-			current.setObjectStatus(obj.getObjectStatus());
+
+		if(obj.getPerson()!=null){
+			current.setPerson(personService.get(obj.getPerson().getId()));
 		}
-		
-		if(obj.getDescription()!=null){
-			current.setDescription(obj.getDescription());
-		}
-		if(obj.getPlannedOccupation()!=null){
-			current.setPlannedOccupation(obj.getPlannedOccupation());
-		}
+		current.setObjectStatus(obj.getObjectStatus());
+		current.setDescription(obj.getDescription());
+		current.setPlannedOccupation(obj.getPlannedOccupation());
 		current.setHowSureAboutMajor(obj.getHowSureAboutMajor());
-		if(obj.getEducationGoal()!=null){
+		
+		if(obj.getEducationGoal()!=null && obj.getEducationGoal().getId()!=null){
 			current.setEducationGoal(educationGoalService.get(obj.getEducationGoal().getId()));
 		}
 		

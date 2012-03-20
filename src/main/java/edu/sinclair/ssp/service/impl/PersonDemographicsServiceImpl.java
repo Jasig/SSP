@@ -78,39 +78,17 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 		current.setPrimaryCaregiver(obj.isPrimaryCaregiver());
 		current.setNumberOfChildren(obj.getNumberOfChildren());
 		
-		if(obj.getAnticipatedStartTerm()!=null){
-			current.setAnticipatedStartTerm(obj.getAnticipatedStartTerm());
-		}
-		if(obj.getAnticipatedStartYear()!=null){
-			current.setAnticipatedStartYear(obj.getAnticipatedStartYear());
-		}
-		if(obj.getCountryOfResidence()!=null){
-			current.setCountryOfResidence(obj.getCountryOfResidence());
-		}
-		if(obj.getPaymentStatus()!=null){
-			current.setPaymentStatus(obj.getPaymentStatus());
-		}
-		if(obj.getCountryOfCitizenship()!=null){
-			current.setCountryOfCitizenship(obj.getCountryOfCitizenship());
-		}
-		if(obj.getChildAges()!=null){
-			current.setChildAges(obj.getChildAges());
-		}
-		if(obj.getPlaceOfEmployment()!=null){
-			current.setPlaceOfEmployment(obj.getPlaceOfEmployment());
-		}
-		if(obj.getWage()!=null){
-			current.setWage(obj.getWage());
-		}
-		if(obj.getTotalHoursWorkedPerWeek()!=null){
-			current.setTotalHoursWorkedPerWeek(obj.getTotalHoursWorkedPerWeek());
-		}
-		if(obj.getShift()!=null){
-			current.setShift(obj.getShift());
-		}
-		if(obj.getGender()!=null){
-			current.setGender(obj.getGender());
-		}
+		current.setAnticipatedStartTerm(obj.getAnticipatedStartTerm());
+		current.setAnticipatedStartYear(obj.getAnticipatedStartYear());
+		current.setCountryOfResidence(obj.getCountryOfResidence());
+		current.setPaymentStatus(obj.getPaymentStatus());
+		current.setCountryOfCitizenship(obj.getCountryOfCitizenship());
+		current.setChildAges(obj.getChildAges());
+		current.setPlaceOfEmployment(obj.getPlaceOfEmployment());
+		current.setWage(obj.getWage());
+		current.setTotalHoursWorkedPerWeek(obj.getTotalHoursWorkedPerWeek());
+		current.setShift(obj.getShift());
+		current.setGender(obj.getGender());
 		if(obj.getMaritalStatus()!=null){
 			current.setMaritalStatus(maritalStatusService.get(obj.getMaritalStatus().getId()));
 		}
@@ -125,6 +103,9 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 		}
 		if(obj.getCoach()!=null){
 			current.setCoach(personService.get(obj.getCoach().getId()));
+		}
+		if(obj.getPerson()!=null){
+			current.setPerson(personService.get(obj.getPerson().getId()));
 		}
 		return dao.save(current);
 	}

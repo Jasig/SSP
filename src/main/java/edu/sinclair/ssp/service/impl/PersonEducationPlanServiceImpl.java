@@ -12,12 +12,20 @@ import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonEducationPlan;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonEducationPlanService;
+import edu.sinclair.ssp.service.PersonService;
+import edu.sinclair.ssp.service.reference.StudentStatusService;
 
 @Service
 public class PersonEducationPlanServiceImpl implements PersonEducationPlanService {
 
 	@Autowired
 	private PersonEducationPlanDao dao;
+
+	@Autowired
+	private PersonService personService;
+	
+	@Autowired
+	private StudentStatusService studentStatusService;
 	
 	@Override
 	public List<PersonEducationPlan> getAll(ObjectStatus status) {
@@ -47,12 +55,19 @@ public class PersonEducationPlanServiceImpl implements PersonEducationPlanServic
 	public PersonEducationPlan save(PersonEducationPlan obj) throws ObjectNotFoundException{
 		PersonEducationPlan current = get(obj.getId());
 		
-		if(obj.getObjectStatus()!=null){
-			current.setObjectStatus(obj.getObjectStatus());
+
+		if(obj.getPerson()!=null){
+			current.setPerson(personService.get(obj.getPerson().getId()));
 		}
-		
-		
-		
+		current.setObjectStatus(obj.getObjectStatus());
+		if(obj.getStudentStatus()!=null){
+			current.setStudentStatus(studentStatusService.get(obj.getStudentStatus().getId()));
+		}
+		current.setNewOrientationComplete(obj.isNewOrientationComplete());
+		current.setRegisteredForClasses(obj.isRegisteredForClasses());
+		current.setCollegeDegreeForParents(obj.isCollegeDegreeForParents());
+		current.setSpecialNeeds(obj.isSpecialNeeds());
+		current.setGradeTypicallyEarned(obj.getGradeTypicallyEarned());
 		
 		return dao.save(current);
 	}
