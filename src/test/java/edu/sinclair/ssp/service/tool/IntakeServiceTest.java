@@ -19,14 +19,14 @@ public class IntakeServiceTest {
 
 	//private static final Logger logger = LoggerFactory.getLogger(StudentIntakeServiceTest.class);
 	
-	private IntakeService service;
+	//private IntakeService service;
 	private ChallengeService challengeService;
 	//private FundingSourceService fundingSourceService;
 	//private VeteranStatusService veteranStatusService;
 	
 	@Before
 	public void setup() {
-		service = new IntakeService();
+		//service = new IntakeService();
 		
 		challengeService = createMock(ChallengeService.class);
 		//fundingSourceService = createMock(FundingSourceService.class);
