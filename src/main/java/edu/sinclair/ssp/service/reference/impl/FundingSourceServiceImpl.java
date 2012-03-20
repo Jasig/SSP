@@ -13,7 +13,6 @@ import edu.sinclair.ssp.dao.reference.FundingSourceDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.FundingSource;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.FundingSourceService;
 
 @Service
@@ -26,9 +25,6 @@ public class FundingSourceServiceImpl implements FundingSourceService {
 	@Autowired
 	private FundingSourceDao dao;
 	
-	@Autowired
-	private SecurityService securityService;
-
 	@Override
 	public List<FundingSource> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -45,17 +41,12 @@ public class FundingSourceServiceImpl implements FundingSourceService {
 
 	@Override
 	public FundingSource create(FundingSource obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public FundingSource save(FundingSource obj) throws ObjectNotFoundException {
 		FundingSource current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());
@@ -82,10 +73,6 @@ public class FundingSourceServiceImpl implements FundingSourceService {
 
 	protected void setDao(FundingSourceDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

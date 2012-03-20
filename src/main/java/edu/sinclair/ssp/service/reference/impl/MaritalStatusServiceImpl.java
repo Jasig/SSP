@@ -13,7 +13,6 @@ import edu.sinclair.ssp.dao.reference.MaritalStatusDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.MaritalStatusService;
 
 @Service
@@ -26,9 +25,6 @@ public class MaritalStatusServiceImpl implements MaritalStatusService {
 	@Autowired
 	private MaritalStatusDao dao;
 	
-	@Autowired
-	private SecurityService securityService;
-
 	@Override
 	public List<MaritalStatus> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -45,17 +41,12 @@ public class MaritalStatusServiceImpl implements MaritalStatusService {
 
 	@Override
 	public MaritalStatus create(MaritalStatus obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public MaritalStatus save(MaritalStatus obj) throws ObjectNotFoundException {
 		MaritalStatus current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());
@@ -82,10 +73,6 @@ public class MaritalStatusServiceImpl implements MaritalStatusService {
 
 	protected void setDao(MaritalStatusDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

@@ -13,7 +13,6 @@ import edu.sinclair.ssp.dao.reference.CitizenshipDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Citizenship;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.CitizenshipService;
 
 @Service
@@ -26,9 +25,6 @@ public class CitizenshipServiceImpl implements CitizenshipService {
 	@Autowired
 	private CitizenshipDao dao;
 	
-	@Autowired
-	private SecurityService securityService;
-
 	@Override
 	public List<Citizenship> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -45,17 +41,12 @@ public class CitizenshipServiceImpl implements CitizenshipService {
 
 	@Override
 	public Citizenship create(Citizenship obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public Citizenship save(Citizenship obj) throws ObjectNotFoundException {
 		Citizenship current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());
@@ -82,10 +73,6 @@ public class CitizenshipServiceImpl implements CitizenshipService {
 
 	protected void setDao(CitizenshipDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

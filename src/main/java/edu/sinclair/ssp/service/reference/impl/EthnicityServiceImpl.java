@@ -13,7 +13,6 @@ import edu.sinclair.ssp.dao.reference.EthnicityDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Ethnicity;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.EthnicityService;
 
 @Service
@@ -26,9 +25,6 @@ public class EthnicityServiceImpl implements EthnicityService {
 	@Autowired
 	private EthnicityDao dao;
 	
-	@Autowired
-	private SecurityService securityService;
-
 	@Override
 	public List<Ethnicity> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -45,17 +41,12 @@ public class EthnicityServiceImpl implements EthnicityService {
 
 	@Override
 	public Ethnicity create(Ethnicity obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public Ethnicity save(Ethnicity obj) throws ObjectNotFoundException {
 		Ethnicity current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());
@@ -82,10 +73,6 @@ public class EthnicityServiceImpl implements EthnicityService {
 
 	protected void setDao(EthnicityDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

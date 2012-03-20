@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonDemographics;
+import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
@@ -31,10 +32,11 @@ public class PersonDemographicsDaoTest {
 	private PersonDemographicsDao dao;
 	
 	@Autowired
-	private PersonDao people;
-	
+	private SecurityServiceInTestEnvironment securityService;
+
 	@Before
-	public void setUp() throws Exception {
+	public void setup(){
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
 	@Test
@@ -46,7 +48,6 @@ public class PersonDemographicsDaoTest {
 		if(null==pd){
 			pd = new PersonDemographics();
 			pd.setPerson(person);
-			pd.setRequiredOnCreate(people.get(Person.SYSTEM_ADMINISTRATOR_ID));
 			dao.save(pd);
 			pd = dao.forPerson(person);
 		}

@@ -57,18 +57,28 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
+	<bean id="securityService" class="edu.sinclair.ssp.service.impl.SecurityServiceImpl"/>
+	
 	<!-- Hibernate Session Factory -->
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
 		depends-on="liquibase">
 		<property name="dataSource" ref="sspDataSource" />
 		<property name="packagesToScan" value="edu.sinclair.ssp.model"/>
+		<property name="entityInterceptor">
+			<bean class="edu.sinclair.ssp.dao.AuditableEntityInterceptor"/>
+		</property>
 		<property name="hibernateProperties">
 			<value>
 				hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 				hibernate.show_sql=false
 			</value>
 		</property>
+		<property name="namingStrategy">
+			<bean class="org.hibernate.cfg.ImprovedNamingStrategy"/>
+		</property>
 	</bean>
+
+	
 	
 	<bean id="sspDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="org.postgresql.Driver" />

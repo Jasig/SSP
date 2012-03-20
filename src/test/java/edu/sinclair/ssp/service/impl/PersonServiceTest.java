@@ -14,34 +14,23 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.core.GrantedAuthority;
 
 import edu.sinclair.ssp.dao.PersonDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.security.MockUser;
-import edu.sinclair.ssp.security.SspUser;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 
 public class PersonServiceTest {
 
 	private PersonServiceImpl service;
 	private PersonDao dao;
-	private SecurityService securityService;
-	
-	private SspUser testUser;
 
 	@Before
 	public void setup(){
 		service = new PersonServiceImpl();
 		dao = createMock(PersonDao.class);
-		securityService = createMock(SecurityService.class);
-
-		service.setDao(dao);
-		service.setSecurityService(securityService);
 		
-		testUser = new MockUser(new Person(), "testuser", new ArrayList<GrantedAuthority>());
+		service.setDao(dao);
 		
 	}
 	
@@ -79,14 +68,11 @@ public class PersonServiceTest {
 		
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(securityService.currentlyLoggedInSspUser()).andReturn(testUser);
 		
 		replay(dao);
-		replay(securityService);
 		
 		assertNotNull(service.save(daoOne));
 		verify(dao);
-		verify(securityService);
 	}
 
 	@Test
@@ -97,10 +83,8 @@ public class PersonServiceTest {
 		expect(dao.get(id)).andReturn(daoOne).times(2);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
-		expect(securityService.currentlyLoggedInSspUser()).andReturn(testUser);
 		
 		replay(dao);
-		replay(securityService);
 		
 		service.delete(id);
 		
@@ -113,7 +97,6 @@ public class PersonServiceTest {
 		
 		assertFalse(found);
 		verify(dao);
-		verify(securityService);
 	}
 
 }

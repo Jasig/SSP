@@ -27,24 +27,24 @@ public abstract class Auditable {
 	private UUID id;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_date", nullable = false, updatable = false)
+	@Column(nullable = false, updatable = false)
 	private Date createdDate;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "created_by", nullable = false, updatable = false)
+	@JoinColumn(nullable = false, updatable = false)
 	private Person createdBy;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "modified_date", nullable = false)
+	@Column(nullable = false)
 	private Date modifiedDate;
 	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "modified_by", nullable = false)
+	@JoinColumn(nullable = false)
 	private Person modifiedBy;
 	
 	@Enumerated
-	@Column(name = "object_status", nullable = false)
+	@Column(nullable = false)
 	private ObjectStatus objectStatus;
 
 	/**
@@ -56,20 +56,6 @@ public abstract class Auditable {
 
 	public Auditable(UUID id){
 		this.id = id;
-	}
-	
-	public void setRequiredOnCreate(Person createdBy){
-		Date now = new Date();
-		setCreatedBy(createdBy);
-		setCreatedDate(now);
-		setObjectStatus(ObjectStatus.ACTIVE);
-		setModifiedBy(createdBy);
-		setModifiedDate(now);
-	}
-	
-	public void setRequiredOnModify(Person modifiedBy){
-		setModifiedBy(modifiedBy);
-		setModifiedDate(new Date());
 	}
 
 

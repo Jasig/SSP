@@ -12,16 +12,12 @@ import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonEducationPlan;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonEducationPlanService;
-import edu.sinclair.ssp.service.SecurityService;
 
 @Service
 public class PersonEducationPlanServiceImpl implements PersonEducationPlanService {
 
 	@Autowired
 	private PersonEducationPlanDao dao;
-	
-	@Autowired
-	private SecurityService securityService;
 	
 	@Override
 	public List<PersonEducationPlan> getAll(ObjectStatus status) {
@@ -44,16 +40,12 @@ public class PersonEducationPlanServiceImpl implements PersonEducationPlanServic
 
 	@Override
 	public PersonEducationPlan create(PersonEducationPlan obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public PersonEducationPlan save(PersonEducationPlan obj) throws ObjectNotFoundException{
 		PersonEducationPlan current = get(obj.getId());
-		
-		current.setRequiredOnModify(securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getObjectStatus()!=null){
 			current.setObjectStatus(obj.getObjectStatus());

@@ -12,7 +12,6 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.SecurityService;
 
 @Service
 @Transactional
@@ -22,9 +21,6 @@ public class PersonServiceImpl implements PersonService {
 	
 	@Autowired
 	private PersonDao dao;
-
-	@Autowired
-	private SecurityService securityService;
 	
 	@Override
 	public List<Person> getAll(ObjectStatus status) {
@@ -51,17 +47,12 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public Person create(Person obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public Person save(Person obj) throws ObjectNotFoundException {
 		Person current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getObjectStatus()!=null){
 			current.setObjectStatus(obj.getObjectStatus());
@@ -149,10 +140,6 @@ public class PersonServiceImpl implements PersonService {
 
 	protected void setDao(PersonDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

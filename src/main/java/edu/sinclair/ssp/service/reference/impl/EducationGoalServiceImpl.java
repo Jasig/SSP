@@ -13,7 +13,6 @@ import edu.sinclair.ssp.dao.reference.EducationGoalDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.EducationGoal;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.EducationGoalService;
 
 @Service
@@ -26,9 +25,6 @@ public class EducationGoalServiceImpl implements EducationGoalService {
 	@Autowired
 	private EducationGoalDao dao;
 	
-	@Autowired
-	private SecurityService securityService;
-
 	@Override
 	public List<EducationGoal> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -45,17 +41,12 @@ public class EducationGoalServiceImpl implements EducationGoalService {
 
 	@Override
 	public EducationGoal create(EducationGoal obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public EducationGoal save(EducationGoal obj) throws ObjectNotFoundException {
 		EducationGoal current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());
@@ -82,10 +73,6 @@ public class EducationGoalServiceImpl implements EducationGoalService {
 
 	protected void setDao(EducationGoalDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

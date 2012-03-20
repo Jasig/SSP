@@ -4,10 +4,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -18,10 +18,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.PersonDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.reference.Challenge;
+import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
@@ -35,15 +35,18 @@ public class ChallengeDaoTest {
 	private ChallengeDao dao;
 	
 	@Autowired
-	private PersonDao personDao;
+	private SecurityServiceInTestEnvironment securityService;
 
+	@Before
+	public void setup(){
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+	}
+	
 	@Test
 	public void testSaveNew(){
 		UUID saved;
 		
 		Challenge obj = new Challenge();
-		obj.setCreatedDate(new Date());
-		obj.setCreatedBy(personDao.get(Person.SYSTEM_ADMINISTRATOR_ID));
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,15 +37,12 @@ public class PersonDaoTest {
 		assertEquals(Person.SYSTEM_ADMINISTRATOR_ID, dao.get(Person.SYSTEM_ADMINISTRATOR_ID).getId());
 	}
 
+	
 	@Test
 	public void testSaveNew(){
 		UUID saved;
 		
 		Person obj = new Person();
-		obj.setCreatedDate(new Date());
-		obj.setCreatedBy(dao.get(Person.SYSTEM_ADMINISTRATOR_ID));
-		obj.setModifiedDate(new Date());
-		obj.setModifiedBy(dao.get(Person.SYSTEM_ADMINISTRATOR_ID));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setFirstName("System");
 		obj.setLastName("User");

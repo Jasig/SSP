@@ -25,19 +25,19 @@ public class PersonEducationPlan extends Auditable{
 	@JoinColumn(name = "student_status_id", nullable = true, updatable = true)
 	private StudentStatus studentStatus;
 	
-	@Column(name = "new_orientation_complete")
+	@Column
 	private boolean newOrientationComplete;
 
-	@Column(name = "registered_for_classes")
+	@Column
 	private boolean registeredForClasses;
 
-	@Column(name = "college_degree_for_parents")
+	@Column
 	private boolean collegeDegreeForParents;
 
-	@Column(name = "special_needs")
+	@Column
 	private boolean specialNeeds;
 
-	@Column(name = "grade_typically_earned", length=2)
+	@Column(length=2)
 	@Size(max = 2)
 	private String gradeTypicallyEarned;
 

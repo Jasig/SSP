@@ -13,7 +13,6 @@ import edu.sinclair.ssp.dao.reference.StudentStatusDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.StudentStatus;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.StudentStatusService;
 
 @Service
@@ -26,9 +25,6 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 	@Autowired
 	private StudentStatusDao dao;
 	
-	@Autowired
-	private SecurityService securityService;
-
 	@Override
 	public List<StudentStatus> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -45,17 +41,12 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 
 	@Override
 	public StudentStatus create(StudentStatus obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public StudentStatus save(StudentStatus obj) throws ObjectNotFoundException {
 		StudentStatus current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());
@@ -82,10 +73,6 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 
 	protected void setDao(StudentStatusDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

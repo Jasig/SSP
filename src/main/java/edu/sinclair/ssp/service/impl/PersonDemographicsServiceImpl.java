@@ -13,7 +13,6 @@ import edu.sinclair.ssp.model.PersonDemographics;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonDemographicsService;
 import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.CitizenshipService;
 import edu.sinclair.ssp.service.reference.EthnicityService;
 import edu.sinclair.ssp.service.reference.MaritalStatusService;
@@ -40,9 +39,6 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 	@Autowired
 	private VeteranStatusService veteranStatusService;
 	
-	@Autowired
-	private SecurityService securityService;
-	
 	@Override
 	public List<PersonDemographics> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -64,16 +60,12 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 
 	@Override
 	public PersonDemographics create(PersonDemographics obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public PersonDemographics save(PersonDemographics obj) throws ObjectNotFoundException{
 		PersonDemographics current = get(obj.getId());
-		
-		current.setRequiredOnModify(securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getObjectStatus()!=null){
 			current.setObjectStatus(obj.getObjectStatus());

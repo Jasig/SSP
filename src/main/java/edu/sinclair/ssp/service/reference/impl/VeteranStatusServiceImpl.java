@@ -13,7 +13,6 @@ import edu.sinclair.ssp.dao.reference.VeteranStatusDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.VeteranStatusService;
 
 @Service
@@ -26,9 +25,6 @@ public class VeteranStatusServiceImpl implements VeteranStatusService {
 	@Autowired
 	private VeteranStatusDao dao;
 	
-	@Autowired
-	private SecurityService securityService;
-
 	@Override
 	public List<VeteranStatus> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -45,17 +41,12 @@ public class VeteranStatusServiceImpl implements VeteranStatusService {
 
 	@Override
 	public VeteranStatus create(VeteranStatus obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public VeteranStatus save(VeteranStatus obj) throws ObjectNotFoundException {
 		VeteranStatus current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());
@@ -82,10 +73,6 @@ public class VeteranStatusServiceImpl implements VeteranStatusService {
 
 	protected void setDao(VeteranStatusDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

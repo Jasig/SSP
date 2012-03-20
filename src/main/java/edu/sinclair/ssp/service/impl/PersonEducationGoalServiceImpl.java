@@ -12,7 +12,6 @@ import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonEducationGoal;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonEducationGoalService;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.EducationGoalService;
 
 @Service
@@ -23,9 +22,6 @@ public class PersonEducationGoalServiceImpl implements PersonEducationGoalServic
 	
 	@Autowired
 	private EducationGoalService educationGoalService;
-	
-	@Autowired
-	private SecurityService securityService;
 	
 	@Override
 	public List<PersonEducationGoal> getAll(ObjectStatus status) {
@@ -48,16 +44,12 @@ public class PersonEducationGoalServiceImpl implements PersonEducationGoalServic
 
 	@Override
 	public PersonEducationGoal create(PersonEducationGoal obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public PersonEducationGoal save(PersonEducationGoal obj) throws ObjectNotFoundException{
 		PersonEducationGoal current = get(obj.getId());
-		
-		current.setRequiredOnModify(securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getObjectStatus()!=null){
 			current.setObjectStatus(obj.getObjectStatus());

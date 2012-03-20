@@ -8,7 +8,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "funding_source", schema = "public")
+@Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class FundingSource extends AbstractReference{
 

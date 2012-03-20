@@ -13,7 +13,6 @@ import edu.sinclair.ssp.dao.reference.ChallengeDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.ChallengeService;
 
 @Service
@@ -25,9 +24,6 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	@Autowired
 	private ChallengeDao dao;
-	
-	@Autowired
-	private SecurityService securityService;
 
 	@Override
 	public List<Challenge> getAll(ObjectStatus status) {
@@ -45,17 +41,12 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	@Override
 	public Challenge create(Challenge obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public Challenge save(Challenge obj) throws ObjectNotFoundException {
 		Challenge current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());
@@ -82,10 +73,6 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	protected void setDao(ChallengeDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

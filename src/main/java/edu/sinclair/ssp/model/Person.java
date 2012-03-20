@@ -16,23 +16,23 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@Table(name = "person", schema = "public")
+@Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Person extends Auditable{
 
 	public static UUID SYSTEM_ADMINISTRATOR_ID = UUID.fromString("58ba5ee3-734e-4ae9-b9c5-943774b4de41");
 
-	@Column(name = "first_name", nullable = false, length=50)
+	@Column(nullable = false, length=50)
 	@NotNull
 	@NotEmpty
 	@Size(max = 50)
 	private String firstName;
 
-	@Column(name = "middle_initial", nullable = true, length=1)
+	@Column(nullable = true, length=1)
 	@Size(max = 1)
 	private String middleInitial;
 
-	@Column(name = "last_name", nullable = false, length=50)
+	@Column(nullable = false, length=50)
 	@NotNull
 	@NotEmpty
 	@Size(max = 50)
@@ -42,13 +42,13 @@ public class Person extends Auditable{
 	@Column(name = "birth_date")
 	private Date birthDate;
 
-	@Column(name = "primary_email_address", length=100)
+	@Column(length=100)
 	@NotNull
 	@NotEmpty
 	@Size(max = 100)
 	private String primaryEmailAddress;
 
-	@Column(name = "secondary_email_address", length=100)
+	@Column(length=100)
 	@Size(max = 100)
 	private String secondaryEmailAddress;
 
@@ -56,23 +56,23 @@ public class Person extends Auditable{
 	@Size(max = 25)
 	private String username;
 
-	@Column(name = "home_phone", length=25)
+	@Column(length=25)
 	@Size(max = 25)
 	private String homePhone;
 
-	@Column(name = "work_phone", length=25)
+	@Column(length=25)
 	@Size(max = 25)
 	private String workPhone;
 
-	@Column(name = "cell_phone", length=25)
+	@Column(length=25)
 	@Size(max = 25)
 	private String cellPhone;
 
-	@Column(name = "address_line_1", length=50)
+	@Column(length=50, name="address_line_1")
 	@Size(max = 50)
 	private String addressLine1;
 
-	@Column(name = "address_line_2", length=50)
+	@Column(length=50, name="address_line_2")
 	@Size(max = 50)
 	private String addressLine2;
 
@@ -84,15 +84,15 @@ public class Person extends Auditable{
 	@Size(max = 2)
 	private String state;
 
-	@Column(name = "zip_code", length=10)
+	@Column(length=10)
 	@Size(max = 10)
 	private String zipCode;
 
-	@Column(name = "photo_url", length=100)
+	@Column(length=100)
 	@Size(max = 100)
 	private String photoUrl;
 
-	@Column(name = "school_id", length=50)
+	@Column(length=50)
 	@Size(max = 50)
 	private String schoolId;
 

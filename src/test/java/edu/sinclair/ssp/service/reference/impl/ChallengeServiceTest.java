@@ -14,36 +14,23 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.core.GrantedAuthority;
 
 import edu.sinclair.ssp.dao.reference.ChallengeDao;
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.security.MockUser;
-import edu.sinclair.ssp.security.SspUser;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 
 public class ChallengeServiceTest {
 
 	private ChallengeServiceImpl service;
 	private ChallengeDao dao;
-	private SecurityService securityService;
-	
-	private SspUser testUser;
 	
 	@Before
 	public void setup(){
 		service = new ChallengeServiceImpl();
 		dao = createMock(ChallengeDao.class);
-		securityService = createMock(SecurityService.class);
 
 		service.setDao(dao);
-		service.setSecurityService(securityService);
-		
-		testUser = new MockUser(new Person(), "testuser", new ArrayList<GrantedAuthority>());
-		
 	}
 	
 	@Test
@@ -80,14 +67,11 @@ public class ChallengeServiceTest {
 		
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(securityService.currentlyLoggedInSspUser()).andReturn(testUser);
 		
 		replay(dao);
-		replay(securityService);
 		
 		assertNotNull(service.save(daoOne));
 		verify(dao);
-		verify(securityService);
 	}
 
 	@Test
@@ -98,10 +82,8 @@ public class ChallengeServiceTest {
 		expect(dao.get(id)).andReturn(daoOne).times(2);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
-		expect(securityService.currentlyLoggedInSspUser()).andReturn(testUser);
 		
 		replay(dao);
-		replay(securityService);
 		
 		service.delete(id);
 		
@@ -114,7 +96,6 @@ public class ChallengeServiceTest {
 		
 		assertFalse(found);
 		verify(dao);
-		verify(securityService);
 	}
 
 }

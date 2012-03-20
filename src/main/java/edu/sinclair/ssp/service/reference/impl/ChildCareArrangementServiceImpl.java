@@ -13,7 +13,6 @@ import edu.sinclair.ssp.dao.reference.ChildCareArrangementDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.ChildCareArrangement;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.ChildCareArrangementService;
 
 @Service
@@ -25,9 +24,6 @@ public class ChildCareArrangementServiceImpl implements ChildCareArrangementServ
 
 	@Autowired
 	private ChildCareArrangementDao dao;
-	
-	@Autowired
-	private SecurityService securityService;
 
 	@Override
 	public List<ChildCareArrangement> getAll(ObjectStatus status) {
@@ -45,17 +41,12 @@ public class ChildCareArrangementServiceImpl implements ChildCareArrangementServ
 
 	@Override
 	public ChildCareArrangement create(ChildCareArrangement obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public ChildCareArrangement save(ChildCareArrangement obj) throws ObjectNotFoundException {
 		ChildCareArrangement current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());
@@ -82,10 +73,6 @@ public class ChildCareArrangementServiceImpl implements ChildCareArrangementServ
 
 	protected void setDao(ChildCareArrangementDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

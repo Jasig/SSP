@@ -13,7 +13,6 @@ import edu.sinclair.ssp.dao.reference.EducationLevelDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.EducationLevel;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.EducationLevelService;
 
 @Service
@@ -26,9 +25,6 @@ public class EducationLevelServiceImpl implements EducationLevelService {
 	@Autowired
 	private EducationLevelDao dao;
 	
-	@Autowired
-	private SecurityService securityService;
-
 	@Override
 	public List<EducationLevel> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -45,17 +41,12 @@ public class EducationLevelServiceImpl implements EducationLevelService {
 
 	@Override
 	public EducationLevel create(EducationLevel obj) {
-		obj.setRequiredOnCreate(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		return dao.save(obj);
 	}
 
 	@Override
 	public EducationLevel save(EducationLevel obj) throws ObjectNotFoundException {
 		EducationLevel current = get(obj.getId());
-		
-		current.setRequiredOnModify(
-				securityService.currentlyLoggedInSspUser().getPerson());
 		
 		if(obj.getName()!=null){
 			current.setName(obj.getName());
@@ -82,10 +73,6 @@ public class EducationLevelServiceImpl implements EducationLevelService {
 
 	protected void setDao(EducationLevelDao dao){
 		this.dao = dao;
-	}
-
-	protected void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }
