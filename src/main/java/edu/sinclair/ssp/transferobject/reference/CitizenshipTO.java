@@ -5,25 +5,26 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.Citizenship;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class CitizenshipTO extends AbstractReferenceTO implements TransferObject<Citizenship>{
+public class CitizenshipTO extends AbstractReferenceTO implements
+		TransferObject<Citizenship> {
 
-	public CitizenshipTO () {
+	public CitizenshipTO() {
 		super();
 	}
-	
-	public CitizenshipTO (UUID id) {
+
+	public CitizenshipTO(UUID id) {
 		super(id);
 	}
-	
-	public CitizenshipTO (UUID id, String name) {
+
+	public CitizenshipTO(UUID id, String name) {
 		super(id, name);
 	}
 
-	public CitizenshipTO (UUID id, String name, String description) {
+	public CitizenshipTO(UUID id, String name, String description) {
 		super(id, name, description);
 	}
-	
-	public CitizenshipTO(Citizenship model){
+
+	public CitizenshipTO(Citizenship model) {
 		super();
 		pullAttributesFromModel(model);
 	}
@@ -38,9 +39,9 @@ public class CitizenshipTO extends AbstractReferenceTO implements TransferObject
 		super.addToModel(model);
 		return model;
 	}
-	
-	@Override 
-	public Citizenship asModel(){
+
+	@Override
+	public Citizenship asModel() {
 		return pushAttributesToModel(new Citizenship());
 	}
 

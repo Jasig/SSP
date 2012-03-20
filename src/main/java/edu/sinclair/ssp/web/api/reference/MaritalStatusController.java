@@ -30,47 +30,54 @@ import edu.sinclair.ssp.web.api.validation.ValidationException;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/maritalStatus")
-public class MaritalStatusController extends RestController<MaritalStatusTO>{
+public class MaritalStatusController extends RestController<MaritalStatusTO> {
 
-	private static final Logger logger = LoggerFactory.getLogger(MaritalStatusController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(MaritalStatusController.class);
 
 	@Autowired
 	private MaritalStatusService service;
-	
-	private TransferObjectListFactory<MaritalStatusTO, MaritalStatus> listFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(MaritalStatusTO.class);
-	
+
+	private TransferObjectListFactory<MaritalStatusTO, MaritalStatus> listFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(
+			MaritalStatusTO.class);
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody List<MaritalStatusTO> getAll(@RequestParam(required = false) ObjectStatus status) throws Exception {
-		if(status==null){
+	public @ResponseBody
+	List<MaritalStatusTO> getAll(@RequestParam(required = false) ObjectStatus status)
+			throws Exception {
+		if (status == null) {
 			status = ObjectStatus.ACTIVE;
 		}
 		return listFactory.toTOList(service.getAll(status));
 	}
-	
+
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody MaritalStatusTO get(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	MaritalStatusTO get(@PathVariable UUID id) throws Exception {
 		MaritalStatus model = service.get(id);
-		if(model!=null){
+		if (model != null) {
 			return new MaritalStatusTO(model);
-		}else{
+		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public @ResponseBody MaritalStatusTO create(@Valid @RequestBody MaritalStatusTO obj) throws Exception {
-		if(obj.getId()!=null){
-			throw new ValidationException("You submitted a maritalStatus with an id to the create method.  Did you mean to save?");
+	public @ResponseBody
+	MaritalStatusTO create(@Valid @RequestBody MaritalStatusTO obj) throws Exception {
+		if (obj.getId() != null) {
+			throw new ValidationException(
+					"You submitted a maritalStatus with an id to the create method.  Did you mean to save?");
 		}
-		
+
 		MaritalStatus model = obj.asModel();
-		
-		if(null!=model){
+
+		if (null != model) {
 			MaritalStatus createdModel = service.create(model);
-			if(null!=createdModel){
+			if (null != createdModel) {
 				return new MaritalStatusTO(createdModel);
 			}
 		}
@@ -79,16 +86,19 @@ public class MaritalStatusController extends RestController<MaritalStatusTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public @ResponseBody MaritalStatusTO save(@PathVariable UUID id, @Valid @RequestBody MaritalStatusTO obj) throws Exception {
-		if(id==null){
-			throw new ValidationException("You submitted a maritalStatus without an id to the save method.  Did you mean to create?");
+	public @ResponseBody
+	MaritalStatusTO save(@PathVariable UUID id, @Valid @RequestBody MaritalStatusTO obj)
+			throws Exception {
+		if (id == null) {
+			throw new ValidationException(
+					"You submitted a maritalStatus without an id to the save method.  Did you mean to create?");
 		}
-		
+
 		MaritalStatus model = obj.asModel();
 		model.setId(id);
-		
+
 		MaritalStatus savedMaritalStatus = service.save(model);
-		if(null!=savedMaritalStatus){
+		if (null != savedMaritalStatus) {
 			return new MaritalStatusTO(savedMaritalStatus);
 		}
 		return null;
@@ -96,14 +106,16 @@ public class MaritalStatusController extends RestController<MaritalStatusTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody ServiceResponse delete(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	ServiceResponse delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
 		return new ServiceResponse(true);
 	}
-	
+
 	@Override
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody ServiceResponse handle(Exception e){
+	public @ResponseBody
+	ServiceResponse handle(Exception e) {
 		logger.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}

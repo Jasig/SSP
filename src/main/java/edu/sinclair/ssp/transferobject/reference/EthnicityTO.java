@@ -5,25 +5,26 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.Ethnicity;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class EthnicityTO extends AbstractReferenceTO implements TransferObject<Ethnicity>{
+public class EthnicityTO extends AbstractReferenceTO implements
+		TransferObject<Ethnicity> {
 
-	public EthnicityTO () {
+	public EthnicityTO() {
 		super();
 	}
-	
-	public EthnicityTO (UUID id) {
+
+	public EthnicityTO(UUID id) {
 		super(id);
 	}
-	
-	public EthnicityTO (UUID id, String name) {
+
+	public EthnicityTO(UUID id, String name) {
 		super(id, name);
 	}
 
-	public EthnicityTO (UUID id, String name, String description) {
+	public EthnicityTO(UUID id, String name, String description) {
 		super(id, name, description);
 	}
-	
-	public EthnicityTO(Ethnicity model){
+
+	public EthnicityTO(Ethnicity model) {
 		super();
 		pullAttributesFromModel(model);
 	}
@@ -38,9 +39,9 @@ public class EthnicityTO extends AbstractReferenceTO implements TransferObject<E
 		super.addToModel(model);
 		return model;
 	}
-	
-	@Override 
-	public Ethnicity asModel(){
+
+	@Override
+	public Ethnicity asModel() {
 		return pushAttributesToModel(new Ethnicity());
 	}
 

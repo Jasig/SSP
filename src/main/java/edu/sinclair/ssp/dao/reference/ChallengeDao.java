@@ -15,9 +15,10 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
 
 @Repository
-public class ChallengeDao implements AuditableCrudDao<Challenge>{
+public class ChallengeDao implements AuditableCrudDao<Challenge> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(ChallengeDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(ChallengeDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -28,27 +29,28 @@ public class ChallengeDao implements AuditableCrudDao<Challenge>{
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(Challenge.class);
 		query.addOrder(Order.asc("name"));
-		
-		if(status!=ObjectStatus.ALL){
+
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public Challenge get(UUID id) {
-		return (Challenge) this.sessionFactory.getCurrentSession().get(Challenge.class, id); 
+		return (Challenge) this.sessionFactory.getCurrentSession().get(
+				Challenge.class, id);
 	}
 
 	@Override
 	public Challenge save(Challenge obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

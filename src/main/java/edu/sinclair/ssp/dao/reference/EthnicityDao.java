@@ -15,9 +15,10 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Ethnicity;
 
 @Repository
-public class EthnicityDao implements AuditableCrudDao<Ethnicity>{
+public class EthnicityDao implements AuditableCrudDao<Ethnicity> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(EthnicityDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(EthnicityDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -28,27 +29,28 @@ public class EthnicityDao implements AuditableCrudDao<Ethnicity>{
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(Ethnicity.class);
 		query.addOrder(Order.asc("name"));
-		
-		if(status!=ObjectStatus.ALL){
+
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public Ethnicity get(UUID id) {
-		return (Ethnicity) this.sessionFactory.getCurrentSession().get(Ethnicity.class, id); 
+		return (Ethnicity) this.sessionFactory.getCurrentSession().get(
+				Ethnicity.class, id);
 	}
 
 	@Override
 	public Ethnicity save(Ethnicity obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

@@ -15,9 +15,10 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.EducationLevel;
 
 @Repository
-public class EducationLevelDao implements AuditableCrudDao<EducationLevel>{
+public class EducationLevelDao implements AuditableCrudDao<EducationLevel> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(EducationLevelDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(EducationLevelDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -28,27 +29,28 @@ public class EducationLevelDao implements AuditableCrudDao<EducationLevel>{
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(EducationLevel.class);
 		query.addOrder(Order.asc("name"));
-		
-		if(status!=ObjectStatus.ALL){
+
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public EducationLevel get(UUID id) {
-		return (EducationLevel) this.sessionFactory.getCurrentSession().get(EducationLevel.class, id); 
+		return (EducationLevel) this.sessionFactory.getCurrentSession().get(
+				EducationLevel.class, id);
 	}
 
 	@Override
 	public EducationLevel save(EducationLevel obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

@@ -10,16 +10,16 @@ import javax.persistence.Table;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Challenge extends AbstractReference{
+public class Challenge extends AbstractReference {
 
 	public Challenge() {
 		super();
 	}
-	
+
 	public Challenge(UUID id) {
 		super(id);
 	}
-	
+
 	public Challenge(UUID id, String name) {
 		super(id, name);
 	}
@@ -29,4 +29,3 @@ public class Challenge extends AbstractReference{
 	}
 
 }
-

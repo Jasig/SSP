@@ -30,47 +30,54 @@ import edu.sinclair.ssp.web.api.validation.ValidationException;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/childCareArrangement")
-public class ChildCareArrangementController extends RestController<ChildCareArrangementTO>{
+public class ChildCareArrangementController extends RestController<ChildCareArrangementTO> {
 
-	private static final Logger logger = LoggerFactory.getLogger(ChildCareArrangementController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ChildCareArrangementController.class);
 
 	@Autowired
 	private ChildCareArrangementService service;
-	
-	private TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> listFactory = new TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement>(ChildCareArrangementTO.class);
-	
+
+	private TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> listFactory = new TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement>(
+			ChildCareArrangementTO.class);
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody List<ChildCareArrangementTO> getAll(@RequestParam(required = false) ObjectStatus status) throws Exception {
-		if(status==null){
+	public @ResponseBody
+	List<ChildCareArrangementTO> getAll(@RequestParam(required = false) ObjectStatus status)
+			throws Exception {
+		if (status == null) {
 			status = ObjectStatus.ACTIVE;
 		}
 		return listFactory.toTOList(service.getAll(status));
 	}
-	
+
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody ChildCareArrangementTO get(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	ChildCareArrangementTO get(@PathVariable UUID id) throws Exception {
 		ChildCareArrangement model = service.get(id);
-		if(model!=null){
+		if (model != null) {
 			return new ChildCareArrangementTO(model);
-		}else{
+		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public @ResponseBody ChildCareArrangementTO create(@Valid @RequestBody ChildCareArrangementTO obj) throws Exception {
-		if(obj.getId()!=null){
-			throw new ValidationException("You submitted a childCareArrangement with an id to the create method.  Did you mean to save?");
+	public @ResponseBody
+	ChildCareArrangementTO create(@Valid @RequestBody ChildCareArrangementTO obj) throws Exception {
+		if (obj.getId() != null) {
+			throw new ValidationException(
+					"You submitted a childCareArrangement with an id to the create method.  Did you mean to save?");
 		}
-		
+
 		ChildCareArrangement model = obj.asModel();
-		
-		if(null!=model){
+
+		if (null != model) {
 			ChildCareArrangement createdModel = service.create(model);
-			if(null!=createdModel){
+			if (null != createdModel) {
 				return new ChildCareArrangementTO(createdModel);
 			}
 		}
@@ -79,16 +86,19 @@ public class ChildCareArrangementController extends RestController<ChildCareArra
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public @ResponseBody ChildCareArrangementTO save(@PathVariable UUID id, @Valid @RequestBody ChildCareArrangementTO obj) throws Exception {
-		if(id==null){
-			throw new ValidationException("You submitted a childCareArrangement without an id to the save method.  Did you mean to create?");
+	public @ResponseBody
+	ChildCareArrangementTO save(@PathVariable UUID id, @Valid @RequestBody ChildCareArrangementTO obj)
+			throws Exception {
+		if (id == null) {
+			throw new ValidationException(
+					"You submitted a childCareArrangement without an id to the save method.  Did you mean to create?");
 		}
-		
+
 		ChildCareArrangement model = obj.asModel();
 		model.setId(id);
-		
+
 		ChildCareArrangement savedChildCareArrangement = service.save(model);
-		if(null!=savedChildCareArrangement){
+		if (null != savedChildCareArrangement) {
 			return new ChildCareArrangementTO(savedChildCareArrangement);
 		}
 		return null;
@@ -96,14 +106,16 @@ public class ChildCareArrangementController extends RestController<ChildCareArra
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody ServiceResponse delete(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	ServiceResponse delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
 		return new ServiceResponse(true);
 	}
-	
+
 	@Override
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody ServiceResponse handle(Exception e){
+	public @ResponseBody
+	ServiceResponse handle(Exception e) {
 		logger.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}

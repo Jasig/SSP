@@ -8,7 +8,7 @@ import edu.sinclair.ssp.model.reference.Ethnicity;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface EthnicityService extends AuditableCrudService<Ethnicity>{
+public interface EthnicityService extends AuditableCrudService<Ethnicity> {
 
 	public List<Ethnicity> getAll(ObjectStatus status);
 

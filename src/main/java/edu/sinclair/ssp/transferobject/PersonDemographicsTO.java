@@ -13,7 +13,7 @@ import edu.sinclair.ssp.model.reference.VeteranStatus;
 
 public class PersonDemographicsTO extends AuditableTO implements TransferObject<PersonDemographics>{
 
-	private UUID id, personId, coachId, maritalStatusId, ethnicityId, citizenshipId, veteranStatusId;
+	private UUID personId, coachId, maritalStatusId, ethnicityId, citizenshipId, veteranStatusId;
 	private boolean abilityToBenefit, isLocal, primaryCaregiver, childCareNeeded, employed;
 	private int numberOfChildren;
 	private String anticipatedStartTerm, anticipatedStartYear, countryOfResidence,
@@ -58,39 +58,21 @@ public class PersonDemographicsTO extends AuditableTO implements TransferObject<
 		setChildCareNeeded(model.isChildCareNeeded());
 		setEmployed(model.isEmployed());
 		setNumberOfChildren(model.getNumberOfChildren());
-		if(model.getAnticipatedStartTerm()!=null){
-			setAnticipatedStartTerm(model.getAnticipatedStartTerm());
-		}
-		if(model.getAnticipatedStartYear()!=null){
-			setAnticipatedStartYear(model.getAnticipatedStartYear());
-		}
-		if(model.getCountryOfResidence()!=null){
-			setCountryOfResidence(model.getCountryOfResidence());
-		}
-		if(model.getPaymentStatus()!=null){
-			setPaymentStatus(model.getPaymentStatus());
-		}
+		setAnticipatedStartTerm(model.getAnticipatedStartTerm());
+		setAnticipatedStartYear(model.getAnticipatedStartYear());
+		setCountryOfResidence(model.getCountryOfResidence());
+		setPaymentStatus(model.getPaymentStatus());
 		if(model.getGender()!=null){
 			setGender(model.getGender().getCode());
 		}
-		if(model.getCountryOfCitizenship()!=null){
-			setCountryOfCitizenship(model.getCountryOfCitizenship());
-		}
-		if(model.getChildAges()!=null){
-			setChildAges(model.getChildAges());
-		}
-		if(model.getPlaceOfEmployment()!=null){
-			setPlaceOfEmployment(model.getPlaceOfEmployment());
-		}
+		setCountryOfCitizenship(model.getCountryOfCitizenship());
+		setChildAges(model.getChildAges());
+		setPlaceOfEmployment(model.getPlaceOfEmployment());
 		if(model.getShift()!=null){
 			setShift(model.getShift().getCode());
 		}
-		if(model.getWage()!=null){
-			setWage(model.getWage());
-		}
-		if(model.getTotalHoursWorkedPerWeek()!=null){
-			setTotalHoursWorkedPerWeek(model.getTotalHoursWorkedPerWeek());
-		}
+		setWage(model.getWage());
+		setTotalHoursWorkedPerWeek(model.getTotalHoursWorkedPerWeek());
 	}
 
 	@Override
@@ -121,39 +103,21 @@ public class PersonDemographicsTO extends AuditableTO implements TransferObject<
 		model.setChildCareNeeded(isChildCareNeeded());
 		model.setEmployed(isEmployed());
 		model.setNumberOfChildren(getNumberOfChildren());
-		if(getAnticipatedStartTerm()!=null){
-			model.setAnticipatedStartTerm(getAnticipatedStartTerm());
-		}
-		if(getAnticipatedStartYear()!=null){
-			model.setAnticipatedStartYear(getAnticipatedStartYear());
-		}
-		if(getCountryOfResidence()!=null){
-			model.setCountryOfResidence(getCountryOfResidence());
-		}
-		if(getPaymentStatus()!=null){
-			model.setPaymentStatus(getPaymentStatus());
-		}
+		model.setAnticipatedStartTerm(getAnticipatedStartTerm());
+		model.setAnticipatedStartYear(getAnticipatedStartYear());
+		model.setCountryOfResidence(getCountryOfResidence());
+		model.setPaymentStatus(getPaymentStatus());
 		if(getGender()!=null){
 			model.setGender(Genders.valueOf(getGender()));
 		}
-		if(getCountryOfCitizenship()!=null){
-			model.setCountryOfCitizenship(getCountryOfCitizenship());
-		}
-		if(getChildAges()!=null){
-			model.setChildAges(getChildAges());
-		}
-		if(getPlaceOfEmployment()!=null){
-			model.setPlaceOfEmployment(getPlaceOfEmployment());
-		}
+		model.setCountryOfCitizenship(getCountryOfCitizenship());
+		model.setChildAges(getChildAges());
+		model.setPlaceOfEmployment(getPlaceOfEmployment());
 		if(getShift()!=null){
 			model.setShift(EmploymentShifts.valueOf(getShift()));
 		}
-		if(getWage()!=null){
-			model.setWage(getWage());
-		}
-		if(getTotalHoursWorkedPerWeek()!=null){
-			model.setTotalHoursWorkedPerWeek(getTotalHoursWorkedPerWeek());
-		}
+		model.setWage(getWage());
+		model.setTotalHoursWorkedPerWeek(getTotalHoursWorkedPerWeek());
 		return model;
 	}
 
@@ -162,14 +126,6 @@ public class PersonDemographicsTO extends AuditableTO implements TransferObject<
 		return pushAttributesToModel(new PersonDemographics());
 	}
 
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
 
 	public UUID getPersonId() {
 		return personId;

@@ -8,7 +8,7 @@ import edu.sinclair.ssp.model.reference.VeteranStatus;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface VeteranStatusService extends AuditableCrudService<VeteranStatus>{
+public interface VeteranStatusService extends AuditableCrudService<VeteranStatus> {
 
 	public List<VeteranStatus> getAll(ObjectStatus status);
 

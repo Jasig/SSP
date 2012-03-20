@@ -30,47 +30,54 @@ import edu.sinclair.ssp.web.api.validation.ValidationException;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/educationGoal")
-public class EducationGoalController extends RestController<EducationGoalTO>{
+public class EducationGoalController extends RestController<EducationGoalTO> {
 
-	private static final Logger logger = LoggerFactory.getLogger(EducationGoalController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(EducationGoalController.class);
 
 	@Autowired
 	private EducationGoalService service;
-	
-	private TransferObjectListFactory<EducationGoalTO, EducationGoal> listFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(EducationGoalTO.class);
-	
+
+	private TransferObjectListFactory<EducationGoalTO, EducationGoal> listFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(
+			EducationGoalTO.class);
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody List<EducationGoalTO> getAll(@RequestParam(required = false) ObjectStatus status) throws Exception {
-		if(status==null){
+	public @ResponseBody
+	List<EducationGoalTO> getAll(@RequestParam(required = false) ObjectStatus status)
+			throws Exception {
+		if (status == null) {
 			status = ObjectStatus.ACTIVE;
 		}
 		return listFactory.toTOList(service.getAll(status));
 	}
-	
+
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody EducationGoalTO get(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	EducationGoalTO get(@PathVariable UUID id) throws Exception {
 		EducationGoal model = service.get(id);
-		if(model!=null){
+		if (model != null) {
 			return new EducationGoalTO(model);
-		}else{
+		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public @ResponseBody EducationGoalTO create(@Valid @RequestBody EducationGoalTO obj) throws Exception {
-		if(obj.getId()!=null){
-			throw new ValidationException("You submitted a educationGoal with an id to the create method.  Did you mean to save?");
+	public @ResponseBody
+	EducationGoalTO create(@Valid @RequestBody EducationGoalTO obj) throws Exception {
+		if (obj.getId() != null) {
+			throw new ValidationException(
+					"You submitted a educationGoal with an id to the create method.  Did you mean to save?");
 		}
-		
+
 		EducationGoal model = obj.asModel();
-		
-		if(null!=model){
+
+		if (null != model) {
 			EducationGoal createdModel = service.create(model);
-			if(null!=createdModel){
+			if (null != createdModel) {
 				return new EducationGoalTO(createdModel);
 			}
 		}
@@ -79,16 +86,19 @@ public class EducationGoalController extends RestController<EducationGoalTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public @ResponseBody EducationGoalTO save(@PathVariable UUID id, @Valid @RequestBody EducationGoalTO obj) throws Exception {
-		if(id==null){
-			throw new ValidationException("You submitted a educationGoal without an id to the save method.  Did you mean to create?");
+	public @ResponseBody
+	EducationGoalTO save(@PathVariable UUID id, @Valid @RequestBody EducationGoalTO obj)
+			throws Exception {
+		if (id == null) {
+			throw new ValidationException(
+					"You submitted a educationGoal without an id to the save method.  Did you mean to create?");
 		}
-		
+
 		EducationGoal model = obj.asModel();
 		model.setId(id);
-		
+
 		EducationGoal savedEducationGoal = service.save(model);
-		if(null!=savedEducationGoal){
+		if (null != savedEducationGoal) {
 			return new EducationGoalTO(savedEducationGoal);
 		}
 		return null;
@@ -96,14 +106,16 @@ public class EducationGoalController extends RestController<EducationGoalTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody ServiceResponse delete(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	ServiceResponse delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
 		return new ServiceResponse(true);
 	}
-	
+
 	@Override
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody ServiceResponse handle(Exception e){
+	public @ResponseBody
+	ServiceResponse handle(Exception e) {
 		logger.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}

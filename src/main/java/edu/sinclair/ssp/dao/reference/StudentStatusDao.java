@@ -15,9 +15,10 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.StudentStatus;
 
 @Repository
-public class StudentStatusDao implements AuditableCrudDao<StudentStatus>{
+public class StudentStatusDao implements AuditableCrudDao<StudentStatus> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(StudentStatusDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(StudentStatusDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -28,27 +29,28 @@ public class StudentStatusDao implements AuditableCrudDao<StudentStatus>{
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(StudentStatus.class);
 		query.addOrder(Order.asc("name"));
-		
-		if(status!=ObjectStatus.ALL){
+
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public StudentStatus get(UUID id) {
-		return (StudentStatus) this.sessionFactory.getCurrentSession().get(StudentStatus.class, id); 
+		return (StudentStatus) this.sessionFactory.getCurrentSession().get(
+				StudentStatus.class, id);
 	}
 
 	@Override
 	public StudentStatus save(StudentStatus obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

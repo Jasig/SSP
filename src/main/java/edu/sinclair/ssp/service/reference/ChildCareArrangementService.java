@@ -8,7 +8,7 @@ import edu.sinclair.ssp.model.reference.ChildCareArrangement;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface ChildCareArrangementService extends AuditableCrudService<ChildCareArrangement>{
+public interface ChildCareArrangementService extends AuditableCrudService<ChildCareArrangement> {
 
 	public List<ChildCareArrangement> getAll(ObjectStatus status);
 

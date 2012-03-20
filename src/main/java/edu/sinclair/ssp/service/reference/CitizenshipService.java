@@ -8,7 +8,7 @@ import edu.sinclair.ssp.model.reference.Citizenship;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface CitizenshipService extends AuditableCrudService<Citizenship>{
+public interface CitizenshipService extends AuditableCrudService<Citizenship> {
 
 	public List<Citizenship> getAll(ObjectStatus status);
 
