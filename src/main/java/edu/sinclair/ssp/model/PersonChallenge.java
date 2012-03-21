@@ -25,12 +25,20 @@ public class PersonChallenge extends Auditable {
 	 * Associated person. Changes to this Person are not persisted.
 	 */
 	@ManyToOne()
-	@JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "person_id")
 	private Person person;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "challenge_id", nullable = false, updatable = false)
 	private Challenge challenge;
+
+	public PersonChallenge() {
+	}
+
+	public PersonChallenge(Person person, Challenge challenge) {
+		this.person = person;
+		this.challenge = challenge;
+	}
 
 	public String getDescription() {
 		return description;
