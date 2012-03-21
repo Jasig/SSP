@@ -25,7 +25,6 @@ public class PersonChallenge extends Auditable {
 	 * Associated person. Changes to this Person are not persisted.
 	 */
 	@ManyToOne()
-	@JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
 	private Person person;
 
 	@ManyToOne(fetch = FetchType.LAZY)

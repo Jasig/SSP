@@ -21,8 +21,7 @@ public class PersonEducationLevel extends Auditable {
 	@Size(max = 255)
 	private String description;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
+	@ManyToOne
 	private Person person;
 
 	/**

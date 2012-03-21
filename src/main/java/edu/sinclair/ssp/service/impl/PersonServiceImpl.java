@@ -69,11 +69,13 @@ public class PersonServiceImpl implements PersonService {
 		current.setWorkPhone(obj.getWorkPhone());
 		current.setCellPhone(obj.getCellPhone());
 		current.setAddressLine1(obj.getAddressLine1());
+		current.setAddressLine2(obj.getAddressLine2());
 		current.setCity(obj.getCity());
 		current.setState(obj.getState());
 		current.setZipCode(obj.getZipCode());
 		current.setPhotoUrl(obj.getPhotoUrl());
 		current.setSchoolId(obj.getSchoolId());
+
 		current.setEnabled(obj.isEnabled());
 
 		return dao.save(current);

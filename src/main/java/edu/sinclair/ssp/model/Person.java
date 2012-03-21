@@ -135,24 +135,21 @@ public class Person extends Auditable {
 	 * Education levels. Changes to this set are persisted.
 	 */
 	@Nullable()
-	@OneToMany
-	@JoinColumn(name = "person_education_level")
+	@OneToMany(mappedBy = "person")
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
 	 * Funding sources. Changes to this set are persisted.
 	 */
 	@Nullable()
-	@OneToMany
-	@JoinColumn(name = "person_funding")
+	@OneToMany(mappedBy = "person")
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
 	 * Challenges. Changes to this set are persisted.
 	 */
 	@Nullable()
-	@OneToMany
-	@JoinColumn(name = "person_challenges")
+	@OneToMany(mappedBy = "person")
 	private Set<PersonChallenge> challenges;
 
 	public Person() {
