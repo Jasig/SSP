@@ -14,9 +14,11 @@ import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonEducationGoal;
 
 @Repository
-public class PersonEducationGoalDao implements AuditableCrudDao<PersonEducationGoal> {
+public class PersonEducationGoalDao implements
+		AuditableCrudDao<PersonEducationGoal> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(PersonEducationGoalDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(PersonEducationGoalDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -27,21 +29,20 @@ public class PersonEducationGoalDao implements AuditableCrudDao<PersonEducationG
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(PersonEducationGoal.class);
 
-		if(status!=ObjectStatus.ALL){
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public PersonEducationGoal get(UUID id) {
-		return (PersonEducationGoal) 
-				this.sessionFactory.getCurrentSession().get(
-						PersonEducationGoal.class, id);
+		return (PersonEducationGoal) this.sessionFactory.getCurrentSession()
+				.get(PersonEducationGoal.class, id);
 	}
 
-	public PersonEducationGoal forPerson(Person person){
+	public PersonEducationGoal forPerson(Person person) {
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(PersonEducationGoal.class)
 				.add(Restrictions.eq("person", person));
@@ -50,12 +51,12 @@ public class PersonEducationGoalDao implements AuditableCrudDao<PersonEducationG
 
 	@Override
 	public PersonEducationGoal save(PersonEducationGoal obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

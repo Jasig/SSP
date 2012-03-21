@@ -9,9 +9,10 @@ import org.springframework.web.context.request.WebRequest;
 import edu.sinclair.ssp.util.uuid.UuidPropertyEditor;
 
 /**
- * SSP specific WebBindingInitializer.  Registers custom Property Editors.
+ * SSP specific WebBindingInitializer. Registers custom Property Editors.
+ * 
  * @author daniel
- *
+ * 
  */
 public class BindingInitializer implements WebBindingInitializer {
 

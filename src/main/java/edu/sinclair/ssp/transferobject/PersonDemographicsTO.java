@@ -11,21 +11,23 @@ import edu.sinclair.ssp.model.reference.Genders;
 import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 
-public class PersonDemographicsTO extends AuditableTO implements TransferObject<PersonDemographics>{
+public class PersonDemographicsTO extends AuditableTO implements
+		TransferObject<PersonDemographics> {
 
-	private UUID personId, coachId, maritalStatusId, ethnicityId, citizenshipId, veteranStatusId;
-	private boolean abilityToBenefit, isLocal, primaryCaregiver, childCareNeeded, employed;
+	private UUID personId, coachId, maritalStatusId, ethnicityId,
+			citizenshipId, veteranStatusId;
+	private boolean abilityToBenefit, isLocal, primaryCaregiver,
+			childCareNeeded, employed;
 	private int numberOfChildren;
-	private String anticipatedStartTerm, anticipatedStartYear, countryOfResidence,
-		paymentStatus, gender, countryOfCitizenship, childAges, placeOfEmployment, 
-		shift, wage, totalHoursWorkedPerWeek;
+	private String anticipatedStartTerm, anticipatedStartYear,
+			countryOfResidence, paymentStatus, gender, countryOfCitizenship,
+			childAges, placeOfEmployment, shift, wage, totalHoursWorkedPerWeek;
 
-
-	public PersonDemographicsTO(){
+	public PersonDemographicsTO() {
 		super();
 	}
 
-	public PersonDemographicsTO(PersonDemographics model){
+	public PersonDemographicsTO(PersonDemographics model) {
 		super();
 		pullAttributesFromModel(model);
 	}
@@ -33,20 +35,20 @@ public class PersonDemographicsTO extends AuditableTO implements TransferObject<
 	@Override
 	public void pullAttributesFromModel(PersonDemographics model) {
 		super.fromModel(model);
-		
-		if(model.getCoach()!=null){
+
+		if (model.getCoach() != null) {
 			setCoachId(model.getCoach().getId());
 		}
-		if(model.getMaritalStatus()!=null){
+		if (model.getMaritalStatus() != null) {
 			setMaritalStatusId(model.getMaritalStatus().getId());
 		}
-		if(model.getEthnicity()!=null){
+		if (model.getEthnicity() != null) {
 			setEthnicityId(model.getEthnicity().getId());
 		}
-		if(model.getCitizenship()!=null){
+		if (model.getCitizenship() != null) {
 			setCitizenshipId(model.getCitizenship().getId());
 		}
-		if(model.getVeteranStatus()!=null){
+		if (model.getVeteranStatus() != null) {
 			setVeteranStatusId(model.getVeteranStatus().getId());
 		}
 		setAbilityToBenefit(model.isAbilityToBenefit());
@@ -59,13 +61,13 @@ public class PersonDemographicsTO extends AuditableTO implements TransferObject<
 		setAnticipatedStartYear(model.getAnticipatedStartYear());
 		setCountryOfResidence(model.getCountryOfResidence());
 		setPaymentStatus(model.getPaymentStatus());
-		if(model.getGender()!=null){
+		if (model.getGender() != null) {
 			setGender(model.getGender().getCode());
 		}
 		setCountryOfCitizenship(model.getCountryOfCitizenship());
 		setChildAges(model.getChildAges());
 		setPlaceOfEmployment(model.getPlaceOfEmployment());
-		if(model.getShift()!=null){
+		if (model.getShift() != null) {
 			setShift(model.getShift().getCode());
 		}
 		setWage(model.getWage());
@@ -75,20 +77,20 @@ public class PersonDemographicsTO extends AuditableTO implements TransferObject<
 	@Override
 	public PersonDemographics pushAttributesToModel(PersonDemographics model) {
 		super.addToModel(model);
-		
-		if(getCoachId()!=null){
+
+		if (getCoachId() != null) {
 			model.setCoach(new Person(getCoachId()));
 		}
-		if(getMaritalStatusId()!=null){
+		if (getMaritalStatusId() != null) {
 			model.setMaritalStatus(new MaritalStatus(getMaritalStatusId()));
 		}
-		if(getEthnicityId()!=null){
+		if (getEthnicityId() != null) {
 			model.setEthnicity(new Ethnicity(getEthnicityId()));
 		}
-		if(getCitizenshipId()!=null){
+		if (getCitizenshipId() != null) {
 			model.setCitizenship(new Citizenship(getCitizenshipId()));
 		}
-		if(getVeteranStatusId()!=null){
+		if (getVeteranStatusId() != null) {
 			model.setVeteranStatus(new VeteranStatus(getVeteranStatusId()));
 		}
 		model.setAbilityToBenefit(isAbilityToBenefit());
@@ -101,13 +103,13 @@ public class PersonDemographicsTO extends AuditableTO implements TransferObject<
 		model.setAnticipatedStartYear(getAnticipatedStartYear());
 		model.setCountryOfResidence(getCountryOfResidence());
 		model.setPaymentStatus(getPaymentStatus());
-		if(getGender()!=null){
+		if (getGender() != null) {
 			model.setGender(Genders.valueOf(getGender()));
 		}
 		model.setCountryOfCitizenship(getCountryOfCitizenship());
 		model.setChildAges(getChildAges());
 		model.setPlaceOfEmployment(getPlaceOfEmployment());
-		if(getShift()!=null){
+		if (getShift() != null) {
 			model.setShift(EmploymentShifts.valueOf(getShift()));
 		}
 		model.setWage(getWage());
@@ -116,10 +118,9 @@ public class PersonDemographicsTO extends AuditableTO implements TransferObject<
 	}
 
 	@Override
-	public PersonDemographics asModel(){
+	public PersonDemographics asModel() {
 		return pushAttributesToModel(new PersonDemographics());
 	}
-
 
 	public UUID getPersonId() {
 		return personId;

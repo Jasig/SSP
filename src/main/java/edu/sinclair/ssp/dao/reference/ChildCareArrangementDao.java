@@ -15,7 +15,8 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.ChildCareArrangement;
 
 @Repository
-public class ChildCareArrangementDao implements AuditableCrudDao<ChildCareArrangement> {
+public class ChildCareArrangementDao implements
+		AuditableCrudDao<ChildCareArrangement> {
 
 	// private static final Logger logger =
 	// LoggerFactory.getLogger(ChildCareArrangementDao.class);
@@ -39,8 +40,8 @@ public class ChildCareArrangementDao implements AuditableCrudDao<ChildCareArrang
 
 	@Override
 	public ChildCareArrangement get(UUID id) {
-		return (ChildCareArrangement) this.sessionFactory.getCurrentSession().get(
-				ChildCareArrangement.class, id);
+		return (ChildCareArrangement) this.sessionFactory.getCurrentSession()
+				.get(ChildCareArrangement.class, id);
 	}
 
 	@Override

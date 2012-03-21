@@ -27,60 +27,62 @@ import edu.sinclair.ssp.model.Person;
 @Transactional
 public class PersonDaoTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(PersonDaoTest.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(PersonDaoTest.class);
 
 	@Autowired
 	private PersonDao dao;
 
 	@Test
-	public void testGet(){
-		assertEquals(Person.SYSTEM_ADMINISTRATOR_ID, dao.get(Person.SYSTEM_ADMINISTRATOR_ID).getId());
+	public void testGet() {
+		assertEquals(Person.SYSTEM_ADMINISTRATOR_ID,
+				dao.get(Person.SYSTEM_ADMINISTRATOR_ID).getId());
 	}
 
-	
 	@Test
-	public void testSaveNew(){
+	public void testSaveNew() {
 		UUID saved;
-		
+
 		Person obj = new Person();
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setFirstName("System");
 		obj.setLastName("User");
 		obj.setPrimaryEmailAddress("user@sinclair.edu");
 		dao.save(obj);
-		
+
 		assertNotNull(obj.getId());
 		saved = obj.getId();
-		
+
 		logger.debug(obj.toString());
-		
+
 		obj = dao.get(saved);
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
 
 		List<Person> all = dao.getAll(ObjectStatus.ACTIVE);
 		assertNotNull(all);
-		assertTrue(all.size()>0);
+		assertTrue(all.size() > 0);
 		assertList(all);
-		
+
 		dao.delete(obj);
 	}
-	
+
 	@Test
-	public void testNull(){
+	public void testNull() {
 		UUID id = UUID.randomUUID();
 		Person person = dao.get(id);
-		
+
 		assertNull(person);
 	}
-	
+
 	@Test
-	public void testFromUsername(){
-		assertEquals(Person.SYSTEM_ADMINISTRATOR_ID, dao.fromUsername("system").getId());
+	public void testFromUsername() {
+		assertEquals(Person.SYSTEM_ADMINISTRATOR_ID, dao.fromUsername("system")
+				.getId());
 	}
 
-	private void assertList(List<Person> objects){
-		for(Person object : objects){
+	private void assertList(List<Person> objects) {
+		for (Person object : objects) {
 			assertNotNull(object.getId());
 		}
 		assertTrue(true);

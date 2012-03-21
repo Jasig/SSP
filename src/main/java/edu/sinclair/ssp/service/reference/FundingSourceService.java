@@ -8,7 +8,8 @@ import edu.sinclair.ssp.model.reference.FundingSource;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface FundingSourceService extends AuditableCrudService<FundingSource> {
+public interface FundingSourceService extends
+		AuditableCrudService<FundingSource> {
 
 	public List<FundingSource> getAll(ObjectStatus status);
 

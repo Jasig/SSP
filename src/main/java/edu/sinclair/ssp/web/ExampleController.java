@@ -10,23 +10,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 @Controller
 @RequestMapping("/example")
 public class ExampleController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ExampleController.class);
-	
+	private static final Logger logger = LoggerFactory
+			.getLogger(ExampleController.class);
+
 	@RequestMapping(method = RequestMethod.GET)
-	public @ResponseBody Map<String, String> defaultMethod() throws Exception {
+	public @ResponseBody
+	Map<String, String> defaultMethod() throws Exception {
 		return get();
 	}
-	
+
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody Map<String, String> get() throws Exception {
+	public @ResponseBody
+	Map<String, String> get() throws Exception {
 		logger.info("get called");
-		
-		Map<String,String> val = new HashMap<String,String>();
+
+		Map<String, String> val = new HashMap<String, String>();
 		val.put("firstName", "Shawn");
 		val.put("middleInitial", "E");
 		val.put("lastName", "Gormley");
@@ -42,7 +44,7 @@ public class ExampleController {
 		val.put("state", "OH");
 		val.put("zipCode", "45324-2183");
 		val.put("studentId", "12345678");
-		
+
 		return val;
 	}
 

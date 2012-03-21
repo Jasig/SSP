@@ -52,7 +52,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
 		current.setObjectStatus(obj.getObjectStatus());
-		
+
 		return dao.save(current);
 	}
 

@@ -29,33 +29,34 @@ import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class VeteranStatusDaoTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(VeteranStatusDaoTest.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(VeteranStatusDaoTest.class);
 
 	@Autowired
 	private VeteranStatusDao dao;
-	
+
 	@Autowired
 	private SecurityServiceInTestEnvironment securityService;
 
 	@Before
-	public void setup(){
+	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
-	
+
 	@Test
-	public void testSaveNew(){
+	public void testSaveNew() {
 		UUID saved;
-		
+
 		VeteranStatus obj = new VeteranStatus();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
-		
+
 		assertNotNull(obj.getId());
 		saved = obj.getId();
-		
+
 		logger.debug(obj.toString());
-		
+
 		obj = dao.get(saved);
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
@@ -63,22 +64,22 @@ public class VeteranStatusDaoTest {
 
 		List<VeteranStatus> all = dao.getAll(ObjectStatus.ACTIVE);
 		assertNotNull(all);
-		assertTrue(all.size()>0);
+		assertTrue(all.size() > 0);
 		assertList(all);
-		
+
 		dao.delete(obj);
 	}
 
 	@Test
-	public void testNull(){
+	public void testNull() {
 		UUID id = UUID.randomUUID();
 		VeteranStatus veteranStatus = dao.get(id);
-		
+
 		assertNull(veteranStatus);
 	}
 
-	private void assertList(List<VeteranStatus> objects){
-		for(VeteranStatus object : objects){
+	private void assertList(List<VeteranStatus> objects) {
+		for (VeteranStatus object : objects) {
 			assertNotNull(object.getId());
 		}
 		assertTrue(true);

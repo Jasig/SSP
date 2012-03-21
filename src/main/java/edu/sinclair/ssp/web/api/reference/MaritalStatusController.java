@@ -44,7 +44,8 @@ public class MaritalStatusController extends RestController<MaritalStatusTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<MaritalStatusTO> getAll(@RequestParam(required = false) ObjectStatus status)
+	List<MaritalStatusTO> getAll(
+			@RequestParam(required = false) ObjectStatus status)
 			throws Exception {
 		if (status == null) {
 			status = ObjectStatus.ACTIVE;
@@ -67,7 +68,8 @@ public class MaritalStatusController extends RestController<MaritalStatusTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	MaritalStatusTO create(@Valid @RequestBody MaritalStatusTO obj) throws Exception {
+	MaritalStatusTO create(@Valid @RequestBody MaritalStatusTO obj)
+			throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"You submitted a maritalStatus with an id to the create method.  Did you mean to save?");
@@ -87,8 +89,8 @@ public class MaritalStatusController extends RestController<MaritalStatusTO> {
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	MaritalStatusTO save(@PathVariable UUID id, @Valid @RequestBody MaritalStatusTO obj)
-			throws Exception {
+	MaritalStatusTO save(@PathVariable UUID id,
+			@Valid @RequestBody MaritalStatusTO obj) throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a maritalStatus without an id to the save method.  Did you mean to create?");

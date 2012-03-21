@@ -52,7 +52,7 @@ public class VeteranStatusServiceImpl implements VeteranStatusService {
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
 		current.setObjectStatus(obj.getObjectStatus());
-		
+
 		return dao.save(current);
 	}
 

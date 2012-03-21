@@ -17,12 +17,13 @@ public interface PersonEducationGoalService extends
 	public PersonEducationGoal get(UUID id) throws ObjectNotFoundException;
 
 	public PersonEducationGoal forPerson(Person person);
-	
+
 	@Override
 	public PersonEducationGoal create(PersonEducationGoal obj);
 
 	@Override
-	public PersonEducationGoal save(PersonEducationGoal obj) throws ObjectNotFoundException;
+	public PersonEducationGoal save(PersonEducationGoal obj)
+			throws ObjectNotFoundException;
 
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException;

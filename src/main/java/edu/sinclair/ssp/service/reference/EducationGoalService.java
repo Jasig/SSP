@@ -8,7 +8,8 @@ import edu.sinclair.ssp.model.reference.EducationGoal;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface EducationGoalService extends AuditableCrudService<EducationGoal> {
+public interface EducationGoalService extends
+		AuditableCrudService<EducationGoal> {
 
 	public List<EducationGoal> getAll(ObjectStatus status);
 

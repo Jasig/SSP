@@ -8,7 +8,8 @@ import edu.sinclair.ssp.model.reference.StudentStatus;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface StudentStatusService extends AuditableCrudService<StudentStatus> {
+public interface StudentStatusService extends
+		AuditableCrudService<StudentStatus> {
 
 	public List<StudentStatus> getAll(ObjectStatus status);
 

@@ -30,7 +30,8 @@ import edu.sinclair.ssp.web.api.validation.ValidationException;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/childCareArrangement")
-public class ChildCareArrangementController extends RestController<ChildCareArrangementTO> {
+public class ChildCareArrangementController extends
+		RestController<ChildCareArrangementTO> {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ChildCareArrangementController.class);
@@ -44,7 +45,8 @@ public class ChildCareArrangementController extends RestController<ChildCareArra
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<ChildCareArrangementTO> getAll(@RequestParam(required = false) ObjectStatus status)
+	List<ChildCareArrangementTO> getAll(
+			@RequestParam(required = false) ObjectStatus status)
 			throws Exception {
 		if (status == null) {
 			status = ObjectStatus.ACTIVE;
@@ -67,7 +69,8 @@ public class ChildCareArrangementController extends RestController<ChildCareArra
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	ChildCareArrangementTO create(@Valid @RequestBody ChildCareArrangementTO obj) throws Exception {
+	ChildCareArrangementTO create(@Valid @RequestBody ChildCareArrangementTO obj)
+			throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"You submitted a childCareArrangement with an id to the create method.  Did you mean to save?");
@@ -87,8 +90,8 @@ public class ChildCareArrangementController extends RestController<ChildCareArra
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	ChildCareArrangementTO save(@PathVariable UUID id, @Valid @RequestBody ChildCareArrangementTO obj)
-			throws Exception {
+	ChildCareArrangementTO save(@PathVariable UUID id,
+			@Valid @RequestBody ChildCareArrangementTO obj) throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a childCareArrangement without an id to the save method.  Did you mean to create?");
