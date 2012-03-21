@@ -49,16 +49,10 @@ public class FundingSourceServiceImpl implements FundingSourceService {
 	public FundingSource save(FundingSource obj) throws ObjectNotFoundException {
 		FundingSource current = get(obj.getId());
 
-		if (obj.getName() != null) {
-			current.setName(obj.getName());
-		}
-		if (obj.getDescription() != null) {
-			current.setDescription(obj.getDescription());
-		}
-		if (obj.getObjectStatus() != null) {
-			current.setObjectStatus(obj.getObjectStatus());
-		}
-
+		current.setName(obj.getName());
+		current.setDescription(obj.getDescription());
+		current.setObjectStatus(obj.getObjectStatus());
+		
 		return dao.save(current);
 	}
 

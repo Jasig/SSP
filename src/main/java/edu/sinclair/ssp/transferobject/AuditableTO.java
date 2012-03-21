@@ -28,33 +28,21 @@ public abstract class AuditableTO {
 	}
 
 	public void fromModel(Auditable model){
-		if(model.getId()!=null){
-			setId(model.getId());
-		}
+		setId(model.getId());
 		if(model.getCreatedBy()!=null){
 			setCreatedById(model.getCreatedBy().getId());
 		}
 		if(model.getModifiedBy()!=null){
 			setModifiedById(model.getModifiedBy().getId());
 		}
-		if(model.getCreatedDate()!=null){
-			setCreatedDate(model.getCreatedDate());
-		}
-		if(model.getModifiedDate()!=null){
-			setModifiedDate(model.getModifiedDate());
-		}
-		if(model.getObjectStatus()!=null){
-			setObjectStatus(model.getObjectStatus());
-		}
+		setCreatedDate(model.getCreatedDate());
+		setModifiedDate(model.getModifiedDate());
+		setObjectStatus(model.getObjectStatus());
 	}
 	
 	public void addToModel(Auditable model){
-		if(getId()!=null){
-			model.setId(getId());
-		}
-		if(getObjectStatus()!=null){
-			model.setObjectStatus(getObjectStatus());
-		}
+		model.setId(getId());
+		model.setObjectStatus(getObjectStatus());
 	}
 
 	public UUID getId() {

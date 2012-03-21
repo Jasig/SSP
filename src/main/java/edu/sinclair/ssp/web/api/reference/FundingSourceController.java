@@ -30,47 +30,54 @@ import edu.sinclair.ssp.web.api.validation.ValidationException;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/fundingSource")
-public class FundingSourceController extends RestController<FundingSourceTO>{
+public class FundingSourceController extends RestController<FundingSourceTO> {
 
-	private static final Logger logger = LoggerFactory.getLogger(FundingSourceController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(FundingSourceController.class);
 
 	@Autowired
 	private FundingSourceService service;
-	
-	private TransferObjectListFactory<FundingSourceTO, FundingSource> listFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(FundingSourceTO.class);
-	
+
+	private TransferObjectListFactory<FundingSourceTO, FundingSource> listFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(
+			FundingSourceTO.class);
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody List<FundingSourceTO> getAll(@RequestParam(required = false) ObjectStatus status) throws Exception {
-		if(status==null){
+	public @ResponseBody
+	List<FundingSourceTO> getAll(@RequestParam(required = false) ObjectStatus status)
+			throws Exception {
+		if (status == null) {
 			status = ObjectStatus.ACTIVE;
 		}
 		return listFactory.toTOList(service.getAll(status));
 	}
-	
+
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody FundingSourceTO get(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	FundingSourceTO get(@PathVariable UUID id) throws Exception {
 		FundingSource model = service.get(id);
-		if(model!=null){
+		if (model != null) {
 			return new FundingSourceTO(model);
-		}else{
+		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public @ResponseBody FundingSourceTO create(@Valid @RequestBody FundingSourceTO obj) throws Exception {
-		if(obj.getId()!=null){
-			throw new ValidationException("You submitted a fundingSource with an id to the create method.  Did you mean to save?");
+	public @ResponseBody
+	FundingSourceTO create(@Valid @RequestBody FundingSourceTO obj) throws Exception {
+		if (obj.getId() != null) {
+			throw new ValidationException(
+					"You submitted a fundingSource with an id to the create method.  Did you mean to save?");
 		}
-		
+
 		FundingSource model = obj.asModel();
-		
-		if(null!=model){
+
+		if (null != model) {
 			FundingSource createdModel = service.create(model);
-			if(null!=createdModel){
+			if (null != createdModel) {
 				return new FundingSourceTO(createdModel);
 			}
 		}
@@ -79,16 +86,19 @@ public class FundingSourceController extends RestController<FundingSourceTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public @ResponseBody FundingSourceTO save(@PathVariable UUID id, @Valid @RequestBody FundingSourceTO obj) throws Exception {
-		if(id==null){
-			throw new ValidationException("You submitted a fundingSource without an id to the save method.  Did you mean to create?");
+	public @ResponseBody
+	FundingSourceTO save(@PathVariable UUID id, @Valid @RequestBody FundingSourceTO obj)
+			throws Exception {
+		if (id == null) {
+			throw new ValidationException(
+					"You submitted a fundingSource without an id to the save method.  Did you mean to create?");
 		}
-		
+
 		FundingSource model = obj.asModel();
 		model.setId(id);
-		
+
 		FundingSource savedFundingSource = service.save(model);
-		if(null!=savedFundingSource){
+		if (null != savedFundingSource) {
 			return new FundingSourceTO(savedFundingSource);
 		}
 		return null;
@@ -96,14 +106,16 @@ public class FundingSourceController extends RestController<FundingSourceTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody ServiceResponse delete(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	ServiceResponse delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
 		return new ServiceResponse(true);
 	}
-	
+
 	@Override
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody ServiceResponse handle(Exception e){
+	public @ResponseBody
+	ServiceResponse handle(Exception e) {
 		logger.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}

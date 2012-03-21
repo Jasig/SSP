@@ -10,16 +10,16 @@ import javax.persistence.Table;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class MaritalStatus extends AbstractReference{
+public class MaritalStatus extends AbstractReference {
 
 	public MaritalStatus() {
 		super();
 	}
-	
+
 	public MaritalStatus(UUID id) {
 		super(id);
 	}
-	
+
 	public MaritalStatus(UUID id, String name) {
 		super(id, name);
 	}
@@ -29,4 +29,3 @@ public class MaritalStatus extends AbstractReference{
 	}
 
 }
-

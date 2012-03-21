@@ -15,9 +15,10 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.ChildCareArrangement;
 
 @Repository
-public class ChildCareArrangementDao implements AuditableCrudDao<ChildCareArrangement>{
+public class ChildCareArrangementDao implements AuditableCrudDao<ChildCareArrangement> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(ChildCareArrangementDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(ChildCareArrangementDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -28,27 +29,28 @@ public class ChildCareArrangementDao implements AuditableCrudDao<ChildCareArrang
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(ChildCareArrangement.class);
 		query.addOrder(Order.asc("name"));
-		
-		if(status!=ObjectStatus.ALL){
+
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public ChildCareArrangement get(UUID id) {
-		return (ChildCareArrangement) this.sessionFactory.getCurrentSession().get(ChildCareArrangement.class, id); 
+		return (ChildCareArrangement) this.sessionFactory.getCurrentSession().get(
+				ChildCareArrangement.class, id);
 	}
 
 	@Override
 	public ChildCareArrangement save(ChildCareArrangement obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

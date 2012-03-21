@@ -15,9 +15,10 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.MaritalStatus;
 
 @Repository
-public class MaritalStatusDao implements AuditableCrudDao<MaritalStatus>{
+public class MaritalStatusDao implements AuditableCrudDao<MaritalStatus> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(MaritalStatusDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(MaritalStatusDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -28,27 +29,28 @@ public class MaritalStatusDao implements AuditableCrudDao<MaritalStatus>{
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(MaritalStatus.class);
 		query.addOrder(Order.asc("name"));
-		
-		if(status!=ObjectStatus.ALL){
+
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public MaritalStatus get(UUID id) {
-		return (MaritalStatus) this.sessionFactory.getCurrentSession().get(MaritalStatus.class, id); 
+		return (MaritalStatus) this.sessionFactory.getCurrentSession().get(
+				MaritalStatus.class, id);
 	}
 
 	@Override
 	public MaritalStatus save(MaritalStatus obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

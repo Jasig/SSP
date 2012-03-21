@@ -10,16 +10,16 @@ import javax.persistence.Table;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EducationLevel extends AbstractReference{
+public class EducationLevel extends AbstractReference {
 
 	public EducationLevel() {
 		super();
 	}
-	
+
 	public EducationLevel(UUID id) {
 		super(id);
 	}
-	
+
 	public EducationLevel(UUID id, String name) {
 		super(id, name);
 	}
@@ -29,4 +29,3 @@ public class EducationLevel extends AbstractReference{
 	}
 
 }
-

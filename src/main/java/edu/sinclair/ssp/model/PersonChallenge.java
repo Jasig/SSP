@@ -1,16 +1,24 @@
 package edu.sinclair.ssp.model;
 
-import java.util.UUID;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.Challenge;
 
-public class PersonChallenge {
+@Entity
+@Table(schema = "public")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class PersonChallenge extends Auditable {
 
-	private UUID id;
-
+	@Column(length = 255)
+	@Size(max = 255)
 	private String description;
 
 	/**
@@ -20,15 +28,9 @@ public class PersonChallenge {
 	@JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
 	private Person person;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "challenge_id", nullable = false, updatable = false)
 	private Challenge challenge;
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
 
 	public String getDescription() {
 		return description;

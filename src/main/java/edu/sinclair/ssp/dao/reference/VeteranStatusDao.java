@@ -15,9 +15,10 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 
 @Repository
-public class VeteranStatusDao implements AuditableCrudDao<VeteranStatus>{
+public class VeteranStatusDao implements AuditableCrudDao<VeteranStatus> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(VeteranStatusDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(VeteranStatusDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -28,27 +29,28 @@ public class VeteranStatusDao implements AuditableCrudDao<VeteranStatus>{
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(VeteranStatus.class);
 		query.addOrder(Order.asc("name"));
-		
-		if(status!=ObjectStatus.ALL){
+
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public VeteranStatus get(UUID id) {
-		return (VeteranStatus) this.sessionFactory.getCurrentSession().get(VeteranStatus.class, id); 
+		return (VeteranStatus) this.sessionFactory.getCurrentSession().get(
+				VeteranStatus.class, id);
 	}
 
 	@Override
 	public VeteranStatus save(VeteranStatus obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

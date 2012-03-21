@@ -12,13 +12,18 @@ import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonEducationPlan;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonEducationPlanService;
+import edu.sinclair.ssp.service.reference.StudentStatusService;
 
 @Service
-public class PersonEducationPlanServiceImpl implements PersonEducationPlanService {
+public class PersonEducationPlanServiceImpl implements
+		PersonEducationPlanService {
 
 	@Autowired
 	private PersonEducationPlanDao dao;
-	
+
+	@Autowired
+	private StudentStatusService studentStatusService;
+
 	@Override
 	public List<PersonEducationPlan> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -27,14 +32,14 @@ public class PersonEducationPlanServiceImpl implements PersonEducationPlanServic
 	@Override
 	public PersonEducationPlan get(UUID id) throws ObjectNotFoundException {
 		PersonEducationPlan obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "PersonEducationPlan");
 		}
 		return obj;
 	}
-	
+
 	@Override
-	public PersonEducationPlan forPerson(Person person){
+	public PersonEducationPlan forPerson(Person person) {
 		return dao.forPerson(person);
 	}
 
@@ -44,24 +49,29 @@ public class PersonEducationPlanServiceImpl implements PersonEducationPlanServic
 	}
 
 	@Override
-	public PersonEducationPlan save(PersonEducationPlan obj) throws ObjectNotFoundException{
+	public PersonEducationPlan save(PersonEducationPlan obj)
+			throws ObjectNotFoundException {
 		PersonEducationPlan current = get(obj.getId());
-		
-		if(obj.getObjectStatus()!=null){
-			current.setObjectStatus(obj.getObjectStatus());
+
+		current.setObjectStatus(obj.getObjectStatus());
+		if (obj.getStudentStatus() != null) {
+			current.setStudentStatus(studentStatusService.get(obj
+					.getStudentStatus().getId()));
 		}
-		
-		
-		
-		
+		current.setNewOrientationComplete(obj.isNewOrientationComplete());
+		current.setRegisteredForClasses(obj.isRegisteredForClasses());
+		current.setCollegeDegreeForParents(obj.isCollegeDegreeForParents());
+		current.setSpecialNeeds(obj.isSpecialNeeds());
+		current.setGradeTypicallyEarned(obj.getGradeTypicallyEarned());
+
 		return dao.save(current);
 	}
 
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
 		PersonEducationPlan current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}

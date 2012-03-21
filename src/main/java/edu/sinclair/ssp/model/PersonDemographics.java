@@ -9,7 +9,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -21,12 +20,9 @@ import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 
 @Entity
-@Table(name = "person_demographics", schema = "public")
+@Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class PersonDemographics extends Auditable {
-
-	@OneToOne(mappedBy = "person_id", fetch = FetchType.LAZY)
-	private Person person;
 
 	@Column
 	private boolean abilityToBenefit;
@@ -105,14 +101,6 @@ public class PersonDemographics extends Auditable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "coach_id", nullable = true, insertable = true, updatable = true)
 	private Person coach;
-
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-	}
 
 	public boolean isAbilityToBenefit() {
 		return abilityToBenefit;

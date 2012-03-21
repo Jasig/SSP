@@ -15,9 +15,10 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.FundingSource;
 
 @Repository
-public class FundingSourceDao implements AuditableCrudDao<FundingSource>{
+public class FundingSourceDao implements AuditableCrudDao<FundingSource> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(FundingSourceDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(FundingSourceDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -28,27 +29,28 @@ public class FundingSourceDao implements AuditableCrudDao<FundingSource>{
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(FundingSource.class);
 		query.addOrder(Order.asc("name"));
-		
-		if(status!=ObjectStatus.ALL){
+
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public FundingSource get(UUID id) {
-		return (FundingSource) this.sessionFactory.getCurrentSession().get(FundingSource.class, id); 
+		return (FundingSource) this.sessionFactory.getCurrentSession().get(
+				FundingSource.class, id);
 	}
 
 	@Override
 	public FundingSource save(FundingSource obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

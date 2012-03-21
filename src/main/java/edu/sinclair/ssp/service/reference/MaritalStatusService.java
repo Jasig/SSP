@@ -8,7 +8,7 @@ import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.AuditableCrudService;
 
-public interface MaritalStatusService extends AuditableCrudService<MaritalStatus>{
+public interface MaritalStatusService extends AuditableCrudService<MaritalStatus> {
 
 	public List<MaritalStatus> getAll(ObjectStatus status);
 

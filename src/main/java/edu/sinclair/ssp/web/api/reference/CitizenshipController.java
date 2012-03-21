@@ -30,47 +30,54 @@ import edu.sinclair.ssp.web.api.validation.ValidationException;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/citizenship")
-public class CitizenshipController extends RestController<CitizenshipTO>{
+public class CitizenshipController extends RestController<CitizenshipTO> {
 
-	private static final Logger logger = LoggerFactory.getLogger(CitizenshipController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(CitizenshipController.class);
 
 	@Autowired
 	private CitizenshipService service;
-	
-	private TransferObjectListFactory<CitizenshipTO, Citizenship> listFactory = new TransferObjectListFactory<CitizenshipTO, Citizenship>(CitizenshipTO.class);
-	
+
+	private TransferObjectListFactory<CitizenshipTO, Citizenship> listFactory = new TransferObjectListFactory<CitizenshipTO, Citizenship>(
+			CitizenshipTO.class);
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody List<CitizenshipTO> getAll(@RequestParam(required = false) ObjectStatus status) throws Exception {
-		if(status==null){
+	public @ResponseBody
+	List<CitizenshipTO> getAll(@RequestParam(required = false) ObjectStatus status)
+			throws Exception {
+		if (status == null) {
 			status = ObjectStatus.ACTIVE;
 		}
 		return listFactory.toTOList(service.getAll(status));
 	}
-	
+
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody CitizenshipTO get(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	CitizenshipTO get(@PathVariable UUID id) throws Exception {
 		Citizenship model = service.get(id);
-		if(model!=null){
+		if (model != null) {
 			return new CitizenshipTO(model);
-		}else{
+		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public @ResponseBody CitizenshipTO create(@Valid @RequestBody CitizenshipTO obj) throws Exception {
-		if(obj.getId()!=null){
-			throw new ValidationException("You submitted a citizenship with an id to the create method.  Did you mean to save?");
+	public @ResponseBody
+	CitizenshipTO create(@Valid @RequestBody CitizenshipTO obj) throws Exception {
+		if (obj.getId() != null) {
+			throw new ValidationException(
+					"You submitted a citizenship with an id to the create method.  Did you mean to save?");
 		}
-		
+
 		Citizenship model = obj.asModel();
-		
-		if(null!=model){
+
+		if (null != model) {
 			Citizenship createdModel = service.create(model);
-			if(null!=createdModel){
+			if (null != createdModel) {
 				return new CitizenshipTO(createdModel);
 			}
 		}
@@ -79,16 +86,19 @@ public class CitizenshipController extends RestController<CitizenshipTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public @ResponseBody CitizenshipTO save(@PathVariable UUID id, @Valid @RequestBody CitizenshipTO obj) throws Exception {
-		if(id==null){
-			throw new ValidationException("You submitted a citizenship without an id to the save method.  Did you mean to create?");
+	public @ResponseBody
+	CitizenshipTO save(@PathVariable UUID id, @Valid @RequestBody CitizenshipTO obj)
+			throws Exception {
+		if (id == null) {
+			throw new ValidationException(
+					"You submitted a citizenship without an id to the save method.  Did you mean to create?");
 		}
-		
+
 		Citizenship model = obj.asModel();
 		model.setId(id);
-		
+
 		Citizenship savedCitizenship = service.save(model);
-		if(null!=savedCitizenship){
+		if (null != savedCitizenship) {
 			return new CitizenshipTO(savedCitizenship);
 		}
 		return null;
@@ -96,14 +106,16 @@ public class CitizenshipController extends RestController<CitizenshipTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody ServiceResponse delete(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	ServiceResponse delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
 		return new ServiceResponse(true);
 	}
-	
+
 	@Override
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody ServiceResponse handle(Exception e){
+	public @ResponseBody
+	ServiceResponse handle(Exception e) {
 		logger.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}

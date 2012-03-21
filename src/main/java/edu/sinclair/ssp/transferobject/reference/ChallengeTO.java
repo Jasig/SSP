@@ -5,25 +5,26 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class ChallengeTO extends AbstractReferenceTO implements TransferObject<Challenge>{
+public class ChallengeTO extends AbstractReferenceTO implements
+		TransferObject<Challenge> {
 
-	public ChallengeTO () {
+	public ChallengeTO() {
 		super();
 	}
-	
-	public ChallengeTO (UUID id) {
+
+	public ChallengeTO(UUID id) {
 		super(id);
 	}
-	
-	public ChallengeTO (UUID id, String name) {
+
+	public ChallengeTO(UUID id, String name) {
 		super(id, name);
 	}
 
-	public ChallengeTO (UUID id, String name, String description) {
+	public ChallengeTO(UUID id, String name, String description) {
 		super(id, name, description);
 	}
-	
-	public ChallengeTO(Challenge model){
+
+	public ChallengeTO(Challenge model) {
 		super();
 		pullAttributesFromModel(model);
 	}
@@ -38,9 +39,9 @@ public class ChallengeTO extends AbstractReferenceTO implements TransferObject<C
 		super.addToModel(model);
 		return model;
 	}
-	
-	@Override 
-	public Challenge asModel(){
+
+	@Override
+	public Challenge asModel() {
 		return pushAttributesToModel(new Challenge());
 	}
 

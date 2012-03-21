@@ -7,7 +7,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -18,11 +17,8 @@ import edu.sinclair.ssp.model.reference.EducationGoal;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class PersonEducationGoal extends Auditable {
 
-	@OneToOne(mappedBy = "person_id", fetch = FetchType.LAZY)
-	private Person person;
-
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "education_goal_id", nullable = true, insertable = false, updatable = true)
+	@JoinColumn(name = "education_goal_id", nullable = true, insertable = false, updatable = false)
 	private EducationGoal educationGoal;
 
 	@Column(length = 50)
@@ -42,14 +38,6 @@ public class PersonEducationGoal extends Auditable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
 	}
 
 	public EducationGoal getEducationGoal() {

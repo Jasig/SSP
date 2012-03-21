@@ -15,9 +15,10 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Citizenship;
 
 @Repository
-public class CitizenshipDao implements AuditableCrudDao<Citizenship>{
+public class CitizenshipDao implements AuditableCrudDao<Citizenship> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(CitizenshipDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(CitizenshipDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -28,27 +29,28 @@ public class CitizenshipDao implements AuditableCrudDao<Citizenship>{
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(Citizenship.class);
 		query.addOrder(Order.asc("name"));
-		
-		if(status!=ObjectStatus.ALL){
+
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public Citizenship get(UUID id) {
-		return (Citizenship) this.sessionFactory.getCurrentSession().get(Citizenship.class, id); 
+		return (Citizenship) this.sessionFactory.getCurrentSession().get(
+				Citizenship.class, id);
 	}
 
 	@Override
 	public Citizenship save(Citizenship obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

@@ -5,25 +5,26 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class VeteranStatusTO extends AbstractReferenceTO implements TransferObject<VeteranStatus>{
+public class VeteranStatusTO extends AbstractReferenceTO implements
+		TransferObject<VeteranStatus> {
 
-	public VeteranStatusTO () {
+	public VeteranStatusTO() {
 		super();
 	}
-	
-	public VeteranStatusTO (UUID id) {
+
+	public VeteranStatusTO(UUID id) {
 		super(id);
 	}
-	
-	public VeteranStatusTO (UUID id, String name) {
+
+	public VeteranStatusTO(UUID id, String name) {
 		super(id, name);
 	}
 
-	public VeteranStatusTO (UUID id, String name, String description) {
+	public VeteranStatusTO(UUID id, String name, String description) {
 		super(id, name, description);
 	}
-	
-	public VeteranStatusTO(VeteranStatus model){
+
+	public VeteranStatusTO(VeteranStatus model) {
 		super();
 		pullAttributesFromModel(model);
 	}
@@ -38,9 +39,9 @@ public class VeteranStatusTO extends AbstractReferenceTO implements TransferObje
 		super.addToModel(model);
 		return model;
 	}
-	
-	@Override 
-	public VeteranStatus asModel(){
+
+	@Override
+	public VeteranStatus asModel() {
 		return pushAttributesToModel(new VeteranStatus());
 	}
 

@@ -8,7 +8,7 @@ import edu.sinclair.ssp.model.PersonDemographics;
 import edu.sinclair.ssp.model.PersonEducationGoal;
 import edu.sinclair.ssp.model.PersonEducationLevel;
 import edu.sinclair.ssp.model.PersonEducationPlan;
-import edu.sinclair.ssp.model.PersonFunding;
+import edu.sinclair.ssp.model.PersonFundingSource;
 
 public class IntakeForm {
 
@@ -22,7 +22,7 @@ public class IntakeForm {
 	
 	private PersonEducationPlan personEducationPlan;
 	
-	private List<PersonFunding> personFundingSources;
+	private List<PersonFundingSource> personFundingSources;
 	
 	private List<PersonChallenge> personChallenges;
 	
@@ -67,11 +67,11 @@ public class IntakeForm {
 		this.personEducationPlan = personEducationPlan;
 	}
 
-	public List<PersonFunding> getPersonFundingSources() {
+	public List<PersonFundingSource> getPersonFundingSources() {
 		return personFundingSources;
 	}
 
-	public void setPersonFundingSources(List<PersonFunding> personFundingSources) {
+	public void setPersonFundingSources(List<PersonFundingSource> personFundingSources) {
 		this.personFundingSources = personFundingSources;
 	}
 

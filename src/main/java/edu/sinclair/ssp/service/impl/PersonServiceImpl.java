@@ -54,76 +54,24 @@ public class PersonServiceImpl implements PersonService {
 	public Person save(Person obj) throws ObjectNotFoundException {
 		Person current = get(obj.getId());
 		
-		if(obj.getObjectStatus()!=null){
-			current.setObjectStatus(obj.getObjectStatus());
-		}
-		
-		if(obj.getFirstName()!=null){
-			current.setFirstName(obj.getFirstName());
-		}
-		
-		if(obj.getMiddleInitial()!=null){
-			current.setMiddleInitial(obj.getMiddleInitial());
-		}
-		
-		if(obj.getLastName()!=null){
-			current.setLastName(obj.getLastName());
-		}
-		
-		if(obj.getBirthDate()!=null){
-			current.setBirthDate(obj.getBirthDate());
-		}
-		
-		if(obj.getPrimaryEmailAddress()!=null){
-			current.setPrimaryEmailAddress(obj.getPrimaryEmailAddress());
-		}
-		
-		if(obj.getSecondaryEmailAddress()!=null){
-			current.setSecondaryEmailAddress(obj.getSecondaryEmailAddress());
-		}
-		
-		if(obj.getUsername()!=null){
-			current.setUsername(obj.getUsername());
-		}
-		
-		if(obj.getHomePhone()!=null){
-			current.setHomePhone(obj.getHomePhone());
-		}
-		
-		if(obj.getWorkPhone()!=null){
-			current.setWorkPhone(obj.getWorkPhone());
-		}
-		
-		if(obj.getCellPhone()!=null){
-			current.setCellPhone(obj.getCellPhone());
-		}
-		
-		if(obj.getAddressLine1()!=null){
-			current.setAddressLine1(obj.getAddressLine1());
-		}
-		
-		if(obj.getCity()!=null){
-			current.setCity(obj.getCity());
-		}
-		
-		if(obj.getState()!=null){
-			current.setState(obj.getState());
-		}
-		
-		if(obj.getZipCode()!=null){
-			current.setZipCode(obj.getZipCode());
-		}
-		
-		if(obj.getPhotoUrl()!=null){
-			current.setPhotoUrl(obj.getPhotoUrl());
-		}
-		
-		if(obj.getSchoolId()!=null){
-			current.setSchoolId(obj.getSchoolId());
-		}
-		
+		current.setObjectStatus(obj.getObjectStatus());
+		current.setFirstName(obj.getFirstName());
+		current.setMiddleInitial(obj.getMiddleInitial());
+		current.setLastName(obj.getLastName());
+		current.setBirthDate(obj.getBirthDate());
+		current.setPrimaryEmailAddress(obj.getPrimaryEmailAddress());
+		current.setSecondaryEmailAddress(obj.getSecondaryEmailAddress());
+		current.setUsername(obj.getUsername());
+		current.setHomePhone(obj.getHomePhone());
+		current.setWorkPhone(obj.getWorkPhone());
+		current.setCellPhone(obj.getCellPhone());
+		current.setAddressLine1(obj.getAddressLine1());
+		current.setCity(obj.getCity());
+		current.setState(obj.getState());
+		current.setZipCode(obj.getZipCode());
+		current.setPhotoUrl(obj.getPhotoUrl());
+		current.setSchoolId(obj.getSchoolId());
 		current.setEnabled(obj.isEnabled());
-		
 		
 		return dao.save(current);
 	}

@@ -42,23 +42,15 @@ public abstract class AbstractReferenceTO extends AuditableTO {
 	public void fromModel(AbstractReference model){
 		super.fromModel(model);
 		
-		if(model.getName()!=null){
-			setName(model.getName());
-		}
-		if(model.getDescription()!=null){
-			setDescription(model.getDescription());
-		}
+		setName(model.getName());
+		setDescription(model.getDescription());
 	}
 	
 	public void addToModel(AbstractReference model){
 		super.addToModel(model);
 		
-		if(getName()!=null){
-			model.setName(getName());
-		}
-		if(getDescription()!=null){
-			model.setDescription(getDescription());
-		}
+		model.setName(getName());
+		model.setDescription(getDescription());
 	}
 
 	public String getName() {

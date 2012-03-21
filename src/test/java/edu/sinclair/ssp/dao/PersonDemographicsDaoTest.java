@@ -26,56 +26,77 @@ import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class PersonDemographicsDaoTest {
 
-	//private static final Logger logger = LoggerFactory.getLogger(PersonDemographicsDaoTest.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(PersonDemographicsDaoTest.class);
+
+	@Autowired
+	private PersonDao daoPerson;
 
 	@Autowired
 	private PersonDemographicsDao dao;
-	
+
 	@Autowired
 	private SecurityServiceInTestEnvironment securityService;
 
 	@Before
-	public void setup(){
+	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
 	@Test
 	public void testGet() {
-		// test student = ken thompson
-		Person person = new Person(UUID.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
-		
-		PersonDemographics pd = dao.forPerson(person);
-		if(null==pd){
+		// test student = ken thompson; test wage = "some wage"
+		String testWage = "some wage";
+		Person person = daoPerson.get(UUID
+				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
+
+		assertTrue(
+				"Sample data should have allowed the user Ken Thompson to be loaded for UUID f549ecab-5110-4cc1-b2bb-369cac854dea",
+				person != null);
+
+		PersonDemographics pd = person.getDemographics();
+
+		if (null == pd) {
 			pd = new PersonDemographics();
-			pd.setPerson(person);
-			dao.save(pd);
-			pd = dao.forPerson(person);
+			pd.setWage(testWage);
+			person.setDemographics(pd);
+			daoPerson.save(person);
+
+			// reload to check that save worked
+			person = daoPerson.get(person.getId());
+			pd = person.getDemographics();
+		} else {
+			pd.setWage(testWage);
+			daoPerson.save(person);
 		}
-		
-		assertEquals(pd.getPerson().getId(), person.getId());
-		
+
+		assertEquals("Demographics wage values did not match.", testWage,
+				pd.getWage());
+
 		PersonDemographics byId = dao.get(pd.getId());
 		assertEquals(byId.getId(), pd.getId());
-		
+
+		UUID oldId = pd.getId();
+		person.setDemographics(null);
+		daoPerson.save(person);
 		dao.delete(pd);
-		assertNull(dao.forPerson(person));
+		assertNull("Demographic information was not correctly deleted.",
+				dao.get(oldId));
 	}
-	
+
 	@Test
-	public void testNull(){
+	public void testNull() {
 		UUID id = UUID.randomUUID();
 		PersonDemographics pd = dao.get(id);
 		assertNull(pd);
-		
-		pd = dao.forPerson(new Person(id));
-		assertNull(pd);
+
+		assertNull(new Person(id).getDemographics());
 	}
-	
+
 	@Test
-	public void testGetAll(){
+	public void testGetAll() {
 		dao.getAll(ObjectStatus.ALL);
 		assertTrue(true);
 	}
-
 
 }

@@ -6,14 +6,14 @@ import java.util.Map;
 import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.PersonChallenge;
 import edu.sinclair.ssp.model.PersonEducationLevel;
-import edu.sinclair.ssp.model.PersonFunding;
+import edu.sinclair.ssp.model.PersonFundingSource;
 import edu.sinclair.ssp.model.tool.IntakeForm;
 import edu.sinclair.ssp.transferobject.PersonChallengeTO;
 import edu.sinclair.ssp.transferobject.PersonDemographicsTO;
 import edu.sinclair.ssp.transferobject.PersonEducationGoalTO;
 import edu.sinclair.ssp.transferobject.PersonEducationLevelTO;
 import edu.sinclair.ssp.transferobject.PersonEducationPlanTO;
-import edu.sinclair.ssp.transferobject.PersonFundingTO;
+import edu.sinclair.ssp.transferobject.PersonFundingSourceTO;
 import edu.sinclair.ssp.transferobject.PersonTO;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
@@ -29,7 +29,7 @@ public class IntakeFormTO implements TransferObject<IntakeForm>{
 
 	private List<PersonEducationLevelTO> personEducationLevels;
 
-	private List<PersonFundingTO> personFundingSources;
+	private List<PersonFundingSourceTO> personFundingSources;
 
 	private List<PersonChallengeTO> personChallenges;
 
@@ -38,7 +38,7 @@ public class IntakeFormTO implements TransferObject<IntakeForm>{
 
 
 	private TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel> personEducationLevelToFactory = new TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel>(PersonEducationLevelTO.class);
-	private TransferObjectListFactory<PersonFundingTO, PersonFunding> personFundingToFactory = new TransferObjectListFactory<PersonFundingTO, PersonFunding>(PersonFundingTO.class);
+	private TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource> personFundingToFactory = new TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource>(PersonFundingSourceTO.class);
 	private TransferObjectListFactory<PersonChallengeTO, PersonChallenge> personChallengeToFactory = new TransferObjectListFactory<PersonChallengeTO, PersonChallenge>(PersonChallengeTO.class);
 	
 	public IntakeFormTO(IntakeForm model){
@@ -144,11 +144,11 @@ public class IntakeFormTO implements TransferObject<IntakeForm>{
 		this.personEducationPlan = personEducationPlan;
 	}
 
-	public List<PersonFundingTO> getPersonFundingSources() {
+	public List<PersonFundingSourceTO> getPersonFundingSources() {
 		return personFundingSources;
 	}
 
-	public void setPersonFundingSources(List<PersonFundingTO> personFundingSources) {
+	public void setPersonFundingSources(List<PersonFundingSourceTO> personFundingSources) {
 		this.personFundingSources = personFundingSources;
 	}
 

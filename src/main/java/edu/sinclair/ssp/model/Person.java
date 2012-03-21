@@ -18,6 +18,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
@@ -113,17 +115,20 @@ public class Person extends Auditable {
 
 	@Nullable()
 	@ManyToOne()
-	@Column(unique = true, nullable = true)
+	@Cascade(CascadeType.ALL)
+	@JoinColumn(name = "person_demographics_id", unique = true, nullable = true)
 	private PersonDemographics demographics;
 
 	@Nullable()
 	@ManyToOne()
-	@Column(unique = true, nullable = true)
+	@Cascade(CascadeType.ALL)
+	@JoinColumn(name = "person_education_goal_id", unique = true, nullable = true)
 	private PersonEducationGoal educationGoal;
 
 	@Nullable()
 	@ManyToOne()
-	@Column(unique = true, nullable = true)
+	@Cascade(CascadeType.ALL)
+	@JoinColumn(name = "person_education_plan_id", unique = true, nullable = true)
 	private PersonEducationPlan educationPlan;
 
 	/**
@@ -140,7 +145,7 @@ public class Person extends Auditable {
 	@Nullable()
 	@OneToMany
 	@JoinColumn(name = "person_funding")
-	private Set<PersonFunding> fundingSources;
+	private Set<PersonFundingSource> fundingSources;
 
 	/**
 	 * Challenges. Changes to this set are persisted.
@@ -333,11 +338,11 @@ public class Person extends Auditable {
 		this.educationLevels = educationLevels;
 	}
 
-	public Set<PersonFunding> getFundingSources() {
+	public Set<PersonFundingSource> getFundingSources() {
 		return fundingSources;
 	}
 
-	public void setFundingSources(Set<PersonFunding> fundingSources) {
+	public void setFundingSources(Set<PersonFundingSource> fundingSources) {
 		this.fundingSources = fundingSources;
 	}
 

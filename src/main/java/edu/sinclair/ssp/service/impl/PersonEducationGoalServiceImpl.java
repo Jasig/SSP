@@ -15,14 +15,15 @@ import edu.sinclair.ssp.service.PersonEducationGoalService;
 import edu.sinclair.ssp.service.reference.EducationGoalService;
 
 @Service
-public class PersonEducationGoalServiceImpl implements PersonEducationGoalService {
+public class PersonEducationGoalServiceImpl implements
+		PersonEducationGoalService {
 
 	@Autowired
 	private PersonEducationGoalDao dao;
-	
+
 	@Autowired
 	private EducationGoalService educationGoalService;
-	
+
 	@Override
 	public List<PersonEducationGoal> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -31,14 +32,14 @@ public class PersonEducationGoalServiceImpl implements PersonEducationGoalServic
 	@Override
 	public PersonEducationGoal get(UUID id) throws ObjectNotFoundException {
 		PersonEducationGoal obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "PersonEducationGoal");
 		}
 		return obj;
 	}
-	
+
 	@Override
-	public PersonEducationGoal forPerson(Person person){
+	public PersonEducationGoal forPerson(Person person) {
 		return dao.forPerson(person);
 	}
 
@@ -48,32 +49,29 @@ public class PersonEducationGoalServiceImpl implements PersonEducationGoalServic
 	}
 
 	@Override
-	public PersonEducationGoal save(PersonEducationGoal obj) throws ObjectNotFoundException{
+	public PersonEducationGoal save(PersonEducationGoal obj)
+			throws ObjectNotFoundException {
 		PersonEducationGoal current = get(obj.getId());
-		
-		if(obj.getObjectStatus()!=null){
-			current.setObjectStatus(obj.getObjectStatus());
-		}
-		
-		if(obj.getDescription()!=null){
-			current.setDescription(obj.getDescription());
-		}
-		if(obj.getPlannedOccupation()!=null){
-			current.setPlannedOccupation(obj.getPlannedOccupation());
-		}
+
+		current.setObjectStatus(obj.getObjectStatus());
+		current.setDescription(obj.getDescription());
+		current.setPlannedOccupation(obj.getPlannedOccupation());
 		current.setHowSureAboutMajor(obj.getHowSureAboutMajor());
-		if(obj.getEducationGoal()!=null){
-			current.setEducationGoal(educationGoalService.get(obj.getEducationGoal().getId()));
+
+		if (obj.getEducationGoal() != null
+				&& obj.getEducationGoal().getId() != null) {
+			current.setEducationGoal(educationGoalService.get(obj
+					.getEducationGoal().getId()));
 		}
-		
+
 		return dao.save(current);
 	}
 
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
 		PersonEducationGoal current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}

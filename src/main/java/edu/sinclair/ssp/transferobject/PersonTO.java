@@ -30,148 +30,45 @@ public class PersonTO extends AuditableTO implements TransferObject<Person>{
 	public void pullAttributesFromModel(Person model){
 		super.fromModel(model);
 		
-		if(model.getFirstName()!=null){
-			setFirstName(model.getFirstName());
-		}
-		
-		if(model.getMiddleInitial()!=null){
-			setMiddleInitial(model.getMiddleInitial());
-		}
-		
-		if(model.getLastName()!=null){
-			setLastName(model.getLastName());
-		}
-		
-		if(model.getBirthDate()!=null){
-			setBirthDate(model.getBirthDate());
-		}
-		
-		if(model.getPrimaryEmailAddress()!=null){
-			setPrimaryEmailAddress(model.getPrimaryEmailAddress());
-		}
-		
-		if(model.getSecondaryEmailAddress()!=null){
-			setSecondaryEmailAddress(model.getSecondaryEmailAddress());
-		}
-		
-		if(model.getUsername()!=null){
-			setUsername(model.getUsername());
-		}
-		
-		if(model.getHomePhone()!=null){
-			setHomePhone(model.getHomePhone());
-		}
-		
-		if(model.getWorkPhone()!=null){
-			setWorkPhone(model.getWorkPhone());
-		}
-		
-		if(model.getCellPhone()!=null){
-			setCellPhone(model.getCellPhone());
-		}
-		
-		if(model.getAddressLine1()!=null){
-			setAddressLine1(model.getAddressLine1());
-		}
-		
-		if(model.getAddressLine2()!=null){
-			setAddressLine2(model.getAddressLine2());
-		}
-		
-		if(model.getCity()!=null){
-			setCity(model.getCity());
-		}
-		
-		if(model.getState()!=null){
-			setState(model.getState());
-		}
-		
-		if(model.getZipCode()!=null){
-			setZipCode(model.getZipCode());
-		}
-		
-		if(model.getPhotoUrl()!=null){
-			setPhotoUrl(model.getPhotoUrl());
-		}
-		
-		if(model.getSchoolId()!=null){
-			setSchoolId(model.getSchoolId());
-		}
-		
+		setFirstName(model.getFirstName());
+		setMiddleInitial(model.getMiddleInitial());
+		setLastName(model.getLastName());
+		setBirthDate(model.getBirthDate());
+		setPrimaryEmailAddress(model.getPrimaryEmailAddress());
+		setSecondaryEmailAddress(model.getSecondaryEmailAddress());
+		setUsername(model.getUsername());
+		setHomePhone(model.getHomePhone());
+		setWorkPhone(model.getWorkPhone());
+		setCellPhone(model.getCellPhone());
+		setAddressLine1(model.getAddressLine1());
+		setAddressLine2(model.getAddressLine2());
+		setCity(model.getCity());
+		setState(model.getState());
+		setZipCode(model.getZipCode());
+		setPhotoUrl(model.getPhotoUrl());
+		setSchoolId(model.getSchoolId());
 		setEnabled(model.isEnabled());
 	}
 
 	public Person pushAttributesToModel(Person model){
 		super.addToModel(model);
-		
-		if(getFirstName()!=null){
-			model.setFirstName(getFirstName());
-		}
-		
-		if(getMiddleInitial()!=null){
-			model.setMiddleInitial(getMiddleInitial());
-		}
-		
-		if(getLastName()!=null){
-			model.setLastName(getLastName());
-		}
-		
-		if(getBirthDate()!=null){
-			model.setBirthDate(getBirthDate());
-		}
-		
-		if(getPrimaryEmailAddress()!=null){
-			model.setPrimaryEmailAddress(getPrimaryEmailAddress());
-		}
-		
-		if(getSecondaryEmailAddress()!=null){
-			model.setSecondaryEmailAddress(getSecondaryEmailAddress());
-		}
-		
-		if(getUsername()!=null){
-			model.setUsername(getUsername());
-		}
-		
-		if(getHomePhone()!=null){
-			model.setHomePhone(getHomePhone());
-		}
-		
-		if(getWorkPhone()!=null){
-			model.setWorkPhone(getWorkPhone());
-		}
-		
-		if(getCellPhone()!=null){
-			model.setCellPhone(getCellPhone());
-		}
-		
-		if(getAddressLine1()!=null){
-			model.setAddressLine1(getAddressLine1());
-		}
-		
-		if(getAddressLine2()!=null){
-			model.setAddressLine2(getAddressLine2());
-		}
-		
-		if(getCity()!=null){
-			model.setCity(getCity());
-		}
-		
-		if(getState()!=null){
-			model.setState(getState());
-		}
-		
-		if(getZipCode()!=null){
-			model.setZipCode(getZipCode());
-		}
-		
-		if(getPhotoUrl()!=null){
-			model.setPhotoUrl(getPhotoUrl());
-		}
-		
-		if(getSchoolId()!=null){
-			model.setSchoolId(getSchoolId());
-		}
-		
+		model.setFirstName(getFirstName());
+		model.setMiddleInitial(getMiddleInitial());
+		model.setLastName(getLastName());
+		model.setBirthDate(getBirthDate());
+		model.setPrimaryEmailAddress(getPrimaryEmailAddress());
+		model.setSecondaryEmailAddress(getSecondaryEmailAddress());
+		model.setUsername(getUsername());
+		model.setHomePhone(getHomePhone());
+		model.setWorkPhone(getWorkPhone());
+		model.setCellPhone(getCellPhone());
+		model.setAddressLine1(getAddressLine1());
+		model.setAddressLine2(getAddressLine2());
+		model.setCity(getCity());
+		model.setState(getState());
+		model.setZipCode(getZipCode());
+		model.setPhotoUrl(getPhotoUrl());
+		model.setSchoolId(getSchoolId());
 		model.setEnabled(isEnabled());
 		
 		return model;

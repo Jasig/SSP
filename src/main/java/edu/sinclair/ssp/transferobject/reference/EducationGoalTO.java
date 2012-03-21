@@ -5,25 +5,26 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.EducationGoal;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class EducationGoalTO extends AbstractReferenceTO implements TransferObject<EducationGoal>{
+public class EducationGoalTO extends AbstractReferenceTO implements
+		TransferObject<EducationGoal> {
 
-	public EducationGoalTO () {
+	public EducationGoalTO() {
 		super();
 	}
-	
-	public EducationGoalTO (UUID id) {
+
+	public EducationGoalTO(UUID id) {
 		super(id);
 	}
-	
-	public EducationGoalTO (UUID id, String name) {
+
+	public EducationGoalTO(UUID id, String name) {
 		super(id, name);
 	}
 
-	public EducationGoalTO (UUID id, String name, String description) {
+	public EducationGoalTO(UUID id, String name, String description) {
 		super(id, name, description);
 	}
-	
-	public EducationGoalTO(EducationGoal model){
+
+	public EducationGoalTO(EducationGoal model) {
 		super();
 		pullAttributesFromModel(model);
 	}
@@ -38,9 +39,9 @@ public class EducationGoalTO extends AbstractReferenceTO implements TransferObje
 		super.addToModel(model);
 		return model;
 	}
-	
-	@Override 
-	public EducationGoal asModel(){
+
+	@Override
+	public EducationGoal asModel() {
 		return pushAttributesToModel(new EducationGoal());
 	}
 

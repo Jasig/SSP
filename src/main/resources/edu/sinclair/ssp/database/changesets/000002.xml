@@ -6,92 +6,124 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-	
+
 	<changeSet author='daniel.bower' id='Add auditing to person table'>
 		<addColumn tableName="person">
 			<column name="created_date" type="datetime" valueDate="2012-03-09">
-				<constraints nullable="true"/>
+				<constraints nullable="true" />
 			</column>
 			<column name="modified_date" type="datetime" valueDate="2012-03-09">
 				<constraints nullable="true" />
 			</column>
-			<column name="created_by" type="uuid" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41">
-				<constraints nullable="true" 
-					foreignKeyName="person_created_by_person_id"
-					references="person(id)"/>
+			<column name="created_by" type="uuid"
+				value="58ba5ee3-734e-4ae9-b9c5-943774b4de41">
+				<constraints nullable="true" foreignKeyName="person_created_by_person_id"
+					references="person(id)" />
 			</column>
-			<column name="modified_by" type="uuid" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41">
+			<column name="modified_by" type="uuid"
+				value="58ba5ee3-734e-4ae9-b9c5-943774b4de41">
 				<constraints nullable="true" foreignKeyName="person_modified_by_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="object_status" type="int" value="1">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
-		<addNotNullConstraint tableName="person" columnName="created_date"/>
-		<addNotNullConstraint tableName="person" columnName="modified_date"/>
-		<addNotNullConstraint tableName="person" columnName="created_by"/>
-		<addNotNullConstraint tableName="person" columnName="modified_by"/>
-		<addNotNullConstraint tableName="person" columnName="object_status"/>
+		<addNotNullConstraint tableName="person"
+			columnName="created_date" />
+		<addNotNullConstraint tableName="person"
+			columnName="modified_date" />
+		<addNotNullConstraint tableName="person"
+			columnName="created_by" />
+		<addNotNullConstraint tableName="person"
+			columnName="modified_by" />
+		<addNotNullConstraint tableName="person"
+			columnName="object_status" />
 	</changeSet>
-	
-	<changeSet author='shawn.gormley' id='Modify Name field length in Reference tables.'>
-		<!-- Adjust data length on reference tables to accommodate longer admin entries. -->		
-		<modifyDataType tableName="challenge" columnName="name" newDataType="character varying(50)" />
-		<modifyDataType tableName="child_care_arrangement" columnName="name" newDataType="character varying(50)" />
-		<modifyDataType tableName="citizenship" columnName="name" newDataType="character varying(50)" />
-		<modifyDataType tableName="education_goal" columnName="name" newDataType="character varying(50)" />
-		<modifyDataType tableName="education_level" columnName="name" newDataType="character varying(50)" />
-		<modifyDataType tableName="ethnicity" columnName="name" newDataType="character varying(50)" />
-		<modifyDataType tableName="funding_source" columnName="name" newDataType="character varying(50)" />
-		<modifyDataType tableName="marital_status" columnName="name" newDataType="character varying(50)" />
-		<modifyDataType tableName="student_status" columnName="name" newDataType="character varying(50)" />
-		<modifyDataType tableName="veteran_status" columnName="name" newDataType="character varying(50)" />
-		
+
+	<changeSet author='shawn.gormley'
+		id='Modify Name field length in Reference tables.'>
+		<!-- Adjust data length on reference tables to accommodate longer admin 
+			entries. -->
+		<modifyDataType tableName="challenge" columnName="name"
+			newDataType="character varying(50)" />
+		<modifyDataType tableName="child_care_arrangement"
+			columnName="name" newDataType="character varying(50)" />
+		<modifyDataType tableName="citizenship" columnName="name"
+			newDataType="character varying(50)" />
+		<modifyDataType tableName="education_goal" columnName="name"
+			newDataType="character varying(50)" />
+		<modifyDataType tableName="education_level" columnName="name"
+			newDataType="character varying(50)" />
+		<modifyDataType tableName="ethnicity" columnName="name"
+			newDataType="character varying(50)" />
+		<modifyDataType tableName="funding_source" columnName="name"
+			newDataType="character varying(50)" />
+		<modifyDataType tableName="marital_status" columnName="name"
+			newDataType="character varying(50)" />
+		<modifyDataType tableName="student_status" columnName="name"
+			newDataType="character varying(50)" />
+		<modifyDataType tableName="veteran_status" columnName="name"
+			newDataType="character varying(50)" />
+
 		<rollback>
-			<modifyDataType tableName="challenge" columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="child_care_arrangement" columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="citizenship" columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="education_goal" columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="education_level" columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="ethnicity" columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="funding_source" columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="marital_status" columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="student_status" columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="veteran_status" columnName="name" newDataType="character varying(25)" />
-		</rollback>	
+			<modifyDataType tableName="challenge" columnName="name"
+				newDataType="character varying(25)" />
+			<modifyDataType tableName="child_care_arrangement"
+				columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="citizenship" columnName="name"
+				newDataType="character varying(25)" />
+			<modifyDataType tableName="education_goal" columnName="name"
+				newDataType="character varying(25)" />
+			<modifyDataType tableName="education_level"
+				columnName="name" newDataType="character varying(25)" />
+			<modifyDataType tableName="ethnicity" columnName="name"
+				newDataType="character varying(25)" />
+			<modifyDataType tableName="funding_source" columnName="name"
+				newDataType="character varying(25)" />
+			<modifyDataType tableName="marital_status" columnName="name"
+				newDataType="character varying(25)" />
+			<modifyDataType tableName="student_status" columnName="name"
+				newDataType="character varying(25)" />
+			<modifyDataType tableName="veteran_status" columnName="name"
+				newDataType="character varying(25)" />
+		</rollback>
 	</changeSet>
-	
+
 	<changeSet author='daniel.bower' id='Add person_demographics table'>
 		<createTable tableName="person_demographics">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
+				<constraints nullable="false"
 					foreignKeyName="person_demographics_created_by_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="person_demographics_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="person_demographics_modified_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 			<column name="person_id" type="uuid">
-				<constraints nullable="false" foreignKeyName="person_demographics_person_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="person_demographics_person_person_id" references="person(id)" />
 			</column>
-			<column name="ability_to_benefit" type="boolean" defaultValueBoolean="false"/>
-			<column name="local" type="boolean" defaultValueBoolean="true"/>
-			<column name="primary_caregiver" type="boolean" defaultValueBoolean="false"/>
-			<column name="child_care_needed" type="boolean" defaultValueBoolean="false"/>
-			<column name="employed" type="boolean" defaultValueBoolean="false"/>
+			<column name="ability_to_benefit" type="boolean"
+				defaultValueBoolean="false" />
+			<column name="local" type="boolean" defaultValueBoolean="true" />
+			<column name="primary_caregiver" type="boolean"
+				defaultValueBoolean="false" />
+			<column name="child_care_needed" type="boolean"
+				defaultValueBoolean="false" />
+			<column name="employed" type="boolean" defaultValueBoolean="false" />
 			<column name="anticipated_start_term" type="character varying(25)">
 				<constraints nullable="true" />
 			</column>
@@ -129,64 +161,67 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="marital_status_id" type="uuid">
-				<constraints nullable="true" foreignKeyName="person_demographics_marital_status_id_marital_status_id"
-					references="marital_status(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="person_demographics_marital_status_id_marital_status_id"
+					references="marital_status(id)" />
 			</column>
 			<column name="ethnicity_id" type="uuid">
-				<constraints nullable="true" foreignKeyName="person_demographics_ethnicity_id_ethnicity_id"
-					references="ethnicity(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="person_demographics_ethnicity_id_ethnicity_id"
+					references="ethnicity(id)" />
 			</column>
 			<column name="citizenship_id" type="uuid">
-				<constraints nullable="true" foreignKeyName="person_demographics_citizenship_id_citizenship_id"
-					references="citizenship(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="person_demographics_citizenship_id_citizenship_id"
+					references="citizenship(id)" />
 			</column>
 			<column name="veteran_status_id" type="uuid">
-				<constraints nullable="true" foreignKeyName="person_demographics_veteran_status_id_veteran_status_id"
-					references="veteran_status(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="person_demographics_veteran_status_id_veteran_status_id"
+					references="veteran_status(id)" />
 			</column>
 			<column name="coach_id" type="uuid">
-				<constraints nullable="true" foreignKeyName="person_demographics_coach_id_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="person_demographics_coach_id_person_id" references="person(id)" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on person_demographics to ssp</sql>
 		<rollback>
-			<dropTable tableName="person_demographics"/>
+			<dropTable tableName="person_demographics" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
-	
+	</changeSet>
+
 	<changeSet author='daniel.bower' id='Add person_education_goal table'>
 		<createTable tableName="person_education_goal">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="person_education_goal_created_by"
-					references="person(id)"/>
+				<constraints nullable="false" foreignKeyName="person_education_goal_created_by"
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="person_education_goal_modified_by"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="person_education_goal_modified_by" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 			<column name="person_id" type="uuid">
 				<constraints nullable="false" foreignKeyName="person_education_goal_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="description" type="character varying(50)">
 				<constraints nullable="true" />
@@ -198,72 +233,273 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="education_goal_id" type="uuid">
-				<constraints nullable="true" foreignKeyName="person_education_goal_education_goal_id"
-					references="education_goal(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="person_education_goal_education_goal_id"
+					references="education_goal(id)" />
 			</column>
 		</createTable>
-	
+
 		<sql>grant all on person_education_goal to ssp</sql>
 		<rollback>
-			<dropTable tableName="person_education_goal"/>
+			<dropTable tableName="person_education_goal" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet>  
-	
+	</changeSet>
+
 	<changeSet author='daniel.bower' id='Add person_education_plan table'>
 		<createTable tableName="person_education_plan">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
+				<constraints nullable="false"
 					foreignKeyName="person_education_plan_created_by_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="person_education_plan_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="person_education_plan_modified_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 			<column name="person_id" type="uuid">
-				<constraints nullable="false" foreignKeyName="person_education_plan_person_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="person_education_plan_person_person_id" references="person(id)" />
 			</column>
-			<column name="new_orientation_complete" type="boolean"/>
-			<column name="registered_for_classes" type="boolean"/>
-			<column name="college_degree_for_parents" type="boolean"/>
-			<column name="special_needs" type="boolean"/>
+			<column name="new_orientation_complete" type="boolean" />
+			<column name="registered_for_classes" type="boolean" />
+			<column name="college_degree_for_parents" type="boolean" />
+			<column name="special_needs" type="boolean" />
 			<column name="grade_typically_earned" type="character varying(2)">
 				<constraints nullable="true" />
 			</column>
 			<column name="student_status_id" type="uuid">
-				<constraints nullable="true" foreignKeyName="person_education_plan_student_status_id"
-					references="student_status(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="person_education_plan_student_status_id"
+					references="student_status(id)" />
 			</column>
 		</createTable>
-	
+
 		<sql>grant all on person_education_goal to ssp</sql>
 		<rollback>
-			<dropTable tableName="person_education_goal"/>
+			<dropTable tableName="person_education_goal" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
- </databaseChangeLog>
+	</changeSet>
+
+
+	<changeSet author='daniel.bower' id='Add person_challenge table'>
+		<createTable tableName="person_challenge">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_challenge_created_by_person_id" references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_challenge_modified_by_person_id" references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_challenge_person_person_id" references="person(id)" />
+			</column>
+			<column name="description" type="character varying(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="challenge_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_challenge_challenge_challenge_id"
+					references="challenge(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on person_challenge to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_challenge" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='daniel.bower' id='Add person_education_level table'>
+		<createTable tableName="person_education_level">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_education_level_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_education_level_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_education_level_person_person_id"
+					references="person(id)" />
+			</column>
+			<column name="description" type="character varying(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="challenge_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_education_level_education_level_education_level_id"
+					references="education_level(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on person_education_level to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_education_level" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='daniel.bower' id='Add person_funding_source table'>
+		<createTable tableName="person_funding_source">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_funding_source_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_funding_source_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_funding_source_person_person_id" references="person(id)" />
+			</column>
+			<column name="description" type="character varying(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="challenge_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_funding_source_funding_source_funding_source_id"
+					references="funding_source(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on person_funding_source to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_funding_source" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='jon.adams'
+		id='Move one-to-one association foreign keys to Person'>
+		<addColumn tableName="person">
+			<column name="person_demographics_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_person_demographics_id"
+					references="person_demographics(id)" />
+			</column>
+			<column name="person_education_goal_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_person_education_goal_id"
+					references="person_education_goal(id)" />
+			</column>
+			<column name="person_education_plan_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_person_education_plan_id"
+					references="person_education_plan(id)" />
+			</column>
+		</addColumn>
+
+		<dropColumn tableName="person_demographics" columnName="person_id" />
+		<dropColumn tableName="person_education_goal" columnName="person_id" />
+		<dropColumn tableName="person_education_plan" columnName="person_id" />
+
+		<rollback>
+
+			<dropColumn tableName="person" columnName="person_demographics_id" />
+			<dropColumn tableName="person" columnName="person_education_goal_id" />
+			<dropColumn tableName="person" columnName="person_education_plan_id" />
+
+			<addColumn tableName="person_demographics">
+				<column name="person_id" type="uuid">
+					<constraints nullable="false"
+						foreignKeyName="person_demographics_person_person_id" references="person(id)" />
+				</column>
+				<column name="person_id" type="uuid">
+					<constraints nullable="false" foreignKeyName="person_education_goal_person_id"
+						references="person(id)" />
+				</column>
+				<column name="person_id" type="uuid">
+					<constraints nullable="false"
+						foreignKeyName="person_education_plan_person_person_id"
+						references="person(id)" />
+				</column>
+			</addColumn>
+		</rollback>
+	</changeSet>
+
+	<changeSet author="jon.adams"
+		id="Fix typo in grant statement for person_education_plan">
+		<sql>grant all on person_education_plan to ssp</sql>
+	</changeSet>
+
+</databaseChangeLog>

@@ -1,37 +1,36 @@
 package edu.sinclair.ssp.model;
 
-import java.util.UUID;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.EducationLevel;
 
-public class PersonEducationLevel {
+@Entity
+@Table(schema = "public")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class PersonEducationLevel extends Auditable {
 
-	private UUID id;
-	
+	@Column(length = 255)
+	@Size(max = 255)
 	private String description;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
 	private Person person;
-	
+
 	/**
 	 * Associated person. Changes to this Person are not persisted.
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "education_level_id", nullable = false, insertable = false, updatable = false)
 	private EducationLevel educationLevel;
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
 
 	public String getDescription() {
 		return description;
@@ -56,6 +55,5 @@ public class PersonEducationLevel {
 	public void setEducationLevel(EducationLevel educationLevel) {
 		this.educationLevel = educationLevel;
 	}
-	
-	
+
 }

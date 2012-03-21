@@ -1,16 +1,23 @@
 package edu.sinclair.ssp.model;
 
-import java.util.UUID;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.FundingSource;
 
-public class PersonFunding {
+@Entity
+@Table(schema = "public")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class PersonFundingSource extends Auditable {
 
-	private UUID id;
-
+	@Column(length = 255)
+	@Size(max = 255)
 	private String description;
 
 	/**
@@ -23,14 +30,6 @@ public class PersonFunding {
 	@ManyToOne()
 	@JoinColumn(name = "funding_source_id", nullable = false, insertable = false, updatable = false)
 	private FundingSource fundingSource;
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
 
 	public String getDescription() {
 		return description;
