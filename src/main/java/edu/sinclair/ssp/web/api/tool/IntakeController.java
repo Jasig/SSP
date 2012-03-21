@@ -63,80 +63,115 @@ import edu.sinclair.ssp.transferobject.tool.IntakeFormTO;
 @RequestMapping("/tool/studentIntake")
 public class IntakeController {
 
-	private static final Logger logger = LoggerFactory.getLogger(IntakeController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(IntakeController.class);
 
 	@Autowired
 	private IntakeService service;
 
-	@Autowired private ChallengeService challengeService;
-	@Autowired private ChildCareArrangementService childCareArrangementService;
-	@Autowired private CitizenshipService citizenshipService;
-	@Autowired private EducationGoalService educationGoalService;
-	@Autowired private EducationLevelService educationLevelService;
-	@Autowired private EthnicityService ethnicityService;
-	@Autowired private FundingSourceService fundingSourceService;
-	@Autowired private MaritalStatusService maritalStatusService;
-	@Autowired private StudentStatusService studentStatusService;
-	@Autowired private VeteranStatusService veteranStatusService;
+	@Autowired
+	private ChallengeService challengeService;
 
-	private TransferObjectListFactory<ChallengeTO, Challenge> challengeToFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(ChallengeTO.class);
-	private TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> childCareArrangementToFactory = new TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement>(ChildCareArrangementTO.class);
-	private TransferObjectListFactory<CitizenshipTO, Citizenship> citizenshipToFactory = new TransferObjectListFactory<CitizenshipTO, Citizenship>(CitizenshipTO.class);
-	private TransferObjectListFactory<EducationGoalTO, EducationGoal> educationGoalToFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(EducationGoalTO.class);
-	private TransferObjectListFactory<EducationLevelTO, EducationLevel> educationLevelToFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(EducationLevelTO.class);
-	private TransferObjectListFactory<EthnicityTO, Ethnicity> ethnicityToFactory = new TransferObjectListFactory<EthnicityTO, Ethnicity>(EthnicityTO.class);
-	private TransferObjectListFactory<FundingSourceTO, FundingSource> fundingSourceToFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(FundingSourceTO.class);
-	private TransferObjectListFactory<MaritalStatusTO, MaritalStatus> maritalStatusToFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(MaritalStatusTO.class);
-	private TransferObjectListFactory<StudentStatusTO, StudentStatus> studentStatusToFactory = new TransferObjectListFactory<StudentStatusTO, StudentStatus>(StudentStatusTO.class);
-	private TransferObjectListFactory<VeteranStatusTO, VeteranStatus> veteranStatusToFactory = new TransferObjectListFactory<VeteranStatusTO, VeteranStatus>(VeteranStatusTO.class);
+	@Autowired
+	private ChildCareArrangementService childCareArrangementService;
+
+	@Autowired
+	private CitizenshipService citizenshipService;
+
+	@Autowired
+	private EducationGoalService educationGoalService;
+
+	@Autowired
+	private EducationLevelService educationLevelService;
+
+	@Autowired
+	private EthnicityService ethnicityService;
+
+	@Autowired
+	private FundingSourceService fundingSourceService;
+
+	@Autowired
+	private MaritalStatusService maritalStatusService;
+
+	@Autowired
+	private StudentStatusService studentStatusService;
+
+	@Autowired
+	private VeteranStatusService veteranStatusService;
+
+	private TransferObjectListFactory<ChallengeTO, Challenge> challengeToFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(
+			ChallengeTO.class);
+	private TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> childCareArrangementToFactory = new TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement>(
+			ChildCareArrangementTO.class);
+	private TransferObjectListFactory<CitizenshipTO, Citizenship> citizenshipToFactory = new TransferObjectListFactory<CitizenshipTO, Citizenship>(
+			CitizenshipTO.class);
+	private TransferObjectListFactory<EducationGoalTO, EducationGoal> educationGoalToFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(
+			EducationGoalTO.class);
+	private TransferObjectListFactory<EducationLevelTO, EducationLevel> educationLevelToFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(
+			EducationLevelTO.class);
+	private TransferObjectListFactory<EthnicityTO, Ethnicity> ethnicityToFactory = new TransferObjectListFactory<EthnicityTO, Ethnicity>(
+			EthnicityTO.class);
+	private TransferObjectListFactory<FundingSourceTO, FundingSource> fundingSourceToFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(
+			FundingSourceTO.class);
+	private TransferObjectListFactory<MaritalStatusTO, MaritalStatus> maritalStatusToFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(
+			MaritalStatusTO.class);
+	private TransferObjectListFactory<StudentStatusTO, StudentStatus> studentStatusToFactory = new TransferObjectListFactory<StudentStatusTO, StudentStatus>(
+			StudentStatusTO.class);
+	private TransferObjectListFactory<VeteranStatusTO, VeteranStatus> veteranStatusToFactory = new TransferObjectListFactory<VeteranStatusTO, VeteranStatus>(
+			VeteranStatusTO.class);
 
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.PUT)
-	public @ResponseBody ServiceResponse save(@PathVariable UUID studentId, @Valid @RequestBody IntakeFormTO obj) throws Exception {
+	public @ResponseBody
+	ServiceResponse save(@PathVariable UUID studentId,
+			@Valid @RequestBody IntakeFormTO obj) throws Exception {
 		IntakeForm model = obj.asModel();
 		model.getPerson().setId(studentId);
 		return new ServiceResponse(service.save(model));
 	}
 
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
-	public @ResponseBody IntakeFormTO load(@PathVariable UUID studentId) throws Exception{
-		IntakeFormTO formTO =  new IntakeFormTO(service.loadForPerson(studentId));
+	public @ResponseBody
+	IntakeFormTO load(@PathVariable UUID studentId) throws Exception {
+		IntakeFormTO formTO = new IntakeFormTO(service.loadForPerson(studentId));
 		formTO.setReferenceData(referenceData());
 		return formTO;
 	}
 
 	public Map<String, Object> referenceData() throws Exception {
 		Map<String, Object> refData = new HashMap<String, Object>();
-		
-		refData.put("challenges", challengeToFactory.toTOList(
-				challengeService.getAll(ObjectStatus.ACTIVE)));
-		refData.put("childCareArrangements", childCareArrangementToFactory.toTOList(
-				childCareArrangementService.getAll(ObjectStatus.ACTIVE)));
-		refData.put("citizenships", citizenshipToFactory.toTOList(
-				citizenshipService.getAll(ObjectStatus.ACTIVE)));
-		refData.put("educationGoals", educationGoalToFactory.toTOList(
-				educationGoalService.getAll(ObjectStatus.ACTIVE)));
-		refData.put("educationLevels", educationLevelToFactory.toTOList(
-				educationLevelService.getAll(ObjectStatus.ACTIVE)));
-		refData.put("ethnicitys", ethnicityToFactory.toTOList(
-				ethnicityService.getAll(ObjectStatus.ACTIVE)));
-		refData.put("fundingSources", fundingSourceToFactory.toTOList(
-				fundingSourceService.getAll(ObjectStatus.ACTIVE)));
-		refData.put("maritalStatuss", maritalStatusToFactory.toTOList(
-				maritalStatusService.getAll(ObjectStatus.ACTIVE)));
-		refData.put("studentStatuss", studentStatusToFactory.toTOList(
-				studentStatusService.getAll(ObjectStatus.ACTIVE)));
-		refData.put("veteranStatuss", veteranStatusToFactory.toTOList(
-				veteranStatusService.getAll(ObjectStatus.ACTIVE)));
-	
+
+		refData.put("challenges", challengeToFactory.toTOList(challengeService
+				.getAll(ObjectStatus.ACTIVE)));
+		refData.put("childCareArrangements", childCareArrangementToFactory
+				.toTOList(childCareArrangementService
+						.getAll(ObjectStatus.ACTIVE)));
+		refData.put("citizenships", citizenshipToFactory
+				.toTOList(citizenshipService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("educationGoals", educationGoalToFactory
+				.toTOList(educationGoalService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("educationLevels", educationLevelToFactory
+				.toTOList(educationLevelService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("ethnicitys", ethnicityToFactory.toTOList(ethnicityService
+				.getAll(ObjectStatus.ACTIVE)));
+		refData.put("fundingSources", fundingSourceToFactory
+				.toTOList(fundingSourceService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("maritalStatuss", maritalStatusToFactory
+				.toTOList(maritalStatusService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("studentStatuss", studentStatusToFactory
+				.toTOList(studentStatusService.getAll(ObjectStatus.ACTIVE)));
+		refData.put("veteranStatuss", veteranStatusToFactory
+				.toTOList(veteranStatusService.getAll(ObjectStatus.ACTIVE)));
+
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());
 		refData.put("states", States.values());
-	
+
 		return refData;
 	}
 
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody ServiceResponse handle(Exception e){
+	public @ResponseBody
+	ServiceResponse handle(Exception e) {
 		logger.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
