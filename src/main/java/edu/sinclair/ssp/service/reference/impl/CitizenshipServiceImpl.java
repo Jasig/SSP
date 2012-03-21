@@ -52,7 +52,7 @@ public class CitizenshipServiceImpl implements CitizenshipService {
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
 		current.setObjectStatus(obj.getObjectStatus());
-		
+
 		return dao.save(current);
 	}
 

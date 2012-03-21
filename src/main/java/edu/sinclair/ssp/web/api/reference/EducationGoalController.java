@@ -44,7 +44,8 @@ public class EducationGoalController extends RestController<EducationGoalTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<EducationGoalTO> getAll(@RequestParam(required = false) ObjectStatus status)
+	List<EducationGoalTO> getAll(
+			@RequestParam(required = false) ObjectStatus status)
 			throws Exception {
 		if (status == null) {
 			status = ObjectStatus.ACTIVE;
@@ -67,7 +68,8 @@ public class EducationGoalController extends RestController<EducationGoalTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	EducationGoalTO create(@Valid @RequestBody EducationGoalTO obj) throws Exception {
+	EducationGoalTO create(@Valid @RequestBody EducationGoalTO obj)
+			throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"You submitted a educationGoal with an id to the create method.  Did you mean to save?");
@@ -87,8 +89,8 @@ public class EducationGoalController extends RestController<EducationGoalTO> {
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	EducationGoalTO save(@PathVariable UUID id, @Valid @RequestBody EducationGoalTO obj)
-			throws Exception {
+	EducationGoalTO save(@PathVariable UUID id,
+			@Valid @RequestBody EducationGoalTO obj) throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a educationGoal without an id to the save method.  Did you mean to create?");

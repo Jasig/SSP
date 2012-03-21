@@ -17,7 +17,8 @@ import edu.sinclair.ssp.service.reference.ChildCareArrangementService;
 
 @Service
 @Transactional
-public class ChildCareArrangementServiceImpl implements ChildCareArrangementService {
+public class ChildCareArrangementServiceImpl implements
+		ChildCareArrangementService {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
@@ -46,13 +47,14 @@ public class ChildCareArrangementServiceImpl implements ChildCareArrangementServ
 	}
 
 	@Override
-	public ChildCareArrangement save(ChildCareArrangement obj) throws ObjectNotFoundException {
+	public ChildCareArrangement save(ChildCareArrangement obj)
+			throws ObjectNotFoundException {
 		ChildCareArrangement current = get(obj.getId());
 
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
 		current.setObjectStatus(obj.getObjectStatus());
-		
+
 		return dao.save(current);
 	}
 

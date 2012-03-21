@@ -29,19 +29,23 @@ import edu.sinclair.ssp.web.api.validation.ValidationException;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/person")
-public class PersonController extends RestController<PersonTO>{
+public class PersonController extends RestController<PersonTO> {
 
-	private static final Logger logger = LoggerFactory.getLogger(PersonController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(PersonController.class);
 
 	@Autowired
 	private PersonService service;
-	
-	private TransferObjectListFactory<PersonTO, Person> toFactory = new TransferObjectListFactory<PersonTO, Person>(PersonTO.class);
+
+	private TransferObjectListFactory<PersonTO, Person> toFactory = new TransferObjectListFactory<PersonTO, Person>(
+			PersonTO.class);
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody List<PersonTO> getAll(@RequestParam(required = false) ObjectStatus status) throws Exception {
-		if(status==null){
+	public @ResponseBody
+	List<PersonTO> getAll(@RequestParam(required = false) ObjectStatus status)
+			throws Exception {
+		if (status == null) {
 			status = ObjectStatus.ACTIVE;
 		}
 		return toFactory.toTOList(service.getAll(status));
@@ -49,27 +53,30 @@ public class PersonController extends RestController<PersonTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody PersonTO get(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	PersonTO get(@PathVariable UUID id) throws Exception {
 		Person model = service.get(id);
-		if(model!=null){
+		if (model != null) {
 			return new PersonTO(model);
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public @ResponseBody PersonTO create(@Valid @RequestBody PersonTO obj) throws Exception {
-		if(obj.getId()!=null){
-			throw new ValidationException("You submitted a person with an id to the create method.  Did you mean to save?");
+	public @ResponseBody
+	PersonTO create(@Valid @RequestBody PersonTO obj) throws Exception {
+		if (obj.getId() != null) {
+			throw new ValidationException(
+					"You submitted a person with an id to the create method.  Did you mean to save?");
 		}
-		
+
 		Person model = obj.asModel();
-		
-		if(null!=model){
+
+		if (null != model) {
 			Person createdModel = service.create(model);
-			if(null!=createdModel){
+			if (null != createdModel) {
 				return new PersonTO(createdModel);
 			}
 		}
@@ -78,16 +85,19 @@ public class PersonController extends RestController<PersonTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public @ResponseBody PersonTO save(@PathVariable UUID id, @Valid @RequestBody PersonTO obj) throws Exception {
-		if(id==null){
-			throw new ValidationException("You submitted a person without an id to the save method.  Did you mean to create?");
+	public @ResponseBody
+	PersonTO save(@PathVariable UUID id, @Valid @RequestBody PersonTO obj)
+			throws Exception {
+		if (id == null) {
+			throw new ValidationException(
+					"You submitted a person without an id to the save method.  Did you mean to create?");
 		}
-		
+
 		Person model = obj.asModel();
 		model.setId(id);
-		
+
 		Person savedPerson = service.save(model);
-		if(null!=savedPerson){
+		if (null != savedPerson) {
 			return new PersonTO(savedPerson);
 		}
 		return null;
@@ -95,14 +105,16 @@ public class PersonController extends RestController<PersonTO>{
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody ServiceResponse delete(@PathVariable UUID id) throws Exception {
+	public @ResponseBody
+	ServiceResponse delete(@PathVariable UUID id) throws Exception {
 		service.delete(id);
 		return new ServiceResponse(true);
 	}
 
 	@Override
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody ServiceResponse handle(Exception e){
+	public @ResponseBody
+	ServiceResponse handle(Exception e) {
 		logger.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}

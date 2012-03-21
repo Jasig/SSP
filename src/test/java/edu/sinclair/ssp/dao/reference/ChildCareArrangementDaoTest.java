@@ -29,33 +29,34 @@ import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class ChildCareArrangementDaoTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(ChildCareArrangementDaoTest.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ChildCareArrangementDaoTest.class);
 
 	@Autowired
 	private ChildCareArrangementDao dao;
-	
+
 	@Autowired
 	private SecurityServiceInTestEnvironment securityService;
 
 	@Before
-	public void setup(){
+	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
-	
+
 	@Test
-	public void testSaveNew(){
+	public void testSaveNew() {
 		UUID saved;
-		
+
 		ChildCareArrangement obj = new ChildCareArrangement();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
-		
+
 		assertNotNull(obj.getId());
 		saved = obj.getId();
-		
+
 		logger.debug(obj.toString());
-		
+
 		obj = dao.get(saved);
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
@@ -63,22 +64,22 @@ public class ChildCareArrangementDaoTest {
 
 		List<ChildCareArrangement> all = dao.getAll(ObjectStatus.ACTIVE);
 		assertNotNull(all);
-		assertTrue(all.size()>0);
+		assertTrue(all.size() > 0);
 		assertList(all);
-		
+
 		dao.delete(obj);
 	}
 
 	@Test
-	public void testNull(){
+	public void testNull() {
 		UUID id = UUID.randomUUID();
 		ChildCareArrangement childCareArrangement = dao.get(id);
-		
+
 		assertNull(childCareArrangement);
 	}
 
-	private void assertList(List<ChildCareArrangement> objects){
-		for(ChildCareArrangement object : objects){
+	private void assertList(List<ChildCareArrangement> objects) {
+		for (ChildCareArrangement object : objects) {
 			assertNotNull(object.getId());
 		}
 		assertTrue(true);

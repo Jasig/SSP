@@ -21,7 +21,7 @@ public class IntakeServiceTest {
 	// private static final Logger logger =
 	// LoggerFactory.getLogger(StudentIntakeServiceTest.class);
 
-	//private IntakeService service;
+	// private IntakeService service;
 
 	private ChallengeService challengeService;
 
@@ -30,8 +30,8 @@ public class IntakeServiceTest {
 
 	@Before
 	public void setup() {
-		//service = new IntakeService();
-		
+		// service = new IntakeService();
+
 		challengeService = createMock(ChallengeService.class);
 		// fundingSourceService = createMock(FundingSourceService.class);
 		// veteranStatusService = createMock(VeteranStatusService.class);

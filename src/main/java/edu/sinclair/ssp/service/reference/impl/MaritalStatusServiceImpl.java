@@ -52,7 +52,7 @@ public class MaritalStatusServiceImpl implements MaritalStatusService {
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
 		current.setObjectStatus(obj.getObjectStatus());
-		
+
 		return dao.save(current);
 	}
 

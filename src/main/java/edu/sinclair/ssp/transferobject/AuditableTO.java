@@ -7,7 +7,7 @@ import edu.sinclair.ssp.model.Auditable;
 import edu.sinclair.ssp.model.ObjectStatus;
 
 public abstract class AuditableTO {
-	
+
 	private UUID id;
 
 	private Date createdDate;
@@ -15,32 +15,32 @@ public abstract class AuditableTO {
 	private UUID createdById;
 
 	private Date modifiedDate;
-	
+
 	private UUID modifiedById;
-	
+
 	private ObjectStatus objectStatus;
 
+	public AuditableTO() {
+	}
 
-	public AuditableTO(){}
-	
-	public AuditableTO(UUID id){
+	public AuditableTO(UUID id) {
 		this.id = id;
 	}
 
-	public void fromModel(Auditable model){
+	public void fromModel(Auditable model) {
 		setId(model.getId());
-		if(model.getCreatedBy()!=null){
+		if (model.getCreatedBy() != null) {
 			setCreatedById(model.getCreatedBy().getId());
 		}
-		if(model.getModifiedBy()!=null){
+		if (model.getModifiedBy() != null) {
 			setModifiedById(model.getModifiedBy().getId());
 		}
 		setCreatedDate(model.getCreatedDate());
 		setModifiedDate(model.getModifiedDate());
 		setObjectStatus(model.getObjectStatus());
 	}
-	
-	public void addToModel(Auditable model){
+
+	public void addToModel(Auditable model) {
 		model.setId(getId());
 		model.setObjectStatus(getObjectStatus());
 	}

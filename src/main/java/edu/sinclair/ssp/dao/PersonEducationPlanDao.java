@@ -14,9 +14,11 @@ import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonEducationPlan;
 
 @Repository
-public class PersonEducationPlanDao implements AuditableCrudDao<PersonEducationPlan> {
+public class PersonEducationPlanDao implements
+		AuditableCrudDao<PersonEducationPlan> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(PersonEducationPlanDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(PersonEducationPlanDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -27,21 +29,20 @@ public class PersonEducationPlanDao implements AuditableCrudDao<PersonEducationP
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(PersonEducationPlan.class);
 
-		if(status!=ObjectStatus.ALL){
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public PersonEducationPlan get(UUID id) {
-		return (PersonEducationPlan) 
-				this.sessionFactory.getCurrentSession().get(
-						PersonEducationPlan.class, id);
+		return (PersonEducationPlan) this.sessionFactory.getCurrentSession()
+				.get(PersonEducationPlan.class, id);
 	}
 
-	public PersonEducationPlan forPerson(Person person){
+	public PersonEducationPlan forPerson(Person person) {
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(PersonEducationPlan.class)
 				.add(Restrictions.eq("person", person));
@@ -50,12 +51,12 @@ public class PersonEducationPlanDao implements AuditableCrudDao<PersonEducationP
 
 	@Override
 	public PersonEducationPlan save(PersonEducationPlan obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

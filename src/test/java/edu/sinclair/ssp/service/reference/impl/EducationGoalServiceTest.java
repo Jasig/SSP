@@ -24,26 +24,26 @@ public class EducationGoalServiceTest {
 
 	private EducationGoalServiceImpl service;
 	private EducationGoalDao dao;
-	
+
 	@Before
-	public void setup(){
+	public void setup() {
 		service = new EducationGoalServiceImpl();
 		dao = createMock(EducationGoalDao.class);
 
 		service.setDao(dao);
 	}
-	
+
 	@Test
 	public void testGetAll() {
 		List<EducationGoal> daoAll = new ArrayList<EducationGoal>();
 		daoAll.add(new EducationGoal());
-		
+
 		expect(dao.getAll(ObjectStatus.ACTIVE)).andReturn(daoAll);
-		
+
 		replay(dao);
-		
+
 		List<EducationGoal> all = service.getAll(ObjectStatus.ACTIVE);
-		assertTrue(all.size()>0);
+		assertTrue(all.size() > 0);
 		verify(dao);
 	}
 
@@ -51,11 +51,11 @@ public class EducationGoalServiceTest {
 	public void testGet() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		EducationGoal daoOne = new EducationGoal(id);
-		
+
 		expect(dao.get(id)).andReturn(daoOne);
-		
+
 		replay(dao);
-		
+
 		assertNotNull(service.get(id));
 		verify(dao);
 	}
@@ -64,12 +64,12 @@ public class EducationGoalServiceTest {
 	public void testSave() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		EducationGoal daoOne = new EducationGoal(id);
-		
+
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		
+
 		replay(dao);
-		
+
 		assertNotNull(service.save(daoOne));
 		verify(dao);
 	}
@@ -78,22 +78,22 @@ public class EducationGoalServiceTest {
 	public void testDelete() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		EducationGoal daoOne = new EducationGoal(id);
-		
+
 		expect(dao.get(id)).andReturn(daoOne).times(2);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
-		
+
 		replay(dao);
-		
+
 		service.delete(id);
-		
+
 		boolean found = true;
-		try{
+		try {
 			service.get(id);
-		}catch(ObjectNotFoundException e){
+		} catch (ObjectNotFoundException e) {
 			found = false;
 		}
-		
+
 		assertFalse(found);
 		verify(dao);
 	}

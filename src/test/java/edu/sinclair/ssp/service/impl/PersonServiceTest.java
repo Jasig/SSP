@@ -26,25 +26,25 @@ public class PersonServiceTest {
 	private PersonDao dao;
 
 	@Before
-	public void setup(){
+	public void setup() {
 		service = new PersonServiceImpl();
 		dao = createMock(PersonDao.class);
-		
+
 		service.setDao(dao);
-		
+
 	}
-	
+
 	@Test
 	public void testGetAll() {
 		List<Person> daoAll = new ArrayList<Person>();
 		daoAll.add(new Person());
-		
+
 		expect(dao.getAll(ObjectStatus.ACTIVE)).andReturn(daoAll);
-		
+
 		replay(dao);
-		
+
 		List<Person> all = service.getAll(ObjectStatus.ACTIVE);
-		assertTrue(all.size()>0);
+		assertTrue(all.size() > 0);
 		verify(dao);
 	}
 
@@ -52,11 +52,11 @@ public class PersonServiceTest {
 	public void testGet() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		Person daoOne = new Person(id);
-		
+
 		expect(dao.get(id)).andReturn(daoOne);
-		
+
 		replay(dao);
-		
+
 		assertNotNull(service.get(id));
 		verify(dao);
 	}
@@ -65,12 +65,12 @@ public class PersonServiceTest {
 	public void testSave() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		Person daoOne = new Person(id);
-		
+
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		
+
 		replay(dao);
-		
+
 		assertNotNull(service.save(daoOne));
 		verify(dao);
 	}
@@ -79,25 +79,24 @@ public class PersonServiceTest {
 	public void testDelete() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		Person daoOne = new Person(id);
-		
+
 		expect(dao.get(id)).andReturn(daoOne).times(2);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
-		
+
 		replay(dao);
-		
+
 		service.delete(id);
-		
+
 		boolean found = true;
-		try{
+		try {
 			service.get(id);
-		}catch(ObjectNotFoundException e){
+		} catch (ObjectNotFoundException e) {
 			found = false;
 		}
-		
+
 		assertFalse(found);
 		verify(dao);
 	}
 
 }
-

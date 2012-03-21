@@ -9,7 +9,7 @@ public interface TransferObject<T> {
 	 * Add the attributes of the model to this TransferObject
 	 */
 	public void pullAttributesFromModel(T model);
-	
+
 	/**
 	 * Create a new Model object from this TransferObject
 	 */

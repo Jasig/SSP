@@ -46,13 +46,14 @@ public class EducationLevelServiceImpl implements EducationLevelService {
 	}
 
 	@Override
-	public EducationLevel save(EducationLevel obj) throws ObjectNotFoundException {
+	public EducationLevel save(EducationLevel obj)
+			throws ObjectNotFoundException {
 		EducationLevel current = get(obj.getId());
 
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
 		current.setObjectStatus(obj.getObjectStatus());
-		
+
 		return dao.save(current);
 	}
 

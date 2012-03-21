@@ -4,7 +4,7 @@ import java.util.Date;
 
 import edu.sinclair.ssp.model.Person;
 
-public class PersonTO extends AuditableTO implements TransferObject<Person>{
+public class PersonTO extends AuditableTO implements TransferObject<Person> {
 
 	private String firstName, middleInitial, lastName;
 	private Date birthDate;
@@ -16,20 +16,18 @@ public class PersonTO extends AuditableTO implements TransferObject<Person>{
 	private String schoolId;
 	private boolean enabled;
 
-
-	public PersonTO(){
+	public PersonTO() {
 		super();
 	}
 
-	public PersonTO(Person model){
+	public PersonTO(Person model) {
 		super();
 		pullAttributesFromModel(model);
 	}
 
-
-	public void pullAttributesFromModel(Person model){
+	public void pullAttributesFromModel(Person model) {
 		super.fromModel(model);
-		
+
 		setFirstName(model.getFirstName());
 		setMiddleInitial(model.getMiddleInitial());
 		setLastName(model.getLastName());
@@ -50,7 +48,7 @@ public class PersonTO extends AuditableTO implements TransferObject<Person>{
 		setEnabled(model.isEnabled());
 	}
 
-	public Person pushAttributesToModel(Person model){
+	public Person pushAttributesToModel(Person model) {
 		super.addToModel(model);
 		model.setFirstName(getFirstName());
 		model.setMiddleInitial(getMiddleInitial());
@@ -70,14 +68,13 @@ public class PersonTO extends AuditableTO implements TransferObject<Person>{
 		model.setPhotoUrl(getPhotoUrl());
 		model.setSchoolId(getSchoolId());
 		model.setEnabled(isEnabled());
-		
+
 		return model;
 	}
 
-	public Person asModel(){
+	public Person asModel() {
 		return pushAttributesToModel(new Person());
 	}
-
 
 	public String getFirstName() {
 		return firstName;
@@ -222,5 +219,5 @@ public class PersonTO extends AuditableTO implements TransferObject<Person>{
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+
 }

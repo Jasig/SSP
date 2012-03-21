@@ -17,7 +17,7 @@ import edu.sinclair.ssp.transferobject.PersonFundingSourceTO;
 import edu.sinclair.ssp.transferobject.PersonTO;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class IntakeFormTO implements TransferObject<IntakeForm>{
+public class IntakeFormTO implements TransferObject<IntakeForm> {
 
 	private PersonTO person;
 
@@ -33,76 +33,91 @@ public class IntakeFormTO implements TransferObject<IntakeForm>{
 
 	private List<PersonChallengeTO> personChallenges;
 
-
 	private Map<String, Object> referenceData;
 
+	private TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel> personEducationLevelToFactory = new TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel>(
+			PersonEducationLevelTO.class);
+	private TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource> personFundingToFactory = new TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource>(
+			PersonFundingSourceTO.class);
+	private TransferObjectListFactory<PersonChallengeTO, PersonChallenge> personChallengeToFactory = new TransferObjectListFactory<PersonChallengeTO, PersonChallenge>(
+			PersonChallengeTO.class);
 
-	private TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel> personEducationLevelToFactory = new TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel>(PersonEducationLevelTO.class);
-	private TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource> personFundingToFactory = new TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource>(PersonFundingSourceTO.class);
-	private TransferObjectListFactory<PersonChallengeTO, PersonChallenge> personChallengeToFactory = new TransferObjectListFactory<PersonChallengeTO, PersonChallenge>(PersonChallengeTO.class);
-	
-	public IntakeFormTO(IntakeForm model){
+	public IntakeFormTO(IntakeForm model) {
 		super();
 		pullAttributesFromModel(model);
 	}
 
 	@Override
 	public void pullAttributesFromModel(IntakeForm model) {
-		if(model.getPerson()!=null){
+		if (model.getPerson() != null) {
 			setPerson(new PersonTO(model.getPerson()));
 		}
-		if(model.getPersonDemographics()!=null){
-			setPersonDemographics(new PersonDemographicsTO(model.getPersonDemographics()));
+		if (model.getPersonDemographics() != null) {
+			setPersonDemographics(new PersonDemographicsTO(
+					model.getPersonDemographics()));
 		}
-		if(model.getPersonEducationGoal()!=null){
-			setPersonEducationGoal(new PersonEducationGoalTO(model.getPersonEducationGoal()));
+		if (model.getPersonEducationGoal() != null) {
+			setPersonEducationGoal(new PersonEducationGoalTO(
+					model.getPersonEducationGoal()));
 		}
-		if(model.getPersonEducationPlan()!=null){
-			setPersonEducationPlan(new PersonEducationPlanTO(model.getPersonEducationPlan()));
+		if (model.getPersonEducationPlan() != null) {
+			setPersonEducationPlan(new PersonEducationPlanTO(
+					model.getPersonEducationPlan()));
 		}
-		if(model.getPersonEducationLevels()!=null && model.getPersonEducationLevels().size()>0){
-			setPersonEducationLevels(personEducationLevelToFactory.toTOList(model.getPersonEducationLevels()));
+		if (model.getPersonEducationLevels() != null
+				&& model.getPersonEducationLevels().size() > 0) {
+			setPersonEducationLevels(personEducationLevelToFactory
+					.toTOList(model.getPersonEducationLevels()));
 		}
-		if(model.getPersonFundingSources()!=null && model.getPersonFundingSources().size()>0){
-			setPersonFundingSources(personFundingToFactory.toTOList(model.getPersonFundingSources()));
+		if (model.getPersonFundingSources() != null
+				&& model.getPersonFundingSources().size() > 0) {
+			setPersonFundingSources(personFundingToFactory.toTOList(model
+					.getPersonFundingSources()));
 		}
-		if(model.getPersonChallenges()!=null && model.getPersonChallenges().size()>0){
-			setPersonChallenges(personChallengeToFactory.toTOList(model.getPersonChallenges()));
+		if (model.getPersonChallenges() != null
+				&& model.getPersonChallenges().size() > 0) {
+			setPersonChallenges(personChallengeToFactory.toTOList(model
+					.getPersonChallenges()));
 		}
 	}
 
 	@Override
 	public IntakeForm pushAttributesToModel(IntakeForm model) {
-		if(getPerson()!=null){
+		if (getPerson() != null) {
 			model.setPerson(getPerson().asModel());
 		}
-		if(getPersonDemographics()!=null){
+		if (getPersonDemographics() != null) {
 			model.setPersonDemographics(getPersonDemographics().asModel());
 		}
-		if(getPersonEducationGoal()!=null){
+		if (getPersonEducationGoal() != null) {
 			model.setPersonEducationGoal(getPersonEducationGoal().asModel());
 		}
-		if(getPersonEducationPlan()!=null){
+		if (getPersonEducationPlan() != null) {
 			model.setPersonEducationPlan(getPersonEducationPlan().asModel());
 		}
-		if(getPersonEducationLevels()!=null && getPersonEducationLevels().size()>0){
-			model.setPersonEducationLevels(personEducationLevelToFactory.toModelList(getPersonEducationLevels()));
+		if (getPersonEducationLevels() != null
+				&& getPersonEducationLevels().size() > 0) {
+			model.setPersonEducationLevels(personEducationLevelToFactory
+					.toModelList(getPersonEducationLevels()));
 		}
-		if(getPersonFundingSources()!=null && getPersonFundingSources().size()>0){
-			model.setPersonFundingSources(personFundingToFactory.toModelList(getPersonFundingSources()));
+		if (getPersonFundingSources() != null
+				&& getPersonFundingSources().size() > 0) {
+			model.setPersonFundingSources(personFundingToFactory
+					.toModelList(getPersonFundingSources()));
 		}
-		if(getPersonChallenges()!=null && getPersonChallenges().size()>0){
-			model.setPersonChallenges(personChallengeToFactory.toModelList(getPersonChallenges()));
+		if (getPersonChallenges() != null && getPersonChallenges().size() > 0) {
+			model.setPersonChallenges(personChallengeToFactory
+					.toModelList(getPersonChallenges()));
 		}
-		
+
 		return model;
 	}
 
 	@Override
-	public IntakeForm asModel(){
+	public IntakeForm asModel() {
 		return pushAttributesToModel(new IntakeForm());
 	}
-	
+
 	public PersonTO getPerson() {
 		return person;
 	}
@@ -148,7 +163,8 @@ public class IntakeFormTO implements TransferObject<IntakeForm>{
 		return personFundingSources;
 	}
 
-	public void setPersonFundingSources(List<PersonFundingSourceTO> personFundingSources) {
+	public void setPersonFundingSources(
+			List<PersonFundingSourceTO> personFundingSources) {
 		this.personFundingSources = personFundingSources;
 	}
 

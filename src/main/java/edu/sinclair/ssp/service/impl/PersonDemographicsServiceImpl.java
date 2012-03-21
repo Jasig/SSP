@@ -23,10 +23,10 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 
 	@Autowired
 	private PersonDemographicsDao dao;
-	
+
 	@Autowired
 	private CitizenshipService citizenshipService;
-	
+
 	@Autowired
 	private EthnicityService ethnicityService;
 
@@ -35,10 +35,10 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 
 	@Autowired
 	private PersonService personService;
-	
+
 	@Autowired
 	private VeteranStatusService veteranStatusService;
-	
+
 	@Override
 	public List<PersonDemographics> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -47,14 +47,14 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 	@Override
 	public PersonDemographics get(UUID id) throws ObjectNotFoundException {
 		PersonDemographics obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "Person");
 		}
 		return obj;
 	}
-	
+
 	@Override
-	public PersonDemographics forPerson(Person person){
+	public PersonDemographics forPerson(Person person) {
 		return dao.forPerson(person);
 	}
 
@@ -64,20 +64,21 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 	}
 
 	@Override
-	public PersonDemographics save(PersonDemographics obj) throws ObjectNotFoundException{
+	public PersonDemographics save(PersonDemographics obj)
+			throws ObjectNotFoundException {
 		PersonDemographics current = get(obj.getId());
-		
-		if(obj.getObjectStatus()!=null){
+
+		if (obj.getObjectStatus() != null) {
 			current.setObjectStatus(obj.getObjectStatus());
 		}
-		
+
 		current.setAbilityToBenefit(obj.isAbilityToBenefit());
 		current.setChildCareNeeded(obj.isChildCareNeeded());
 		current.setEmployed(obj.isEmployed());
 		current.setLocal(obj.isLocal());
 		current.setPrimaryCaregiver(obj.isPrimaryCaregiver());
 		current.setNumberOfChildren(obj.getNumberOfChildren());
-		
+
 		current.setAnticipatedStartTerm(obj.getAnticipatedStartTerm());
 		current.setAnticipatedStartYear(obj.getAnticipatedStartYear());
 		current.setCountryOfResidence(obj.getCountryOfResidence());
@@ -89,19 +90,23 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 		current.setTotalHoursWorkedPerWeek(obj.getTotalHoursWorkedPerWeek());
 		current.setShift(obj.getShift());
 		current.setGender(obj.getGender());
-		if(obj.getMaritalStatus()!=null){
-			current.setMaritalStatus(maritalStatusService.get(obj.getMaritalStatus().getId()));
+		if (obj.getMaritalStatus() != null) {
+			current.setMaritalStatus(maritalStatusService.get(obj
+					.getMaritalStatus().getId()));
 		}
-		if(obj.getEthnicity()!=null){
-			current.setEthnicity(ethnicityService.get(obj.getEthnicity().getId()));
+		if (obj.getEthnicity() != null) {
+			current.setEthnicity(ethnicityService.get(obj.getEthnicity()
+					.getId()));
 		}
-		if(obj.getCitizenship()!=null){
-			current.setCitizenship(citizenshipService.get(obj.getCitizenship().getId()));
+		if (obj.getCitizenship() != null) {
+			current.setCitizenship(citizenshipService.get(obj.getCitizenship()
+					.getId()));
 		}
-		if(obj.getVeteranStatus()!=null){
-			current.setVeteranStatus(veteranStatusService.get(obj.getVeteranStatus().getId()));
+		if (obj.getVeteranStatus() != null) {
+			current.setVeteranStatus(veteranStatusService.get(obj
+					.getVeteranStatus().getId()));
 		}
-		if(obj.getCoach()!=null){
+		if (obj.getCoach() != null) {
 			current.setCoach(personService.get(obj.getCoach().getId()));
 		}
 		return dao.save(current);
@@ -110,8 +115,8 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
 		PersonDemographics current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}

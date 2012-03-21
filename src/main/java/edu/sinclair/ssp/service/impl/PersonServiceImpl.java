@@ -17,11 +17,12 @@ import edu.sinclair.ssp.service.PersonService;
 @Transactional
 public class PersonServiceImpl implements PersonService {
 
-	//private static final Logger logger = LoggerFactory.getLogger(PersonServiceImpl.class);
-	
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(PersonServiceImpl.class);
+
 	@Autowired
 	private PersonDao dao;
-	
+
 	@Override
 	public List<Person> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -30,17 +31,19 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public Person get(UUID id) throws ObjectNotFoundException {
 		Person obj = dao.get(id);
-		if(null==obj){
+		if (null == obj) {
 			throw new ObjectNotFoundException(id, "Person");
 		}
 		return obj;
 	}
 
 	@Override
-	public Person personFromUsername(String username) throws ObjectNotFoundException {
+	public Person personFromUsername(String username)
+			throws ObjectNotFoundException {
 		Person obj = dao.fromUsername(username);
-		if(null==obj){
-			throw new ObjectNotFoundException("Could not find person with username: " + username);
+		if (null == obj) {
+			throw new ObjectNotFoundException(
+					"Could not find person with username: " + username);
 		}
 		return obj;
 	}
@@ -53,7 +56,7 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public Person save(Person obj) throws ObjectNotFoundException {
 		Person current = get(obj.getId());
-		
+
 		current.setObjectStatus(obj.getObjectStatus());
 		current.setFirstName(obj.getFirstName());
 		current.setMiddleInitial(obj.getMiddleInitial());
@@ -72,23 +75,22 @@ public class PersonServiceImpl implements PersonService {
 		current.setPhotoUrl(obj.getPhotoUrl());
 		current.setSchoolId(obj.getSchoolId());
 		current.setEnabled(obj.isEnabled());
-		
+
 		return dao.save(current);
 	}
 
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
 		Person current = get(id);
-		
-		if(null!=current){
+
+		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}
 	}
 
-	protected void setDao(PersonDao dao){
+	protected void setDao(PersonDao dao) {
 		this.dao = dao;
 	}
 
 }
-

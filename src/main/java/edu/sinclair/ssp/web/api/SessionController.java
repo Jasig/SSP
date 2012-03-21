@@ -13,23 +13,25 @@ import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
 
-
 @Controller
 @RequestMapping("/session")
 public class SessionController {
 
-	private static final Logger logger = LoggerFactory.getLogger(SessionController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(SessionController.class);
 
 	@Autowired
 	private SecurityService service;
-	
-	@RequestMapping(value="getAuthenticatedPerson", method = RequestMethod.GET)
-	public @ResponseBody Person getAuthenticatedPerson() throws Exception {
+
+	@RequestMapping(value = "getAuthenticatedPerson", method = RequestMethod.GET)
+	public @ResponseBody
+	Person getAuthenticatedPerson() throws Exception {
 		return service.currentlyLoggedInSspUser().getPerson();
 	}
 
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody ServiceResponse handle(Exception e){
+	public @ResponseBody
+	ServiceResponse handle(Exception e) {
 		logger.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}

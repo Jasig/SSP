@@ -20,22 +20,25 @@ import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonService;
 
 @Transactional(readOnly = true)
-public class SspUserDetailsService implements UserDetailsService { 
+public class SspUserDetailsService implements UserDetailsService {
 
-	private Logger logger = LoggerFactory.getLogger(SspUserDetailsService.class);
+	private Logger logger = LoggerFactory
+			.getLogger(SspUserDetailsService.class);
 
 	@Autowired
 	private PersonService personService;
-	
+
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UserNotAuthorizedException, EmailNotFoundException {
+	public UserDetails loadUserByUsername(String username)
+			throws UserNotAuthorizedException, EmailNotFoundException {
 
 		logger.debug("BEGIN : loadUserByUsername()");
-		
+
 		Collection<GrantedAuthority> authorities = Lists.newArrayList();
 		authorities.add(new GrantedAuthorityImpl("ROLE_USER"));
-		
-		SspUser sspUser = new SspUser(username, "password", true, true, true, true, authorities);
+
+		SspUser sspUser = new SspUser(username, "password", true, true, true,
+				true, authorities);
 		sspUser.setEmailAddress("test.user@infinum.com");
 
 		try {
@@ -43,22 +46,24 @@ public class SspUserDetailsService implements UserDetailsService {
 		} catch (ObjectNotFoundException e) {
 			logger.error("Did not find the person's domain object");
 		}
-		
+
 		if (sspUser.getPerson() == null) {
 			logger.error("Unable to load user's record for: {}", username);
-			throw new UserNotAuthorizedException("Unable to load user's record, support has been notified.");
+			throw new UserNotAuthorizedException(
+					"Unable to load user's record, support has been notified.");
 		} else if (!sspUser.isEnabled()) {
 			logger.error("User is disabled: {}", username);
 			throw new UserNotEnabledException("User is disabled.");
 		} else if (sspUser.getEmailAddress() == null) {
 			logger.error("User {} has no email address", username);
-			throw new EmailNotFoundException("User does not have an assigned email address, support has been notified.");
+			throw new EmailNotFoundException(
+					"User does not have an assigned email address, support has been notified.");
 		}
-		
+
 		logger.debug("User: {}", sspUser.toString());
-		
+
 		logger.debug("END : loadUserByUsername()");
-		
+
 		return sspUser;
 	}
 

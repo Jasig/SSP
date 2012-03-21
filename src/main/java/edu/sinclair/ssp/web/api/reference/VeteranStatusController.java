@@ -44,7 +44,8 @@ public class VeteranStatusController extends RestController<VeteranStatusTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<VeteranStatusTO> getAll(@RequestParam(required = false) ObjectStatus status)
+	List<VeteranStatusTO> getAll(
+			@RequestParam(required = false) ObjectStatus status)
 			throws Exception {
 		if (status == null) {
 			status = ObjectStatus.ACTIVE;
@@ -67,7 +68,8 @@ public class VeteranStatusController extends RestController<VeteranStatusTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	VeteranStatusTO create(@Valid @RequestBody VeteranStatusTO obj) throws Exception {
+	VeteranStatusTO create(@Valid @RequestBody VeteranStatusTO obj)
+			throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"You submitted a veteranStatus with an id to the create method.  Did you mean to save?");
@@ -87,8 +89,8 @@ public class VeteranStatusController extends RestController<VeteranStatusTO> {
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	VeteranStatusTO save(@PathVariable UUID id, @Valid @RequestBody VeteranStatusTO obj)
-			throws Exception {
+	VeteranStatusTO save(@PathVariable UUID id,
+			@Valid @RequestBody VeteranStatusTO obj) throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a veteranStatus without an id to the save method.  Did you mean to create?");

@@ -4,8 +4,9 @@ import java.util.UUID;
 
 /**
  * Utilities for working with UUIDs
+ * 
  * @author daniel
- *
+ * 
  */
 public class UuidUtils {
 
@@ -13,29 +14,29 @@ public class UuidUtils {
 	 * Is the parameter a UUID?
 	 */
 	public static boolean isUUID(String str) {
-		
+
 		if (str == null)
 			return false;
 		else if (str.length() != 36)
 			return false;
 		else
-			try{
+			try {
 				UUID.fromString(str);
-			}catch(IllegalArgumentException e){
+			} catch (IllegalArgumentException e) {
 				return false;
 			}
-			return true;
+		return true;
 	}
-	
+
 	/**
 	 * Turn the parameter into a string
 	 */
-	public static String uuidToString(UUID val){
-		if(null!=val){
+	public static String uuidToString(UUID val) {
+		if (null != val) {
 			return val.toString();
-		}else{
+		} else {
 			return "No UUID assigned";
 		}
 	}
-	
+
 }

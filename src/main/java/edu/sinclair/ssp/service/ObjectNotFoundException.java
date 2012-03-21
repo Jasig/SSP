@@ -8,25 +8,25 @@ public class ObjectNotFoundException extends Exception {
 
 	private UUID objectId;
 	private String name;
-	
-	public ObjectNotFoundException(UUID objectId, String name){
+
+	public ObjectNotFoundException(UUID objectId, String name) {
 		super(message(objectId, name));
 		this.objectId = objectId;
 		this.name = name;
 	}
-	
-	public ObjectNotFoundException(String message){
+
+	public ObjectNotFoundException(String message) {
 		super(message);
 	}
-	
-	private static String message(UUID objectId, String name){
+
+	private static String message(UUID objectId, String name) {
 		return "Unable to access " + name + " with id " + objectId.toString();
 	}
 
 	public UUID getObjectId() {
 		return objectId;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

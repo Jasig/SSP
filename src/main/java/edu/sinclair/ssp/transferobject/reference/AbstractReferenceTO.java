@@ -11,44 +11,42 @@ import edu.sinclair.ssp.transferobject.AuditableTO;
 
 public abstract class AbstractReferenceTO extends AuditableTO {
 
-	//validator
+	// validator
 	@NotNull
 	@NotEmpty
 	private String name;
-	
-	private String description;
 
+	private String description;
 
 	public AbstractReferenceTO() {
 		super();
 	}
-	
-	public AbstractReferenceTO(UUID id){
+
+	public AbstractReferenceTO(UUID id) {
 		super(id);
 	}
-	
+
 	public AbstractReferenceTO(UUID id, String name) {
 		super(id);
 		this.name = name;
 	}
-	
+
 	public AbstractReferenceTO(UUID id, String name, String description) {
 		this(id);
 		this.name = name;
 		this.description = description;
 	}
 
-
-	public void fromModel(AbstractReference model){
+	public void fromModel(AbstractReference model) {
 		super.fromModel(model);
-		
+
 		setName(model.getName());
 		setDescription(model.getDescription());
 	}
-	
-	public void addToModel(AbstractReference model){
+
+	public void addToModel(AbstractReference model) {
 		super.addToModel(model);
-		
+
 		model.setName(getName());
 		model.setDescription(getDescription());
 	}

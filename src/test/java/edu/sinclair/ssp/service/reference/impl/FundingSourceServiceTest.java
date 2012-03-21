@@ -24,26 +24,26 @@ public class FundingSourceServiceTest {
 
 	private FundingSourceServiceImpl service;
 	private FundingSourceDao dao;
-	
+
 	@Before
-	public void setup(){
+	public void setup() {
 		service = new FundingSourceServiceImpl();
 		dao = createMock(FundingSourceDao.class);
 
 		service.setDao(dao);
 	}
-	
+
 	@Test
 	public void testGetAll() {
 		List<FundingSource> daoAll = new ArrayList<FundingSource>();
 		daoAll.add(new FundingSource());
-		
+
 		expect(dao.getAll(ObjectStatus.ACTIVE)).andReturn(daoAll);
-		
+
 		replay(dao);
-		
+
 		List<FundingSource> all = service.getAll(ObjectStatus.ACTIVE);
-		assertTrue(all.size()>0);
+		assertTrue(all.size() > 0);
 		verify(dao);
 	}
 
@@ -51,11 +51,11 @@ public class FundingSourceServiceTest {
 	public void testGet() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		FundingSource daoOne = new FundingSource(id);
-		
+
 		expect(dao.get(id)).andReturn(daoOne);
-		
+
 		replay(dao);
-		
+
 		assertNotNull(service.get(id));
 		verify(dao);
 	}
@@ -64,12 +64,12 @@ public class FundingSourceServiceTest {
 	public void testSave() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		FundingSource daoOne = new FundingSource(id);
-		
+
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		
+
 		replay(dao);
-		
+
 		assertNotNull(service.save(daoOne));
 		verify(dao);
 	}
@@ -78,22 +78,22 @@ public class FundingSourceServiceTest {
 	public void testDelete() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		FundingSource daoOne = new FundingSource(id);
-		
+
 		expect(dao.get(id)).andReturn(daoOne).times(2);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
-		
+
 		replay(dao);
-		
+
 		service.delete(id);
-		
+
 		boolean found = true;
-		try{
+		try {
 			service.get(id);
-		}catch(ObjectNotFoundException e){
+		} catch (ObjectNotFoundException e) {
 			found = false;
 		}
-		
+
 		assertFalse(found);
 		verify(dao);
 	}

@@ -9,19 +9,20 @@ import com.google.common.collect.Lists;
 
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class TransferObjectListFactory <T extends TransferObject<M>,M>{
+public class TransferObjectListFactory<T extends TransferObject<M>, M> {
 
-	private static final Logger logger = LoggerFactory.getLogger(TransferObjectListFactory.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(TransferObjectListFactory.class);
 
 	private Class<T> transferObjectClass;
 
-	public TransferObjectListFactory(Class<T> transferObjectClass){
+	public TransferObjectListFactory(Class<T> transferObjectClass) {
 		this.transferObjectClass = transferObjectClass;
 	}
 
-	public List<T> toTOList(List<M> from){
+	public List<T> toTOList(List<M> from) {
 		List<T> toList = Lists.newArrayList();
-		for(M m : from){
+		for (M m : from) {
 			T tObject;
 			try {
 				tObject = (T) transferObjectClass.newInstance();
@@ -36,9 +37,9 @@ public class TransferObjectListFactory <T extends TransferObject<M>,M>{
 		return toList;
 	}
 
-	public List<M> toModelList(List<T> from){
+	public List<M> toModelList(List<T> from) {
 		List<M> mList = Lists.newArrayList();
-		for(TransferObject<M> c : from){
+		for (TransferObject<M> c : from) {
 			mList.add(c.asModel());
 		}
 		return mList;

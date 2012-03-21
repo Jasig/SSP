@@ -7,7 +7,7 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
 
-public class CodeAndPropertySerializer extends JsonSerializer<CodeAndProperty>{
+public class CodeAndPropertySerializer extends JsonSerializer<CodeAndProperty> {
 
 	@Override
 	public void serialize(CodeAndProperty value, JsonGenerator generator,
@@ -21,5 +21,4 @@ public class CodeAndPropertySerializer extends JsonSerializer<CodeAndProperty>{
 		generator.writeEndObject();
 	}
 
-	
 }

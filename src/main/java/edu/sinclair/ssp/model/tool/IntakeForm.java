@@ -13,19 +13,19 @@ import edu.sinclair.ssp.model.PersonFundingSource;
 public class IntakeForm {
 
 	private Person person;
-	
+
 	private PersonDemographics personDemographics;
-	
+
 	private PersonEducationGoal personEducationGoal;
-	
+
 	private List<PersonEducationLevel> personEducationLevels;
-	
+
 	private PersonEducationPlan personEducationPlan;
-	
+
 	private List<PersonFundingSource> personFundingSources;
-	
+
 	private List<PersonChallenge> personChallenges;
-	
+
 	public Person getPerson() {
 		return person;
 	}
@@ -71,7 +71,8 @@ public class IntakeForm {
 		return personFundingSources;
 	}
 
-	public void setPersonFundingSources(List<PersonFundingSource> personFundingSources) {
+	public void setPersonFundingSources(
+			List<PersonFundingSource> personFundingSources) {
 		this.personFundingSources = personFundingSources;
 	}
 

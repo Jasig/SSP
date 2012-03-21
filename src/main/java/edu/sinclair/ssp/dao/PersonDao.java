@@ -14,9 +14,10 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 
 @Repository
-public class PersonDao implements AuditableCrudDao<Person>{
+public class PersonDao implements AuditableCrudDao<Person> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(PersonDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(PersonDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -25,36 +26,37 @@ public class PersonDao implements AuditableCrudDao<Person>{
 	@SuppressWarnings("unchecked")
 	public List<Person> getAll(ObjectStatus status) {
 		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(Person.class)
-				.addOrder(Order.asc("lastName"))
+				.createCriteria(Person.class).addOrder(Order.asc("lastName"))
 				.addOrder(Order.asc("firstName"));
-		
-		if(status!=ObjectStatus.ALL){
+
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public Person get(UUID id) {
-		return (Person) this.sessionFactory.getCurrentSession().get(Person.class, id); 
+		return (Person) this.sessionFactory.getCurrentSession().get(
+				Person.class, id);
 	}
 
-	public Person fromUsername(String username){
-		Criteria query = this.sessionFactory.getCurrentSession().createCriteria(Person.class);
+	public Person fromUsername(String username) {
+		Criteria query = this.sessionFactory.getCurrentSession()
+				.createCriteria(Person.class);
 		query.add(Restrictions.eq("username", username));
 		return (Person) query.uniqueResult();
 	}
 
 	@Override
 	public Person save(Person obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

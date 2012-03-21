@@ -2,21 +2,22 @@ package edu.sinclair.ssp.transferobject;
 
 import edu.sinclair.ssp.model.PersonEducationLevel;
 
-public class PersonEducationLevelTO implements TransferObject<PersonEducationLevel>{
+public class PersonEducationLevelTO implements
+		TransferObject<PersonEducationLevel> {
 
-	public PersonEducationLevelTO(){
+	public PersonEducationLevelTO() {
 		super();
 	}
 
-	public PersonEducationLevelTO(PersonEducationLevel model){
+	public PersonEducationLevelTO(PersonEducationLevel model) {
 		super();
 		pullAttributesFromModel(model);
 	}
-	
+
 	@Override
 	public void pullAttributesFromModel(PersonEducationLevel model) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -24,9 +25,9 @@ public class PersonEducationLevelTO implements TransferObject<PersonEducationLev
 		// TODO Auto-generated method stub
 		return model;
 	}
-	
+
 	@Override
-	public PersonEducationLevel asModel(){
+	public PersonEducationLevel asModel() {
 		return pushAttributesToModel(new PersonEducationLevel());
 	}
 

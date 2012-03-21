@@ -17,7 +17,8 @@ import edu.sinclair.ssp.model.PersonDemographics;
 public class PersonDemographicsDao implements
 		AuditableCrudDao<PersonDemographics> {
 
-	//private static final Logger logger = LoggerFactory.getLogger(PersonDemographicsDao.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(PersonDemographicsDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -28,21 +29,20 @@ public class PersonDemographicsDao implements
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(PersonDemographics.class);
 
-		if(status!=ObjectStatus.ALL){
+		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
-		
+
 		return query.list();
 	}
 
 	@Override
 	public PersonDemographics get(UUID id) {
-		return (PersonDemographics) 
-				this.sessionFactory.getCurrentSession().get(
-						PersonDemographics.class, id);
+		return (PersonDemographics) this.sessionFactory.getCurrentSession()
+				.get(PersonDemographics.class, id);
 	}
 
-	public PersonDemographics forPerson(Person person){
+	public PersonDemographics forPerson(Person person) {
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(PersonDemographics.class)
 				.add(Restrictions.eq("person", person));
@@ -51,12 +51,12 @@ public class PersonDemographicsDao implements
 
 	@Override
 	public PersonDemographics save(PersonDemographics obj) {
-		if(obj.getId()!=null){
+		if (obj.getId() != null) {
 			this.sessionFactory.getCurrentSession().merge(obj);
-		}else{
+		} else {
 			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
-		
+
 		return obj;
 	}
 

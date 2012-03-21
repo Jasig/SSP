@@ -36,10 +36,10 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 	 * this one if the permissions don't really matter
 	 */
 	public void setCurrent(Person current) {
-		if(current.getUsername()==null){
+		if (current.getUsername() == null) {
 			current.setUsername("testUser");
 		}
-		
+
 		this.current = new MockUser(current, current.getUsername(),
 				new ArrayList<GrantedAuthority>());
 	}
@@ -49,10 +49,10 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 	 * this one if the permissions matter
 	 */
 	public void setCurrent(Person current, List<GrantedAuthority> authorities) {
-		if(current.getUsername()==null){
+		if (current.getUsername() == null) {
 			current.setUsername("testUser");
 		}
-		
+
 		this.current = new MockUser(current, current.getUsername(), authorities);
 	}
 }

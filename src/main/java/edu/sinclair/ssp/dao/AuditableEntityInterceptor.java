@@ -17,13 +17,14 @@ import edu.sinclair.ssp.security.SspUser;
 import edu.sinclair.ssp.service.SecurityService;
 
 @Service
-public class AuditableEntityInterceptor extends EmptyInterceptor implements ApplicationContextAware {
+public class AuditableEntityInterceptor extends EmptyInterceptor implements
+		ApplicationContextAware {
 
 	private static final long serialVersionUID = 1L;
 
 	private SecurityService securityService;
-	
-	public Person currentUser(){
+
+	public Person currentUser() {
 		SspUser user = getSecurityService().currentlyLoggedInSspUser();
 		return user.getPerson();
 	}
@@ -43,30 +44,31 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements Appl
 		addAuditingProps(entity, state, propertyNames);
 		return super.onSave(entity, id, state, propertyNames, types);
 	}
-	
-	private void addAuditingProps(Object entity, Object[] state, String[] propertyNames){
-		if(entity instanceof Auditable){
-			for(int i=0; i<propertyNames.length; i++ ) {
+
+	private void addAuditingProps(Object entity, Object[] state,
+			String[] propertyNames) {
+		if (entity instanceof Auditable) {
+			for (int i = 0; i < propertyNames.length; i++) {
 				String property = propertyNames[i];
-				if("createdDate".equals(property) ) {
-					if(state[i]==null){
+				if ("createdDate".equals(property)) {
+					if (state[i] == null) {
 						state[i] = new Date();
 					}
 				}
-				if("createdBy".equals(property)){
-					if(state[i]==null){
+				if ("createdBy".equals(property)) {
+					if (state[i] == null) {
 						state[i] = currentUser();
 					}
 				}
-				if("objectStatus".equals(property)){
-					if(state[i]==null){
+				if ("objectStatus".equals(property)) {
+					if (state[i] == null) {
 						state[i] = ObjectStatus.ACTIVE;
 					}
 				}
-				if("modifiedDate".equals(property)){
+				if ("modifiedDate".equals(property)) {
 					state[i] = new Date();
 				}
-				if("modifiedBy".equals(property)){
+				if ("modifiedBy".equals(property)) {
 					state[i] = currentUser();
 				}
 			}
@@ -74,9 +76,11 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements Appl
 	}
 
 	private ApplicationContext context;
-	private SecurityService getSecurityService(){
-		if(securityService==null){
-			this.securityService = context.getBean("securityService", SecurityService.class);
+
+	private SecurityService getSecurityService() {
+		if (securityService == null) {
+			this.securityService = context.getBean("securityService",
+					SecurityService.class);
 		}
 		return securityService;
 	}

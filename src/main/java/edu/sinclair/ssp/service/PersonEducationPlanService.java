@@ -17,12 +17,13 @@ public interface PersonEducationPlanService extends
 	public PersonEducationPlan get(UUID id) throws ObjectNotFoundException;
 
 	public PersonEducationPlan forPerson(Person person);
-	
+
 	@Override
 	public PersonEducationPlan create(PersonEducationPlan obj);
 
 	@Override
-	public PersonEducationPlan save(PersonEducationPlan obj) throws ObjectNotFoundException;
+	public PersonEducationPlan save(PersonEducationPlan obj)
+			throws ObjectNotFoundException;
 
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException;

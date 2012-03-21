@@ -17,19 +17,20 @@ import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
 public class TransferObjectListFactoryTest {
 
 	private TransferObjectListFactory<ChallengeTO, Challenge> listFactory;
-	
+
 	@Before
-	public void setup(){
-		listFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(ChallengeTO.class);
+	public void setup() {
+		listFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(
+				ChallengeTO.class);
 	}
-	
+
 	@Test
 	public void toTOList() {
 		List<Challenge> models = Lists.newArrayList();
 		models.add(new Challenge(UUID.randomUUID()));
-		
+
 		List<ChallengeTO> tos = listFactory.toTOList(models);
-		
+
 		assertNotNull(tos);
 		assertEquals(1, tos.size());
 		assertEquals(tos.get(0).getId(), models.get(0).getId());
@@ -39,9 +40,9 @@ public class TransferObjectListFactoryTest {
 	public void toModelList() {
 		List<ChallengeTO> tos = Lists.newArrayList();
 		tos.add(new ChallengeTO(UUID.randomUUID()));
-		
+
 		List<Challenge> models = listFactory.toModelList(tos);
-		
+
 		assertNotNull(models);
 		assertEquals(1, models.size());
 		assertEquals(tos.get(0).getId(), models.get(0).getId());

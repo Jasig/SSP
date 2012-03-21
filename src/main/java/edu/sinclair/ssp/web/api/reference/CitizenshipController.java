@@ -44,7 +44,8 @@ public class CitizenshipController extends RestController<CitizenshipTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<CitizenshipTO> getAll(@RequestParam(required = false) ObjectStatus status)
+	List<CitizenshipTO> getAll(
+			@RequestParam(required = false) ObjectStatus status)
 			throws Exception {
 		if (status == null) {
 			status = ObjectStatus.ACTIVE;
@@ -67,7 +68,8 @@ public class CitizenshipController extends RestController<CitizenshipTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	CitizenshipTO create(@Valid @RequestBody CitizenshipTO obj) throws Exception {
+	CitizenshipTO create(@Valid @RequestBody CitizenshipTO obj)
+			throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"You submitted a citizenship with an id to the create method.  Did you mean to save?");
@@ -87,8 +89,8 @@ public class CitizenshipController extends RestController<CitizenshipTO> {
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	CitizenshipTO save(@PathVariable UUID id, @Valid @RequestBody CitizenshipTO obj)
-			throws Exception {
+	CitizenshipTO save(@PathVariable UUID id,
+			@Valid @RequestBody CitizenshipTO obj) throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a citizenship without an id to the save method.  Did you mean to create?");
