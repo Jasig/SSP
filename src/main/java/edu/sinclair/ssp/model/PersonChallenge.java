@@ -29,7 +29,7 @@ public class PersonChallenge extends Auditable {
 	private Person person;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "challenge_id", nullable = false, updatable = false)
+	@JoinColumn(name = "challenge_id", insertable = false, nullable = false, updatable = false)
 	private Challenge challenge;
 
 	public PersonChallenge() {

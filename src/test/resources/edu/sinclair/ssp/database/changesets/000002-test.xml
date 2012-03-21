@@ -25,4 +25,22 @@
 			</delete>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="create test education level" author="daniel.bower">
+		<insert tableName="education_level">
+			<column name="id" value="841652e8-7b80-41e7-9ef2-ce456d2606ca" />
+			<column name="name" value="Test Education Level" />
+			<column name="description" value="This is a test education level." />
+			<column name="created_date" value="2012-03-20 00:00:00-05" />
+			<column name="modified_date" value="2012-03-20 00:00:00-05" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="education_level">
+				<where>id='841652e8-7b80-41e7-9ef2-ce456d2606ca'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

@@ -21,16 +21,24 @@ public class PersonEducationLevel extends Auditable {
 	@Size(max = 255)
 	private String description;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
-	private Person person;
-
 	/**
 	 * Associated person. Changes to this Person are not persisted.
 	 */
+	@ManyToOne()
+	@JoinColumn(name = "person_id")
+	private Person person;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "education_level_id", nullable = false, insertable = false, updatable = false)
 	private EducationLevel educationLevel;
+
+	public PersonEducationLevel() {
+	}
+
+	public PersonEducationLevel(Person person, EducationLevel educationLevel) {
+		this.person = person;
+		this.educationLevel = educationLevel;
+	}
 
 	public String getDescription() {
 		return description;

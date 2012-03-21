@@ -294,7 +294,7 @@
 
 		<sql>grant all on person_education_goal to ssp</sql>
 		<rollback>
-			<dropTable tableName="person_education_goal" />
+			<dropTable tableName="person_education_plan" />
 		</rollback>
 
 		<!-- Theres a different assumption in the liquibase handling of timezones 
@@ -500,6 +500,30 @@
 	<changeSet author="jon.adams"
 		id="Fix typo in grant statement for person_education_plan">
 		<sql>grant all on person_education_plan to ssp</sql>
+		<rollback>
+			<sql>REVOKE all on person_education_plan from ssp</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet author = "daniel.bower" id="Fix column in person_education_level">
+		<dropColumn tableName="person_education_level" columnName="challenge_id"/>
+		<addColumn tableName="person_education_level">
+			<column name="education_level_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_education_level_education_level_education_level_id"
+					references="education_level(id)" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person_education_level" columnName="education_level_id"/>
+			<addColumn tableName="person_education_level">
+				<column name="challenge_id" type="uuid">
+					<constraints nullable="true"
+						foreignKeyName="person_education_level_education_level_education_level_id"
+						references="education_level(id)" />
+				</column>
+			</addColumn>
+		</rollback>
 	</changeSet>
 
 </databaseChangeLog>

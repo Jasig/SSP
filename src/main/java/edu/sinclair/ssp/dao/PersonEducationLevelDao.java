@@ -15,7 +15,7 @@ import edu.sinclair.ssp.model.PersonEducationLevel;
 
 @Repository
 public class PersonEducationLevelDao implements
-		AuditableCrudDao<PersonEducationLevel> {
+AuditableCrudDao<PersonEducationLevel> {
 
 	// private static final Logger logger =
 	// LoggerFactory.getLogger(PersonEducationLevelDao.class);
@@ -42,11 +42,12 @@ public class PersonEducationLevelDao implements
 				.get(PersonEducationLevel.class, id);
 	}
 
-	public PersonEducationLevel forPerson(Person person) {
+	@SuppressWarnings("unchecked")
+	public List<PersonEducationLevel> forPerson(Person person) {
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(PersonEducationLevel.class)
 				.add(Restrictions.eq("person", person));
-		return (PersonEducationLevel) query.uniqueResult();
+		return query.list();
 	}
 
 	@Override

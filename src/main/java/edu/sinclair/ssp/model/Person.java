@@ -135,8 +135,8 @@ public class Person extends Auditable {
 	 * Education levels. Changes to this set are persisted.
 	 */
 	@Nullable()
-	@OneToMany
-	@JoinColumn(name = "person_id")
+	@OneToMany(mappedBy = "person")
+	@Cascade(value = CascadeType.ALL)
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
