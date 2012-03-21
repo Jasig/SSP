@@ -22,6 +22,7 @@ public class PersonEducationLevel extends Auditable {
 	private String description;
 
 	@ManyToOne
+	@JoinColumn(name = "person_id")
 	private Person person;
 
 	/**
