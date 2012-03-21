@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.sinclair.ssp</groupId>
 	<artifactId>ssp</artifactId>
 	<packaging>war</packaging>
 	<name>SSP</name>
 	<version>0.0.1</version>
-	
+
 	<dependencies>
 		<!-- File Upload -->
 		<dependency>
@@ -14,7 +15,7 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.2</version>
 		</dependency>
-	
+
 		<!-- Collections shortcuts -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -26,7 +27,7 @@
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.1</version>
 		</dependency>
-		
+
 		<!-- Mail -->
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -49,14 +50,14 @@
 			<artifactId>velocity</artifactId>
 			<version>1.7</version>
 		</dependency>
-		
+
 		<!-- Scheduling -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>2.0.2</version>
 		</dependency>
-		
+
 		<!-- Web -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -86,7 +87,7 @@
 			<artifactId>urlrewritefilter</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-		
+
 		<!-- Spring dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -120,8 +121,8 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
-		<!--  JSR 303 with Hibernate Validator -->
+
+		<!-- JSR 303 with Hibernate Validator -->
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -132,13 +133,13 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.2.0.Final</version>
 		</dependency>
-		
+
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.6.4</version>
-		</dependency>	
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
@@ -154,20 +155,20 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-		
+
 		<!-- Persistence -->
 		<dependency>
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>8.4-701.jdbc4</version>
-	 	</dependency>
-	 	
-	 	<dependency>
+		</dependency>
+
+		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 			<version>2.0.3</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
@@ -193,7 +194,7 @@
 			<artifactId>cglib</artifactId>
 			<version>2.2.2</version>
 		</dependency>
-			
+
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -214,16 +215,17 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
 			<version>${spring.security.version}</version>
-		</dependency>	
-		
+		</dependency>
+
 		<!-- Jackson JSON Processor -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-lgpl</artifactId>
 			<version>1.9.4</version>
 		</dependency>
-		
-		<!-- Apache directory service used for running a local directory server for development purposes -->
+
+		<!-- Apache directory service used for running a local directory server 
+			for development purposes -->
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-core</artifactId>
@@ -239,7 +241,7 @@
 			<artifactId>shared-ldap</artifactId>
 			<version>0.9.17</version>
 		</dependency>
-		
+
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.easymock</groupId>
@@ -253,9 +255,19 @@
 			<version>4.9</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>hibernatingrhinos.hibernate.profiler</groupId>
+			<artifactId>profiler</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
 	</dependencies>
-	
-	<build>	 
+
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -274,20 +286,10 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<!-- plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>emma-maven-plugin</artifactId>
-				<version>1.0-alpha-3</version>
-				<inherited>true</inherited>
-				<executions>
-					<execution>
-					<phase>process-classes</phase>
-					<goals>
-						<goal>instrument</goal>
-					</goals>
-					</execution>
-				</executions>
-			</plugin -->
+			<!-- plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>emma-maven-plugin</artifactId> 
+				<version>1.0-alpha-3</version> <inherited>true</inherited> <executions> <execution> 
+				<phase>process-classes</phase> <goals> <goal>instrument</goal> </goals> </execution> 
+				</executions> </plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -311,22 +313,18 @@
 				<configuration>
 					<!-- verbose>true</verbose -->
 					<propertyFile>/usr/local/etc/ssp/ssp-liquibase.properties</propertyFile>
-					<!-- In order for the liquibase-maven-plugin to pickup any updates you have 
-						made to the changesets, you will need to "mvn compile" the project first -->
+					<!-- In order for the liquibase-maven-plugin to pickup any updates you 
+						have made to the changesets, you will need to "mvn compile" the project first -->
 					<changeLogFile>edu/sinclair/ssp/database/masterChangeLog-test.xml</changeLogFile>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<reporting>
 		<plugins>
-			<!-- plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>emma-maven-plugin</artifactId>
-				<version>1.0-alpha-3</version>
-				<inherited>true</inherited>
-			</plugin -->
+			<!-- plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>emma-maven-plugin</artifactId> 
+				<version>1.0-alpha-3</version> <inherited>true</inherited> </plugin -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>surefire-report-maven-plugin</artifactId>
@@ -356,5 +354,5 @@
 		<spring.security.version>3.0.7.RELEASE</spring.security.version>
 		<targetJdk>1.6</targetJdk>
 	</properties>
-	
+
 </project>
