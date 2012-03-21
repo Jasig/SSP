@@ -41,11 +41,12 @@ public class PersonChallengeDao implements AuditableCrudDao<PersonChallenge> {
 				PersonChallenge.class, id);
 	}
 
-	public PersonChallenge forPerson(Person person) {
+	@SuppressWarnings("unchecked")
+	public List<PersonChallenge> forPerson(Person person) {
 		Criteria query = this.sessionFactory.getCurrentSession()
 				.createCriteria(PersonChallenge.class)
 				.add(Restrictions.eq("person", person));
-		return (PersonChallenge) query.uniqueResult();
+		return query.list();
 	}
 
 	@Override

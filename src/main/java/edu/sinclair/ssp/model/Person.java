@@ -108,7 +108,7 @@ public class Person extends Auditable {
 	/**
 	 * Marks the user account able to authenticate in the system.
 	 * 
-	 * Usually only marked false for former administrators, counselors, 
+	 * Usually only marked false for former administrators, counselors,
 	 * and non-students who no longer use the system anymore.
 	 */
 	private boolean enabled;
@@ -136,7 +136,7 @@ public class Person extends Auditable {
 	 */
 	@Nullable()
 	@OneToMany
-	@JoinColumn(name = "person_education_level")
+	@JoinColumn(name = "person_id")
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
@@ -144,15 +144,15 @@ public class Person extends Auditable {
 	 */
 	@Nullable()
 	@OneToMany
-	@JoinColumn(name = "person_funding")
+	@JoinColumn(name = "person_id")
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
 	 * Challenges. Changes to this set are persisted.
 	 */
 	@Nullable()
-	@OneToMany
-	@JoinColumn(name = "person_challenges")
+	@OneToMany(mappedBy = "person")
+	@Cascade(value = CascadeType.ALL)
 	private Set<PersonChallenge> challenges;
 
 	public Person() {
