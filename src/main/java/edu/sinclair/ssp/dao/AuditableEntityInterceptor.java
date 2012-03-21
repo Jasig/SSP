@@ -50,24 +50,22 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 		if (entity instanceof Auditable) {
 			for (int i = 0; i < propertyNames.length; i++) {
 				String property = propertyNames[i];
-				if ("createdDate".equals(property)) {
-					if (state[i] == null) {
-						state[i] = new Date();
-					}
+				if ("createdDate".equals(property) && state[i] == null) {
+					state[i] = new Date();
 				}
-				if ("createdBy".equals(property)) {
-					if (state[i] == null) {
-						state[i] = currentUser();
-					}
+
+				if ("createdBy".equals(property) && state[i] == null) {
+					state[i] = currentUser();
 				}
-				if ("objectStatus".equals(property)) {
-					if (state[i] == null) {
-						state[i] = ObjectStatus.ACTIVE;
-					}
+
+				if ("objectStatus".equals(property) && state[i] == null) {
+					state[i] = ObjectStatus.ACTIVE;
 				}
+
 				if ("modifiedDate".equals(property)) {
 					state[i] = new Date();
 				}
+
 				if ("modifiedBy".equals(property)) {
 					state[i] = currentUser();
 				}

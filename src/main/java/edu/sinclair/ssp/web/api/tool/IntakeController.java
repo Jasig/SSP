@@ -71,22 +71,31 @@ public class IntakeController {
 
 	@Autowired
 	private ChallengeService challengeService;
+
 	@Autowired
 	private ChildCareArrangementService childCareArrangementService;
+
 	@Autowired
 	private CitizenshipService citizenshipService;
+
 	@Autowired
 	private EducationGoalService educationGoalService;
+
 	@Autowired
 	private EducationLevelService educationLevelService;
+
 	@Autowired
 	private EthnicityService ethnicityService;
+
 	@Autowired
 	private FundingSourceService fundingSourceService;
+
 	@Autowired
 	private MaritalStatusService maritalStatusService;
+
 	@Autowired
 	private StudentStatusService studentStatusService;
+
 	@Autowired
 	private VeteranStatusService veteranStatusService;
 

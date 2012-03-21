@@ -52,28 +52,34 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		if (model.getPerson() != null) {
 			setPerson(new PersonTO(model.getPerson()));
 		}
+
 		if (model.getPersonDemographics() != null) {
 			setPersonDemographics(new PersonDemographicsTO(
 					model.getPersonDemographics()));
 		}
+
 		if (model.getPersonEducationGoal() != null) {
 			setPersonEducationGoal(new PersonEducationGoalTO(
 					model.getPersonEducationGoal()));
 		}
+
 		if (model.getPersonEducationPlan() != null) {
 			setPersonEducationPlan(new PersonEducationPlanTO(
 					model.getPersonEducationPlan()));
 		}
+
 		if (model.getPersonEducationLevels() != null
 				&& model.getPersonEducationLevels().size() > 0) {
 			setPersonEducationLevels(personEducationLevelToFactory
 					.toTOList(model.getPersonEducationLevels()));
 		}
+
 		if (model.getPersonFundingSources() != null
 				&& model.getPersonFundingSources().size() > 0) {
 			setPersonFundingSources(personFundingToFactory.toTOList(model
 					.getPersonFundingSources()));
 		}
+
 		if (model.getPersonChallenges() != null
 				&& model.getPersonChallenges().size() > 0) {
 			setPersonChallenges(personChallengeToFactory.toTOList(model
@@ -86,28 +92,34 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		if (getPerson() != null) {
 			model.setPerson(getPerson().asModel());
 		}
+
 		if (getPersonDemographics() != null) {
 			model.setPersonDemographics(getPersonDemographics().asModel());
 		}
+
 		if (getPersonEducationGoal() != null) {
 			model.setPersonEducationGoal(getPersonEducationGoal().asModel());
 		}
+
 		if (getPersonEducationPlan() != null) {
 			model.setPersonEducationPlan(getPersonEducationPlan().asModel());
 		}
+
 		if (getPersonEducationLevels() != null
 				&& getPersonEducationLevels().size() > 0) {
 			model.setPersonEducationLevels(personEducationLevelToFactory
-					.toModelList(getPersonEducationLevels()));
+					.toModelSet(getPersonEducationLevels()));
 		}
+
 		if (getPersonFundingSources() != null
 				&& getPersonFundingSources().size() > 0) {
 			model.setPersonFundingSources(personFundingToFactory
-					.toModelList(getPersonFundingSources()));
+					.toModelSet(getPersonFundingSources()));
 		}
+
 		if (getPersonChallenges() != null && getPersonChallenges().size() > 0) {
 			model.setPersonChallenges(personChallengeToFactory
-					.toModelList(getPersonChallenges()));
+					.toModelSet(getPersonChallenges()));
 		}
 
 		return model;

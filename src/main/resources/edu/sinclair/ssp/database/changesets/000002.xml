@@ -526,4 +526,18 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet author='jon.adams' id="Fix some column name typos">
+		<renameColumn tableName="person_education_level"
+			oldColumnName="challenge_id" newColumnName="education_level_id" />
+		<renameColumn tableName="person_funding_source"
+			oldColumnName="challenge_id" newColumnName="funding_source_id" />
+
+		<rollback>
+			<renameColumn tableName="person_education_level"
+				oldColumnName="education_level_id" newColumnName="challenge_id" />
+			<renameColumn tableName="person_funding_source"
+				oldColumnName="funding_source_id" newColumnName="challenge_id" />
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

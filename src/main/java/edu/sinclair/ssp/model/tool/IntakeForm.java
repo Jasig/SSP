@@ -1,6 +1,6 @@
 package edu.sinclair.ssp.model.tool;
 
-import java.util.List;
+import java.util.Set;
 
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonChallenge;
@@ -18,13 +18,13 @@ public class IntakeForm {
 
 	private PersonEducationGoal personEducationGoal;
 
-	private List<PersonEducationLevel> personEducationLevels;
-
 	private PersonEducationPlan personEducationPlan;
 
-	private List<PersonFundingSource> personFundingSources;
+	private Set<PersonEducationLevel> personEducationLevels;
 
-	private List<PersonChallenge> personChallenges;
+	private Set<PersonFundingSource> personFundingSources;
+
+	private Set<PersonChallenge> personChallenges;
 
 	public Person getPerson() {
 		return person;
@@ -50,15 +50,6 @@ public class IntakeForm {
 		this.personEducationGoal = personEducationGoal;
 	}
 
-	public List<PersonEducationLevel> getPersonEducationLevels() {
-		return personEducationLevels;
-	}
-
-	public void setPersonEducationLevels(
-			List<PersonEducationLevel> personEducationLevels) {
-		this.personEducationLevels = personEducationLevels;
-	}
-
 	public PersonEducationPlan getPersonEducationPlan() {
 		return personEducationPlan;
 	}
@@ -67,20 +58,29 @@ public class IntakeForm {
 		this.personEducationPlan = personEducationPlan;
 	}
 
-	public List<PersonFundingSource> getPersonFundingSources() {
+	public Set<PersonEducationLevel> getPersonEducationLevels() {
+		return personEducationLevels;
+	}
+
+	public void setPersonEducationLevels(
+			Set<PersonEducationLevel> personEducationLevels) {
+		this.personEducationLevels = personEducationLevels;
+	}
+
+	public Set<PersonFundingSource> getPersonFundingSources() {
 		return personFundingSources;
 	}
 
 	public void setPersonFundingSources(
-			List<PersonFundingSource> personFundingSources) {
+			Set<PersonFundingSource> personFundingSources) {
 		this.personFundingSources = personFundingSources;
 	}
 
-	public List<PersonChallenge> getPersonChallenges() {
+	public Set<PersonChallenge> getPersonChallenges() {
 		return personChallenges;
 	}
 
-	public void setPersonChallenges(List<PersonChallenge> personChallenges) {
+	public void setPersonChallenges(Set<PersonChallenge> personChallenges) {
 		this.personChallenges = personChallenges;
 	}
 

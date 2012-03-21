@@ -24,7 +24,7 @@ public class PersonEducationLevel extends Auditable {
 	/**
 	 * Associated person. Changes to this Person are not persisted.
 	 */
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name = "person_id")
 	private Person person;
 

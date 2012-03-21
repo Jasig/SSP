@@ -137,14 +137,14 @@ public class Person extends Auditable {
 	@Nullable()
 	@OneToMany(mappedBy = "person")
 	@Cascade(value = CascadeType.ALL)
+
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
 	 * Funding sources. Changes to this set are persisted.
 	 */
 	@Nullable()
-	@OneToMany
-	@JoinColumn(name = "person_id")
+	@OneToMany(mappedBy = "person")
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
@@ -152,7 +152,6 @@ public class Person extends Auditable {
 	 */
 	@Nullable()
 	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
 	private Set<PersonChallenge> challenges;
 
 	public Person() {

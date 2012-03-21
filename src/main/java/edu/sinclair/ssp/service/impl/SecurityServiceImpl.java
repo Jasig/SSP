@@ -31,9 +31,11 @@ public class SecurityServiceImpl implements SecurityService {
 			} else if (principal instanceof String) {
 				logger.error("Just tried to get an sspUser object from a user that is "
 						+ principal);
+				return sspUser;
 			} else {
 				logger.error("Just tried to get an sspUser object from an object that is really a "
 						+ principal.toString());
+				return sspUser;
 			}
 		}
 

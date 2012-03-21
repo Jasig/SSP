@@ -23,11 +23,11 @@ public class PersonFundingSource extends Auditable {
 	/**
 	 * Associated person. Changes to this Person are not persisted.
 	 */
-	@ManyToOne()
-	@JoinColumn(name = "person_id", nullable = false, insertable = false, updatable = false)
+	@ManyToOne
+	@JoinColumn(name = "person_id")
 	private Person person;
 
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name = "funding_source_id", nullable = false, insertable = false, updatable = false)
 	private FundingSource fundingSource;
 
