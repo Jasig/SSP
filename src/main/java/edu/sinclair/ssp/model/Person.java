@@ -137,7 +137,6 @@ public class Person extends Auditable {
 	@Nullable()
 	@OneToMany(mappedBy = "person")
 	@Cascade(value = CascadeType.ALL)
-
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
@@ -353,4 +352,63 @@ public class Person extends Auditable {
 		this.challenges = challenges;
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties. Does not
+	 * include the Enabled property.
+	 * 
+	 * @param pFromTO
+	 *            Source to use for overwrites.
+	 * @see overwriteWithEnabled(Person)
+	 * @see overwriteWithEnabledAndCollections(Person)
+	 */
+	public void overwrite(Person pFromTO) {
+		this.setFirstName(pFromTO.getFirstName());
+		this.setMiddleInitial(pFromTO.getMiddleInitial());
+		this.setLastName(pFromTO.getLastName());
+		this.setBirthDate(pFromTO.getBirthDate());
+		this.setPrimaryEmailAddress(pFromTO.getPrimaryEmailAddress());
+		this.setSecondaryEmailAddress(pFromTO.getSecondaryEmailAddress());
+		this.setUsername(pFromTO.getUsername());
+		this.setHomePhone(pFromTO.getHomePhone());
+		this.setWorkPhone(pFromTO.getWorkPhone());
+		this.setCellPhone(pFromTO.getCellPhone());
+		this.setAddressLine1(pFromTO.getAddressLine1());
+		this.setAddressLine2(pFromTO.getAddressLine2());
+		this.setCity(pFromTO.getCity());
+		this.setState(pFromTO.getState());
+		this.setZipCode(pFromTO.getZipCode());
+		this.setPhotoUrl(pFromTO.getPhotoUrl());
+		this.setSchoolId(pFromTO.getSchoolId());
+	}
+
+	/**
+	 * Overwrites simple properties with the parameter's properties, including
+	 * the Enabled property.
+	 * 
+	 * @param pFromTO
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 * @see overwriteWithEnabledAndCollections(Person)
+	 */
+	public void overwriteWithEnabled(Person pFromTO) {
+		this.overwrite(pFromTO);
+
+		this.setEnabled(pFromTO.isEnabled());
+	}
+
+	/**
+	 * Overwrites simple and collection properties with the parameter's
+	 * properties, including the Enabled property.
+	 * 
+	 * @param pFromTO
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 * @see overwriteWithEnabledAndCollections(Person)
+	 */
+	public void overwriteWithEnabledAndCollections(Person pFromTO) {
+		this.overwriteWithEnabled(pFromTO);
+
+		// TODO: Implement overwriteWithEnabledAndCollections
+		throw new RuntimeException("Not implemented");
+	}
 }

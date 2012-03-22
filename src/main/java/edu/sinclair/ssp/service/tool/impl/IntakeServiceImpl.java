@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.tool.IntakeForm;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.PersonDemographicsService;
-import edu.sinclair.ssp.service.PersonEducationGoalService;
-import edu.sinclair.ssp.service.PersonEducationPlanService;
 import edu.sinclair.ssp.service.PersonService;
 import edu.sinclair.ssp.service.tool.IntakeService;
 
@@ -22,15 +19,6 @@ public class IntakeServiceImpl implements IntakeService {
 
 	@Autowired
 	private PersonService personService;
-
-	@Autowired
-	private PersonDemographicsService personDemographicsService;
-
-	@Autowired
-	private PersonEducationGoalService personEducationGoalService;
-
-	@Autowired
-	private PersonEducationPlanService personEducationPlanService;
 
 	/**
 	 * Copy non-persisted model values, over to persisted values.
