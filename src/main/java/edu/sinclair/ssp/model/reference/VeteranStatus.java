@@ -28,4 +28,15 @@ public class VeteranStatus extends AbstractReference {
 		super(id, name, description);
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(VeteranStatus)
+	 */
+	public void overwrite(VeteranStatus source) {
+		this.setName(source.getName());
+		this.setDescription(source.getDescription());
+	}
 }

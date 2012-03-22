@@ -1,6 +1,7 @@
 package edu.sinclair.ssp.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -356,81 +357,176 @@ public class Person extends Auditable {
 	 * Overwrites simple properties with the parameter's properties. Does not
 	 * include the Enabled property.
 	 * 
-	 * @param pFromTO
+	 * @param source
 	 *            Source to use for overwrites.
 	 * @see overwriteWithEnabled(Person)
 	 * @see overwriteWithEnabledAndCollections(Person)
 	 */
-	public void overwrite(Person pFromTO) {
-		this.setFirstName(pFromTO.getFirstName());
-		this.setMiddleInitial(pFromTO.getMiddleInitial());
-		this.setLastName(pFromTO.getLastName());
-		this.setBirthDate(pFromTO.getBirthDate());
-		this.setPrimaryEmailAddress(pFromTO.getPrimaryEmailAddress());
-		this.setSecondaryEmailAddress(pFromTO.getSecondaryEmailAddress());
-		this.setUsername(pFromTO.getUsername());
-		this.setHomePhone(pFromTO.getHomePhone());
-		this.setWorkPhone(pFromTO.getWorkPhone());
-		this.setCellPhone(pFromTO.getCellPhone());
-		this.setAddressLine1(pFromTO.getAddressLine1());
-		this.setAddressLine2(pFromTO.getAddressLine2());
-		this.setCity(pFromTO.getCity());
-		this.setState(pFromTO.getState());
-		this.setZipCode(pFromTO.getZipCode());
-		this.setPhotoUrl(pFromTO.getPhotoUrl());
-		this.setSchoolId(pFromTO.getSchoolId());
+	public void overwrite(Person source) {
+		this.setFirstName(source.getFirstName());
+		this.setMiddleInitial(source.getMiddleInitial());
+		this.setLastName(source.getLastName());
+		this.setBirthDate(source.getBirthDate());
+		this.setPrimaryEmailAddress(source.getPrimaryEmailAddress());
+		this.setSecondaryEmailAddress(source.getSecondaryEmailAddress());
+		this.setUsername(source.getUsername());
+		this.setHomePhone(source.getHomePhone());
+		this.setWorkPhone(source.getWorkPhone());
+		this.setCellPhone(source.getCellPhone());
+		this.setAddressLine1(source.getAddressLine1());
+		this.setAddressLine2(source.getAddressLine2());
+		this.setCity(source.getCity());
+		this.setState(source.getState());
+		this.setZipCode(source.getZipCode());
+		this.setPhotoUrl(source.getPhotoUrl());
+		this.setSchoolId(source.getSchoolId());
 	}
 
 	/**
 	 * Overwrites simple properties with the parameter's properties, including
 	 * the Enabled property.
 	 * 
-	 * @param pFromTO
+	 * @param source
 	 *            Source to use for overwrites.
 	 * @see overwrite(Person)
 	 * @see overwriteWithCollections(Person)
 	 * @see overwriteWithEnabledAndCollections(Person)
 	 */
-	public void overwriteWithEnabled(Person pFromTO) {
-		this.overwrite(pFromTO);
+	public void overwriteWithEnabled(Person source) {
+		this.overwrite(source);
 
-		this.setEnabled(pFromTO.isEnabled());
+		this.setEnabled(source.isEnabled());
 	}
 
 	/**
 	 * Overwrites simple and collection properties with the parameter's
 	 * properties, including the Enabled property.
 	 * 
-	 * @param fromTO
+	 * @param source
 	 *            Source to use for overwrites.
 	 * @see overwrite(Person)
 	 * @see overwriteWithCollections(Person)
 	 * @see overwriteWithEnabledAndCollections(Person)
 	 */
-	public void overwriteWithEnabledAndCollections(Person fromTO) {
-		this.overwriteWithEnabled(fromTO);
-
-		this.getDemographics().overwrite(fromTO.getDemographics());
-
-		// TODO: Implement overwriteWithEnabledAndCollections
-		throw new RuntimeException("Not implemented");
+	public void overwriteWithEnabledAndCollections(Person source) {
+		this.overwriteWithEnabled(source);
+		this.overwriteWithCollections(source);
 	}
 
 	/**
 	 * Overwrites simple and collection properties with the parameter's
 	 * properties, but not the Enabled property.
 	 * 
-	 * @param fromTO
+	 * @param source
 	 *            Source to use for overwrites.
 	 * @see overwrite(Person)
 	 * @see overwriteWithEnabledAndCollections(Person)
 	 */
-	public void overwriteWithCollections(Person fromTO) {
-		this.overwrite(fromTO);
+	public void overwriteWithCollections(Person source) {
+		this.overwrite(source);
 
-		this.getDemographics().overwrite(fromTO.getDemographics());
+		this.getDemographics().overwriteWithCollections(
+				source.getDemographics());
+		this.getEducationGoal().overwriteWithCollections(
+				source.getEducationGoal());
+		this.getEducationPlan().overwriteWithCollections(
+				source.getEducationPlan());
 
-		// TODO: Implement overwriteWithEnabledAndCollections
-		throw new RuntimeException("Not implemented");
+		this.overwriteWithCollectionsEducationLevels(source
+				.getEducationLevels());
+		this.overwriteWithCollectionsFundingSources(source.getFundingSources());
+		this.overwriteWithCollectionsChallenges(source.getChallenges());
+	}
+
+	private void overwriteWithCollectionsEducationLevels(
+			Set<PersonEducationLevel> source) {
+		Set<PersonEducationLevel> thisSet = this.getEducationLevels();
+		Set<PersonEducationLevel> toRemove = new HashSet<PersonEducationLevel>();
+
+		// iterate through set to overwrite updating matching items
+		for (PersonEducationLevel thisItem : thisSet) {
+			if (!source.contains(thisItem)) {
+				toRemove.add(thisItem);
+			}
+
+			for (PersonEducationLevel sourceItem : source) {
+				if (sourceItem.equals(thisItem)) {
+					thisItem.overwriteWithEducationLevel(sourceItem);
+				}
+			}
+		}
+
+		// remove all items not in new set from the current set
+		thisSet.removeAll(toRemove);
+
+		// find all items that need added
+		for (PersonEducationLevel sourceItem : source) {
+			if (!thisSet.contains(sourceItem)) {
+				PersonEducationLevel newItem = new PersonEducationLevel();
+				newItem.overwriteWithEducationLevel(sourceItem);
+				thisSet.add(newItem);
+			}
+		}
+	}
+
+	private void overwriteWithCollectionsFundingSources(
+			Set<PersonFundingSource> source) {
+		Set<PersonFundingSource> thisSet = this.getFundingSources();
+		Set<PersonFundingSource> toRemove = new HashSet<PersonFundingSource>();
+
+		// iterate through set to overwrite updating matching items
+		for (PersonFundingSource thisItem : thisSet) {
+			if (!source.contains(thisItem)) {
+				toRemove.add(thisItem);
+			}
+
+			for (PersonFundingSource sourceItem : source) {
+				if (sourceItem.equals(thisItem)) {
+					thisItem.overwriteWithFundingSource(sourceItem);
+				}
+			}
+		}
+
+		// remove all items not in new set from the current set
+		thisSet.removeAll(toRemove);
+
+		// find all items that need added
+		for (PersonFundingSource sourceItem : source) {
+			if (!thisSet.contains(sourceItem)) {
+				PersonFundingSource newItem = new PersonFundingSource();
+				newItem.overwriteWithFundingSource(sourceItem);
+				thisSet.add(newItem);
+			}
+		}
+	}
+
+	private void overwriteWithCollectionsChallenges(Set<PersonChallenge> source) {
+		Set<PersonChallenge> thisSet = this.getChallenges();
+		Set<PersonChallenge> toRemove = new HashSet<PersonChallenge>();
+
+		// iterate through set to overwrite updating matching items
+		for (PersonChallenge thisItem : thisSet) {
+			if (!source.contains(thisItem)) {
+				toRemove.add(thisItem);
+			}
+
+			for (PersonChallenge sourceItem : source) {
+				if (sourceItem.equals(thisItem)) {
+					thisItem.overwrite(sourceItem);
+				}
+			}
+		}
+
+		// remove all items not in new set from the current set
+		thisSet.removeAll(toRemove);
+
+		// find all items that need added
+		for (PersonChallenge sourceItem : source) {
+			if (!thisSet.contains(sourceItem)) {
+				PersonChallenge newItem = new PersonChallenge();
+				newItem.overwrite(sourceItem);
+				thisSet.add(newItem);
+			}
+		}
 	}
 }

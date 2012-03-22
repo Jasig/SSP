@@ -64,4 +64,30 @@ public class PersonEducationGoal extends Auditable {
 		this.plannedOccupation = plannedOccupation;
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(PersonEducationGoal)
+	 */
+	public void overwrite(PersonEducationGoal source) {
+		this.setDescription(source.getDescription());
+		this.setPlannedOccupation(source.getPlannedOccupation());
+		this.setHowSureAboutMajor(source.getHowSureAboutMajor());
+	}
+
+	/**
+	 * Overwrites simple and collection properties with the parameter's
+	 * properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(PersonEducationGoal)
+	 */
+	public void overwriteWithCollections(PersonEducationGoal source) {
+		this.overwrite(source);
+
+		this.getEducationGoal().overwrite(source.getEducationGoal());
+	}
 }

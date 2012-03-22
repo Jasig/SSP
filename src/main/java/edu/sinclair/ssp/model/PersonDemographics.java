@@ -281,46 +281,45 @@ public class PersonDemographics extends Auditable {
 	/**
 	 * Overwrites simple properties with the parameter's properties.
 	 * 
-	 * @param fromTO
+	 * @param source
 	 *            Source to use for overwrites.
 	 * @see overwriteWithCollections(PersonDemographics)
 	 */
-	public void overwrite(PersonDemographics fromTO) {
-		this.setAbilityToBenefit(fromTO.isAbilityToBenefit());
-		this.setAnticipatedStartTerm(fromTO.getAnticipatedStartTerm());
-		this.setAnticipatedStartYear(fromTO.getAnticipatedStartYear());
-		this.setLocal(fromTO.isLocal());
-		this.setCountryOfResidence(fromTO.getCountryOfResidence());
-		this.setPaymentStatus(fromTO.getPaymentStatus());
-		this.setCountryOfCitizenship(fromTO.getCountryOfCitizenship());
-		this.setPrimaryCaregiver(fromTO.isPrimaryCaregiver());
-		this.setNumberOfChildren(fromTO.getNumberOfChildren());
-		this.setChildAges(fromTO.getChildAges());
-		this.setChildCareNeeded(fromTO.isChildCareNeeded());
-		this.setEmployed(fromTO.isEmployed());
-		this.setPlaceOfEmployment(fromTO.getPlaceOfEmployment());
-		this.setWage(fromTO.getWage());
-		this.setTotalHoursWorkedPerWeek(fromTO.getTotalHoursWorkedPerWeek());
+	public void overwrite(PersonDemographics source) {
+		this.setAbilityToBenefit(source.isAbilityToBenefit());
+		this.setAnticipatedStartTerm(source.getAnticipatedStartTerm());
+		this.setAnticipatedStartYear(source.getAnticipatedStartYear());
+		this.setLocal(source.isLocal());
+		this.setCountryOfResidence(source.getCountryOfResidence());
+		this.setPaymentStatus(source.getPaymentStatus());
+		this.setEthnicity(source.getEthnicity());
+		this.setGender(source.getGender());
+		this.setCitizenship(source.getCitizenship());
+		this.setCountryOfCitizenship(source.getCountryOfCitizenship());
+		this.setPrimaryCaregiver(source.isPrimaryCaregiver());
+		this.setNumberOfChildren(source.getNumberOfChildren());
+		this.setChildAges(source.getChildAges());
+		this.setChildCareNeeded(source.isChildCareNeeded());
+		this.setEmployed(source.isEmployed());
+		this.setPlaceOfEmployment(source.getPlaceOfEmployment());
+		this.setShift(source.getShift());
+		this.setWage(source.getWage());
+		this.setTotalHoursWorkedPerWeek(source.getTotalHoursWorkedPerWeek());
 	}
 
 	/**
 	 * Overwrites simple and collection properties with the parameter's
 	 * properties.
 	 * 
-	 * @param fromTO
+	 * @param source
 	 *            Source to use for overwrites.
 	 * @see overwrite(PersonDemographics)
 	 */
-	public void overwriteWithCollections(PersonDemographics fromTO) {
-		this.overwrite(fromTO);
+	public void overwriteWithCollections(PersonDemographics source) {
+		this.overwrite(source);
 
-		// TODO: Implement overwriteWithEnabledAndCollections
-		throw new RuntimeException("Not implemented");
-		/*
-		 * this.setMaritalStatus(fromTO.get); this.setEthnicity(fromTO.get);
-		 * this.setGender(fromTO.get); this.setCitizenship(fromTO.get);
-		 * this.setVeteranStatus(fromTO.get); this.setShift(fromTO.get);
-		 * this.setCoach(fromTO.get);
-		 */
+		this.getMaritalStatus().overwrite(source.getMaritalStatus());
+		this.getVeteranStatus().overwrite(source.getVeteranStatus());
+		this.getCoach().overwrite(source.getCoach());
 	}
 }

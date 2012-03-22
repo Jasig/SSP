@@ -28,4 +28,15 @@ public class MaritalStatus extends AbstractReference {
 		super(id, name, description);
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(MaritalStatus)
+	 */
+	public void overwrite(MaritalStatus source) {
+		this.setName(source.getName());
+		this.setDescription(source.getDescription());
+	}
 }

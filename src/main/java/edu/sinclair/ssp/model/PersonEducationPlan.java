@@ -85,4 +85,32 @@ public class PersonEducationPlan extends Auditable {
 		this.gradeTypicallyEarned = gradeTypicallyEarned;
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(PersonEducationPlan)
+	 */
+	public void overwrite(PersonEducationPlan source) {
+		this.setNewOrientationComplete(source.isNewOrientationComplete());
+		this.setRegisteredForClasses(source.isRegisteredForClasses());
+		this.setCollegeDegreeForParents(source.isCollegeDegreeForParents());
+		this.setSpecialNeeds(source.isSpecialNeeds());
+		this.setGradeTypicallyEarned(source.getGradeTypicallyEarned());
+	}
+
+	/**
+	 * Overwrites simple and collection properties with the parameter's
+	 * properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(PersonEducationPlan)
+	 */
+	public void overwriteWithCollections(PersonEducationPlan source) {
+		this.overwrite(source);
+
+		this.getStudentStatus().overwrite(source.getStudentStatus());
+	}
 }

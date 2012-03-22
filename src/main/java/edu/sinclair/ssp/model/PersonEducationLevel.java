@@ -64,4 +64,56 @@ public class PersonEducationLevel extends Auditable {
 		this.educationLevel = educationLevel;
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(PersonEducationLevel)
+	 */
+	public void overwrite(PersonEducationLevel source) {
+		this.setDescription(source.getDescription());
+	}
+
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(PersonEducationLevel)
+	 */
+	public void overwriteWithPerson(PersonEducationLevel source, Person person) {
+		this.overwrite(source);
+
+		this.setPerson(person);
+	}
+
+	/**
+	 * Overwrites simple and collection properties with the parameter's
+	 * properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(PersonEducationLevel)
+	 */
+	public void overwriteWithEducationLevel(PersonEducationLevel source) {
+		this.overwrite(source);
+
+		this.getEducationLevel().overwrite(source.getEducationLevel());
+	}
+
+	/**
+	 * Overwrites simple and collection properties with the parameter's
+	 * properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(PersonEducationLevel)
+	 */
+	public void overwriteWithPersonAndEducationLevel(
+			PersonEducationLevel source, Person person) {
+		this.overwriteWithEducationLevel(source);
+
+		this.setPerson(person);
+	}
 }

@@ -64,4 +64,32 @@ public class PersonChallenge extends Auditable {
 		this.challenge = challenge;
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties. Does not
+	 * include the Enabled property.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithPersonAndCollections(PersonChallenge)
+	 */
+	public void overwrite(PersonChallenge source) {
+		this.setDescription(source.getDescription());
+	}
+
+	/**
+	 * Overwrites simple and collection properties with the parameter's
+	 * properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(PersonChallenge)
+	 * @see overwriteWithEnabledAndCollections(PersonChallenge)
+	 */
+	public void overwriteWithPersonAndCollections(PersonChallenge source,
+			Person person) {
+		this.overwrite(source);
+
+		this.setPerson(person);
+		this.getChallenge().overwrite(source.getChallenge());
+	}
 }

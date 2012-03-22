@@ -28,4 +28,15 @@ public class Ethnicity extends AbstractReference {
 		super(id, name, description);
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(Ethnicity)
+	 */
+	public void overwrite(Ethnicity source) {
+		this.setName(source.getName());
+		this.setDescription(source.getDescription());
+	}
 }
