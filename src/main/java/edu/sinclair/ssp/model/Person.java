@@ -388,6 +388,7 @@ public class Person extends Auditable {
 	 * @param pFromTO
 	 *            Source to use for overwrites.
 	 * @see overwrite(Person)
+	 * @see overwriteWithCollections(Person)
 	 * @see overwriteWithEnabledAndCollections(Person)
 	 */
 	public void overwriteWithEnabled(Person pFromTO) {
@@ -400,13 +401,34 @@ public class Person extends Auditable {
 	 * Overwrites simple and collection properties with the parameter's
 	 * properties, including the Enabled property.
 	 * 
-	 * @param pFromTO
+	 * @param fromTO
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 * @see overwriteWithCollections(Person)
+	 * @see overwriteWithEnabledAndCollections(Person)
+	 */
+	public void overwriteWithEnabledAndCollections(Person fromTO) {
+		this.overwriteWithEnabled(fromTO);
+
+		this.getDemographics().overwrite(fromTO.getDemographics());
+
+		// TODO: Implement overwriteWithEnabledAndCollections
+		throw new RuntimeException("Not implemented");
+	}
+
+	/**
+	 * Overwrites simple and collection properties with the parameter's
+	 * properties, but not the Enabled property.
+	 * 
+	 * @param fromTO
 	 *            Source to use for overwrites.
 	 * @see overwrite(Person)
 	 * @see overwriteWithEnabledAndCollections(Person)
 	 */
-	public void overwriteWithEnabledAndCollections(Person pFromTO) {
-		this.overwriteWithEnabled(pFromTO);
+	public void overwriteWithCollections(Person fromTO) {
+		this.overwrite(fromTO);
+
+		this.getDemographics().overwrite(fromTO.getDemographics());
 
 		// TODO: Implement overwriteWithEnabledAndCollections
 		throw new RuntimeException("Not implemented");

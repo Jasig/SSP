@@ -131,7 +131,7 @@ public class PersonDemographics extends Auditable {
 	}
 
 	public void setLocal(boolean isLocal) {
-		this.local = isLocal;
+		local = isLocal;
 	}
 
 	public String getCountryOfResidence() {
@@ -278,4 +278,49 @@ public class PersonDemographics extends Auditable {
 		this.coach = coach;
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param fromTO
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(PersonDemographics)
+	 */
+	public void overwrite(PersonDemographics fromTO) {
+		this.setAbilityToBenefit(fromTO.isAbilityToBenefit());
+		this.setAnticipatedStartTerm(fromTO.getAnticipatedStartTerm());
+		this.setAnticipatedStartYear(fromTO.getAnticipatedStartYear());
+		this.setLocal(fromTO.isLocal());
+		this.setCountryOfResidence(fromTO.getCountryOfResidence());
+		this.setPaymentStatus(fromTO.getPaymentStatus());
+		this.setCountryOfCitizenship(fromTO.getCountryOfCitizenship());
+		this.setPrimaryCaregiver(fromTO.isPrimaryCaregiver());
+		this.setNumberOfChildren(fromTO.getNumberOfChildren());
+		this.setChildAges(fromTO.getChildAges());
+		this.setChildCareNeeded(fromTO.isChildCareNeeded());
+		this.setEmployed(fromTO.isEmployed());
+		this.setPlaceOfEmployment(fromTO.getPlaceOfEmployment());
+		this.setWage(fromTO.getWage());
+		this.setTotalHoursWorkedPerWeek(fromTO.getTotalHoursWorkedPerWeek());
+	}
+
+	/**
+	 * Overwrites simple and collection properties with the parameter's
+	 * properties.
+	 * 
+	 * @param fromTO
+	 *            Source to use for overwrites.
+	 * @see overwrite(PersonDemographics)
+	 */
+	public void overwriteWithCollections(PersonDemographics fromTO) {
+		this.overwrite(fromTO);
+
+		// TODO: Implement overwriteWithEnabledAndCollections
+		throw new RuntimeException("Not implemented");
+		/*
+		 * this.setMaritalStatus(fromTO.get); this.setEthnicity(fromTO.get);
+		 * this.setGender(fromTO.get); this.setCitizenship(fromTO.get);
+		 * this.setVeteranStatus(fromTO.get); this.setShift(fromTO.get);
+		 * this.setCoach(fromTO.get);
+		 */
+	}
 }

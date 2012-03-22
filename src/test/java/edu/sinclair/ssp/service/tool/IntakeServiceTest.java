@@ -14,7 +14,6 @@ import org.junit.Test;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.service.reference.ChallengeService;
-import edu.sinclair.ssp.service.tool.impl.IntakeServiceImpl;
 
 public class IntakeServiceTest {
 
