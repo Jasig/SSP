@@ -104,8 +104,11 @@ The build server automatically pulls in SVN commits and runs unit tests.
 	Notifications->Recipients
 
 
-Additional tasks:
+Additional, optional tasks:
 	- To view/edit some of the documentation in the SVN /doc directory, install
 		the following applications:
 		- ObjectAid: http://www.objectaid.com/installation
 		- FreeMind
+	- To run the FindBug reports locally before the build server runs them, install
+		the FindBug plugin via the "Install New Software" tool in Eclipse:
+		- FindBugs: http://findbugs.cs.umd.edu/eclipse/

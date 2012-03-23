@@ -29,9 +29,7 @@ public class PersonServiceTest {
 	public void setup() {
 		service = new PersonServiceImpl();
 		dao = createMock(PersonDao.class);
-
 		service.setDao(dao);
-
 	}
 
 	@Test

@@ -4,23 +4,41 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.sinclair.ssp.model.ObjectStatus;
+import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.reference.Challenge;
+import edu.sinclair.ssp.model.tool.IntakeForm;
+import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.reference.ChallengeService;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("service-testConfig.xml")
+@TransactionConfiguration
+@Transactional
 public class IntakeServiceTest {
 
 	// private static final Logger logger =
 	// LoggerFactory.getLogger(StudentIntakeServiceTest.class);
 
-	// private IntakeService service;
+	@Autowired
+	private IntakeService service;
 
 	private ChallengeService challengeService;
 
@@ -29,8 +47,6 @@ public class IntakeServiceTest {
 
 	@Before
 	public void setup() {
-		// service = new IntakeService();
-
 		challengeService = createMock(ChallengeService.class);
 		// fundingSourceService = createMock(FundingSourceService.class);
 		// veteranStatusService = createMock(VeteranStatusService.class);
@@ -66,4 +82,24 @@ public class IntakeServiceTest {
 		// verify(veteranStatusService);
 	}
 
+	@Test(expected = ObjectNotFoundException.class)
+	public void testIntakeServiceFormObjectNotFoundException()
+			throws ObjectNotFoundException {
+		service.loadForPerson(UUID.randomUUID());
+	}
+
+	@Test
+	public void testIntakeServiceFromLoadForPersonFromDatabaseForAdminUser()
+			throws ObjectNotFoundException {
+		IntakeForm form = service.loadForPerson(Person.SYSTEM_ADMINISTRATOR_ID);
+		assertNotNull("Admin user could not be loaded.", form.getPerson());
+		assertNotNull("Admin user loaded but was missing the Person instance.",
+				form.getPerson());
+		assertEquals("Admin user loaded but identifiers did not match.",
+				Person.SYSTEM_ADMINISTRATOR_ID, form.getPerson().getId());
+
+		assertNull(
+				"Admin user loaded but included a PersonDemographics instance even though it should not have.",
+				form.getPersonDemographics());
+	}
 }
