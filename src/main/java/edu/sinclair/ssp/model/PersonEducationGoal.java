@@ -1,5 +1,7 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +17,9 @@ import edu.sinclair.ssp.model.reference.EducationGoal;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonEducationGoal extends Auditable {
+public class PersonEducationGoal extends Auditable implements Serializable {
+
+	private static final long serialVersionUID = -5687416606848336981L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "education_goal_id", nullable = true, insertable = false, updatable = false)

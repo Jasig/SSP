@@ -1,5 +1,7 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -14,7 +16,9 @@ import edu.sinclair.ssp.model.reference.FundingSource;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonFundingSource extends Auditable {
+public class PersonFundingSource extends Auditable implements Serializable {
+
+	private static final long serialVersionUID = -1349765434053823165L;
 
 	@Column(length = 255)
 	@Size(max = 255)

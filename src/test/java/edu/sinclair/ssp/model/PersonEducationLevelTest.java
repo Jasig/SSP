@@ -30,7 +30,7 @@ public class PersonEducationLevelTest {
 	}
 
 	@Test
-	public void testOverwriteWithPersonAndCollections() {
+	public void testOverwriteWithPersonAndEducationLevel() {
 		String testString1 = "ts1";
 		String testString2 = "ts2";
 		Date testDate = new Date();

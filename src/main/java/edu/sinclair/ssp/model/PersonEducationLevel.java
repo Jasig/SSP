@@ -1,5 +1,7 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +17,9 @@ import edu.sinclair.ssp.model.reference.EducationLevel;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonEducationLevel extends Auditable {
+public class PersonEducationLevel extends Auditable implements Serializable {
+
+	private static final long serialVersionUID = -7969723552077396105L;
 
 	@Column(length = 255)
 	@Size(max = 255)

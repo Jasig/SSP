@@ -31,37 +31,9 @@ public class IntakeServiceImpl implements IntakeService {
 
 		// Load current Person from storage
 		Person pPerson = personService.get(form.getPerson().getId());
-
+		
 		// Walk through values copying mutable data into persistent version.
-		Person fPerson = form.getPerson();
-		pPerson.setAddressLine1(fPerson.getAddressLine1());
-		pPerson.setAddressLine2(fPerson.getAddressLine2());
-		pPerson.setBirthDate(fPerson.getBirthDate());
-		pPerson.setCellPhone(fPerson.getCellPhone());
-		pPerson.setCity(fPerson.getCity());
-
-		// No reason for IntakeForm to be able to mark a user
-		// pPerson.setEnabled(fPerson.isEnabled());
-
-		pPerson.setFirstName(fPerson.getFirstName());
-		pPerson.setHomePhone(fPerson.getHomePhone());
-		pPerson.setLastName(fPerson.getLastName());
-		pPerson.setMiddleInitial(fPerson.getMiddleInitial());
-		pPerson.setPhotoUrl(fPerson.getPhotoUrl());
-		pPerson.setPrimaryEmailAddress(fPerson.getPrimaryEmailAddress());
-		pPerson.setSchoolId(fPerson.getSchoolId());
-		pPerson.setSecondaryEmailAddress(fPerson.getSecondaryEmailAddress());
-		pPerson.setState(fPerson.getState());
-		pPerson.setUsername(fPerson.getUsername());
-		pPerson.setWorkPhone(fPerson.getWorkPhone());
-		pPerson.setZipCode(fPerson.getZipCode());
-
-		pPerson.setChallenges(fPerson.getChallenges());
-		pPerson.setDemographics(fPerson.getDemographics());
-		pPerson.setEducationGoal(fPerson.getEducationGoal());
-		pPerson.setEducationLevels(fPerson.getEducationLevels());
-		pPerson.setEducationPlan(fPerson.getEducationPlan());
-		pPerson.setFundingSources(fPerson.getFundingSources());
+		pPerson.overwriteWithCollections(form);
 
 		// Save changes to persistent storage.
 		personService.save(pPerson);

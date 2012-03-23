@@ -73,7 +73,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 		}
 	}
 
-	private ApplicationContext context;
+	private transient ApplicationContext context;
 
 	private SecurityService getSecurityService() {
 		if (securityService == null) {

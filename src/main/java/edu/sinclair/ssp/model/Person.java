@@ -1,5 +1,6 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,12 +24,16 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import edu.sinclair.ssp.model.tool.IntakeForm;
+
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Person extends Auditable {
+public class Person extends Auditable implements Serializable {
 
-	public static UUID SYSTEM_ADMINISTRATOR_ID = UUID
+	private static final long serialVersionUID = 4122282021549627683L;
+
+	public static final UUID SYSTEM_ADMINISTRATOR_ID = UUID
 			.fromString("58ba5ee3-734e-4ae9-b9c5-943774b4de41");
 
 	@Column(nullable = false, length = 50)
@@ -192,11 +197,12 @@ public class Person extends Auditable {
 	}
 
 	public Date getBirthDate() {
-		return birthDate;
+		return birthDate == null ? null : new Date(birthDate.getTime());
 	}
 
 	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
+		this.birthDate = birthDate == null ? null : new Date(
+				birthDate.getTime());
 	}
 
 	public String getPrimaryEmailAddress() {
@@ -438,14 +444,42 @@ public class Person extends Auditable {
 		this.getEducationPlan().overwriteWithCollections(
 				source.getEducationPlan());
 
-		this.overwriteWithCollectionsEducationLevels(source
-				.getEducationLevels());
-		this.overwriteWithCollectionsFundingSources(source.getFundingSources());
-		this.overwriteWithCollectionsChallenges(source.getChallenges());
+		this.overwriteWithCollectionsEducationLevels(
+				source.getEducationLevels(), this);
+		this.overwriteWithCollectionsFundingSources(source.getFundingSources(),
+				this);
+		this.overwriteWithCollectionsChallenges(source.getChallenges(), this);
+	}
+
+	/**
+	 * Overwrites simple and collection properties with the parameter's
+	 * properties, but not the Enabled property.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 * @see overwriteWithEnabledAndCollections(Person)
+	 */
+	public void overwriteWithCollections(IntakeForm source) {
+		this.overwrite(source.getPerson());
+
+		this.getDemographics().overwriteWithCollections(
+				source.getPerson().getDemographics());
+		this.getEducationGoal().overwriteWithCollections(
+				source.getPerson().getEducationGoal());
+		this.getEducationPlan().overwriteWithCollections(
+				source.getPerson().getEducationPlan());
+
+		this.overwriteWithCollectionsEducationLevels(
+				source.getPersonEducationLevels(), this);
+		this.overwriteWithCollectionsFundingSources(
+				source.getPersonFundingSources(), this);
+		this.overwriteWithCollectionsChallenges(source.getPersonChallenges(),
+				this);
 	}
 
 	private void overwriteWithCollectionsEducationLevels(
-			Set<PersonEducationLevel> source) {
+			Set<PersonEducationLevel> source, Person person) {
 		Set<PersonEducationLevel> thisSet = this.getEducationLevels();
 		Set<PersonEducationLevel> toRemove = new HashSet<PersonEducationLevel>();
 
@@ -457,7 +491,8 @@ public class Person extends Auditable {
 
 			for (PersonEducationLevel sourceItem : source) {
 				if (sourceItem.equals(thisItem)) {
-					thisItem.overwriteWithEducationLevel(sourceItem);
+					thisItem.overwriteWithPersonAndEducationLevel(sourceItem,
+							person);
 				}
 			}
 		}
@@ -469,14 +504,14 @@ public class Person extends Auditable {
 		for (PersonEducationLevel sourceItem : source) {
 			if (!thisSet.contains(sourceItem)) {
 				PersonEducationLevel newItem = new PersonEducationLevel();
-				newItem.overwriteWithEducationLevel(sourceItem);
+				newItem.overwriteWithPersonAndEducationLevel(sourceItem, person);
 				thisSet.add(newItem);
 			}
 		}
 	}
 
 	private void overwriteWithCollectionsFundingSources(
-			Set<PersonFundingSource> source) {
+			Set<PersonFundingSource> source, Person person) {
 		Set<PersonFundingSource> thisSet = this.getFundingSources();
 		Set<PersonFundingSource> toRemove = new HashSet<PersonFundingSource>();
 
@@ -488,7 +523,8 @@ public class Person extends Auditable {
 
 			for (PersonFundingSource sourceItem : source) {
 				if (sourceItem.equals(thisItem)) {
-					thisItem.overwriteWithFundingSource(sourceItem);
+					thisItem.overwriteWithPersonAndFundingSource(sourceItem,
+							person);
 				}
 			}
 		}
@@ -500,13 +536,14 @@ public class Person extends Auditable {
 		for (PersonFundingSource sourceItem : source) {
 			if (!thisSet.contains(sourceItem)) {
 				PersonFundingSource newItem = new PersonFundingSource();
-				newItem.overwriteWithFundingSource(sourceItem);
+				newItem.overwriteWithPersonAndFundingSource(sourceItem, person);
 				thisSet.add(newItem);
 			}
 		}
 	}
 
-	private void overwriteWithCollectionsChallenges(Set<PersonChallenge> source) {
+	private void overwriteWithCollectionsChallenges(
+			Set<PersonChallenge> source, Person person) {
 		Set<PersonChallenge> thisSet = this.getChallenges();
 		Set<PersonChallenge> toRemove = new HashSet<PersonChallenge>();
 
@@ -518,7 +555,8 @@ public class Person extends Auditable {
 
 			for (PersonChallenge sourceItem : source) {
 				if (sourceItem.equals(thisItem)) {
-					thisItem.overwrite(sourceItem);
+					thisItem.overwriteWithPerson(sourceItem,
+							person);
 				}
 			}
 		}
@@ -530,7 +568,7 @@ public class Person extends Auditable {
 		for (PersonChallenge sourceItem : source) {
 			if (!thisSet.contains(sourceItem)) {
 				PersonChallenge newItem = new PersonChallenge();
-				newItem.overwrite(sourceItem);
+				newItem.overwriteWithPerson(sourceItem, person);
 				thisSet.add(newItem);
 			}
 		}

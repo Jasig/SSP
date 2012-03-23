@@ -104,11 +104,12 @@ public class PersonTO extends AuditableTO implements TransferObject<Person> {
 	}
 
 	public Date getBirthDate() {
-		return new Date(birthDate.getTime());
+		return birthDate == null ? null : new Date(birthDate.getTime());
 	}
 
 	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
+		this.birthDate = birthDate == null ? null : new Date(
+				birthDate.getTime());
 	}
 
 	public String getPrimaryEmailAddress() {

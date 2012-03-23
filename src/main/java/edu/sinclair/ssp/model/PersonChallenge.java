@@ -1,5 +1,7 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +17,9 @@ import edu.sinclair.ssp.model.reference.Challenge;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonChallenge extends Auditable {
+public class PersonChallenge extends Auditable implements Serializable {
+
+	private static final long serialVersionUID = 27277225191519712L;
 
 	@Column(length = 255)
 	@Size(max = 255)
@@ -85,8 +89,7 @@ public class PersonChallenge extends Auditable {
 	 * @see overwrite(PersonChallenge)
 	 * @see overwriteWithEnabledAndCollections(PersonChallenge)
 	 */
-	public void overwriteWithPersonAndCollections(PersonChallenge source,
-			Person person) {
+	public void overwriteWithPerson(PersonChallenge source, Person person) {
 		this.overwrite(source);
 
 		this.setPerson(person);

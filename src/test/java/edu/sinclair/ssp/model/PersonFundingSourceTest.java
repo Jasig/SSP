@@ -30,7 +30,7 @@ public class PersonFundingSourceTest {
 	}
 
 	@Test
-	public void testOverwriteWithPersonAndCollections() {
+	public void testOverwriteWithPersonAndFundingSource() {
 		String testString1 = "ts1";
 		String testString2 = "ts2";
 		Date testDate = new Date();

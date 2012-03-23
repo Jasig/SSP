@@ -54,11 +54,12 @@ public abstract class AuditableTO {
 	}
 
 	public Date getCreatedDate() {
-		return new Date(createdDate.getTime());
+		return createdDate == null ? null : new Date(createdDate.getTime());
 	}
 
 	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+		this.createdDate = createdDate == null ? null : new Date(
+				createdDate.getTime());
 	}
 
 	public UUID getCreatedById() {
@@ -70,11 +71,12 @@ public abstract class AuditableTO {
 	}
 
 	public Date getModifiedDate() {
-		return new Date(modifiedDate.getTime());
+		return modifiedDate == null ? null : new Date(modifiedDate.getTime());
 	}
 
 	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
+		this.modifiedDate = modifiedDate == null ? null : new Date(
+				modifiedDate.getTime());
 	}
 
 	public UUID getModifiedById() {

@@ -57,7 +57,7 @@ public class PersonChallengeTest {
 		pFromTO.setPerson(person2);
 		pFromTO.setChallenge(challenge2);
 
-		pPersistent.overwriteWithPersonAndCollections(pFromTO, person2);
+		pPersistent.overwriteWithPerson(pFromTO, person2);
 
 		assertEquals("Person property not copied correctly.", person2,
 				pPersistent.getPerson());

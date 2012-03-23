@@ -1,5 +1,6 @@
 package edu.sinclair.ssp.model.reference;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -10,7 +11,9 @@ import javax.persistence.Table;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class FundingSource extends AbstractReference {
+public class FundingSource extends AbstractReference implements Serializable {
+
+	private static final long serialVersionUID = 7001182084156012094L;
 
 	public FundingSource() {
 		super();

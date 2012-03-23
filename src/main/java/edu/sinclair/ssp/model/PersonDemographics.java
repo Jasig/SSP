@@ -1,5 +1,7 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -22,7 +24,9 @@ import edu.sinclair.ssp.model.reference.VeteranStatus;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonDemographics extends Auditable {
+public class PersonDemographics extends Auditable implements Serializable {
+
+	private static final long serialVersionUID = 3252611289245443664L;
 
 	@Column
 	private boolean abilityToBenefit;

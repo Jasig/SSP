@@ -66,11 +66,12 @@ public abstract class Auditable {
 	}
 
 	public Date getCreatedDate() {
-		return createdDate;
+		return createdDate == null ? null : new Date(createdDate.getTime());
 	}
 
 	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+		this.createdDate = createdDate == null ? null : new Date(
+				createdDate.getTime());
 	}
 
 	public Person getCreatedBy() {
@@ -82,11 +83,12 @@ public abstract class Auditable {
 	}
 
 	public Date getModifiedDate() {
-		return modifiedDate;
+		return modifiedDate == null ? null : new Date(modifiedDate.getTime());
 	}
 
 	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
+		this.modifiedDate = modifiedDate == null ? null : new Date(
+				modifiedDate.getTime());
 	}
 
 	public Person getModifiedBy() {
@@ -105,6 +107,7 @@ public abstract class Auditable {
 		this.objectStatus = objectStatus;
 	}
 
+	@Override
 	public String toString() {
 		if (null != id) {
 			return id.toString();
