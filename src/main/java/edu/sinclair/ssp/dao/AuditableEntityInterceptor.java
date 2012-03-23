@@ -22,7 +22,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 
 	private static final long serialVersionUID = 1L;
 
-	private SecurityService securityService;
+	private transient SecurityService securityService;
 
 	public Person currentUser() {
 		SspUser user = getSecurityService().currentlyLoggedInSspUser();
@@ -77,7 +77,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 
 	private SecurityService getSecurityService() {
 		if (securityService == null) {
-			this.securityService = context.getBean("securityService",
+			securityService = context.getBean("securityService",
 					SecurityService.class);
 		}
 		return securityService;
@@ -86,6 +86,6 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	@Override
 	public void setApplicationContext(ApplicationContext arg0)
 			throws BeansException {
-		this.context = arg0;
+		context = arg0;
 	}
 }

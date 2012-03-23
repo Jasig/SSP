@@ -133,7 +133,7 @@ public class Person extends Auditable {
 	private PersonEducationPlan educationPlan;
 
 	/**
-	 * Education levels. Changes to this set are persisted.
+	 * Education levels.
 	 */
 	@Nullable()
 	@OneToMany(mappedBy = "person")
@@ -141,24 +141,30 @@ public class Person extends Auditable {
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
-	 * Funding sources. Changes to this set are persisted.
+	 * Funding sources.
 	 */
 	@Nullable()
 	@OneToMany(mappedBy = "person")
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
-	 * Challenges. Changes to this set are persisted.
+	 * Challenges.
 	 */
 	@Nullable()
 	@OneToMany(mappedBy = "person")
 	private Set<PersonChallenge> challenges;
 
 	public Person() {
+		challenges = new HashSet<PersonChallenge>();
+		fundingSources = new HashSet<PersonFundingSource>();
+		educationLevels = new HashSet<PersonEducationLevel>();
 	}
 
 	public Person(UUID id) {
 		super(id);
+		challenges = new HashSet<PersonChallenge>();
+		fundingSources = new HashSet<PersonFundingSource>();
+		educationLevels = new HashSet<PersonEducationLevel>();
 	}
 
 	public String getFirstName() {

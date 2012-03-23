@@ -54,7 +54,7 @@ public abstract class AuditableTO {
 	}
 
 	public Date getCreatedDate() {
-		return createdDate;
+		return new Date(createdDate.getTime());
 	}
 
 	public void setCreatedDate(Date createdDate) {
@@ -70,7 +70,7 @@ public abstract class AuditableTO {
 	}
 
 	public Date getModifiedDate() {
-		return modifiedDate;
+		return new Date(modifiedDate.getTime());
 	}
 
 	public void setModifiedDate(Date modifiedDate) {

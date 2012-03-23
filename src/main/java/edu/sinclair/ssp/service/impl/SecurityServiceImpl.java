@@ -31,12 +31,14 @@ public class SecurityServiceImpl implements SecurityService {
 			} else if (principal instanceof String) {
 				logger.error("Just tried to get an sspUser object from a user that is "
 						+ principal);
-				return sspUser;
+				return null;
 			} else {
 				logger.error("Just tried to get an sspUser object from an object that is really a "
 						+ principal.toString());
-				return sspUser;
+				return null;
 			}
+		} else {
+			return null;
 		}
 
 		if (sspUser.getPerson() == null) {

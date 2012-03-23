@@ -25,6 +25,7 @@ public class PersonTO extends AuditableTO implements TransferObject<Person> {
 		pullAttributesFromModel(model);
 	}
 
+	@Override
 	public void pullAttributesFromModel(Person model) {
 		super.fromModel(model);
 
@@ -48,6 +49,7 @@ public class PersonTO extends AuditableTO implements TransferObject<Person> {
 		setEnabled(model.isEnabled());
 	}
 
+	@Override
 	public Person pushAttributesToModel(Person model) {
 		super.addToModel(model);
 		model.setFirstName(getFirstName());
@@ -72,6 +74,7 @@ public class PersonTO extends AuditableTO implements TransferObject<Person> {
 		return model;
 	}
 
+	@Override
 	public Person asModel() {
 		return pushAttributesToModel(new Person());
 	}
@@ -101,7 +104,7 @@ public class PersonTO extends AuditableTO implements TransferObject<Person> {
 	}
 
 	public Date getBirthDate() {
-		return birthDate;
+		return new Date(birthDate.getTime());
 	}
 
 	public void setBirthDate(Date birthDate) {
