@@ -21,7 +21,8 @@ public class IntakeServiceImpl implements IntakeService {
 	private PersonService personService;
 
 	/**
-	 * Copy non-persisted model values, over to persisted values.
+	 * Copy non-persisted, untrusted model values for a complete Person data
+	 * tree, to persisted instances.
 	 */
 	@Override
 	public boolean save(IntakeForm form) throws ObjectNotFoundException {
@@ -31,8 +32,13 @@ public class IntakeServiceImpl implements IntakeService {
 
 		// Load current Person from storage
 		Person pPerson = personService.get(form.getPerson().getId());
-		
+
 		// Walk through values copying mutable data into persistent version.
+		/*
+		 * TODO Somehow lookup and send Hibernate-loaded instances that are sent
+		 * as only IDs or for instances that could create a dependency loop if
+		 * we walked them.
+		 */
 		pPerson.overwriteWithCollections(form);
 
 		// Save changes to persistent storage.
@@ -41,6 +47,13 @@ public class IntakeServiceImpl implements IntakeService {
 		return true;
 	}
 
+	/**
+	 * Load the specified Person.
+	 * 
+	 * Be careful when walking the tree to avoid performance issues that can
+	 * arise if eager fetching from the database layer is not used
+	 * appropriately.
+	 */
 	@Override
 	public IntakeForm loadForPerson(UUID studentId)
 			throws ObjectNotFoundException {
@@ -48,13 +61,6 @@ public class IntakeServiceImpl implements IntakeService {
 
 		Person person = personService.get(studentId);
 		form.setPerson(person);
-
-		form.setPersonDemographics(person.getDemographics());
-		form.setPersonEducationGoal(person.getEducationGoal());
-		form.setPersonEducationPlan(person.getEducationPlan());
-		form.setPersonEducationLevels(person.getEducationLevels());
-		form.setPersonFundingSources(person.getFundingSources());
-		form.setPersonChallenges(person.getChallenges());
 
 		return form;
 	}

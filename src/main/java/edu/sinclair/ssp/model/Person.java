@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
@@ -52,16 +53,30 @@ public class Person extends Auditable implements Serializable {
 	@Size(max = 50)
 	private String lastName;
 
+	/**
+	 * Birth date
+	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "birth_date")
+	@Past
 	private Date birthDate;
 
+	/**
+	 * Primary e-mail address.
+	 * 
+	 * Required; can not be null or empty. Maximum length of 100 characters.
+	 */
 	@Column(length = 100)
 	@NotNull
 	@NotEmpty
 	@Size(max = 100)
 	private String primaryEmailAddress;
 
+	/**
+	 * Secondary e-mail address.
+	 * 
+	 * Optional. Maximum length of 100 characters.
+	 */
 	@Column(length = 100)
 	@Size(max = 100)
 	private String secondaryEmailAddress;
@@ -437,13 +452,57 @@ public class Person extends Auditable implements Serializable {
 	public void overwriteWithCollections(Person source) {
 		this.overwrite(source);
 
-		this.getDemographics().overwriteWithCollections(
-				source.getDemographics());
-		this.getEducationGoal().overwriteWithCollections(
-				source.getEducationGoal());
-		this.getEducationPlan().overwriteWithCollections(
-				source.getEducationPlan());
+		// Demographics
+		if (this.getDemographics() == null && source.getDemographics() != null) {
+			this.setDemographics(new PersonDemographics());
+		}
 
+		if (this.getDemographics() != null) {
+			if (source.getDemographics() == null) {
+				// TODO Does the PersonDemographic instance have to be deleted
+				// too? Or will Hibernate automatic orphan control catch it?
+				this.setDemographics(null);
+			} else {
+				this.getDemographics().overwriteWithCollections(
+						source.getDemographics());
+			}
+		}
+
+		// Education goal
+		if (this.getEducationGoal() == null
+				&& source.getEducationGoal() != null) {
+			this.setEducationGoal(new PersonEducationGoal());
+		}
+
+		if (this.getEducationGoal() != null) {
+			if (source.getEducationGoal() == null) {
+				// TODO Does the PersonEducationGoal instance have to be deleted
+				// too? Or will Hibernate automatic orphan control catch it?
+				this.setEducationGoal(null);
+			} else {
+				this.getEducationGoal().overwriteWithCollections(
+						source.getEducationGoal());
+			}
+		}
+
+		// Education plan
+		if (this.getEducationPlan() == null
+				&& source.getEducationPlan() != null) {
+			this.setEducationPlan(new PersonEducationPlan());
+		}
+
+		if (this.getEducationPlan() != null) {
+			if (source.getEducationPlan() == null) {
+				// TODO Does the PersonEducationPlan instance have to be deleted
+				// too? Or will Hibernate automatic orphan control catch it?
+				this.setEducationPlan(null);
+			} else {
+				this.getEducationPlan().overwriteWithCollections(
+						source.getEducationPlan());
+			}
+		}
+
+		// various sets
 		this.overwriteWithCollectionsEducationLevels(
 				source.getEducationLevels(), this);
 		this.overwriteWithCollectionsFundingSources(source.getFundingSources(),
@@ -504,6 +563,10 @@ public class Person extends Auditable implements Serializable {
 		for (PersonEducationLevel sourceItem : source) {
 			if (!thisSet.contains(sourceItem)) {
 				PersonEducationLevel newItem = new PersonEducationLevel();
+				// initialize the EducationLevel
+				// TODO The EducationLevel needs to be looked up from persistent
+				// storage.
+				newItem.setEducationLevel(sourceItem.getEducationLevel());
 				newItem.overwriteWithPersonAndEducationLevel(sourceItem, person);
 				thisSet.add(newItem);
 			}
@@ -536,6 +599,10 @@ public class Person extends Auditable implements Serializable {
 		for (PersonFundingSource sourceItem : source) {
 			if (!thisSet.contains(sourceItem)) {
 				PersonFundingSource newItem = new PersonFundingSource();
+				// initialize the FundingSource
+				// TODO The FundingSource needs to be looked up from persistent
+				// storage.
+				newItem.setFundingSource(sourceItem.getFundingSource());
 				newItem.overwriteWithPersonAndFundingSource(sourceItem, person);
 				thisSet.add(newItem);
 			}
@@ -555,8 +622,7 @@ public class Person extends Auditable implements Serializable {
 
 			for (PersonChallenge sourceItem : source) {
 				if (sourceItem.equals(thisItem)) {
-					thisItem.overwriteWithPerson(sourceItem,
-							person);
+					thisItem.overwriteWithPerson(sourceItem, person);
 				}
 			}
 		}
@@ -568,6 +634,10 @@ public class Person extends Auditable implements Serializable {
 		for (PersonChallenge sourceItem : source) {
 			if (!thisSet.contains(sourceItem)) {
 				PersonChallenge newItem = new PersonChallenge();
+				// initialize the Challenge
+				// TODO The Challenge needs to be looked up from persistent
+				// storage.
+				newItem.setChallenge(sourceItem.getChallenge());
 				newItem.overwriteWithPerson(sourceItem, person);
 				thisSet.add(newItem);
 			}

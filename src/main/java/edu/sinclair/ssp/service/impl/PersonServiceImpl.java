@@ -12,6 +12,7 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonService;
+import edu.sinclair.ssp.service.tool.IntakeService;
 
 @Service
 @Transactional
@@ -23,17 +24,38 @@ public class PersonServiceImpl implements PersonService {
 	@Autowired
 	private PersonDao dao;
 
+	/**
+	 * Retrieve every Person instance in the database filtered by the supplied
+	 * status.
+	 * 
+	 * @param status
+	 *            Filter by this status, usually null or
+	 *            {@link ObjectStatus#DELETED}.
+	 * @return List of all people in the database filtered by the supplied
+	 *         status.
+	 */
 	@Override
 	public List<Person> getAll(ObjectStatus status) {
 		return dao.getAll(status);
 	}
 
+	/**
+	 * Retrieves the specified Person.
+	 * 
+	 * @param id
+	 *            Required identifier for the Person to retrieve. Can not be
+	 *            null.
+	 * @exception ObjectNotFoundException
+	 *                If the supplied identifier does not exist in the database.
+	 * @return The specified Person instance.
+	 */
 	@Override
 	public Person get(UUID id) throws ObjectNotFoundException {
 		Person obj = dao.get(id);
 		if (null == obj) {
 			throw new ObjectNotFoundException(id, "Person");
 		}
+
 		return obj;
 	}
 
@@ -53,6 +75,15 @@ public class PersonServiceImpl implements PersonService {
 		return dao.save(obj);
 	}
 
+	/**
+	 * Updates values of direct Person properties, but not any associated
+	 * children or collections.
+	 * 
+	 * WARNING: Copies system-only (based on business logic rules) properties,
+	 * so ensure that the incoming values have already been sanitized.
+	 * 
+	 * @see IntakeService
+	 */
 	@Override
 	public Person save(Person obj) throws ObjectNotFoundException {
 		Person current = get(obj.getId());
@@ -81,6 +112,12 @@ public class PersonServiceImpl implements PersonService {
 		return dao.save(current);
 	}
 
+	/**
+	 * Mark a Person as deleted.
+	 * 
+	 * Does not remove them from persistent storage, but marks their status flag
+	 * to {@link ObjectStatus#DELETED}.
+	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
 		Person current = get(id);
