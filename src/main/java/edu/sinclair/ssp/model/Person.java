@@ -522,19 +522,64 @@ public class Person extends Auditable implements Serializable {
 	public void overwriteWithCollections(IntakeForm source) {
 		this.overwrite(source.getPerson());
 
-		this.getDemographics().overwriteWithCollections(
-				source.getPerson().getDemographics());
-		this.getEducationGoal().overwriteWithCollections(
-				source.getPerson().getEducationGoal());
-		this.getEducationPlan().overwriteWithCollections(
-				source.getPerson().getEducationPlan());
+		// Demographics
+		if (this.getDemographics() == null
+				&& source.getPerson().getDemographics() != null) {
+			this.setDemographics(new PersonDemographics());
+		}
 
-		this.overwriteWithCollectionsEducationLevels(
-				source.getPersonEducationLevels(), this);
-		this.overwriteWithCollectionsFundingSources(
-				source.getPersonFundingSources(), this);
-		this.overwriteWithCollectionsChallenges(source.getPersonChallenges(),
-				this);
+		if (this.getDemographics() != null) {
+			if (source.getPerson().getDemographics() == null) {
+				// TODO Does the PersonDemographic instance have to be deleted
+				// too? Or will Hibernate automatic orphan control catch it?
+				this.setDemographics(null);
+			} else {
+				this.getDemographics().overwriteWithCollections(
+						source.getPerson().getDemographics());
+			}
+		}
+
+		// Education goal
+		if (this.getEducationGoal() == null
+				&& source.getPerson().getEducationGoal() != null) {
+			this.setEducationGoal(new PersonEducationGoal());
+		}
+
+		if (this.getEducationGoal() != null) {
+			if (source.getPerson().getEducationGoal() == null) {
+				// TODO Does the PersonEducationGoal instance have to be deleted
+				// too? Or will Hibernate automatic orphan control catch it?
+				this.setEducationGoal(null);
+			} else {
+				this.getEducationGoal().overwriteWithCollections(
+						source.getPerson().getEducationGoal());
+			}
+		}
+
+		// Education plan
+		if (this.getEducationPlan() == null
+				&& source.getPerson().getEducationPlan() != null) {
+			this.setEducationPlan(new PersonEducationPlan());
+		}
+
+		if (this.getEducationPlan() != null) {
+			if (source.getPerson().getEducationPlan() == null) {
+				// TODO Does the PersonEducationPlan instance have to be deleted
+				// too? Or will Hibernate automatic orphan control catch it?
+				this.setEducationPlan(null);
+			} else {
+				this.getEducationPlan().overwriteWithCollections(
+						source.getPerson().getEducationPlan());
+			}
+		}
+
+		// various sets
+		this.overwriteWithCollectionsEducationLevels(source.getPerson()
+				.getEducationLevels(), this);
+		this.overwriteWithCollectionsFundingSources(source.getPerson()
+				.getFundingSources(), this);
+		this.overwriteWithCollectionsChallenges(source.getPerson()
+				.getChallenges(), this);
 	}
 
 	private void overwriteWithCollectionsEducationLevels(

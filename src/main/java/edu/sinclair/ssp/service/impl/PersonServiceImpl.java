@@ -70,6 +70,12 @@ public class PersonServiceImpl implements PersonService {
 		return obj;
 	}
 
+	/**
+	 * Creates a new Person instance based on the supplied model.
+	 * 
+	 * @param obj
+	 *            Model instance
+	 */
 	@Override
 	public Person create(Person obj) {
 		return dao.save(obj);
@@ -82,6 +88,8 @@ public class PersonServiceImpl implements PersonService {
 	 * WARNING: Copies system-only (based on business logic rules) properties,
 	 * so ensure that the incoming values have already been sanitized.
 	 * 
+	 * @param obj
+	 *            Model instance from which to copy the simple properties.
 	 * @see IntakeService
 	 */
 	@Override

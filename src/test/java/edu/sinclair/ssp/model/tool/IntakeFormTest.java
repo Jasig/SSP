@@ -24,11 +24,11 @@ public class IntakeFormTest {
 
 		IntakeForm pPersistent = new IntakeForm();
 		pPersistent.setPerson(person1);
-		pPersistent.setPersonDemographics(pd1);
+		pPersistent.getPerson().setDemographics(pd1);
 
 		assertEquals("Field not set correctly.", testString1, pPersistent
 				.getPerson().getFirstName());
 		assertEquals("Field not set correctly.", testString2, pPersistent
-				.getPersonDemographics().getChildAges());
+				.getPerson().getDemographics().getChildAges());
 	}
 }
