@@ -3,7 +3,6 @@ package edu.sinclair.ssp.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
-import java.util.Date;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -31,20 +30,15 @@ public class PersonChallengeTest {
 
 	@Test
 	public void testOverwriteWithPersonAndCollections() {
-		String testString1 = "ts1";
-		String testString2 = "ts2";
-		Date testDate = new Date();
-		Date testDate2 = new Date();
-		testDate2.setTime(testDate2.getTime() + 24);
+		String testString1 = "teststring1";
+		String testString2 = "teststring2";
+		String testString3 = "teststring3";
 
 		Person person = new Person(UUID.randomUUID());
 		Person person2 = new Person(UUID.randomUUID());
 
 		Challenge challenge = new Challenge(UUID.randomUUID());
 		Challenge challenge2 = new Challenge(UUID.randomUUID());
-
-		person.setBirthDate(testDate);
-		person2.setBirthDate(testDate2);
 
 		challenge.setName(testString1);
 		challenge2.setName(testString2);
@@ -56,17 +50,21 @@ public class PersonChallengeTest {
 		PersonChallenge pFromTO = new PersonChallenge();
 		pFromTO.setPerson(person2);
 		pFromTO.setChallenge(challenge2);
+		pFromTO.setDescription(testString3);
 
-		pPersistent.overwriteWithPerson(pFromTO, person2);
+		pPersistent.overwrite(pFromTO);
 
-		assertEquals("Person property not copied correctly.", person2,
-				pPersistent.getPerson());
-		assertEquals("Person.birthDate property not copied correctly.",
-				testDate2, pPersistent.getPerson().getBirthDate());
+		assertEquals(
+				"PersonChallenge.Person property copied when it shouldn't have been.",
+				person, pPersistent.getPerson());
 		assertNotSame(
 				"Person.challenge property copied exactly, instead of deep copying.",
 				challenge2, pPersistent.getChallenge());
-		assertEquals("Person.challenge property not copied correctly.",
-				testString2, pPersistent.getChallenge().getName());
+		assertEquals(
+				"PersonChallenge.Challenge property copied when it shouldn't have been.",
+				testString1, pPersistent.getChallenge().getName());
+		assertEquals(
+				"PersonChallenge.Description property not copied correctly.",
+				testString3, pPersistent.getDescription());
 	}
 }

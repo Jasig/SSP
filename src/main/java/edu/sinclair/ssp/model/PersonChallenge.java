@@ -79,20 +79,4 @@ public class PersonChallenge extends Auditable implements Serializable {
 	public void overwrite(PersonChallenge source) {
 		this.setDescription(source.getDescription());
 	}
-
-	/**
-	 * Overwrites simple and collection properties with the parameter's
-	 * properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 * @see overwrite(PersonChallenge)
-	 * @see overwriteWithEnabledAndCollections(PersonChallenge)
-	 */
-	public void overwriteWithPerson(PersonChallenge source, Person person) {
-		this.overwrite(source);
-
-		this.setPerson(person);
-		this.getChallenge().overwrite(source.getChallenge());
-	}
 }

@@ -36,12 +36,11 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 	@Column()
 	private int howSureAboutMajor;
 
-	public String getDescription() {
-		return description;
+	public PersonEducationGoal() {
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public PersonEducationGoal(EducationGoal educationGoal) {
+		this.educationGoal = educationGoal;
 	}
 
 	public EducationGoal getEducationGoal() {
@@ -50,6 +49,14 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 
 	public void setEducationGoal(EducationGoal educationGoal) {
 		this.educationGoal = educationGoal;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public int getHowSureAboutMajor() {
@@ -79,19 +86,5 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		this.setDescription(source.getDescription());
 		this.setPlannedOccupation(source.getPlannedOccupation());
 		this.setHowSureAboutMajor(source.getHowSureAboutMajor());
-	}
-
-	/**
-	 * Overwrites simple and collection properties with the parameter's
-	 * properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 * @see overwrite(PersonEducationGoal)
-	 */
-	public void overwriteWithCollections(PersonEducationGoal source) {
-		this.overwrite(source);
-
-		this.getEducationGoal().overwrite(source.getEducationGoal());
 	}
 }

@@ -69,48 +69,4 @@ public class PersonFundingSource extends Auditable implements Serializable {
 	public void overwrite(PersonFundingSource source) {
 		this.setDescription(source.getDescription());
 	}
-
-	/**
-	 * Overwrites simple and collection properties with the parameter's
-	 * properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 * @see overwrite(PersonFundingSource)
-	 */
-	public void overwriteWithFundingSource(PersonFundingSource source) {
-		this.overwrite(source);
-
-		this.getFundingSource().overwrite(source.getFundingSource());
-	}
-
-	/**
-	 * Overwrites simple properties with the parameter's properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 * @param person
-	 * @see overwriteWithCollections(PersonFundingSource)
-	 */
-	public void overwriteWithPerson(PersonFundingSource source, Person person) {
-		this.overwrite(source);
-
-		this.setPerson(person);
-	}
-
-	/**
-	 * Overwrites simple and collection properties with the parameter's
-	 * properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 * @param person
-	 * @see overwrite(PersonFundingSource)
-	 */
-	public void overwriteWithPersonAndFundingSource(PersonFundingSource source,
-			Person person) {
-		this.overwriteWithFundingSource(source);
-
-		this.setPerson(person);
-	}
 }

@@ -289,7 +289,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 	 *            Source to use for overwrites.
 	 * @see overwriteWithCollections(PersonDemographics)
 	 */
-	public void overwrite(PersonDemographics source) {
+	public void overwrite(PersonDemographics source, Person coach) {
 		this.setAbilityToBenefit(source.isAbilityToBenefit());
 		this.setAnticipatedStartTerm(source.getAnticipatedStartTerm());
 		this.setAnticipatedStartYear(source.getAnticipatedStartYear());
@@ -309,6 +309,8 @@ public class PersonDemographics extends Auditable implements Serializable {
 		this.setShift(source.getShift());
 		this.setWage(source.getWage());
 		this.setTotalHoursWorkedPerWeek(source.getTotalHoursWorkedPerWeek());
+
+		this.setCoach(coach);
 	}
 
 	/**
@@ -319,11 +321,10 @@ public class PersonDemographics extends Auditable implements Serializable {
 	 *            Source to use for overwrites.
 	 * @see overwrite(PersonDemographics)
 	 */
-	public void overwriteWithCollections(PersonDemographics source) {
-		this.overwrite(source);
+	public void overwriteWithCollections(PersonDemographics source, Person coach) {
+		this.overwrite(source, coach);
 
 		this.getMaritalStatus().overwrite(source.getMaritalStatus());
 		this.getVeteranStatus().overwrite(source.getVeteranStatus());
-		this.getCoach().overwrite(source.getCoach());
 	}
 }

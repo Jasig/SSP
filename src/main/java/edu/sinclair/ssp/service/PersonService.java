@@ -1,10 +1,14 @@
 package edu.sinclair.ssp.service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
+import edu.sinclair.ssp.model.PersonChallenge;
+import edu.sinclair.ssp.model.PersonEducationLevel;
+import edu.sinclair.ssp.model.PersonFundingSource;
 import edu.sinclair.ssp.service.tool.IntakeService;
 
 public interface PersonService extends AuditableCrudService<Person> {
@@ -69,4 +73,39 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException;
+
+	/**
+	 * Overwrites simple properties with the parameter's properties. Does not
+	 * include the Enabled property.
+	 * 
+	 * @param target
+	 *            Target (original) to overwrite.
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithEnabled(Person)
+	 * @see overwriteWithEnabledAndCollections(Person)
+	 */
+	public void overwrite(Person target, Person source);
+
+	/**
+	 * Overwrites simple and collection properties with the parameter's
+	 * properties, but not the Enabled property.
+	 * 
+	 * @param target
+	 *            Target (original) to overwrite.
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 */
+	public void overwriteWithCollections(Person target, Person source)
+			throws ObjectNotFoundException;
+
+	public void overwriteWithCollectionsEducationLevels(Person target,
+			Set<PersonEducationLevel> source) throws ObjectNotFoundException;
+
+	public void overwriteWithCollectionsFundingSources(Person target,
+			Set<PersonFundingSource> source) throws ObjectNotFoundException;
+
+	public void overwriteWithCollectionsChallenges(Person target,
+			Set<PersonChallenge> source) throws ObjectNotFoundException;
 }
