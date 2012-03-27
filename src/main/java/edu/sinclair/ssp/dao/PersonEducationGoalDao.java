@@ -26,8 +26,8 @@ public class PersonEducationGoalDao implements
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<PersonEducationGoal> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(PersonEducationGoal.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				PersonEducationGoal.class);
 
 		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
@@ -38,12 +38,12 @@ public class PersonEducationGoalDao implements
 
 	@Override
 	public PersonEducationGoal get(UUID id) {
-		return (PersonEducationGoal) this.sessionFactory.getCurrentSession()
-				.get(PersonEducationGoal.class, id);
+		return (PersonEducationGoal) sessionFactory.getCurrentSession().get(
+				PersonEducationGoal.class, id);
 	}
 
 	public PersonEducationGoal forPerson(Person person) {
-		Criteria query = this.sessionFactory.getCurrentSession()
+		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(PersonEducationGoal.class)
 				.add(Restrictions.eq("person", person));
 		return (PersonEducationGoal) query.uniqueResult();
@@ -52,9 +52,10 @@ public class PersonEducationGoalDao implements
 	@Override
 	public PersonEducationGoal save(PersonEducationGoal obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (PersonEducationGoal) sessionFactory.getCurrentSession()
+					.merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -62,7 +63,7 @@ public class PersonEducationGoalDao implements
 
 	@Override
 	public void delete(PersonEducationGoal obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

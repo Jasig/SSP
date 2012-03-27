@@ -26,8 +26,8 @@ public class EducationLevelDao implements AuditableCrudDao<EducationLevel> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<EducationLevel> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(EducationLevel.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				EducationLevel.class);
 		query.addOrder(Order.asc("name"));
 
 		if (status != ObjectStatus.ALL) {
@@ -39,16 +39,17 @@ public class EducationLevelDao implements AuditableCrudDao<EducationLevel> {
 
 	@Override
 	public EducationLevel get(UUID id) {
-		return (EducationLevel) this.sessionFactory.getCurrentSession().get(
+		return (EducationLevel) sessionFactory.getCurrentSession().get(
 				EducationLevel.class, id);
 	}
 
 	@Override
 	public EducationLevel save(EducationLevel obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (EducationLevel) sessionFactory.getCurrentSession()
+					.merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -56,7 +57,7 @@ public class EducationLevelDao implements AuditableCrudDao<EducationLevel> {
 
 	@Override
 	public void delete(EducationLevel obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

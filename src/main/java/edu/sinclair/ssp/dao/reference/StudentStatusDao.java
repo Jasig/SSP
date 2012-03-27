@@ -26,8 +26,8 @@ public class StudentStatusDao implements AuditableCrudDao<StudentStatus> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<StudentStatus> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(StudentStatus.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				StudentStatus.class);
 		query.addOrder(Order.asc("name"));
 
 		if (status != ObjectStatus.ALL) {
@@ -39,16 +39,16 @@ public class StudentStatusDao implements AuditableCrudDao<StudentStatus> {
 
 	@Override
 	public StudentStatus get(UUID id) {
-		return (StudentStatus) this.sessionFactory.getCurrentSession().get(
+		return (StudentStatus) sessionFactory.getCurrentSession().get(
 				StudentStatus.class, id);
 	}
 
 	@Override
 	public StudentStatus save(StudentStatus obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (StudentStatus) sessionFactory.getCurrentSession().merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -56,7 +56,7 @@ public class StudentStatusDao implements AuditableCrudDao<StudentStatus> {
 
 	@Override
 	public void delete(StudentStatus obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

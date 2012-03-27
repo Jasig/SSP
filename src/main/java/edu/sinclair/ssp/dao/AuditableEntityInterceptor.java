@@ -47,9 +47,10 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	public boolean onFlushDirty(Object entity, Serializable id,
 			Object[] currentState, Object[] previousState,
 			String[] propertyNames, Type[] types) {
-		addAuditingProps(entity, currentState, propertyNames);
-		return super.onFlushDirty(entity, id, currentState, previousState,
+		boolean modified = addAuditingProps(entity, currentState, propertyNames);
+		super.onFlushDirty(entity, id, currentState, previousState,
 				propertyNames, types);
+		return modified;
 	}
 
 	/**
@@ -62,12 +63,15 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 * @param previousState
 	 * @param propertyNames
 	 * @param types
+	 * @return If state was modified any, will return true to indicate this to
+	 *         Hibernate
 	 */
 	@Override
 	public boolean onSave(Object entity, Serializable id, Object[] state,
 			String[] propertyNames, Type[] types) {
-		addAuditingProps(entity, state, propertyNames);
-		return super.onSave(entity, id, state, propertyNames, types);
+		boolean modified = addAuditingProps(entity, state, propertyNames);
+		super.onSave(entity, id, state, propertyNames, types);
+		return modified;
 	}
 
 	/**
@@ -83,33 +87,48 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 * @param propertyNames
 	 *            Array of property names that are keys to the state field array
 	 *            values.
+	 * @return If state was modified any, will return true to indicate this to
+	 *         Hibernate
 	 */
-	private void addAuditingProps(Object entity, Object[] state,
+	private boolean addAuditingProps(Object entity, Object[] state,
 			String[] propertyNames) {
-		if (entity instanceof Auditable) {
-			for (int i = 0; i < propertyNames.length; i++) {
-				String property = propertyNames[i];
-				if ("createdDate".equals(property) && state[i] == null) {
-					state[i] = new Date();
-				}
+		if (!(entity instanceof Auditable)) {
+			// Not Auditable, so no changes are necessary.
+			return false;
+		}
 
-				if ("createdBy".equals(property) && state[i] == null) {
-					state[i] = currentUser();
-				}
+		for (int i = 0; i < propertyNames.length; i++) {
+			String property = propertyNames[i];
+			if ("createdDate".equals(property) && state[i] == null) {
+				state[i] = new Date();
+				continue;
+			}
 
-				if ("objectStatus".equals(property) && state[i] == null) {
-					state[i] = ObjectStatus.ACTIVE;
-				}
+			if ("createdBy".equals(property) && state[i] == null) {
+				state[i] = currentUser();
+				continue;
+			}
 
-				if ("modifiedDate".equals(property)) {
-					state[i] = new Date();
-				}
+			if ("objectStatus".equals(property) && state[i] == null) {
+				state[i] = ObjectStatus.ACTIVE;
+				continue;
+			}
 
-				if ("modifiedBy".equals(property)) {
-					state[i] = currentUser();
-				}
+			if ("modifiedDate".equals(property)) {
+				state[i] = new Date();
+				continue;
+			}
+
+			if ("modifiedBy".equals(property)) {
+				state[i] = currentUser();
+				continue;
 			}
 		}
+
+		// Since it was Auditable (didn't short circuit in test at the top of
+		// this method), then last modified stamps always change, so return true
+		// to indicate to Hibernate that the state has changed.
+		return true;
 	}
 
 	/**

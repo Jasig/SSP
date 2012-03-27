@@ -26,8 +26,8 @@ public class ChallengeDao implements AuditableCrudDao<Challenge> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Challenge> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(Challenge.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				Challenge.class);
 		query.addOrder(Order.asc("name"));
 
 		if (status != ObjectStatus.ALL) {
@@ -39,16 +39,16 @@ public class ChallengeDao implements AuditableCrudDao<Challenge> {
 
 	@Override
 	public Challenge get(UUID id) {
-		return (Challenge) this.sessionFactory.getCurrentSession().get(
+		return (Challenge) sessionFactory.getCurrentSession().get(
 				Challenge.class, id);
 	}
 
 	@Override
 	public Challenge save(Challenge obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (Challenge) sessionFactory.getCurrentSession().merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -56,7 +56,7 @@ public class ChallengeDao implements AuditableCrudDao<Challenge> {
 
 	@Override
 	public void delete(Challenge obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

@@ -26,8 +26,8 @@ public class FundingSourceDao implements AuditableCrudDao<FundingSource> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<FundingSource> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(FundingSource.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				FundingSource.class);
 		query.addOrder(Order.asc("name"));
 
 		if (status != ObjectStatus.ALL) {
@@ -39,16 +39,16 @@ public class FundingSourceDao implements AuditableCrudDao<FundingSource> {
 
 	@Override
 	public FundingSource get(UUID id) {
-		return (FundingSource) this.sessionFactory.getCurrentSession().get(
+		return (FundingSource) sessionFactory.getCurrentSession().get(
 				FundingSource.class, id);
 	}
 
 	@Override
 	public FundingSource save(FundingSource obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (FundingSource) sessionFactory.getCurrentSession().merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -56,7 +56,7 @@ public class FundingSourceDao implements AuditableCrudDao<FundingSource> {
 
 	@Override
 	public void delete(FundingSource obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

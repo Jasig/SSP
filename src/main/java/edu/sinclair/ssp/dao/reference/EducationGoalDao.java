@@ -26,8 +26,8 @@ public class EducationGoalDao implements AuditableCrudDao<EducationGoal> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<EducationGoal> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(EducationGoal.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				EducationGoal.class);
 		query.addOrder(Order.asc("name"));
 
 		if (status != ObjectStatus.ALL) {
@@ -39,16 +39,16 @@ public class EducationGoalDao implements AuditableCrudDao<EducationGoal> {
 
 	@Override
 	public EducationGoal get(UUID id) {
-		return (EducationGoal) this.sessionFactory.getCurrentSession().get(
+		return (EducationGoal) sessionFactory.getCurrentSession().get(
 				EducationGoal.class, id);
 	}
 
 	@Override
 	public EducationGoal save(EducationGoal obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (EducationGoal) sessionFactory.getCurrentSession().merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -56,7 +56,7 @@ public class EducationGoalDao implements AuditableCrudDao<EducationGoal> {
 
 	@Override
 	public void delete(EducationGoal obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

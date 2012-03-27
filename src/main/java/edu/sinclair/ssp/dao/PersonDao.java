@@ -25,7 +25,7 @@ public class PersonDao implements AuditableCrudDao<Person> {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Person> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
+		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(Person.class).addOrder(Order.asc("lastName"))
 				.addOrder(Order.asc("firstName"));
 
@@ -38,13 +38,13 @@ public class PersonDao implements AuditableCrudDao<Person> {
 
 	@Override
 	public Person get(UUID id) {
-		return (Person) this.sessionFactory.getCurrentSession().get(
-				Person.class, id);
+		return (Person) sessionFactory.getCurrentSession()
+				.get(Person.class, id);
 	}
 
 	public Person fromUsername(String username) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(Person.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				Person.class);
 		query.add(Restrictions.eq("username", username));
 		return (Person) query.uniqueResult();
 	}
@@ -52,9 +52,9 @@ public class PersonDao implements AuditableCrudDao<Person> {
 	@Override
 	public Person save(Person obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (Person) sessionFactory.getCurrentSession().merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -62,6 +62,6 @@ public class PersonDao implements AuditableCrudDao<Person> {
 
 	@Override
 	public void delete(Person obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 }
