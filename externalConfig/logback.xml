@@ -41,7 +41,7 @@
 	<!-- Be sure to set the username, password, to, from, and subject fields	  -->
 	<!-- ************************************************************************ -->
 	<!-- ************************************************************************ -->
-	<appender name="smtpAppender" class="ch.qos.logback.classic.net.SMTPAppender">
+	<!--appender name="smtpAppender" class="ch.qos.logback.classic.net.SMTPAppender">
 		<SMTPHost>${smtp_host}</SMTPHost>
 		<SMTPPort>${smtp_port}</SMTPPort>
 		<SSL>true</SSL>
@@ -53,9 +53,9 @@
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</layout>
-	</appender>
+	</appender-->
 
-	<logger name="edu.sinclair.ssp" level="info" />
+	<logger name="edu.sinclair.ssp" level="debug" />
 	<logger name="org.springframework.core" level="info" />
 	<logger name="org.springframework.beans" level="info" />
 	<logger name="org.springframework.context" level="info" />
