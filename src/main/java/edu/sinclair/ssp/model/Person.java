@@ -290,9 +290,10 @@ public class Person extends Auditable implements Serializable {
 	}
 
 	/**
-	 * Initialize a Person.
+	 * Initialize a Person with the specified ID and empty sets.
 	 * 
-	 * Initializes empty sets.
+	 * @param id
+	 *            Identifier
 	 */
 	public Person(UUID id) {
 		super(id);

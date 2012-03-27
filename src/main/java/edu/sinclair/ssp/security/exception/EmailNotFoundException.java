@@ -3,10 +3,12 @@ package edu.sinclair.ssp.security.exception;
 import org.springframework.security.core.AuthenticationException;
 
 /**
- * Thrown if an {@link UserDetailsService} implementation cannot locate a
- * {@link User}'s email address.
+ * Thrown if an
+ * {@link org.springframework.security.core.userdetails.UserDetailsService}
+ * implementation cannot locate a
+ * {@link org.springframework.security.core.userdetails.User}'s email address.
  * 
- * @author Alexander Leader
+ * @author alexander.leader
  */
 public class EmailNotFoundException extends AuthenticationException {
 

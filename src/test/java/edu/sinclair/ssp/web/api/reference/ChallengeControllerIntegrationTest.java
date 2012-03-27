@@ -58,6 +58,7 @@ public class ChallengeControllerIntegrationTest {
 	 * Test the {@link ChallengeController#get(UUID)} action.
 	 * 
 	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
 	public void testControllerGet() throws Exception {
@@ -80,6 +81,7 @@ public class ChallengeControllerIntegrationTest {
 	 * correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
 	public void testControllerGetOfInvalidId() throws Exception {
@@ -99,6 +101,7 @@ public class ChallengeControllerIntegrationTest {
 	 * {@link ChallengeController#delete(UUID)} actions.
 	 * 
 	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
 	public void testControllerCreateAndDelete() throws Exception {

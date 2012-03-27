@@ -36,7 +36,6 @@ public class FundingSource extends AbstractReference implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(FundingSource)
 	 */
 	public void overwrite(FundingSource source) {
 		this.setName(source.getName());

@@ -85,7 +85,6 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(PersonEducationLevel)
 	 */
 	public void overwrite(PersonEducationLevel source) {
 		this.setDescription(source.getDescription());

@@ -36,7 +36,6 @@ public class Citizenship extends AbstractReference implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(Citizenship)
 	 */
 	public void overwrite(Citizenship source) {
 		this.setName(source.getName());

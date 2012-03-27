@@ -40,8 +40,12 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 * @param id
 	 *            Entity identifier
 	 * @param previousState
+	 *            Data fields, some of which are modified by this method.
 	 * @param propertyNames
+	 *            Array of property names that are keys to the state field array
+	 *            values.
 	 * @param types
+	 *            Types
 	 */
 	@Override
 	public boolean onFlushDirty(Object entity, Serializable id,
@@ -60,9 +64,13 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 *            Entity that has been changed
 	 * @param id
 	 *            Entity identifier
-	 * @param previousState
+	 * @param state
+	 *            Data fields, some of which are modified by this method.
 	 * @param propertyNames
+	 *            Array of property names that are keys to the state field array
+	 *            values.
 	 * @param types
+	 *            Types
 	 * @return If state was modified any, will return true to indicate this to
 	 *         Hibernate
 	 */

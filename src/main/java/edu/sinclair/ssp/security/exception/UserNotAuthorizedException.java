@@ -3,10 +3,13 @@ package edu.sinclair.ssp.security.exception;
 import org.springframework.security.core.AuthenticationException;
 
 /**
- * Thrown if an {@link UserDetailsService} implementation cannot locate a
- * {@link User}'s record in the database after successful authentication.
+ * Thrown if an
+ * {@link org.springframework.security.core.userdetails.UserDetailsService}
+ * implementation cannot locate a
+ * {@link org.springframework.security.core.userdetails.User}'s record in the
+ * database after successful authentication.
  * 
- * @author Alexander Leader
+ * @author alexander.leader
  */
 public class UserNotAuthorizedException extends AuthenticationException {
 

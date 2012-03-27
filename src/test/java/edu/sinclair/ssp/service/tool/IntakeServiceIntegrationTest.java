@@ -73,6 +73,7 @@ public class IntakeServiceIntegrationTest {
 	 * administrator user.
 	 * 
 	 * @throws ObjectNotFoundException
+	 *             Thrown if the special administrator user is not found.
 	 */
 	@Test
 	public void testIntakeServiceFromLoadForPersonFromDatabaseForAdminUser()
@@ -91,10 +92,12 @@ public class IntakeServiceIntegrationTest {
 
 	/**
 	 * Massive integration test that creates, fills, and asserts the correct
-	 * insertion of an {@link IntakeFormServ#save()} all the way through the
-	 * service, DAO, and model layers.
+	 * insertion of an {@link IntakeService#save(IntakeForm)} all the way
+	 * through the service, DAO, and model layers.
 	 * 
 	 * @throws ObjectNotFoundException
+	 *             Thrown if any of the expected test data identifiers are not
+	 *             found in the database.
 	 */
 	@Test
 	public void testIntakeServiceForNewUser() throws ObjectNotFoundException {

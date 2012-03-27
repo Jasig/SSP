@@ -82,8 +82,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *            Target (original) to overwrite.
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithEnabled(Person)
-	 * @see overwriteWithEnabledAndCollections(Person)
 	 */
 	public void overwrite(Person target, Person source);
 
@@ -95,7 +93,10 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *            Target (original) to overwrite.
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwrite(Person)
+	 * @see #overwrite(Person, Person)
+	 * @exception ObjectNotFoundException
+	 *                If the referenced nested entities could not be loaded from
+	 *                the database.
 	 */
 	public void overwriteWithCollections(Person target, Person source)
 			throws ObjectNotFoundException;
@@ -107,7 +108,10 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *            Target (original) to overwrite.
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwrite(Person)
+	 * @see #overwrite(Person, Person)
+	 * @exception ObjectNotFoundException
+	 *                If the referenced nested entities could not be loaded from
+	 *                the database.
 	 */
 	public void overwriteWithCollectionsEducationLevels(Person target,
 			Set<PersonEducationLevel> source) throws ObjectNotFoundException;
@@ -119,7 +123,10 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *            Target (original) to overwrite.
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwrite(Person)
+	 * @see #overwrite(Person, Person)
+	 * @exception ObjectNotFoundException
+	 *                If the referenced nested entities could not be loaded from
+	 *                the database.
 	 */
 	public void overwriteWithCollectionsFundingSources(Person target,
 			Set<PersonFundingSource> source) throws ObjectNotFoundException;
@@ -131,7 +138,10 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *            Target (original) to overwrite.
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwrite(Person)
+	 * @see #overwrite(Person, Person)
+	 * @exception ObjectNotFoundException
+	 *                If the referenced nested entities could not be loaded from
+	 *                the database.
 	 */
 	public void overwriteWithCollectionsChallenges(Person target,
 			Set<PersonChallenge> source) throws ObjectNotFoundException;

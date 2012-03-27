@@ -26,6 +26,9 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 
 	/**
 	 * Set the current user.
+	 * 
+	 * @param current
+	 *            Current user
 	 */
 	public void setCurrent(SspUser current) {
 		this.current = current;
@@ -34,6 +37,9 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 	/**
 	 * Set the Current user. Will wrap a person domain object in a MockUser. Use
 	 * this one if the permissions don't really matter
+	 * 
+	 * @param current
+	 *            Current user
 	 */
 	public void setCurrent(Person current) {
 		if (current.getUsername() == null) {
@@ -46,7 +52,12 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 
 	/**
 	 * Set the Current user. Will wrap a person domain object in a MockUser. Use
-	 * this one if the permissions matter
+	 * this one if the permissions matter.
+	 * 
+	 * @param current
+	 *            Current user
+	 * @param authorities
+	 *            List of authorities
 	 */
 	public void setCurrent(Person current, List<GrantedAuthority> authorities) {
 		if (current.getUsername() == null) {

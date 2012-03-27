@@ -184,8 +184,6 @@ public class PersonServiceImpl implements PersonService {
 	 *            Target (original) to overwrite.
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithEnabled(Person)
-	 * @see overwriteWithEnabledAndCollections(Person)
 	 */
 	@Override
 	public void overwrite(Person target, Person source) {
@@ -216,7 +214,7 @@ public class PersonServiceImpl implements PersonService {
 	 *            Target (original) to overwrite.
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwrite(Person)
+	 * @see #overwrite(Person, Person)
 	 */
 	@Override
 	public void overwriteWithCollections(Person target, Person source)
@@ -303,7 +301,7 @@ public class PersonServiceImpl implements PersonService {
 	 *            Target (original) to overwrite.
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwrite(Person)
+	 * @see #overwrite(Person, Person)
 	 */
 	@Override
 	public void overwriteWithCollectionsEducationLevels(Person target,
@@ -348,7 +346,7 @@ public class PersonServiceImpl implements PersonService {
 	 *            Target (original) to overwrite.
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwrite(Person)
+	 * @see #overwrite(Person, Person)
 	 */
 
 	@Override
@@ -394,7 +392,7 @@ public class PersonServiceImpl implements PersonService {
 	 *            Target (original) to overwrite.
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwrite(Person)
+	 * @see #overwrite(Person, Person)
 	 */
 	@Override
 	public void overwriteWithCollectionsChallenges(Person target,

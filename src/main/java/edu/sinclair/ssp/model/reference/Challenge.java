@@ -36,7 +36,6 @@ public class Challenge extends AbstractReference implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(Challenge)
 	 */
 	public void overwrite(Challenge source) {
 		this.setName(source.getName());

@@ -36,7 +36,6 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(VeteranStatus)
 	 */
 	public void overwrite(VeteranStatus source) {
 		this.setName(source.getName());

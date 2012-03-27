@@ -28,6 +28,9 @@ public class IntakeForm {
 
 	/**
 	 * Sets the full Person instance.
+	 * 
+	 * @param person
+	 *            Person instance
 	 */
 	public void setPerson(Person person) {
 		this.person = person;

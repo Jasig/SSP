@@ -3,10 +3,11 @@ package edu.sinclair.ssp.security.exception;
 import org.springframework.security.core.AuthenticationException;
 
 /**
- * Thrown if an {@link UserDetailsService} implementation checks the
- * {@link Affiliation} and it is not enabled.
+ * This exception is thrown if an
+ * {@link org.springframework.security.core.userdetails.UserDetailsService}
+ * implementation checks the <code>Affiliation</code> and it is not enabled.
  * 
- * @author Alexander Leader
+ * @author alexander.leader
  */
 public class UserNotEnabledException extends AuthenticationException {
 

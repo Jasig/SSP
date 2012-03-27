@@ -37,7 +37,6 @@ public class ChildCareArrangement extends AbstractReference implements
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(ChildCareArrangement)
 	 */
 	public void overwrite(ChildCareArrangement source) {
 		this.setName(source.getName());

@@ -36,7 +36,6 @@ public class EducationLevel extends AbstractReference implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(EducationLevel)
 	 */
 	public void overwrite(EducationLevel source) {
 		this.setName(source.getName());

@@ -36,7 +36,6 @@ public class Ethnicity extends AbstractReference implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(Ethnicity)
 	 */
 	public void overwrite(Ethnicity source) {
 		this.setName(source.getName());

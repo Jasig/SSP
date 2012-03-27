@@ -297,7 +297,16 @@ public class PersonDemographics extends Auditable implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(PersonDemographics)
+	 * @param maritalStatus
+	 *            Marital status
+	 * @param ethnicity
+	 *            Ethnicity
+	 * @param citizenship
+	 *            Citizenship
+	 * @param veterenStatus
+	 *            Veteran status
+	 * @param coach
+	 *            Coach, if any
 	 */
 	public void overwrite(PersonDemographics source,
 			MaritalStatus maritalStatus, Ethnicity ethnicity,

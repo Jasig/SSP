@@ -36,7 +36,6 @@ public class StudentStatus extends AbstractReference implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(StudentStatus)
 	 */
 	public void overwrite(StudentStatus source) {
 		this.setName(source.getName());

@@ -92,7 +92,6 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(PersonEducationGoal)
 	 */
 	public void overwrite(PersonEducationGoal source) {
 		this.setDescription(source.getDescription());

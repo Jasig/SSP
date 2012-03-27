@@ -36,7 +36,6 @@ public class MaritalStatus extends AbstractReference implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(MaritalStatus)
 	 */
 	public void overwrite(MaritalStatus source) {
 		this.setName(source.getName());

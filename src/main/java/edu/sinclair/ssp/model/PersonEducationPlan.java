@@ -103,7 +103,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(PersonEducationPlan)
+	 * @see #overwriteWithCollections(PersonEducationPlan)
 	 */
 	public void overwrite(PersonEducationPlan source) {
 		this.setNewOrientationComplete(source.isNewOrientationComplete());
@@ -119,7 +119,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwrite(PersonEducationPlan)
+	 * @see #overwrite(PersonEducationPlan)
 	 */
 	public void overwriteWithCollections(PersonEducationPlan source) {
 		this.overwrite(source);

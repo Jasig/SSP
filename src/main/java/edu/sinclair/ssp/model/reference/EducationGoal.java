@@ -36,7 +36,6 @@ public class EducationGoal extends AbstractReference implements Serializable {
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwriteWithCollections(EducationGoal)
 	 */
 	public void overwrite(EducationGoal source) {
 		this.setName(source.getName());

@@ -17,9 +17,13 @@ public interface IntakeService {
 	 * Overwrites simple and collection properties with the parameter's
 	 * properties, but not the Enabled property.
 	 * 
+	 * @param target
+	 *            Entity to copy properties to
 	 * @param source
 	 *            Source to use for overwrites.
-	 * @see overwrite(Person)
+	 * @exception ObjectNotFoundException
+	 *                If the referenced nested entities could not be loaded from
+	 *                the database.
 	 */
 	public void overwriteWithCollections(Person target, IntakeForm source)
 			throws ObjectNotFoundException;
