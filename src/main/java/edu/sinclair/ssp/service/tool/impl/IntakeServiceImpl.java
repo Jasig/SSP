@@ -12,6 +12,10 @@ import edu.sinclair.ssp.model.PersonEducationPlan;
 import edu.sinclair.ssp.model.tool.IntakeForm;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonService;
+import edu.sinclair.ssp.service.reference.CitizenshipService;
+import edu.sinclair.ssp.service.reference.EthnicityService;
+import edu.sinclair.ssp.service.reference.MaritalStatusService;
+import edu.sinclair.ssp.service.reference.VeteranStatusService;
 import edu.sinclair.ssp.service.tool.IntakeService;
 
 @Service
@@ -19,6 +23,18 @@ public class IntakeServiceImpl implements IntakeService {
 
 	// private static final Logger logger =
 	// LoggerFactory.getLogger(IntakeService.class);
+
+	@Autowired
+	private MaritalStatusService maritalStatusService;
+
+	@Autowired
+	private EthnicityService ethnicityService;
+
+	@Autowired
+	private CitizenshipService citizenshipService;
+
+	@Autowired
+	private VeteranStatusService veteranStatusService;
 
 	@Autowired
 	private PersonService personService;
@@ -86,11 +102,23 @@ public class IntakeServiceImpl implements IntakeService {
 				// too? Or will Hibernate automatic orphan control catch it?
 				target.setDemographics(null);
 			} else {
-				target.getDemographics().overwriteWithCollections(
-						source.getPerson().getDemographics(),
-						personService.get(source.getPerson().getDemographics()
-								.getCoach() == null ? null : source.getPerson()
-								.getDemographics().getCoach().getId()));
+				PersonDemographics demo = source.getPerson().getDemographics();
+				target.getDemographics().overwrite(
+						demo,
+						demo == null || demo.getMaritalStatus() == null ? null
+								: maritalStatusService.get(demo
+										.getMaritalStatus().getId()),
+						demo == null || demo.getEthnicity() == null ? null
+								: ethnicityService.get(demo.getEthnicity()
+										.getId()),
+						demo == null || demo.getCitizenship() == null ? null
+								: citizenshipService.get(demo.getCitizenship()
+										.getId()),
+						demo == null || demo.getVeteranStatus() == null ? null
+								: veteranStatusService.get(demo
+										.getVeteranStatus().getId()),
+						demo == null || demo.getCoach() == null ? null
+								: personService.get(demo.getCoach().getId()));
 			}
 		}
 

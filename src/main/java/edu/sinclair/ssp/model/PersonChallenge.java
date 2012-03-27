@@ -14,6 +14,16 @@ import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.Challenge;
 
+/**
+ * Students may have zero or multiple Challenges in their way to success.
+ * 
+ * The PersonChallenge entity is an associative mapping between a student
+ * (Person) and any Challenges they face.
+ * 
+ * Non-student users should never have any assigned Challenges.
+ * 
+ * @author jon.adams
+ */
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -37,9 +47,11 @@ public class PersonChallenge extends Auditable implements Serializable {
 	private Challenge challenge;
 
 	public PersonChallenge() {
+		super();
 	}
 
 	public PersonChallenge(Person person, Challenge challenge) {
+		super();
 		this.person = person;
 		this.challenge = challenge;
 	}

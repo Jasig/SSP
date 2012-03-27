@@ -21,8 +21,12 @@ import edu.sinclair.ssp.model.PersonFundingSource;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonService;
 import edu.sinclair.ssp.service.reference.ChallengeService;
+import edu.sinclair.ssp.service.reference.CitizenshipService;
 import edu.sinclair.ssp.service.reference.EducationLevelService;
+import edu.sinclair.ssp.service.reference.EthnicityService;
 import edu.sinclair.ssp.service.reference.FundingSourceService;
+import edu.sinclair.ssp.service.reference.MaritalStatusService;
+import edu.sinclair.ssp.service.reference.VeteranStatusService;
 import edu.sinclair.ssp.service.tool.IntakeService;
 
 @Service
@@ -34,6 +38,18 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private PersonDao dao;
+
+	@Autowired
+	private MaritalStatusService maritalStatusService;
+
+	@Autowired
+	private EthnicityService ethnicityService;
+
+	@Autowired
+	private CitizenshipService citizenshipService;
+
+	@Autowired
+	private VeteranStatusService veteranStatusService;
 
 	@Autowired
 	private ChallengeService challengeService;
@@ -219,12 +235,23 @@ public class PersonServiceImpl implements PersonService {
 				// too? Or will Hibernate automatic orphan control catch it?
 				target.setDemographics(null);
 			} else {
-				target.getDemographics()
-						.overwriteWithCollections(
-								source.getDemographics(),
-								this.get(source.getDemographics().getCoach() == null ? null
-										: source.getDemographics().getCoach()
-												.getId()));
+				PersonDemographics demo = source.getDemographics();
+				target.getDemographics().overwrite(
+						demo,
+						demo == null || demo.getMaritalStatus() == null ? null
+								: maritalStatusService.get(demo
+										.getMaritalStatus().getId()),
+						demo == null || demo.getEthnicity() == null ? null
+								: ethnicityService.get(demo.getEthnicity()
+										.getId()),
+						demo == null || demo.getCitizenship() == null ? null
+								: citizenshipService.get(demo.getCitizenship()
+										.getId()),
+						demo == null || demo.getVeteranStatus() == null ? null
+								: veteranStatusService.get(demo
+										.getVeteranStatus().getId()),
+						demo == null || demo.getCoach() == null ? null : this
+								.get(demo.getCoach().getId()));
 			}
 		}
 
@@ -269,6 +296,15 @@ public class PersonServiceImpl implements PersonService {
 		this.overwriteWithCollectionsChallenges(target, source.getChallenges());
 	}
 
+	/**
+	 * Overwrites the EducationLevels property.
+	 * 
+	 * @param target
+	 *            Target (original) to overwrite.
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 */
 	@Override
 	public void overwriteWithCollectionsEducationLevels(Person target,
 			Set<PersonEducationLevel> source) throws ObjectNotFoundException {
@@ -304,6 +340,16 @@ public class PersonServiceImpl implements PersonService {
 			}
 		}
 	}
+
+	/**
+	 * Overwrites the FundingSources property.
+	 * 
+	 * @param target
+	 *            Target (original) to overwrite.
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 */
 
 	@Override
 	public void overwriteWithCollectionsFundingSources(Person target,
@@ -341,6 +387,15 @@ public class PersonServiceImpl implements PersonService {
 		}
 	}
 
+	/**
+	 * Overwrites the Challenges property.
+	 * 
+	 * @param target
+	 *            Target (original) to overwrite.
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 */
 	@Override
 	public void overwriteWithCollectionsChallenges(Person target,
 			Set<PersonChallenge> source) throws ObjectNotFoundException {

@@ -100,12 +100,39 @@ public interface PersonService extends AuditableCrudService<Person> {
 	public void overwriteWithCollections(Person target, Person source)
 			throws ObjectNotFoundException;
 
+	/**
+	 * Overwrites the EducationLevels property.
+	 * 
+	 * @param target
+	 *            Target (original) to overwrite.
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 */
 	public void overwriteWithCollectionsEducationLevels(Person target,
 			Set<PersonEducationLevel> source) throws ObjectNotFoundException;
 
+	/**
+	 * Overwrites the FundingSources property.
+	 * 
+	 * @param target
+	 *            Target (original) to overwrite.
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 */
 	public void overwriteWithCollectionsFundingSources(Person target,
 			Set<PersonFundingSource> source) throws ObjectNotFoundException;
 
+	/**
+	 * Overwrites the Challenges property.
+	 * 
+	 * @param target
+	 *            Target (original) to overwrite.
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwrite(Person)
+	 */
 	public void overwriteWithCollectionsChallenges(Person target,
 			Set<PersonChallenge> source) throws ObjectNotFoundException;
 }

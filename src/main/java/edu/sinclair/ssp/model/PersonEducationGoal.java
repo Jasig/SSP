@@ -14,6 +14,16 @@ import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.EducationGoal;
 
+/**
+ * Students may have an Education Goal stored for use in notifications to
+ * appropriate users, and for reporting purposes.
+ * 
+ * Students may have one associated Education Goal instance (one-to-one
+ * mapping). Non-student users should never have any education goals associated
+ * to them.
+ * 
+ * @author jon.adams
+ */
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -37,9 +47,11 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 	private int howSureAboutMajor;
 
 	public PersonEducationGoal() {
+		super();
 	}
 
 	public PersonEducationGoal(EducationGoal educationGoal) {
+		super();
 		this.educationGoal = educationGoal;
 	}
 

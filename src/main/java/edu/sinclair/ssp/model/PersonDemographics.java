@@ -21,6 +21,16 @@ import edu.sinclair.ssp.model.reference.Genders;
 import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 
+/**
+ * Students should have some demographic information stored for use in
+ * notifications to appropriate users, and for reporting purposes.
+ * 
+ * Students may have one associated demographic instance (one-to-one mapping).
+ * Non-student users should never have any demographic information associated to
+ * them.
+ * 
+ * @author jon.adams
+ */
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -289,7 +299,9 @@ public class PersonDemographics extends Auditable implements Serializable {
 	 *            Source to use for overwrites.
 	 * @see overwriteWithCollections(PersonDemographics)
 	 */
-	public void overwrite(PersonDemographics source, Person coach) {
+	public void overwrite(PersonDemographics source,
+			MaritalStatus maritalStatus, Ethnicity ethnicity,
+			Citizenship citizenship, VeteranStatus veterenStatus, Person coach) {
 		this.setAbilityToBenefit(source.isAbilityToBenefit());
 		this.setAnticipatedStartTerm(source.getAnticipatedStartTerm());
 		this.setAnticipatedStartYear(source.getAnticipatedStartYear());
@@ -310,21 +322,10 @@ public class PersonDemographics extends Auditable implements Serializable {
 		this.setWage(source.getWage());
 		this.setTotalHoursWorkedPerWeek(source.getTotalHoursWorkedPerWeek());
 
+		this.setMaritalStatus(maritalStatus);
+		this.setEthnicity(ethnicity);
+		this.setCitizenship(citizenship);
+		this.setVeteranStatus(veterenStatus);
 		this.setCoach(coach);
-	}
-
-	/**
-	 * Overwrites simple and collection properties with the parameter's
-	 * properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 * @see overwrite(PersonDemographics)
-	 */
-	public void overwriteWithCollections(PersonDemographics source, Person coach) {
-		this.overwrite(source, coach);
-
-		this.getMaritalStatus().overwrite(source.getMaritalStatus());
-		this.getVeteranStatus().overwrite(source.getVeteranStatus());
 	}
 }

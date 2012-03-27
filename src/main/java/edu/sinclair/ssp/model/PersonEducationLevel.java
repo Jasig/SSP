@@ -14,6 +14,16 @@ import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.EducationLevel;
 
+/**
+ * Students may have zero or multiple Education Levels.
+ * 
+ * The PersonEducationLevel entity is an associative mapping between a student
+ * (Person) and any Education Level information about them.
+ * 
+ * Non-student users should never have any assigned Education Levels.
+ * 
+ * @author jon.adams
+ */
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -37,9 +47,11 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 	private EducationLevel educationLevel;
 
 	public PersonEducationLevel() {
+		super();
 	}
 
 	public PersonEducationLevel(Person person, EducationLevel educationLevel) {
+		super();
 		this.person = person;
 		this.educationLevel = educationLevel;
 	}

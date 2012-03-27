@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,6 @@ public class PersonServiceIntegrationTest {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
-	@Ignore("The challenge reference data does not run on the build server, so this test can't be run successfully without that test data.")
 	@Test
 	public void testOverwriteWithCollections() throws ObjectNotFoundException {
 		// Simple fields
@@ -70,7 +68,7 @@ public class PersonServiceIntegrationTest {
 		Set<PersonChallenge> challenges = new HashSet<PersonChallenge>();
 		PersonChallenge challenge1 = new PersonChallenge();
 		challenge1.setChallenge(challengeService.get(UUID
-				.fromString("07c21095-7f77-4b52-b239-a6049f63c2db")));
+				.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0")));
 		challenge1.setPerson(pPersistent);
 		challenges.add(challenge1);
 		pFromTO.setChallenges(challenges);

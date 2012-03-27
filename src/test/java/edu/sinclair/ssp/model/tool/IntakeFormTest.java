@@ -9,10 +9,19 @@ import org.junit.Test;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonDemographics;
 
+/**
+ * Simple tests on the {@link IntakeForm} model.
+ * 
+ * @author jon.adams
+ */
 public class IntakeFormTest {
 
+	/**
+	 * Test that {@link IntakeForm#setPerson(Person)} correctly sets nested
+	 * properties correctly.
+	 */
 	@Test
-	public void testOverwrite() {
+	public void testSetPerson() {
 		String testString1 = "ts1";
 		String testString2 = "ts2";
 

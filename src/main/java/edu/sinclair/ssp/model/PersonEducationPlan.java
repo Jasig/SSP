@@ -14,6 +14,15 @@ import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.StudentStatus;
 
+/**
+ * Students should have some Education Plan stored for use in notifications to
+ * appropriate users, and for reporting purposes.
+ * 
+ * Students may have one associated plan instance (one-to-one mapping).
+ * Non-student users should never have any plan associated to them.
+ * 
+ * @author jon.adams
+ */
 @Entity
 @Table(name = "person_education_plan", schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
