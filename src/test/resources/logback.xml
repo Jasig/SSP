@@ -20,6 +20,9 @@
 	<logger name="org.springframework.web" level="info" />
 	<logger name="org.springframework.orm" level="info" />
 	<logger name="org.springframework.security" level="info" />
+	<logger name="org.hibernate" level="debug" />
+	<!-- logger name="org.hibernate.SQL" level="debug" / -->
+	
 
 
 	<root level="info">
