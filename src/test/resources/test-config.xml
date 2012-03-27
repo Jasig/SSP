@@ -44,6 +44,11 @@
 		<property name="entityInterceptor" >
 			<bean class="edu.sinclair.ssp.dao.AuditableEntityInterceptor"/>
 		</property>
+		<!-- property name="mappingResources">
+			<array>
+				<value>mappings.xml</value> 
+			</array>
+		</property -->
 		<property name="hibernateProperties">
 			<value>
 				hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
