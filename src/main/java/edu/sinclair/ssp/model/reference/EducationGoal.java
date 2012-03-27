@@ -1,5 +1,6 @@
 package edu.sinclair.ssp.model.reference;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -10,7 +11,9 @@ import javax.persistence.Table;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EducationGoal extends AbstractReference {
+public class EducationGoal extends AbstractReference implements Serializable {
+
+	private static final long serialVersionUID = -2021521905024491578L;
 
 	public EducationGoal() {
 		super();
@@ -28,4 +31,15 @@ public class EducationGoal extends AbstractReference {
 		super(id, name, description);
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(EducationGoal)
+	 */
+	public void overwrite(EducationGoal source) {
+		this.setName(source.getName());
+		this.setDescription(source.getDescription());
+	}
 }

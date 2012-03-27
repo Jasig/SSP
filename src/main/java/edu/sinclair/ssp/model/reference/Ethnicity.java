@@ -1,5 +1,6 @@
 package edu.sinclair.ssp.model.reference;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -10,7 +11,9 @@ import javax.persistence.Table;
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Ethnicity extends AbstractReference {
+public class Ethnicity extends AbstractReference implements Serializable {
+
+	private static final long serialVersionUID = 4750159626353128179L;
 
 	public Ethnicity() {
 		super();
@@ -28,4 +31,15 @@ public class Ethnicity extends AbstractReference {
 		super(id, name, description);
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(Ethnicity)
+	 */
+	public void overwrite(Ethnicity source) {
+		this.setName(source.getName());
+		this.setDescription(source.getDescription());
+	}
 }

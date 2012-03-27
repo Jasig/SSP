@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.sinclair.ssp.model.ObjectStatus;
+import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.reference.Challenge;
+import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 import edu.sinclair.ssp.service.reference.ChallengeService;
-import edu.sinclair.ssp.service.tool.impl.IntakeServiceImpl;
 
 public class IntakeServiceTest {
 
@@ -25,12 +28,19 @@ public class IntakeServiceTest {
 
 	private ChallengeService challengeService;
 
+	// private PersonService personService;
+
+	// private PersonDao personDao;
+
 	// private FundingSourceService fundingSourceService;
 	// private VeteranStatusService veteranStatusService;
 
+	@Autowired
+	private SecurityServiceInTestEnvironment securityService;
+
 	@Before
 	public void setup() {
-		// service = new IntakeService();
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 
 		challengeService = createMock(ChallengeService.class);
 		// fundingSourceService = createMock(FundingSourceService.class);
@@ -43,6 +53,7 @@ public class IntakeServiceTest {
 
 	@Ignore
 	@Test
+	@Transactional
 	public void testReferenceData() {
 		expect(challengeService.getAll(ObjectStatus.ACTIVE)).andReturn(
 				new ArrayList<Challenge>());
@@ -66,5 +77,4 @@ public class IntakeServiceTest {
 		// verify(fundingSourceService);
 		// verify(veteranStatusService);
 	}
-
 }

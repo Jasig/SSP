@@ -1,5 +1,7 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,10 +21,22 @@ import edu.sinclair.ssp.model.reference.Genders;
 import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 
+/**
+ * Students should have some demographic information stored for use in
+ * notifications to appropriate users, and for reporting purposes.
+ * 
+ * Students may have one associated demographic instance (one-to-one mapping).
+ * Non-student users should never have any demographic information associated to
+ * them.
+ * 
+ * @author jon.adams
+ */
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonDemographics extends Auditable {
+public class PersonDemographics extends Auditable implements Serializable {
+
+	private static final long serialVersionUID = 3252611289245443664L;
 
 	@Column
 	private boolean abilityToBenefit;
@@ -131,7 +145,7 @@ public class PersonDemographics extends Auditable {
 	}
 
 	public void setLocal(boolean isLocal) {
-		this.local = isLocal;
+		local = isLocal;
 	}
 
 	public String getCountryOfResidence() {
@@ -278,4 +292,40 @@ public class PersonDemographics extends Auditable {
 		this.coach = coach;
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(PersonDemographics)
+	 */
+	public void overwrite(PersonDemographics source,
+			MaritalStatus maritalStatus, Ethnicity ethnicity,
+			Citizenship citizenship, VeteranStatus veterenStatus, Person coach) {
+		this.setAbilityToBenefit(source.isAbilityToBenefit());
+		this.setAnticipatedStartTerm(source.getAnticipatedStartTerm());
+		this.setAnticipatedStartYear(source.getAnticipatedStartYear());
+		this.setLocal(source.isLocal());
+		this.setCountryOfResidence(source.getCountryOfResidence());
+		this.setPaymentStatus(source.getPaymentStatus());
+		this.setEthnicity(source.getEthnicity());
+		this.setGender(source.getGender());
+		this.setCitizenship(source.getCitizenship());
+		this.setCountryOfCitizenship(source.getCountryOfCitizenship());
+		this.setPrimaryCaregiver(source.isPrimaryCaregiver());
+		this.setNumberOfChildren(source.getNumberOfChildren());
+		this.setChildAges(source.getChildAges());
+		this.setChildCareNeeded(source.isChildCareNeeded());
+		this.setEmployed(source.isEmployed());
+		this.setPlaceOfEmployment(source.getPlaceOfEmployment());
+		this.setShift(source.getShift());
+		this.setWage(source.getWage());
+		this.setTotalHoursWorkedPerWeek(source.getTotalHoursWorkedPerWeek());
+
+		this.setMaritalStatus(maritalStatus);
+		this.setEthnicity(ethnicity);
+		this.setCitizenship(citizenship);
+		this.setVeteranStatus(veterenStatus);
+		this.setCoach(coach);
+	}
 }

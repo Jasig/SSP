@@ -74,26 +74,28 @@ How to set up your development environment:
 		path you chose for the project checkout from SVN differs from what you
 		set it to before.)
 10. Setup local configuration files
-	- Symbolically link, or copy (and manually watch for changes) to the files
-		in /externalConfig. Your local versions need modified appropriately for
-		your environment. The local versions should be stored at 
-		[ TODO: INSERT DIRECTORY HERE ]
+	- Symbolically link to, or copy (and manually watch for changes), the files
+		in /externalConfig. The links/copies should be in a directory outside of
+		the source control tree, since your local versions need modified
+		appropriately for your environment and must not be committed back to
+		the repository.
+	- Add the following parameter, after setting the appropriate path for
+	    your environment, to your Tomcat context.xml:
+	    	<Parameter name="SSP_CONFIGDIR" value="/usr/local/etc/ssp/" />
+	    Example Windows version:
+	    	<Parameter name="SSP_CONFIGDIR" value="C:\\ssp\\" />
+	  OR
+	    Copy the /ssp/src/main/webapp/META-INF/context.xml file to your
+		Tomcat directory at
+			[your Tomcat (Catalina) directory]/conf/[enginename]/[hostname]/
+		Replace the items in brackets as appropriate for your
+		environment. Example: $CATALINA_HOME/conf/[enginename]/[hostname]/
 
-Build server:
-The build server automatically pulls in SVN commits and runs unit tests.
-
-- To view build server status and history, go to
-	https://107.21.202.155/jenkins/job/SSP/
-- Use the username and password combo:
-	infinum
-	T93Xmhs6
-- If you wish to be notified of build failures via e-mail, add your e-mail
-	address to the notification list at Configure->Build Settings->E-mail
-	Notifications->Recipients
-
-
-Additional tasks:
+Additional, optional tasks:
 	- To view/edit some of the documentation in the SVN /doc directory, install
 		the following applications:
 		- ObjectAid: http://www.objectaid.com/installation
 		- FreeMind
+	- To run the FindBug reports locally before the build server runs them, install
+		the FindBug plugin via the "Install New Software" tool in Eclipse:
+		- FindBugs: http://findbugs.cs.umd.edu/eclipse/

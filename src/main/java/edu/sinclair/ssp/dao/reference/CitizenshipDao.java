@@ -26,8 +26,8 @@ public class CitizenshipDao implements AuditableCrudDao<Citizenship> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Citizenship> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(Citizenship.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				Citizenship.class);
 		query.addOrder(Order.asc("name"));
 
 		if (status != ObjectStatus.ALL) {
@@ -39,16 +39,16 @@ public class CitizenshipDao implements AuditableCrudDao<Citizenship> {
 
 	@Override
 	public Citizenship get(UUID id) {
-		return (Citizenship) this.sessionFactory.getCurrentSession().get(
+		return (Citizenship) sessionFactory.getCurrentSession().get(
 				Citizenship.class, id);
 	}
 
 	@Override
 	public Citizenship save(Citizenship obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (Citizenship) sessionFactory.getCurrentSession().merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -56,7 +56,7 @@ public class CitizenshipDao implements AuditableCrudDao<Citizenship> {
 
 	@Override
 	public void delete(Citizenship obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

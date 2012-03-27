@@ -1,5 +1,7 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,10 +14,22 @@ import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.EducationGoal;
 
+/**
+ * Students may have an Education Goal stored for use in notifications to
+ * appropriate users, and for reporting purposes.
+ * 
+ * Students may have one associated Education Goal instance (one-to-one
+ * mapping). Non-student users should never have any education goals associated
+ * to them.
+ * 
+ * @author jon.adams
+ */
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonEducationGoal extends Auditable {
+public class PersonEducationGoal extends Auditable implements Serializable {
+
+	private static final long serialVersionUID = -5687416606848336981L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "education_goal_id", nullable = true, insertable = false, updatable = false)
@@ -32,12 +46,13 @@ public class PersonEducationGoal extends Auditable {
 	@Column()
 	private int howSureAboutMajor;
 
-	public String getDescription() {
-		return description;
+	public PersonEducationGoal() {
+		super();
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public PersonEducationGoal(EducationGoal educationGoal) {
+		super();
+		this.educationGoal = educationGoal;
 	}
 
 	public EducationGoal getEducationGoal() {
@@ -46,6 +61,14 @@ public class PersonEducationGoal extends Auditable {
 
 	public void setEducationGoal(EducationGoal educationGoal) {
 		this.educationGoal = educationGoal;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public int getHowSureAboutMajor() {
@@ -64,4 +87,16 @@ public class PersonEducationGoal extends Auditable {
 		this.plannedOccupation = plannedOccupation;
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithCollections(PersonEducationGoal)
+	 */
+	public void overwrite(PersonEducationGoal source) {
+		this.setDescription(source.getDescription());
+		this.setPlannedOccupation(source.getPlannedOccupation());
+		this.setHowSureAboutMajor(source.getHowSureAboutMajor());
+	}
 }

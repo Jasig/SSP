@@ -2,11 +2,22 @@ package edu.sinclair.ssp.service;
 
 import java.util.UUID;
 
+/**
+ * A record was not found in persistent storage based on the specified
+ * identifier.
+ */
 public class ObjectNotFoundException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Identifier that was used for the lookup that failed.
+	 */
 	private UUID objectId;
+
+	/**
+	 * Entity (class) name
+	 */
 	private String name;
 
 	public ObjectNotFoundException(UUID objectId, String name) {

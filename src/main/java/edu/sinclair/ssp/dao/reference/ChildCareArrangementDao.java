@@ -27,8 +27,8 @@ public class ChildCareArrangementDao implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChildCareArrangement> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(ChildCareArrangement.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				ChildCareArrangement.class);
 		query.addOrder(Order.asc("name"));
 
 		if (status != ObjectStatus.ALL) {
@@ -40,16 +40,17 @@ public class ChildCareArrangementDao implements
 
 	@Override
 	public ChildCareArrangement get(UUID id) {
-		return (ChildCareArrangement) this.sessionFactory.getCurrentSession()
-				.get(ChildCareArrangement.class, id);
+		return (ChildCareArrangement) sessionFactory.getCurrentSession().get(
+				ChildCareArrangement.class, id);
 	}
 
 	@Override
 	public ChildCareArrangement save(ChildCareArrangement obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (ChildCareArrangement) sessionFactory.getCurrentSession()
+					.merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -57,7 +58,7 @@ public class ChildCareArrangementDao implements
 
 	@Override
 	public void delete(ChildCareArrangement obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

@@ -26,8 +26,8 @@ public class MaritalStatusDao implements AuditableCrudDao<MaritalStatus> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<MaritalStatus> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(MaritalStatus.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				MaritalStatus.class);
 		query.addOrder(Order.asc("name"));
 
 		if (status != ObjectStatus.ALL) {
@@ -39,16 +39,16 @@ public class MaritalStatusDao implements AuditableCrudDao<MaritalStatus> {
 
 	@Override
 	public MaritalStatus get(UUID id) {
-		return (MaritalStatus) this.sessionFactory.getCurrentSession().get(
+		return (MaritalStatus) sessionFactory.getCurrentSession().get(
 				MaritalStatus.class, id);
 	}
 
 	@Override
 	public MaritalStatus save(MaritalStatus obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (MaritalStatus) sessionFactory.getCurrentSession().merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -56,7 +56,7 @@ public class MaritalStatusDao implements AuditableCrudDao<MaritalStatus> {
 
 	@Override
 	public void delete(MaritalStatus obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

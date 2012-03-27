@@ -26,8 +26,8 @@ public class EthnicityDao implements AuditableCrudDao<Ethnicity> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Ethnicity> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(Ethnicity.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				Ethnicity.class);
 		query.addOrder(Order.asc("name"));
 
 		if (status != ObjectStatus.ALL) {
@@ -39,16 +39,16 @@ public class EthnicityDao implements AuditableCrudDao<Ethnicity> {
 
 	@Override
 	public Ethnicity get(UUID id) {
-		return (Ethnicity) this.sessionFactory.getCurrentSession().get(
+		return (Ethnicity) sessionFactory.getCurrentSession().get(
 				Ethnicity.class, id);
 	}
 
 	@Override
 	public Ethnicity save(Ethnicity obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (Ethnicity) sessionFactory.getCurrentSession().merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -56,7 +56,7 @@ public class EthnicityDao implements AuditableCrudDao<Ethnicity> {
 
 	@Override
 	public void delete(Ethnicity obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

@@ -25,8 +25,8 @@ public class PersonChallengeDao implements AuditableCrudDao<PersonChallenge> {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<PersonChallenge> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(PersonChallenge.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				PersonChallenge.class);
 
 		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
@@ -37,13 +37,13 @@ public class PersonChallengeDao implements AuditableCrudDao<PersonChallenge> {
 
 	@Override
 	public PersonChallenge get(UUID id) {
-		return (PersonChallenge) this.sessionFactory.getCurrentSession().get(
+		return (PersonChallenge) sessionFactory.getCurrentSession().get(
 				PersonChallenge.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<PersonChallenge> forPerson(Person person) {
-		Criteria query = this.sessionFactory.getCurrentSession()
+		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(PersonChallenge.class)
 				.add(Restrictions.eq("person", person));
 		return query.list();
@@ -52,9 +52,10 @@ public class PersonChallengeDao implements AuditableCrudDao<PersonChallenge> {
 	@Override
 	public PersonChallenge save(PersonChallenge obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (PersonChallenge) sessionFactory.getCurrentSession().merge(
+					obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -62,7 +63,7 @@ public class PersonChallengeDao implements AuditableCrudDao<PersonChallenge> {
 
 	@Override
 	public void delete(PersonChallenge obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

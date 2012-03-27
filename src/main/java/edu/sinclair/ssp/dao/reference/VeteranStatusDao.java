@@ -26,8 +26,8 @@ public class VeteranStatusDao implements AuditableCrudDao<VeteranStatus> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<VeteranStatus> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(VeteranStatus.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				VeteranStatus.class);
 		query.addOrder(Order.asc("name"));
 
 		if (status != ObjectStatus.ALL) {
@@ -39,16 +39,16 @@ public class VeteranStatusDao implements AuditableCrudDao<VeteranStatus> {
 
 	@Override
 	public VeteranStatus get(UUID id) {
-		return (VeteranStatus) this.sessionFactory.getCurrentSession().get(
+		return (VeteranStatus) sessionFactory.getCurrentSession().get(
 				VeteranStatus.class, id);
 	}
 
 	@Override
 	public VeteranStatus save(VeteranStatus obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (VeteranStatus) sessionFactory.getCurrentSession().merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -56,7 +56,7 @@ public class VeteranStatusDao implements AuditableCrudDao<VeteranStatus> {
 
 	@Override
 	public void delete(VeteranStatus obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

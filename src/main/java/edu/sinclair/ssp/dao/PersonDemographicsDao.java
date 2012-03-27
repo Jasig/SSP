@@ -26,8 +26,8 @@ public class PersonDemographicsDao implements
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<PersonDemographics> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(PersonDemographics.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				PersonDemographics.class);
 
 		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
@@ -38,12 +38,12 @@ public class PersonDemographicsDao implements
 
 	@Override
 	public PersonDemographics get(UUID id) {
-		return (PersonDemographics) this.sessionFactory.getCurrentSession()
-				.get(PersonDemographics.class, id);
+		return (PersonDemographics) sessionFactory.getCurrentSession().get(
+				PersonDemographics.class, id);
 	}
 
 	public PersonDemographics forPerson(Person person) {
-		Criteria query = this.sessionFactory.getCurrentSession()
+		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(PersonDemographics.class)
 				.add(Restrictions.eq("person", person));
 		return (PersonDemographics) query.uniqueResult();
@@ -52,9 +52,10 @@ public class PersonDemographicsDao implements
 	@Override
 	public PersonDemographics save(PersonDemographics obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (PersonDemographics) sessionFactory.getCurrentSession()
+					.merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -62,7 +63,7 @@ public class PersonDemographicsDao implements
 
 	@Override
 	public void delete(PersonDemographics obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

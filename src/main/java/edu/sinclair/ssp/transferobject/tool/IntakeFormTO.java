@@ -53,37 +53,37 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 			setPerson(new PersonTO(model.getPerson()));
 		}
 
-		if (model.getPersonDemographics() != null) {
-			setPersonDemographics(new PersonDemographicsTO(
-					model.getPersonDemographics()));
+		if (model.getPerson().getDemographics() != null) {
+			setPersonDemographics(new PersonDemographicsTO(model.getPerson()
+					.getDemographics()));
 		}
 
-		if (model.getPersonEducationGoal() != null) {
-			setPersonEducationGoal(new PersonEducationGoalTO(
-					model.getPersonEducationGoal()));
+		if (model.getPerson().getEducationGoal() != null) {
+			setPersonEducationGoal(new PersonEducationGoalTO(model.getPerson()
+					.getEducationGoal()));
 		}
 
-		if (model.getPersonEducationPlan() != null) {
-			setPersonEducationPlan(new PersonEducationPlanTO(
-					model.getPersonEducationPlan()));
+		if (model.getPerson().getEducationPlan() != null) {
+			setPersonEducationPlan(new PersonEducationPlanTO(model.getPerson()
+					.getEducationPlan()));
 		}
 
-		if (model.getPersonEducationLevels() != null
-				&& model.getPersonEducationLevels().size() > 0) {
+		if (model.getPerson().getEducationLevels() != null
+				&& model.getPerson().getEducationLevels().size() > 0) {
 			setPersonEducationLevels(personEducationLevelToFactory
-					.toTOList(model.getPersonEducationLevels()));
+					.toTOList(model.getPerson().getEducationLevels()));
 		}
 
-		if (model.getPersonFundingSources() != null
-				&& model.getPersonFundingSources().size() > 0) {
+		if (model.getPerson().getFundingSources() != null
+				&& model.getPerson().getFundingSources().size() > 0) {
 			setPersonFundingSources(personFundingToFactory.toTOList(model
-					.getPersonFundingSources()));
+					.getPerson().getFundingSources()));
 		}
 
-		if (model.getPersonChallenges() != null
-				&& model.getPersonChallenges().size() > 0) {
+		if (model.getPerson().getChallenges() != null
+				&& model.getPerson().getChallenges().size() > 0) {
 			setPersonChallenges(personChallengeToFactory.toTOList(model
-					.getPersonChallenges()));
+					.getPerson().getChallenges()));
 		}
 	}
 
@@ -94,32 +94,37 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		}
 
 		if (getPersonDemographics() != null) {
-			model.setPersonDemographics(getPersonDemographics().asModel());
+			model.getPerson()
+					.setDemographics(getPersonDemographics().asModel());
 		}
 
 		if (getPersonEducationGoal() != null) {
-			model.setPersonEducationGoal(getPersonEducationGoal().asModel());
+			model.getPerson().setEducationGoal(
+					getPersonEducationGoal().asModel());
 		}
 
 		if (getPersonEducationPlan() != null) {
-			model.setPersonEducationPlan(getPersonEducationPlan().asModel());
+			model.getPerson().setEducationPlan(
+					getPersonEducationPlan().asModel());
 		}
 
 		if (getPersonEducationLevels() != null
 				&& getPersonEducationLevels().size() > 0) {
-			model.setPersonEducationLevels(personEducationLevelToFactory
-					.toModelSet(getPersonEducationLevels()));
+			model.getPerson().setEducationLevels(
+					personEducationLevelToFactory
+							.toModelSet(getPersonEducationLevels()));
 		}
 
 		if (getPersonFundingSources() != null
 				&& getPersonFundingSources().size() > 0) {
-			model.setPersonFundingSources(personFundingToFactory
-					.toModelSet(getPersonFundingSources()));
+			model.getPerson().setFundingSources(
+					personFundingToFactory
+							.toModelSet(getPersonFundingSources()));
 		}
 
 		if (getPersonChallenges() != null && getPersonChallenges().size() > 0) {
-			model.setPersonChallenges(personChallengeToFactory
-					.toModelSet(getPersonChallenges()));
+			model.getPerson().setChallenges(
+					personChallengeToFactory.toModelSet(getPersonChallenges()));
 		}
 
 		return model;

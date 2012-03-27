@@ -1,5 +1,7 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,10 +14,22 @@ import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.Challenge;
 
+/**
+ * Students may have zero or multiple Challenges in their way to success.
+ * 
+ * The PersonChallenge entity is an associative mapping between a student
+ * (Person) and any Challenges they face.
+ * 
+ * Non-student users should never have any assigned Challenges.
+ * 
+ * @author jon.adams
+ */
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonChallenge extends Auditable {
+public class PersonChallenge extends Auditable implements Serializable {
+
+	private static final long serialVersionUID = 27277225191519712L;
 
 	@Column(length = 255)
 	@Size(max = 255)
@@ -33,9 +47,11 @@ public class PersonChallenge extends Auditable {
 	private Challenge challenge;
 
 	public PersonChallenge() {
+		super();
 	}
 
 	public PersonChallenge(Person person, Challenge challenge) {
+		super();
 		this.person = person;
 		this.challenge = challenge;
 	}
@@ -64,4 +80,15 @@ public class PersonChallenge extends Auditable {
 		this.challenge = challenge;
 	}
 
+	/**
+	 * Overwrites simple properties with the parameter's properties. Does not
+	 * include the Enabled property.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 * @see overwriteWithPersonAndCollections(PersonChallenge)
+	 */
+	public void overwrite(PersonChallenge source) {
+		this.setDescription(source.getDescription());
+	}
 }

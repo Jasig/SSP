@@ -15,7 +15,7 @@ import edu.sinclair.ssp.model.PersonEducationLevel;
 
 @Repository
 public class PersonEducationLevelDao implements
-AuditableCrudDao<PersonEducationLevel> {
+		AuditableCrudDao<PersonEducationLevel> {
 
 	// private static final Logger logger =
 	// LoggerFactory.getLogger(PersonEducationLevelDao.class);
@@ -26,8 +26,8 @@ AuditableCrudDao<PersonEducationLevel> {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<PersonEducationLevel> getAll(ObjectStatus status) {
-		Criteria query = this.sessionFactory.getCurrentSession()
-				.createCriteria(PersonEducationLevel.class);
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				PersonEducationLevel.class);
 
 		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
@@ -38,13 +38,13 @@ AuditableCrudDao<PersonEducationLevel> {
 
 	@Override
 	public PersonEducationLevel get(UUID id) {
-		return (PersonEducationLevel) this.sessionFactory.getCurrentSession()
-				.get(PersonEducationLevel.class, id);
+		return (PersonEducationLevel) sessionFactory.getCurrentSession().get(
+				PersonEducationLevel.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<PersonEducationLevel> forPerson(Person person) {
-		Criteria query = this.sessionFactory.getCurrentSession()
+		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(PersonEducationLevel.class)
 				.add(Restrictions.eq("person", person));
 		return query.list();
@@ -53,9 +53,10 @@ AuditableCrudDao<PersonEducationLevel> {
 	@Override
 	public PersonEducationLevel save(PersonEducationLevel obj) {
 		if (obj.getId() != null) {
-			this.sessionFactory.getCurrentSession().merge(obj);
+			obj = (PersonEducationLevel) sessionFactory.getCurrentSession()
+					.merge(obj);
 		} else {
-			this.sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}
 
 		return obj;
@@ -63,7 +64,7 @@ AuditableCrudDao<PersonEducationLevel> {
 
 	@Override
 	public void delete(PersonEducationLevel obj) {
-		this.sessionFactory.getCurrentSession().delete(obj);
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 
 }

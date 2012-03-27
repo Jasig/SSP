@@ -1,6 +1,8 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,115 +18,229 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 
+/**
+ * A Person entity.
+ * 
+ * Usually represents either a user of the backend system, or a student.
+ * Students should have non-null demographics, challenges, etc., whereas a user
+ * will not.
+ * 
+ * @author jon.adams
+ */
 @Entity
 @Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Person extends Auditable {
+public class Person extends Auditable implements Serializable {
 
-	public static UUID SYSTEM_ADMINISTRATOR_ID = UUID
+	private static final long serialVersionUID = 4122282021549627683L;
+
+	/**
+	 * Static, super administrator account identifier. Only used by IT and
+	 * support staff, never by students or users of the system.
+	 */
+	public static final UUID SYSTEM_ADMINISTRATOR_ID = UUID
 			.fromString("58ba5ee3-734e-4ae9-b9c5-943774b4de41");
 
+	/**
+	 * First name; required.
+	 * 
+	 * Maximum length of 50.
+	 */
 	@Column(nullable = false, length = 50)
 	@NotNull
 	@NotEmpty
 	@Size(max = 50)
 	private String firstName;
 
+	/**
+	 * Middle initial.
+	 * 
+	 * Optional; maximum length of 1.
+	 */
 	@Column(nullable = true, length = 1)
 	@Size(max = 1)
 	private String middleInitial;
 
+	/**
+	 * Last name; required.
+	 * 
+	 * Maximum length of 50.
+	 */
 	@Column(nullable = false, length = 50)
 	@NotNull
 	@NotEmpty
 	@Size(max = 50)
 	private String lastName;
 
+	/**
+	 * Birth date
+	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "birth_date")
+	@Past
 	private Date birthDate;
 
+	/**
+	 * Primary e-mail address; required.
+	 * 
+	 * Can not be null or empty. Maximum length of 100 characters.
+	 */
 	@Column(length = 100)
 	@NotNull
 	@NotEmpty
 	@Size(max = 100)
 	private String primaryEmailAddress;
 
+	/**
+	 * Secondary e-mail address.
+	 * 
+	 * Optional. Maximum length of 100 characters.
+	 */
 	@Column(length = 100)
 	@Size(max = 100)
 	private String secondaryEmailAddress;
 
+	/**
+	 * User name.
+	 * 
+	 * Maximum length of 25.
+	 */
 	@Column(length = 25)
 	@Size(max = 25)
 	private String username;
 
+	/**
+	 * Home phone number.
+	 * 
+	 * Maximum length of 25.
+	 */
 	@Column(length = 25)
 	@Size(max = 25)
 	private String homePhone;
 
+	/**
+	 * Work phone number.
+	 * 
+	 * Maximum length of 25.
+	 */
 	@Column(length = 25)
 	@Size(max = 25)
 	private String workPhone;
 
+	/**
+	 * Cell (mobile) phone number.
+	 * 
+	 * Maximum length of 25.
+	 */
 	@Column(length = 25)
 	@Size(max = 25)
 	private String cellPhone;
 
+	/**
+	 * Address line 1.
+	 * 
+	 * Maximum length of 50.
+	 */
 	@Column(length = 50, name = "address_line_1")
 	@Size(max = 50)
 	private String addressLine1;
 
+	/**
+	 * Address line 2.
+	 * 
+	 * Maximum length of 50.
+	 */
 	@Column(length = 50, name = "address_line_2")
 	@Size(max = 50)
 	private String addressLine2;
-
+	/**
+	 * City.
+	 * 
+	 * Maximum length of 50.
+	 */
 	@Column(length = 50)
 	@Size(max = 50)
 	private String city;
 
+	/**
+	 * State code (abbreviated to 2 characters).
+	 * 
+	 * Maximum length of 2.
+	 */
 	@Column(length = 2)
 	@Size(max = 2)
 	private String state;
 
+	/**
+	 * ZIP/postal code.
+	 * 
+	 * Maximum length of 10.
+	 */
 	@Column(length = 10)
 	@Size(max = 10)
 	private String zipCode;
 
+	/**
+	 * Photo URL.
+	 * 
+	 * Maximum length of 100.
+	 */
 	@Column(length = 100)
 	@Size(max = 100)
 	private String photoUrl;
 
+	/**
+	 * School identifier.
+	 * 
+	 * Maximum length of 50.
+	 */
 	@Column(length = 50)
 	@Size(max = 50)
 	private String schoolId;
 
-	@Nullable()
 	/**
 	 * Marks the user account able to authenticate in the system.
 	 * 
-	 * Usually only marked false for former administrators, counselors,
-	 * and non-students who no longer use the system anymore.
+	 * Usually only marked false for former administrators, counselors, and
+	 * non-students who no longer use the system anymore.
 	 */
+	@Nullable()
 	private boolean enabled;
 
+	/**
+	 * Demographics about a student.
+	 * 
+	 * Should be null for non-student users.
+	 */
 	@Nullable()
 	@ManyToOne()
 	@Cascade(CascadeType.ALL)
 	@JoinColumn(name = "person_demographics_id", unique = true, nullable = true)
 	private PersonDemographics demographics;
 
+	/**
+	 * Education goal for a student.
+	 * 
+	 * Should be null for non-student users.
+	 */
 	@Nullable()
 	@ManyToOne()
 	@Cascade(CascadeType.ALL)
 	@JoinColumn(name = "person_education_goal_id", unique = true, nullable = true)
 	private PersonEducationGoal educationGoal;
 
+	/**
+	 * Education plan for a student.
+	 * 
+	 * Should be null for non-student users.
+	 */
 	@Nullable()
 	@ManyToOne()
 	@Cascade(CascadeType.ALL)
@@ -132,33 +248,57 @@ public class Person extends Auditable {
 	private PersonEducationPlan educationPlan;
 
 	/**
-	 * Education levels. Changes to this set are persisted.
+	 * Education Levels for a student.
+	 * 
+	 * Should be null for non-student users.
 	 */
 	@Nullable()
 	@OneToMany(mappedBy = "person")
 	@Cascade(value = CascadeType.ALL)
-
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
-	 * Funding sources. Changes to this set are persisted.
+	 * Any funding sources for a student.
+	 * 
+	 * Should be null for non-student users.
 	 */
 	@Nullable()
 	@OneToMany(mappedBy = "person")
+	@Cascade(CascadeType.ALL)
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
-	 * Challenges. Changes to this set are persisted.
+	 * Any Challenges for a student.
+	 * 
+	 * Should be null for non-student users.
 	 */
 	@Nullable()
 	@OneToMany(mappedBy = "person")
+	@Cascade(CascadeType.ALL)
 	private Set<PersonChallenge> challenges;
 
+	/**
+	 * Initialize a Person.
+	 * 
+	 * Does not generated an ID, but does initialize empty sets.
+	 */
 	public Person() {
+		super();
+		challenges = new HashSet<PersonChallenge>();
+		fundingSources = new HashSet<PersonFundingSource>();
+		educationLevels = new HashSet<PersonEducationLevel>();
 	}
 
+	/**
+	 * Initialize a Person.
+	 * 
+	 * Initializes empty sets.
+	 */
 	public Person(UUID id) {
 		super(id);
+		challenges = new HashSet<PersonChallenge>();
+		fundingSources = new HashSet<PersonFundingSource>();
+		educationLevels = new HashSet<PersonEducationLevel>();
 	}
 
 	public String getFirstName() {
@@ -186,11 +326,12 @@ public class Person extends Auditable {
 	}
 
 	public Date getBirthDate() {
-		return birthDate;
+		return birthDate == null ? null : new Date(birthDate.getTime());
 	}
 
 	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
+		this.birthDate = birthDate == null ? null : new Date(
+				birthDate.getTime());
 	}
 
 	public String getPrimaryEmailAddress() {
@@ -352,5 +493,4 @@ public class Person extends Auditable {
 	public void setChallenges(Set<PersonChallenge> challenges) {
 		this.challenges = challenges;
 	}
-
 }

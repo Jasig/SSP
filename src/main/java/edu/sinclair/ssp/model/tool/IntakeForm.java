@@ -1,87 +1,35 @@
 package edu.sinclair.ssp.model.tool;
 
-import java.util.Set;
-
 import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonChallenge;
-import edu.sinclair.ssp.model.PersonDemographics;
-import edu.sinclair.ssp.model.PersonEducationGoal;
-import edu.sinclair.ssp.model.PersonEducationLevel;
-import edu.sinclair.ssp.model.PersonEducationPlan;
-import edu.sinclair.ssp.model.PersonFundingSource;
 
+/**
+ * The model for the Intake Form tool.
+ * 
+ * Currently only a simple wrapper around a fully-normalized {@link Person}.
+ */
 public class IntakeForm {
 
+	/**
+	 * Person with the full tree of data, down to only using identifiers
+	 * (non-full objects) when a circular dependency (usually a reference back
+	 * to a Person instance) or reference data (system-level lookups like
+	 * Challenges, etc.).
+	 */
 	private Person person;
 
-	private PersonDemographics personDemographics;
-
-	private PersonEducationGoal personEducationGoal;
-
-	private PersonEducationPlan personEducationPlan;
-
-	private Set<PersonEducationLevel> personEducationLevels;
-
-	private Set<PersonFundingSource> personFundingSources;
-
-	private Set<PersonChallenge> personChallenges;
-
+	/**
+	 * Gets the full Person instance.
+	 * 
+	 * @return the full Person instance
+	 */
 	public Person getPerson() {
 		return person;
 	}
 
+	/**
+	 * Sets the full Person instance.
+	 */
 	public void setPerson(Person person) {
 		this.person = person;
 	}
-
-	public PersonDemographics getPersonDemographics() {
-		return personDemographics;
-	}
-
-	public void setPersonDemographics(PersonDemographics personDemographics) {
-		this.personDemographics = personDemographics;
-	}
-
-	public PersonEducationGoal getPersonEducationGoal() {
-		return personEducationGoal;
-	}
-
-	public void setPersonEducationGoal(PersonEducationGoal personEducationGoal) {
-		this.personEducationGoal = personEducationGoal;
-	}
-
-	public PersonEducationPlan getPersonEducationPlan() {
-		return personEducationPlan;
-	}
-
-	public void setPersonEducationPlan(PersonEducationPlan personEducationPlan) {
-		this.personEducationPlan = personEducationPlan;
-	}
-
-	public Set<PersonEducationLevel> getPersonEducationLevels() {
-		return personEducationLevels;
-	}
-
-	public void setPersonEducationLevels(
-			Set<PersonEducationLevel> personEducationLevels) {
-		this.personEducationLevels = personEducationLevels;
-	}
-
-	public Set<PersonFundingSource> getPersonFundingSources() {
-		return personFundingSources;
-	}
-
-	public void setPersonFundingSources(
-			Set<PersonFundingSource> personFundingSources) {
-		this.personFundingSources = personFundingSources;
-	}
-
-	public Set<PersonChallenge> getPersonChallenges() {
-		return personChallenges;
-	}
-
-	public void setPersonChallenges(Set<PersonChallenge> personChallenges) {
-		this.personChallenges = personChallenges;
-	}
-
 }
