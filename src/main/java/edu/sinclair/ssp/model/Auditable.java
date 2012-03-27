@@ -15,6 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @MappedSuperclass
@@ -23,7 +24,10 @@ public abstract class Auditable {
 	@Id
 	@Type(type = "pg-uuid")
 	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@GenericGenerator(name = "uuid", strategy = "uuid2",
+	parameters = { @Parameter(
+			name = "uuid_gen_strategy_class",
+			value = "org.hibernate.id.uuid.CustomVersionOneStrategy") })
 	private UUID id;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -105,6 +109,7 @@ public abstract class Auditable {
 		this.objectStatus = objectStatus;
 	}
 
+	@Override
 	public String toString() {
 		if (null != id) {
 			return id.toString();
