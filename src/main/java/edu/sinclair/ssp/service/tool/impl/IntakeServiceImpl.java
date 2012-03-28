@@ -109,20 +109,19 @@ public class IntakeServiceImpl implements IntakeService {
 				PersonDemographics demo = source.getPerson().getDemographics();
 				target.getDemographics().overwrite(
 						demo,
-						demo == null || demo.getMaritalStatus() == null ? null
+						demo.getMaritalStatus() == null ? null
 								: maritalStatusService.get(demo
 										.getMaritalStatus().getId()),
-						demo == null || demo.getEthnicity() == null ? null
-								: ethnicityService.get(demo.getEthnicity()
-										.getId()),
-						demo == null || demo.getCitizenship() == null ? null
+						demo.getEthnicity() == null ? null : ethnicityService
+								.get(demo.getEthnicity().getId()),
+						demo.getCitizenship() == null ? null
 								: citizenshipService.get(demo.getCitizenship()
 										.getId()),
-						demo == null || demo.getVeteranStatus() == null ? null
+						demo.getVeteranStatus() == null ? null
 								: veteranStatusService.get(demo
 										.getVeteranStatus().getId()),
-						demo == null || demo.getCoach() == null ? null
-								: personService.get(demo.getCoach().getId()));
+						demo.getCoach() == null ? null : personService.get(demo
+								.getCoach().getId()));
 			}
 		}
 

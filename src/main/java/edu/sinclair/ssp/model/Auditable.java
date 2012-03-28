@@ -35,10 +35,7 @@ public abstract class Auditable {
 	@Id
 	@Type(type = "pg-uuid")
 	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2",
-	parameters = { @Parameter(
-			name = "uuid_gen_strategy_class",
-			value = "org.hibernate.id.uuid.CustomVersionOneStrategy") })
+	@GenericGenerator(name = "uuid", strategy = "uuid2", parameters = { @Parameter(name = "uuid_gen_strategy_class", value = "org.hibernate.id.uuid.CustomVersionOneStrategy") })
 	private UUID id;
 
 	/**
@@ -55,7 +52,7 @@ public abstract class Auditable {
 	 * {@link edu.sinclair.ssp.transferobject.AuditableTO#fromModel(edu.sinclair.ssp.model.Auditable)}
 	 * pulls the ID from the full Person object and would require an extra
 	 * lookup for every entity sent through the Controllers (or anything that
-	 * uses Auditable transfer objects).
+	 * uses {@link Auditable} transfer objects).
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, updatable = false)
