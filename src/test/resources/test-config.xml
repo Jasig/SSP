@@ -20,8 +20,8 @@
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
 		<property name="dataSource">
 			<bean class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-				<property name="driverClass" value="org.postgresql.Driver" />
-				<property name="url" value="jdbc:postgresql://#{configProperties.db_host}:#{configProperties.db_port}/#{configProperties.db_name}" />
+				<property name="driverClass" value="#{configProperties.db_driver_class}" />
+				<property name="url" value="#{configProperties.db_url}" />
 				<property name="username" value="#{configProperties.db_admin_username}" />
 				<property name="password" value="#{configProperties.db_admin_password}" />
 			</bean>
@@ -44,9 +44,14 @@
 		<property name="entityInterceptor" >
 			<bean class="edu.sinclair.ssp.dao.AuditableEntityInterceptor"/>
 		</property>
+		<!-- property name="mappingResources">
+			<array>
+				<value>mappings.xml</value> 
+			</array>
+		</property -->
 		<property name="hibernateProperties">
 			<value>
-				hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+				hibernate.dialect=#{configProperties.db_dialect}
 				hibernate.show_sql=false
 			</value>
 		</property>
@@ -56,8 +61,8 @@
 	</bean>
 	
 	<bean id="sspDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="org.postgresql.Driver" />
-		<property name="url" value="jdbc:postgresql://#{configProperties.db_host}:#{configProperties.db_port}/#{configProperties.db_name}" />
+		<property name="driverClassName" value="#{configProperties.db_driver_class}" />
+		<property name="url" value="#{configProperties.db_url}" />
 		<property name="username" value="#{configProperties.db_username}" />
 		<property name="password" value="#{configProperties.db_password}" />
 		<property name="validationQuery" value="select 1" />

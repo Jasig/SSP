@@ -30,64 +30,15 @@
 			</column>
 		</addColumn>
 		<addNotNullConstraint tableName="person"
-			columnName="created_date" />
+			columnName="created_date" columnDataType="datetime"/>
 		<addNotNullConstraint tableName="person"
-			columnName="modified_date" />
+			columnName="modified_date" columnDataType="datetime"/>
 		<addNotNullConstraint tableName="person"
-			columnName="created_by" />
+			columnName="created_by" columnDataType="uuid"/>
 		<addNotNullConstraint tableName="person"
-			columnName="modified_by" />
+			columnName="modified_by" columnDataType="uuid"/>
 		<addNotNullConstraint tableName="person"
-			columnName="object_status" />
-	</changeSet>
-
-	<changeSet author='shawn.gormley'
-		id='Modify Name field length in Reference tables.'>
-		<!-- Adjust data length on reference tables to accommodate longer admin 
-			entries. -->
-		<modifyDataType tableName="challenge" columnName="name"
-			newDataType="character varying(50)" />
-		<modifyDataType tableName="child_care_arrangement"
-			columnName="name" newDataType="character varying(50)" />
-		<modifyDataType tableName="citizenship" columnName="name"
-			newDataType="character varying(50)" />
-		<modifyDataType tableName="education_goal" columnName="name"
-			newDataType="character varying(50)" />
-		<modifyDataType tableName="education_level" columnName="name"
-			newDataType="character varying(50)" />
-		<modifyDataType tableName="ethnicity" columnName="name"
-			newDataType="character varying(50)" />
-		<modifyDataType tableName="funding_source" columnName="name"
-			newDataType="character varying(50)" />
-		<modifyDataType tableName="marital_status" columnName="name"
-			newDataType="character varying(50)" />
-		<modifyDataType tableName="student_status" columnName="name"
-			newDataType="character varying(50)" />
-		<modifyDataType tableName="veteran_status" columnName="name"
-			newDataType="character varying(50)" />
-
-		<rollback>
-			<modifyDataType tableName="challenge" columnName="name"
-				newDataType="character varying(25)" />
-			<modifyDataType tableName="child_care_arrangement"
-				columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="citizenship" columnName="name"
-				newDataType="character varying(25)" />
-			<modifyDataType tableName="education_goal" columnName="name"
-				newDataType="character varying(25)" />
-			<modifyDataType tableName="education_level"
-				columnName="name" newDataType="character varying(25)" />
-			<modifyDataType tableName="ethnicity" columnName="name"
-				newDataType="character varying(25)" />
-			<modifyDataType tableName="funding_source" columnName="name"
-				newDataType="character varying(25)" />
-			<modifyDataType tableName="marital_status" columnName="name"
-				newDataType="character varying(25)" />
-			<modifyDataType tableName="student_status" columnName="name"
-				newDataType="character varying(25)" />
-			<modifyDataType tableName="veteran_status" columnName="name"
-				newDataType="character varying(25)" />
-		</rollback>
+			columnName="object_status" columnDataType="int"/>
 	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add person_demographics table'>
@@ -111,10 +62,6 @@
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
-			</column>
-			<column name="person_id" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="person_demographics_person_person_id" references="person(id)" />
 			</column>
 			<column name="ability_to_benefit" type="boolean"
 				defaultValueBoolean="false" />
@@ -209,19 +156,15 @@
 			</column>
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" foreignKeyName="person_education_goal_created_by"
+				<constraints nullable="false" foreignKeyName="person_education_goal_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="person_education_goal_modified_by" references="person(id)" />
+					foreignKeyName="person_education_goal_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
-			</column>
-			<column name="person_id" type="uuid">
-				<constraints nullable="false" foreignKeyName="person_education_goal_person_id"
-					references="person(id)" />
 			</column>
 			<column name="description" type="character varying(50)">
 				<constraints nullable="true" />
@@ -234,7 +177,7 @@
 			</column>
 			<column name="education_goal_id" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="person_education_goal_education_goal_id"
+					foreignKeyName="person_education_goal_education_goal_id_education_goal_id"
 					references="education_goal(id)" />
 			</column>
 		</createTable>
@@ -274,10 +217,6 @@
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
-			<column name="person_id" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="person_education_plan_person_person_id" references="person(id)" />
-			</column>
 			<column name="new_orientation_complete" type="boolean" />
 			<column name="registered_for_classes" type="boolean" />
 			<column name="college_degree_for_parents" type="boolean" />
@@ -287,12 +226,12 @@
 			</column>
 			<column name="student_status_id" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="person_education_plan_student_status_id"
+					foreignKeyName="person_education_plan_student_status_id_student_status_id"
 					references="student_status(id)" />
 			</column>
 		</createTable>
 
-		<sql>grant all on person_education_goal to ssp</sql>
+		<sql>grant all on person_education_plan to ssp</sql>
 		<rollback>
 			<dropTable tableName="person_education_plan" />
 		</rollback>
@@ -328,14 +267,14 @@
 			</column>
 			<column name="person_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="person_challenge_person_person_id" references="person(id)" />
+					foreignKeyName="person_challenge_person_id_person_id" references="person(id)" />
 			</column>
 			<column name="description" type="character varying(255)">
 				<constraints nullable="true" />
 			</column>
 			<column name="challenge_id" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="person_challenge_challenge_challenge_id"
+					foreignKeyName="person_challenge_challenge_id_challenge_id"
 					references="challenge(id)" />
 			</column>
 		</createTable>
@@ -377,15 +316,15 @@
 			</column>
 			<column name="person_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="person_education_level_person_person_id"
+					foreignKeyName="person_education_level_person_id_person_id"
 					references="person(id)" />
 			</column>
 			<column name="description" type="character varying(255)">
 				<constraints nullable="true" />
 			</column>
-			<column name="challenge_id" type="uuid">
+			<column name="education_level_id" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="person_education_level_education_level_education_level_id"
+					foreignKeyName="person_education_level_education_level_id_education_level_id"
 					references="education_level(id)" />
 			</column>
 		</createTable>
@@ -432,9 +371,9 @@
 			<column name="description" type="character varying(255)">
 				<constraints nullable="true" />
 			</column>
-			<column name="challenge_id" type="uuid">
+			<column name="funding_source_id" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="person_funding_source_funding_source_funding_source_id"
+					foreignKeyName="person_funding_source_funding_source_id_funding_source_id"
 					references="funding_source(id)" />
 			</column>
 		</createTable>
@@ -453,7 +392,7 @@
 	</changeSet>
 
 	<changeSet author='jon.adams'
-		id='Move one-to-one association foreign keys to Person'>
+		id='Add one-to-one association foreign keys to Person'>
 		<addColumn tableName="person">
 			<column name="person_demographics_id" type="uuid">
 				<constraints nullable="true" foreignKeyName="person_person_demographics_id"
@@ -469,53 +408,10 @@
 			</column>
 		</addColumn>
 
-		<dropColumn tableName="person_demographics" columnName="person_id" />
-		<dropColumn tableName="person_education_goal" columnName="person_id" />
-		<dropColumn tableName="person_education_plan" columnName="person_id" />
-
 		<rollback>
-
 			<dropColumn tableName="person" columnName="person_demographics_id" />
 			<dropColumn tableName="person" columnName="person_education_goal_id" />
 			<dropColumn tableName="person" columnName="person_education_plan_id" />
-
-			<addColumn tableName="person_demographics">
-				<column name="person_id" type="uuid">
-					<constraints nullable="false"
-						foreignKeyName="person_demographics_person_person_id" references="person(id)" />
-				</column>
-				<column name="person_id" type="uuid">
-					<constraints nullable="false" foreignKeyName="person_education_goal_person_id"
-						references="person(id)" />
-				</column>
-				<column name="person_id" type="uuid">
-					<constraints nullable="false"
-						foreignKeyName="person_education_plan_person_person_id"
-						references="person(id)" />
-				</column>
-			</addColumn>
-		</rollback>
-	</changeSet>
-
-	<changeSet author="jon.adams"
-		id="Fix typo in grant statement for person_education_plan">
-		<sql>grant all on person_education_plan to ssp</sql>
-		<rollback>
-			<sql>REVOKE all on person_education_plan from ssp</sql>
-		</rollback>
-	</changeSet>
-
-	<changeSet author='jon.adams' id="Fix some column name typos">
-		<renameColumn tableName="person_education_level"
-			oldColumnName="challenge_id" newColumnName="education_level_id" />
-		<renameColumn tableName="person_funding_source"
-			oldColumnName="challenge_id" newColumnName="funding_source_id" />
-
-		<rollback>
-			<renameColumn tableName="person_education_level"
-				oldColumnName="education_level_id" newColumnName="challenge_id" />
-			<renameColumn tableName="person_funding_source"
-				oldColumnName="funding_source_id" newColumnName="challenge_id" />
 		</rollback>
 	</changeSet>
 

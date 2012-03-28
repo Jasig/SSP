@@ -42,29 +42,6 @@
 		</modifySql>
 	</changeSet>
 
-	<changeSet author='daniel.bower' id='Add reference tables'>
-		<createTable tableName="challenge">
-			<column name="id" type="uuid">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
-			<column name="name" type="character varying(25)">
-				<constraints nullable="false" />
-			</column>
-			<column name="description" type="character varying(150)">
-				<constraints nullable="true" />
-			</column>
-			<column name="optlock" type="int">
-				<constraints nullable="false" />
-			</column>
-		</createTable>
-		
-		<sql>grant all on challenge to ssp</sql>
-		<rollback>
-			<dropTable tableName="challenge"/>
-		</rollback>
-		
-	</changeSet>
-
 	<changeSet id="person table" author="daniel.bower">
 		<createTable tableName="person">
 			<column name="id" type="uuid">
@@ -131,8 +108,17 @@
 		
 	</changeSet>
 
-	<changeSet id="additional std props for ref tables" author="daniel.bower">
-		<addColumn tableName="challenge">
+	<changeSet author='daniel.bower' id='Add reference tables'>
+		<createTable tableName="challenge">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="character varying(150)">
+				<constraints nullable="true" />
+			</column>
 			<column name="created_date" type="datetime">
 				<constraints nullable="false"/>
 			</column>
@@ -149,15 +135,21 @@
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
-		</addColumn>
+		</createTable>
 		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+		<sql>grant all on challenge to ssp</sql>
+		<rollback>
+			<dropTable tableName="challenge"/>
+		</rollback>
+		
 		<modifySql dbms="postgresql">
+			<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
+		Specifying "Without" timezone-->
 			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
 		</modifySql>
 	</changeSet>
-	
+
+
 	<changeSet id="create system person" author="">
 		<insert tableName="person">
 			<column name="id" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -181,27 +173,13 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
-	<changeSet author='daniel.bower' id='drop optimistic locking for now'>
-		<dropColumn tableName="challenge" columnName="optlock"/>
-		<rollback>
-			<addColumn tableName="challenge">
-				<column name="optlock" type="int" valueNumeric="0">
-					<constraints nullable="false" />
-				</column>
-			</addColumn>
-		</rollback>
-	</changeSet>
-
-	<!-- Insert reference data with the creatTable's of the other types? -->
-
 
 	<changeSet author='daniel.bower' id='Add child_care_arrangement table'>
 		<createTable tableName="child_care_arrangement">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -243,7 +221,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -285,7 +263,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -327,7 +305,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -369,7 +347,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -411,7 +389,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -453,7 +431,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -495,7 +473,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -537,7 +515,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">

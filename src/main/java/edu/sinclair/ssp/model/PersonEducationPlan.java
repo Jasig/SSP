@@ -9,7 +9,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.StudentStatus;
@@ -24,7 +23,6 @@ import edu.sinclair.ssp.model.reference.StudentStatus;
  * @author jon.adams
  */
 @Entity
-@Table(name = "person_education_plan", schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class PersonEducationPlan extends Auditable implements Serializable {
 
