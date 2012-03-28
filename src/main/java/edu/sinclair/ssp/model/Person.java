@@ -28,8 +28,6 @@ import org.hibernate.validator.constraints.NotEmpty;
  * A Person entity.
  * 
  * Usually represents either a user of the backend system, or a student.
- * Students should have non-null demographics, challenges, etc., whereas a user
- * will not.
  * 
  * @author jon.adams
  */
