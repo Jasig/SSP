@@ -83,8 +83,8 @@ public class StudentStatusDao implements AuditableCrudDao<StudentStatus> {
 		}
 
 		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(StudentStatus.class)
-				.setFirstResult(firstResult).setMaxResults(maxResults);
+				.createCriteria(StudentStatus.class).setFirstResult(firstResult)
+				.setMaxResults(maxResults);
 
 		if (StringUtils.isEmpty(sortExpression)) {
 			query.addOrder(Order.asc("name"));

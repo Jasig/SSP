@@ -83,8 +83,8 @@ public class EducationGoalDao implements AuditableCrudDao<EducationGoal> {
 		}
 
 		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(EducationGoal.class)
-				.setFirstResult(firstResult).setMaxResults(maxResults);
+				.createCriteria(EducationGoal.class).setFirstResult(firstResult)
+				.setMaxResults(maxResults);
 
 		if (StringUtils.isEmpty(sortExpression)) {
 			query.addOrder(Order.asc("name"));

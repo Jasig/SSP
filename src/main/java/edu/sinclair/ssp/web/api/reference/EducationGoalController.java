@@ -41,6 +41,15 @@ public class EducationGoalController extends RestController<EducationGoalTO> {
 	private TransferObjectListFactory<EducationGoalTO, EducationGoal> listFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(
 			EducationGoalTO.class);
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @exception Exception
+	 *                Generic exception thrown if there were any errors.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
@@ -51,6 +60,41 @@ public class EducationGoalController extends RestController<EducationGoalTO> {
 			status = ObjectStatus.ACTIVE;
 		}
 		return listFactory.toTOList(service.getAll(status));
+	}
+
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @param firstResult
+	 *            First result (0-based index) to return. Parameter must be a
+	 *            positive, non-zero integer.
+	 * @param maxResults
+	 *            Maximum number of results to return. Parameter must be a
+	 *            positive, non-zero integer.
+	 * @param sortExpression
+	 *            Property name and ascending/descending keyword. If null or
+	 *            empty string, the default sort order will be used. Example
+	 *            sort expression: <code>propertyName ASC</code>
+	 * @exception Exception
+	 *                Generic exception thrown if there were any errors.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
+	@Override
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public @ResponseBody
+	List<EducationGoalTO> getAll(
+			@RequestParam(required = false) ObjectStatus status,
+			int firstResult, int maxResults,
+			@RequestParam(required = false) String sortExpression)
+			throws Exception {
+		if (status == null) {
+			status = ObjectStatus.ACTIVE;
+		}
+
+		return listFactory.toTOList(service.getAll(status, firstResult,
+				maxResults, sortExpression));
 	}
 
 	@Override

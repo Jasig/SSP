@@ -83,8 +83,8 @@ public class MaritalStatusDao implements AuditableCrudDao<MaritalStatus> {
 		}
 
 		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(MaritalStatus.class)
-				.setFirstResult(firstResult).setMaxResults(maxResults);
+				.createCriteria(MaritalStatus.class).setFirstResult(firstResult)
+				.setMaxResults(maxResults);
 
 		if (StringUtils.isEmpty(sortExpression)) {
 			query.addOrder(Order.asc("name"));

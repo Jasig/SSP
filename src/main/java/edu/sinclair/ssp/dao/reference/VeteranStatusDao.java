@@ -83,8 +83,8 @@ public class VeteranStatusDao implements AuditableCrudDao<VeteranStatus> {
 		}
 
 		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(VeteranStatus.class)
-				.setFirstResult(firstResult).setMaxResults(maxResults);
+				.createCriteria(VeteranStatus.class).setFirstResult(firstResult)
+				.setMaxResults(maxResults);
 
 		if (StringUtils.isEmpty(sortExpression)) {
 			query.addOrder(Order.asc("name"));

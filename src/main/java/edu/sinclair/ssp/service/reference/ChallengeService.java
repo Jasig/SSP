@@ -10,6 +10,13 @@ import edu.sinclair.ssp.service.ObjectNotFoundException;
 
 public interface ChallengeService extends AuditableCrudService<Challenge> {
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	@Override
 	public List<Challenge> getAll(ObjectStatus status);
 
