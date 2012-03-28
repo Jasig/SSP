@@ -134,7 +134,7 @@ class Templater{
 					exampleFile.getFile().eachLine { String line ->
 						String newLine;
 						if(line.startsWith("@Table(name = ")){
-							newLine = """@Table(name = "${tableName}", schema = "public")"""
+							newLine = """@Table(name = "${tableName}")"""
 						}else{
 							newLine = line.replaceAll(modelName, newModelName)
 							newLine = newLine.replaceAll(camelCased(modelName), camelCased(newModelName))

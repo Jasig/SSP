@@ -8,7 +8,7 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet id="create 1st test person" author="daniel.bower">
+	<changeSet id="create test people" author="daniel.bower">
 		<insert tableName="person">
 			<column name="id" value="252de4a0-7c06-4254-b7d8-4ffc02fe81ff" />
 			<column name="first_name" value="Alan" />
@@ -60,21 +60,6 @@
 			<column name="photo_url" value="" />
 			<column name="school_id" value="ken.1" />
 		</insert>
-		
-		<rollback>
-			<delete tableName="person">
-				<where>id='252de4a0-7c06-4254-b7d8-4ffc02fe81ff'</where>
-			</delete>
-			<delete tableName="person">
-				<where>id='7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194'</where>
-			</delete>
-			<delete tableName="person">
-				<where>id='f549ecab-5110-4cc1-b2bb-369cac854dea'</where>
-			</delete>
-		</rollback>
-	</changeSet>
-
-	<changeSet id="create test student" author="daniel.bower">
 		<insert tableName="person">
 			<column name="id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
 			<column name="first_name" value="James" />
@@ -95,9 +80,18 @@
 		
 		<rollback>
 			<delete tableName="person">
+				<where>id='252de4a0-7c06-4254-b7d8-4ffc02fe81ff'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='f549ecab-5110-4cc1-b2bb-369cac854dea'</where>
+			</delete>
+			<delete tableName="person">
 				<where>id='1010e4a0-1001-0110-1011-4ffc02fe81ff'</where>
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 </databaseChangeLog>

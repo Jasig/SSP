@@ -11,8 +11,8 @@
 			<column name="id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
 			<column name="name" value="Test Challenge" />
 			<column name="description" value="This is a test challenge." />
-			<column name="created_date" value="2012-03-20 00:00:00-05" />
-			<column name="modified_date" value="2012-03-20 00:00:00-05" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
@@ -47,8 +47,8 @@
 			<column name="id" value="841652e8-7b80-41e7-9ef2-ce456d2606ca" />
 			<column name="name" value="Test Education Level" />
 			<column name="description" value="This is a test education level." />
-			<column name="created_date" value="2012-03-20 00:00:00-05" />
-			<column name="modified_date" value="2012-03-20 00:00:00-05" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
