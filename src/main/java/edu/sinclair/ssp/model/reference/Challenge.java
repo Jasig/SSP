@@ -14,7 +14,7 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Challenge extends AbstractReference implements Serializable {
 
-	private static final long serialVersionUID = -5460841184801377719L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor
