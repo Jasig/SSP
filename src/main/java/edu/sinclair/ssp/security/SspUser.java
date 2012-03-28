@@ -41,33 +41,34 @@ public class SspUser extends User {
 
 	@Override
 	public boolean equals(Object aThat) {
-		// check for self-comparison
-		if (this == aThat) {
-			return true;
-		}
-
-		if (!(aThat instanceof SspUser)) {
+		boolean res = false;
+		if (aThat == null) {
 			return false;
 		}
 
-		// cast to native object is now safe
-		SspUser that = (SspUser) aThat;
+		if (aThat == this) {
+			return true;
+		}
 
-		// now a proper field-by-field evaluation can be made
-		return (emailAddress == null
-				? (that.getEmailAddress() == null)
-						: emailAddress.equals(that.getEmailAddress()))
-						&& (person == null
-						? that.getPerson() == null
-						: person.equals(that.getPerson()));
+		if (aThat.getClass() == this.getClass()) {
+			// cast to native object is now safe
+			SspUser that = (SspUser) aThat;
+
+			// now a proper field-by-field evaluation can be made
+			return (emailAddress == null ? (that.getEmailAddress() == null)
+					: emailAddress.equals(that.getEmailAddress()))
+					&& (person == null ? that.getPerson() == null : person
+							.equals(that.getPerson()));
+		}
+		return res;
 	}
 
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 31)
-		// two randomly chosen prime numbers
-		// if deriving: appendSuper(super.hashCode()).
-		.appendSuper(super.hashCode()).append(emailAddress)
-		.append(person).toHashCode();
+				// two randomly chosen prime numbers
+				// if deriving: appendSuper(super.hashCode()).
+				.appendSuper(super.hashCode()).append(emailAddress)
+				.append(person).toHashCode();
 	}
 }

@@ -30,9 +30,10 @@ public class TransferObjectListFactory<T extends TransferObject<M>, M> {
 	/**
 	 * The Constructor requires the Class to be provided again in order to be
 	 * able to reflectively call the constructor. The factory requires that the
-	 * class have a no param constructor.
+	 * class have a no parameter constructor.
 	 * 
 	 * @param transferObjectClass
+	 *            Transfer object class
 	 */
 	public TransferObjectListFactory(Class<T> transferObjectClass) {
 		this.transferObjectClass = transferObjectClass;
@@ -40,6 +41,10 @@ public class TransferObjectListFactory<T extends TransferObject<M>, M> {
 
 	/**
 	 * Create a list of Transfer Objects from a Collection of Model Objects
+	 * 
+	 * @param from
+	 *            Original collection from which to transfer data.
+	 * @return Copied transfer objects
 	 */
 	public List<T> toTOList(Collection<M> from) {
 		List<T> toList = Lists.newArrayList();
@@ -62,6 +67,10 @@ public class TransferObjectListFactory<T extends TransferObject<M>, M> {
 
 	/**
 	 * Create a list of Model Objects from a Collection of Transfer Objects
+	 * 
+	 * @param from
+	 *            Original collection from which to transfer data.
+	 * @return Copied transfer objects
 	 */
 	public List<M> toModelList(Collection<T> from) {
 		List<M> mList = Lists.newArrayList();
@@ -71,6 +80,10 @@ public class TransferObjectListFactory<T extends TransferObject<M>, M> {
 
 	/**
 	 * Create a Set of Model Objects from a Collection of Transfer Objects
+	 * 
+	 * @param from
+	 *            Original collection from which to transfer data.
+	 * @return Copied transfer objects
 	 */
 	public Set<M> toModelSet(Collection<T> from) {
 		Set<M> mSet = Sets.newHashSet();

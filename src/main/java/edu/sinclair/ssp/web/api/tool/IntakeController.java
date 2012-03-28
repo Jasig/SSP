@@ -130,7 +130,15 @@ public class IntakeController {
 			VeteranStatusTO.class);
 
 	/**
-	 * Save changes to an Intake Form
+	 * Save changes to an IntakeForm
+	 * 
+	 * @param studentId
+	 *            Student identifier
+	 * @param intakeForm
+	 *            Incoming data
+	 * @exception Exception
+	 *                Any errors will throw this generic exception.
+	 * @return Service response with success value, in the JSON format.
 	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.PUT)
 	public @ResponseBody
@@ -142,8 +150,14 @@ public class IntakeController {
 	}
 
 	/**
-	 * Using the studentId passed, return the intake form in its current state,
+	 * Using the studentId passed, return the IntakeForm in its current state,
 	 * creating it if necessary.
+	 * 
+	 * @param studentId
+	 *            Student identifier
+	 * @exception Exception
+	 *                Any errors will throw this generic exception.
+	 * @return Service response with success value, in the JSON format.
 	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
 	public @ResponseBody
@@ -155,6 +169,10 @@ public class IntakeController {
 
 	/**
 	 * Return all the data that is necessary to complete an intake form.
+	 * 
+	 * @exception Exception
+	 *                Any errors will throw this generic exception.
+	 * @return Service response with success value, in the JSON format.
 	 */
 	public Map<String, Object> referenceData() throws Exception {
 		Map<String, Object> refData = new HashMap<String, Object>();
@@ -190,6 +208,10 @@ public class IntakeController {
 
 	/**
 	 * Wraps any Exceptions in a {@link ServiceResponse}
+	 * 
+	 * @param e
+	 *            Exception to handle
+	 * @return Service response with success value, in the JSON format.
 	 */
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody

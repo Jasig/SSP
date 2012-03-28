@@ -1,48 +1,44 @@
 package edu.sinclair.ssp.dao;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.sinclair.ssp.model.Auditable;
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
 
-/**
- * CRUD methods for the Person model.
- * <p>
- * Default sort order is <code>lastName</code> then <code>firstName</code>.
- */
-@Repository
-public class PersonDao extends AbstractAuditableCrudDao<Person> implements
-		AuditableCrudDao<Person> {
+public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
+		AuditableCrudDao<T> {
+	@Autowired
+	protected SessionFactory sessionFactory;
 
-	/**
-	 * Constructor
-	 */
-	public PersonDao() {
-		super(Person.class);
+	protected Class<T> persistentClass;
+
+	protected AbstractAuditableCrudDao(Class<T> persistentClass) {
+		this.persistentClass = persistentClass;
 	}
 
 	/**
 	 * Return all entities in the database, filtered only by the specified
-	 * parameters. Sorted by <code>lastName</code> then <code>firstName</code>.
+	 * parameters.
 	 * 
 	 * @param status
-	 *            Object status filter
+	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
+	 *            return all results.
 	 * @return All entities in the database, filtered only by the specified
 	 *         parameters.
 	 */
-	@Override
 	@SuppressWarnings("unchecked")
-	public List<Person> getAll(ObjectStatus status) {
-		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(super.persistentClass)
-				.addOrder(Order.asc("lastName"))
-				.addOrder(Order.asc("firstName"));
+	@Override
+	public List<T> getAll(ObjectStatus status) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				persistentClass);
 
 		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
@@ -73,8 +69,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Person> getAll(ObjectStatus status, int firstResult,
-			int maxResults, String sortExpression) {
+	public List<T> getAll(ObjectStatus status, int firstResult, int maxResults,
+			String sortExpression) {
 		if (firstResult < 0) {
 			throw new IllegalArgumentException(
 					"firstResult must be 0 or greater.");
@@ -86,21 +82,20 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 
 		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(super.persistentClass)
+				.createCriteria(this.persistentClass)
 				.setFirstResult(firstResult).setMaxResults(maxResults);
 
-		if (StringUtils.isEmpty(sortExpression)) {
-			query.addOrder(Order.asc("lastName")).addOrder(
-					Order.asc("firstName"));
-		} else if (StringUtils.endsWithIgnoreCase(sortExpression, "asc")) {
-			query.addOrder(Order.asc(StringUtils.substringBefore(
-					sortExpression, " ")));
-		} else if (StringUtils.endsWithIgnoreCase(sortExpression, "desc")) {
-			query.addOrder(Order.desc(StringUtils.substringBefore(
-					sortExpression, " ")));
-		} else {
-			throw new IllegalArgumentException(
-					"Invalid sort expression. Must be in the form of \"propertyName ASC\" or \"propertyName DESC\".");
+		if (StringUtils.isNotEmpty(sortExpression)) {
+			if (StringUtils.endsWithIgnoreCase(sortExpression, "asc")) {
+				query.addOrder(Order.asc(StringUtils.substringBefore(
+						sortExpression, " ")));
+			} else if (StringUtils.endsWithIgnoreCase(sortExpression, "desc")) {
+				query.addOrder(Order.desc(StringUtils.substringBefore(
+						sortExpression, " ")));
+			} else {
+				throw new IllegalArgumentException(
+						"Invalid sort expression. Must be in the form of \"propertyName ASC\" or \"propertyName DESC\".");
+			}
 		}
 
 		if (status != ObjectStatus.ALL) {
@@ -110,10 +105,27 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return query.list();
 	}
 
-	public Person fromUsername(String username) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(
-				Person.class);
-		query.add(Restrictions.eq("username", username));
-		return (Person) query.uniqueResult();
+	@SuppressWarnings("unchecked")
+	@Override
+	public T get(UUID id) {
+		return (T) sessionFactory.getCurrentSession().get(this.persistentClass,
+				id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T save(T obj) {
+		if (obj.getId() != null) {
+			obj = (T) sessionFactory.getCurrentSession().merge(obj);
+		} else {
+			sessionFactory.getCurrentSession().saveOrUpdate(obj);
+		}
+
+		return obj;
+	}
+
+	@Override
+	public void delete(T obj) {
+		sessionFactory.getCurrentSession().delete(obj);
 	}
 }
