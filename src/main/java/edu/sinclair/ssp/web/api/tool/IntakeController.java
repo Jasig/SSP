@@ -101,34 +101,50 @@ public class IntakeController {
 
 	private TransferObjectListFactory<ChallengeTO, Challenge> challengeToFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(
 			ChallengeTO.class);
+
 	private TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> childCareArrangementToFactory = new TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement>(
 			ChildCareArrangementTO.class);
+
 	private TransferObjectListFactory<CitizenshipTO, Citizenship> citizenshipToFactory = new TransferObjectListFactory<CitizenshipTO, Citizenship>(
 			CitizenshipTO.class);
+
 	private TransferObjectListFactory<EducationGoalTO, EducationGoal> educationGoalToFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(
 			EducationGoalTO.class);
+
 	private TransferObjectListFactory<EducationLevelTO, EducationLevel> educationLevelToFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(
 			EducationLevelTO.class);
+
 	private TransferObjectListFactory<EthnicityTO, Ethnicity> ethnicityToFactory = new TransferObjectListFactory<EthnicityTO, Ethnicity>(
 			EthnicityTO.class);
+
 	private TransferObjectListFactory<FundingSourceTO, FundingSource> fundingSourceToFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(
 			FundingSourceTO.class);
+
 	private TransferObjectListFactory<MaritalStatusTO, MaritalStatus> maritalStatusToFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(
 			MaritalStatusTO.class);
+
 	private TransferObjectListFactory<StudentStatusTO, StudentStatus> studentStatusToFactory = new TransferObjectListFactory<StudentStatusTO, StudentStatus>(
 			StudentStatusTO.class);
+
 	private TransferObjectListFactory<VeteranStatusTO, VeteranStatus> veteranStatusToFactory = new TransferObjectListFactory<VeteranStatusTO, VeteranStatus>(
 			VeteranStatusTO.class);
 
+	/**
+	 * Save changes to an Intake Form
+	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.PUT)
 	public @ResponseBody
 	ServiceResponse save(@PathVariable UUID studentId,
-			@Valid @RequestBody IntakeFormTO obj) throws Exception {
-		IntakeForm model = obj.asModel();
+			@Valid @RequestBody IntakeFormTO intakeForm) throws Exception {
+		IntakeForm model = intakeForm.asModel();
 		model.getPerson().setId(studentId);
 		return new ServiceResponse(service.save(model));
 	}
 
+	/**
+	 * Using the studentId passed, return the intake form in its current state,
+	 * creating it if necessary.
+	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
 	public @ResponseBody
 	IntakeFormTO load(@PathVariable UUID studentId) throws Exception {
@@ -137,6 +153,9 @@ public class IntakeController {
 		return formTO;
 	}
 
+	/**
+	 * Return all the data that is necessary to complete an intake form.
+	 */
 	public Map<String, Object> referenceData() throws Exception {
 		Map<String, Object> refData = new HashMap<String, Object>();
 
@@ -169,6 +188,9 @@ public class IntakeController {
 		return refData;
 	}
 
+	/**
+	 * Wraps any Exceptions in a {@link ServiceResponse}
+	 */
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody
 	ServiceResponse handle(Exception e) {

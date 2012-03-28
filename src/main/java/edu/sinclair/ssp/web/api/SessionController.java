@@ -13,6 +13,9 @@ import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
 
+/**
+ * Allows the logged in user to get their profile
+ */
 @Controller
 @RequestMapping("/session")
 public class SessionController {

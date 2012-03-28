@@ -19,14 +19,22 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 /**
- * A base class that most entities in the system inherit, to provide common
- * fields.
+ * <p>
+ * A base class that most entities in the system inherit, that allow the system
+ * to track the most recent action to occur on an object. Auditable objects are
+ * always persisted, so they additionally have an id property.
+ * </p>
  * 
+ * <p>
  * Common fields include a primary key identifier, creation/modification author
  * and timestamps, and object status.
+ * </p>
  * 
+ * <p>
  * {@link edu.sinclair.ssp.dao.AuditableEntityInterceptor} will automatically
- * fill the creation/modification stamps as appropriate.
+ * fill the creation/modification stamps as appropriate in the persistence
+ * layer.
+ * </p>
  * 
  * @author daniel.bower
  */

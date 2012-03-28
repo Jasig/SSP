@@ -79,8 +79,7 @@ public class PersonChallenge extends Auditable implements Serializable {
 	}
 
 	/**
-	 * Overwrites simple properties with the parameter's properties. Does not
-	 * include the Enabled property.
+	 * Overwrites simple properties with the parameter's properties.
 	 * 
 	 * @param source
 	 *            Source to use for overwrites.

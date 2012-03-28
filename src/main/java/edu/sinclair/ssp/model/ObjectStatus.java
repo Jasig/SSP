@@ -21,23 +21,18 @@ public enum ObjectStatus {
 	ALL,
 
 	/**
-	 * Valid, active user or student. Has appropriate access for their security
-	 * level.
+	 * Object is appropriate for use in creating/editing records.
 	 */
 	ACTIVE,
 
 	/**
-	 * Inactive account, so they may not authenticate into the system. However,
-	 * any account in this status will still be shown in administrative views,
-	 * with the purpose of allowing the account to be re-enabled in the future,
-	 * or continue to be shown in references to any history for this user.
+	 * Object is not appropriate for use in creating/editing records.
 	 */
 	INACTIVE,
 
 	/**
-	 * Indicates that the account should no longer be shown in any view. Not
-	 * completely removed from the database, but should never be seen in any
-	 * user or administrator view in the system or API.
+	 * Object has been removed, and should not be used in creating/editing
+	 * records
 	 */
 	DELETED;
 }
