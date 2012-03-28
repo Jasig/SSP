@@ -26,6 +26,12 @@ import edu.sinclair.ssp.transferobject.PersonTO;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
 import edu.sinclair.ssp.web.api.validation.ValidationException;
 
+/**
+ * Some basic methods for manipulating people in the system.
+ * 
+ * :TODO Lock down the methods in the class based on business requirements
+ * 
+ */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/person")
