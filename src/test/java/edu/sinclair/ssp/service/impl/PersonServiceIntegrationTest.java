@@ -2,9 +2,11 @@ package edu.sinclair.ssp.service.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.PersonChallenge;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
@@ -39,6 +42,35 @@ public class PersonServiceIntegrationTest {
 	@Before
 	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+	}
+
+	@Test
+	public void testGetAll() {
+		List<Person> list = service.getAll(ObjectStatus.ALL);
+		assertNotNull(list);
+		assertTrue("List should have included multiple entities.",
+				list.size() > 1);
+	}
+
+	@Test
+	public void testGetAllWithRowFilter() {
+		List<Person> listAll = service.getAll(ObjectStatus.ALL);
+		List<Person> listFiltered = service
+				.getAll(ObjectStatus.ALL, 1, 2, null);
+
+		assertNotNull(listAll);
+		assertTrue("List should have included multiple entities.",
+				listAll.size() > 2);
+
+		assertNotNull(listFiltered);
+		assertEquals("List should have included exactly 2 entities.", 2,
+				listFiltered.size());
+		assertEquals("List should have included exactly 2 entities.", 2,
+				listFiltered.size());
+
+		assertTrue(
+				"The filtered list should have included a different number of entities then the unfiltered list.",
+				listFiltered.size() != listAll.size());
 	}
 
 	@Test

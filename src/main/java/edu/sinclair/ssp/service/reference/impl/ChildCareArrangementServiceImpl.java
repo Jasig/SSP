@@ -32,6 +32,29 @@ public class ChildCareArrangementServiceImpl implements
 		return dao.getAll(status);
 	}
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @param firstResult
+	 *            First result (0-based index) to return. Parameter must be a
+	 *            positive, non-zero integer.
+	 * @param maxResults
+	 *            Maximum number of results to return. Parameter must be a
+	 *            positive, non-zero integer.
+	 * @param sortExpression
+	 *            Property name and ascending/descending keyword. If null or
+	 *            empty string, the default sort order will be used. Example
+	 *            sort expression: <code>propertyName ASC</code>
+	 * @return All entities in the database filtered by the supplied status.
+	 */
+	@Override
+	public List<ChildCareArrangement> getAll(ObjectStatus status,
+			int firstResult, int maxResults, String sortExpression) {
+		return dao.getAll(status, firstResult, maxResults, sortExpression);
+	}
+
 	@Override
 	public ChildCareArrangement get(UUID id) throws ObjectNotFoundException {
 		ChildCareArrangement obj = dao.get(id);

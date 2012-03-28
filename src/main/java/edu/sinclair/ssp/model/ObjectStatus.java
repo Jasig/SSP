@@ -15,12 +15,13 @@ public enum ObjectStatus {
 	 */
 
 	/**
-	 * All is a safety enum value. WARNING: This value should never be used!
+	 * ALL is used when filtering by this field, to allow all the ObjectStatus
+	 * values to be included.
 	 */
 	ALL,
 
 	/**
-	 * Valid, active user or student. Has appropraite access for their security
+	 * Valid, active user or student. Has appropriate access for their security
 	 * level.
 	 */
 	ACTIVE,
@@ -29,14 +30,14 @@ public enum ObjectStatus {
 	 * Inactive account, so they may not authenticate into the system. However,
 	 * any account in this status will still be shown in administrative views,
 	 * with the purpose of allowing the account to be re-enabled in the future,
-	 * or contintue to be shown in references to any history for this user.
+	 * or continue to be shown in references to any history for this user.
 	 */
 	INACTIVE,
 
 	/**
 	 * Indicates that the account should no longer be shown in any view. Not
 	 * completely removed from the database, but should never be seen in any
-	 * user or admin view in the system or API.
+	 * user or administrator view in the system or API.
 	 */
 	DELETED;
 }

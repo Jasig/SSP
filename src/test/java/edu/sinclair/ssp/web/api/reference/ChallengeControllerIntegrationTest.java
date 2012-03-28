@@ -47,7 +47,7 @@ public class ChallengeControllerIntegrationTest {
 	private SecurityServiceInTestEnvironment securityService;
 
 	/**
-	 * Setup the security service with the admin user for use by
+	 * Setup the security service with the administrator user for use by
 	 * {@link #testControllerCreateAndDelete()} that checks that the Auditable
 	 * auto-fill properties are correctly filled.
 	 */

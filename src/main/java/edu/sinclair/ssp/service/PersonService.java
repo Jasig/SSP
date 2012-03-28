@@ -27,6 +27,30 @@ public interface PersonService extends AuditableCrudService<Person> {
 	public List<Person> getAll(ObjectStatus status);
 
 	/**
+	 * Retrieve every Person instance in the database filtered by the supplied
+	 * status.
+	 * 
+	 * @param status
+	 *            Filter by this status, usually null or
+	 *            {@link ObjectStatus#DELETED}.
+	 * @param firstResult
+	 *            First result (0-based index) to return. Parameter must be a
+	 *            positive, non-zero integer.
+	 * @param maxResults
+	 *            Maximum number of results to return. Parameter must be a
+	 *            positive, non-zero integer.
+	 * @param sortExpression
+	 *            Property name and ascending/descending keyword. If null or
+	 *            empty string, the default sort order will be used. Example
+	 *            sort expression: <code>propertyName ASC</code>
+	 * @return List of all people in the database filtered by the supplied
+	 *         status.
+	 */
+	@Override
+	public List<Person> getAll(ObjectStatus status, int firstResult,
+			int maxResults, String sortExpression);
+
+	/**
 	 * Retrieves the specified Person.
 	 * 
 	 * @param id
