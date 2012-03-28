@@ -6,13 +6,11 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.FundingSource;
 
 @Entity
-@Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class PersonFundingSource extends Auditable {
 

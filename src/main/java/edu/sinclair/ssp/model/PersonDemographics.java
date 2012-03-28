@@ -9,7 +9,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.Citizenship;
@@ -20,7 +19,6 @@ import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 
 @Entity
-@Table(schema = "public")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class PersonDemographics extends Auditable {
 
