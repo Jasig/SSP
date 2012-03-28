@@ -12,6 +12,14 @@ import com.google.common.collect.Sets;
 
 import edu.sinclair.ssp.transferobject.TransferObject;
 
+/**
+ * Turn a list of Transfer Objects into Model Objects, and back again.
+ * 
+ * @param <T>
+ *            The Transfer Object Class
+ * @param <M>
+ *            The Model Object Class
+ */
 public class TransferObjectListFactory<T extends TransferObject<M>, M> {
 
 	private static final Logger logger = LoggerFactory
@@ -19,17 +27,27 @@ public class TransferObjectListFactory<T extends TransferObject<M>, M> {
 
 	private Class<T> transferObjectClass;
 
+	/**
+	 * The Constructor requires the Class to be provided again in order to be
+	 * able to reflectively call the constructor. The factory requires that the
+	 * class have a no param constructor.
+	 * 
+	 * @param transferObjectClass
+	 */
 	public TransferObjectListFactory(Class<T> transferObjectClass) {
 		this.transferObjectClass = transferObjectClass;
 	}
 
+	/**
+	 * Create a list of Transfer Objects from a Collection of Model Objects
+	 */
 	public List<T> toTOList(Collection<M> from) {
 		List<T> toList = Lists.newArrayList();
 
 		for (M m : from) {
 			T tObject;
 			try {
-				tObject = (T) transferObjectClass.newInstance();
+				tObject = transferObjectClass.newInstance();
 				tObject.pullAttributesFromModel(m);
 				toList.add(tObject);
 			} catch (InstantiationException e) {
@@ -42,21 +60,27 @@ public class TransferObjectListFactory<T extends TransferObject<M>, M> {
 		return toList;
 	}
 
-	public List<M> toModelList(List<T> from) {
+	/**
+	 * Create a list of Model Objects from a Collection of Transfer Objects
+	 */
+	public List<M> toModelList(Collection<T> from) {
 		List<M> mList = Lists.newArrayList();
-		for (TransferObject<M> c : from) {
-			mList.add(c.asModel());
-		}
-
+		toModelCollection(from, mList);
 		return mList;
 	}
 
+	/**
+	 * Create a Set of Model Objects from a Collection of Transfer Objects
+	 */
 	public Set<M> toModelSet(Collection<T> from) {
-		Set<M> mList = Sets.newHashSet();
-		for (TransferObject<M> c : from) {
-			mList.add(c.asModel());
-		}
+		Set<M> mSet = Sets.newHashSet();
+		toModelCollection(from, mSet);
+		return mSet;
+	}
 
-		return mList;
+	private void toModelCollection(Collection<T> from, Collection<M> to) {
+		for (TransferObject<M> c : from) {
+			to.add(c.asModel());
+		}
 	}
 }
