@@ -119,7 +119,7 @@ public abstract class AbstractReference extends Auditable {
 	 * @param source
 	 *            Source to use for overwrites.
 	 */
-	public void overwrite(@NotNull Challenge source) {
+	public void overwrite(@NotNull AbstractReference source) {
 		this.setName(source.getName());
 		this.setDescription(source.getDescription());
 	}
