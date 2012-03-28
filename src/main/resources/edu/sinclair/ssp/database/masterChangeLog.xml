@@ -20,4 +20,5 @@
 	
 	<include file="edu/sinclair/ssp/database/changesets/000002.xml"/>
 
+	<include file="edu/sinclair/ssp/database/changesets/000003.xml"/>
 </databaseChangeLog>
