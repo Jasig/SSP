@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog
-	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
@@ -25,6 +23,24 @@
 			</delete>
 		</rollback>
 	</changeSet>
+
+	<changeSet id="create test citizenship" author="jon.adams">
+		<insert tableName="citizenship">
+			<column name="id" value="76521a04-b531-4c25-b6a6-609f3a123456" />
+			<column name="name" value="I have a fiancé" />
+			<column name="description" value="__*̡͌l̡*̡̡ ̴̡ı̴̴̡ ̡̡͡|̲̲̲͡͡͡ ̲▫̲͡ ̲̲̲͡͡π̲̲͡͡ ̲̲͡▫̲̲͡͡ ̲|̡̡̡ ̡ ̴̡ı̴̡̡ *̡͌*̡͌l̡*̡̡ ̡__" />
+			<column name="created_date" value="2012-03-27 00:00:00-05" />
+			<column name="modified_date" value="2012-03-27 00:00:00-05" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="citizenship">
+				<where>id='76521a04-b531-4c25-b6a6-609f3a123456'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 	
 	<changeSet id="create test education level" author="daniel.bower">
 		<insert tableName="education_level">
@@ -43,4 +59,59 @@
 			</delete>
 		</rollback>
 	</changeSet>
+
+	<changeSet id="create test ethnicity" author="jon.adams">
+		<insert tableName="ethnicity">
+			<column name="id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
+			<column name="name" value="Test Ethnicity" />
+			<column name="description" value="This is a test ethnicity." />
+			<column name="created_date" value="2012-03-20 00:00:00-05" />
+			<column name="modified_date" value="2012-03-20 00:00:00-05" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="ethnicity">
+				<where>id='f6201a04-bb31-4ca5-b606-609f3ad09f87'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create test funding source" author="jon.adams">
+		<insert tableName="funding_source">
+			<column name="id" value="a6521a04-b531-4c25-b6a6-609f3a509f85" />
+			<column name="name" value="Test Funding Source" />
+			<column name="description" value="This is a test funding source" />
+			<column name="created_date" value="2012-03-27 00:00:00-05" />
+			<column name="modified_date" value="2012-03-27 00:00:00-05" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="funding_source">
+				<where>id='a6521a04-b531-4c25-b6a6-609f3a509f85'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create test marital status" author="jon.adams">
+		<insert tableName="marital_status">
+			<column name="id" value="76521a04-b531-4c25-b6a6-609f3a123456" />
+			<column name="name" value="I have a fiancé" />
+			<column name="description" value="This is a test marital status" />
+			<column name="created_date" value="2012-03-27 00:00:00-05" />
+			<column name="modified_date" value="2012-03-27 00:00:00-05" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="marital_status">
+				<where>id='76521a04-b531-4c25-b6a6-609f3a123456'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
 </databaseChangeLog>

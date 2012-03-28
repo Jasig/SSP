@@ -21,11 +21,11 @@ import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
-import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
+import edu.sinclair.ssp.transferobject.reference.FundingSourceTO;
 import edu.sinclair.ssp.web.api.validation.ValidationException;
 
 /**
- * Challenge controller tests
+ * FundingSource controller tests
  * 
  * @author daniel.bower
  */
@@ -33,15 +33,15 @@ import edu.sinclair.ssp.web.api.validation.ValidationException;
 @ContextConfiguration("../../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration
 @Transactional
-public class ChallengeControllerIntegrationTest {
+public class FundingSourceControllerIntegrationTest {
 
 	@Autowired
-	private ChallengeController controller;
+	private FundingSourceController controller;
 
-	private static final UUID CHALLENGE_ID = UUID
-			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
+	private static final UUID FundingSource_ID = UUID
+			.fromString("a6521a04-b531-4c25-b6a6-609f3a509f85");
 
-	private static final String CHALLENGE_NAME = "Test Challenge";
+	private static final String FundingSource_NAME = "Test Funding Source";
 
 	@Autowired
 	private SecurityServiceInTestEnvironment securityService;
@@ -57,7 +57,7 @@ public class ChallengeControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link ChallengeController#get(UUID)} action.
+	 * Test the {@link FundingSourceController#get(UUID)} action.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
@@ -68,19 +68,19 @@ public class ChallengeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		ChallengeTO obj = controller.get(CHALLENGE_ID);
+		FundingSourceTO obj = controller.get(FundingSource_ID);
 
 		assertNotNull(
-				"Returned ChallengeTO from the controller should not have been null.",
+				"Returned FundingSourceTO from the controller should not have been null.",
 				obj);
 
-		assertEquals("Returned Challenge.Name did not match.", CHALLENGE_NAME,
-				obj.getName());
+		assertEquals("Returned FundingSource.Name did not match.",
+				FundingSource_NAME, obj.getName());
 	}
 
 	/**
-	 * Test that the {@link ChallengeController#get(UUID)} action returns the
-	 * correct validation errors when an invalid ID is sent.
+	 * Test that the {@link FundingSourceController#get(UUID)} action returns
+	 * the correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
@@ -91,16 +91,16 @@ public class ChallengeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		ChallengeTO obj = controller.get(UUID.randomUUID());
+		FundingSourceTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
-				"Returned ChallengeTO from the controller should have been null.",
+				"Returned FundingSourceTO from the controller should have been null.",
 				obj);
 	}
 
 	/**
-	 * Test the {@link ChallengeController#create(ChallengeTO)} and
-	 * {@link ChallengeController#delete(UUID)} actions.
+	 * Test the {@link FundingSourceController#create(FundingSourceTO)} and
+	 * {@link FundingSourceController#delete(UUID)} actions.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
@@ -115,8 +115,8 @@ public class ChallengeControllerIntegrationTest {
 		String testString2 = "testString1";
 
 		// Check validation of 'no ID for create()'
-		ChallengeTO obj = new ChallengeTO(UUID.randomUUID(), testString1,
-				testString2);
+		FundingSourceTO obj = new FundingSourceTO(UUID.randomUUID(),
+				testString1, testString2);
 		try {
 			obj = controller.create(obj);
 			assertTrue(
@@ -126,21 +126,21 @@ public class ChallengeControllerIntegrationTest {
 			/* expected */
 		}
 
-		// Now create a valid Challenge
-		obj = new ChallengeTO(null, testString1, testString2);
+		// Now create a valid FundingSource
+		obj = new FundingSourceTO(null, testString1, testString2);
 		obj = controller.create(obj);
 
 		assertNotNull(
-				"Returned ChallengeTO from the controller should not have been null.",
+				"Returned FundingSourceTO from the controller should not have been null.",
 				obj);
 		assertNotNull(
-				"Returned ChallengeTO.ID from the controller should not have been null.",
+				"Returned FundingSourceTO.ID from the controller should not have been null.",
 				obj.getId());
 		assertEquals(
-				"Returned ChallengeTO.Name from the controller did not match.",
+				"Returned FundingSourceTO.Name from the controller did not match.",
 				testString1, obj.getName());
 		assertEquals(
-				"Returned ChallengeTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
+				"Returned FundingSourceTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
 				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedById());
 
 		assertTrue("Delete action did not return success.",
@@ -148,14 +148,14 @@ public class ChallengeControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link ChallengeController#getAll(ObjectStatus)} action.
+	 * Test the {@link FundingSourceController#getAll(ObjectStatus)} action.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE);
+		List<FundingSourceTO> list = controller.getAll(ObjectStatus.ACTIVE);
 
 		assertNotNull("List should not have been null.", list);
 		assertTrue("List action should have returned some objects.",
