@@ -1,0 +1,1199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="create reference data - ethnicity" author="daniel.bower">
+		<insert tableName="ethnicity">
+			<column name="id" value="9f73e1f0-66aa-47f6-a7bc-2daecb915207" />
+			<column name="name" value="African American/Black" />
+			<column name="description" value="African American/Black" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="ethnicity">
+			<column name="id" value="83e7967f-fc67-408c-929f-fc361eece175" />
+			<column name="name" value="Asian Pacific Islander" />
+			<column name="description" value="Asian Pacific Islander" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="ethnicity">
+			<column name="id" value="ff149156-a02f-4e9d-bfb2-ef9dfb32eef2" />
+			<column name="name" value="Caucasian/White" />
+			<column name="description" value="Caucasian/White" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="ethnicity">
+			<column name="id" value="79a9a1a7-35ff-459c-9fed-a233d9421761" />
+			<column name="name" value="Hispanic/Latino" />
+			<column name="description" value="Hispanic/Latino" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="ethnicity">
+			<column name="id" value="fa80f025-5405-4355-9747-84dd3fa66df6" />
+			<column name="name" value="Other" />
+			<column name="description" value="Other" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="ethnicity">
+			<column name="id" value="dec0364a-d576-424d-94ce-79544c21e8c8" />
+			<column name="name" value="Prefer Not To Answer" />
+			<column name="description" value="Prefer Not To Answer" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="ethnicity">
+			<column name="id" value="35efc2bd-c8df-4b2e-b821-43278fdd4839" />
+			<column name="name" value="American Indian/Alaskan Native" />
+			<column name="description" value="American Indian/Alaskan Native" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="ethnicity">
+				<where>id='9f73e1f0-66aa-47f6-a7bc-2daecb915207'</where>
+			</delete>
+			<delete tableName="ethnicity">
+				<where>id='83e7967f-fc67-408c-929f-fc361eece175'</where>
+			</delete>
+			<delete tableName="ethnicity">
+				<where>id='ff149156-a02f-4e9d-bfb2-ef9dfb32eef2'</where>
+			</delete>
+			<delete tableName="ethnicity">
+				<where>id='79a9a1a7-35ff-459c-9fed-a233d9421761'</where>
+			</delete>
+			<delete tableName="ethnicity">
+				<where>id='fa80f025-5405-4355-9747-84dd3fa66df6'</where>
+			</delete>
+			<delete tableName="ethnicity">
+				<where>id='dec0364a-d576-424d-94ce-79544c21e8c8'</where>
+			</delete>
+			<delete tableName="ethnicity">
+				<where>id='35efc2bd-c8df-4b2e-b821-43278fdd4839'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create reference data - challenge" author="daniel.bower">
+		<insert tableName="challenge">
+			<column name="id" value="07b5c3ac-3bdf-4d12-b65d-94cb55167998" />
+			<column name="name" value="Child or Adult Care" />
+			<column name="description" value="Child or Adult Care" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="33c6207a-3302-405f-8a2e-9d9bd750dac0" />
+			<column name="name" value="Classroom Issues" />
+			<column name="description" value="Classroom Issues" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="f067c6ca-50ad-447a-ad12-f47dffdce42e" />
+			<column name="name" value="Computer/Email" />
+			<column name="description" value="Computer/Email" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="6e4b6a6c-8b67-48df-ac7f-c9f225e872b8" />
+			<column name="name" value="Cultural Awareness Issues" />
+			<column name="description" value="Cultural Awareness Issues" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="7c0e5b76-9933-484a-b265-58cb280305a5" />
+			<column name="name" value="Finances - Education" />
+			<column name="description" value="Finances - Education" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="70693703-b2c1-4d3c-b79f-e43e93393b8c" />
+			<column name="name" value="Finances - Personal" />
+			<column name="description" value="Finances - Personal" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="fb206a68-78db-489d-9d5d-dce554f54eed" />
+			<column name="name" value="Grades" />
+			<column name="description" value="Grades" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="22d23035-74f0-40f1-ac41-47a22c798af7" />
+			<column name="name" value="Grief and Loss" />
+			<column name="description" value="Grief and Loss" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="2fd9ab0b-4afb-43d3-8ae2-5cf462c847e5" />
+			<column name="name" value="Housing/Shelter" />
+			<column name="description" value="Housing/Shelter" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="bd886899-96d5-4ec8-9d6c-3cb2d4e0f09b" />
+			<column name="name" value="Legal - Immigration" />
+			<column name="description" value="Legal - Immigration" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="72de7c95-eab3-46b2-93cf-108397befcbb" />
+			<column name="name" value="Maps/Directions" />
+			<column name="description" value="Maps/Directions" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="7ad819ef-d1e3-4ebf-a05b-e233f17f9e55" />
+			<column name="name" value="Motivation/Attitude" />
+			<column name="description" value="Motivation/Attitude" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="609527d4-e768-4caa-a65a-2bb3f3da2948" />
+			<column name="name" value="Physical Health" />
+			<column name="description" value="Physical Health" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="615225df-c3b7-4ae2-a828-6fad663c629b" />
+			<column name="name" value="Relationship Issues" />
+			<column name="description" value="Relationship Issues" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="5d6dc03f-b000-42b1-a078-253c55867ff1" />
+			<column name="name" value="Alcohol and/or Substance Abuse" />
+			<column name="description" value="Alcohol and/or Substance Abuse" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="cab7d5a5-2ca5-4af7-a644-b3882ddc9b41" />
+			<column name="name" value="Concentration (Poor Concentration)" />
+			<column name="description" value="Concentration (Poor Concentration)" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="af7e472c-3b7c-4d00-a667-04f52f560940" />
+			<column name="name" value="Emotions, Moods and Stress" />
+			<column name="description" value="Emotions, Moods and Stress" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="dbb8741c-ece0-4830-8ebf-774151cb6a1b" />
+			<column name="name" value="English as a Second Language" />
+			<column name="description" value="English as a Second Language" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="1f5b63a9-9b50-412b-9971-23602f87444c" />
+			<column name="name" value="Goals/Career Choices (Unclear)" />
+			<column name="description" value="Goals/Career Choices (Unclear)" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="c1428288-ec1e-432e-87df-6567d9618f42" />
+			<column name="name" value="Social Support (Lack of Support)" />
+			<column name="description" value="Social Support (Lack of Support)" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="6c34e91c-3ef3-4b3f-8061-fab1b7ff59ca" />
+			<column name="name" value="Steps to Begin Sinclair" />
+			<column name="description" value="Steps to Begin Sinclair" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="80c5b019-1946-4a98-a7fd-b8d62684558c" />
+			<column name="name" value="Study Resources" />
+			<column name="description" value="Study Resources" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="eb0dc2c0-3157-43c1-8b2e-55a5c2e2f4c3" />
+			<column name="name" value="Test Anxiety" />
+			<column name="description" value="Test Anxiety" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="431abcf2-43fe-4d6a-8f83-b47c91157a15" />
+			<column name="name" value="Time Management" />
+			<column name="description" value="Time Management" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="b9ac1cb5-d40a-4451-8ec2-08240698aaf3" />
+			<column name="name" value="Tired/Fatigue" />
+			<column name="description" value="Tired/Fatigue" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="38f7ae25-902f-4381-851e-2e2319adb1bd" />
+			<column name="name" value="Transportation" />
+			<column name="description" value="Transportation" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge">
+			<column name="id" value="43719c57-ec92-4e4a-9fb6-25208936fd18" />
+			<column name="name" value="Undecided Major or Career Field" />
+			<column name="description" value="Undecided Major or Career Field" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="challenge">
+				<where>id='07b5c3ac-3bdf-4d12-b65d-94cb55167998'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='33c6207a-3302-405f-8a2e-9d9bd750dac0'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='f067c6ca-50ad-447a-ad12-f47dffdce42e'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='6e4b6a6c-8b67-48df-ac7f-c9f225e872b8'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='7c0e5b76-9933-484a-b265-58cb280305a5'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='70693703-b2c1-4d3c-b79f-e43e93393b8c'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='fb206a68-78db-489d-9d5d-dce554f54eed'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='22d23035-74f0-40f1-ac41-47a22c798af7'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='2fd9ab0b-4afb-43d3-8ae2-5cf462c847e5'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='bd886899-96d5-4ec8-9d6c-3cb2d4e0f09b'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='72de7c95-eab3-46b2-93cf-108397befcbb'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='7ad819ef-d1e3-4ebf-a05b-e233f17f9e55'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='609527d4-e768-4caa-a65a-2bb3f3da2948'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='615225df-c3b7-4ae2-a828-6fad663c629b'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='5d6dc03f-b000-42b1-a078-253c55867ff1'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='cab7d5a5-2ca5-4af7-a644-b3882ddc9b41'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='af7e472c-3b7c-4d00-a667-04f52f560940'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='dbb8741c-ece0-4830-8ebf-774151cb6a1b'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='1f5b63a9-9b50-412b-9971-23602f87444c'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='c1428288-ec1e-432e-87df-6567d9618f42'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='6c34e91c-3ef3-4b3f-8061-fab1b7ff59ca'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='80c5b019-1946-4a98-a7fd-b8d62684558c'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='eb0dc2c0-3157-43c1-8b2e-55a5c2e2f4c3'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='431abcf2-43fe-4d6a-8f83-b47c91157a15'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='b9ac1cb5-d40a-4451-8ec2-08240698aaf3'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='38f7ae25-902f-4381-851e-2e2319adb1bd'</where>
+			</delete>
+			<delete tableName="challenge">
+				<where>id='43719c57-ec92-4e4a-9fb6-25208936fd18'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+<changeSet id="create reference data - funding_source" author="daniel.bower">
+	<insert tableName="funding_source">
+		<column name="id" value="e2ca9893-c808-47ce-bea5-3b9d97ae6626" />
+		<column name="name" value="Assistance Needed" />
+		<column name="description" value="Assistance Needed" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="77df68fe-2a5f-47ef-914b-d38774e5a485" />
+		<column name="name" value="Employer" />
+		<column name="description" value="Employer" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="41358be9-c202-4dda-b8ab-99cba9a9432f" />
+		<column name="name" value="Financial Aid" />
+		<column name="description" value="Financial Aid" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="db26cf97-02af-493a-a0e4-d3f7fa08629f" />
+		<column name="name" value="GI Bill" />
+		<column name="description" value="GI Bill" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="365e8c95-f356-4f1f-8d79-4771ae8b0291" />
+		<column name="name" value="Other" />
+		<column name="description" value="Other" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="80372221-b00b-4977-8c22-f908697b2762" />
+		<column name="name" value="Military Tuition Assistance" />
+		<column name="description" value="Military Tuition Assistance" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="86445dc9-3947-4e53-b91f-2a41cceeb0f4" />
+		<column name="name" value="Trade Adjustment Act (TAA)" />
+		<column name="description" value="Trade Adjustment Act (TAA)" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="425be625-78ce-4099-8920-e903dd19900a" />
+		<column name="name" value="Self" />
+		<column name="description" value="Self" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="9d36198b-eaa0-49e8-859a-ffaa646b318f" />
+		<column name="name" value="Parent/Other Relative" />
+		<column name="description" value="Parent/Other Relative" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="74f8b985-70a3-4379-991f-a660bb99ea9c" />
+		<column name="name" value="Federal Pell Grant" />
+		<column name="description" value="Federal Pell Grant" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="380c15c4-16d9-440b-9b32-6f909401eb8b" />
+		<column name="name" value="Workforce Investment Act" />
+		<column name="description" value="Workforce Investment Act" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="7321d900-39d1-47f3-82c6-f3c232e492aa" />
+		<column name="name" value="Student Loan" />
+		<column name="description" value="Student Loan" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="c0d24dd9-d6ce-4f22-99d0-ed12df8b8bd0" />
+		<column name="name" value="Scholarship" />
+		<column name="description" value="Scholarship" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="funding_source">
+		<column name="id" value="9e9d3655-74f7-45b4-9187-0536e4445ac0" />
+		<column name="name" value="Spousal Assistance" />
+		<column name="description" value="Spousal Assistance" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<rollback>
+		<delete tableName="funding_source">
+			<where>id='e2ca9893-c808-47ce-bea5-3b9d97ae6626'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='77df68fe-2a5f-47ef-914b-d38774e5a485'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='41358be9-c202-4dda-b8ab-99cba9a9432f'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='db26cf97-02af-493a-a0e4-d3f7fa08629f'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='365e8c95-f356-4f1f-8d79-4771ae8b0291'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='80372221-b00b-4977-8c22-f908697b2762'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='86445dc9-3947-4e53-b91f-2a41cceeb0f4'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='425be625-78ce-4099-8920-e903dd19900a'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='9d36198b-eaa0-49e8-859a-ffaa646b318f'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='74f8b985-70a3-4379-991f-a660bb99ea9c'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='380c15c4-16d9-440b-9b32-6f909401eb8b'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='7321d900-39d1-47f3-82c6-f3c232e492aa'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='c0d24dd9-d6ce-4f22-99d0-ed12df8b8bd0'</where>
+		</delete>
+		<delete tableName="funding_source">
+			<where>id='9e9d3655-74f7-45b4-9187-0536e4445ac0'</where>
+		</delete>
+	</rollback>
+</changeSet>
+<changeSet id="create reference data - education_level"
+	author="daniel.bower">
+	<insert tableName="education_level">
+		<column name="id" value="5d967ba0-e086-4426-85d5-29bc86da9295" />
+		<column name="name" value="No Diploma/No GED" />
+		<column name="description" value="No Diploma/No GED" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_level">
+		<column name="id" value="710add1c-7b53-4cbe-86cb-8d7c5837d68b" />
+		<column name="name" value="GED" />
+		<column name="description" value="GED" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_level">
+		<column name="id" value="742d0a11-2f4f-4f5c-bf30-ab5c4122e66e" />
+		<column name="name" value="Attending High School" />
+		<column name="description" value="Attending High School" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_level">
+		<column name="id" value="f4780d23-fd8a-4758-b772-18606dca32f0" />
+		<column name="name" value="High School Graduation" />
+		<column name="description" value="High School Graduation" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_level">
+		<column name="id" value="c5111182-9e2f-4252-bb61-d2cfa9700af7" />
+		<column name="name" value="Some College Credits" />
+		<column name="description" value="Some College Credits" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_level">
+		<column name="id" value="247165ae-3db4-4679-ac95-ca96488c3b27" />
+		<column name="name" value="Other" />
+		<column name="description" value="Other" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_level">
+		<column name="id" value="e79e6be0-80e2-40a6-a21e-7544b08f0bce" />
+		<column name="name" value="College Degree - 2 Year" />
+		<column name="description" value="College Degree - 2 Year" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_level">
+		<column name="id" value="459f4cb3-2274-4f47-b757-68b987f8707e" />
+		<column name="name" value="College Degree - 4 Year" />
+		<column name="description" value="College Degree - 4 Year" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<rollback>
+		<delete tableName="education_level">
+			<where>id='5d967ba0-e086-4426-85d5-29bc86da9295'</where>
+		</delete>
+		<delete tableName="education_level">
+			<where>id='710add1c-7b53-4cbe-86cb-8d7c5837d68b'</where>
+		</delete>
+		<delete tableName="education_level">
+			<where>id='742d0a11-2f4f-4f5c-bf30-ab5c4122e66e'</where>
+		</delete>
+		<delete tableName="education_level">
+			<where>id='f4780d23-fd8a-4758-b772-18606dca32f0'</where>
+		</delete>
+		<delete tableName="education_level">
+			<where>id='c5111182-9e2f-4252-bb61-d2cfa9700af7'</where>
+		</delete>
+		<delete tableName="education_level">
+			<where>id='247165ae-3db4-4679-ac95-ca96488c3b27'</where>
+		</delete>
+		<delete tableName="education_level">
+			<where>id='e79e6be0-80e2-40a6-a21e-7544b08f0bce'</where>
+		</delete>
+		<delete tableName="education_level">
+			<where>id='459f4cb3-2274-4f47-b757-68b987f8707e'</where>
+		</delete>
+	</rollback>
+</changeSet>
+<changeSet id="create reference data - education_goal" author="daniel.bower">
+	<insert tableName="education_goal">
+		<column name="id" value="9bf33704-e41e-4922-bc7f-07b98b276824" />
+		<column name="name" value="Uncertain" />
+		<column name="description" value="Uncertain" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_goal">
+		<column name="id" value="d25e224b-a0ca-48f0-ac30-1ddf5bdb9e0d" />
+		<column name="name" value="Associates Degree" />
+		<column name="description" value="Associates Degree" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_goal">
+		<column name="id" value="00afdf46-2f0e-46e4-9d56-bc45b9266642" />
+		<column name="name" value="Certificate" />
+		<column name="description" value="Certificate" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_goal">
+		<column name="id" value="5cccdca1-9a73-47e8-814f-134663a2ae67" />
+		<column name="name" value="Short Term Certificate" />
+		<column name="description" value="Short Term Certificate" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_goal">
+		<column name="id" value="efeb5536-d634-4b79-80bc-1e1041dcd3ff" />
+		<column name="name" value="Bachelor" />
+		<column name="description" value="Bachelor" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_goal">
+		<column name="id" value="d632046f-1fbf-4361-ac1e-3ca67f78e104" />
+		<column name="name" value="Workforce" />
+		<column name="description" value="Workforce" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_goal">
+		<column name="id" value="7e3e6f05-612c-4636-a370-7b038e98510f" />
+		<column name="name" value="Tech School" />
+		<column name="description" value="Tech School" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_goal">
+		<column name="id" value="6c466885-d3f8-44d1-a301-62d6fe2d3553" />
+		<column name="name" value="Military" />
+		<column name="description" value="Military" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="education_goal">
+		<column name="id" value="78b54da7-fb19-4092-bb44-f60485678d6b" />
+		<column name="name" value="Other" />
+		<column name="description" value="Other" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<rollback>
+		<delete tableName="education_goal">
+			<where>id='9bf33704-e41e-4922-bc7f-07b98b276824'</where>
+		</delete>
+		<delete tableName="education_goal">
+			<where>id='d25e224b-a0ca-48f0-ac30-1ddf5bdb9e0d'</where>
+		</delete>
+		<delete tableName="education_goal">
+			<where>id='00afdf46-2f0e-46e4-9d56-bc45b9266642'</where>
+		</delete>
+		<delete tableName="education_goal">
+			<where>id='5cccdca1-9a73-47e8-814f-134663a2ae67'</where>
+		</delete>
+		<delete tableName="education_goal">
+			<where>id='efeb5536-d634-4b79-80bc-1e1041dcd3ff'</where>
+		</delete>
+		<delete tableName="education_goal">
+			<where>id='d632046f-1fbf-4361-ac1e-3ca67f78e104'</where>
+		</delete>
+		<delete tableName="education_goal">
+			<where>id='7e3e6f05-612c-4636-a370-7b038e98510f'</where>
+		</delete>
+		<delete tableName="education_goal">
+			<where>id='6c466885-d3f8-44d1-a301-62d6fe2d3553'</where>
+		</delete>
+		<delete tableName="education_goal">
+			<where>id='78b54da7-fb19-4092-bb44-f60485678d6b'</where>
+		</delete>
+	</rollback>
+</changeSet>
+<changeSet id="create reference data - citizenship" author="daniel.bower">
+	<insert tableName="citizenship">
+		<column name="id" value="53c5efe6-c149-45d3-a719-6c8f1ac2e056" />
+		<column name="name" value="US Citizen" />
+		<column name="description" value="US Citizen" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="citizenship">
+		<column name="id" value="048459c9-8178-4822-b136-240cba86b5d7" />
+		<column name="name" value="Permanent Resident" />
+		<column name="description" value="Permanent Resident" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="citizenship">
+		<column name="id" value="66be33cb-ae0c-444f-8b3c-3e22a4cbc5cb" />
+		<column name="name" value="Naturalized Citizen" />
+		<column name="description" value="Naturalized Citizen" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="citizenship">
+		<column name="id" value="80c7c0b5-54d3-4e08-8102-f522f4c8f1af" />
+		<column name="name" value="International" />
+		<column name="description" value="International" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<rollback>
+		<delete tableName="citizenship">
+			<where>id='53c5efe6-c149-45d3-a719-6c8f1ac2e056'</where>
+		</delete>
+		<delete tableName="citizenship">
+			<where>id='048459c9-8178-4822-b136-240cba86b5d7'</where>
+		</delete>
+		<delete tableName="citizenship">
+			<where>id='66be33cb-ae0c-444f-8b3c-3e22a4cbc5cb'</where>
+		</delete>
+		<delete tableName="citizenship">
+			<where>id='80c7c0b5-54d3-4e08-8102-f522f4c8f1af'</where>
+		</delete>
+	</rollback>
+</changeSet>
+<changeSet id="create reference data - child_care_arrangement"
+	author="daniel.bower">
+	<insert tableName="child_care_arrangement">
+		<column name="id" value="58828932-d2ec-4c23-a141-36656c61abbd" />
+		<column name="name" value="Day Care" />
+		<column name="description" value="Day Care" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="child_care_arrangement">
+		<column name="id" value="1157e185-cf72-48f8-9117-3812e6812aed" />
+		<column name="name" value="Home Provider" />
+		<column name="description" value="Home Provider" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="child_care_arrangement">
+		<column name="id" value="b82e644e-5152-493a-8b75-1a5e4f60f316" />
+		<column name="name" value="Family/Friend" />
+		<column name="description" value="Family/Friend" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="child_care_arrangement">
+		<column name="id" value="3ee60d0a-4ba3-48a7-ac4b-89595bd10636" />
+		<column name="name" value="Need to make arrangements" />
+		<column name="description" value="Need to make arrangements" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<rollback>
+		<delete tableName="child_care_arrangement">
+			<where>id='58828932-d2ec-4c23-a141-36656c61abbd'</where>
+		</delete>
+		<delete tableName="child_care_arrangement">
+			<where>id='1157e185-cf72-48f8-9117-3812e6812aed'</where>
+		</delete>
+		<delete tableName="child_care_arrangement">
+			<where>id='b82e644e-5152-493a-8b75-1a5e4f60f316'</where>
+		</delete>
+		<delete tableName="child_care_arrangement">
+			<where>id='3ee60d0a-4ba3-48a7-ac4b-89595bd10636'</where>
+		</delete>
+	</rollback>
+</changeSet>
+<changeSet id="create reference data - veteran_status" author="daniel.bower">
+	<insert tableName="veteran_status">
+		<column name="id" value="4b584fdb-dbc8-44ff-a30d-8c3e0a2d8295" />
+		<column name="name" value="Dependent of Veteran" />
+		<column name="description" value="Dependent of Veteran" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="veteran_status">
+		<column name="id" value="8f66c758-aeb7-44e8-b343-48289c051a9b" />
+		<column name="name" value="VEAP" />
+		<column name="description" value="VEAP" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="veteran_status">
+		<column name="id" value="8d1bb38c-5670-469d-96a5-b8a79ae7856f" />
+		<column name="name" value="Veteran" />
+		<column name="description" value="Veteran" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="veteran_status">
+		<column name="id" value="7120ff28-67b1-4e44-b9f2-5f663c3c9a9c" />
+		<column name="name" value="Montgomery County Reservist" />
+		<column name="description" value="Montgomery County Reservist" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="veteran_status">
+		<column name="id" value="b106d9e6-6666-48c8-96e3-4dc0807c0557" />
+		<column name="name" value="Montgomery County Active Duty" />
+		<column name="description" value="Montgomery County Active Duty" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<rollback>
+		<delete tableName="veteran_status">
+			<where>id='4b584fdb-dbc8-44ff-a30d-8c3e0a2d8295'</where>
+		</delete>
+		<delete tableName="veteran_status">
+			<where>id='8f66c758-aeb7-44e8-b343-48289c051a9b'</where>
+		</delete>
+		<delete tableName="veteran_status">
+			<where>id='8d1bb38c-5670-469d-96a5-b8a79ae7856f'</where>
+		</delete>
+		<delete tableName="veteran_status">
+			<where>id='7120ff28-67b1-4e44-b9f2-5f663c3c9a9c'</where>
+		</delete>
+		<delete tableName="veteran_status">
+			<where>id='b106d9e6-6666-48c8-96e3-4dc0807c0557'</where>
+		</delete>
+	</rollback>
+</changeSet>
+<changeSet id="create reference data - marital_status" author="daniel.bower">
+	<insert tableName="marital_status">
+		<column name="id" value="c1d6598e-622d-428c-b7c2-1c4283d73126" />
+		<column name="name" value="Single" />
+		<column name="description" value="Single" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="marital_status">
+		<column name="id" value="c30d2993-0e96-4b70-9fd1-15f83ce281c1" />
+		<column name="name" value="Married" />
+		<column name="description" value="Married" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="marital_status">
+		<column name="id" value="f415d6c7-9723-42ea-8bb6-9417ca8fec6f" />
+		<column name="name" value="Separated" />
+		<column name="description" value="Separated" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="marital_status">
+		<column name="id" value="4e8d1ee2-6862-463f-b3f6-9c96d85873fe" />
+		<column name="name" value="Widowed" />
+		<column name="description" value="Widowed" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="marital_status">
+		<column name="id" value="a159c9bf-4e94-4f68-874a-3065e2d9651e" />
+		<column name="name" value="Divorced" />
+		<column name="description" value="Divorced" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<rollback>
+		<delete tableName="marital_status">
+			<where>id='c1d6598e-622d-428c-b7c2-1c4283d73126'</where>
+		</delete>
+		<delete tableName="marital_status">
+			<where>id='c30d2993-0e96-4b70-9fd1-15f83ce281c1'</where>
+		</delete>
+		<delete tableName="marital_status">
+			<where>id='f415d6c7-9723-42ea-8bb6-9417ca8fec6f'</where>
+		</delete>
+		<delete tableName="marital_status">
+			<where>id='4e8d1ee2-6862-463f-b3f6-9c96d85873fe'</where>
+		</delete>
+		<delete tableName="marital_status">
+			<where>id='a159c9bf-4e94-4f68-874a-3065e2d9651e'</where>
+		</delete>
+	</rollback>
+</changeSet>
+<changeSet id="create reference data - student_status" author="daniel.bower">
+	<insert tableName="student_status">
+		<column name="id" value="4e73f0e0-ea42-485f-9b9a-d3af38d8f696" />
+		<column name="name" value="Pre-College/ESP" />
+		<column name="description" value="Pre-College/ESP" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="student_status">
+		<column name="id" value="0b150cea-c3de-40ef-8564-fc2f53847a43" />
+		<column name="name" value="New" />
+		<column name="description" value="New" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="student_status">
+		<column name="id" value="eac2ecfc-6c32-45ed-b70d-0b23b06cfa74" />
+		<column name="name" value="Current" />
+		<column name="description" value="Current" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="student_status">
+		<column name="id" value="c9e10b4a-6855-4a77-860f-979f8a3fd1eb" />
+		<column name="name" value="Former" />
+		<column name="description" value="Former" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<insert tableName="student_status">
+		<column name="id" value="c640a23e-7ebf-4d0b-8e68-295f05982401" />
+		<column name="name" value="Transfer" />
+		<column name="description" value="Transfer" />
+		<column name="created_date" valueDate="2012-03-20T00:00:00" />
+		<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+	<rollback>
+		<delete tableName="student_status">
+			<where>id='4e73f0e0-ea42-485f-9b9a-d3af38d8f696'</where>
+		</delete>
+		<delete tableName="student_status">
+			<where>id='0b150cea-c3de-40ef-8564-fc2f53847a43'</where>
+		</delete>
+		<delete tableName="student_status">
+			<where>id='eac2ecfc-6c32-45ed-b70d-0b23b06cfa74'</where>
+		</delete>
+		<delete tableName="student_status">
+			<where>id='c9e10b4a-6855-4a77-860f-979f8a3fd1eb'</where>
+		</delete>
+		<delete tableName="student_status">
+			<where>id='c640a23e-7ebf-4d0b-8e68-295f05982401'</where>
+		</delete>
+	</rollback>
+</changeSet>
+
+</databaseChangeLog>
