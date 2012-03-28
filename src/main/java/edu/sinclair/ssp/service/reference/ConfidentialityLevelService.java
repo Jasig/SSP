@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.UUID;
 
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.Ethnicity;
+import edu.sinclair.ssp.model.reference.ConfidentialityLevel;
 import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 
-public interface EthnicityService extends AuditableCrudService<Ethnicity> {
+public interface ConfidentialityLevelService extends
+		AuditableCrudService<ConfidentialityLevel> {
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -18,7 +19,7 @@ public interface EthnicityService extends AuditableCrudService<Ethnicity> {
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<Ethnicity> getAll(ObjectStatus status);
+	public List<ConfidentialityLevel> getAll(ObjectStatus status);
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -38,17 +39,19 @@ public interface EthnicityService extends AuditableCrudService<Ethnicity> {
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<Ethnicity> getAll(ObjectStatus status, int firstResult,
+	public List<ConfidentialityLevel> getAll(ObjectStatus status,
+			int firstResult,
 			int maxResults, String sortExpression);
 
 	@Override
-	public Ethnicity get(UUID id) throws ObjectNotFoundException;
+	public ConfidentialityLevel get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public Ethnicity create(Ethnicity obj);
+	public ConfidentialityLevel create(ConfidentialityLevel obj);
 
 	@Override
-	public Ethnicity save(Ethnicity obj) throws ObjectNotFoundException;
+	public ConfidentialityLevel save(ConfidentialityLevel obj)
+			throws ObjectNotFoundException;
 
 	/**
 	 * Mark the specific instance as {@link ObjectStatus#DELETED}.

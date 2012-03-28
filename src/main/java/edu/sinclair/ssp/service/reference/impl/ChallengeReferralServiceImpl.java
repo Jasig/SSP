@@ -7,18 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.reference.StudentStatusDao;
+import edu.sinclair.ssp.dao.reference.ChallengeReferralDao;
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.StudentStatus;
+import edu.sinclair.ssp.model.reference.ChallengeReferral;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.reference.StudentStatusService;
+import edu.sinclair.ssp.service.reference.ChallengeReferralService;
 
 @Service
 @Transactional
-public class StudentStatusServiceImpl implements StudentStatusService {
+public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 
 	@Autowired
-	private StudentStatusDao dao;
+	private ChallengeReferralDao dao;
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -28,7 +28,7 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<StudentStatus> getAll(ObjectStatus status) {
+	public List<ChallengeReferral> getAll(ObjectStatus status) {
 		return dao.getAll(status);
 	}
 
@@ -50,28 +50,29 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<StudentStatus> getAll(ObjectStatus status, int firstResult,
+	public List<ChallengeReferral> getAll(ObjectStatus status, int firstResult,
 			int maxResults, String sortExpression) {
 		return dao.getAll(status, firstResult, maxResults, sortExpression);
 	}
 
 	@Override
-	public StudentStatus get(UUID id) throws ObjectNotFoundException {
-		StudentStatus obj = dao.get(id);
+	public ChallengeReferral get(UUID id) throws ObjectNotFoundException {
+		ChallengeReferral obj = dao.get(id);
 		if (null == obj) {
-			throw new ObjectNotFoundException(id, "StudentStatus");
+			throw new ObjectNotFoundException(id, "ChallengeReferral");
 		}
 		return obj;
 	}
 
 	@Override
-	public StudentStatus create(StudentStatus obj) {
+	public ChallengeReferral create(ChallengeReferral obj) {
 		return dao.save(obj);
 	}
 
 	@Override
-	public StudentStatus save(StudentStatus obj) throws ObjectNotFoundException {
-		StudentStatus current = get(obj.getId());
+	public ChallengeReferral save(ChallengeReferral obj)
+			throws ObjectNotFoundException {
+		ChallengeReferral current = get(obj.getId());
 
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
@@ -90,7 +91,7 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
-		StudentStatus current = get(id);
+		ChallengeReferral current = get(id);
 
 		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
@@ -98,7 +99,7 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 		}
 	}
 
-	protected void setDao(StudentStatusDao dao) {
+	protected void setDao(ChallengeReferralDao dao) {
 		this.dao = dao;
 	}
 }

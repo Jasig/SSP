@@ -20,26 +20,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.EducationLevel;
-import edu.sinclair.ssp.service.reference.EducationLevelService;
+import edu.sinclair.ssp.model.reference.ConfidentialityLevel;
+import edu.sinclair.ssp.service.reference.ConfidentialityLevelService;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
-import edu.sinclair.ssp.transferobject.reference.EducationLevelTO;
+import edu.sinclair.ssp.transferobject.reference.ConfidentialityLevelTO;
 import edu.sinclair.ssp.web.api.RestController;
 import edu.sinclair.ssp.web.api.validation.ValidationException;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/educationLevel")
-public class EducationLevelController extends RestController<EducationLevelTO> {
+@RequestMapping("/reference/confidentialityLevel")
+public class ConfidentialityLevelController extends
+		RestController<ConfidentialityLevelTO> {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(EducationLevelController.class);
+			.getLogger(ConfidentialityLevelController.class);
 
 	@Autowired
-	private EducationLevelService service;
+	private ConfidentialityLevelService service;
 
-	private TransferObjectListFactory<EducationLevelTO, EducationLevel> listFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(
-			EducationLevelTO.class);
+	private TransferObjectListFactory<ConfidentialityLevelTO, ConfidentialityLevel> listFactory = new TransferObjectListFactory<ConfidentialityLevelTO, ConfidentialityLevel>(
+			ConfidentialityLevelTO.class);
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -53,7 +54,7 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<EducationLevelTO> getAll(
+	List<ConfidentialityLevelTO> getAll(
 			@RequestParam(required = false) ObjectStatus status)
 			throws Exception {
 		if (status == null) {
@@ -84,7 +85,7 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<EducationLevelTO> getAll(
+	List<ConfidentialityLevelTO> getAll(
 			@RequestParam(required = false) ObjectStatus status,
 			int firstResult, int maxResults,
 			@RequestParam(required = false) String sortExpression)
@@ -100,10 +101,10 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	EducationLevelTO get(@PathVariable UUID id) throws Exception {
-		EducationLevel model = service.get(id);
+	ConfidentialityLevelTO get(@PathVariable UUID id) throws Exception {
+		ConfidentialityLevel model = service.get(id);
 		if (model != null) {
-			return new EducationLevelTO(model);
+			return new ConfidentialityLevelTO(model);
 		} else {
 			return null;
 		}
@@ -112,19 +113,19 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	EducationLevelTO create(@Valid @RequestBody EducationLevelTO obj)
+	ConfidentialityLevelTO create(@Valid @RequestBody ConfidentialityLevelTO obj)
 			throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
-					"You submitted a educationLevel with an id to the create method.  Did you mean to save?");
+					"You submitted a confidentialityLevel with an id to the create method.  Did you mean to save?");
 		}
 
-		EducationLevel model = obj.asModel();
+		ConfidentialityLevel model = obj.asModel();
 
 		if (null != model) {
-			EducationLevel createdModel = service.create(model);
+			ConfidentialityLevel createdModel = service.create(model);
 			if (null != createdModel) {
-				return new EducationLevelTO(createdModel);
+				return new ConfidentialityLevelTO(createdModel);
 			}
 		}
 		return null;
@@ -133,20 +134,20 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	EducationLevelTO save(@PathVariable UUID id,
-			@Valid @RequestBody EducationLevelTO obj)
+	ConfidentialityLevelTO save(@PathVariable UUID id,
+			@Valid @RequestBody ConfidentialityLevelTO obj)
 			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
-					"You submitted a educationLevel without an id to the save method.  Did you mean to create?");
+					"You submitted a confidentialityLevel without an id to the save method.  Did you mean to create?");
 		}
 
-		EducationLevel model = obj.asModel();
+		ConfidentialityLevel model = obj.asModel();
 		model.setId(id);
 
-		EducationLevel savedEducationLevel = service.save(model);
-		if (null != savedEducationLevel) {
-			return new EducationLevelTO(savedEducationLevel);
+		ConfidentialityLevel savedConfidentialityLevel = service.save(model);
+		if (null != savedConfidentialityLevel) {
+			return new ConfidentialityLevelTO(savedConfidentialityLevel);
 		}
 		return null;
 	}

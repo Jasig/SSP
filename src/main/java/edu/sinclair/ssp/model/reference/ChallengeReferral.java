@@ -8,18 +8,19 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 /**
- * EducationLevel reference object.
+ * ChallengeReferral reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EducationLevel extends AbstractReference implements Serializable {
+public class ChallengeReferral extends AbstractReference implements
+		Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor
 	 */
-	public EducationLevel() {
+	public ChallengeReferral() {
 		super();
 	}
 
@@ -30,7 +31,7 @@ public class EducationLevel extends AbstractReference implements Serializable {
 	 *            Identifier; required
 	 */
 
-	public EducationLevel(UUID id) {
+	public ChallengeReferral(UUID id) {
 		super(id);
 	}
 
@@ -43,7 +44,7 @@ public class EducationLevel extends AbstractReference implements Serializable {
 	 *            Name; required; max 100 characters
 	 */
 
-	public EducationLevel(UUID id, String name) {
+	public ChallengeReferral(UUID id, String name) {
 		super(id, name);
 	}
 
@@ -57,7 +58,7 @@ public class EducationLevel extends AbstractReference implements Serializable {
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public EducationLevel(UUID id, String name, String description) {
+	public ChallengeReferral(UUID id, String name, String description) {
 		super(id, name, description);
 	}
 }

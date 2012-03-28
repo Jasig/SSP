@@ -10,6 +10,13 @@ import edu.sinclair.ssp.service.ObjectNotFoundException;
 
 public interface CitizenshipService extends AuditableCrudService<Citizenship> {
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	@Override
 	public List<Citizenship> getAll(ObjectStatus status);
 

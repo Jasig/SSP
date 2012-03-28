@@ -81,7 +81,7 @@ class Templater{
 	private String resourcesTestPath = basePath + "src/test/resources/"
 
 	// The liquibase changelog to add the table.
-	String liquibaseChangeLogLocation =  resourcesMainPath + appPath.join("/") + "/" + "database/00.01.0.xml"
+	String liquibaseChangeLogLocation =  resourcesMainPath + appPath.join("/") + "/" + "database/changesets/a.xml"
 
 	//Turn a string into a camel cased version of itself
 	String camelCased(String val){
@@ -263,7 +263,7 @@ class Templater{
 class ReferenceDataTemplater {
 	String templateModel = "Challenge"
 	List<String> subpackage = ["reference"]
-	List<String> referenceDataModels = ["ChildCareArrangement", "Citizenship", "EducationGoal", "EducationLevel", "Ethnicity", "FundingSource", "MaritalStatus", "StudentStatus", "VeteranStatus"]
+	List<String> referenceDataModels = ["ChildCareArrangement", "ChallengeCategory","ChallengeReferral", "Citizenship", "ConfidentialityLevel", "EducationGoal", "EducationLevel", "Ethnicity", "FundingSource", "MaritalStatus", "StudentStatus", "VeteranStatus"]
 
 	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
 		Templater templater = new Templater(create, overwrite, writeLiquibaseScript, dryRun, displayFileContents)
@@ -274,4 +274,4 @@ class ReferenceDataTemplater {
 }
 
 
-new ReferenceDataTemplater().run(true, true, false, false, false)
+new ReferenceDataTemplater().run(true, true, true, false, false)

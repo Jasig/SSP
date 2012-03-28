@@ -14,7 +14,7 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class FundingSource extends AbstractReference implements Serializable {
 
-	private static final long serialVersionUID = 7001182084156012094L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor

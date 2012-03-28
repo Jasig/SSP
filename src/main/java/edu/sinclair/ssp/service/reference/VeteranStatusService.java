@@ -11,6 +11,13 @@ import edu.sinclair.ssp.service.ObjectNotFoundException;
 public interface VeteranStatusService extends
 		AuditableCrudService<VeteranStatus> {
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	@Override
 	public List<VeteranStatus> getAll(ObjectStatus status);
 

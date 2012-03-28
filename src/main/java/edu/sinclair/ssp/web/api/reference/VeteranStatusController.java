@@ -134,7 +134,8 @@ public class VeteranStatusController extends RestController<VeteranStatusTO> {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	VeteranStatusTO save(@PathVariable UUID id,
-			@Valid @RequestBody VeteranStatusTO obj) throws Exception {
+			@Valid @RequestBody VeteranStatusTO obj)
+			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a veteranStatus without an id to the save method.  Did you mean to create?");

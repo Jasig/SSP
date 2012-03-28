@@ -20,26 +20,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.EducationLevel;
-import edu.sinclair.ssp.service.reference.EducationLevelService;
+import edu.sinclair.ssp.model.reference.ChallengeCategory;
+import edu.sinclair.ssp.service.reference.ChallengeCategoryService;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
-import edu.sinclair.ssp.transferobject.reference.EducationLevelTO;
+import edu.sinclair.ssp.transferobject.reference.ChallengeCategoryTO;
 import edu.sinclair.ssp.web.api.RestController;
 import edu.sinclair.ssp.web.api.validation.ValidationException;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/educationLevel")
-public class EducationLevelController extends RestController<EducationLevelTO> {
+@RequestMapping("/reference/challengeCategory")
+public class ChallengeCategoryController extends
+		RestController<ChallengeCategoryTO> {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(EducationLevelController.class);
+			.getLogger(ChallengeCategoryController.class);
 
 	@Autowired
-	private EducationLevelService service;
+	private ChallengeCategoryService service;
 
-	private TransferObjectListFactory<EducationLevelTO, EducationLevel> listFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(
-			EducationLevelTO.class);
+	private TransferObjectListFactory<ChallengeCategoryTO, ChallengeCategory> listFactory = new TransferObjectListFactory<ChallengeCategoryTO, ChallengeCategory>(
+			ChallengeCategoryTO.class);
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -53,7 +54,7 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<EducationLevelTO> getAll(
+	List<ChallengeCategoryTO> getAll(
 			@RequestParam(required = false) ObjectStatus status)
 			throws Exception {
 		if (status == null) {
@@ -84,7 +85,7 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<EducationLevelTO> getAll(
+	List<ChallengeCategoryTO> getAll(
 			@RequestParam(required = false) ObjectStatus status,
 			int firstResult, int maxResults,
 			@RequestParam(required = false) String sortExpression)
@@ -100,10 +101,10 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	EducationLevelTO get(@PathVariable UUID id) throws Exception {
-		EducationLevel model = service.get(id);
+	ChallengeCategoryTO get(@PathVariable UUID id) throws Exception {
+		ChallengeCategory model = service.get(id);
 		if (model != null) {
-			return new EducationLevelTO(model);
+			return new ChallengeCategoryTO(model);
 		} else {
 			return null;
 		}
@@ -112,19 +113,19 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	EducationLevelTO create(@Valid @RequestBody EducationLevelTO obj)
+	ChallengeCategoryTO create(@Valid @RequestBody ChallengeCategoryTO obj)
 			throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
-					"You submitted a educationLevel with an id to the create method.  Did you mean to save?");
+					"You submitted a challengeCategory with an id to the create method.  Did you mean to save?");
 		}
 
-		EducationLevel model = obj.asModel();
+		ChallengeCategory model = obj.asModel();
 
 		if (null != model) {
-			EducationLevel createdModel = service.create(model);
+			ChallengeCategory createdModel = service.create(model);
 			if (null != createdModel) {
-				return new EducationLevelTO(createdModel);
+				return new ChallengeCategoryTO(createdModel);
 			}
 		}
 		return null;
@@ -133,20 +134,20 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	EducationLevelTO save(@PathVariable UUID id,
-			@Valid @RequestBody EducationLevelTO obj)
+	ChallengeCategoryTO save(@PathVariable UUID id,
+			@Valid @RequestBody ChallengeCategoryTO obj)
 			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
-					"You submitted a educationLevel without an id to the save method.  Did you mean to create?");
+					"You submitted a challengeCategory without an id to the save method.  Did you mean to create?");
 		}
 
-		EducationLevel model = obj.asModel();
+		ChallengeCategory model = obj.asModel();
 		model.setId(id);
 
-		EducationLevel savedEducationLevel = service.save(model);
-		if (null != savedEducationLevel) {
-			return new EducationLevelTO(savedEducationLevel);
+		ChallengeCategory savedChallengeCategory = service.save(model);
+		if (null != savedChallengeCategory) {
+			return new ChallengeCategoryTO(savedChallengeCategory);
 		}
 		return null;
 	}

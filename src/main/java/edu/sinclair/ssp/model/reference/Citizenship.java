@@ -14,7 +14,7 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Citizenship extends AbstractReference implements Serializable {
 
-	private static final long serialVersionUID = -8799814200256630616L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor

@@ -20,6 +20,13 @@ public class CitizenshipServiceImpl implements CitizenshipService {
 	@Autowired
 	private CitizenshipDao dao;
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	@Override
 	public List<Citizenship> getAll(ObjectStatus status) {
 		return dao.getAll(status);

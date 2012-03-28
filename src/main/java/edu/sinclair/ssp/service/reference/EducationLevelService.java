@@ -11,6 +11,13 @@ import edu.sinclair.ssp.service.ObjectNotFoundException;
 public interface EducationLevelService extends
 		AuditableCrudService<EducationLevel> {
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	@Override
 	public List<EducationLevel> getAll(ObjectStatus status);
 

@@ -134,7 +134,8 @@ public class StudentStatusController extends RestController<StudentStatusTO> {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	StudentStatusTO save(@PathVariable UUID id,
-			@Valid @RequestBody StudentStatusTO obj) throws Exception {
+			@Valid @RequestBody StudentStatusTO obj)
+			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a studentStatus without an id to the save method.  Did you mean to create?");

@@ -20,6 +20,13 @@ public class VeteranStatusServiceImpl implements VeteranStatusService {
 	@Autowired
 	private VeteranStatusDao dao;
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	@Override
 	public List<VeteranStatus> getAll(ObjectStatus status) {
 		return dao.getAll(status);

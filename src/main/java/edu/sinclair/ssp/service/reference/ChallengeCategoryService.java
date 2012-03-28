@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.UUID;
 
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.Ethnicity;
+import edu.sinclair.ssp.model.reference.ChallengeCategory;
 import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 
-public interface EthnicityService extends AuditableCrudService<Ethnicity> {
+public interface ChallengeCategoryService extends
+		AuditableCrudService<ChallengeCategory> {
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -18,7 +19,7 @@ public interface EthnicityService extends AuditableCrudService<Ethnicity> {
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<Ethnicity> getAll(ObjectStatus status);
+	public List<ChallengeCategory> getAll(ObjectStatus status);
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -38,17 +39,18 @@ public interface EthnicityService extends AuditableCrudService<Ethnicity> {
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<Ethnicity> getAll(ObjectStatus status, int firstResult,
+	public List<ChallengeCategory> getAll(ObjectStatus status, int firstResult,
 			int maxResults, String sortExpression);
 
 	@Override
-	public Ethnicity get(UUID id) throws ObjectNotFoundException;
+	public ChallengeCategory get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public Ethnicity create(Ethnicity obj);
+	public ChallengeCategory create(ChallengeCategory obj);
 
 	@Override
-	public Ethnicity save(Ethnicity obj) throws ObjectNotFoundException;
+	public ChallengeCategory save(ChallengeCategory obj)
+			throws ObjectNotFoundException;
 
 	/**
 	 * Mark the specific instance as {@link ObjectStatus#DELETED}.

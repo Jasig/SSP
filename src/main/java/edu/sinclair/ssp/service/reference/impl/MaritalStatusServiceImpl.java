@@ -20,6 +20,13 @@ public class MaritalStatusServiceImpl implements MaritalStatusService {
 	@Autowired
 	private MaritalStatusDao dao;
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	@Override
 	public List<MaritalStatus> getAll(ObjectStatus status) {
 		return dao.getAll(status);

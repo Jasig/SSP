@@ -12,7 +12,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class VelocityTemplateHelper {

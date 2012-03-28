@@ -21,6 +21,13 @@ public class ChildCareArrangementServiceImpl implements
 	@Autowired
 	private ChildCareArrangementDao dao;
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	@Override
 	public List<ChildCareArrangement> getAll(ObjectStatus status) {
 		return dao.getAll(status);
@@ -45,7 +52,8 @@ public class ChildCareArrangementServiceImpl implements
 	 */
 	@Override
 	public List<ChildCareArrangement> getAll(ObjectStatus status,
-			int firstResult, int maxResults, String sortExpression) {
+			int firstResult,
+			int maxResults, String sortExpression) {
 		return dao.getAll(status, firstResult, maxResults, sortExpression);
 	}
 

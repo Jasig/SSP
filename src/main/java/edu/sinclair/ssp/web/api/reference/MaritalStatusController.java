@@ -134,7 +134,8 @@ public class MaritalStatusController extends RestController<MaritalStatusTO> {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	MaritalStatusTO save(@PathVariable UUID id,
-			@Valid @RequestBody MaritalStatusTO obj) throws Exception {
+			@Valid @RequestBody MaritalStatusTO obj)
+			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a maritalStatus without an id to the save method.  Did you mean to create?");
