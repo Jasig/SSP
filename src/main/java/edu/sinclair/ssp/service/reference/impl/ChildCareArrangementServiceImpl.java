@@ -3,8 +3,6 @@ package edu.sinclair.ssp.service.reference.impl;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +17,6 @@ import edu.sinclair.ssp.service.reference.ChildCareArrangementService;
 @Transactional
 public class ChildCareArrangementServiceImpl implements
 		ChildCareArrangementService {
-
-	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory
-			.getLogger(ChildCareArrangementServiceImpl.class);
 
 	@Autowired
 	private ChildCareArrangementDao dao;
@@ -81,6 +75,14 @@ public class ChildCareArrangementServiceImpl implements
 		return dao.save(current);
 	}
 
+	/**
+	 * Mark the specific instance as {@link ObjectStatus#DELETED}.
+	 * 
+	 * @param id
+	 *            Instance identifier
+	 * @exception ObjectNotFoundException
+	 *                if the specified ID does not exist.
+	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
 		ChildCareArrangement current = get(id);
@@ -94,5 +96,4 @@ public class ChildCareArrangementServiceImpl implements
 	protected void setDao(ChildCareArrangementDao dao) {
 		this.dao = dao;
 	}
-
 }

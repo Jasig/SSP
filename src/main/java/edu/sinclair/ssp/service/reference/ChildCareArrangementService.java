@@ -45,6 +45,14 @@ public interface ChildCareArrangementService extends
 	public ChildCareArrangement save(ChildCareArrangement obj)
 			throws ObjectNotFoundException;
 
+	/**
+	 * Mark the specific instance as {@link ObjectStatus#DELETED}.
+	 * 
+	 * @param id
+	 *            Instance identifier
+	 * @exception ObjectNotFoundException
+	 *                if the specified ID does not exist.
+	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException;
 

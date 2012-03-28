@@ -15,15 +15,25 @@ import edu.sinclair.ssp.dao.AuditableCrudDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.EducationLevel;
 
+/**
+ * Data access class for the EducationLevel reference entity.
+ */
 @Repository
 public class EducationLevelDao implements AuditableCrudDao<EducationLevel> {
-
-	// private static final Logger logger =
-	// LoggerFactory.getLogger(EducationLevelDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	/**
+	 * Return all entities in the database, filtered only by the specified
+	 * parameters.
+	 * 
+	 * @param status
+	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
+	 *            return all results.
+	 * @return All entities in the database, filtered only by the specified
+	 *         parameters.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<EducationLevel> getAll(ObjectStatus status) {
@@ -118,5 +128,4 @@ public class EducationLevelDao implements AuditableCrudDao<EducationLevel> {
 	public void delete(EducationLevel obj) {
 		sessionFactory.getCurrentSession().delete(obj);
 	}
-
 }

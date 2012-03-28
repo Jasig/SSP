@@ -85,4 +85,23 @@ public class StudentStatusDaoTest {
 		assertTrue(true);
 	}
 
+	@Test
+	public void uuidGeneration() {
+		StudentStatus obj = new StudentStatus();
+		obj.setName("new name");
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		dao.save(obj);
+
+		StudentStatus obj2 = new StudentStatus();
+		obj2.setName("new name");
+		obj2.setObjectStatus(ObjectStatus.ACTIVE);
+		dao.save(obj2);
+
+		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+				+ obj2.getId().toString());
+
+		dao.delete(obj);
+		dao.delete(obj2);
+	}
+
 }

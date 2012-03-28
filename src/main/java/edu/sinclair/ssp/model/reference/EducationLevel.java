@@ -7,36 +7,57 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+/**
+ * EducationLevel reference object.
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class EducationLevel extends AbstractReference implements Serializable {
 
 	private static final long serialVersionUID = 8607220055323069577L;
 
+	/**
+	 * Constructor
+	 */
 	public EducationLevel() {
 		super();
 	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 *            Identifier; required
+	 */
 
 	public EducationLevel(UUID id) {
 		super(id);
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 *            Identifier; required
+	 * @param name
+	 *            Name; required; max 100 characters
+	 */
+
 	public EducationLevel(UUID id, String name) {
 		super(id, name);
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 *            Identifier; required
+	 * @param name
+	 *            Name; required; max 100 characters
+	 * @param description
+	 *            Description; max 150 characters
+	 */
 	public EducationLevel(UUID id, String name, String description) {
 		super(id, name, description);
-	}
-
-	/**
-	 * Overwrites simple properties with the parameter's properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 */
-	public void overwrite(EducationLevel source) {
-		this.setName(source.getName());
-		this.setDescription(source.getDescription());
 	}
 }

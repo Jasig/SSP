@@ -11,35 +11,75 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import edu.sinclair.ssp.model.Auditable;
 
+/**
+ * Reference entities must all share this abstract class, so they inherit the
+ * identifier, name, and description properties.
+ */
 @MappedSuperclass
 public abstract class AbstractReference extends Auditable {
 
-	// jpa
+	/**
+	 * Name
+	 * 
+	 * Required, not null, max length 100 characters.
+	 */
 	@Column(name = "name", nullable = false, length = 100)
-	// validator
 	@NotNull
 	@NotEmpty
 	@Size(max = 100)
 	private String name;
 
+	/**
+	 * Description
+	 * 
+	 * Optional, null allowed, max length 150 characters.
+	 */
 	@Column(nullable = true, length = 150)
 	@Size(max = 150)
 	private String description;
 
+	/**
+	 * Constructor
+	 */
 	public AbstractReference() {
 		super();
 	}
 
-	public AbstractReference(UUID id) {
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 *            Identifier; required
+	 */
+	public AbstractReference(@NotNull UUID id) {
 		super(id);
 	}
 
-	public AbstractReference(UUID id, String name) {
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 *            Identifier; required
+	 * @param name
+	 *            Name; required; max 100 characters
+	 */
+	public AbstractReference(@NotNull UUID id, @NotNull String name) {
 		super(id);
 		this.name = name;
 	}
 
-	public AbstractReference(UUID id, String name, String description) {
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 *            Identifier; required
+	 * @param name
+	 *            Name; required; max 100 characters
+	 * @param description
+	 *            Description; max 150 characters
+	 */
+	public AbstractReference(@NotNull UUID id, @NotNull String name,
+			String description) {
 		super(id);
 		this.name = name;
 		this.description = description;
@@ -49,7 +89,13 @@ public abstract class AbstractReference extends Auditable {
 		return name;
 	}
 
-	public void setName(String name) {
+	/**
+	 * Sets the name
+	 * 
+	 * @param name
+	 *            Name; required; max 100 characters
+	 */
+	public void setName(@NotNull String name) {
 		this.name = name;
 	}
 
@@ -57,8 +103,25 @@ public abstract class AbstractReference extends Auditable {
 		return description;
 	}
 
+	/**
+	 * Sets the description
+	 * 
+	 * @param description
+	 *            Name; null allowed; max 150 characters
+	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * Overwrites properties with the source object's properties.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 */
+	public void overwrite(@NotNull Challenge source) {
+		this.setName(source.getName());
+		this.setDescription(source.getDescription());
 	}
 
 }

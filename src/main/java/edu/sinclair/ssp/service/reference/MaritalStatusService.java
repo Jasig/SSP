@@ -44,6 +44,14 @@ public interface MaritalStatusService extends
 	@Override
 	public MaritalStatus save(MaritalStatus obj) throws ObjectNotFoundException;
 
+	/**
+	 * Mark the specific instance as {@link ObjectStatus#DELETED}.
+	 * 
+	 * @param id
+	 *            Instance identifier
+	 * @exception ObjectNotFoundException
+	 *                if the specified ID does not exist.
+	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException;
 

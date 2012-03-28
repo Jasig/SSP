@@ -6,6 +6,17 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.ObjectStatus;
 
 public interface AuditableCrudDao<T> {
+
+	/**
+	 * Return all entities in the database, filtered only by the specified
+	 * parameters.
+	 * 
+	 * @param status
+	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
+	 *            return all results.
+	 * @return All entities in the database, filtered only by the specified
+	 *         parameters.
+	 */
 	public List<T> getAll(ObjectStatus status);
 
 	/**

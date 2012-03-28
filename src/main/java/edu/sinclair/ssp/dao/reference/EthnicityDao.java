@@ -15,15 +15,25 @@ import edu.sinclair.ssp.dao.AuditableCrudDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.Ethnicity;
 
+/**
+ * Data access class for the Ethnicity reference entity.
+ */
 @Repository
 public class EthnicityDao implements AuditableCrudDao<Ethnicity> {
-
-	// private static final Logger logger =
-	// LoggerFactory.getLogger(EthnicityDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	/**
+	 * Return all entities in the database, filtered only by the specified
+	 * parameters.
+	 * 
+	 * @param status
+	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
+	 *            return all results.
+	 * @return All entities in the database, filtered only by the specified
+	 *         parameters.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Ethnicity> getAll(ObjectStatus status) {
@@ -117,5 +127,4 @@ public class EthnicityDao implements AuditableCrudDao<Ethnicity> {
 	public void delete(Ethnicity obj) {
 		sessionFactory.getCurrentSession().delete(obj);
 	}
-
 }

@@ -85,4 +85,23 @@ public class FundingSourceDaoTest {
 		assertTrue(true);
 	}
 
+	@Test
+	public void uuidGeneration() {
+		FundingSource obj = new FundingSource();
+		obj.setName("new name");
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		dao.save(obj);
+
+		FundingSource obj2 = new FundingSource();
+		obj2.setName("new name");
+		obj2.setObjectStatus(ObjectStatus.ACTIVE);
+		dao.save(obj2);
+
+		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+				+ obj2.getId().toString());
+
+		dao.delete(obj);
+		dao.delete(obj2);
+	}
+
 }

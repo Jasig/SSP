@@ -85,4 +85,23 @@ public class EthnicityDaoTest {
 		assertTrue(true);
 	}
 
+	@Test
+	public void uuidGeneration() {
+		Ethnicity obj = new Ethnicity();
+		obj.setName("new name");
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		dao.save(obj);
+
+		Ethnicity obj2 = new Ethnicity();
+		obj2.setName("new name");
+		obj2.setObjectStatus(ObjectStatus.ACTIVE);
+		dao.save(obj2);
+
+		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+				+ obj2.getId().toString());
+
+		dao.delete(obj);
+		dao.delete(obj2);
+	}
+
 }

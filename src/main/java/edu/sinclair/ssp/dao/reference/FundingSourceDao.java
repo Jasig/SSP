@@ -15,15 +15,25 @@ import edu.sinclair.ssp.dao.AuditableCrudDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.reference.FundingSource;
 
+/**
+ * Data access class for the FundingSource reference entity.
+ */
 @Repository
 public class FundingSourceDao implements AuditableCrudDao<FundingSource> {
-
-	// private static final Logger logger =
-	// LoggerFactory.getLogger(FundingSourceDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	/**
+	 * Return all entities in the database, filtered only by the specified
+	 * parameters.
+	 * 
+	 * @param status
+	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
+	 *            return all results.
+	 * @return All entities in the database, filtered only by the specified
+	 *         parameters.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<FundingSource> getAll(ObjectStatus status) {
@@ -117,5 +127,4 @@ public class FundingSourceDao implements AuditableCrudDao<FundingSource> {
 	public void delete(FundingSource obj) {
 		sessionFactory.getCurrentSession().delete(obj);
 	}
-
 }

@@ -3,8 +3,6 @@ package edu.sinclair.ssp.service.reference.impl;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +16,6 @@ import edu.sinclair.ssp.service.reference.EducationGoalService;
 @Service
 @Transactional
 public class EducationGoalServiceImpl implements EducationGoalService {
-
-	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory
-			.getLogger(EducationGoalServiceImpl.class);
 
 	@Autowired
 	private EducationGoalDao dao;
@@ -79,6 +73,14 @@ public class EducationGoalServiceImpl implements EducationGoalService {
 		return dao.save(current);
 	}
 
+	/**
+	 * Mark the specific instance as {@link ObjectStatus#DELETED}.
+	 * 
+	 * @param id
+	 *            Instance identifier
+	 * @exception ObjectNotFoundException
+	 *                if the specified ID does not exist.
+	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
 		EducationGoal current = get(id);
@@ -92,5 +94,4 @@ public class EducationGoalServiceImpl implements EducationGoalService {
 	protected void setDao(EducationGoalDao dao) {
 		this.dao = dao;
 	}
-
 }

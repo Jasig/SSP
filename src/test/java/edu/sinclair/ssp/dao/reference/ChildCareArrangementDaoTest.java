@@ -85,4 +85,23 @@ public class ChildCareArrangementDaoTest {
 		assertTrue(true);
 	}
 
+	@Test
+	public void uuidGeneration() {
+		ChildCareArrangement obj = new ChildCareArrangement();
+		obj.setName("new name");
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		dao.save(obj);
+
+		ChildCareArrangement obj2 = new ChildCareArrangement();
+		obj2.setName("new name");
+		obj2.setObjectStatus(ObjectStatus.ACTIVE);
+		dao.save(obj2);
+
+		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+				+ obj2.getId().toString());
+
+		dao.delete(obj);
+		dao.delete(obj2);
+	}
+
 }
