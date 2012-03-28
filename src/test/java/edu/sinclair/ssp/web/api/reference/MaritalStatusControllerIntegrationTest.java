@@ -41,7 +41,7 @@ public class MaritalStatusControllerIntegrationTest {
 	private static final UUID MaritalStatus_ID = UUID
 			.fromString("76521a04-b531-4c25-b6a6-609f3a123456");
 
-	private static final String MaritalStatus_NAME = "I have a fiancé";
+	private static final String MaritalStatus_NAME = "I have a fiancÃ©";
 
 	@Autowired
 	private SecurityServiceInTestEnvironment securityService;
