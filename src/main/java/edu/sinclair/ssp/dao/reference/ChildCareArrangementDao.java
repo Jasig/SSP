@@ -19,7 +19,8 @@ import edu.sinclair.ssp.model.reference.ChildCareArrangement;
  * Data access class for the ChildCareArrangement reference entity.
  */
 @Repository
-public class ChildCareArrangementDao implements AuditableCrudDao<ChildCareArrangement> {
+public class ChildCareArrangementDao implements
+		AuditableCrudDao<ChildCareArrangement> {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -70,7 +71,8 @@ public class ChildCareArrangementDao implements AuditableCrudDao<ChildCareArrang
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<ChildCareArrangement> getAll(ObjectStatus status, int firstResult,
+	public List<ChildCareArrangement> getAll(ObjectStatus status,
+			int firstResult,
 			int maxResults, String sortExpression) {
 		if (firstResult < 0) {
 			throw new IllegalArgumentException(
@@ -83,7 +85,8 @@ public class ChildCareArrangementDao implements AuditableCrudDao<ChildCareArrang
 		}
 
 		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(ChildCareArrangement.class).setFirstResult(firstResult)
+				.createCriteria(ChildCareArrangement.class)
+				.setFirstResult(firstResult)
 				.setMaxResults(maxResults);
 
 		if (StringUtils.isEmpty(sortExpression)) {
@@ -115,7 +118,8 @@ public class ChildCareArrangementDao implements AuditableCrudDao<ChildCareArrang
 	@Override
 	public ChildCareArrangement save(ChildCareArrangement obj) {
 		if (obj.getId() != null) {
-			obj = (ChildCareArrangement) sessionFactory.getCurrentSession().merge(obj);
+			obj = (ChildCareArrangement) sessionFactory.getCurrentSession()
+					.merge(obj);
 		} else {
 			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}

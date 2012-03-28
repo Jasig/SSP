@@ -83,7 +83,8 @@ public class EducationLevelDao implements AuditableCrudDao<EducationLevel> {
 		}
 
 		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(EducationLevel.class).setFirstResult(firstResult)
+				.createCriteria(EducationLevel.class)
+				.setFirstResult(firstResult)
 				.setMaxResults(maxResults);
 
 		if (StringUtils.isEmpty(sortExpression)) {
@@ -115,7 +116,8 @@ public class EducationLevelDao implements AuditableCrudDao<EducationLevel> {
 	@Override
 	public EducationLevel save(EducationLevel obj) {
 		if (obj.getId() != null) {
-			obj = (EducationLevel) sessionFactory.getCurrentSession().merge(obj);
+			obj = (EducationLevel) sessionFactory.getCurrentSession()
+					.merge(obj);
 		} else {
 			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 		}

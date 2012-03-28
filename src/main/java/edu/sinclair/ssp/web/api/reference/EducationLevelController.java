@@ -134,7 +134,8 @@ public class EducationLevelController extends RestController<EducationLevelTO> {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	EducationLevelTO save(@PathVariable UUID id,
-			@Valid @RequestBody EducationLevelTO obj) throws Exception {
+			@Valid @RequestBody EducationLevelTO obj)
+			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a educationLevel without an id to the save method.  Did you mean to create?");

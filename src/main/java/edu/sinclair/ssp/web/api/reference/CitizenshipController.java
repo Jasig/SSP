@@ -134,7 +134,8 @@ public class CitizenshipController extends RestController<CitizenshipTO> {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	CitizenshipTO save(@PathVariable UUID id,
-			@Valid @RequestBody CitizenshipTO obj) throws Exception {
+			@Valid @RequestBody CitizenshipTO obj)
+			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a citizenship without an id to the save method.  Did you mean to create?");

@@ -56,8 +56,8 @@ public class SspUser extends User {
 		// now a proper field-by-field evaluation can be made
 		return (emailAddress == null
 				? (that.getEmailAddress() == null)
-						: emailAddress.equals(that.getEmailAddress()))
-						&& (person == null
+				: emailAddress.equals(that.getEmailAddress()))
+				&& (person == null
 						? that.getPerson() == null
 						: person.equals(that.getPerson()));
 	}
@@ -65,9 +65,9 @@ public class SspUser extends User {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 31)
-		// two randomly chosen prime numbers
-		// if deriving: appendSuper(super.hashCode()).
-		.appendSuper(super.hashCode()).append(emailAddress)
-		.append(person).toHashCode();
+				// two randomly chosen prime numbers
+				// if deriving: appendSuper(super.hashCode()).
+				.appendSuper(super.hashCode()).append(emailAddress)
+				.append(person).toHashCode();
 	}
 }

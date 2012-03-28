@@ -15,7 +15,7 @@ import javax.persistence.InheritanceType;
 public class ChildCareArrangement extends AbstractReference implements
 		Serializable {
 
-	private static final long serialVersionUID = -8926637130500357983L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor

@@ -134,7 +134,8 @@ public class EducationGoalController extends RestController<EducationGoalTO> {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	EducationGoalTO save(@PathVariable UUID id,
-			@Valid @RequestBody EducationGoalTO obj) throws Exception {
+			@Valid @RequestBody EducationGoalTO obj)
+			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a educationGoal without an id to the save method.  Did you mean to create?");

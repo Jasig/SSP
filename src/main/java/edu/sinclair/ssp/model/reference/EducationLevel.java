@@ -14,7 +14,7 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class EducationLevel extends AbstractReference implements Serializable {
 
-	private static final long serialVersionUID = 8607220055323069577L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor

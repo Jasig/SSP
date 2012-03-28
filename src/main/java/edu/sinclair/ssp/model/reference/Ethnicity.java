@@ -14,7 +14,7 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Ethnicity extends AbstractReference implements Serializable {
 
-	private static final long serialVersionUID = 4750159626353128179L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor

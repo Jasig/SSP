@@ -83,7 +83,8 @@ public class FundingSourceDao implements AuditableCrudDao<FundingSource> {
 		}
 
 		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(FundingSource.class).setFirstResult(firstResult)
+				.createCriteria(FundingSource.class)
+				.setFirstResult(firstResult)
 				.setMaxResults(maxResults);
 
 		if (StringUtils.isEmpty(sortExpression)) {
