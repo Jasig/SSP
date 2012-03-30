@@ -5,8 +5,8 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.FundingSource;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class FundingSourceTO extends AbstractReferenceTO implements
-		TransferObject<FundingSource> {
+public class FundingSourceTO extends AbstractReferenceTO<FundingSource>
+		implements TransferObject<FundingSource> {
 
 	public FundingSourceTO() {
 		super();

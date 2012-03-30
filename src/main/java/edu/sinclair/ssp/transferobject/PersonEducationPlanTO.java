@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import edu.sinclair.ssp.model.PersonEducationPlan;
 
-public class PersonEducationPlanTO extends AuditableTO implements
-		TransferObject<PersonEducationPlan> {
+public class PersonEducationPlanTO extends AuditableTO<PersonEducationPlan>
+		implements TransferObject<PersonEducationPlan> {
 
 	private UUID personId, studentStatusId;
 	private boolean newOrientationComplete, registeredForClasses,

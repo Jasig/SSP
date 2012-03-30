@@ -11,8 +11,8 @@ import edu.sinclair.ssp.model.reference.Genders;
 import edu.sinclair.ssp.model.reference.MaritalStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
 
-public class PersonDemographicsTO extends AuditableTO implements
-		TransferObject<PersonDemographics> {
+public class PersonDemographicsTO extends AuditableTO<PersonDemographics>
+		implements TransferObject<PersonDemographics> {
 
 	private UUID personId, coachId, maritalStatusId, ethnicityId,
 			citizenshipId, veteranStatusId;

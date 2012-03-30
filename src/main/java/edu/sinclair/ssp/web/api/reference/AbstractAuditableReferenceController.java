@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.web.api;
+package edu.sinclair.ssp.web.api.reference;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,8 +7,6 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,31 +18,37 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.factory.TransferObjectListFactory;
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.transferobject.PersonTO;
+import edu.sinclair.ssp.model.reference.AbstractReference;
+import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
+import edu.sinclair.ssp.transferobject.reference.AbstractReferenceTO;
+import edu.sinclair.ssp.web.api.RestController;
 import edu.sinclair.ssp.web.api.validation.ValidationException;
 
-/**
- * Some basic methods for manipulating people in the system.
- * 
- * :TODO Lock down the methods in the class based on business requirements
- * 
- */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/person")
-public class PersonController extends RestController<PersonTO> {
+public abstract class AbstractAuditableReferenceController<T extends AbstractReference, TO extends AbstractReferenceTO<T>>
+		extends RestController<TO> {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(PersonController.class);
+	protected static final Logger logger = LoggerFactory
+			.getLogger(AbstractAuditableReferenceController.class);
 
-	@Autowired
-	private PersonService service;
+	protected AuditableCrudService<T> service;
 
-	private TransferObjectListFactory<PersonTO, Person> toFactory = new TransferObjectListFactory<PersonTO, Person>(
-			PersonTO.class);
+	private TransferObjectListFactory<TO, T> listFactory;
+
+	protected Class<T> persistentClass;
+
+	protected Class<TO> transferObjectClass;
+
+	protected AbstractAuditableReferenceController(
+			AuditableCrudService<T> service, Class<T> persistentClass,
+			Class<TO> transferObjectClass) {
+		this.service = service;
+		this.persistentClass = persistentClass;
+		this.transferObjectClass = transferObjectClass;
+		this.listFactory = new TransferObjectListFactory<TO, T>(
+				transferObjectClass);
+	}
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -58,13 +62,12 @@ public class PersonController extends RestController<PersonTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<PersonTO> getAll(@RequestParam(required = false) ObjectStatus status)
+	List<TO> getAll(@RequestParam(required = false) ObjectStatus status)
 			throws Exception {
 		if (status == null) {
 			status = ObjectStatus.ACTIVE;
 		}
-
-		return toFactory.toTOList(service.getAll(status));
+		return listFactory.toTOList(service.getAll(status));
 	}
 
 	/**
@@ -89,25 +92,27 @@ public class PersonController extends RestController<PersonTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET, params = "firstResult,maxResults")
 	public @ResponseBody
-	List<PersonTO> getAll(@RequestParam(required = false) ObjectStatus status,
-			@RequestParam int firstResult, @RequestParam int maxResults,
+	List<TO> getAll(@RequestParam(required = false) ObjectStatus status,
+			int firstResult, int maxResults,
 			@RequestParam(required = false) String sortExpression)
 			throws Exception {
 		if (status == null) {
 			status = ObjectStatus.ACTIVE;
 		}
 
-		return toFactory.toTOList(service.getAll(status, firstResult,
+		return listFactory.toTOList(service.getAll(status, firstResult,
 				maxResults, sortExpression));
 	}
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	PersonTO get(@PathVariable UUID id) throws Exception {
-		Person model = service.get(id);
+	TO get(@PathVariable UUID id) throws Exception {
+		T model = service.get(id);
 		if (model != null) {
-			return new PersonTO(model);
+			TO out = this.transferObjectClass.newInstance();
+			out.fromModel(model);
+			return out;
 		} else {
 			return null;
 		}
@@ -116,18 +121,20 @@ public class PersonController extends RestController<PersonTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	PersonTO create(@Valid @RequestBody PersonTO obj) throws Exception {
+	TO create(@Valid @RequestBody TO obj) throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
-					"You submitted a person with an id to the create method.  Did you mean to save?");
+					"It is invalid to send a reference entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
 
-		Person model = obj.asModel();
+		T model = obj.asModel();
 
 		if (null != model) {
-			Person createdModel = service.create(model);
+			T createdModel = service.create(model);
 			if (null != createdModel) {
-				return new PersonTO(createdModel);
+				TO out = this.transferObjectClass.newInstance();
+				out.fromModel(createdModel);
+				return out;
 			}
 		}
 		return null;
@@ -136,19 +143,20 @@ public class PersonController extends RestController<PersonTO> {
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	PersonTO save(@PathVariable UUID id, @Valid @RequestBody PersonTO obj)
-			throws Exception {
+	TO save(@PathVariable UUID id, @Valid @RequestBody TO obj) throws Exception {
 		if (id == null) {
 			throw new ValidationException(
-					"You submitted a person without an id to the save method.  Did you mean to create?");
+					"You submitted a citizenship without an id to the save method.  Did you mean to create?");
 		}
 
-		Person model = obj.asModel();
+		T model = obj.asModel();
 		model.setId(id);
 
-		Person savedPerson = service.save(model);
-		if (null != savedPerson) {
-			return new PersonTO(savedPerson);
+		T savedT = service.save(model);
+		if (null != savedT) {
+			TO out = this.transferObjectClass.newInstance();
+			out.fromModel(savedT);
+			return out;
 		}
 		return null;
 	}
@@ -168,5 +176,4 @@ public class PersonController extends RestController<PersonTO> {
 		logger.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
-
 }

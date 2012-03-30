@@ -5,7 +5,7 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class ChallengeTO extends AbstractReferenceTO implements
+public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge> {
 
 	public ChallengeTO() {
@@ -25,24 +25,11 @@ public class ChallengeTO extends AbstractReferenceTO implements
 	}
 
 	public ChallengeTO(Challenge model) {
-		super();
-		pullAttributesFromModel(model);
-	}
-
-	@Override
-	public void pullAttributesFromModel(Challenge model) {
-		super.fromModel(model);
-	}
-
-	@Override
-	public Challenge pushAttributesToModel(Challenge model) {
-		super.addToModel(model);
-		return model;
+		super(model);
 	}
 
 	@Override
 	public Challenge asModel() {
 		return pushAttributesToModel(new Challenge());
 	}
-
 }
