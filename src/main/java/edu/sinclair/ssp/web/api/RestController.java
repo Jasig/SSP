@@ -32,13 +32,16 @@ public abstract class RestController<T> {
 	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
+	 *            positive, non-zero integer. Often comes from client as a
+	 *            parameter labeled <code>start</code>.
 	 * @param maxResults
 	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
+	 *            positive, non-zero integer. Often comes from client as a
+	 *            parameter labeled <code>limit</code>.
 	 * @param sortExpression
 	 *            Property name and ascending/descending keyword. If null or
-	 *            empty string, the default sort order will be used. Example
+	 *            empty string, the default sort order will be used. Often comes
+	 *            from client as a parameter labeled <code>sort</code>. Example
 	 *            sort expression: <code>propertyName ASC</code>
 	 * @exception Exception
 	 *                Generic exception thrown if there were any errors.

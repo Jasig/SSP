@@ -87,10 +87,11 @@ public class PersonController extends RestController<PersonTO> {
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.GET, params = "firstResult,maxResults")
+	@RequestMapping(value = "/", method = RequestMethod.GET, params = "start,limit")
 	public @ResponseBody
 	List<PersonTO> getAll(@RequestParam(required = false) ObjectStatus status,
-			@RequestParam int firstResult, @RequestParam int maxResults,
+			@RequestParam(value = "start") int firstResult,
+			@RequestParam(value = "limit") int maxResults,
 			@RequestParam(required = false) String sortExpression)
 			throws Exception {
 		if (status == null) {
