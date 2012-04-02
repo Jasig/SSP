@@ -8,6 +8,19 @@
 	<version>0.0.1</version>
 	
 	<dependencies>
+		<!-- Jasper -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>3.7.6</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 		<!-- File Upload -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>

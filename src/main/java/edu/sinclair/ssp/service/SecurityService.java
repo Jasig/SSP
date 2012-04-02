@@ -5,4 +5,8 @@ import edu.sinclair.ssp.security.SspUser;
 public interface SecurityService {
 
 	public SspUser currentlyLoggedInSspUser();
+
+	public boolean isAuthenticated();
+
+	public String getSessionId();
 }

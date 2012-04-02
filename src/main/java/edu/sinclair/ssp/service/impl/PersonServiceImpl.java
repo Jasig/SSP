@@ -248,8 +248,8 @@ public class PersonServiceImpl implements PersonService {
 		this.overwrite(target, source);
 
 		// Demographics
-		if (target.getDemographics() == null
-				&& source.getDemographics() != null) {
+		if ((target.getDemographics() == null)
+				&& (source.getDemographics() != null)) {
 			target.setDemographics(new PersonDemographics());
 		}
 
@@ -265,22 +265,22 @@ public class PersonServiceImpl implements PersonService {
 						demo.getMaritalStatus() == null ? null
 								: maritalStatusService.get(demo
 										.getMaritalStatus().getId()),
-						demo.getEthnicity() == null ? null : ethnicityService
-								.get(demo.getEthnicity().getId()),
-						demo.getCitizenship() == null ? null
-								: citizenshipService.get(demo.getCitizenship()
-										.getId()),
-						demo.getVeteranStatus() == null ? null
-								: veteranStatusService.get(demo
-										.getVeteranStatus().getId()),
-						demo.getCoach() == null ? null : this.get(demo
-								.getCoach().getId()));
+										demo.getEthnicity() == null ? null : ethnicityService
+												.get(demo.getEthnicity().getId()),
+												demo.getCitizenship() == null ? null
+														: citizenshipService.get(demo.getCitizenship()
+																.getId()),
+																demo.getVeteranStatus() == null ? null
+																		: veteranStatusService.get(demo
+																				.getVeteranStatus().getId()),
+																				demo.getCoach() == null ? null : this.get(demo
+																						.getCoach().getId()));
 			}
 		}
 
 		// Education goal
-		if (target.getEducationGoal() == null
-				&& source.getEducationGoal() != null) {
+		if ((target.getEducationGoal() == null)
+				&& (source.getEducationGoal() != null)) {
 			target.setEducationGoal(new PersonEducationGoal());
 		}
 
@@ -295,8 +295,8 @@ public class PersonServiceImpl implements PersonService {
 		}
 
 		// Education plan
-		if (target.getEducationPlan() == null
-				&& source.getEducationPlan() != null) {
+		if ((target.getEducationPlan() == null)
+				&& (source.getEducationPlan() != null)) {
 			target.setEducationPlan(new PersonEducationPlan());
 		}
 
@@ -454,5 +454,11 @@ public class PersonServiceImpl implements PersonService {
 				targetSet.add(newItem);
 			}
 		}
+	}
+
+	@Override
+	public Person personFromUserId(String userId)
+			throws ObjectNotFoundException {
+		return dao.fromUserId(userId);
 	}
 }

@@ -18,7 +18,7 @@ import edu.sinclair.ssp.model.Person;
  */
 @Repository
 public class PersonDao extends AbstractAuditableCrudDao<Person> implements
-		AuditableCrudDao<Person> {
+AuditableCrudDao<Person> {
 
 	/**
 	 * Constructor
@@ -114,6 +114,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(
 				Person.class);
 		query.add(Restrictions.eq("username", username));
+		return (Person) query.uniqueResult();
+	}
+
+	public Person fromUserId(String userId) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				Person.class);
+		query.add(Restrictions.eq("userId", userId));
 		return (Person) query.uniqueResult();
 	}
 }

@@ -33,6 +33,16 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 	@Size(max = 255)
 	private String description;
 
+	private Integer lastYearAttended;
+
+	private Integer highestGradeCompleted;
+
+	private Integer graduatedYear;
+
+	@Column(length = 128)
+	@Size(max = 128)
+	private String schoolName;
+
 	/**
 	 * Associated person. Changes to this Person are not persisted.
 	 */
@@ -60,6 +70,38 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Integer getLastYearAttended() {
+		return lastYearAttended;
+	}
+
+	public void setLastYearAttended(Integer lastYearAttended) {
+		this.lastYearAttended = lastYearAttended;
+	}
+
+	public Integer getHighestGradeCompleted() {
+		return highestGradeCompleted;
+	}
+
+	public void setHighestGradeCompleted(Integer highestGradeCompleted) {
+		this.highestGradeCompleted = highestGradeCompleted;
+	}
+
+	public Integer getGraduatedYear() {
+		return graduatedYear;
+	}
+
+	public void setGraduatedYear(Integer graduatedYear) {
+		this.graduatedYear = graduatedYear;
+	}
+
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
 	}
 
 	public Person getPerson() {

@@ -6,7 +6,9 @@ import edu.sinclair.ssp.model.reference.ChallengeReferral;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
 public class ChallengeReferralTO extends AbstractReferenceTO implements
-		TransferObject<ChallengeReferral> {
+TransferObject<ChallengeReferral> {
+
+	private String publicDescription;
 
 	public ChallengeReferralTO() {
 		super();
@@ -32,17 +34,29 @@ public class ChallengeReferralTO extends AbstractReferenceTO implements
 	@Override
 	public void pullAttributesFromModel(ChallengeReferral model) {
 		super.fromModel(model);
+		setPublicDescription(model.getPublicDescription());
 	}
 
 	@Override
 	public ChallengeReferral pushAttributesToModel(ChallengeReferral model) {
 		super.addToModel(model);
+
+		model.setPublicDescription(getPublicDescription());
+
 		return model;
 	}
 
 	@Override
 	public ChallengeReferral asModel() {
 		return pushAttributesToModel(new ChallengeReferral());
+	}
+
+	public String getPublicDescription() {
+		return publicDescription;
+	}
+
+	public void setPublicDescription(String publicDescription) {
+		this.publicDescription = publicDescription;
 	}
 
 }

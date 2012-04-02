@@ -9,7 +9,7 @@ public class PersonTO extends AuditableTO implements TransferObject<Person> {
 	private String firstName, middleInitial, lastName;
 	private Date birthDate;
 	private String primaryEmailAddress, secondaryEmailAddress;
-	private String username;
+	private String username, userId;
 	private String homePhone, workPhone, cellPhone;
 	private String addressLine1, addressLine2, city, state, zipCode;
 	private String photoUrl;
@@ -36,6 +36,7 @@ public class PersonTO extends AuditableTO implements TransferObject<Person> {
 		setPrimaryEmailAddress(model.getPrimaryEmailAddress());
 		setSecondaryEmailAddress(model.getSecondaryEmailAddress());
 		setUsername(model.getUsername());
+		setUserId(model.getUserId());
 		setHomePhone(model.getHomePhone());
 		setWorkPhone(model.getWorkPhone());
 		setCellPhone(model.getCellPhone());
@@ -59,6 +60,7 @@ public class PersonTO extends AuditableTO implements TransferObject<Person> {
 		model.setPrimaryEmailAddress(getPrimaryEmailAddress());
 		model.setSecondaryEmailAddress(getSecondaryEmailAddress());
 		model.setUsername(getUsername());
+		model.setUserId(getUserId());
 		model.setHomePhone(getHomePhone());
 		model.setWorkPhone(getWorkPhone());
 		model.setCellPhone(getCellPhone());
@@ -134,6 +136,14 @@ public class PersonTO extends AuditableTO implements TransferObject<Person> {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getHomePhone() {

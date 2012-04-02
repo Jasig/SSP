@@ -3,9 +3,11 @@ package edu.sinclair.ssp.model.reference;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.validation.constraints.Size;
 
 /**
  * EducationGoal reference object.
@@ -15,6 +17,10 @@ import javax.persistence.InheritanceType;
 public class EducationGoal extends AbstractReference implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	@Column(length = 255)
+	@Size(max = 255)
+	private String otherDescription;
 
 	/**
 	 * Constructor
@@ -60,4 +66,13 @@ public class EducationGoal extends AbstractReference implements Serializable {
 	public EducationGoal(UUID id, String name, String description) {
 		super(id, name, description);
 	}
+
+	public String getOtherDescription() {
+		return otherDescription;
+	}
+
+	public void setOtherDescription(String otherDescription) {
+		this.otherDescription = otherDescription;
+	}
+
 }

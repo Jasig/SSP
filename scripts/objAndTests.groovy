@@ -126,6 +126,10 @@ class Templater{
 			if(create){
 				if(newFile.exists() && !overwrite){
 					println "The file $newFileName already exists, skipping"
+					
+					if(exampleFile.isModel()){
+						createTableForModel(tableName)
+					}
 				}else{
 					if(newFile.exists() ){
 						newFile.text = ""
@@ -261,9 +265,10 @@ class Templater{
 
 
 class ReferenceDataTemplater {
-	String templateModel = "Challenge"
+	String templateModel = "ChallengeCategory"
 	List<String> subpackage = ["reference"]
-	List<String> referenceDataModels = ["ChildCareArrangement", "ChallengeCategory","ChallengeReferral", "Citizenship", "ConfidentialityLevel", "EducationGoal", "EducationLevel", "Ethnicity", "FundingSource", "MaritalStatus", "StudentStatus", "VeteranStatus"]
+	//List<String> referenceDataModels = ["ChildCareArrangement", "ChallengeCategory","ChallengeReferral", "Citizenship", "ConfidentialityLevel", "EducationGoal", "EducationLevel", "Ethnicity", "FundingSource", "MaritalStatus", "StudentStatus", "VeteranStatus","ConfidentialityDisclosureAgreement", "MessageTemplate"]
+	List<String> referenceDataModels = ["SelfHelpGuideQuestion"]
 
 	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
 		Templater templater = new Templater(create, overwrite, writeLiquibaseScript, dryRun, displayFileContents)

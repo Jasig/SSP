@@ -6,7 +6,9 @@ import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
 public class ChallengeTO extends AbstractReferenceTO implements
-		TransferObject<Challenge> {
+TransferObject<Challenge> {
+
+	private long referralCount;
 
 	public ChallengeTO() {
 		super();
@@ -45,4 +47,12 @@ public class ChallengeTO extends AbstractReferenceTO implements
 		return pushAttributesToModel(new Challenge());
 	}
 
+
+	public long getReferralCount() {
+		return referralCount;
+	}
+
+	public void setReferralCount(long referralCount) {
+		this.referralCount = referralCount;
+	}
 }
