@@ -5,8 +5,8 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.ConfidentialityDisclosureAgreement;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class ConfidentialityDisclosureAgreementTO extends AbstractReferenceTO implements
-		TransferObject<ConfidentialityDisclosureAgreement> {
+public class ConfidentialityDisclosureAgreementTO extends AbstractReferenceTO<ConfidentialityDisclosureAgreement>
+		implements TransferObject<ConfidentialityDisclosureAgreement> {
 
 	public ConfidentialityDisclosureAgreementTO() {
 		super();

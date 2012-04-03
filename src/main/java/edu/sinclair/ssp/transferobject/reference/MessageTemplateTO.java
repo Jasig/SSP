@@ -5,8 +5,8 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.MessageTemplate;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class MessageTemplateTO extends AbstractReferenceTO implements
-		TransferObject<MessageTemplate> {
+public class MessageTemplateTO extends AbstractReferenceTO<MessageTemplate>
+		implements TransferObject<MessageTemplate> {
 
 	public MessageTemplateTO() {
 		super();

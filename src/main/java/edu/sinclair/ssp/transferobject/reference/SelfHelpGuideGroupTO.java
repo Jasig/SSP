@@ -5,8 +5,8 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.SelfHelpGuideGroup;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class SelfHelpGuideGroupTO extends AbstractReferenceTO implements
-		TransferObject<SelfHelpGuideGroup> {
+public class SelfHelpGuideGroupTO extends AbstractReferenceTO<SelfHelpGuideGroup>
+		implements TransferObject<SelfHelpGuideGroup> {
 
 	public SelfHelpGuideGroupTO() {
 		super();
