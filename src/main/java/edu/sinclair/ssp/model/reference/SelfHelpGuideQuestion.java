@@ -33,11 +33,11 @@ Serializable {
 	private boolean mandatory;
 
 	@ManyToOne
-	@JoinColumn(nullable = false, updatable = false)
+	@JoinColumn(name = "challenge_id", nullable = false, updatable = false)
 	private Challenge challenge;
 
 	@ManyToOne
-	@JoinColumn(nullable = false, updatable = false)
+	@JoinColumn(name = "self_help_guide_id", nullable = false, updatable = false)
 	private SelfHelpGuide selfHelpGuide;
 
 	@OneToMany(mappedBy = "selfHelpGuideQuestion")

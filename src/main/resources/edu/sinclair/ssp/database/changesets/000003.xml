@@ -1596,19 +1596,19 @@
 			<column name="threshold" type="int">
 				<constraints nullable="false" />
 			</column>
-			<column name="introductoryText" type="text">
+			<column name="introductory_text" type="text">
 				<constraints nullable = "false" />
 			</column>
-			<column name="summaryText" type="text">
+			<column name="summary_text" type="text">
 				<constraints nullable = "false" />
 			</column>
-			<column name="summaryTextEarlyAlert" type="text">
+			<column name="summary_text_early_alert" type="text">
 				<constraints nullable = "false" />
 			</column>
-			<column name="summaryTextThreshold" type="text">
+			<column name="summary_text_threshold" type="text">
 				<constraints nullable = "false" />
 			</column>
-			<column name="authenticationRequired" type="boolean">
+			<column name="authentication_required" type="boolean">
 				<constraints nullable = "false" />
 			</column> 
 		</createTable>
@@ -1662,6 +1662,9 @@
 			<column name="mandatory" type="boolean">
 				<constraints nullable="false" />
 			</column>
+			<column name="critical" type="boolean">
+				<constraints nullable="false" />
+			</column>
 			<column name="challenge_id" type="uuid">
 				<constraints nullable="false"
 					foreignKeyName="self_help_guide_question_challenge_id_challenge_id"
@@ -1695,8 +1698,8 @@
 			<column name="self_help_guide_question" type="text">
 				<constraints nullable="true" />
 			</column>
-			<column name="show_in_student_intake" type="boolean"/>
-			<column name="show_in_self_help_search" type="boolean"/>
+			<column name="show_in_student_intake" type="boolean" valueBoolean="true"/>
+			<column name="show_in_self_help_search" type="boolean" valueBoolean="true"/>
 		</addColumn>
 		
 		<rollback>
@@ -1754,6 +1757,18 @@
 			<dropColumn tableName="person_demographics" columnName="child_care_arrangement_id"/>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="add other_description to education_goal" author="daniel.bower">
+		<addColumn tableName="education_goal">
+			<column name="other_description" type="character varying(255)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="education_goal" columnName="other_description"/>
+		</rollback>
+	</changeSet>
+	
 	
 	<!-- Add challengeChallengeReferral table -->
 	<!-- Add SelfHelpGuideResponse table -->
