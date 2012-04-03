@@ -75,7 +75,7 @@ How to set up your development environment:
 		set it to before.)
 10. Setup local configuration files
 	- Symbolically link to, or copy (and manually watch for changes), the files
-		in /externalConfig. The links/copies should be in a directory outside of
+		in /src/main/config/external. The links/copies should be in a directory outside of
 		the source control tree, since your local versions need modified
 		appropriately for your environment and must not be committed back to
 		the repository.

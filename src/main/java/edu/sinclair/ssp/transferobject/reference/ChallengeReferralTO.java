@@ -5,8 +5,8 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.ChallengeReferral;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class ChallengeReferralTO extends AbstractReferenceTO implements
-TransferObject<ChallengeReferral> {
+public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
+		implements TransferObject<ChallengeReferral> {
 
 	private String publicDescription;
 

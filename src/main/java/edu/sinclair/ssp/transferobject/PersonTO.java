@@ -4,7 +4,8 @@ import java.util.Date;
 
 import edu.sinclair.ssp.model.Person;
 
-public class PersonTO extends AuditableTO implements TransferObject<Person> {
+public class PersonTO extends AuditableTO<Person> implements
+		TransferObject<Person> {
 
 	private String firstName, middleInitial, lastName;
 	private Date birthDate;

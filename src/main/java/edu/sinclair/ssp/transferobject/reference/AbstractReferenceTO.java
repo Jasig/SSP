@@ -9,9 +9,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 import edu.sinclair.ssp.model.reference.AbstractReference;
 import edu.sinclair.ssp.transferobject.AuditableTO;
 
-public abstract class AbstractReferenceTO extends AuditableTO {
+public abstract class AbstractReferenceTO<T extends AbstractReference> extends
+		AuditableTO<T> {
 
-	// validator
 	@NotNull
 	@NotEmpty
 	private String name;
@@ -32,9 +32,14 @@ public abstract class AbstractReferenceTO extends AuditableTO {
 	}
 
 	public AbstractReferenceTO(UUID id, String name, String description) {
-		this(id);
+		super(id);
 		this.name = name;
 		this.description = description;
+	}
+
+	public AbstractReferenceTO(T model) {
+		super();
+		pullAttributesFromModel(model);
 	}
 
 	public void fromModel(AbstractReference model) {
@@ -67,4 +72,14 @@ public abstract class AbstractReferenceTO extends AuditableTO {
 		this.description = description;
 	}
 
+	@Override
+	public void pullAttributesFromModel(T model) {
+		this.fromModel(model);
+	}
+
+	@Override
+	public T pushAttributesToModel(T model) {
+		this.addToModel(model);
+		return model;
+	}
 }

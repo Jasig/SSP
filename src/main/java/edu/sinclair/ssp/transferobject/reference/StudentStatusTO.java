@@ -5,8 +5,8 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.StudentStatus;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class StudentStatusTO extends AbstractReferenceTO implements
-		TransferObject<StudentStatus> {
+public class StudentStatusTO extends AbstractReferenceTO<StudentStatus>
+		implements TransferObject<StudentStatus> {
 
 	public StudentStatusTO() {
 		super();

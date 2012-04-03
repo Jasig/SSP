@@ -5,8 +5,8 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.ChallengeCategory;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class ChallengeCategoryTO extends AbstractReferenceTO implements
-		TransferObject<ChallengeCategory> {
+public class ChallengeCategoryTO extends AbstractReferenceTO<ChallengeCategory>
+		implements TransferObject<ChallengeCategory> {
 
 	public ChallengeCategoryTO() {
 		super();

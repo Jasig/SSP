@@ -5,7 +5,7 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.Citizenship;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class CitizenshipTO extends AbstractReferenceTO implements
+public class CitizenshipTO extends AbstractReferenceTO<Citizenship> implements
 		TransferObject<Citizenship> {
 
 	public CitizenshipTO() {
