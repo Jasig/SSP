@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file allows you greater access to the application's configuration on a
+per site basis.  This is a primary point of access for integration into systems
+like mail. 
+
+It is necessary to include this file in the production config directory.-->
+
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"

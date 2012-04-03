@@ -1,0 +1,55 @@
+This document will walk through the general process of creating an environment to run SSP in a production environment.
+
+Required:
+ - Database Server         - PostgreSQL 8 or greater suggested  (will support MS-SQL in future release)
+ - Java Application Server - Apache Tomcat 6 suggested
+  
+Installing PostgreSQL (http://www.postgresql.org/)
+  On Unix:
+    - PostgreSQL is available in the package manager of most linux distributions.  
+      Install it according to the distributions instructions.
+        Ubuntu - https://help.ubuntu.com/11.10/serverguide/C/postgresql.html
+  On Mac:
+    - PostgreSQL is available via the ????? package manager or as a download on 
+      the postgresql.org site.
+  On Windows:
+    - PostgreSQL is available as a download on the postgresql.org site.
+  
+Configure PostgreSQL
+  Connect with pgadmin or your preferred db admin tool and create the "ssp" & 
+  "sspadmin" users and the "ssp" database.
+  
+  
+Installing Apache Tomcat 6
+  On Unix:
+    - Tomcat is available in the package manager of most linux distributions.  
+      Install it according to the distributions instructions.
+        Ubuntu - https://help.ubuntu.com/11.10/serverguide/C/tomcat.html
+  On Mac:
+    - Tomcat is available via the ????? package manager or as a download at:  
+      http://tomcat.apache.org/download-60.cgi
+  On Windows:
+    - Tomcat is available as a download at: http://tomcat.apache.org/download-60.cgi
+  
+Configure SSP
+  On Unix/Mac:
+    - Create a directory at /usr/local/etc/ssp
+    - Make it only readable by the user that is running tomcat
+  On Windows:
+    - Create a directory at C:\ssp\
+    - Make it only readable by the user that is running tomcat
+    - In the next step, be sure to use Windows paths formatted in Java
+    - There is a context.xml file that is put into the conf directory of tomcat 
+      once the application starts.  Or you can paste it there ahead of time.  
+      It is available from this project in src/main/webapp/META-INF/context.xml
+      The destination path is $CATALINA_HOME/conf/context.xml
+  After Above on Unix/Mac/Windows:
+    - copy the files from this project in src/main/config/external to /usr/local/etc/ssp or C:\ssp\
+    - Review each file carefully to set the appropriate settings.
+    
+Deploy SSP
+  - Right now the deployment file is not available anywhere, so it must be 
+    generated with maven.  Look at the DevelopmentEnvironmentSetup.txt for instructions.
+  - Once you have the war file, you'll need to drop it into the webapps directory of tomcat
+  - Double check your settings in the config directory.
+  - Start Tomcat according to the manner specified by your Operating System.

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Similar to ssp-local, this file allows you greater access to the 
+application's SECURITY configuration on a per site basis.  This is a primary 
+point of access for integration into systems like ldap. 
+
+It is necessary to include this file in the production config directory.-->
+
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
