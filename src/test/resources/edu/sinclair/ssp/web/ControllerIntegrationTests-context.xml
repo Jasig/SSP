@@ -16,18 +16,24 @@
 
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
 	<context:component-scan base-package="edu.sinclair.ssp" />
+	<mvc:annotation-driven />
+	
+	<mvc:interceptors>
+		<bean class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">
+			<property name="sessionFactory" ref="sessionFactory" />
+		</bean>
+	</mvc:interceptors>
 
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	<bean
+	class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"
+	id="sspRequestMappingHandlerAdapter">
 		<property name="cacheSeconds" value="0" />
-		<property name="messageConverters">
-			<list>
-				<ref bean="mappingJacksonHttpMessageConverter" />
-			</list>
+		<property name="webBindingInitializer">
+			<!-- Allows binding of UUIDs -->
+			<bean class="edu.sinclair.ssp.util.BindingInitializer" />
 		</property>
 	</bean>
-
-	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
-
+	
 	<bean id="jasperViewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
 		<property name="order" value="1" />
 	    <property name="basename" value="views"/>

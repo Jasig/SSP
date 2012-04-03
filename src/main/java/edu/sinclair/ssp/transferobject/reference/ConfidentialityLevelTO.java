@@ -5,7 +5,8 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.reference.ConfidentialityLevel;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
-public class ConfidentialityLevelTO extends AbstractReferenceTO implements
+public class ConfidentialityLevelTO extends
+		AbstractReferenceTO<ConfidentialityLevel> implements
 		TransferObject<ConfidentialityLevel> {
 
 	public ConfidentialityLevelTO() {

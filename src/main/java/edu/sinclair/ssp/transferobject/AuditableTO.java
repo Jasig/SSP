@@ -6,7 +6,7 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.Auditable;
 import edu.sinclair.ssp.model.ObjectStatus;
 
-public abstract class AuditableTO {
+public abstract class AuditableTO<T> implements TransferObject<T> {
 
 	private UUID id;
 

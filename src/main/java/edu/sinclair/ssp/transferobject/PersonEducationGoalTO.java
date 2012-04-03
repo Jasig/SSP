@@ -5,8 +5,8 @@ import java.util.UUID;
 import edu.sinclair.ssp.model.PersonEducationGoal;
 import edu.sinclair.ssp.model.reference.EducationGoal;
 
-public class PersonEducationGoalTO extends AuditableTO implements
-		TransferObject<PersonEducationGoal> {
+public class PersonEducationGoalTO extends AuditableTO<PersonEducationGoal>
+		implements TransferObject<PersonEducationGoal> {
 
 	private UUID personId, educationGoalId;
 	private String description, plannedOccupation;
