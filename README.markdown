@@ -4,7 +4,7 @@ To start developing look at the documentation in doc/development.
 To install SSP-OS, look at the documentation in doc/installation.  
 
 Descriptions of files and directories at the root of this project:  
-doc					documentation that is relevant to business rules, development, and installation.
+[doc](tree/master/doc/) - documentation that is relevant to business rules, development, and installation.
 
 src					source code to build the application  
 pom.xml				maven build file  
