@@ -50,6 +50,8 @@ public class ChallengeDaoTest {
 		Challenge obj = new Challenge();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setShowInSelfHelpSearch(false);
+		obj.setShowInStudentIntake(false);
 		dao.save(obj);
 
 		assertNotNull(obj.getId());

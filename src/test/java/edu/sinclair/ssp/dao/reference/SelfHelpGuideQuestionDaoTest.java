@@ -36,6 +36,9 @@ public class SelfHelpGuideQuestionDaoTest {
 	private SelfHelpGuideQuestionDao dao;
 
 	@Autowired
+	private ChallengeDao challengeDao;
+
+	@Autowired
 	private SecurityServiceInTestEnvironment securityService;
 
 	@Before
@@ -50,6 +53,7 @@ public class SelfHelpGuideQuestionDaoTest {
 		SelfHelpGuideQuestion obj = new SelfHelpGuideQuestion();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setChallenge(challengeDao.getAll(ObjectStatus.ACTIVE).get(0));
 		dao.save(obj);
 
 		assertNotNull(obj.getId());
@@ -90,6 +94,7 @@ public class SelfHelpGuideQuestionDaoTest {
 		SelfHelpGuideQuestion obj = new SelfHelpGuideQuestion();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setChallenge(challengeDao.getAll(ObjectStatus.ACTIVE).get(0));
 		dao.save(obj);
 
 		SelfHelpGuideQuestion obj2 = new SelfHelpGuideQuestion();
