@@ -1,9 +1,10 @@
 # Welcome to the Student Success Portal - Open Source Edition  
 
-### To start developing look at the documentation in doc/development.  
-### To install SSP-OS, look at the documentation in doc/installation.  
+### To start...  
+ *  developing, look at the documentation in doc/development.  
+ *  installing, look at the documentation in doc/installation.  
 
-### Descriptions of files and directories at the root of this project:  
+#### Descriptions of files and directories at the root of this project:  
 [doc](SSP-Open-Source-Project/tree/master/doc/) - documentation that is relevant to business rules, development, and installation.
 
 [src](SSP-Open-Source-Project/tree/master/src/) - source code to build the application  
