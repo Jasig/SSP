@@ -1,11 +1,17 @@
 <!--
-	 Add debug="true" to configuration element to debug logback configuration.
+	This file configures logging for the SSP application.
 
-	 Adding scan="true" to configuration element allows logback to automatically
-	 update itself from this config file without restarting the app.
+	It is necessary to include this file in the production config directory.
 
-	 If you modify this file while the app is running, and it appears not to load,
-	 but also does not give you an error message, then you likely have an xml syntax error.
+
+
+	Add debug="true" to configuration element to debug logback configuration.
+
+	Adding scan="true" to configuration element allows logback to automatically
+	update itself from this config file without restarting the app.
+
+	If you modify this file while the app is running, and it appears not to load,
+	but also does not give you an error message, then you likely have an xml syntax error.
 -->
 
 <configuration debug="true" scan="true">
