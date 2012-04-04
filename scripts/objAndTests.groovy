@@ -218,7 +218,7 @@ class Templater{
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(100)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">

@@ -1345,7 +1345,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(100)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -1391,7 +1391,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(100)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -1436,7 +1436,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(100)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -1570,7 +1570,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(100)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -1631,7 +1631,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(100)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -1769,6 +1769,17 @@
 		</rollback>
 	</changeSet>
 	
+	<changeSet id="fix name column size from 25 to 100" author="daniel.bower">
+		<modifyDataType tableName="challenge_category" columnName="name" newDataType="character varying(100)"/>
+		<modifyDataType tableName="challenge_referral" columnName="name" newDataType="character varying(100)"/>
+		<modifyDataType tableName="confidentiality_level" columnName="name" newDataType="character varying(100)"/>
+		
+		<rollback>
+			<modifyDataType tableName="challenge_category" columnName="name" newDataType="character varying(25)"/>
+			<modifyDataType tableName="challenge_referral" columnName="name" newDataType="character varying(25)"/>
+			<modifyDataType tableName="confidentiality_level" columnName="name" newDataType="character varying(25)"/>
+		</rollback>
+	</changeSet>
 	
 	<!-- Add challengeChallengeReferral table -->
 	<!-- Add SelfHelpGuideResponse table -->
