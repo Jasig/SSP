@@ -1,4 +1,4 @@
-describe("Search Results", function() {
+describe("search-results.js --> Search Results", function() {
     var studentstore = null;
 
     beforeEach(function(){
