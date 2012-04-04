@@ -6,6 +6,16 @@
 	<packaging>war</packaging>
 	<name>SSP</name>
 	<version>0.0.1</version>
+
+	<properties>
+		<spring.version>3.1.1.RELEASE</spring.version>
+		<spring.security.version>3.0.7.RELEASE</spring.security.version>
+		
+		<targetJdk>1.6</targetJdk>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<gmaven.runtime>1.8</gmaven.runtime>
+	</properties>
 	
 	<dependencies>
 		<!-- Jasper -->
@@ -273,6 +283,26 @@
 			<version>4.9</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency> 
+			<groupId>org.codehaus.groovy.maven.runtime</groupId> 
+			<artifactId>gmaven-runtime-api</artifactId> 
+			<version>1.0</version>
+			<scope>test</scope> 
+			<exclusions> 
+				<exclusion> 
+					<groupId>org.codehaus.groovy</groupId> 
+					<artifactId>groovy-all-minimal</artifactId> 
+				</exclusion> 
+			</exclusions> 
+		</dependency> 
+
+		<dependency> 
+			<groupId>org.codehaus.groovy</groupId> 
+			<artifactId>groovy-all</artifactId> 
+			<version>1.8.6</version> 
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	
 	<build>	 
@@ -295,6 +325,20 @@
 					<encoding>UTF-8</encoding>
 					<showWarnings>true</showWarnings>
 				</configuration>
+			</plugin>
+			<!-- GMaven plugin for unit tests -->
+			<plugin>
+				<groupId>org.codehaus.gmaven</groupId>
+				<artifactId>gmaven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generateTestStubs</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<!-- plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -339,6 +383,38 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.gmaven</groupId>
+										<artifactId>gmaven-plugin</artifactId>
+										<versionRange>[1.4,)</versionRange>
+										<goals>
+											<goal>generateTestStubs</goal>
+											<goal>testCompile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute >
+											<runOnIncremental>false</runOnIncremental>
+										</execute >
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	
 	<reporting>
@@ -372,13 +448,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
-	<properties>
-		<spring.version>3.1.1.RELEASE</spring.version>
-		<spring.security.version>3.0.7.RELEASE</spring.security.version>
-		
-		<targetJdk>1.6</targetJdk>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 	
 </project>
