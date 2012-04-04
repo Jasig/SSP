@@ -38,9 +38,9 @@ How to set up your development environment:
 	- JAVA_HOME=C:\Program Files\Java\jdk1.6.0_31
 	- MAVEN_HOME=C:\java\bin\apache-maven-3.0.3
 	- SSP_TESTCONFIGDIR=C:\java\projects\ssp\src\test\resources\
-		This will point to wherever your projects directory and SVN checkouts
+		This will point to wherever your projects directory and Git checkouts
 		were placed. You may need to alter the "C:\java\projects\ssp" part, but
-		the "src\test\resources\" is relative to the SVN root of the project.
+		the "src\test\resources\" is relative to the root of the project.
 		Make sure to include the trailing directory separator!
 	- Append the following to your system PATH environment variable:
 		- %GRADLE_HOME%\bin
@@ -63,15 +63,8 @@ How to set up your development environment:
 			- Subclipse
 		- Click the Install button in the lower right. Accept any dialog boxes
 			that are shown.
-	- Setup project and SVN checkout directory
-		- File->New->Project...
-		- Search for "SVN" and select "Checkout projects from SVN".
-		- Click Next until you get to the "Location" box and enter the URL:
-			https://studentzen.svn.cvsdude.com/sspopensource
-		- Enter your SVN credentials. Once connected, select SSP->trunk from SVN.
-		- Follow the rest of the prompts as you see fit.
 	- (Don't forget to update the SSP_TESTCONFIGDIR environment variable if the
-		path you chose for the project checkout from SVN differs from what you
+		path you chose for the project checkout from Git differs from what you
 		set it to before.)
 10. Setup local configuration files
 	- Symbolically link to, or copy (and manually watch for changes), the files
@@ -97,7 +90,7 @@ Additional, optional tasks:
 			/externalLibs/msSQL-JDBC_toMaven.sh script file.
 			On a Windows system you can open that script file in a text editor
 			to read the instructions.
-	- To view/edit some of the documentation in the SVN /doc directory, install
+	- To view/edit some of the documentation in the source /doc directory, install
 		the following applications:
 		- ObjectAid: http://www.objectaid.com/installation
 		- FreeMind
