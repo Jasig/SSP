@@ -284,6 +284,7 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Allow using groovy maven tools in test scope -->
 		<dependency> 
 			<groupId>org.codehaus.groovy.maven.runtime</groupId> 
 			<artifactId>gmaven-runtime-api</artifactId> 
@@ -296,11 +297,18 @@
 				</exclusion> 
 			</exclusions> 
 		</dependency> 
-
 		<dependency> 
 			<groupId>org.codehaus.groovy</groupId> 
 			<artifactId>groovy-all</artifactId> 
 			<version>1.8.6</version> 
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Spock testing -->
+		<dependency>
+			<groupId>org.spockframework</groupId>
+			<artifactId>spock-core</artifactId>
+			<version>0.6-groovy-1.8</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -383,6 +391,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		
 		<pluginManagement>
 			<plugins>
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
