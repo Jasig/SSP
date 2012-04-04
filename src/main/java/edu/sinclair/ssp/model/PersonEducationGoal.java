@@ -41,6 +41,10 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 	@Size(max = 50)
 	private String plannedOccupation;
 
+	@Column(length = 128)
+	@Size(max = 128)
+	private String militaryBranchDescription;
+
 	@Column()
 	private int howSureAboutMajor;
 
@@ -85,6 +89,14 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		this.plannedOccupation = plannedOccupation;
 	}
 
+	public String getMilitaryBranchDescription() {
+		return militaryBranchDescription;
+	}
+
+	public void setMilitaryBranchDescription(String militaryBranchDescription) {
+		this.militaryBranchDescription = militaryBranchDescription;
+	}
+
 	/**
 	 * Overwrites simple properties with the parameter's properties.
 	 * 
@@ -95,5 +107,6 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		this.setDescription(source.getDescription());
 		this.setPlannedOccupation(source.getPlannedOccupation());
 		this.setHowSureAboutMajor(source.getHowSureAboutMajor());
+		this.setMilitaryBranchDescription(source.getMilitaryBranchDescription());
 	}
 }

@@ -19,6 +19,8 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 
 	private SspUser current;
 
+	private String sessionId;
+
 	@Override
 	public SspUser currentlyLoggedInSspUser() {
 		return current;
@@ -65,5 +67,19 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 		}
 
 		this.current = new MockUser(current, current.getUsername(), authorities);
+	}
+
+	@Override
+	public boolean isAuthenticated() {
+		return null == current;
+	}
+
+	@Override
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 }

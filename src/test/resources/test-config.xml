@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:task="http://www.springframework.org/schema/task"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
@@ -13,10 +11,11 @@
 		http://www.springframework.org/schema/util     http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties" location="file:#{systemEnvironment['SSP_TESTCONFIGDIR']}ssp-test-config.properties"/>
+	<util:properties id="configProperties"
+		location="file:#{systemEnvironment['SSP_TESTCONFIGDIR']}ssp-test-config.properties" />
 
 	<tx:annotation-driven />
-	
+
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
 		<property name="dataSource">
 			<bean class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
@@ -26,29 +25,30 @@
 				<property name="password" value="#{configProperties.db_admin_password}" />
 			</bean>
 		</property>
-		<property name="changeLog" value="classpath:edu/sinclair/ssp/database/masterChangeLog-test.xml" />
+		<property name="changeLog"
+			value="classpath:edu/sinclair/ssp/database/masterChangeLog-test.xml" />
 	</bean>
 
 	<!-- Hibernate -->
-	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
-	<bean id="securityService" class="edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment"/>
+	<bean id="securityService"
+		class="edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment" />
 
 	<!-- Hibernate Session Factory -->
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
 		depends-on="liquibase">
 		<property name="dataSource" ref="sspDataSource" />
-		<property name="packagesToScan" value="edu.sinclair.ssp.model"/>
-		<property name="entityInterceptor" >
-			<bean class="edu.sinclair.ssp.dao.AuditableEntityInterceptor"/>
+		<property name="packagesToScan" value="edu.sinclair.ssp.model" />
+		<property name="entityInterceptor">
+			<bean class="edu.sinclair.ssp.dao.AuditableEntityInterceptor" />
 		</property>
-		<!-- property name="mappingResources">
-			<array>
-				<value>mappings.xml</value> 
-			</array>
-		</property -->
+		<!-- property name="mappingResources"> <array> <value>mappings.xml</value> 
+			</array> </property -->
 		<property name="hibernateProperties">
 			<value>
 				hibernate.dialect=#{configProperties.db_dialect}
@@ -56,11 +56,12 @@
 			</value>
 		</property>
 		<property name="namingStrategy">
-			<bean class="org.hibernate.cfg.ImprovedNamingStrategy"/>
+			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
 		</property>
 	</bean>
-	
-	<bean id="sspDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+
+	<bean id="sspDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
 		<property name="driverClassName" value="#{configProperties.db_driver_class}" />
 		<property name="url" value="#{configProperties.db_url}" />
 		<property name="username" value="#{configProperties.db_username}" />
@@ -68,6 +69,13 @@
 		<property name="validationQuery" value="select 1" />
 		<property name="maxActive" value="10" />
 		<property name="maxIdle" value="5" />
-		<property name="maxWait" value="10000" /> 
+		<property name="maxWait" value="10000" />
+	</bean>
+
+	<!-- Mail Server Configuration -->
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="nonexistent" />
+		<property name="port" value="0000" />
+		<property name="protocol" value="smtp" />
 	</bean>
 </beans>

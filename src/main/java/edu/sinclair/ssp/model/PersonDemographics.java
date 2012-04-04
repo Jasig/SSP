@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import edu.sinclair.ssp.model.reference.ChildCareArrangement;
 import edu.sinclair.ssp.model.reference.Citizenship;
 import edu.sinclair.ssp.model.reference.EmploymentShifts;
 import edu.sinclair.ssp.model.reference.Ethnicity;
@@ -85,6 +86,10 @@ public class PersonDemographics extends Auditable implements Serializable {
 
 	@Column
 	private int numberOfChildren;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "child_care_arrangement_id", nullable = true, insertable = true, updatable = true)
+	private ChildCareArrangement childCareArrangement;
 
 	@Column(length = 50)
 	@Size(max = 50)
@@ -224,6 +229,15 @@ public class PersonDemographics extends Auditable implements Serializable {
 
 	public void setNumberOfChildren(int numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
+	}
+
+	public ChildCareArrangement getChildCareArrangement() {
+		return childCareArrangement;
+	}
+
+	public void setChildCareArrangement(
+			ChildCareArrangement childCareArrangement) {
+		this.childCareArrangement = childCareArrangement;
 	}
 
 	public String getChildAges() {

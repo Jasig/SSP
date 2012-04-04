@@ -24,6 +24,8 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import edu.sinclair.ssp.model.tool.PersonTool;
+
 /**
  * A Person entity.
  * 
@@ -111,6 +113,17 @@ public class Person extends Auditable implements Serializable {
 	@Column(length = 25)
 	@Size(max = 25)
 	private String username;
+
+	/**
+	 * User Id
+	 * Secondary Id for used to identify the user in secondary systems like
+	 * ldap.
+	 * 
+	 * Maximum length of 25.
+	 */
+	@Column(length = 25)
+	@Size(max = 25)
+	private String userId;
 
 	/**
 	 * Home phone number.
@@ -273,6 +286,17 @@ public class Person extends Auditable implements Serializable {
 	@Cascade(CascadeType.ALL)
 	private Set<PersonChallenge> challenges;
 
+	// :TODO person tools mapping
+	@Nullable()
+	@OneToMany(mappedBy = "person")
+	@Cascade(value = CascadeType.ALL)
+	private Set<PersonTool> tools;
+
+	// :TODO person confidentialityDisclosureAgreement mapping
+	@Nullable()
+	@OneToMany(mappedBy = "person")
+	@Cascade(value = CascadeType.ALL)
+	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
 	/**
 	 * Initialize a Person.
 	 * 
@@ -296,6 +320,14 @@ public class Person extends Auditable implements Serializable {
 		challenges = new HashSet<PersonChallenge>();
 		fundingSources = new HashSet<PersonFundingSource>();
 		educationLevels = new HashSet<PersonEducationLevel>();
+	}
+
+	public String getFullName() {
+		return firstName + " " + lastName;
+	}
+
+	public String getEmailAddressWithName() {
+		return this.getFullName() + " <" + primaryEmailAddress + ">";
 	}
 
 	public String getFirstName() {
@@ -490,4 +522,30 @@ public class Person extends Auditable implements Serializable {
 	public void setChallenges(Set<PersonChallenge> challenges) {
 		this.challenges = challenges;
 	}
+
+	public Set<PersonTool> getTools() {
+		return tools;
+	}
+
+	public void setTools(Set<PersonTool> tools) {
+		this.tools = tools;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public Set<PersonConfidentialityDisclosureAgreement> getConfidentialityDisclosureAgreements() {
+		return confidentialityDisclosureAgreements;
+	}
+
+	public void setConfidentialityDisclosureAgreements(
+			Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements) {
+		this.confidentialityDisclosureAgreements = confidentialityDisclosureAgreements;
+	}
+
 }

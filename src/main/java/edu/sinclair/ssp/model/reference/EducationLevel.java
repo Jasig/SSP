@@ -14,6 +14,19 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class EducationLevel extends AbstractReference implements Serializable {
 
+	// :TODO Match these to actual values used in ssp
+	// Education Level
+	public static final UUID NO_DIPLOMA_NO_GED_ID = UUID
+			.fromString("B2D05BB9-5056-A51A-80FD-FE0D53E6EB07");
+	public static final UUID GED_ID = UUID
+			.fromString("B2D05BF8-5056-A51A-8053-E140B84D65A4");
+	public static final UUID HIGH_SCHOOL_GRADUATION_ID = UUID
+			.fromString("B2D05C27-5056-A51A-80D2-6A4742E0AB64");
+	public static final UUID SOME_COLLEGE_CREDITS_ID = UUID
+			.fromString("B2D05C36-5056-A51A-80E7-C017F4882593");
+	public static final UUID OTHER_ID = UUID
+			.fromString("B2D05C65-5056-A51A-8024-DC8A118A585C");
+
 	private static final long serialVersionUID = 1L;
 
 	/**

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import edu.sinclair.ssp.security.SspUser;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
@@ -51,5 +52,16 @@ public class SecurityServiceImpl implements SecurityService {
 		}
 
 		return sspUser;
+	}
+
+	@Override
+	public boolean isAuthenticated() {
+		return SecurityContextHolder.getContext().getAuthentication()
+				.isAuthenticated();
+	}
+
+	@Override
+	public String getSessionId() {
+		return RequestContextHolder.currentRequestAttributes().getSessionId();
 	}
 }

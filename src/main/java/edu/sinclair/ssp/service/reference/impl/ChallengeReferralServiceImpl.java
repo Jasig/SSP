@@ -77,6 +77,7 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
 		current.setObjectStatus(obj.getObjectStatus());
+		current.setPublicDescription(obj.getPublicDescription());
 
 		return dao.save(current);
 	}

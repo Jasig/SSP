@@ -97,16 +97,17 @@ class Templater{
 	 * Whether to just print results or actually perform them
 	 */
 	public void run(String modelName, String newModelName, List<String> subpackage){
-		List<ExampleFile> exampleFiles = [new ExampleFile(javaMainPath, appPath, ["dao"] + subpackage, modelName, "Dao.java"),
-					new ExampleFile(javaMainPath, appPath, ["model"] + subpackage, modelName, ".java"),
-					new ExampleFile(javaMainPath, appPath, ["service"] + subpackage, modelName, "Service.java"),
-					new ExampleFile(javaMainPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceImpl.java"),
+		List<ExampleFile> exampleFiles = [
+                    //new ExampleFile(javaMainPath, appPath, ["dao"] + subpackage, modelName, "Dao.java"),
+					//new ExampleFile(javaMainPath, appPath, ["model"] + subpackage, modelName, ".java"),
+					//new ExampleFile(javaMainPath, appPath, ["service"] + subpackage, modelName, "Service.java"),
+					//new ExampleFile(javaMainPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceImpl.java"),
 					new ExampleFile(javaMainPath, appPath, ["web", "api"] + subpackage, modelName, "Controller.java"),
 					//new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage, modelName, "TOFactory.java"),
 					//new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryImpl.java"),
 					new ExampleFile(javaMainPath, appPath, ["transferobject"] + subpackage, modelName, "TO.java"),
-					new ExampleFile(javaTestPath, appPath, ["dao"] + subpackage, modelName, "DaoTest.java"),
-					new ExampleFile(javaTestPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceTest.java")
+					//new ExampleFile(javaTestPath, appPath, ["dao"] + subpackage, modelName, "DaoTest.java"),
+					//new ExampleFile(javaTestPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceTest.java")
 					//new ExampleFile(javaTestPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryTest.java")
 					]
 		
@@ -126,6 +127,10 @@ class Templater{
 			if(create){
 				if(newFile.exists() && !overwrite){
 					println "The file $newFileName already exists, skipping"
+					
+					if(exampleFile.isModel()){
+						createTableForModel(tableName)
+					}
 				}else{
 					if(newFile.exists() ){
 						newFile.text = ""
@@ -213,7 +218,7 @@ class Templater{
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="character varying(100)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="character varying(150)">
@@ -261,9 +266,10 @@ class Templater{
 
 
 class ReferenceDataTemplater {
-	String templateModel = "Challenge"
+	String templateModel = "ChallengeCategory"
 	List<String> subpackage = ["reference"]
-	List<String> referenceDataModels = ["ChildCareArrangement", "ChallengeCategory","ChallengeReferral", "Citizenship", "ConfidentialityLevel", "EducationGoal", "EducationLevel", "Ethnicity", "FundingSource", "MaritalStatus", "StudentStatus", "VeteranStatus"]
+	//List<String> referenceDataModels = ["ChildCareArrangement", "ChallengeCategory","ChallengeReferral", "Citizenship", "ConfidentialityLevel", "EducationGoal", "EducationLevel", "Ethnicity", "FundingSource", "MaritalStatus", "SelfHelpGuideQuestion", "StudentStatus", "VeteranStatus","ConfidentialityDisclosureAgreement", "MessageTemplate"]
+	List<String> referenceDataModels = ["MessageTemplate", "SelfHelpGuideQuestion", "ConfidentialityDisclosureAgreement", "SelfHelpGuide", "SelfHelpGuideGroup"]
 
 	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
 		Templater templater = new Templater(create, overwrite, writeLiquibaseScript, dryRun, displayFileContents)
@@ -274,4 +280,4 @@ class ReferenceDataTemplater {
 }
 
 
-new ReferenceDataTemplater().run(true, true, true, false, false)
+new ReferenceDataTemplater().run(true, true, false, false, false)

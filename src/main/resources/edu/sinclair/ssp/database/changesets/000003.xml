@@ -1331,4 +1331,459 @@
 
 	</changeSet>
 
+	<!-- Add public_description column to Challenge Referral -->
+	<changeSet id="add public_description column to challenge_referral" author="daniel.bower">
+		<addColumn tableName="challenge_referral">
+			<column name="public_description" type="character varying(150)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
+	
+	<changeSet author='daniel.bower' id='Add self_help_guide_group table'>
+		<createTable tableName="self_help_guide_group">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="character varying(150)">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_group_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_group_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on self_help_guide_group to ssp</sql>
+		<rollback>
+			<dropTable tableName="self_help_guide_group" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+	
+		<changeSet author='daniel.bower'
+		id='Add confidentiality_disclosure_agreement table'>
+		<createTable tableName="confidentiality_disclosure_agreement">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="character varying(150)">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="confidentiality_disclosure_agreement_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="confidentiality_disclosure_agreement_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on confidentiality_disclosure_agreement to ssp</sql>
+		<rollback>
+			<dropTable tableName="confidentiality_disclosure_agreement" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='daniel.bower' id='Add message_template table'>
+		<createTable tableName="message_template">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="character varying(150)">
+				<constraints nullable="true" />
+			</column>
+			<column name="subject" type="character varying(250)">
+				<constraints nullable="false" />
+			</column>
+			<column name="body" type="text">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="message_template_created_by_person_id" references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="message_template_modified_by_person_id" references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on message_template to ssp</sql>
+		<rollback>
+			<dropTable tableName="message_template" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='daniel.bower' id='Add person_tool table'>
+		<createTable tableName="person_tool">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_tool_created_by_person_id" references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_tool_modified_by_person_id" references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_tool_person_id_person_id" references="person(id)" />
+			</column>
+			<column name="tool" type="character varying(255)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on person_tool to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_tool" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='daniel.bower' id='Add person_confidentiality_disclosure_agreement table'>
+		<createTable tableName="person_confidentiality_disclosure_agreement">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_confidentiality_disclosure_agreement_created_by_person_id" references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_confidentiality_disclosure_agreement_modified_by_person_id" references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_confidentiality_disclosure_agreement_person_id_person_id" references="person(id)" />
+			</column>
+			<column name="confidentiality_disclosure_agreement" type="uuid">
+				<constraints nullable="false" 
+					foreignKeyName="person_confidentiality_disclosure_agreement_confidentiality_disclosure_agreement_id_confidentiality_disclosure_agreement_id" references="person(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on person_confidentiality_disclosure_agreement to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_confidentiality_disclosure_agreement" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='daniel.bower' id='Add self_help_guide table'>
+		<createTable tableName="self_help_guide">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="character varying(150)">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_created_by_person_id" references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_modified_by_person_id" references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="threshold" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="introductory_text" type="text">
+				<constraints nullable = "false" />
+			</column>
+			<column name="summary_text" type="text">
+				<constraints nullable = "false" />
+			</column>
+			<column name="summary_text_early_alert" type="text">
+				<constraints nullable = "false" />
+			</column>
+			<column name="summary_text_threshold" type="text">
+				<constraints nullable = "false" />
+			</column>
+			<column name="authentication_required" type="boolean">
+				<constraints nullable = "false" />
+			</column> 
+		</createTable>
+
+		<sql>grant all on self_help_guide to ssp</sql>
+		<rollback>
+			<dropTable tableName="self_help_guide" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+	
+	<changeSet author='daniel.bower' id='Add self_help_guide_question table'>
+		<createTable tableName="self_help_guide_question">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="character varying(150)">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_question_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_question_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="question_number" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="mandatory" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="critical" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="challenge_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_question_challenge_id_challenge_id"
+					references="challenge(id)" />
+			</column>
+			<column name="self_help_guide_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_question_self_help_guide_id_self_help_guide_id"
+					references="self_help_guide(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on self_help_guide_question to ssp</sql>
+		<rollback>
+			<dropTable tableName="self_help_guide_question" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+	
+	<changeSet id="add self_help_guide and display columns to Challenge" author="daniel.bower">
+		<addColumn tableName="challenge">
+			<column name="self_help_guide_description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="self_help_guide_question" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="show_in_student_intake" type="boolean" valueBoolean="true"/>
+			<column name="show_in_self_help_search" type="boolean" valueBoolean="true"/>
+		</addColumn>
+		
+		<rollback>
+			<dropColumn tableName="challenge" columnName="self_help_guide_description"/>
+			<dropColumn tableName="challenge" columnName="self_help_guide_question"/>
+			<dropColumn tableName="challenge" columnName="show_in_student_intake"/>
+			<dropColumn tableName="challenge" columnName="show_in_self_help_search"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add int columns to person_education_level" author="daniel.bower">
+		<addColumn tableName="person_education_level">
+			<column name="last_year_attended" type="int" />
+			<column name="highest_grade_completed" type="int" />
+			<column name="graduated_year" type="int" />
+			<column name="school_name" type="character varying(255)"/>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person_education_level" columnName="last_year_attended"/>
+			<dropColumn tableName="person_education_level" columnName="highest_grade_completed"/>
+			<dropColumn tableName="person_education_level" columnName="graduated_year"/>
+			<dropColumn tableName="person_education_level" columnName="school_name"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add militaryBranchDescription to studentEducationGoal" author="daniel.bower">
+		<addColumn tableName="person_education_goal">
+			<column name="military_branch_description" type="character varying(128)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person_education_goal" columnName="military_branch_description"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add userId field to person" author="daniel.bower">
+		<addColumn tableName="person">
+			<column name="user_id"  type="character varying(25)"></column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person" columnName="user_id"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add childcare to personDemograpics" author="daniel.bower">
+		<addColumn tableName="person_demographics">
+			<column name="child_care_arrangement_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_demographics_child_care_arrangement_id_child_care_arrangement_id"
+					references="child_care_arrangement(id)" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person_demographics" columnName="child_care_arrangement_id"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add other_description to education_goal" author="daniel.bower">
+		<addColumn tableName="education_goal">
+			<column name="other_description" type="character varying(255)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="education_goal" columnName="other_description"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="fix name column size from 25 to 100" author="daniel.bower">
+		<modifyDataType tableName="challenge_category" columnName="name" newDataType="character varying(100)"/>
+		<modifyDataType tableName="challenge_referral" columnName="name" newDataType="character varying(100)"/>
+		<modifyDataType tableName="confidentiality_level" columnName="name" newDataType="character varying(100)"/>
+		
+		<rollback>
+			<modifyDataType tableName="challenge_category" columnName="name" newDataType="character varying(25)"/>
+			<modifyDataType tableName="challenge_referral" columnName="name" newDataType="character varying(25)"/>
+			<modifyDataType tableName="confidentiality_level" columnName="name" newDataType="character varying(25)"/>
+		</rollback>
+	</changeSet>
+	
+	<!-- Add challengeChallengeReferral table -->
+	<!-- Add SelfHelpGuideResponse table -->
+	<!-- Add SelfHelpGuideQuestionResponse table -->
+	<!-- Add Task and CustomTask Tables -->
+	
 </databaseChangeLog>
