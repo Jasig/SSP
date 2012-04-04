@@ -50,6 +50,8 @@ public class MessageTemplateDaoTest {
 		MessageTemplate obj = new MessageTemplate();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setSubject("test template subject");
+		obj.setBody("This body");
 		dao.save(obj);
 
 		assertNotNull(obj.getId());
@@ -90,11 +92,15 @@ public class MessageTemplateDaoTest {
 		MessageTemplate obj = new MessageTemplate();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setSubject("test template subject");
+		obj.setBody("This body");
 		dao.save(obj);
 
 		MessageTemplate obj2 = new MessageTemplate();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
+		obj2.setSubject("test template subject");
+		obj2.setBody("This body");
 		dao.save(obj2);
 
 		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "

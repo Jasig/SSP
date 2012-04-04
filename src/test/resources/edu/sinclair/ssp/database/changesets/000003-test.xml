@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="test self help guide" author="daniel.bower">
+		<insert tableName="self_help_guide">
+			<column name="id" value="2597d6a8-c95e-40a5-a3fd-e0d95967b1a0" />
+			<column name="name" value="Test Self Help Guide" />
+			<column name="description" value="This is the description of the Test Self Help Guide." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="threshold" value="10"/>
+			<column name="introductory_text" value="Introducing, the Self Help Guide" />
+			<column name="summary_text" value="A Summary of the self help guide" />
+			<column name="summary_text_early_alert" value="This is an early alert for the self help guide" />
+			<column name="summary_text_threshold" value="10" />
+			<column name="authentication_required" valueBoolean="false" />
+		</insert>
+		<rollback>
+			<delete tableName="self_help_guide">
+				<where>id='2597d6a8-c95e-40a5-a3fd-e0d95967b1a0'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

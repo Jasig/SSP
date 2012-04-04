@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
+import edu.sinclair.ssp.model.reference.Challenge;
+import edu.sinclair.ssp.model.reference.SelfHelpGuide;
 import edu.sinclair.ssp.model.reference.SelfHelpGuideQuestion;
 import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 
@@ -36,14 +38,23 @@ public class SelfHelpGuideQuestionDaoTest {
 	private SelfHelpGuideQuestionDao dao;
 
 	@Autowired
+	private SelfHelpGuideDao selfHelpGuideDao;
+
+	@Autowired
 	private ChallengeDao challengeDao;
 
 	@Autowired
 	private SecurityServiceInTestEnvironment securityService;
 
+	private SelfHelpGuide testGuide;
+	private Challenge testChallenge;
+
 	@Before
 	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+		testGuide = selfHelpGuideDao.get(UUID
+				.fromString("2597d6a8-c95e-40a5-a3fd-e0d95967b1a0"));
+		testChallenge = challengeDao.getAll(ObjectStatus.ACTIVE).get(0);
 	}
 
 	@Test
@@ -53,7 +64,8 @@ public class SelfHelpGuideQuestionDaoTest {
 		SelfHelpGuideQuestion obj = new SelfHelpGuideQuestion();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setChallenge(challengeDao.getAll(ObjectStatus.ACTIVE).get(0));
+		obj.setChallenge(testChallenge);
+		obj.setSelfHelpGuide(testGuide);
 		dao.save(obj);
 
 		assertNotNull(obj.getId());
@@ -94,12 +106,15 @@ public class SelfHelpGuideQuestionDaoTest {
 		SelfHelpGuideQuestion obj = new SelfHelpGuideQuestion();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setChallenge(challengeDao.getAll(ObjectStatus.ACTIVE).get(0));
+		obj.setChallenge(testChallenge);
+		obj.setSelfHelpGuide(testGuide);
 		dao.save(obj);
 
 		SelfHelpGuideQuestion obj2 = new SelfHelpGuideQuestion();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
+		obj2.setChallenge(testChallenge);
+		obj2.setSelfHelpGuide(testGuide);
 		dao.save(obj2);
 
 		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "

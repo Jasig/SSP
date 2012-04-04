@@ -50,6 +50,12 @@ public class SelfHelpGuideDaoTest {
 		SelfHelpGuide obj = new SelfHelpGuide();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setIntroductoryText("text");
+		obj.setSummaryText("summary text");
+		obj.setSummaryTextEarlyAlert("early alert summary");
+		obj.setSummaryTextThreshold("threshold");
+		obj.setThreshold(5);
+		obj.setAuthenticationRequired(false);
 		dao.save(obj);
 
 		assertNotNull(obj.getId());
@@ -90,11 +96,23 @@ public class SelfHelpGuideDaoTest {
 		SelfHelpGuide obj = new SelfHelpGuide();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setIntroductoryText("text");
+		obj.setSummaryText("summary text");
+		obj.setSummaryTextEarlyAlert("early alert summary");
+		obj.setSummaryTextThreshold("threshold");
+		obj.setThreshold(5);
+		obj.setAuthenticationRequired(false);
 		dao.save(obj);
 
 		SelfHelpGuide obj2 = new SelfHelpGuide();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
+		obj2.setIntroductoryText("text");
+		obj2.setSummaryText("summary text");
+		obj2.setSummaryTextEarlyAlert("early alert summary");
+		obj2.setSummaryTextThreshold("threshold");
+		obj2.setThreshold(5);
+		obj2.setAuthenticationRequired(false);
 		dao.save(obj2);
 
 		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
