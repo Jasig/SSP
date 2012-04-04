@@ -24,11 +24,6 @@ public class PersonEducationGoalServiceImpl implements
 	@Autowired
 	private EducationGoalService educationGoalService;
 
-	@Override
-	public List<PersonEducationGoal> getAll(ObjectStatus status) {
-		return dao.getAll(status);
-	}
-
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
 	 * 

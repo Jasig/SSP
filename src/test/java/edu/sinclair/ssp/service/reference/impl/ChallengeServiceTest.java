@@ -38,11 +38,11 @@ public class ChallengeServiceTest {
 		List<Challenge> daoAll = new ArrayList<Challenge>();
 		daoAll.add(new Challenge());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE)).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE, -1, -1, null)).andReturn(daoAll);
 
 		replay(dao);
 
-		List<Challenge> all = service.getAll(ObjectStatus.ACTIVE);
+		List<Challenge> all = service.getAll(ObjectStatus.ACTIVE, -1, -1, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

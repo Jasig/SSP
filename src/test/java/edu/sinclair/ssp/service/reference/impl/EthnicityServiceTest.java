@@ -38,11 +38,11 @@ public class EthnicityServiceTest {
 		List<Ethnicity> daoAll = new ArrayList<Ethnicity>();
 		daoAll.add(new Ethnicity());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE)).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE, -1, -1, null)).andReturn(daoAll);
 
 		replay(dao);
 
-		List<Ethnicity> all = service.getAll(ObjectStatus.ACTIVE);
+		List<Ethnicity> all = service.getAll(ObjectStatus.ACTIVE, -1, -1, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

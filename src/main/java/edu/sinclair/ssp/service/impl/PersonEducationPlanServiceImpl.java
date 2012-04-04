@@ -24,11 +24,6 @@ public class PersonEducationPlanServiceImpl implements
 	@Autowired
 	private StudentStatusService studentStatusService;
 
-	@Override
-	public List<PersonEducationPlan> getAll(ObjectStatus status) {
-		return dao.getAll(status);
-	}
-
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
 	 * 

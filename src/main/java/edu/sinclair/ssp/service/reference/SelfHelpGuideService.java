@@ -16,16 +16,6 @@ public interface SelfHelpGuideService extends
 	 * 
 	 * @param status
 	 *            Filter by this status.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	public List<SelfHelpGuide> getAll(ObjectStatus status);
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer.
@@ -49,8 +39,7 @@ public interface SelfHelpGuideService extends
 	public SelfHelpGuide create(SelfHelpGuide obj);
 
 	@Override
-	public SelfHelpGuide save(SelfHelpGuide obj)
-			throws ObjectNotFoundException;
+	public SelfHelpGuide save(SelfHelpGuide obj) throws ObjectNotFoundException;
 
 	/**
 	 * Mark the specific instance as {@link ObjectStatus#DELETED}.

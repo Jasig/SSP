@@ -38,11 +38,12 @@ public class MessageTemplateServiceTest {
 		List<MessageTemplate> daoAll = new ArrayList<MessageTemplate>();
 		daoAll.add(new MessageTemplate());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE)).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE, -1, -1, null)).andReturn(daoAll);
 
 		replay(dao);
 
-		List<MessageTemplate> all = service.getAll(ObjectStatus.ACTIVE);
+		List<MessageTemplate> all = service.getAll(ObjectStatus.ACTIVE, -1, -1,
+				null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

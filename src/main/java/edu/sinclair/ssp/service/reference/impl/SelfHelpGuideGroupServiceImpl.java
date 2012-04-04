@@ -25,18 +25,6 @@ public class SelfHelpGuideGroupServiceImpl implements SelfHelpGuideGroupService 
 	 * 
 	 * @param status
 	 *            Filter by this status.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	public List<SelfHelpGuideGroup> getAll(ObjectStatus status) {
-		return dao.getAll(status);
-	}
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer.
@@ -50,8 +38,8 @@ public class SelfHelpGuideGroupServiceImpl implements SelfHelpGuideGroupService 
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<SelfHelpGuideGroup> getAll(ObjectStatus status, int firstResult,
-			int maxResults, String sortExpression) {
+	public List<SelfHelpGuideGroup> getAll(ObjectStatus status,
+			int firstResult, int maxResults, String sortExpression) {
 		return dao.getAll(status, firstResult, maxResults, sortExpression);
 	}
 

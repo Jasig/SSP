@@ -36,37 +36,14 @@ public abstract class ReferenceAuditableCrudDao<T extends Auditable> extends
 	 * @param status
 	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
 	 *            return all results.
-	 * @return All entities in the database, filtered only by the specified
-	 *         parameters.
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<T> getAll(ObjectStatus status) {
-		Criteria query = super.sessionFactory.getCurrentSession()
-				.createCriteria(super.persistentClass);
-
-		if (status != ObjectStatus.ALL) {
-			query.add(Restrictions.eq("objectStatus", status));
-		}
-
-		query.addOrder(Order.asc("name"));
-
-		return query.list();
-	}
-
-	/**
-	 * Return all entities in the database, filtered only by the specified
-	 * parameters.
-	 * 
-	 * @param status
-	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
-	 *            return all results.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
+	 *            positive, non-zero integer. If less than zero, parameter is
+	 *            ignored.
 	 * @param maxResults
 	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
+	 *            positive, non-zero integer. If less than one, parameter is
+	 *            ignored.
 	 * @param sortExpression
 	 *            Property name and ascending/descending keyword. If null or
 	 *            empty string, the default sort order will be used. Example
@@ -78,19 +55,17 @@ public abstract class ReferenceAuditableCrudDao<T extends Auditable> extends
 	@SuppressWarnings("unchecked")
 	public List<T> getAll(ObjectStatus status, int firstResult, int maxResults,
 			String sortExpression) {
-		if (firstResult < 0) {
-			throw new IllegalArgumentException(
-					"firstResult must be 0 or greater.");
+
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				persistentClass);
+
+		if (firstResult >= 0) {
+			query.setFirstResult(firstResult);
 		}
 
-		if (maxResults < 1) {
-			throw new IllegalArgumentException(
-					"maxResults must be 1 or greater.");
+		if (maxResults > 0) {
+			query.setMaxResults(maxResults);
 		}
-
-		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(persistentClass).setFirstResult(firstResult)
-				.setMaxResults(maxResults);
 
 		if (StringUtils.isEmpty(sortExpression)) {
 			query.addOrder(Order.asc("name"));

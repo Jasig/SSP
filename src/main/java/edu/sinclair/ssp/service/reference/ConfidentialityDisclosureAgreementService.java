@@ -16,16 +16,6 @@ public interface ConfidentialityDisclosureAgreementService extends
 	 * 
 	 * @param status
 	 *            Filter by this status.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	public List<ConfidentialityDisclosureAgreement> getAll(ObjectStatus status);
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer.
@@ -39,17 +29,20 @@ public interface ConfidentialityDisclosureAgreementService extends
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<ConfidentialityDisclosureAgreement> getAll(ObjectStatus status, int firstResult,
-			int maxResults, String sortExpression);
+	public List<ConfidentialityDisclosureAgreement> getAll(ObjectStatus status,
+			int firstResult, int maxResults, String sortExpression);
 
 	@Override
-	public ConfidentialityDisclosureAgreement get(UUID id) throws ObjectNotFoundException;
+	public ConfidentialityDisclosureAgreement get(UUID id)
+			throws ObjectNotFoundException;
 
 	@Override
-	public ConfidentialityDisclosureAgreement create(ConfidentialityDisclosureAgreement obj);
+	public ConfidentialityDisclosureAgreement create(
+			ConfidentialityDisclosureAgreement obj);
 
 	@Override
-	public ConfidentialityDisclosureAgreement save(ConfidentialityDisclosureAgreement obj)
+	public ConfidentialityDisclosureAgreement save(
+			ConfidentialityDisclosureAgreement obj)
 			throws ObjectNotFoundException;
 
 	/**

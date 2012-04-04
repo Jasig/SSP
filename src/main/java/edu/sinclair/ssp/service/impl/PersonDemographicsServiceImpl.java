@@ -39,11 +39,6 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 	@Autowired
 	private VeteranStatusService veteranStatusService;
 
-	@Override
-	public List<PersonDemographics> getAll(ObjectStatus status) {
-		return dao.getAll(status);
-	}
-
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
 	 * 

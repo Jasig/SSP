@@ -11,7 +11,8 @@ public interface PersonEducationPlanService extends
 		AuditableCrudService<PersonEducationPlan> {
 
 	@Override
-	public List<PersonEducationPlan> getAll(ObjectStatus status);
+	public List<PersonEducationPlan> getAll(ObjectStatus status,
+			int firstResult, int maxResults, String sortExpression);
 
 	@Override
 	public PersonEducationPlan get(UUID id) throws ObjectNotFoundException;

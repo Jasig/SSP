@@ -25,18 +25,6 @@ public class ChallengeCategoryServiceImpl implements ChallengeCategoryService {
 	 * 
 	 * @param status
 	 *            Filter by this status.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	public List<ChallengeCategory> getAll(ObjectStatus status) {
-		return dao.getAll(status);
-	}
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer.
