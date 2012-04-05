@@ -92,10 +92,12 @@ public class Challenge extends AbstractReference implements Serializable {
 	@Column(nullable = false)
 	private boolean showInSelfHelpSearch;
 
-
 	@OneToMany(mappedBy = "challenge")
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals =
 	new HashSet<ChallengeChallengeReferral>(0);
+
+	@Column(length = 255)
+	private String tags;
 
 	public String getSelfHelpGuideQuestion() {
 		return selfHelpGuideQuestion;
@@ -145,6 +147,14 @@ public class Challenge extends AbstractReference implements Serializable {
 	public void setChallengeChallengeReferrals(
 			Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
 		this.challengeChallengeReferrals = challengeChallengeReferrals;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 }

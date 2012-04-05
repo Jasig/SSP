@@ -1781,7 +1781,51 @@
 		</rollback>
 	</changeSet>
 	
-	<!-- Add challengeChallengeReferral table -->
+	<changeSet id="add challenge_challenge_referral table" author="daniel.bower">
+		<createTable tableName="challenge_challenge_referral">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="challenge_challenge_referral_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="challenge_challenge_referral_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="challenge_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="challenge_challenge_referral_challenge_id_challenge_id"
+					references="challenge(id)" />
+			</column>
+			<column name="challenge_referral_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="challenge_challenge_referral_mchallenge_referral_id_challenge_referral_id"
+					references="challenge_referral(id)" />
+			</column>
+		</createTable>
+		<rollback>
+			<dropTable tableName="challenge_challenge_referral"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add tags to challenge" author="daniel.bower">
+		<addColumn tableName="challenge">
+			<column name="tags" type="character varying(255)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
+	
 	<!-- Add SelfHelpGuideResponse table -->
 	<!-- Add SelfHelpGuideQuestionResponse table -->
 	<!-- Add Task and CustomTask Tables -->

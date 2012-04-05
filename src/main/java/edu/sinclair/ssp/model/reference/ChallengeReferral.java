@@ -1,12 +1,15 @@
 package edu.sinclair.ssp.model.reference;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
 /**
@@ -27,6 +30,10 @@ Serializable {
 	@Column(nullable = true, length = 150)
 	@Size(max = 150)
 	private String publicDescription;
+
+	@OneToMany(mappedBy = "challengeReferral")
+	private Set<ChallengeChallengeReferral> challengeChallengeReferrals =
+			new HashSet<ChallengeChallengeReferral>(0);
 
 	/**
 	 * Constructor
@@ -79,5 +86,14 @@ Serializable {
 
 	public void setPublicDescription(String publicDescription) {
 		this.publicDescription = publicDescription;
+	}
+
+	public Set<ChallengeChallengeReferral> getChallengeChallengeReferrals() {
+		return challengeChallengeReferrals;
+	}
+
+	public void setChallengeChallengeReferrals(
+			Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
+		this.challengeChallengeReferrals = challengeChallengeReferrals;
 	}
 }

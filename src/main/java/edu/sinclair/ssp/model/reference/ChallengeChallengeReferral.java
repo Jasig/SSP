@@ -12,11 +12,11 @@ import edu.sinclair.ssp.model.Auditable;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ChallengeChallengeReferral extends Auditable {
 	@ManyToOne()
-	@JoinColumn(name = "challengeId", nullable = false)
+	@JoinColumn(nullable = false)
 	private Challenge challenge;
 
 	@ManyToOne()
-	@JoinColumn(name = "challengeReferralId", nullable = false)
+	@JoinColumn(nullable = false)
 	private ChallengeReferral challengeReferral;
 
 	public Challenge getChallenge() {
