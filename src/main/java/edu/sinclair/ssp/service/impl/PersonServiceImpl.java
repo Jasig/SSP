@@ -67,21 +67,6 @@ public class PersonServiceImpl implements PersonService {
 	 * @param status
 	 *            Filter by this status, usually null or
 	 *            {@link ObjectStatus#DELETED}.
-	 * @return List of all people in the database filtered by the supplied
-	 *         status.
-	 */
-	@Override
-	public List<Person> getAll(ObjectStatus status) {
-		return dao.getAll(status);
-	}
-
-	/**
-	 * Retrieve every Person instance in the database filtered by the supplied
-	 * status.
-	 * 
-	 * @param status
-	 *            Filter by this status, usually null or
-	 *            {@link ObjectStatus#DELETED}.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer.
@@ -265,16 +250,16 @@ public class PersonServiceImpl implements PersonService {
 						demo.getMaritalStatus() == null ? null
 								: maritalStatusService.get(demo
 										.getMaritalStatus().getId()),
-										demo.getEthnicity() == null ? null : ethnicityService
-												.get(demo.getEthnicity().getId()),
-												demo.getCitizenship() == null ? null
-														: citizenshipService.get(demo.getCitizenship()
-																.getId()),
-																demo.getVeteranStatus() == null ? null
-																		: veteranStatusService.get(demo
-																				.getVeteranStatus().getId()),
-																				demo.getCoach() == null ? null : this.get(demo
-																						.getCoach().getId()));
+						demo.getEthnicity() == null ? null : ethnicityService
+								.get(demo.getEthnicity().getId()),
+						demo.getCitizenship() == null ? null
+								: citizenshipService.get(demo.getCitizenship()
+										.getId()),
+						demo.getVeteranStatus() == null ? null
+								: veteranStatusService.get(demo
+										.getVeteranStatus().getId()),
+						demo.getCoach() == null ? null : this.get(demo
+								.getCoach().getId()));
 			}
 		}
 

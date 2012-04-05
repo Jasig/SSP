@@ -19,17 +19,6 @@ public abstract class RestController<T> {
 	 * 
 	 * @param status
 	 *            Filter by this status.
-	 * @exception Exception
-	 *                Generic exception thrown if there were any errors.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	public abstract List<T> getAll(ObjectStatus status) throws Exception;
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer. Often comes from client as a

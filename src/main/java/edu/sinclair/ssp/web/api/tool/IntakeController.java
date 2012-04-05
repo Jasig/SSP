@@ -178,26 +178,33 @@ public class IntakeController {
 		Map<String, Object> refData = new HashMap<String, Object>();
 
 		refData.put("challenges", challengeToFactory.toTOList(challengeService
-				.getAll(ObjectStatus.ACTIVE)));
+				.getAll(ObjectStatus.ACTIVE, -1, -1, null)));
 		refData.put("childCareArrangements", childCareArrangementToFactory
-				.toTOList(childCareArrangementService
-						.getAll(ObjectStatus.ACTIVE)));
+				.toTOList(childCareArrangementService.getAll(
+						ObjectStatus.ACTIVE, -1, -1, null)));
 		refData.put("citizenships", citizenshipToFactory
-				.toTOList(citizenshipService.getAll(ObjectStatus.ACTIVE)));
+				.toTOList(citizenshipService.getAll(ObjectStatus.ACTIVE, -1,
+						-1, null)));
 		refData.put("educationGoals", educationGoalToFactory
-				.toTOList(educationGoalService.getAll(ObjectStatus.ACTIVE)));
+				.toTOList(educationGoalService.getAll(ObjectStatus.ACTIVE, -1,
+						-1, null)));
 		refData.put("educationLevels", educationLevelToFactory
-				.toTOList(educationLevelService.getAll(ObjectStatus.ACTIVE)));
+				.toTOList(educationLevelService.getAll(ObjectStatus.ACTIVE, -1,
+						-1, null)));
 		refData.put("ethnicitys", ethnicityToFactory.toTOList(ethnicityService
-				.getAll(ObjectStatus.ACTIVE)));
+				.getAll(ObjectStatus.ACTIVE, -1, -1, null)));
 		refData.put("fundingSources", fundingSourceToFactory
-				.toTOList(fundingSourceService.getAll(ObjectStatus.ACTIVE)));
+				.toTOList(fundingSourceService.getAll(ObjectStatus.ACTIVE, -1,
+						-1, null)));
 		refData.put("maritalStatuss", maritalStatusToFactory
-				.toTOList(maritalStatusService.getAll(ObjectStatus.ACTIVE)));
+				.toTOList(maritalStatusService.getAll(ObjectStatus.ACTIVE, -1,
+						-1, null)));
 		refData.put("studentStatuss", studentStatusToFactory
-				.toTOList(studentStatusService.getAll(ObjectStatus.ACTIVE)));
+				.toTOList(studentStatusService.getAll(ObjectStatus.ACTIVE, -1,
+						-1, null)));
 		refData.put("veteranStatuss", veteranStatusToFactory
-				.toTOList(veteranStatusService.getAll(ObjectStatus.ACTIVE)));
+				.toTOList(veteranStatusService.getAll(ObjectStatus.ACTIVE, -1,
+						-1, null)));
 
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());

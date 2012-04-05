@@ -18,7 +18,7 @@ import edu.sinclair.ssp.model.Person;
  */
 @Repository
 public class PersonDao extends AbstractAuditableCrudDao<Person> implements
-AuditableCrudDao<Person> {
+		AuditableCrudDao<Person> {
 
 	/**
 	 * Constructor
@@ -75,19 +75,17 @@ AuditableCrudDao<Person> {
 	@SuppressWarnings("unchecked")
 	public List<Person> getAll(ObjectStatus status, int firstResult,
 			int maxResults, String sortExpression) {
-		if (firstResult < 0) {
-			throw new IllegalArgumentException(
-					"firstResult must be 0 or greater.");
+
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(
+				super.persistentClass);
+
+		if (firstResult >= 0) {
+			query.setFirstResult(firstResult);
 		}
 
-		if (maxResults < 1) {
-			throw new IllegalArgumentException(
-					"maxResults must be 1 or greater.");
+		if (maxResults > 0) {
+			query.setMaxResults(maxResults);
 		}
-
-		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(super.persistentClass)
-				.setFirstResult(firstResult).setMaxResults(maxResults);
 
 		if (StringUtils.isEmpty(sortExpression)) {
 			query.addOrder(Order.asc("lastName")).addOrder(

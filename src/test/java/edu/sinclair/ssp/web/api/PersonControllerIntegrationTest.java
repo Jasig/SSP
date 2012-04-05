@@ -90,14 +90,16 @@ public class PersonControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link PersonController#getAll(ObjectStatus)} action.
+	 * Test the {@link PersonController#getAll(ObjectStatus, int, int, String)}
+	 * action.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE);
+		List<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE, -1, -1,
+				null);
 
 		assertNotNull("List should not have been null.", list);
 		assertTrue("List action should have returned some objects.",
@@ -116,7 +118,8 @@ public class PersonControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAllWithPaging() throws Exception {
-		List<PersonTO> listAll = controller.getAll(ObjectStatus.ACTIVE);
+		List<PersonTO> listAll = controller.getAll(ObjectStatus.ACTIVE, -1, -1,
+				null);
 		List<PersonTO> listFiltered = controller.getAll(ObjectStatus.ACTIVE, 1,
 				2, null);
 

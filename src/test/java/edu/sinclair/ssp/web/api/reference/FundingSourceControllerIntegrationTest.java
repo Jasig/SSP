@@ -148,14 +148,17 @@ public class FundingSourceControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link FundingSourceController#getAll(ObjectStatus)} action.
+	 * Test the
+	 * {@link FundingSourceController#getAll(ObjectStatus, int, int, String)}
+	 * action.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<FundingSourceTO> list = controller.getAll(ObjectStatus.ACTIVE);
+		List<FundingSourceTO> list = controller.getAll(ObjectStatus.ACTIVE, -1,
+				-1, null);
 
 		assertNotNull("List should not have been null.", list);
 		assertTrue("List action should have returned some objects.",

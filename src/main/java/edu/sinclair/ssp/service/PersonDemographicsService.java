@@ -11,7 +11,8 @@ public interface PersonDemographicsService extends
 		AuditableCrudService<PersonDemographics> {
 
 	@Override
-	public List<PersonDemographics> getAll(ObjectStatus status);
+	public List<PersonDemographics> getAll(ObjectStatus status,
+			int firstResult, int maxResults, String sortExpression);
 
 	@Override
 	public PersonDemographics get(UUID id) throws ObjectNotFoundException;

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
+import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
@@ -54,6 +55,38 @@ public class ChallengeControllerHttpIntegrationTest extends
 	@Before
 	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+	}
+
+	/**
+	 * Test the
+	 * {@link ChallengeController#getAll(edu.sinclair.ssp.model.ObjectStatus, int, int, String)}
+	 * action.
+	 * 
+	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
+	 */
+	@Test
+	public void testControllerGetAllWithPagingParameters() throws Exception {
+		// Request URI, but do not include any Spring configuration roots, but
+		// do include class-level root paths. Example:
+		// "/reference/controllerlevelmapping/mymethodmapping"
+		final String requestUri = "/reference/challenge/";
+		final Object handler;
+		final HandlerMethod expectedHandlerMethod;
+
+		request.setMethod(RequestMethod.GET.toString());
+		request.setRequestURI(requestUri);
+
+		handler = this.getHandler(request);
+
+		// Lookup the expected handler that Spring should have pulled.
+		// HandlerMethod(controller, action (method) name, parameters)
+		expectedHandlerMethod = new HandlerMethod(controller, "getAll",
+				ObjectStatus.class, int.class, int.class, String.class);
+
+		Assert.assertEquals("Correct handler found for request url: "
+				+ requestUri, expectedHandlerMethod.toString(),
+				handler.toString());
 	}
 
 	/**

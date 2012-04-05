@@ -15,22 +15,11 @@ import edu.sinclair.ssp.service.reference.SelfHelpGuideQuestionService;
 
 @Service
 @Transactional
-public class SelfHelpGuideQuestionServiceImpl implements SelfHelpGuideQuestionService {
+public class SelfHelpGuideQuestionServiceImpl implements
+		SelfHelpGuideQuestionService {
 
 	@Autowired
 	private SelfHelpGuideQuestionDao dao;
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	public List<SelfHelpGuideQuestion> getAll(ObjectStatus status) {
-		return dao.getAll(status);
-	}
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -50,8 +39,8 @@ public class SelfHelpGuideQuestionServiceImpl implements SelfHelpGuideQuestionSe
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<SelfHelpGuideQuestion> getAll(ObjectStatus status, int firstResult,
-			int maxResults, String sortExpression) {
+	public List<SelfHelpGuideQuestion> getAll(ObjectStatus status,
+			int firstResult, int maxResults, String sortExpression) {
 		return dao.getAll(status, firstResult, maxResults, sortExpression);
 	}
 

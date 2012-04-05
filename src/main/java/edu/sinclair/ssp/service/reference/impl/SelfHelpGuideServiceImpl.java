@@ -25,18 +25,6 @@ public class SelfHelpGuideServiceImpl implements SelfHelpGuideService {
 	 * 
 	 * @param status
 	 *            Filter by this status.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	public List<SelfHelpGuide> getAll(ObjectStatus status) {
-		return dao.getAll(status);
-	}
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer.
@@ -70,8 +58,7 @@ public class SelfHelpGuideServiceImpl implements SelfHelpGuideService {
 	}
 
 	@Override
-	public SelfHelpGuide save(SelfHelpGuide obj)
-			throws ObjectNotFoundException {
+	public SelfHelpGuide save(SelfHelpGuide obj) throws ObjectNotFoundException {
 		SelfHelpGuide current = get(obj.getId());
 
 		current.setName(obj.getName());

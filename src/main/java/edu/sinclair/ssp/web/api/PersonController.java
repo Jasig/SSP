@@ -51,27 +51,6 @@ public class PersonController extends RestController<PersonTO> {
 	 * 
 	 * @param status
 	 *            Filter by this status.
-	 * @exception Exception
-	 *                Generic exception thrown if there were any errors.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody
-	List<PersonTO> getAll(@RequestParam(required = false) ObjectStatus status)
-			throws Exception {
-		if (status == null) {
-			status = ObjectStatus.ACTIVE;
-		}
-
-		return toFactory.toTOList(service.getAll(status));
-	}
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer.

@@ -16,16 +16,6 @@ public interface SelfHelpGuideGroupService extends
 	 * 
 	 * @param status
 	 *            Filter by this status.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	public List<SelfHelpGuideGroup> getAll(ObjectStatus status);
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer.
@@ -39,8 +29,8 @@ public interface SelfHelpGuideGroupService extends
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<SelfHelpGuideGroup> getAll(ObjectStatus status, int firstResult,
-			int maxResults, String sortExpression);
+	public List<SelfHelpGuideGroup> getAll(ObjectStatus status,
+			int firstResult, int maxResults, String sortExpression);
 
 	@Override
 	public SelfHelpGuideGroup get(UUID id) throws ObjectNotFoundException;

@@ -25,24 +25,12 @@ public class EducationLevelServiceImpl implements EducationLevelService {
 	 * 
 	 * @param status
 	 *            Filter by this status.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	public List<EducationLevel> getAll(ObjectStatus status) {
-		return dao.getAll(status);
-	}
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
+	 *            positive, non-zero integer. If -1, parameter is ignored.
 	 * @param maxResults
 	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
+	 *            positive, non-zero integer. If -1, parameter is ignored.
 	 * @param sortExpression
 	 *            Property name and ascending/descending keyword. If null or
 	 *            empty string, the default sort order will be used. Example

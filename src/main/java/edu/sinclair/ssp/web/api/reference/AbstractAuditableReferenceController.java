@@ -55,26 +55,6 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	 * 
 	 * @param status
 	 *            Filter by this status.
-	 * @exception Exception
-	 *                Generic exception thrown if there were any errors.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody
-	List<TO> getAll(@RequestParam(required = false) ObjectStatus status)
-			throws Exception {
-		if (status == null) {
-			status = ObjectStatus.ACTIVE;
-		}
-		return listFactory.toTOList(service.getAll(status));
-	}
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
 	 * @param firstResult
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer. Often comes from client as a
@@ -93,19 +73,17 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.GET, params = "start,limit")
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
 	List<TO> getAll(@RequestParam(required = false) ObjectStatus status,
-			@RequestParam(value = "start") int firstResult,
-			@RequestParam(value = "limit") int maxResults,
-			@RequestParam(required = false) String sortExpression)
-			throws Exception {
+			@RequestParam(required = false) int start,
+			@RequestParam(required = false) int limit,
+			@RequestParam(required = false) String sort) throws Exception {
 		if (status == null) {
 			status = ObjectStatus.ACTIVE;
 		}
 
-		return listFactory.toTOList(service.getAll(status, firstResult,
-				maxResults, sortExpression));
+		return listFactory.toTOList(service.getAll(status, start, limit, sort));
 	}
 
 	@Override

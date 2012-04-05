@@ -15,22 +15,11 @@ import edu.sinclair.ssp.service.reference.ConfidentialityDisclosureAgreementServ
 
 @Service
 @Transactional
-public class ConfidentialityDisclosureAgreementServiceImpl implements ConfidentialityDisclosureAgreementService {
+public class ConfidentialityDisclosureAgreementServiceImpl implements
+		ConfidentialityDisclosureAgreementService {
 
 	@Autowired
 	private ConfidentialityDisclosureAgreementDao dao;
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@Override
-	public List<ConfidentialityDisclosureAgreement> getAll(ObjectStatus status) {
-		return dao.getAll(status);
-	}
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -50,27 +39,31 @@ public class ConfidentialityDisclosureAgreementServiceImpl implements Confidenti
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@Override
-	public List<ConfidentialityDisclosureAgreement> getAll(ObjectStatus status, int firstResult,
-			int maxResults, String sortExpression) {
+	public List<ConfidentialityDisclosureAgreement> getAll(ObjectStatus status,
+			int firstResult, int maxResults, String sortExpression) {
 		return dao.getAll(status, firstResult, maxResults, sortExpression);
 	}
 
 	@Override
-	public ConfidentialityDisclosureAgreement get(UUID id) throws ObjectNotFoundException {
+	public ConfidentialityDisclosureAgreement get(UUID id)
+			throws ObjectNotFoundException {
 		ConfidentialityDisclosureAgreement obj = dao.get(id);
 		if (null == obj) {
-			throw new ObjectNotFoundException(id, "ConfidentialityDisclosureAgreement");
+			throw new ObjectNotFoundException(id,
+					"ConfidentialityDisclosureAgreement");
 		}
 		return obj;
 	}
 
 	@Override
-	public ConfidentialityDisclosureAgreement create(ConfidentialityDisclosureAgreement obj) {
+	public ConfidentialityDisclosureAgreement create(
+			ConfidentialityDisclosureAgreement obj) {
 		return dao.save(obj);
 	}
 
 	@Override
-	public ConfidentialityDisclosureAgreement save(ConfidentialityDisclosureAgreement obj)
+	public ConfidentialityDisclosureAgreement save(
+			ConfidentialityDisclosureAgreement obj)
 			throws ObjectNotFoundException {
 		ConfidentialityDisclosureAgreement current = get(obj.getId());
 
