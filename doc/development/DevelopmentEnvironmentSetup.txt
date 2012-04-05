@@ -13,21 +13,21 @@ How to set up your development environment:
 4. Install PostgreSQL 9.1 or newer (http://www.postgresql.org/download/)
 5. Setup a PostgreSQL database
 	- Launch the newly installed pgAdmin application.
-	- In the Object Browser, navigate to and right click on 
+	- In the Object browser, navigate to and right click on
 		"Server Groups->Servers->PostgreSQL 9.1 (localhost:5432)". (The last 
 		item may be different depending on the settings you made during 
 		installation.)
-	- In the pop-up context menu, click "Connect"
+	- In the pop-up context menu, click "Connect" (enter the admin password you chose when you installed PostgreSQL if prompted)
 	- Right click on "Login Roles" and click "New Login Role..."
-	- In the Properties tab, enter a Role name of "sspadmin".
-	- In the Definition tab, enter a Password of "sspadmin" (no quotes).
-	- Click Ok.
-	- Repeat the last three steps again, but use "ssp" instead of "sspadmin".
+	   - In the Properties tab, enter a Role name of "sspadmin" (no quotes).
+	   - In the Definition tab, enter a Password of "sspadmin" (no quotes).
+	   - Click Ok.
+	- Perform the previous steps again, but use "ssp" instead of "sspadmin".
 	- Check that the new "sspadmin" and "ssp" roles exist in the Login Roles
 		section of the Object browser.
-	- Back in the Object right-click on "Databases" and click "New database...".
+	- Back in the Object browser right-click on "Databases" and click "New Database...".
 	- Enter a Name of "ssp", Owner of "sspadmin", and click Ok.
-	- You may now exist pgAdmin.
+	- You may now exit pgAdmin.
 6. Download and install the latest version of Sun Java JDK 6.
 7. Create a project files directory. Windows example: C:\java\projects
 8. Setup environment variables pointing to the appropriate locations where they
@@ -42,11 +42,10 @@ How to set up your development environment:
 		were placed. You may need to alter the "C:\java\projects\ssp" part, but
 		the "src\test\resources\" is relative to the root of the project.
 		Make sure to include the trailing directory separator!
-	- Append the following to your system PATH environment variable:
-		- %GRADLE_HOME%\bin
+	- Add the following elements to your system PATH environment variable:
+		- %JAVA_HOME%\bin (you may want to add this one at or near the beginning, in case there is another copy of Java already installed on your system)
 		- %MAVEN_HOME%\bin
 		- %GROOVY_HOME%\bin
-		- %JAVA_HOME%\bin
 9. Setup your editing and testing environment in SpringSource Tool Suite:
 	- Launch sts.exe from your SpringSource Tool Suite directory.
 		Windows example: C:\java\bin\sts-2.9.0.RELEASE\STS.exe
@@ -72,8 +71,9 @@ How to set up your development environment:
 		the source control tree, since your local versions need modified
 		appropriately for your environment and must not be committed back to
 		the repository.
+	- Modify the files you copied from externalConfig to suit your environment
 	- Add the following parameter, after setting the appropriate path for
-	    your environment, to your Tomcat context.xml:
+	    your environment, to your Tomcat context.xml found in Tomcat/conf/:
 	    	<Parameter name="SSP_CONFIGDIR" value="/usr/local/etc/ssp/" />
 	    Example Windows version:
 	    	<Parameter name="SSP_CONFIGDIR" value="C:\\ssp\\" />
@@ -83,6 +83,7 @@ How to set up your development environment:
 			[your Tomcat (Catalina) directory]/conf/[enginename]/[hostname]/
 		Replace the items in brackets as appropriate for your
 		environment. Example: $CATALINA_HOME/conf/[enginename]/[hostname]/
+11. Build & Deploy
 
 Additional, optional tasks:
 	- To run with SQL Server instead of PostgreSQL:
