@@ -69,10 +69,12 @@ public class SelfHelpGuideManager {
 
 	public List<SelfHelpGuideTO> getAll() {
 
-		List<SelfHelpGuideTO> selfHelpGuideTOs = new ArrayList<SelfHelpGuideTO>();
+		List<SelfHelpGuideTO> selfHelpGuideTOs = null;
 
 		if (!securityService.isAuthenticated()) {
-			selfHelpGuideTOs = SelfHelpGuideFactory.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao.findAllActiveForUnauthenticated());
+			selfHelpGuideTOs = SelfHelpGuideFactory
+					.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
+							.findAllActiveForUnauthenticated());
 		} else {
 			selfHelpGuideTOs = SelfHelpGuideFactory
 					.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
@@ -84,7 +86,9 @@ public class SelfHelpGuideManager {
 
 	public List<SelfHelpGuideTO> getBySelfHelpGuideGroup(
 			UUID selfHelpGuideGroupId) {
-		return SelfHelpGuideFactory.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao.selectActiveBySelfHelpGuideGroup(selfHelpGuideGroupId));
+		return SelfHelpGuideFactory
+				.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
+						.selectActiveBySelfHelpGuideGroup(selfHelpGuideGroupId));
 	}
 
 	public SelfHelpGuideContentTO getContentById(UUID selfHelpGuideId) {
@@ -94,14 +98,19 @@ public class SelfHelpGuideManager {
 
 		SelfHelpGuide selfHelpGuide = selfHelpGuideDao.get(selfHelpGuideId);
 
-		for (SelfHelpGuideQuestion selfHelpGuideQuestion : selfHelpGuideQuestionDao.selectBySelfHelpGuide(selfHelpGuide.getId())) {
+		for (SelfHelpGuideQuestion selfHelpGuideQuestion : selfHelpGuideQuestionDao
+				.selectBySelfHelpGuide(selfHelpGuide.getId())) {
 			SelfHelpGuideQuestionTO selfHelpGuideQuestionTO = new SelfHelpGuideQuestionTO();
 
-			selfHelpGuideQuestionTO.setDescriptionText(selfHelpGuideQuestion.getChallenge().getSelfHelpGuideDescription());
-			selfHelpGuideQuestionTO.setHeadingText(selfHelpGuideQuestion.getChallenge().getName());
+			selfHelpGuideQuestionTO.setDescriptionText(selfHelpGuideQuestion
+					.getChallenge().getSelfHelpGuideDescription());
+			selfHelpGuideQuestionTO.setHeadingText(selfHelpGuideQuestion
+					.getChallenge().getName());
 			selfHelpGuideQuestionTO.setId(selfHelpGuideQuestion.getId());
-			selfHelpGuideQuestionTO.setMandatory(selfHelpGuideQuestion.isMandatory());
-			selfHelpGuideQuestionTO.setQuestionText(selfHelpGuideQuestion.getChallenge().getSelfHelpGuideQuestion());
+			selfHelpGuideQuestionTO.setMandatory(selfHelpGuideQuestion
+					.isMandatory());
+			selfHelpGuideQuestionTO.setQuestionText(selfHelpGuideQuestion
+					.getChallenge().getSelfHelpGuideQuestion());
 
 			selfHelpGuideQuestionTOs.add(selfHelpGuideQuestionTO);
 		}
@@ -110,14 +119,16 @@ public class SelfHelpGuideManager {
 		selfHelpGuideContentTO.setName(selfHelpGuide.getName());
 		selfHelpGuideContentTO.setDescription(selfHelpGuide.getDescription());
 		selfHelpGuideContentTO.setQuestions(selfHelpGuideQuestionTOs);
-		selfHelpGuideContentTO.setIntroductoryText(selfHelpGuide.getIntroductoryText());
+		selfHelpGuideContentTO.setIntroductoryText(selfHelpGuide
+				.getIntroductoryText());
 
 		return selfHelpGuideContentTO;
 	}
 
 	public boolean cancelSelfHelpGuideResponse(UUID selfHelpGuideResponseId) {
 
-		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao.selectById(selfHelpGuideResponseId);
+		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
+				.selectById(selfHelpGuideResponseId);
 
 		selfHelpGuideResponse.setCancelled(true);
 
@@ -128,7 +139,8 @@ public class SelfHelpGuideManager {
 
 	// SelfHelpGuideResponseService
 	public Boolean completeSelfHelpGuideResponse(UUID selfHelpGuideResponseId) {
-		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao.selectById(selfHelpGuideResponseId);
+		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
+				.selectById(selfHelpGuideResponseId);
 		selfHelpGuideResponse.setCompleted(true);
 		selfHelpGuideResponseDao.save(selfHelpGuideResponse);
 		return true;
@@ -137,33 +149,40 @@ public class SelfHelpGuideManager {
 	public SelfHelpGuideResponseTO getSelfHelpGuideResponseById(
 			UUID selfHelpGuideResponseId) {
 
-		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao.selectById(selfHelpGuideResponseId);
+		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
+				.selectById(selfHelpGuideResponseId);
 		SelfHelpGuideResponseTO selfHelpGuideResponseTO = new SelfHelpGuideResponseTO();
 		int count = 0;
 
 		selfHelpGuideResponseTO.setId(selfHelpGuideResponse.getId());
-		selfHelpGuideResponseTO.setSummaryText(selfHelpGuideResponse.getSelfHelpGuide().getSummaryText());
-		selfHelpGuideResponseTO.setTriggeredEarlyAlert(selfHelpGuideResponse.isEarlyAlertSent());
+		selfHelpGuideResponseTO.setSummaryText(selfHelpGuideResponse
+				.getSelfHelpGuide().getSummaryText());
+		selfHelpGuideResponseTO.setTriggeredEarlyAlert(selfHelpGuideResponse
+				.isEarlyAlertSent());
 
 		// Get identified challenges
 		List<ChallengeTO> challengeTOs = new ArrayList<ChallengeTO>();
 
-		for (Challenge challenge : challengeDao.selectAffirmativeBySelfHelpGuideResponseId(selfHelpGuideResponseId)) {
+		for (Challenge challenge : challengeDao
+				.selectAffirmativeBySelfHelpGuideResponseId(selfHelpGuideResponseId)) {
 
-			count = getChallengeReferralCountByChallengeAndQuery(challenge.getId(), "");
+			count = getChallengeReferralCountByChallengeAndQuery(
+					challenge.getId(), "");
 
 			if (count > 0) {
 
 				ChallengeTO challengeTO = new ChallengeTO();
 
-				challengeTO.setDescription(challenge.getSelfHelpGuideDescription());
+				challengeTO.setDescription(challenge
+						.getSelfHelpGuideDescription());
 				challengeTO.setId(challenge.getId());
 				challengeTO.setName(challenge.getName());
 
 				if (count < Constants.SEARCH_RESULT_COUNT_LIMIT) {
 					challengeTO.setReferralCount(count);
 				} else {
-					challengeTO.setReferralCount(Constants.SEARCH_RESULT_COUNT_LIMIT);
+					challengeTO
+							.setReferralCount(Constants.SEARCH_RESULT_COUNT_LIMIT);
 				}
 
 				challengeTOs.add(challengeTO);
@@ -186,7 +205,8 @@ public class SelfHelpGuideManager {
 		selfHelpGuideResponse.setEarlyAlertSent(false);
 		selfHelpGuideResponse.setPerson(securityService
 				.currentlyLoggedInSspUser().getPerson());
-		selfHelpGuideResponse.setSelfHelpGuide(new SelfHelpGuide(selfHelpGuideId));
+		selfHelpGuideResponse.setSelfHelpGuide(new SelfHelpGuide(
+				selfHelpGuideId));
 
 		selfHelpGuideResponseDao.save(selfHelpGuideResponse);
 
@@ -202,11 +222,11 @@ public class SelfHelpGuideManager {
 		selfHelpGuideQuestionResponse.setEarlyAlertSent(false);
 		selfHelpGuideQuestionResponse.setResponse(response);
 		selfHelpGuideQuestionResponse
-		.setSelfHelpGuideQuestion(selfHelpGuideQuestionDao
-				.get(selfHelpGuideQuestionId));
+				.setSelfHelpGuideQuestion(selfHelpGuideQuestionDao
+						.get(selfHelpGuideQuestionId));
 		selfHelpGuideQuestionResponse
-		.setSelfHelpGuideResponse(selfHelpGuideResponseDao
-				.selectById(selfHelpGuideResponseId));
+				.setSelfHelpGuideResponse(selfHelpGuideResponseDao
+						.selectById(selfHelpGuideResponseId));
 
 		selfHelpGuideQuestionResponseDao.save(selfHelpGuideQuestionResponse);
 
@@ -225,9 +245,8 @@ public class SelfHelpGuideManager {
 
 			count = challengeReferralDao
 					.selectCountByChallengeNotOnActiveTaskList(challenge
-							.getId(),
-							securityService.currentlyLoggedInSspUser()
-							.getPerson(),
+							.getId(), securityService
+							.currentlyLoggedInSspUser().getPerson(),
 							securityService.getSessionId());
 
 			if (count > 0) {
@@ -252,7 +271,8 @@ public class SelfHelpGuideManager {
 				.selectByChallengeNotOnActiveTaskList(challengeId,
 						securityService.currentlyLoggedInSspUser().getPerson(),
 						securityService.getSessionId())) {
-			challengeReferralTOs.add(new ChallengeReferralTO(challengeReferral));
+			challengeReferralTOs
+					.add(new ChallengeReferralTO(challengeReferral));
 		}
 
 		return challengeReferralTOs;
@@ -263,8 +283,10 @@ public class SelfHelpGuideManager {
 
 		List<ChallengeReferralTO> challengeReferralTOs = new ArrayList<ChallengeReferralTO>();
 
-		for (ChallengeReferral challengeReferral : challengeReferralDao.selectByChallenge(challengeId)) {
-			challengeReferralTOs.add(new ChallengeReferralTO(challengeReferral));
+		for (ChallengeReferral challengeReferral : challengeReferralDao
+				.selectByChallenge(challengeId)) {
+			challengeReferralTOs
+					.add(new ChallengeReferralTO(challengeReferral));
 		}
 
 		return challengeReferralTOs;
@@ -275,30 +297,29 @@ public class SelfHelpGuideManager {
 
 		int count = 0;
 
-		for (ChallengeReferral challengeReferral : challengeReferralDao.searchByChallengeAndQuery(challengeId, query)) {
+		for (ChallengeReferral challengeReferral : challengeReferralDao
+				.searchByChallengeAndQuery(challengeId, query)) {
 
 			// Does the referral exist as an active/incomplete task?
-			// Need to check both the tasks created w/in MyGPS as well as those created in SSP.
+			// Need to check both the tasks created w/in MyGPS as well as those
+			// created in SSP.
 
 			int size = 0;
 
 			if (securityService.isAuthenticated()) {
 				Person student = securityService.currentlyLoggedInSspUser()
 						.getPerson();
-				size = taskDao
-						.getAllForPersonIdAndChallengeReferralId(
-								student.getId(), false,
-								challengeReferral.getId())
-								.size()
-								+ actionPlanStepDao
+				size = taskDao.getAllForPersonIdAndChallengeReferralId(
+						student.getId(), false, challengeReferral.getId())
+						.size()
+						+ actionPlanStepDao
 								.selectAllIncompleteByPersonAndChallengeReferral(
 										student.getId(),
 										challengeReferral.getId()).size();
 			} else {
-				size = taskDao
-						.getAllForSessionIdAndChallengeReferralId(
-								securityService.getSessionId(), false,
-								challengeReferral.getId()).size();
+				size = taskDao.getAllForSessionIdAndChallengeReferralId(
+						securityService.getSessionId(), false,
+						challengeReferral.getId()).size();
 			}
 
 			if (size == 0) {
@@ -308,7 +329,6 @@ public class SelfHelpGuideManager {
 
 		return count;
 	}
-
 
 	public void setSelfHelpGuideDao(SelfHelpGuideDao selfHelpGuideDao) {
 		this.selfHelpGuideDao = selfHelpGuideDao;

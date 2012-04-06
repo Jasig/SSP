@@ -52,8 +52,10 @@ public class ChallengeControllerHttpIntegrationTest extends
 	/**
 	 * Setup the security service with the administrator user.
 	 */
+	@Override
 	@Before
-	public void setup() {
+	public void setUp() {
+		super.setUp();
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 

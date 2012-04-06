@@ -16,7 +16,7 @@ public class ObjectStatusFactory {
 		return objectStatus;
 	}
 
-	public static Boolean ObjectStatusToActive (ObjectStatus objectStatus) {
+	public static Boolean objectStatusToActive (ObjectStatus objectStatus) {
 		return objectStatus == ObjectStatus.ACTIVE;
 	}
 }

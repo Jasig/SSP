@@ -15,15 +15,13 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.ForeignKey;
 
-import edu.sinclair.ssp.model.Person;
-
 @Entity
 @Table(name = "Message", schema = "dbo")
 public class Message {
 
 	@Id
-	@GeneratedValue(generator="gen_id")
-	@org.hibernate.annotations.GenericGenerator(name="gen_id", strategy="guid")
+	@GeneratedValue(generator = "gen_id")
+	@org.hibernate.annotations.GenericGenerator(name = "gen_id", strategy = "guid")
 	@Column(name = "id", unique = true, nullable = false, length = 36)
 	private String id;
 

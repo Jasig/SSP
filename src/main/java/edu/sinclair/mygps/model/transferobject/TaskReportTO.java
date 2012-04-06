@@ -15,27 +15,35 @@ public class TaskReportTO implements Comparable<TaskReportTO> {
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	public String getChallengeName() {
 		return challengeName;
 	}
+
 	public void setChallengeName(String challengeName) {
 		this.challengeName = challengeName;
 	}
+
 	public String getChallengeReferralName() {
 		return challengeReferralName;
 	}
+
 	public void setChallengeReferralName(String challengeReferralName) {
 		this.challengeReferralName = challengeReferralName;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public Date getDueDate() {
 		return dueDate;
 	}
@@ -47,12 +55,14 @@ public class TaskReportTO implements Comparable<TaskReportTO> {
 	public void setCreatedBy(UUID createdBy) {
 		this.createdBy = createdBy;
 	}
+
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
 	}
+
 	@Override
 	public int compareTo(TaskReportTO taskReportTO) {
-		return this.challengeName.compareTo(taskReportTO.getChallengeName());
+		return challengeName.compareTo(taskReportTO.getChallengeName());
 	}
 
 }

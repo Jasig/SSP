@@ -301,7 +301,7 @@ public class StudentIntakeFormManager {
 					SECTION_CONFIDENTIALITY_QUESTION_AGREE_ID, formSectionTO)
 					.setValue(
 							confidentialityDisclosureDao
-							.getAgreementByStudent(student));
+									.getAgreementByStudent(student));
 		}
 
 		/* Personal */
@@ -372,7 +372,7 @@ public class StudentIntakeFormManager {
 									Constants.DEFAULT_DROPDOWN_LIST_VALUE));
 			FormUtil.getFormQuestionById(SECTION_PERSONAL_QUESTION_STATE_ID,
 					formSectionTO).setValue(
-							Constants.DEFAULT_DROPDOWN_LIST_VALUE);
+					Constants.DEFAULT_DROPDOWN_LIST_VALUE);
 		} else {
 			FormUtil.getFormQuestionById(SECTION_PERSONAL_QUESTION_STATE_ID,
 					formSectionTO).setValue(student.getState());
@@ -401,12 +401,12 @@ public class StudentIntakeFormManager {
 				FormUtil.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID,
 						formSectionTO).setValue(
-								Constants.DEFAULT_DROPDOWN_LIST_VALUE);
+						Constants.DEFAULT_DROPDOWN_LIST_VALUE);
 			} else {
 				FormUtil.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID,
 						formSectionTO).setValue(
-								student.getDemographics().getMaritalStatus().getId()
+						student.getDemographics().getMaritalStatus().getId()
 								.toString());
 			}
 
@@ -423,12 +423,12 @@ public class StudentIntakeFormManager {
 				FormUtil.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID,
 						formSectionTO).setValue(
-								Constants.DEFAULT_DROPDOWN_LIST_VALUE);
+						Constants.DEFAULT_DROPDOWN_LIST_VALUE);
 			} else {
 				FormUtil.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID,
 						formSectionTO).setValue(
-								student.getDemographics().getEthnicity().getId()
+						student.getDemographics().getEthnicity().getId()
 								.toString());
 			}
 
@@ -450,12 +450,12 @@ public class StudentIntakeFormManager {
 				FormUtil.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID,
 						formSectionTO).setValue(
-								Constants.DEFAULT_DROPDOWN_LIST_VALUE);
+						Constants.DEFAULT_DROPDOWN_LIST_VALUE);
 			} else {
 				FormUtil.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID,
 						formSectionTO).setValue(
-								student.getDemographics().getCitizenship().getId()
+						student.getDemographics().getCitizenship().getId()
 								.toString());
 			}
 
@@ -463,7 +463,7 @@ public class StudentIntakeFormManager {
 			FormUtil.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_COUNTRYOFCITIZENSHIP_ID,
 					formSectionTO).setValue(
-							student.getDemographics().getCountryOfCitizenship());
+					student.getDemographics().getCountryOfCitizenship());
 
 			// Veteran Status
 			if (student.getDemographics().getVeteranStatus() == null) {
@@ -478,38 +478,38 @@ public class StudentIntakeFormManager {
 				FormUtil.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID,
 						formSectionTO).setValue(
-								Constants.DEFAULT_DROPDOWN_LIST_VALUE);
+						Constants.DEFAULT_DROPDOWN_LIST_VALUE);
 			} else {
 				FormUtil.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID,
 						formSectionTO).setValue(
-								student.getDemographics().getVeteranStatus().getId());
+						student.getDemographics().getVeteranStatus().getId());
 			}
 
 			// Primary Caregiver
 			FormUtil.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID,
 					formSectionTO).setValue(
-							student.getDemographics().isPrimaryCaregiver());
+					student.getDemographics().isPrimaryCaregiver());
 
 			// How Many Children
 			FormUtil.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_HOWMANYCHILDREN_ID,
 					formSectionTO).setValue(
-							String.valueOf(student.getDemographics()
-									.getNumberOfChildren()));
+					String.valueOf(student.getDemographics()
+							.getNumberOfChildren()));
 
 			// Chidren Ages
 			FormUtil.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_CHILDRENAGES_ID,
 					formSectionTO).setValue(
-							student.getDemographics().getChildAges());
+					student.getDemographics().getChildAges());
 
 			// Childcare Needed
 			FormUtil.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID,
 					formSectionTO).setValue(
-							student.getDemographics().isChildCareNeeded());
+					student.getDemographics().isChildCareNeeded());
 
 			// Childcare Arrangements
 			if (student.getDemographics().getChildCareArrangement() == null) {
@@ -524,12 +524,12 @@ public class StudentIntakeFormManager {
 				FormUtil.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID,
 						formSectionTO).setValue(
-								Constants.DEFAULT_DROPDOWN_LIST_VALUE);
+						Constants.DEFAULT_DROPDOWN_LIST_VALUE);
 			} else {
 				FormUtil.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID,
 						formSectionTO).setValue(
-								student.getDemographics().getChildCareArrangement()
+						student.getDemographics().getChildCareArrangement()
 								.getId());
 			}
 
@@ -571,7 +571,7 @@ public class StudentIntakeFormManager {
 			FormUtil.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_HOURSWORKEDPERWEEK_ID,
 					formSectionTO).setValue(
-							student.getDemographics().getTotalHoursWorkedPerWeek());
+					student.getDemographics().getTotalHoursWorkedPerWeek());
 
 		}
 
@@ -585,40 +585,37 @@ public class StudentIntakeFormManager {
 			FormUtil.getFormQuestionById(
 					SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID,
 					formSectionTO).setValue(
-							student.getEducationPlan().getStudentStatus());
+					student.getEducationPlan().getStudentStatus());
 
 			// New Student Orientation
 			FormUtil.getFormQuestionById(
 					SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID,
 					formSectionTO).setValue(
-							student.getEducationPlan().isNewOrientationComplete());
+					student.getEducationPlan().isNewOrientationComplete());
 
 			// Registered for Classes
 			FormUtil.getFormQuestionById(
 					SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID,
 					formSectionTO).setValue(
-							student.getEducationPlan().isRegisteredForClasses());
+					student.getEducationPlan().isRegisteredForClasses());
 
 			// Have Parents Obtained a College Degree
 			FormUtil.getFormQuestionById(
 					SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID,
 					formSectionTO).setValue(
-							student.getEducationPlan().isCollegeDegreeForParents());
+					student.getEducationPlan().isCollegeDegreeForParents());
 
 			// Special Needs or Accomodations
 			FormUtil.getFormQuestionById(
 					SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID,
-					formSectionTO)
-					.setValue(
-							student.getEducationPlan()
-							.isSpecialNeeds());
+					formSectionTO).setValue(
+					student.getEducationPlan().isSpecialNeeds());
 
 			// Grade at Highest Education Level
 			FormUtil.getFormQuestionById(
 					SECTION_EDUCATIONPLAN_QUESTION_GRADEATHIGHESTEDUCATIONLEVEL_ID,
 					formSectionTO).setValue(
-							student.getEducationPlan()
-							.getGradeTypicallyEarned());
+					student.getEducationPlan().getGradeTypicallyEarned());
 		}
 
 		/* Education Level */
@@ -645,14 +642,14 @@ public class StudentIntakeFormManager {
 				FormUtil.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMALASTYEARATTENDED_ID,
 						educationLevelFormSection).setValue(
-								MyGpsStringUtils.stringFromYear(studentEducationLevel
-										.getLastYearAttended()));
+						MyGpsStringUtils.stringFromYear(studentEducationLevel
+								.getLastYearAttended()));
 
 				FormUtil.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMAHIGHESTGRADECOMPLETED_ID,
 						educationLevelFormSection).setValue(
-								String.valueOf(studentEducationLevel
-										.getHighestGradeCompleted()));
+						String.valueOf(studentEducationLevel
+								.getHighestGradeCompleted()));
 
 			} else if (studentEducationLevel.getEducationLevel().getId()
 					.equals(EducationLevel.GED_ID)) {
@@ -660,24 +657,22 @@ public class StudentIntakeFormManager {
 				FormUtil.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_GEDYEAROFGED_ID,
 						educationLevelFormSection).setValue(
-								MyGpsStringUtils.stringFromYear(studentEducationLevel
-										.getGraduatedYear()));
+						MyGpsStringUtils.stringFromYear(studentEducationLevel
+								.getGraduatedYear()));
 
-			} else if (studentEducationLevel
-					.getEducationLevel()
-					.getId()
+			} else if (studentEducationLevel.getEducationLevel().getId()
 					.equals(EducationLevel.HIGH_SCHOOL_GRADUATION_ID)) {
 
 				FormUtil.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLYEARGRADUATED_ID,
 						educationLevelFormSection).setValue(
-								MyGpsStringUtils.stringFromYear(studentEducationLevel
-										.getGraduatedYear()));
+						MyGpsStringUtils.stringFromYear(studentEducationLevel
+								.getGraduatedYear()));
 
 				FormUtil.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLATTENDED_ID,
 						educationLevelFormSection).setValue(
-								studentEducationLevel.getSchoolName());
+						studentEducationLevel.getSchoolName());
 
 			} else if (studentEducationLevel.getEducationLevel().getId()
 					.equals(EducationLevel.SOME_COLLEGE_CREDITS_ID)) {
@@ -685,8 +680,8 @@ public class StudentIntakeFormManager {
 				FormUtil.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_SOMECOLLEGECREDITSLASTYEARATTENDED_ID,
 						educationLevelFormSection).setValue(
-								MyGpsStringUtils.stringFromYear(studentEducationLevel
-										.getLastYearAttended()));
+						MyGpsStringUtils.stringFromYear(studentEducationLevel
+								.getLastYearAttended()));
 
 			} else if (studentEducationLevel.getEducationLevel().getId()
 					.equals(EducationLevel.OTHER_ID)) {
@@ -694,7 +689,7 @@ public class StudentIntakeFormManager {
 				FormUtil.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_OTHERPLEASEEXPLAIN_ID,
 						educationLevelFormSection).setValue(
-								studentEducationLevel.getDescription());
+						studentEducationLevel.getDescription());
 
 			}
 		}
@@ -717,7 +712,7 @@ public class StudentIntakeFormManager {
 			FormUtil.getFormQuestionById(
 					SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID,
 					formSectionTO).setValue(
-							student.getEducationGoal().getDescription());
+					student.getEducationGoal().getDescription());
 
 			// Other Description
 			/*
@@ -731,7 +726,7 @@ public class StudentIntakeFormManager {
 			FormUtil.getFormQuestionById(
 					SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID,
 					formSectionTO).setValue(
-							student.getEducationGoal().getHowSureAboutMajor());
+					student.getEducationGoal().getHowSureAboutMajor());
 
 			// Career Goal
 			FormUtil.getFormQuestionById(
@@ -742,8 +737,7 @@ public class StudentIntakeFormManager {
 			/*
 			 * FormUtil.getFormQuestionById(
 			 * SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID,
-			 * formSectionTO).setValue(
-			 * student.getEducationGoal()
+			 * formSectionTO).setValue( student.getEducationGoal()
 			 * .getMilitaryBranchDescription());
 			 */
 		}
@@ -762,9 +756,7 @@ public class StudentIntakeFormManager {
 			fundingQuestionValues.add(studentFundingSource.getFundingSource()
 					.getId().toString());
 
-			if (studentFundingSource
-					.getFundingSource()
-					.getId()
+			if (studentFundingSource.getFundingSource().getId()
 					.equals(SECTION_FUNDING_OTHER_FUNDING_SOURCE_ID)) {
 
 				FormQuestionTO fundingOtherQuestion = FormUtil
@@ -788,8 +780,8 @@ public class StudentIntakeFormManager {
 		List<String> challengeQuestionValues = new ArrayList<String>();
 
 		for (PersonChallenge studentChallenge : student.getChallenges()) {
-			challengeQuestionValues
-			.add(studentChallenge.getChallenge().getId().toString());
+			challengeQuestionValues.add(studentChallenge.getChallenge().getId()
+					.toString());
 		}
 
 		challengeQuestion.setValues(challengeQuestionValues);
@@ -894,13 +886,14 @@ public class StudentIntakeFormManager {
 		FormQuestionTO stateQuestion = FormUtil.getFormQuestionById(
 				SECTION_PERSONAL_QUESTION_STATE_ID, personalSection);
 
-		if (stateQuestion.getValue() == Constants.DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (Constants.DEFAULT_DROPDOWN_LIST_VALUE.equals(stateQuestion
+				.getValue())) {
 			student.setState(null);
 		} else {
 			student.setState(stateQuestion.getValue());
 		}
 
-		// Zip Code
+		// ZIP Code
 		student.setZipCode(FormUtil.getFormQuestionById(
 				SECTION_PERSONAL_QUESTION_ZIPCODE_ID, personalSection)
 				.getValue());
@@ -955,8 +948,7 @@ public class StudentIntakeFormManager {
 			demographics.setCitizenship(null);
 		} else {
 			demographics.setCitizenship(citizenshipDao.get(UUID
-					.fromString(citizenshipQuestion
-							.getValue())));
+					.fromString(citizenshipQuestion.getValue())));
 		}
 
 		demographics.setCountryOfCitizenship(FormUtil.getFormQuestionById(
@@ -967,7 +959,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO employedQuestion = FormUtil.getFormQuestionById(
 				SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID, demographicsSection);
 
-		if (employedQuestion.getValue() == Constants.DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (Constants.DEFAULT_DROPDOWN_LIST_VALUE.equals(employedQuestion
+				.getValue())) {
 			demographics.setEmployed(false);
 		} else {
 			demographics.setEmployed(MyGpsStringUtils
@@ -1031,8 +1024,7 @@ public class StudentIntakeFormManager {
 			demographics.setPrimaryCaregiver(false);
 		} else {
 			demographics.setPrimaryCaregiver(MyGpsStringUtils
-					.booleanFromString(primaryCaregiverQuestion
-							.getValue()));
+					.booleanFromString(primaryCaregiverQuestion.getValue()));
 		}
 
 		// Shift
@@ -1078,11 +1070,9 @@ public class StudentIntakeFormManager {
 						SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID,
 						educationPlanSection).getValue()));
 
-		educationPlan
-		.setGradeTypicallyEarned(FormUtil
-				.getFormQuestionById(
-						SECTION_EDUCATIONPLAN_QUESTION_GRADEATHIGHESTEDUCATIONLEVEL_ID,
-						educationPlanSection).getValue());
+		educationPlan.setGradeTypicallyEarned(FormUtil.getFormQuestionById(
+				SECTION_EDUCATIONPLAN_QUESTION_GRADEATHIGHESTEDUCATIONLEVEL_ID,
+				educationPlanSection).getValue());
 
 		// Parents Have College Degree
 		FormQuestionTO parentsHaveCollegeDegreeQuestion = FormUtil
@@ -1093,8 +1083,7 @@ public class StudentIntakeFormManager {
 		if (parentsHaveCollegeDegreeQuestion.getValue() == Constants.DEFAULT_DROPDOWN_LIST_VALUE) {
 			educationPlan.setCollegeDegreeForParents(false);
 		} else {
-			educationPlan
-			.setCollegeDegreeForParents(MyGpsStringUtils
+			educationPlan.setCollegeDegreeForParents(MyGpsStringUtils
 					.booleanFromString(parentsHaveCollegeDegreeQuestion
 							.getValue()));
 		}
@@ -1113,8 +1102,7 @@ public class StudentIntakeFormManager {
 		if (requireSpecialAccomodationQuestion.getValue() == Constants.DEFAULT_DROPDOWN_LIST_VALUE) {
 			educationPlan.setSpecialNeeds(false);
 		} else {
-			educationPlan
-			.setSpecialNeeds(MyGpsStringUtils
+			educationPlan.setSpecialNeeds(MyGpsStringUtils
 					.booleanFromString(requireSpecialAccomodationQuestion
 							.getValue()));
 		}
@@ -1175,8 +1163,7 @@ public class StudentIntakeFormManager {
 				continue;
 			}
 
-			if (formOption.getId().equals(
-					EducationLevel.NO_DIPLOMA_NO_GED_ID)) {
+			if (formOption.getId().equals(EducationLevel.NO_DIPLOMA_NO_GED_ID)) {
 
 				educationLevelQuestionValue = FormUtil
 						.getFormQuestionById(
@@ -1198,8 +1185,7 @@ public class StudentIntakeFormManager {
 							.parseInt(educationLevelQuestionValue));
 				}
 
-			} else if (formOption.getId().equals(
-					EducationLevel.GED_ID)) {
+			} else if (formOption.getId().equals(EducationLevel.GED_ID)) {
 
 				educationLevelQuestionValue = FormUtil.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_GEDYEAROFGED_ID,
@@ -1224,10 +1210,10 @@ public class StudentIntakeFormManager {
 				}
 
 				studentEducationLevel
-				.setSchoolName(FormUtil
-						.getFormQuestionById(
-								SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLATTENDED_ID,
-								educationLevelSection).getValue());
+						.setSchoolName(FormUtil
+								.getFormQuestionById(
+										SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLATTENDED_ID,
+										educationLevelSection).getValue());
 
 			} else if (formOption.getId().equals(
 					EducationLevel.SOME_COLLEGE_CREDITS_ID)) {
@@ -1242,14 +1228,13 @@ public class StudentIntakeFormManager {
 							.parseInt(educationLevelQuestionValue));
 				}
 
-			} else if (formOption.getId().equals(
-					EducationLevel.OTHER_ID)) {
+			} else if (formOption.getId().equals(EducationLevel.OTHER_ID)) {
 
 				studentEducationLevel
-				.setDescription(FormUtil
-						.getFormQuestionById(
-								SECTION_EDUCATIONLEVEL_QUESTION_OTHERPLEASEEXPLAIN_ID,
-								educationLevelSection).getValue());
+						.setDescription(FormUtil
+								.getFormQuestionById(
+										SECTION_EDUCATIONLEVEL_QUESTION_OTHERPLEASEEXPLAIN_ID,
+										educationLevelSection).getValue());
 
 			}
 
@@ -1273,19 +1258,19 @@ public class StudentIntakeFormManager {
 				educationGoalSection).getValue());
 		studentEducationGoal.setEducationGoal(educationGoalDao.get(UUID
 				.fromString(FormUtil.getFormQuestionById(
-						SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID, educationGoalSection)
-						.getValue())));
+						SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID,
+						educationGoalSection).getValue())));
 		studentEducationGoal.setDescription(FormUtil.getFormQuestionById(
 				SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID,
 				educationGoalSection).getValue());
 
 		/*
-		 * studentEducationGoal
-		 * .setMilitaryBranchDescription(FormUtil
+		 * studentEducationGoal .setMilitaryBranchDescription(FormUtil
 		 * .getFormQuestionById(
 		 * SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID,
 		 * educationGoalSection).getValue());
-		 * studentEducationGoal.setOtherDescription(FormUtil.getFormQuestionById(
+		 * studentEducationGoal.setOtherDescription
+		 * (FormUtil.getFormQuestionById(
 		 * SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID,
 		 * educationGoalSection).getValue());
 		 */
@@ -1329,8 +1314,8 @@ public class StudentIntakeFormManager {
 									SECTION_FUNDING_QUESTION_OTHER_ID,
 									fundingSection).getValue());
 				} else {
-					studentFundingSource.setDescription(formOptionTO
-							.getLabel());
+					studentFundingSource
+							.setDescription(formOptionTO.getLabel());
 				}
 
 				studentFundingSource.setPerson(student);
@@ -1429,7 +1414,7 @@ public class StudentIntakeFormManager {
 
 		middleInitialQuestionTO.setReadOnly(true);
 		middleInitialQuestionTO
-		.setId(SECTION_PERSONAL_QUESTION_MIDDLEINITIAL_ID);
+				.setId(SECTION_PERSONAL_QUESTION_MIDDLEINITIAL_ID);
 		middleInitialQuestionTO.setLabel("Middle Initial");
 		middleInitialQuestionTO.setMaximumLength("1");
 		middleInitialQuestionTO.setType(Constants.FORM_TYPE_TEXTINPUT);
@@ -1550,124 +1535,124 @@ public class StudentIntakeFormManager {
 		FormQuestionTO stateQuestion = new FormQuestionTO();
 		List<FormOptionTO> stateQuestionOptions = new ArrayList<FormOptionTO>();
 
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"AK", "AK"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"AL", "AL"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"AS", "AS"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"AZ", "AZ"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"BC", "BC"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"CA", "CA"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"CO", "CO"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"CT", "CT"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"CZ", "CZ"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"DC", "DC"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"DE", "DE"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"FL", "FL"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"FM", "FM"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"GA", "GA"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"GU", "GU"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"HI", "HI"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"IA", "IA"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"ID", "ID"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"IL", "IL"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"IN", "IN"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"KS", "KS"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"KY", "KY"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"LA", "LA"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"MA", "MA"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"MD", "MD"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"ME", "ME"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"MH", "MH"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"MN", "MN"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"MO", "MO"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"MP", "MP"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"MS", "MS"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"MT", "MT"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"NC", "NC"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"ND", "ND"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"NE", "NE"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"NH", "NH"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"NJ", "NJ"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"NM", "NM"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"NV", "NV"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"NY", "NY"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"OH", "OH"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"OK", "OK"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"ON", "ON"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"OR", "OR"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"OS", "OS"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"PA", "PA"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"PR", "PR"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"RI", "RI"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"SC", "SC"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"SD", "SD"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"TN", "TN"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"TX", "TX"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"UT", "UT"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"VA", "VA"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"VI", "VI"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"WA", "WA"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"WI", "WI"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"WV", "WV"));
-		stateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"WY", "WY"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "AK", "AK"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "AL", "AL"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "AS", "AS"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "AZ", "AZ"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "BC", "BC"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "CA", "CA"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "CO", "CO"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "CT", "CT"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "CZ", "CZ"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "DC", "DC"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "DE", "DE"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "FL", "FL"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "FM", "FM"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "GA", "GA"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "GU", "GU"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "HI", "HI"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "IA", "IA"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "ID", "ID"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "IL", "IL"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "IN", "IN"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "KS", "KS"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "KY", "KY"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "LA", "LA"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "MA", "MA"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "MD", "MD"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "ME", "ME"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "MH", "MH"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "MN", "MN"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "MO", "MO"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "MP", "MP"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "MS", "MS"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "MT", "MT"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "NC", "NC"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "ND", "ND"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "NE", "NE"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "NH", "NH"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "NJ", "NJ"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "NM", "NM"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "NV", "NV"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "NY", "NY"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "OH", "OH"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "OK", "OK"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "ON", "ON"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "OR", "OR"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "OS", "OS"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "PA", "PA"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "PR", "PR"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "RI", "RI"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "SC", "SC"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "SD", "SD"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "TN", "TN"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "TX", "TX"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "UT", "UT"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "VA", "VA"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "VI", "VI"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "WA", "WA"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "WI", "WI"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "WV", "WV"));
+		stateQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "WY", "WY"));
 
 		stateQuestion.setReadOnly(true);
 		stateQuestion.setId(SECTION_PERSONAL_QUESTION_STATE_ID);
@@ -1707,7 +1692,7 @@ public class StudentIntakeFormManager {
 		List<FormOptionTO> maritalStatusQuestionOptions = new ArrayList<FormOptionTO>();
 
 		maritalStatusQuestion
-		.setId(SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
+				.setId(SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
 		maritalStatusQuestion.setLabel("Marital Status");
 
 		maritalStatusQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
@@ -1747,10 +1732,10 @@ public class StudentIntakeFormManager {
 		FormQuestionTO genderQuestion = new FormQuestionTO();
 		List<FormOptionTO> genderQuestionOptions = new ArrayList<FormOptionTO>();
 
-		genderQuestionOptions.add(new FormOptionTO(
-				UUID.randomUUID(), "Male", "M"));
-		genderQuestionOptions.add(new FormOptionTO(
-				UUID.randomUUID(), "Female", "F"));
+		genderQuestionOptions.add(new FormOptionTO(UUID.randomUUID(), "Male",
+				"M"));
+		genderQuestionOptions.add(new FormOptionTO(UUID.randomUUID(), "Female",
+				"F"));
 
 		genderQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID);
 		genderQuestion.setLabel("Gender");
@@ -1764,17 +1749,13 @@ public class StudentIntakeFormManager {
 		List<FormOptionTO> citizenshipQuestionOptions = new ArrayList<FormOptionTO>();
 
 		citizenshipQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"US Citizen",
-				"DD1A644C-58A9-4A77-A263-76C2ECB6B152"));
+				"US Citizen", "DD1A644C-58A9-4A77-A263-76C2ECB6B152"));
 		citizenshipQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"Permanent Resident",
-				"1B870957-9165-46AB-9BA8-47085DD4B561"));
+				"Permanent Resident", "1B870957-9165-46AB-9BA8-47085DD4B561"));
 		citizenshipQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"Naturalized Citizen",
-				"8DDB5013-1D9F-441D-8C6B-71C52F839570"));
+				"Naturalized Citizen", "8DDB5013-1D9F-441D-8C6B-71C52F839570"));
 		citizenshipQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"International",
-				"8BFA49CE-4D8E-43C1-AA2B-0F5E66319168"));
+				"International", "8BFA49CE-4D8E-43C1-AA2B-0F5E66319168"));
 
 		citizenshipQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID);
 		citizenshipQuestion.setLabel("Citizenship");
@@ -1787,15 +1768,15 @@ public class StudentIntakeFormManager {
 		FormQuestionTO countryOfCitizenshipQuestion = new FormQuestionTO();
 
 		countryOfCitizenshipQuestion
-		.setId(SECTION_DEMOGRAPHICS_QUESTION_COUNTRYOFCITIZENSHIP_ID);
+				.setId(SECTION_DEMOGRAPHICS_QUESTION_COUNTRYOFCITIZENSHIP_ID);
 		countryOfCitizenshipQuestion.setLabel("Country of Citizenship");
 		countryOfCitizenshipQuestion.setMaximumLength("50");
 		countryOfCitizenshipQuestion.setType(Constants.FORM_TYPE_TEXTINPUT);
 		// DEPENDENCY -> countryOfCitizenshipQuestion should be shown only when
 		// citizenshipQuestion selection matches 'International'
 		countryOfCitizenshipQuestion
-		.setVisibilityExpression("hasValueForQuestionId('8BFA49CE-4D8E-43C1-AA2B-0F5E66319168', '"
-				+ SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID + "')");
+				.setVisibilityExpression("hasValueForQuestionId('8BFA49CE-4D8E-43C1-AA2B-0F5E66319168', '"
+						+ SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID + "')");
 
 		demographicSectionQuestions.add(countryOfCitizenshipQuestion);
 
@@ -1806,12 +1787,12 @@ public class StudentIntakeFormManager {
 		for (VeteranStatus veteranStatus : veteranStatusDao
 				.getAll(ObjectStatus.ACTIVE)) {
 			veteranStatusQuestionOptions
-			.add(new FormOptionTO(veteranStatus.getId(), veteranStatus
-					.getName(), veteranStatus.getName()));
+					.add(new FormOptionTO(veteranStatus.getId(), veteranStatus
+							.getName(), veteranStatus.getName()));
 		}
 
 		veteranStatusQuestion
-		.setId(SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID);
+				.setId(SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID);
 		veteranStatusQuestion.setLabel("Veteran Status");
 		veteranStatusQuestion.setOptions(veteranStatusQuestionOptions);
 		veteranStatusQuestion.setType(Constants.FORM_TYPE_SELECT);
@@ -1828,7 +1809,7 @@ public class StudentIntakeFormManager {
 				"No", "N"));
 
 		primaryCaregiverQuestion
-		.setId(SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID);
+				.setId(SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID);
 		primaryCaregiverQuestion.setLabel("Are you a primary Caregiver?");
 		primaryCaregiverQuestion.setOptions(primaryCaregiverQuestionOptions);
 		primaryCaregiverQuestion.setType(Constants.FORM_TYPE_RADIOLIST);
@@ -1863,7 +1844,7 @@ public class StudentIntakeFormManager {
 				"10", "10"));
 
 		howManyChildrenQuestion
-		.setId(SECTION_DEMOGRAPHICS_QUESTION_HOWMANYCHILDREN_ID);
+				.setId(SECTION_DEMOGRAPHICS_QUESTION_HOWMANYCHILDREN_ID);
 		howManyChildrenQuestion.setLabel("If you have children, how many?");
 		howManyChildrenQuestion.setOptions(howManyChildrenQuestionOptions);
 		howManyChildrenQuestion.setType(Constants.FORM_TYPE_SELECT);
@@ -1874,7 +1855,7 @@ public class StudentIntakeFormManager {
 		FormQuestionTO childrenAgesQuestion = new FormQuestionTO();
 
 		childrenAgesQuestion
-		.setId(SECTION_DEMOGRAPHICS_QUESTION_CHILDRENAGES_ID);
+				.setId(SECTION_DEMOGRAPHICS_QUESTION_CHILDRENAGES_ID);
 		childrenAgesQuestion.setLabel("Ages? (Separated by commas)");
 		childrenAgesQuestion.setMaximumLength("50");
 		childrenAgesQuestion.setType(Constants.FORM_TYPE_TEXTINPUT);
@@ -1891,7 +1872,7 @@ public class StudentIntakeFormManager {
 				"No", "N"));
 
 		childCareNeededQuestion
-		.setId(SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID);
+				.setId(SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID);
 		childCareNeededQuestion.setLabel("Childcare needed?");
 		childCareNeededQuestion.setOptions(childCareNeededQuestionOptions);
 		childCareNeededQuestion.setType(Constants.FORM_TYPE_RADIOLIST);
@@ -1906,21 +1887,21 @@ public class StudentIntakeFormManager {
 				.getAll(ObjectStatus.ACTIVE)) {
 			childCareArrangementQuestionOptions.add(new FormOptionTO(
 					childcareArrangement.getId(), childcareArrangement
-					.getName(), childcareArrangement.getName()));
+							.getName(), childcareArrangement.getName()));
 		}
 
 		childCareArrangementQuestion
-		.setId(SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID);
+				.setId(SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID);
 		childCareArrangementQuestion.setLabel("Childcare arrangement");
 		childCareArrangementQuestion
-		.setOptions(childCareArrangementQuestionOptions);
+				.setOptions(childCareArrangementQuestionOptions);
 		childCareArrangementQuestion.setType(Constants.FORM_TYPE_SELECT);
 		// DEPENDENCY -> childCareArrangementQuestion shown when
 		// childCareNeededQuestion selection matches "Yes"
 		childCareArrangementQuestion
-		.setVisibilityExpression("hasValueForQuestionId('Y', '"
-				+ SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID
-				+ "')");
+				.setVisibilityExpression("hasValueForQuestionId('Y', '"
+						+ SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID
+						+ "')");
 
 		demographicSectionQuestions.add(childCareArrangementQuestion);
 
@@ -1957,12 +1938,12 @@ public class StudentIntakeFormManager {
 		FormQuestionTO shiftQuestion = new FormQuestionTO();
 		List<FormOptionTO> shiftQuestionOptions = new ArrayList<FormOptionTO>();
 
-		shiftQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"1st", "1"));
-		shiftQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"2nd", "2"));
-		shiftQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"3rd", "3"));
+		shiftQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "1st", "1"));
+		shiftQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "2nd", "2"));
+		shiftQuestionOptions
+				.add(new FormOptionTO(UUID.randomUUID(), "3rd", "3"));
 		shiftQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
 				"Not Applicable", "4"));
 
@@ -1994,14 +1975,14 @@ public class StudentIntakeFormManager {
 		FormQuestionTO hoursWorkedPerWeekQuestion = new FormQuestionTO();
 
 		hoursWorkedPerWeekQuestion
-		.setId(SECTION_DEMOGRAPHICS_QUESTION_HOURSWORKEDPERWEEK_ID);
+				.setId(SECTION_DEMOGRAPHICS_QUESTION_HOURSWORKEDPERWEEK_ID);
 		hoursWorkedPerWeekQuestion.setLabel("Hours Worked per Week");
 		hoursWorkedPerWeekQuestion.setType(Constants.FORM_TYPE_TEXTINPUT);
 		// DEPENDENCY -> hoursWorkedPerWeekQuestion shown when employedQuestion
 		// selection matches "Yes"
 		hoursWorkedPerWeekQuestion
-		.setVisibilityExpression("hasValueForQuestionId('Y', '"
-				+ SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID + "')");
+				.setVisibilityExpression("hasValueForQuestionId('Y', '"
+						+ SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID + "')");
 
 		demographicSectionQuestions.add(hoursWorkedPerWeekQuestion);
 
@@ -2026,12 +2007,12 @@ public class StudentIntakeFormManager {
 		for (StudentStatus studentStatus : studentStatusDao
 				.getAll(ObjectStatus.ACTIVE)) {
 			studentStatusQuestionOptions
-			.add(new FormOptionTO(studentStatus.getId(), studentStatus
-					.getName(), studentStatus.getName()));
+					.add(new FormOptionTO(studentStatus.getId(), studentStatus
+							.getName(), studentStatus.getName()));
 		}
 
 		studentStatusQuestion
-		.setId(SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID);
+				.setId(SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID);
 		studentStatusQuestion.setLabel("Student Status");
 		studentStatusQuestion.setOptions(studentStatusQuestionOptions);
 		studentStatusQuestion.setType(Constants.FORM_TYPE_RADIOLIST);
@@ -2048,11 +2029,11 @@ public class StudentIntakeFormManager {
 				.randomUUID(), "No", "N"));
 
 		newStudentOrientationQuestion
-		.setId(SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID);
+				.setId(SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID);
 		newStudentOrientationQuestion
-		.setLabel("Have you completed new student orientation?");
+				.setLabel("Have you completed new student orientation?");
 		newStudentOrientationQuestion
-		.setOptions(newStudentOrientationQuestionOptions);
+				.setOptions(newStudentOrientationQuestionOptions);
 		newStudentOrientationQuestion.setType(Constants.FORM_TYPE_RADIOLIST);
 
 		eduPlanSectionQuestions.add(newStudentOrientationQuestion);
@@ -2067,11 +2048,11 @@ public class StudentIntakeFormManager {
 				.randomUUID(), "No", "N"));
 
 		registeredForClassesQuestion
-		.setId(SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID);
+				.setId(SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID);
 		registeredForClassesQuestion
-		.setLabel("Have you registered for classes?");
+				.setLabel("Have you registered for classes?");
 		registeredForClassesQuestion
-		.setOptions(registeredForClassesQuestionOptions);
+				.setOptions(registeredForClassesQuestionOptions);
 		registeredForClassesQuestion.setType(Constants.FORM_TYPE_RADIOLIST);
 
 		eduPlanSectionQuestions.add(registeredForClassesQuestion);
@@ -2086,13 +2067,13 @@ public class StudentIntakeFormManager {
 				.randomUUID(), "No", "N"));
 
 		parentsObtainedCollegeDegreeQuestion
-		.setId(SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID);
+				.setId(SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID);
 		parentsObtainedCollegeDegreeQuestion
-		.setLabel("Have your parents obtained a college degree?");
+				.setLabel("Have your parents obtained a college degree?");
 		parentsObtainedCollegeDegreeQuestion
-		.setOptions(newStudentOrientationQuestionOptions);
+				.setOptions(newStudentOrientationQuestionOptions);
 		parentsObtainedCollegeDegreeQuestion
-		.setType(Constants.FORM_TYPE_RADIOLIST);
+				.setType(Constants.FORM_TYPE_RADIOLIST);
 
 		eduPlanSectionQuestions.add(parentsObtainedCollegeDegreeQuestion);
 
@@ -2106,11 +2087,11 @@ public class StudentIntakeFormManager {
 				.randomUUID(), "No", "N"));
 
 		specialAccomodationQuestion
-		.setId(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID);
+				.setId(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID);
 		specialAccomodationQuestion
-		.setLabel("Special needs or require special accomodation?");
+				.setLabel("Special needs or require special accomodation?");
 		specialAccomodationQuestion
-		.setOptions(specialAccomodationQuestionOptions);
+				.setOptions(specialAccomodationQuestionOptions);
 		specialAccomodationQuestion.setType(Constants.FORM_TYPE_RADIOLIST);
 
 		eduPlanSectionQuestions.add(specialAccomodationQuestion);
@@ -2139,13 +2120,13 @@ public class StudentIntakeFormManager {
 				UUID.randomUUID(), "F", "9"));
 
 		gradeEarnedHighestLevelEducationQuestion
-		.setId(SECTION_EDUCATIONPLAN_QUESTION_GRADEATHIGHESTEDUCATIONLEVEL_ID);
+				.setId(SECTION_EDUCATIONPLAN_QUESTION_GRADEATHIGHESTEDUCATIONLEVEL_ID);
 		gradeEarnedHighestLevelEducationQuestion
-		.setLabel("What grade did you typically earn at your highest level of education?");
+				.setLabel("What grade did you typically earn at your highest level of education?");
 		gradeEarnedHighestLevelEducationQuestion
-		.setOptions(gradeEarnedHighestLevelEducationQuestionOptions);
+				.setOptions(gradeEarnedHighestLevelEducationQuestionOptions);
 		gradeEarnedHighestLevelEducationQuestion
-		.setType(Constants.FORM_TYPE_RADIOLIST);
+				.setType(Constants.FORM_TYPE_RADIOLIST);
 
 		eduPlanSectionQuestions.add(gradeEarnedHighestLevelEducationQuestion);
 
@@ -2175,10 +2156,10 @@ public class StudentIntakeFormManager {
 		}
 
 		educationLevelCompletedQuestion
-		.setId(SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID);
+				.setId(SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID);
 		educationLevelCompletedQuestion.setLabel("Education Level Completed");
 		educationLevelCompletedQuestion
-		.setOptions(educationLevelCompletedQuestionOptions);
+				.setOptions(educationLevelCompletedQuestionOptions);
 		educationLevelCompletedQuestion.setType(Constants.FORM_TYPE_CHECKLIST);
 
 		eduLevelSectionQuestions.add(educationLevelCompletedQuestion);
@@ -2187,19 +2168,19 @@ public class StudentIntakeFormManager {
 		FormQuestionTO noDiplomaLastYearAttendedQuestion = new FormQuestionTO();
 
 		noDiplomaLastYearAttendedQuestion
-		.setId(SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMALASTYEARATTENDED_ID);
+				.setId(SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMALASTYEARATTENDED_ID);
 		noDiplomaLastYearAttendedQuestion.setLabel("Last Year Attended");
 		noDiplomaLastYearAttendedQuestion.setMaximumLength("4");
 		noDiplomaLastYearAttendedQuestion
-		.setType(Constants.FORM_TYPE_TEXTINPUT);
+				.setType(Constants.FORM_TYPE_TEXTINPUT);
 		noDiplomaLastYearAttendedQuestion.setRequired(true);
 		// DEPENDENCY -> noDiplomaLastYearAttendedQuestion shown when
 		// educationLevelCompletedQuestion value is
 		// B2D05BB9-5056-A51A-80FDFE0D53E6EB07
 		noDiplomaLastYearAttendedQuestion
-		.setVisibilityExpression("hasValueForQuestionId('B2D05BB9-5056-A51A-80FDFE0D53E6EB07', '"
-				+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
-				+ "')");
+				.setVisibilityExpression("hasValueForQuestionId('B2D05BB9-5056-A51A-80FDFE0D53E6EB07', '"
+						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
+						+ "')");
 
 		eduLevelSectionQuestions.add(noDiplomaLastYearAttendedQuestion);
 
@@ -2207,19 +2188,19 @@ public class StudentIntakeFormManager {
 		FormQuestionTO noDiplomaHighestGradeCompletedQuestion = new FormQuestionTO();
 
 		noDiplomaHighestGradeCompletedQuestion
-		.setId(SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMAHIGHESTGRADECOMPLETED_ID);
+				.setId(SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMAHIGHESTGRADECOMPLETED_ID);
 		noDiplomaHighestGradeCompletedQuestion
-		.setLabel("Highest Grade Completed");
+				.setLabel("Highest Grade Completed");
 		noDiplomaHighestGradeCompletedQuestion
-		.setType(Constants.FORM_TYPE_TEXTINPUT);
+				.setType(Constants.FORM_TYPE_TEXTINPUT);
 		noDiplomaHighestGradeCompletedQuestion.setRequired(true);
 		// DEPENDENCY -> noDiplomaHighestGradeCompletedQuestion shown when
 		// educationLevelCompletedQuestion value is
 		// B2D05BB9-5056-A51A-80FDFE0D53E6EB07
 		noDiplomaHighestGradeCompletedQuestion
-		.setVisibilityExpression("hasValueForQuestionId('B2D05BB9-5056-A51A-80FDFE0D53E6EB07', '"
-				+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
-				+ "')");
+				.setVisibilityExpression("hasValueForQuestionId('B2D05BB9-5056-A51A-80FDFE0D53E6EB07', '"
+						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
+						+ "')");
 
 		eduLevelSectionQuestions.add(noDiplomaHighestGradeCompletedQuestion);
 
@@ -2227,7 +2208,7 @@ public class StudentIntakeFormManager {
 		FormQuestionTO gedYearOfGedQuestion = new FormQuestionTO();
 
 		gedYearOfGedQuestion
-		.setId(SECTION_EDUCATIONLEVEL_QUESTION_GEDYEAROFGED_ID);
+				.setId(SECTION_EDUCATIONLEVEL_QUESTION_GEDYEAROFGED_ID);
 		gedYearOfGedQuestion.setLabel("Year of GED");
 		gedYearOfGedQuestion.setMaximumLength("4");
 		gedYearOfGedQuestion.setType(Constants.FORM_TYPE_TEXTINPUT);
@@ -2236,9 +2217,9 @@ public class StudentIntakeFormManager {
 		// educationLevelCompletedQuestion value is
 		// B2D05BF8-5056-A51A-8053E140B84D65A4
 		gedYearOfGedQuestion
-		.setVisibilityExpression("hasValueForQuestionId('B2D05BF8-5056-A51A-8053E140B84D65A4', '"
-				+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
-				+ "')");
+				.setVisibilityExpression("hasValueForQuestionId('B2D05BF8-5056-A51A-8053E140B84D65A4', '"
+						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
+						+ "')");
 
 		eduLevelSectionQuestions.add(gedYearOfGedQuestion);
 
@@ -2246,7 +2227,7 @@ public class StudentIntakeFormManager {
 		FormQuestionTO highSchoolYearGraduatedQuestion = new FormQuestionTO();
 
 		highSchoolYearGraduatedQuestion
-		.setId(SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLYEARGRADUATED_ID);
+				.setId(SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLYEARGRADUATED_ID);
 		highSchoolYearGraduatedQuestion.setLabel("Year Graduated");
 		highSchoolYearGraduatedQuestion.setMaximumLength("4");
 		highSchoolYearGraduatedQuestion.setType(Constants.FORM_TYPE_TEXTINPUT);
@@ -2255,9 +2236,9 @@ public class StudentIntakeFormManager {
 		// educationLevelCompletedQuestion value is
 		// B2D05C27-5056-A51A-80D26A4742E0AB64
 		highSchoolYearGraduatedQuestion
-		.setVisibilityExpression("hasValueForQuestionId('B2D05C27-5056-A51A-80D26A4742E0AB64', '"
-				+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
-				+ "')");
+				.setVisibilityExpression("hasValueForQuestionId('B2D05C27-5056-A51A-80D26A4742E0AB64', '"
+						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
+						+ "')");
 
 		eduLevelSectionQuestions.add(highSchoolYearGraduatedQuestion);
 
@@ -2265,7 +2246,7 @@ public class StudentIntakeFormManager {
 		FormQuestionTO highSchoolAttendedQuestion = new FormQuestionTO();
 
 		highSchoolAttendedQuestion
-		.setId(SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLATTENDED_ID);
+				.setId(SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLATTENDED_ID);
 		highSchoolAttendedQuestion.setLabel("High School Attended");
 		highSchoolAttendedQuestion.setMaximumLength("250");
 		highSchoolAttendedQuestion.setType(Constants.FORM_TYPE_TEXTINPUT);
@@ -2274,9 +2255,9 @@ public class StudentIntakeFormManager {
 		// educationLevelCompletedQuestion value is
 		// B2D05C27-5056-A51A-80D26A4742E0AB64
 		highSchoolAttendedQuestion
-		.setVisibilityExpression("hasValueForQuestionId('B2D05C27-5056-A51A-80D26A4742E0AB64', '"
-				+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
-				+ "')");
+				.setVisibilityExpression("hasValueForQuestionId('B2D05C27-5056-A51A-80D26A4742E0AB64', '"
+						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
+						+ "')");
 
 		eduLevelSectionQuestions.add(highSchoolAttendedQuestion);
 
@@ -2284,29 +2265,29 @@ public class StudentIntakeFormManager {
 		FormQuestionTO someCollegeCreditsLastYearAttendedQuestion = new FormQuestionTO();
 
 		someCollegeCreditsLastYearAttendedQuestion
-		.setId(SECTION_EDUCATIONLEVEL_QUESTION_SOMECOLLEGECREDITSLASTYEARATTENDED_ID);
+				.setId(SECTION_EDUCATIONLEVEL_QUESTION_SOMECOLLEGECREDITSLASTYEARATTENDED_ID);
 		someCollegeCreditsLastYearAttendedQuestion
-		.setLabel("Last Year Attended");
+				.setLabel("Last Year Attended");
 		someCollegeCreditsLastYearAttendedQuestion.setMaximumLength("4");
 		someCollegeCreditsLastYearAttendedQuestion
-		.setType(Constants.FORM_TYPE_TEXTINPUT);
+				.setType(Constants.FORM_TYPE_TEXTINPUT);
 		someCollegeCreditsLastYearAttendedQuestion.setRequired(true);
 		// DEPENDENCY -> someCollegeCreditsLastYearAttendedQuestion shown when
 		// educationLevelCompletedQuestion value is
 		// B2D05C36-5056-A51A-80E7C017F4882593
 		someCollegeCreditsLastYearAttendedQuestion
-		.setVisibilityExpression("hasValueForQuestionId('B2D05C36-5056-A51A-80E7C017F4882593', '"
-				+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
-				+ "')");
+				.setVisibilityExpression("hasValueForQuestionId('B2D05C36-5056-A51A-80E7C017F4882593', '"
+						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
+						+ "')");
 
 		eduLevelSectionQuestions
-		.add(someCollegeCreditsLastYearAttendedQuestion);
+				.add(someCollegeCreditsLastYearAttendedQuestion);
 
 		// Other - Please Explain
 		FormQuestionTO otherPleaseExplainQuestion = new FormQuestionTO();
 
 		otherPleaseExplainQuestion
-		.setId(SECTION_EDUCATIONLEVEL_QUESTION_OTHERPLEASEEXPLAIN_ID);
+				.setId(SECTION_EDUCATIONLEVEL_QUESTION_OTHERPLEASEEXPLAIN_ID);
 		otherPleaseExplainQuestion.setLabel("Please Explain");
 		otherPleaseExplainQuestion.setMaximumLength("250");
 		otherPleaseExplainQuestion.setType(Constants.FORM_TYPE_TEXTAREA);
@@ -2315,9 +2296,9 @@ public class StudentIntakeFormManager {
 		// educationLevelCompletedQuestion value is
 		// B2D05C65-5056-A51A-8024DC8A118A585C
 		otherPleaseExplainQuestion
-		.setVisibilityExpression("hasValueForQuestionId('B2D05C65-5056-A51A-8024DC8A118A585C', '"
-				+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
-				+ "')");
+				.setVisibilityExpression("hasValueForQuestionId('B2D05C65-5056-A51A-8024DC8A118A585C', '"
+						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
+						+ "')");
 
 		eduLevelSectionQuestions.add(otherPleaseExplainQuestion);
 
@@ -2346,8 +2327,7 @@ public class StudentIntakeFormManager {
 		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
 				.randomUUID(), "Certificate", "certificate"));
 		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Short Term Certificate",
-				"short-term"));
+				.randomUUID(), "Short Term Certificate", "short-term"));
 		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
 				.randomUUID(), "Bachelor's Degree", "bachelor"));
 		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
@@ -2360,10 +2340,10 @@ public class StudentIntakeFormManager {
 				.randomUUID(), "Other", "other"));
 
 		educationCareerGoalQuestion
-		.setId(SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID);
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID);
 		educationCareerGoalQuestion.setLabel("Education/Career Goal");
 		educationCareerGoalQuestion
-		.setOptions(educationCareerGoalQuestionOptions);
+				.setOptions(educationCareerGoalQuestionOptions);
 		educationCareerGoalQuestion.setType(Constants.FORM_TYPE_RADIOLIST);
 
 		eduGoalSectionQuestions.add(educationCareerGoalQuestion);
@@ -2372,7 +2352,7 @@ public class StudentIntakeFormManager {
 		FormQuestionTO bachelorsDegreeQuestion = new FormQuestionTO();
 
 		bachelorsDegreeQuestion
-		.setId(SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID);
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID);
 		bachelorsDegreeQuestion.setLabel("Bachelor's Degree Major");
 		bachelorsDegreeQuestion.setMaximumLength("255");
 		bachelorsDegreeQuestion.setType(Constants.FORM_TYPE_TEXTINPUT);
@@ -2380,8 +2360,8 @@ public class StudentIntakeFormManager {
 		// DEPENDENCY -> bachelorsDegreeQuestion shown when
 		// educationCareerGoalQuestion.option.value value is 'bachelor'
 		bachelorsDegreeQuestion
-		.setVisibilityExpression("hasValueForQuestionId('bachelor', '"
-				+ SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID + "')");
+				.setVisibilityExpression("hasValueForQuestionId('bachelor', '"
+						+ SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID + "')");
 
 		eduGoalSectionQuestions.add(bachelorsDegreeQuestion);
 
@@ -2389,7 +2369,7 @@ public class StudentIntakeFormManager {
 		FormQuestionTO militaryBranchQuestion = new FormQuestionTO();
 
 		militaryBranchQuestion
-		.setId(SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID);
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID);
 		militaryBranchQuestion.setLabel("Military Branch");
 		militaryBranchQuestion.setMaximumLength("255");
 		militaryBranchQuestion.setType(Constants.FORM_TYPE_TEXTINPUT);
@@ -2397,8 +2377,8 @@ public class StudentIntakeFormManager {
 		// DEPENDENCY -> militaryBranchQuestion shown when
 		// educationCareerGoalQuestion.option.value value is 'military'
 		militaryBranchQuestion
-		.setVisibilityExpression("hasValueForQuestionId('military', '"
-				+ SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID + "')");
+				.setVisibilityExpression("hasValueForQuestionId('military', '"
+						+ SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID + "')");
 
 		eduGoalSectionQuestions.add(militaryBranchQuestion);
 
@@ -2413,8 +2393,8 @@ public class StudentIntakeFormManager {
 		// DEPENDENCY -> otherQuestion shown when
 		// educationCareerGoalQuestion.option.value value is 'other'
 		otherQuestion
-		.setVisibilityExpression("hasValueForQuestionId('other', '"
-				+ SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID + "')");
+				.setVisibilityExpression("hasValueForQuestionId('other', '"
+						+ SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID + "')");
 
 		eduGoalSectionQuestions.add(otherQuestion);
 
@@ -2434,7 +2414,7 @@ public class StudentIntakeFormManager {
 				"Very Sure", "5"));
 
 		majorCertaintyQuestion
-		.setId(SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID);
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID);
 		majorCertaintyQuestion.setLabel("How sure are you about your major?");
 		majorCertaintyQuestion.setOptions(majorCertaintyQuestionOptions);
 		majorCertaintyQuestion.setType(Constants.FORM_TYPE_RADIOLIST);
@@ -2445,7 +2425,7 @@ public class StudentIntakeFormManager {
 		FormQuestionTO plannedOccupationQuestion = new FormQuestionTO();
 
 		plannedOccupationQuestion
-		.setId(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID);
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID);
 		plannedOccupationQuestion.setLabel("What is your planned occupation?");
 		plannedOccupationQuestion.setMaximumLength("50");
 		plannedOccupationQuestion.setType(Constants.FORM_TYPE_TEXTINPUT);
@@ -2494,8 +2474,8 @@ public class StudentIntakeFormManager {
 		// DEPENDENCY -> otherQuestion shown when fundingQuestionTO value is
 		// 'B2D05DEC-5056-A51A-8001FE8BDD379C5B'
 		otherQuestion
-		.setVisibilityExpression("hasValueForQuestionId('B2D05DEC-5056-A51A-8001FE8BDD379C5B', '"
-				+ SECTION_FUNDING_QUESTION_FUNDING_ID + "')");
+				.setVisibilityExpression("hasValueForQuestionId('B2D05DEC-5056-A51A-8001FE8BDD379C5B', '"
+						+ SECTION_FUNDING_QUESTION_FUNDING_ID + "')");
 
 		fundingSectionQuestions.add(otherQuestion);
 
@@ -2524,7 +2504,7 @@ public class StudentIntakeFormManager {
 
 		challengeQuestionTO.setId(SECTION_CHALLENGE_QUESTION_CHALLENGE_ID);
 		challengeQuestionTO
-		.setLabel("Select all challenges that may be barriers to your academic success");
+				.setLabel("Select all challenges that may be barriers to your academic success");
 		challengeQuestionTO.setOptions(challengeOptions);
 		challengeQuestionTO.setType(Constants.FORM_TYPE_CHECKLIST);
 
@@ -2541,8 +2521,8 @@ public class StudentIntakeFormManager {
 		// DEPENDENCY -> otherQuestion shown when challengeQuestionTO value is
 		// '90CD580D-58F8-489F-AC3E-8522B929B24B'
 		otherQuestion
-		.setVisibilityExpression("hasValueForQuestionId('90CD580D-58F8-489F-AC3E-8522B929B24B', '"
-				+ SECTION_CHALLENGE_QUESTION_CHALLENGE_ID + "')");
+				.setVisibilityExpression("hasValueForQuestionId('90CD580D-58F8-489F-AC3E-8522B929B24B', '"
+						+ SECTION_CHALLENGE_QUESTION_CHALLENGE_ID + "')");
 
 		challengeSectionQuestions.add(otherQuestion);
 
