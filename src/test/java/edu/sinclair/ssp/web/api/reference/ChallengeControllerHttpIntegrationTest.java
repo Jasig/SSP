@@ -59,7 +59,7 @@ public class ChallengeControllerHttpIntegrationTest extends
 
 	/**
 	 * Test the
-	 * {@link ChallengeController#getAll(edu.sinclair.ssp.model.ObjectStatus, int, int, String)}
+	 * {@link ChallengeController#getAll(edu.sinclair.ssp.model.ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws Exception
@@ -77,12 +77,13 @@ public class ChallengeControllerHttpIntegrationTest extends
 		request.setMethod(RequestMethod.GET.toString());
 		request.setRequestURI(requestUri);
 
-		handler = this.getHandler(request);
+		handler = getHandler(request);
 
 		// Lookup the expected handler that Spring should have pulled.
 		// HandlerMethod(controller, action (method) name, parameters)
 		expectedHandlerMethod = new HandlerMethod(controller, "getAll",
-				ObjectStatus.class, int.class, int.class, String.class);
+				ObjectStatus.class, Integer.class, Integer.class, String.class,
+				String.class);
 
 		Assert.assertEquals("Correct handler found for request url: "
 				+ requestUri, expectedHandlerMethod.toString(),
@@ -121,7 +122,7 @@ public class ChallengeControllerHttpIntegrationTest extends
 		request.setMethod(RequestMethod.GET.toString());
 		request.setRequestURI(requestUri);
 
-		handler = this.getHandler(request);
+		handler = getHandler(request);
 
 		// Lookup the expected handler that Spring should have pulled.
 		// HandlerMethod(controller, action (method) name, parameters)

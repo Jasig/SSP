@@ -46,7 +46,8 @@ public class PersonServiceIntegrationTest {
 
 	@Test
 	public void testGetAll() {
-		List<Person> list = service.getAll(ObjectStatus.ALL, -1, -1, null);
+		List<Person> list = service.getAll(ObjectStatus.ALL, null, null, null,
+				null);
 		assertNotNull(list);
 		assertTrue("List should have included multiple entities.",
 				list.size() > 1);
@@ -54,9 +55,10 @@ public class PersonServiceIntegrationTest {
 
 	@Test
 	public void testGetAllWithRowFilter() {
-		List<Person> listAll = service.getAll(ObjectStatus.ALL, -1, -1, null);
-		List<Person> listFiltered = service
-				.getAll(ObjectStatus.ALL, 1, 2, null);
+		List<Person> listAll = service.getAll(ObjectStatus.ALL, null, null,
+				null, null);
+		List<Person> listFiltered = service.getAll(ObjectStatus.ALL, 1, 2,
+				null, null);
 
 		assertNotNull(listAll);
 		assertTrue("List should have included multiple entities.",

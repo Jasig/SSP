@@ -12,7 +12,8 @@ public interface PersonEducationPlanService extends
 
 	@Override
 	public List<PersonEducationPlan> getAll(ObjectStatus status,
-			int firstResult, int maxResults, String sortExpression);
+			Integer firstResult, Integer maxResults, String sort,
+			String sortDirection);
 
 	@Override
 	public PersonEducationPlan get(UUID id) throws ObjectNotFoundException;

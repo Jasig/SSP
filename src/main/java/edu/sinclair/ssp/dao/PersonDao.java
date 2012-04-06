@@ -37,75 +37,37 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 *         parameters.
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Person> getAll(ObjectStatus status) {
-		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(super.persistentClass)
-				.addOrder(Order.asc("lastName"))
-				.addOrder(Order.asc("firstName"));
-
-		if (status != ObjectStatus.ALL) {
-			query.add(Restrictions.eq("objectStatus", status));
-		}
-
-		return query.list();
+		return getAll(status, null, null, null, null);
 	}
 
-	/**
-	 * Return all entities in the database, filtered only by the specified
-	 * parameters.
-	 * 
-	 * @param status
-	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
-	 *            return all results.
-	 * @param firstResult
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param maxResults
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param sortExpression
-	 *            Property name and ascending/descending keyword. If null or
-	 *            empty string, the default sort order will be used. Example
-	 *            sort expression: <code>propertyName ASC</code>
-	 * @return All entities in the database, filtered only by the specified
-	 *         parameters.
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Person> getAll(ObjectStatus status, int firstResult,
-			int maxResults, String sortExpression) {
+	public List<Person> getAll(ObjectStatus status, Integer firstResult,
+			Integer maxResults, String sort, String sortDirection) {
 
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(
-				super.persistentClass);
+		Criteria criteria = createCriteria();
 
-		if (firstResult >= 0) {
-			query.setFirstResult(firstResult);
+		if (firstResult != null && firstResult.intValue() >= 0) {
+			criteria.setFirstResult(firstResult);
 		}
 
-		if (maxResults > 0) {
-			query.setMaxResults(maxResults);
+		if (maxResults != null && maxResults.intValue() > 0) {
+			criteria.setMaxResults(maxResults);
 		}
 
-		if (StringUtils.isEmpty(sortExpression)) {
-			query.addOrder(Order.asc("lastName")).addOrder(
+		if (StringUtils.isEmpty(sort)) {
+			criteria.addOrder(Order.asc("lastName")).addOrder(
 					Order.asc("firstName"));
-		} else if (StringUtils.endsWithIgnoreCase(sortExpression, "asc")) {
-			query.addOrder(Order.asc(StringUtils.substringBefore(
-					sortExpression, " ")));
-		} else if (StringUtils.endsWithIgnoreCase(sortExpression, "desc")) {
-			query.addOrder(Order.desc(StringUtils.substringBefore(
-					sortExpression, " ")));
 		} else {
-			throw new IllegalArgumentException(
-					"Invalid sort expression. Must be in the form of \"propertyName ASC\" or \"propertyName DESC\".");
+			criteria = addOrderToCriteria(criteria, sort, sortDirection);
 		}
 
 		if (status != ObjectStatus.ALL) {
-			query.add(Restrictions.eq("objectStatus", status));
+			criteria.add(Restrictions.eq("objectStatus", status));
 		}
 
-		return query.list();
+		return criteria.list();
 	}
 
 	public Person fromUsername(String username) {

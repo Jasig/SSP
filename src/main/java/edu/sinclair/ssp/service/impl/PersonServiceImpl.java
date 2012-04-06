@@ -33,9 +33,6 @@ import edu.sinclair.ssp.service.tool.IntakeService;
 @Transactional
 public class PersonServiceImpl implements PersonService {
 
-	// private static final Logger logger =
-	// LoggerFactory.getLogger(PersonServiceImpl.class);
-
 	@Autowired
 	private PersonDao dao;
 
@@ -60,30 +57,10 @@ public class PersonServiceImpl implements PersonService {
 	@Autowired
 	private FundingSourceService fundingSourceService;
 
-	/**
-	 * Retrieve every Person instance in the database filtered by the supplied
-	 * status.
-	 * 
-	 * @param status
-	 *            Filter by this status, usually null or
-	 *            {@link ObjectStatus#DELETED}.
-	 * @param firstResult
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param maxResults
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param sortExpression
-	 *            Property name and ascending/descending keyword. If null or
-	 *            empty string, the default sort order will be used. Example
-	 *            sort expression: <code>propertyName ASC</code>
-	 * @return List of all people in the database filtered by the supplied
-	 *         status.
-	 */
 	@Override
-	public List<Person> getAll(ObjectStatus status, int firstResult,
-			int maxResults, String sortExpression) {
-		return dao.getAll(status, firstResult, maxResults, sortExpression);
+	public List<Person> getAll(ObjectStatus status, Integer firstResult,
+			Integer maxResults, String sort, String sortDirection) {
+		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
 	}
 
 	/**
@@ -230,7 +207,7 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public void overwriteWithCollections(Person target, Person source)
 			throws ObjectNotFoundException {
-		this.overwrite(target, source);
+		overwrite(target, source);
 
 		// Demographics
 		if ((target.getDemographics() == null)
@@ -258,8 +235,8 @@ public class PersonServiceImpl implements PersonService {
 						demo.getVeteranStatus() == null ? null
 								: veteranStatusService.get(demo
 										.getVeteranStatus().getId()),
-						demo.getCoach() == null ? null : this.get(demo
-								.getCoach().getId()));
+						demo.getCoach() == null ? null : get(demo.getCoach()
+								.getId()));
 			}
 		}
 
@@ -297,11 +274,11 @@ public class PersonServiceImpl implements PersonService {
 		}
 
 		// various sets
-		this.overwriteWithCollectionsEducationLevels(target,
+		overwriteWithCollectionsEducationLevels(target,
 				source.getEducationLevels());
-		this.overwriteWithCollectionsFundingSources(target,
+		overwriteWithCollectionsFundingSources(target,
 				source.getFundingSources());
-		this.overwriteWithCollectionsChallenges(target, source.getChallenges());
+		overwriteWithCollectionsChallenges(target, source.getChallenges());
 	}
 
 	/**

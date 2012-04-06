@@ -20,27 +20,10 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 	@Autowired
 	private ChallengeReferralDao dao;
 
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
-	 * @param firstResult
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param maxResults
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param sortExpression
-	 *            Property name and ascending/descending keyword. If null or
-	 *            empty string, the default sort order will be used. Example
-	 *            sort expression: <code>propertyName ASC</code>
-	 * @return All entities in the database filtered by the supplied status.
-	 */
 	@Override
-	public List<ChallengeReferral> getAll(ObjectStatus status, int firstResult,
-			int maxResults, String sortExpression) {
-		return dao.getAll(status, firstResult, maxResults, sortExpression);
+	public List<ChallengeReferral> getAll(ObjectStatus status, Integer firstResult,
+			Integer maxResults, String sort, String sortDirection) {
+		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
 	}
 
 	@Override
@@ -49,6 +32,7 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 		if (null == obj) {
 			throw new ObjectNotFoundException(id, "ChallengeReferral");
 		}
+
 		return obj;
 	}
 
@@ -58,26 +42,16 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 	}
 
 	@Override
-	public ChallengeReferral save(ChallengeReferral obj)
-			throws ObjectNotFoundException {
+	public ChallengeReferral save(ChallengeReferral obj) throws ObjectNotFoundException {
 		ChallengeReferral current = get(obj.getId());
 
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
 		current.setObjectStatus(obj.getObjectStatus());
-		current.setPublicDescription(obj.getPublicDescription());
 
 		return dao.save(current);
 	}
 
-	/**
-	 * Mark the specific instance as {@link ObjectStatus#DELETED}.
-	 * 
-	 * @param id
-	 *            Instance identifier
-	 * @exception ObjectNotFoundException
-	 *                if the specified ID does not exist.
-	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
 		ChallengeReferral current = get(id);

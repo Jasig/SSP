@@ -38,12 +38,13 @@ public class ChallengeReferralServiceTest {
 		List<ChallengeReferral> daoAll = new ArrayList<ChallengeReferral>();
 		daoAll.add(new ChallengeReferral());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, -1, -1, null)).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+				.andReturn(daoAll);
 
 		replay(dao);
 
-		List<ChallengeReferral> all = service.getAll(ObjectStatus.ACTIVE, -1,
-				-1, null);
+		List<ChallengeReferral> all = service.getAll(ObjectStatus.ACTIVE, null, null,
+				null, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

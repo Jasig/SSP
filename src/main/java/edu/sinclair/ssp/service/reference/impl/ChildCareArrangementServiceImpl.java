@@ -15,33 +15,15 @@ import edu.sinclair.ssp.service.reference.ChildCareArrangementService;
 
 @Service
 @Transactional
-public class ChildCareArrangementServiceImpl implements
-		ChildCareArrangementService {
+public class ChildCareArrangementServiceImpl implements ChildCareArrangementService {
 
 	@Autowired
 	private ChildCareArrangementDao dao;
 
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
-	 * @param firstResult
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param maxResults
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param sortExpression
-	 *            Property name and ascending/descending keyword. If null or
-	 *            empty string, the default sort order will be used. Example
-	 *            sort expression: <code>propertyName ASC</code>
-	 * @return All entities in the database filtered by the supplied status.
-	 */
 	@Override
-	public List<ChildCareArrangement> getAll(ObjectStatus status,
-			int firstResult, int maxResults, String sortExpression) {
-		return dao.getAll(status, firstResult, maxResults, sortExpression);
+	public List<ChildCareArrangement> getAll(ObjectStatus status, Integer firstResult,
+			Integer maxResults, String sort, String sortDirection) {
+		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
 	}
 
 	@Override
@@ -50,6 +32,7 @@ public class ChildCareArrangementServiceImpl implements
 		if (null == obj) {
 			throw new ObjectNotFoundException(id, "ChildCareArrangement");
 		}
+
 		return obj;
 	}
 
@@ -59,8 +42,7 @@ public class ChildCareArrangementServiceImpl implements
 	}
 
 	@Override
-	public ChildCareArrangement save(ChildCareArrangement obj)
-			throws ObjectNotFoundException {
+	public ChildCareArrangement save(ChildCareArrangement obj) throws ObjectNotFoundException {
 		ChildCareArrangement current = get(obj.getId());
 
 		current.setName(obj.getName());
@@ -70,14 +52,6 @@ public class ChildCareArrangementServiceImpl implements
 		return dao.save(current);
 	}
 
-	/**
-	 * Mark the specific instance as {@link ObjectStatus#DELETED}.
-	 * 
-	 * @param id
-	 *            Instance identifier
-	 * @exception ObjectNotFoundException
-	 *                if the specified ID does not exist.
-	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
 		ChildCareArrangement current = get(id);

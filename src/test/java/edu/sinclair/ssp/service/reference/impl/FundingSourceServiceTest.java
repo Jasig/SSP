@@ -38,12 +38,13 @@ public class FundingSourceServiceTest {
 		List<FundingSource> daoAll = new ArrayList<FundingSource>();
 		daoAll.add(new FundingSource());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, -1, -1, null)).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+				.andReturn(daoAll);
 
 		replay(dao);
 
-		List<FundingSource> all = service.getAll(ObjectStatus.ACTIVE, -1, -1,
-				null);
+		List<FundingSource> all = service.getAll(ObjectStatus.ACTIVE, null, null,
+				null, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

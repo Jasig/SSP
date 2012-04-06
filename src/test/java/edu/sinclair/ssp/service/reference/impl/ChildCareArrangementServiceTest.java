@@ -38,12 +38,13 @@ public class ChildCareArrangementServiceTest {
 		List<ChildCareArrangement> daoAll = new ArrayList<ChildCareArrangement>();
 		daoAll.add(new ChildCareArrangement());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, -1, -1, null)).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+				.andReturn(daoAll);
 
 		replay(dao);
 
-		List<ChildCareArrangement> all = service.getAll(ObjectStatus.ACTIVE,
-				-1, -1, null);
+		List<ChildCareArrangement> all = service.getAll(ObjectStatus.ACTIVE, null, null,
+				null, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

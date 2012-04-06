@@ -38,12 +38,13 @@ public class SelfHelpGuideQuestionServiceTest {
 		List<SelfHelpGuideQuestion> daoAll = new ArrayList<SelfHelpGuideQuestion>();
 		daoAll.add(new SelfHelpGuideQuestion());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, -1, -1, null)).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+				.andReturn(daoAll);
 
 		replay(dao);
 
-		List<SelfHelpGuideQuestion> all = service.getAll(ObjectStatus.ACTIVE,
-				-1, -1, null);
+		List<SelfHelpGuideQuestion> all = service.getAll(ObjectStatus.ACTIVE, null, null,
+				null, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

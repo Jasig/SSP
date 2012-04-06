@@ -38,12 +38,13 @@ public class StudentStatusServiceTest {
 		List<StudentStatus> daoAll = new ArrayList<StudentStatus>();
 		daoAll.add(new StudentStatus());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, -1, -1, null)).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+				.andReturn(daoAll);
 
 		replay(dao);
 
-		List<StudentStatus> all = service.getAll(ObjectStatus.ACTIVE, -1, -1,
-				null);
+		List<StudentStatus> all = service.getAll(ObjectStatus.ACTIVE, null, null,
+				null, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

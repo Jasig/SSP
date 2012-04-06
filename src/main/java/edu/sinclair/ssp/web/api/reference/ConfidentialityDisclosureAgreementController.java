@@ -12,8 +12,7 @@ import edu.sinclair.ssp.transferobject.reference.ConfidentialityDisclosureAgreem
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/confidentialityDisclosureAgreement")
-public class ConfidentialityDisclosureAgreementController
-		extends
+public class ConfidentialityDisclosureAgreementController extends
 		AbstractAuditableReferenceController<ConfidentialityDisclosureAgreement, ConfidentialityDisclosureAgreementTO> {
 
 	@Autowired

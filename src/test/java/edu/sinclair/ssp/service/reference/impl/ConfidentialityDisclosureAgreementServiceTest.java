@@ -38,12 +38,13 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 		List<ConfidentialityDisclosureAgreement> daoAll = new ArrayList<ConfidentialityDisclosureAgreement>();
 		daoAll.add(new ConfidentialityDisclosureAgreement());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, -1, -1, null)).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+				.andReturn(daoAll);
 
 		replay(dao);
 
-		List<ConfidentialityDisclosureAgreement> all = service.getAll(
-				ObjectStatus.ACTIVE, -1, -1, null);
+		List<ConfidentialityDisclosureAgreement> all = service.getAll(ObjectStatus.ACTIVE, null, null,
+				null, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}
@@ -51,8 +52,7 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 	@Test
 	public void testGet() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
-		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(
-				id);
+		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -65,8 +65,7 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 	@Test
 	public void testSave() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
-		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(
-				id);
+		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -80,8 +79,7 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
-		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(
-				id);
+		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(id);
 
 		expect(dao.get(id)).andReturn(daoOne).times(2);
 		expect(dao.save(daoOne)).andReturn(daoOne);

@@ -12,8 +12,7 @@ import edu.sinclair.ssp.transferobject.reference.ChallengeReferralTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/challengeReferral")
-public class ChallengeReferralController
-		extends
+public class ChallengeReferralController extends
 		AbstractAuditableReferenceController<ChallengeReferral, ChallengeReferralTO> {
 
 	@Autowired

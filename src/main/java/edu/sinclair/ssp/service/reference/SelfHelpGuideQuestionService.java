@@ -8,29 +8,11 @@ import edu.sinclair.ssp.model.reference.SelfHelpGuideQuestion;
 import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 
-public interface SelfHelpGuideQuestionService extends
-		AuditableCrudService<SelfHelpGuideQuestion> {
+public interface SelfHelpGuideQuestionService extends AuditableCrudService<SelfHelpGuideQuestion> {
 
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
-	 * @param firstResult
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param maxResults
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param sortExpression
-	 *            Property name and ascending/descending keyword. If null or
-	 *            empty string, the default sort order will be used. Example
-	 *            sort expression: <code>propertyName ASC</code>
-	 * @return All entities in the database filtered by the supplied status.
-	 */
 	@Override
-	public List<SelfHelpGuideQuestion> getAll(ObjectStatus status,
-			int firstResult, int maxResults, String sortExpression);
+	public List<SelfHelpGuideQuestion> getAll(ObjectStatus status, Integer firstResult,
+			Integer maxResults, String sort, String sortDirection);
 
 	@Override
 	public SelfHelpGuideQuestion get(UUID id) throws ObjectNotFoundException;
@@ -39,17 +21,8 @@ public interface SelfHelpGuideQuestionService extends
 	public SelfHelpGuideQuestion create(SelfHelpGuideQuestion obj);
 
 	@Override
-	public SelfHelpGuideQuestion save(SelfHelpGuideQuestion obj)
-			throws ObjectNotFoundException;
+	public SelfHelpGuideQuestion save(SelfHelpGuideQuestion obj) throws ObjectNotFoundException;
 
-	/**
-	 * Mark the specific instance as {@link ObjectStatus#DELETED}.
-	 * 
-	 * @param id
-	 *            Instance identifier
-	 * @exception ObjectNotFoundException
-	 *                if the specified ID does not exist.
-	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException;
 
