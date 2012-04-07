@@ -52,8 +52,10 @@
 		<property name="hibernateProperties">
 			<value>
 				hibernate.dialect=#{configProperties.db_dialect}
-				hibernate.show_sql=false
 			</value>
+			<!-- 
+				hibernate.show_sql=true
+				hibernate.format_sql=true -->
 		</property>
 		<property name="namingStrategy">
 			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
