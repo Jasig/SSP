@@ -10,7 +10,7 @@ Installing PostgreSQL (http://www.postgresql.org/)
       Install it according to the distributions instructions.
         Ubuntu - https://help.ubuntu.com/11.10/serverguide/C/postgresql.html
   On Mac:
-    - PostgreSQL is available via the ????? package manager or as a download on 
+    - PostgreSQL is available via the homebrew package manager or as a download on 
       the postgresql.org site.
   On Windows:
     - PostgreSQL is available as a download on the postgresql.org site.
@@ -26,7 +26,7 @@ Installing Apache Tomcat 6
       Install it according to the distributions instructions.
         Ubuntu - https://help.ubuntu.com/11.10/serverguide/C/tomcat.html
   On Mac:
-    - Tomcat is available via the ????? package manager or as a download at:  
+    - Tomcat is available via the homebrew package manager or as a download at:  
       http://tomcat.apache.org/download-60.cgi
   On Windows:
     - Tomcat is available as a download at: http://tomcat.apache.org/download-60.cgi
