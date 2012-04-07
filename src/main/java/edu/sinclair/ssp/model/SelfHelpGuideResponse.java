@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.reference.SelfHelpGuide;
 
 @Entity
@@ -49,9 +48,11 @@ public class SelfHelpGuideResponse {
 	private SelfHelpGuide selfHelpGuide;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "selfHelpGuideResponse")
-	private Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = new HashSet<SelfHelpGuideQuestionResponse>(0);
+	private Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = new HashSet<SelfHelpGuideQuestionResponse>(
+			0);
 
-	public SelfHelpGuideResponse() {}
+	public SelfHelpGuideResponse() {
+	}
 
 	public SelfHelpGuideResponse(UUID id) {
 		this.id = id;

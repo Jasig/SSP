@@ -59,7 +59,8 @@ public class PersonDaoTest {
 	@Test
 	public void testGetAllWithRowFilter() {
 		List<Person> listAll = dao.getAll(ObjectStatus.ALL);
-		List<Person> listFiltered = dao.getAll(ObjectStatus.ALL, 1, 2, null);
+		List<Person> listFiltered = dao.getAll(ObjectStatus.ALL, 1, 2, null,
+				null);
 
 		assertNotNull(listAll);
 		assertTrue("List should have included multiple entities.",

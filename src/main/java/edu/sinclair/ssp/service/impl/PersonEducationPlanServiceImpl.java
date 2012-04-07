@@ -24,27 +24,11 @@ public class PersonEducationPlanServiceImpl implements
 	@Autowired
 	private StudentStatusService studentStatusService;
 
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
-	 * @param firstResult
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param maxResults
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param sortExpression
-	 *            Property name and ascending/descending keyword. If null or
-	 *            empty string, the default sort order will be used. Example
-	 *            sort expression: <code>propertyName ASC</code>
-	 * @return All entities in the database filtered by the supplied status.
-	 */
 	@Override
 	public List<PersonEducationPlan> getAll(ObjectStatus status,
-			int firstResult, int maxResults, String sortExpression) {
-		return dao.getAll(status, firstResult, maxResults, sortExpression);
+			Integer firstResult, Integer maxResults, String sort,
+			String sortDirection) {
+		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
 	}
 
 	@Override

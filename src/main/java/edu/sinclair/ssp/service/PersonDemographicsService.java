@@ -12,7 +12,8 @@ public interface PersonDemographicsService extends
 
 	@Override
 	public List<PersonDemographics> getAll(ObjectStatus status,
-			int firstResult, int maxResults, String sortExpression);
+			Integer firstResult, Integer maxResults, String sort,
+			String sortDirection);
 
 	@Override
 	public PersonDemographics get(UUID id) throws ObjectNotFoundException;

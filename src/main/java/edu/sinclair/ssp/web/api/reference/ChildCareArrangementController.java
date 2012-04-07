@@ -12,8 +12,7 @@ import edu.sinclair.ssp.transferobject.reference.ChildCareArrangementTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/childCareArrangement")
-public class ChildCareArrangementController
-		extends
+public class ChildCareArrangementController extends
 		AbstractAuditableReferenceController<ChildCareArrangement, ChildCareArrangementTO> {
 
 	@Autowired

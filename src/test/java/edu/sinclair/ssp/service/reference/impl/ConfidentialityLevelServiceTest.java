@@ -38,12 +38,13 @@ public class ConfidentialityLevelServiceTest {
 		List<ConfidentialityLevel> daoAll = new ArrayList<ConfidentialityLevel>();
 		daoAll.add(new ConfidentialityLevel());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, -1, -1, null)).andReturn(daoAll);
+		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+				.andReturn(daoAll);
 
 		replay(dao);
 
-		List<ConfidentialityLevel> all = service.getAll(ObjectStatus.ACTIVE,
-				-1, -1, null);
+		List<ConfidentialityLevel> all = service.getAll(ObjectStatus.ACTIVE, null, null,
+				null, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

@@ -12,8 +12,7 @@ import edu.sinclair.ssp.transferobject.reference.SelfHelpGuideGroupTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/selfHelpGuideGroup")
-public class SelfHelpGuideGroupController
-		extends
+public class SelfHelpGuideGroupController extends
 		AbstractAuditableReferenceController<SelfHelpGuideGroup, SelfHelpGuideGroupTO> {
 
 	@Autowired

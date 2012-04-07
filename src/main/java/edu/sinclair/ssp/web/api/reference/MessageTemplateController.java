@@ -12,8 +12,7 @@ import edu.sinclair.ssp.transferobject.reference.MessageTemplateTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/messageTemplate")
-public class MessageTemplateController
-		extends
+public class MessageTemplateController extends
 		AbstractAuditableReferenceController<MessageTemplate, MessageTemplateTO> {
 
 	@Autowired

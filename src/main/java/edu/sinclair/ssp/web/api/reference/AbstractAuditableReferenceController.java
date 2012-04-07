@@ -34,7 +34,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 
 	protected AuditableCrudService<T> service;
 
-	private TransferObjectListFactory<TO, T> listFactory;
+	private final TransferObjectListFactory<TO, T> listFactory;
 
 	protected Class<T> persistentClass;
 
@@ -50,40 +50,23 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 				transferObjectClass);
 	}
 
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
-	 * @param firstResult
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer. Often comes from client as a
-	 *            parameter labeled <code>start</code>.
-	 * @param maxResults
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer. Often comes from client as a
-	 *            parameter labeled <code>limit</code>.
-	 * @param sortExpression
-	 *            Property name and ascending/descending keyword. If null or
-	 *            empty string, the default sort order will be used. Often comes
-	 *            from client as a parameter labeled <code>sort</code>. Example
-	 *            sort expression: <code>propertyName ASC</code>
-	 * @exception Exception
-	 *                Generic exception thrown if there were any errors.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
 	List<TO> getAll(@RequestParam(required = false) ObjectStatus status,
-			@RequestParam(required = false) int start,
-			@RequestParam(required = false) int limit,
-			@RequestParam(required = false) String sort) throws Exception {
+			@RequestParam(required = false) Integer start,
+			@RequestParam(required = false) Integer limit,
+			@RequestParam(required = false) String sort,
+			@RequestParam(required = false) String sortDirection)
+			throws Exception {
+
+		// Set default of ACTIVE status
 		if (status == null) {
 			status = ObjectStatus.ACTIVE;
 		}
 
-		return listFactory.toTOList(service.getAll(status, start, limit, sort));
+		return listFactory.toTOList(service.getAll(status, start, limit, sort,
+				sortDirection));
 	}
 
 	@Override

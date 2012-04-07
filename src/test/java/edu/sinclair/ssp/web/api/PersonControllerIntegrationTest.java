@@ -90,7 +90,8 @@ public class PersonControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link PersonController#getAll(ObjectStatus, int, int, String)}
+	 * Test the
+	 * {@link PersonController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws Exception
@@ -98,8 +99,8 @@ public class PersonControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE, -1, -1,
-				null);
+		List<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE, null,
+				null, null, null);
 
 		assertNotNull("List should not have been null.", list);
 		assertTrue("List action should have returned some objects.",
@@ -107,7 +108,8 @@ public class PersonControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link PersonController#getAll(ObjectStatus, int, int, String)}
+	 * Test the
+	 * {@link PersonController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * This test assumes that there are at least 3 valid, active Persons in the
@@ -118,10 +120,10 @@ public class PersonControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAllWithPaging() throws Exception {
-		List<PersonTO> listAll = controller.getAll(ObjectStatus.ACTIVE, -1, -1,
-				null);
+		List<PersonTO> listAll = controller.getAll(ObjectStatus.ACTIVE, null,
+				null, null, null);
 		List<PersonTO> listFiltered = controller.getAll(ObjectStatus.ACTIVE, 1,
-				2, null);
+				2, null, null);
 
 		assertNotNull("ListAll should not have been null.", listAll);
 		assertNotNull("ListFiltered should not have been null.", listFiltered);
@@ -136,7 +138,8 @@ public class PersonControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link PersonController#getAll(ObjectStatus, int, int, String)}
+	 * Test the
+	 * {@link PersonController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * This test assumes that there are at least 3 valid, active Persons in the
@@ -148,7 +151,7 @@ public class PersonControllerIntegrationTest {
 	@Test
 	public void testControllerAllWithSorting() throws Exception {
 		List<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE, 0, 200,
-				"firstName ASC");
+				"firstName", "ASC");
 
 		assertNotNull("The list should not have been null.", list);
 		assertNotNull("List[0] should not have been null.", list.get(0));

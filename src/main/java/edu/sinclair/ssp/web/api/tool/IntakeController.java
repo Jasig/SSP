@@ -99,34 +99,34 @@ public class IntakeController {
 	@Autowired
 	private VeteranStatusService veteranStatusService;
 
-	private TransferObjectListFactory<ChallengeTO, Challenge> challengeToFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(
+	private final TransferObjectListFactory<ChallengeTO, Challenge> challengeToFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(
 			ChallengeTO.class);
 
-	private TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> childCareArrangementToFactory = new TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement>(
+	private final TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> childCareArrangementToFactory = new TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement>(
 			ChildCareArrangementTO.class);
 
-	private TransferObjectListFactory<CitizenshipTO, Citizenship> citizenshipToFactory = new TransferObjectListFactory<CitizenshipTO, Citizenship>(
+	private final TransferObjectListFactory<CitizenshipTO, Citizenship> citizenshipToFactory = new TransferObjectListFactory<CitizenshipTO, Citizenship>(
 			CitizenshipTO.class);
 
-	private TransferObjectListFactory<EducationGoalTO, EducationGoal> educationGoalToFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(
+	private final TransferObjectListFactory<EducationGoalTO, EducationGoal> educationGoalToFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(
 			EducationGoalTO.class);
 
-	private TransferObjectListFactory<EducationLevelTO, EducationLevel> educationLevelToFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(
+	private final TransferObjectListFactory<EducationLevelTO, EducationLevel> educationLevelToFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(
 			EducationLevelTO.class);
 
-	private TransferObjectListFactory<EthnicityTO, Ethnicity> ethnicityToFactory = new TransferObjectListFactory<EthnicityTO, Ethnicity>(
+	private final TransferObjectListFactory<EthnicityTO, Ethnicity> ethnicityToFactory = new TransferObjectListFactory<EthnicityTO, Ethnicity>(
 			EthnicityTO.class);
 
-	private TransferObjectListFactory<FundingSourceTO, FundingSource> fundingSourceToFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(
+	private final TransferObjectListFactory<FundingSourceTO, FundingSource> fundingSourceToFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(
 			FundingSourceTO.class);
 
-	private TransferObjectListFactory<MaritalStatusTO, MaritalStatus> maritalStatusToFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(
+	private final TransferObjectListFactory<MaritalStatusTO, MaritalStatus> maritalStatusToFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(
 			MaritalStatusTO.class);
 
-	private TransferObjectListFactory<StudentStatusTO, StudentStatus> studentStatusToFactory = new TransferObjectListFactory<StudentStatusTO, StudentStatus>(
+	private final TransferObjectListFactory<StudentStatusTO, StudentStatus> studentStatusToFactory = new TransferObjectListFactory<StudentStatusTO, StudentStatus>(
 			StudentStatusTO.class);
 
-	private TransferObjectListFactory<VeteranStatusTO, VeteranStatus> veteranStatusToFactory = new TransferObjectListFactory<VeteranStatusTO, VeteranStatus>(
+	private final TransferObjectListFactory<VeteranStatusTO, VeteranStatus> veteranStatusToFactory = new TransferObjectListFactory<VeteranStatusTO, VeteranStatus>(
 			VeteranStatusTO.class);
 
 	/**
@@ -178,33 +178,33 @@ public class IntakeController {
 		Map<String, Object> refData = new HashMap<String, Object>();
 
 		refData.put("challenges", challengeToFactory.toTOList(challengeService
-				.getAll(ObjectStatus.ACTIVE, -1, -1, null)));
+				.getAll(ObjectStatus.ACTIVE, null, null, null, null)));
 		refData.put("childCareArrangements", childCareArrangementToFactory
 				.toTOList(childCareArrangementService.getAll(
-						ObjectStatus.ACTIVE, -1, -1, null)));
+						ObjectStatus.ACTIVE, null, null, null, null)));
 		refData.put("citizenships", citizenshipToFactory
-				.toTOList(citizenshipService.getAll(ObjectStatus.ACTIVE, -1,
-						-1, null)));
+				.toTOList(citizenshipService.getAll(ObjectStatus.ACTIVE, null,
+						null, null, null)));
 		refData.put("educationGoals", educationGoalToFactory
-				.toTOList(educationGoalService.getAll(ObjectStatus.ACTIVE, -1,
-						-1, null)));
+				.toTOList(educationGoalService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
 		refData.put("educationLevels", educationLevelToFactory
-				.toTOList(educationLevelService.getAll(ObjectStatus.ACTIVE, -1,
-						-1, null)));
+				.toTOList(educationLevelService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
 		refData.put("ethnicitys", ethnicityToFactory.toTOList(ethnicityService
-				.getAll(ObjectStatus.ACTIVE, -1, -1, null)));
+				.getAll(ObjectStatus.ACTIVE, null, null, null, null)));
 		refData.put("fundingSources", fundingSourceToFactory
-				.toTOList(fundingSourceService.getAll(ObjectStatus.ACTIVE, -1,
-						-1, null)));
+				.toTOList(fundingSourceService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
 		refData.put("maritalStatuss", maritalStatusToFactory
-				.toTOList(maritalStatusService.getAll(ObjectStatus.ACTIVE, -1,
-						-1, null)));
+				.toTOList(maritalStatusService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
 		refData.put("studentStatuss", studentStatusToFactory
-				.toTOList(studentStatusService.getAll(ObjectStatus.ACTIVE, -1,
-						-1, null)));
+				.toTOList(studentStatusService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
 		refData.put("veteranStatuss", veteranStatusToFactory
-				.toTOList(veteranStatusService.getAll(ObjectStatus.ACTIVE, -1,
-						-1, null)));
+				.toTOList(veteranStatusService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
 
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());

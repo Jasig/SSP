@@ -8,29 +8,11 @@ import edu.sinclair.ssp.model.reference.SelfHelpGuide;
 import edu.sinclair.ssp.service.AuditableCrudService;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 
-public interface SelfHelpGuideService extends
-		AuditableCrudService<SelfHelpGuide> {
+public interface SelfHelpGuideService extends AuditableCrudService<SelfHelpGuide> {
 
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
-	 * @param firstResult
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param maxResults
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param sortExpression
-	 *            Property name and ascending/descending keyword. If null or
-	 *            empty string, the default sort order will be used. Example
-	 *            sort expression: <code>propertyName ASC</code>
-	 * @return All entities in the database filtered by the supplied status.
-	 */
 	@Override
-	public List<SelfHelpGuide> getAll(ObjectStatus status, int firstResult,
-			int maxResults, String sortExpression);
+	public List<SelfHelpGuide> getAll(ObjectStatus status, Integer firstResult,
+			Integer maxResults, String sort, String sortDirection);
 
 	@Override
 	public SelfHelpGuide get(UUID id) throws ObjectNotFoundException;
@@ -41,14 +23,6 @@ public interface SelfHelpGuideService extends
 	@Override
 	public SelfHelpGuide save(SelfHelpGuide obj) throws ObjectNotFoundException;
 
-	/**
-	 * Mark the specific instance as {@link ObjectStatus#DELETED}.
-	 * 
-	 * @param id
-	 *            Instance identifier
-	 * @exception ObjectNotFoundException
-	 *                if the specified ID does not exist.
-	 */
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException;
 

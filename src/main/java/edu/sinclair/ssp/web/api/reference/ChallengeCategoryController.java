@@ -12,8 +12,7 @@ import edu.sinclair.ssp.transferobject.reference.ChallengeCategoryTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/challengeCategory")
-public class ChallengeCategoryController
-		extends
+public class ChallengeCategoryController extends
 		AbstractAuditableReferenceController<ChallengeCategory, ChallengeCategoryTO> {
 
 	@Autowired

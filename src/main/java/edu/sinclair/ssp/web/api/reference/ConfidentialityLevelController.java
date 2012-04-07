@@ -12,8 +12,7 @@ import edu.sinclair.ssp.transferobject.reference.ConfidentialityLevelTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/reference/confidentialityLevel")
-public class ConfidentialityLevelController
-		extends
+public class ConfidentialityLevelController extends
 		AbstractAuditableReferenceController<ConfidentialityLevel, ConfidentialityLevelTO> {
 
 	@Autowired

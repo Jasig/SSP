@@ -149,7 +149,7 @@ public class ChallengeControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link ChallengeController#getAll(ObjectStatus, int, int, String)}
+	 * {@link ChallengeController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws Exception
@@ -157,8 +157,8 @@ public class ChallengeControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE, -1, -1,
-				null);
+		List<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE, null,
+				null, null, null);
 
 		assertNotNull("List should not have been null.", list);
 		assertTrue("List action should have returned some objects.",

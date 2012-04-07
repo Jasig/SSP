@@ -24,80 +24,40 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		this.persistentClass = persistentClass;
 	}
 
-	/**
-	 * Return all entities in the database, filtered only by the specified
-	 * parameters.
-	 * 
-	 * @param status
-	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
-	 *            return all results.
-	 * @return All entities in the database, filtered only by the specified
-	 *         parameters.
-	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> getAll(ObjectStatus status) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(
-				persistentClass);
-
-		if (status != ObjectStatus.ALL) {
-			query.add(Restrictions.eq("objectStatus", status));
-		}
-
-		return query.list();
+		return getAllWithDefault(status, null, null, null, null, null);
 	}
 
-	/**
-	 * Return all entities in the database, filtered only by the specified
-	 * parameters.
-	 * 
-	 * @param status
-	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
-	 *            return all results.
-	 * @param firstResult
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param maxResults
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param sortExpression
-	 *            Property name and ascending/descending keyword. If null or
-	 *            empty string, the default sort order will be used. Example
-	 *            sort expression: <code>propertyName ASC</code>
-	 * @return All entities in the database, filtered only by the specified
-	 *         parameters.
-	 */
 	@Override
+	public List<T> getAll(ObjectStatus status, Integer firstResult,
+			Integer maxResults, String sort, String sortDirection) {
+		return getAllWithDefault(status, firstResult, maxResults,
+				sortDirection, sortDirection, null);
+	}
+
 	@SuppressWarnings("unchecked")
-	public List<T> getAll(ObjectStatus status, int firstResult, int maxResults,
-			String sortExpression) {
-		if (firstResult < 0) {
-			throw new IllegalArgumentException(
-					"firstResult must be 0 or greater.");
+	protected List<T> getAllWithDefault(ObjectStatus status,
+			Integer firstResult, Integer maxResults, String sort,
+			String sortDirection, String defaultSortProperty) {
+		Criteria query = createCriteria();
+
+		if (firstResult != null && firstResult.intValue() >= 0) {
+			query.setFirstResult(firstResult);
 		}
 
-		if (maxResults < 1) {
-			throw new IllegalArgumentException(
-					"maxResults must be 1 or greater.");
+		if (maxResults != null && maxResults.intValue() > 0) {
+			query.setMaxResults(maxResults);
 		}
 
-		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(this.persistentClass)
-				.setFirstResult(firstResult).setMaxResults(maxResults);
-
-		if (StringUtils.isNotEmpty(sortExpression)) {
-			if (StringUtils.endsWithIgnoreCase(sortExpression, "asc")) {
-				query.addOrder(Order.asc(StringUtils.substringBefore(
-						sortExpression, " ")));
-			} else if (StringUtils.endsWithIgnoreCase(sortExpression, "desc")) {
-				query.addOrder(Order.desc(StringUtils.substringBefore(
-						sortExpression, " ")));
-			} else {
-				throw new IllegalArgumentException(
-						"Invalid sort expression. Must be in the form of \"propertyName ASC\" or \"propertyName DESC\".");
-			}
+		if (StringUtils.isEmpty(defaultSortProperty)) {
+			query = addOrderToCriteria(query, sort, sortDirection);
+		} else {
+			query = addOrderToCriteria(query, sort, sortDirection,
+					defaultSortProperty);
 		}
 
+		// Add object status filter
 		if (status != ObjectStatus.ALL) {
 			query.add(Restrictions.eq("objectStatus", status));
 		}
@@ -127,5 +87,41 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	@Override
 	public void delete(T obj) {
 		sessionFactory.getCurrentSession().delete(obj);
+	}
+
+	protected Criteria createCriteria() {
+		return sessionFactory.getCurrentSession().createCriteria(
+				this.persistentClass);
+	}
+
+	protected Criteria addOrderToCriteria(Criteria criteria, String sort,
+			String sortDirection, String defaultSortProperty) {
+		return addOrderToCriteria(criteria,
+				StringUtils.isEmpty(sort) ? defaultSortProperty : sort,
+				sortDirection);
+	}
+
+	protected Criteria addOrderToCriteria(Criteria criteria, String sort,
+			String sortDirection) {
+		if (StringUtils.isEmpty(sort)) {
+			return criteria;
+		}
+
+		// Clean/validate sort direction input
+		if (StringUtils.isEmpty(sortDirection)) {
+			sortDirection = "ASC"; // Default to ascending
+		} else {
+			sortDirection = sortDirection.toUpperCase();
+		}
+
+		// Add sort property with the specified order
+		if (sortDirection == "DESC" || sortDirection == "DESCENDING") {
+			criteria.addOrder(Order.desc(sort));
+		} else {
+			// If not descending, assume ascending
+			criteria.addOrder(Order.asc(sort));
+		}
+
+		return criteria;
 	}
 }
