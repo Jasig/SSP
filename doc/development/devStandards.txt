@@ -1,0 +1,8 @@
+A good style guide:
+
+https://wiki.jasig.org/display/UPC/Code+Style+and+Conventions
+
+With these exceptions:
+Using Eclipse's default formatting settings - autoformat before you save.
+Using tabs instead of all spaces. (This is due to some legacy code
+written in coffescript which is sensitive to whitespace).
