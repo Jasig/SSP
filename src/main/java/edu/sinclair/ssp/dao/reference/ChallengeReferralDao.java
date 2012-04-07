@@ -16,8 +16,8 @@ import edu.sinclair.ssp.model.reference.ChallengeReferral;
  */
 @Repository
 public class ChallengeReferralDao extends
-ReferenceAuditableCrudDao<ChallengeReferral> implements
-AuditableCrudDao<ChallengeReferral> {
+		ReferenceAuditableCrudDao<ChallengeReferral> implements
+		AuditableCrudDao<ChallengeReferral> {
 
 	public ChallengeReferralDao() {
 		super(ChallengeReferral.class);
@@ -145,5 +145,6 @@ AuditableCrudDao<ChallengeReferral> {
 						.setParameter(3, sessionId)
 						.list();
 	}
+
 
 }
