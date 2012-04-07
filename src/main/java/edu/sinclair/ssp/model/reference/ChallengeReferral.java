@@ -25,15 +25,18 @@ Serializable {
 	/**
 	 * Public Description
 	 * 
-	 * Optional, null allowed, max length 150 characters.
+	 * Optional, null allowed, max length 64000 characters.
 	 */
-	@Column(nullable = true, length = 150)
-	@Size(max = 150)
+	@Column(nullable = true, length = 64000)
+	@Size(max = 64000)
 	private String publicDescription;
+
+	@Column(nullable = false)
+	private boolean showInSelfHelpGuide;
 
 	@OneToMany(mappedBy = "challengeReferral")
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals =
-			new HashSet<ChallengeChallengeReferral>(0);
+	new HashSet<ChallengeChallengeReferral>(0);
 
 	/**
 	 * Constructor
@@ -95,5 +98,13 @@ Serializable {
 	public void setChallengeChallengeReferrals(
 			Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
 		this.challengeChallengeReferrals = challengeChallengeReferrals;
+	}
+
+	public boolean isShowInSelfHelpGuide() {
+		return showInSelfHelpGuide;
+	}
+
+	public void setShowInSelfHelpGuide(boolean showInSelfHelpGuide) {
+		this.showInSelfHelpGuide = showInSelfHelpGuide;
 	}
 }

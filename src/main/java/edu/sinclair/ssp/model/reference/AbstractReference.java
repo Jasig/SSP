@@ -26,16 +26,16 @@ public abstract class AbstractReference extends Auditable {
 	@Column(name = "name", nullable = false, length = 100)
 	@NotNull
 	@NotEmpty
-	@Size(max = 100)
+	@Size(max = 80)
 	private String name;
 
 	/**
 	 * Description
 	 * 
-	 * Optional, null allowed, max length 150 characters.
+	 * Optional, null allowed, max length 64000 characters.
 	 */
-	@Column(nullable = true, length = 150)
-	@Size(max = 150)
+	@Column(nullable = true, length = 64000)
+	@Size(max = 64000)
 	private String description;
 
 	/**

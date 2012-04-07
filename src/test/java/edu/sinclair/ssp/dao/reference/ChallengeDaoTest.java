@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -104,6 +105,30 @@ public class ChallengeDaoTest {
 
 		dao.delete(obj);
 		dao.delete(obj2);
+	}
+
+	@Test
+	public void searchByQuery() {
+		String filter = "issue";
+
+		List<Challenge> challenges = dao.searchByQuery(filter);
+		assertList(challenges);
+		assertTrue(challenges.size() > 0);
+
+		logger.debug(Integer.toString(challenges.size()));
+	}
+
+	@Test
+	public void getAllInStudentIntake() {
+		List<Challenge> challenges = dao.getAllInStudentIntake();
+		assertList(challenges);
+		assertTrue(challenges.size() > 0);
+	}
+
+	@Ignore
+	@Test
+	public void selectAffirmativeBySelfHelpGuideResponseId() {
+
 	}
 
 }

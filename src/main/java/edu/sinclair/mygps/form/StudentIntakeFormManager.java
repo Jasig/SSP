@@ -2517,7 +2517,7 @@ public class StudentIntakeFormManager {
 		FormQuestionTO challengeQuestionTO = new FormQuestionTO();
 		List<FormOptionTO> challengeOptions = new ArrayList<FormOptionTO>();
 
-		for (Challenge challenge : challengeDao.selectForStudentIntake()) {
+		for (Challenge challenge : challengeDao.getAllInStudentIntake()) {
 			challengeOptions.add(new FormOptionTO(challenge.getId(), challenge
 					.getName(), challenge.getId().toString()));
 		}

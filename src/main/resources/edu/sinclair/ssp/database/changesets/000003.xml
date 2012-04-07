@@ -1813,6 +1813,9 @@
 					references="challenge_referral(id)" />
 			</column>
 		</createTable>
+		
+		<sql>grant all on challenge_challenge_referral to ssp</sql>
+		
 		<rollback>
 			<dropTable tableName="challenge_challenge_referral"/>
 		</rollback>
@@ -1825,6 +1828,1492 @@
 			</column>
 		</addColumn>
 	</changeSet>
+	
+	<changeSet id="add showInSelfHelpGuide to challenge_referral" author="daniel.bower">
+		<addColumn tableName="challenge_referral">
+			<column name="show_in_self_help_guide" type="boolean"/>
+		</addColumn>
+	</changeSet>
+	
+	<changeSet id="enlarge description column " author="daniel.bower">
+		<modifyDataType tableName="challenge" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="challenge_category" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="challenge_referral" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="child_care_arrangement" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="citizenship" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="confidentiality_disclosure_agreement" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="confidentiality_level" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="education_goal" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="education_level" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="ethnicity" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="funding_source" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="marital_status" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="message_template" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="self_help_guide" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="self_help_guide_group" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="self_help_guide_question" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="student_status" columnName="description" newDataType="text"/>
+		<modifyDataType tableName="veteran_status" columnName="description" newDataType="text"/>
+		
+		<modifyDataType tableName="challenge_referral" columnName="public_description" newDataType="text"/>
+		
+		<modifyDataType tableName="challenge" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="challenge_category" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="challenge_referral" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="child_care_arrangement" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="citizenship" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="confidentiality_disclosure_agreement" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="confidentiality_level" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="education_goal" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="education_level" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="ethnicity" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="funding_source" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="marital_status" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="message_template" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="self_help_guide" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="self_help_guide_group" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="self_help_guide_question" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="student_status" columnName="name" newDataType="character varying(80)"/>
+		<modifyDataType tableName="veteran_status" columnName="name" newDataType="character varying(80)"/>
+		
+		<rollback>
+			<modifyDataType tableName="challenge" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="challenge_category" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="challenge_referral" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="child_care_arrangement" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="citizenship" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="confidentiality_disclosure_agreement" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="confidentiality_level" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="education_goal" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="education_level" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="ethnicity" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="funding_source" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="marital_status" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="message_template" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="self_help_guide" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="self_help_guide_group" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="self_help_guide_question" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="student_status" columnName="description" newDataType="character varying(150)"/>
+			<modifyDataType tableName="veteran_status" columnName="description" newDataType="character varying(150)"/>
+			
+			<modifyDataType tableName="challenge_referral" columnName="public_description" newDataType="character varying(150)"/>
+			
+			<modifyDataType tableName="challenge" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="challenge_category" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="challenge_referral" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="child_care_arrangement" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="citizenship" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="confidentiality_disclosure_agreement" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="confidentiality_level" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="education_goal" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="education_level" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="ethnicity" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="funding_source" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="marital_status" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="message_template" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="self_help_guide" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="self_help_guide_group" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="self_help_guide_question" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="student_status" columnName="name" newDataType="character varying(50)"/>
+			<modifyDataType tableName="veteran_status" columnName="name" newDataType="character varying(50)"/>
+			
+		</rollback>
+	</changeSet>
+	
+		
+	<changeSet id="create reference data - challenge_referral"
+		author="daniel.bower">
+		<insert tableName="challenge_referral">
+			<column name="id" value="1086F9D4-90DA-418C-A106-004E29490093" />
+			<column name="name" value="Improve English Skills" />
+			<column name="description"
+				value="To improve English skills at no cost (not enrolled in classes) contact Barbara Gilbert 512-2894 for computer audio-visual programs. " />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="19FBEC43-8C0B-478B-9D5F-00EC6EC57511" />
+			<column name="name" value="Campus Organization" />
+			<column name="description"
+				value="Contact Student Leadership Development 8025 512-2509 for: campus organizations to increase social/cultural contacts  learn about organizations pertaining to career field 
+	and/or for Student Leadership Development opportunity for additional information visit www.sinclair.edu/organizations" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="true" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="B1B323BE-41EA-437F-BF2F-03AD0BD758F2" />
+			<column name="name" value="Admission - Application" />
+			<column name="description"
+				value="Complete Application for Admission (new and returning students who have not attended Sinclair for one year).  Application is available in Admissions Office 10112 512-3648 www.sinclair.edu/admissions." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="A81A21B6-BFD7-4FD3-A07E-04025A078A7D" />
+			<column name="name" value="Counselor - Liberal Arts" />
+			<column name="description"
+				value=" Communication &amp; Social Sciences Speak with Liberal Arts Communication &amp; Social Sciences Academic Advisor to discuss undecided status 11346 512-3700 www.sinclair.edu/academics/lcs." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="7FA465AE-C8CD-430C-A263-04C6A5046068" />
+			<column name="name" value="Open Learning Labs" />
+			<column name="description"
+				value="OPEN LEARNING LABS:   Take advantage of Open Learning Labs on campus www.sinclair.edu/stservices/edu/tutorial/index.cfm" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="FC523DCA-A1BA-4711-9802-04E85C3174DB" />
+			<column name="name" value="Survey" />
+			<column name="description"
+				value="Complete ILP Survey or Counseling Services Survey." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="59AC3691-EA0D-4237-A468-0573EF07E895" />
+			<column name="name" value="Resource Room" />
+			<column name="description"
+				value="RESOURCE ROOM:  Visit Counseling Services 'Resource Room' for additional resources (e.g. books brochures videos) 10424 512-2752 www.sinclair.edu/stservices/cnsl/index.cfm" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="75E20872-17C8-436E-A3C0-07319F818C26" />
+			<column name="name" value="Community Referral" />
+			<column name="description"
+				value="Contact insurance company for list of approved providers who offer mental health services." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="E218AD4A-4797-4818-89A9-0B0580DB4274" />
+			<column name="name" value="LASSI Handout" />
+			<column name="description"
+				value="Select and apply three helpful strategies from the LASSI handouts. " />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="96CC3609-0EC2-42D6-8123-0B15492A9D2C" />
+			<column name="name" value="PSY 130" />
+			<column name="description"
+				value="PSY 130:  Discuss with academic counselor the possibility of taking  class to address parenting skills.  For example PSY 130 Effective Parenting  (course offered irregularly).  Check the course bulletin at: www.sinclair.edu/bulletin/index.cfm" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="7EDA3A29-5FE8-44C0-B86F-0F084B51B228" />
+			<column name="name" value="Handouts" />
+			<column name="description"
+				value="HANDOUTS:  Review handouts in reference to Health Well-Being and Success in College." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="FD01167F-F99C-456B-80AD-0FC44A99AC24" />
+			<column name="name" value="Computer Access" />
+			<column name="description"
+				value="Free computer access may be found at the following locations: Local Community Libraries and Sinclair Community College Tartan Marketplace – lower level of building 7 Library Teleport – 13223 Walkway in building 14 second floor or Open Computer Lab Bldg. 14 first floor" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="4E2AAC3F-5056-A51A-8034-10522B001062" />
+			<column name="name" value="Day-VEST" />
+			<column name="description"
+				value="A volunteer employment service for those seeking professional positions as well as an employment resource for members employers and other professionals.  www.day-vest.org.  Contact Dave Harlow 937-222-9065" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="true" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="7A69F78F-ECBF-48FB-8747-121C65CEE660" />
+			<column name="name" value="CrisisCare" />
+			<column name="description"
+				value="CRISISCARE:  For 24 hour assessment and services for the uninsured contact CrisisCare Elizabeth Place NW Building 1st Floor 601 Edwin C. Moses Blvd. 224-4646." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="238AEBCE-887D-480A-B63B-122935D60337" />
+			<column name="name" value="Student Judicial Affairs" />
+			<column name="description"
+				value="Refer student to Student Judicial Affairs Building 8 room 8025 512-2509." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="79DE802E-AFD6-46E3-99F8-134B2A41D8A0" />
+			<column name="name" value="Improvement in Class Work" />
+			<column name="description"
+				value="Meet with instructor to discuss specific needs for class work improvement." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="DE37299C-FEAC-4E71-9583-13A91C44370C" />
+			<column name="name" value="Academic Petition" />
+			<column name="description"
+				value="If poor grades are the result of emergency circumstances provide documentation to support an academic petition to Vice President for Instruction Office 7330 or call 512- 2522.  For more information please reference the Student Handbook at http://www.sinclair.edu/student/leader." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="FE7CE526-758F-4A2A-838A-1482ADECEC6B" />
+			<column name="name" value="Dayton Dialogue on Race Relations" />
+			<column name="description"
+				value="Contact Dayton Dialogue on Race Relations Madeline Iseli Room 734 512-2022 or 371 W. Second Street Suite 100 Dayton Ohio 45402 or call (937) 333-1413." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="660DA4FF-7B02-4FA0-B0DA-160E488B947B" />
+			<column name="name" value="Financial Aid Deadlines" />
+			<column name="description"
+				value="Consider Quarterly Financial Aid deadlines (deadline to guarantee process of aid if eligible by fee payment date). Summer May 1 Fall August 1 Winter November 15 Spring February 15" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="56AA29EF-E13E-4A26-B151-16E0CB1F9E86" />
+			<column name="name" value="FAFSA &amp; Student Guide - Spanish" />
+			<column name="description"
+				value="To obtain the FAFSA form and Student Guide online in Spanish access the following link: http://www.fafsa.ed.gov/es_ES/index.htm." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="46F21D93-5056-A51A-80FE-16FB711058E6" />
+			<column name="name" value="Large Font Size" />
+			<column name="description"
+				value="Increase fonts for written or published class material." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="true" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="C72EF7EF-EA06-4282-92AD-17153E136BB5" />
+			<column name="name" value="Part-time Ohio College Opportunity Grant (OCOG)" />
+			<column name="description"
+				value="If financial aid file is complete and attend part-time apply in person (if student prior to 2006-2007) by taking fee bill to the Financial Aid Office in 10324 or call 512-3000." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="EBA6B6C1-7D62-4B3D-8F61-1722CE93418B" />
+			<column name="name" value="COPE Workshops" />
+			<column name="description"
+				value="COPE WORKSHOPS:  Attend COPE and other workshops offered at Sinclair; Workshops are listed in the Calendar of Events – Building Connections to Instructions brochure.  Brochure which can be obtained in the Student Activities Center Building 8 lower level 512-2509" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="EA8396C8-5E13-4A62-BA62-17CADE2C57A5" />
+			<column name="name" value="Attendance Issues" />
+			<column name="description"
+				value="Attend all classes and appointments with counselors. If unable to attend contact the instructor or counselor as soon as possible and discuss arrangements to make up missed assignments or to reschedule the appointment." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="DB9229FE-2511-4939-8F9A-18D17E674E0C" />
+			<column name="name" value="$100 Pell Transfer to Tartan Card" />
+			<column name="description"
+				value="If you have Pell Grant visit the Bookstore within the first 2 weeks to transfer up to $100 per quarter of your financial aid award to your tartan card to purchase bus pass(es) academic expenses and daily expenses at Sinclair." />
+			<column name="public_description"
+				value="If have Pell Grant transfer up to $100 per quarter of your financial aid award to your tartan card to purchase bus pass(es) academic expenses and daily expenses at Sinclair." />
+			<column name="show_in_self_help_guide" valueBoolean="true" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="BC7967CF-BF1A-4445-885C-19705A0E686B" />
+			<column name="name" value="Substance Abuse Treatment" />
+			<column name="description"
+				value="Visit website for listing of substance abuse treatment facilities located in Dayton http://www.substanceabusetreatment.info/city.htm?state=ohio&amp;city=dayton and the state of Ohio http://www.odadas.state.oh.us" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="C9B60122-466C-4A25-A1E3-1A5E946468A5" />
+			<column name="name" value="Fee Bill" />
+			<column name="description"
+				value="If question balance on fee bill take fee bill to financial aid for clarification." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="B17D9FF8-B28C-40A9-8779-1B3D7A9D64C1" />
+			<column name="name" value="Class - Grief &amp; Loss" />
+			<column name="description"
+				value="Consider taking the PSY135 Living with Loss Death &amp; Grief class to learn more information." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="F1F881FD-83AF-444E-9331-1D6AC7CD60C9" />
+			<column name="name" value="Myers-Briggs Type Indicator (MBTI)" />
+			<column name="description"
+				value="TYPE:  Complete Jung Typology Test.  Type:http://www.humanmetrics.com/cgi-win/Jtypes1.htm in the address field/box of the web browser.  Press ENTER.  Carefully read the directions and click on the 'Do It' button at the bottom of the text box. Click 'Score it' when done.  PRINT PAGE!!  Bring printed page to your scheduled appointment with your counselor." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="E9E29C50-0E3E-4F3B-A0A8-1DEB5BA7352F" />
+			<column name="name" value="Counseling - Weekend Intervention Program (WIP)" />
+			<column name="description"
+				value="Complete alcohol counseling by attending scheduled appointments. If unable to keep scheduled appointment call counselor to reschedule appointment." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="8C1612BC-D8CD-4878-8D5D-1E330EE8C136" />
+			<column name="name" value="TYPE" />
+			<column name="description"
+				value="Complete the Humanmetrics Jung Typology Test (same as Myers Briggs MBTI) to identify preferences which can assist with career selection learning and/or relationships.  Web address:  http://www.humanmetrics.com/cgi-win/JTypes1.htm.  Read instructions and click on 'Do It.'  Answer the questions click on 'Score It.'  When finished print page and bring it to your scheduled appointment with your counselor." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="F298779D-2417-4B2D-B6B8-1F9DF9ACF481" />
+			<column name="name" value="LASSI" />
+			<column name="description"
+				value="Complete Learning and Study Strategies Inventory (LASSI) to obtain feedback on study habits:    Website:  http://www.hhpubco.com/LASSI/     School Number: 77813     User Name:  prwa   User Password:  pf4y" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="3D8A27C6-920F-462B-8730-1FA91DA9F78C" />
+			<column name="name" value="Courses and Class Schedule" />
+			<column name="description"
+				value="Select courses and develop a class schedule with the assistance of ILP Counselor and/or Academic Advisor." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="0CC3F7F0-F583-4920-BAA9-2024284ACD10" />
+			<column name="name" value="$Instructor" />
+			<column name="description"
+				value="Meet with instructor about study tips for his/her class to confirm progress/grades in class and/or discuss extra credit assignment.  If appropriate discuss specific needs for class work improvement. " />
+			<column name="public_description"
+				value="$Meet with instructor about study tips for his/her class to confirm progress/grades in class and/or discuss extra credit assignment. If appropriate discuss specific needs for class work improvement." />
+			<column name="show_in_self_help_guide" valueBoolean="true" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="40A0BA63-3AF9-49AE-A42C-20E43005B36D" />
+			<column name="name" value="Classes" />
+			<column name="description"
+				value="CLASSES:  Consider taking classes to help manage stressors or emotions.  For example EXL 105 Study Skills PSY 126 Stress Management PSY 140 Psy of Interaction and Human Potential PSY 142 Self Esteem:  Building Life Skills and PED Classes or ART Classes.  Please refer to the course bulletin at: www.sinclair.edu/bulletin/index.cfm." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="51A92FD5-7639-46DD-ACCC-215305E46BC0" />
+			<column name="name" value="Payment" />
+			<column name="description"
+				value="Make sure there is a zero balance on your fee bill by the payment deadline date. If not speak with the appropriate office (e.g. Financial Aid Office 10324 or Bursar Office 10244 or call 512-3000)." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="6E68497F-D4AF-4F51-A9F7-251F7E2F680C" />
+			<column name="name" value="Family Services" />
+			<column name="description"
+				value="FAMILY SERVICES:  Contact Pat Davis at Family Services Association 222-9481 for parenting education program.  Parenting 101 Classes are offered throughout the year.  Sliding fee scale will establish the fee and scholarships may be available." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="31476A55-FAD6-4D5A-AFC6-266294BEE0A4" />
+			<column name="name" value="Orientation-IT" />
+			<column name="description"
+				value="Attend student information technology session to learn how to access accounts and do things electronically on campus. For example learn about web portal email web advisor my.sinclair and other IT services.  Sessions are held in the Teleport Room 13-223.  For day and times sessions are offered call 512-4357 visit Teleport or check out my.sinclair." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="FD6E5FF6-8907-4A2D-B3DF-28FCC659A189" />
+			<column name="name" value="Student Support Services" />
+			<column name="description"
+				value="If eligible contact Student Support Services for support and guidance to achieve educational goals and to discuss services requirements and/or application process in 11342 or call 512-3550." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="74B23392-139D-4DFB-A808-29B9A1265214" />
+			<column name="name" value="Financial Aid Office Application" />
+			<column name="description"
+				value="FINANCIAL AID OFFICE APPLICATION:  Submit Sinclair Financial Aid Office application to the Financial Aid Office 11346 512-3000." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="EB4DDD20-CE13-417B-B110-2A54E1D471D5" />
+			<column name="name"
+				value="Montgomery County Child Support Enforcement Agency" />
+			<column name="description"
+				value="Contact Montgomery County Child Support Enforcement Agency for enforcement of child support orders 225-4600 www.mcsea.org." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="780BB947-1124-4F6F-B55C-2B02DBB03C64" />
+			<column name="name" value="COPE Workshop" />
+			<column name="description"
+				value="COPE WORKSHOP:  Attend Counseling Services’ C.O.P.E Workshop on test anxiety 10424 512-2752 www.sinclair.edu/stservices/cnsl/index.cfm" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="DB2BB56C-5AF5-499B-ACC5-2BCF29123E6C" />
+			<column name="name"
+				value="Personal Interest Career Development Transient or HS Student" />
+			<column name="description"
+				value=" If Personal Interest Career Development Transient or High School Student visit the Enrollment Center 10444 or call 512-3210." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="BED66095-78F5-46E5-B277-2CA5EE7ADB2D" />
+			<column name="name" value="Tutorial Services and Labs" />
+			<column name="description"
+				value="Attend tutorial labs or help rooms as suggested by the instructor (listed below). Tutorial Services located in the Library or call 512-2792 Disability Services 10421 or call 512-5113 Academic Math Lab 1315 or call 512-2286 Writing Center - Library 7L or call 512-5106 Math Help Room - Library 7L Tutoring and Learning Center - Library 7L or call 512-2792" />
+			<column name="public_description"
+				value="Attend tutorial labs or help rooms as suggested by the instructor (listed below). ' Tutorial Services located in the Library or call 512-2792 ' Disability Services 10421 or call 512-5113 ' Academic Math Lab 1315 or call 512-2286 ' Writing Center - Library 7L or call 512-5106 ' Math Help Room - Library 7L ' Tutoring and Learning Center - Library 7L or call 512-2792" />
+			<column name="show_in_self_help_guide" valueBoolean="true" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="D9B99E47-1714-450A-8DB1-2D3913AC90CB" />
+			<column name="name" value="Financial Aid Award" />
+			<column name="description"
+				value="Consider the amount of award is based upon number of credit hours carried each quarter." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="03F7D2EA-504E-4B31-9099-30CA9ECD2AFA" />
+			<column name="name" value="Medicaid Programs" />
+			<column name="description"
+				value="For Medicaid programs (e.g. Healthy Start/Healthy Families; Ohio Works First; Aged Blind and Disabled; Low Income Family (LIF)/Healthy Start Medicaid) visit the Job Center 111 S. Edwin C. Moses Blvd or call 225-4148." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="B4C42BFD-7AD4-41EF-B650-31A135C660CE" />
+			<column name="name" value="Individualizing a Degree Program" />
+			<column name="description"
+				value="Consider individualizing a degree program.  For additional information contact Linda Pastore at 512-2101 for A.A. programs not listed in the catalog." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="43724DE8-93CB-411C-A9FE-322A62756D04" />
+			<column name="name" value="Placement Testing" />
+			<column name="description"
+				value="If seeking a certificate or degree and do not have placement test scores within the last two years visit the Enrollment Center in 10422 or call 512-4549." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="C8F59411-D74F-4E93-B70F-370C6B297E96" />
+			<column name="name" value="Tartan Card - Transportation" />
+			<column name="description"
+				value="Put money on Tartan Card to pay reduced fee of $1.00 for parking in garage daily." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="0BAF5091-398D-408D-81D9-3763695DBD7A" />
+			<column name="name" value="Holistic Counseling - Intellectual" />
+			<column name="description" value="INTELLECTUAL:  " />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="1F831A35-8944-4E9A-B459-38364DF365EA" />
+			<column name="name" value="Student Success Course" />
+			<column name="description"
+				value="Register for Student Success Course -Section 101 from all divisions to learn strategies for success." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="D1650A52-B6E0-415B-9781-38504BE570AC" />
+			<column name="name" value="Study Skills Website" />
+			<column name="description"
+				value="Any student may access the study skills site designated for probation students at http://www.sinclair.edu/academics/lcs/counselors/StudentSuccessWorkshop or http://www.aims.edu/student/arc/index.php." />
+			<column name="public_description"
+				value="Any student may access the study skills site designated for probation students at www.sinclair.edu/academics/lcs/counselors/StudentSuccessWorkshop or www.aims.edu/student/arc/index.php." />
+			<column name="show_in_self_help_guide" valueBoolean="true" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="75830250-D95D-4187-B8CD-38A110D1A832" />
+			<column name="name" value="Withdraw date" />
+			<column name="description"
+				value="Remember the withdraw date. If thinking about withdrawing be sure to speak with the Financial Aid Office for possible impact of withdrawing on your financial aid. Before withdrawing speak with ILP Counselor to see if there might be other options." />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="7CC73413-02B9-4F8B-AA3F-38B082ABC706" />
+			<column name="name" value="Alcoholics-anonymous" />
+			<column name="description"
+				value="AL-ANON/ALATEEN:  For family members and friends whose lives are affected by someone who drinks visit the national Al-non/Alateen website at www.al-anon.alateen.org or the local website at www.al-anondaytonoh.org" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="751A3383-7398-469F-A35F-3A86A08D8FCD" />
+			<column name="name" value="Learning Labs" />
+			<column name="description"
+				value="Take advantage of various Learning Labs on campus www.sinclair.edu/support/tutor.  Tutorial Services (937/512-2792) and Tutoring &amp; Learning Center (937/512-4506) are located in the Library in 7L07.  The Math Lab is located in Building 1 Room 1-315 or call (937/512-2286)" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="challenge_referral">
+			<column name="id" value="5044BF0F-3EB1-47E5-9D30-3B60B7ED63BB" />
+			<column name="name" value="Minority Peer Group" />
+			<column name="description"
+				value="MINORITY PEER GROUP:  Contact Omar Powell Minority Student Retention  Counselor for a Minority Peer Mentor 10324 512-2752 www.sinclair.edu/stservices/cnsl/AAMI/index.cfm" />
+			<column name="public_description" value="" />
+			<column name="show_in_self_help_guide" valueBoolean="false" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="challenge_referral">
+				<where>id='1086F9D4-90DA-418C-A106-004E29490093'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='19FBEC43-8C0B-478B-9D5F-00EC6EC57511'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='B1B323BE-41EA-437F-BF2F-03AD0BD758F2'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='A81A21B6-BFD7-4FD3-A07E-04025A078A7D'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='7FA465AE-C8CD-430C-A263-04C6A5046068'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='FC523DCA-A1BA-4711-9802-04E85C3174DB'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='59AC3691-EA0D-4237-A468-0573EF07E895'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='75E20872-17C8-436E-A3C0-07319F818C26'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='E218AD4A-4797-4818-89A9-0B0580DB4274'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='96CC3609-0EC2-42D6-8123-0B15492A9D2C'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='7EDA3A29-5FE8-44C0-B86F-0F084B51B228'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='FD01167F-F99C-456B-80AD-0FC44A99AC24'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='4E2AAC3F-5056-A51A-8034-10522B001062'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='7A69F78F-ECBF-48FB-8747-121C65CEE660'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='238AEBCE-887D-480A-B63B-122935D60337'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='79DE802E-AFD6-46E3-99F8-134B2A41D8A0'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='DE37299C-FEAC-4E71-9583-13A91C44370C'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='FE7CE526-758F-4A2A-838A-1482ADECEC6B'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='660DA4FF-7B02-4FA0-B0DA-160E488B947B'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='56AA29EF-E13E-4A26-B151-16E0CB1F9E86'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='46F21D93-5056-A51A-80FE-16FB711058E6'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='C72EF7EF-EA06-4282-92AD-17153E136BB5'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='EBA6B6C1-7D62-4B3D-8F61-1722CE93418B'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='EA8396C8-5E13-4A62-BA62-17CADE2C57A5'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='DB9229FE-2511-4939-8F9A-18D17E674E0C'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='BC7967CF-BF1A-4445-885C-19705A0E686B'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='C9B60122-466C-4A25-A1E3-1A5E946468A5'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='B17D9FF8-B28C-40A9-8779-1B3D7A9D64C1'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='F1F881FD-83AF-444E-9331-1D6AC7CD60C9'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='E9E29C50-0E3E-4F3B-A0A8-1DEB5BA7352F'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='8C1612BC-D8CD-4878-8D5D-1E330EE8C136'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='F298779D-2417-4B2D-B6B8-1F9DF9ACF481'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='3D8A27C6-920F-462B-8730-1FA91DA9F78C'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='0CC3F7F0-F583-4920-BAA9-2024284ACD10'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='40A0BA63-3AF9-49AE-A42C-20E43005B36D'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='51A92FD5-7639-46DD-ACCC-215305E46BC0'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='6E68497F-D4AF-4F51-A9F7-251F7E2F680C'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='31476A55-FAD6-4D5A-AFC6-266294BEE0A4'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='FD6E5FF6-8907-4A2D-B3DF-28FCC659A189'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='74B23392-139D-4DFB-A808-29B9A1265214'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='EB4DDD20-CE13-417B-B110-2A54E1D471D5'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='780BB947-1124-4F6F-B55C-2B02DBB03C64'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='DB2BB56C-5AF5-499B-ACC5-2BCF29123E6C'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='BED66095-78F5-46E5-B277-2CA5EE7ADB2D'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='D9B99E47-1714-450A-8DB1-2D3913AC90CB'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='03F7D2EA-504E-4B31-9099-30CA9ECD2AFA'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='B4C42BFD-7AD4-41EF-B650-31A135C660CE'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='43724DE8-93CB-411C-A9FE-322A62756D04'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='C8F59411-D74F-4E93-B70F-370C6B297E96'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='0BAF5091-398D-408D-81D9-3763695DBD7A'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='1F831A35-8944-4E9A-B459-38364DF365EA'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='D1650A52-B6E0-415B-9781-38504BE570AC'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='75830250-D95D-4187-B8CD-38A110D1A832'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='7CC73413-02B9-4F8B-AA3F-38B082ABC706'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='751A3383-7398-469F-A35F-3A86A08D8FCD'</where>
+			</delete>
+			<delete tableName="challenge_referral">
+				<where>id='5044BF0F-3EB1-47E5-9D30-3B60B7ED63BB'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	    <changeSet id="create reference data - challenge_challenge_referral" author="daniel.bower">
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="DE726C30-95A9-4E5A-BC0E-A86277BA9CE1" />
+                <column name="challenge_id" value="07b5c3ac-3bdf-4d12-b65d-94cb55167998" />
+                <column name="challenge_referral_id" value="EB4DDD20-CE13-417B-B110-2A54E1D471D5" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="D422EC7D-BFCE-4D11-9377-06A70C85B3C1" />
+                <column name="challenge_id" value="07b5c3ac-3bdf-4d12-b65d-94cb55167998" />
+                <column name="challenge_referral_id" value="6E68497F-D4AF-4F51-A9F7-251F7E2F680C" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="AB7920C0-656D-4568-97C6-7837422BFB71" />
+                <column name="challenge_id" value="33c6207a-3302-405f-8a2e-9d9bd750dac0" />
+                <column name="challenge_referral_id" value="8C1612BC-D8CD-4878-8D5D-1E330EE8C136" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="9372770E-B734-408E-9811-BE98CBCCC6ED" />
+                <column name="challenge_id" value="cab7d5a5-2ca5-4af7-a644-b3882ddc9b41" />
+                <column name="challenge_referral_id" value="BED66095-78F5-46E5-B277-2CA5EE7ADB2D" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="DE19E6BB-6AC7-46CE-837E-BC5F0C5CC56A" />
+                <column name="challenge_id" value="cab7d5a5-2ca5-4af7-a644-b3882ddc9b41" />
+                <column name="challenge_referral_id" value="E218AD4A-4797-4818-89A9-0B0580DB4274" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="90556835-2033-4F18-9B89-BE61C17AF9A8" />
+                <column name="challenge_id" value="6e4b6a6c-8b67-48df-ac7f-c9f225e872b8" />
+                <column name="challenge_referral_id" value="FE7CE526-758F-4A2A-838A-1482ADECEC6B" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="38C6EDBD-920E-43B7-9496-AAD2162379A0" />
+                <column name="challenge_id" value="6e4b6a6c-8b67-48df-ac7f-c9f225e872b8" />
+                <column name="challenge_referral_id" value="19FBEC43-8C0B-478B-9D5F-00EC6EC57511" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="0027AF30-2394-4E13-816F-36969C506A1B" />
+                <column name="challenge_id" value="af7e472c-3b7c-4d00-a667-04f52f560940" />
+                <column name="challenge_referral_id" value="19FBEC43-8C0B-478B-9D5F-00EC6EC57511" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="BABEF2F7-84C2-4947-AF92-386B79876436" />
+                <column name="challenge_id" value="af7e472c-3b7c-4d00-a667-04f52f560940" />
+                <column name="challenge_referral_id" value="75E20872-17C8-436E-A3C0-07319F818C26" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="BCA01BA2-8844-49C7-913D-093541D24374" />
+                <column name="challenge_id" value="dbb8741c-ece0-4830-8ebf-774151cb6a1b" />
+                <column name="challenge_referral_id" value="1086F9D4-90DA-418C-A106-004E29490093" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="85272573-C1F4-4038-B129-43D4D41D0D81" />
+                <column name="challenge_id" value="dbb8741c-ece0-4830-8ebf-774151cb6a1b" />
+                <column name="challenge_referral_id" value="56AA29EF-E13E-4A26-B151-16E0CB1F9E86" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="F7AA5DBB-A842-4A3D-83E7-526DEB6B3C0C" />
+                <column name="challenge_id" value="7c0e5b76-9933-484a-b265-58cb280305a5" />
+                <column name="challenge_referral_id" value="C9B60122-466C-4A25-A1E3-1A5E946468A5" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="92109505-C2AC-4B78-9C2D-718FBCAB4D7C" />
+                <column name="challenge_id" value="70693703-b2c1-4d3c-b79f-e43e93393b8c" />
+                <column name="challenge_referral_id" value="03F7D2EA-504E-4B31-9099-30CA9ECD2AFA" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="B72584C1-DFE7-449D-901F-2FC6420FC7CA" />
+                <column name="challenge_id" value="7c0e5b76-9933-484a-b265-58cb280305a5" />
+                <column name="challenge_referral_id" value="660DA4FF-7B02-4FA0-B0DA-160E488B947B" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="444A1A6B-B9D9-4234-83BA-25EEF5B9A734" />
+                <column name="challenge_id" value="7c0e5b76-9933-484a-b265-58cb280305a5" />
+                <column name="challenge_referral_id" value="C72EF7EF-EA06-4282-92AD-17153E136BB5" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="48879DA5-7E90-4663-8BA1-817601FBDA45" />
+                <column name="challenge_id" value="7c0e5b76-9933-484a-b265-58cb280305a5" />
+                <column name="challenge_referral_id" value="DB9229FE-2511-4939-8F9A-18D17E674E0C" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="FA1CCAFC-45D7-46B9-A61B-D6072A105DAD" />
+                <column name="challenge_id" value="7c0e5b76-9933-484a-b265-58cb280305a5" />
+                <column name="challenge_referral_id" value="56AA29EF-E13E-4A26-B151-16E0CB1F9E86" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="2BC2CA93-794D-4BF3-A661-DF75655B7272" />
+                <column name="challenge_id" value="7c0e5b76-9933-484a-b265-58cb280305a5" />
+                <column name="challenge_referral_id" value="D9B99E47-1714-450A-8DB1-2D3913AC90CB" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="E7FA9A56-3BFF-4C0C-A6C8-5883D11DAEE8" />
+                <column name="challenge_id" value="43719c57-ec92-4e4a-9fb6-25208936fd18" />
+                <column name="challenge_referral_id" value="B4C42BFD-7AD4-41EF-B650-31A135C660CE" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="1BCA626A-7C9A-46C3-9149-7D4E3ECF1831" />
+                <column name="challenge_id" value="43719c57-ec92-4e4a-9fb6-25208936fd18" />
+                <column name="challenge_referral_id" value="A81A21B6-BFD7-4FD3-A07E-04025A078A7D" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="506513A3-C620-4A6B-91E1-DB6AA353FC56" />
+                <column name="challenge_id" value="43719c57-ec92-4e4a-9fb6-25208936fd18" />
+                <column name="challenge_referral_id" value="19FBEC43-8C0B-478B-9D5F-00EC6EC57511" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="468599DF-9187-481D-8A04-CD1999847B35" />
+                <column name="challenge_id" value="fb206a68-78db-489d-9d5d-dce554f54eed" />
+                <column name="challenge_referral_id" value="751A3383-7398-469F-A35F-3A86A08D8FCD" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="E1766186-3804-43F0-A1CF-F201FED83693" />
+                <column name="challenge_id" value="fb206a68-78db-489d-9d5d-dce554f54eed" />
+                <column name="challenge_referral_id" value="DE37299C-FEAC-4E71-9583-13A91C44370C" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="AB27B1C6-FA6B-4910-99AC-F88CAA82BC9B" />
+                <column name="challenge_id" value="fb206a68-78db-489d-9d5d-dce554f54eed" />
+                <column name="challenge_referral_id" value="D1650A52-B6E0-415B-9781-38504BE570AC" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="1B739896-DDCE-4AB2-8885-EF97405DBD4E" />
+                <column name="challenge_id" value="22d23035-74f0-40f1-ac41-47a22c798af7" />
+                <column name="challenge_referral_id" value="B17D9FF8-B28C-40A9-8779-1B3D7A9D64C1" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="B50BDE11-7E7A-4C70-8DE4-01749070AB76" />
+                <column name="challenge_id" value="72de7c95-eab3-46b2-93cf-108397befcbb" />
+                <column name="challenge_referral_id" value="FD01167F-F99C-456B-80AD-0FC44A99AC24" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="DBF75920-4920-4C32-AFF8-F27F337E1A8B" />
+                <column name="challenge_id" value="609527d4-e768-4caa-a65a-2bb3f3da2948" />
+                <column name="challenge_referral_id" value="03F7D2EA-504E-4B31-9099-30CA9ECD2AFA" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="3761E01F-09B2-48FD-8A36-EAA3B274E26E" />
+                <column name="challenge_id" value="615225df-c3b7-4ae2-a828-6fad663c629b" />
+                <column name="challenge_referral_id" value="19FBEC43-8C0B-478B-9D5F-00EC6EC57511" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="8B7FC34B-0BDA-4FF9-B057-C575C20CD5AB" />
+                <column name="challenge_id" value="c1428288-ec1e-432e-87df-6567d9618f42" />
+                <column name="challenge_referral_id" value="FD6E5FF6-8907-4A2D-B3DF-28FCC659A189" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="D5C16285-4AA9-455F-9146-3C85DD655D47" />
+                <column name="challenge_id" value="c1428288-ec1e-432e-87df-6567d9618f42" />
+                <column name="challenge_referral_id" value="19FBEC43-8C0B-478B-9D5F-00EC6EC57511" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="57BA86E7-DF5D-4E05-B212-5C4FEF9190CC" />
+                <column name="challenge_id" value="6c34e91c-3ef3-4b3f-8061-fab1b7ff59ca" />
+                <column name="challenge_referral_id" value="43724DE8-93CB-411C-A9FE-322A62756D04" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="BCFC0DA3-5A47-4A70-9DA4-AED7C6706164" />
+                <column name="challenge_id" value="6c34e91c-3ef3-4b3f-8061-fab1b7ff59ca" />
+                <column name="challenge_referral_id" value="DB2BB56C-5AF5-499B-ACC5-2BCF29123E6C" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="9F0EC135-C854-4ED5-8C63-AAAE6F3DF844" />
+                <column name="challenge_id" value="6c34e91c-3ef3-4b3f-8061-fab1b7ff59ca" />
+                <column name="challenge_referral_id" value="B1B323BE-41EA-437F-BF2F-03AD0BD758F2" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="B6A4A07D-15DF-4C5F-AC73-A37CE6B814A2" />
+                <column name="challenge_id" value="eb0dc2c0-3157-43c1-8b2e-55a5c2e2f4c3" />
+                <column name="challenge_referral_id" value="BED66095-78F5-46E5-B277-2CA5EE7ADB2D" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="BE7155F9-07B1-49EA-A942-4F206EE73184" />
+                <column name="challenge_id" value="eb0dc2c0-3157-43c1-8b2e-55a5c2e2f4c3" />
+                <column name="challenge_referral_id" value="D1650A52-B6E0-415B-9781-38504BE570AC" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="BEDC8A8C-FCA2-463F-9FEF-4A02C313CB72" />
+                <column name="challenge_id" value="eb0dc2c0-3157-43c1-8b2e-55a5c2e2f4c3" />
+                <column name="challenge_referral_id" value="E218AD4A-4797-4818-89A9-0B0580DB4274" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="509F6D0A-8ADE-4D03-AC26-B2A912D26A02" />
+                <column name="challenge_id" value="431abcf2-43fe-4d6a-8f83-b47c91157a15" />
+                <column name="challenge_referral_id" value="E218AD4A-4797-4818-89A9-0B0580DB4274" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="17485780-91A6-42AA-88A9-70804DE24FB8" />
+                <column name="challenge_id" value="38f7ae25-902f-4381-851e-2e2319adb1bd" />
+                <column name="challenge_referral_id" value="C8F59411-D74F-4E93-B70F-370C6B297E96" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="47BDB8DC-33C9-43E6-A895-153A652ED978" />
+                <column name="challenge_id" value="38f7ae25-902f-4381-851e-2e2319adb1bd" />
+                <column name="challenge_referral_id" value="DB9229FE-2511-4939-8F9A-18D17E674E0C" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <insert tableName="challenge_challenge_referral">
+                <column name="id" value="A4C97BCE-B022-40E1-BC59-D4F37F490A37" />
+                <column name="challenge_id" value="43719c57-ec92-4e4a-9fb6-25208936fd18" />
+                <column name="challenge_referral_id" value="19FBEC43-8C0B-478B-9D5F-00EC6EC57511" />
+                <column name="created_date" valueDate="2012-03-20T00:00:00" />
+                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            </insert>
+        <rollback>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='DE726C30-95A9-4E5A-BC0E-A86277BA9CE1'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='D422EC7D-BFCE-4D11-9377-06A70C85B3C1'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='AB7920C0-656D-4568-97C6-7837422BFB71'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='9372770E-B734-408E-9811-BE98CBCCC6ED'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='DE19E6BB-6AC7-46CE-837E-BC5F0C5CC56A'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='90556835-2033-4F18-9B89-BE61C17AF9A8'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='38C6EDBD-920E-43B7-9496-AAD2162379A0'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='0027AF30-2394-4E13-816F-36969C506A1B'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='BABEF2F7-84C2-4947-AF92-386B79876436'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='BCA01BA2-8844-49C7-913D-093541D24374'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='85272573-C1F4-4038-B129-43D4D41D0D81'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='F7AA5DBB-A842-4A3D-83E7-526DEB6B3C0C'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='92109505-C2AC-4B78-9C2D-718FBCAB4D7C'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='B72584C1-DFE7-449D-901F-2FC6420FC7CA'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='444A1A6B-B9D9-4234-83BA-25EEF5B9A734'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='48879DA5-7E90-4663-8BA1-817601FBDA45'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='FA1CCAFC-45D7-46B9-A61B-D6072A105DAD'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='2BC2CA93-794D-4BF3-A661-DF75655B7272'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='E7FA9A56-3BFF-4C0C-A6C8-5883D11DAEE8'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='1BCA626A-7C9A-46C3-9149-7D4E3ECF1831'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='506513A3-C620-4A6B-91E1-DB6AA353FC56'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='468599DF-9187-481D-8A04-CD1999847B35'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='E1766186-3804-43F0-A1CF-F201FED83693'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='AB27B1C6-FA6B-4910-99AC-F88CAA82BC9B'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='1B739896-DDCE-4AB2-8885-EF97405DBD4E'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='B50BDE11-7E7A-4C70-8DE4-01749070AB76'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='DBF75920-4920-4C32-AFF8-F27F337E1A8B'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='3761E01F-09B2-48FD-8A36-EAA3B274E26E'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='8B7FC34B-0BDA-4FF9-B057-C575C20CD5AB'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='D5C16285-4AA9-455F-9146-3C85DD655D47'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='57BA86E7-DF5D-4E05-B212-5C4FEF9190CC'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='BCFC0DA3-5A47-4A70-9DA4-AED7C6706164'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='9F0EC135-C854-4ED5-8C63-AAAE6F3DF844'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='B6A4A07D-15DF-4C5F-AC73-A37CE6B814A2'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='BE7155F9-07B1-49EA-A942-4F206EE73184'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='BEDC8A8C-FCA2-463F-9FEF-4A02C313CB72'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='509F6D0A-8ADE-4D03-AC26-B2A912D26A02'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='17485780-91A6-42AA-88A9-70804DE24FB8'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='47BDB8DC-33C9-43E6-A895-153A652ED978'</where>
+                    </delete>
+            <delete tableName="challenge_challenge_referral">
+                        <where>id='A4C97BCE-B022-40E1-BC59-D4F37F490A37'</where>
+                    </delete>
+            
+        </rollback>
+    </changeSet>
 	
 	<!-- Add SelfHelpGuideResponse table -->
 	<!-- Add SelfHelpGuideQuestionResponse table -->

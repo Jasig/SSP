@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 
 /**
  * Challenge reference object.
@@ -68,7 +69,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	/**
 	 * This is the text that will be used in a selfHelpGuideQuestion.
 	 */
-	@Column(length = 255)
+	@Column(length = 64000)
 	private String selfHelpGuideQuestion;
 
 	/**
@@ -81,9 +82,13 @@ public class Challenge extends AbstractReference implements Serializable {
 
 	/**
 	 * Public description of the challenge
+	 * 
+	 * :TODO possibly rename to publicDescription
+	 * 
+	 * Optional, null allowed, max length 64000 characters.
 	 */
-	// :TODO possibly rename to publicDescription
-	@Column(length = 1000)
+	@Column(nullable = true, length = 64000)
+	@Size(max = 64000)
 	private String selfHelpGuideDescription;
 
 	@Column(nullable = false)
