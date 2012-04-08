@@ -3689,5 +3689,48 @@
 	
 	<!-- Create message tables -->
 	
+	<changeSet author='jon.adams' id='Add referral table'>
+		<createTable tableName="referral">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="character varying(150)">
+				<constraints nullable="true" />
+			</column>
+			<column name="public_description" type="character varying(150)">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="referral_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="referral_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on referral to ssp</sql>
+		<rollback>
+			<dropTable tableName="referral" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
 	
 </databaseChangeLog>

@@ -7,44 +7,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.reference.CategoryDao;
+import edu.sinclair.ssp.dao.reference.ReferralDao;
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.Category;
+import edu.sinclair.ssp.model.reference.Referral;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.reference.CategoryService;
+import edu.sinclair.ssp.service.reference.ReferralService;
 
 @Service
 @Transactional
-public class CategoryServiceImpl implements CategoryService {
+public class ReferralServiceImpl implements ReferralService {
 
 	@Autowired
-	transient private CategoryDao dao;
+	transient private ReferralDao dao;
 
 	@Override
-	public List<Category> getAll(final ObjectStatus status,
+	public List<Referral> getAll(final ObjectStatus status,
 			final Integer firstResult, final Integer maxResults,
 			final String sort, final String sortDirection) {
 		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
 	}
 
 	@Override
-	public Category get(final UUID id) throws ObjectNotFoundException {
-		final Category obj = dao.get(id);
+	public Referral get(final UUID id) throws ObjectNotFoundException {
+		final Referral obj = dao.get(id);
 		if (null == obj) {
-			throw new ObjectNotFoundException(id, "Category");
+			throw new ObjectNotFoundException(id, "Referral");
 		}
 
 		return obj;
 	}
 
 	@Override
-	public Category create(final Category obj) {
+	public Referral create(final Referral obj) {
 		return dao.save(obj);
 	}
 
 	@Override
-	public Category save(final Category obj) throws ObjectNotFoundException {
-		Category current = get(obj.getId());
+	public Referral save(final Referral obj) throws ObjectNotFoundException {
+		Referral current = get(obj.getId());
 
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
@@ -55,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void delete(final UUID id) throws ObjectNotFoundException {
-		Category current = get(id);
+		Referral current = get(id);
 
 		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
@@ -63,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 	}
 
-	protected void setDao(final CategoryDao dao) {
+	protected void setDao(final ReferralDao dao) {
 		this.dao = dao;
 	}
 }
