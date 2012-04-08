@@ -39,7 +39,7 @@ import org.hibernate.annotations.Type;
  * @author daniel.bower
  */
 @MappedSuperclass
-public abstract class Auditable {
+public class Auditable {
 	@Id
 	@Type(type = "pg-uuid")
 	@GeneratedValue(generator = "uuid")
@@ -96,6 +96,9 @@ public abstract class Auditable {
 	@Column(nullable = false)
 	private ObjectStatus objectStatus;
 
+	/**
+	 * Empty constructor.
+	 */
 	public Auditable() {
 	}
 
@@ -115,7 +118,7 @@ public abstract class Auditable {
 		return createdDate == null ? null : new Date(createdDate.getTime());
 	}
 
-	public void setCreatedDate(Date createdDate) {
+	public void setCreatedDate(final Date createdDate) {
 		this.createdDate = createdDate == null ? null : new Date(
 				createdDate.getTime());
 	}
@@ -124,7 +127,7 @@ public abstract class Auditable {
 		return createdBy;
 	}
 
-	public void setCreatedBy(Person createdBy) {
+	public void setCreatedBy(final Person createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -132,7 +135,7 @@ public abstract class Auditable {
 		return modifiedDate == null ? null : new Date(modifiedDate.getTime());
 	}
 
-	public void setModifiedDate(Date modifiedDate) {
+	public void setModifiedDate(final Date modifiedDate) {
 		this.modifiedDate = modifiedDate == null ? null : new Date(
 				modifiedDate.getTime());
 	}
@@ -141,7 +144,7 @@ public abstract class Auditable {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(Person modifiedBy) {
+	public void setModifiedBy(final Person modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -149,16 +152,12 @@ public abstract class Auditable {
 		return objectStatus;
 	}
 
-	public void setObjectStatus(ObjectStatus objectStatus) {
+	public void setObjectStatus(final ObjectStatus objectStatus) {
 		this.objectStatus = objectStatus;
 	}
 
 	@Override
 	public String toString() {
-		if (null != id) {
-			return id.toString();
-		} else {
-			return super.toString();
-		}
+		return id == null ? super.toString() : id.toString();
 	}
 }

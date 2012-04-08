@@ -106,7 +106,7 @@ public class Challenge extends AbstractReference implements Serializable {
 		return selfHelpGuideQuestion;
 	}
 
-	public void setSelfHelpGuideQuestion(String selfHelpGuideQuestion) {
+	public void setSelfHelpGuideQuestion(final String selfHelpGuideQuestion) {
 		this.selfHelpGuideQuestion = selfHelpGuideQuestion;
 	}
 
@@ -114,7 +114,8 @@ public class Challenge extends AbstractReference implements Serializable {
 		return selfHelpGuideDescription;
 	}
 
-	public void setSelfHelpGuideDescription(String selfHelpGuideDescription) {
+	public void setSelfHelpGuideDescription(
+			final String selfHelpGuideDescription) {
 		this.selfHelpGuideDescription = selfHelpGuideDescription;
 	}
 
@@ -122,7 +123,7 @@ public class Challenge extends AbstractReference implements Serializable {
 		return showInStudentIntake;
 	}
 
-	public void setShowInStudentIntake(boolean showInStudentIntake) {
+	public void setShowInStudentIntake(final boolean showInStudentIntake) {
 		this.showInStudentIntake = showInStudentIntake;
 	}
 
@@ -130,7 +131,7 @@ public class Challenge extends AbstractReference implements Serializable {
 		return showInSelfHelpSearch;
 	}
 
-	public void setShowInSelfHelpSearch(boolean showInSelfHelpSearch) {
+	public void setShowInSelfHelpSearch(final boolean showInSelfHelpSearch) {
 		this.showInSelfHelpSearch = showInSelfHelpSearch;
 	}
 
@@ -139,7 +140,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	}
 
 	public void setSelfHelpGuideQuestions(
-			Set<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
+			final Set<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
 		this.selfHelpGuideQuestions = selfHelpGuideQuestions;
 	}
 
@@ -148,7 +149,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	}
 
 	public void setChallengeChallengeReferrals(
-			Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
+			final Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
 		this.challengeChallengeReferrals = challengeChallengeReferrals;
 	}
 
@@ -156,7 +157,7 @@ public class Challenge extends AbstractReference implements Serializable {
 		return tags;
 	}
 
-	public void setTags(String tags) {
+	public void setTags(final String tags) {
 		this.tags = tags;
 	}
 }

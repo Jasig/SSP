@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -21,20 +20,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.reference.Challenge;
+import edu.sinclair.ssp.model.reference.Category;
 import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
-public class ChallengeDaoTest {
+public class CategoryDaoTest {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ChallengeDaoTest.class);
+			.getLogger(CategoryDaoTest.class);
 
 	@Autowired
-	transient private ChallengeDao dao;
+	transient private CategoryDao dao;
 
 	@Autowired
 	transient private SecurityServiceInTestEnvironment securityService;
@@ -48,11 +47,9 @@ public class ChallengeDaoTest {
 	public void testSaveNew() {
 		UUID saved;
 
-		Challenge obj = new Challenge();
+		Category obj = new Category();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setShowInSelfHelpSearch(false);
-		obj.setShowInStudentIntake(false);
 		dao.save(obj);
 
 		assertNotNull("obj.id should not have been null.", obj.getId());
@@ -65,9 +62,9 @@ public class ChallengeDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		final List<Challenge> all = dao.getAll(ObjectStatus.ACTIVE);
+		List<Category> all = dao.getAll(ObjectStatus.ACTIVE);
 		assertNotNull(all);
-		assertTrue(all.size() > 0);
+		assertTrue(!all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);
@@ -75,26 +72,26 @@ public class ChallengeDaoTest {
 
 	@Test
 	public void testNull() {
-		UUID id = UUID.randomUUID();
-		Challenge challenge = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		Category category = dao.get(id);
 
-		assertNull(challenge);
+		assertNull(category);
 	}
 
-	private void assertList(List<Challenge> objects) {
-		for (Challenge object : objects) {
+	private void assertList(List<Category> objects) {
+		for (Category object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		Challenge obj = new Challenge();
+		Category obj = new Category();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		Challenge obj2 = new Challenge();
+		Category obj2 = new Category();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);
@@ -104,30 +101,6 @@ public class ChallengeDaoTest {
 
 		dao.delete(obj);
 		dao.delete(obj2);
-	}
-
-	@Test
-	public void searchByQuery() {
-		String filter = "issue";
-
-		List<Challenge> challenges = dao.searchByQuery(filter);
-		assertList(challenges);
-		assertTrue(!challenges.isEmpty());
-
-		LOGGER.debug(Integer.toString(challenges.size()));
-	}
-
-	@Test
-	public void getAllInStudentIntake() {
-		List<Challenge> challenges = dao.getAllInStudentIntake();
-		assertList(challenges);
-		assertTrue(!challenges.isEmpty());
-	}
-
-	@Ignore
-	@Test
-	public void selectAffirmativeBySelfHelpGuideResponseId() {
-
 	}
 
 }
