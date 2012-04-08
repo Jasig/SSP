@@ -1,72 +1,49 @@
 package edu.sinclair.ssp.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import edu.sinclair.ssp.model.reference.SelfHelpGuide;
 
 @Entity
-@Table(name = "SelfHelpGuideResponse", schema = "dbo")
-public class SelfHelpGuideResponse implements Serializable {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class SelfHelpGuideResponse extends Auditable implements Serializable {
+
 	private static final long serialVersionUID = -1245736694871363293L;
 
-	@Id
-	@Column(name = "id", unique = true, nullable = false)
-	private UUID id;
-
-	@Column(name = "completed", nullable = false)
+	@Column(nullable = false)
 	private boolean completed;
 
-	@Column(name = "cancelled", nullable = false)
+	@Column(nullable = false)
 	private boolean cancelled;
 
-	@Column(name = "earlyAlertSent", nullable = false)
+	@Column(nullable = false)
 	private boolean earlyAlertSent;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "createdDate", nullable = false, length = 23)
-	private Date createdDate;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "personId", nullable = false)
+	/**
+	 * Associated person. Changes to this Person are not persisted.
+	 */
+	@ManyToOne
+	@JoinColumn(name = "person_id")
 	private Person person;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "selfHelpGuideId", nullable = false)
+	@JoinColumn(name = "self_help_guide_id", nullable = false)
 	private SelfHelpGuide selfHelpGuide;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "selfHelpGuideResponse")
 	private Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = new HashSet<SelfHelpGuideQuestionResponse>(
 			0);
-
-	public SelfHelpGuideResponse() {
-	}
-
-	public SelfHelpGuideResponse(UUID id) {
-		this.id = id;
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
 
 	public boolean isCompleted() {
 		return completed;
@@ -90,16 +67,6 @@ public class SelfHelpGuideResponse implements Serializable {
 
 	public void setEarlyAlertSent(boolean earlyAlertSent) {
 		this.earlyAlertSent = earlyAlertSent;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate == null ? null : new Date(createdDate.getTime());
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate == null ? null : new Date(
-				createdDate.getTime());
-		;
 	}
 
 	public Person getPerson() {

@@ -1,25 +1,24 @@
 package edu.sinclair.ssp.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.ForeignKey;
 
 import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.model.reference.ChallengeReferral;
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Task extends AbstractTask {
 
 	@ManyToOne
-	@ForeignKey(name = "FK_TaskRoadmap_Challenge")
-	@JoinColumn(name = "challengeId", updatable = false)
+	@JoinColumn(name = "challenge_id", updatable = false)
 	private Challenge challenge;
 
 	@ManyToOne
-	@ForeignKey(name = "FK_TaskRoadmap_ChallengeReferral")
-	@JoinColumn(name = "challengeReferralId", updatable = false)
+	@JoinColumn(name = "challenge_referral_id", updatable = false)
 	private ChallengeReferral challengeReferral;
 
 	public Challenge getChallenge() {

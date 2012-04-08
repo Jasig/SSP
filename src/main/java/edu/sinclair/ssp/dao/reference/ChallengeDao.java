@@ -24,6 +24,7 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 	}
 
 	@SuppressWarnings("unchecked")
+	// :TODO paging?
 	public List<Challenge> selectAffirmativeBySelfHelpGuideResponseId(
 			final UUID selfHelpGuideResponseId) {
 		return sessionFactory
@@ -36,7 +37,8 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 								+ "where shgqr.response = true "
 								+ "and shgqr.selfHelpGuideResponse.id = ? "
 								+ "order by c.name")
-				.setParameter(0, selfHelpGuideResponseId).list();
+				.setParameter(0, selfHelpGuideResponseId)
+				.list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -61,7 +63,8 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 								+ "order by c.name")
 				.setParameter("query",
 						"%" + query.toUpperCase(Locale.getDefault()) + "%")
-				.setParameter("objectStatus", ObjectStatus.ACTIVE).list();
+				.setParameter("objectStatus", ObjectStatus.ACTIVE)
+				.list();
 
 	}
 

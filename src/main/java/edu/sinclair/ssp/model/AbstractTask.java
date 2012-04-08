@@ -8,13 +8,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.ForeignKey;
+import javax.validation.constraints.Size;
 
 @MappedSuperclass
 public abstract class AbstractTask extends Auditable {
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 64000)
+	@Size(max = 64000)
 	private String description;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -32,9 +32,11 @@ public abstract class AbstractTask extends Auditable {
 	@Column(length = 32, updatable = false)
 	private String sessionId;
 
+	/**
+	 * Associated person. Changes to this Person are not persisted.
+	 */
 	@ManyToOne
-	@ForeignKey(name = "FK_Task_Person_0")
-	@JoinColumn(updatable = false)
+	@JoinColumn(name = "person_id")
 	private Person person;
 
 	public String getDescription() {

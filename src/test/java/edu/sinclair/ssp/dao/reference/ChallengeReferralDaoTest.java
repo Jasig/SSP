@@ -18,8 +18,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.sinclair.ssp.dao.PersonDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
+import edu.sinclair.ssp.model.reference.Challenge;
 import edu.sinclair.ssp.model.reference.ChallengeReferral;
 import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 
@@ -36,11 +38,24 @@ public class ChallengeReferralDaoTest {
 	private ChallengeReferralDao dao;
 
 	@Autowired
+	private ChallengeDao challengeDao;
+
+	private Challenge testChallenge;
+
+	@Autowired
+	private PersonDao personDao;
+
+	private Person testStudent;
+
+	@Autowired
 	private SecurityServiceInTestEnvironment securityService;
 
 	@Before
 	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+
+		testChallenge = challengeDao.getAll(ObjectStatus.ACTIVE).get(0);
+		testStudent = personDao.fromUsername("ken");
 	}
 
 	@Test
@@ -102,6 +117,36 @@ public class ChallengeReferralDaoTest {
 
 		dao.delete(obj);
 		dao.delete(obj2);
+	}
+
+	@Test
+	public void byChallengeId() {
+		List<ChallengeReferral> crs =
+				dao.byChallengeId(testChallenge.getId());
+		assertList(crs);
+	}
+
+	@Test
+	public void byChallengeIdAndQuery() {
+		List<ChallengeReferral> crs =
+				dao.byChallengeIdAndQuery(testChallenge.getId(), "issue");
+		assertList(crs);
+	}
+
+	@Test
+	public void countByChallengeIdNotOnActiveTaskList() {
+		long count =
+				dao.countByChallengeIdNotOnActiveTaskList(
+						testChallenge.getId(), testStudent, "testSessionId");
+		assertTrue(count > -1);
+	}
+
+	@Test
+	public void byChallengeIdNotOnActiveTaskList() {
+		List<ChallengeReferral> crs =
+				dao.byChallengeIdNotOnActiveTaskList(testChallenge.getId(),
+						testStudent, "testSessionId");
+		assertList(crs);
 	}
 
 }

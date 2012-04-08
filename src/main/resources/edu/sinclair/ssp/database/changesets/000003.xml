@@ -3457,8 +3457,237 @@
 
 	</changeSet>
 
-	<!-- Add SelfHelpGuideResponse table -->
-	<!-- Add SelfHelpGuideQuestionResponse table -->
-	<!-- Add Task and CustomTask Tables -->
+	<changeSet author='daniel.bower' id='Add self_help_guide_response table'>
+		<createTable tableName="self_help_guide_response">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_response_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="self_help_guide_response_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="completed" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="cancelled" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="early_alert_sent" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_response_person_id_person_id" references="person(id)" />
+			</column>
+			<column name="self_help_guide_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="self_help_guide_response_self_help_guide_id_self_help_guide_id"
+					references="self_help_guide(id)" />
+			</column>
+		</createTable>
 
+		<sql>grant all on self_help_guide_response to ssp</sql>
+		<rollback>
+			<dropTable tableName="self_help_guide_response" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+	
+	<changeSet author='daniel.bower' id='Add self_help_guide_question_response table'>
+		<createTable tableName="self_help_guide_question_response">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_question_response_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="self_help_guide_question_response_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="self_help_guide_response_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_question_response_self_help_guide_response_id_self_help_guide_response_id" 
+					references="self_help_guide_response(id)" />
+			</column>
+			<column name="self_help_guide_question_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_question_response_self_help_guide_question_id_self_help_guide_question_id"
+					references="self_help_guide_question(id)" />
+			</column>
+			<column name="response" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="early_alert_sent" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on self_help_guide_question_response to ssp</sql>
+		<rollback>
+			<dropTable tableName="self_help_guide_question_response" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+	
+	<changeSet author='daniel.bower' id='Add task table'>
+		<createTable tableName="task">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="task_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="task_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="false" />
+			</column>
+			<column name="due_date" type="datetime" />
+			<column name="completed_date" type="datetime">
+				<constraints nullable="true"/>
+			</column>
+			<column name="reminder_sent_date" type="datetime">
+				<constraints nullable="true"/>
+			</column>
+			<column name="session_id" type="character varying(32)">
+				<constraints nullable="true" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="task_person_id_person_id" 
+					references="person(id)" />
+			</column>
+			<column name="challenge_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="task_challenge_id_challenge_id" 
+					references="challenge(id)" />
+			</column>
+			<column name="challenge_referral_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="task_challenge_referral_id_challenge_referral_id" 
+					references="challenge_referral(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on task to ssp</sql>
+		<rollback>
+			<dropTable tableName="task" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='daniel.bower' id='Add custom_task table'>
+		<createTable tableName="custom_task">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="custom_task_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="custom_task_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="false" />
+			</column>
+			<column name="due_date" type="datetime" />
+			<column name="completed_date" type="datetime">
+				<constraints nullable="true"/>
+			</column>
+			<column name="reminder_sent_date" type="datetime">
+				<constraints nullable="true"/>
+			</column>
+			<column name="session_id" type="character varying(32)">
+				<constraints nullable="true" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="custom_task_person_person_id" references="person(id)" />
+			</column>
+			<column name="name" type="character varying(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on custom_task to ssp</sql>
+		<rollback>
+			<dropTable tableName="custom_task" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+	
+	<!-- Create message tables -->
+	
+	
 </databaseChangeLog>

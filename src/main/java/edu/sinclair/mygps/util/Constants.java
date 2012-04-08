@@ -1,9 +1,12 @@
 package edu.sinclair.mygps.util;
 
+import java.util.UUID;
+
 public class Constants {
 
 	public static final String ANONYMOUS_PERSON_FIRSTNAME = "Guest";
-	public static final String ANONYMOUS_PERSON_ID = "46DA4CB4-6EB4-4B91-8E39-8F9FA4D85552";
+	public static final UUID ANONYMOUS_PERSON_ID = UUID
+			.fromString("46DA4CB4-6EB4-4B91-8E39-8F9FA4D85552");
 	public static final String ANONYMOUS_PERSON_LASTNAME = "User";
 	public static final String ANONYMOUS_PERSON_USERNAME = "anonymousUser";
 

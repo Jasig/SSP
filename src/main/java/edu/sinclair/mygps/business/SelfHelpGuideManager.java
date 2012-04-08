@@ -236,7 +236,7 @@ public class SelfHelpGuideManager {
 			long count = 0;
 
 			count = challengeReferralDao
-					.selectCountByChallengeNotOnActiveTaskList(challenge
+					.countByChallengeIdNotOnActiveTaskList(challenge
 							.getId(), securityService
 							.currentlyLoggedInSspUser().getPerson(),
 							securityService.getSessionId());
@@ -259,7 +259,7 @@ public class SelfHelpGuideManager {
 		List<ChallengeReferralTO> challengeReferralTOs = new ArrayList<ChallengeReferralTO>();
 
 		for (ChallengeReferral challengeReferral : challengeReferralDao
-				.selectByChallengeNotOnActiveTaskList(challengeId,
+				.byChallengeIdNotOnActiveTaskList(challengeId,
 						securityService.currentlyLoggedInSspUser().getPerson(),
 						securityService.getSessionId())) {
 			challengeReferralTOs
@@ -275,7 +275,7 @@ public class SelfHelpGuideManager {
 		List<ChallengeReferralTO> challengeReferralTOs = new ArrayList<ChallengeReferralTO>();
 
 		for (ChallengeReferral challengeReferral : challengeReferralDao
-				.selectByChallenge(challengeId)) {
+				.byChallengeId(challengeId)) {
 			challengeReferralTOs
 					.add(new ChallengeReferralTO(challengeReferral));
 		}
@@ -289,7 +289,7 @@ public class SelfHelpGuideManager {
 		int count = 0;
 
 		for (ChallengeReferral challengeReferral : challengeReferralDao
-				.searchByChallengeAndQuery(challengeId, query)) {
+				.byChallengeIdAndQuery(challengeId, query)) {
 
 			// Does the referral exist as an active/incomplete task?
 			// Need to check both the tasks created w/in MyGPS as well as those
