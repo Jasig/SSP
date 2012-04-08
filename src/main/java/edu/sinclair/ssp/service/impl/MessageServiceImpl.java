@@ -44,7 +44,7 @@ public class MessageServiceImpl implements MessageService {
 	private String bcc;
 
 	@Value("#{configProperties.send_mail}")
-	private final boolean sendMail = false;
+	private boolean sendMail = false;
 
 	private final Logger LOGGER = LoggerFactory
 			.getLogger(MessageServiceImpl.class);
