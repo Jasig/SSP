@@ -38,8 +38,11 @@ public abstract class AbstractReferenceTO<T extends AbstractReference> extends
 	}
 
 	public AbstractReferenceTO(T model) {
-		super();
-		pullAttributesFromModel(model);
+		super(model.getId());
+		super.fromModel(model);
+
+		setName(model.getName());
+		setDescription(model.getDescription());
 	}
 
 	public void fromModel(AbstractReference model) {

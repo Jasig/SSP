@@ -1,5 +1,6 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +21,8 @@ import edu.sinclair.ssp.model.reference.SelfHelpGuide;
 
 @Entity
 @Table(name = "SelfHelpGuideResponse", schema = "dbo")
-public class SelfHelpGuideResponse {
+public class SelfHelpGuideResponse implements Serializable {
+	private static final long serialVersionUID = -1245736694871363293L;
 
 	@Id
 	@Column(name = "id", unique = true, nullable = false)
@@ -91,11 +93,13 @@ public class SelfHelpGuideResponse {
 	}
 
 	public Date getCreatedDate() {
-		return createdDate;
+		return createdDate == null ? null : new Date(createdDate.getTime());
 	}
 
 	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+		this.createdDate = createdDate == null ? null : new Date(
+				createdDate.getTime());
+		;
 	}
 
 	public Person getPerson() {

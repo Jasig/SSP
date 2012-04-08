@@ -29,7 +29,7 @@ import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class PersonDaoTest {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonDaoTest.class);
 
 	@Autowired
@@ -97,7 +97,7 @@ public class PersonDaoTest {
 		assertNotNull(obj.getId());
 		saved = obj.getId();
 
-		logger.debug(obj.toString());
+		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
 		assertNotNull(obj);

@@ -114,19 +114,21 @@ public class Message {
 	}
 
 	public Date getCreatedDate() {
-		return createdDate;
+		return createdDate == null ? null : new Date(createdDate.getTime());
 	}
 
 	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+		this.createdDate = createdDate == null ? null : new Date(
+				createdDate.getTime());
+		;
 	}
 
 	public Date getSentDate() {
-		return sentDate;
+		return sentDate == null ? null : new Date(sentDate.getTime());
 	}
 
 	public void setSentDate(Date sentDate) {
-		this.sentDate = sentDate;
+		this.sentDate = sentDate == null ? null : new Date(sentDate.getTime());
 	}
 
 }

@@ -51,7 +51,7 @@ public abstract class AbstractReference extends Auditable {
 	 * @param id
 	 *            Identifier; required
 	 */
-	public AbstractReference(@NotNull UUID id) {
+	public AbstractReference(@NotNull final UUID id) {
 		super(id);
 	}
 
@@ -63,7 +63,7 @@ public abstract class AbstractReference extends Auditable {
 	 * @param name
 	 *            Name; required; max 100 characters
 	 */
-	public AbstractReference(@NotNull UUID id, @NotNull String name) {
+	public AbstractReference(@NotNull final UUID id, @NotNull final String name) {
 		super(id);
 		this.name = name;
 	}
@@ -78,8 +78,8 @@ public abstract class AbstractReference extends Auditable {
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public AbstractReference(@NotNull UUID id, @NotNull String name,
-			String description) {
+	public AbstractReference(@NotNull final UUID id,
+			@NotNull final String name, final String description) {
 		super(id);
 		this.name = name;
 		this.description = description;
@@ -95,7 +95,7 @@ public abstract class AbstractReference extends Auditable {
 	 * @param name
 	 *            Name; required; max 100 characters
 	 */
-	public void setName(@NotNull String name) {
+	public void setName(@NotNull final String name) {
 		this.name = name;
 	}
 
@@ -109,7 +109,7 @@ public abstract class AbstractReference extends Auditable {
 	 * @param description
 	 *            Name; null allowed; max 150 characters
 	 */
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -119,9 +119,9 @@ public abstract class AbstractReference extends Auditable {
 	 * @param source
 	 *            Source to use for overwrites.
 	 */
-	public void overwrite(@NotNull AbstractReference source) {
-		this.setName(source.getName());
-		this.setDescription(source.getDescription());
+	public void overwrite(@NotNull final AbstractReference source) {
+		setName(source.getName());
+		setDescription(source.getDescription());
 	}
 
 }

@@ -1,14 +1,20 @@
 package edu.sinclair.ssp.transferobject.reference;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
+
 import edu.sinclair.ssp.model.reference.Challenge;
+import edu.sinclair.ssp.model.reference.ChallengeChallengeReferral;
+import edu.sinclair.ssp.model.reference.SelfHelpGuideQuestion;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
 public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge> {
-
-	private long referralCount;
 
 	public ChallengeTO() {
 		super();
@@ -30,12 +36,133 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		super(model);
 	}
 
-	public long getReferralCount() {
-		return referralCount;
+	public void fromModel(Challenge model) {
+		super.fromModel(model);
+
+		setSelfHelpGuideQuestion(model.getSelfHelpGuideQuestion());
+		setSelfHelpGuideQuestions(model.getSelfHelpGuideQuestions());
+		setSelfHelpGuideDescription(model.getSelfHelpGuideDescription());
+		setShowInStudentIntake(model.isShowInStudentIntake());
+		setShowInSelfHelpSearch(model.isShowInSelfHelpSearch());
+		setChallengeChallengeReferrals(model.getChallengeChallengeReferrals());
+		setTags(model.getTags());
 	}
 
-	public void setReferralCount(long referralCount) {
-		this.referralCount = referralCount;
+	public void addToModel(Challenge model) {
+		super.addToModel(model);
+
+		model.setSelfHelpGuideQuestion(getSelfHelpGuideQuestion());
+		model.setSelfHelpGuideQuestions(getSelfHelpGuideQuestions());
+		model.setSelfHelpGuideDescription(getSelfHelpGuideDescription());
+		model.setShowInStudentIntake(isShowInStudentIntake());
+		model.setShowInSelfHelpSearch(isShowInSelfHelpSearch());
+		model.setChallengeChallengeReferrals(getChallengeChallengeReferrals());
+		model.setTags(getTags());
+	}
+
+	@Override
+	public void pullAttributesFromModel(Challenge model) {
+		fromModel(model);
+	}
+
+	@Override
+	public Challenge pushAttributesToModel(Challenge model) {
+		addToModel(model);
+		return model;
+	}
+
+	/**
+	 * This is the text that will be used in a selfHelpGuideQuestion.
+	 */
+	@Column(length = 64000)
+	private String selfHelpGuideQuestion;
+
+	/**
+	 * Just a reference to the questions that reference this Challenge. Think of
+	 * as selfHelpQuideChallenges
+	 */
+	@OneToMany(mappedBy = "challenge")
+	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
+			0);
+
+	/**
+	 * Public description of the challenge
+	 * 
+	 * Optional, null allowed, max length 64000 characters.
+	 */
+	@Column(nullable = true, length = 64000)
+	@Size(max = 64000)
+	private String selfHelpGuideDescription;
+
+	@Column(nullable = false)
+	private boolean showInStudentIntake;
+
+	@Column(nullable = false)
+	private boolean showInSelfHelpSearch;
+
+	@OneToMany(mappedBy = "challenge")
+	private Set<ChallengeChallengeReferral> challengeChallengeReferrals = new HashSet<ChallengeChallengeReferral>(
+			0);
+
+	@Column(length = 255)
+	private String tags;
+
+	public String getSelfHelpGuideQuestion() {
+		return selfHelpGuideQuestion;
+	}
+
+	public void setSelfHelpGuideQuestion(String selfHelpGuideQuestion) {
+		this.selfHelpGuideQuestion = selfHelpGuideQuestion;
+	}
+
+	public String getSelfHelpGuideDescription() {
+		return selfHelpGuideDescription;
+	}
+
+	public void setSelfHelpGuideDescription(String selfHelpGuideDescription) {
+		this.selfHelpGuideDescription = selfHelpGuideDescription;
+	}
+
+	public boolean isShowInStudentIntake() {
+		return showInStudentIntake;
+	}
+
+	public void setShowInStudentIntake(boolean showInStudentIntake) {
+		this.showInStudentIntake = showInStudentIntake;
+	}
+
+	public boolean isShowInSelfHelpSearch() {
+		return showInSelfHelpSearch;
+	}
+
+	public void setShowInSelfHelpSearch(boolean showInSelfHelpSearch) {
+		this.showInSelfHelpSearch = showInSelfHelpSearch;
+	}
+
+	public Set<SelfHelpGuideQuestion> getSelfHelpGuideQuestions() {
+		return selfHelpGuideQuestions;
+	}
+
+	public void setSelfHelpGuideQuestions(
+			Set<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
+		this.selfHelpGuideQuestions = selfHelpGuideQuestions;
+	}
+
+	public Set<ChallengeChallengeReferral> getChallengeChallengeReferrals() {
+		return challengeChallengeReferrals;
+	}
+
+	public void setChallengeChallengeReferrals(
+			Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
+		this.challengeChallengeReferrals = challengeChallengeReferrals;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 	@Override

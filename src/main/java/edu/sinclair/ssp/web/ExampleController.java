@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/example")
 public class ExampleController {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExampleController.class);
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -26,7 +26,7 @@ public class ExampleController {
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody
 	Map<String, String> get() throws Exception {
-		logger.info("get called");
+		LOGGER.info("get called");
 
 		Map<String, String> val = new HashMap<String, String>();
 		val.put("firstName", "Shawn");

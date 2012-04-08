@@ -23,45 +23,59 @@ public class TaskTO {
 	public void setId(UUID id) {
 		this.id = id;
 	}
+
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public String getDetails() {
 		return details;
 	}
+
 	public void setDetails(String details) {
 		this.details = details;
 	}
+
 	public Date getDueDate() {
-		return dueDate;
+		return dueDate == null ? null : new Date(dueDate.getTime());
 	}
+
 	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
 	}
+
 	public boolean isCompleted() {
 		return completed;
 	}
+
 	public void setCompleted(boolean completed) {
 		this.completed = completed;
 	}
+
 	public boolean isDeletable() {
 		return deletable;
 	}
+
 	public void setDeletable(boolean deletable) {
 		this.deletable = deletable;
 	}

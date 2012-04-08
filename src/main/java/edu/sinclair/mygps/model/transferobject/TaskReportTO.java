@@ -45,7 +45,7 @@ public class TaskReportTO implements Comparable<TaskReportTO> {
 	}
 
 	public Date getDueDate() {
-		return dueDate;
+		return dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
 	public UUID getCreatedBy() {
@@ -57,7 +57,7 @@ public class TaskReportTO implements Comparable<TaskReportTO> {
 	}
 
 	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
 	@Override

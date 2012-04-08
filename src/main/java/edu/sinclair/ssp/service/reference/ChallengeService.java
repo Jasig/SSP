@@ -11,19 +11,18 @@ import edu.sinclair.ssp.service.ObjectNotFoundException;
 public interface ChallengeService extends AuditableCrudService<Challenge> {
 
 	@Override
-	public List<Challenge> getAll(ObjectStatus status, Integer firstResult,
+	List<Challenge> getAll(ObjectStatus status, Integer firstResult,
 			Integer maxResults, String sort, String sortDirection);
 
 	@Override
-	public Challenge get(UUID id) throws ObjectNotFoundException;
+	Challenge get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public Challenge create(Challenge obj);
+	Challenge create(Challenge obj);
 
 	@Override
-	public Challenge save(Challenge obj) throws ObjectNotFoundException;
+	Challenge save(Challenge obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }
