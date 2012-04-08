@@ -25,21 +25,59 @@ import edu.sinclair.ssp.transferobject.reference.AbstractReferenceTO;
 import edu.sinclair.ssp.web.api.RestController;
 import edu.sinclair.ssp.web.api.validation.ValidationException;
 
+/**
+ * Basic REST command implementation to responds with standard transfer objects
+ * in JSON format.
+ * 
+ * @author jon.adams
+ * 
+ * @param <T>
+ *            Model type
+ * @param <TO>
+ *            Transfer object type that handles the model type T.
+ */
 @Controller
 public abstract class AbstractAuditableReferenceController<T extends AbstractReference, TO extends AbstractReferenceTO<T>>
 		extends RestController<TO> {
 
-	protected static final Logger logger = LoggerFactory
+	/**
+	 * Logger
+	 */
+	protected static final Logger LOGGER = LoggerFactory
 			.getLogger(AbstractAuditableReferenceController.class);
 
+	/**
+	 * Service that handles the business logic for the implementing type for T.
+	 */
 	protected AuditableCrudService<T> service;
 
+	/**
+	 * Transfer object factory to create new instances of the specific TO for
+	 * extending classes.
+	 */
 	private final TransferObjectListFactory<TO, T> listFactory;
 
+	/**
+	 * Model class type
+	 */
 	protected Class<T> persistentClass;
 
+	/**
+	 * Transfer object class type
+	 */
 	protected Class<TO> transferObjectClass;
 
+	/**
+	 * Construct a controller with the specified specific service and types.
+	 * 
+	 * @param service
+	 *            Service that handles the business logic for the implementing
+	 *            type for T.
+	 * @param persistentClass
+	 *            Model class type
+	 * @param transferObjectClass
+	 *            Transfer object class type
+	 */
 	protected AbstractAuditableReferenceController(
 			AuditableCrudService<T> service, Class<T> persistentClass,
 			Class<TO> transferObjectClass) {
@@ -60,13 +98,9 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 			@RequestParam(required = false) String sortDirection)
 			throws Exception {
 
-		// Set default of ACTIVE status
-		if (status == null) {
-			status = ObjectStatus.ACTIVE;
-		}
-
-		return listFactory.toTOList(service.getAll(status, start, limit, sort,
-				sortDirection));
+		return listFactory.toTOList(service.getAll(
+				status == null ? ObjectStatus.ACTIVE : status, start, limit,
+				sort, sortDirection));
 	}
 
 	@Override
@@ -138,7 +172,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody
 	ServiceResponse handle(Exception e) {
-		logger.error("Error: ", e);
+		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 }

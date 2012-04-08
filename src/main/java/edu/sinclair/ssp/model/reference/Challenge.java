@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Challenge extends AbstractReference implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5610544634433661561L;
 
 	/**
 	 * Constructor
@@ -35,7 +35,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	 *            Identifier; required
 	 */
 
-	public Challenge(UUID id) {
+	public Challenge(final UUID id) {
 		super(id);
 	}
 
@@ -48,7 +48,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	 *            Name; required; max 100 characters
 	 */
 
-	public Challenge(UUID id, String name) {
+	public Challenge(final UUID id, final String name) {
 		super(id, name);
 	}
 
@@ -62,7 +62,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public Challenge(UUID id, String name, String description) {
+	public Challenge(final UUID id, final String name, final String description) {
 		super(id, name, description);
 	}
 
@@ -77,13 +77,11 @@ public class Challenge extends AbstractReference implements Serializable {
 	 * as selfHelpQuideChallenges
 	 */
 	@OneToMany(mappedBy = "challenge")
-	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions =
-	new HashSet<SelfHelpGuideQuestion>(0);
+	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
+			0);
 
 	/**
 	 * Public description of the challenge
-	 * 
-	 * :TODO possibly rename to publicDescription
 	 * 
 	 * Optional, null allowed, max length 64000 characters.
 	 */
@@ -98,8 +96,8 @@ public class Challenge extends AbstractReference implements Serializable {
 	private boolean showInSelfHelpSearch;
 
 	@OneToMany(mappedBy = "challenge")
-	private Set<ChallengeChallengeReferral> challengeChallengeReferrals =
-	new HashSet<ChallengeChallengeReferral>(0);
+	private Set<ChallengeChallengeReferral> challengeChallengeReferrals = new HashSet<ChallengeChallengeReferral>(
+			0);
 
 	@Column(length = 255)
 	private String tags;
@@ -108,7 +106,7 @@ public class Challenge extends AbstractReference implements Serializable {
 		return selfHelpGuideQuestion;
 	}
 
-	public void setSelfHelpGuideQuestion(String selfHelpGuideQuestion) {
+	public void setSelfHelpGuideQuestion(final String selfHelpGuideQuestion) {
 		this.selfHelpGuideQuestion = selfHelpGuideQuestion;
 	}
 
@@ -116,7 +114,8 @@ public class Challenge extends AbstractReference implements Serializable {
 		return selfHelpGuideDescription;
 	}
 
-	public void setSelfHelpGuideDescription(String selfHelpGuideDescription) {
+	public void setSelfHelpGuideDescription(
+			final String selfHelpGuideDescription) {
 		this.selfHelpGuideDescription = selfHelpGuideDescription;
 	}
 
@@ -124,7 +123,7 @@ public class Challenge extends AbstractReference implements Serializable {
 		return showInStudentIntake;
 	}
 
-	public void setShowInStudentIntake(boolean showInStudentIntake) {
+	public void setShowInStudentIntake(final boolean showInStudentIntake) {
 		this.showInStudentIntake = showInStudentIntake;
 	}
 
@@ -132,7 +131,7 @@ public class Challenge extends AbstractReference implements Serializable {
 		return showInSelfHelpSearch;
 	}
 
-	public void setShowInSelfHelpSearch(boolean showInSelfHelpSearch) {
+	public void setShowInSelfHelpSearch(final boolean showInSelfHelpSearch) {
 		this.showInSelfHelpSearch = showInSelfHelpSearch;
 	}
 
@@ -141,7 +140,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	}
 
 	public void setSelfHelpGuideQuestions(
-			Set<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
+			final Set<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
 		this.selfHelpGuideQuestions = selfHelpGuideQuestions;
 	}
 
@@ -150,7 +149,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	}
 
 	public void setChallengeChallengeReferrals(
-			Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
+			final Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
 		this.challengeChallengeReferrals = challengeChallengeReferrals;
 	}
 
@@ -158,8 +157,7 @@ public class Challenge extends AbstractReference implements Serializable {
 		return tags;
 	}
 
-	public void setTags(String tags) {
+	public void setTags(final String tags) {
 		this.tags = tags;
 	}
-
 }

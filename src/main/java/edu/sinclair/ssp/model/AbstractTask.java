@@ -46,11 +46,13 @@ public abstract class AbstractTask extends Auditable {
 	}
 
 	public Date getCompletedDate() {
-		return completedDate;
+		return completedDate == null ? null : new Date(completedDate.getTime());
 	}
 
 	public void setCompletedDate(Date completedDate) {
-		this.completedDate = completedDate;
+		this.completedDate = completedDate == null ? null : new Date(
+				completedDate.getTime());
+		;
 	}
 
 	public String getSessionId() {
@@ -70,18 +72,22 @@ public abstract class AbstractTask extends Auditable {
 	}
 
 	public Date getReminderSentDate() {
-		return reminderSentDate;
+		return reminderSentDate == null ? null : new Date(
+				reminderSentDate.getTime());
 	}
 
 	public void setReminderSentDate(Date reminderSentDate) {
-		this.reminderSentDate = reminderSentDate;
+		this.reminderSentDate = dueDate == null ? null : new Date(
+				reminderSentDate.getTime());
+		;
 	}
 
 	public Date getDueDate() {
-		return dueDate;
+		return dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
 	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
+		;
 	}
 }

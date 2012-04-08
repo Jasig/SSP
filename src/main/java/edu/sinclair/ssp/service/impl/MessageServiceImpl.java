@@ -44,9 +44,10 @@ public class MessageServiceImpl implements MessageService {
 	private String bcc;
 
 	@Value("#{configProperties.send_mail}")
-	private boolean sendMail = false;
+	private final boolean sendMail = false;
 
-	private Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
+	private final Logger LOGGER = LoggerFactory
+			.getLogger(MessageServiceImpl.class);
 
 	@Override
 	public void setBcc(String bcc) {
@@ -120,24 +121,24 @@ public class MessageServiceImpl implements MessageService {
 	@Transactional(readOnly = false)
 	public void sendQueuedMessages() {
 
-		logger.info("BEGIN : sendQueuedMessages()");
+		LOGGER.info("BEGIN : sendQueuedMessages()");
 
 		try {
 
 			List<Message> messages = messageDao.selectQueued();
 
 			for (Message message : messages) {
-				this.sendMessage(message);
+				sendMessage(message);
 			}
 
 		} catch (Exception e) {
-			logger.error("ERROR : sendQueuedMessages() : {}", e);
+			LOGGER.error("ERROR : sendQueuedMessages() : {}", e);
 		}
 
-		logger.info("END : sendQueuedMessages()");
+		LOGGER.info("END : sendQueuedMessages()");
 	}
 
-	protected boolean validateEmail(String email){
+	protected boolean validateEmail(String email) {
 		EmailValidator emailValidator = EmailValidator.getInstance();
 		return emailValidator.isValid(email);
 	}
@@ -145,34 +146,38 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public boolean sendMessage(Message message) {
 
-		logger.info("BEGIN : sendMessage()");
+		LOGGER.info("BEGIN : sendMessage()");
 
-		logger.info("Sending message: {}", message.getId().toString());
+		LOGGER.info("Sending message: {}", message.getId().toString());
 
 		boolean retVal = true;
 
 		try {
 			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(
+					mimeMessage);
 
 			mimeMessageHelper.setFrom(personService.get(
 					Person.SYSTEM_ADMINISTRATOR_ID).getEmailAddressWithName());
-			mimeMessageHelper.setReplyTo(message.getSender().getEmailAddressWithName());
+			mimeMessageHelper.setReplyTo(message.getSender()
+					.getEmailAddressWithName());
 
 			if (message.getRecipient() != null) {
-				mimeMessageHelper.setTo(message.getRecipient().getEmailAddressWithName());
+				mimeMessageHelper.setTo(message.getRecipient()
+						.getEmailAddressWithName());
 			} else if (message.getRecipientEmailAddress() != null) {
 				mimeMessageHelper.setTo(message.getRecipientEmailAddress());
 			} else {
 				return false;
 			}
 
-			if(!validateEmail(message.getRecipientEmailAddress())){
-				throw new Exception("Recipient Email Address '" + message.getRecipientEmailAddress() + "' is invalid");
+			if (!validateEmail(message.getRecipientEmailAddress())) {
+				throw new Exception("Recipient Email Address '"
+						+ message.getRecipientEmailAddress() + "' is invalid");
 			}
 
-			if ((this.bcc != null) && (this.bcc.length() > 0)) {
-				mimeMessageHelper.setBcc(this.bcc);
+			if ((bcc != null) && (bcc.length() > 0)) {
+				mimeMessageHelper.setBcc(bcc);
 			}
 
 			mimeMessageHelper.setSubject(message.getSubject());
@@ -180,7 +185,7 @@ public class MessageServiceImpl implements MessageService {
 
 			mimeMessage.setContent(message.getBody(), "text/html");
 
-			if(sendMail){
+			if (sendMail) {
 				javaMailSender.send(mimeMessage);
 			}
 
@@ -189,16 +194,16 @@ public class MessageServiceImpl implements MessageService {
 
 		} catch (MailException e) {
 			retVal = false;
-			logger.error("ERROR : sendMessage() : {}", e);
+			LOGGER.error("ERROR : sendMessage() : {}", e);
 		} catch (MessagingException e) {
 			retVal = false;
-			logger.error("ERROR : sendMessage() : {}", e);
+			LOGGER.error("ERROR : sendMessage() : {}", e);
 		} catch (Exception e) {
 			retVal = false;
-			logger.error("ERROR : sendMessage() : {}", e);
+			LOGGER.error("ERROR : sendMessage() : {}", e);
 		}
 
-		logger.info("END : sendMessage()");
+		LOGGER.info("END : sendMessage()");
 
 		return retVal;
 	}

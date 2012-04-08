@@ -20,7 +20,6 @@ import edu.sinclair.mygps.model.transferobject.SelfHelpGuideContentTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideQuestionTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideResponseTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideTO;
-import edu.sinclair.mygps.util.Constants;
 import edu.sinclair.ssp.dao.TaskDao;
 import edu.sinclair.ssp.dao.reference.ChallengeDao;
 import edu.sinclair.ssp.dao.reference.ChallengeReferralDao;
@@ -178,13 +177,6 @@ public class SelfHelpGuideManager {
 				challengeTO.setId(challenge.getId());
 				challengeTO.setName(challenge.getName());
 
-				if (count < Constants.SEARCH_RESULT_COUNT_LIMIT) {
-					challengeTO.setReferralCount(count);
-				} else {
-					challengeTO
-							.setReferralCount(Constants.SEARCH_RESULT_COUNT_LIMIT);
-				}
-
 				challengeTOs.add(challengeTO);
 			}
 		}
@@ -255,7 +247,6 @@ public class SelfHelpGuideManager {
 				challengeTO.setDescription(challenge.getDescription());
 				challengeTO.setId(challenge.getId());
 				challengeTO.setName(challenge.getName());
-				challengeTO.setReferralCount(count);
 
 				challengeTOs.add(challengeTO);
 			}

@@ -7,44 +7,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.reference.ChallengeDao;
+import edu.sinclair.ssp.dao.reference.CategoryDao;
 import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.Challenge;
+import edu.sinclair.ssp.model.reference.Category;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.reference.ChallengeService;
+import edu.sinclair.ssp.service.reference.CategoryService;
 
 @Service
 @Transactional
-public class ChallengeServiceImpl implements ChallengeService {
+public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
-	private ChallengeDao dao;
+	private CategoryDao dao;
 
 	@Override
-	public List<Challenge> getAll(final ObjectStatus status,
+	public List<Category> getAll(final ObjectStatus status,
 			final Integer firstResult, final Integer maxResults,
 			final String sort, final String sortDirection) {
 		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
 	}
 
 	@Override
-	public Challenge get(final UUID id) throws ObjectNotFoundException {
-		Challenge obj = dao.get(id);
+	public Category get(final UUID id) throws ObjectNotFoundException {
+		final Category obj = dao.get(id);
 		if (null == obj) {
-			throw new ObjectNotFoundException(id, "Challenge");
+			throw new ObjectNotFoundException(id, "Category");
 		}
 
 		return obj;
 	}
 
 	@Override
-	public Challenge create(final Challenge obj) {
+	public Category create(final Category obj) {
 		return dao.save(obj);
 	}
 
 	@Override
-	public Challenge save(final Challenge obj) throws ObjectNotFoundException {
-		Challenge current = get(obj.getId());
+	public Category save(final Category obj) throws ObjectNotFoundException {
+		Category current = get(obj.getId());
 
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
@@ -54,8 +54,8 @@ public class ChallengeServiceImpl implements ChallengeService {
 	}
 
 	@Override
-	public void delete(final UUID id) throws ObjectNotFoundException {
-		Challenge current = get(id);
+	public void delete(UUID id) throws ObjectNotFoundException {
+		Category current = get(id);
 
 		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
@@ -63,7 +63,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 		}
 	}
 
-	protected void setDao(final ChallengeDao dao) {
+	protected void setDao(final CategoryDao dao) {
 		this.dao = dao;
 	}
 }

@@ -1,5 +1,7 @@
 package edu.sinclair.ssp.model.reference;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -10,7 +12,10 @@ import edu.sinclair.ssp.model.Auditable;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class ChallengeChallengeReferral extends Auditable {
+public class ChallengeChallengeReferral extends Auditable implements
+		Serializable {
+	private static final long serialVersionUID = -1482715931640054820L;
+
 	@ManyToOne()
 	@JoinColumn(name = "challenge_id", nullable = false)
 	private Challenge challenge;

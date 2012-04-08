@@ -1,5 +1,6 @@
 package edu.sinclair.ssp.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -19,7 +20,8 @@ import edu.sinclair.ssp.model.reference.SelfHelpGuideQuestion;
 
 @Entity
 @Table(name = "SelfHelpGuideQuestionResponse", schema = "dbo")
-public class SelfHelpGuideQuestionResponse {
+public class SelfHelpGuideQuestionResponse implements Serializable {
+	private static final long serialVersionUID = -6385278568384602029L;
 
 	@Id
 	@GenericGenerator(name = "generator", strategy = "guid", parameters = {})
@@ -57,7 +59,8 @@ public class SelfHelpGuideQuestionResponse {
 		return selfHelpGuideResponse;
 	}
 
-	public void setSelfHelpGuideResponse(SelfHelpGuideResponse selfHelpGuideResponse) {
+	public void setSelfHelpGuideResponse(
+			SelfHelpGuideResponse selfHelpGuideResponse) {
 		this.selfHelpGuideResponse = selfHelpGuideResponse;
 	}
 
@@ -65,7 +68,8 @@ public class SelfHelpGuideQuestionResponse {
 		return selfHelpGuideQuestion;
 	}
 
-	public void setSelfHelpGuideQuestion(SelfHelpGuideQuestion selfHelpGuideQuestion) {
+	public void setSelfHelpGuideQuestion(
+			SelfHelpGuideQuestion selfHelpGuideQuestion) {
 		this.selfHelpGuideQuestion = selfHelpGuideQuestion;
 	}
 
@@ -86,11 +90,13 @@ public class SelfHelpGuideQuestionResponse {
 	}
 
 	public Date getCreatedDate() {
-		return createdDate;
+		return createdDate == null ? null : new Date(createdDate.getTime());
 	}
 
 	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+		this.createdDate = createdDate == null ? null : new Date(
+				createdDate.getTime());
+		;
 	}
 
 }

@@ -39,7 +39,7 @@ public class ChallengeControllerHttpIntegrationTest extends
 	 * Controller instance used to run tests.
 	 */
 	@Autowired
-	private ChallengeController controller;
+	private transient ChallengeController controller;
 
 	private static final UUID CHALLENGE_ID = UUID
 			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
@@ -47,7 +47,7 @@ public class ChallengeControllerHttpIntegrationTest extends
 	private static final String CHALLENGE_NAME = "Test Challenge";
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	/**
 	 * Setup the security service with the administrator user.

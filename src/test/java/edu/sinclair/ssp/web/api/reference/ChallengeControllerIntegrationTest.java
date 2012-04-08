@@ -164,4 +164,34 @@ public class ChallengeControllerIntegrationTest {
 		assertTrue("List action should have returned some objects.",
 				list.size() > 0);
 	}
+
+	/**
+	 * Test the
+	 * {@link ChallengeController#getAll(ObjectStatus, Integer, Integer, String, String)}
+	 * action results.
+	 * 
+	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
+	 */
+	@Test
+	public void testControllerGetAllResults() throws Exception {
+		List<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE, null,
+				null, null, null);
+
+		ChallengeTO challenge = list.get(0);
+		assertTrue("Name should have been longer than 0 characters.", challenge
+				.getName().length() > 0);
+		assertTrue("ModifiedBy id should not have been empty.", !challenge
+				.getModifiedById().equals(UUID.randomUUID()));
+		assertTrue("ShowInStudentIntake should have been true.",
+				challenge.isShowInStudentIntake());
+
+		challenge = list.get(1);
+		assertTrue("Description should have been longer than 0 characters.",
+				challenge.getDescription().length() > 0);
+		assertTrue("CreatedBy id should not have been empty.", !challenge
+				.getCreatedById().equals(UUID.randomUUID()));
+		assertTrue("ShowInSelfHelpSearch should have been true.",
+				challenge.isShowInSelfHelpSearch());
+	}
 }
