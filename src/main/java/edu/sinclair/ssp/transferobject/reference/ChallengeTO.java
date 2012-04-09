@@ -32,10 +32,6 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		super(id, name, description);
 	}
 
-	public ChallengeTO(Challenge model) {
-		super(model);
-	}
-
 	public void fromModel(Challenge model) {
 		super.fromModel(model);
 

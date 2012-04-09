@@ -16,7 +16,7 @@ public class CategoryController extends
 		AbstractAuditableReferenceController<Category, CategoryTO> {
 
 	@Autowired
-	protected CategoryController(CategoryService service) {
+	protected CategoryController(final CategoryService service) {
 		super(service, Category.class, CategoryTO.class);
 	}
 }
