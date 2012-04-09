@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.sinclair.mygps.dao.ActionPlanStepDao;
-import edu.sinclair.mygps.factory.SelfHelpGuideFactory;
 import edu.sinclair.mygps.model.transferobject.ChallengeReferralTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideContentTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideQuestionTO;
@@ -71,11 +70,11 @@ public class SelfHelpGuideManager {
 		List<SelfHelpGuideTO> selfHelpGuideTOs = null;
 
 		if (!securityService.isAuthenticated()) {
-			selfHelpGuideTOs = SelfHelpGuideFactory
+			selfHelpGuideTOs = SelfHelpGuideTO
 					.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
 							.findAllActiveForUnauthenticated());
 		} else {
-			selfHelpGuideTOs = SelfHelpGuideFactory
+			selfHelpGuideTOs = SelfHelpGuideTO
 					.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
 							.getAll(ObjectStatus.ACTIVE));
 		}
@@ -85,7 +84,7 @@ public class SelfHelpGuideManager {
 
 	public List<SelfHelpGuideTO> getBySelfHelpGuideGroup(
 			UUID selfHelpGuideGroupId) {
-		return SelfHelpGuideFactory
+		return SelfHelpGuideTO
 				.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
 						.findAllActiveBySelfHelpGuideGroup(selfHelpGuideGroupId));
 	}

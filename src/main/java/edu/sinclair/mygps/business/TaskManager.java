@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.sinclair.mygps.dao.ActionPlanStepDao;
-import edu.sinclair.mygps.factory.TaskFactory;
 import edu.sinclair.mygps.model.transferobject.TaskReportTO;
 import edu.sinclair.mygps.model.transferobject.TaskTO;
 import edu.sinclair.mygps.model.transferobject.TaskTOComparator;

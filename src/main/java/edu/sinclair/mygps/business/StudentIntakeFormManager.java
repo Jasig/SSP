@@ -1,4 +1,4 @@
-package edu.sinclair.mygps.form;
+package edu.sinclair.mygps.business;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

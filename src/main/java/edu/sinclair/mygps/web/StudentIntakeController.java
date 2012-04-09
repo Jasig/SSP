@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.mygps.form.StudentIntakeFormManager;
+import edu.sinclair.mygps.business.StudentIntakeFormManager;
 import edu.sinclair.mygps.model.transferobject.FormTO;
 
 @Controller
