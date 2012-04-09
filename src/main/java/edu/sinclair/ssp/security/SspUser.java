@@ -1,6 +1,7 @@
 package edu.sinclair.ssp.security;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +10,12 @@ import org.springframework.security.core.userdetails.User;
 import edu.sinclair.ssp.model.Person;
 
 public class SspUser extends User {
+
+	public static final String ANONYMOUS_PERSON_FIRSTNAME = "Guest";
+	public static final UUID ANONYMOUS_PERSON_ID = UUID
+			.fromString("46DA4CB4-6EB4-4B91-8E39-8F9FA4D85552");
+	public static final String ANONYMOUS_PERSON_LASTNAME = "User";
+	public static final String ANONYMOUS_PERSON_USERNAME = "anonymousUser";
 
 	public SspUser(String username, String password, boolean enabled,
 			boolean accountNonExpired, boolean credentialsNonExpired,

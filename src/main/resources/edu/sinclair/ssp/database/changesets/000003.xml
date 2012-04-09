@@ -3807,4 +3807,33 @@
 
 	</changeSet>
 	
+	<changeSet author="daniel.bower" id="rename in person_confidentiality_disclosure_agreement">
+		<renameColumn tableName="person_confidentiality_disclosure_agreement" oldColumnName="confidentiality_disclosure_agreement" newColumnName="confidentiality_disclosure_agreement_id"/>
+		<rollback>
+			<renameColumn tableName="person_confidentiality_disclosure_agreement" oldColumnName="confidentiality_disclosure_agreement_id" newColumnName="confidentiality_disclosure_agreement"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add text field to Confidentiality Disclosure" author="dnaiel.bower">
+		<addColumn tableName="confidentiality_disclosure_agreement">
+			<column name="text" type="text">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="confidentiality_disclosure_agreement" columnName="text"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add object_status challenge_challenge_referral" author="daniel.bower">
+		<addColumn tableName="challenge_challenge_referral">
+			<column name="object_status" type="int" defaultValueNumeric="1">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="challenge_challenge_referral" columnName="object_status"/>
+		</rollback>
+	</changeSet>
+	
 </databaseChangeLog>

@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.UUID;
 
 public class TaskTO {
+	public static final String TASKTO_ID_PREFIX_DELIMITER = ":";
+	public static final String TASKTO_ID_PREFIX_ACTION_PLAN_TASK = "ACT";
+	public static final String TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK = "CUS";
+	public static final String TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK = "SSP";
 
 	private UUID id;
 	private String type;

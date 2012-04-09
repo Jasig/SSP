@@ -1,8 +1,7 @@
-package edu.sinclair.mygps.util;
+package edu.sinclair.ssp.util;
 
-import java.util.UUID;
 
-public class MyGpsStringUtils {
+public class SspStringUtils {
 
 	public static String stringFromYear(int year) {
 		if (0 == year) {
@@ -28,8 +27,4 @@ public class MyGpsStringUtils {
 		}
 	}
 
-	public static String coldfusionStringFromUUID(UUID uuid) {
-		String uuidString = uuid.toString().toUpperCase();
-		return uuidString.substring(0, 23) + uuidString.substring(24, 36);
-	}
 }

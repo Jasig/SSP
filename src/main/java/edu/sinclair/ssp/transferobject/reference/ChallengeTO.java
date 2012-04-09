@@ -9,7 +9,6 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
 import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.model.reference.ChallengeChallengeReferral;
 import edu.sinclair.ssp.model.reference.SelfHelpGuideQuestion;
 import edu.sinclair.ssp.transferobject.TransferObject;
 
@@ -40,7 +39,6 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		setSelfHelpGuideDescription(model.getSelfHelpGuideDescription());
 		setShowInStudentIntake(model.isShowInStudentIntake());
 		setShowInSelfHelpSearch(model.isShowInSelfHelpSearch());
-		setChallengeChallengeReferrals(model.getChallengeChallengeReferrals());
 		setTags(model.getTags());
 	}
 
@@ -52,7 +50,6 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		model.setSelfHelpGuideDescription(getSelfHelpGuideDescription());
 		model.setShowInStudentIntake(isShowInStudentIntake());
 		model.setShowInSelfHelpSearch(isShowInSelfHelpSearch());
-		model.setChallengeChallengeReferrals(getChallengeChallengeReferrals());
 		model.setTags(getTags());
 	}
 
@@ -96,10 +93,6 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	@Column(nullable = false)
 	private boolean showInSelfHelpSearch;
 
-	@OneToMany(mappedBy = "challenge")
-	private Set<ChallengeChallengeReferral> challengeChallengeReferrals = new HashSet<ChallengeChallengeReferral>(
-			0);
-
 	@Column(length = 255)
 	private String tags;
 
@@ -142,15 +135,6 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	public void setSelfHelpGuideQuestions(
 			Set<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
 		this.selfHelpGuideQuestions = selfHelpGuideQuestions;
-	}
-
-	public Set<ChallengeChallengeReferral> getChallengeChallengeReferrals() {
-		return challengeChallengeReferrals;
-	}
-
-	public void setChallengeChallengeReferrals(
-			Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
-		this.challengeChallengeReferrals = challengeChallengeReferrals;
 	}
 
 	public String getTags() {

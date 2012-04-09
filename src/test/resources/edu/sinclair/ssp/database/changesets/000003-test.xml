@@ -31,5 +31,24 @@
 			</delete>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="test confidentiality disclosure agreement" author="daniel.bower">
+		<insert tableName="confidentiality_disclosure_agreement">
+			<column name="id" value="06919242-824c-11e1-af98-0026b9e7ff4c" />
+			<column name="name" value="Test Confidentiality Disclosure Agreement" />
+			<column name="description" value="This is the description of the Test Self Help Guide." />
+			<column name="text" value="This is the aggreement text." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="confidentiality_disclosure_agreement">
+				<where>id='06919242-824c-11e1-af98-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 
 </databaseChangeLog>

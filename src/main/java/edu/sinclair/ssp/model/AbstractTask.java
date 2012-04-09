@@ -13,6 +13,12 @@ import javax.validation.constraints.Size;
 @MappedSuperclass
 public abstract class AbstractTask extends Auditable {
 
+	public static final String ACTION_PLAN_TASK = "ActionPlanTask";
+	public static final String CUSTOM_ACTION_PLAN_TASK = "CustomActionPlanTask";
+	public static final String SSP_ACTION_PLAN_TASK =
+			"SSPActionPlanTask"; // action plan tasks created by your advisor -
+									// someone other than the student
+
 	@Column(nullable = false, length = 64000)
 	@Size(max = 64000)
 	private String description;

@@ -5,11 +5,11 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
-import edu.sinclair.mygps.util.Constants;
 import edu.sinclair.ssp.dao.AuditableCrudDao;
 import edu.sinclair.ssp.model.ObjectStatus;
 import edu.sinclair.ssp.model.Person;
 import edu.sinclair.ssp.model.reference.ChallengeReferral;
+import edu.sinclair.ssp.security.SspUser;
 
 /**
  * Data access class for the ChallengeReferral reference entity.
@@ -37,7 +37,7 @@ public class ChallengeReferralDao extends
 						"order by cr.name")
 				.setParameter(0, challengeId)
 				.setParameter(1, ObjectStatus.ACTIVE)
-				.setMaxResults(Constants.RESULT_COUNT_LIMIT)
+				.setMaxResults(100)
 				.list();
 	}
 
@@ -64,7 +64,7 @@ public class ChallengeReferralDao extends
 				.setParameter(1, ObjectStatus.ACTIVE)
 				.setParameter(2, query)
 				.setParameter(3, query)
-				.setMaxResults(Constants.SEARCH_RESULT_COUNT_LIMIT)
+				.setMaxResults(100)
 				.list();
 	}
 
@@ -93,7 +93,7 @@ public class ChallengeReferralDao extends
 						"end)")
 				.setParameter("challengeId", challengeId)
 				.setParameter("studentId", student.getId())
-				.setParameter("anonPersonId", Constants.ANONYMOUS_PERSON_ID)
+				.setParameter("anonPersonId", SspUser.ANONYMOUS_PERSON_ID)
 				.setParameter("webSessionId", sessionId)
 				.setParameter("objectStatus", ObjectStatus.ACTIVE)
 				.uniqueResult();
@@ -126,7 +126,7 @@ public class ChallengeReferralDao extends
 						"end)")
 				.setParameter("challengeId", challengeId)
 				.setParameter("studentId", student.getId())
-				.setParameter("anonPersonId", Constants.ANONYMOUS_PERSON_ID)
+				.setParameter("anonPersonId", SspUser.ANONYMOUS_PERSON_ID)
 				.setParameter("webSessionId", sessionId)
 				.setParameter("objectStatus", ObjectStatus.ACTIVE)
 				.list();

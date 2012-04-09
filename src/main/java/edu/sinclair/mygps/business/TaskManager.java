@@ -21,7 +21,6 @@ import edu.sinclair.mygps.factory.TaskFactory;
 import edu.sinclair.mygps.model.transferobject.TaskReportTO;
 import edu.sinclair.mygps.model.transferobject.TaskTO;
 import edu.sinclair.mygps.model.transferobject.TaskTOComparator;
-import edu.sinclair.mygps.util.Constants;
 import edu.sinclair.ssp.dao.CustomTaskDao;
 import edu.sinclair.ssp.dao.MessageDao;
 import edu.sinclair.ssp.dao.TaskDao;
@@ -107,25 +106,27 @@ public class TaskManager {
 
 		// Determine what type of task this is from the id
 
-		String [] arrTaskId = taskId.split(Constants.TASKTO_ID_PREFIX_DELIMITER);
+		String[] arrTaskId = taskId.split(TaskTO.TASKTO_ID_PREFIX_DELIMITER);
 		String taskType = arrTaskId[0];
 		UUID id = UUID.fromString(arrTaskId[1]);
 
-		if (taskType.equals(Constants.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)) {
+		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)) {
 
 			Task task = taskDao.get(id);
 
 			task.setObjectStatus(ObjectStatus.DELETED);
 			taskDao.save(task);
 
-		} else if (taskType.equals(Constants.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
+		} else if (taskType
+				.equals(TaskTO.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
 
 			CustomTask customTask = customTaskDao.get(id);
 
 			customTask.setObjectStatus(ObjectStatus.DELETED);
 			customTaskDao.save(customTask);
 
-		} else if (taskType.equals(Constants.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
+		} else if (taskType
+				.equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
 
 			// Do nothing, not deletable as in SSP
 
@@ -179,8 +180,10 @@ public class TaskManager {
 
 			// Create message, add to queue for delivery
 			messageManager.createMessage(emailAddress,
-					velocityTemplateHelper.generateContentFromTemplate(messageTemplate.getSubject(), templateParameters),
-					velocityTemplateHelper.generateContentFromTemplate(messageTemplate.getBody(), templateParameters));
+					velocityTemplateHelper.generateContentFromTemplate(
+							messageTemplate.getSubject(), templateParameters),
+					velocityTemplateHelper.generateContentFromTemplate(
+							messageTemplate.getBody(), templateParameters));
 
 			return true;
 		} catch (Exception e) {
@@ -246,13 +249,16 @@ public class TaskManager {
 	@Transactional(readOnly = false)
 	public TaskTO createTaskForStudent(String name, String description,
 			String studentId, Date dueDate, UUID messageTemplateId)
-					throws Exception {
+			throws Exception {
 
 		Person student = personService.personFromUserId(studentId);
 
 		if (student == null) {
-			logger.error("Unable to acquire person for supplied student id " + studentId);
-			throw new Exception("Unable to acquire person for supplied student id " + studentId);
+			logger.error("Unable to acquire person for supplied student id "
+					+ studentId);
+			throw new Exception(
+					"Unable to acquire person for supplied student id "
+							+ studentId);
 		}
 
 		CustomTask customTask = new CustomTask();
@@ -274,8 +280,8 @@ public class TaskManager {
 		if (!messageTemplateId
 				.equals(MessageTemplate.TASK_AUTO_CREATED_EMAIL_ID)
 				&& !messageTemplateId
-				.equals(MessageTemplate.NEW_STUDENT_INTAKE_TASK_EMAIL_ID)) {
-			//exit without sending message
+						.equals(MessageTemplate.NEW_STUDENT_INTAKE_TASK_EMAIL_ID)) {
+			// exit without sending message
 			return taskTO;
 		}
 
@@ -288,19 +294,22 @@ public class TaskManager {
 		templateParameters.put("fullName", student.getFullName());
 		templateParameters.put("name", name);
 
-		//fix links in description
-		String linkedDescription = description.replaceAll("href=\"/MyGPS/", "href=\"" + serverExternalPath + "/MyGPS/");
+		// fix links in description
+		String linkedDescription = description.replaceAll("href=\"/MyGPS/",
+				"href=\"" + serverExternalPath + "/MyGPS/");
 		templateParameters.put("description", linkedDescription);
 
 		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 		templateParameters.put("dueDate", format.format(dueDate));
 
-		try{
+		try {
 			// Create message, add to queue for delivery
 			messageManager.createMessage(student.getPrimaryEmailAddress(),
-					velocityTemplateHelper.generateContentFromTemplate(messageTemplate.getSubject(), templateParameters),
-					velocityTemplateHelper.generateContentFromTemplate(messageTemplate.getBody(), templateParameters));
-		}catch(Exception e){
+					velocityTemplateHelper.generateContentFromTemplate(
+							messageTemplate.getSubject(), templateParameters),
+					velocityTemplateHelper.generateContentFromTemplate(
+							messageTemplate.getBody(), templateParameters));
+		} catch (Exception e) {
 			logger.error("Unable to send email", e);
 		}
 
@@ -312,11 +321,11 @@ public class TaskManager {
 
 		TaskTO taskTO = null;
 
-		String [] arrTaskId = taskId.split(Constants.TASKTO_ID_PREFIX_DELIMITER);
+		String[] arrTaskId = taskId.split(TaskTO.TASKTO_ID_PREFIX_DELIMITER);
 		String taskType = arrTaskId[0];
 		UUID id = UUID.fromString(arrTaskId[1]);
 
-		if (taskType.equals(Constants.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)) {
+		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)) {
 
 			Task task = taskDao.get(id);
 
@@ -325,7 +334,8 @@ public class TaskManager {
 
 			taskTO = TaskFactory.taskToTaskTO(task);
 
-		} else if (taskType.equals(Constants.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
+		} else if (taskType
+				.equals(TaskTO.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
 
 			CustomTask customTask = customTaskDao.get(id);
 
@@ -334,7 +344,8 @@ public class TaskManager {
 
 			taskTO = TaskFactory.customTaskToTaskTO(customTask);
 
-		} else if (taskType.equals(Constants.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
+		} else if (taskType
+				.equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
 
 			if (complete) {
 				Person student = securityService.currentlyLoggedInSspUser()
@@ -344,7 +355,8 @@ public class TaskManager {
 				actionPlanStepDao.saveAsIncomplete(id);
 			}
 
-			taskTO = TaskFactory.objectToTaskTO(actionPlanStepDao.selectById(id));
+			taskTO = TaskFactory.objectToTaskTO(actionPlanStepDao
+					.selectById(id));
 		}
 
 		return taskTO;
@@ -383,7 +395,8 @@ public class TaskManager {
 				// Due date
 				dueDateCalendar.setTime(customTask.getDueDate());
 
-				if (now.after(startDateCalendar) && (now.before(dueDateCalendar))) {
+				if (now.after(startDateCalendar)
+						&& (now.before(dueDateCalendar))) {
 
 					Message message = new Message();
 					HashMap<String, Object> templateParameters = new HashMap<String, Object>();
@@ -457,7 +470,8 @@ public class TaskManager {
 				 */
 			}
 		} catch (Exception e) {
-			logger.error("ERROR : sendTaskReminderNotifications() : {}", e.getMessage(), e);
+			logger.error("ERROR : sendTaskReminderNotifications() : {}",
+					e.getMessage(), e);
 		}
 
 		logger.info("END : sendTaskReminderNotifications()");
@@ -474,10 +488,10 @@ public class TaskManager {
 					.tasksToTaskReportTOs(taskDao
 							.getAllForPersonId(student.getId(), false)));
 			taskReportTOs
-			.addAll(TaskFactory
-					.customTasksToTaskReportTOs(customTaskDao
-							.getAllForPersonId(student
-									.getId(), false)));
+					.addAll(TaskFactory
+							.customTasksToTaskReportTOs(customTaskDao
+									.getAllForPersonId(student
+											.getId(), false)));
 			taskReportTOs.addAll(TaskFactory
 					.objectsToTaskReportTOs(actionPlanStepDao
 							.selectAllIncompleteByPersonId(student.getId())));
@@ -489,10 +503,10 @@ public class TaskManager {
 							.getAllForSessionId(securityService
 									.getSessionId(), false)));
 			taskReportTOs
-			.addAll(TaskFactory
-					.customTasksToTaskReportTOs(customTaskDao
-							.getAllForSessionId(securityService
-									.getSessionId(), false)));
+					.addAll(TaskFactory
+							.customTasksToTaskReportTOs(customTaskDao
+									.getAllForSessionId(securityService
+											.getSessionId(), false)));
 
 		}
 

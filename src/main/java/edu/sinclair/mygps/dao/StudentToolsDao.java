@@ -8,7 +8,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import edu.sinclair.mygps.util.MyGpsStringUtils;
 import edu.sinclair.ssp.model.Person;
 
 @Repository
@@ -22,18 +21,18 @@ public class StudentToolsDao {
 
 	@SuppressWarnings("unchecked")
 	public List<String> toolsForStudent(Person student, UUID onlyThisTool) {
-		boolean allTools = (null==onlyThisTool);
+		boolean allTools = (null == onlyThisTool);
 		String query = "SELECT toolLUID FROM ToolsByStudent where studentID = ? ";
 
 		List<String> results;
 
-		if(allTools){
+		if (allTools) {
 			results = sessionFactory.getCurrentSession()
 					.createSQLQuery(query)
 					.addScalar("toolLUID")
 					.setParameter(0, student.getId())
 					.list();
-		}else{
+		} else {
 			query = query + " and toolLUID = ? ";
 			results = sessionFactory.getCurrentSession()
 					.createSQLQuery(query)
@@ -43,9 +42,9 @@ public class StudentToolsDao {
 					.list();
 		}
 
-		if(0<results.size()){
+		if (0 < results.size()) {
 			return results;
-		}else{
+		} else {
 			return new ArrayList<String>();
 		}
 	}
@@ -55,35 +54,42 @@ public class StudentToolsDao {
 	}
 
 	protected void addToolToStudent(Person student, UUID toolLuid) {
-		//What records exist for student and tool
+		// What records exist for student and tool
 		List<String> results = toolsForStudent(student, toolLuid);
 
-		//Record does not exist for student and tool?
-		if(results.size()==0){
-			//add
-			this.sessionFactory.getCurrentSession()
-			.createSQLQuery("insert into ToolsByStudent("
-					+ "toolLUID, studentID, toolID) values(?, ?, ?)")
+		// Record does not exist for student and tool?
+		if (results.size() == 0) {
+			// add
+			this.sessionFactory
+					.getCurrentSession()
+					.createSQLQuery("insert into ToolsByStudent("
+							+ "toolLUID, studentID, toolID) values(?, ?, ?)")
 					.setParameter(0, toolLuid)
 					.setParameter(1, student.getId())
-					.setParameter(2, MyGpsStringUtils.coldfusionStringFromUUID(UUID.randomUUID()))
+					.setParameter(2,
+							coldfusionStringFromUUID(UUID.randomUUID()))
 					.executeUpdate();
-		}//ignore
+		}// ignore
 	}
 
 	protected void removeToolFromStudent(Person student, UUID toolLuid) {
-		//What records exist for student and tool
+		// What records exist for student and tool
 		List<String> results = toolsForStudent(student, toolLuid);
 
-		//Record does not exist for student and tool?
-		if(results.size()!=0){
-			//delete
+		// Record does not exist for student and tool?
+		if (results.size() != 0) {
+			// delete
 			this.sessionFactory.getCurrentSession()
-			.createSQLQuery("delete from ToolsByStudent "
-					+ "where toolLUID = ? and studentID = ?")
+					.createSQLQuery("delete from ToolsByStudent "
+							+ "where toolLUID = ? and studentID = ?")
 					.setParameter(0, toolLuid)
 					.setParameter(1, student.getId())
 					.executeUpdate();
-		}//ignore
+		}// ignore
+	}
+
+	public static String coldfusionStringFromUUID(UUID uuid) {
+		String uuidString = uuid.toString().toUpperCase();
+		return uuidString.substring(0, 23) + uuidString.substring(24, 36);
 	}
 }
