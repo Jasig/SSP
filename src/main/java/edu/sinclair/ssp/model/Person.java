@@ -286,17 +286,16 @@ public class Person extends Auditable implements Serializable {
 	@Cascade(CascadeType.ALL)
 	private Set<PersonChallenge> challenges;
 
-	// :TODO person tools mapping
 	@Nullable()
 	@OneToMany(mappedBy = "person")
 	@Cascade(value = CascadeType.ALL)
 	private Set<PersonTool> tools;
 
-	// :TODO person confidentialityDisclosureAgreement mapping
 	@Nullable()
 	@OneToMany(mappedBy = "person")
 	@Cascade(value = CascadeType.ALL)
 	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
+
 	/**
 	 * Initialize a Person.
 	 * 

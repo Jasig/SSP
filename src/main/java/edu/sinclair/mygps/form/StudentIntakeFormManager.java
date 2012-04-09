@@ -10,7 +10,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.sinclair.mygps.dao.StudentToolsDao;
 import edu.sinclair.mygps.model.transferobject.FormOptionTO;
 import edu.sinclair.mygps.model.transferobject.FormQuestionTO;
 import edu.sinclair.mygps.model.transferobject.FormSectionTO;
@@ -46,10 +45,12 @@ import edu.sinclair.ssp.model.reference.FundingSource;
 import edu.sinclair.ssp.model.reference.Genders;
 import edu.sinclair.ssp.model.reference.StudentStatus;
 import edu.sinclair.ssp.model.reference.VeteranStatus;
+import edu.sinclair.ssp.model.tool.Tools;
 import edu.sinclair.ssp.service.ObjectNotFoundException;
 import edu.sinclair.ssp.service.PersonConfidentialityDisclosureAgreementService;
 import edu.sinclair.ssp.service.SecurityService;
 import edu.sinclair.ssp.service.reference.MaritalStatusService;
+import edu.sinclair.ssp.service.tool.PersonToolService;
 import edu.sinclair.ssp.util.SspStringUtils;
 
 @Service
@@ -98,10 +99,10 @@ public class StudentIntakeFormManager {
 	private PersonConfidentialityDisclosureAgreementService studentConfidentialityDisclosureAgreementService;
 
 	@Autowired
-	private StudentStatusDao studentStatusDao;
+	private PersonToolService personToolService;
 
 	@Autowired
-	private StudentToolsDao studentToolsDao;
+	private StudentStatusDao studentStatusDao;
 
 	@Autowired
 	private VeteranStatusDao veteranStatusDao;
@@ -806,7 +807,7 @@ public class StudentIntakeFormManager {
 		Person student = securityService.currentlyLoggedInSspUser().getPerson();
 
 		/* Add intake form to student's record */
-		studentToolsDao.addIntakeToolToStudent(student);
+		personToolService.addToolToStudent(student, Tools.INTAKE);
 
 		/* Confidentiality disclosure */
 
