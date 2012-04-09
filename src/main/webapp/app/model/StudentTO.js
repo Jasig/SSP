@@ -1,7 +1,6 @@
 Ext.define('Ssp.model.StudentTO', {
     extend: 'Ssp.model.AbstractBaseTO',
-    fields: ['id',
-    		 'studentIntakeCreatedDate',
+    fields: ['studentIntakeCreatedDate',
     		 'photoUrl',
     		 'schoolId',
     		 {name: 'name', 

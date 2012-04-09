@@ -1,7 +1,7 @@
 Ext.require('Ext.tab.*');
 Ext.define('Ssp.view.tools.StudentIntake', {
 	extend: 'Ext.panel.Panel',
-	alias : 'widget.StudentIntake',
+	alias : 'widget.studentintake',
 	id: 'StudentIntake',
     title: 'Student Intake',
     autoScroll: true,
@@ -27,13 +27,7 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 		}
 	 * 
 	 */
-    buttons: [ 
-    
-           { text: 'Save',
-        	 id: 'SaveStudentIntakeButton'
-           }
-    
-    ],
+    buttons: [ { text: 'Save', id: 'SaveStudentIntakeButton'} ],
 	
 	initComponent: function() {	
 		this.items = [ Ext.createWidget('tabpanel', {
@@ -72,7 +66,7 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 					    
 						];
 						
-		this.superclass.initComponent.call(this, arguments);
+		this.callParent(arguments);
 	}
 
 });

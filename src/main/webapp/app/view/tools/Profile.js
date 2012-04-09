@@ -1,7 +1,7 @@
 Ext.define('Ssp.view.tools.Profile', {
 	extend: 'Ext.form.Panel',
-	alias : 'widget.Profile',
-    
+	alias : 'widget.profile',
+	id: 'Profile',
     width: '100%',
     height: '100%',
     bodyPadding: 5,
@@ -74,11 +74,6 @@ Ext.define('Ssp.view.tools.Profile', {
 	        fieldLabel: 'Academic Programs',
 	        name: 'academicPrograms'
 	    }]
-	    }],
-	
-
-	initComponent: function() {	
-		this.superclass.initComponent.call(this, arguments);
-	}
+	    }]
 	
 });

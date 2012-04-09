@@ -1,5 +1,6 @@
 Ext.define('Ssp.view.tools.studentintake.Personal', {
 	extend: 'Ext.form.Panel',
+	alias: 'widget.studentintakepersonal',
 	id: 'StudentIntakePersonal',
 	autoScroll: true,
     width: '100%',

@@ -1,10 +1,9 @@
 Ext.define('Ssp.store.reference.Challenges', {
-    extend: 'Ext.data.Store',
+    extend: 'Ssp.store.reference.AbstractReferences',
     model: 'Ssp.model.reference.ChallengeTO',
     storeId: 'challengesReferenceStore',
 	autoLoad: false,
 	autoSync: true,
-
     proxy: {
 		type: 'rest',
 		url: '/ssp/api/reference/challenge/',

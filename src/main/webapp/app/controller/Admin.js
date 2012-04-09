@@ -37,7 +37,7 @@ Ext.define('Ssp.controller.Admin', {
         
 		}); 
 		
-		this.superclass.init.call(this, arguments);
+		this.callParent(arguments);
     },
  
  	/*
@@ -59,36 +59,20 @@ Ext.define('Ssp.controller.Admin', {
 	
 	loadAdmin: function( title ,form ) {
 		var adminFormsView = Ext.getCmp('AdminForms');
-		var store = Ext.getStore('reference.' + form)
+		var store = Ext.getStore('reference.' + form);
 		var comp = adminFormsView.getComponent('AbstractReferenceAdmin');
 		var pager = null;
-		// this.formRendererUtils.cleanItems(adminFormsView);				
+		
+		// set the store page size
+		// store.pageSize = 15;
 		
 		if (comp == undefined)
 		{
-			comp = Ext.create('Ssp.view.admin.forms.AbstractReferenceAdmin',{store:store}); // +form			
+			comp = Ext.create('Ssp.view.admin.forms.AbstractReferenceAdmin');			
 			adminFormsView.add( comp );
 		}
-		/*
-		var columns = [
-				          { header: 'Name',  
-				            dataIndex: 'name',
-				            field: {
-				                xtype: 'textfield'
-				            },
-				            flex: 50 },
-				          { header: 'Description',
-				            dataIndex: 'description', 
-				            flex: 50,
-				            field: {
-				                xtype: 'textfield'
-				            }
-				          }
-				     ]; 
-		*/
+		
 		comp.setTitle(title + ' Admin');
-		pager = comp.getDockedComponent('abstractReferenceAdminPager');
-    	pager.bindStore(store);
 		comp.reconfigure(store); // ,columns
 		comp.getStore().load();		
 	},

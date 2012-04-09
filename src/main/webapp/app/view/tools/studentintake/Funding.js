@@ -1,5 +1,6 @@
 Ext.define('Ssp.view.tools.studentintake.Funding', {
 	extend: 'Ext.form.Panel',
+	alias: 'widget.studentintakefunding',
 	id : 'StudentIntakeFunding',
 	autoScroll: true,    
     width: '100%',
@@ -14,11 +15,6 @@ Ext.define('Ssp.view.tools.studentintake.Funding', {
 
     // The fields
     defaultType: 'checkbox',
-    items: [],
-	
-
-	initComponent: function() {	
-		this.superclass.initComponent.call(this, arguments);
-	}
+    items: []
 	
 });

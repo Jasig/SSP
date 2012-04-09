@@ -1,6 +1,7 @@
 Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 	extend: "Ext.form.Panel",
-	id : "StudentIntakeEducationGoal",
+	alias: 'widget.studentintakeeducationgoals',
+	id : "StudentIntakeEducationGoals",
 	autoScroll: true,    
     width: "100%",
     height: "100%",
@@ -52,11 +53,6 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
         fieldLabel: 'What is your planned occupation?',
         name: 'plannedOccupation'
     }]
-    }],
-	
-
-	initComponent: function() {	
-		this.superclass.initComponent.call(this, arguments);
-	}
+    }]
 	
 });

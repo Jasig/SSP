@@ -1,6 +1,6 @@
 Ext.define('Ssp.view.Main', {
 	extend: 'Ext.panel.Panel',
-    alias: 'widget.Main',
+    alias: 'widget.main',
     id: 'Main',
     title: 'Student Success Plan',
     layout: {
