@@ -3825,4 +3825,15 @@
 		</rollback>
 	</changeSet>
 	
+	<changeSet id="add object_status challenge_challenge_referral" author="daniel.bower">
+		<addColumn tableName="challenge_challenge_referral">
+			<column name="object_status" type="int" defaultValueNumeric="1">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="challenge_challenge_referral" columnName="object_status"/>
+		</rollback>
+	</changeSet>
+	
 </databaseChangeLog>
