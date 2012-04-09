@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.sinclair.mygps.dao.ActionPlanStepDao;
-import edu.sinclair.mygps.dao.SelfHelpGuideQuestionResponseDao;
-import edu.sinclair.mygps.dao.SelfHelpGuideResponseDao;
 import edu.sinclair.mygps.factory.SelfHelpGuideFactory;
 import edu.sinclair.mygps.model.transferobject.ChallengeReferralTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideContentTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideQuestionTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideResponseTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideTO;
+import edu.sinclair.ssp.dao.SelfHelpGuideQuestionResponseDao;
+import edu.sinclair.ssp.dao.SelfHelpGuideResponseDao;
 import edu.sinclair.ssp.dao.TaskDao;
 import edu.sinclair.ssp.dao.reference.ChallengeDao;
 import edu.sinclair.ssp.dao.reference.ChallengeReferralDao;
@@ -127,7 +127,7 @@ public class SelfHelpGuideManager {
 	public boolean cancelSelfHelpGuideResponse(UUID selfHelpGuideResponseId) {
 
 		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
-				.selectById(selfHelpGuideResponseId);
+				.get(selfHelpGuideResponseId);
 
 		selfHelpGuideResponse.setCancelled(true);
 
@@ -139,7 +139,7 @@ public class SelfHelpGuideManager {
 	// SelfHelpGuideResponseService
 	public Boolean completeSelfHelpGuideResponse(UUID selfHelpGuideResponseId) {
 		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
-				.selectById(selfHelpGuideResponseId);
+				.get(selfHelpGuideResponseId);
 		selfHelpGuideResponse.setCompleted(true);
 		selfHelpGuideResponseDao.save(selfHelpGuideResponse);
 		return true;
@@ -149,7 +149,7 @@ public class SelfHelpGuideManager {
 			UUID selfHelpGuideResponseId) {
 
 		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
-				.selectById(selfHelpGuideResponseId);
+				.get(selfHelpGuideResponseId);
 		SelfHelpGuideResponseTO selfHelpGuideResponseTO = new SelfHelpGuideResponseTO();
 		int count = 0;
 
@@ -218,7 +218,7 @@ public class SelfHelpGuideManager {
 						.get(selfHelpGuideQuestionId));
 		selfHelpGuideQuestionResponse
 				.setSelfHelpGuideResponse(selfHelpGuideResponseDao
-						.selectById(selfHelpGuideResponseId));
+						.get(selfHelpGuideResponseId));
 
 		selfHelpGuideQuestionResponseDao.save(selfHelpGuideQuestionResponse);
 

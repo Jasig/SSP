@@ -1,28 +1,24 @@
-package edu.sinclair.mygps.dao;
+package edu.sinclair.ssp.dao;
 
 import java.util.List;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.sinclair.ssp.model.SelfHelpGuideQuestionResponse;
 import edu.sinclair.ssp.security.SspUser;
 
 @Repository
-public class SelfHelpGuideQuestionResponseDao {
+public class SelfHelpGuideQuestionResponseDao extends
+		AbstractAuditableCrudDao<SelfHelpGuideQuestionResponse> implements
+		AuditableCrudDao<SelfHelpGuideQuestionResponse> {
 
-	@Autowired
-	private SessionFactory sessionFactory;
-
-	public void save(SelfHelpGuideQuestionResponse selfHelpGuideQuestionResponse) {
-		this.sessionFactory.getCurrentSession().saveOrUpdate(
-				selfHelpGuideQuestionResponse);
+	public SelfHelpGuideQuestionResponseDao() {
+		super(SelfHelpGuideQuestionResponse.class);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<SelfHelpGuideQuestionResponse> selectCriticalResponsesForEarlyAlert() {
-
+	// :TODO should be limited? paging?
+	public List<SelfHelpGuideQuestionResponse> criticalResponsesForEarlyAlert() {
 		return this.sessionFactory.getCurrentSession()
 				.createQuery("from SelfHelpGuideQuestionResponse " +
 						"where earlyAlertSent = false " +
@@ -31,6 +27,5 @@ public class SelfHelpGuideQuestionResponseDao {
 						"and selfHelpGuideResponse.person.id != ?")
 				.setParameter(0, SspUser.ANONYMOUS_PERSON_ID)
 				.list();
-
 	}
 }

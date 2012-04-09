@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import edu.sinclair.mygps.dao.SelfHelpGuideQuestionResponseDao;
-import edu.sinclair.mygps.dao.SelfHelpGuideResponseDao;
+import edu.sinclair.ssp.dao.SelfHelpGuideQuestionResponseDao;
+import edu.sinclair.ssp.dao.SelfHelpGuideResponseDao;
 import edu.sinclair.ssp.model.SelfHelpGuideQuestionResponse;
 import edu.sinclair.ssp.model.SelfHelpGuideResponse;
 
@@ -51,7 +51,7 @@ public class EarlyAlertManager {
 		logger.info("BEGIN : generateCriticalAlerts()");
 
 		List<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponseDao
-				.selectCriticalResponsesForEarlyAlert();
+				.criticalResponsesForEarlyAlert();
 
 		for (SelfHelpGuideQuestionResponse selfHelpGuideQuestionResponse : selfHelpGuideQuestionResponses) {
 
@@ -112,7 +112,7 @@ public class EarlyAlertManager {
 		logger.info("BEGIN : generateThresholdAlerts()");
 
 		List<SelfHelpGuideResponse> selfHelpGuideResponses = selfHelpGuideResponseDao
-				.selectForEarlyAlert();
+				.forEarlyAlert();
 
 		for (SelfHelpGuideResponse selfHelpGuideResponse : selfHelpGuideResponses) {
 
