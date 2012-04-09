@@ -4,66 +4,37 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.ForeignKey;
-
 @Entity
-@Table(name = "Message", schema = "dbo")
-public class Message {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Message extends Auditable {
 
-	@Id
-	@GeneratedValue(generator = "gen_id")
-	@org.hibernate.annotations.GenericGenerator(name = "gen_id", strategy = "guid")
-	@Column(name = "id", unique = true, nullable = false, length = 36)
-	private String id;
-
-	@Column(name = "subject", nullable = false, length = 250)
+	@Column(nullable = false, length = 250)
 	private String subject;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_Message_Person_0")
-	@JoinColumn(name = "senderPersonId", nullable = false)
-	private Person sender;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_Message_Person_1")
-	@JoinColumn(name = "recipientPersonId")
-	private Person recipient;
-
-	@Column(name = "recipientEmailAddress", length = 100)
-	private String recipientEmailAddress;
-
-	@Column(name = "body", nullable = false, columnDefinition = "text")
+	@Column(nullable = false, columnDefinition = "text")
 	private String body;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_Message_Person_2")
-	@JoinColumn(name = "createdByPersonId", nullable = false)
-	private Person createdBy;
+	@ManyToOne
+	@JoinColumn(name = "sender_id")
+	private Person sender;
+
+	@ManyToOne
+	@JoinColumn(name = "recipient_id")
+	private Person recipient;
+
+	@Column(length = 100)
+	private String recipientEmailAddress;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "createdDate", nullable = false, updatable = false)
-	private Date createdDate;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "sentDate")
+	@Column
 	private Date sentDate;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getSubject() {
 		return subject;
@@ -103,24 +74,6 @@ public class Message {
 
 	public void setBody(String body) {
 		this.body = body;
-	}
-
-	public Person getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(Person createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate == null ? null : new Date(createdDate.getTime());
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate == null ? null : new Date(
-				createdDate.getTime());
-		;
 	}
 
 	public Date getSentDate() {

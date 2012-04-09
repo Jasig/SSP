@@ -3708,8 +3708,6 @@
 		
 	</changeSet>
 	
-	<!-- Create message tables -->
-	
 	<changeSet author='jon.adams' id='Add referral table'>
 		<createTable tableName="referral">
 			<column name="id" type="uuid">
@@ -3744,6 +3742,61 @@
 		<sql>grant all on referral to ssp</sql>
 		<rollback>
 			<dropTable tableName="referral" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+	
+	<changeSet author='daniel.bower' id='Add message table'>
+		<createTable tableName="message">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="message_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="message_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="subject" type="character varying(250)">
+				<constraints nullable="false" />
+			</column>
+			<column name="body" type="text">
+				<constraints nullable="false" />
+			</column>
+			<column name="sender_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="message_sender_id_person_id"
+					references="person(id)" />
+			</column>
+			<column name="recipient_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="message_recipient_id_person_id"
+					references="person(id)" />
+			</column>
+			<column name="recipient_email_address" type="character varying(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="sent_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on message to ssp</sql>
+		<rollback>
+			<dropTable tableName="message" />
 		</rollback>
 
 		<!-- Theres a different assumption in the liquibase handling of timezones 

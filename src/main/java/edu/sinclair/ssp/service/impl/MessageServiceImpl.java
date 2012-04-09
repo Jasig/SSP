@@ -125,7 +125,7 @@ public class MessageServiceImpl implements MessageService {
 
 		try {
 
-			List<Message> messages = messageDao.selectQueued();
+			List<Message> messages = messageDao.queued();
 
 			for (Message message : messages) {
 				sendMessage(message);
