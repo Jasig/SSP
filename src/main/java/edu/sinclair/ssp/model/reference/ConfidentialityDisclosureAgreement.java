@@ -3,19 +3,30 @@ package edu.sinclair.ssp.model.reference;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.validation.constraints.Size;
 
 /**
  * ConfidentialityDisclosureAgreement reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class ConfidentialityDisclosureAgreement extends AbstractReference implements
-		Serializable {
+public class ConfidentialityDisclosureAgreement extends AbstractReference
+		implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * text of the agreement
+	 * 
+	 * Optional, null allowed, max length 64000 characters.
+	 */
+	@Column(nullable = false, length = 64000)
+	@Size(max = 64000)
+	private String text;
 
 	/**
 	 * Constructor
@@ -58,7 +69,16 @@ public class ConfidentialityDisclosureAgreement extends AbstractReference implem
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public ConfidentialityDisclosureAgreement(UUID id, String name, String description) {
+	public ConfidentialityDisclosureAgreement(UUID id, String name,
+			String description) {
 		super(id, name, description);
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 }

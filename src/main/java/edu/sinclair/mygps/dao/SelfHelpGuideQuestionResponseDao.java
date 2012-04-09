@@ -6,8 +6,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import edu.sinclair.mygps.util.Constants;
 import edu.sinclair.ssp.model.SelfHelpGuideQuestionResponse;
+import edu.sinclair.ssp.security.SspUser;
 
 @Repository
 public class SelfHelpGuideQuestionResponseDao {
@@ -16,7 +16,8 @@ public class SelfHelpGuideQuestionResponseDao {
 	private SessionFactory sessionFactory;
 
 	public void save(SelfHelpGuideQuestionResponse selfHelpGuideQuestionResponse) {
-		this.sessionFactory.getCurrentSession().saveOrUpdate(selfHelpGuideQuestionResponse);
+		this.sessionFactory.getCurrentSession().saveOrUpdate(
+				selfHelpGuideQuestionResponse);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -28,8 +29,8 @@ public class SelfHelpGuideQuestionResponseDao {
 						"and response = true " +
 						"and selfHelpGuideQuestion.critical = true " +
 						"and selfHelpGuideResponse.person.id != ?")
-						.setParameter(0, Constants.ANONYMOUS_PERSON_ID)
-						.list();
+				.setParameter(0, SspUser.ANONYMOUS_PERSON_ID)
+				.list();
 
 	}
 }

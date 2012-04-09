@@ -3,8 +3,8 @@ package edu.sinclair.mygps.model.transferobject;
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.mygps.util.MyGpsStringUtils;
 import edu.sinclair.ssp.model.reference.AbstractReference;
+import edu.sinclair.ssp.util.SspStringUtils;
 
 public class FormQuestionTO {
 
@@ -69,7 +69,7 @@ public class FormQuestionTO {
 	}
 
 	public void setValue(boolean value) {
-		this.value = MyGpsStringUtils.stringFromBoolean(value);
+		this.value = SspStringUtils.stringFromBoolean(value);
 	}
 
 	public void setValue(int value) {

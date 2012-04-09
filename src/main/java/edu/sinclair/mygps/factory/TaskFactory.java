@@ -5,7 +5,7 @@ import java.util.List;
 
 import edu.sinclair.mygps.model.transferobject.TaskReportTO;
 import edu.sinclair.mygps.model.transferobject.TaskTO;
-import edu.sinclair.mygps.util.Constants;
+import edu.sinclair.ssp.model.AbstractTask;
 import edu.sinclair.ssp.model.CustomTask;
 import edu.sinclair.ssp.model.Task;
 
@@ -44,7 +44,7 @@ public class TaskFactory {
 		// Constants.TASKTO_ID_PREFIX_DELIMITER + task.getId());
 		taskTO.setId(task.getId());
 		taskTO.setName(task.getChallengeReferral().getName());
-		taskTO.setType(Constants.ACTION_PLAN_TASK);
+		taskTO.setType(AbstractTask.ACTION_PLAN_TASK);
 
 		return taskTO;
 
@@ -83,17 +83,17 @@ public class TaskFactory {
 		// Constants.TASKTO_ID_PREFIX_DELIMITER + customTask.getId());
 		taskTO.setId(customTask.getId());
 		taskTO.setName(customTask.getName());
-		taskTO.setType(Constants.CUSTOM_ACTION_PLAN_TASK);
+		taskTO.setType(AbstractTask.CUSTOM_ACTION_PLAN_TASK);
 
 		return taskTO;
 
 	}
 
-	public static List<TaskTO> objectsToTaskTOs (List<Object[]> objects) {
+	public static List<TaskTO> objectsToTaskTOs(List<Object[]> objects) {
 
 		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
 
-		for (Object [] object : objects) {
+		for (Object[] object : objects) {
 			taskTOs.add(objectToTaskTO(object));
 		}
 
@@ -101,11 +101,12 @@ public class TaskFactory {
 
 	}
 
-	public static List<TaskReportTO> objectsToTaskReportTOs (List<Object[]> objects) {
+	public static List<TaskReportTO> objectsToTaskReportTOs(
+			List<Object[]> objects) {
 
 		List<TaskReportTO> taskReportTOs = new ArrayList<TaskReportTO>();
 
-		for (Object [] object : objects) {
+		for (Object[] object : objects) {
 			taskReportTOs.add(objectToTaskReportTO(object));
 		}
 
@@ -113,11 +114,11 @@ public class TaskFactory {
 
 	}
 
-	public static TaskTO objectToTaskTO (Object [] object) {
+	public static TaskTO objectToTaskTO(Object[] object) {
 		return actionPlanStepToTaskTO(objectToActionPlanStep(object));
 	}
 
-	public static TaskReportTO objectToTaskReportTO (Object [] object) {
+	public static TaskReportTO objectToTaskReportTO(Object[] object) {
 		return actionPlanStepToTaskReportTO(objectToActionPlanStep(object));
 	}
 
@@ -125,7 +126,7 @@ public class TaskFactory {
 
 		List<Task> actionPlanSteps = new ArrayList<Task>();
 
-		for (Object [] object : objects) {
+		for (Object[] object : objects) {
 			actionPlanSteps.add(objectToActionPlanStep(object));
 		}
 
@@ -179,7 +180,7 @@ public class TaskFactory {
 		 * // Constants.TASKTO_ID_PREFIX_DELIMITER + actionPlanStep.getId());
 		 * taskTO.setId(actionPlanStep.getId());
 		 * taskTO.setName(actionPlanStep.getChallengeReferralName());
-		 * taskTO.setType(Constants.SSP_ACTION_PLAN_TASK);
+		 * taskTO.setType(AbstractTask.SSP_ACTION_PLAN_TASK);
 		 * 
 		 * return taskTO;
 		 */
@@ -197,7 +198,7 @@ public class TaskFactory {
 		 * taskReportTO.setCreatedBy(actionPlanStep.getCreatedBy().getId());
 		 * taskReportTO.setDescription(actionPlanStep.getActionDescription());
 		 * taskReportTO.setDueDate(actionPlanStep.getDueDate());
-		 * taskReportTO.setType(Constants.SSP_ACTION_PLAN_TASK);
+		 * taskReportTO.setType(AbstractTask.SSP_ACTION_PLAN_TASK);
 		 * 
 		 * return taskReportTO;
 		 */
@@ -227,7 +228,7 @@ public class TaskFactory {
 		taskReportTO.setDescription(task.getChallengeReferral()
 				.getPublicDescription());
 		taskReportTO.setDueDate(null);
-		taskReportTO.setType(Constants.ACTION_PLAN_TASK);
+		taskReportTO.setType(AbstractTask.ACTION_PLAN_TASK);
 
 		return taskReportTO;
 
@@ -255,7 +256,7 @@ public class TaskFactory {
 		taskReportTO.setCreatedBy(customTask.getCreatedBy().getId());
 		taskReportTO.setDescription(customTask.getDescription());
 		taskReportTO.setDueDate(customTask.getDueDate());
-		taskReportTO.setType(Constants.CUSTOM_ACTION_PLAN_TASK);
+		taskReportTO.setType(AbstractTask.CUSTOM_ACTION_PLAN_TASK);
 
 		return taskReportTO;
 
