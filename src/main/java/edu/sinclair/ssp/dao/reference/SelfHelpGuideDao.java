@@ -15,17 +15,18 @@ import edu.sinclair.ssp.model.reference.SelfHelpGuide;
 @Repository
 public class SelfHelpGuideDao extends
 		ReferenceAuditableCrudDao<SelfHelpGuide> implements
-AuditableCrudDao<SelfHelpGuide> {
+		AuditableCrudDao<SelfHelpGuide> {
 
 	public SelfHelpGuideDao() {
 		super(SelfHelpGuide.class);
 	}
 
 	@SuppressWarnings("unchecked")
+	// :TODO paging
 	public List<SelfHelpGuide> findAllActiveForUnauthenticated() {
 		return this.sessionFactory.getCurrentSession()
 				.createQuery("from SelfHelpGuide " +
-						"where objectStatus.id = ? " +
+						"where objectStatus = ? " +
 						"and authenticationRequired = false " +
 						"order by name")
 				.setParameter(0, ObjectStatus.ACTIVE)
@@ -33,14 +34,15 @@ AuditableCrudDao<SelfHelpGuide> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<SelfHelpGuide> selectActiveBySelfHelpGuideGroup(
+	// :TODO paging
+	public List<SelfHelpGuide> findAllActiveBySelfHelpGuideGroup(
 			UUID selfHelpGuideGroupId) {
 		return this.sessionFactory.getCurrentSession()
 				.createQuery("select shg " +
 						"from SelfHelpGuide shg " +
 						"inner join shg.selfHelpGuideGroups shgg " +
 						"where shgg.id = ? " +
-						"and shg.objectStatus.id = ? " +
+						"and shg.objectStatus = ? " +
 						"order by shg.name")
 				.setParameter(0, selfHelpGuideGroupId)
 				.setParameter(1, ObjectStatus.ACTIVE)

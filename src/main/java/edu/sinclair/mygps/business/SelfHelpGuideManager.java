@@ -87,7 +87,7 @@ public class SelfHelpGuideManager {
 			UUID selfHelpGuideGroupId) {
 		return SelfHelpGuideFactory
 				.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
-						.selectActiveBySelfHelpGuideGroup(selfHelpGuideGroupId));
+						.findAllActiveBySelfHelpGuideGroup(selfHelpGuideGroupId));
 	}
 
 	public SelfHelpGuideContentTO getContentById(UUID selfHelpGuideId) {
@@ -98,7 +98,7 @@ public class SelfHelpGuideManager {
 		SelfHelpGuide selfHelpGuide = selfHelpGuideDao.get(selfHelpGuideId);
 
 		for (SelfHelpGuideQuestion selfHelpGuideQuestion : selfHelpGuideQuestionDao
-				.selectBySelfHelpGuide(selfHelpGuide.getId())) {
+				.bySelfHelpGuide(selfHelpGuide.getId())) {
 			SelfHelpGuideQuestionTO selfHelpGuideQuestionTO = new SelfHelpGuideQuestionTO();
 
 			selfHelpGuideQuestionTO.setDescriptionText(selfHelpGuideQuestion

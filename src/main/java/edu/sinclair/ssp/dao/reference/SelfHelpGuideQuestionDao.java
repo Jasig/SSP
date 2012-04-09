@@ -15,19 +15,20 @@ import edu.sinclair.ssp.model.reference.SelfHelpGuideQuestion;
 @Repository
 public class SelfHelpGuideQuestionDao extends
 		ReferenceAuditableCrudDao<SelfHelpGuideQuestion> implements
-AuditableCrudDao<SelfHelpGuideQuestion> {
+		AuditableCrudDao<SelfHelpGuideQuestion> {
 
 	public SelfHelpGuideQuestionDao() {
 		super(SelfHelpGuideQuestion.class);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<SelfHelpGuideQuestion> selectBySelfHelpGuide(
+	// :TODO paging
+	public List<SelfHelpGuideQuestion> bySelfHelpGuide(
 			UUID selfHelpGuideId) {
 		return this.sessionFactory.getCurrentSession()
 				.createQuery("from SelfHelpGuideQuestion " +
 						"where selfHelpGuide.id = ? " +
-						"and objectStatus.id = ? " +
+						"and objectStatus = ? " +
 						"order by questionNumber")
 				.setParameter(0, selfHelpGuideId)
 				.setParameter(1, ObjectStatus.ACTIVE)

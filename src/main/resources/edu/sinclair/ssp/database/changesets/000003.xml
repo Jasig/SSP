@@ -3687,6 +3687,27 @@
 
 	</changeSet>
 	
+	<changeSet id="add self_help_guide_self_help_guide_group" author="daniel.bower">
+		<createTable tableName="self_help_guide_self_help_guide_group">
+			<column name="self_help_guide_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_self_help_guide_group_self_help_guide_id_self_help_guide_id" 
+					references="self_help_guide(id)" />
+			</column>
+			<column name="self_help_guide_group_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="self_help_guide_self_help_guide_group_self_help_guide_group_id_self_help_guide_group_id" 
+					references="self_help_guide_group(id)" />
+			</column>
+		</createTable>
+	
+		<sql>grant all on self_help_guide_self_help_guide_group to ssp</sql>
+		<rollback>
+			<dropTable tableName="self_help_guide_self_help_guide_group" />
+		</rollback>
+		
+	</changeSet>
+	
 	<!-- Create message tables -->
 	
 	

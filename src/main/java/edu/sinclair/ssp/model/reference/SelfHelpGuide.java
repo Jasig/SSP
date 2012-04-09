@@ -21,7 +21,7 @@ import javax.persistence.OneToMany;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class SelfHelpGuide extends AbstractReference implements
-Serializable {
+		Serializable {
 
 	@Column(name = "threshold")
 	private int threshold;
@@ -46,10 +46,9 @@ Serializable {
 			0);
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "SelfHelpGuideSelfHelpGuideGroup",
-	schema = "dbo",
-	joinColumns = { @JoinColumn(name = "selfHelpGuideId", nullable = false, updatable = false) },
-	inverseJoinColumns = { @JoinColumn(name = "selfHelpGuideGroupId", nullable = false, updatable = false) })
+	@JoinTable(name = "self_help_guide_self_help_guide_group",
+			joinColumns = { @JoinColumn(name = "self_help_guide_id", nullable = false, updatable = false) },
+			inverseJoinColumns = { @JoinColumn(name = "self_help_guide_group_id", nullable = false, updatable = false) })
 	private Set<SelfHelpGuideGroup> selfHelpGuideGroups = new HashSet<SelfHelpGuideGroup>(
 			0);
 

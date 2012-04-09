@@ -122,4 +122,15 @@ public class SelfHelpGuideDaoTest {
 		dao.delete(obj2);
 	}
 
+	@Test
+	public void findAllActiveForUnauthenticated() {
+		assertList(dao.findAllActiveForUnauthenticated());
+	}
+
+	@Test
+	public void findAllActiveBySelfHelpGuideGroup() {
+		assertList(dao.findAllActiveBySelfHelpGuideGroup(UUID.randomUUID()));
+
+	}
+
 }

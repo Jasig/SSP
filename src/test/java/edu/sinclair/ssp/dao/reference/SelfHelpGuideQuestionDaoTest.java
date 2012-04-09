@@ -124,4 +124,9 @@ public class SelfHelpGuideQuestionDaoTest {
 		dao.delete(obj2);
 	}
 
+	@Test
+	public void bySelfHelpGuide() {
+		assertList(dao.bySelfHelpGuide(UUID.randomUUID()));
+	}
+
 }
