@@ -37,7 +37,7 @@ Ext.define('Ssp.controller.Main', {
 			
 		}); 
 		
-		this.superclass.init.call(this, arguments);
+		this.callParent(arguments);
     },
   
 	/*
@@ -69,12 +69,8 @@ Ext.define('Ssp.controller.Main', {
 	},	
 	
 	displayLoginWindow: function(){
-		var sspView = Ext.getCmp('sspView');
-		// Create a variable to hold our EXT Form Panel. 
-		// Assign various config options as seen.	 
-	    var login = Ext.create('Ssp.view.security.Login',{});	   		
-		// This just creates a window to wrap the login form. 
-		// The login object is passed to the items collection.       
+		var sspView = Ext.getCmp('sspView');	 
+	    var login = Ext.create('Ssp.view.security.Login',{});      
 	    var loginWin = new Ext.Window({
 	        layout:'fit',
 	        id: 'loginWin',
@@ -105,38 +101,50 @@ Ext.define('Ssp.controller.Main', {
     	// var loginWin = Ext.getCmp('loginWin');
     	
 		// Hide the login window
-		// loginWin.hide();
-
-		var sspView = Ext.getCmp('sspView');
-		
-		var appView = Ext.create('Ssp.view.Main');
-								 
-		// Add the Student Record View
-		sspView.add( appView );    	
+		// loginWin.hide();  	
     	
 		// display the default student record view
     	this.displayStudentRecordView();
     },
     
+    cleanSspView: function(){
+    	var sspView = Ext.getCmp('sspView');
+    	this.formRendererUtils.cleanAll(sspView);
+    	return sspView;
+    },
+    
     displayStudentRecordView: function(){
-		var mainView = Ext.getCmp('Main');
-		var arrViewItems = [
-		 		  Ext.create('Ssp.view.SearchResults', {flex:2}),
-		 		  
-		 		  Ext.create('Ssp.view.StudentRecord',
-					{items:[Ext.create('Ssp.view.ToolsMenu',{ flex:1 }), 
-					Ext.create('Ssp.view.Tools',{ flex:4 }) 
-					],flex:4})
-		 		 ];
+    	var mainView;
+    	var arrViewItems;
+    	var sspView = this.cleanSspView();
+    	mainView = Ext.create('Ssp.view.Main');
+		arrViewItems = [{ 
+							xtype: 'searchresults', 
+							flex: 2 
+						},
+							Ext.create('Ssp.view.StudentRecord',{
+								flex: 4,
+				 			  items: [{
+				 				  	xtype: 'toolsmenu',
+				 				  	flex: 1
+				 				  },{
+				 					  xtype: 'tools',
+				 					  flex: 4
+				 			  }]
+			 		  		 				 
+						})];
 		
-		
-		this.formRendererUtils.cleanItems(mainView);
 		mainView.add( arrViewItems );
+		sspView.add(mainView);
+		sspView.render();
     },    
     
     displayAdminView: function() { 
-		var mainView = Ext.getCmp('Main');
-		var arrViewItems = [
+    	var mainView;
+    	var arrViewItems;
+    	var sspView = this.cleanSspView();
+    	mainView = Ext.create('Ssp.view.Main');
+		arrViewItems = [
 		 		  Ext.create('Ssp.view.admin.AdminMain',
 					{items:[
 					        Ext.create('Ssp.view.admin.AdminTreeMenu',{ flex:2 }), 
@@ -144,8 +152,8 @@ Ext.define('Ssp.controller.Main', {
 					],flex:4})
 		 		 ];
 		
-		this.formRendererUtils.cleanItems(mainView);
-		mainView.add( arrViewItems );    	
+		mainView.add( arrViewItems ); 
+		sspView.add(mainView);
     }
 	
 });

@@ -1,6 +1,6 @@
 Ext.define('Ssp.view.StudentRecord', {
 	extend: 'Ext.panel.Panel',
-    alias: 'widget.StudentRecord',
+    alias: 'widget.studentrecord',
     id: 'StudentRecord',
     title: 'Student Record',
     collapsible: true,

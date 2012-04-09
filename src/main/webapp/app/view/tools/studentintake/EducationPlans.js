@@ -1,5 +1,6 @@
 Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 	extend: 'Ext.form.Panel',
+	alias: 'widget.studentintakeeducationplans',
 	id : 'StudentIntakeEducationPlans',
 	autoScroll: true,    
     width: '100%',
@@ -74,11 +75,6 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
                 {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
         		]
         }]
-    }],
-	
-
-	initComponent: function() {	
-		this.superclass.initComponent.call(this, arguments);
-	}
+    }]
 	
 });

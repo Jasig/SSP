@@ -1,6 +1,6 @@
 Ext.define('Ssp.view.SearchResults', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.SearchResults',
+	alias : 'widget.searchresults',
 	title: 'Students',
 	id: 'SearchResults',
     collapsible: false,

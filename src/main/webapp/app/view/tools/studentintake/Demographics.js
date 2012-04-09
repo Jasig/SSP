@@ -1,5 +1,6 @@
 Ext.define('Ssp.view.tools.studentintake.Demographics', {
 	extend: 'Ext.form.Panel',
+	alias: 'widget.studentintakedemographics',
 	id : 'StudentIntakeDemographics',
     width: '100%',
     height: '100%',
@@ -158,11 +159,6 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         fieldLabel: 'Total hours worked weekly while attending school',
         name: 'totalHoursWorkedPerWeek'
     }]
-    }],
-	
-
-	initComponent: function() {	
-		this.superclass.initComponent.call(this, arguments);
-	}
+    }]
 	
 });

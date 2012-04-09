@@ -1,16 +1,20 @@
-ssp = Ext.create('Ext.app.Application', {
-	
-	requires: ['Ext.data.UuidGenerator',
-	           'Ext.container.Viewport',
-			   'Ssp.model.StudentTO',
+Ext.application({
+	/*  To-DO determine required objects in the Requires config. These reference items
+	 * cause an issue with loading the interface in Firefox and not in Chrome. 
+			   'Ssp.view.admin.forms.AbstractReferenceAdmin',
+			   'Ssp.view.admin.forms.Challenges',
+			   'Ssp.view.admin.forms.Ethnicity',
+			   'Ext.data.UuidGenerator',
+			   'Ext.container.Viewport',		
+	*/
+	requires: ['Ssp.model.StudentTO',
 			   'Ssp.model.security.UserTO',
 			   'Ssp.model.tool.studentintake.StudentIntakeForm',
 			   'Ssp.model.tool.studentintake.StudentDemographics',
 			   'Ssp.model.tool.studentintake.StudentEducationGoal',
 			   'Ssp.model.tool.studentintake.StudentEducationPlan',
-			   'Ssp.view.admin.forms.AbstractReferenceAdmin',
-			   'Ssp.view.admin.forms.Challenges',
-			   'Ssp.view.admin.forms.Ethnicity'],
+			   'Ssp.model.reference.AbstractReferenceTO'],
+	
 			   
     name: 'Ssp',
     appFolder: 'app',
@@ -21,7 +25,7 @@ ssp = Ext.create('Ext.app.Application', {
 			  'security.Roles',
 			  'admin.AdminMenus',
 			  'admin.AdminTreeMenus',
-			  'reference.States', 
+			  'reference.AbstractReferences',
 			  'reference.Challenges',
 			  'reference.ChildCareArrangements',
 			  'reference.Citizenships',
@@ -32,10 +36,12 @@ ssp = Ext.create('Ext.app.Application', {
 			  'reference.FundingSources',
 			  'reference.Genders',
 			  'reference.MaritalStatuses',
+			  'reference.States', 
 			  'reference.StudentStatuses',
 			  'reference.VeteranStatuses',
 			  'reference.YesNo'], 
 	
+
 	controllers: [
         	'AbstractController',
         	'Admin',
@@ -46,7 +52,7 @@ ssp = Ext.create('Ext.app.Application', {
     ],
           		
     launch: function( app ) {
-	    	
+   	
 		// Define a global student model
 		Ext.apply( this, {currentStudent: new Ssp.model.StudentTO({id:"0"}, {}),
 						  currentUser: new Ssp.model.security.UserTO({id:"0"})
@@ -63,39 +69,12 @@ ssp = Ext.create('Ext.app.Application', {
         Ext.create('Ext.container.Viewport', {
             layout: 'fit',
             id: 'sspView',
+            alias: 'widget.sspview',
             items: []
         });   
- 
+         
  		// Display the application
- 		this.getController('Main').displayApplication();
-
-        
-		// Prepare a form to be loaded and used dynamically
-		/*
-		var cleaner = Ext.create( 'Ssp.util.TemplateDataUtil' );
-		var applicationFormsStore =  Ext.getStore('ApplicationForms');
-        var formItems = cleaner.prepareTemplateData(  applicationFormsStore );
-        */	
-        
-		/*
-		 * Loads a template within a container using a store for the data model of the template.
-		 
-		var templateLoader = Ext.create( 'Ssp.util.Util' );
-		
-		var search = Ext.create('Ext.container.Container', {
-			collapsible: true,
-			baseCls: 'sspPanel',
-		    store: Ext.getStore('Students'),
-		    width: 300,
-		    loader: {
-		        url:'templates/students.html',
-		        autoLoad: true,
-		        renderer: templateLoader.loaderXTemplateRenderer
-		    }
-		    
-		});	 
-		*/ 
-	    
+        this.getController('Main').displayApplication();
    }
     
 });

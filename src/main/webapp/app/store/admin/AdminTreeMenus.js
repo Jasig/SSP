@@ -1,7 +1,7 @@
 Ext.define('Ssp.store.admin.AdminTreeMenus',{
 	extend: 'Ext.data.TreeStore',  
     storeId: 'adminTreeMenuStore',
-	
+
     root: {
     	text: 'Administrative Tools',
     	title: 'Administrative Tools',

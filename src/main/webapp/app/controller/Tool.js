@@ -1,9 +1,9 @@
 Ext.require('Ext.tab.*');
 Ext.define('Ssp.controller.Tool', {
-    extend: 'Ssp.controller.AbstractController',
+	extend: 'Ssp.controller.AbstractController',
     
 	views: [
-        'ToolsMenu'
+        'ToolsMenu','Tools'
     ],
     
     stores: ['reference.FundingSources','reference.Challenges'],
@@ -12,35 +12,57 @@ Ext.define('Ssp.controller.Tool', {
         console.log('Initialized Tools Controller!');
         
 		this.control({
-			'ToolsMenu': {
+			'toolsmenu': {
 				itemclick: this.itemClick,
 				scope: this
 			}
 			
-		}); 
+		});
 		
-		this.superclass.init.call(this, arguments);
+		this.application.addListener('afterLoadStudent', function(record){
+			var toolsView = Ext.ComponentQuery.query('tools')[0];
+			var toolsStore = Ext.getStore('Tools');
+			var toolsMenu = Ext.ComponentQuery.query('toolsmenu')[0];
+			var toolsController = this.getController('Tool');			
+					
+			// Load the tools for the selected student
+			// Assumes that the tools under the students record are in the format
+			// of a tools json object
+			// toolsStore.load();
+			toolsStore.loadRawData( record.get('tools') );
+			toolsMenu.getSelectionModel().select(0);
+			this.getController('Tool').loadTool('Profile');
+		});
+		
+		this.callParent(arguments);
     },
- 
- 	/*
-	 * Load the selected tool.
-	 * var studentRecord = Ext.getCmp('SearchResults');
-		var columnRendererUtils = Ext.create('Ssp.util.FormRendererUtils');
-		var profileForm = columnRendererUtils.getProfileFormItems();
-		var studentRecordView = Ext.getCmp('StudentRecord');
-
-	 */    
+     
+    /*
+     * Handle Tool Menu Item Click.
+     */
 	itemClick: function(grid,record,item,index){ 
 		this.loadTool( record.get('toolType') );		
 	},
 	
+ 	/*
+	 * Loads a tool.
+	 */	
 	loadTool: function( toolType ) {
-		var toolsView = Ext.getCmp('Tools');
-		var comp = Ext.create('Ssp.view.tools.'+toolType);
+		var toolsView = Ext.ComponentQuery.query('tools')[0];
+		var comp = null;
 		var tabs;
 		var Form = "";
 		var currentStudent = this.application.currentStudent;
 		var currentStudentId = currentStudent.get('id');
+
+		// Kill existing tools, so no dupe ids are registered
+		if (toolsView != null)
+		{
+			Ssp.util.FormRendererUtils.cleanAll(toolsView);
+		}
+		
+		// create the tool by type
+		comp =  Ext.create('Ssp.view.tools.'+toolType);
 		
 		switch(toolType)
 		{
@@ -52,7 +74,7 @@ Ext.define('Ssp.controller.Tool', {
 				Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
 				Form.load(currentStudentId,{
 					success: function( formData ) {
-						// console.log( formData.data.student );
+						console.log( formData );
 						var formUtils = Ext.create('Ssp.util.FormRendererUtils');
 						var person = formData.data.person;
 						//var personDemographics = formData.data.personDemographics;
@@ -104,9 +126,8 @@ Ext.define('Ssp.controller.Tool', {
 				});
 				break;
 		}
-
-		this.formRendererUtils.cleanItems(toolsView);
-		toolsView.add( comp );	
+		
+		toolsView.add( comp );
 	}
     
 });

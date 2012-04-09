@@ -1,5 +1,6 @@
 Ext.define('Ssp.view.tools.studentintake.Challenges', {
 	extend: 'Ext.form.Panel',
+	alias: 'widget.studentintakechallenges',
 	id : 'StudentIntakeChallenges',
 	autoScroll: true,
     width: '100%',
@@ -11,15 +12,9 @@ Ext.define('Ssp.view.tools.studentintake.Challenges', {
         anchor: '100%'
     },
     
-
     // The fields
     defaultType: 'checkbox',
     
-    items: [],
-	
-
-	initComponent: function() {	
-		this.superclass.initComponent.call(this, arguments);
-	}
+    items: []
 	
 });

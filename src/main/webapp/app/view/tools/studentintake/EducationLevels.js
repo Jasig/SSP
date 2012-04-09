@@ -1,5 +1,6 @@
 Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 	extend: 'Ext.form.Panel',
+	alias: 'widget.studentintakeeducationlevels',
 	id : 'StudentIntakeEducationLevels',
 	autoScroll: true,    
     width: '100%',
@@ -14,11 +15,6 @@ Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 
     // The fields
     defaultType: 'checkbox',
-    items: [],
-	
-
-	initComponent: function() {	
-		this.superclass.initComponent.call(this, arguments);
-	}
+    items: []
 	
 });

@@ -34,7 +34,8 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 			xtype: 'pagingtoolbar',
 			id: 'abstractReferenceAdminPager',
 		    dock: 'bottom',
-		    displayInfo: true
+		    displayInfo: true,
+		    pageSize: 15
 		},
 		
        {
@@ -61,7 +62,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     }], 
     
     initComponent: function(){
-    	this.callParent();
+    	this.callParent(arguments);
     },
     
     reconfigure: function(store, columns) {
@@ -78,7 +79,8 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
             }
             if (store) {
                 store = Ext.StoreManager.lookup(store);
-                me.bindStore(store);
+                me.down('pagingtoolbar').bindStore(store);
+                me.bindStore(store);        
             } else {
                 me.getView().refresh();
             }

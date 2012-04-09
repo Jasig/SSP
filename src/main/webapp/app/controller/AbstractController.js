@@ -7,6 +7,7 @@ Ext.define('Ssp.controller.AbstractController', {
 		var formRendererUtils = new Ssp.util.FormRendererUtils(); 
         var config = { formRendererUtils: formRendererUtils };
         Ext.apply( this, config );
+        this.callParent(arguments);
     }
 
 });

@@ -18,8 +18,8 @@ describe("search-results.js --> Search Results", function() {
         );
     });
 
-    it("Search Results Store should have model.StudentTOs",function(){
-        expect(studentstore.getCount()).toBeGreaterThan(1);
+    it("Search Results Store should have more than 0 items",function(){
+        expect(studentstore.getCount()).toBeGreaterThan(0);
     });
 
 });
