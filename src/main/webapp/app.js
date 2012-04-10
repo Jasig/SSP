@@ -1,14 +1,14 @@
 Deft.Injector.configure({
     currentPerson: {
     	fn: function(){
-    		return new Ssp.model.StudentTO({id:"1"}, {})
+    		return new Ssp.model.StudentTO({id:"0"}, {})
     	},
     	singleton: true
     },
 
 	currentUser: {
 		fn: function(){
-			return new Ssp.model.security.UserTO({id:"1"}, {})
+			return new Ssp.model.security.UserTO({id:"0"}, {})
 		},
 		singleton: true
 	}
@@ -45,7 +45,6 @@ Ext.application({
 			  'ApplicationForms', 
 			  'Tools',
 			  'security.Roles',
-			  'admin.AdminMenus',
 			  'admin.AdminTreeMenus',
 			  'reference.AbstractReferences',
 			  'reference.Challenges',
@@ -74,17 +73,7 @@ Ext.application({
           		
     launch: function( app ) {
     	
-		// Define a global student model
-		Ext.apply( this, {currentStudent: new Ssp.model.StudentTO({id:"0"}, {}),
-						  currentUser: new Ssp.model.security.UserTO({id:"0"})
-		});
-		
-		// Load the initial data for the application
-		Ext.getStore('Students').load();
-		Ext.getStore('security.Roles').load();
-		Ext.getStore('admin.AdminMenus').load();
-          					 		
-   		// Build the UI
+		// Load the application shell
         Ext.create('Ext.container.Viewport', {
             layout: 'fit',
             id: 'sspView',

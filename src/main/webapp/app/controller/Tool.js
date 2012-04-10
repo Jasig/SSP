@@ -1,7 +1,12 @@
 Ext.require('Ext.tab.*');
 Ext.define('Ssp.controller.Tool', {
 	extend: 'Ssp.controller.AbstractViewController',
-    
+
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        currentPerson: 'currentPerson'
+    },
+	
 	views: [
         'ToolsMenu','Tools'
     ],
@@ -18,20 +23,12 @@ Ext.define('Ssp.controller.Tool', {
 			
 		});
 		
-		this.application.addListener('afterLoadStudent', function(record){
-			var toolsView = Ext.ComponentQuery.query('tools')[0];
-			var toolsStore = Ext.getStore('Tools');
-			var toolsMenu = Ext.ComponentQuery.query('toolsmenu')[0];
-			var toolsController = this.getController('Tool');			
-					
-			// Load the tools for the selected student
-			// Assumes that the tools under the students record are in the format
-			// of a tools json object
-			// toolsStore.load();
-			toolsStore.loadRawData( record.get('tools') );
-			toolsMenu.getSelectionModel().select(0);
-			this.getController('Tool').loadTool('Profile');
-		});
+		this.application.addListener('afterLoadStudent', function(){
+			// Load the profile for the selected record.
+			Ext.getStore('Tools').loadRawData( this.currentPerson.get('tools') );
+			Ext.ComponentQuery.query('toolsmenu')[0].getSelectionModel().select(0);
+			this.loadTool('Profile');
+		},this);
 		
 		this.callParent(arguments);
     },
@@ -51,9 +48,9 @@ Ext.define('Ssp.controller.Tool', {
 		var comp = null;
 		var tabs;
 		var form = "";
-		var currentStudent = this.application.currentStudent;
-		var currentStudentId = currentStudent.get('id');
-
+		var person = this.currentPerson;
+		var personId = person.get('id');
+		
 		// Kill existing tools, so no dupe ids are registered
 		if (toolsView != null)
 		{
@@ -66,12 +63,12 @@ Ext.define('Ssp.controller.Tool', {
 		switch(toolType)
 		{
 			case 'Profile':
-				comp.loadRecord( currentStudent );
+				comp.loadRecord( person );
 				break;
 			
 			case 'StudentIntake':
 				Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
-				Form.load(currentStudentId,{
+				Form.load(personId,{
 					success: function( formData ) {
 						console.log( formData );
 						var formUtils = Ext.create('Ssp.util.FormRendererUtils');

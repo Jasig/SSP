@@ -1,9 +1,8 @@
-Ext.require('Ext.tab.*');
 Ext.define('Ssp.controller.Admin', {
     extend: 'Ssp.controller.AbstractViewController',
     
     views: [
-        'admin.AdminMenu', 'admin.AdminTreeMenu', 'admin.forms.AbstractReferenceAdmin'
+        'admin.AdminTreeMenu', 'admin.forms.AbstractReferenceAdmin'
     ],
 
     stores: ['reference.Challenges',
@@ -19,11 +18,6 @@ Ext.define('Ssp.controller.Admin', {
 	init: function() {
 
 		this.control({
-			'AdminMenu': {
-				itemclick: this.itemClick,
-				scope: this
-			},
-			
 			'AdminTreeMenu': {
 				itemclick : this.treeItemClick,
 				scope: this
@@ -37,20 +31,12 @@ Ext.define('Ssp.controller.Admin', {
 		}); 
 		
 		this.callParent(arguments);
-    },
- 
- 	/*
-	 * Load the selected admin tool.
-	 */  
-	itemClick: function(grid,record,item,index){ 
-		this.loadAdmin( record.get('title'), record.get('form') );		
-	},
+    },	
 	
 	/*
 	 * Handle selecting an item in the tree grid
 	 */
 	treeItemClick: function(view,record,item,index,eventObj) {
-		
 		if (record.raw != undefined )
 			if ( record.raw.form != "")
 				this.loadAdmin( record.raw.title, record.raw.form );         

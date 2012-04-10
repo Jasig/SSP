@@ -2,7 +2,7 @@ Ext.define('Ssp.store.security.Roles', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.security.RoleTO',
     storeId: 'rolesStore',
-	autoLoad: false,
+	autoLoad: true,
 
     proxy: {
 		type: 'ajax',
