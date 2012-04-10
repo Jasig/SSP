@@ -1,0 +1,53 @@
+# CoffeeScript build file for MyGPS
+
+# Copy this file to some path outside the source control tree, edit the below
+# variables with the correct paths for your environment, and run it manually
+# any time any *.coffee file is updated.
+#
+# To run this build file, ensure CoffeeScript is installed and in your path,
+# then change your working directory to the location of this (copied) file
+# and run:
+#  cake build
+
+
+# Version number to append to the compiled MyGPS.js file.
+# If this version is changed, manually update the <SCRIPT> links in the /src/main/webapp/*.html files.
+VERSION  = "2.1.0"
+
+# Full path to /src/main/coffee
+# On Linux, for example, /usr/me/projects/ssp/src/main/MyGPS/coffee
+# On Windows, for example, C:/java/projects/ssp/src/main/MyGPS/coffee
+SRC_MAIN_COFFEE_PATH = "C:/java/projects/ssp/src/main/MyGPS/coffee"
+
+# Full path to /src/main/webapp/scripts where the compiled MyGPS.js file should be placed.
+# On Linux, for example, /usr/me/projects/MyGPS/src/main/webapp/MyGPS/scripts
+# On Windows, for example, C:/java/projects/MyGPS/src/main/webapp/MyGPS/scripts
+OUTPUT_PATH = "C:/java/projects/ssp/src/main/webapp/MyGPS/scripts"
+
+# Full path, including filename and extension, to the location of the Closure Compiler JAR file.
+# On Linux, for example, /usr/share/compiler/compiler.jar
+# On Windows, for example, C:/java/projects/compiler.jar
+CLOSURE_PATH = "C:/java/projects/closure-compiler.jar"
+
+
+
+# The below code should _not_ need changed per environment.
+
+PRODUCT  = "MyGPS"
+FILENAME = "#{ PRODUCT }-#{ VERSION }"
+
+{ exec } = require 'child_process'
+
+task "build", "Builds #{ PRODUCT } JavaScript (and minified JavaScript) implementation from CoffeeScript source code. Make sure this file is copied and paths are edited for your environment.", ->
+	console.log "Building #{ PRODUCT } version #{ VERSION }"
+	console.log "Compiling #{ SRC_MAIN_COFFEE_PATH }/**.coffee to \"#{ OUTPUT_PATH }/#{ FILENAME }.js\""
+	exec "coffee --join \"#{ FILENAME }.js\" --output \"#{ OUTPUT_PATH }\" --compile #{ SRC_MAIN_COFFEE_PATH }/mygps/enumeration/ #{ SRC_MAIN_COFFEE_PATH }/mygps/model/ #{ SRC_MAIN_COFFEE_PATH }/mygps/session/ #{ SRC_MAIN_COFFEE_PATH }/mygps/service/ #{ SRC_MAIN_COFFEE_PATH }/mygps/viewmodel/", ( error, stdout, stderr ) ->
+		console.log stdout + stderr if stdout or stderr
+		if error
+			throw error
+		else
+			console.log "Minifying \"#{ OUTPUT_PATH }/#{ FILENAME }.js\" to \"#{ OUTPUT_PATH }/#{ FILENAME }.min.js\""
+			console.log "closure --js \"#{ OUTPUT_PATH }/#{ FILENAME }.js\" --js_output_file \"#{ OUTPUT_PATH }/#{ FILENAME }.min.js\""
+			exec "java -jar #{ CLOSURE_PATH } --js \"#{ OUTPUT_PATH }/#{ FILENAME }.js\" --js_output_file \"#{ OUTPUT_PATH }/#{ FILENAME }.min.js\"", ( error, stdout, stderr ) ->
+				console.log stdout + stderr if stdout or stderr
+				throw error if error

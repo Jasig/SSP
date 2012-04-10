@@ -1,0 +1,5 @@
+<div data-role="fieldcontain" data-bind="visible: visible, css: { 'required': required, 'invalid': !valid() }">
+	<label class="select" data-bind="attr: { 'for': id }, text: labelWithIndicator"></label>
+	<select data-bind="attr: { id: id, name: label }, template: { name: 'selectOptionTemplate', foreach: options }, value: value, enable: enabled">
+	</select>
+</div>

@@ -1,0 +1,7 @@
+<h2 data-bind="text: headingText"></h2>
+<p data-bind="text: descriptionText"></p>
+<p><strong data-bind="text: questionText"></strong></p>
+<div data-inline="true">
+	<a href="#" ref="external" data-bind="click: function () { viewModel.answerQuestion( $data, true  ); if ( !viewModel.hasNextQuestion() ) { $.mobile.changePage('#guide-referrals-page'); } }" data-role="button" data-inline="true" data-theme="b">Yes</a>
+	<a href="#" ref="external" data-bind="click: function () { viewModel.answerQuestion( $data, false ); if ( !viewModel.hasNextQuestion() ) { $.mobile.changePage('#guide-referrals-page'); } }" data-role="button" data-inline="true">No</a>
+</div>
