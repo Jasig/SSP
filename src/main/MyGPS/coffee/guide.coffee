@@ -2,11 +2,11 @@
 context = window.context ||= {}
 
 # Create services.
-context.sessionService ||= new mygps.service.SessionService( "../1/session" )
-context.taskService ||= new mygps.service.TaskService( "../1/task" )
-context.selfHelpGuideService ||= new mygps.service.SelfHelpGuideService( "../1/selfhelpguide" )
-context.selfHelpGuideResponseService ||= new mygps.service.SelfHelpGuideResponseService( "../1/selfhelpguideresponse" )
-context.challengeReferralService ||= new mygps.service.ChallengeReferralService( "../1/challengereferral" )
+context.sessionService ||= new mygps.service.SessionService( "../api/mygps/session" )
+context.taskService ||= new mygps.service.TaskService( "../api/mygps/task" )
+context.selfHelpGuideService ||= new mygps.service.SelfHelpGuideService( "../api/mygps/selfhelpguide" )
+context.selfHelpGuideResponseService ||= new mygps.service.SelfHelpGuideResponseService( "../api/mygps/selfhelpguideresponse" )
+context.challengeReferralService ||= new mygps.service.ChallengeReferralService( "../api/mygps/challengereferral" )
 
 # Create session.
 context.session ||= new mygps.session.Session( context.sessionService )

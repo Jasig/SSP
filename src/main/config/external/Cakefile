@@ -40,12 +40,14 @@ FILENAME = "#{ PRODUCT }-#{ VERSION }"
 
 task "build", "Builds #{ PRODUCT } JavaScript (and minified JavaScript) implementation from CoffeeScript source code. Make sure this file is copied and paths are edited for your environment.", ->
 	console.log "Building #{ PRODUCT } version #{ VERSION }"
-	console.log "Compiling #{ SRC_MAIN_COFFEE_PATH }/**.coffee to \"#{ OUTPUT_PATH }/#{ FILENAME }.js\""
+	console.log "Compiling #{ SRC_MAIN_COFFEE_PATH }/ to \"#{ OUTPUT_PATH }/ and #{ FILENAME }.js\""
+	exec "coffee --output \"#{ OUTPUT_PATH }\" --compile #{ SRC_MAIN_COFFEE_PATH }/", ( error, stdout, stderr ) ->
 	exec "coffee --join \"#{ FILENAME }.js\" --output \"#{ OUTPUT_PATH }\" --compile #{ SRC_MAIN_COFFEE_PATH }/mygps/enumeration/ #{ SRC_MAIN_COFFEE_PATH }/mygps/model/ #{ SRC_MAIN_COFFEE_PATH }/mygps/session/ #{ SRC_MAIN_COFFEE_PATH }/mygps/service/ #{ SRC_MAIN_COFFEE_PATH }/mygps/viewmodel/", ( error, stdout, stderr ) ->
 		console.log stdout + stderr if stdout or stderr
 		if error
 			throw error
 		else
+
 			console.log "Minifying \"#{ OUTPUT_PATH }/#{ FILENAME }.js\" to \"#{ OUTPUT_PATH }/#{ FILENAME }.min.js\""
 			console.log "closure --js \"#{ OUTPUT_PATH }/#{ FILENAME }.js\" --js_output_file \"#{ OUTPUT_PATH }/#{ FILENAME }.min.js\""
 			exec "java -jar #{ CLOSURE_PATH } --js \"#{ OUTPUT_PATH }/#{ FILENAME }.js\" --js_output_file \"#{ OUTPUT_PATH }/#{ FILENAME }.min.js\"", ( error, stdout, stderr ) ->

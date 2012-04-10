@@ -10,32 +10,62 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sinclair.ssp.model.Person;
+import edu.sinclair.ssp.security.SspUser;
 import edu.sinclair.ssp.service.SecurityService;
+import edu.sinclair.ssp.transferobject.PersonTO;
 import edu.sinclair.ssp.transferobject.ServiceResponse;
 
 /**
- * Allows the logged in user to get their profile
+ * Allows the logged in user to get their profile.
+ * <p>
+ * Mapped to the URI path <code>/api/session/...</code>
  */
 @Controller
 @RequestMapping("/session")
 public class SessionController {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SessionController.class);
 
 	@Autowired
 	private SecurityService service;
 
-	@RequestMapping(value = "getAuthenticatedPerson", method = RequestMethod.GET)
+	/**
+	 * Gets the currently authenticated user.
+	 * <p>
+	 * Mapped to the URI path <code>.../getAuthenticatedPerson</code>
+	 * 
+	 * @return The currently authenticated {@link Person} info, or null (empty)
+	 *         if not authenticated.
+	 */
+	@RequestMapping(value = "/getAuthenticatedPerson", method = RequestMethod.GET)
 	public @ResponseBody
-	Person getAuthenticatedPerson() throws Exception {
-		return service.currentlyLoggedInSspUser().getPerson();
+	PersonTO getAuthenticatedPerson() {
+		if (service == null) {
+			LOGGER.error("The security service was not wired by the Spring container correctly for the SessionController.");
+			return null;
+		}
+
+		SspUser user = service.currentlyLoggedInSspUser();
+
+		if (user == null) {
+			// User not authenticated, so return an empty result, but still with
+			// an HTTP 200 response.
+			return null;
+		}
+
+		// Convert model to a transfer object
+		PersonTO pTo = new PersonTO();
+		pTo.fromModel(user.getPerson());
+
+		// Return authenticated person transfer object
+		return pTo;
 	}
 
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody
 	ServiceResponse handle(Exception e) {
-		logger.error("Error: ", e);
+		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 }

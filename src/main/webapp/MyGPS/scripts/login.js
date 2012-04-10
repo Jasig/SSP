@@ -1,6 +1,8 @@
 (function() {
   var context;
+
   context = window.context || (window.context = {});
+
   $('#login-page').live('pagecreate', function(event) {
     var loginPage, viewModel;
     loginPage = this;
@@ -22,4 +24,5 @@
       });
     });
   });
+
 }).call(this);

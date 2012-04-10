@@ -1,9 +1,14 @@
 (function() {
   var context;
+
   context = window.context || (window.context = {});
-  context.sessionService || (context.sessionService = new mygps.service.SessionService("1/session"));
-  context.taskService || (context.taskService = new mygps.service.TaskService("1/task"));
+
+  context.sessionService || (context.sessionService = new mygps.service.SessionService("../api/mygps/session"));
+
+  context.taskService || (context.taskService = new mygps.service.TaskService("../api/mygps/task"));
+
   context.session || (context.session = new mygps.session.Session(context.sessionService));
+
   $('#home-page').live('pagecreate', function(event) {
     var homePage, viewModel;
     homePage = this;
@@ -23,4 +28,5 @@
       viewModel.load();
     });
   });
+
 }).call(this);

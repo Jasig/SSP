@@ -2,8 +2,8 @@
 context = window.context ||= {}
 
 # Create services.
-context.sessionService ||= new mygps.service.SessionService( "../1/session" )
-context.messageService ||= new mygps.service.MessageService( "../1/message" )
+context.sessionService ||= new mygps.service.SessionService( "../api/mygps/session" )
+context.messageService ||= new mygps.service.MessageService( "../api/mygps/message" )
 
 # Create session.
 context.session ||= new mygps.session.Session( context.sessionService )
