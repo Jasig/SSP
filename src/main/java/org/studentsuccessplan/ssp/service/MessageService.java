@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.service;
+package org.studentsuccessplan.ssp.service;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.model.Message;
-import edu.sinclair.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.Message;
+import org.studentsuccessplan.ssp.model.Person;
 
 public interface MessageService {
 

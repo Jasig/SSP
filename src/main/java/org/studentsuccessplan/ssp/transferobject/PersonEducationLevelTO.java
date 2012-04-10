@@ -1,6 +1,6 @@
-package edu.sinclair.ssp.transferobject;
+package org.studentsuccessplan.ssp.transferobject;
 
-import edu.sinclair.ssp.model.PersonEducationLevel;
+import org.studentsuccessplan.ssp.model.PersonEducationLevel;
 
 public class PersonEducationLevelTO implements
 		TransferObject<PersonEducationLevel> {

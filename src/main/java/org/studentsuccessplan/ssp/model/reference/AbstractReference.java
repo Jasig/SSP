@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.model.reference;
+package org.studentsuccessplan.ssp.model.reference;
 
 import java.util.UUID;
 
@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import edu.sinclair.ssp.model.Auditable;
+import org.studentsuccessplan.ssp.model.Auditable;
 
 /**
  * Reference entities must all share this abstract class, so they inherit the

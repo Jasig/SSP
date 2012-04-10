@@ -1,6 +1,6 @@
-package edu.sinclair.ssp.transferobject;
+package org.studentsuccessplan.ssp.transferobject;
 
-import edu.sinclair.ssp.model.PersonFundingSource;
+import org.studentsuccessplan.ssp.model.PersonFundingSource;
 
 public class PersonFundingSourceTO implements
 		TransferObject<PersonFundingSource> {

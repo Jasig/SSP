@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.model.reference;
+package org.studentsuccessplan.ssp.model.reference;
 
 import java.util.UUID;
 

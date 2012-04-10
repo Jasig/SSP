@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.dao;
+package org.studentsuccessplan.ssp.dao;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -16,12 +16,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonConfidentialityDisclosureAgreement;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.studentsuccessplan.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonConfidentialityDisclosureAgreement;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")

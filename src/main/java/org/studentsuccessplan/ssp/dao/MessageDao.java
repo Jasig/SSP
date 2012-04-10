@@ -1,10 +1,10 @@
-package edu.sinclair.ssp.dao;
+package org.studentsuccessplan.ssp.dao;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import edu.sinclair.ssp.model.Message;
+import org.studentsuccessplan.ssp.model.Message;
 
 @Repository
 public class MessageDao extends AbstractAuditableCrudDao<Message> implements

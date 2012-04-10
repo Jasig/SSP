@@ -1,12 +1,12 @@
-package edu.sinclair.ssp.service.reference;
+package org.studentsuccessplan.ssp.service.reference;
 
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.EducationGoal;
-import edu.sinclair.ssp.service.AuditableCrudService;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.EducationGoal;
+import org.studentsuccessplan.ssp.service.AuditableCrudService;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 
 public interface EducationGoalService extends AuditableCrudService<EducationGoal> {
 

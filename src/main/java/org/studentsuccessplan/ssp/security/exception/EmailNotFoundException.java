@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.security.exception;
+package org.studentsuccessplan.ssp.security.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

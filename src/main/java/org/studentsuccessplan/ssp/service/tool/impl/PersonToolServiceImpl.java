@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.tool.impl;
+package org.studentsuccessplan.ssp.service.tool.impl;
 
 import java.util.List;
 
@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 
-import edu.sinclair.ssp.dao.PersonDao;
-import edu.sinclair.ssp.dao.PersonToolsDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.tool.PersonTool;
-import edu.sinclair.ssp.model.tool.Tools;
-import edu.sinclair.ssp.service.tool.PersonToolService;
+import org.studentsuccessplan.ssp.dao.PersonDao;
+import org.studentsuccessplan.ssp.dao.PersonToolsDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.tool.PersonTool;
+import org.studentsuccessplan.ssp.model.tool.Tools;
+import org.studentsuccessplan.ssp.service.tool.PersonToolService;
 
 @Service
 public class PersonToolServiceImpl implements PersonToolService {

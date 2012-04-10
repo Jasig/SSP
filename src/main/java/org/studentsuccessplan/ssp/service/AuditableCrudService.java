@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.service;
+package org.studentsuccessplan.ssp.service;
 
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 
 public interface AuditableCrudService<T> {
 

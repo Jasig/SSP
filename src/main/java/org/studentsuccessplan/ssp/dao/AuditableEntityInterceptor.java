@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.dao;
+package org.studentsuccessplan.ssp.dao;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,16 +10,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
-import edu.sinclair.ssp.model.Auditable;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.security.SspUser;
-import edu.sinclair.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.model.Auditable;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.security.SspUser;
+import org.studentsuccessplan.ssp.service.SecurityService;
 
 /**
  * Intercepts Hibernate writes to automatically fill the created and modified
  * author and time stamp fields of any model that derives from the
- * {@link edu.sinclair.ssp.model.Auditable} class.
+ * {@link org.studentsuccessplan.ssp.model.Auditable} class.
  */
 @Service
 public class AuditableEntityInterceptor extends EmptyInterceptor implements
@@ -141,7 +141,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 
 	/**
 	 * Retrieve the currently authenticated user from the
-	 * {@link edu.sinclair.ssp.service.SecurityService}.
+	 * {@link org.studentsuccessplan.ssp.service.SecurityService}.
 	 * 
 	 * @return The currently authenticated user
 	 */

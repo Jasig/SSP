@@ -1,4 +1,4 @@
-package edu.sinclair.mygps.web;
+package org.studentsuccessplan.mygps.web;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.sinclair.mygps.business.TaskManager;
-import edu.sinclair.mygps.model.transferobject.TaskTO;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.service.SecurityService;
+import org.studentsuccessplan.mygps.business.TaskManager;
+import org.studentsuccessplan.mygps.model.transferobject.TaskTO;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.service.SecurityService;
 
 @Controller
 @RequestMapping("/task")

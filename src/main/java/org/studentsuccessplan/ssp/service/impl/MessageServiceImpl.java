@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.impl;
+package org.studentsuccessplan.ssp.service.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -17,12 +17,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.MessageDao;
-import edu.sinclair.ssp.model.Message;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.service.MessageService;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.dao.MessageDao;
+import org.studentsuccessplan.ssp.model.Message;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.service.MessageService;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.SecurityService;
 
 @Service
 @Transactional(readOnly = true)

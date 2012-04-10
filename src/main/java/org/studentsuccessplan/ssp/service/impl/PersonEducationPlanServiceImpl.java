@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.impl;
+package org.studentsuccessplan.ssp.service.impl;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,13 +6,13 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.sinclair.ssp.dao.PersonEducationPlanDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonEducationPlan;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.PersonEducationPlanService;
-import edu.sinclair.ssp.service.reference.StudentStatusService;
+import org.studentsuccessplan.ssp.dao.PersonEducationPlanDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonEducationPlan;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonEducationPlanService;
+import org.studentsuccessplan.ssp.service.reference.StudentStatusService;
 
 @Service
 public class PersonEducationPlanServiceImpl implements

@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.transferobject.reference;
+package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.reference.SelfHelpGuideGroup;
-import edu.sinclair.ssp.transferobject.TransferObject;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 public class SelfHelpGuideGroupTO extends AbstractReferenceTO<SelfHelpGuideGroup>
 		implements TransferObject<SelfHelpGuideGroup> {

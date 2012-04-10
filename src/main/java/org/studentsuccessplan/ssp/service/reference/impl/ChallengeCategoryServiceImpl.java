@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.reference.impl;
+package org.studentsuccessplan.ssp.service.reference.impl;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.reference.ChallengeCategoryDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.ChallengeCategory;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.reference.ChallengeCategoryService;
+import org.studentsuccessplan.ssp.dao.reference.ChallengeCategoryDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.ChallengeCategory;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.reference.ChallengeCategoryService;
 
 @Service
 @Transactional

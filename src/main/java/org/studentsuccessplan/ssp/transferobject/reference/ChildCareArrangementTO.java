@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.transferobject.reference;
+package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.reference.ChildCareArrangement;
-import edu.sinclair.ssp.transferobject.TransferObject;
+import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 public class ChildCareArrangementTO extends
 		AbstractReferenceTO<ChildCareArrangement> implements

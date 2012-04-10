@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.web.api.reference;
+package org.studentsuccessplan.ssp.web.api.reference;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -17,11 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
-import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
-import edu.sinclair.ssp.web.api.AbstractControllerHttpTestSupport;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+import org.studentsuccessplan.ssp.web.api.AbstractControllerHttpTestSupport;
 
 /**
  * Challenge controller tests
@@ -61,7 +61,7 @@ public class ChallengeControllerHttpIntegrationTest extends
 
 	/**
 	 * Test the
-	 * {@link ChallengeController#getAll(edu.sinclair.ssp.model.ObjectStatus, Integer, Integer, String, String)}
+	 * {@link ChallengeController#getAll(org.studentsuccessplan.ssp.model.ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws Exception

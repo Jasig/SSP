@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.transferobject.reference;
+package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.UUID;
 
@@ -6,8 +6,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import edu.sinclair.ssp.model.reference.AbstractReference;
-import edu.sinclair.ssp.transferobject.AuditableTO;
+import org.studentsuccessplan.ssp.model.reference.AbstractReference;
+import org.studentsuccessplan.ssp.transferobject.AuditableTO;
 
 public abstract class AbstractReferenceTO<T extends AbstractReference> extends
 		AuditableTO<T> {

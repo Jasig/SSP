@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.web.api;
+package org.studentsuccessplan.ssp.web.api;
 
 import java.security.InvalidParameterException;
 import java.util.Iterator;

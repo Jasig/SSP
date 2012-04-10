@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.factory;
+package org.studentsuccessplan.ssp.factory;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import edu.sinclair.ssp.transferobject.TransferObject;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 /**
  * Turn a list of Transfer Objects into Model Objects, and back again.

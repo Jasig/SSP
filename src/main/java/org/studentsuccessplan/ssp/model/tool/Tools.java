@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.model.tool;
+package org.studentsuccessplan.ssp.model.tool;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import edu.sinclair.ssp.transferobject.jsonserializer.CodeAndProperty;
-import edu.sinclair.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
+import org.studentsuccessplan.ssp.transferobject.jsonserializer.CodeAndProperty;
+import org.studentsuccessplan.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
 
 @JsonSerialize(using = CodeAndPropertySerializer.class)
 public enum Tools implements CodeAndProperty {

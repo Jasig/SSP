@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service;
+package org.studentsuccessplan.ssp.service;
 
 import java.io.Serializable;
 import java.util.UUID;

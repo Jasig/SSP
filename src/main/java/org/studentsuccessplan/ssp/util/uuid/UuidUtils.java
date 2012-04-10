@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.util.uuid;
+package org.studentsuccessplan.ssp.util.uuid;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package edu.sinclair.mygps.web;
+package org.studentsuccessplan.mygps.web;
 
 import java.util.UUID;
 
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.mygps.business.SelfHelpGuideManager;
-import edu.sinclair.mygps.model.transferobject.SelfHelpGuideResponseTO;
+import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
+import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
 
 @Controller
 @RequestMapping("/selfhelpguideresponse")

@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.reference.impl;
+package org.studentsuccessplan.ssp.service.reference.impl;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.reference.EducationLevelDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.EducationLevel;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.reference.EducationLevelService;
+import org.studentsuccessplan.ssp.dao.reference.EducationLevelDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.EducationLevel;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.reference.EducationLevelService;
 
 @Service
 @Transactional

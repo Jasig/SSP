@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.dao;
+package org.studentsuccessplan.ssp.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -17,14 +17,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonEducationLevel;
-import edu.sinclair.ssp.model.reference.EducationLevel;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
-import edu.sinclair.ssp.service.reference.EducationLevelService;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonEducationLevel;
+import org.studentsuccessplan.ssp.model.reference.EducationLevel;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.studentsuccessplan.ssp.service.reference.EducationLevelService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")

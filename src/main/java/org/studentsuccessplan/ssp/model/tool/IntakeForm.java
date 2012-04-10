@@ -1,6 +1,6 @@
-package edu.sinclair.ssp.model.tool;
+package org.studentsuccessplan.ssp.model.tool;
 
-import edu.sinclair.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.Person;
 
 /**
  * The model for the Intake Form tool.

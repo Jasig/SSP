@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.web.api;
+package org.studentsuccessplan.ssp.web.api;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.TransferObjectListFactory;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.transferobject.PersonTO;
-import edu.sinclair.ssp.transferobject.ServiceResponse;
-import edu.sinclair.ssp.web.api.validation.ValidationException;
+import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.transferobject.PersonTO;
+import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
+import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
 /**
  * Some basic methods for manipulating people in the system.

@@ -1,11 +1,11 @@
-package edu.sinclair.ssp.service;
+package org.studentsuccessplan.ssp.service;
 
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonEducationGoal;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonEducationGoal;
 
 public interface PersonEducationGoalService extends
 		AuditableCrudService<PersonEducationGoal> {

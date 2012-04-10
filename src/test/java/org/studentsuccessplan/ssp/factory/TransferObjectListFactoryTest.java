@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.factory;
+package org.studentsuccessplan.ssp.factory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -11,8 +11,8 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
-import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
 public class TransferObjectListFactoryTest {
 

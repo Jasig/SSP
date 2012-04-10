@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.dao;
+package org.studentsuccessplan.ssp.dao;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,8 +10,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.sinclair.ssp.model.Auditable;
-import edu.sinclair.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Auditable;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 
 public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		AuditableCrudDao<T> {

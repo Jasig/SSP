@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.web.api;
+package org.studentsuccessplan.ssp.web.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.service.SecurityService;
-import edu.sinclair.ssp.transferobject.ServiceResponse;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
 
 /**
  * Allows the logged in user to get their profile

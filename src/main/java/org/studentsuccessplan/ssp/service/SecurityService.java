@@ -1,6 +1,6 @@
-package edu.sinclair.ssp.service;
+package org.studentsuccessplan.ssp.service;
 
-import edu.sinclair.ssp.security.SspUser;
+import org.studentsuccessplan.ssp.security.SspUser;
 
 public interface SecurityService {
 

@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.impl;
+package org.studentsuccessplan.ssp.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,25 +9,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.PersonDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonChallenge;
-import edu.sinclair.ssp.model.PersonDemographics;
-import edu.sinclair.ssp.model.PersonEducationGoal;
-import edu.sinclair.ssp.model.PersonEducationLevel;
-import edu.sinclair.ssp.model.PersonEducationPlan;
-import edu.sinclair.ssp.model.PersonFundingSource;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.reference.ChallengeService;
-import edu.sinclair.ssp.service.reference.CitizenshipService;
-import edu.sinclair.ssp.service.reference.EducationLevelService;
-import edu.sinclair.ssp.service.reference.EthnicityService;
-import edu.sinclair.ssp.service.reference.FundingSourceService;
-import edu.sinclair.ssp.service.reference.MaritalStatusService;
-import edu.sinclair.ssp.service.reference.VeteranStatusService;
-import edu.sinclair.ssp.service.tool.IntakeService;
+import org.studentsuccessplan.ssp.dao.PersonDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonChallenge;
+import org.studentsuccessplan.ssp.model.PersonDemographics;
+import org.studentsuccessplan.ssp.model.PersonEducationGoal;
+import org.studentsuccessplan.ssp.model.PersonEducationLevel;
+import org.studentsuccessplan.ssp.model.PersonEducationPlan;
+import org.studentsuccessplan.ssp.model.PersonFundingSource;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.reference.ChallengeService;
+import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
+import org.studentsuccessplan.ssp.service.reference.EducationLevelService;
+import org.studentsuccessplan.ssp.service.reference.EthnicityService;
+import org.studentsuccessplan.ssp.service.reference.FundingSourceService;
+import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
+import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
+import org.studentsuccessplan.ssp.service.tool.IntakeService;
 
 @Service
 @Transactional

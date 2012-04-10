@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.model.tool;
+package org.studentsuccessplan.ssp.model.tool;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonDemographics;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonDemographics;
 
 /**
  * Simple tests on the {@link IntakeForm} model.

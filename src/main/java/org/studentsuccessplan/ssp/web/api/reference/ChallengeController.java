@@ -1,13 +1,13 @@
-package edu.sinclair.ssp.web.api.reference;
+package org.studentsuccessplan.ssp.web.api.reference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.service.reference.ChallengeService;
-import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.service.reference.ChallengeService;
+import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
 /**
  * Challenge controller responds to common REST requests with

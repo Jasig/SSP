@@ -1,8 +1,8 @@
-package edu.sinclair.ssp.service;
+package org.studentsuccessplan.ssp.service;
 
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonConfidentialityDisclosureAgreement;
-import edu.sinclair.ssp.model.reference.ConfidentialityDisclosureAgreement;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonConfidentialityDisclosureAgreement;
+import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
 
 public interface PersonConfidentialityDisclosureAgreementService {
 

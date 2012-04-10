@@ -1,14 +1,14 @@
-package edu.sinclair.ssp.service.impl;
+package org.studentsuccessplan.ssp.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.security.MockUser;
-import edu.sinclair.ssp.security.SspUser;
-import edu.sinclair.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.security.MockUser;
+import org.studentsuccessplan.ssp.security.SspUser;
+import org.studentsuccessplan.ssp.service.SecurityService;
 
 /**
  * A Security Service for use in a test environment. Allows an integration test

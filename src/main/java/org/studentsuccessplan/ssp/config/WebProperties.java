@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.config;
+package org.studentsuccessplan.ssp.config;
 
 import org.springframework.beans.factory.annotation.Value;
 

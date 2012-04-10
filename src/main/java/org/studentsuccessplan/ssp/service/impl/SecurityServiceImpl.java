@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.impl;
+package org.studentsuccessplan.ssp.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,10 +7,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import edu.sinclair.ssp.security.SspUser;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.security.SspUser;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.SecurityService;
 
 @Transactional(readOnly = true)
 public class SecurityServiceImpl implements SecurityService {

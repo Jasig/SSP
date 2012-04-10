@@ -1,15 +1,15 @@
-package edu.sinclair.ssp.transferobject;
+package org.studentsuccessplan.ssp.transferobject;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonDemographics;
-import edu.sinclair.ssp.model.reference.Citizenship;
-import edu.sinclair.ssp.model.reference.EmploymentShifts;
-import edu.sinclair.ssp.model.reference.Ethnicity;
-import edu.sinclair.ssp.model.reference.Genders;
-import edu.sinclair.ssp.model.reference.MaritalStatus;
-import edu.sinclair.ssp.model.reference.VeteranStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonDemographics;
+import org.studentsuccessplan.ssp.model.reference.Citizenship;
+import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
+import org.studentsuccessplan.ssp.model.reference.Ethnicity;
+import org.studentsuccessplan.ssp.model.reference.Genders;
+import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
+import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 
 public class PersonDemographicsTO extends AuditableTO<PersonDemographics>
 		implements TransferObject<PersonDemographics> {

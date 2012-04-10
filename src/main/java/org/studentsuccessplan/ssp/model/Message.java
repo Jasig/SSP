@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.model;
+package org.studentsuccessplan.ssp.model;
 
 import java.util.Date;
 

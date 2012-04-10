@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.reference.impl;
+package org.studentsuccessplan.ssp.service.reference.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -15,10 +15,10 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.sinclair.ssp.dao.reference.VeteranStatusDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.VeteranStatus;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.dao.reference.VeteranStatusDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 
 public class VeteranStatusServiceTest {
 

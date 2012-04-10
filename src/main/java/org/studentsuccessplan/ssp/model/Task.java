@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.model;
+package org.studentsuccessplan.ssp.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -6,8 +6,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

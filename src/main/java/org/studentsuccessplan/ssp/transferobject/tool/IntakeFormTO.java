@@ -1,21 +1,21 @@
-package edu.sinclair.ssp.transferobject.tool;
+package org.studentsuccessplan.ssp.transferobject.tool;
 
 import java.util.List;
 import java.util.Map;
 
-import edu.sinclair.ssp.factory.TransferObjectListFactory;
-import edu.sinclair.ssp.model.PersonChallenge;
-import edu.sinclair.ssp.model.PersonEducationLevel;
-import edu.sinclair.ssp.model.PersonFundingSource;
-import edu.sinclair.ssp.model.tool.IntakeForm;
-import edu.sinclair.ssp.transferobject.PersonChallengeTO;
-import edu.sinclair.ssp.transferobject.PersonDemographicsTO;
-import edu.sinclair.ssp.transferobject.PersonEducationGoalTO;
-import edu.sinclair.ssp.transferobject.PersonEducationLevelTO;
-import edu.sinclair.ssp.transferobject.PersonEducationPlanTO;
-import edu.sinclair.ssp.transferobject.PersonFundingSourceTO;
-import edu.sinclair.ssp.transferobject.PersonTO;
-import edu.sinclair.ssp.transferobject.TransferObject;
+import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
+import org.studentsuccessplan.ssp.model.PersonChallenge;
+import org.studentsuccessplan.ssp.model.PersonEducationLevel;
+import org.studentsuccessplan.ssp.model.PersonFundingSource;
+import org.studentsuccessplan.ssp.model.tool.IntakeForm;
+import org.studentsuccessplan.ssp.transferobject.PersonChallengeTO;
+import org.studentsuccessplan.ssp.transferobject.PersonDemographicsTO;
+import org.studentsuccessplan.ssp.transferobject.PersonEducationGoalTO;
+import org.studentsuccessplan.ssp.transferobject.PersonEducationLevelTO;
+import org.studentsuccessplan.ssp.transferobject.PersonEducationPlanTO;
+import org.studentsuccessplan.ssp.transferobject.PersonFundingSourceTO;
+import org.studentsuccessplan.ssp.transferobject.PersonTO;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 public class IntakeFormTO implements TransferObject<IntakeForm> {
 

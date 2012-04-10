@@ -1,10 +1,10 @@
-package edu.sinclair.ssp.service.tool;
+package org.studentsuccessplan.ssp.service.tool;
 
 import java.util.List;
 
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.tool.PersonTool;
-import edu.sinclair.ssp.model.tool.Tools;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.tool.PersonTool;
+import org.studentsuccessplan.ssp.model.tool.Tools;
 
 public interface PersonToolService {
 

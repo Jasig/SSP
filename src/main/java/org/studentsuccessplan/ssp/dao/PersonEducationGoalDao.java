@@ -1,11 +1,11 @@
-package edu.sinclair.ssp.dao;
+package org.studentsuccessplan.ssp.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonEducationGoal;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonEducationGoal;
 
 /**
  * CRUD methods for the PersonEducationGoal model.

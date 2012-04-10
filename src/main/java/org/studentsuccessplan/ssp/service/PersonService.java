@@ -1,15 +1,15 @@
-package edu.sinclair.ssp.service;
+package org.studentsuccessplan.ssp.service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonChallenge;
-import edu.sinclair.ssp.model.PersonEducationLevel;
-import edu.sinclair.ssp.model.PersonFundingSource;
-import edu.sinclair.ssp.service.tool.IntakeService;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonChallenge;
+import org.studentsuccessplan.ssp.model.PersonEducationLevel;
+import org.studentsuccessplan.ssp.model.PersonFundingSource;
+import org.studentsuccessplan.ssp.service.tool.IntakeService;
 
 public interface PersonService extends AuditableCrudService<Person> {
 

@@ -1,8 +1,8 @@
-package edu.sinclair.mygps.model.transferobject;
+package org.studentsuccessplan.mygps.model.transferobject;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 
 public class ChallengeReferralTO {
 

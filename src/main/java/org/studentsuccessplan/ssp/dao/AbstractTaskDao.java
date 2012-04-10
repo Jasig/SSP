@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.dao;
+package org.studentsuccessplan.ssp.dao;
 
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.AbstractTask;
+import org.studentsuccessplan.ssp.model.AbstractTask;
 
 public abstract class AbstractTaskDao<T extends AbstractTask> {
 

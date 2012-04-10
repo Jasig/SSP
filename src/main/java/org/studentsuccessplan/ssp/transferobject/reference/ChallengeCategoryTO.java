@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.transferobject.reference;
+package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.reference.ChallengeCategory;
-import edu.sinclair.ssp.transferobject.TransferObject;
+import org.studentsuccessplan.ssp.model.reference.ChallengeCategory;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 public class ChallengeCategoryTO extends AbstractReferenceTO<ChallengeCategory>
 		implements TransferObject<ChallengeCategory> {

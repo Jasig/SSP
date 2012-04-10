@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.config.logging;
+package org.studentsuccessplan.ssp.config.logging;
 
 import java.io.File;
 import java.io.IOException;

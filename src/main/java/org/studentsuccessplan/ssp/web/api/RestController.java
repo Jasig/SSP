@@ -1,10 +1,10 @@
-package edu.sinclair.ssp.web.api;
+package org.studentsuccessplan.ssp.web.api;
 
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.transferobject.ServiceResponse;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
 
 /**
  * All the Methods a Reference Controller needs to be useful.
@@ -64,7 +64,7 @@ public abstract class RestController<T> {
 	 * @param obj
 	 *            New instance to persist.
 	 * @return Original instance plus the generated id.
-	 * @throws edu.sinclair.ssp.web.api.validation.ValidationException
+	 * @throws org.studentsuccessplan.ssp.web.api.validation.ValidationException
 	 *             If the obj contains an id (since it shouldn't).
 	 * @throws Exception
 	 */
@@ -77,7 +77,7 @@ public abstract class RestController<T> {
 	 *            Explicit id to the instance to persist.
 	 * @param obj
 	 * @return The update data object instance.
-	 * @throws edu.sinclair.ssp.web.api.validation.ValidationException
+	 * @throws org.studentsuccessplan.ssp.web.api.validation.ValidationException
 	 *             If the specified id is null.
 	 * @throws Exception
 	 */

@@ -1,4 +1,4 @@
-package edu.sinclair.mygps.business;
+package org.studentsuccessplan.mygps.business;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,28 +11,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.mygps.model.transferobject.ChallengeReferralTO;
-import edu.sinclair.mygps.model.transferobject.SelfHelpGuideContentTO;
-import edu.sinclair.mygps.model.transferobject.SelfHelpGuideQuestionTO;
-import edu.sinclair.mygps.model.transferobject.SelfHelpGuideResponseTO;
-import edu.sinclair.mygps.model.transferobject.SelfHelpGuideTO;
-import edu.sinclair.ssp.dao.SelfHelpGuideQuestionResponseDao;
-import edu.sinclair.ssp.dao.SelfHelpGuideResponseDao;
-import edu.sinclair.ssp.dao.TaskDao;
-import edu.sinclair.ssp.dao.reference.ChallengeDao;
-import edu.sinclair.ssp.dao.reference.ChallengeReferralDao;
-import edu.sinclair.ssp.dao.reference.SelfHelpGuideDao;
-import edu.sinclair.ssp.dao.reference.SelfHelpGuideQuestionDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.SelfHelpGuideQuestionResponse;
-import edu.sinclair.ssp.model.SelfHelpGuideResponse;
-import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.model.reference.ChallengeReferral;
-import edu.sinclair.ssp.model.reference.SelfHelpGuide;
-import edu.sinclair.ssp.model.reference.SelfHelpGuideQuestion;
-import edu.sinclair.ssp.service.SecurityService;
-import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
+import org.studentsuccessplan.mygps.model.transferobject.ChallengeReferralTO;
+import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
+import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideQuestionTO;
+import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
+import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideTO;
+import org.studentsuccessplan.ssp.dao.SelfHelpGuideQuestionResponseDao;
+import org.studentsuccessplan.ssp.dao.SelfHelpGuideResponseDao;
+import org.studentsuccessplan.ssp.dao.TaskDao;
+import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
+import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
+import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideDao;
+import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideQuestionDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
+import org.studentsuccessplan.ssp.model.SelfHelpGuideResponse;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
+import org.studentsuccessplan.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
 @Service
 public class SelfHelpGuideManager {

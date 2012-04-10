@@ -1,8 +1,8 @@
-package edu.sinclair.ssp.dao;
+package org.studentsuccessplan.ssp.dao;
 
 import org.springframework.stereotype.Repository;
 
-import edu.sinclair.ssp.model.tool.PersonTool;
+import org.studentsuccessplan.ssp.model.tool.PersonTool;
 
 /**
  * CRUD methods for the PersonDemographics model.

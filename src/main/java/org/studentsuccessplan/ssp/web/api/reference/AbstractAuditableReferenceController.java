@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.web.api.reference;
+package org.studentsuccessplan.ssp.web.api.reference;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.ssp.factory.TransferObjectListFactory;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.AbstractReference;
-import edu.sinclair.ssp.service.AuditableCrudService;
-import edu.sinclair.ssp.transferobject.ServiceResponse;
-import edu.sinclair.ssp.transferobject.reference.AbstractReferenceTO;
-import edu.sinclair.ssp.web.api.RestController;
-import edu.sinclair.ssp.web.api.validation.ValidationException;
+import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.AbstractReference;
+import org.studentsuccessplan.ssp.service.AuditableCrudService;
+import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
+import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
+import org.studentsuccessplan.ssp.web.api.RestController;
+import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
 /**
  * Basic REST command implementation to responds with standard transfer objects

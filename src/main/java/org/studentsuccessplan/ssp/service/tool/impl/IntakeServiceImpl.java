@@ -1,22 +1,22 @@
-package edu.sinclair.ssp.service.tool.impl;
+package org.studentsuccessplan.ssp.service.tool.impl;
 
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonDemographics;
-import edu.sinclair.ssp.model.PersonEducationGoal;
-import edu.sinclair.ssp.model.PersonEducationPlan;
-import edu.sinclair.ssp.model.tool.IntakeForm;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.reference.CitizenshipService;
-import edu.sinclair.ssp.service.reference.EthnicityService;
-import edu.sinclair.ssp.service.reference.MaritalStatusService;
-import edu.sinclair.ssp.service.reference.VeteranStatusService;
-import edu.sinclair.ssp.service.tool.IntakeService;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonDemographics;
+import org.studentsuccessplan.ssp.model.PersonEducationGoal;
+import org.studentsuccessplan.ssp.model.PersonEducationPlan;
+import org.studentsuccessplan.ssp.model.tool.IntakeForm;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
+import org.studentsuccessplan.ssp.service.reference.EthnicityService;
+import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
+import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
+import org.studentsuccessplan.ssp.service.tool.IntakeService;
 
 @Service
 public class IntakeServiceImpl implements IntakeService {

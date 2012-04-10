@@ -1,4 +1,4 @@
-package edu.sinclair.mygps.model.transferobject;
+package org.studentsuccessplan.mygps.model.transferobject;
 
 public class MessageTO {
 

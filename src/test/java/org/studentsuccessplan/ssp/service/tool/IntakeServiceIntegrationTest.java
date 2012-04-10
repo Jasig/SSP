@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.tool;
+package org.studentsuccessplan.ssp.service.tool;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -18,23 +18,23 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.PersonDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonChallenge;
-import edu.sinclair.ssp.model.PersonDemographics;
-import edu.sinclair.ssp.model.PersonEducationGoal;
-import edu.sinclair.ssp.model.PersonEducationLevel;
-import edu.sinclair.ssp.model.PersonEducationPlan;
-import edu.sinclair.ssp.model.PersonFundingSource;
-import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.model.reference.EducationLevel;
-import edu.sinclair.ssp.model.reference.FundingSource;
-import edu.sinclair.ssp.model.reference.StudentStatus;
-import edu.sinclair.ssp.model.tool.IntakeForm;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.studentsuccessplan.ssp.dao.PersonDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonChallenge;
+import org.studentsuccessplan.ssp.model.PersonDemographics;
+import org.studentsuccessplan.ssp.model.PersonEducationGoal;
+import org.studentsuccessplan.ssp.model.PersonEducationLevel;
+import org.studentsuccessplan.ssp.model.PersonEducationPlan;
+import org.studentsuccessplan.ssp.model.PersonFundingSource;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.EducationLevel;
+import org.studentsuccessplan.ssp.model.reference.FundingSource;
+import org.studentsuccessplan.ssp.model.reference.StudentStatus;
+import org.studentsuccessplan.ssp.model.tool.IntakeForm;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../service-testConfig.xml")

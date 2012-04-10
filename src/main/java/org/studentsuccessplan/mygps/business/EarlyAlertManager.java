@@ -1,4 +1,4 @@
-package edu.sinclair.mygps.business;
+package org.studentsuccessplan.mygps.business;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import edu.sinclair.ssp.dao.SelfHelpGuideQuestionResponseDao;
-import edu.sinclair.ssp.dao.SelfHelpGuideResponseDao;
-import edu.sinclair.ssp.model.SelfHelpGuideQuestionResponse;
-import edu.sinclair.ssp.model.SelfHelpGuideResponse;
+import org.studentsuccessplan.ssp.dao.SelfHelpGuideQuestionResponseDao;
+import org.studentsuccessplan.ssp.dao.SelfHelpGuideResponseDao;
+import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
+import org.studentsuccessplan.ssp.model.SelfHelpGuideResponse;
 
 @Service
 public class EarlyAlertManager {

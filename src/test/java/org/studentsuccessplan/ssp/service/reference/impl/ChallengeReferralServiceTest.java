@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.reference.impl;
+package org.studentsuccessplan.ssp.service.reference.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -15,10 +15,10 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.sinclair.ssp.dao.reference.ChallengeReferralDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.ChallengeReferral;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 
 public class ChallengeReferralServiceTest {
 

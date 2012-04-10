@@ -1,4 +1,4 @@
-package edu.sinclair.ssp;
+package org.studentsuccessplan.ssp;
 
 import static org.junit.Assert.*;
 

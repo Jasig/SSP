@@ -1,11 +1,11 @@
-package edu.sinclair.mygps.business;
+package org.studentsuccessplan.mygps.business;
 
 import java.util.UUID;
 
-import edu.sinclair.mygps.model.transferobject.FormOptionTO;
-import edu.sinclair.mygps.model.transferobject.FormQuestionTO;
-import edu.sinclair.mygps.model.transferobject.FormSectionTO;
-import edu.sinclair.mygps.model.transferobject.FormTO;
+import org.studentsuccessplan.mygps.model.transferobject.FormOptionTO;
+import org.studentsuccessplan.mygps.model.transferobject.FormQuestionTO;
+import org.studentsuccessplan.mygps.model.transferobject.FormSectionTO;
+import org.studentsuccessplan.mygps.model.transferobject.FormTO;
 
 public class FormUtil {
 

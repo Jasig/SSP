@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.util;
+package org.studentsuccessplan.ssp.util;
 
 
 public class SspStringUtils {

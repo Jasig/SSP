@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.transferobject.reference;
+package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.reference.EducationGoal;
-import edu.sinclair.ssp.transferobject.TransferObject;
+import org.studentsuccessplan.ssp.model.reference.EducationGoal;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 public class EducationGoalTO extends AbstractReferenceTO<EducationGoal>
 		implements TransferObject<EducationGoal> {

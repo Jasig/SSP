@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.model;
+package org.studentsuccessplan.ssp.model;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import edu.sinclair.ssp.model.reference.StudentStatus;
+import org.studentsuccessplan.ssp.model.reference.StudentStatus;
 
 /**
  * Students should have some Education Plan stored for use in notifications to

@@ -15,7 +15,7 @@
 	<import resource="classpath:test-config.xml"/>
 
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
-	<context:component-scan base-package="edu.sinclair.ssp" />
+	<context:component-scan base-package="org.studentsuccessplan.ssp" />
 	<mvc:annotation-driven />
 	
 	<mvc:interceptors>
@@ -30,7 +30,7 @@
 		<property name="cacheSeconds" value="0" />
 		<property name="webBindingInitializer">
 			<!-- Allows binding of UUIDs -->
-			<bean class="edu.sinclair.ssp.util.BindingInitializer" />
+			<bean class="org.studentsuccessplan.ssp.util.BindingInitializer" />
 		</property>
 	</bean>
 	
@@ -39,7 +39,7 @@
 	    <property name="basename" value="views"/>
 	</bean>
 
-	<bean id="webProperties" class="edu.sinclair.ssp.config.WebProperties" factory-method="getInstance"></bean>
+	<bean id="webProperties" class="org.studentsuccessplan.ssp.config.WebProperties" factory-method="getInstance"></bean>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 

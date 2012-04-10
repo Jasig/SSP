@@ -1,15 +1,15 @@
-package edu.sinclair.ssp.dao.reference;
+package org.studentsuccessplan.ssp.dao.reference;
 
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
-import edu.sinclair.ssp.dao.AuditableCrudDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.reference.ChallengeReferral;
-import edu.sinclair.ssp.security.SspUser;
+import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.security.SspUser;
 
 /**
  * Data access class for the ChallengeReferral reference entity.

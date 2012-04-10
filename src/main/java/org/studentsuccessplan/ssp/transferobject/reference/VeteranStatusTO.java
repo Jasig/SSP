@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.transferobject.reference;
+package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.reference.VeteranStatus;
-import edu.sinclair.ssp.transferobject.TransferObject;
+import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 public class VeteranStatusTO extends AbstractReferenceTO<VeteranStatus>
 		implements TransferObject<VeteranStatus> {

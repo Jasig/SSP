@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.model;
+package org.studentsuccessplan.ssp.model;
 
 import java.io.Serializable;
 
@@ -13,13 +13,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import edu.sinclair.ssp.model.reference.ChildCareArrangement;
-import edu.sinclair.ssp.model.reference.Citizenship;
-import edu.sinclair.ssp.model.reference.EmploymentShifts;
-import edu.sinclair.ssp.model.reference.Ethnicity;
-import edu.sinclair.ssp.model.reference.Genders;
-import edu.sinclair.ssp.model.reference.MaritalStatus;
-import edu.sinclair.ssp.model.reference.VeteranStatus;
+import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
+import org.studentsuccessplan.ssp.model.reference.Citizenship;
+import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
+import org.studentsuccessplan.ssp.model.reference.Ethnicity;
+import org.studentsuccessplan.ssp.model.reference.Genders;
+import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
+import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 
 /**
  * Students should have some demographic information stored for use in

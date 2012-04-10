@@ -1,10 +1,10 @@
-package edu.sinclair.mygps.model.transferobject;
+package org.studentsuccessplan.mygps.model.transferobject;
 
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.reference.AbstractReference;
-import edu.sinclair.ssp.util.SspStringUtils;
+import org.studentsuccessplan.ssp.model.reference.AbstractReference;
+import org.studentsuccessplan.ssp.util.SspStringUtils;
 
 public class FormQuestionTO {
 

@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.transferobject.reference;
+package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.reference.Citizenship;
-import edu.sinclair.ssp.transferobject.TransferObject;
+import org.studentsuccessplan.ssp.model.reference.Citizenship;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 public class CitizenshipTO extends AbstractReferenceTO<Citizenship> implements
 		TransferObject<Citizenship> {

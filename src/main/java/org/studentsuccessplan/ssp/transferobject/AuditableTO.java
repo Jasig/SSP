@@ -1,10 +1,10 @@
-package edu.sinclair.ssp.transferobject;
+package org.studentsuccessplan.ssp.transferobject;
 
 import java.util.Date;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.Auditable;
-import edu.sinclair.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Auditable;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 
 public abstract class AuditableTO<T> implements TransferObject<T> {
 

@@ -1,13 +1,13 @@
-package edu.sinclair.mygps.model.transferobject;
+package org.studentsuccessplan.mygps.model.transferobject;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.AbstractTask;
-import edu.sinclair.ssp.model.CustomTask;
-import edu.sinclair.ssp.model.Task;
+import org.studentsuccessplan.ssp.model.AbstractTask;
+import org.studentsuccessplan.ssp.model.CustomTask;
+import org.studentsuccessplan.ssp.model.Task;
 
 public class TaskTO {
 	public static final String TASKTO_ID_PREFIX_DELIMITER = ":";

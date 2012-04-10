@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.transferobject;
+package org.studentsuccessplan.ssp.transferobject;
 
 public class ServiceResponse {
 

@@ -1,10 +1,10 @@
-package edu.sinclair.ssp.transferobject;
+package org.studentsuccessplan.ssp.transferobject;
 
 /**
  * An object which exposes the model to another layer
  * 
  * @param <T>
- *            Should be any model class from the edu.sinclair.ssp.model
+ *            Should be any model class from the org.studentsuccessplan.ssp.model
  *            namespace.
  */
 public interface TransferObject<T> {

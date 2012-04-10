@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.util;
+package org.studentsuccessplan.ssp.util;
 
 import java.io.StringWriter;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.web.api;
+package org.studentsuccessplan.ssp.web.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,9 +16,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.transferobject.PersonTO;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.transferobject.PersonTO;
 
 /**
  * Person controller tests

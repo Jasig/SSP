@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.config.logging;
+package org.studentsuccessplan.ssp.config.logging;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;

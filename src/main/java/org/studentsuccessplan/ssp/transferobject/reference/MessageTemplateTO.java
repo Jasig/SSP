@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.transferobject.reference;
+package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.reference.MessageTemplate;
-import edu.sinclair.ssp.transferobject.TransferObject;
+import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 public class MessageTemplateTO extends AbstractReferenceTO<MessageTemplate>
 		implements TransferObject<MessageTemplate> {

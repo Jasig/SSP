@@ -1,6 +1,6 @@
-package edu.sinclair.mygps.model.transferobject;
+package org.studentsuccessplan.mygps.model.transferobject;
 
-import edu.sinclair.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.Person;
 
 public class PersonTO {
 

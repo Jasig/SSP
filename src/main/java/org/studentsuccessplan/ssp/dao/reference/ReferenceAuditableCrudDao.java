@@ -1,12 +1,12 @@
-package edu.sinclair.ssp.dao.reference;
+package org.studentsuccessplan.ssp.dao.reference;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import edu.sinclair.ssp.dao.AbstractAuditableCrudDao;
-import edu.sinclair.ssp.model.Auditable;
-import edu.sinclair.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.dao.AbstractAuditableCrudDao;
+import org.studentsuccessplan.ssp.model.Auditable;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 
 /**
  * Base CRUD methods for reference model objects.

@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.reference.impl;
+package org.studentsuccessplan.ssp.service.reference.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -15,10 +15,10 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.sinclair.ssp.dao.reference.ConfidentialityLevelDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.reference.ConfidentialityLevel;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.dao.reference.ConfidentialityLevelDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 
 public class ConfidentialityLevelServiceTest {
 

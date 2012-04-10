@@ -1,4 +1,4 @@
-package edu.sinclair.mygps.business;
+package org.studentsuccessplan.mygps.business;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,25 +16,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.mygps.model.transferobject.TaskReportTO;
-import edu.sinclair.mygps.model.transferobject.TaskTO;
-import edu.sinclair.mygps.model.transferobject.TaskTOComparator;
-import edu.sinclair.ssp.dao.CustomTaskDao;
-import edu.sinclair.ssp.dao.MessageDao;
-import edu.sinclair.ssp.dao.TaskDao;
-import edu.sinclair.ssp.dao.reference.ChallengeReferralDao;
-import edu.sinclair.ssp.dao.reference.MessageTemplateDao;
-import edu.sinclair.ssp.model.CustomTask;
-import edu.sinclair.ssp.model.Message;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.Task;
-import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.model.reference.MessageTemplate;
-import edu.sinclair.ssp.service.MessageService;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.SecurityService;
-import edu.sinclair.ssp.util.VelocityTemplateHelper;
+import org.studentsuccessplan.mygps.model.transferobject.TaskReportTO;
+import org.studentsuccessplan.mygps.model.transferobject.TaskTO;
+import org.studentsuccessplan.mygps.model.transferobject.TaskTOComparator;
+import org.studentsuccessplan.ssp.dao.CustomTaskDao;
+import org.studentsuccessplan.ssp.dao.MessageDao;
+import org.studentsuccessplan.ssp.dao.TaskDao;
+import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
+import org.studentsuccessplan.ssp.dao.reference.MessageTemplateDao;
+import org.studentsuccessplan.ssp.model.CustomTask;
+import org.studentsuccessplan.ssp.model.Message;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.Task;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
+import org.studentsuccessplan.ssp.service.MessageService;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.util.VelocityTemplateHelper;
 
 @Service
 public class TaskManager {

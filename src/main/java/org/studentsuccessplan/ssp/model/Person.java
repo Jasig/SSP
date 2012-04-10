@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.model;
+package org.studentsuccessplan.ssp.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,7 +27,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.google.common.collect.Sets;
 
-import edu.sinclair.ssp.model.tool.PersonTool;
+import org.studentsuccessplan.ssp.model.tool.PersonTool;
 
 /**
  * A Person entity.

@@ -1,6 +1,6 @@
-package edu.sinclair.ssp.transferobject;
+package org.studentsuccessplan.ssp.transferobject;
 
-import edu.sinclair.ssp.model.PersonChallenge;
+import org.studentsuccessplan.ssp.model.PersonChallenge;
 
 public class PersonChallengeTO implements TransferObject<PersonChallenge> {
 

@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.security;
+package org.studentsuccessplan.ssp.security;
 
 import java.util.Collection;
 

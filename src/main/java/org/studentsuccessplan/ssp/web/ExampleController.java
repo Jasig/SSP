@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.web;
+package org.studentsuccessplan.ssp.web;
 
 import java.util.HashMap;
 import java.util.Map;

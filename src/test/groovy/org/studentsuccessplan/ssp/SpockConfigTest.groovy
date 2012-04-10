@@ -1,4 +1,4 @@
-package edu.sinclair.ssp
+package org.studentsuccessplan.ssp
 
 import spock.lang.Specification
 

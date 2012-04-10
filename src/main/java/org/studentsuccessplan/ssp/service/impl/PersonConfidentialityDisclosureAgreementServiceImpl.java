@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.impl;
+package org.studentsuccessplan.ssp.service.impl;
 
 import java.util.List;
 
@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.ssp.dao.PersonConfidentialityDisclosureAgreementDao;
-import edu.sinclair.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonConfidentialityDisclosureAgreement;
-import edu.sinclair.ssp.model.reference.ConfidentialityDisclosureAgreement;
-import edu.sinclair.ssp.service.PersonConfidentialityDisclosureAgreementService;
+import org.studentsuccessplan.ssp.dao.PersonConfidentialityDisclosureAgreementDao;
+import org.studentsuccessplan.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonConfidentialityDisclosureAgreement;
+import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
+import org.studentsuccessplan.ssp.service.PersonConfidentialityDisclosureAgreementService;
 
 @Service
 @Transactional(readOnly = true)

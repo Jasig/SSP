@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.impl;
+package org.studentsuccessplan.ssp.service.impl;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,17 +6,17 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.sinclair.ssp.dao.PersonDemographicsDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonDemographics;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.PersonDemographicsService;
-import edu.sinclair.ssp.service.PersonService;
-import edu.sinclair.ssp.service.reference.CitizenshipService;
-import edu.sinclair.ssp.service.reference.EthnicityService;
-import edu.sinclair.ssp.service.reference.MaritalStatusService;
-import edu.sinclair.ssp.service.reference.VeteranStatusService;
+import org.studentsuccessplan.ssp.dao.PersonDemographicsDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonDemographics;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonDemographicsService;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
+import org.studentsuccessplan.ssp.service.reference.EthnicityService;
+import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
+import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
 
 @Service
 public class PersonDemographicsServiceImpl implements PersonDemographicsService {

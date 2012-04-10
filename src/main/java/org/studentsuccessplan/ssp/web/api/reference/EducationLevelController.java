@@ -1,13 +1,13 @@
-package edu.sinclair.ssp.web.api.reference;
+package org.studentsuccessplan.ssp.web.api.reference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import edu.sinclair.ssp.model.reference.EducationLevel;
-import edu.sinclair.ssp.service.reference.EducationLevelService;
-import edu.sinclair.ssp.transferobject.reference.EducationLevelTO;
+import org.studentsuccessplan.ssp.model.reference.EducationLevel;
+import org.studentsuccessplan.ssp.service.reference.EducationLevelService;
+import org.studentsuccessplan.ssp.transferobject.reference.EducationLevelTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller

@@ -1,10 +1,10 @@
-package edu.sinclair.mygps.model.transferobject;
+package org.studentsuccessplan.mygps.model.transferobject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.reference.SelfHelpGuide;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 
 public class SelfHelpGuideTO {
 

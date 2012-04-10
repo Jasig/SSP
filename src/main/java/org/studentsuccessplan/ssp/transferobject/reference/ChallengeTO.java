@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.transferobject.reference;
+package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -8,9 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
-import edu.sinclair.ssp.model.reference.Challenge;
-import edu.sinclair.ssp.model.reference.SelfHelpGuideQuestion;
-import edu.sinclair.ssp.transferobject.TransferObject;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge> {

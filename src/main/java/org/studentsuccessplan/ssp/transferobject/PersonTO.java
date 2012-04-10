@@ -1,8 +1,8 @@
-package edu.sinclair.ssp.transferobject;
+package org.studentsuccessplan.ssp.transferobject;
 
 import java.util.Date;
 
-import edu.sinclair.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.Person;
 
 public class PersonTO extends AuditableTO<Person> implements
 		TransferObject<Person> {

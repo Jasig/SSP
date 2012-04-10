@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.security;
+package org.studentsuccessplan.ssp.security;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -7,7 +7,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import edu.sinclair.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.Person;
 
 public class SspUser extends User {
 

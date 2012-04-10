@@ -1,9 +1,9 @@
-package edu.sinclair.ssp.transferobject;
+package org.studentsuccessplan.ssp.transferobject;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.PersonEducationGoal;
-import edu.sinclair.ssp.model.reference.EducationGoal;
+import org.studentsuccessplan.ssp.model.PersonEducationGoal;
+import org.studentsuccessplan.ssp.model.reference.EducationGoal;
 
 public class PersonEducationGoalTO extends AuditableTO<PersonEducationGoal>
 		implements TransferObject<PersonEducationGoal> {

@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.model;
+package org.studentsuccessplan.ssp.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import edu.sinclair.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
 
 public class PersonChallengeTest {
 

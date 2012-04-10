@@ -1,9 +1,9 @@
-package edu.sinclair.mygps.model.transferobject;
+package org.studentsuccessplan.mygps.model.transferobject;
 
 import java.util.List;
 import java.util.UUID;
 
-import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
+import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
 public class SelfHelpGuideResponseTO {
 

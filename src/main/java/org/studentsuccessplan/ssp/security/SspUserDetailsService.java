@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.security;
+package org.studentsuccessplan.ssp.security;
 
 import java.util.Collection;
 
@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
-import edu.sinclair.ssp.security.exception.EmailNotFoundException;
-import edu.sinclair.ssp.security.exception.UserNotAuthorizedException;
-import edu.sinclair.ssp.security.exception.UserNotEnabledException;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
-import edu.sinclair.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.security.exception.EmailNotFoundException;
+import org.studentsuccessplan.ssp.security.exception.UserNotAuthorizedException;
+import org.studentsuccessplan.ssp.security.exception.UserNotEnabledException;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonService;
 
 @Transactional(readOnly = true)
 public class SspUserDetailsService implements UserDetailsService {

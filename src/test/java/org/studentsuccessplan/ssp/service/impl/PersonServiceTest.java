@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.service.impl;
+package org.studentsuccessplan.ssp.service.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -19,11 +19,11 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.sinclair.ssp.dao.PersonDao;
-import edu.sinclair.ssp.model.ObjectStatus;
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.PersonChallenge;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.dao.PersonDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonChallenge;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 
 public class PersonServiceTest {
 

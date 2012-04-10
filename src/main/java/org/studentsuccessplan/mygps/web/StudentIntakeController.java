@@ -1,4 +1,4 @@
-package edu.sinclair.mygps.web;
+package org.studentsuccessplan.mygps.web;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.sinclair.mygps.business.StudentIntakeFormManager;
-import edu.sinclair.mygps.model.transferobject.FormTO;
+import org.studentsuccessplan.mygps.business.StudentIntakeFormManager;
+import org.studentsuccessplan.mygps.model.transferobject.FormTO;
 
 @Controller
 @RequestMapping("/intake")

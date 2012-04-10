@@ -1,10 +1,10 @@
-package edu.sinclair.ssp.service.tool;
+package org.studentsuccessplan.ssp.service.tool;
 
 import java.util.UUID;
 
-import edu.sinclair.ssp.model.Person;
-import edu.sinclair.ssp.model.tool.IntakeForm;
-import edu.sinclair.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.tool.IntakeForm;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 
 public interface IntakeService {
 

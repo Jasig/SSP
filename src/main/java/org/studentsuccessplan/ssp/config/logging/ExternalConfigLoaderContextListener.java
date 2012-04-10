@@ -1,4 +1,4 @@
-package edu.sinclair.ssp.config.logging;
+package org.studentsuccessplan.ssp.config.logging;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * 
  * <pre>
  * <listener>
- *     <listener-class>edu.sinclair.ssp.config.logging.ExternalConfigLoaderContextListener</listener-class>
+ *     <listener-class>org.studentsuccessplan.ssp.config.logging.ExternalConfigLoaderContextListener</listener-class>
  *   </listener>
  * </pre>
  * 
