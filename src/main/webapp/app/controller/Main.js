@@ -2,28 +2,14 @@ Ext.define('Ssp.controller.Main', {
     extend: 'Ssp.controller.AbstractViewController',
     requires: ['Ext.window.*'],
 	
-	models: ['security.UserTO'],
-    
 	views: [
-        'Main',
-        'security.Login',
-        'security.Roles'
+        'Main'
     ],
  
 		
 	init: function() {
 
 		this.control({
-			'#securityLoginButton': {
-				click: this.loginButtonClick,
-				scope: this
-			},
-			
-			'#securityRolesButton': {
-				click: this.roleSelectionClick,
-				scope: this
-			},
-			
 			'#studentViewNav': {
 				click: this.studentRecordViewNavClick,
 				scope: this
@@ -38,20 +24,6 @@ Ext.define('Ssp.controller.Main', {
 		
 		this.callParent(arguments);
     },
-  
-	/*
-	 * Handle login button click.
-	 */    
-	loginButtonClick: function(obj, eObj){ 
-		this.displayRoleList();
-	},
-
-	/*
-	 * Handle assigning a role.
-	 */    
-	roleSelectionClick: function(obj, eObj){ 
-		this.displayApplication();
-	},
 
 	/*
 	 * Handle the studentRecordViewNav click.
@@ -65,45 +37,11 @@ Ext.define('Ssp.controller.Main', {
 	 */    
 	adminViewNavClick: function(obj, eObj){ 
 		this.displayAdminView();
-	},	
-	
-	displayLoginWindow: function(){
-		var sspView = Ext.getCmp('sspView');	 
-	    var login = Ext.create('Ssp.view.security.Login',{});      
-	    var loginWin = new Ext.Window({
-	        layout:'fit',
-	        id: 'loginWin',
-	        width:300,
-	        height:150,
-	        closable: false,
-	        resizable: false,
-	        plain: true,
-	        border: false,
-	        title: 'Please Login',
-	        items: [login]
-		});
-		loginWin.show();
-		
-		sspView.add(loginWin);
-		
-	},
- 
- 
-	displayRoleList: function(){
-		var loginWin = Ext.getCmp('loginWin');
-		var roleList = Ext.create('Ssp.view.security.Roles');
-		loginWin.removeAll();
-		loginWin.add(roleList);
 	},
  
     displayApplication: function(){
-    	// var loginWin = Ext.getCmp('loginWin');
-    	
-		// Hide the login window
-		// loginWin.hide();  	
-    	
-		// display the default student record view
-    	this.displayStudentRecordView();
+		// display the default record view
+    	this.displayRecordView();
     },
     
     cleanSspView: function(){
@@ -116,7 +54,7 @@ Ext.define('Ssp.controller.Main', {
     	return sspView;
     },
     
-    displayStudentRecordView: function(){
+    displayRecordView: function(){
     	var mainView;
     	var arrViewItems;
     	var sspView = this.cleanSspView();
@@ -158,5 +96,4 @@ Ext.define('Ssp.controller.Main', {
 		mainView.add( arrViewItems ); 
 		sspView.add(mainView);
     }
-	
 });

@@ -4,15 +4,7 @@ Deft.Injector.configure({
     		return new Ssp.model.StudentTO({id:"0"}, {})
     	},
     	singleton: true
-    },
-
-	currentUser: {
-		fn: function(){
-			return new Ssp.model.security.UserTO({id:"0"}, {})
-		},
-		singleton: true
-	}
-	
+    }
 });
 
 Ext.application({
@@ -29,7 +21,6 @@ Ext.application({
 	*/		
 	
 	requires: ['Ssp.model.StudentTO',
-			   'Ssp.model.security.UserTO',
 			   'Ssp.model.tool.studentintake.StudentIntakeForm',
 			   'Ssp.model.tool.studentintake.StudentDemographics',
 			   'Ssp.model.tool.studentintake.StudentEducationGoal',
@@ -44,7 +35,6 @@ Ext.application({
 	stores: [ 'Students', 
 			  'ApplicationForms', 
 			  'Tools',
-			  'security.Roles',
 			  'admin.AdminTreeMenus',
 			  'reference.AbstractReferences',
 			  'reference.Challenges',

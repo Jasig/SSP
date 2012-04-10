@@ -72,6 +72,8 @@ Ext.define('Ssp.controller.Tool', {
 					success: function( formData ) {
 						console.log( formData );
 						var formUtils = Ext.create('Ssp.util.FormRendererUtils');
+						
+						// PERSON RECORD
 						var person = formData.data.person;
 						var personDemographics = formData.data.personDemographics;
 						var personEducationPlan = formData.data.personEducationPlan;
@@ -79,9 +81,8 @@ Ext.define('Ssp.controller.Tool', {
 						var personEducationLevels = formData.data.personEducationLevels;
 						var personFundingSources = formData.data.personFundingSources;
 						var personChallenges = formData.data.personChallenges;
-							// [{ id: "07b5c3ac-3bdf-4d12-b65d-94cb55167998" },
-							// { id: "eba26bb7-c36b-41d3-857e-00673b231a5d" }]; 
-						
+
+						// REFERENCE OBJECTS
 						var challenges = formData.data.referenceData.challenges;
 						var childCareArrangements = formData.data.referenceData.childCareArrangements;
 						var citizenships = formData.data.referenceData.citizenships;
