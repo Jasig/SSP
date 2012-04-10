@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
@@ -23,6 +24,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.google.common.collect.Sets;
 
 import edu.sinclair.ssp.model.tool.PersonTool;
 
@@ -296,6 +299,24 @@ public class Person extends Auditable implements Serializable {
 	@Cascade(value = CascadeType.ALL)
 	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
 
+	@Nullable()
+	@OneToMany(mappedBy = "person")
+	@Cascade(value = CascadeType.ALL)
+	private Set<Task> tasks;
+
+	@Nullable()
+	@OneToMany(mappedBy = "person")
+	@Cascade(value = CascadeType.ALL)
+	private Set<CustomTask> customTasks;
+
+	@Transient
+	public Set<AbstractTask> getTasksAndCustomTasks() {
+		Set<AbstractTask> tasks = Sets.newHashSet();
+		tasks.addAll(getTasks());
+		tasks.addAll(getCustomTasks());
+		return tasks;
+	}
+
 	/**
 	 * Initialize a Person.
 	 * 
@@ -545,6 +566,22 @@ public class Person extends Auditable implements Serializable {
 	public void setConfidentialityDisclosureAgreements(
 			Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements) {
 		this.confidentialityDisclosureAgreements = confidentialityDisclosureAgreements;
+	}
+
+	public Set<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(Set<Task> tasks) {
+		this.tasks = tasks;
+	}
+
+	public Set<CustomTask> getCustomTasks() {
+		return customTasks;
+	}
+
+	public void setCustomTasks(Set<CustomTask> customTasks) {
+		this.customTasks = customTasks;
 	}
 
 }

@@ -1,7 +1,13 @@
 package edu.sinclair.mygps.model.transferobject;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+
+import edu.sinclair.ssp.model.AbstractTask;
+import edu.sinclair.ssp.model.CustomTask;
+import edu.sinclair.ssp.model.Task;
 
 public class TaskReportTO implements Comparable<TaskReportTO> {
 
@@ -11,6 +17,50 @@ public class TaskReportTO implements Comparable<TaskReportTO> {
 	private String description;
 	private UUID createdBy;
 	private Date dueDate;
+
+	public TaskReportTO() {
+	}
+
+	public TaskReportTO(Task task) {
+		this.setChallengeName(task.getChallenge().getName());
+		this.setChallengeReferralName(task.getChallengeReferral()
+				.getName());
+		this.setCreatedBy(task.getCreatedBy().getId());
+		this.setDescription(task.getChallengeReferral()
+				.getPublicDescription());
+		this.setDueDate(null);
+
+		// :TODO how do determine between ACTION_PLAN_TASK and
+		// SSP_ACTION_PLAN_TASK
+		this.setType(AbstractTask.ACTION_PLAN_TASK);
+		// this.setType(AbstractTask.SSP_ACTION_PLAN_TASK);
+	}
+
+	public TaskReportTO(CustomTask customTask) {
+		this.setChallengeName("Custom Action Plan Task");
+		this.setChallengeReferralName(customTask.getName());
+		this.setCreatedBy(customTask.getCreatedBy().getId());
+		this.setDescription(customTask.getDescription());
+		this.setDueDate(customTask.getDueDate());
+		this.setType(AbstractTask.CUSTOM_ACTION_PLAN_TASK);
+	}
+
+	public static List<TaskReportTO> tasksToTaskReportTOs(List<Task> tasks) {
+		List<TaskReportTO> taskReportTOs = new ArrayList<TaskReportTO>();
+		for (Task task : tasks) {
+			taskReportTOs.add(new TaskReportTO(task));
+		}
+		return taskReportTOs;
+	}
+
+	public static List<TaskReportTO> customTasksToTaskReportTOs(
+			List<CustomTask> customTasks) {
+		List<TaskReportTO> taskReportTOs = new ArrayList<TaskReportTO>();
+		for (CustomTask customTask : customTasks) {
+			taskReportTOs.add(new TaskReportTO(customTask));
+		}
+		return taskReportTOs;
+	}
 
 	public String getType() {
 		return type;

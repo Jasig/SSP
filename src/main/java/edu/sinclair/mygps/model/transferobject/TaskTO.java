@@ -1,7 +1,13 @@
 package edu.sinclair.mygps.model.transferobject;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+
+import edu.sinclair.ssp.model.AbstractTask;
+import edu.sinclair.ssp.model.CustomTask;
+import edu.sinclair.ssp.model.Task;
 
 public class TaskTO {
 	public static final String TASKTO_ID_PREFIX_DELIMITER = ":";
@@ -9,7 +15,7 @@ public class TaskTO {
 	public static final String TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK = "CUS";
 	public static final String TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK = "SSP";
 
-	private UUID id;
+	private String id;
 	private String type;
 	private String name;
 	private String description;
@@ -20,11 +26,79 @@ public class TaskTO {
 	private UUID challengeId;
 	private UUID challengeReferralId;
 
-	public UUID getId() {
+	public TaskTO() {
+	}
+
+	public TaskTO(Task task) {
+		this.setChallengeId(task.getChallenge().getId());
+		this.setChallengeReferralId(task.getChallengeReferral()
+				.getId());
+		this.setCompleted((task.getCompletedDate() != null) ? true : false);
+		this.setDeletable(true);
+
+		if (task.getChallengeReferral().getPublicDescription() != null) {
+			this.setDescription(task.getChallengeReferral()
+					.getPublicDescription().replaceAll("\\<.*?>", ""));
+		}
+
+		this.setDetails(task.getChallengeReferral().getPublicDescription());
+		this.setDueDate(null);
+		// :TODO how do determine between ACTION_PLAN_TASK and
+		// SSP_ACTION_PLAN_TASK
+		this.setId(TASKTO_ID_PREFIX_ACTION_PLAN_TASK
+				+ TASKTO_ID_PREFIX_DELIMITER + task.getId());
+		this.setId(TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK
+				+ TASKTO_ID_PREFIX_DELIMITER + task.getId());
+
+		this.setName(task.getChallengeReferral().getName());
+
+		// :TODO how do determine between ACTION_PLAN_TASK and
+		// SSP_ACTION_PLAN_TASK
+		this.setType(AbstractTask.ACTION_PLAN_TASK);
+		// this.setType(AbstractTask.SSP_ACTION_PLAN_TASK);
+	}
+
+	public TaskTO(CustomTask customTask) {
+		this.setChallengeId(null);
+		this.setChallengeReferralId(null);
+		this.setCompleted((customTask.getCompletedDate() != null) ? true
+				: false);
+		this.setDeletable(true);
+
+		if (customTask.getDescription() != null) {
+			this.setDescription(customTask.getDescription().replaceAll(
+					"\\<.*?>", ""));
+		}
+
+		this.setDetails(customTask.getDescription());
+		this.setDueDate(customTask.getDueDate());
+		this.setId(TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK
+				+ TASKTO_ID_PREFIX_DELIMITER + customTask.getId());
+		this.setName(customTask.getName());
+		this.setType(AbstractTask.CUSTOM_ACTION_PLAN_TASK);
+	}
+
+	public static List<TaskTO> tasksToTaskTOs(List<Task> tasks) {
+		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
+		for (Task task : tasks) {
+			taskTOs.add(new TaskTO(task));
+		}
+		return taskTOs;
+	}
+
+	public static List<TaskTO> customTasksToTaskTOs(List<CustomTask> customTasks) {
+		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
+		for (CustomTask customTask : customTasks) {
+			taskTOs.add(new TaskTO(customTask));
+		}
+		return taskTOs;
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

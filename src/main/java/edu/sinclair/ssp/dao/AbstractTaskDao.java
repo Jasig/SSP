@@ -11,8 +11,18 @@ public abstract class AbstractTaskDao<T extends AbstractTask> {
 		return null;
 	}
 
+	public List<T> getAllForPersonId(UUID personId) {
+		// only return ObjectStatus.ACTIVE
+		return null;
+	}
+
 	public List<T> getAllForPersonId(UUID personId, boolean complete) {
 		// completion just looks for null completed date
+		// only return ObjectStatus.ACTIVE
+		return null;
+	}
+
+	public List<T> getAllForSessionId(String sessionId) {
 		// only return ObjectStatus.ACTIVE
 		return null;
 	}
@@ -35,6 +45,18 @@ public abstract class AbstractTaskDao<T extends AbstractTask> {
 	}
 
 	public void save(T task) {
+
+	}
+
+	public void markTaskComplete(UUID taskId) {
+
+	}
+
+	public void markTaskIncomplete(UUID taskId) {
+
+	}
+
+	public void setReminderSentDateToToday(UUID taskId) {
 
 	}
 }

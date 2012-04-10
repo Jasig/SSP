@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.mygps.dao.ActionPlanStepDao;
 import edu.sinclair.mygps.model.transferobject.TaskReportTO;
 import edu.sinclair.mygps.model.transferobject.TaskTO;
 import edu.sinclair.mygps.model.transferobject.TaskTOComparator;
@@ -39,9 +38,6 @@ import edu.sinclair.ssp.util.VelocityTemplateHelper;
 
 @Service
 public class TaskManager {
-
-	@Autowired
-	private ActionPlanStepDao actionPlanStepDao;
 
 	@Autowired
 	private TaskDao taskDao;
@@ -97,7 +93,7 @@ public class TaskManager {
 
 		taskDao.save(task);
 
-		return TaskFactory.taskToTaskTO(task);
+		return new TaskTO(task);
 	}
 
 	@Transactional(readOnly = false)
@@ -145,18 +141,16 @@ public class TaskManager {
 			if (securityService.isAuthenticated()) {
 				Person student = securityService.currentlyLoggedInSspUser()
 						.getPerson();
-				taskTOs.addAll(TaskFactory.tasksToTaskTOs(taskDao
+				taskTOs.addAll(TaskTO.tasksToTaskTOs(taskDao
 						.getAllForPersonId(student.getId(), false)));
-				taskTOs.addAll(TaskFactory.customTasksToTaskTOs(customTaskDao
+				taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskDao
 						.getAllForPersonId(student.getId(), false)));
-				taskTOs.addAll(TaskFactory.objectsToTaskTOs(actionPlanStepDao
-						.selectAllIncompleteByPersonId(student.getId())));
 			} else {
-				taskTOs.addAll(TaskFactory
+				taskTOs.addAll(TaskTO
 						.tasksToTaskTOs(taskDao
 								.getAllForSessionId(securityService
 										.getSessionId(), true)));
-				taskTOs.addAll(TaskFactory
+				taskTOs.addAll(TaskTO
 						.customTasksToTaskTOs(customTaskDao
 								.getAllForSessionId(securityService
 										.getSessionId(), true)));
@@ -200,25 +194,23 @@ public class TaskManager {
 			Person student = securityService.currentlyLoggedInSspUser()
 					.getPerson();
 
-			taskTOs.addAll(TaskFactory
+			taskTOs.addAll(TaskTO
 					.tasksToTaskTOs(taskDao
-							.getAllForPersonId(student.getId(), true)));
-			taskTOs.addAll(TaskFactory
+							.getAllForPersonId(student.getId())));
+			taskTOs.addAll(TaskTO
 					.customTasksToTaskTOs(customTaskDao
-							.getAllForPersonId(student.getId(), true)));
-			taskTOs.addAll(TaskFactory.objectsToTaskTOs(actionPlanStepDao
-					.selectAllByPersonId(student.getId())));
+							.getAllForPersonId(student.getId())));
 
 		} else {
 
-			taskTOs.addAll(TaskFactory
+			taskTOs.addAll(TaskTO
 					.tasksToTaskTOs(taskDao
 							.getAllForSessionId(securityService
-									.getSessionId(), true)));
-			taskTOs.addAll(TaskFactory
+									.getSessionId())));
+			taskTOs.addAll(TaskTO
 					.customTasksToTaskTOs(customTaskDao
 							.getAllForSessionId(securityService
-									.getSessionId(), true)));
+									.getSessionId())));
 
 		}
 
@@ -242,7 +234,7 @@ public class TaskManager {
 
 		customTaskDao.save(customTask);
 
-		return TaskFactory.customTaskToTaskTO(customTask);
+		return new TaskTO(customTask);
 	}
 
 	@Transactional(readOnly = false)
@@ -274,7 +266,7 @@ public class TaskManager {
 
 		customTaskDao.save(customTask);
 
-		TaskTO taskTO = TaskFactory.customTaskToTaskTO(customTask);
+		TaskTO taskTO = new TaskTO(customTask);
 
 		if (!messageTemplateId
 				.equals(MessageTemplate.TASK_AUTO_CREATED_EMAIL_ID)
@@ -331,7 +323,7 @@ public class TaskManager {
 			task.setCompletedDate(complete ? new Date() : null);
 			taskDao.save(task);
 
-			taskTO = TaskFactory.taskToTaskTO(task);
+			taskTO = new TaskTO(task);
 
 		} else if (taskType
 				.equals(TaskTO.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
@@ -341,21 +333,18 @@ public class TaskManager {
 			customTask.setCompletedDate(complete ? new Date() : null);
 			customTaskDao.save(customTask);
 
-			taskTO = TaskFactory.customTaskToTaskTO(customTask);
+			taskTO = new TaskTO(customTask);
 
 		} else if (taskType
 				.equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
 
 			if (complete) {
-				Person student = securityService.currentlyLoggedInSspUser()
-						.getPerson();
-				actionPlanStepDao.saveAsComplete(id, student.getUsername());
+				taskDao.markTaskComplete(id);
 			} else {
-				actionPlanStepDao.saveAsIncomplete(id);
+				taskDao.markTaskIncomplete(id);
 			}
 
-			taskTO = TaskFactory.objectToTaskTO(actionPlanStepDao
-					.selectById(id));
+			taskTO = new TaskTO(taskDao.get(id));
 		}
 
 		return taskTO;
@@ -424,49 +413,46 @@ public class TaskManager {
 			}
 
 			// Send reminders for action plan steps
-			List<Task> actionPlanSteps = TaskFactory
-					.objectsToActionPlanSteps(actionPlanStepDao
-							.selectForReminderEmail());
+			List<Task> actionPlanSteps = taskDao.getAllWhichNeedRemindersSent();
 
 			for (Task actionPlanStep : actionPlanSteps) {
-				/*
-				 * :TODO fix action plan step
-				 * // Calculate reminder window start date
-				 * startDateCalendar.setTime(actionPlanStep.getDueDate());
-				 * startDateCalendar.add(Calendar.HOUR,
-				 * numberOfDaysPriorForTaskReminder * 24 * -1);
-				 * 
-				 * // Due date
-				 * dueDateCalendar.setTime(actionPlanStep.getDueDate());
-				 * 
-				 * if (now.after(startDateCalendar) &&
-				 * (now.before(dueDateCalendar))) {
-				 * 
-				 * Message message = new Message();
-				 * HashMap<String, Object> templateParameters = new
-				 * HashMap<String, Object>();
-				 * 
-				 * message.setBody(velocityTemplateHelper.
-				 * generateContentFromTemplate
-				 * (actionPlanStepMessageTemplate.getBody(),
-				 * templateParameters));
-				 * message.setCreatedBy(personService
-				 * .get(Person.SYSTEM_ADMINISTRATOR_ID));
-				 * message.setCreatedDate(new Date());
-				 * message.setRecipient(actionPlanStep.getPerson());
-				 * message.setSender(personService
-				 * .get(Person.SYSTEM_ADMINISTRATOR_ID));
-				 * message.setSubject(velocityTemplateHelper.
-				 * generateContentFromTemplate
-				 * (actionPlanStepMessageTemplate.getSubject(),
-				 * templateParameters));
-				 * 
-				 * messageDao.save(message);
-				 * 
-				 * actionPlanStepDao.saveReminderSentDate(actionPlanStep.getId())
-				 * ;
-				 * }
-				 */
+
+				// Calculate reminder window start date
+				startDateCalendar.setTime(actionPlanStep.getDueDate());
+				startDateCalendar.add(Calendar.HOUR,
+						numberOfDaysPriorForTaskReminder * 24 * -1);
+
+				// Due date
+				dueDateCalendar.setTime(actionPlanStep.getDueDate());
+
+				if (now.after(startDateCalendar) &&
+						(now.before(dueDateCalendar))) {
+
+					Message message = new Message();
+					HashMap<String, Object> templateParameters = new
+							HashMap<String, Object>();
+
+					message.setBody(velocityTemplateHelper.
+							generateContentFromTemplate
+							(actionPlanStepMessageTemplate.getBody(),
+									templateParameters));
+					message.setCreatedBy(personService
+							.get(Person.SYSTEM_ADMINISTRATOR_ID));
+					message.setCreatedDate(new Date());
+					message.setRecipient(actionPlanStep.getPerson());
+					message.setSender(personService
+							.get(Person.SYSTEM_ADMINISTRATOR_ID));
+					message.setSubject(velocityTemplateHelper.
+							generateContentFromTemplate
+							(actionPlanStepMessageTemplate.getSubject(),
+									templateParameters));
+
+					messageDao.save(message);
+
+					taskDao.setReminderSentDateToToday(actionPlanStep
+							.getId());
+				}
+
 			}
 		} catch (Exception e) {
 			logger.error("ERROR : sendTaskReminderNotifications() : {}",
@@ -483,26 +469,23 @@ public class TaskManager {
 		if (securityService.isAuthenticated()) {
 			Person student = securityService.currentlyLoggedInSspUser()
 					.getPerson();
-			taskReportTOs.addAll(TaskFactory
+			taskReportTOs.addAll(TaskReportTO
 					.tasksToTaskReportTOs(taskDao
 							.getAllForPersonId(student.getId(), false)));
 			taskReportTOs
-					.addAll(TaskFactory
+					.addAll(TaskReportTO
 							.customTasksToTaskReportTOs(customTaskDao
 									.getAllForPersonId(student
 											.getId(), false)));
-			taskReportTOs.addAll(TaskFactory
-					.objectsToTaskReportTOs(actionPlanStepDao
-							.selectAllIncompleteByPersonId(student.getId())));
 
 		} else {
 
-			taskReportTOs.addAll(TaskFactory
+			taskReportTOs.addAll(TaskReportTO
 					.tasksToTaskReportTOs(taskDao
 							.getAllForSessionId(securityService
 									.getSessionId(), false)));
 			taskReportTOs
-					.addAll(TaskFactory
+					.addAll(TaskReportTO
 							.customTasksToTaskReportTOs(customTaskDao
 									.getAllForSessionId(securityService
 											.getSessionId(), false)));

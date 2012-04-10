@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sinclair.mygps.dao.ActionPlanStepDao;
 import edu.sinclair.mygps.model.transferobject.ChallengeReferralTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideContentTO;
 import edu.sinclair.mygps.model.transferobject.SelfHelpGuideQuestionTO;
@@ -37,9 +36,6 @@ import edu.sinclair.ssp.transferobject.reference.ChallengeTO;
 
 @Service
 public class SelfHelpGuideManager {
-
-	@Autowired
-	private ActionPlanStepDao actionPlanStepDao;
 
 	@Autowired
 	private TaskDao taskDao;
@@ -301,11 +297,7 @@ public class SelfHelpGuideManager {
 						.getPerson();
 				size = taskDao.getAllForPersonIdAndChallengeReferralId(
 						student.getId(), false, challengeReferral.getId())
-						.size()
-						+ actionPlanStepDao
-								.selectAllIncompleteByPersonAndChallengeReferral(
-										student.getId(),
-										challengeReferral.getId()).size();
+						.size();
 			} else {
 				size = taskDao.getAllForSessionIdAndChallengeReferralId(
 						securityService.getSessionId(), false,
