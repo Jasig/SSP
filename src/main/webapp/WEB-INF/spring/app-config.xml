@@ -19,7 +19,7 @@
 	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
 	
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
-	<context:component-scan base-package="org.studentsuccessplan.ssp">
+	<context:component-scan base-package="org.studentsuccessplan.ssp,org.studentsuccessplan.mygps">
 		<context:exclude-filter type="regex" expression=".*Controller"/>
 	</context:component-scan>
 	

@@ -14,27 +14,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideTO;
 
 @Controller
-@RequestMapping("/selfhelpguide")
-public class SelfHelpGuideController {
+@RequestMapping("/mygps/selfhelpguide")
+public class MyGpsSelfHelpGuideController {
 
 	@Autowired
 	private SelfHelpGuideManager selfHelpGuideManager;
 
-	private Logger logger = LoggerFactory.getLogger(SelfHelpGuideController.class);
+	private Logger logger = LoggerFactory
+			.getLogger(MyGpsSelfHelpGuideController.class);
 
 	// Needed for tests
-	public void setSelfHelpGuideManager(SelfHelpGuideManager selfHelpGuideManager) {
+	public void setSelfHelpGuideManager(
+			SelfHelpGuideManager selfHelpGuideManager) {
 		this.selfHelpGuideManager = selfHelpGuideManager;
 	}
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
-	public @ResponseBody List<SelfHelpGuideTO> getAll() throws Exception {
+	public @ResponseBody
+	List<SelfHelpGuideTO> getAll() throws Exception {
 
 		try {
 			return selfHelpGuideManager.getAll();
@@ -65,15 +67,18 @@ public class SelfHelpGuideController {
 			throws Exception {
 
 		try {
-			return selfHelpGuideManager.getBySelfHelpGuideGroup(selfHelpGuideGroupId);
+			return selfHelpGuideManager
+					.getBySelfHelpGuideGroup(selfHelpGuideGroupId);
 		} catch (Exception e) {
-			logger.error("ERROR : getBySelfHelpGuideGroup() : {}", e.getMessage(), e);
+			logger.error("ERROR : getBySelfHelpGuideGroup() : {}",
+					e.getMessage(), e);
 			throw e;
 		}
 	}
 
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody String handleException(Exception e, HttpServletResponse response) {
+	public @ResponseBody
+	String handleException(Exception e, HttpServletResponse response) {
 		logger.error("ERROR : handleException()", e);
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		return e.getMessage();
