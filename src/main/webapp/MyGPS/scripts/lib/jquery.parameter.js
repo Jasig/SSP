@@ -2,6 +2,7 @@
  * jquery.parameter v0.5.0
  * Copyright (c) 2011 CodeCatalyst, LLC.
  * Open source under the MIT License.
+ * https://github.com/CodeCatalyst/jquery.parameter
  */
 (function() {
   $.parameter = function(name) {

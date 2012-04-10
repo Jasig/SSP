@@ -21,7 +21,7 @@
 		<script type="text/javascript" src="//code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
 		<script type="text/javascript" src="scripts/lib/jquery.tmpl.min.js"></script>
 		<script type="text/javascript" src="scripts/lib/jquery.tmpl.loadTemplates.min.js"></script>
-		<script type="text/javascript" src="scripts/lib/jquery.simplemodal-1.4.1.min.js"></script>
+		<script type="text/javascript" src="scripts/lib/jquery.simplemodal.1.4.2.min.js"></script>
 		<script type="text/javascript" src="scripts/lib/jquery.parameter.min.js"></script>
 		<script type="text/javascript" src="scripts/lib/underscore-min.js"></script>
 		<script type="text/javascript" src="scripts/lib/knockout-1.2.1.js"></script>
