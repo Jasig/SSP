@@ -39,7 +39,7 @@ It is necessary to include this file in the production config directory.-->
 			</beans:bean>
 		</beans:constructor-arg>
 		<beans:constructor-arg>
-			<beans:bean class="edu.sinclair.ssp.security.SspLdapAuthoritiesPopulator">
+			<beans:bean class="org.studentsuccessplan.ssp.security.SspLdapAuthoritiesPopulator">
 				<beans:constructor-arg ref="sspUserDetailsService" />
 			</beans:bean>
 		</beans:constructor-arg>

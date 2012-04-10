@@ -13,7 +13,7 @@
 		</param-value>
 	</context-param>
 	<listener>
-		<listener-class>edu.sinclair.ssp.config.logging.ExternalConfigLoaderContextListener</listener-class>
+		<listener-class>org.studentsuccessplan.ssp.config.logging.ExternalConfigLoaderContextListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

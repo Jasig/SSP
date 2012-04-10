@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>edu.sinclair.ssp</groupId>
+	<groupId>org.studentsuccessplan.ssp</groupId>
 	<artifactId>ssp</artifactId>
 	<packaging>war</packaging>
 	<name>SSP</name>
@@ -387,7 +387,7 @@
 					<propertyFile>/usr/local/etc/ssp/ssp-liquibase.properties</propertyFile>
 					<!-- In order for the liquibase-maven-plugin to pickup any updates you have 
 						made to the changesets, you will need to "mvn compile" the project first -->
-					<changeLogFile>edu/sinclair/ssp/database/masterChangeLog-test.xml</changeLogFile>
+					<changeLogFile>org/studentsuccessplan/ssp/database/masterChangeLog-test.xml</changeLogFile>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -1,127 +1,127 @@
 <class-diagram version="1.0.7" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.EducationGoal" 
-    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/EducationGoal.java" binary="false">    
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.EducationGoal" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/EducationGoal.java" binary="false">    
     <position height="-1" width="-1" x="1328" y="162"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="2" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.StudentStatus" 
-    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/StudentStatus.java" binary="false">    
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.StudentStatus" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/StudentStatus.java" binary="false">    
     <position height="-1" width="-1" x="113" y="720"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="3" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.FundingSource" 
-    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/FundingSource.java" binary="false">    
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.FundingSource" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/FundingSource.java" binary="false">    
     <position height="-1" width="-1" x="208" y="141"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="4" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.Citizenship" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/Citizenship.java" binary="false">    
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Citizenship" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Citizenship.java" binary="false">    
     <position height="-1" width="-1" x="1642" y="1033"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="5" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.Challenge" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/Challenge.java" binary="false">    
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Challenge" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Challenge.java" binary="false">    
     <position height="-1" width="-1" x="982" y="84"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="6" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.VeteranStatus" 
-    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/VeteranStatus.java" binary="false">    
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.VeteranStatus" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/VeteranStatus.java" binary="false">    
     <position height="-1" width="-1" x="1654" y="1232"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="7" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.EducationLevel" 
-    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/EducationLevel.java" binary="false">    
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.EducationLevel" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/EducationLevel.java" binary="false">    
     <position height="-1" width="-1" x="155" y="1422"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="8" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.Ethnicity" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/Ethnicity.java" binary="false">    
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Ethnicity" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Ethnicity.java" binary="false">    
     <position height="-1" width="-1" x="1681" y="1714"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="9" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.reference.MaritalStatus" 
-    project="ssp" file="/ssp/src/main/java/edu/sinclair/ssp/model/reference/MaritalStatus.java" binary="false">    
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.MaritalStatus" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/MaritalStatus.java" binary="false">    
     <position height="-1" width="-1" x="1661" y="1471"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="10" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.Person" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/Person.java" binary="false">    
+  <class id="10" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.Person" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/Person.java" binary="false">    
     <position height="-1" width="-1" x="796" y="1058"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="11" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonFunding" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonFunding.java" binary="false">    
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonFunding" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonFunding.java" binary="false">    
     <position height="226" width="241" x="339" y="359"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="12" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonChallenge" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonChallenge.java" binary="false">    
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonChallenge" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonChallenge.java" binary="false">    
     <position height="-1" width="-1" x="783" y="297"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="13" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonEducationGoal" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonEducationGoal.java" binary="false">    
+  <class id="13" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonEducationGoal" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonEducationGoal.java" binary="false">    
     <position height="322" width="235" x="1009" y="297"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="14" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonDemographics" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonDemographics.java" binary="false">    
+  <class id="14" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonDemographics" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonDemographics.java" binary="false">    
     <position height="-1" width="-1" x="1273" y="1256"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="15" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonEducationPlan" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonEducationPlan.java" binary="false">    
+  <class id="15" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonEducationPlan" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonEducationPlan.java" binary="false">    
     <position height="-1" width="-1" x="422" y="915"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="16" corner="BOTTOM_RIGHT" language="java" name="edu.sinclair.ssp.model.PersonEducationLevel" project="ssp" 
-    file="/ssp/src/main/java/edu/sinclair/ssp/model/PersonEducationLevel.java" binary="false">    
+  <class id="16" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonEducationLevel" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonEducationLevel.java" binary="false">    
     <position height="-1" width="-1" x="464" y="1310"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      

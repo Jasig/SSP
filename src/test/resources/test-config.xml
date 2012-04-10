@@ -26,7 +26,7 @@
 			</bean>
 		</property>
 		<property name="changeLog"
-			value="classpath:edu/sinclair/ssp/database/masterChangeLog-test.xml" />
+			value="classpath:org/studentsuccessplan/ssp/database/masterChangeLog-test.xml" />
 	</bean>
 
 	<!-- Hibernate -->
@@ -36,16 +36,16 @@
 	</bean>
 
 	<bean id="securityService"
-		class="edu.sinclair.ssp.service.impl.SecurityServiceInTestEnvironment" />
+		class="org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment" />
 
 	<!-- Hibernate Session Factory -->
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
 		depends-on="liquibase">
 		<property name="dataSource" ref="sspDataSource" />
-		<property name="packagesToScan" value="edu.sinclair.ssp.model" />
+		<property name="packagesToScan" value="org.studentsuccessplan.ssp.model" />
 		<property name="entityInterceptor">
-			<bean class="edu.sinclair.ssp.dao.AuditableEntityInterceptor" />
+			<bean class="org.studentsuccessplan.ssp.dao.AuditableEntityInterceptor" />
 		</property>
 		<!-- property name="mappingResources"> <array> <value>mappings.xml</value> 
 			</array> </property -->

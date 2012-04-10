@@ -39,10 +39,10 @@
 		<logout logout-success-url="/login.jsp" />
 	</http>
 
-	<beans:bean id="sspUserDetailsService" class="edu.sinclair.ssp.security.SspUserDetailsService">
+	<beans:bean id="sspUserDetailsService" class="org.studentsuccessplan.ssp.security.SspUserDetailsService">
 	</beans:bean>
 
-	<beans:bean id="sspUserDetailsContextMapper" class="edu.sinclair.ssp.security.SspUserDetailsContextMapper">
+	<beans:bean id="sspUserDetailsContextMapper" class="org.studentsuccessplan.ssp.security.SspUserDetailsContextMapper">
 	</beans:bean>
 
 </beans:beans>
