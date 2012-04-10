@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.security.SspUser;
 import org.studentsuccessplan.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.transferobject.PersonTO;
 import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
 
 /**
@@ -54,7 +55,7 @@ public class SessionController {
 
 		// Convert model to a transfer object
 		PersonTO pTo = new PersonTO();
-		pTo.fromModel(user.getPerson());
+		pTo.pullAttributesFromModel(user.getPerson());
 
 		// Return authenticated person transfer object
 		return pTo;
