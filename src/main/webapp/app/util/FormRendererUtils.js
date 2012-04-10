@@ -14,8 +14,6 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	},
 	
 	init: function() {
-        console.log('Initialized util.FormRendererUtils!');
-		
 		this.callParent(arguments);
     },	
 	
@@ -47,22 +45,30 @@ Ext.define('Ssp.util.FormRendererUtils',{
     },    
     
     createCheckBoxForm: function( formId, itemsArr, selectedItemsArr, idFieldName ){
-    	form = Ext.getCmp(formId);
-		items = itemsArr;
-		selectedItems = selectedItemsArr;
+    	var form = Ext.getCmp(formId);
+		var items = itemsArr;
+		var selectedItems = selectedItemsArr;
+		var setSelectedItems = false;
+		if (selectedItems != null)
+		{
+			setSelectedItems = true;
+		}
 		for (i=0; i<items.length; i++)
 		{
 			var cb = {xtype:'checkbox'};
 			var item = items[i];
 			cb.boxLabel = item.name;
 			cb.inputValue = item[idFieldName];
-			for (var s=0; s<selectedItems.length; s++)
+			if (setSelectedItems == true)
 			{
-				id = selectedItems[s][idFieldName];
-				if (id===item[idFieldName])
+				for (var s=0; s<selectedItems.length; s++)
 				{
-					cb.checked = true;
-					break;
+					id = selectedItems[s][idFieldName];
+					if (id===item[idFieldName])
+					{
+						cb.checked = true;
+						break;
+					}
 				}
 			}
 			

@@ -1,6 +1,6 @@
 Ext.require('Ext.tab.*');
 Ext.define('Ssp.controller.Admin', {
-    extend: 'Ssp.controller.AbstractController',
+    extend: 'Ssp.controller.AbstractViewController',
     
     views: [
         'admin.AdminMenu', 'admin.AdminTreeMenu', 'admin.forms.AbstractReferenceAdmin'
@@ -17,9 +17,8 @@ Ext.define('Ssp.controller.Admin', {
              'reference.VeteranStatuses'],
 
 	init: function() {
-        console.log('Initialized Admin Controller!');
-        
-        this.control({
+
+		this.control({
 			'AdminMenu': {
 				itemclick: this.itemClick,
 				scope: this

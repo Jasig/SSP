@@ -1,5 +1,5 @@
 Ext.define('Ssp.controller.Main', {
-    extend: 'Ssp.controller.AbstractController',
+    extend: 'Ssp.controller.AbstractViewController',
     requires: ['Ext.window.*'],
 	
 	models: ['security.UserTO'],
@@ -12,8 +12,7 @@ Ext.define('Ssp.controller.Main', {
  
 		
 	init: function() {
-        console.log('Initialized Main View Controller!');
-		        
+
 		this.control({
 			'#securityLoginButton': {
 				click: this.loginButtonClick,
@@ -109,7 +108,11 @@ Ext.define('Ssp.controller.Main', {
     
     cleanSspView: function(){
     	var sspView = Ext.getCmp('sspView');
-    	this.formRendererUtils.cleanAll(sspView);
+    	console.log(sspView.items)
+    	if (sspView.items.length > 0)
+    	{
+    		this.formRendererUtils.cleanAll(sspView);
+    	}
     	return sspView;
     },
     
