@@ -15,7 +15,7 @@
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
 
-	<context:component-scan base-package="org.studentsuccessplan.ssp.web"/>
+	<context:component-scan base-package="org.studentsuccessplan.ssp.web,org.studentsuccessplan.mygps.web"/>
 		<!-- context:include-filter type="regex" expression=".*Controller"/>
 	</context:component-scan -->
 	

@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.studentsuccessplan.mygps.model.transferobject.FormOptionTO;
 import org.studentsuccessplan.mygps.model.transferobject.FormQuestionTO;
 import org.studentsuccessplan.mygps.model.transferobject.FormSectionTO;
@@ -257,7 +256,7 @@ public class StudentIntakeFormManager {
 	private static UUID SECTION_FUNDING_QUESTION_OTHER_ID = UUID
 			.fromString("f6f60253-e62c-4f6c-898b-0392b43bf2d5");
 	private static UUID SECTION_FUNDING_OTHER_FUNDING_SOURCE_ID = UUID
-			.fromString("B2D05DEC-5056-A51A-8001FE8BDD379C5B");
+			.fromString("B2D05DEC-5056-A51A-8001-FE8BDD379C5B");
 
 	// Challenge
 	private static UUID SECTION_CHALLENGE_ID = UUID

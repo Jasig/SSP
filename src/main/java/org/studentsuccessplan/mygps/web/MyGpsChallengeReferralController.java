@@ -14,25 +14,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.mygps.model.transferobject.ChallengeReferralTO;
 
 @Controller
-@RequestMapping("/challengereferral")
-public class ChallengeReferralController {
+@RequestMapping("/mygps/challengereferral")
+public class MyGpsChallengeReferralController {
 
 	@Autowired
 	private SelfHelpGuideManager manager;
 
-	private Logger logger = LoggerFactory.getLogger(ChallengeReferralController.class);
+	private Logger logger = LoggerFactory
+			.getLogger(MyGpsChallengeReferralController.class);
 
 	// Required for tests
 	public void setManager(SelfHelpGuideManager manager) {
 		this.manager = manager;
 	}
 
-	@RequestMapping(value="/getByChallengeId", method = RequestMethod.GET)
+	@RequestMapping(value = "/getByChallengeId", method = RequestMethod.GET)
 	public @ResponseBody
 	List<ChallengeReferralTO> getByChallengeId(
 			@RequestParam("challengeId") UUID challengeId) throws Exception {
@@ -45,12 +45,14 @@ public class ChallengeReferralController {
 		}
 	}
 
-	@RequestMapping(value="/search", method = RequestMethod.GET)
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public @ResponseBody
 	List<ChallengeReferralTO> search(@RequestParam("query") String query,
 			@RequestParam("challengeId") UUID challengeId) throws Exception {
 
-		// TODO: Not using query param as we are no longer searching the referrals, simply returning based on challengeId and whether the referral is public.
+		// TODO: Not using query param as we are no longer searching the
+		// referrals, simply returning based on challengeId and whether the
+		// referral is public.
 
 		try {
 			return manager.challengeReferralSearch(challengeId);
@@ -61,7 +63,8 @@ public class ChallengeReferralController {
 	}
 
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody String handleException(Exception e, HttpServletResponse response) {
+	public @ResponseBody
+	String handleException(Exception e, HttpServletResponse response) {
 		logger.error("ERROR : handleException()", e);
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		return e.getMessage();

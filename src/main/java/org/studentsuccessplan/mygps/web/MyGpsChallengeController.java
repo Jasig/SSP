@@ -13,26 +13,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
 @Controller
-@RequestMapping("/challenge")
-public class ChallengeController {
+@RequestMapping("/mygps/challenge")
+public class MyGpsChallengeController {
 
 	@Autowired
 	private SelfHelpGuideManager manager;
 
-	private Logger logger = LoggerFactory.getLogger(ChallengeController.class);
+	private Logger logger = LoggerFactory
+			.getLogger(MyGpsChallengeController.class);
 
 	// Needed for tests, will be removed in the future.
 	public void setManager(SelfHelpGuideManager manager) {
 		this.manager = manager;
 	}
 
-	@RequestMapping(value="/search", method = RequestMethod.GET)
-	public @ResponseBody List<ChallengeTO> search(@RequestParam("query") String query) throws Exception {
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public @ResponseBody
+	List<ChallengeTO> search(@RequestParam("query") String query)
+			throws Exception {
 
 		try {
 			return manager.challengeSearch(query);
@@ -45,7 +47,8 @@ public class ChallengeController {
 	}
 
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody String handleException(Exception e, HttpServletResponse response) {
+	public @ResponseBody
+	String handleException(Exception e, HttpServletResponse response) {
 		logger.error("ERROR : handleException()", e);
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		return e.getMessage();
