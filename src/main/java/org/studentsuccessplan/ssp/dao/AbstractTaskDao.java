@@ -5,10 +5,12 @@ import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.AbstractTask;
 
-public abstract class AbstractTaskDao<T extends AbstractTask> {
+public abstract class AbstractTaskDao<T extends AbstractTask> extends
+		AbstractAuditableCrudDao<T> implements
+		AuditableCrudDao<T> {
 
-	public T get(UUID id) {
-		return null;
+	protected AbstractTaskDao(Class<T> persistentClass) {
+		super(persistentClass);
 	}
 
 	public List<T> getAllForPersonId(UUID personId) {
@@ -42,10 +44,6 @@ public abstract class AbstractTaskDao<T extends AbstractTask> {
 		 * "and dueDate > current_timestamp()
 		 */
 		return null;
-	}
-
-	public void save(T task) {
-
 	}
 
 	public void markTaskComplete(UUID taskId) {

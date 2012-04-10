@@ -3,9 +3,15 @@ package org.studentsuccessplan.ssp.dao;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.stereotype.Repository;
 import org.studentsuccessplan.ssp.model.Task;
 
+@Repository
 public class TaskDao extends AbstractTaskDao<Task> {
+
+	protected TaskDao() {
+		super(Task.class);
+	}
 
 	public List<Task> getAllForPersonIdAndChallengeReferralId(UUID personId,
 			boolean complete, UUID challengeReferralId) {
