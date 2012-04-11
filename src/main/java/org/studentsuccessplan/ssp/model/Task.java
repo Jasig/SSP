@@ -1,5 +1,7 @@
 package org.studentsuccessplan.ssp.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -20,6 +22,16 @@ public class Task extends AbstractTask {
 	@ManyToOne
 	@JoinColumn(name = "challenge_referral_id", updatable = false)
 	private ChallengeReferral challengeReferral;
+
+	public Task() {
+	}
+
+	public Task(String description, Date dueDate, Person person,
+			Challenge challenge, ChallengeReferral challengeReferral) {
+		super(description, dueDate, person);
+		this.challenge = challenge;
+		this.challengeReferral = challengeReferral;
+	}
 
 	public Challenge getChallenge() {
 		return challenge;
