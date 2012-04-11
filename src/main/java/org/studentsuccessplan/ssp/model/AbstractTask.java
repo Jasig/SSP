@@ -93,7 +93,7 @@ public abstract class AbstractTask extends Auditable {
 	}
 
 	public void setReminderSentDate(Date reminderSentDate) {
-		this.reminderSentDate = dueDate == null ? null : new Date(
+		this.reminderSentDate = reminderSentDate == null ? null : new Date(
 				reminderSentDate.getTime());
 	}
 

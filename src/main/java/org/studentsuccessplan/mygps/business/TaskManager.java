@@ -15,13 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.mygps.model.transferobject.TaskReportTO;
 import org.studentsuccessplan.mygps.model.transferobject.TaskTO;
 import org.studentsuccessplan.mygps.model.transferobject.TaskTOComparator;
-import org.studentsuccessplan.ssp.dao.CustomTaskDao;
 import org.studentsuccessplan.ssp.dao.MessageDao;
-import org.studentsuccessplan.ssp.dao.TaskDao;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
 import org.studentsuccessplan.ssp.dao.reference.MessageTemplateDao;
 import org.studentsuccessplan.ssp.model.CustomTask;
@@ -31,22 +28,25 @@ import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
+import org.studentsuccessplan.ssp.service.CustomTaskService;
 import org.studentsuccessplan.ssp.service.MessageService;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.service.TaskService;
 import org.studentsuccessplan.ssp.util.VelocityTemplateHelper;
 
 @Service
 public class TaskManager {
 
 	@Autowired
-	private TaskDao taskDao;
+	private TaskService taskService;
 
 	@Autowired
 	private ChallengeReferralDao challengeReferralDao;
 
 	@Autowired
-	private CustomTaskDao customTaskDao;
+	private CustomTaskService customTaskService;
 
 	@Autowired
 	private MessageDao messageDao;
@@ -72,7 +72,8 @@ public class TaskManager {
 	@Value("#{configProperties.serverExternalPath}")
 	String serverExternalPath;
 
-	private Logger logger = LoggerFactory.getLogger(TaskManager.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(TaskManager.class);
 
 	@Transactional(readOnly = false)
 	public TaskTO createTaskForChallengeReferral(UUID challengeId,
@@ -91,13 +92,13 @@ public class TaskManager {
 				.getPerson());
 		task.setSessionId(securityService.getSessionId());
 
-		taskDao.save(task);
+		taskService.create(task);
 
 		return new TaskTO(task);
 	}
 
 	@Transactional(readOnly = false)
-	public boolean deleteTask(String taskId) {
+	public boolean deleteTask(String taskId) throws ObjectNotFoundException {
 
 		// Determine what type of task this is from the id
 
@@ -107,18 +108,12 @@ public class TaskManager {
 
 		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)) {
 
-			Task task = taskDao.get(id);
-
-			task.setObjectStatus(ObjectStatus.DELETED);
-			taskDao.save(task);
+			taskService.delete(id);
 
 		} else if (taskType
 				.equals(TaskTO.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
 
-			CustomTask customTask = customTaskDao.get(id);
-
-			customTask.setObjectStatus(ObjectStatus.DELETED);
-			customTaskDao.save(customTask);
+			customTaskService.delete(id);
 
 		} else if (taskType
 				.equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
@@ -141,19 +136,19 @@ public class TaskManager {
 			if (securityService.isAuthenticated()) {
 				Person student = securityService.currentlyLoggedInSspUser()
 						.getPerson();
-				taskTOs.addAll(TaskTO.tasksToTaskTOs(taskDao
-						.getAllForPersonId(student.getId(), false)));
-				taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskDao
-						.getAllForPersonId(student.getId(), false)));
+				taskTOs.addAll(TaskTO.tasksToTaskTOs(
+						taskService.getAllForPersonId(student, false)));
+				taskTOs.addAll(TaskTO.customTasksToTaskTOs(
+						customTaskService.getAllForPersonId(student, false)));
 			} else {
 				taskTOs.addAll(TaskTO
-						.tasksToTaskTOs(taskDao
-								.getAllForSessionId(securityService
-										.getSessionId(), true)));
+						.tasksToTaskTOs(
+						taskService.getAllForSessionId(
+								securityService.getSessionId(), true)));
 				taskTOs.addAll(TaskTO
-						.customTasksToTaskTOs(customTaskDao
-								.getAllForSessionId(securityService
-										.getSessionId(), true)));
+						.customTasksToTaskTOs(
+						customTaskService.getAllForSessionId(
+								securityService.getSessionId(), true)));
 			}
 
 			Collections.sort(taskTOs, new TaskTOComparator());
@@ -180,7 +175,7 @@ public class TaskManager {
 
 			return true;
 		} catch (Exception e) {
-			logger.error("ERROR : email() : {}", e);
+			LOGGER.error("ERROR : email() : {}", e);
 			return false;
 		}
 	}
@@ -195,23 +190,22 @@ public class TaskManager {
 					.getPerson();
 
 			taskTOs.addAll(TaskTO
-					.tasksToTaskTOs(taskDao
-							.getAllForPersonId(student.getId())));
+					.tasksToTaskTOs(
+					taskService.getAllForPersonId(student)));
 			taskTOs.addAll(TaskTO
-					.customTasksToTaskTOs(customTaskDao
-							.getAllForPersonId(student.getId())));
+					.customTasksToTaskTOs(
+					customTaskService.getAllForPersonId(student)));
 
 		} else {
 
 			taskTOs.addAll(TaskTO
-					.tasksToTaskTOs(taskDao
-							.getAllForSessionId(securityService
-									.getSessionId())));
+					.tasksToTaskTOs(
+					taskService.getAllForSessionId(
+							securityService.getSessionId())));
 			taskTOs.addAll(TaskTO
-					.customTasksToTaskTOs(customTaskDao
-							.getAllForSessionId(securityService
-									.getSessionId())));
-
+					.customTasksToTaskTOs(
+					customTaskService.getAllForSessionId(
+							securityService.getSessionId())));
 		}
 
 		return taskTOs;
@@ -232,7 +226,7 @@ public class TaskManager {
 		customTask.setName(name);
 		customTask.setSessionId(securityService.getSessionId());
 
-		customTaskDao.save(customTask);
+		customTaskService.create(customTask);
 
 		return new TaskTO(customTask);
 	}
@@ -245,7 +239,7 @@ public class TaskManager {
 		Person student = personService.personFromUserId(studentId);
 
 		if (student == null) {
-			logger.error("Unable to acquire person for supplied student id "
+			LOGGER.error("Unable to acquire person for supplied student id "
 					+ studentId);
 			throw new Exception(
 					"Unable to acquire person for supplied student id "
@@ -255,8 +249,8 @@ public class TaskManager {
 		CustomTask customTask = new CustomTask();
 
 		customTask.setCreatedDate(new Date());
-		customTask.setCreatedBy(personService
-				.get(Person.SYSTEM_ADMINISTRATOR_ID));
+		customTask.setCreatedBy(
+				personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
 		customTask.setDescription(description);
 		customTask.setObjectStatus(ObjectStatus.ACTIVE);
 		customTask.setPerson(student);
@@ -264,7 +258,7 @@ public class TaskManager {
 		customTask.setSessionId(securityService.getSessionId());
 		customTask.setDueDate(dueDate);
 
-		customTaskDao.save(customTask);
+		customTaskService.create(customTask);
 
 		TaskTO taskTO = new TaskTO(customTask);
 
@@ -301,14 +295,15 @@ public class TaskManager {
 					velocityTemplateHelper.generateContentFromTemplate(
 							messageTemplate.getBody(), templateParameters));
 		} catch (Exception e) {
-			logger.error("Unable to send email", e);
+			LOGGER.error("Unable to send email", e);
 		}
 
 		return taskTO;
 	}
 
 	@Transactional(readOnly = false)
-	public TaskTO markTask(String taskId, Boolean complete) {
+	public TaskTO markTask(String taskId, Boolean complete)
+			throws ObjectNotFoundException {
 
 		TaskTO taskTO = null;
 
@@ -318,33 +313,26 @@ public class TaskManager {
 
 		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)) {
 
-			Task task = taskDao.get(id);
-
-			task.setCompletedDate(complete ? new Date() : null);
-			taskDao.save(task);
+			Task task = taskService.get(id);
+			taskService.markTaskCompletion(task, complete);
 
 			taskTO = new TaskTO(task);
 
 		} else if (taskType
 				.equals(TaskTO.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
 
-			CustomTask customTask = customTaskDao.get(id);
-
-			customTask.setCompletedDate(complete ? new Date() : null);
-			customTaskDao.save(customTask);
+			CustomTask customTask = customTaskService.get(id);
+			customTaskService.markTaskCompletion(customTask, complete);
 
 			taskTO = new TaskTO(customTask);
 
 		} else if (taskType
 				.equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
 
-			if (complete) {
-				taskDao.markTaskComplete(id);
-			} else {
-				taskDao.markTaskIncomplete(id);
-			}
+			Task task = taskService.get(id);
+			taskService.markTaskCompletion(task, complete);
 
-			taskTO = new TaskTO(taskDao.get(id));
+			taskTO = new TaskTO(task);
 		}
 
 		return taskTO;
@@ -353,7 +341,7 @@ public class TaskManager {
 	@Transactional(readOnly = false)
 	public void sendTaskReminderNotifications() {
 
-		logger.info("BEGIN : sendTaskReminderNotifications()");
+		LOGGER.info("BEGIN : sendTaskReminderNotifications()");
 
 		try {
 
@@ -370,7 +358,7 @@ public class TaskManager {
 			Calendar dueDateCalendar = Calendar.getInstance();
 
 			// Send reminders for custom action plan tasks
-			List<CustomTask> customTasks = customTaskDao
+			List<CustomTask> customTasks = customTaskService
 					.getAllWhichNeedRemindersSent();
 
 			for (CustomTask customTask : customTasks) {
@@ -406,14 +394,13 @@ public class TaskManager {
 
 					messageDao.save(message);
 
-					customTask.setReminderSentDate(new Date());
-
-					customTaskDao.save(customTask);
+					customTaskService.setReminderSentDateToToday(customTask);
 				}
 			}
 
 			// Send reminders for action plan steps
-			List<Task> actionPlanSteps = taskDao.getAllWhichNeedRemindersSent();
+			List<Task> actionPlanSteps = taskService
+					.getAllWhichNeedRemindersSent();
 
 			for (Task actionPlanStep : actionPlanSteps) {
 
@@ -449,17 +436,16 @@ public class TaskManager {
 
 					messageDao.save(message);
 
-					taskDao.setReminderSentDateToToday(actionPlanStep
-							.getId());
+					taskService.setReminderSentDateToToday(actionPlanStep);
 				}
 
 			}
 		} catch (Exception e) {
-			logger.error("ERROR : sendTaskReminderNotifications() : {}",
+			LOGGER.error("ERROR : sendTaskReminderNotifications() : {}",
 					e.getMessage(), e);
 		}
 
-		logger.info("END : sendTaskReminderNotifications()");
+		LOGGER.info("END : sendTaskReminderNotifications()");
 	}
 
 	public List<TaskReportTO> getActionPlanReportData() {
@@ -469,26 +455,27 @@ public class TaskManager {
 		if (securityService.isAuthenticated()) {
 			Person student = securityService.currentlyLoggedInSspUser()
 					.getPerson();
-			taskReportTOs.addAll(TaskReportTO
-					.tasksToTaskReportTOs(taskDao
-							.getAllForPersonId(student.getId(), false)));
+			taskReportTOs.addAll(
+					TaskReportTO.tasksToTaskReportTOs(
+							taskService.getAllForPersonId(
+									student, false)));
 			taskReportTOs
-					.addAll(TaskReportTO
-							.customTasksToTaskReportTOs(customTaskDao
-									.getAllForPersonId(student
-											.getId(), false)));
+					.addAll(
+					TaskReportTO.customTasksToTaskReportTOs(
+							customTaskService.getAllForPersonId(
+									student, false)));
 
 		} else {
 
-			taskReportTOs.addAll(TaskReportTO
-					.tasksToTaskReportTOs(taskDao
-							.getAllForSessionId(securityService
-									.getSessionId(), false)));
+			taskReportTOs.addAll(
+					TaskReportTO.tasksToTaskReportTOs(
+							taskService.getAllForSessionId(
+									securityService.getSessionId(), false)));
 			taskReportTOs
-					.addAll(TaskReportTO
-							.customTasksToTaskReportTOs(customTaskDao
-									.getAllForSessionId(securityService
-											.getSessionId(), false)));
+					.addAll(
+					TaskReportTO.customTasksToTaskReportTOs(
+							customTaskService.getAllForSessionId(
+									securityService.getSessionId(), false)));
 
 		}
 
