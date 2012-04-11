@@ -1,0 +1,42 @@
+#login-page .login-form .login-form-button-container {
+  padding-left: 0px;
+}
+#contact-page .contact-form .contact-form-button-container {
+  padding-left: 0px;
+}
+#search-page .referral-search .search-form .ui-field-contain {
+  padding-top: 0px;
+  height: 22px;
+}
+#search-page .referral-search .search-form .ui-field-contain label {
+  display: inline;
+  position: absolute;
+  padding-top: 4px;
+}
+#search-page .referral-search .search-form .ui-field-contain .ui-input-search {
+  display: inline;
+  position: absolute;
+  padding-top: 2px;
+  padding-left: 30px;
+  padding-bottom: 2px;
+  padding-right: 30px;
+  left: 114px;
+  width: 276px;
+}
+#search-page .referral-search .search-form .ui-field-contain .ui-input-search .ui-input-text {
+  padding-top: 2px;
+}
+#search-page .referral-search .search-form .ui-field-contain .ui-btn-inline {
+  display: inline;
+  position: absolute;
+  right: 0px;
+  width: 72px;
+  height: 31px;
+  margin-top: 0px;
+}
+#search-page .referral-search .search-form .ui-field-contain .ui-btn-inline .ui-btn-inner {
+  padding-top: 6px;
+}
+#intake-page .intake-form .ui-select .ui-btn.ui-disabled {
+  background-color: #ddd;
+}

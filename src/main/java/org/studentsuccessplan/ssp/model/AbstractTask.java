@@ -45,6 +45,15 @@ public abstract class AbstractTask extends Auditable {
 	@JoinColumn(name = "person_id")
 	private Person person;
 
+	public AbstractTask() {
+	}
+
+	public AbstractTask(String description, Date dueDate, Person person) {
+		this.description = description;
+		this.dueDate = dueDate;
+		this.person = person;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -84,7 +93,7 @@ public abstract class AbstractTask extends Auditable {
 	}
 
 	public void setReminderSentDate(Date reminderSentDate) {
-		this.reminderSentDate = dueDate == null ? null : new Date(
+		this.reminderSentDate = reminderSentDate == null ? null : new Date(
 				reminderSentDate.getTime());
 	}
 

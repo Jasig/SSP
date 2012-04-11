@@ -30,67 +30,73 @@ public class TaskTO {
 	}
 
 	public TaskTO(Task task) {
-		this.setChallengeId(task.getChallenge().getId());
-		this.setChallengeReferralId(task.getChallengeReferral()
-				.getId());
-		this.setCompleted((task.getCompletedDate() != null) ? true : false);
-		this.setDeletable(true);
+		setChallengeId(task.getChallenge().getId());
+		setChallengeReferralId(task.getChallengeReferral().getId());
+		setCompleted((task.getCompletedDate() != null) ? true : false);
+		setDeletable(true);
 
 		if (task.getChallengeReferral().getPublicDescription() != null) {
-			this.setDescription(task.getChallengeReferral()
-					.getPublicDescription().replaceAll("\\<.*?>", ""));
+			setDescription(task.getChallengeReferral().getPublicDescription()
+					.replaceAll("\\<.*?>", ""));
 		}
 
-		this.setDetails(task.getChallengeReferral().getPublicDescription());
-		this.setDueDate(null);
+		setDetails(task.getChallengeReferral().getPublicDescription());
+		setDueDate(null);
 		// :TODO how do determine between ACTION_PLAN_TASK and
 		// SSP_ACTION_PLAN_TASK
-		this.setId(TASKTO_ID_PREFIX_ACTION_PLAN_TASK
-				+ TASKTO_ID_PREFIX_DELIMITER + task.getId());
-		this.setId(TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK
+		setId(TASKTO_ID_PREFIX_ACTION_PLAN_TASK + TASKTO_ID_PREFIX_DELIMITER
+				+ task.getId());
+		setId(TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK
 				+ TASKTO_ID_PREFIX_DELIMITER + task.getId());
 
-		this.setName(task.getChallengeReferral().getName());
+		setName(task.getChallengeReferral().getName());
 
 		// :TODO how do determine between ACTION_PLAN_TASK and
 		// SSP_ACTION_PLAN_TASK
-		this.setType(AbstractTask.ACTION_PLAN_TASK);
+		setType(AbstractTask.ACTION_PLAN_TASK);
 		// this.setType(AbstractTask.SSP_ACTION_PLAN_TASK);
 	}
 
 	public TaskTO(CustomTask customTask) {
-		this.setChallengeId(null);
-		this.setChallengeReferralId(null);
-		this.setCompleted((customTask.getCompletedDate() != null) ? true
-				: false);
-		this.setDeletable(true);
+		setChallengeId(null);
+		setChallengeReferralId(null);
+		setCompleted((customTask.getCompletedDate() != null) ? true : false);
+		setDeletable(true);
 
 		if (customTask.getDescription() != null) {
-			this.setDescription(customTask.getDescription().replaceAll(
-					"\\<.*?>", ""));
+			setDescription(customTask.getDescription()
+					.replaceAll("\\<.*?>", ""));
 		}
 
-		this.setDetails(customTask.getDescription());
-		this.setDueDate(customTask.getDueDate());
-		this.setId(TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK
+		setDetails(customTask.getDescription());
+		setDueDate(customTask.getDueDate());
+		setId(TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK
 				+ TASKTO_ID_PREFIX_DELIMITER + customTask.getId());
-		this.setName(customTask.getName());
-		this.setType(AbstractTask.CUSTOM_ACTION_PLAN_TASK);
+		setName(customTask.getName());
+		setType(AbstractTask.CUSTOM_ACTION_PLAN_TASK);
 	}
 
 	public static List<TaskTO> tasksToTaskTOs(List<Task> tasks) {
 		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
-		for (Task task : tasks) {
-			taskTOs.add(new TaskTO(task));
+
+		if (tasks != null && !tasks.isEmpty()) {
+			for (Task task : tasks) {
+				taskTOs.add(new TaskTO(task));
+			}
 		}
+
 		return taskTOs;
 	}
 
 	public static List<TaskTO> customTasksToTaskTOs(List<CustomTask> customTasks) {
 		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
-		for (CustomTask customTask : customTasks) {
-			taskTOs.add(new TaskTO(customTask));
+
+		if (customTasks != null && !customTasks.isEmpty()) {
+			for (CustomTask customTask : customTasks) {
+				taskTOs.add(new TaskTO(customTask));
+			}
 		}
+
 		return taskTOs;
 	}
 

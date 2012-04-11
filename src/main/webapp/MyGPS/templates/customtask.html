@@ -1,0 +1,17 @@
+<div class='custom-task-modal ui-overlay-shadow ui-body-b ui-corner-all'>
+	<h2>Create a Custom Task</h2>
+	<form>
+		<div data-role="fieldcontain">
+		    <label for="customTaskName">Name:</label>
+		    <input type="text" name="customTaskName" id="customTaskName" />
+		</div>
+		<div data-role="fieldcontain">
+			<label for="customTaskDescription">Description:</label>
+			<textarea cols="40" rows="8" name="customTaskDescription" id="customTaskDescription"></textarea>
+		</div>
+		<div class="contact-form-button-container">
+			<button type="submit" data-theme="b" data-inline="true" name="submit" value="create" data-bind="click: function () { viewModel.createCustomTask( customTaskName.value, customTaskDescription.value, { result: function () { $item.modal.close() } } ); }">Create</button>
+			<button type="submit" data-theme="a" data-inline="true" name="cancel" value="cancel" data-bind="click: function () { $item.modal.close() }">Cancel</button>
+		</div>
+	</form>
+</div>

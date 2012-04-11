@@ -1,3 +1,5 @@
 target
 catalina.home_IS_UNDEFINED
 .DS_Store
+
+/src/main/webapp/MyGPS/scripts/mygps
