@@ -10,12 +10,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.mygps.model.transferobject.ChallengeReferralTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideQuestionTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideTO;
 import org.studentsuccessplan.ssp.dao.SelfHelpGuideQuestionResponseDao;
 import org.studentsuccessplan.ssp.dao.SelfHelpGuideResponseDao;
 import org.studentsuccessplan.ssp.dao.TaskDao;
@@ -61,28 +59,23 @@ public class SelfHelpGuideManager {
 	@Autowired
 	private SecurityService securityService;
 
-	public List<SelfHelpGuideTO> getAll() {
+	public List<SelfHelpGuide> getAll() {
 
-		List<SelfHelpGuideTO> selfHelpGuideTOs = null;
+		List<SelfHelpGuide> selfHelpGuides = null;
 
 		if (!securityService.isAuthenticated()) {
-			selfHelpGuideTOs = SelfHelpGuideTO
-					.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
-							.findAllActiveForUnauthenticated());
+			selfHelpGuides = selfHelpGuideDao.findAllActiveForUnauthenticated();
 		} else {
-			selfHelpGuideTOs = SelfHelpGuideTO
-					.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
-							.getAll(ObjectStatus.ACTIVE));
+			selfHelpGuides = selfHelpGuideDao.getAll(ObjectStatus.ACTIVE);
 		}
 
-		return selfHelpGuideTOs;
+		return selfHelpGuides;
 	}
 
-	public List<SelfHelpGuideTO> getBySelfHelpGuideGroup(
+	public List<SelfHelpGuide> getBySelfHelpGuideGroup(
 			UUID selfHelpGuideGroupId) {
-		return SelfHelpGuideTO
-				.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
-						.findAllActiveBySelfHelpGuideGroup(selfHelpGuideGroupId));
+		return selfHelpGuideDao
+				.findAllActiveBySelfHelpGuideGroup(selfHelpGuideGroupId);
 	}
 
 	public SelfHelpGuideContentTO getContentById(UUID selfHelpGuideId) {
