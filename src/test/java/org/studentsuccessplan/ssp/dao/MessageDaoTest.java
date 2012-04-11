@@ -29,7 +29,7 @@ import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class MessageDaoTest {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MessageDaoTest.class);
 
 	@Autowired
@@ -62,7 +62,7 @@ public class MessageDaoTest {
 		assertNotNull(obj.getId());
 		saved = obj.getId();
 
-		logger.debug(obj.toString());
+		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
 		assertNotNull(obj);
@@ -111,7 +111,7 @@ public class MessageDaoTest {
 		obj2.setRecipientEmailAddress("a@b.com");
 		dao.save(obj2);
 
-		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
 				+ obj2.getId().toString());
 
 		dao.delete(obj);
