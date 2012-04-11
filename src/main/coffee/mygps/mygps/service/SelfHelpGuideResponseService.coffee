@@ -41,7 +41,7 @@ namespace 'mygps.service'
 			initiate: ( selfHelpGuideId, callbacks ) ->
 				$.ajax(
 					url: @createURL( "/initiate?selfHelpGuideId=#{ selfHelpGuideId }" )
-					dataType: "json"
+					dataType: "text"
 					success: ( result ) ->
 						callbacks?.result?( result )
 					error: ( fault ) ->
