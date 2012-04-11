@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file allows you greater access to the application's configuration on a
-per site basis.  This is a primary point of access for integration into systems
-like mail. 
-
-It is necessary to include this file in the production config directory.-->
+<!-- This file allows you greater access to the application's configuration 
+	on a per site basis. This is a primary point of access for integration into 
+	systems like mail. It is necessary to include this file in the production 
+	config directory. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:task="http://www.springframework.org/schema/task"
-	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
-	http://www.springframework.org/schema/util	 http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
-	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
+	<util:properties id="configProperties"
+		location="file:/usr/local/etc/ssp/ssp-config.properties" />
 
 	<!-- Mail Server Configuration -->
-		<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="#{configProperties.smtp_host}"/>
-		<property name="port" value="#{configProperties.smtp_port}"/>
-		<property name="protocol" value="smtps"/>
-		<property name="username" value="#{configProperties.smtp_username}"/>
-		<property name="password" value="#{configProperties.smtp_password}"/>
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="#{configProperties.smtp_host}" />
+		<property name="port" value="#{configProperties.smtp_port}" />
+		<property name="protocol" value="smtps" />
+		<property name="username" value="#{configProperties.smtp_username}" />
+		<property name="password" value="#{configProperties.smtp_password}" />
 	</bean>
-	
+
 	<!-- Task Scheduling -->
 	<task:scheduler id="mygpsScheduler" pool-size="3" />
 
-	<task:scheduled-tasks scheduler="mygpsScheduler" >
-		<!--
-		<task:scheduled ref="taskManager" method="sendTaskReminderNotifications" cron="0 0 1 * * *" />
-		<task:scheduled ref="earlyAlertManager" method="generateCriticalAlerts" cron="0 0,5,10,15,20,25,30,35,40,45,50,55 * * * *" />
-		<task:scheduled ref="earlyAlertManager" method="generateThresholdAlerts" cron="0 0 3 * * *" />
-		<task:scheduled ref="messageManager" method="sendQueuedMessages" cron="0 0,5,10,15,20,25,30,35,40,45,50,55 * * * *" />
-		-->
-	</task:scheduled-tasks>
+	<!-- 
+	<task:scheduled-tasks scheduler="mygpsScheduler" > 
+		<task:scheduled ref="taskManager" method="sendTaskReminderNotifications" 
+			cron="0 0 1 * * *" /> 
+		<task:scheduled ref="earlyAlertManager" method="generateCriticalAlerts" 
+			cron="0 0,5,10,15,20,25,30,35,40,45,50,55 * * * *" /> 
+		<task:scheduled ref="earlyAlertManager" method="generateThresholdAlerts" 
+			cron="0 0 3 * * *" /> 
+		<task:scheduled ref="messageManager" method="sendQueuedMessages" 
+			cron="0 0,5,10,15,20,25,30,35,40,45,50,55 * * * *" />
+	</task:scheduled-tasks> -->
 
 </beans>
