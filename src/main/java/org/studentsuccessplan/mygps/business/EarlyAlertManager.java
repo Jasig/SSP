@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-
 import org.studentsuccessplan.ssp.dao.SelfHelpGuideQuestionResponseDao;
 import org.studentsuccessplan.ssp.dao.SelfHelpGuideResponseDao;
 import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
@@ -36,7 +35,8 @@ public class EarlyAlertManager {
 	@Autowired
 	private SelfHelpGuideResponseDao selfHelpGuideResponseDao;
 
-	private Logger logger = LoggerFactory.getLogger(EarlyAlertManager.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(EarlyAlertManager.class);
 
 	@Value("#{configProperties.earlyAlertApiBaseUrl}")
 	private String earlyAlertApiBaseUrl;
@@ -48,7 +48,7 @@ public class EarlyAlertManager {
 	@Transactional(readOnly = false)
 	public void generateCriticalAlerts() {
 
-		logger.info("BEGIN : generateCriticalAlerts()");
+		LOGGER.info("BEGIN : generateCriticalAlerts()");
 
 		List<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponseDao
 				.criticalResponsesForEarlyAlert();
@@ -75,7 +75,7 @@ public class EarlyAlertManager {
 									.getSelfHelpGuideQuestion());
 
 			try {
-				logger.info("Sending Alert for student "
+				LOGGER.info("Sending Alert for student "
 						+ selfHelpGuideQuestionResponse
 								.getSelfHelpGuideResponse().getPerson()
 								.getUserId() + " : generateCriticalAlerts()");
@@ -88,28 +88,28 @@ public class EarlyAlertManager {
 					selfHelpGuideQuestionResponseDao
 							.save(selfHelpGuideQuestionResponse);
 
-					logger.info("Alert for selfHelpGuideQuestionResponse "
+					LOGGER.info("Alert for selfHelpGuideQuestionResponse "
 							+ selfHelpGuideQuestionResponse.getId()
 							+ " sent successfully.");
 				} else {
-					logger.error("ERROR : generateCriticalAlerts() : {}",
+					LOGGER.error("ERROR : generateCriticalAlerts() : {}",
 							"Return value false from post for student self help guide question response "
 									+ selfHelpGuideQuestionResponse.getId());
 				}
 
 			} catch (Exception e) {
-				logger.error("ERROR : generateCriticalAlerts() : {}",
+				LOGGER.error("ERROR : generateCriticalAlerts() : {}",
 						e.getMessage(), e);
 			}
 
 		}
 
-		logger.info("END : generateCriticalAlerts()");
+		LOGGER.info("END : generateCriticalAlerts()");
 	}
 
 	public void generateThresholdAlerts() {
 
-		logger.info("BEGIN : generateThresholdAlerts()");
+		LOGGER.info("BEGIN : generateThresholdAlerts()");
 
 		List<SelfHelpGuideResponse> selfHelpGuideResponses = selfHelpGuideResponseDao
 				.forEarlyAlert();
@@ -134,7 +134,7 @@ public class EarlyAlertManager {
 					+ " was exceeded.");
 
 			try {
-				logger.info("Sending Alert for student "
+				LOGGER.info("Sending Alert for student "
 						+ selfHelpGuideResponse.getPerson().getUserId()
 						+ " : generateThresholdAlerts()");
 
@@ -145,23 +145,23 @@ public class EarlyAlertManager {
 					selfHelpGuideResponse.setEarlyAlertSent(true);
 					selfHelpGuideResponseDao.save(selfHelpGuideResponse);
 
-					logger.info("Alert for selfhelpguideresponse "
+					LOGGER.info("Alert for selfhelpguideresponse "
 							+ selfHelpGuideResponse.getId()
 							+ " sent successfully.");
 				} else {
-					logger.error("ERROR : generateThresholdAlerts() : {}",
+					LOGGER.error("ERROR : generateThresholdAlerts() : {}",
 							"Return value false from post for student self help guide response "
 									+ selfHelpGuideResponse.getId());
 				}
 
 			} catch (Exception e) {
-				logger.error("ERROR : generateThresholdAlerts() : {}",
+				LOGGER.error("ERROR : generateThresholdAlerts() : {}",
 						e.getMessage(), e);
 			}
 
 		}
 
-		logger.info("END : generateThresholdAlerts()");
+		LOGGER.info("END : generateThresholdAlerts()");
 	}
 
 }
