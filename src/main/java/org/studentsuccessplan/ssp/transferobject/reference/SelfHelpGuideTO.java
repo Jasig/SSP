@@ -1,9 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
+
+import com.google.common.collect.Lists;
 
 public class SelfHelpGuideTO extends AbstractReferenceTO<SelfHelpGuide>
 		implements TransferObject<SelfHelpGuide> {
@@ -45,4 +48,11 @@ public class SelfHelpGuideTO extends AbstractReferenceTO<SelfHelpGuide>
 		return pushAttributesToModel(new SelfHelpGuide());
 	}
 
+	public static List<SelfHelpGuideTO> listToTOList(List<SelfHelpGuide> guides) {
+		List<SelfHelpGuideTO> tos = Lists.newArrayList();
+		for (SelfHelpGuide guide : guides) {
+			tos.add(new SelfHelpGuideTO(guide));
+		}
+		return tos;
+	}
 }

@@ -3,32 +3,28 @@ package org.studentsuccessplan.mygps.web;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideTO;
+import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
 
 @Controller
 @RequestMapping("/mygps/selfhelpguide")
-public class MyGpsSelfHelpGuideController {
+public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 
 	@Autowired
 	private SelfHelpGuideManager selfHelpGuideManager;
 
-	private Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsSelfHelpGuideController.class);
 
-	// Needed for tests
 	public void setSelfHelpGuideManager(
 			SelfHelpGuideManager selfHelpGuideManager) {
 		this.selfHelpGuideManager = selfHelpGuideManager;
@@ -39,9 +35,9 @@ public class MyGpsSelfHelpGuideController {
 	List<SelfHelpGuideTO> getAll() throws Exception {
 
 		try {
-			return selfHelpGuideManager.getAll();
+			return SelfHelpGuideTO.listToTOList(selfHelpGuideManager.getAll());
 		} catch (Exception e) {
-			logger.error("ERROR : getAll() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : getAll() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -55,7 +51,7 @@ public class MyGpsSelfHelpGuideController {
 		try {
 			return selfHelpGuideManager.getContentById(selfHelpGuideId);
 		} catch (Exception e) {
-			logger.error("ERROR : getContentById() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : getContentById() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -67,21 +63,12 @@ public class MyGpsSelfHelpGuideController {
 			throws Exception {
 
 		try {
-			return selfHelpGuideManager
-					.getBySelfHelpGuideGroup(selfHelpGuideGroupId);
+			return SelfHelpGuideTO.listToTOList(selfHelpGuideManager
+					.getBySelfHelpGuideGroup(selfHelpGuideGroupId));
 		} catch (Exception e) {
-			logger.error("ERROR : getBySelfHelpGuideGroup() : {}",
+			LOGGER.error("ERROR : getBySelfHelpGuideGroup() : {}",
 					e.getMessage(), e);
 			throw e;
 		}
 	}
-
-	@ExceptionHandler(Exception.class)
-	public @ResponseBody
-	String handleException(Exception e, HttpServletResponse response) {
-		logger.error("ERROR : handleException()", e);
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		return e.getMessage();
-	}
-
 }

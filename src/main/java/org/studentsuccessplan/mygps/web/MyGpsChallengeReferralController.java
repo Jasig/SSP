@@ -3,13 +3,10 @@ package org.studentsuccessplan.mygps.web;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,16 +16,15 @@ import org.studentsuccessplan.mygps.model.transferobject.ChallengeReferralTO;
 
 @Controller
 @RequestMapping("/mygps/challengereferral")
-public class MyGpsChallengeReferralController {
+public class MyGpsChallengeReferralController extends AbstractMyGpsController {
 
 	@Autowired
 	private SelfHelpGuideManager manager;
 
-	private Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsChallengeReferralController.class);
 
-	// Required for tests
-	public void setManager(SelfHelpGuideManager manager) {
+	protected void setManager(SelfHelpGuideManager manager) {
 		this.manager = manager;
 	}
 
@@ -40,7 +36,7 @@ public class MyGpsChallengeReferralController {
 		try {
 			return manager.getChallengeReferralsByChallengeId(challengeId);
 		} catch (Exception e) {
-			logger.error("ERROR : getByChallengeId() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : getByChallengeId() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -50,24 +46,15 @@ public class MyGpsChallengeReferralController {
 	List<ChallengeReferralTO> search(@RequestParam("query") String query,
 			@RequestParam("challengeId") UUID challengeId) throws Exception {
 
-		// TODO: Not using query param as we are no longer searching the
+		// Not using query param as we are no longer searching the
 		// referrals, simply returning based on challengeId and whether the
 		// referral is public.
 
 		try {
 			return manager.challengeReferralSearch(challengeId);
 		} catch (Exception e) {
-			logger.error("ERROR : search() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : search() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
-
-	@ExceptionHandler(Exception.class)
-	public @ResponseBody
-	String handleException(Exception e, HttpServletResponse response) {
-		logger.error("ERROR : handleException()", e);
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		return e.getMessage();
-	}
-
 }

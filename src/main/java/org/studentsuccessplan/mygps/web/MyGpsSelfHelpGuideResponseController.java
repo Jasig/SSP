@@ -2,13 +2,10 @@ package org.studentsuccessplan.mygps.web;
 
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +15,8 @@ import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO
 
 @Controller
 @RequestMapping("/mygps/selfhelpguideresponse")
-public class MyGpsSelfHelpGuideResponseController {
+public class MyGpsSelfHelpGuideResponseController
+		extends AbstractMyGpsController {
 
 	@Autowired
 	private SelfHelpGuideManager manager;
@@ -26,8 +24,7 @@ public class MyGpsSelfHelpGuideResponseController {
 	private Logger logger = LoggerFactory
 			.getLogger(MyGpsSelfHelpGuideResponseController.class);
 
-	// Needed for tests
-	public void setManager(SelfHelpGuideManager manager) {
+	protected void setManager(SelfHelpGuideManager manager) {
 		this.manager = manager;
 	}
 
@@ -104,13 +101,4 @@ public class MyGpsSelfHelpGuideResponseController {
 			throw e;
 		}
 	}
-
-	@ExceptionHandler(Exception.class)
-	public @ResponseBody
-	String handleException(Exception e, HttpServletResponse response) {
-		logger.error("ERROR : handleException()", e);
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		return e.getMessage();
-	}
-
 }
