@@ -14,10 +14,10 @@
 # If this version is changed, manually update the <SCRIPT> links in the /src/main/webapp/*.html files.
 VERSION  = "2.1.0"
 
-# Full path to /src/main/coffee
-# On Linux, for example, /usr/me/projects/ssp/src/main/MyGPS/coffee
-# On Windows, for example, C:/java/projects/ssp/src/main/MyGPS/coffee
-SRC_MAIN_COFFEE_PATH = "C:/java/projects/ssp/src/main/MyGPS/coffee"
+# Full path to CoffeeScript source files for MyGPS
+# On Linux, for example, /usr/me/projects/ssp/src/main/coffee/mygps
+# On Windows, for example, C:/java/projects/ssp/src/main/coffee/mygps
+SRC_MAIN_COFFEE_PATH = "C:/java/projects/ssp/src/main/coffee/mygps"
 
 # Full path to /src/main/webapp/scripts where the compiled MyGPS.js file should be placed.
 # On Linux, for example, /usr/me/projects/MyGPS/src/main/webapp/MyGPS/scripts
