@@ -1,15 +1,15 @@
 package org.studentsuccessplan.ssp.security;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.UUID;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-
 import org.studentsuccessplan.ssp.model.Person;
 
-public class SspUser extends User {
+public class SspUser extends User implements Serializable {
 
 	public static final String ANONYMOUS_PERSON_FIRSTNAME = "Guest";
 	public static final UUID ANONYMOUS_PERSON_ID = UUID
@@ -17,18 +17,18 @@ public class SspUser extends User {
 	public static final String ANONYMOUS_PERSON_LASTNAME = "User";
 	public static final String ANONYMOUS_PERSON_USERNAME = "anonymousUser";
 
+	private static final long serialVersionUID = -8125829986440987725L;
+
+	private String emailAddress;
+
+	private Person person;
+
 	public SspUser(String username, String password, boolean enabled,
 			boolean accountNonExpired, boolean credentialsNonExpired,
 			boolean accountNonLocked, Collection<GrantedAuthority> authorities) {
 		super(username, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, authorities);
 	}
-
-	private static final long serialVersionUID = -8125829986440987725L;
-
-	private String emailAddress;
-
-	private Person person;
 
 	public String getEmailAddress() {
 		return emailAddress;

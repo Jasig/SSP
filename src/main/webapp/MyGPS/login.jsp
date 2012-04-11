@@ -17,7 +17,7 @@
 		<link media="only screen and (min-device-width: 768px) and (max-device-width: 1024px)" rel="stylesheet" href="styles/ipad.min.css" />
 		
 		<script type="text/javascript" src="scripts/lib/json2.js"></script>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 		<script type="text/javascript" src="scripts/lib/jquery.mobile-1.0rc1.min.js"></script>
 		<script type="text/javascript" src="scripts/lib/jquery.tmpl.min.js"></script>
 		<script type="text/javascript" src="scripts/lib/jquery.tmpl.loadTemplates.min.js"></script>

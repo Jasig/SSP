@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
-
 import org.studentsuccessplan.ssp.security.SspUser;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
@@ -15,7 +14,8 @@ import org.studentsuccessplan.ssp.service.SecurityService;
 @Transactional(readOnly = true)
 public class SecurityServiceImpl implements SecurityService {
 
-	private Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
+	private final Logger logger = LoggerFactory
+			.getLogger(SecurityServiceImpl.class);
 
 	@Autowired
 	private PersonService personService;
@@ -48,6 +48,7 @@ public class SecurityServiceImpl implements SecurityService {
 						.getUsername()));
 			} catch (ObjectNotFoundException e) {
 				logger.error("Did not find the person's domain object");
+				return null;
 			}
 		}
 

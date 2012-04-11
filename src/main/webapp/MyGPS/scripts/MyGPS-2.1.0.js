@@ -774,7 +774,7 @@
       SelfHelpGuideResponseService.prototype.initiate = function(selfHelpGuideId, callbacks) {
         return $.ajax({
           url: this.createURL("/initiate?selfHelpGuideId=" + selfHelpGuideId),
-          dataType: "json",
+          dataType: "text",
           success: function(result) {
             return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
           },
