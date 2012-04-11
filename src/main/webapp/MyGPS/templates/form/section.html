@@ -1,0 +1,8 @@
+<h2 data-bind="text: label"></h2>
+<a href="#" rel="external" data-bind="click: function () { if ( viewModel.moveToPreviousSection() ) { $('body').scrollTop(0); } }, visible: viewModel.hasPreviousSection" data-role="button" data-inline="true">Go Back</a>
+<p>* Indicates required field.</p>
+<form action="#" method="get" data-role="form" data-inset="true" data-bind="template: { name: function ( item ) { return item.type() + 'Template'; }, foreach: questions }">
+</form>
+<p class="error-message" data-bind="visible: viewModel.invalid">You have errors in your form.  Please see the questions highlighted in red above.</p>
+<a href="#" rel="external" data-bind="click: function () { if ( viewModel.moveToNextSection() ) { $('body').scrollTop(0); } }, visible: viewModel.hasNextSection" data-role="button" data-inline="true">Continue</a>
+<a href="#" rel="external" data-bind="click: function () { viewModel.saveForm( { result: function () { document.location = 'index.html'; } } ) }, visible: !viewModel.hasNextSection()" data-role="button" data-inline="true">Save</a>

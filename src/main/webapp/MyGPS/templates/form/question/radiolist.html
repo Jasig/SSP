@@ -1,0 +1,6 @@
+<div data-role="fieldcontain" data-bind="visible: visible, css: { 'required': required, 'invalid': !valid() }">
+	<fieldset data-role="controlgroup">
+		<legend data-bind="text: labelWithIndicator"></legend>
+		<span data-bind="template: { name: 'radioOptionTemplate', foreach: options, templateOptions: { group: id, value: value, enable: enabled } }"></span>
+	</fieldset>
+</div>

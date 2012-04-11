@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Resources - Welcome</title>
+		
+		<link rel="stylesheet" href="styles/lib/jquery.mobile-1.0.1.min.css" />
+		<link rel="stylesheet" href="styles/lib/apprise.min.css" />
+		<link rel="stylesheet" href="styles/stylesheet.min.css" />
+		<!--[if IE 7]>
+			<link rel="stylesheet" href="styles/win-ie7.min.css">
+		<![endif]-->
+		<!--[if IE 8]>
+			<link rel="stylesheet" href="styles/win-ie8.min.css">
+		<![endif]-->
+		
+		<link media="only screen and (min-device-width: 768px) and (max-device-width: 1024px)" rel="stylesheet" href="styles/ipad.min.css" />
+		
+		<script type="text/javascript" src="scripts/lib/json2.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+		<script type="text/javascript" src="scripts/lib/jquery.mobile-1.0rc1.min.js"></script>
+		<script type="text/javascript" src="scripts/lib/jquery.tmpl.min.js"></script>
+		<script type="text/javascript" src="scripts/lib/jquery.tmpl.loadTemplates.min.js"></script>
+		<script type="text/javascript" src="scripts/lib/jquery.simplemodal.1.4.2.min.js"></script>
+		<script type="text/javascript" src="scripts/lib/jquery.parameter.min.js"></script>
+		<script type="text/javascript" src="scripts/lib/underscore-min.js"></script>
+		<script type="text/javascript" src="scripts/lib/knockout-1.2.1.js"></script>
+		<script type="text/javascript" src="scripts/lib/ko.jqm.bindings.min.js"></script>
+		<script type="text/javascript" src="scripts/lib/namespace.min.js"></script>
+		<script type="text/javascript" src="scripts/lib/apprise-1.5.min.js"></script>
+		<script type="text/javascript" src="scripts/MyGPS-2.1.0.min.js"></script>
+	</head>
+	<body>
+		
+		<!-- Home Page -->
+		
+		<div id="home-page" class="page" data-role="page">
+			
+			<script type="text/javascript" src="scripts/home.js"></script>
+			
+			<div class="header">
+				<div class="banner" data-bind="template: { name: 'bannerTemplate' }"></div>
+				<div data-role="header" data-theme="b">
+					<h1>&nbsp;</h1>
+					<a href="login.jsp" rel="external" class="ui-btn-right" data-bind="visible: !viewModel.authenticated()" data-role="button" data-icon="custom">Login</a>
+					<p class="person-name" data-bind="text: authenticatedPersonName"></p>
+					<a href="j_spring_security_logout" rel="external" class="ui-btn-right" data-bind="visible: viewModel.authenticated()" data-role="button" data-icon="custom">Logout</a>
+				</div>
+			</div>
+			
+			<div data-role="content" class="content">
+				
+				<div class="introduction">
+					<h2>Welcome</h2>
+					<p>This self help tool will assist you in identifying and overcoming challenges or barriers to your success at Sinclair Community College. Please use the Self Help Guides to begin the process of identifying the challenges you might face, and discovering the solutions available to meet those challenges. The tool will assist you in building a Personal Road Map that will guide you on your journey to success. Good luck on that journey!</p>		
+					<h2>Tools for Your Success</h2>
+					<ul data-role="listview" data-inset="true">
+						<li><a href="guides.html">Self Help Guides</a></li>
+						<li style="display: none;" data-bind="visible: canContactCoach"><a href="contact.html">Contact Your Coach</a></li>
+						<li><a href="search.html">Search for Resources</a></li>
+					</ul>
+					
+				</div>
+				
+				<div class="task-list" data-bind="template: { name: 'tasksTemplate' }"></div>
+				
+			</div>
+			
+			<div class="footer" data-bind="template: { name: 'footerTemplate' }"></div>
+						
+		</div>
+		
+	</body>
+</html>
