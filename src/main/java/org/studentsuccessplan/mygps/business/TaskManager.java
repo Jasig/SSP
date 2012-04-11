@@ -43,10 +43,10 @@ public class TaskManager {
 	private TaskService taskService;
 
 	@Autowired
-	private ChallengeReferralDao challengeReferralDao;
+	private CustomTaskService customTaskService;
 
 	@Autowired
-	private CustomTaskService customTaskService;
+	private ChallengeReferralDao challengeReferralDao;
 
 	@Autowired
 	private MessageDao messageDao;
@@ -67,10 +67,10 @@ public class TaskManager {
 	private VelocityTemplateHelper velocityTemplateHelper;
 
 	@Value("#{configProperties.numberOfDaysPriorForTaskReminder}")
-	int numberOfDaysPriorForTaskReminder;
+	private int numberOfDaysPriorForTaskReminder;
 
 	@Value("#{configProperties.serverExternalPath}")
-	String serverExternalPath;
+	private String serverExternalPath;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TaskManager.class);

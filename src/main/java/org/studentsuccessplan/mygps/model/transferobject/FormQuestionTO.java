@@ -21,6 +21,25 @@ public class FormQuestionTO {
 	private String visibilityExpression;
 	private String availabilityExpression;
 
+	public FormOptionTO getFormOptionByValue(String value) {
+		for (FormOptionTO formOptionTO : getOptions()) {
+			if (formOptionTO.getValue().toUpperCase()
+					.equals(value.toUpperCase())) {
+				return formOptionTO;
+			}
+		}
+		return null;
+	}
+
+	public FormOptionTO getFormOptionById(UUID formOptionId) {
+		for (FormOptionTO formOptionTO : getOptions()) {
+			if (formOptionTO.getId().equals(formOptionId)) {
+				return formOptionTO;
+			}
+		}
+		return null;
+	}
+
 	public UUID getId() {
 		return id;
 	}
@@ -28,30 +47,39 @@ public class FormQuestionTO {
 	public void setId(UUID id) {
 		this.id = id;
 	}
+
 	public String getLabel() {
 		return label;
 	}
+
 	public void setLabel(String label) {
 		this.label = label;
 	}
+
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	public boolean isReadOnly() {
 		return readOnly;
 	}
+
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
 	}
+
 	public boolean isRequired() {
 		return required;
 	}
+
 	public void setRequired(boolean required) {
 		this.required = required;
 	}
+
 	public String getValue() {
 		return value;
 	}
@@ -79,36 +107,47 @@ public class FormQuestionTO {
 	public List<String> getValues() {
 		return values;
 	}
+
 	public void setValues(List<String> values) {
 		this.values = values;
 	}
+
 	public String getMaximumLength() {
 		return maximumLength;
 	}
+
 	public void setMaximumLength(String maximumLength) {
 		this.maximumLength = maximumLength;
 	}
+
 	public List<FormOptionTO> getOptions() {
 		return options;
 	}
+
 	public void setOptions(List<FormOptionTO> options) {
 		this.options = options;
 	}
+
 	public String getValidationExpression() {
 		return validationExpression;
 	}
+
 	public void setValidationExpression(String validationExpression) {
 		this.validationExpression = validationExpression;
 	}
+
 	public String getVisibilityExpression() {
 		return visibilityExpression;
 	}
+
 	public void setVisibilityExpression(String visibilityExpression) {
 		this.visibilityExpression = visibilityExpression;
 	}
+
 	public String getAvailabilityExpression() {
 		return availabilityExpression;
 	}
+
 	public void setAvailabilityExpression(String availabilityExpression) {
 		this.availabilityExpression = availabilityExpression;
 	}
