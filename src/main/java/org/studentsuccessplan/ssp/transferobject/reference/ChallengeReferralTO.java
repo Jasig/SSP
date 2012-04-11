@@ -1,9 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
+
+import com.google.common.collect.Lists;
 
 public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		implements TransferObject<ChallengeReferral> {
@@ -49,6 +52,15 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	@Override
 	public ChallengeReferral asModel() {
 		return pushAttributesToModel(new ChallengeReferral());
+	}
+
+	public static List<ChallengeReferralTO> listToTOList(
+			List<ChallengeReferral> models) {
+		List<ChallengeReferralTO> tos = Lists.newArrayList();
+		for (ChallengeReferral model : models) {
+			tos.add(new ChallengeReferralTO(model));
+		}
+		return tos;
 	}
 
 	public String getPublicDescription() {

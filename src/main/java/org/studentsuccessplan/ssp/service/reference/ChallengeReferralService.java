@@ -4,26 +4,43 @@ import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 
-public interface ChallengeReferralService extends AuditableCrudService<ChallengeReferral> {
+public interface ChallengeReferralService extends
+		AuditableCrudService<ChallengeReferral> {
 
 	@Override
-	public List<ChallengeReferral> getAll(ObjectStatus status, Integer firstResult,
+	List<ChallengeReferral> getAll(ObjectStatus status, Integer firstResult,
 			Integer maxResults, String sort, String sortDirection);
 
 	@Override
-	public ChallengeReferral get(UUID id) throws ObjectNotFoundException;
+	ChallengeReferral get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public ChallengeReferral create(ChallengeReferral obj);
+	ChallengeReferral create(ChallengeReferral obj);
 
 	@Override
-	public ChallengeReferral save(ChallengeReferral obj) throws ObjectNotFoundException;
+	ChallengeReferral save(ChallengeReferral obj)
+			throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
+	void delete(UUID id) throws ObjectNotFoundException;
 
+	List<ChallengeReferral> getChallengeReferralsByChallengeId(
+			Challenge challenge);
+
+	List<ChallengeReferral> challengeReferralSearch(Challenge challenge);
+
+	int getChallengeReferralCountByChallengeAndQuery(Challenge challenge,
+			String query);
+
+	int countByChallengeIdNotOnActiveTaskList(Challenge challenge,
+			Person student, String sessionId);
+
+	List<ChallengeReferral> byChallengeIdNotOnActiveTaskList(
+			Challenge challenge, Person student, String sessionId);
 }

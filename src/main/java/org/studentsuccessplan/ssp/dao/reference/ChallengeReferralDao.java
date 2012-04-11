@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
-
 import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
@@ -68,10 +67,10 @@ public class ChallengeReferralDao extends
 				.list();
 	}
 
-	public long countByChallengeIdNotOnActiveTaskList(UUID challengeId,
+	public int countByChallengeIdNotOnActiveTaskList(UUID challengeId,
 			Person student, String sessionId) {
 
-		return (Long) this.sessionFactory
+		Long count = (Long) this.sessionFactory
 				.getCurrentSession()
 				.createQuery("select count(cr) " +
 						"from ChallengeReferral cr " +
@@ -97,6 +96,7 @@ public class ChallengeReferralDao extends
 				.setParameter("webSessionId", sessionId)
 				.setParameter("objectStatus", ObjectStatus.ACTIVE)
 				.uniqueResult();
+		return count.intValue();
 	}
 
 	@SuppressWarnings("unchecked")

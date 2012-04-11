@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
+import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideGroupService;
+import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
 
 @Controller
@@ -22,12 +26,25 @@ public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 	@Autowired
 	private SelfHelpGuideManager selfHelpGuideManager;
 
+	@Autowired
+	private SelfHelpGuideService selfHelpGuideService;
+
+	@Autowired
+	private SelfHelpGuideGroupService selfHelpGuideGroupService;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsSelfHelpGuideController.class);
 
-	public void setSelfHelpGuideManager(
-			SelfHelpGuideManager selfHelpGuideManager) {
+	public MyGpsSelfHelpGuideController() {
+	}
+
+	public MyGpsSelfHelpGuideController(
+			SelfHelpGuideManager selfHelpGuideManager,
+			SelfHelpGuideService selfHelpGuideService,
+			SelfHelpGuideGroupService selfHelpGuideGroupService) {
 		this.selfHelpGuideManager = selfHelpGuideManager;
+		this.selfHelpGuideService = selfHelpGuideService;
+		this.selfHelpGuideGroupService = selfHelpGuideGroupService;
 	}
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
@@ -35,11 +52,13 @@ public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 	List<SelfHelpGuideTO> getAll() throws Exception {
 
 		try {
-			return SelfHelpGuideTO.listToTOList(selfHelpGuideManager.getAll());
+			return SelfHelpGuideTO.listToTOList(selfHelpGuideService.getAll(
+					ObjectStatus.ACTIVE, null, null, null, null));
 		} catch (Exception e) {
 			LOGGER.error("ERROR : getAll() : {}", e.getMessage(), e);
 			throw e;
 		}
+
 	}
 
 	@RequestMapping(value = "/getContentById", method = RequestMethod.GET)
@@ -63,8 +82,10 @@ public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 			throws Exception {
 
 		try {
-			return SelfHelpGuideTO.listToTOList(selfHelpGuideManager
-					.getBySelfHelpGuideGroup(selfHelpGuideGroupId));
+			SelfHelpGuideGroup selfHelpGuideGroup = selfHelpGuideGroupService
+					.get(selfHelpGuideGroupId);
+			return SelfHelpGuideTO.listToTOList(selfHelpGuideService
+					.getBySelfHelpGuideGroup(selfHelpGuideGroup));
 		} catch (Exception e) {
 			LOGGER.error("ERROR : getBySelfHelpGuideGroup() : {}",
 					e.getMessage(), e);

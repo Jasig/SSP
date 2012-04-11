@@ -14,39 +14,63 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.SecurityService;
 
 public class SelfHelpGuideServiceTest {
 
 	private SelfHelpGuideServiceImpl service;
 	private SelfHelpGuideDao dao;
+	private SecurityService securityService;
 
 	@Before
 	public void setup() {
-		service = new SelfHelpGuideServiceImpl();
 		dao = createMock(SelfHelpGuideDao.class);
-
-		service.setDao(dao);
+		securityService = createMock(SecurityService.class);
+		service = new SelfHelpGuideServiceImpl(dao, securityService);
 	}
 
 	@Test
-	public void testGetAll() {
+	public void testGetAll_notAuthenticated() {
 		List<SelfHelpGuide> daoAll = new ArrayList<SelfHelpGuide>();
 		daoAll.add(new SelfHelpGuide());
 
+		expect(securityService.isAuthenticated()).andReturn(false);
+		expect(dao.findAllActiveForUnauthenticated())
+				.andReturn(daoAll);
+
+		replay(dao);
+		replay(securityService);
+
+		List<SelfHelpGuide> all = service.getAll(ObjectStatus.ACTIVE, null,
+				null,
+				null, null);
+		assertTrue(all.size() > 0);
+		verify(dao);
+		verify(securityService);
+	}
+
+	@Test
+	public void testGetAll_authenticated() {
+		List<SelfHelpGuide> daoAll = new ArrayList<SelfHelpGuide>();
+		daoAll.add(new SelfHelpGuide());
+
+		expect(securityService.isAuthenticated()).andReturn(true);
 		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
 				.andReturn(daoAll);
 
 		replay(dao);
+		replay(securityService);
 
-		List<SelfHelpGuide> all = service.getAll(ObjectStatus.ACTIVE, null, null,
+		List<SelfHelpGuide> all = service.getAll(ObjectStatus.ACTIVE, null,
+				null,
 				null, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
+		verify(securityService);
 	}
 
 	@Test

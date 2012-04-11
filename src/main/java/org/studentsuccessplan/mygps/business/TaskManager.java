@@ -484,12 +484,4 @@ public class TaskManager {
 		return taskReportTOs;
 
 	}
-
-	public String getServerExternalPath() {
-		return serverExternalPath;
-	}
-
-	public void setServerExternalPath(String serverExternalPath) {
-		this.serverExternalPath = serverExternalPath;
-	}
 }

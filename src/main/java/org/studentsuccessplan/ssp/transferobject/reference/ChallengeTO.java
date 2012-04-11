@@ -1,6 +1,7 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ import javax.validation.constraints.Size;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
+
+import com.google.common.collect.Lists;
 
 public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge> {
@@ -29,6 +32,10 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 
 	public ChallengeTO(UUID id, String name, String description) {
 		super(id, name, description);
+	}
+
+	public ChallengeTO(Challenge model) {
+		fromModel(model);
 	}
 
 	public void fromModel(Challenge model) {
@@ -148,5 +155,13 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	@Override
 	public Challenge asModel() {
 		return pushAttributesToModel(new Challenge());
+	}
+
+	public static List<ChallengeTO> listToTOList(List<Challenge> models) {
+		List<ChallengeTO> tos = Lists.newArrayList();
+		for (Challenge model : models) {
+			tos.add(new ChallengeTO(model));
+		}
+		return tos;
 	}
 }

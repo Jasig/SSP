@@ -6,12 +6,15 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
+
+import com.google.common.collect.Lists;
 
 @Service
 @Transactional
@@ -19,6 +22,12 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	@Autowired
 	private ChallengeDao dao;
+
+	@Autowired
+	private ChallengeReferralService challengeReferralService;
+
+	@Autowired
+	private SecurityService securityService;
 
 	@Override
 	public List<Challenge> getAll(final ObjectStatus status,
@@ -61,6 +70,24 @@ public class ChallengeServiceImpl implements ChallengeService {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}
+	}
+
+	@Override
+	public List<Challenge> challengeSearch(String query) {
+		List<Challenge> challenges = dao.searchByQuery(query);
+		List<Challenge> results = Lists.newArrayList();
+
+		for (Challenge challenge : challenges) {
+			int count = challengeReferralService
+					.countByChallengeIdNotOnActiveTaskList(challenge,
+							securityService
+									.currentlyLoggedInSspUser().getPerson(),
+							securityService.getSessionId());
+			if (count > 0) {
+				results.add(challenge);
+			}
+		}
+		return results;
 	}
 
 	protected void setDao(final ChallengeDao dao) {

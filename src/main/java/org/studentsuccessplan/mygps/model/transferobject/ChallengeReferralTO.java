@@ -1,8 +1,11 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+
+import com.google.common.collect.Lists;
 
 public class ChallengeReferralTO {
 
@@ -29,6 +32,15 @@ public class ChallengeReferralTO {
 		setDetails(challengeReferral.getPublicDescription());
 		setId(challengeReferral.getId());
 		setName(challengeReferral.getName());
+	}
+
+	public static List<ChallengeReferralTO> listToTOList(
+			List<ChallengeReferral> models) {
+		List<ChallengeReferralTO> tos = Lists.newArrayList();
+		for (ChallengeReferral model : models) {
+			tos.add(new ChallengeReferralTO(model));
+		}
+		return tos;
 	}
 
 	public UUID getId() {

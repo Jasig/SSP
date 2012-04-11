@@ -6,15 +6,17 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.service.reference.ChallengeService;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+
+import com.google.common.collect.Lists;
 
 public class MyGpsChallengeControllerTest {
 
@@ -22,20 +24,18 @@ public class MyGpsChallengeControllerTest {
 			.getLogger(MyGpsChallengeControllerTest.class);
 
 	private MyGpsChallengeController controller;
-	private SelfHelpGuideManager manager;
+	private ChallengeService manager;
 
 	@Before
 	public void setup() {
-		manager = createMock(SelfHelpGuideManager.class);
-
-		controller = new MyGpsChallengeController();
-		controller.setManager(manager);
+		manager = createMock(ChallengeService.class);
+		controller = new MyGpsChallengeController(manager);
 	}
 
 	@Test
 	public void search() {
 		String query = "ABCDEFG";
-		List<ChallengeTO> searchResults = new ArrayList<ChallengeTO>();
+		List<Challenge> searchResults = Lists.newArrayList();
 		expect(manager.challengeSearch(query)).andReturn(searchResults);
 
 		replay(manager);

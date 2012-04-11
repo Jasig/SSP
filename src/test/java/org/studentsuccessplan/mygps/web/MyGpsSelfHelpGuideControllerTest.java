@@ -16,7 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideGroupService;
+import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
 
 public class MyGpsSelfHelpGuideControllerTest {
@@ -26,27 +31,38 @@ public class MyGpsSelfHelpGuideControllerTest {
 
 	private MyGpsSelfHelpGuideController controller;
 	private SelfHelpGuideManager manager;
+	private SelfHelpGuideService selfHelpGuideService;
+	private SelfHelpGuideGroupService selfHelpGuideGroupService;
 
 	@Before
 	public void setup() {
 		manager = createMock(SelfHelpGuideManager.class);
+		selfHelpGuideService = createMock(SelfHelpGuideService.class);
+		selfHelpGuideGroupService = createMock(SelfHelpGuideGroupService.class);
 
-		controller = new MyGpsSelfHelpGuideController();
-		controller.setSelfHelpGuideManager(manager);
+		controller = new MyGpsSelfHelpGuideController(manager,
+				selfHelpGuideService, selfHelpGuideGroupService);
 	}
 
 	@Test
 	public void getAll() {
 		List<SelfHelpGuide> guides = new ArrayList<SelfHelpGuide>();
 		guides.add(new SelfHelpGuide());
-		expect(manager.getAll()).andReturn(guides);
+		expect(
+				selfHelpGuideService.getAll(ObjectStatus.ACTIVE, null, null,
+						null, null)).andReturn(guides);
 
 		replay(manager);
+		replay(selfHelpGuideService);
+		replay(selfHelpGuideGroupService);
 
 		try {
 			List<SelfHelpGuideTO> results = controller.getAll();
 
 			verify(manager);
+			verify(selfHelpGuideService);
+			verify(selfHelpGuideGroupService);
+
 			assertNotNull(results);
 			assert (results.size() > 0);
 		} catch (Exception e) {
@@ -64,35 +80,45 @@ public class MyGpsSelfHelpGuideControllerTest {
 		expect(manager.getContentById(selfHelpGuideId)).andReturn(contentTO);
 
 		replay(manager);
+		replay(selfHelpGuideService);
+		replay(selfHelpGuideGroupService);
 
 		try {
 			SelfHelpGuideContentTO content = controller
 					.getContentById(selfHelpGuideId);
 			assertNotNull(content);
+
 			verify(manager);
+			verify(selfHelpGuideService);
+			verify(selfHelpGuideGroupService);
+
 		} catch (Exception e) {
 			LOGGER.error("controller error", e);
 		}
 	}
 
 	@Test
-	public void getBySelfHelpGuideGroup() {
+	public void getBySelfHelpGuideGroup() throws ObjectNotFoundException {
+		SelfHelpGuideGroup group = new SelfHelpGuideGroup(UUID.randomUUID());
 		List<SelfHelpGuide> guides = new ArrayList<SelfHelpGuide>();
 		guides.add(new SelfHelpGuide());
 
-		UUID selfHelpGuideGroupId = UUID
-				.fromString("7CDD9ECE-C479-4AD6-4A1D-1BB3CDD4DDE4");
-
-		expect(manager.getBySelfHelpGuideGroup(selfHelpGuideGroupId))
+		expect(selfHelpGuideGroupService.get(group.getId())).andReturn(group);
+		expect(selfHelpGuideService.getBySelfHelpGuideGroup(group))
 				.andReturn(guides);
 
 		replay(manager);
+		replay(selfHelpGuideService);
+		replay(selfHelpGuideGroupService);
 
 		try {
 			List<SelfHelpGuideTO> results = controller
-					.getBySelfHelpGuideGroup(selfHelpGuideGroupId);
+					.getBySelfHelpGuideGroup(group.getId());
 
 			verify(manager);
+			verify(selfHelpGuideService);
+			verify(selfHelpGuideGroupService);
+
 			assertNotNull(results);
 			assert (results.size() > 0);
 		} catch (Exception e) {

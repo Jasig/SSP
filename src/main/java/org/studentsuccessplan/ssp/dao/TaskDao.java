@@ -37,8 +37,7 @@ public class TaskDao extends AbstractTaskDao<Task> {
 
 	@SuppressWarnings("unchecked")
 	public List<Task> getAllForSessionIdAndChallengeReferralId(
-			String sessionId,
-			boolean complete, UUID challengeReferralId) {
+			String sessionId, boolean complete, UUID challengeReferralId) {
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
 		criteria.add(Restrictions.eq("sessionId", sessionId));

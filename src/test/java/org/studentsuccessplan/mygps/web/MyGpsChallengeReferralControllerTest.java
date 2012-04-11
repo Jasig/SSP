@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,8 +13,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.mygps.model.transferobject.ChallengeReferralTO;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
+import org.studentsuccessplan.ssp.service.reference.ChallengeService;
+
+import com.google.common.collect.Lists;
 
 public class MyGpsChallengeReferralControllerTest {
 
@@ -23,30 +28,38 @@ public class MyGpsChallengeReferralControllerTest {
 			.getLogger(MyGpsChallengeReferralControllerTest.class);
 
 	private MyGpsChallengeReferralController controller;
-	private SelfHelpGuideManager manager;
+
+	private ChallengeReferralService challengeReferralService;
+	private ChallengeService challengeService;
 
 	@Before
 	public void setup() {
-		manager = createMock(SelfHelpGuideManager.class);
+		challengeReferralService = createMock(ChallengeReferralService.class);
+		challengeService = createMock(ChallengeService.class);
 
-		controller = new MyGpsChallengeReferralController();
-		controller.setManager(manager);
+		controller = new MyGpsChallengeReferralController(
+				challengeReferralService, challengeService);
 	}
 
 	@Test
-	public void getByChallengeId() {
-		UUID challengeId = UUID.randomUUID();
-		List<ChallengeReferralTO> searchResults = new ArrayList<ChallengeReferralTO>();
-		expect(manager.getChallengeReferralsByChallengeId(challengeId))
+	public void getByChallengeId() throws ObjectNotFoundException {
+		Challenge challenge = new Challenge(UUID.randomUUID());
+		List<ChallengeReferral> searchResults = Lists.newArrayList();
+		expect(challengeService.get(challenge.getId())).andReturn(challenge);
+		expect(
+				challengeReferralService
+						.getChallengeReferralsByChallengeId(challenge))
 				.andReturn(searchResults);
 
-		replay(manager);
+		replay(challengeReferralService);
+		replay(challengeService);
 
 		try {
 			List<ChallengeReferralTO> response = controller
-					.getByChallengeId(challengeId);
+					.getByChallengeId(challenge.getId());
 
-			verify(manager);
+			verify(challengeReferralService);
+			verify(challengeService);
 			assertEquals(searchResults, response);
 		} catch (Exception e) {
 			LOGGER.error("controller error", e);
@@ -54,19 +67,22 @@ public class MyGpsChallengeReferralControllerTest {
 	}
 
 	@Test
-	public void search() {
-		UUID challengeId = UUID.randomUUID();
-		List<ChallengeReferralTO> searchResults = new ArrayList<ChallengeReferralTO>();
-		expect(manager.challengeReferralSearch(challengeId))
+	public void search() throws ObjectNotFoundException {
+		Challenge challenge = new Challenge(UUID.randomUUID());
+		List<ChallengeReferral> searchResults = Lists.newArrayList();
+		expect(challengeService.get(challenge.getId())).andReturn(challenge);
+		expect(challengeReferralService.challengeReferralSearch(challenge))
 				.andReturn(searchResults);
 
-		replay(manager);
+		replay(challengeReferralService);
+		replay(challengeService);
 
 		try {
 			List<ChallengeReferralTO> response = controller
-					.search("", challengeId);
+					.search("", challenge.getId());
 
-			verify(manager);
+			verify(challengeReferralService);
+			verify(challengeService);
 			assertEquals(searchResults, response);
 		} catch (Exception e) {
 			LOGGER.error("controller error", e);
