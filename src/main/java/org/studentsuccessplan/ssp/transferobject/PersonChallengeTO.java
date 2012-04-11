@@ -1,9 +1,17 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.UUID;
+
+import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonChallenge;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
 
-public class PersonChallengeTO implements TransferObject<PersonChallenge> {
+public class PersonChallengeTO extends AuditableTO<PersonChallenge> 
+		implements TransferObject<PersonChallenge> {
 
+	private UUID challengeId, personId;
+	private String description;
+	
 	public PersonChallengeTO() {
 		super();
 	}
@@ -15,13 +23,35 @@ public class PersonChallengeTO implements TransferObject<PersonChallenge> {
 
 	@Override
 	public void pullAttributesFromModel(PersonChallenge model) {
-		// TODO Auto-generated method stub
+		super.fromModel(model);
 
+		setDescription(model.getDescription());
+		
+		if (model.getChallenge() != null 
+				&& model.getChallenge().getId() != null) {
+			setChallengeId(model.getChallenge().getId());
+		}
+
+		if (model.getPerson() != null 
+				&& model.getPerson().getId() != null) {
+			setPersonId(model.getPerson().getId());
+		}
 	}
 
 	@Override
 	public PersonChallenge pushAttributesToModel(PersonChallenge model) {
-		// TODO Auto-generated method stub
+		super.addToModel(model);
+
+		model.setDescription(getDescription());
+		
+		if (getChallengeId() != null) {
+			model.setChallenge(new Challenge(getChallengeId()));
+		}
+		
+		if (getPersonId() != null) {
+			model.setPerson(new Person(getPersonId()));
+		}
+		
 		return model;
 	}
 
@@ -30,4 +60,27 @@ public class PersonChallengeTO implements TransferObject<PersonChallenge> {
 		return pushAttributesToModel(new PersonChallenge());
 	}
 
+	public UUID getChallengeId() {
+		return challengeId;
+	}
+
+	public void setChallengeId(UUID challengeId) {
+		this.challengeId = challengeId;
+	}
+
+	public UUID getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(UUID personId) {
+		this.personId = personId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }
