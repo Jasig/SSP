@@ -6,11 +6,12 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
 
 @Service
@@ -20,10 +21,27 @@ public class SelfHelpGuideServiceImpl implements SelfHelpGuideService {
 	@Autowired
 	private SelfHelpGuideDao dao;
 
+	@Autowired
+	private SecurityService securityService;
+
+	public SelfHelpGuideServiceImpl() {
+	}
+
+	public SelfHelpGuideServiceImpl(SelfHelpGuideDao dao,
+			SecurityService securityService) {
+		this.dao = dao;
+		this.securityService = securityService;
+	}
+
 	@Override
 	public List<SelfHelpGuide> getAll(ObjectStatus status, Integer firstResult,
 			Integer maxResults, String sort, String sortDirection) {
-		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
+		if (!securityService.isAuthenticated()) {
+			return dao.findAllActiveForUnauthenticated();
+		} else {
+			return dao.getAll(status, firstResult, maxResults, sort,
+					sortDirection);
+		}
 	}
 
 	@Override
@@ -62,7 +80,11 @@ public class SelfHelpGuideServiceImpl implements SelfHelpGuideService {
 		}
 	}
 
-	protected void setDao(SelfHelpGuideDao dao) {
-		this.dao = dao;
+	@Override
+	public List<SelfHelpGuide> getBySelfHelpGuideGroup(
+			SelfHelpGuideGroup selfHelpGuideGroup) {
+		return dao
+				.findAllActiveBySelfHelpGuideGroup(selfHelpGuideGroup.getId());
 	}
+
 }

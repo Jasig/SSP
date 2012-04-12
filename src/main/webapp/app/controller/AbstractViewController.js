@@ -1,9 +1,8 @@
-Ext.define('Ssp.controller.AbstractController', {
+Ext.define('Ssp.controller.AbstractViewController', {
     extend: 'Ext.app.Controller',
     requires: ['Ssp.util.FormRendererUtils'],
-		
+    
 	init: function() {
-        console.log('Initialized Abstract Controller!');
 		var formRendererUtils = new Ssp.util.FormRendererUtils(); 
         var config = { formRendererUtils: formRendererUtils };
         Ext.apply( this, config );

@@ -1,21 +1,32 @@
 package org.studentsuccessplan.ssp.dao;
 
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
+import org.studentsuccessplan.ssp.model.CustomTask;
 
-public class CustomTaskDaoTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("reference/dao-testConfig.xml")
+@TransactionConfiguration(defaultRollback = false)
+@Transactional
+public class CustomTaskDaoTest extends AbstractTaskDaoTest<CustomTask> {
 
+	@Override
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
+		super.setUp();
 	}
 
-	@Ignore
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+	@Autowired
+	private CustomTaskDao dao;
+
+	@Override
+	protected CustomTaskDao getDao() {
+		return dao;
 	}
 
 }

@@ -17,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.PersonDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
@@ -135,7 +134,7 @@ public class ChallengeReferralDaoTest {
 
 	@Test
 	public void countByChallengeIdNotOnActiveTaskList() {
-		long count =
+		int count =
 				dao.countByChallengeIdNotOnActiveTaskList(
 						testChallenge.getId(), testStudent, "testSessionId");
 		assertTrue(count > -1);

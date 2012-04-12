@@ -6,13 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,22 +18,18 @@ import org.springframework.web.servlet.ModelAndView;
 import org.studentsuccessplan.mygps.business.TaskManager;
 import org.studentsuccessplan.mygps.model.transferobject.TaskTO;
 import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.service.SecurityService;
 
 @Controller
 @RequestMapping("/mygps/task")
-public class MyGpsTaskController {
+public class MyGpsTaskController extends AbstractMyGpsController {
 
 	@Autowired
 	private TaskManager taskManager;
 
-	@Autowired
-	private SecurityService securityService;
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(MyGpsTaskController.class);
 
-	private Logger logger = LoggerFactory.getLogger(MyGpsTaskController.class);
-
-	// Needed for tests
-	public void setManager(TaskManager taskManager) {
+	protected void setManager(TaskManager taskManager) {
 		this.taskManager = taskManager;
 	}
 
@@ -68,11 +61,11 @@ public class MyGpsTaskController {
 						dueDate, messageTemplate);
 				return true;
 			} else {
-				logger.error("Token exception in MyGpsTaskController.createTaskForStudent");
+				LOGGER.error("Token exception in MyGpsTaskController.createTaskForStudent");
 				return false;
 			}
 		} catch (Exception e) {
-			logger.error("ERROR: createTaskForStudent(): {}", e.getMessage(), e);
+			LOGGER.error("ERROR: createTaskForStudent(): {}", e.getMessage(), e);
 			return false;
 		}
 	}
@@ -85,7 +78,7 @@ public class MyGpsTaskController {
 		try {
 			return taskManager.createCustom(name, description);
 		} catch (Exception e) {
-			logger.error("ERROR : createCustom() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : createCustom() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -101,7 +94,7 @@ public class MyGpsTaskController {
 			return taskManager.createTaskForChallengeReferral(challengeId,
 					challengeReferralId);
 		} catch (Exception e) {
-			logger.error("ERROR : createForChallengeReferral() : {}",
+			LOGGER.error("ERROR : createForChallengeReferral() : {}",
 					e.getMessage(), e);
 			throw e;
 		}
@@ -114,7 +107,7 @@ public class MyGpsTaskController {
 		try {
 			return taskManager.deleteTask(taskId);
 		} catch (Exception e) {
-			logger.error("ERROR : delete() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : delete() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -127,7 +120,7 @@ public class MyGpsTaskController {
 		try {
 			return taskManager.email(emailAddress);
 		} catch (Exception e) {
-			logger.error("ERROR : email() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : email() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -139,7 +132,7 @@ public class MyGpsTaskController {
 		try {
 			return taskManager.getAllTasks();
 		} catch (Exception e) {
-			logger.error("ERROR : getAll() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : getAll() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -152,7 +145,7 @@ public class MyGpsTaskController {
 		try {
 			return taskManager.markTask(taskId, complete);
 		} catch (Exception e) {
-			logger.error("ERROR : markTask() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : markTask() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -175,17 +168,8 @@ public class MyGpsTaskController {
 
 			return new ModelAndView("actionPlanReport", model);
 		} catch (Exception e) {
-			logger.error("ERROR : print() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : print() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
-
-	@ExceptionHandler(Exception.class)
-	public @ResponseBody
-	String handleException(Exception e, HttpServletResponse response) {
-		logger.error("ERROR : handleException()", e);
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		return e.getMessage();
-	}
-
 }

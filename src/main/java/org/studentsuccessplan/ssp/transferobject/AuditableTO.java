@@ -6,7 +6,8 @@ import java.util.UUID;
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 
-public abstract class AuditableTO<T> implements TransferObject<T> {
+public abstract class AuditableTO<T extends Auditable>
+		implements TransferObject<T> {
 
 	private UUID id;
 
@@ -27,7 +28,8 @@ public abstract class AuditableTO<T> implements TransferObject<T> {
 		this.id = id;
 	}
 
-	public void fromModel(Auditable model) {
+	@Override
+	public void fromModel(T model) {
 		setId(model.getId());
 		if (model.getCreatedBy() != null) {
 			setCreatedById(model.getCreatedBy().getId());
@@ -40,9 +42,11 @@ public abstract class AuditableTO<T> implements TransferObject<T> {
 		setObjectStatus(model.getObjectStatus());
 	}
 
-	public void addToModel(Auditable model) {
+	@Override
+	public T addToModel(T model) {
 		model.setId(getId());
 		model.setObjectStatus(getObjectStatus());
+		return model;
 	}
 
 	public UUID getId() {

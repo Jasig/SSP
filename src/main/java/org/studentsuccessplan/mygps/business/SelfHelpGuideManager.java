@@ -14,7 +14,6 @@ import org.studentsuccessplan.mygps.model.transferobject.ChallengeReferralTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideQuestionTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideTO;
 import org.studentsuccessplan.ssp.dao.SelfHelpGuideQuestionResponseDao;
 import org.studentsuccessplan.ssp.dao.SelfHelpGuideResponseDao;
 import org.studentsuccessplan.ssp.dao.TaskDao;
@@ -22,7 +21,6 @@ import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
 import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideDao;
 import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideQuestionDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
 import org.studentsuccessplan.ssp.model.SelfHelpGuideResponse;
@@ -31,6 +29,7 @@ import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
 @Service
@@ -46,6 +45,9 @@ public class SelfHelpGuideManager {
 	private ChallengeReferralDao challengeReferralDao;
 
 	@Autowired
+	private ChallengeReferralService challengeReferralService;
+
+	@Autowired
 	private SelfHelpGuideDao selfHelpGuideDao;
 
 	@Autowired
@@ -59,30 +61,6 @@ public class SelfHelpGuideManager {
 
 	@Autowired
 	private SecurityService securityService;
-
-	public List<SelfHelpGuideTO> getAll() {
-
-		List<SelfHelpGuideTO> selfHelpGuideTOs = null;
-
-		if (!securityService.isAuthenticated()) {
-			selfHelpGuideTOs = SelfHelpGuideTO
-					.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
-							.findAllActiveForUnauthenticated());
-		} else {
-			selfHelpGuideTOs = SelfHelpGuideTO
-					.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
-							.getAll(ObjectStatus.ACTIVE));
-		}
-
-		return selfHelpGuideTOs;
-	}
-
-	public List<SelfHelpGuideTO> getBySelfHelpGuideGroup(
-			UUID selfHelpGuideGroupId) {
-		return SelfHelpGuideTO
-				.selfHelpGuidesToSelfHelpGuideTOs(selfHelpGuideDao
-						.findAllActiveBySelfHelpGuideGroup(selfHelpGuideGroupId));
-	}
 
 	public SelfHelpGuideContentTO getContentById(UUID selfHelpGuideId) {
 
@@ -159,8 +137,8 @@ public class SelfHelpGuideManager {
 		for (Challenge challenge : challengeDao
 				.selectAffirmativeBySelfHelpGuideResponseId(selfHelpGuideResponseId)) {
 
-			count = getChallengeReferralCountByChallengeAndQuery(
-					challenge.getId(), "");
+			count = challengeReferralService
+					.getChallengeReferralCountByChallengeAndQuery(challenge, "");
 
 			if (count > 0) {
 

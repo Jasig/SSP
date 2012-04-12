@@ -9,6 +9,15 @@ public class FormTO {
 	private String label;
 	private List<FormSectionTO> sections;
 
+	public FormSectionTO getFormSectionById(UUID formSectionId) {
+		for (FormSectionTO formSectionTO : getSections()) {
+			if (formSectionTO.getId().equals(formSectionId)) {
+				return formSectionTO;
+			}
+		}
+		return null;
+	}
+
 	public UUID getId() {
 		return id;
 	}
@@ -16,15 +25,19 @@ public class FormTO {
 	public void setId(UUID id) {
 		this.id = id;
 	}
+
 	public String getLabel() {
 		return label;
 	}
+
 	public void setLabel(String label) {
 		this.label = label;
 	}
+
 	public List<FormSectionTO> getSections() {
 		return sections;
 	}
+
 	public void setSections(List<FormSectionTO> sections) {
 		this.sections = sections;
 	}

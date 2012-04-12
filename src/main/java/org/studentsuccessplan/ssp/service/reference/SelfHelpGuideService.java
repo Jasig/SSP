@@ -5,25 +5,29 @@ import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 
-public interface SelfHelpGuideService extends AuditableCrudService<SelfHelpGuide> {
+public interface SelfHelpGuideService extends
+		AuditableCrudService<SelfHelpGuide> {
 
 	@Override
-	public List<SelfHelpGuide> getAll(ObjectStatus status, Integer firstResult,
+	List<SelfHelpGuide> getAll(ObjectStatus status, Integer firstResult,
 			Integer maxResults, String sort, String sortDirection);
 
 	@Override
-	public SelfHelpGuide get(UUID id) throws ObjectNotFoundException;
+	SelfHelpGuide get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public SelfHelpGuide create(SelfHelpGuide obj);
+	SelfHelpGuide create(SelfHelpGuide obj);
 
 	@Override
-	public SelfHelpGuide save(SelfHelpGuide obj) throws ObjectNotFoundException;
+	SelfHelpGuide save(SelfHelpGuide obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
+	void delete(UUID id) throws ObjectNotFoundException;
 
+	List<SelfHelpGuide> getBySelfHelpGuideGroup(
+			SelfHelpGuideGroup selfHelpGuideGroup);
 }

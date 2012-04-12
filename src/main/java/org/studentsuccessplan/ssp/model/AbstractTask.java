@@ -15,9 +15,19 @@ public abstract class AbstractTask extends Auditable {
 
 	public static final String ACTION_PLAN_TASK = "ActionPlanTask";
 	public static final String CUSTOM_ACTION_PLAN_TASK = "CustomActionPlanTask";
-	public static final String SSP_ACTION_PLAN_TASK =
-			"SSPActionPlanTask"; // action plan tasks created by your advisor -
-									// someone other than the student
+	public static final String SSP_ACTION_PLAN_TASK = "SSPActionPlanTask"; // action
+																			// plan
+																			// tasks
+																			// created
+																			// by
+																			// your
+																			// advisor
+																			// -
+																			// someone
+																			// other
+																			// than
+																			// the
+																			// student
 
 	@Column(nullable = false, length = 64000)
 	@Size(max = 64000)
@@ -44,6 +54,15 @@ public abstract class AbstractTask extends Auditable {
 	@ManyToOne
 	@JoinColumn(name = "person_id")
 	private Person person;
+
+	public AbstractTask() {
+	}
+
+	public AbstractTask(String description, Date dueDate, Person person) {
+		this.description = description;
+		this.dueDate = new Date(dueDate.getTime());
+		this.person = person;
+	}
 
 	public String getDescription() {
 		return description;
@@ -84,7 +103,7 @@ public abstract class AbstractTask extends Auditable {
 	}
 
 	public void setReminderSentDate(Date reminderSentDate) {
-		this.reminderSentDate = dueDate == null ? null : new Date(
+		this.reminderSentDate = reminderSentDate == null ? null : new Date(
 				reminderSentDate.getTime());
 	}
 

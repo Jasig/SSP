@@ -1,9 +1,21 @@
 package org.studentsuccessplan.ssp.transferobject;
 
-import org.studentsuccessplan.ssp.model.PersonEducationLevel;
+import java.util.List;
+import java.util.UUID;
 
-public class PersonEducationLevelTO implements
-		TransferObject<PersonEducationLevel> {
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonEducationLevel;
+import org.studentsuccessplan.ssp.model.reference.EducationLevel;
+
+import com.google.common.collect.Lists;
+
+public class PersonEducationLevelTO
+		extends AuditableTO<PersonEducationLevel>
+		implements TransferObject<PersonEducationLevel> {
+
+	private UUID educationLevelId, personId;
+	private Integer graduatedYear, highestGradeCompleted, lastYearAttended;
+	private String description, schoolName;
 
 	public PersonEducationLevelTO() {
 		super();
@@ -11,24 +23,123 @@ public class PersonEducationLevelTO implements
 
 	public PersonEducationLevelTO(PersonEducationLevel model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(PersonEducationLevel model) {
-		// TODO Auto-generated method stub
+	public void fromModel(PersonEducationLevel model) {
+		super.fromModel(model);
 
+		setDescription(model.getDescription());
+
+		if ((model.getEducationLevel() != null)
+				&& (model.getEducationLevel().getId() != null)) {
+			setEducationLevelId(model.getEducationLevel().getId());
+		}
+
+		setGraduatedYear(model.getGraduatedYear());
+		setHighestGradeCompleted(model.getHighestGradeCompleted());
+		setLastYearAttended(model.getLastYearAttended());
+
+		if ((model.getPerson() != null)
+				&& (model.getPerson().getId() != null)) {
+			setPersonId(model.getPerson().getId());
+		}
+
+		setSchoolName(model.getSchoolName());
 	}
 
 	@Override
-	public PersonEducationLevel pushAttributesToModel(PersonEducationLevel model) {
-		// TODO Auto-generated method stub
+	public PersonEducationLevel addToModel(PersonEducationLevel model) {
+		super.addToModel(model);
+
+		model.setDescription(getDescription());
+
+		if (getEducationLevelId() != null) {
+			model.setEducationLevel(new EducationLevel(getEducationLevelId()));
+		}
+
+		model.setGraduatedYear(getGraduatedYear());
+		model.setHighestGradeCompleted(getHighestGradeCompleted());
+		model.setLastYearAttended(getLastYearAttended());
+
+		if (getPersonId() != null) {
+			model.setPerson(new Person(getPersonId()));
+		}
+
+		model.setSchoolName(getSchoolName());
+
 		return model;
 	}
 
 	@Override
 	public PersonEducationLevel asModel() {
-		return pushAttributesToModel(new PersonEducationLevel());
+		return addToModel(new PersonEducationLevel());
+	}
+
+	public static List<PersonEducationLevelTO> listToTOList(
+			List<PersonEducationLevel> models) {
+		List<PersonEducationLevelTO> tos = Lists.newArrayList();
+		for (PersonEducationLevel model : models) {
+			tos.add(new PersonEducationLevelTO(model));
+		}
+		return tos;
+	}
+
+	public UUID getEducationLevelId() {
+		return educationLevelId;
+	}
+
+	public void setEducationLevelId(UUID educationLevelId) {
+		this.educationLevelId = educationLevelId;
+	}
+
+	public UUID getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(UUID personId) {
+		this.personId = personId;
+	}
+
+	public Integer getGraduatedYear() {
+		return graduatedYear;
+	}
+
+	public void setGraduatedYear(Integer graduatedYear) {
+		this.graduatedYear = graduatedYear;
+	}
+
+	public Integer getHighestGradeCompleted() {
+		return highestGradeCompleted;
+	}
+
+	public void setHighestGradeCompleted(Integer highestGradeCompleted) {
+		this.highestGradeCompleted = highestGradeCompleted;
+	}
+
+	public Integer getLastYearAttended() {
+		return lastYearAttended;
+	}
+
+	public void setLastYearAttended(Integer lastYearAttended) {
+		this.lastYearAttended = lastYearAttended;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
 	}
 
 }

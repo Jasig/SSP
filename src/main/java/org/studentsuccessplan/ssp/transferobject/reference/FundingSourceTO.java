@@ -1,9 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.FundingSource;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
+
+import com.google.common.collect.Lists;
 
 public class FundingSourceTO extends AbstractReferenceTO<FundingSource>
 		implements TransferObject<FundingSource> {
@@ -24,25 +27,30 @@ public class FundingSourceTO extends AbstractReferenceTO<FundingSource>
 		super(id, name, description);
 	}
 
-	public FundingSourceTO(FundingSource model) {
-		super();
-		pullAttributesFromModel(model);
-	}
-
 	@Override
-	public void pullAttributesFromModel(FundingSource model) {
+	public void fromModel(FundingSource model) {
 		super.fromModel(model);
 	}
 
 	@Override
-	public FundingSource pushAttributesToModel(FundingSource model) {
+	public FundingSource addToModel(FundingSource model) {
 		super.addToModel(model);
 		return model;
 	}
 
 	@Override
 	public FundingSource asModel() {
-		return pushAttributesToModel(new FundingSource());
+		return addToModel(new FundingSource());
+	}
+
+	public static List<FundingSourceTO> listToTOList(List<FundingSource> models) {
+		List<FundingSourceTO> tos = Lists.newArrayList();
+		for (FundingSource model : models) {
+			FundingSourceTO obj = new FundingSourceTO();
+			obj.fromModel(model);
+			tos.add(obj);
+		}
+		return tos;
 	}
 
 }

@@ -3490,7 +3490,8 @@
 			</column>
 			<column name="person_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="self_help_guide_response_person_id_person_id" references="person(id)" />
+					foreignKeyName="self_help_guide_response_person_id_person_id"
+					references="person(id)" />
 			</column>
 			<column name="self_help_guide_id" type="uuid">
 				<constraints nullable="true"
@@ -3511,8 +3512,9 @@
 		</modifySql>
 
 	</changeSet>
-	
-	<changeSet author='daniel.bower' id='Add self_help_guide_question_response table'>
+
+	<changeSet author='daniel.bower'
+		id='Add self_help_guide_question_response table'>
 		<createTable tableName="self_help_guide_question_response">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
@@ -3536,7 +3538,7 @@
 			</column>
 			<column name="self_help_guide_response_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="self_help_guide_question_response_self_help_guide_response_id_self_help_guide_response_id" 
+					foreignKeyName="self_help_guide_question_response_self_help_guide_response_id_self_help_guide_response_id"
 					references="self_help_guide_response(id)" />
 			</column>
 			<column name="self_help_guide_question_id" type="uuid">
@@ -3564,7 +3566,7 @@
 		</modifySql>
 
 	</changeSet>
-	
+
 	<changeSet author='daniel.bower' id='Add task table'>
 		<createTable tableName="task">
 			<column name="id" type="uuid">
@@ -3575,13 +3577,11 @@
 			</column>
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="task_created_by_person_id"
+				<constraints nullable="false" foreignKeyName="task_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true"
-					foreignKeyName="task_modified_by_person_id"
+				<constraints nullable="true" foreignKeyName="task_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -3592,27 +3592,25 @@
 			</column>
 			<column name="due_date" type="datetime" />
 			<column name="completed_date" type="datetime">
-				<constraints nullable="true"/>
+				<constraints nullable="true" />
 			</column>
 			<column name="reminder_sent_date" type="datetime">
-				<constraints nullable="true"/>
+				<constraints nullable="true" />
 			</column>
 			<column name="session_id" type="character varying(32)">
 				<constraints nullable="true" />
 			</column>
 			<column name="person_id" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="task_person_id_person_id" 
+				<constraints nullable="false" foreignKeyName="task_person_id_person_id"
 					references="person(id)" />
 			</column>
 			<column name="challenge_id" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="task_challenge_id_challenge_id" 
+				<constraints nullable="false" foreignKeyName="task_challenge_id_challenge_id"
 					references="challenge(id)" />
 			</column>
 			<column name="challenge_referral_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="task_challenge_referral_id_challenge_referral_id" 
+					foreignKeyName="task_challenge_referral_id_challenge_referral_id"
 					references="challenge_referral(id)" />
 			</column>
 		</createTable>
@@ -3640,14 +3638,12 @@
 			</column>
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="custom_task_created_by_person_id"
+				<constraints nullable="false" foreignKeyName="custom_task_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="custom_task_modified_by_person_id"
-					references="person(id)" />
+					foreignKeyName="custom_task_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
@@ -3657,17 +3653,17 @@
 			</column>
 			<column name="due_date" type="datetime" />
 			<column name="completed_date" type="datetime">
-				<constraints nullable="true"/>
+				<constraints nullable="true" />
 			</column>
 			<column name="reminder_sent_date" type="datetime">
-				<constraints nullable="true"/>
+				<constraints nullable="true" />
 			</column>
 			<column name="session_id" type="character varying(32)">
 				<constraints nullable="true" />
 			</column>
 			<column name="person_id" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="custom_task_person_person_id" references="person(id)" />
+				<constraints nullable="false" foreignKeyName="custom_task_person_person_id"
+					references="person(id)" />
 			</column>
 			<column name="name" type="character varying(100)">
 				<constraints nullable="false" />
@@ -3686,28 +3682,29 @@
 		</modifySql>
 
 	</changeSet>
-	
-	<changeSet id="add self_help_guide_self_help_guide_group" author="daniel.bower">
+
+	<changeSet id="add self_help_guide_self_help_guide_group"
+		author="daniel.bower">
 		<createTable tableName="self_help_guide_self_help_guide_group">
 			<column name="self_help_guide_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="self_help_guide_self_help_guide_group_self_help_guide_id_self_help_guide_id" 
+					foreignKeyName="self_help_guide_self_help_guide_group_self_help_guide_id_self_help_guide_id"
 					references="self_help_guide(id)" />
 			</column>
 			<column name="self_help_guide_group_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="self_help_guide_self_help_guide_group_self_help_guide_group_id_self_help_guide_group_id" 
+					foreignKeyName="self_help_guide_self_help_guide_group_self_help_guide_group_id_self_help_guide_group_id"
 					references="self_help_guide_group(id)" />
 			</column>
 		</createTable>
-	
+
 		<sql>grant all on self_help_guide_self_help_guide_group to ssp</sql>
 		<rollback>
 			<dropTable tableName="self_help_guide_self_help_guide_group" />
 		</rollback>
-		
+
 	</changeSet>
-	
+
 	<changeSet author='jon.adams' id='Add referral table'>
 		<createTable tableName="referral">
 			<column name="id" type="uuid">
@@ -3751,7 +3748,7 @@
 		</modifySql>
 
 	</changeSet>
-	
+
 	<changeSet author='daniel.bower' id='Add message table'>
 		<createTable tableName="message">
 			<column name="id" type="uuid">
@@ -3806,34 +3803,71 @@
 		</modifySql>
 
 	</changeSet>
-	
-	<changeSet author="daniel.bower" id="rename in person_confidentiality_disclosure_agreement">
-		<renameColumn tableName="person_confidentiality_disclosure_agreement" oldColumnName="confidentiality_disclosure_agreement" newColumnName="confidentiality_disclosure_agreement_id"/>
+
+	<changeSet author="daniel.bower"
+		id="rename in person_confidentiality_disclosure_agreement">
+		<renameColumn tableName="person_confidentiality_disclosure_agreement"
+			oldColumnName="confidentiality_disclosure_agreement" newColumnName="confidentiality_disclosure_agreement_id" />
 		<rollback>
-			<renameColumn tableName="person_confidentiality_disclosure_agreement" oldColumnName="confidentiality_disclosure_agreement_id" newColumnName="confidentiality_disclosure_agreement"/>
+			<renameColumn tableName="person_confidentiality_disclosure_agreement"
+				oldColumnName="confidentiality_disclosure_agreement_id"
+				newColumnName="confidentiality_disclosure_agreement" />
 		</rollback>
 	</changeSet>
-	
-	<changeSet id="add text field to Confidentiality Disclosure" author="dnaiel.bower">
+
+	<changeSet id="add text field to Confidentiality Disclosure"
+		author="dnaiel.bower">
 		<addColumn tableName="confidentiality_disclosure_agreement">
 			<column name="text" type="text">
 				<constraints nullable="false" />
 			</column>
 		</addColumn>
 		<rollback>
-			<dropColumn tableName="confidentiality_disclosure_agreement" columnName="text"/>
+			<dropColumn tableName="confidentiality_disclosure_agreement"
+				columnName="text" />
 		</rollback>
 	</changeSet>
-	
-	<changeSet id="add object_status challenge_challenge_referral" author="daniel.bower">
+
+	<changeSet id="add object_status challenge_challenge_referral"
+		author="daniel.bower">
 		<addColumn tableName="challenge_challenge_referral">
 			<column name="object_status" type="int" defaultValueNumeric="1">
 				<constraints nullable="false" />
 			</column>
 		</addColumn>
 		<rollback>
-			<dropColumn tableName="challenge_challenge_referral" columnName="object_status"/>
+			<dropColumn tableName="challenge_challenge_referral"
+				columnName="object_status" />
 		</rollback>
 	</changeSet>
-	
+
+	<changeSet id="create anonymous person" author="jon.adams">
+		<insert tableName="person">
+			<column name="id" value="46da4cb4-6eb4-4b91-8e39-8f9fa4d85552" />
+			<column name="first_name" value="Guest" />
+			<column name="last_name" value="User" />
+			<column name="primary_email_address" value="test@sinclair.edu" />
+			<column name="secondary_email_address" value="test@sinclair.edu" />
+			<column name="username" value="anonymousUser" />
+			<column name="work_phone" value="000-000-0000" />
+			<column name="address_line_1" value="444 West Third Street" />
+			<column name="city" value="Dayton" />
+			<column name="state" value="OH" />
+			<column name="zip_code" value="45402" />
+			<column name="photo_url" value="" />
+			<column name="school_id" value="system" />
+			<column name="created_date" valueDate="2012-04-12T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-12T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="person">
+				<where>id='46da4cb4-6eb4-4b91-8e39-8f9fa4d85552'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

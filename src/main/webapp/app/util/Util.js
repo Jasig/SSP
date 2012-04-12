@@ -2,9 +2,7 @@ Ext.define('Ssp.util.Util', {
     extend: 'Ext.Component',   		
 	
     init: function() {
-        console.log('Initialized util.Utils!');
-		
-		this.superclass.init.call(this, arguments);
+		this.callParent( arguments );
     }, 
     
     loaderXTemplateRenderer: function(loader, response, active) {

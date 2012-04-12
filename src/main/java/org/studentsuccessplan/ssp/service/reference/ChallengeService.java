@@ -25,4 +25,6 @@ public interface ChallengeService extends AuditableCrudService<Challenge> {
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;
+
+	List<Challenge> challengeSearch(String query);
 }

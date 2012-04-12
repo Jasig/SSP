@@ -1,46 +1,34 @@
 Ext.define('Ssp.controller.Search', {
-    extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller', 
+	
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        currentPerson: 'currentPerson'
+    },
     
-	models: ['StudentTO'],
-
-    stores: ['Students'],
-    
-	views: [
+    views: [
         'SearchResults'
     ],
  
-		
 	init: function() {
-        console.log('Initialized Search Controller!');
-    		
-		this.control({
+ 		this.control({
 			'searchresults': {
-				selectionchange: this.loadStudent,
-				viewready: this.setSearchResultsDefaults,
+				selectionchange: this.handleSelectionChange,
+				viewready: this.handleViewReady,
 				scope: this
 			}
 		});
-		
+ 		
+ 		this.callParent(arguments);
     },
-    
-	/*
-	 * Load the student's profile.
-	 */    
-	loadStudent: function(selModel,records,eOpts){ 
-		var record = records[0];
-
-		// Set the current student
-		this.application.currentStudent = record;
-		
-		// Load the student's Profile
-		this.application.fireEvent('afterLoadStudent', record);
+       
+	handleSelectionChange: function(selModel,records,eOpts){ 
+		// select the person
+		this.currentPerson.data = records[0].data;
+		this.application.fireEvent('afterLoadStudent');
 	},
-	
-	/*
-	 * Handle defaults when the Search Results grid
-	 * appears.
-	 */
-	setSearchResultsDefaults: function(view, eobj){
+
+	handleViewReady: function(view, eobj){
 		view.getSelectionModel().select(0);
 	}
 	

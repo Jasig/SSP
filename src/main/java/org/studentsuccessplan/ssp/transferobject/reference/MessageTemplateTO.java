@@ -1,9 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
+
+import com.google.common.collect.Lists;
 
 public class MessageTemplateTO extends AbstractReferenceTO<MessageTemplate>
 		implements TransferObject<MessageTemplate> {
@@ -24,25 +27,31 @@ public class MessageTemplateTO extends AbstractReferenceTO<MessageTemplate>
 		super(id, name, description);
 	}
 
-	public MessageTemplateTO(MessageTemplate model) {
-		super();
-		pullAttributesFromModel(model);
-	}
-
 	@Override
-	public void pullAttributesFromModel(MessageTemplate model) {
+	public void fromModel(MessageTemplate model) {
 		super.fromModel(model);
 	}
 
 	@Override
-	public MessageTemplate pushAttributesToModel(MessageTemplate model) {
+	public MessageTemplate addToModel(MessageTemplate model) {
 		super.addToModel(model);
 		return model;
 	}
 
 	@Override
 	public MessageTemplate asModel() {
-		return pushAttributesToModel(new MessageTemplate());
+		return addToModel(new MessageTemplate());
+	}
+
+	public static List<MessageTemplateTO> listToTOList(
+			List<MessageTemplate> models) {
+		List<MessageTemplateTO> tos = Lists.newArrayList();
+		for (MessageTemplate model : models) {
+			MessageTemplateTO obj = new MessageTemplateTO();
+			obj.fromModel(model);
+			tos.add(obj);
+		}
+		return tos;
 	}
 
 }

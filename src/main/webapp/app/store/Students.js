@@ -2,7 +2,7 @@ Ext.define('Ssp.store.Students', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.StudentTO',
     storeId: 'studentsStore',
-	autoLoad: false,
+	autoLoad: true,
 
 	/*    
 	proxy: {

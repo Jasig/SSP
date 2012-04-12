@@ -55,7 +55,7 @@ public class SessionController {
 
 		// Convert model to a transfer object
 		PersonTO pTo = new PersonTO();
-		pTo.pullAttributesFromModel(user.getPerson());
+		pTo.fromModel(user.getPerson());
 
 		// Return authenticated person transfer object
 		return pTo;

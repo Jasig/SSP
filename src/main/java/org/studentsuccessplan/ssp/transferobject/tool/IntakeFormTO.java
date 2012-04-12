@@ -37,18 +37,23 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 
 	private TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel> personEducationLevelToFactory = new TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel>(
 			PersonEducationLevelTO.class);
+
 	private TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource> personFundingToFactory = new TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource>(
 			PersonFundingSourceTO.class);
+
 	private TransferObjectListFactory<PersonChallengeTO, PersonChallenge> personChallengeToFactory = new TransferObjectListFactory<PersonChallengeTO, PersonChallenge>(
 			PersonChallengeTO.class);
 
+	public IntakeFormTO() {
+	}
+
 	public IntakeFormTO(IntakeForm model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(IntakeForm model) {
+	public void fromModel(IntakeForm model) {
 		if (model.getPerson() != null) {
 			setPerson(new PersonTO(model.getPerson()));
 		}
@@ -68,27 +73,27 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 					.getEducationPlan()));
 		}
 
-		if (model.getPerson().getEducationLevels() != null
-				&& model.getPerson().getEducationLevels().size() > 0) {
+		if ((model.getPerson().getEducationLevels() != null)
+				&& (model.getPerson().getEducationLevels().size() > 0)) {
 			setPersonEducationLevels(personEducationLevelToFactory
 					.toTOList(model.getPerson().getEducationLevels()));
 		}
 
-		if (model.getPerson().getFundingSources() != null
-				&& model.getPerson().getFundingSources().size() > 0) {
+		if ((model.getPerson().getFundingSources() != null)
+				&& (model.getPerson().getFundingSources().size() > 0)) {
 			setPersonFundingSources(personFundingToFactory.toTOList(model
 					.getPerson().getFundingSources()));
 		}
 
-		if (model.getPerson().getChallenges() != null
-				&& model.getPerson().getChallenges().size() > 0) {
+		if ((model.getPerson().getChallenges() != null)
+				&& (model.getPerson().getChallenges().size() > 0)) {
 			setPersonChallenges(personChallengeToFactory.toTOList(model
 					.getPerson().getChallenges()));
 		}
 	}
 
 	@Override
-	public IntakeForm pushAttributesToModel(IntakeForm model) {
+	public IntakeForm addToModel(IntakeForm model) {
 		if (getPerson() != null) {
 			model.setPerson(getPerson().asModel());
 		}
@@ -108,21 +113,22 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 					getPersonEducationPlan().asModel());
 		}
 
-		if (getPersonEducationLevels() != null
-				&& getPersonEducationLevels().size() > 0) {
+		if ((getPersonEducationLevels() != null)
+				&& (getPersonEducationLevels().size() > 0)) {
 			model.getPerson().setEducationLevels(
 					personEducationLevelToFactory
 							.toModelSet(getPersonEducationLevels()));
 		}
 
-		if (getPersonFundingSources() != null
-				&& getPersonFundingSources().size() > 0) {
+		if ((getPersonFundingSources() != null)
+				&& (getPersonFundingSources().size() > 0)) {
 			model.getPerson().setFundingSources(
 					personFundingToFactory
 							.toModelSet(getPersonFundingSources()));
 		}
 
-		if (getPersonChallenges() != null && getPersonChallenges().size() > 0) {
+		if ((getPersonChallenges() != null)
+				&& (getPersonChallenges().size() > 0)) {
 			model.getPerson().setChallenges(
 					personChallengeToFactory.toModelSet(getPersonChallenges()));
 		}
@@ -132,7 +138,7 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 
 	@Override
 	public IntakeForm asModel() {
-		return pushAttributesToModel(new IntakeForm());
+		return addToModel(new IntakeForm());
 	}
 
 	public PersonTO getPerson() {

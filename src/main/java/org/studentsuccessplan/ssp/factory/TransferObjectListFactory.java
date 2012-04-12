@@ -53,7 +53,7 @@ public class TransferObjectListFactory<T extends TransferObject<M>, M> {
 			T tObject;
 			try {
 				tObject = transferObjectClass.newInstance();
-				tObject.pullAttributesFromModel(m);
+				tObject.fromModel(m);
 				toList.add(tObject);
 			} catch (InstantiationException e) {
 				logger.error("unable to instantiate Transfer object in factory.");

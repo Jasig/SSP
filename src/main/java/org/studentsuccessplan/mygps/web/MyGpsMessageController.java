@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,19 +13,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.studentsuccessplan.mygps.model.transferobject.MessageTO;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.MessageService;
-import org.studentsuccessplan.ssp.service.SecurityService;
 
 @Controller
 @RequestMapping("/mygps/message")
-public class MyGpsMessageController {
+public class MyGpsMessageController extends AbstractMyGpsController {
 
 	@Autowired
 	private MessageService messageService;
 
-	@Autowired
-	private SecurityService securityService;
-
-	private Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsMessageController.class);
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -49,18 +44,9 @@ public class MyGpsMessageController {
 
 			return true;
 		} catch (Exception e) {
-			logger.error("ERROR : contactCoach() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : contactCoach() : {}", e.getMessage(), e);
 			throw e;
 		}
-
-	}
-
-	@ExceptionHandler(Exception.class)
-	public @ResponseBody
-	String handleException(Exception e, HttpServletResponse response) {
-		logger.error("ERROR : handleException()", e);
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		return e.getMessage();
 	}
 
 }

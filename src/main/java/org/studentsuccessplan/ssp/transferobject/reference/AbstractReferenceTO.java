@@ -5,12 +5,11 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
-
 import org.studentsuccessplan.ssp.model.reference.AbstractReference;
 import org.studentsuccessplan.ssp.transferobject.AuditableTO;
 
-public abstract class AbstractReferenceTO<T extends AbstractReference> extends
-		AuditableTO<T> {
+public abstract class AbstractReferenceTO<T extends AbstractReference>
+		extends AuditableTO<T> {
 
 	@NotNull
 	@NotEmpty
@@ -38,26 +37,29 @@ public abstract class AbstractReferenceTO<T extends AbstractReference> extends
 	}
 
 	public AbstractReferenceTO(T model) {
-		super(model.getId());
+		super.fromModel(model);
+	}
+
+	@Override
+	public void fromModel(T model) {
 		super.fromModel(model);
 
 		setName(model.getName());
 		setDescription(model.getDescription());
 	}
 
-	public void fromModel(AbstractReference model) {
-		super.fromModel(model);
-
-		setName(model.getName());
-		setDescription(model.getDescription());
-	}
-
-	public void addToModel(AbstractReference model) {
+	@Override
+	public T addToModel(T model) {
 		super.addToModel(model);
 
 		model.setName(getName());
 		model.setDescription(getDescription());
+
+		return model;
 	}
+
+	@Override
+	public abstract T asModel();
 
 	public String getName() {
 		return name;
@@ -75,14 +77,4 @@ public abstract class AbstractReferenceTO<T extends AbstractReference> extends
 		this.description = description;
 	}
 
-	@Override
-	public void pullAttributesFromModel(T model) {
-		this.fromModel(model);
-	}
-
-	@Override
-	public T pushAttributesToModel(T model) {
-		this.addToModel(model);
-		return model;
-	}
 }

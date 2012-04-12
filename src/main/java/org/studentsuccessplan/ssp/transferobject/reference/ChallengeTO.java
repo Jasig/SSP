@@ -1,6 +1,7 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -9,9 +10,10 @@ import org.studentsuccessplan.ssp.model.reference.ChallengeChallengeReferral;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
+import com.google.common.collect.Lists;
+
 public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge> {
-
 	/**
 	 * This is the text that will be used in a selfHelpGuideQuestion.
 	 */
@@ -126,6 +128,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		this.referralCount = referralCount;
 	}
 
+	@Override
 	public void fromModel(Challenge model) {
 		super.fromModel(model);
 
@@ -153,7 +156,8 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		}
 	}
 
-	public void addToModel(Challenge model) {
+	@Override
+	public Challenge addToModel(Challenge model) {
 		super.addToModel(model);
 
 		model.setSelfHelpGuideQuestion(getSelfHelpGuideQuestion());
@@ -196,14 +200,14 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		 * 
 		 * }
 		 */
+
+		return model;
 	}
 
-	@Override
 	public void pullAttributesFromModel(Challenge model) {
 		fromModel(model);
 	}
 
-	@Override
 	public Challenge pushAttributesToModel(Challenge model) {
 		addToModel(model);
 		return model;
@@ -213,4 +217,16 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	public Challenge asModel() {
 		return pushAttributesToModel(new Challenge());
 	}
+
+	public static List<ChallengeTO> listToTOList(List<Challenge> models) {
+		List<ChallengeTO> tos = Lists.newArrayList();
+		for (Challenge model : models) {
+			ChallengeTO challenge = new ChallengeTO();
+			challenge.fromModel(model);
+			tos.add(challenge);
+		}
+
+		return tos;
+	}
+
 }

@@ -15,7 +15,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.transferobject.PersonTO;
@@ -156,6 +155,6 @@ public class PersonControllerIntegrationTest {
 		assertNotNull("The list should not have been null.", list);
 		assertNotNull("List[0] should not have been null.", list.get(0));
 		assertEquals(PERSON_SORTEDBY_FIRSTNAME_0, list.get(0).getFirstName());
-		assertEquals(PERSON_SORTEDBY_FIRSTNAME_2, list.get(2).getFirstName());
+		assertEquals(PERSON_SORTEDBY_FIRSTNAME_2, list.get(3).getFirstName());
 	}
 }

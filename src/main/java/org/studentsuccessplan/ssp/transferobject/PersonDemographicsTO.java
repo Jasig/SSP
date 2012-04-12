@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.Person;
@@ -11,7 +12,10 @@ import org.studentsuccessplan.ssp.model.reference.Genders;
 import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
 import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 
-public class PersonDemographicsTO extends AuditableTO<PersonDemographics>
+import com.google.common.collect.Lists;
+
+public class PersonDemographicsTO
+		extends AuditableTO<PersonDemographics>
 		implements TransferObject<PersonDemographics> {
 
 	private UUID personId, coachId, maritalStatusId, ethnicityId,
@@ -29,11 +33,11 @@ public class PersonDemographicsTO extends AuditableTO<PersonDemographics>
 
 	public PersonDemographicsTO(PersonDemographics model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(PersonDemographics model) {
+	public void fromModel(PersonDemographics model) {
 		super.fromModel(model);
 
 		if (model.getCoach() != null) {
@@ -75,7 +79,7 @@ public class PersonDemographicsTO extends AuditableTO<PersonDemographics>
 	}
 
 	@Override
-	public PersonDemographics pushAttributesToModel(PersonDemographics model) {
+	public PersonDemographics addToModel(PersonDemographics model) {
 		super.addToModel(model);
 
 		if (getCoachId() != null) {
@@ -119,7 +123,16 @@ public class PersonDemographicsTO extends AuditableTO<PersonDemographics>
 
 	@Override
 	public PersonDemographics asModel() {
-		return pushAttributesToModel(new PersonDemographics());
+		return addToModel(new PersonDemographics());
+	}
+
+	public static List<PersonDemographicsTO> listToTOList(
+			List<PersonDemographics> models) {
+		List<PersonDemographicsTO> tos = Lists.newArrayList();
+		for (PersonDemographics model : models) {
+			tos.add(new PersonDemographicsTO(model));
+		}
+		return tos;
 	}
 
 	public UUID getPersonId() {
