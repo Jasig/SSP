@@ -21,27 +21,29 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 		super();
 	}
 
-	public AbstractReferenceTO(UUID id) {
+	public AbstractReferenceTO(final UUID id) {
 		super(id);
 	}
 
-	public AbstractReferenceTO(UUID id, String name) {
+	public AbstractReferenceTO(final UUID id, final String name) {
 		super(id);
 		this.name = name;
 	}
 
-	public AbstractReferenceTO(UUID id, String name, String description) {
+	public AbstractReferenceTO(final UUID id, final String name,
+			final String description) {
 		super(id);
 		this.name = name;
 		this.description = description;
 	}
 
-	public AbstractReferenceTO(T model) {
+	public AbstractReferenceTO(final T model) {
+		super();
 		super.fromModel(model);
 	}
 
 	@Override
-	public void fromModel(T model) {
+	public void fromModel(final T model) {
 		super.fromModel(model);
 
 		setName(model.getName());
@@ -49,7 +51,7 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 	}
 
 	@Override
-	public T addToModel(T model) {
+	public T addToModel(final T model) {
 		super.addToModel(model);
 
 		model.setName(getName());
@@ -65,7 +67,7 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -73,7 +75,7 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 

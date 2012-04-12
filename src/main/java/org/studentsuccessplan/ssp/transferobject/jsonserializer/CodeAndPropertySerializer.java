@@ -10,9 +10,9 @@ import org.codehaus.jackson.map.SerializerProvider;
 public class CodeAndPropertySerializer extends JsonSerializer<CodeAndProperty> {
 
 	@Override
-	public void serialize(CodeAndProperty value, JsonGenerator generator,
-			SerializerProvider provider) throws IOException,
-			JsonProcessingException {
+	public void serialize(final CodeAndProperty value,
+			final JsonGenerator generator, final SerializerProvider provider)
+			throws IOException, JsonProcessingException {
 		generator.writeStartObject();
 		generator.writeFieldName("code");
 		generator.writeString(value.getCode());
