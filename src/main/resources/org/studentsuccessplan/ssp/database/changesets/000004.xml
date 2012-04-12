@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="remove duplicate referral table" author="daniel.bower">
+		<dropTable tableName="referral"/>
+		
+		<rollback>
+			<createTable tableName="referral">
+				<column name="id" type="uuid">
+					<constraints primaryKey="true" nullable="false" />
+				</column>
+				<column name="name" type="character varying(80)">
+					<constraints nullable="false" />
+				</column>
+				<column name="description" type="text">
+					<constraints nullable="true" />
+				</column>
+				<column name="public_description" type="text">
+					<constraints nullable="true" />
+				</column>
+				<column name="created_date" type="datetime">
+					<constraints nullable="false" />
+				</column>
+				<column name="modified_date" type="datetime" />
+				<column name="created_by" type="uuid">
+					<constraints nullable="false" foreignKeyName="referral_created_by_person_id"
+						references="person(id)" />
+				</column>
+				<column name="modified_by" type="uuid">
+					<constraints nullable="true" foreignKeyName="referral_modified_by_person_id"
+						references="person(id)" />
+				</column>
+				<column name="object_status" type="int">
+					<constraints nullable="false" />
+				</column>
+			</createTable>
+
+			<sql>grant all on referral to ssp</sql>
+		</rollback>
+		
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+	
+</databaseChangeLog>

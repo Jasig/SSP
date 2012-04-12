@@ -21,4 +21,6 @@
 	<include file="org/studentsuccessplan/ssp/database/changesets/000002.xml"/>
 
 	<include file="org/studentsuccessplan/ssp/database/changesets/000003.xml"/>
+	
+	<include file="org/studentsuccessplan/ssp/database/changesets/000004.xml"/>
 </databaseChangeLog>
