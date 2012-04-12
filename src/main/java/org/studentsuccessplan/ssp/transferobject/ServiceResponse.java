@@ -22,4 +22,19 @@ public class ServiceResponse {
 	public String getMessage() {
 		return message;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{\"success\":\"");
+		if (success == true) {
+			sb.append("true");
+		} else {
+			sb.append("false");
+		}
+		sb.append("\", \"message\":\"");
+		sb.append(message);
+		sb.append("\"}");
+		return sb.toString();
+	}
 }
