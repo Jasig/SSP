@@ -23,7 +23,7 @@ public class MyGpsChallengeController {
 	@Autowired
 	private SelfHelpGuideManager manager;
 
-	private Logger logger = LoggerFactory
+	private final Logger logger = LoggerFactory
 			.getLogger(MyGpsChallengeController.class);
 
 	// Needed for tests, will be removed in the future.
@@ -31,16 +31,26 @@ public class MyGpsChallengeController {
 		this.manager = manager;
 	}
 
+	/**
+	 * Retrieve all applicable, visible Challenges for the specified query, that
+	 * are not already assigned as Tasks for the current user.
+	 * <p>
+	 * Also filters out inactive Challenges, and those that are not marked to
+	 * show in the SelfHelpSearch.
+	 * 
+	 * @param query
+	 *            Text string to compare with a SQL LIKE clause on the
+	 *            SelfHelpGuide Question, Description, and Tags fields
+	 * @return All Challenges that match the specified criteria
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public @ResponseBody
 	List<ChallengeTO> search(@RequestParam("query") String query)
 			throws Exception {
-
 		try {
 			return manager.challengeSearch(query);
-
 		} catch (Exception e) {
-
 			logger.error("ERROR : search() : {}", e.getMessage(), e);
 			throw e;
 		}

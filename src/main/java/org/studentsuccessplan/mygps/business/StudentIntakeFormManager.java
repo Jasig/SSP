@@ -302,7 +302,7 @@ public class StudentIntakeFormManager {
 
 		FormTO formTO = create();
 
-		Person student = securityService.currentlyLoggedInSspUser().getPerson();
+		Person student = securityService.currentUser().getPerson();
 
 		/* Confidentiality disclosure */
 
@@ -803,7 +803,7 @@ public class StudentIntakeFormManager {
 
 	public void save(FormTO formTO) throws ObjectNotFoundException {
 
-		Person student = securityService.currentlyLoggedInSspUser().getPerson();
+		Person student = securityService.currentUser().getPerson();
 
 		/* Add intake form to student's record */
 		personToolService.addToolToStudent(student, Tools.INTAKE);
@@ -1374,7 +1374,7 @@ public class StudentIntakeFormManager {
 	}
 
 	private FormSectionTO buildConfidentialitySection() {
-		Person student = securityService.currentlyLoggedInSspUser().getPerson();
+		Person student = securityService.currentUser().getPerson();
 		if (null != studentConfidentialityDisclosureAgreementService
 				.hasStudentAgreedToOne(student)) {
 			// if already agreed to, we don't need to see it again.

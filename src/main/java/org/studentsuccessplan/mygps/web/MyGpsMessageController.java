@@ -35,13 +35,13 @@ public class MyGpsMessageController {
 			HttpServletResponse response) throws Exception {
 
 		try {
-			if ((securityService.currentlyLoggedInSspUser().getPerson() == null)
-					|| (securityService.currentlyLoggedInSspUser().getPerson()
+			if ((securityService.currentUser().getPerson() == null)
+					|| (securityService.currentUser().getPerson()
 							.getDemographics().getCoach() == null)) {
 				return false;
 			}
 
-			Person coach = securityService.currentlyLoggedInSspUser()
+			Person coach = securityService.currentUser()
 					.getPerson().getDemographics().getCoach();
 
 			messageService.createMessage(coach, messageTO.getSubject(),

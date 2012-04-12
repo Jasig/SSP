@@ -10,7 +10,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.mygps.model.transferobject.ChallengeReferralTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideQuestionTO;
@@ -190,8 +189,8 @@ public class SelfHelpGuideManager {
 		selfHelpGuideResponse.setCompleted(false);
 		selfHelpGuideResponse.setCreatedDate(new Date());
 		selfHelpGuideResponse.setEarlyAlertSent(false);
-		selfHelpGuideResponse.setPerson(securityService
-				.currentlyLoggedInSspUser().getPerson());
+		selfHelpGuideResponse.setPerson(securityService.currentUser()
+				.getPerson());
 		selfHelpGuideResponse.setSelfHelpGuide(new SelfHelpGuide(
 				selfHelpGuideId));
 
@@ -220,9 +219,20 @@ public class SelfHelpGuideManager {
 		return true;
 	}
 
+	/**
+	 * Retrieve all applicable, visible Challenges for the specified query, that
+	 * are not already assigned as Tasks for the current user.
+	 * <p>
+	 * Also filters out inactive Challenges, and those that are not marked to
+	 * show in the SelfHelpSearch.
+	 * 
+	 * @param query
+	 *            Text string to compare with a SQL LIKE clause on the
+	 *            SelfHelpGuide Question, Description, and Tags fields
+	 * @return All Challenges that match the specified criteria
+	 */
 	public List<ChallengeTO> challengeSearch(String query) {
 		List<ChallengeTO> challengeTOs = new ArrayList<ChallengeTO>();
-
 		Set<Challenge> challenges = new LinkedHashSet<Challenge>();
 
 		challenges.addAll(challengeDao.searchByQuery(query));
@@ -230,19 +240,13 @@ public class SelfHelpGuideManager {
 		for (Challenge challenge : challenges) {
 			long count = 0;
 
-			count = challengeReferralDao
-					.countByChallengeIdNotOnActiveTaskList(challenge
-							.getId(), securityService
-							.currentlyLoggedInSspUser().getPerson(),
-							securityService.getSessionId());
+			count = challengeReferralDao.countByChallengeIdNotOnActiveTaskList(
+					challenge.getId(), securityService.currentUser()
+							.getPerson(), securityService.getSessionId());
 
 			if (count > 0) {
 				ChallengeTO challengeTO = new ChallengeTO();
-
-				challengeTO.setDescription(challenge.getDescription());
-				challengeTO.setId(challenge.getId());
-				challengeTO.setName(challenge.getName());
-
+				challengeTO.fromModel(challenge);
 				challengeTOs.add(challengeTO);
 			}
 		}
@@ -254,9 +258,9 @@ public class SelfHelpGuideManager {
 		List<ChallengeReferralTO> challengeReferralTOs = new ArrayList<ChallengeReferralTO>();
 
 		for (ChallengeReferral challengeReferral : challengeReferralDao
-				.byChallengeIdNotOnActiveTaskList(challengeId,
-						securityService.currentlyLoggedInSspUser().getPerson(),
-						securityService.getSessionId())) {
+				.byChallengeIdNotOnActiveTaskList(challengeId, securityService
+						.currentUser().getPerson(), securityService
+						.getSessionId())) {
 			challengeReferralTOs
 					.add(new ChallengeReferralTO(challengeReferral));
 		}
@@ -293,8 +297,7 @@ public class SelfHelpGuideManager {
 			int size = 0;
 
 			if (securityService.isAuthenticated()) {
-				Person student = securityService.currentlyLoggedInSspUser()
-						.getPerson();
+				Person student = securityService.currentUser().getPerson();
 				size = taskDao.getAllForPersonIdAndChallengeReferralId(
 						student.getId(), false, challengeReferral.getId())
 						.size();
