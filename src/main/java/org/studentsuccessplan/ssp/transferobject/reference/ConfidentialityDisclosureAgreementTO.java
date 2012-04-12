@@ -9,8 +9,8 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 import com.google.common.collect.Lists;
 
 public class ConfidentialityDisclosureAgreementTO extends
-		AbstractReferenceTO<ConfidentialityDisclosureAgreement>
-		implements TransferObject<ConfidentialityDisclosureAgreement> {
+		AbstractReferenceTO<ConfidentialityDisclosureAgreement> implements
+		TransferObject<ConfidentialityDisclosureAgreement> {
 
 	public ConfidentialityDisclosureAgreementTO() {
 		super();
@@ -27,12 +27,6 @@ public class ConfidentialityDisclosureAgreementTO extends
 	public ConfidentialityDisclosureAgreementTO(UUID id, String name,
 			String description) {
 		super(id, name, description);
-	}
-
-	public ConfidentialityDisclosureAgreementTO(
-			ConfidentialityDisclosureAgreement model) {
-		super();
-		fromModel(model);
 	}
 
 	@Override
@@ -56,7 +50,9 @@ public class ConfidentialityDisclosureAgreementTO extends
 			List<ConfidentialityDisclosureAgreement> models) {
 		List<ConfidentialityDisclosureAgreementTO> tos = Lists.newArrayList();
 		for (ConfidentialityDisclosureAgreement model : models) {
-			tos.add(new ConfidentialityDisclosureAgreementTO(model));
+			ConfidentialityDisclosureAgreementTO obj = new ConfidentialityDisclosureAgreementTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

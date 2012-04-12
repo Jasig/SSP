@@ -45,6 +45,7 @@ public class MyGpsChallengeReferralControllerTest {
 	public void getByChallengeId() throws ObjectNotFoundException {
 		Challenge challenge = new Challenge(UUID.randomUUID());
 		List<ChallengeReferral> searchResults = Lists.newArrayList();
+		List<ChallengeReferralTO> searchResultsTO = Lists.newArrayList();
 		expect(challengeService.get(challenge.getId())).andReturn(challenge);
 		expect(
 				challengeReferralService
@@ -60,7 +61,7 @@ public class MyGpsChallengeReferralControllerTest {
 
 			verify(challengeReferralService);
 			verify(challengeService);
-			assertEquals(searchResults, response);
+			assertEquals(searchResultsTO, response);
 		} catch (Exception e) {
 			LOGGER.error("controller error", e);
 		}
@@ -70,6 +71,7 @@ public class MyGpsChallengeReferralControllerTest {
 	public void search() throws ObjectNotFoundException {
 		Challenge challenge = new Challenge(UUID.randomUUID());
 		List<ChallengeReferral> searchResults = Lists.newArrayList();
+		List<ChallengeReferralTO> searchResultsTO = Lists.newArrayList();
 		expect(challengeService.get(challenge.getId())).andReturn(challenge);
 		expect(challengeReferralService.challengeReferralSearch(challenge))
 				.andReturn(searchResults);
@@ -78,12 +80,12 @@ public class MyGpsChallengeReferralControllerTest {
 		replay(challengeService);
 
 		try {
-			List<ChallengeReferralTO> response = controller
-					.search("", challenge.getId());
+			List<ChallengeReferralTO> response = controller.search("",
+					challenge.getId());
 
 			verify(challengeReferralService);
 			verify(challengeService);
-			assertEquals(searchResults, response);
+			assertEquals(searchResultsTO, response);
 		} catch (Exception e) {
 			LOGGER.error("controller error", e);
 		}

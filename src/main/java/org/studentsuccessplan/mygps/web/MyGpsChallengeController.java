@@ -23,18 +23,34 @@ public class MyGpsChallengeController extends AbstractMyGpsController {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsChallengeController.class);
 
+	/**
+	 * Empty constructor
+	 */
 	public MyGpsChallengeController() {
 	}
 
+	// Needed for tests, will be removed in the future.
 	public MyGpsChallengeController(ChallengeService challengeService) {
 		this.challengeService = challengeService;
 	}
 
+	/**
+	 * Retrieve all applicable, visible Challenges for the specified query, that
+	 * are not already assigned as Tasks for the current user.
+	 * <p>
+	 * Also filters out inactive Challenges, and those that are not marked to
+	 * show in the SelfHelpSearch.
+	 * 
+	 * @param query
+	 *            Text string to compare with a SQL LIKE clause on the
+	 *            SelfHelpGuide Question, Description, and Tags fields
+	 * @return All Challenges that match the specified criteria
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public @ResponseBody
 	List<ChallengeTO> search(@RequestParam("query") String query)
 			throws Exception {
-
 		try {
 			return ChallengeTO.listToTOList(challengeService
 					.challengeSearch(query));

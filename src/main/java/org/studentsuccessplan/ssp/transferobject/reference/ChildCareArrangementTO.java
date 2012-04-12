@@ -28,11 +28,6 @@ public class ChildCareArrangementTO extends
 		super(id, name, description);
 	}
 
-	public ChildCareArrangementTO(ChildCareArrangement model) {
-		super();
-		fromModel(model);
-	}
-
 	@Override
 	public void fromModel(ChildCareArrangement model) {
 		super.fromModel(model);
@@ -53,7 +48,9 @@ public class ChildCareArrangementTO extends
 			List<ChildCareArrangement> models) {
 		List<ChildCareArrangementTO> tos = Lists.newArrayList();
 		for (ChildCareArrangement model : models) {
-			tos.add(new ChildCareArrangementTO(model));
+			ChildCareArrangementTO obj = new ChildCareArrangementTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

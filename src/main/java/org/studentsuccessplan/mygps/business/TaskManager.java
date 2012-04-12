@@ -82,15 +82,10 @@ public class TaskManager {
 		Task task = new Task();
 
 		task.setChallenge(new Challenge(challengeId));
-		task.setChallengeReferral(challengeReferralDao
-				.get(challengeReferralId));
-		task.setCreatedBy(securityService.currentlyLoggedInSspUser()
-				.getPerson());
-		task.setCreatedDate(new Date());
-		task.setObjectStatus(ObjectStatus.ACTIVE);
-		task.setPerson(securityService.currentlyLoggedInSspUser()
-				.getPerson());
+		task.setChallengeReferral(challengeReferralDao.get(challengeReferralId));
+		task.setPerson(securityService.currentUser().getPerson());
 		task.setSessionId(securityService.getSessionId());
+		task.setDescription("");
 
 		taskService.create(task);
 
@@ -134,21 +129,18 @@ public class TaskManager {
 			List<TaskTO> taskTOs = new ArrayList<TaskTO>();
 
 			if (securityService.isAuthenticated()) {
-				Person student = securityService.currentlyLoggedInSspUser()
-						.getPerson();
-				taskTOs.addAll(TaskTO.tasksToTaskTOs(
-						taskService.getAllForPersonId(student, false)));
-				taskTOs.addAll(TaskTO.customTasksToTaskTOs(
-						customTaskService.getAllForPersonId(student, false)));
+				Person student = securityService.currentUser().getPerson();
+				taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
+						.getAllForPersonId(student, false)));
+				taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
+						.getAllForPersonId(student, false)));
 			} else {
-				taskTOs.addAll(TaskTO
-						.tasksToTaskTOs(
-						taskService.getAllForSessionId(
-								securityService.getSessionId(), true)));
-				taskTOs.addAll(TaskTO
-						.customTasksToTaskTOs(
-						customTaskService.getAllForSessionId(
-								securityService.getSessionId(), true)));
+				taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
+						.getAllForSessionId(securityService.getSessionId(),
+								true)));
+				taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
+						.getAllForSessionId(securityService.getSessionId(),
+								true)));
 			}
 
 			Collections.sort(taskTOs, new TaskTOComparator());
@@ -160,18 +152,17 @@ public class TaskManager {
 			// Template parameters
 			HashMap<String, Object> templateParameters = new HashMap<String, Object>();
 
-			Person student = securityService.currentlyLoggedInSspUser()
-					.getPerson();
+			Person student = securityService.currentUser().getPerson();
 
 			templateParameters.put("fullName", student.getFullName());
 			templateParameters.put("taskTOs", taskTOs);
 
 			// Create message, add to queue for delivery
-			messageManager.createMessage(emailAddress,
-					velocityTemplateHelper.generateContentFromTemplate(
-							messageTemplate.getSubject(), templateParameters),
-					velocityTemplateHelper.generateContentFromTemplate(
-							messageTemplate.getBody(), templateParameters));
+			messageManager.createMessage(emailAddress, velocityTemplateHelper
+					.generateContentFromTemplate(messageTemplate.getSubject(),
+							templateParameters), velocityTemplateHelper
+					.generateContentFromTemplate(messageTemplate.getBody(),
+							templateParameters));
 
 			return true;
 		} catch (Exception e) {
@@ -185,27 +176,20 @@ public class TaskManager {
 		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
 
 		if (securityService.isAuthenticated()) {
+			Person student = securityService.currentUser().getPerson();
 
-			Person student = securityService.currentlyLoggedInSspUser()
-					.getPerson();
-
-			taskTOs.addAll(TaskTO
-					.tasksToTaskTOs(
-					taskService.getAllForPersonId(student)));
-			taskTOs.addAll(TaskTO
-					.customTasksToTaskTOs(
-					customTaskService.getAllForPersonId(student)));
+			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
+					.getAllForPersonId(student)));
+			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
+					.getAllForPersonId(student)));
 
 		} else {
 
-			taskTOs.addAll(TaskTO
-					.tasksToTaskTOs(
-					taskService.getAllForSessionId(
-							securityService.getSessionId())));
-			taskTOs.addAll(TaskTO
-					.customTasksToTaskTOs(
-					customTaskService.getAllForSessionId(
-							securityService.getSessionId())));
+			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
+					.getAllForSessionId(securityService.getSessionId())));
+			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
+					.getAllForSessionId(securityService.getSessionId())));
+
 		}
 
 		return taskTOs;
@@ -216,7 +200,7 @@ public class TaskManager {
 
 		CustomTask customTask = new CustomTask();
 
-		Person student = securityService.currentlyLoggedInSspUser().getPerson();
+		Person student = securityService.currentUser().getPerson();
 
 		customTask.setCreatedDate(new Date());
 		customTask.setCreatedBy(student);
@@ -249,8 +233,8 @@ public class TaskManager {
 		CustomTask customTask = new CustomTask();
 
 		customTask.setCreatedDate(new Date());
-		customTask.setCreatedBy(
-				personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
+		customTask.setCreatedBy(personService
+				.get(Person.SYSTEM_ADMINISTRATOR_ID));
 		customTask.setDescription(description);
 		customTask.setObjectStatus(ObjectStatus.ACTIVE);
 		customTask.setPerson(student);
@@ -412,16 +396,15 @@ public class TaskManager {
 				// Due date
 				dueDateCalendar.setTime(actionPlanStep.getDueDate());
 
-				if (now.after(startDateCalendar) &&
-						(now.before(dueDateCalendar))) {
+				if (now.after(startDateCalendar)
+						&& (now.before(dueDateCalendar))) {
 
 					Message message = new Message();
-					HashMap<String, Object> templateParameters = new
-							HashMap<String, Object>();
+					HashMap<String, Object> templateParameters = new HashMap<String, Object>();
 
-					message.setBody(velocityTemplateHelper.
-							generateContentFromTemplate
-							(actionPlanStepMessageTemplate.getBody(),
+					message.setBody(velocityTemplateHelper
+							.generateContentFromTemplate(
+									actionPlanStepMessageTemplate.getBody(),
 									templateParameters));
 					message.setCreatedBy(personService
 							.get(Person.SYSTEM_ADMINISTRATOR_ID));
@@ -429,9 +412,9 @@ public class TaskManager {
 					message.setRecipient(actionPlanStep.getPerson());
 					message.setSender(personService
 							.get(Person.SYSTEM_ADMINISTRATOR_ID));
-					message.setSubject(velocityTemplateHelper.
-							generateContentFromTemplate
-							(actionPlanStepMessageTemplate.getSubject(),
+					message.setSubject(velocityTemplateHelper
+							.generateContentFromTemplate(
+									actionPlanStepMessageTemplate.getSubject(),
 									templateParameters));
 
 					messageDao.save(message);
@@ -453,29 +436,23 @@ public class TaskManager {
 		List<TaskReportTO> taskReportTOs = new ArrayList<TaskReportTO>();
 
 		if (securityService.isAuthenticated()) {
-			Person student = securityService.currentlyLoggedInSspUser()
-					.getPerson();
-			taskReportTOs.addAll(
-					TaskReportTO.tasksToTaskReportTOs(
-							taskService.getAllForPersonId(
-									student, false)));
-			taskReportTOs
-					.addAll(
-					TaskReportTO.customTasksToTaskReportTOs(
-							customTaskService.getAllForPersonId(
-									student, false)));
+			Person student = securityService.currentUser().getPerson();
+			taskReportTOs.addAll(TaskReportTO.tasksToTaskReportTOs(taskService
+					.getAllForPersonId(student, false)));
+			taskReportTOs.addAll(TaskReportTO
+					.customTasksToTaskReportTOs(customTaskService
+							.getAllForPersonId(student, false)));
 
 		} else {
 
-			taskReportTOs.addAll(
-					TaskReportTO.tasksToTaskReportTOs(
-							taskService.getAllForSessionId(
-									securityService.getSessionId(), false)));
 			taskReportTOs
-					.addAll(
-					TaskReportTO.customTasksToTaskReportTOs(
-							customTaskService.getAllForSessionId(
-									securityService.getSessionId(), false)));
+					.addAll(TaskReportTO.tasksToTaskReportTOs(taskService
+							.getAllForSessionId(securityService.getSessionId(),
+									false)));
+			taskReportTOs.addAll(TaskReportTO
+					.customTasksToTaskReportTOs(customTaskService
+							.getAllForSessionId(securityService.getSessionId(),
+									false)));
 
 		}
 

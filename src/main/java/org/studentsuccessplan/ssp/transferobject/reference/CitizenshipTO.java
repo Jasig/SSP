@@ -27,11 +27,6 @@ public class CitizenshipTO extends AbstractReferenceTO<Citizenship> implements
 		super(id, name, description);
 	}
 
-	public CitizenshipTO(Citizenship model) {
-		super();
-		fromModel(model);
-	}
-
 	@Override
 	public void fromModel(Citizenship model) {
 		super.fromModel(model);
@@ -48,11 +43,12 @@ public class CitizenshipTO extends AbstractReferenceTO<Citizenship> implements
 		return addToModel(new Citizenship());
 	}
 
-	public static List<CitizenshipTO> listToTOList(
-			List<Citizenship> models) {
+	public static List<CitizenshipTO> listToTOList(List<Citizenship> models) {
 		List<CitizenshipTO> tos = Lists.newArrayList();
 		for (Citizenship model : models) {
-			tos.add(new CitizenshipTO(model));
+			CitizenshipTO obj = new CitizenshipTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

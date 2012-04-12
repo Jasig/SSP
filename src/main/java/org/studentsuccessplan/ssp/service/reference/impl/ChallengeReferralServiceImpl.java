@@ -31,8 +31,8 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 
 	@Override
 	public List<ChallengeReferral> getAll(ObjectStatus status,
-			Integer firstResult,
-			Integer maxResults, String sort, String sortDirection) {
+			Integer firstResult, Integer maxResults, String sort,
+			String sortDirection) {
 		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
 	}
 
@@ -82,19 +82,18 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 	@Override
 	public List<ChallengeReferral> challengeReferralSearch(Challenge challenge) {
 		return dao.byChallengeIdNotOnActiveTaskList(challenge.getId(),
-				securityService.currentlyLoggedInSspUser().getPerson(),
+				securityService.currentUser().getPerson(),
 				securityService.getSessionId());
 	}
 
 	@Override
 	public int getChallengeReferralCountByChallengeAndQuery(
-			Challenge challenge,
-			String query) {
+			Challenge challenge, String query) {
 
 		int count = 0;
 
-		for (ChallengeReferral challengeReferral : dao
-				.byChallengeIdAndQuery(challenge.getId(), query)) {
+		for (ChallengeReferral challengeReferral : dao.byChallengeIdAndQuery(
+				challenge.getId(), query)) {
 
 			// Does the referral exist as an active/incomplete task?
 			// Need to check both the tasks created w/in MyGPS as well as those
@@ -103,11 +102,9 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 			int size = 0;
 
 			if (securityService.isAuthenticated()) {
-				Person student = securityService.currentlyLoggedInSspUser()
-						.getPerson();
-				size = taskService.getAllForPersonAndChallengeReferral(
-						student, false, challengeReferral)
-						.size();
+				Person student = securityService.currentUser().getPerson();
+				size = taskService.getAllForPersonAndChallengeReferral(student,
+						false, challengeReferral).size();
 			} else {
 				size = taskService.getAllForSessionIdAndChallengeReferral(
 						securityService.getSessionId(), false,

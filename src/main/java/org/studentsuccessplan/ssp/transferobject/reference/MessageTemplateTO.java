@@ -8,8 +8,7 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class MessageTemplateTO
-		extends AbstractReferenceTO<MessageTemplate>
+public class MessageTemplateTO extends AbstractReferenceTO<MessageTemplate>
 		implements TransferObject<MessageTemplate> {
 
 	public MessageTemplateTO() {
@@ -26,11 +25,6 @@ public class MessageTemplateTO
 
 	public MessageTemplateTO(UUID id, String name, String description) {
 		super(id, name, description);
-	}
-
-	public MessageTemplateTO(MessageTemplate model) {
-		super();
-		fromModel(model);
 	}
 
 	@Override
@@ -53,7 +47,9 @@ public class MessageTemplateTO
 			List<MessageTemplate> models) {
 		List<MessageTemplateTO> tos = Lists.newArrayList();
 		for (MessageTemplate model : models) {
-			tos.add(new MessageTemplateTO(model));
+			MessageTemplateTO obj = new MessageTemplateTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

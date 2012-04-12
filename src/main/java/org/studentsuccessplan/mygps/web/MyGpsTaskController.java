@@ -157,7 +157,7 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 			Map<String, Object> model = new HashMap<String, Object>();
 
 			if (securityService.isAuthenticated()) {
-				Person student = securityService.currentlyLoggedInSspUser()
+				Person student = securityService.currentUser()
 						.getPerson();
 				model.put("studentName",
 						student.getFirstName() + " " + student.getLastName());

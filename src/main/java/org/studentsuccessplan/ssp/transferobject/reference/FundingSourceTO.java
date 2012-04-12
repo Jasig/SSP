@@ -27,11 +27,6 @@ public class FundingSourceTO extends AbstractReferenceTO<FundingSource>
 		super(id, name, description);
 	}
 
-	public FundingSourceTO(FundingSource model) {
-		super();
-		fromModel(model);
-	}
-
 	@Override
 	public void fromModel(FundingSource model) {
 		super.fromModel(model);
@@ -48,11 +43,12 @@ public class FundingSourceTO extends AbstractReferenceTO<FundingSource>
 		return addToModel(new FundingSource());
 	}
 
-	public static List<FundingSourceTO> listToTOList(
-			List<FundingSource> models) {
+	public static List<FundingSourceTO> listToTOList(List<FundingSource> models) {
 		List<FundingSourceTO> tos = Lists.newArrayList();
 		for (FundingSource model : models) {
-			tos.add(new FundingSourceTO(model));
+			FundingSourceTO obj = new FundingSourceTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

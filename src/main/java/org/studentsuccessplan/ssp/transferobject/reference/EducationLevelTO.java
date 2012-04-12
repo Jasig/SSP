@@ -27,11 +27,6 @@ public class EducationLevelTO extends AbstractReferenceTO<EducationLevel>
 		super(id, name, description);
 	}
 
-	public EducationLevelTO(EducationLevel model) {
-		super();
-		fromModel(model);
-	}
-
 	@Override
 	public void fromModel(EducationLevel model) {
 		super.fromModel(model);
@@ -52,7 +47,9 @@ public class EducationLevelTO extends AbstractReferenceTO<EducationLevel>
 			List<EducationLevel> models) {
 		List<EducationLevelTO> tos = Lists.newArrayList();
 		for (EducationLevel model : models) {
-			tos.add(new EducationLevelTO(model));
+			EducationLevelTO obj = new EducationLevelTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

@@ -146,7 +146,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 * @return The currently authenticated user
 	 */
 	public Person currentUser() {
-		SspUser user = getSecurityService().currentlyLoggedInSspUser();
+		SspUser user = getSecurityService().currentUser();
 		return user.getPerson();
 	}
 

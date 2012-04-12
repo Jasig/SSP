@@ -80,8 +80,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 		for (Challenge challenge : challenges) {
 			int count = challengeReferralService
 					.countByChallengeIdNotOnActiveTaskList(challenge,
-							securityService
-									.currentlyLoggedInSspUser().getPerson(),
+							securityService.currentUser().getPerson(),
 							securityService.getSessionId());
 			if (count > 0) {
 				results.add(challenge);

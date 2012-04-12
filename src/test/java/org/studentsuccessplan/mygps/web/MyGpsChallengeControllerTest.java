@@ -36,6 +36,7 @@ public class MyGpsChallengeControllerTest {
 	public void search() {
 		String query = "ABCDEFG";
 		List<Challenge> searchResults = Lists.newArrayList();
+		List<ChallengeTO> searchResultsTO = Lists.newArrayList();
 		expect(manager.challengeSearch(query)).andReturn(searchResults);
 
 		replay(manager);
@@ -44,7 +45,7 @@ public class MyGpsChallengeControllerTest {
 			List<ChallengeTO> response = controller.search(query);
 
 			verify(manager);
-			assertEquals(searchResults, response);
+			assertEquals(searchResultsTO, response);
 		} catch (Exception e) {
 			LOGGER.error("controller error", e);
 		}

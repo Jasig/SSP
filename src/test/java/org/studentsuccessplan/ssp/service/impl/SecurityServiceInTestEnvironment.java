@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
-
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.security.MockUser;
 import org.studentsuccessplan.ssp.security.SspUser;
@@ -22,8 +21,14 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 	private String sessionId;
 
 	@Override
-	public SspUser currentlyLoggedInSspUser() {
+	public SspUser currentUser() {
 		return current;
+	}
+
+	@Override
+	public SspUser currentlyAuthenticatedUser() {
+		return current.getUsername().equals(SspUser.ANONYMOUS_PERSON_USERNAME) ? null
+				: current;
 	}
 
 	/**
@@ -71,7 +76,7 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 
 	@Override
 	public boolean isAuthenticated() {
-		return null == current;
+		return null != currentlyAuthenticatedUser();
 	}
 
 	@Override

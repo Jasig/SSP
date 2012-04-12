@@ -22,6 +22,42 @@ public class Challenge extends AbstractReference implements Serializable {
 	private static final long serialVersionUID = 5610544634433661561L;
 
 	/**
+	 * This is the text that will be used in a selfHelpGuideQuestion.
+	 */
+	@Column(length = 64000)
+	private String selfHelpGuideQuestion;
+
+	/**
+	 * Just a reference to the questions that reference this Challenge. Think of
+	 * as selfHelpQuideChallenges
+	 */
+	@OneToMany(mappedBy = "challenge")
+	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
+			0);
+
+	/**
+	 * Public description of the challenge
+	 * 
+	 * Optional, null allowed, max length 64000 characters.
+	 */
+	@Column(nullable = true, length = 64000)
+	@Size(max = 64000)
+	private String selfHelpGuideDescription;
+
+	@Column(nullable = false)
+	private boolean showInStudentIntake;
+
+	@Column(nullable = false)
+	private boolean showInSelfHelpSearch;
+
+	@OneToMany(mappedBy = "challenge")
+	private Set<ChallengeChallengeReferral> challengeChallengeReferrals = new HashSet<ChallengeChallengeReferral>(
+			0);
+
+	@Column(length = 255)
+	private String tags;
+
+	/**
 	 * Constructor
 	 */
 	public Challenge() {
@@ -65,42 +101,6 @@ public class Challenge extends AbstractReference implements Serializable {
 	public Challenge(final UUID id, final String name, final String description) {
 		super(id, name, description);
 	}
-
-	/**
-	 * This is the text that will be used in a selfHelpGuideQuestion.
-	 */
-	@Column(length = 64000)
-	private String selfHelpGuideQuestion;
-
-	/**
-	 * Just a reference to the questions that reference this Challenge. Think of
-	 * as selfHelpQuideChallenges
-	 */
-	@OneToMany(mappedBy = "challenge")
-	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
-			0);
-
-	/**
-	 * Public description of the challenge
-	 * 
-	 * Optional, null allowed, max length 64000 characters.
-	 */
-	@Column(nullable = true, length = 64000)
-	@Size(max = 64000)
-	private String selfHelpGuideDescription;
-
-	@Column(nullable = false)
-	private boolean showInStudentIntake;
-
-	@Column(nullable = false)
-	private boolean showInSelfHelpSearch;
-
-	@OneToMany(mappedBy = "challenge")
-	private Set<ChallengeChallengeReferral> challengeChallengeReferrals = new HashSet<ChallengeChallengeReferral>(
-			0);
-
-	@Column(length = 255)
-	private String tags;
 
 	public String getSelfHelpGuideQuestion() {
 		return selfHelpGuideQuestion;

@@ -8,9 +8,8 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class EthnicityTO
-		extends AbstractReferenceTO<Ethnicity>
-		implements TransferObject<Ethnicity> {
+public class EthnicityTO extends AbstractReferenceTO<Ethnicity> implements
+		TransferObject<Ethnicity> {
 
 	public EthnicityTO() {
 		super();
@@ -26,11 +25,6 @@ public class EthnicityTO
 
 	public EthnicityTO(UUID id, String name, String description) {
 		super(id, name, description);
-	}
-
-	public EthnicityTO(Ethnicity model) {
-		super();
-		fromModel(model);
 	}
 
 	@Override
@@ -49,11 +43,12 @@ public class EthnicityTO
 		return addToModel(new Ethnicity());
 	}
 
-	public static List<EthnicityTO> listToTOList(
-			List<Ethnicity> models) {
+	public static List<EthnicityTO> listToTOList(List<Ethnicity> models) {
 		List<EthnicityTO> tos = Lists.newArrayList();
 		for (Ethnicity model : models) {
-			tos.add(new EthnicityTO(model));
+			EthnicityTO obj = new EthnicityTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

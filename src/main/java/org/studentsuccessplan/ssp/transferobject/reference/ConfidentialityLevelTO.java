@@ -28,11 +28,6 @@ public class ConfidentialityLevelTO extends
 		super(id, name, description);
 	}
 
-	public ConfidentialityLevelTO(ConfidentialityLevel model) {
-		super();
-		fromModel(model);
-	}
-
 	@Override
 	public void fromModel(ConfidentialityLevel model) {
 		super.fromModel(model);
@@ -53,7 +48,9 @@ public class ConfidentialityLevelTO extends
 			List<ConfidentialityLevel> models) {
 		List<ConfidentialityLevelTO> tos = Lists.newArrayList();
 		for (ConfidentialityLevel model : models) {
-			tos.add(new ConfidentialityLevelTO(model));
+			ConfidentialityLevelTO obj = new ConfidentialityLevelTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

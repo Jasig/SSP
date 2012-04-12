@@ -10,6 +10,9 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 /**
  * Base class which provides a building block for creating an
  * AuditableCrudService
+ * 
+ * @param <T>
+ *            Any class that extends Auditable
  */
 public abstract class AbstractAuditableCrudService<T extends Auditable>
 		implements AuditableCrudService<T> {

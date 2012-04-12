@@ -8,26 +8,42 @@ import org.studentsuccessplan.ssp.security.SspUser;
 public interface SecurityService {
 
 	/**
+	 * Retrieve the current user (authenticated or anonymous).
+	 * 
+	 * @return The current user, or null if there was some kind of error or
+	 *         missing data.
+	 * @see #currentlyAuthenticatedUser()
+	 */
+	SspUser currentUser();
+
+	/**
 	 * Returns currently authenticated user, or null if this session has not
 	 * been authenticated.
+	 * <p>
+	 * This is similar to {@link #currentUser()} but differs by
+	 * this method returning null if the anonymous user is current.
 	 * 
 	 * @return The currently authenticated user, or null if this session has not
 	 *         been authenticated.
+	 * @see #currentUser()
 	 */
-	public SspUser currentlyLoggedInSspUser();
+	SspUser currentlyAuthenticatedUser();
 
 	/**
 	 * Check if this session has been authenticated.
+	 * <p>
+	 * Will return false if the anonymous user is current instead of an
+	 * authenticated user.
 	 * 
 	 * @return True if this session has been authenticated by any valid, active
-	 *         user.
+	 *         user; false for the anonymous user.
 	 */
-	public boolean isAuthenticated();
+	boolean isAuthenticated();
 
 	/**
 	 * Get the session identifier.
 	 * 
 	 * @return The session identifier.
 	 */
-	public String getSessionId();
+	String getSessionId();
 }

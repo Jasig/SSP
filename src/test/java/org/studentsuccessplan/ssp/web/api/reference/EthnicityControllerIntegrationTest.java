@@ -1,6 +1,7 @@
 package org.studentsuccessplan.ssp.web.api.reference;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -16,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
@@ -36,15 +36,15 @@ import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 public class EthnicityControllerIntegrationTest {
 
 	@Autowired
-	private EthnicityController controller;
+	private transient EthnicityController controller;
 
-	private static final UUID Ethnicity_ID = UUID
+	private static final UUID ETHNICITY_ID = UUID
 			.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87");
 
-	private static final String Ethnicity_NAME = "Test Ethnicity";
+	private static final String ETHNICITY_NAME = "Test Ethnicity";
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	/**
 	 * Setup the security service with the admin user for use by
@@ -52,7 +52,7 @@ public class EthnicityControllerIntegrationTest {
 	 * auto-fill properties are correctly filled.
 	 */
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
@@ -68,13 +68,13 @@ public class EthnicityControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		EthnicityTO obj = controller.get(Ethnicity_ID);
+		EthnicityTO obj = controller.get(ETHNICITY_ID);
 
 		assertNotNull(
 				"Returned EthnicityTO from the controller should not have been null.",
 				obj);
 
-		assertEquals("Returned Ethnicity.Name did not match.", Ethnicity_NAME,
+		assertEquals("Returned Ethnicity.Name did not match.", ETHNICITY_NAME,
 				obj.getName());
 	}
 
@@ -111,8 +111,8 @@ public class EthnicityControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		String testString1 = "testString1";
-		String testString2 = "testString1";
+		final String testString1 = "testString1";
+		final String testString2 = "testString1";
 
 		// Check validation of 'no ID for create()'
 		EthnicityTO obj = new EthnicityTO(UUID.randomUUID(), testString1,
@@ -161,7 +161,7 @@ public class EthnicityControllerIntegrationTest {
 				null, null, null);
 
 		assertNotNull("List should not have been null.", list);
-		assertTrue("List action should have returned some objects.",
-				list.size() > 0);
+		assertFalse("List action should have returned some objects.",
+				list.isEmpty());
 	}
 }
