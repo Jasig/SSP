@@ -18,7 +18,7 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @return All entities in the database, filtered only by the specified
 	 *         parameters.
 	 */
-	public List<T> getAll(ObjectStatus status);
+	List<T> getAll(ObjectStatus status);
 
 	/**
 	 * Return all entities in the database, filtered only by the specified
@@ -46,7 +46,7 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @return All entities in the database, filtered only by the specified
 	 *         parameters.
 	 */
-	public List<T> getAll(ObjectStatus status, Integer firstResult,
+	List<T> getAll(ObjectStatus status, Integer firstResult,
 			Integer maxResults, String sort, String sortDirection);
 
 	/**
@@ -55,7 +55,7 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @param id
 	 * @return The specified instance if found.
 	 */
-	public T get(UUID id);
+	T get(UUID id);
 
 	/**
 	 * Save instance to persistent storage.
@@ -63,7 +63,7 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @param obj
 	 * @return The update data object instance.
 	 */
-	public T save(T obj);
+	T save(T obj);
 
 	/**
 	 * <i>Permanently</i> removes the specified data instance!
@@ -77,5 +77,5 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @param id
 	 *            The id of the data instance to permanently delete.
 	 */
-	public void delete(T id);
+	void delete(T id);
 }

@@ -3869,5 +3869,23 @@
 			</delete>
 		</rollback>
 	</changeSet>
+	<changeSet id="Add 'not applicable' to veteran_status"
+		author="jon.adams">
+		<insert tableName="veteran_status">
+			<column name="id" value="5c584fdb-dcc8-44ff-a30d-8c3e0a2d8206" />
+			<column name="name" value="[ Not applicable ]" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-12T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-12T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="veteran_status">
+				<where>id='5c584fdb-dcc8-44ff-a30d-8c3e0a2d8206'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 
 </databaseChangeLog>

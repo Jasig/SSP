@@ -14,19 +14,24 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.studentsuccessplan.ssp.dao.reference.VeteranStatusDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 
+/**
+ * Test the Veteran Status reference service.
+ * 
+ * @author jon.adams
+ */
 public class VeteranStatusServiceTest {
 
-	private VeteranStatusServiceImpl service;
-	private VeteranStatusDao dao;
+	private transient VeteranStatusServiceImpl service;
+
+	private transient VeteranStatusDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new VeteranStatusServiceImpl();
 		dao = createMock(VeteranStatusDao.class);
 
@@ -43,8 +48,8 @@ public class VeteranStatusServiceTest {
 
 		replay(dao);
 
-		List<VeteranStatus> all = service.getAll(ObjectStatus.ACTIVE, null, null,
-				null, null);
+		List<VeteranStatus> all = service.getAll(ObjectStatus.ACTIVE, null,
+				null, null, null);
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

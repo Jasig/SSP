@@ -35,14 +35,34 @@ public interface AuditableCrudService<T> {
 	 *            <code>DESC</code>.
 	 * @return All entities in the database filtered by the supplied status.
 	 */
-	public List<T> getAll(ObjectStatus status, Integer firstResult,
+	List<T> getAll(ObjectStatus status, Integer firstResult,
 			Integer maxResults, String sort, String sortDirection);
 
-	public T get(UUID id) throws ObjectNotFoundException;
+	/**
+	 * Retrieves the specified instance from persistent storage.
+	 * 
+	 * @param id
+	 * @return The specified instance if found.
+	 * @exception ObjectNotFoundException
+	 */
+	T get(UUID id) throws ObjectNotFoundException;
 
-	public T create(T obj);
+	/**
+	 * Save instance to persistent storage.
+	 * 
+	 * @param obj
+	 * @return The update data object instance.
+	 */
+	T create(T obj);
 
-	public T save(T obj) throws ObjectNotFoundException;
+	/**
+	 * Save instance to persistent storage.
+	 * 
+	 * @param obj
+	 * @return The update data object instance.
+	 * @exception ObjectNotFoundException
+	 */
+	T save(T obj) throws ObjectNotFoundException;
 
 	/**
 	 * Mark the specific instance as {@link ObjectStatus#DELETED}.
@@ -52,5 +72,5 @@ public interface AuditableCrudService<T> {
 	 * @exception ObjectNotFoundException
 	 *                if the specified ID does not exist.
 	 */
-	public void delete(UUID id) throws ObjectNotFoundException;
+	void delete(UUID id) throws ObjectNotFoundException;
 }
