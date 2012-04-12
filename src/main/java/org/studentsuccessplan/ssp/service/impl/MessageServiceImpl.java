@@ -64,7 +64,7 @@ public class MessageServiceImpl implements MessageService {
 		message.setBody(body);
 
 		if (securityService.isAuthenticated()) {
-			message.setCreatedBy(securityService.currentlyLoggedInSspUser()
+			message.setCreatedBy(securityService.currentUser()
 					.getPerson());
 		} else {
 			message.setCreatedBy(personService
@@ -75,7 +75,7 @@ public class MessageServiceImpl implements MessageService {
 		message.setRecipient(to);
 
 		if (securityService.isAuthenticated()) {
-			message.setSender(securityService.currentlyLoggedInSspUser()
+			message.setSender(securityService.currentUser()
 					.getPerson());
 		} else {
 			message.setSender(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
@@ -95,7 +95,7 @@ public class MessageServiceImpl implements MessageService {
 		message.setBody(body);
 
 		if (securityService.isAuthenticated()) {
-			message.setCreatedBy(securityService.currentlyLoggedInSspUser()
+			message.setCreatedBy(securityService.currentUser()
 					.getPerson());
 		} else {
 			message.setCreatedBy(personService
@@ -106,7 +106,7 @@ public class MessageServiceImpl implements MessageService {
 		message.setRecipientEmailAddress(to);
 
 		if (securityService.isAuthenticated()) {
-			message.setSender(securityService.currentlyLoggedInSspUser()
+			message.setSender(securityService.currentUser()
 					.getPerson());
 		} else {
 			message.setSender(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
