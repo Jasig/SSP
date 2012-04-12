@@ -29,11 +29,6 @@ public class SelfHelpGuideGroupTO extends
 	}
 
 	@Override
-	public void fromModel(SelfHelpGuideGroup model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public SelfHelpGuideGroup addToModel(SelfHelpGuideGroup model) {
 		super.addToModel(model);
 		return model;

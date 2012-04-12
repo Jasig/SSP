@@ -28,11 +28,6 @@ public class SelfHelpGuideTO extends AbstractReferenceTO<SelfHelpGuide>
 	}
 
 	@Override
-	public void fromModel(SelfHelpGuide model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public SelfHelpGuide addToModel(SelfHelpGuide model) {
 		super.addToModel(model);
 		return model;

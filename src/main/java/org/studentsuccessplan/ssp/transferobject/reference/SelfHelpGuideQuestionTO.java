@@ -29,11 +29,6 @@ public class SelfHelpGuideQuestionTO extends
 	}
 
 	@Override
-	public void fromModel(SelfHelpGuideQuestion model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public SelfHelpGuideQuestion addToModel(SelfHelpGuideQuestion model) {
 		super.addToModel(model);
 		return model;

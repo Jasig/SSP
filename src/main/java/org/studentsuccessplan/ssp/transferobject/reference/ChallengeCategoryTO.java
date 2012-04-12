@@ -28,11 +28,6 @@ public class ChallengeCategoryTO extends AbstractReferenceTO<ChallengeCategory>
 	}
 
 	@Override
-	public void fromModel(ChallengeCategory model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public ChallengeCategory addToModel(ChallengeCategory model) {
 		super.addToModel(model);
 		return model;

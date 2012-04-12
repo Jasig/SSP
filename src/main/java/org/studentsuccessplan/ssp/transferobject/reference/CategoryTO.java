@@ -28,11 +28,6 @@ public class CategoryTO extends AbstractReferenceTO<Category> implements
 	}
 
 	@Override
-	public void fromModel(final Category model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public Category addToModel(final Category model) {
 		super.addToModel(model);
 		return model;

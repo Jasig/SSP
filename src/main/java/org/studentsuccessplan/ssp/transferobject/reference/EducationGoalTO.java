@@ -28,11 +28,6 @@ public class EducationGoalTO extends AbstractReferenceTO<EducationGoal>
 	}
 
 	@Override
-	public void fromModel(EducationGoal model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public EducationGoal addToModel(EducationGoal model) {
 		super.addToModel(model);
 		return model;

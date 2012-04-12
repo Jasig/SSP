@@ -28,11 +28,6 @@ public class EducationLevelTO extends AbstractReferenceTO<EducationLevel>
 	}
 
 	@Override
-	public void fromModel(EducationLevel model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public EducationLevel addToModel(EducationLevel model) {
 		super.addToModel(model);
 		return model;
