@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.AbstractReference;
@@ -84,8 +83,8 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		this.service = service;
 		this.persistentClass = persistentClass;
 		this.transferObjectClass = transferObjectClass;
-		this.listFactory = new TransferObjectListFactory<TO, T>(
-				transferObjectClass);
+		this.listFactory =
+				TransferObjectListFactory.newFactory(transferObjectClass);
 	}
 
 	@Override

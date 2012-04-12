@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
@@ -99,35 +98,35 @@ public class IntakeController {
 	@Autowired
 	private VeteranStatusService veteranStatusService;
 
-	private final TransferObjectListFactory<ChallengeTO, Challenge> challengeToFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(
-			ChallengeTO.class);
+	private final TransferObjectListFactory<ChallengeTO, Challenge> challengeToFactory =
+			TransferObjectListFactory.newFactory(ChallengeTO.class);
 
-	private final TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> childCareArrangementToFactory = new TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement>(
-			ChildCareArrangementTO.class);
+	private final TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> childCareArrangementToFactory =
+			TransferObjectListFactory.newFactory(ChildCareArrangementTO.class);
 
-	private final TransferObjectListFactory<CitizenshipTO, Citizenship> citizenshipToFactory = new TransferObjectListFactory<CitizenshipTO, Citizenship>(
-			CitizenshipTO.class);
+	private final TransferObjectListFactory<CitizenshipTO, Citizenship> citizenshipToFactory =
+			TransferObjectListFactory.newFactory(CitizenshipTO.class);
 
-	private final TransferObjectListFactory<EducationGoalTO, EducationGoal> educationGoalToFactory = new TransferObjectListFactory<EducationGoalTO, EducationGoal>(
-			EducationGoalTO.class);
+	private final TransferObjectListFactory<EducationGoalTO, EducationGoal> educationGoalToFactory =
+			TransferObjectListFactory.newFactory(EducationGoalTO.class);
 
-	private final TransferObjectListFactory<EducationLevelTO, EducationLevel> educationLevelToFactory = new TransferObjectListFactory<EducationLevelTO, EducationLevel>(
-			EducationLevelTO.class);
+	private final TransferObjectListFactory<EducationLevelTO, EducationLevel> educationLevelToFactory =
+			TransferObjectListFactory.newFactory(EducationLevelTO.class);
 
-	private final TransferObjectListFactory<EthnicityTO, Ethnicity> ethnicityToFactory = new TransferObjectListFactory<EthnicityTO, Ethnicity>(
-			EthnicityTO.class);
+	private final TransferObjectListFactory<EthnicityTO, Ethnicity> ethnicityToFactory =
+			TransferObjectListFactory.newFactory(EthnicityTO.class);
 
-	private final TransferObjectListFactory<FundingSourceTO, FundingSource> fundingSourceToFactory = new TransferObjectListFactory<FundingSourceTO, FundingSource>(
-			FundingSourceTO.class);
+	private final TransferObjectListFactory<FundingSourceTO, FundingSource> fundingSourceToFactory =
+			TransferObjectListFactory.newFactory(FundingSourceTO.class);
 
-	private final TransferObjectListFactory<MaritalStatusTO, MaritalStatus> maritalStatusToFactory = new TransferObjectListFactory<MaritalStatusTO, MaritalStatus>(
-			MaritalStatusTO.class);
+	private final TransferObjectListFactory<MaritalStatusTO, MaritalStatus> maritalStatusToFactory =
+			TransferObjectListFactory.newFactory(MaritalStatusTO.class);
 
-	private final TransferObjectListFactory<StudentStatusTO, StudentStatus> studentStatusToFactory = new TransferObjectListFactory<StudentStatusTO, StudentStatus>(
-			StudentStatusTO.class);
+	private final TransferObjectListFactory<StudentStatusTO, StudentStatus> studentStatusToFactory =
+			TransferObjectListFactory.newFactory(StudentStatusTO.class);
 
-	private final TransferObjectListFactory<VeteranStatusTO, VeteranStatus> veteranStatusToFactory = new TransferObjectListFactory<VeteranStatusTO, VeteranStatus>(
-			VeteranStatusTO.class);
+	private final TransferObjectListFactory<VeteranStatusTO, VeteranStatus> veteranStatusToFactory =
+			TransferObjectListFactory.newFactory(VeteranStatusTO.class);
 
 	/**
 	 * Save changes to an IntakeForm

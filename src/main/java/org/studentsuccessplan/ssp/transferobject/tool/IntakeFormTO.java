@@ -35,14 +35,14 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 
 	private Map<String, Object> referenceData;
 
-	private TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel> personEducationLevelToFactory = new TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel>(
-			PersonEducationLevelTO.class);
+	private TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel> personEducationLevelToFactory =
+			TransferObjectListFactory.newFactory(PersonEducationLevelTO.class);
 
-	private TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource> personFundingToFactory = new TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource>(
-			PersonFundingSourceTO.class);
+	private TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource> personFundingToFactory =
+			TransferObjectListFactory.newFactory(PersonFundingSourceTO.class);
 
-	private TransferObjectListFactory<PersonChallengeTO, PersonChallenge> personChallengeToFactory = new TransferObjectListFactory<PersonChallengeTO, PersonChallenge>(
-			PersonChallengeTO.class);
+	private TransferObjectListFactory<PersonChallengeTO, PersonChallenge> personChallengeToFactory =
+			TransferObjectListFactory.newFactory(PersonChallengeTO.class);
 
 	public IntakeFormTO() {
 	}
