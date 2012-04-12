@@ -1,12 +1,16 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.Category;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
-public class CategoryTO extends AbstractReferenceTO<Category> implements
-		TransferObject<Category> {
+import com.google.common.collect.Lists;
+
+public class CategoryTO
+		extends AbstractReferenceTO<Category>
+		implements TransferObject<Category> {
 
 	public CategoryTO() {
 		super();
@@ -24,20 +28,34 @@ public class CategoryTO extends AbstractReferenceTO<Category> implements
 		super(id, name, description);
 	}
 
+	public CategoryTO(Category model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public void pullAttributesFromModel(final Category model) {
+	public void fromModel(final Category model) {
 		super.fromModel(model);
 	}
 
 	@Override
-	public Category pushAttributesToModel(final Category model) {
+	public Category addToModel(final Category model) {
 		super.addToModel(model);
 		return model;
 	}
 
 	@Override
 	public Category asModel() {
-		return pushAttributesToModel(new Category());
+		return addToModel(new Category());
+	}
+
+	public static List<CategoryTO> listToTOList(
+			List<Category> models) {
+		List<CategoryTO> tos = Lists.newArrayList();
+		for (Category model : models) {
+			tos.add(new CategoryTO(model));
+		}
+		return tos;
 	}
 
 }

@@ -1,9 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
+
+import com.google.common.collect.Lists;
 
 public class ChildCareArrangementTO extends
 		AbstractReferenceTO<ChildCareArrangement> implements
@@ -27,23 +30,32 @@ public class ChildCareArrangementTO extends
 
 	public ChildCareArrangementTO(ChildCareArrangement model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(ChildCareArrangement model) {
+	public void fromModel(ChildCareArrangement model) {
 		super.fromModel(model);
 	}
 
 	@Override
-	public ChildCareArrangement pushAttributesToModel(ChildCareArrangement model) {
+	public ChildCareArrangement addToModel(ChildCareArrangement model) {
 		super.addToModel(model);
 		return model;
 	}
 
 	@Override
 	public ChildCareArrangement asModel() {
-		return pushAttributesToModel(new ChildCareArrangement());
+		return addToModel(new ChildCareArrangement());
+	}
+
+	public static List<ChildCareArrangementTO> listToTOList(
+			List<ChildCareArrangement> models) {
+		List<ChildCareArrangementTO> tos = Lists.newArrayList();
+		for (ChildCareArrangement model : models) {
+			tos.add(new ChildCareArrangementTO(model));
+		}
+		return tos;
 	}
 
 }

@@ -31,27 +31,25 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 
 	public ChallengeReferralTO(ChallengeReferral model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(ChallengeReferral model) {
+	public void fromModel(ChallengeReferral model) {
 		super.fromModel(model);
 		setPublicDescription(model.getPublicDescription());
 	}
 
 	@Override
-	public ChallengeReferral pushAttributesToModel(ChallengeReferral model) {
+	public ChallengeReferral addToModel(ChallengeReferral model) {
 		super.addToModel(model);
-
 		model.setPublicDescription(getPublicDescription());
-
 		return model;
 	}
 
 	@Override
 	public ChallengeReferral asModel() {
-		return pushAttributesToModel(new ChallengeReferral());
+		return addToModel(new ChallengeReferral());
 	}
 
 	public static List<ChallengeReferralTO> listToTOList(

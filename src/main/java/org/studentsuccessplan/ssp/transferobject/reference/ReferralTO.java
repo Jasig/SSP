@@ -52,13 +52,13 @@ public class ReferralTO extends AbstractReferenceTO<Referral> implements
 	}
 
 	@Override
-	public void pullAttributesFromModel(final Referral model) {
+	public void fromModel(final Referral model) {
 		super.fromModel(model);
 		setPublicDescription(model.getPublicDescription());
 	}
 
 	@Override
-	public Referral pushAttributesToModel(final Referral model) {
+	public Referral addToModel(final Referral model) {
 		super.addToModel(model);
 		model.setPublicDescription(model.getPublicDescription());
 		return model;
@@ -66,6 +66,6 @@ public class ReferralTO extends AbstractReferenceTO<Referral> implements
 
 	@Override
 	public Referral asModel() {
-		return pushAttributesToModel(new Referral());
+		return addToModel(new Referral());
 	}
 }

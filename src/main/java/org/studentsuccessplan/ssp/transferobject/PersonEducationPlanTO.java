@@ -1,10 +1,14 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.PersonEducationPlan;
 
-public class PersonEducationPlanTO extends AuditableTO<PersonEducationPlan>
+import com.google.common.collect.Lists;
+
+public class PersonEducationPlanTO
+		extends AuditableTO<PersonEducationPlan>
 		implements TransferObject<PersonEducationPlan> {
 
 	private UUID personId, studentStatusId;
@@ -18,11 +22,11 @@ public class PersonEducationPlanTO extends AuditableTO<PersonEducationPlan>
 
 	public PersonEducationPlanTO(PersonEducationPlan model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(PersonEducationPlan model) {
+	public void fromModel(PersonEducationPlan model) {
 		super.fromModel(model);
 
 		setNewOrientationComplete(model.isNewOrientationComplete());
@@ -30,8 +34,8 @@ public class PersonEducationPlanTO extends AuditableTO<PersonEducationPlan>
 		setCollegeDegreeForParents(model.isCollegeDegreeForParents());
 		setSpecialNeeds(model.isSpecialNeeds());
 
-		if (model.getStudentStatus() != null
-				&& model.getStudentStatus().getId() != null) {
+		if ((model.getStudentStatus() != null)
+				&& (model.getStudentStatus().getId() != null)) {
 			setStudentStatusId(model.getStudentStatus().getId());
 		}
 
@@ -39,7 +43,7 @@ public class PersonEducationPlanTO extends AuditableTO<PersonEducationPlan>
 	}
 
 	@Override
-	public PersonEducationPlan pushAttributesToModel(PersonEducationPlan model) {
+	public PersonEducationPlan addToModel(PersonEducationPlan model) {
 		super.addToModel(model);
 
 		model.setNewOrientationComplete(isNewOrientationComplete());
@@ -53,7 +57,16 @@ public class PersonEducationPlanTO extends AuditableTO<PersonEducationPlan>
 
 	@Override
 	public PersonEducationPlan asModel() {
-		return pushAttributesToModel(new PersonEducationPlan());
+		return addToModel(new PersonEducationPlan());
+	}
+
+	public static List<PersonEducationPlanTO> listToTOList(
+			List<PersonEducationPlan> models) {
+		List<PersonEducationPlanTO> tos = Lists.newArrayList();
+		for (PersonEducationPlan model : models) {
+			tos.add(new PersonEducationPlanTO(model));
+		}
+		return tos;
 	}
 
 	public UUID getPersonId() {

@@ -1,63 +1,76 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonChallenge;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 
-public class PersonChallengeTO extends AuditableTO<PersonChallenge> 
+import com.google.common.collect.Lists;
+
+public class PersonChallengeTO
+		extends AuditableTO<PersonChallenge>
 		implements TransferObject<PersonChallenge> {
 
 	private UUID challengeId, personId;
 	private String description;
-	
+
 	public PersonChallengeTO() {
 		super();
 	}
 
 	public PersonChallengeTO(PersonChallenge model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(PersonChallenge model) {
+	public void fromModel(PersonChallenge model) {
 		super.fromModel(model);
 
 		setDescription(model.getDescription());
-		
-		if (model.getChallenge() != null 
-				&& model.getChallenge().getId() != null) {
+
+		if ((model.getChallenge() != null)
+				&& (model.getChallenge().getId() != null)) {
 			setChallengeId(model.getChallenge().getId());
 		}
 
-		if (model.getPerson() != null 
-				&& model.getPerson().getId() != null) {
+		if ((model.getPerson() != null)
+				&& (model.getPerson().getId() != null)) {
 			setPersonId(model.getPerson().getId());
 		}
 	}
 
 	@Override
-	public PersonChallenge pushAttributesToModel(PersonChallenge model) {
+	public PersonChallenge addToModel(PersonChallenge model) {
 		super.addToModel(model);
 
 		model.setDescription(getDescription());
-		
+
 		if (getChallengeId() != null) {
 			model.setChallenge(new Challenge(getChallengeId()));
 		}
-		
+
 		if (getPersonId() != null) {
 			model.setPerson(new Person(getPersonId()));
 		}
-		
+
 		return model;
 	}
 
 	@Override
 	public PersonChallenge asModel() {
-		return pushAttributesToModel(new PersonChallenge());
+		return addToModel(new PersonChallenge());
+	}
+
+	public static List<PersonChallengeTO> listToTOList(
+			List<PersonChallenge> models) {
+		List<PersonChallengeTO> tos = Lists.newArrayList();
+		for (PersonChallenge model : models) {
+			tos.add(new PersonChallengeTO(model));
+		}
+		return tos;
 	}
 
 	public UUID getChallengeId() {

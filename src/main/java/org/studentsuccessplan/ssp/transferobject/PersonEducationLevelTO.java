@@ -1,69 +1,72 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonEducationLevel;
 import org.studentsuccessplan.ssp.model.reference.EducationLevel;
 
-public class PersonEducationLevelTO extends AuditableTO<PersonEducationLevel> 
+import com.google.common.collect.Lists;
+
+public class PersonEducationLevelTO
+		extends AuditableTO<PersonEducationLevel>
 		implements TransferObject<PersonEducationLevel> {
 
 	private UUID educationLevelId, personId;
 	private Integer graduatedYear, highestGradeCompleted, lastYearAttended;
 	private String description, schoolName;
 
-	
 	public PersonEducationLevelTO() {
 		super();
 	}
 
 	public PersonEducationLevelTO(PersonEducationLevel model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(PersonEducationLevel model) {
+	public void fromModel(PersonEducationLevel model) {
 		super.fromModel(model);
 
 		setDescription(model.getDescription());
-		
-		if (model.getEducationLevel() != null 
-				&& model.getEducationLevel().getId() != null) {
+
+		if ((model.getEducationLevel() != null)
+				&& (model.getEducationLevel().getId() != null)) {
 			setEducationLevelId(model.getEducationLevel().getId());
 		}
-		
+
 		setGraduatedYear(model.getGraduatedYear());
 		setHighestGradeCompleted(model.getHighestGradeCompleted());
 		setLastYearAttended(model.getLastYearAttended());
 
-		if (model.getPerson() != null
-				&& model.getPerson().getId() != null) {
+		if ((model.getPerson() != null)
+				&& (model.getPerson().getId() != null)) {
 			setPersonId(model.getPerson().getId());
 		}
-		
+
 		setSchoolName(model.getSchoolName());
 	}
 
 	@Override
-	public PersonEducationLevel pushAttributesToModel(PersonEducationLevel model) {
+	public PersonEducationLevel addToModel(PersonEducationLevel model) {
 		super.addToModel(model);
 
 		model.setDescription(getDescription());
-		
+
 		if (getEducationLevelId() != null) {
 			model.setEducationLevel(new EducationLevel(getEducationLevelId()));
 		}
-		
+
 		model.setGraduatedYear(getGraduatedYear());
 		model.setHighestGradeCompleted(getHighestGradeCompleted());
 		model.setLastYearAttended(getLastYearAttended());
-		
+
 		if (getPersonId() != null) {
 			model.setPerson(new Person(getPersonId()));
 		}
-		
+
 		model.setSchoolName(getSchoolName());
 
 		return model;
@@ -71,7 +74,16 @@ public class PersonEducationLevelTO extends AuditableTO<PersonEducationLevel>
 
 	@Override
 	public PersonEducationLevel asModel() {
-		return pushAttributesToModel(new PersonEducationLevel());
+		return addToModel(new PersonEducationLevel());
+	}
+
+	public static List<PersonEducationLevelTO> listToTOList(
+			List<PersonEducationLevel> models) {
+		List<PersonEducationLevelTO> tos = Lists.newArrayList();
+		for (PersonEducationLevel model : models) {
+			tos.add(new PersonEducationLevelTO(model));
+		}
+		return tos;
 	}
 
 	public UUID getEducationLevelId() {
@@ -129,5 +141,5 @@ public class PersonEducationLevelTO extends AuditableTO<PersonEducationLevel>
 	public void setSchoolName(String schoolName) {
 		this.schoolName = schoolName;
 	}
-	
+
 }

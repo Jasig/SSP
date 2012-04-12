@@ -1,9 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.EducationLevel;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
+
+import com.google.common.collect.Lists;
 
 public class EducationLevelTO extends AbstractReferenceTO<EducationLevel>
 		implements TransferObject<EducationLevel> {
@@ -26,23 +29,32 @@ public class EducationLevelTO extends AbstractReferenceTO<EducationLevel>
 
 	public EducationLevelTO(EducationLevel model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(EducationLevel model) {
+	public void fromModel(EducationLevel model) {
 		super.fromModel(model);
 	}
 
 	@Override
-	public EducationLevel pushAttributesToModel(EducationLevel model) {
+	public EducationLevel addToModel(EducationLevel model) {
 		super.addToModel(model);
 		return model;
 	}
 
 	@Override
 	public EducationLevel asModel() {
-		return pushAttributesToModel(new EducationLevel());
+		return addToModel(new EducationLevel());
+	}
+
+	public static List<EducationLevelTO> listToTOList(
+			List<EducationLevel> models) {
+		List<EducationLevelTO> tos = Lists.newArrayList();
+		for (EducationLevel model : models) {
+			tos.add(new EducationLevelTO(model));
+		}
+		return tos;
 	}
 
 }

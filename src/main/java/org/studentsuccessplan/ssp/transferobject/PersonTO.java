@@ -1,11 +1,15 @@
 package org.studentsuccessplan.ssp.transferobject;
 
 import java.util.Date;
+import java.util.List;
 
 import org.studentsuccessplan.ssp.model.Person;
 
-public class PersonTO extends AuditableTO<Person> implements
-		TransferObject<Person> {
+import com.google.common.collect.Lists;
+
+public class PersonTO
+		extends AuditableTO<Person>
+		implements TransferObject<Person> {
 
 	private String firstName, middleInitial, lastName;
 	private Date birthDate;
@@ -23,11 +27,11 @@ public class PersonTO extends AuditableTO<Person> implements
 
 	public PersonTO(Person model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(Person model) {
+	public void fromModel(Person model) {
 		super.fromModel(model);
 
 		setFirstName(model.getFirstName());
@@ -52,7 +56,7 @@ public class PersonTO extends AuditableTO<Person> implements
 	}
 
 	@Override
-	public Person pushAttributesToModel(Person model) {
+	public Person addToModel(Person model) {
 		super.addToModel(model);
 		model.setFirstName(getFirstName());
 		model.setMiddleInitial(getMiddleInitial());
@@ -79,7 +83,16 @@ public class PersonTO extends AuditableTO<Person> implements
 
 	@Override
 	public Person asModel() {
-		return pushAttributesToModel(new Person());
+		return addToModel(new Person());
+	}
+
+	public static List<PersonTO> listToTOList(
+			List<Person> models) {
+		List<PersonTO> tos = Lists.newArrayList();
+		for (Person model : models) {
+			tos.add(new PersonTO(model));
+		}
+		return tos;
 	}
 
 	public String getFirstName() {

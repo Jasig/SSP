@@ -1,11 +1,15 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.PersonEducationGoal;
 import org.studentsuccessplan.ssp.model.reference.EducationGoal;
 
-public class PersonEducationGoalTO extends AuditableTO<PersonEducationGoal>
+import com.google.common.collect.Lists;
+
+public class PersonEducationGoalTO
+		extends AuditableTO<PersonEducationGoal>
 		implements TransferObject<PersonEducationGoal> {
 
 	private UUID personId, educationGoalId;
@@ -18,24 +22,24 @@ public class PersonEducationGoalTO extends AuditableTO<PersonEducationGoal>
 
 	public PersonEducationGoalTO(PersonEducationGoal model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(PersonEducationGoal model) {
+	public void fromModel(PersonEducationGoal model) {
 		super.fromModel(model);
 
 		setHowSureAboutMajor(model.getHowSureAboutMajor());
 		setDescription(model.getDescription());
 		setPlannedOccupation(model.getPlannedOccupation());
-		if (model.getEducationGoal() != null
-				&& model.getEducationGoal().getId() != null) {
+		if ((model.getEducationGoal() != null)
+				&& (model.getEducationGoal().getId() != null)) {
 			setEducationGoalId(model.getEducationGoal().getId());
 		}
 	}
 
 	@Override
-	public PersonEducationGoal pushAttributesToModel(PersonEducationGoal model) {
+	public PersonEducationGoal addToModel(PersonEducationGoal model) {
 		super.addToModel(model);
 
 		model.setHowSureAboutMajor(getHowSureAboutMajor());
@@ -50,7 +54,16 @@ public class PersonEducationGoalTO extends AuditableTO<PersonEducationGoal>
 
 	@Override
 	public PersonEducationGoal asModel() {
-		return pushAttributesToModel(new PersonEducationGoal());
+		return addToModel(new PersonEducationGoal());
+	}
+
+	public static List<PersonEducationGoalTO> listToTOList(
+			List<PersonEducationGoal> models) {
+		List<PersonEducationGoalTO> tos = Lists.newArrayList();
+		for (PersonEducationGoal model : models) {
+			tos.add(new PersonEducationGoalTO(model));
+		}
+		return tos;
 	}
 
 	public UUID getPersonId() {

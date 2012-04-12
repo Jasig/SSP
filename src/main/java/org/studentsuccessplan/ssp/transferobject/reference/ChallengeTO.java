@@ -15,8 +15,9 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
-		TransferObject<Challenge> {
+public class ChallengeTO
+		extends AbstractReferenceTO<Challenge>
+		implements TransferObject<Challenge> {
 
 	public ChallengeTO() {
 		super();
@@ -35,9 +36,11 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	}
 
 	public ChallengeTO(Challenge model) {
+		super();
 		fromModel(model);
 	}
 
+	@Override
 	public void fromModel(Challenge model) {
 		super.fromModel(model);
 
@@ -49,7 +52,8 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		setTags(model.getTags());
 	}
 
-	public void addToModel(Challenge model) {
+	@Override
+	public Challenge addToModel(Challenge model) {
 		super.addToModel(model);
 
 		model.setSelfHelpGuideQuestion(getSelfHelpGuideQuestion());
@@ -58,17 +62,21 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		model.setShowInStudentIntake(isShowInStudentIntake());
 		model.setShowInSelfHelpSearch(isShowInSelfHelpSearch());
 		model.setTags(getTags());
-	}
 
-	@Override
-	public void pullAttributesFromModel(Challenge model) {
-		fromModel(model);
-	}
-
-	@Override
-	public Challenge pushAttributesToModel(Challenge model) {
-		addToModel(model);
 		return model;
+	}
+
+	@Override
+	public Challenge asModel() {
+		return addToModel(new Challenge());
+	}
+
+	public static List<ChallengeTO> listToTOList(List<Challenge> models) {
+		List<ChallengeTO> tos = Lists.newArrayList();
+		for (Challenge model : models) {
+			tos.add(new ChallengeTO(model));
+		}
+		return tos;
 	}
 
 	/**
@@ -150,18 +158,5 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 
 	public void setTags(String tags) {
 		this.tags = tags;
-	}
-
-	@Override
-	public Challenge asModel() {
-		return pushAttributesToModel(new Challenge());
-	}
-
-	public static List<ChallengeTO> listToTOList(List<Challenge> models) {
-		List<ChallengeTO> tos = Lists.newArrayList();
-		for (Challenge model : models) {
-			tos.add(new ChallengeTO(model));
-		}
-		return tos;
 	}
 }

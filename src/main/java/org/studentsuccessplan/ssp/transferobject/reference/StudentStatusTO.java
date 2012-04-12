@@ -1,11 +1,15 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.StudentStatus;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
-public class StudentStatusTO extends AbstractReferenceTO<StudentStatus>
+import com.google.common.collect.Lists;
+
+public class StudentStatusTO
+		extends AbstractReferenceTO<StudentStatus>
 		implements TransferObject<StudentStatus> {
 
 	public StudentStatusTO() {
@@ -26,23 +30,32 @@ public class StudentStatusTO extends AbstractReferenceTO<StudentStatus>
 
 	public StudentStatusTO(StudentStatus model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(StudentStatus model) {
+	public void fromModel(StudentStatus model) {
 		super.fromModel(model);
 	}
 
 	@Override
-	public StudentStatus pushAttributesToModel(StudentStatus model) {
+	public StudentStatus addToModel(StudentStatus model) {
 		super.addToModel(model);
 		return model;
 	}
 
 	@Override
 	public StudentStatus asModel() {
-		return pushAttributesToModel(new StudentStatus());
+		return addToModel(new StudentStatus());
+	}
+
+	public static List<StudentStatusTO> listToTOList(
+			List<StudentStatus> models) {
+		List<StudentStatusTO> tos = Lists.newArrayList();
+		for (StudentStatus model : models) {
+			tos.add(new StudentStatusTO(model));
+		}
+		return tos;
 	}
 
 }

@@ -1,11 +1,15 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
-public class SelfHelpGuideQuestionTO extends AbstractReferenceTO<SelfHelpGuideQuestion>
+import com.google.common.collect.Lists;
+
+public class SelfHelpGuideQuestionTO
+		extends AbstractReferenceTO<SelfHelpGuideQuestion>
 		implements TransferObject<SelfHelpGuideQuestion> {
 
 	public SelfHelpGuideQuestionTO() {
@@ -26,23 +30,32 @@ public class SelfHelpGuideQuestionTO extends AbstractReferenceTO<SelfHelpGuideQu
 
 	public SelfHelpGuideQuestionTO(SelfHelpGuideQuestion model) {
 		super();
-		pullAttributesFromModel(model);
+		fromModel(model);
 	}
 
 	@Override
-	public void pullAttributesFromModel(SelfHelpGuideQuestion model) {
+	public void fromModel(SelfHelpGuideQuestion model) {
 		super.fromModel(model);
 	}
 
 	@Override
-	public SelfHelpGuideQuestion pushAttributesToModel(SelfHelpGuideQuestion model) {
+	public SelfHelpGuideQuestion addToModel(SelfHelpGuideQuestion model) {
 		super.addToModel(model);
 		return model;
 	}
 
 	@Override
 	public SelfHelpGuideQuestion asModel() {
-		return pushAttributesToModel(new SelfHelpGuideQuestion());
+		return addToModel(new SelfHelpGuideQuestion());
+	}
+
+	public static List<SelfHelpGuideQuestionTO> listToTOList(
+			List<SelfHelpGuideQuestion> models) {
+		List<SelfHelpGuideQuestionTO> tos = Lists.newArrayList();
+		for (SelfHelpGuideQuestion model : models) {
+			tos.add(new SelfHelpGuideQuestionTO(model));
+		}
+		return tos;
 	}
 
 }
