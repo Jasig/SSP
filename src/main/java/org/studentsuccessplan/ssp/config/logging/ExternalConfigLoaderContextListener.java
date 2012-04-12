@@ -26,7 +26,7 @@ public class ExternalConfigLoaderContextListener implements
 			.getLogger(ExternalConfigLoaderContextListener.class);
 
 	@Override
-	public void contextInitialized(ServletContextEvent sce) {
+	public void contextInitialized(final ServletContextEvent sce) {
 		String configLocation = sce.getServletContext().getInitParameter(
 				"SSP_CONFIGDIR");
 		if (configLocation == null) {
@@ -41,6 +41,9 @@ public class ExternalConfigLoaderContextListener implements
 	}
 
 	@Override
-	public void contextDestroyed(ServletContextEvent sce) {
+	public void contextDestroyed(final ServletContextEvent sce) {
+		/**
+		 * Nothing to do here
+		 */
 	}
 }

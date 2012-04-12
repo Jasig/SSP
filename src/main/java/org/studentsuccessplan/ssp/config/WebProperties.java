@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
  *         research, but at least is works for now.
  */
 
-public class WebProperties {
+public final class WebProperties {
 
 	/**
 	 * Create singleton
@@ -20,7 +20,7 @@ public class WebProperties {
 	private WebProperties() {
 	}
 
-	private static WebProperties props;
+	private static WebProperties props = new WebProperties();
 
 	@Value("#{configProperties.app_title}")
 	private String appTitle;
@@ -29,10 +29,6 @@ public class WebProperties {
 	private String instHomeUrl;
 
 	public static WebProperties getInstance() {
-		if (null == props) {
-			props = new WebProperties();
-		}
-
 		return props;
 	}
 
@@ -40,7 +36,7 @@ public class WebProperties {
 		return appTitle;
 	}
 
-	public void setAppTitle(String appTitle) {
+	public void setAppTitle(final String appTitle) {
 		this.appTitle = appTitle;
 	}
 
@@ -48,7 +44,7 @@ public class WebProperties {
 		return instHomeUrl;
 	}
 
-	public void setInstHomeUrl(String instHomeUrl) {
+	public void setInstHomeUrl(final String instHomeUrl) {
 		this.instHomeUrl = instHomeUrl;
 	}
 
