@@ -79,6 +79,7 @@ public class TaskManager {
 	public TaskTO createTaskForChallengeReferral(UUID challengeId,
 			UUID challengeReferralId) {
 
+		// Create, fill, and persist a new Task
 		Task task = new Task();
 
 		task.setChallenge(new Challenge(challengeId));
@@ -96,26 +97,25 @@ public class TaskManager {
 	public boolean deleteTask(String taskId) throws ObjectNotFoundException {
 
 		// Determine what type of task this is from the id
-
 		String[] arrTaskId = taskId.split(TaskTO.TASKTO_ID_PREFIX_DELIMITER);
 		String taskType = arrTaskId[0];
 		UUID id = UUID.fromString(arrTaskId[1]);
 
 		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)) {
-
 			taskService.delete(id);
-
 		} else if (taskType
 				.equals(TaskTO.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
-
 			customTaskService.delete(id);
-
-		} else if (taskType
-				.equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
-
-			// Do nothing, not deletable as in SSP
-
 		}
+
+		/*
+		 * else if (taskType
+		 * .equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
+		 * 
+		 * // Do nothing, not deletable as in SSP
+		 * 
+		 * }
+		 */
 
 		return true;
 	}

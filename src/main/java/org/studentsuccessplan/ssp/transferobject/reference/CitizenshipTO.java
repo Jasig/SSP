@@ -28,11 +28,6 @@ public class CitizenshipTO extends AbstractReferenceTO<Citizenship> implements
 	}
 
 	@Override
-	public void fromModel(Citizenship model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public Citizenship addToModel(Citizenship model) {
 		super.addToModel(model);
 		return model;

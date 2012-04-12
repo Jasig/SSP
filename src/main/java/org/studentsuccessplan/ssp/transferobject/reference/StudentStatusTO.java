@@ -28,11 +28,6 @@ public class StudentStatusTO extends AbstractReferenceTO<StudentStatus>
 	}
 
 	@Override
-	public void fromModel(StudentStatus model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public StudentStatus addToModel(StudentStatus model) {
 		super.addToModel(model);
 		return model;

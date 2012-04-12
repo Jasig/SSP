@@ -26,6 +26,9 @@ public class TaskTO {
 	private UUID challengeId;
 	private UUID challengeReferralId;
 
+	/**
+	 * Empty constructor
+	 */
 	public TaskTO() {
 	}
 

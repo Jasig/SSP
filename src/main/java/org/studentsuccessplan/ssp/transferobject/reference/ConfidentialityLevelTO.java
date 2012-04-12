@@ -29,11 +29,6 @@ public class ConfidentialityLevelTO extends
 	}
 
 	@Override
-	public void fromModel(ConfidentialityLevel model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public ConfidentialityLevel addToModel(ConfidentialityLevel model) {
 		super.addToModel(model);
 		return model;

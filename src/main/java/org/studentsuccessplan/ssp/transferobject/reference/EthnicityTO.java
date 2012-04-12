@@ -28,11 +28,6 @@ public class EthnicityTO extends AbstractReferenceTO<Ethnicity> implements
 	}
 
 	@Override
-	public void fromModel(Ethnicity model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public Ethnicity addToModel(Ethnicity model) {
 		super.addToModel(model);
 		return model;

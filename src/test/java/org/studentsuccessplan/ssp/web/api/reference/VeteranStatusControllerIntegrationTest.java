@@ -21,30 +21,30 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+import org.studentsuccessplan.ssp.transferobject.reference.VeteranStatusTO;
 import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
 /**
- * Challenge controller tests
+ * {@link VeteranStatusController} tests
  * 
- * @author daniel.bower
+ * @author jon.adams
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration
 @Transactional
-public class ChallengeControllerIntegrationTest {
+public class VeteranStatusControllerIntegrationTest {
 
 	@Autowired
-	private ChallengeController controller;
+	private transient VeteranStatusController controller;
 
-	private static final UUID CHALLENGE_ID = UUID
-			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
+	private static final UUID VETERANSTATUS_ID = UUID
+			.fromString("5c584fdb-dcc8-44ff-a30d-8c3e0a2d8206");
 
-	private static final String CHALLENGE_NAME = "Test Challenge";
+	private static final String VETERANSTATUS_NAME = "[ Not applicable ]";
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	/**
 	 * Setup the security service with the administrator user for use by
@@ -57,7 +57,7 @@ public class ChallengeControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link ChallengeController#get(UUID)} action.
+	 * Test the {@link VeteranStatusController#get(UUID)} action.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
@@ -68,19 +68,19 @@ public class ChallengeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		ChallengeTO obj = controller.get(CHALLENGE_ID);
+		VeteranStatusTO obj = controller.get(VETERANSTATUS_ID);
 
 		assertNotNull(
-				"Returned ChallengeTO from the controller should not have been null.",
+				"Returned VeteranStatusTO from the controller should not have been null.",
 				obj);
 
-		assertEquals("Returned Challenge.Name did not match.", CHALLENGE_NAME,
-				obj.getName());
+		assertEquals("Returned VeteranStatus.Name did not match.",
+				VETERANSTATUS_NAME, obj.getName());
 	}
 
 	/**
-	 * Test that the {@link ChallengeController#get(UUID)} action returns the
-	 * correct validation errors when an invalid ID is sent.
+	 * Test that the {@link VeteranStatusController#get(UUID)} action returns
+	 * the correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
@@ -91,16 +91,16 @@ public class ChallengeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		ChallengeTO obj = controller.get(UUID.randomUUID());
+		VeteranStatusTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
-				"Returned ChallengeTO from the controller should have been null.",
+				"Returned VeteranStatusTO from the controller should have been null.",
 				obj);
 	}
 
 	/**
-	 * Test the {@link ChallengeController#create(ChallengeTO)} and
-	 * {@link ChallengeController#delete(UUID)} actions.
+	 * Test the {@link VeteranStatusController#create(VeteranStatusTO)} and
+	 * {@link VeteranStatusController#delete(UUID)} actions.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
@@ -115,8 +115,8 @@ public class ChallengeControllerIntegrationTest {
 		String testString2 = "testString1";
 
 		// Check validation of 'no ID for create()'
-		ChallengeTO obj = new ChallengeTO(UUID.randomUUID(), testString1,
-				testString2);
+		VeteranStatusTO obj = new VeteranStatusTO(UUID.randomUUID(),
+				testString1, testString2);
 		try {
 			obj = controller.create(obj);
 			assertTrue(
@@ -126,21 +126,21 @@ public class ChallengeControllerIntegrationTest {
 			/* expected */
 		}
 
-		// Now create a valid Challenge
-		obj = new ChallengeTO(null, testString1, testString2);
+		// Now create a valid VeteranStatus
+		obj = new VeteranStatusTO(null, testString1, testString2);
 		obj = controller.create(obj);
 
 		assertNotNull(
-				"Returned ChallengeTO from the controller should not have been null.",
+				"Returned VeteranStatusTO from the controller should not have been null.",
 				obj);
 		assertNotNull(
-				"Returned ChallengeTO.ID from the controller should not have been null.",
+				"Returned VeteranStatusTO.ID from the controller should not have been null.",
 				obj.getId());
 		assertEquals(
-				"Returned ChallengeTO.Name from the controller did not match.",
+				"Returned VeteranStatusTO.Name from the controller did not match.",
 				testString1, obj.getName());
 		assertEquals(
-				"Returned ChallengeTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
+				"Returned VeteranStatusTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
 				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedById());
 
 		assertTrue("Delete action did not return success.",
@@ -149,7 +149,7 @@ public class ChallengeControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link ChallengeController#getAll(ObjectStatus, Integer, Integer, String, String)}
+	 * {@link VeteranStatusController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws Exception
@@ -157,8 +157,8 @@ public class ChallengeControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE, null,
-				null, null, null);
+		List<VeteranStatusTO> list = controller.getAll(ObjectStatus.ACTIVE,
+				null, null, null, null);
 
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
@@ -167,7 +167,7 @@ public class ChallengeControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link ChallengeController#getAll(ObjectStatus, Integer, Integer, String, String)}
+	 * {@link VeteranStatusController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action results.
 	 * 
 	 * @throws Exception
@@ -175,23 +175,19 @@ public class ChallengeControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerGetAllResults() throws Exception {
-		List<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE, null,
-				null, null, null);
+		List<VeteranStatusTO> list = controller.getAll(ObjectStatus.ACTIVE,
+				null, null, "name", "ASC");
 
-		ChallengeTO challenge = list.get(0);
-		assertTrue("Name should have been longer than 0 characters.", challenge
-				.getName().length() > 0);
-		assertTrue("ModifiedBy id should not have been empty.", !challenge
+		VeteranStatusTO veteranStatus = list.get(0);
+		assertEquals("Name should have been " + VETERANSTATUS_NAME,
+				VETERANSTATUS_NAME, veteranStatus.getName());
+		assertTrue("ModifiedBy id should not have been empty.", !veteranStatus
 				.getModifiedById().equals(UUID.randomUUID()));
-		assertTrue("ShowInStudentIntake should have been true.",
-				challenge.isShowInStudentIntake());
 
-		challenge = list.get(1);
+		veteranStatus = list.get(1);
 		assertTrue("Description should have been longer than 0 characters.",
-				challenge.getDescription().length() > 0);
-		assertTrue("CreatedBy id should not have been empty.", !challenge
+				veteranStatus.getDescription().length() > 0);
+		assertTrue("CreatedBy id should not have been empty.", !veteranStatus
 				.getCreatedById().equals(UUID.randomUUID()));
-		assertTrue("ShowInSelfHelpSearch should have been true.",
-				challenge.isShowInSelfHelpSearch());
 	}
 }

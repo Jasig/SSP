@@ -28,11 +28,6 @@ public class VeteranStatusTO extends AbstractReferenceTO<VeteranStatus>
 	}
 
 	@Override
-	public void fromModel(VeteranStatus model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public VeteranStatus addToModel(VeteranStatus model) {
 		super.addToModel(model);
 		return model;

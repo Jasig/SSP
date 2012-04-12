@@ -28,11 +28,6 @@ public class MaritalStatusTO extends AbstractReferenceTO<MaritalStatus>
 	}
 
 	@Override
-	public void fromModel(MaritalStatus model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public MaritalStatus addToModel(MaritalStatus model) {
 		super.addToModel(model);
 		return model;

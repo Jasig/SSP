@@ -28,11 +28,6 @@ public class FundingSourceTO extends AbstractReferenceTO<FundingSource>
 	}
 
 	@Override
-	public void fromModel(FundingSource model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public FundingSource addToModel(FundingSource model) {
 		super.addToModel(model);
 		return model;

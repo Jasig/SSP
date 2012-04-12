@@ -28,11 +28,6 @@ public class MessageTemplateTO extends AbstractReferenceTO<MessageTemplate>
 	}
 
 	@Override
-	public void fromModel(MessageTemplate model) {
-		super.fromModel(model);
-	}
-
-	@Override
 	public MessageTemplate addToModel(MessageTemplate model) {
 		super.addToModel(model);
 		return model;
