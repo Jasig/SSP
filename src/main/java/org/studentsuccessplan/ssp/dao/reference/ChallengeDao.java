@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-
 import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
@@ -37,10 +36,21 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 								+ "where shgqr.response = true "
 								+ "and shgqr.selfHelpGuideResponse.id = ? "
 								+ "order by c.name")
-				.setParameter(0, selfHelpGuideResponseId)
-				.list();
+				.setParameter(0, selfHelpGuideResponseId).list();
 	}
 
+	/**
+	 * Retrieve all Challenges that match the specified text query via a simple
+	 * LIKE clause on the SelfHelpGuide Question, Description, and Tags fields.
+	 * <p>
+	 * Also filters out inactive Challenges, and those that are not marked to
+	 * show in the SelfHelpSearch.
+	 * 
+	 * @param query
+	 *            Text string to compare with a SQL LIKE clause on the
+	 *            SelfHelpGuide Question, Description, and Tags fields
+	 * @return All Challenges that match the specified criteria.
+	 */
 	@SuppressWarnings("unchecked")
 	// :TODO paging?
 	public List<Challenge> searchByQuery(final String query) {
@@ -63,9 +73,7 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 								+ "order by c.name")
 				.setParameter("query",
 						"%" + query.toUpperCase(Locale.getDefault()) + "%")
-				.setParameter("objectStatus", ObjectStatus.ACTIVE)
-				.list();
-
+				.setParameter("objectStatus", ObjectStatus.ACTIVE).list();
 	}
 
 	@SuppressWarnings("unchecked")

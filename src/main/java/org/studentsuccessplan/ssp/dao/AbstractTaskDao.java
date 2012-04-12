@@ -13,10 +13,11 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 /**
  * Base class for reading AbstractTasks from the Database
  * 
+ * @param <T>
+ *            Any task class that extends AbstractTask
  */
-public abstract class AbstractTaskDao<T extends AbstractTask>
-		extends AbstractAuditableCrudDao<T>
-		implements AuditableCrudDao<T> {
+public abstract class AbstractTaskDao<T extends AbstractTask> extends
+		AbstractAuditableCrudDao<T> implements AuditableCrudDao<T> {
 
 	protected AbstractTaskDao(Class<T> persistentClass) {
 		super(persistentClass);
@@ -54,8 +55,7 @@ public abstract class AbstractTaskDao<T extends AbstractTask>
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> getAllForSessionId(String sessionId,
-			boolean complete) {
+	public List<T> getAllForSessionId(String sessionId, boolean complete) {
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
 		criteria.add(Restrictions.eq("sessionId", sessionId));

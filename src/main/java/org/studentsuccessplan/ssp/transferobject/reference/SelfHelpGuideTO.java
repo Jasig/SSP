@@ -8,8 +8,7 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class SelfHelpGuideTO
-		extends AbstractReferenceTO<SelfHelpGuide>
+public class SelfHelpGuideTO extends AbstractReferenceTO<SelfHelpGuide>
 		implements TransferObject<SelfHelpGuide> {
 
 	public SelfHelpGuideTO() {
@@ -28,11 +27,6 @@ public class SelfHelpGuideTO
 		super(id, name, description);
 	}
 
-	public SelfHelpGuideTO(SelfHelpGuide model) {
-		super();
-		fromModel(model);
-	}
-
 	@Override
 	public void fromModel(SelfHelpGuide model) {
 		super.fromModel(model);
@@ -49,11 +43,12 @@ public class SelfHelpGuideTO
 		return addToModel(new SelfHelpGuide());
 	}
 
-	public static List<SelfHelpGuideTO> listToTOList(
-			List<SelfHelpGuide> guides) {
+	public static List<SelfHelpGuideTO> listToTOList(List<SelfHelpGuide> guides) {
 		List<SelfHelpGuideTO> tos = Lists.newArrayList();
-		for (SelfHelpGuide guide : guides) {
-			tos.add(new SelfHelpGuideTO(guide));
+		for (SelfHelpGuide model : guides) {
+			SelfHelpGuideTO obj = new SelfHelpGuideTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

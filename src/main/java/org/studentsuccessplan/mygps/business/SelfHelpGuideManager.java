@@ -125,8 +125,7 @@ public class SelfHelpGuideManager {
 				.selectAffirmativeBySelfHelpGuideResponseId(selfHelpGuideResponseId)) {
 
 			count = challengeReferralService
-					.getChallengeReferralCountByChallengeAndQuery(
-							challenge, "");
+					.getChallengeReferralCountByChallengeAndQuery(challenge, "");
 
 			if (count > 0) {
 
@@ -155,8 +154,8 @@ public class SelfHelpGuideManager {
 		selfHelpGuideResponse.setCompleted(false);
 		selfHelpGuideResponse.setCreatedDate(new Date());
 		selfHelpGuideResponse.setEarlyAlertSent(false);
-		selfHelpGuideResponse.setPerson(securityService
-				.currentlyLoggedInSspUser().getPerson());
+		selfHelpGuideResponse.setPerson(securityService.currentUser()
+				.getPerson());
 		selfHelpGuideResponse.setSelfHelpGuide(new SelfHelpGuide(
 				selfHelpGuideId));
 

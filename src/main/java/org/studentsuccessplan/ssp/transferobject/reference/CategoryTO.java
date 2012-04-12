@@ -8,9 +8,8 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class CategoryTO
-		extends AbstractReferenceTO<Category>
-		implements TransferObject<Category> {
+public class CategoryTO extends AbstractReferenceTO<Category> implements
+		TransferObject<Category> {
 
 	public CategoryTO() {
 		super();
@@ -26,11 +25,6 @@ public class CategoryTO
 
 	public CategoryTO(final UUID id, final String name, final String description) {
 		super(id, name, description);
-	}
-
-	public CategoryTO(Category model) {
-		super();
-		fromModel(model);
 	}
 
 	@Override
@@ -49,13 +43,13 @@ public class CategoryTO
 		return addToModel(new Category());
 	}
 
-	public static List<CategoryTO> listToTOList(
-			List<Category> models) {
+	public static List<CategoryTO> listToTOList(List<Category> models) {
 		List<CategoryTO> tos = Lists.newArrayList();
 		for (Category model : models) {
-			tos.add(new CategoryTO(model));
+			CategoryTO category = new CategoryTO();
+			category.fromModel(model);
+			tos.add(category);
 		}
 		return tos;
 	}
-
 }

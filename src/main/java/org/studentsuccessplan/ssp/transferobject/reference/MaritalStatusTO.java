@@ -8,8 +8,7 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class MaritalStatusTO
-		extends AbstractReferenceTO<MaritalStatus>
+public class MaritalStatusTO extends AbstractReferenceTO<MaritalStatus>
 		implements TransferObject<MaritalStatus> {
 
 	public MaritalStatusTO() {
@@ -28,11 +27,6 @@ public class MaritalStatusTO
 		super(id, name, description);
 	}
 
-	public MaritalStatusTO(MaritalStatus model) {
-		super();
-		fromModel(model);
-	}
-
 	@Override
 	public void fromModel(MaritalStatus model) {
 		super.fromModel(model);
@@ -49,11 +43,12 @@ public class MaritalStatusTO
 		return addToModel(new MaritalStatus());
 	}
 
-	public static List<MaritalStatusTO> listToTOList(
-			List<MaritalStatus> models) {
+	public static List<MaritalStatusTO> listToTOList(List<MaritalStatus> models) {
 		List<MaritalStatusTO> tos = Lists.newArrayList();
 		for (MaritalStatus model : models) {
-			tos.add(new MaritalStatusTO(model));
+			MaritalStatusTO obj = new MaritalStatusTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

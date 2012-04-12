@@ -29,11 +29,6 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		super(id, name, description);
 	}
 
-	public ChallengeReferralTO(ChallengeReferral model) {
-		super();
-		fromModel(model);
-	}
-
 	@Override
 	public void fromModel(ChallengeReferral model) {
 		super.fromModel(model);
@@ -56,7 +51,9 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 			List<ChallengeReferral> models) {
 		List<ChallengeReferralTO> tos = Lists.newArrayList();
 		for (ChallengeReferral model : models) {
-			tos.add(new ChallengeReferralTO(model));
+			ChallengeReferralTO obj = new ChallengeReferralTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

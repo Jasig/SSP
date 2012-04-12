@@ -16,7 +16,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
@@ -137,6 +136,9 @@ public class ChallengeControllerHttpIntegrationTest extends
 		Assert.assertEquals("Correct handler found for request url: "
 				+ requestUri, expectedHandlerMethod.toString(),
 				handler.toString());
+
+		Assert.assertNotNull("Response mock object should not have been null.",
+				response);
 
 		// TODO Handle the actual request
 		// ChallengeTO result = handlerAdapter.handle(request, response,

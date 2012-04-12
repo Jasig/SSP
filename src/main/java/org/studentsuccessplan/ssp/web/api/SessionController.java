@@ -45,7 +45,7 @@ public class SessionController {
 			return null;
 		}
 
-		SspUser user = service.currentlyLoggedInSspUser();
+		SspUser user = service.currentUser();
 
 		if (user == null) {
 			// User not authenticated, so return an empty result, but still with

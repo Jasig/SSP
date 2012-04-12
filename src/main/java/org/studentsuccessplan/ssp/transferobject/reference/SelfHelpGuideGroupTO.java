@@ -8,9 +8,9 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class SelfHelpGuideGroupTO
-		extends AbstractReferenceTO<SelfHelpGuideGroup>
-		implements TransferObject<SelfHelpGuideGroup> {
+public class SelfHelpGuideGroupTO extends
+		AbstractReferenceTO<SelfHelpGuideGroup> implements
+		TransferObject<SelfHelpGuideGroup> {
 
 	public SelfHelpGuideGroupTO() {
 		super();
@@ -26,11 +26,6 @@ public class SelfHelpGuideGroupTO
 
 	public SelfHelpGuideGroupTO(UUID id, String name, String description) {
 		super(id, name, description);
-	}
-
-	public SelfHelpGuideGroupTO(SelfHelpGuideGroup model) {
-		super();
-		fromModel(model);
 	}
 
 	@Override
@@ -53,7 +48,9 @@ public class SelfHelpGuideGroupTO
 			List<SelfHelpGuideGroup> models) {
 		List<SelfHelpGuideGroupTO> tos = Lists.newArrayList();
 		for (SelfHelpGuideGroup model : models) {
-			tos.add(new SelfHelpGuideGroupTO(model));
+			SelfHelpGuideGroupTO obj = new SelfHelpGuideGroupTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}

@@ -27,11 +27,6 @@ public class EducationGoalTO extends AbstractReferenceTO<EducationGoal>
 		super(id, name, description);
 	}
 
-	public EducationGoalTO(EducationGoal model) {
-		super();
-		fromModel(model);
-	}
-
 	@Override
 	public void fromModel(EducationGoal model) {
 		super.fromModel(model);
@@ -48,11 +43,12 @@ public class EducationGoalTO extends AbstractReferenceTO<EducationGoal>
 		return addToModel(new EducationGoal());
 	}
 
-	public static List<EducationGoalTO> listToTOList(
-			List<EducationGoal> models) {
+	public static List<EducationGoalTO> listToTOList(List<EducationGoal> models) {
 		List<EducationGoalTO> tos = Lists.newArrayList();
 		for (EducationGoal model : models) {
-			tos.add(new EducationGoalTO(model));
+			EducationGoalTO obj = new EducationGoalTO();
+			obj.fromModel(model);
+			tos.add(obj);
 		}
 		return tos;
 	}
