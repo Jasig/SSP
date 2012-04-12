@@ -58,7 +58,7 @@
 								<p>Please log in.</p>
 							</c:otherwise>
 						</c:choose>
-						<form action="/MyGPS/j_spring_security_check" method="post" data-ajax="false">
+						<form action="../j_spring_security_check" method="post" data-ajax="false">
 						<div data-role="fieldcontain">
 						    <label for="j_username">Username:</label>
 						    <input type="text" id="j_username" name="j_username" />
