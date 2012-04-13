@@ -1,5 +1,15 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+
+import com.google.common.collect.Lists;
+
 public class ServiceResponse {
 
 	private final transient boolean success;
@@ -14,6 +24,59 @@ public class ServiceResponse {
 	public ServiceResponse(final boolean success, final String message) {
 		this.success = success;
 		this.message = message;
+	}
+
+	/**
+	 * Extract the Validation messages out of the
+	 * MethodArgumentNotValidException, and use as the ServiceResponse Message.
+	 * 
+	 * @param success
+	 * @param e
+	 */
+	public ServiceResponse(final boolean success,
+			final MethodArgumentNotValidException e) {
+		this.success = success;
+
+		StringBuilder sb;
+
+		// collect the error messages
+		List<String> errorMessages = Lists.newArrayList();
+		for (ObjectError error : e.getBindingResult().getAllErrors()) {
+			sb = new StringBuilder();
+
+			// get the field name if it is a field error.
+			if (error instanceof FieldError) {
+				FieldError fe = (FieldError) error;
+				sb.append("[")
+						.append(fe.getField());
+			} else {
+				sb.append("[");
+			}
+
+			// get the default message
+			sb.append(" ")
+					.append(error.getDefaultMessage())
+					.append("] ");
+			// add it to the list of error messages
+			errorMessages.add(sb.toString());
+		}
+
+		// sort the messages for readablility
+		Collections.sort(errorMessages);
+
+		// introduce the error messages
+		final int errorCount = e.getBindingResult().getErrorCount();
+		sb = new StringBuilder("Validation failed for argument ")
+				.append(e.getParameter().getParameterName())
+				.append(", with ")
+				.append(errorCount)
+				.append(errorCount > 1 ? " errors: " : " error: ");
+
+		// append the sorted error messages to the introduction and set as the
+		// service response message.
+		sb.append(StringUtils.join(errorMessages, ","));
+
+		this.message = sb.toString();
 	}
 
 	public boolean isSuccess() {

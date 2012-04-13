@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -37,6 +38,16 @@ public class AbstractMyGpsController {
 	ServiceResponse handleAccessDenied(AccessDeniedException e) {
 		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
+	}
+
+	@PreAuthorize("permitAll")
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public @ResponseBody
+	ServiceResponse handleValidationError(
+			final MethodArgumentNotValidException e) {
+		LOGGER.error("Error: ", e);
+		return new ServiceResponse(false, e);
 	}
 
 	@PreAuthorize("permitAll")

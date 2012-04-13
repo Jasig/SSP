@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -202,6 +203,16 @@ public class IntakeController {
 	ServiceResponse handleNotFound(final ObjectNotFoundException e) {
 		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
+	}
+
+	@PreAuthorize("permitAll")
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public @ResponseBody
+	ServiceResponse handleValidationError(
+			final MethodArgumentNotValidException e) {
+		LOGGER.error("Error: ", e);
+		return new ServiceResponse(false, e);
 	}
 
 	@PreAuthorize("permitAll")
