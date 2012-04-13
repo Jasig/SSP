@@ -3,6 +3,8 @@ package org.studentsuccessplan.ssp.transferobject;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonFundingSource;
 import org.studentsuccessplan.ssp.model.reference.FundingSource;
@@ -13,7 +15,12 @@ public class PersonFundingSourceTO
 		extends AuditableTO<PersonFundingSource>
 		implements TransferObject<PersonFundingSource> {
 
-	private UUID personId, fundingSourceId;
+	@NotNull
+	private UUID fundingSourceId;
+
+	@NotNull
+	private UUID personId;
+
 	private String description;
 
 	public PersonFundingSourceTO() {

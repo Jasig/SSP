@@ -3,6 +3,8 @@ package org.studentsuccessplan.ssp.transferobject;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonEducationLevel;
 import org.studentsuccessplan.ssp.model.reference.EducationLevel;
@@ -13,7 +15,12 @@ public class PersonEducationLevelTO
 		extends AuditableTO<PersonEducationLevel>
 		implements TransferObject<PersonEducationLevel> {
 
-	private UUID educationLevelId, personId;
+	@NotNull
+	private UUID educationLevelId;
+
+	@NotNull
+	private UUID personId;
+
 	private Integer graduatedYear, highestGradeCompleted, lastYearAttended;
 	private String description, schoolName;
 

@@ -3,6 +3,8 @@ package org.studentsuccessplan.ssp.transferobject;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonDemographics;
 import org.studentsuccessplan.ssp.model.reference.Citizenship;
@@ -18,7 +20,10 @@ public class PersonDemographicsTO
 		extends AuditableTO<PersonDemographics>
 		implements TransferObject<PersonDemographics> {
 
-	private UUID personId, coachId, maritalStatusId, ethnicityId,
+	@NotNull
+	private UUID personId;
+
+	private UUID coachId, maritalStatusId, ethnicityId,
 			citizenshipId, veteranStatusId;
 	private boolean abilityToBenefit, local, primaryCaregiver,
 			childCareNeeded, employed;

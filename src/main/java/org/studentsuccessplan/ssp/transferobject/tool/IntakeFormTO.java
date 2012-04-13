@@ -3,6 +3,8 @@ package org.studentsuccessplan.ssp.transferobject.tool;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
 import org.studentsuccessplan.ssp.model.PersonChallenge;
 import org.studentsuccessplan.ssp.model.PersonEducationLevel;
@@ -19,18 +21,25 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 public class IntakeFormTO implements TransferObject<IntakeForm> {
 
+	@Valid
 	private PersonTO person;
 
+	@Valid
 	private PersonDemographicsTO personDemographics;
 
+	@Valid
 	private PersonEducationGoalTO personEducationGoal;
 
+	@Valid
 	private PersonEducationPlanTO personEducationPlan;
 
+	@Valid
 	private List<PersonEducationLevelTO> personEducationLevels;
 
+	@Valid
 	private List<PersonFundingSourceTO> personFundingSources;
 
+	@Valid
 	private List<PersonChallengeTO> personChallenges;
 
 	private Map<String, Object> referenceData;

@@ -3,6 +3,8 @@ package org.studentsuccessplan.ssp.transferobject;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonChallenge;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
@@ -13,7 +15,12 @@ public class PersonChallengeTO
 		extends AuditableTO<PersonChallenge>
 		implements TransferObject<PersonChallenge> {
 
-	private UUID challengeId, personId;
+	@NotNull
+	private UUID challengeId;
+
+	@NotNull
+	private UUID personId;
+
 	private String description;
 
 	public PersonChallengeTO() {
