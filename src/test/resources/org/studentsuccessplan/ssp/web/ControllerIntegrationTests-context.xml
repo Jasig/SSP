@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
@@ -12,47 +10,67 @@
 		http://www.springframework.org/schema/tx       http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
 		http://www.springframework.org/schema/util     http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
-	<import resource="classpath:test-config.xml"/>
+	<import resource="classpath:test-config.xml" />
 
-	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
-	<context:component-scan base-package="org.studentsuccessplan.ssp" />
+	<!-- Scans within the base package of the application for @Components, @Service 
+		& @Repository to configure as beans -->
+	<context:component-scan
+		base-package="org.studentsuccessplan.ssp,org.studentsuccessplan.mygps" />
 	<mvc:annotation-driven />
-	
+
+	<!-- Util -->
+	<bean id="velocityTemplateHelper" class="org.studentsuccessplan.ssp.util.VelocityTemplateHelper" />
+
+	<bean id="velocityEngine"
+		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="velocityProperties">
+			<value>
+				resource.loader=string
+				string.resource.loader.class=org.apache.velocity.runtime.resource.loader.StringResourceLoader
+			</value>
+		</property>
+	</bean>
+
 	<mvc:interceptors>
-		<bean class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">
+		<bean
+			class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">
 			<property name="sessionFactory" ref="sessionFactory" />
 		</bean>
 	</mvc:interceptors>
 
 	<bean
-	class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"
-	id="sspRequestMappingHandlerAdapter">
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"
+		id="sspRequestMappingHandlerAdapter">
 		<property name="cacheSeconds" value="0" />
 		<property name="webBindingInitializer">
 			<!-- Allows binding of UUIDs -->
 			<bean class="org.studentsuccessplan.ssp.util.BindingInitializer" />
 		</property>
 	</bean>
-	
-	<bean id="jasperViewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+
+	<bean id="jasperViewResolver"
+		class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
 		<property name="order" value="1" />
-	    <property name="basename" value="views"/>
+		<property name="basename" value="views" />
 	</bean>
 
-	<bean id="webProperties" class="org.studentsuccessplan.ssp.config.WebProperties" factory-method="getInstance"></bean>
+	<bean id="webProperties" class="org.studentsuccessplan.ssp.config.WebProperties"
+		factory-method="getInstance"></bean>
 
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
-	<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="order" value="2" />		
+	<bean id="internalResourceViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="2" />
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 		<property name="exposedContextBeanNames">
-	      <list>
-	         <value>webProperties</value>
-	      </list>
-	   </property>
-		
+			<list>
+				<value>webProperties</value>
+			</list>
+		</property>
+
 	</bean>
-	
+
 </beans>

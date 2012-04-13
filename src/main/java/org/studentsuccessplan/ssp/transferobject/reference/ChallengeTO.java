@@ -148,7 +148,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 
 		if ((model.getChallengeChallengeReferrals() == null)
 				|| model.getChallengeChallengeReferrals().isEmpty()) {
-			challengeChallengeReferrals = new HashSet<ChallengeReferralTO>(0);
+			setChallengeChallengeReferrals(new HashSet<ChallengeReferralTO>(0));
 		} else {
 			final Set<ChallengeReferralTO> set = new HashSet<ChallengeReferralTO>(
 					model.getChallengeChallengeReferrals().size());
@@ -158,7 +158,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 						.getChallengeReferral()));
 			}
 
-			challengeChallengeReferrals = set;
+			setChallengeChallengeReferrals(set);
 		}
 	}
 

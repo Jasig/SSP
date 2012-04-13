@@ -23,7 +23,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 import org.studentsuccessplan.ssp.web.api.AbstractControllerHttpTestSupport;
 
 /**
- * Challenge controller tests
+ * {@link ChallengeController} tests
  * 
  * @author jon.adams
  */

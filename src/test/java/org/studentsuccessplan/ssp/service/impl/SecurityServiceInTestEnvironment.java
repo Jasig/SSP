@@ -81,7 +81,7 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 
 	@Override
 	public String getSessionId() {
-		return sessionId;
+		return sessionId == null ? "test session id" : sessionId;
 	}
 
 	public void setSessionId(String sessionId) {
