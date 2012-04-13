@@ -120,8 +120,9 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 	 * @see #overwrite(PersonEducationPlan)
 	 */
 	public void overwriteWithCollections(PersonEducationPlan source) {
-		this.overwrite(source);
-
-		this.getStudentStatus().overwrite(source.getStudentStatus());
+		if (source != null) {
+			this.overwrite(source);
+			this.getStudentStatus().overwrite(source.getStudentStatus());
+		}
 	}
 }
