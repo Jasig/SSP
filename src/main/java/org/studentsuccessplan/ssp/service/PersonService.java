@@ -14,7 +14,7 @@ import org.studentsuccessplan.ssp.service.tool.IntakeService;
 public interface PersonService extends AuditableCrudService<Person> {
 
 	@Override
-	public List<Person> getAll(ObjectStatus status, Integer firstResult,
+	List<Person> getAll(ObjectStatus status, Integer firstResult,
 			Integer maxResults, String sort, String sortDirection);
 
 	/**
@@ -28,13 +28,11 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return The specified Person instance.
 	 */
 	@Override
-	public Person get(UUID id) throws ObjectNotFoundException;
+	Person get(UUID id) throws ObjectNotFoundException;
 
-	public Person personFromUsername(String username)
-			throws ObjectNotFoundException;
+	Person personFromUsername(String username) throws ObjectNotFoundException;
 
-	public Person personFromUserId(String userId)
-			throws ObjectNotFoundException;
+	Person personFromUserId(String userId) throws ObjectNotFoundException;
 
 	/**
 	 * Creates a new Person instance based on the supplied model.
@@ -43,7 +41,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *            Model instance
 	 */
 	@Override
-	public Person create(Person obj);
+	Person create(Person obj);
 
 	/**
 	 * Updates values of direct Person properties, but not any associated
@@ -57,7 +55,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @see IntakeService
 	 */
 	@Override
-	public Person save(Person obj) throws ObjectNotFoundException;
+	Person save(Person obj) throws ObjectNotFoundException;
 
 	/**
 	 * Mark a Person as deleted.
@@ -66,7 +64,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * to {@link ObjectStatus#DELETED}.
 	 */
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
+	void delete(UUID id) throws ObjectNotFoundException;
 
 	/**
 	 * Overwrites simple properties with the parameter's properties. Does not
@@ -77,7 +75,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @param source
 	 *            Source to use for overwrites.
 	 */
-	public void overwrite(Person target, Person source);
+	void overwrite(Person target, Person source);
 
 	/**
 	 * Overwrites simple and collection properties with the parameter's
@@ -92,7 +90,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *                If the referenced nested entities could not be loaded from
 	 *                the database.
 	 */
-	public void overwriteWithCollections(Person target, Person source)
+	void overwriteWithCollections(Person target, Person source)
 			throws ObjectNotFoundException;
 
 	/**
@@ -107,7 +105,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *                If the referenced nested entities could not be loaded from
 	 *                the database.
 	 */
-	public void overwriteWithCollectionsEducationLevels(Person target,
+	void overwriteWithCollectionsEducationLevels(Person target,
 			Set<PersonEducationLevel> source) throws ObjectNotFoundException;
 
 	/**
@@ -122,7 +120,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *                If the referenced nested entities could not be loaded from
 	 *                the database.
 	 */
-	public void overwriteWithCollectionsFundingSources(Person target,
+	void overwriteWithCollectionsFundingSources(Person target,
 			Set<PersonFundingSource> source) throws ObjectNotFoundException;
 
 	/**
@@ -137,6 +135,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *                If the referenced nested entities could not be loaded from
 	 *                the database.
 	 */
-	public void overwriteWithCollectionsChallenges(Person target,
+	void overwriteWithCollectionsChallenges(Person target,
 			Set<PersonChallenge> source) throws ObjectNotFoundException;
 }
