@@ -104,25 +104,12 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 	 * @see #overwriteWithCollections(PersonEducationPlan)
 	 */
 	public void overwrite(PersonEducationPlan source) {
-		this.setNewOrientationComplete(source.isNewOrientationComplete());
-		this.setRegisteredForClasses(source.isRegisteredForClasses());
-		this.setCollegeDegreeForParents(source.isCollegeDegreeForParents());
-		this.setSpecialNeeds(source.isSpecialNeeds());
-		this.setGradeTypicallyEarned(source.getGradeTypicallyEarned());
+		setNewOrientationComplete(source.isNewOrientationComplete());
+		setRegisteredForClasses(source.isRegisteredForClasses());
+		setCollegeDegreeForParents(source.isCollegeDegreeForParents());
+		setSpecialNeeds(source.isSpecialNeeds());
+		setGradeTypicallyEarned(source.getGradeTypicallyEarned());
+		setStudentStatus(source.getStudentStatus());
 	}
 
-	/**
-	 * Overwrites simple and collection properties with the parameter's
-	 * properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 * @see #overwrite(PersonEducationPlan)
-	 */
-	public void overwriteWithCollections(PersonEducationPlan source) {
-		if (source != null) {
-			this.overwrite(source);
-			this.getStudentStatus().overwrite(source.getStudentStatus());
-		}
-	}
 }

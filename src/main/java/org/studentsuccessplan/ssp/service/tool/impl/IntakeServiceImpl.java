@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonDemographics;
 import org.studentsuccessplan.ssp.model.PersonEducationGoal;
@@ -95,8 +94,8 @@ public class IntakeServiceImpl implements IntakeService {
 		personService.overwrite(target, source.getPerson());
 
 		// Demographics
-		if (target.getDemographics() == null
-				&& source.getPerson().getDemographics() != null) {
+		if ((target.getDemographics() == null)
+				&& (source.getPerson().getDemographics() != null)) {
 			target.setDemographics(new PersonDemographics());
 		}
 
@@ -126,8 +125,8 @@ public class IntakeServiceImpl implements IntakeService {
 		}
 
 		// Education goal
-		if (target.getEducationGoal() == null
-				&& source.getPerson().getEducationGoal() != null) {
+		if ((target.getEducationGoal() == null)
+				&& (source.getPerson().getEducationGoal() != null)) {
 			target.setEducationGoal(new PersonEducationGoal());
 		}
 
@@ -143,8 +142,8 @@ public class IntakeServiceImpl implements IntakeService {
 		}
 
 		// Education plan
-		if (target.getEducationPlan() == null
-				&& source.getPerson().getEducationPlan() != null) {
+		if ((target.getEducationPlan() == null)
+				&& (source.getPerson().getEducationPlan() != null)) {
 			target.setEducationPlan(new PersonEducationPlan());
 		}
 
@@ -154,7 +153,7 @@ public class IntakeServiceImpl implements IntakeService {
 				// too? Or will Hibernate automatic orphan control catch it?
 				target.setEducationPlan(null);
 			} else {
-				target.getEducationPlan().overwriteWithCollections(
+				target.getEducationPlan().overwrite(
 						source.getPerson().getEducationPlan());
 			}
 		}

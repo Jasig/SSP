@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.PersonDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
@@ -268,7 +267,7 @@ public class PersonServiceImpl implements PersonService {
 				// too? Or will Hibernate automatic orphan control catch it?
 				target.setEducationPlan(null);
 			} else {
-				target.getEducationPlan().overwriteWithCollections(
+				target.getEducationPlan().overwrite(
 						source.getEducationPlan());
 			}
 		}
