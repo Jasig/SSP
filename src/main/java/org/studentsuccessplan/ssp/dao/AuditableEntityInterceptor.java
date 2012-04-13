@@ -9,7 +9,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
-
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
@@ -105,19 +104,21 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 			return false;
 		}
 
+		Person current = currentUser();
+
 		for (int i = 0; i < propertyNames.length; i++) {
 			String property = propertyNames[i];
-			if ("createdDate".equals(property) && state[i] == null) {
+			if ("createdDate".equals(property) && (state[i] == null)) {
 				state[i] = new Date();
 				continue;
 			}
 
-			if ("createdBy".equals(property) && state[i] == null) {
-				state[i] = currentUser();
+			if ("createdBy".equals(property) && (state[i] == null)) {
+				state[i] = current;
 				continue;
 			}
 
-			if ("objectStatus".equals(property) && state[i] == null) {
+			if ("objectStatus".equals(property) && (state[i] == null)) {
 				state[i] = ObjectStatus.ACTIVE;
 				continue;
 			}
@@ -128,7 +129,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 			}
 
 			if ("modifiedBy".equals(property)) {
-				state[i] = currentUser();
+				state[i] = current;
 				continue;
 			}
 		}
