@@ -2,7 +2,7 @@ package org.studentsuccessplan.ssp.transferobject.jsonserializer;
 
 public interface CodeAndProperty {
 
-	public String getCode();
+	String getCode();
 
-	public String getTitle();
+	String getTitle();
 }

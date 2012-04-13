@@ -20,26 +20,26 @@ public class PersonEducationGoalTO
 		super();
 	}
 
-	public PersonEducationGoalTO(PersonEducationGoal model) {
+	public PersonEducationGoalTO(final PersonEducationGoal model) {
 		super();
 		fromModel(model);
 	}
 
 	@Override
-	public void fromModel(PersonEducationGoal model) {
+	public final void fromModel(final PersonEducationGoal model) {
 		super.fromModel(model);
 
-		setHowSureAboutMajor(model.getHowSureAboutMajor());
-		setDescription(model.getDescription());
-		setPlannedOccupation(model.getPlannedOccupation());
+		howSureAboutMajor = model.getHowSureAboutMajor();
+		description = model.getDescription();
+		plannedOccupation = model.getPlannedOccupation();
 		if ((model.getEducationGoal() != null)
 				&& (model.getEducationGoal().getId() != null)) {
-			setEducationGoalId(model.getEducationGoal().getId());
+			educationGoalId = model.getEducationGoal().getId();
 		}
 	}
 
 	@Override
-	public PersonEducationGoal addToModel(PersonEducationGoal model) {
+	public PersonEducationGoal addToModel(final PersonEducationGoal model) {
 		super.addToModel(model);
 
 		model.setHowSureAboutMajor(getHowSureAboutMajor());
@@ -58,8 +58,8 @@ public class PersonEducationGoalTO
 	}
 
 	public static List<PersonEducationGoalTO> listToTOList(
-			List<PersonEducationGoal> models) {
-		List<PersonEducationGoalTO> tos = Lists.newArrayList();
+			final List<PersonEducationGoal> models) {
+		final List<PersonEducationGoalTO> tos = Lists.newArrayList();
 		for (PersonEducationGoal model : models) {
 			tos.add(new PersonEducationGoalTO(model));
 		}
@@ -70,7 +70,7 @@ public class PersonEducationGoalTO
 		return personId;
 	}
 
-	public void setPersonId(UUID personId) {
+	public void setPersonId(final UUID personId) {
 		this.personId = personId;
 	}
 
@@ -78,7 +78,7 @@ public class PersonEducationGoalTO
 		return educationGoalId;
 	}
 
-	public void setEducationGoalId(UUID educationGoalId) {
+	public void setEducationGoalId(final UUID educationGoalId) {
 		this.educationGoalId = educationGoalId;
 	}
 
@@ -86,7 +86,7 @@ public class PersonEducationGoalTO
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -94,7 +94,7 @@ public class PersonEducationGoalTO
 		return plannedOccupation;
 	}
 
-	public void setPlannedOccupation(String plannedOccupation) {
+	public void setPlannedOccupation(final String plannedOccupation) {
 		this.plannedOccupation = plannedOccupation;
 	}
 
@@ -102,7 +102,7 @@ public class PersonEducationGoalTO
 		return howSureAboutMajor;
 	}
 
-	public void setHowSureAboutMajor(int howSureAboutMajor) {
+	public void setHowSureAboutMajor(final int howSureAboutMajor) {
 		this.howSureAboutMajor = howSureAboutMajor;
 	}
 }

@@ -15,20 +15,26 @@ public class EducationLevelTO extends AbstractReferenceTO<EducationLevel>
 		super();
 	}
 
-	public EducationLevelTO(UUID id) {
+	public EducationLevelTO(final UUID id) {
 		super(id);
 	}
 
-	public EducationLevelTO(UUID id, String name) {
+	public EducationLevelTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public EducationLevelTO(UUID id, String name, String description) {
+	public EducationLevelTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public EducationLevelTO(final EducationLevel model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public EducationLevel addToModel(EducationLevel model) {
+	public EducationLevel addToModel(final EducationLevel model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -39,12 +45,10 @@ public class EducationLevelTO extends AbstractReferenceTO<EducationLevel>
 	}
 
 	public static List<EducationLevelTO> listToTOList(
-			List<EducationLevel> models) {
-		List<EducationLevelTO> tos = Lists.newArrayList();
+			final List<EducationLevel> models) {
+		final List<EducationLevelTO> tos = Lists.newArrayList();
 		for (EducationLevel model : models) {
-			EducationLevelTO obj = new EducationLevelTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new EducationLevelTO(model));
 		}
 		return tos;
 	}

@@ -7,21 +7,19 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LogBackConfigLoaderTest {
+public final class LogBackConfigLoaderTest {
 
-	private Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(LogBackConfigLoaderTest.class);
 
 	@Test
 	public void test() {
 		try {
-			assertNotNull(new LogBackConfigLoader(
+			assertNotNull("Failed to load file", new LogBackConfigLoader(
 					System.getenv("SSP_TESTCONFIGDIR") + "logback.xml"));
 		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
+			LOGGER.error("Failed to load file", e);
+			fail("Failed to load file");
 		}
-
-		logger.info("Testing logger location");
 	}
 }

@@ -8,35 +8,33 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class ConfidentialityDisclosureAgreementTO extends
-		AbstractReferenceTO<ConfidentialityDisclosureAgreement> implements
-		TransferObject<ConfidentialityDisclosureAgreement> {
+public class ConfidentialityDisclosureAgreementTO extends AbstractReferenceTO<ConfidentialityDisclosureAgreement>
+		implements TransferObject<ConfidentialityDisclosureAgreement> {
 
 	public ConfidentialityDisclosureAgreementTO() {
 		super();
 	}
 
-	public ConfidentialityDisclosureAgreementTO(UUID id) {
+	public ConfidentialityDisclosureAgreementTO(final UUID id) {
 		super(id);
 	}
 
-	public ConfidentialityDisclosureAgreementTO(UUID id, String name) {
+	public ConfidentialityDisclosureAgreementTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public ConfidentialityDisclosureAgreementTO(UUID id, String name,
-			String description) {
+	public ConfidentialityDisclosureAgreementTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
-	@Override
-	public void fromModel(ConfidentialityDisclosureAgreement model) {
-		super.fromModel(model);
+	public ConfidentialityDisclosureAgreementTO(final ConfidentialityDisclosureAgreement model) {
+		super();
+		fromModel(model);
 	}
 
 	@Override
-	public ConfidentialityDisclosureAgreement addToModel(
-			ConfidentialityDisclosureAgreement model) {
+	public ConfidentialityDisclosureAgreement addToModel(final ConfidentialityDisclosureAgreement model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -47,12 +45,10 @@ public class ConfidentialityDisclosureAgreementTO extends
 	}
 
 	public static List<ConfidentialityDisclosureAgreementTO> listToTOList(
-			List<ConfidentialityDisclosureAgreement> models) {
-		List<ConfidentialityDisclosureAgreementTO> tos = Lists.newArrayList();
+			final List<ConfidentialityDisclosureAgreement> models) {
+		final List<ConfidentialityDisclosureAgreementTO> tos = Lists.newArrayList();
 		for (ConfidentialityDisclosureAgreement model : models) {
-			ConfidentialityDisclosureAgreementTO obj = new ConfidentialityDisclosureAgreementTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new ConfidentialityDisclosureAgreementTO(model));
 		}
 		return tos;
 	}

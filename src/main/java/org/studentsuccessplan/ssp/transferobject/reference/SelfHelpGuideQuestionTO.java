@@ -8,28 +8,33 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class SelfHelpGuideQuestionTO extends
-		AbstractReferenceTO<SelfHelpGuideQuestion> implements
-		TransferObject<SelfHelpGuideQuestion> {
+public class SelfHelpGuideQuestionTO extends AbstractReferenceTO<SelfHelpGuideQuestion>
+		implements TransferObject<SelfHelpGuideQuestion> {
 
 	public SelfHelpGuideQuestionTO() {
 		super();
 	}
 
-	public SelfHelpGuideQuestionTO(UUID id) {
+	public SelfHelpGuideQuestionTO(final UUID id) {
 		super(id);
 	}
 
-	public SelfHelpGuideQuestionTO(UUID id, String name) {
+	public SelfHelpGuideQuestionTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public SelfHelpGuideQuestionTO(UUID id, String name, String description) {
+	public SelfHelpGuideQuestionTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public SelfHelpGuideQuestionTO(final SelfHelpGuideQuestion model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public SelfHelpGuideQuestion addToModel(SelfHelpGuideQuestion model) {
+	public SelfHelpGuideQuestion addToModel(final SelfHelpGuideQuestion model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -40,12 +45,10 @@ public class SelfHelpGuideQuestionTO extends
 	}
 
 	public static List<SelfHelpGuideQuestionTO> listToTOList(
-			List<SelfHelpGuideQuestion> models) {
-		List<SelfHelpGuideQuestionTO> tos = Lists.newArrayList();
+			final List<SelfHelpGuideQuestion> models) {
+		final List<SelfHelpGuideQuestionTO> tos = Lists.newArrayList();
 		for (SelfHelpGuideQuestion model : models) {
-			SelfHelpGuideQuestionTO obj = new SelfHelpGuideQuestionTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new SelfHelpGuideQuestionTO(model));
 		}
 		return tos;
 	}

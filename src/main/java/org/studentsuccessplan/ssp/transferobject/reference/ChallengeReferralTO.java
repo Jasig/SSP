@@ -17,26 +17,32 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		super();
 	}
 
-	public ChallengeReferralTO(UUID id) {
+	public ChallengeReferralTO(final UUID id) {
 		super(id);
 	}
 
-	public ChallengeReferralTO(UUID id, String name) {
+	public ChallengeReferralTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public ChallengeReferralTO(UUID id, String name, String description) {
+	public ChallengeReferralTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
-	@Override
-	public void fromModel(ChallengeReferral model) {
-		super.fromModel(model);
-		setPublicDescription(model.getPublicDescription());
+	public ChallengeReferralTO(final ChallengeReferral model) {
+		super();
+		fromModel(model);
 	}
 
 	@Override
-	public ChallengeReferral addToModel(ChallengeReferral model) {
+	public final void fromModel(final ChallengeReferral model) {
+		super.fromModel(model);
+		publicDescription = model.getPublicDescription();
+	}
+
+	@Override
+	public ChallengeReferral addToModel(final ChallengeReferral model) {
 		super.addToModel(model);
 		model.setPublicDescription(getPublicDescription());
 		return model;
@@ -48,12 +54,10 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	}
 
 	public static List<ChallengeReferralTO> listToTOList(
-			List<ChallengeReferral> models) {
-		List<ChallengeReferralTO> tos = Lists.newArrayList();
+			final List<ChallengeReferral> models) {
+		final List<ChallengeReferralTO> tos = Lists.newArrayList();
 		for (ChallengeReferral model : models) {
-			ChallengeReferralTO obj = new ChallengeReferralTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new ChallengeReferralTO(model));
 		}
 		return tos;
 	}
@@ -62,7 +66,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		return publicDescription;
 	}
 
-	public void setPublicDescription(String publicDescription) {
+	public void setPublicDescription(final String publicDescription) {
 		this.publicDescription = publicDescription;
 	}
 

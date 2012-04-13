@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
@@ -43,8 +42,8 @@ public class PersonController extends RestController<PersonTO> {
 	@Autowired
 	private PersonService service;
 
-	private final TransferObjectListFactory<PersonTO, Person> toFactory = new TransferObjectListFactory<PersonTO, Person>(
-			PersonTO.class);
+	private final TransferObjectListFactory<PersonTO, Person> toFactory =
+			TransferObjectListFactory.newFactory(PersonTO.class);
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)

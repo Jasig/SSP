@@ -8,11 +8,10 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.Lists;
-
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+
+import com.google.common.collect.Lists;
 
 public class TransferObjectListFactoryTest {
 
@@ -20,8 +19,7 @@ public class TransferObjectListFactoryTest {
 
 	@Before
 	public void setup() {
-		listFactory = new TransferObjectListFactory<ChallengeTO, Challenge>(
-				ChallengeTO.class);
+		listFactory = TransferObjectListFactory.newFactory(ChallengeTO.class);
 	}
 
 	@Test

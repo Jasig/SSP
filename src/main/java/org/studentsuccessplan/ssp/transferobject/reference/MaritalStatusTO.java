@@ -15,20 +15,26 @@ public class MaritalStatusTO extends AbstractReferenceTO<MaritalStatus>
 		super();
 	}
 
-	public MaritalStatusTO(UUID id) {
+	public MaritalStatusTO(final UUID id) {
 		super(id);
 	}
 
-	public MaritalStatusTO(UUID id, String name) {
+	public MaritalStatusTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public MaritalStatusTO(UUID id, String name, String description) {
+	public MaritalStatusTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public MaritalStatusTO(final MaritalStatus model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public MaritalStatus addToModel(MaritalStatus model) {
+	public MaritalStatus addToModel(final MaritalStatus model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -38,12 +44,11 @@ public class MaritalStatusTO extends AbstractReferenceTO<MaritalStatus>
 		return addToModel(new MaritalStatus());
 	}
 
-	public static List<MaritalStatusTO> listToTOList(List<MaritalStatus> models) {
-		List<MaritalStatusTO> tos = Lists.newArrayList();
+	public static List<MaritalStatusTO> listToTOList(
+			final List<MaritalStatus> models) {
+		final List<MaritalStatusTO> tos = Lists.newArrayList();
 		for (MaritalStatus model : models) {
-			MaritalStatusTO obj = new MaritalStatusTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new MaritalStatusTO(model));
 		}
 		return tos;
 	}

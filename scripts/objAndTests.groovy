@@ -72,7 +72,7 @@ class Templater{
 	/*
 	 * Set some paths to access the files
 	 */
-	List<String> appPath = ["edu", "sinclair", "ssp"]
+	List<String> appPath = ["org", "studentsuccessplan", "ssp"]
 	String basePath = "/data/code/infinum/javaWorkspace/ssp/"
 	
 	private String javaMainPath = basePath + "src/main/java/"
@@ -102,7 +102,7 @@ class Templater{
 					//new ExampleFile(javaMainPath, appPath, ["model"] + subpackage, modelName, ".java"),
 					//new ExampleFile(javaMainPath, appPath, ["service"] + subpackage, modelName, "Service.java"),
 					//new ExampleFile(javaMainPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceImpl.java"),
-					new ExampleFile(javaMainPath, appPath, ["web", "api"] + subpackage, modelName, "Controller.java"),
+					//new ExampleFile(javaMainPath, appPath, ["web", "api"] + subpackage, modelName, "Controller.java"),
 					//new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage, modelName, "TOFactory.java"),
 					//new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryImpl.java"),
 					new ExampleFile(javaMainPath, appPath, ["transferobject"] + subpackage, modelName, "TO.java"),
@@ -268,8 +268,25 @@ class Templater{
 class ReferenceDataTemplater {
 	String templateModel = "ChallengeCategory"
 	List<String> subpackage = ["reference"]
-	//List<String> referenceDataModels = ["ChildCareArrangement", "ChallengeCategory","ChallengeReferral", "Citizenship", "ConfidentialityLevel", "EducationGoal", "EducationLevel", "Ethnicity", "FundingSource", "MaritalStatus", "SelfHelpGuideQuestion", "StudentStatus", "VeteranStatus","ConfidentialityDisclosureAgreement", "MessageTemplate"]
-	List<String> referenceDataModels = ["MessageTemplate", "SelfHelpGuideQuestion", "ConfidentialityDisclosureAgreement", "SelfHelpGuide", "SelfHelpGuideGroup"]
+	List<String> referenceDataModels = [
+//"ChallengeCategory",
+//"ChallengeReferral", 
+"ChildCareArrangement",
+"Citizenship", 
+"ConfidentialityDisclosureAgreement", 
+"ConfidentialityLevel", 
+"EducationGoal", 
+"EducationLevel", 
+"Ethnicity", 
+"FundingSource", 
+"MaritalStatus", 
+"MessageTemplate",
+"SelfHelpGuideGroup",
+"SelfHelpGuideQuestion", 
+"SelfHelpGuide", 
+"StudentStatus", 
+"VeteranStatus",
+]
 
 	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
 		Templater templater = new Templater(create, overwrite, writeLiquibaseScript, dryRun, displayFileContents)

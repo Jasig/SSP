@@ -35,65 +35,66 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 
 	private Map<String, Object> referenceData;
 
-	private TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel> personEducationLevelToFactory = new TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel>(
-			PersonEducationLevelTO.class);
+	private static final TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel> PERSON_EDUCATION_LEVEL_FACTORY =
+			TransferObjectListFactory.newFactory(PersonEducationLevelTO.class);
 
-	private TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource> personFundingToFactory = new TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource>(
-			PersonFundingSourceTO.class);
+	private static final TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource> PERSON_FUNDING_SOURCE_FACTORY =
+			TransferObjectListFactory.newFactory(PersonFundingSourceTO.class);
 
-	private TransferObjectListFactory<PersonChallengeTO, PersonChallenge> personChallengeToFactory = new TransferObjectListFactory<PersonChallengeTO, PersonChallenge>(
-			PersonChallengeTO.class);
+	private static final TransferObjectListFactory<PersonChallengeTO, PersonChallenge> PERSON_CHALLENGE_FACTORY =
+			TransferObjectListFactory.newFactory(PersonChallengeTO.class);
 
 	public IntakeFormTO() {
+		// allowed
 	}
 
-	public IntakeFormTO(IntakeForm model) {
+	public IntakeFormTO(final IntakeForm model) {
 		super();
 		fromModel(model);
 	}
 
 	@Override
-	public void fromModel(IntakeForm model) {
+	public final void fromModel(final IntakeForm model) {
 		if (model.getPerson() != null) {
-			setPerson(new PersonTO(model.getPerson()));
+			person = new PersonTO(model.getPerson());
 		}
 
 		if (model.getPerson().getDemographics() != null) {
-			setPersonDemographics(new PersonDemographicsTO(model.getPerson()
-					.getDemographics()));
+			personDemographics = new PersonDemographicsTO(model.getPerson()
+					.getDemographics());
 		}
 
 		if (model.getPerson().getEducationGoal() != null) {
-			setPersonEducationGoal(new PersonEducationGoalTO(model.getPerson()
-					.getEducationGoal()));
+			personEducationGoal = new PersonEducationGoalTO(model.getPerson()
+					.getEducationGoal());
 		}
 
 		if (model.getPerson().getEducationPlan() != null) {
-			setPersonEducationPlan(new PersonEducationPlanTO(model.getPerson()
-					.getEducationPlan()));
+			personEducationPlan = new PersonEducationPlanTO(model.getPerson()
+					.getEducationPlan());
 		}
 
 		if ((model.getPerson().getEducationLevels() != null)
 				&& (model.getPerson().getEducationLevels().size() > 0)) {
-			setPersonEducationLevels(personEducationLevelToFactory
-					.toTOList(model.getPerson().getEducationLevels()));
+			personEducationLevels = PERSON_EDUCATION_LEVEL_FACTORY
+					.toTOList(model.getPerson().getEducationLevels());
 		}
 
 		if ((model.getPerson().getFundingSources() != null)
 				&& (model.getPerson().getFundingSources().size() > 0)) {
-			setPersonFundingSources(personFundingToFactory.toTOList(model
-					.getPerson().getFundingSources()));
+			personFundingSources = PERSON_FUNDING_SOURCE_FACTORY.toTOList(model
+					.getPerson().getFundingSources());
 		}
 
 		if ((model.getPerson().getChallenges() != null)
 				&& (model.getPerson().getChallenges().size() > 0)) {
-			setPersonChallenges(personChallengeToFactory.toTOList(model
-					.getPerson().getChallenges()));
+			personChallenges = PERSON_CHALLENGE_FACTORY.toTOList(model
+					.getPerson().getChallenges());
 		}
 	}
 
 	@Override
-	public IntakeForm addToModel(IntakeForm model) {
+	public IntakeForm addToModel(final IntakeForm model) {
 		if (getPerson() != null) {
 			model.setPerson(getPerson().asModel());
 		}
@@ -116,21 +117,21 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		if ((getPersonEducationLevels() != null)
 				&& (getPersonEducationLevels().size() > 0)) {
 			model.getPerson().setEducationLevels(
-					personEducationLevelToFactory
+					PERSON_EDUCATION_LEVEL_FACTORY
 							.toModelSet(getPersonEducationLevels()));
 		}
 
 		if ((getPersonFundingSources() != null)
 				&& (getPersonFundingSources().size() > 0)) {
 			model.getPerson().setFundingSources(
-					personFundingToFactory
+					PERSON_FUNDING_SOURCE_FACTORY
 							.toModelSet(getPersonFundingSources()));
 		}
 
 		if ((getPersonChallenges() != null)
 				&& (getPersonChallenges().size() > 0)) {
 			model.getPerson().setChallenges(
-					personChallengeToFactory.toModelSet(getPersonChallenges()));
+					PERSON_CHALLENGE_FACTORY.toModelSet(getPersonChallenges()));
 		}
 
 		return model;
@@ -145,7 +146,7 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		return person;
 	}
 
-	public void setPerson(PersonTO person) {
+	public void setPerson(final PersonTO person) {
 		this.person = person;
 	}
 
@@ -153,7 +154,8 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		return personDemographics;
 	}
 
-	public void setPersonDemographics(PersonDemographicsTO personDemographics) {
+	public void setPersonDemographics(
+			final PersonDemographicsTO personDemographics) {
 		this.personDemographics = personDemographics;
 	}
 
@@ -161,7 +163,8 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		return personEducationGoal;
 	}
 
-	public void setPersonEducationGoal(PersonEducationGoalTO personEducationGoal) {
+	public void setPersonEducationGoal(
+			final PersonEducationGoalTO personEducationGoal) {
 		this.personEducationGoal = personEducationGoal;
 	}
 
@@ -170,7 +173,7 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 	}
 
 	public void setPersonEducationLevels(
-			List<PersonEducationLevelTO> personEducationLevels) {
+			final List<PersonEducationLevelTO> personEducationLevels) {
 		this.personEducationLevels = personEducationLevels;
 	}
 
@@ -178,7 +181,8 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		return personEducationPlan;
 	}
 
-	public void setPersonEducationPlan(PersonEducationPlanTO personEducationPlan) {
+	public void setPersonEducationPlan(
+			final PersonEducationPlanTO personEducationPlan) {
 		this.personEducationPlan = personEducationPlan;
 	}
 
@@ -187,7 +191,7 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 	}
 
 	public void setPersonFundingSources(
-			List<PersonFundingSourceTO> personFundingSources) {
+			final List<PersonFundingSourceTO> personFundingSources) {
 		this.personFundingSources = personFundingSources;
 	}
 
@@ -195,7 +199,8 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		return personChallenges;
 	}
 
-	public void setPersonChallenges(List<PersonChallengeTO> personChallenges) {
+	public void setPersonChallenges(
+			final List<PersonChallengeTO> personChallenges) {
 		this.personChallenges = personChallenges;
 	}
 
@@ -203,7 +208,7 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		return referenceData;
 	}
 
-	public void setReferenceData(Map<String, Object> referenceData) {
+	public void setReferenceData(final Map<String, Object> referenceData) {
 		this.referenceData = referenceData;
 	}
 }

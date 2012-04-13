@@ -20,13 +20,13 @@ public class PersonChallengeTO
 		super();
 	}
 
-	public PersonChallengeTO(PersonChallenge model) {
+	public PersonChallengeTO(final PersonChallenge model) {
 		super();
 		fromModel(model);
 	}
 
 	@Override
-	public void fromModel(PersonChallenge model) {
+	public final void fromModel(final PersonChallenge model) {
 		super.fromModel(model);
 
 		setDescription(model.getDescription());
@@ -43,7 +43,7 @@ public class PersonChallengeTO
 	}
 
 	@Override
-	public PersonChallenge addToModel(PersonChallenge model) {
+	public PersonChallenge addToModel(final PersonChallenge model) {
 		super.addToModel(model);
 
 		model.setDescription(getDescription());
@@ -65,8 +65,8 @@ public class PersonChallengeTO
 	}
 
 	public static List<PersonChallengeTO> listToTOList(
-			List<PersonChallenge> models) {
-		List<PersonChallengeTO> tos = Lists.newArrayList();
+			final List<PersonChallenge> models) {
+		final List<PersonChallengeTO> tos = Lists.newArrayList();
 		for (PersonChallenge model : models) {
 			tos.add(new PersonChallengeTO(model));
 		}
@@ -77,7 +77,7 @@ public class PersonChallengeTO
 		return challengeId;
 	}
 
-	public void setChallengeId(UUID challengeId) {
+	public final void setChallengeId(final UUID challengeId) {
 		this.challengeId = challengeId;
 	}
 
@@ -85,7 +85,7 @@ public class PersonChallengeTO
 		return personId;
 	}
 
-	public void setPersonId(UUID personId) {
+	public final void setPersonId(final UUID personId) {
 		this.personId = personId;
 	}
 
@@ -93,7 +93,7 @@ public class PersonChallengeTO
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public final void setDescription(final String description) {
 		this.description = description;
 	}
 }

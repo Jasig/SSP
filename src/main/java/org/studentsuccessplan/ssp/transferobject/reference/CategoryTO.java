@@ -27,6 +27,11 @@ public class CategoryTO extends AbstractReferenceTO<Category> implements
 		super(id, name, description);
 	}
 
+	public CategoryTO(final Category model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
 	public Category addToModel(final Category model) {
 		super.addToModel(model);
@@ -38,12 +43,10 @@ public class CategoryTO extends AbstractReferenceTO<Category> implements
 		return addToModel(new Category());
 	}
 
-	public static List<CategoryTO> listToTOList(List<Category> models) {
-		List<CategoryTO> tos = Lists.newArrayList();
+	public static List<CategoryTO> listToTOList(final List<Category> models) {
+		final List<CategoryTO> tos = Lists.newArrayList();
 		for (Category model : models) {
-			CategoryTO category = new CategoryTO();
-			category.fromModel(model);
-			tos.add(category);
+			tos.add(new CategoryTO(model));
 		}
 		return tos;
 	}

@@ -21,36 +21,36 @@ public class PersonEducationLevelTO
 		super();
 	}
 
-	public PersonEducationLevelTO(PersonEducationLevel model) {
+	public PersonEducationLevelTO(final PersonEducationLevel model) {
 		super();
 		fromModel(model);
 	}
 
 	@Override
-	public void fromModel(PersonEducationLevel model) {
+	public final void fromModel(final PersonEducationLevel model) {
 		super.fromModel(model);
 
-		setDescription(model.getDescription());
+		description = model.getDescription();
 
 		if ((model.getEducationLevel() != null)
 				&& (model.getEducationLevel().getId() != null)) {
-			setEducationLevelId(model.getEducationLevel().getId());
+			educationLevelId = model.getEducationLevel().getId();
 		}
 
-		setGraduatedYear(model.getGraduatedYear());
-		setHighestGradeCompleted(model.getHighestGradeCompleted());
-		setLastYearAttended(model.getLastYearAttended());
+		graduatedYear = model.getGraduatedYear();
+		highestGradeCompleted = model.getHighestGradeCompleted();
+		lastYearAttended = model.getLastYearAttended();
 
 		if ((model.getPerson() != null)
 				&& (model.getPerson().getId() != null)) {
-			setPersonId(model.getPerson().getId());
+			personId = model.getPerson().getId();
 		}
 
-		setSchoolName(model.getSchoolName());
+		schoolName = model.getSchoolName();
 	}
 
 	@Override
-	public PersonEducationLevel addToModel(PersonEducationLevel model) {
+	public PersonEducationLevel addToModel(final PersonEducationLevel model) {
 		super.addToModel(model);
 
 		model.setDescription(getDescription());
@@ -78,8 +78,8 @@ public class PersonEducationLevelTO
 	}
 
 	public static List<PersonEducationLevelTO> listToTOList(
-			List<PersonEducationLevel> models) {
-		List<PersonEducationLevelTO> tos = Lists.newArrayList();
+			final List<PersonEducationLevel> models) {
+		final List<PersonEducationLevelTO> tos = Lists.newArrayList();
 		for (PersonEducationLevel model : models) {
 			tos.add(new PersonEducationLevelTO(model));
 		}
@@ -90,7 +90,7 @@ public class PersonEducationLevelTO
 		return educationLevelId;
 	}
 
-	public void setEducationLevelId(UUID educationLevelId) {
+	public void setEducationLevelId(final UUID educationLevelId) {
 		this.educationLevelId = educationLevelId;
 	}
 
@@ -98,7 +98,7 @@ public class PersonEducationLevelTO
 		return personId;
 	}
 
-	public void setPersonId(UUID personId) {
+	public void setPersonId(final UUID personId) {
 		this.personId = personId;
 	}
 
@@ -106,7 +106,7 @@ public class PersonEducationLevelTO
 		return graduatedYear;
 	}
 
-	public void setGraduatedYear(Integer graduatedYear) {
+	public void setGraduatedYear(final Integer graduatedYear) {
 		this.graduatedYear = graduatedYear;
 	}
 
@@ -114,7 +114,7 @@ public class PersonEducationLevelTO
 		return highestGradeCompleted;
 	}
 
-	public void setHighestGradeCompleted(Integer highestGradeCompleted) {
+	public void setHighestGradeCompleted(final Integer highestGradeCompleted) {
 		this.highestGradeCompleted = highestGradeCompleted;
 	}
 
@@ -122,7 +122,7 @@ public class PersonEducationLevelTO
 		return lastYearAttended;
 	}
 
-	public void setLastYearAttended(Integer lastYearAttended) {
+	public void setLastYearAttended(final Integer lastYearAttended) {
 		this.lastYearAttended = lastYearAttended;
 	}
 
@@ -130,7 +130,7 @@ public class PersonEducationLevelTO
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -138,7 +138,7 @@ public class PersonEducationLevelTO
 		return schoolName;
 	}
 
-	public void setSchoolName(String schoolName) {
+	public void setSchoolName(final String schoolName) {
 		this.schoolName = schoolName;
 	}
 

@@ -17,34 +17,44 @@ import ch.qos.logback.core.joran.spi.JoranException;
  */
 public class LogBackConfigLoader {
 
-	private Logger logger = LoggerFactory.getLogger(LogBackConfigLoader.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(LogBackConfigLoader.class);
 
-	public LogBackConfigLoader(String externalConfigFileLocation)
+	/**
+	 * Load the Logback Configuration
+	 * 
+	 * @param configPath
+	 *            A config file in an external location
+	 * @throws IOException
+	 * @throws JoranException
+	 */
+	public LogBackConfigLoader(final String configPath)
 			throws IOException, JoranException {
-		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+		final LoggerContext loggerContext = (LoggerContext) LoggerFactory
+				.getILoggerFactory();
 
-		File externalConfigFile = new File(externalConfigFileLocation);
-		if (!externalConfigFile.exists()) {
-			throw new IOException(
-					"Logback External Config File Parameter does not reference a file that exists");
-		} else {
-			if (!externalConfigFile.isFile()) {
-				throw new IOException(
-						"Logback External Config File Parameter exists, but does not reference a file");
-			} else {
-				if (!externalConfigFile.canRead()) {
+		final File configFile = new File(configPath);
+		if (configFile.exists()) {
+			if (configFile.isFile()) {
+				if (configFile.canRead()) {
+					final JoranConfigurator configurator = new JoranConfigurator();
+					configurator.setContext(loggerContext);
+					loggerContext.reset();
+					configurator.doConfigure(configPath);
+
+					LOGGER.info("Configured Logback with config file from: "
+							+ configPath);
+				} else {
 					throw new IOException(
 							"Logback External Config File exists and is a file, but cannot be read.");
-				} else {
-					JoranConfigurator configurator = new JoranConfigurator();
-					configurator.setContext(lc);
-					lc.reset();
-					configurator.doConfigure(externalConfigFileLocation);
-
-					logger.info("Configured Logback with config file from: "
-							+ externalConfigFileLocation);
 				}
+			} else {
+				throw new IOException(
+						"Logback External Config File Parameter exists, but does not reference a file");
 			}
+		} else {
+			throw new IOException(
+					"Logback External Config File Parameter does not reference a file that exists");
 		}
 	}
 

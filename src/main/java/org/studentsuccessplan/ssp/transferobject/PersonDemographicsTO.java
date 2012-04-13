@@ -20,7 +20,7 @@ public class PersonDemographicsTO
 
 	private UUID personId, coachId, maritalStatusId, ethnicityId,
 			citizenshipId, veteranStatusId;
-	private boolean abilityToBenefit, isLocal, primaryCaregiver,
+	private boolean abilityToBenefit, local, primaryCaregiver,
 			childCareNeeded, employed;
 	private int numberOfChildren;
 	private String anticipatedStartTerm, anticipatedStartYear,
@@ -31,55 +31,55 @@ public class PersonDemographicsTO
 		super();
 	}
 
-	public PersonDemographicsTO(PersonDemographics model) {
+	public PersonDemographicsTO(final PersonDemographics model) {
 		super();
 		fromModel(model);
 	}
 
 	@Override
-	public void fromModel(PersonDemographics model) {
+	public final void fromModel(final PersonDemographics model) {
 		super.fromModel(model);
 
 		if (model.getCoach() != null) {
-			setCoachId(model.getCoach().getId());
+			coachId = model.getCoach().getId();
 		}
 		if (model.getMaritalStatus() != null) {
-			setMaritalStatusId(model.getMaritalStatus().getId());
+			maritalStatusId = model.getMaritalStatus().getId();
 		}
 		if (model.getEthnicity() != null) {
-			setEthnicityId(model.getEthnicity().getId());
+			ethnicityId = model.getEthnicity().getId();
 		}
 		if (model.getCitizenship() != null) {
-			setCitizenshipId(model.getCitizenship().getId());
+			citizenshipId = model.getCitizenship().getId();
 		}
 		if (model.getVeteranStatus() != null) {
-			setVeteranStatusId(model.getVeteranStatus().getId());
+			veteranStatusId = model.getVeteranStatus().getId();
 		}
-		setAbilityToBenefit(model.isAbilityToBenefit());
-		setLocal(model.isLocal());
-		setPrimaryCaregiver(model.isPrimaryCaregiver());
-		setChildCareNeeded(model.isChildCareNeeded());
-		setEmployed(model.isEmployed());
-		setNumberOfChildren(model.getNumberOfChildren());
-		setAnticipatedStartTerm(model.getAnticipatedStartTerm());
-		setAnticipatedStartYear(model.getAnticipatedStartYear());
-		setCountryOfResidence(model.getCountryOfResidence());
-		setPaymentStatus(model.getPaymentStatus());
+		abilityToBenefit = model.isAbilityToBenefit();
+		local = model.isLocal();
+		primaryCaregiver = model.isPrimaryCaregiver();
+		childCareNeeded = model.isChildCareNeeded();
+		employed = model.isEmployed();
+		numberOfChildren = model.getNumberOfChildren();
+		anticipatedStartTerm = model.getAnticipatedStartTerm();
+		anticipatedStartYear = model.getAnticipatedStartYear();
+		countryOfResidence = model.getCountryOfResidence();
+		paymentStatus = model.getPaymentStatus();
 		if (model.getGender() != null) {
-			setGender(model.getGender().getCode());
+			gender = model.getGender().getCode();
 		}
-		setCountryOfCitizenship(model.getCountryOfCitizenship());
-		setChildAges(model.getChildAges());
-		setPlaceOfEmployment(model.getPlaceOfEmployment());
+		countryOfCitizenship = model.getCountryOfCitizenship();
+		childAges = model.getChildAges();
+		placeOfEmployment = model.getPlaceOfEmployment();
 		if (model.getShift() != null) {
-			setShift(model.getShift().getCode());
+			shift = model.getShift().getCode();
 		}
-		setWage(model.getWage());
-		setTotalHoursWorkedPerWeek(model.getTotalHoursWorkedPerWeek());
+		wage = model.getWage();
+		totalHoursWorkedPerWeek = model.getTotalHoursWorkedPerWeek();
 	}
 
 	@Override
-	public PersonDemographics addToModel(PersonDemographics model) {
+	public PersonDemographics addToModel(final PersonDemographics model) {
 		super.addToModel(model);
 
 		if (getCoachId() != null) {
@@ -127,8 +127,8 @@ public class PersonDemographicsTO
 	}
 
 	public static List<PersonDemographicsTO> listToTOList(
-			List<PersonDemographics> models) {
-		List<PersonDemographicsTO> tos = Lists.newArrayList();
+			final List<PersonDemographics> models) {
+		final List<PersonDemographicsTO> tos = Lists.newArrayList();
 		for (PersonDemographics model : models) {
 			tos.add(new PersonDemographicsTO(model));
 		}
@@ -139,7 +139,7 @@ public class PersonDemographicsTO
 		return personId;
 	}
 
-	public void setPersonId(UUID personId) {
+	public void setPersonId(final UUID personId) {
 		this.personId = personId;
 	}
 
@@ -147,7 +147,7 @@ public class PersonDemographicsTO
 		return coachId;
 	}
 
-	public void setCoachId(UUID coachId) {
+	public void setCoachId(final UUID coachId) {
 		this.coachId = coachId;
 	}
 
@@ -155,7 +155,7 @@ public class PersonDemographicsTO
 		return maritalStatusId;
 	}
 
-	public void setMaritalStatusId(UUID maritalStatusId) {
+	public void setMaritalStatusId(final UUID maritalStatusId) {
 		this.maritalStatusId = maritalStatusId;
 	}
 
@@ -163,7 +163,7 @@ public class PersonDemographicsTO
 		return ethnicityId;
 	}
 
-	public void setEthnicityId(UUID ethnicityId) {
+	public void setEthnicityId(final UUID ethnicityId) {
 		this.ethnicityId = ethnicityId;
 	}
 
@@ -171,7 +171,7 @@ public class PersonDemographicsTO
 		return citizenshipId;
 	}
 
-	public void setCitizenshipId(UUID citizenshipId) {
+	public void setCitizenshipId(final UUID citizenshipId) {
 		this.citizenshipId = citizenshipId;
 	}
 
@@ -179,7 +179,7 @@ public class PersonDemographicsTO
 		return veteranStatusId;
 	}
 
-	public void setVeteranStatusId(UUID veteranStatusId) {
+	public void setVeteranStatusId(final UUID veteranStatusId) {
 		this.veteranStatusId = veteranStatusId;
 	}
 
@@ -187,23 +187,23 @@ public class PersonDemographicsTO
 		return abilityToBenefit;
 	}
 
-	public void setAbilityToBenefit(boolean abilityToBenefit) {
+	public void setAbilityToBenefit(final boolean abilityToBenefit) {
 		this.abilityToBenefit = abilityToBenefit;
 	}
 
 	public boolean isLocal() {
-		return isLocal;
+		return local;
 	}
 
-	public void setLocal(boolean isLocal) {
-		this.isLocal = isLocal;
+	public void setLocal(final boolean local) {
+		this.local = local;
 	}
 
 	public boolean isPrimaryCaregiver() {
 		return primaryCaregiver;
 	}
 
-	public void setPrimaryCaregiver(boolean primaryCaregiver) {
+	public void setPrimaryCaregiver(final boolean primaryCaregiver) {
 		this.primaryCaregiver = primaryCaregiver;
 	}
 
@@ -211,7 +211,7 @@ public class PersonDemographicsTO
 		return childCareNeeded;
 	}
 
-	public void setChildCareNeeded(boolean childCareNeeded) {
+	public void setChildCareNeeded(final boolean childCareNeeded) {
 		this.childCareNeeded = childCareNeeded;
 	}
 
@@ -219,7 +219,7 @@ public class PersonDemographicsTO
 		return employed;
 	}
 
-	public void setEmployed(boolean employed) {
+	public void setEmployed(final boolean employed) {
 		this.employed = employed;
 	}
 
@@ -227,7 +227,7 @@ public class PersonDemographicsTO
 		return anticipatedStartTerm;
 	}
 
-	public void setAnticipatedStartTerm(String anticipatedStartTerm) {
+	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
 		this.anticipatedStartTerm = anticipatedStartTerm;
 	}
 
@@ -235,7 +235,7 @@ public class PersonDemographicsTO
 		return anticipatedStartYear;
 	}
 
-	public void setAnticipatedStartYear(String anticipatedStartYear) {
+	public void setAnticipatedStartYear(final String anticipatedStartYear) {
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
@@ -243,7 +243,7 @@ public class PersonDemographicsTO
 		return countryOfResidence;
 	}
 
-	public void setCountryOfResidence(String countryOfResidence) {
+	public void setCountryOfResidence(final String countryOfResidence) {
 		this.countryOfResidence = countryOfResidence;
 	}
 
@@ -251,7 +251,7 @@ public class PersonDemographicsTO
 		return paymentStatus;
 	}
 
-	public void setPaymentStatus(String paymentStatus) {
+	public void setPaymentStatus(final String paymentStatus) {
 		this.paymentStatus = paymentStatus;
 	}
 
@@ -259,7 +259,7 @@ public class PersonDemographicsTO
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(final String gender) {
 		this.gender = gender;
 	}
 
@@ -267,7 +267,7 @@ public class PersonDemographicsTO
 		return countryOfCitizenship;
 	}
 
-	public void setCountryOfCitizenship(String countryOfCitizenship) {
+	public void setCountryOfCitizenship(final String countryOfCitizenship) {
 		this.countryOfCitizenship = countryOfCitizenship;
 	}
 
@@ -275,7 +275,7 @@ public class PersonDemographicsTO
 		return childAges;
 	}
 
-	public void setChildAges(String childAges) {
+	public void setChildAges(final String childAges) {
 		this.childAges = childAges;
 	}
 
@@ -283,7 +283,7 @@ public class PersonDemographicsTO
 		return placeOfEmployment;
 	}
 
-	public void setPlaceOfEmployment(String placeOfEmployment) {
+	public void setPlaceOfEmployment(final String placeOfEmployment) {
 		this.placeOfEmployment = placeOfEmployment;
 	}
 
@@ -291,7 +291,7 @@ public class PersonDemographicsTO
 		return shift;
 	}
 
-	public void setShift(String shift) {
+	public void setShift(final String shift) {
 		this.shift = shift;
 	}
 
@@ -299,7 +299,7 @@ public class PersonDemographicsTO
 		return wage;
 	}
 
-	public void setWage(String wage) {
+	public void setWage(final String wage) {
 		this.wage = wage;
 	}
 
@@ -307,7 +307,7 @@ public class PersonDemographicsTO
 		return totalHoursWorkedPerWeek;
 	}
 
-	public void setTotalHoursWorkedPerWeek(String totalHoursWorkedPerWeek) {
+	public void setTotalHoursWorkedPerWeek(final String totalHoursWorkedPerWeek) {
 		this.totalHoursWorkedPerWeek = totalHoursWorkedPerWeek;
 	}
 
@@ -315,7 +315,7 @@ public class PersonDemographicsTO
 		return numberOfChildren;
 	}
 
-	public void setNumberOfChildren(int numberOfChildren) {
+	public void setNumberOfChildren(final int numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
 	}
 

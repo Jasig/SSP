@@ -15,20 +15,26 @@ public class VeteranStatusTO extends AbstractReferenceTO<VeteranStatus>
 		super();
 	}
 
-	public VeteranStatusTO(UUID id) {
+	public VeteranStatusTO(final UUID id) {
 		super(id);
 	}
 
-	public VeteranStatusTO(UUID id, String name) {
+	public VeteranStatusTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public VeteranStatusTO(UUID id, String name, String description) {
+	public VeteranStatusTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public VeteranStatusTO(final VeteranStatus model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public VeteranStatus addToModel(VeteranStatus model) {
+	public VeteranStatus addToModel(final VeteranStatus model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -38,12 +44,11 @@ public class VeteranStatusTO extends AbstractReferenceTO<VeteranStatus>
 		return addToModel(new VeteranStatus());
 	}
 
-	public static List<VeteranStatusTO> listToTOList(List<VeteranStatus> models) {
-		List<VeteranStatusTO> tos = Lists.newArrayList();
+	public static List<VeteranStatusTO> listToTOList(
+			final List<VeteranStatus> models) {
+		final List<VeteranStatusTO> tos = Lists.newArrayList();
 		for (VeteranStatus model : models) {
-			VeteranStatusTO obj = new VeteranStatusTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new VeteranStatusTO(model));
 		}
 		return tos;
 	}

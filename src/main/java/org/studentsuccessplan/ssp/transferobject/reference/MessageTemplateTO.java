@@ -15,20 +15,26 @@ public class MessageTemplateTO extends AbstractReferenceTO<MessageTemplate>
 		super();
 	}
 
-	public MessageTemplateTO(UUID id) {
+	public MessageTemplateTO(final UUID id) {
 		super(id);
 	}
 
-	public MessageTemplateTO(UUID id, String name) {
+	public MessageTemplateTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public MessageTemplateTO(UUID id, String name, String description) {
+	public MessageTemplateTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public MessageTemplateTO(final MessageTemplate model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public MessageTemplate addToModel(MessageTemplate model) {
+	public MessageTemplate addToModel(final MessageTemplate model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -39,12 +45,10 @@ public class MessageTemplateTO extends AbstractReferenceTO<MessageTemplate>
 	}
 
 	public static List<MessageTemplateTO> listToTOList(
-			List<MessageTemplate> models) {
-		List<MessageTemplateTO> tos = Lists.newArrayList();
+			final List<MessageTemplate> models) {
+		final List<MessageTemplateTO> tos = Lists.newArrayList();
 		for (MessageTemplate model : models) {
-			MessageTemplateTO obj = new MessageTemplateTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new MessageTemplateTO(model));
 		}
 		return tos;
 	}

@@ -2,15 +2,16 @@ package org.studentsuccessplan.ssp.transferobject;
 
 public class ServiceResponse {
 
-	private boolean success;
+	private final transient boolean success;
 
-	private String message;
+	private final transient String message;
 
-	public ServiceResponse(boolean success) {
+	public ServiceResponse(final boolean success) {
 		this.success = success;
+		this.message = "";
 	}
 
-	public ServiceResponse(boolean success, String message) {
+	public ServiceResponse(final boolean success, final String message) {
 		this.success = success;
 		this.message = message;
 	}
@@ -21,5 +22,20 @@ public class ServiceResponse {
 
 	public String getMessage() {
 		return message;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("{\"success\":\"");
+		if (success) {
+			sb.append("true");
+		} else {
+			sb.append("false");
+		}
+		sb.append("\", \"message\":\"");
+		sb.append(message);
+		sb.append("\"}");
+		return sb.toString();
 	}
 }

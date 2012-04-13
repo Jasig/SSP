@@ -15,20 +15,26 @@ public class ChallengeCategoryTO extends AbstractReferenceTO<ChallengeCategory>
 		super();
 	}
 
-	public ChallengeCategoryTO(UUID id) {
+	public ChallengeCategoryTO(final UUID id) {
 		super(id);
 	}
 
-	public ChallengeCategoryTO(UUID id, String name) {
+	public ChallengeCategoryTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public ChallengeCategoryTO(UUID id, String name, String description) {
+	public ChallengeCategoryTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public ChallengeCategoryTO(final ChallengeCategory model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public ChallengeCategory addToModel(ChallengeCategory model) {
+	public ChallengeCategory addToModel(final ChallengeCategory model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -39,12 +45,10 @@ public class ChallengeCategoryTO extends AbstractReferenceTO<ChallengeCategory>
 	}
 
 	public static List<ChallengeCategoryTO> listToTOList(
-			List<ChallengeCategory> models) {
-		List<ChallengeCategoryTO> tos = Lists.newArrayList();
+			final List<ChallengeCategory> models) {
+		final List<ChallengeCategoryTO> tos = Lists.newArrayList();
 		for (ChallengeCategory model : models) {
-			ChallengeCategoryTO obj = new ChallengeCategoryTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new ChallengeCategoryTO(model));
 		}
 		return tos;
 	}

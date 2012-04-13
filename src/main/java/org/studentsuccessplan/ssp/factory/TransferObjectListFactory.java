@@ -6,11 +6,10 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
-import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 /**
  * Turn a list of Transfer Objects into Model Objects, and back again.
@@ -37,6 +36,11 @@ public class TransferObjectListFactory<T extends TransferObject<M>, M> {
 	 */
 	public TransferObjectListFactory(Class<T> transferObjectClass) {
 		this.transferObjectClass = transferObjectClass;
+	}
+
+	public static <T extends TransferObject<M>, M> TransferObjectListFactory<T, M> newFactory(
+			Class<T> transferObjectClass) {
+		return new TransferObjectListFactory<T, M>(transferObjectClass);
 	}
 
 	/**
