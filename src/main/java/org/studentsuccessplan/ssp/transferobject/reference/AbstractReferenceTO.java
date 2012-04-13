@@ -37,13 +37,8 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 		this.description = description;
 	}
 
-	public AbstractReferenceTO(final T model) {
-		super();
-		fromModel(model);
-	}
-
 	@Override
-	public final void fromModel(final AbstractReference model) {
+	public void fromModel(final T model) {
 		super.fromModel(model);
 
 		name = model.getName();

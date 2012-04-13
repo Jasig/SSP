@@ -29,12 +29,8 @@ public abstract class AuditableTO<T extends Auditable>
 		this.id = id;
 	}
 
-	public AuditableTO(final Auditable model) {
-		fromModel(model);
-	}
-
 	@Override
-	public final void fromModel(final Auditable model) {
+	public void fromModel(final T model) {
 		id = model.getId();
 		if (model.getCreatedBy() != null) {
 			createdById = model.getCreatedBy().getId();
