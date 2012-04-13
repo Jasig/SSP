@@ -1,45 +1,169 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class SelfHelpGuideQuestionTO {
+import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
+import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
 
-	private UUID id;
-	private String headingText;
-	private String descriptionText;
-	private String questionText;
+import com.google.common.collect.Sets;
+
+public class SelfHelpGuideQuestionTO extends
+		AbstractReferenceTO<SelfHelpGuideQuestion> {
+
+	private int questionNumber;
+
+	private boolean critical;
+
 	private boolean mandatory;
 
-	public UUID getId() {
-		return id;
+	private Challenge challenge;
+
+	private SelfHelpGuide selfHelpGuide;
+
+	private Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = new HashSet<SelfHelpGuideQuestionResponse>(
+			0);
+
+	/**
+	 * @return the questionNumber
+	 */
+	public int getQuestionNumber() {
+		return questionNumber;
 	}
 
-	public void setId(UUID id) {
-		this.id = id;
+	/**
+	 * @param questionNumber
+	 *            the questionNumber to set
+	 */
+	public void setQuestionNumber(int questionNumber) {
+		this.questionNumber = questionNumber;
 	}
-	public String getHeadingText() {
-		return headingText;
+
+	/**
+	 * @return the critical
+	 */
+	public boolean isCritical() {
+		return critical;
 	}
-	public void setHeadingText(String headingText) {
-		this.headingText = headingText;
+
+	/**
+	 * @param critical
+	 *            the critical to set
+	 */
+	public void setCritical(boolean critical) {
+		this.critical = critical;
 	}
-	public String getDescriptionText() {
-		return descriptionText;
-	}
-	public void setDescriptionText(String descriptionText) {
-		this.descriptionText = descriptionText;
-	}
-	public String getQuestionText() {
-		return questionText;
-	}
-	public void setQuestionText(String questionText) {
-		this.questionText = questionText;
-	}
+
+	/**
+	 * @return the mandatory
+	 */
 	public boolean isMandatory() {
 		return mandatory;
 	}
+
+	/**
+	 * @param mandatory
+	 *            the mandatory to set
+	 */
 	public void setMandatory(boolean mandatory) {
 		this.mandatory = mandatory;
 	}
 
+	/**
+	 * @return the challenge
+	 */
+	public Challenge getChallenge() {
+		return challenge;
+	}
+
+	/**
+	 * @param challenge
+	 *            the challenge to set
+	 */
+	public void setChallenge(Challenge challenge) {
+		this.challenge = challenge;
+	}
+
+	/**
+	 * @return the selfHelpGuide
+	 */
+	public SelfHelpGuide getSelfHelpGuide() {
+		return selfHelpGuide;
+	}
+
+	/**
+	 * @param selfHelpGuide
+	 *            the selfHelpGuide to set
+	 */
+	public void setSelfHelpGuide(SelfHelpGuide selfHelpGuide) {
+		this.selfHelpGuide = selfHelpGuide;
+	}
+
+	/**
+	 * @return the selfHelpGuideQuestionResponses
+	 */
+	public Set<SelfHelpGuideQuestionResponse> getSelfHelpGuideQuestionResponses() {
+		return selfHelpGuideQuestionResponses;
+	}
+
+	/**
+	 * @param selfHelpGuideQuestionResponses
+	 *            the selfHelpGuideQuestionResponses to set
+	 */
+	public void setSelfHelpGuideQuestionResponses(
+			Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses) {
+		this.selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponses;
+	}
+
+	@Override
+	public SelfHelpGuideQuestion asModel() {
+		return pushAttributesToModel(new SelfHelpGuideQuestion());
+	}
+
+	public SelfHelpGuideQuestion pushAttributesToModel(
+			SelfHelpGuideQuestion model) {
+		addToModel(model);
+		return model;
+	}
+
+	@Override
+	public void fromModel(SelfHelpGuideQuestion model) {
+		super.fromModel(model);
+
+		setQuestionNumber(model.getQuestionNumber());
+		setCritical(model.isCritical());
+		setMandatory(model.isMandatory());
+		setChallenge(model.getChallenge());
+		setSelfHelpGuide(model.getSelfHelpGuide());
+		setSelfHelpGuideQuestionResponses(model
+				.getSelfHelpGuideQuestionResponses());
+	}
+
+	public static Set<SelfHelpGuideQuestionTO> listToTOSet(
+			List<SelfHelpGuideQuestion> models) {
+		Set<SelfHelpGuideQuestionTO> tos = Sets.newHashSet();
+		for (SelfHelpGuideQuestion model : models) {
+			SelfHelpGuideQuestionTO obj = new SelfHelpGuideQuestionTO();
+			obj.fromModel(model);
+			tos.add(obj);
+		}
+
+		return tos;
+	}
+
+	public static Set<SelfHelpGuideQuestionTO> setToTOSet(
+			Set<SelfHelpGuideQuestion> models) {
+		Set<SelfHelpGuideQuestionTO> tos = Sets.newHashSet();
+		for (SelfHelpGuideQuestion model : models) {
+			SelfHelpGuideQuestionTO obj = new SelfHelpGuideQuestionTO();
+			obj.fromModel(model);
+			tos.add(obj);
+		}
+
+		return tos;
+	}
 }

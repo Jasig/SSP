@@ -72,7 +72,7 @@ public class MyGpsSelfHelpGuideControllerTest {
 	}
 
 	@Test
-	public void getContentById() {
+	public void getContentById() throws ObjectNotFoundException {
 		SelfHelpGuideContentTO contentTO = new SelfHelpGuideContentTO();
 		UUID selfHelpGuideId = UUID
 				.fromString("7CDD9ECE-C479-4AD6-4A1D-1BB3CDD4DDE4");
@@ -104,8 +104,8 @@ public class MyGpsSelfHelpGuideControllerTest {
 		guides.add(new SelfHelpGuide());
 
 		expect(selfHelpGuideGroupService.get(group.getId())).andReturn(group);
-		expect(selfHelpGuideService.getBySelfHelpGuideGroup(group))
-				.andReturn(guides);
+		expect(selfHelpGuideService.getBySelfHelpGuideGroup(group)).andReturn(
+				guides);
 
 		replay(manager);
 		replay(selfHelpGuideService);

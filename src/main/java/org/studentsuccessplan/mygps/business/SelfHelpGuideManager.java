@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideQuestionTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
 import org.studentsuccessplan.ssp.dao.SelfHelpGuideQuestionResponseDao;
 import org.studentsuccessplan.ssp.dao.SelfHelpGuideResponseDao;
@@ -20,7 +19,7 @@ import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
 import org.studentsuccessplan.ssp.model.SelfHelpGuideResponse;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
@@ -49,36 +48,30 @@ public class SelfHelpGuideManager {
 	@Autowired
 	private SecurityService securityService;
 
-	public SelfHelpGuideContentTO getContentById(UUID selfHelpGuideId) {
+	/**
+	 * Retrieves the specified guide with associated questions.
+	 * 
+	 * @param selfHelpGuideId
+	 *            The guide to load
+	 * @return The specified guide with associated questions.
+	 * @throws ObjectNotFoundException
+	 *             If the specified guide could not be found.
+	 */
+	public SelfHelpGuideContentTO getContentById(UUID selfHelpGuideId)
+			throws ObjectNotFoundException {
 
-		SelfHelpGuideContentTO selfHelpGuideContentTO = new SelfHelpGuideContentTO();
-		List<SelfHelpGuideQuestionTO> selfHelpGuideQuestionTOs = new ArrayList<SelfHelpGuideQuestionTO>();
-
+		// Look up specified guide
 		SelfHelpGuide selfHelpGuide = selfHelpGuideDao.get(selfHelpGuideId);
 
-		for (SelfHelpGuideQuestion selfHelpGuideQuestion : selfHelpGuideQuestionDao
-				.bySelfHelpGuide(selfHelpGuide.getId())) {
-			SelfHelpGuideQuestionTO selfHelpGuideQuestionTO = new SelfHelpGuideQuestionTO();
-
-			selfHelpGuideQuestionTO.setDescriptionText(selfHelpGuideQuestion
-					.getChallenge().getSelfHelpGuideDescription());
-			selfHelpGuideQuestionTO.setHeadingText(selfHelpGuideQuestion
-					.getChallenge().getName());
-			selfHelpGuideQuestionTO.setId(selfHelpGuideQuestion.getId());
-			selfHelpGuideQuestionTO.setMandatory(selfHelpGuideQuestion
-					.isMandatory());
-			selfHelpGuideQuestionTO.setQuestionText(selfHelpGuideQuestion
-					.getChallenge().getSelfHelpGuideQuestion());
-
-			selfHelpGuideQuestionTOs.add(selfHelpGuideQuestionTO);
+		if (selfHelpGuide == null) {
+			throw new ObjectNotFoundException(
+					"Specified guide could not be loaded.");
 		}
 
-		selfHelpGuideContentTO.setId(selfHelpGuide.getId());
-		selfHelpGuideContentTO.setName(selfHelpGuide.getName());
-		selfHelpGuideContentTO.setDescription(selfHelpGuide.getDescription());
-		selfHelpGuideContentTO.setQuestions(selfHelpGuideQuestionTOs);
-		selfHelpGuideContentTO.setIntroductoryText(selfHelpGuide
-				.getIntroductoryText());
+		// Create, fill, and return the SelfHelpGuideContentTO response
+		SelfHelpGuideContentTO selfHelpGuideContentTO = new SelfHelpGuideContentTO();
+		selfHelpGuideContentTO.fromModel(selfHelpGuide,
+				selfHelpGuideQuestionDao.bySelfHelpGuide(selfHelpGuideId));
 
 		return selfHelpGuideContentTO;
 	}
