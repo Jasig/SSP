@@ -92,6 +92,7 @@ public class PersonDaoTest {
 		obj.setFirstName("System");
 		obj.setLastName("User");
 		obj.setPrimaryEmailAddress("user@sinclair.edu");
+		obj.setStrengths("strengths");
 		dao.save(obj);
 
 		assertNotNull(obj.getId());
@@ -102,6 +103,8 @@ public class PersonDaoTest {
 		obj = dao.get(saved);
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
+		assertEquals("Strengths property did not match.", "strengths",
+				obj.getStrengths());
 
 		List<Person> all = dao.getAll(ObjectStatus.ACTIVE);
 		assertNotNull(all);

@@ -24,10 +24,9 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.studentsuccessplan.ssp.model.tool.PersonTool;
 
 import com.google.common.collect.Sets;
-
-import org.studentsuccessplan.ssp.model.tool.PersonTool;
 
 /**
  * A Person entity.
@@ -118,9 +117,8 @@ public class Person extends Auditable implements Serializable {
 	private String username;
 
 	/**
-	 * User Id
-	 * Secondary Id for used to identify the user in secondary systems like
-	 * ldap.
+	 * User Id Secondary Id for used to identify the user in secondary systems
+	 * like ldap.
 	 * 
 	 * Maximum length of 25.
 	 */
@@ -172,6 +170,7 @@ public class Person extends Auditable implements Serializable {
 	@Column(length = 50, name = "address_line_2")
 	@Size(max = 50)
 	private String addressLine2;
+
 	/**
 	 * City.
 	 * 
@@ -309,6 +308,15 @@ public class Person extends Auditable implements Serializable {
 	@Cascade(value = CascadeType.ALL)
 	private Set<CustomTask> customTasks;
 
+	/**
+	 * Strengths
+	 * 
+	 * Maximum length of 4000.
+	 */
+	@Column(length = 4000)
+	@Size(max = 4000)
+	private String strengths;
+
 	@Transient
 	public Set<AbstractTask> getTasksAndCustomTasks() {
 		Set<AbstractTask> tasks = Sets.newHashSet();
@@ -347,7 +355,7 @@ public class Person extends Auditable implements Serializable {
 	}
 
 	public String getEmailAddressWithName() {
-		return this.getFullName() + " <" + primaryEmailAddress + ">";
+		return getFullName() + " <" + primaryEmailAddress + ">";
 	}
 
 	public String getFirstName() {
@@ -584,4 +592,18 @@ public class Person extends Auditable implements Serializable {
 		this.customTasks = customTasks;
 	}
 
+	/**
+	 * @return the strengths
+	 */
+	public String getStrengths() {
+		return strengths;
+	}
+
+	/**
+	 * @param strengths
+	 *            the strengths to set
+	 */
+	public void setStrengths(String strengths) {
+		this.strengths = strengths;
+	}
 }

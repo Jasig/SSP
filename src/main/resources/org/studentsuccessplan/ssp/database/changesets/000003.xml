@@ -3869,6 +3869,7 @@
 			</delete>
 		</rollback>
 	</changeSet>
+
 	<changeSet id="Add 'not applicable' to veteran_status"
 		author="jon.adams">
 		<insert tableName="veteran_status">
@@ -3888,4 +3889,31 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="Add sort order to veteran_status" author="jon.adams">
+		<addColumn tableName="veteran_status">
+			<column name="sort_order" type="smallint" defaultValue="0">
+				<constraints nullable="false" />
+
+			</column>
+		</addColumn>
+
+		<update tableName="veteran_status">
+			<column name="name" value="Not applicable" />
+			<column name="sort_order" value="-1" />
+			<where>id = '5c584fdb-dcc8-44ff-a30d-8c3e0a2d8206'</where>
+		</update>
+
+		<rollback>
+			<dropColumn tableName="veteran_status" columnName="sort_order" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Add strengths to person" author="jon.adams">
+		<addColumn tableName="person">
+			<column name="strengths" type="text" />
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person" columnName="strengths" />
+		</rollback>
+	</changeSet>
 </databaseChangeLog>
