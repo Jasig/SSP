@@ -9,6 +9,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,22 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
-import org.studentsuccessplan.ssp.model.reference.Citizenship;
-import org.studentsuccessplan.ssp.model.reference.EducationGoal;
-import org.studentsuccessplan.ssp.model.reference.EducationLevel;
 import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
-import org.studentsuccessplan.ssp.model.reference.Ethnicity;
-import org.studentsuccessplan.ssp.model.reference.FundingSource;
 import org.studentsuccessplan.ssp.model.reference.Genders;
-import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
 import org.studentsuccessplan.ssp.model.reference.States;
-import org.studentsuccessplan.ssp.model.reference.StudentStatus;
-import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 import org.studentsuccessplan.ssp.model.tool.IntakeForm;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
 import org.studentsuccessplan.ssp.service.reference.ChildCareArrangementService;
 import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
@@ -62,71 +55,41 @@ import org.studentsuccessplan.ssp.transferobject.tool.IntakeFormTO;
 @RequestMapping("/tool/studentIntake")
 public class IntakeController {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(IntakeController.class);
 
 	@Autowired
-	private IntakeService service;
+	private transient IntakeService service;
 
 	@Autowired
-	private ChallengeService challengeService;
+	private transient ChallengeService challengeService;
 
 	@Autowired
-	private ChildCareArrangementService childCareArrangementService;
+	private transient ChildCareArrangementService childCareArrangementService;
 
 	@Autowired
-	private CitizenshipService citizenshipService;
+	private transient CitizenshipService citizenshipService;
 
 	@Autowired
-	private EducationGoalService educationGoalService;
+	private transient EducationGoalService educationGoalService;
 
 	@Autowired
-	private EducationLevelService educationLevelService;
+	private transient EducationLevelService educationLevelService;
 
 	@Autowired
-	private EthnicityService ethnicityService;
+	private transient EthnicityService ethnicityService;
 
 	@Autowired
-	private FundingSourceService fundingSourceService;
+	private transient FundingSourceService fundingSourceService;
 
 	@Autowired
-	private MaritalStatusService maritalStatusService;
+	private transient MaritalStatusService maritalStatusService;
 
 	@Autowired
-	private StudentStatusService studentStatusService;
+	private transient StudentStatusService studentStatusService;
 
 	@Autowired
-	private VeteranStatusService veteranStatusService;
-
-	private final TransferObjectListFactory<ChallengeTO, Challenge> challengeToFactory =
-			TransferObjectListFactory.newFactory(ChallengeTO.class);
-
-	private final TransferObjectListFactory<ChildCareArrangementTO, ChildCareArrangement> childCareArrangementToFactory =
-			TransferObjectListFactory.newFactory(ChildCareArrangementTO.class);
-
-	private final TransferObjectListFactory<CitizenshipTO, Citizenship> citizenshipToFactory =
-			TransferObjectListFactory.newFactory(CitizenshipTO.class);
-
-	private final TransferObjectListFactory<EducationGoalTO, EducationGoal> educationGoalToFactory =
-			TransferObjectListFactory.newFactory(EducationGoalTO.class);
-
-	private final TransferObjectListFactory<EducationLevelTO, EducationLevel> educationLevelToFactory =
-			TransferObjectListFactory.newFactory(EducationLevelTO.class);
-
-	private final TransferObjectListFactory<EthnicityTO, Ethnicity> ethnicityToFactory =
-			TransferObjectListFactory.newFactory(EthnicityTO.class);
-
-	private final TransferObjectListFactory<FundingSourceTO, FundingSource> fundingSourceToFactory =
-			TransferObjectListFactory.newFactory(FundingSourceTO.class);
-
-	private final TransferObjectListFactory<MaritalStatusTO, MaritalStatus> maritalStatusToFactory =
-			TransferObjectListFactory.newFactory(MaritalStatusTO.class);
-
-	private final TransferObjectListFactory<StudentStatusTO, StudentStatus> studentStatusToFactory =
-			TransferObjectListFactory.newFactory(StudentStatusTO.class);
-
-	private final TransferObjectListFactory<VeteranStatusTO, VeteranStatus> veteranStatusToFactory =
-			TransferObjectListFactory.newFactory(VeteranStatusTO.class);
+	private transient VeteranStatusService veteranStatusService;
 
 	/**
 	 * Save changes to an IntakeForm
@@ -141,9 +104,9 @@ public class IntakeController {
 	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.PUT)
 	public @ResponseBody
-	ServiceResponse save(@PathVariable UUID studentId,
-			@Valid @RequestBody IntakeFormTO intakeForm) throws Exception {
-		IntakeForm model = intakeForm.asModel();
+	ServiceResponse save(final @PathVariable UUID studentId,
+			final @Valid @RequestBody IntakeFormTO intakeForm) throws Exception {
+		final IntakeForm model = intakeForm.asModel();
 		model.getPerson().setId(studentId);
 		return new ServiceResponse(service.save(model));
 	}
@@ -160,8 +123,9 @@ public class IntakeController {
 	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
 	public @ResponseBody
-	IntakeFormTO load(@PathVariable UUID studentId) throws Exception {
-		IntakeFormTO formTO = new IntakeFormTO(service.loadForPerson(studentId));
+	IntakeFormTO load(final @PathVariable UUID studentId) throws Exception {
+		final IntakeFormTO formTO = new IntakeFormTO(
+				service.loadForPerson(studentId));
 		formTO.setReferenceData(referenceData());
 		return formTO;
 	}
@@ -174,36 +138,48 @@ public class IntakeController {
 	 * @return Service response with success value, in the JSON format.
 	 */
 	public Map<String, Object> referenceData() throws Exception {
-		Map<String, Object> refData = new HashMap<String, Object>();
+		final Map<String, Object> refData = new HashMap<String, Object>();
 
-		refData.put("challenges", challengeToFactory.toTOList(challengeService
-				.getAll(ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("childCareArrangements", childCareArrangementToFactory
-				.toTOList(childCareArrangementService.getAll(
-						ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("citizenships", citizenshipToFactory
-				.toTOList(citizenshipService.getAll(ObjectStatus.ACTIVE, null,
-						null, null, null)));
-		refData.put("educationGoals", educationGoalToFactory
-				.toTOList(educationGoalService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
-		refData.put("educationLevels", educationLevelToFactory
-				.toTOList(educationLevelService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
-		refData.put("ethnicitys", ethnicityToFactory.toTOList(ethnicityService
-				.getAll(ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("fundingSources", fundingSourceToFactory
-				.toTOList(fundingSourceService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
-		refData.put("maritalStatuss", maritalStatusToFactory
-				.toTOList(maritalStatusService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
-		refData.put("studentStatuss", studentStatusToFactory
-				.toTOList(studentStatusService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
-		refData.put("veteranStatuss", veteranStatusToFactory
-				.toTOList(veteranStatusService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
+		refData.put("challenges",
+				ChallengeTO.listToTOList(
+						challengeService.getAll(
+								ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("childCareArrangements",
+				ChildCareArrangementTO.listToTOList(
+						childCareArrangementService.getAll(
+								ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("citizenships",
+				CitizenshipTO.listToTOList(
+						citizenshipService.getAll(
+								ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("educationGoals",
+				EducationGoalTO.listToTOList(
+						educationGoalService.getAll(
+								ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("educationLevels",
+				EducationLevelTO.listToTOList(
+						educationLevelService.getAll(
+								ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("ethnicitys",
+				EthnicityTO.listToTOList(
+						ethnicityService.getAll(
+								ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("fundingSources",
+				FundingSourceTO.listToTOList(
+						fundingSourceService.getAll(
+								ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("maritalStatuses",
+				MaritalStatusTO.listToTOList(
+						maritalStatusService.getAll(
+								ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("studentStatuses",
+				StudentStatusTO.listToTOList(
+						studentStatusService.getAll(
+								ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("veteranStatuses",
+				VeteranStatusTO.listToTOList(
+						veteranStatusService.getAll(
+								ObjectStatus.ACTIVE, null, null, null, null)));
 
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());
@@ -219,10 +195,30 @@ public class IntakeController {
 	 *            Exception to handle
 	 * @return Service response with success value, in the JSON format.
 	 */
-	@ExceptionHandler(Exception.class)
+	@PreAuthorize("permitAll")
+	@ExceptionHandler(ObjectNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public @ResponseBody
-	ServiceResponse handle(Exception e) {
-		logger.error("Error: ", e);
+	ServiceResponse handleNotFound(final ObjectNotFoundException e) {
+		LOGGER.error("Error: ", e);
+		return new ServiceResponse(false, e.getMessage());
+	}
+
+	@PreAuthorize("permitAll")
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public @ResponseBody
+	ServiceResponse handleAccessDenied(final AccessDeniedException e) {
+		LOGGER.error("Error: ", e);
+		return new ServiceResponse(false, e.getMessage());
+	}
+
+	@PreAuthorize("permitAll")
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public @ResponseBody
+	ServiceResponse handle(final Exception e) {
+		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 }

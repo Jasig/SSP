@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
+import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
 import org.studentsuccessplan.ssp.transferobject.reference.MaritalStatusTO;
 
@@ -16,7 +16,14 @@ public class MaritalStatusController extends
 		AbstractAuditableReferenceController<MaritalStatus, MaritalStatusTO> {
 
 	@Autowired
-	protected MaritalStatusController(MaritalStatusService service) {
-		super(service, MaritalStatus.class, MaritalStatusTO.class);
+	protected transient MaritalStatusService citizenshipService;
+
+	@Override
+	protected AuditableCrudService<MaritalStatus> getService() {
+		return citizenshipService;
+	}
+
+	protected MaritalStatusController() {
+		super(MaritalStatus.class, MaritalStatusTO.class);
 	}
 }

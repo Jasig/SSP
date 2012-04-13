@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.studentsuccessplan.ssp.model.reference.StudentStatus;
+import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.StudentStatusService;
 import org.studentsuccessplan.ssp.transferobject.reference.StudentStatusTO;
 
@@ -16,7 +16,14 @@ public class StudentStatusController extends
 		AbstractAuditableReferenceController<StudentStatus, StudentStatusTO> {
 
 	@Autowired
-	protected StudentStatusController(StudentStatusService service) {
-		super(service, StudentStatus.class, StudentStatusTO.class);
+	protected transient StudentStatusService citizenshipService;
+
+	@Override
+	protected AuditableCrudService<StudentStatus> getService() {
+		return citizenshipService;
+	}
+
+	protected StudentStatusController() {
+		super(StudentStatus.class, StudentStatusTO.class);
 	}
 }
