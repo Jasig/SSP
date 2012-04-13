@@ -41,7 +41,7 @@ public class VeteranStatusControllerIntegrationTest {
 	private static final UUID VETERANSTATUS_ID = UUID
 			.fromString("5c584fdb-dcc8-44ff-a30d-8c3e0a2d8206");
 
-	private static final String VETERANSTATUS_NAME = "[ Not applicable ]";
+	private static final String VETERANSTATUS_NAME = "Not applicable";
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -176,7 +176,7 @@ public class VeteranStatusControllerIntegrationTest {
 	@Test
 	public void testControllerGetAllResults() throws Exception {
 		List<VeteranStatusTO> list = controller.getAll(ObjectStatus.ACTIVE,
-				null, null, "name", "ASC");
+				null, null, null, null);
 
 		VeteranStatusTO veteranStatus = list.get(0);
 		assertEquals("Name should have been " + VETERANSTATUS_NAME,
