@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
-
 import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
@@ -23,15 +22,15 @@ public class SelfHelpGuideQuestionDao extends
 
 	@SuppressWarnings("unchecked")
 	// :TODO paging
-	public List<SelfHelpGuideQuestion> bySelfHelpGuide(
-			UUID selfHelpGuideId) {
-		return this.sessionFactory.getCurrentSession()
-				.createQuery("from SelfHelpGuideQuestion " +
-						"where selfHelpGuide.id = ? " +
-						"and objectStatus = ? " +
-						"order by questionNumber")
+	public List<SelfHelpGuideQuestion> bySelfHelpGuide(UUID selfHelpGuideId) {
+		return sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from SelfHelpGuideQuestion "
+								+ "where selfHelpGuide.id = ? "
+								+ "and objectStatus = ? "
+								+ "order by questionNumber")
 				.setParameter(0, selfHelpGuideId)
-				.setParameter(1, ObjectStatus.ACTIVE)
-				.list();
+				.setParameter(1, ObjectStatus.ACTIVE).list();
 	}
 }

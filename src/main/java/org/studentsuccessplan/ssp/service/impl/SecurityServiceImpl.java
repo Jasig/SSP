@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
-import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.security.SspUser;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
@@ -67,21 +66,8 @@ public class SecurityServiceImpl implements SecurityService {
 
 		if (sspUser.getPerson() == null) {
 			try {
-				if (SspUser.ANONYMOUS_PERSON_USERNAME.equals(sspUser
-						.getUsername())) {
-					Person anonymousPerson = new Person(
-							SspUser.ANONYMOUS_PERSON_ID);
-					anonymousPerson
-							.setFirstName(SspUser.ANONYMOUS_PERSON_FIRSTNAME);
-					anonymousPerson
-							.setLastName(SspUser.ANONYMOUS_PERSON_LASTNAME);
-					anonymousPerson
-							.setUsername(SspUser.ANONYMOUS_PERSON_USERNAME);
-					sspUser.setPerson(anonymousPerson);
-				} else {
-					sspUser.setPerson(personService.personFromUsername(sspUser
-							.getUsername()));
-				}
+				sspUser.setPerson(personService.personFromUsername(sspUser
+						.getUsername()));
 			} catch (ObjectNotFoundException e) {
 				logger.error("Did not find the person's domain object");
 				return null;

@@ -27,7 +27,7 @@ public class MyGpsChallengeControllerTest {
 	private ChallengeService manager;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		manager = createMock(ChallengeService.class);
 		controller = new MyGpsChallengeController(manager);
 	}

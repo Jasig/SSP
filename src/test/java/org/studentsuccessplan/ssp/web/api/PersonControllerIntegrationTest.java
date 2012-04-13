@@ -20,7 +20,7 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.transferobject.PersonTO;
 
 /**
- * Person controller tests
+ * {@link PersonController} tests
  * 
  * @author jon.adams
  */

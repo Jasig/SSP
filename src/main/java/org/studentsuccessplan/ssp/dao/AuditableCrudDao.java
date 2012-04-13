@@ -50,10 +50,11 @@ public interface AuditableCrudDao<T extends Auditable> {
 			Integer maxResults, String sort, String sortDirection);
 
 	/**
-	 * Retrieves the specified instance from persistent storage.
+	 * Retrieves the specified instance from persistent storage, or returns null
+	 * if not found.
 	 * 
 	 * @param id
-	 * @return The specified instance if found.
+	 * @return The specified instance if found; null otherwise.
 	 */
 	T get(UUID id);
 

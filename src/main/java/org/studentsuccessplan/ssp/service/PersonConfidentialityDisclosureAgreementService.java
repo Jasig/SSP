@@ -9,37 +9,59 @@ public interface PersonConfidentialityDisclosureAgreementService {
 	/**
 	 * Has the student agreed to the most recent
 	 * ConfidentialityDisclosureAgreement
+	 * 
+	 * @param student
+	 *            Student
+	 * @return
 	 */
-	public PersonConfidentialityDisclosureAgreement hasStudentAgreedToLatest(
+	PersonConfidentialityDisclosureAgreement hasStudentAgreedToLatest(
 			Person student);
 
 	/**
-	 * Has the student agreed to at least one
-	 * ConfidentialityDisclosureAgreement
+	 * Has the student agreed to at least one ConfidentialityDisclosureAgreement
+	 * 
+	 * @param student
+	 *            Student
+	 * @return
 	 */
-	public PersonConfidentialityDisclosureAgreement hasStudentAgreedToOne(
+	PersonConfidentialityDisclosureAgreement hasStudentAgreedToOne(
 			Person student);
 
 	/**
 	 * Has the student agreed to a specific agreement?
+	 * 
+	 * @param student
+	 *            Student
+	 * @param agreement
+	 *            Agreement
+	 * @return
 	 */
-	public PersonConfidentialityDisclosureAgreement hasStudentAgreedTo(
-			Person student, ConfidentialityDisclosureAgreement agreement);
+	PersonConfidentialityDisclosureAgreement hasStudentAgreedTo(Person student,
+			ConfidentialityDisclosureAgreement agreement);
 
 	/**
 	 * Return the most recent agreement
+	 * 
+	 * @return The most recent agreement
 	 */
-	public ConfidentialityDisclosureAgreement latestAgreement();
+	ConfidentialityDisclosureAgreement latestAgreement();
 
 	/**
 	 * Mark the given student as agreeing to the agreement
+	 * 
+	 * @param student
+	 *            Student
+	 * @param agreement
+	 *            Agreement
 	 */
-	public void studentAgreedTo(Person student,
+	void studentAgreedTo(Person student,
 			ConfidentialityDisclosureAgreement agreement);
 
 	/**
 	 * Mark the given student as agreeing to the most recent agreement
+	 * 
+	 * @param student
+	 *            Student to be marked as agreeing to the most recent agreement
 	 */
-	public void studentAgreed(Person student);
-
+	void studentAgreed(Person student);
 }

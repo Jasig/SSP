@@ -22,7 +22,10 @@ import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 // :TODO rename to SelfHelpGuideChallenge
 public class SelfHelpGuideQuestion extends AbstractReference implements
-Serializable {
+		Serializable {
+
+	private static final long serialVersionUID = -3535904390712079266L;
+
 	@Column(nullable = false)
 	private int questionNumber;
 
@@ -43,8 +46,6 @@ Serializable {
 	@OneToMany(mappedBy = "selfHelpGuideQuestion")
 	private Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = new HashSet<SelfHelpGuideQuestionResponse>(
 			0);
-
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor

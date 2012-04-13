@@ -1,13 +1,16 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
 import java.util.List;
+import java.util.Set;
 
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
 
 public class SelfHelpGuideContentTO extends SelfHelpGuideTO {
 
 	private String introductoryText;
-	private List<SelfHelpGuideQuestionTO> questions;
+	private Set<SelfHelpGuideQuestionTO> questions;
 
 	public String getIntroductoryText() {
 		return introductoryText;
@@ -17,12 +20,20 @@ public class SelfHelpGuideContentTO extends SelfHelpGuideTO {
 		this.introductoryText = introductoryText;
 	}
 
-	public List<SelfHelpGuideQuestionTO> getQuestions() {
+	public Set<SelfHelpGuideQuestionTO> getQuestions() {
 		return questions;
 	}
 
-	public void setQuestions(List<SelfHelpGuideQuestionTO> questions) {
+	public void setQuestions(Set<SelfHelpGuideQuestionTO> questions) {
 		this.questions = questions;
 	}
 
+	public void fromModel(SelfHelpGuide model,
+			List<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
+		super.fromModel(model);
+
+		setIntroductoryText(model.getIntroductoryText());
+		setQuestions(SelfHelpGuideQuestionTO.setToTOSet(model
+				.getSelfHelpGuideQuestions()));
+	}
 }

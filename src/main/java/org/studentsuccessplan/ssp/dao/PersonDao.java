@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.FlushMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 
@@ -73,7 +73,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	public Person fromUsername(String username) {
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(
 				Person.class);
-		query.add(Restrictions.eq("username", username));
+		query.add(Restrictions.eq("username", username)).setFlushMode(
+				FlushMode.COMMIT);
 		return (Person) query.uniqueResult();
 	}
 
