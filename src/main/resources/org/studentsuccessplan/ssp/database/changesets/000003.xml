@@ -3908,4 +3908,12 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="Add strengths to person" author="jon.adams">
+		<addColumn tableName="person">
+			<column name="strengths" type="text" />
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person" columnName="strengths" />
+		</rollback>
+	</changeSet>
 </databaseChangeLog>
