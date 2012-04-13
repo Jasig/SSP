@@ -25,38 +25,38 @@ public class PersonTO
 		super();
 	}
 
-	public PersonTO(Person model) {
+	public PersonTO(final Person model) {
 		super();
 		fromModel(model);
 	}
 
 	@Override
-	public void fromModel(Person model) {
+	public final void fromModel(final Person model) {
 		super.fromModel(model);
 
-		setFirstName(model.getFirstName());
-		setMiddleInitial(model.getMiddleInitial());
-		setLastName(model.getLastName());
-		setBirthDate(model.getBirthDate());
-		setPrimaryEmailAddress(model.getPrimaryEmailAddress());
-		setSecondaryEmailAddress(model.getSecondaryEmailAddress());
-		setUsername(model.getUsername());
-		setUserId(model.getUserId());
-		setHomePhone(model.getHomePhone());
-		setWorkPhone(model.getWorkPhone());
-		setCellPhone(model.getCellPhone());
-		setAddressLine1(model.getAddressLine1());
-		setAddressLine2(model.getAddressLine2());
-		setCity(model.getCity());
-		setState(model.getState());
-		setZipCode(model.getZipCode());
-		setPhotoUrl(model.getPhotoUrl());
-		setSchoolId(model.getSchoolId());
-		setEnabled(model.isEnabled());
+		firstName = model.getFirstName();
+		middleInitial = model.getMiddleInitial();
+		lastName = model.getLastName();
+		birthDate = model.getBirthDate();
+		primaryEmailAddress = model.getPrimaryEmailAddress();
+		secondaryEmailAddress = model.getSecondaryEmailAddress();
+		username = model.getUsername();
+		userId = model.getUserId();
+		homePhone = model.getHomePhone();
+		workPhone = model.getWorkPhone();
+		cellPhone = model.getCellPhone();
+		addressLine1 = model.getAddressLine1();
+		addressLine2 = model.getAddressLine2();
+		city = model.getCity();
+		state = model.getState();
+		zipCode = model.getZipCode();
+		photoUrl = model.getPhotoUrl();
+		schoolId = model.getSchoolId();
+		enabled = model.isEnabled();
 	}
 
 	@Override
-	public Person addToModel(Person model) {
+	public Person addToModel(final Person model) {
 		super.addToModel(model);
 		model.setFirstName(getFirstName());
 		model.setMiddleInitial(getMiddleInitial());
@@ -87,8 +87,8 @@ public class PersonTO
 	}
 
 	public static List<PersonTO> listToTOList(
-			List<Person> models) {
-		List<PersonTO> tos = Lists.newArrayList();
+			final List<Person> models) {
+		final List<PersonTO> tos = Lists.newArrayList();
 		for (Person model : models) {
 			tos.add(new PersonTO(model));
 		}
@@ -99,7 +99,7 @@ public class PersonTO
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -107,7 +107,7 @@ public class PersonTO
 		return middleInitial;
 	}
 
-	public void setMiddleInitial(String middleInitial) {
+	public void setMiddleInitial(final String middleInitial) {
 		this.middleInitial = middleInitial;
 	}
 
@@ -115,7 +115,7 @@ public class PersonTO
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -123,7 +123,7 @@ public class PersonTO
 		return birthDate == null ? null : new Date(birthDate.getTime());
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(final Date birthDate) {
 		this.birthDate = birthDate == null ? null : new Date(
 				birthDate.getTime());
 	}
@@ -132,7 +132,7 @@ public class PersonTO
 		return primaryEmailAddress;
 	}
 
-	public void setPrimaryEmailAddress(String primaryEmailAddress) {
+	public void setPrimaryEmailAddress(final String primaryEmailAddress) {
 		this.primaryEmailAddress = primaryEmailAddress;
 	}
 
@@ -140,7 +140,7 @@ public class PersonTO
 		return secondaryEmailAddress;
 	}
 
-	public void setSecondaryEmailAddress(String secondaryEmailAddress) {
+	public void setSecondaryEmailAddress(final String secondaryEmailAddress) {
 		this.secondaryEmailAddress = secondaryEmailAddress;
 	}
 
@@ -148,7 +148,7 @@ public class PersonTO
 		return username;
 	}
 
-	public void setUsername(String username) {
+	public void setUsername(final String username) {
 		this.username = username;
 	}
 
@@ -156,7 +156,7 @@ public class PersonTO
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(final String userId) {
 		this.userId = userId;
 	}
 
@@ -164,7 +164,7 @@ public class PersonTO
 		return homePhone;
 	}
 
-	public void setHomePhone(String homePhone) {
+	public void setHomePhone(final String homePhone) {
 		this.homePhone = homePhone;
 	}
 
@@ -172,7 +172,7 @@ public class PersonTO
 		return workPhone;
 	}
 
-	public void setWorkPhone(String workPhone) {
+	public void setWorkPhone(final String workPhone) {
 		this.workPhone = workPhone;
 	}
 
@@ -180,7 +180,7 @@ public class PersonTO
 		return cellPhone;
 	}
 
-	public void setCellPhone(String cellPhone) {
+	public void setCellPhone(final String cellPhone) {
 		this.cellPhone = cellPhone;
 	}
 
@@ -188,7 +188,7 @@ public class PersonTO
 		return addressLine1;
 	}
 
-	public void setAddressLine1(String addressLine1) {
+	public void setAddressLine1(final String addressLine1) {
 		this.addressLine1 = addressLine1;
 	}
 
@@ -196,7 +196,7 @@ public class PersonTO
 		return addressLine2;
 	}
 
-	public void setAddressLine2(String addressLine2) {
+	public void setAddressLine2(final String addressLine2) {
 		this.addressLine2 = addressLine2;
 	}
 
@@ -204,7 +204,7 @@ public class PersonTO
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(final String city) {
 		this.city = city;
 	}
 
@@ -212,7 +212,7 @@ public class PersonTO
 		return state;
 	}
 
-	public void setState(String state) {
+	public void setState(final String state) {
 		this.state = state;
 	}
 
@@ -220,7 +220,7 @@ public class PersonTO
 		return zipCode;
 	}
 
-	public void setZipCode(String zipCode) {
+	public void setZipCode(final String zipCode) {
 		this.zipCode = zipCode;
 	}
 
@@ -228,7 +228,7 @@ public class PersonTO
 		return photoUrl;
 	}
 
-	public void setPhotoUrl(String photoUrl) {
+	public void setPhotoUrl(final String photoUrl) {
 		this.photoUrl = photoUrl;
 	}
 
@@ -236,7 +236,7 @@ public class PersonTO
 		return schoolId;
 	}
 
-	public void setSchoolId(String schoolId) {
+	public void setSchoolId(final String schoolId) {
 		this.schoolId = schoolId;
 	}
 
@@ -244,7 +244,7 @@ public class PersonTO
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
 

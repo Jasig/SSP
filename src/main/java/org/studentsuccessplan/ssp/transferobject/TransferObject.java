@@ -16,14 +16,14 @@ public interface TransferObject<T> {
 	 * @param model
 	 *            Model from which to pull attributes
 	 */
-	public void fromModel(T model);
+	void fromModel(T model);
 
 	/**
 	 * Create a new Model object from this TransferObject
 	 * 
 	 * @return A model representation from the related transfer object.
 	 */
-	public T asModel();
+	T asModel();
 
 	/**
 	 * Add the attributes of this TransferObject to this Model
@@ -34,6 +34,6 @@ public interface TransferObject<T> {
 	 *            Model from which to pull attributes
 	 * @return An updated model with new values from the supplied parameter.
 	 */
-	public T addToModel(T model);
+	T addToModel(T model);
 
 }

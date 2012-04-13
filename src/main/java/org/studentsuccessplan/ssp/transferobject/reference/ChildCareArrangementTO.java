@@ -8,33 +8,33 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class ChildCareArrangementTO extends
-		AbstractReferenceTO<ChildCareArrangement> implements
-		TransferObject<ChildCareArrangement> {
+public class ChildCareArrangementTO extends AbstractReferenceTO<ChildCareArrangement>
+		implements TransferObject<ChildCareArrangement> {
 
 	public ChildCareArrangementTO() {
 		super();
 	}
 
-	public ChildCareArrangementTO(UUID id) {
+	public ChildCareArrangementTO(final UUID id) {
 		super(id);
 	}
 
-	public ChildCareArrangementTO(UUID id, String name) {
+	public ChildCareArrangementTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public ChildCareArrangementTO(UUID id, String name, String description) {
+	public ChildCareArrangementTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
-	@Override
-	public void fromModel(ChildCareArrangement model) {
-		super.fromModel(model);
+	public ChildCareArrangementTO(final ChildCareArrangement model) {
+		super();
+		fromModel(model);
 	}
 
 	@Override
-	public ChildCareArrangement addToModel(ChildCareArrangement model) {
+	public ChildCareArrangement addToModel(final ChildCareArrangement model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -45,12 +45,10 @@ public class ChildCareArrangementTO extends
 	}
 
 	public static List<ChildCareArrangementTO> listToTOList(
-			List<ChildCareArrangement> models) {
-		List<ChildCareArrangementTO> tos = Lists.newArrayList();
+			final List<ChildCareArrangement> models) {
+		final List<ChildCareArrangementTO> tos = Lists.newArrayList();
 		for (ChildCareArrangement model : models) {
-			ChildCareArrangementTO obj = new ChildCareArrangementTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new ChildCareArrangementTO(model));
 		}
 		return tos;
 	}

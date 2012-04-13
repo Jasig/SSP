@@ -15,20 +15,26 @@ public class SelfHelpGuideTO extends AbstractReferenceTO<SelfHelpGuide>
 		super();
 	}
 
-	public SelfHelpGuideTO(UUID id) {
+	public SelfHelpGuideTO(final UUID id) {
 		super(id);
 	}
 
-	public SelfHelpGuideTO(UUID id, String name) {
+	public SelfHelpGuideTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public SelfHelpGuideTO(UUID id, String name, String description) {
+	public SelfHelpGuideTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public SelfHelpGuideTO(final SelfHelpGuide model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public SelfHelpGuide addToModel(SelfHelpGuide model) {
+	public SelfHelpGuide addToModel(final SelfHelpGuide model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -38,13 +44,13 @@ public class SelfHelpGuideTO extends AbstractReferenceTO<SelfHelpGuide>
 		return addToModel(new SelfHelpGuide());
 	}
 
-	public static List<SelfHelpGuideTO> listToTOList(List<SelfHelpGuide> guides) {
-		List<SelfHelpGuideTO> tos = Lists.newArrayList();
-		for (SelfHelpGuide model : guides) {
-			SelfHelpGuideTO obj = new SelfHelpGuideTO();
-			obj.fromModel(model);
-			tos.add(obj);
+	public static List<SelfHelpGuideTO> listToTOList(
+			final List<SelfHelpGuide> models) {
+		final List<SelfHelpGuideTO> tos = Lists.newArrayList();
+		for (SelfHelpGuide model : models) {
+			tos.add(new SelfHelpGuideTO(model));
 		}
 		return tos;
 	}
+
 }

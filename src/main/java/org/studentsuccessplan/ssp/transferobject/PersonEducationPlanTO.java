@@ -20,30 +20,30 @@ public class PersonEducationPlanTO
 		super();
 	}
 
-	public PersonEducationPlanTO(PersonEducationPlan model) {
+	public PersonEducationPlanTO(final PersonEducationPlan model) {
 		super();
 		fromModel(model);
 	}
 
 	@Override
-	public void fromModel(PersonEducationPlan model) {
+	public final void fromModel(final PersonEducationPlan model) {
 		super.fromModel(model);
 
-		setNewOrientationComplete(model.isNewOrientationComplete());
-		setRegisteredForClasses(model.isRegisteredForClasses());
-		setCollegeDegreeForParents(model.isCollegeDegreeForParents());
-		setSpecialNeeds(model.isSpecialNeeds());
+		newOrientationComplete = model.isNewOrientationComplete();
+		registeredForClasses = model.isRegisteredForClasses();
+		collegeDegreeForParents = model.isCollegeDegreeForParents();
+		specialNeeds = model.isSpecialNeeds();
 
 		if ((model.getStudentStatus() != null)
 				&& (model.getStudentStatus().getId() != null)) {
-			setStudentStatusId(model.getStudentStatus().getId());
+			studentStatusId = model.getStudentStatus().getId();
 		}
 
-		setGradeTypicallyEarned(model.getGradeTypicallyEarned());
+		gradeTypicallyEarned = model.getGradeTypicallyEarned();
 	}
 
 	@Override
-	public PersonEducationPlan addToModel(PersonEducationPlan model) {
+	public PersonEducationPlan addToModel(final PersonEducationPlan model) {
 		super.addToModel(model);
 
 		model.setNewOrientationComplete(isNewOrientationComplete());
@@ -61,8 +61,8 @@ public class PersonEducationPlanTO
 	}
 
 	public static List<PersonEducationPlanTO> listToTOList(
-			List<PersonEducationPlan> models) {
-		List<PersonEducationPlanTO> tos = Lists.newArrayList();
+			final List<PersonEducationPlan> models) {
+		final List<PersonEducationPlanTO> tos = Lists.newArrayList();
 		for (PersonEducationPlan model : models) {
 			tos.add(new PersonEducationPlanTO(model));
 		}
@@ -73,7 +73,7 @@ public class PersonEducationPlanTO
 		return personId;
 	}
 
-	public void setPersonId(UUID personId) {
+	public void setPersonId(final UUID personId) {
 		this.personId = personId;
 	}
 
@@ -81,7 +81,7 @@ public class PersonEducationPlanTO
 		return studentStatusId;
 	}
 
-	public void setStudentStatusId(UUID studentStatusId) {
+	public void setStudentStatusId(final UUID studentStatusId) {
 		this.studentStatusId = studentStatusId;
 	}
 
@@ -89,7 +89,7 @@ public class PersonEducationPlanTO
 		return newOrientationComplete;
 	}
 
-	public void setNewOrientationComplete(boolean newOrientationComplete) {
+	public void setNewOrientationComplete(final boolean newOrientationComplete) {
 		this.newOrientationComplete = newOrientationComplete;
 	}
 
@@ -97,7 +97,7 @@ public class PersonEducationPlanTO
 		return registeredForClasses;
 	}
 
-	public void setRegisteredForClasses(boolean registeredForClasses) {
+	public void setRegisteredForClasses(final boolean registeredForClasses) {
 		this.registeredForClasses = registeredForClasses;
 	}
 
@@ -105,7 +105,7 @@ public class PersonEducationPlanTO
 		return collegeDegreeForParents;
 	}
 
-	public void setCollegeDegreeForParents(boolean collegeDegreeForParents) {
+	public void setCollegeDegreeForParents(final boolean collegeDegreeForParents) {
 		this.collegeDegreeForParents = collegeDegreeForParents;
 	}
 
@@ -113,7 +113,7 @@ public class PersonEducationPlanTO
 		return specialNeeds;
 	}
 
-	public void setSpecialNeeds(boolean specialNeeds) {
+	public void setSpecialNeeds(final boolean specialNeeds) {
 		this.specialNeeds = specialNeeds;
 	}
 
@@ -121,7 +121,7 @@ public class PersonEducationPlanTO
 		return gradeTypicallyEarned;
 	}
 
-	public void setGradeTypicallyEarned(String gradeTypicallyEarned) {
+	public void setGradeTypicallyEarned(final String gradeTypicallyEarned) {
 		this.gradeTypicallyEarned = gradeTypicallyEarned;
 	}
 

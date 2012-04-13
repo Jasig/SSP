@@ -15,20 +15,26 @@ public class StudentStatusTO extends AbstractReferenceTO<StudentStatus>
 		super();
 	}
 
-	public StudentStatusTO(UUID id) {
+	public StudentStatusTO(final UUID id) {
 		super(id);
 	}
 
-	public StudentStatusTO(UUID id, String name) {
+	public StudentStatusTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public StudentStatusTO(UUID id, String name, String description) {
+	public StudentStatusTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public StudentStatusTO(final StudentStatus model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public StudentStatus addToModel(StudentStatus model) {
+	public StudentStatus addToModel(final StudentStatus model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -38,12 +44,11 @@ public class StudentStatusTO extends AbstractReferenceTO<StudentStatus>
 		return addToModel(new StudentStatus());
 	}
 
-	public static List<StudentStatusTO> listToTOList(List<StudentStatus> models) {
-		List<StudentStatusTO> tos = Lists.newArrayList();
+	public static List<StudentStatusTO> listToTOList(
+			final List<StudentStatus> models) {
+		final List<StudentStatusTO> tos = Lists.newArrayList();
 		for (StudentStatus model : models) {
-			StudentStatusTO obj = new StudentStatusTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new StudentStatusTO(model));
 		}
 		return tos;
 	}

@@ -48,23 +48,29 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		super();
 	}
 
-	public ChallengeTO(UUID id) {
+	public ChallengeTO(final UUID id) {
 		super(id);
 	}
 
-	public ChallengeTO(UUID id, String name) {
+	public ChallengeTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public ChallengeTO(UUID id, String name, String description) {
+	public ChallengeTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
+	}
+
+	public ChallengeTO(final Challenge model) {
+		super();
+		fromModel(model);
 	}
 
 	public String getSelfHelpGuideQuestion() {
 		return selfHelpGuideQuestion;
 	}
 
-	public void setSelfHelpGuideQuestion(String selfHelpGuideQuestion) {
+	public void setSelfHelpGuideQuestion(final String selfHelpGuideQuestion) {
 		this.selfHelpGuideQuestion = selfHelpGuideQuestion;
 	}
 
@@ -72,7 +78,8 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		return selfHelpGuideDescription;
 	}
 
-	public void setSelfHelpGuideDescription(String selfHelpGuideDescription) {
+	public void setSelfHelpGuideDescription(
+			final String selfHelpGuideDescription) {
 		this.selfHelpGuideDescription = selfHelpGuideDescription;
 	}
 
@@ -80,7 +87,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		return showInStudentIntake;
 	}
 
-	public void setShowInStudentIntake(boolean showInStudentIntake) {
+	public void setShowInStudentIntake(final boolean showInStudentIntake) {
 		this.showInStudentIntake = showInStudentIntake;
 	}
 
@@ -88,7 +95,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		return showInSelfHelpSearch;
 	}
 
-	public void setShowInSelfHelpSearch(boolean showInSelfHelpSearch) {
+	public void setShowInSelfHelpSearch(final boolean showInSelfHelpSearch) {
 		this.showInSelfHelpSearch = showInSelfHelpSearch;
 	}
 
@@ -97,7 +104,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	}
 
 	public void setSelfHelpGuideQuestions(
-			Set<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
+			final Set<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
 		this.selfHelpGuideQuestions = selfHelpGuideQuestions;
 	}
 
@@ -105,7 +112,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		return tags;
 	}
 
-	public void setTags(String tags) {
+	public void setTags(final String tags) {
 		this.tags = tags;
 	}
 
@@ -114,7 +121,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	}
 
 	public void setChallengeChallengeReferrals(
-			Set<ChallengeReferralTO> challengeChallengeReferrals) {
+			final Set<ChallengeReferralTO> challengeChallengeReferrals) {
 		this.challengeChallengeReferrals = challengeChallengeReferrals;
 		setReferralCount(challengeChallengeReferrals == null ? 0
 				: challengeChallengeReferrals.size());
@@ -124,40 +131,39 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		return referralCount;
 	}
 
-	public void setReferralCount(int referralCount) {
+	public void setReferralCount(final int referralCount) {
 		this.referralCount = referralCount;
 	}
 
 	@Override
-	public void fromModel(Challenge model) {
+	public final void fromModel(final Challenge model) {
 		super.fromModel(model);
 
-		setSelfHelpGuideQuestion(model.getSelfHelpGuideQuestion());
-		setSelfHelpGuideQuestions(model.getSelfHelpGuideQuestions());
-		setSelfHelpGuideDescription(model.getSelfHelpGuideDescription());
-		setShowInStudentIntake(model.isShowInStudentIntake());
-		setShowInSelfHelpSearch(model.isShowInSelfHelpSearch());
-		setTags(model.getTags());
+		selfHelpGuideQuestion = model.getSelfHelpGuideQuestion();
+		selfHelpGuideQuestions = model.getSelfHelpGuideQuestions();
+		selfHelpGuideDescription = model.getSelfHelpGuideDescription();
+		showInStudentIntake = model.isShowInStudentIntake();
+		showInSelfHelpSearch = model.isShowInSelfHelpSearch();
+		tags = model.getTags();
 
-		if (model.getChallengeChallengeReferrals() == null
+		if ((model.getChallengeChallengeReferrals() == null)
 				|| model.getChallengeChallengeReferrals().isEmpty()) {
-			setChallengeChallengeReferrals(new HashSet<ChallengeReferralTO>(0));
+			challengeChallengeReferrals = new HashSet<ChallengeReferralTO>(0);
 		} else {
-			Set<ChallengeReferralTO> set = new HashSet<ChallengeReferralTO>(
+			final Set<ChallengeReferralTO> set = new HashSet<ChallengeReferralTO>(
 					model.getChallengeChallengeReferrals().size());
 			for (ChallengeChallengeReferral challengeReferral : model
 					.getChallengeChallengeReferrals()) {
-				ChallengeReferralTO crt = new ChallengeReferralTO();
-				crt.fromModel(challengeReferral.getChallengeReferral());
-				set.add(crt);
+				set.add(new ChallengeReferralTO(challengeReferral
+						.getChallengeReferral()));
 			}
 
-			setChallengeChallengeReferrals(set);
+			challengeChallengeReferrals = set;
 		}
 	}
 
 	@Override
-	public Challenge addToModel(Challenge model) {
+	public Challenge addToModel(final Challenge model) {
 		super.addToModel(model);
 
 		model.setSelfHelpGuideQuestion(getSelfHelpGuideQuestion());
@@ -204,26 +210,15 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		return model;
 	}
 
-	public void pullAttributesFromModel(Challenge model) {
-		fromModel(model);
-	}
-
-	public Challenge pushAttributesToModel(Challenge model) {
-		addToModel(model);
-		return model;
-	}
-
 	@Override
 	public Challenge asModel() {
-		return pushAttributesToModel(new Challenge());
+		return addToModel(new Challenge());
 	}
 
-	public static List<ChallengeTO> listToTOList(List<Challenge> models) {
-		List<ChallengeTO> tos = Lists.newArrayList();
+	public static List<ChallengeTO> listToTOList(final List<Challenge> models) {
+		final List<ChallengeTO> tos = Lists.newArrayList();
 		for (Challenge model : models) {
-			ChallengeTO challenge = new ChallengeTO();
-			challenge.fromModel(model);
-			tos.add(challenge);
+			tos.add(new ChallengeTO(model));
 		}
 
 		return tos;

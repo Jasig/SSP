@@ -22,28 +22,33 @@ public abstract class AuditableTO<T extends Auditable>
 	private ObjectStatus objectStatus;
 
 	public AuditableTO() {
+		// allowed
 	}
 
-	public AuditableTO(UUID id) {
+	public AuditableTO(final UUID id) {
 		this.id = id;
 	}
 
-	@Override
-	public void fromModel(T model) {
-		setId(model.getId());
-		if (model.getCreatedBy() != null) {
-			setCreatedById(model.getCreatedBy().getId());
-		}
-		if (model.getModifiedBy() != null) {
-			setModifiedById(model.getModifiedBy().getId());
-		}
-		setCreatedDate(model.getCreatedDate());
-		setModifiedDate(model.getModifiedDate());
-		setObjectStatus(model.getObjectStatus());
+	public AuditableTO(final Auditable model) {
+		fromModel(model);
 	}
 
 	@Override
-	public T addToModel(T model) {
+	public final void fromModel(final Auditable model) {
+		id = model.getId();
+		if (model.getCreatedBy() != null) {
+			createdById = model.getCreatedBy().getId();
+		}
+		if (model.getModifiedBy() != null) {
+			modifiedById = model.getModifiedBy().getId();
+		}
+		createdDate = model.getCreatedDate();
+		modifiedDate = model.getModifiedDate();
+		objectStatus = model.getObjectStatus();
+	}
+
+	@Override
+	public T addToModel(final T model) {
 		model.setId(getId());
 		model.setObjectStatus(getObjectStatus());
 		return model;
@@ -53,7 +58,7 @@ public abstract class AuditableTO<T extends Auditable>
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(final UUID id) {
 		this.id = id;
 	}
 
@@ -61,7 +66,7 @@ public abstract class AuditableTO<T extends Auditable>
 		return createdDate == null ? null : new Date(createdDate.getTime());
 	}
 
-	public void setCreatedDate(Date createdDate) {
+	public void setCreatedDate(final Date createdDate) {
 		this.createdDate = createdDate == null ? null : new Date(
 				createdDate.getTime());
 	}
@@ -70,7 +75,7 @@ public abstract class AuditableTO<T extends Auditable>
 		return createdById;
 	}
 
-	public void setCreatedById(UUID createdById) {
+	public void setCreatedById(final UUID createdById) {
 		this.createdById = createdById;
 	}
 
@@ -78,7 +83,7 @@ public abstract class AuditableTO<T extends Auditable>
 		return modifiedDate == null ? null : new Date(modifiedDate.getTime());
 	}
 
-	public void setModifiedDate(Date modifiedDate) {
+	public void setModifiedDate(final Date modifiedDate) {
 		this.modifiedDate = modifiedDate == null ? null : new Date(
 				modifiedDate.getTime());
 	}
@@ -87,7 +92,7 @@ public abstract class AuditableTO<T extends Auditable>
 		return modifiedById;
 	}
 
-	public void setModifiedById(UUID modifiedById) {
+	public void setModifiedById(final UUID modifiedById) {
 		this.modifiedById = modifiedById;
 	}
 
@@ -95,7 +100,7 @@ public abstract class AuditableTO<T extends Auditable>
 		return objectStatus;
 	}
 
-	public void setObjectStatus(ObjectStatus objectStatus) {
+	public void setObjectStatus(final ObjectStatus objectStatus) {
 		this.objectStatus = objectStatus;
 	}
 }

@@ -8,28 +8,33 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class SelfHelpGuideGroupTO extends
-		AbstractReferenceTO<SelfHelpGuideGroup> implements
-		TransferObject<SelfHelpGuideGroup> {
+public class SelfHelpGuideGroupTO extends AbstractReferenceTO<SelfHelpGuideGroup>
+		implements TransferObject<SelfHelpGuideGroup> {
 
 	public SelfHelpGuideGroupTO() {
 		super();
 	}
 
-	public SelfHelpGuideGroupTO(UUID id) {
+	public SelfHelpGuideGroupTO(final UUID id) {
 		super(id);
 	}
 
-	public SelfHelpGuideGroupTO(UUID id, String name) {
+	public SelfHelpGuideGroupTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public SelfHelpGuideGroupTO(UUID id, String name, String description) {
+	public SelfHelpGuideGroupTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public SelfHelpGuideGroupTO(final SelfHelpGuideGroup model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public SelfHelpGuideGroup addToModel(SelfHelpGuideGroup model) {
+	public SelfHelpGuideGroup addToModel(final SelfHelpGuideGroup model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -40,12 +45,10 @@ public class SelfHelpGuideGroupTO extends
 	}
 
 	public static List<SelfHelpGuideGroupTO> listToTOList(
-			List<SelfHelpGuideGroup> models) {
-		List<SelfHelpGuideGroupTO> tos = Lists.newArrayList();
+			final List<SelfHelpGuideGroup> models) {
+		final List<SelfHelpGuideGroupTO> tos = Lists.newArrayList();
 		for (SelfHelpGuideGroup model : models) {
-			SelfHelpGuideGroupTO obj = new SelfHelpGuideGroupTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new SelfHelpGuideGroupTO(model));
 		}
 		return tos;
 	}

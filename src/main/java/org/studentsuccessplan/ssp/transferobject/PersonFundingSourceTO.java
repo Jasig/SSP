@@ -20,30 +20,30 @@ public class PersonFundingSourceTO
 		super();
 	}
 
-	public PersonFundingSourceTO(PersonFundingSource model) {
+	public PersonFundingSourceTO(final PersonFundingSource model) {
 		super();
 		fromModel(model);
 	}
 
 	@Override
-	public void fromModel(PersonFundingSource model) {
+	public final void fromModel(final PersonFundingSource model) {
 		super.fromModel(model);
 
-		setDescription(model.getDescription());
+		description = model.getDescription();
 
 		if ((model.getFundingSource() != null)
 				&& (model.getFundingSource().getId() != null)) {
-			setFundingSourceId(model.getFundingSource().getId());
+			fundingSourceId = model.getFundingSource().getId();
 		}
 
 		if ((model.getPerson() != null)
 				&& (model.getPerson().getId() != null)) {
-			setPersonId(model.getPerson().getId());
+			personId = model.getPerson().getId();
 		}
 	}
 
 	@Override
-	public PersonFundingSource addToModel(PersonFundingSource model) {
+	public PersonFundingSource addToModel(final PersonFundingSource model) {
 		super.addToModel(model);
 
 		model.setDescription(getDescription());
@@ -65,8 +65,8 @@ public class PersonFundingSourceTO
 	}
 
 	public static List<PersonFundingSourceTO> listToTOList(
-			List<PersonFundingSource> models) {
-		List<PersonFundingSourceTO> tos = Lists.newArrayList();
+			final List<PersonFundingSource> models) {
+		final List<PersonFundingSourceTO> tos = Lists.newArrayList();
 		for (PersonFundingSource model : models) {
 			tos.add(new PersonFundingSourceTO(model));
 		}
@@ -77,7 +77,7 @@ public class PersonFundingSourceTO
 		return personId;
 	}
 
-	public void setPersonId(UUID personId) {
+	public void setPersonId(final UUID personId) {
 		this.personId = personId;
 	}
 
@@ -85,7 +85,7 @@ public class PersonFundingSourceTO
 		return fundingSourceId;
 	}
 
-	public void setFundingSourceId(UUID fundingSourceId) {
+	public void setFundingSourceId(final UUID fundingSourceId) {
 		this.fundingSourceId = fundingSourceId;
 	}
 
@@ -93,7 +93,7 @@ public class PersonFundingSourceTO
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 }

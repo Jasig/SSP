@@ -8,28 +8,33 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class ConfidentialityLevelTO extends
-		AbstractReferenceTO<ConfidentialityLevel> implements
-		TransferObject<ConfidentialityLevel> {
+public class ConfidentialityLevelTO extends AbstractReferenceTO<ConfidentialityLevel>
+		implements TransferObject<ConfidentialityLevel> {
 
 	public ConfidentialityLevelTO() {
 		super();
 	}
 
-	public ConfidentialityLevelTO(UUID id) {
+	public ConfidentialityLevelTO(final UUID id) {
 		super(id);
 	}
 
-	public ConfidentialityLevelTO(UUID id, String name) {
+	public ConfidentialityLevelTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public ConfidentialityLevelTO(UUID id, String name, String description) {
+	public ConfidentialityLevelTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public ConfidentialityLevelTO(final ConfidentialityLevel model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public ConfidentialityLevel addToModel(ConfidentialityLevel model) {
+	public ConfidentialityLevel addToModel(final ConfidentialityLevel model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -40,12 +45,10 @@ public class ConfidentialityLevelTO extends
 	}
 
 	public static List<ConfidentialityLevelTO> listToTOList(
-			List<ConfidentialityLevel> models) {
-		List<ConfidentialityLevelTO> tos = Lists.newArrayList();
+			final List<ConfidentialityLevel> models) {
+		final List<ConfidentialityLevelTO> tos = Lists.newArrayList();
 		for (ConfidentialityLevel model : models) {
-			ConfidentialityLevelTO obj = new ConfidentialityLevelTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new ConfidentialityLevelTO(model));
 		}
 		return tos;
 	}

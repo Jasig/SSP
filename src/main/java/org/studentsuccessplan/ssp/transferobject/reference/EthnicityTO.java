@@ -8,27 +8,33 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class EthnicityTO extends AbstractReferenceTO<Ethnicity> implements
-		TransferObject<Ethnicity> {
+public class EthnicityTO extends AbstractReferenceTO<Ethnicity>
+		implements TransferObject<Ethnicity> {
 
 	public EthnicityTO() {
 		super();
 	}
 
-	public EthnicityTO(UUID id) {
+	public EthnicityTO(final UUID id) {
 		super(id);
 	}
 
-	public EthnicityTO(UUID id, String name) {
+	public EthnicityTO(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	public EthnicityTO(UUID id, String name, String description) {
+	public EthnicityTO(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
+	public EthnicityTO(final Ethnicity model) {
+		super();
+		fromModel(model);
+	}
+
 	@Override
-	public Ethnicity addToModel(Ethnicity model) {
+	public Ethnicity addToModel(final Ethnicity model) {
 		super.addToModel(model);
 		return model;
 	}
@@ -38,12 +44,11 @@ public class EthnicityTO extends AbstractReferenceTO<Ethnicity> implements
 		return addToModel(new Ethnicity());
 	}
 
-	public static List<EthnicityTO> listToTOList(List<Ethnicity> models) {
-		List<EthnicityTO> tos = Lists.newArrayList();
+	public static List<EthnicityTO> listToTOList(
+			final List<Ethnicity> models) {
+		final List<EthnicityTO> tos = Lists.newArrayList();
 		for (Ethnicity model : models) {
-			EthnicityTO obj = new EthnicityTO();
-			obj.fromModel(model);
-			tos.add(obj);
+			tos.add(new EthnicityTO(model));
 		}
 		return tos;
 	}
