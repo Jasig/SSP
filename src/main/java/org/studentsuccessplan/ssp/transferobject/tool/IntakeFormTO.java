@@ -71,16 +71,25 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		if (model.getPerson().getDemographics() != null) {
 			personDemographics = new PersonDemographicsTO(model.getPerson()
 					.getDemographics());
+			if (personDemographics.getPersonId() == null) {
+				personDemographics.setPersonId(person.getId());
+			}
 		}
 
 		if (model.getPerson().getEducationGoal() != null) {
 			personEducationGoal = new PersonEducationGoalTO(model.getPerson()
 					.getEducationGoal());
+			if (personEducationGoal.getPersonId() == null) {
+				personEducationGoal.setPersonId(person.getId());
+			}
 		}
 
 		if (model.getPerson().getEducationPlan() != null) {
 			personEducationPlan = new PersonEducationPlanTO(model.getPerson()
 					.getEducationPlan());
+			if (personEducationPlan.getPersonId() == null) {
+				personEducationPlan.setPersonId(person.getId());
+			}
 		}
 
 		if ((model.getPerson().getEducationLevels() != null)
