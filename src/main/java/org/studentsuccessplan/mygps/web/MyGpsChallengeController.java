@@ -46,6 +46,7 @@ public class MyGpsChallengeController extends AbstractMyGpsController {
 	 *            SelfHelpGuide Question, Description, and Tags fields
 	 * @return All Challenges that match the specified criteria
 	 * @throws Exception
+	 *             If there were any unexpected exceptions thrown.
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public @ResponseBody

@@ -18,7 +18,7 @@ public class ServiceResponse {
 
 	public ServiceResponse(final boolean success) {
 		this.success = success;
-		this.message = "";
+		message = "";
 	}
 
 	public ServiceResponse(final boolean success, final String message) {
@@ -31,7 +31,9 @@ public class ServiceResponse {
 	 * MethodArgumentNotValidException, and use as the ServiceResponse Message.
 	 * 
 	 * @param success
+	 *            If the response should indicate success or not
 	 * @param e
+	 *            Error messages to show
 	 */
 	public ServiceResponse(final boolean success,
 			final MethodArgumentNotValidException e) {
@@ -47,16 +49,13 @@ public class ServiceResponse {
 			// get the field name if it is a field error.
 			if (error instanceof FieldError) {
 				FieldError fe = (FieldError) error;
-				sb.append("[")
-						.append(fe.getField());
+				sb.append("[").append(fe.getField());
 			} else {
 				sb.append("[");
 			}
 
 			// get the default message
-			sb.append(" ")
-					.append(error.getDefaultMessage())
-					.append("] ");
+			sb.append(" ").append(error.getDefaultMessage()).append("] ");
 			// add it to the list of error messages
 			errorMessages.add(sb.toString());
 		}
@@ -67,8 +66,7 @@ public class ServiceResponse {
 		// introduce the error messages
 		final int errorCount = e.getBindingResult().getErrorCount();
 		sb = new StringBuilder("Validation failed for argument ")
-				.append(e.getParameter().getParameterName())
-				.append(", with ")
+				.append(e.getParameter().getParameterName()).append(", with ")
 				.append(errorCount)
 				.append(errorCount > 1 ? " errors: " : " error: ");
 
@@ -76,7 +74,7 @@ public class ServiceResponse {
 		// service response message.
 		sb.append(StringUtils.join(errorMessages, ","));
 
-		this.message = sb.toString();
+		message = sb.toString();
 	}
 
 	public boolean isSuccess() {

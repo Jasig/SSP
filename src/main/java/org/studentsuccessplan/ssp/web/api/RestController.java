@@ -51,8 +51,10 @@ public abstract class RestController<T> {
 	 * Retrieves the specified instance from persistent storage.
 	 * 
 	 * @param id
+	 *            The specific id to use to lookup the associated data.
 	 * @return The specified instance if found.
 	 * @throws Exception
+	 *             If there were any unexpected exceptions thrown.
 	 */
 	public abstract T get(UUID id) throws Exception;
 
@@ -67,6 +69,7 @@ public abstract class RestController<T> {
 	 * @throws org.studentsuccessplan.ssp.web.api.validation.ValidationException
 	 *             If the obj contains an id (since it shouldn't).
 	 * @throws Exception
+	 *             If there were any unexpected exceptions thrown.
 	 */
 	public abstract T create(T obj) throws Exception;
 
@@ -76,10 +79,12 @@ public abstract class RestController<T> {
 	 * @param id
 	 *            Explicit id to the instance to persist.
 	 * @param obj
+	 *            Full instance to persist.
 	 * @return The update data object instance.
 	 * @throws org.studentsuccessplan.ssp.web.api.validation.ValidationException
 	 *             If the specified id is null.
 	 * @throws Exception
+	 *             If there were any unexpected exceptions thrown.
 	 */
 	public abstract T save(UUID id, T obj) throws Exception;
 
@@ -91,6 +96,7 @@ public abstract class RestController<T> {
 	 *            The id of the data instance to mark deleted.
 	 * @return Success boolean.
 	 * @throws Exception
+	 *             If there were any unexpected exceptions thrown.
 	 */
 	public abstract ServiceResponse delete(UUID id) throws Exception;
 
@@ -99,6 +105,7 @@ public abstract class RestController<T> {
 	 * controller.
 	 * 
 	 * @param e
+	 *            Exception that was thrown.
 	 * @return Message containing the reason for the exception.
 	 */
 	public abstract ServiceResponse handle(Exception e);

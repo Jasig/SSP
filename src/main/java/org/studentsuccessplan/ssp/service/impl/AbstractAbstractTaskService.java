@@ -12,13 +12,14 @@ import org.studentsuccessplan.ssp.service.AbstractTaskService;
 /**
  * Base class for creating the Task Services
  * 
- * @author daniel
+ * @author daniel.bower
  * 
  * @param <T>
+ *            A detailed type of Task that inherits from {@link AbstractTask}.
  */
 public abstract class AbstractAbstractTaskService<T extends AbstractTask>
-		extends AbstractAuditableCrudService<T>
-		implements AbstractTaskService<T> {
+		extends AbstractAuditableCrudService<T> implements
+		AbstractTaskService<T> {
 
 	@Override
 	protected abstract AbstractTaskDao<T> getDao();
@@ -39,8 +40,7 @@ public abstract class AbstractAbstractTaskService<T extends AbstractTask>
 	}
 
 	@Override
-	public List<T> getAllForSessionId(String sessionId,
-			boolean complete) {
+	public List<T> getAllForSessionId(String sessionId, boolean complete) {
 		return getDao().getAllForSessionId(sessionId, complete);
 	}
 
