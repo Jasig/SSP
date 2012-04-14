@@ -16,11 +16,11 @@ public class CategoryController extends
 		AbstractAuditableReferenceController<Category, CategoryTO> {
 
 	@Autowired
-	protected transient CategoryService citizenshipService;
+	protected transient CategoryService service;
 
 	@Override
 	protected AuditableCrudService<Category> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected CategoryController() {

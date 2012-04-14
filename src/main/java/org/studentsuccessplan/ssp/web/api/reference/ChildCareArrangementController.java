@@ -17,11 +17,11 @@ public class ChildCareArrangementController
 		AbstractAuditableReferenceController<ChildCareArrangement, ChildCareArrangementTO> {
 
 	@Autowired
-	protected transient ChildCareArrangementService citizenshipService;
+	protected transient ChildCareArrangementService service;
 
 	@Override
 	protected AuditableCrudService<ChildCareArrangement> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected ChildCareArrangementController() {

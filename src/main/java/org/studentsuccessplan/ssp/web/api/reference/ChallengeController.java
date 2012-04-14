@@ -25,11 +25,11 @@ public class ChallengeController extends
 		AbstractAuditableReferenceController<Challenge, ChallengeTO> {
 
 	@Autowired
-	protected transient ChallengeService citizenshipService;
+	protected transient ChallengeService service;
 
 	@Override
 	protected AuditableCrudService<Challenge> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected ChallengeController() {

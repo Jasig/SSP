@@ -16,11 +16,11 @@ public class FundingSourceController extends
 		AbstractAuditableReferenceController<FundingSource, FundingSourceTO> {
 
 	@Autowired
-	protected transient FundingSourceService citizenshipService;
+	protected transient FundingSourceService service;
 
 	@Override
 	protected AuditableCrudService<FundingSource> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected FundingSourceController() {

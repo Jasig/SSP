@@ -16,11 +16,11 @@ public class VeteranStatusController extends
 		AbstractAuditableReferenceController<VeteranStatus, VeteranStatusTO> {
 
 	@Autowired
-	protected transient VeteranStatusService citizenshipService;
+	protected transient VeteranStatusService service;
 
 	@Override
 	protected AuditableCrudService<VeteranStatus> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected VeteranStatusController() {

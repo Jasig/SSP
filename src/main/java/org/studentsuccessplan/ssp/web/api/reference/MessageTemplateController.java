@@ -17,11 +17,11 @@ public class MessageTemplateController
 		AbstractAuditableReferenceController<MessageTemplate, MessageTemplateTO> {
 
 	@Autowired
-	protected transient MessageTemplateService citizenshipService;
+	protected transient MessageTemplateService service;
 
 	@Override
 	protected AuditableCrudService<MessageTemplate> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected MessageTemplateController() {

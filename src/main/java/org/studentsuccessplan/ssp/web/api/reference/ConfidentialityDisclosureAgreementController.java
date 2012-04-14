@@ -17,11 +17,11 @@ public class ConfidentialityDisclosureAgreementController
 		AbstractAuditableReferenceController<ConfidentialityDisclosureAgreement, ConfidentialityDisclosureAgreementTO> {
 
 	@Autowired
-	protected transient ConfidentialityDisclosureAgreementService citizenshipService;
+	protected transient ConfidentialityDisclosureAgreementService service;
 
 	@Override
 	protected AuditableCrudService<ConfidentialityDisclosureAgreement> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected ConfidentialityDisclosureAgreementController() {

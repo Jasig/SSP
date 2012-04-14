@@ -17,11 +17,11 @@ public class ConfidentialityLevelController
 		AbstractAuditableReferenceController<ConfidentialityLevel, ConfidentialityLevelTO> {
 
 	@Autowired
-	protected transient ConfidentialityLevelService citizenshipService;
+	protected transient ConfidentialityLevelService service;
 
 	@Override
 	protected AuditableCrudService<ConfidentialityLevel> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected ConfidentialityLevelController() {

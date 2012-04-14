@@ -17,11 +17,11 @@ public class SelfHelpGuideQuestionController
 		AbstractAuditableReferenceController<SelfHelpGuideQuestion, SelfHelpGuideQuestionTO> {
 
 	@Autowired
-	protected transient SelfHelpGuideQuestionService citizenshipService;
+	protected transient SelfHelpGuideQuestionService service;
 
 	@Override
 	protected AuditableCrudService<SelfHelpGuideQuestion> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected SelfHelpGuideQuestionController() {

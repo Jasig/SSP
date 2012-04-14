@@ -16,11 +16,11 @@ public class EthnicityController extends
 		AbstractAuditableReferenceController<Ethnicity, EthnicityTO> {
 
 	@Autowired
-	protected transient EthnicityService citizenshipService;
+	protected transient EthnicityService service;
 
 	@Override
 	protected AuditableCrudService<Ethnicity> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected EthnicityController() {

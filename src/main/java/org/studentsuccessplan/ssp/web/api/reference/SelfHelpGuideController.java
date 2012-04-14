@@ -16,11 +16,11 @@ public class SelfHelpGuideController extends
 		AbstractAuditableReferenceController<SelfHelpGuide, SelfHelpGuideTO> {
 
 	@Autowired
-	protected transient SelfHelpGuideService citizenshipService;
+	protected transient SelfHelpGuideService service;
 
 	@Override
 	protected AuditableCrudService<SelfHelpGuide> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected SelfHelpGuideController() {

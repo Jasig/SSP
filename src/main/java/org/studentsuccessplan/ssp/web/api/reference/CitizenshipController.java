@@ -16,11 +16,11 @@ public class CitizenshipController extends
 		AbstractAuditableReferenceController<Citizenship, CitizenshipTO> {
 
 	@Autowired
-	protected transient CitizenshipService citizenshipService;
+	protected transient CitizenshipService service;
 
 	@Override
 	protected AuditableCrudService<Citizenship> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected CitizenshipController() {

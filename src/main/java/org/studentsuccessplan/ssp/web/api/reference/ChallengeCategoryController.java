@@ -17,11 +17,11 @@ public class ChallengeCategoryController
 		AbstractAuditableReferenceController<ChallengeCategory, ChallengeCategoryTO> {
 
 	@Autowired
-	protected transient ChallengeCategoryService citizenshipService;
+	protected transient ChallengeCategoryService service;
 
 	@Override
 	protected AuditableCrudService<ChallengeCategory> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected ChallengeCategoryController() {

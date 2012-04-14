@@ -16,11 +16,11 @@ public class StudentStatusController extends
 		AbstractAuditableReferenceController<StudentStatus, StudentStatusTO> {
 
 	@Autowired
-	protected transient StudentStatusService citizenshipService;
+	protected transient StudentStatusService service;
 
 	@Override
 	protected AuditableCrudService<StudentStatus> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected StudentStatusController() {

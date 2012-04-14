@@ -16,11 +16,11 @@ public class MaritalStatusController extends
 		AbstractAuditableReferenceController<MaritalStatus, MaritalStatusTO> {
 
 	@Autowired
-	protected transient MaritalStatusService citizenshipService;
+	protected transient MaritalStatusService service;
 
 	@Override
 	protected AuditableCrudService<MaritalStatus> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected MaritalStatusController() {

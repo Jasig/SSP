@@ -17,11 +17,11 @@ public class SelfHelpGuideGroupController
 		AbstractAuditableReferenceController<SelfHelpGuideGroup, SelfHelpGuideGroupTO> {
 
 	@Autowired
-	protected transient SelfHelpGuideGroupService citizenshipService;
+	protected transient SelfHelpGuideGroupService service;
 
 	@Override
 	protected AuditableCrudService<SelfHelpGuideGroup> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected SelfHelpGuideGroupController() {

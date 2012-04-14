@@ -16,11 +16,11 @@ public class EducationGoalController extends
 		AbstractAuditableReferenceController<EducationGoal, EducationGoalTO> {
 
 	@Autowired
-	protected transient EducationGoalService citizenshipService;
+	protected transient EducationGoalService service;
 
 	@Override
 	protected AuditableCrudService<EducationGoal> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected EducationGoalController() {

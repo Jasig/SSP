@@ -16,11 +16,11 @@ public class EducationLevelController extends
 		AbstractAuditableReferenceController<EducationLevel, EducationLevelTO> {
 
 	@Autowired
-	protected transient EducationLevelService citizenshipService;
+	protected transient EducationLevelService service;
 
 	@Override
 	protected AuditableCrudService<EducationLevel> getService() {
-		return citizenshipService;
+		return service;
 	}
 
 	protected EducationLevelController() {
