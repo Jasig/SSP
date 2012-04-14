@@ -1,12 +1,17 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-public class FormTO {
+public class FormTO implements Serializable {
+
+	private static final long serialVersionUID = -1978459152865190470L;
 
 	private UUID id;
+
 	private String label;
+
 	private List<FormSectionTO> sections;
 
 	public FormSectionTO getFormSectionById(UUID formSectionId) {
@@ -41,5 +46,4 @@ public class FormTO {
 	public void setSections(List<FormSectionTO> sections) {
 		this.sections = sections;
 	}
-
 }

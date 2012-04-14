@@ -20,7 +20,7 @@ namespace 'mygps.service'
 				
 			saveForm: ( form, callbacks ) ->
 				$.ajax(
-					url: @createURL( "" )
+					url: @createURL( "/" )
 					type: "POST"
 					data: JSON.stringify( mygps.model.Form.toTransferObject( form ) )
 					contentType: "application/json"

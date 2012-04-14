@@ -1,24 +1,37 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.AbstractReference;
 import org.studentsuccessplan.ssp.util.SspStringUtils;
 
-public class FormQuestionTO {
+public class FormQuestionTO implements Serializable {
 
+	private static final long serialVersionUID = -4773730489429626123L;
 	private UUID id;
+
 	private String label;
+
 	private String type;
+
 	private boolean readOnly;
+
 	private boolean required;
+
 	private String value;
+
 	private List<String> values;
+
 	private String maximumLength;
+
 	private List<FormOptionTO> options;
+
 	private String validationExpression;
+
 	private String visibilityExpression;
+
 	private String availabilityExpression;
 
 	public FormOptionTO getFormOptionByValue(String value) {

@@ -936,7 +936,7 @@
 
       StudentIntakeService.prototype.saveForm = function(form, callbacks) {
         return $.ajax({
-          url: this.createURL(""),
+          url: this.createURL("/"),
           type: "POST",
           data: JSON.stringify(mygps.model.Form.toTransferObject(form)),
           contentType: "application/json",
@@ -1830,7 +1830,8 @@
             return _this.form(result);
           },
           fault: function(fault) {
-            return alert(fault.responseText);
+            var _ref, _ref2;
+            return alert((_ref = (_ref2 = $.parseJSON(fault.responseText)) != null ? _ref2.message : void 0) != null ? _ref : fault.responseText);
           }
         });
       };

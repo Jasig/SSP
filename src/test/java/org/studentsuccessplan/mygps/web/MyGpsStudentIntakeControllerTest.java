@@ -32,7 +32,7 @@ public class MyGpsStudentIntakeControllerTest {
 	}
 
 	@Test
-	public void testGetForm() {
+	public void testGetForm() throws ObjectNotFoundException {
 		FormTO form = new FormTO();
 		expect(manager.populate()).andReturn(form);
 		replay(manager);

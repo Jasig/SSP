@@ -1,11 +1,16 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class FormOptionTO {
+public class FormOptionTO implements Serializable {
+
+	private static final long serialVersionUID = -7692154729447618397L;
 
 	private UUID id;
+
 	private String label;
+
 	private String value;
 
 	public FormOptionTO() {
@@ -40,5 +45,4 @@ public class FormOptionTO {
 	public void setValue(String value) {
 		this.value = value;
 	}
-
 }

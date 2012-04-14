@@ -14,7 +14,6 @@ import org.studentsuccessplan.mygps.model.transferobject.FormQuestionTO;
 import org.studentsuccessplan.mygps.model.transferobject.FormSectionTO;
 import org.studentsuccessplan.mygps.model.transferobject.FormTO;
 import org.studentsuccessplan.ssp.dao.PersonChallengeDao;
-import org.studentsuccessplan.ssp.dao.PersonDao;
 import org.studentsuccessplan.ssp.dao.PersonEducationGoalDao;
 import org.studentsuccessplan.ssp.dao.PersonEducationLevelDao;
 import org.studentsuccessplan.ssp.dao.PersonFundingSourceDao;
@@ -47,6 +46,7 @@ import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 import org.studentsuccessplan.ssp.model.tool.Tools;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonConfidentialityDisclosureAgreementService;
+import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
 import org.studentsuccessplan.ssp.service.tool.PersonToolService;
@@ -83,7 +83,7 @@ public class StudentIntakeFormManager {
 	private PersonChallengeDao studentChallengeDao;
 
 	@Autowired
-	private PersonDao studentDao;
+	private PersonService personService;
 
 	@Autowired
 	private PersonEducationGoalDao studentEducationGoalDao;
@@ -298,23 +298,29 @@ public class StudentIntakeFormManager {
 		return formTO;
 	}
 
-	public FormTO populate() {
-
+	/**
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             If currently authenticated user data could not be refreshed.
+	 * @return A form transfer object filled with current user data.
+	 */
+	public FormTO populate() throws ObjectNotFoundException {
 		FormTO formTO = create();
-
 		Person student = securityService.currentUser().getPerson();
+
+		// now refresh Person from Hibernate so lazy-loading works in case the
+		// person instance was loaded in a previous request
+		student = personService.get(student.getId());
 
 		/* Confidentiality disclosure */
 
-		FormSectionTO formSectionTO = formTO.getFormSectionById(
-				SECTION_CONFIDENTIALTY_ID);
+		FormSectionTO formSectionTO = formTO
+				.getFormSectionById(SECTION_CONFIDENTIALTY_ID);
 		if (null != formSectionTO) {
-			formSectionTO
-					.getFormQuestionById(
-							SECTION_CONFIDENTIALITY_QUESTION_AGREE_ID)
-					.setValue(
-							(null == studentConfidentialityDisclosureAgreementService
-									.hasStudentAgreedToOne(student)));
+			formSectionTO.getFormQuestionById(
+					SECTION_CONFIDENTIALITY_QUESTION_AGREE_ID).setValue(
+					(null == studentConfidentialityDisclosureAgreementService
+							.hasStudentAgreedToOne(student)));
 		}
 
 		/* Personal */
@@ -328,13 +334,13 @@ public class StudentIntakeFormManager {
 
 		// Middle Initial
 		formSectionTO.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_MIDDLEINITIAL_ID)
-				.setValue(student.getMiddleInitial());
+				SECTION_PERSONAL_QUESTION_MIDDLEINITIAL_ID).setValue(
+				student.getMiddleInitial());
 
 		// Last Name
-		formSectionTO.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_LASTNAME_ID).setValue(
-				student.getLastName());
+		formSectionTO
+				.getFormQuestionById(SECTION_PERSONAL_QUESTION_LASTNAME_ID)
+				.setValue(student.getLastName());
 
 		// Student Id
 		formSectionTO.getFormQuestionById(
@@ -342,10 +348,10 @@ public class StudentIntakeFormManager {
 				student.getId());
 
 		// Birthdate
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 		formSectionTO.getFormQuestionById(
 				SECTION_PERSONAL_QUESTION_BIRTHDATE_ID).setValue(
-				format.format(student.getBirthDate()));
+				student.getBirthDate() == null ? null : new SimpleDateFormat(
+						"MM/dd/yyyy").format(student.getBirthDate()));
 
 		// School Email
 		formSectionTO.getFormQuestionById(
@@ -398,21 +404,20 @@ public class StudentIntakeFormManager {
 					student.getState());
 		}
 
-		// Zip Code
+		// ZIP Code
 		formSectionTO.getFormQuestionById(SECTION_PERSONAL_QUESTION_ZIPCODE_ID)
 				.setValue(student.getZipCode());
 
 		/* Demographics */
 
 		if (student.getDemographics() != null) {
-			formSectionTO = formTO.getFormSectionById(
-					SECTION_DEMOGRAPHICS_ID);
+			formSectionTO = formTO.getFormSectionById(SECTION_DEMOGRAPHICS_ID);
 
 			// Marital Status
 			if (student.getDemographics().getMaritalStatus() == null) {
-				formSectionTO.getFormQuestionById(
-						SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID
-						)
+				formSectionTO
+						.getFormQuestionById(
+								SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID)
 						.getOptions()
 						.add(0,
 								new FormOptionTO(UUID.randomUUID(),
@@ -420,21 +425,20 @@ public class StudentIntakeFormManager {
 										DEFAULT_DROPDOWN_LIST_VALUE));
 				formSectionTO.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID)
-						.setValue(
-								DEFAULT_DROPDOWN_LIST_VALUE);
+						.setValue(DEFAULT_DROPDOWN_LIST_VALUE);
 			} else {
 				formSectionTO.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID)
 						.setValue(
 								student.getDemographics().getMaritalStatus()
-										.getId()
-										.toString());
+										.getId().toString());
 			}
 
 			// Ethnicity
 			if (student.getDemographics().getEthnicity() == null) {
-				formSectionTO.getFormQuestionById(
-						SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID)
+				formSectionTO
+						.getFormQuestionById(
+								SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID)
 						.getOptions()
 						.add(0,
 								new FormOptionTO(UUID.randomUUID(),
@@ -452,13 +456,14 @@ public class StudentIntakeFormManager {
 
 			// Gender
 			formSectionTO.getFormQuestionById(
-					SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID)
-					.setValue(student.getDemographics().getGender().getCode());
+					SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID).setValue(
+					student.getDemographics().getGender().getCode());
 
 			// Citizenship
 			if (student.getDemographics().getCitizenship() == null) {
-				formSectionTO.getFormQuestionById(
-						SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID)
+				formSectionTO
+						.getFormQuestionById(
+								SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID)
 						.getOptions()
 						.add(0,
 								new FormOptionTO(UUID.randomUUID(),
@@ -483,8 +488,9 @@ public class StudentIntakeFormManager {
 
 			// Veteran Status
 			if (student.getDemographics().getVeteranStatus() == null) {
-				formSectionTO.getFormQuestionById(
-						SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID)
+				formSectionTO
+						.getFormQuestionById(
+								SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID)
 						.getOptions()
 						.add(0,
 								new FormOptionTO(UUID.randomUUID(),
@@ -492,8 +498,7 @@ public class StudentIntakeFormManager {
 										DEFAULT_DROPDOWN_LIST_VALUE));
 				formSectionTO.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID)
-						.setValue(
-								DEFAULT_DROPDOWN_LIST_VALUE);
+						.setValue(DEFAULT_DROPDOWN_LIST_VALUE);
 			} else {
 				formSectionTO.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID)
@@ -505,8 +510,7 @@ public class StudentIntakeFormManager {
 			// Primary Caregiver
 			formSectionTO.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID)
-					.setValue(
-							student.getDemographics().isPrimaryCaregiver());
+					.setValue(student.getDemographics().isPrimaryCaregiver());
 
 			// How Many Children
 			formSectionTO.getFormQuestionById(
@@ -514,7 +518,7 @@ public class StudentIntakeFormManager {
 					String.valueOf(student.getDemographics()
 							.getNumberOfChildren()));
 
-			// Chidren Ages
+			// Children Ages
 			formSectionTO.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_CHILDRENAGES_ID).setValue(
 					student.getDemographics().getChildAges());
@@ -526,8 +530,9 @@ public class StudentIntakeFormManager {
 
 			// Childcare Arrangements
 			if (student.getDemographics().getChildCareArrangement() == null) {
-				formSectionTO.getFormQuestionById(
-						SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID)
+				formSectionTO
+						.getFormQuestionById(
+								SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID)
 						.getOptions()
 						.add(0,
 								new FormOptionTO(UUID.randomUUID(),
@@ -535,50 +540,48 @@ public class StudentIntakeFormManager {
 										DEFAULT_DROPDOWN_LIST_VALUE));
 				formSectionTO.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID)
-						.setValue(
-								DEFAULT_DROPDOWN_LIST_VALUE);
+						.setValue(DEFAULT_DROPDOWN_LIST_VALUE);
 			} else {
 				formSectionTO.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID)
 						.setValue(
 								student.getDemographics()
-										.getChildCareArrangement()
-										.getId());
+										.getChildCareArrangement().getId());
 			}
 
 			// Employed
 			formSectionTO.getFormQuestionById(
-					SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID)
-					.setValue(student.getDemographics().isEmployed());
+					SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID).setValue(
+					student.getDemographics().isEmployed());
 
 			// Employer
 			formSectionTO.getFormQuestionById(
-					SECTION_DEMOGRAPHICS_QUESTION_EMPLOYER_ID)
-					.setValue(student.getDemographics().getPlaceOfEmployment());
+					SECTION_DEMOGRAPHICS_QUESTION_EMPLOYER_ID).setValue(
+					student.getDemographics().getPlaceOfEmployment());
 
 			// Shift
 			if (student.getDemographics().getShift() == null) {
-				formSectionTO.getFormQuestionById(
-						SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID)
+				formSectionTO
+						.getFormQuestionById(
+								SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID)
 						.getOptions()
 						.add(0,
 								new FormOptionTO(UUID.randomUUID(),
 										DEFAULT_DROPDOWN_LIST_LABEL,
 										DEFAULT_DROPDOWN_LIST_VALUE));
 				formSectionTO.getFormQuestionById(
-						SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID)
-						.setValue(DEFAULT_DROPDOWN_LIST_VALUE);
+						SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID).setValue(
+						DEFAULT_DROPDOWN_LIST_VALUE);
 			} else {
 				formSectionTO.getFormQuestionById(
-						SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID)
-						.setValue(
-								student.getDemographics().getShift().getCode());
+						SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID).setValue(
+						student.getDemographics().getShift().getCode());
 			}
 
 			// Wage
 			formSectionTO.getFormQuestionById(
-					SECTION_DEMOGRAPHICS_QUESTION_WAGE_ID)
-					.setValue(student.getDemographics().getWage());
+					SECTION_DEMOGRAPHICS_QUESTION_WAGE_ID).setValue(
+					student.getDemographics().getWage());
 
 			// Hours worked per week
 			formSectionTO.getFormQuestionById(
@@ -592,8 +595,7 @@ public class StudentIntakeFormManager {
 		/* Education Plan */
 		if (student.getEducationPlan() != null) {
 
-			formSectionTO = formTO.getFormSectionById(
-					SECTION_EDUCATIONPLAN_ID);
+			formSectionTO = formTO.getFormSectionById(SECTION_EDUCATIONPLAN_ID);
 
 			// Student Status
 			formSectionTO.getFormQuestionById(
@@ -621,12 +623,11 @@ public class StudentIntakeFormManager {
 							student.getEducationPlan()
 									.isCollegeDegreeForParents());
 
-			// Special Needs or Accomodations
+			// Special Needs or Accommodations
 			formSectionTO
 					.getFormQuestionById(
 							SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID)
-					.setValue(
-							student.getEducationPlan().isSpecialNeeds());
+					.setValue(student.getEducationPlan().isSpecialNeeds());
 
 			// Grade at Highest Education Level
 			formSectionTO
@@ -639,21 +640,21 @@ public class StudentIntakeFormManager {
 
 		/* Education Level */
 
-		FormSectionTO educationLevelFormSection = formTO.getFormSectionById(
-				SECTION_EDUCATIONLEVEL_ID);
+		FormSectionTO educationLevelFormSection = formTO
+				.getFormSectionById(SECTION_EDUCATIONLEVEL_ID);
 
 		FormQuestionTO educationLevelFormQuestion = educationLevelFormSection
-				.getFormQuestionById(
-				SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID);
+				.getFormQuestionById(SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID);
+
 		List<String> educationLevelFormQuestionValues = new ArrayList<String>();
 
 		for (PersonEducationLevel studentEducationLevel : student
 				.getEducationLevels()) {
 
-			educationLevelFormQuestionValues.add(
-					educationLevelFormQuestion.getFormOptionById(
+			educationLevelFormQuestionValues.add(educationLevelFormQuestion
+					.getFormOptionById(
 							studentEducationLevel.getEducationLevel().getId())
-							.getValue());
+					.getValue());
 
 			if (studentEducationLevel.getEducationLevel().getId()
 					.equals(EducationLevel.NO_DIPLOMA_NO_GED_ID)) {
@@ -696,8 +697,7 @@ public class StudentIntakeFormManager {
 
 				educationLevelFormSection.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLATTENDED_ID)
-						.setValue(
-								studentEducationLevel.getSchoolName());
+						.setValue(studentEducationLevel.getSchoolName());
 
 			} else if (studentEducationLevel.getEducationLevel().getId()
 					.equals(EducationLevel.SOME_COLLEGE_CREDITS_ID)) {
@@ -715,8 +715,7 @@ public class StudentIntakeFormManager {
 
 				educationLevelFormSection.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_OTHERPLEASEEXPLAIN_ID)
-						.setValue(
-								studentEducationLevel.getDescription());
+						.setValue(studentEducationLevel.getDescription());
 
 			}
 		}
@@ -731,19 +730,17 @@ public class StudentIntakeFormManager {
 
 			// Goal
 			formSectionTO.getFormQuestionById(
-					SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID)
-					.setValue(student.getEducationGoal().getEducationGoal());
+					SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID).setValue(
+					student.getEducationGoal().getEducationGoal());
 
 			// Goal Description
 			formSectionTO.getFormQuestionById(
 					SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID)
-					.setValue(
-							student.getEducationGoal().getDescription());
+					.setValue(student.getEducationGoal().getDescription());
 
 			// Other Description
 			/*
-			 * :TODO
-			 * formSectionTO.getFormQuestionById(
+			 * :TODO formSectionTO.getFormQuestionById(
 			 * SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID,
 			 * formSectionTO).setValue(
 			 * student.getEducationGoal().getOtherDescription());
@@ -755,10 +752,9 @@ public class StudentIntakeFormManager {
 					student.getEducationGoal().getHowSureAboutMajor());
 
 			// Career Goal
-			formSectionTO
-					.getFormQuestionById(
-							SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID)
-					.setValue(student.getEducationGoal().getPlannedOccupation());
+			formSectionTO.getFormQuestionById(
+					SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID).setValue(
+					student.getEducationGoal().getPlannedOccupation());
 
 			// Military Branch Description
 			formSectionTO
@@ -771,12 +767,12 @@ public class StudentIntakeFormManager {
 
 		/* Funding Sources */
 
-		FormSectionTO fundingFormSection = formTO.getFormSectionById(
-				SECTION_FUNDING_ID);
+		FormSectionTO fundingFormSection = formTO
+				.getFormSectionById(SECTION_FUNDING_ID);
 
 		FormQuestionTO fundingQuestion = fundingFormSection
-				.getFormQuestionById(
-				SECTION_FUNDING_QUESTION_FUNDING_ID);
+				.getFormQuestionById(SECTION_FUNDING_QUESTION_FUNDING_ID);
+
 		List<String> fundingQuestionValues = new ArrayList<String>();
 
 		for (PersonFundingSource studentFundingSource : student
@@ -799,12 +795,11 @@ public class StudentIntakeFormManager {
 
 		/* Challenges */
 
-		FormSectionTO challengeFormSection = formTO.getFormSectionById(
-				SECTION_CHALLENGE_ID);
+		FormSectionTO challengeFormSection = formTO
+				.getFormSectionById(SECTION_CHALLENGE_ID);
 
 		FormQuestionTO challengeQuestion = challengeFormSection
-				.getFormQuestionById(
-				SECTION_CHALLENGE_QUESTION_CHALLENGE_ID);
+				.getFormQuestionById(SECTION_CHALLENGE_QUESTION_CHALLENGE_ID);
 		List<String> challengeQuestionValues = new ArrayList<String>();
 
 		for (PersonChallenge studentChallenge : student.getChallenges()) {
@@ -826,15 +821,15 @@ public class StudentIntakeFormManager {
 
 		/* Confidentiality disclosure */
 
-		FormSectionTO confidentialitySection = formTO.getFormSectionById(
-				SECTION_CONFIDENTIALTY_ID);
+		FormSectionTO confidentialitySection = formTO
+				.getFormSectionById(SECTION_CONFIDENTIALTY_ID);
 
 		if (null != confidentialitySection) {
 			Boolean agreed = SspStringUtils
 					.booleanFromString(confidentialitySection
 							.getFormQuestionById(
-									SECTION_CONFIDENTIALITY_QUESTION_AGREE_ID
-							).getValue());
+									SECTION_CONFIDENTIALITY_QUESTION_AGREE_ID)
+							.getValue());
 			if (agreed) {
 				studentConfidentialityDisclosureAgreementService
 						.studentAgreed(student);
@@ -843,80 +838,70 @@ public class StudentIntakeFormManager {
 
 		/* Personal */
 
-		FormSectionTO personalSection = formTO.getFormSectionById(
-				SECTION_PERSONAL_ID);
+		FormSectionTO personalSection = formTO
+				.getFormSectionById(SECTION_PERSONAL_ID);
 
 		// First Name
 		student.setFirstName(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_FIRSTNAME_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_FIRSTNAME_ID).getValue());
 
 		// Middle Initial
 		student.setMiddleInitial(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_MIDDLEINITIAL_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_MIDDLEINITIAL_ID).getValue());
 
 		// Last Name
 		student.setLastName(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_LASTNAME_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_LASTNAME_ID).getValue());
 
 		// Student Id
 		student.setUserId(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_STUDENTID_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_STUDENTID_ID).getValue());
 
 		// Birthdate
-		FormQuestionTO birthDateQuestion = personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_BIRTHDATE_ID);
+		FormQuestionTO birthDateQuestion = personalSection
+				.getFormQuestionById(SECTION_PERSONAL_QUESTION_BIRTHDATE_ID);
 
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 		try {
-			student.setBirthDate(format.parse(birthDateQuestion.getValue()));
+			student.setBirthDate(birthDateQuestion.getValue() == null ? null
+					: new SimpleDateFormat("MM/dd/yyyy")
+							.parse(birthDateQuestion.getValue()));
 		} catch (ParseException pe) {
 			// just leave the birthDate alone
 		}
 
 		// School Email
 		student.setPrimaryEmailAddress(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_SCHOOLEMAIL_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_SCHOOLEMAIL_ID).getValue());
 
 		// Home Email
 		student.setSecondaryEmailAddress(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_HOMEEMAIL_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_HOMEEMAIL_ID).getValue());
 
 		// Home Phone
 		student.setHomePhone(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_HOMEPHONE_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_HOMEPHONE_ID).getValue());
 
 		// Work Phone
 		student.setWorkPhone(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_WORKPHONE_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_WORKPHONE_ID).getValue());
 
 		// Cell Phone
 		student.setCellPhone(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_CELLPHONE_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_CELLPHONE_ID).getValue());
 
 		// Address
 		student.setAddressLine1(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_ADDRESS_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_ADDRESS_ID).getValue());
 
 		// City
 		student.setCity(personalSection.getFormQuestionById(
 				SECTION_PERSONAL_QUESTION_CITY_ID).getValue());
 
 		// State
-		FormQuestionTO stateQuestion = personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_STATE_ID);
+		FormQuestionTO stateQuestion = personalSection
+				.getFormQuestionById(SECTION_PERSONAL_QUESTION_STATE_ID);
 
-		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(stateQuestion
-				.getValue())) {
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(stateQuestion.getValue())) {
 			student.setState(null);
 		} else {
 			student.setState(stateQuestion.getValue());
@@ -924,13 +909,12 @@ public class StudentIntakeFormManager {
 
 		// ZIP Code
 		student.setZipCode(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_ZIPCODE_ID)
-				.getValue());
+				SECTION_PERSONAL_QUESTION_ZIPCODE_ID).getValue());
 
 		/* Demographics */
 
-		FormSectionTO demographicsSection = formTO.getFormSectionById(
-				SECTION_DEMOGRAPHICS_ID);
+		FormSectionTO demographicsSection = formTO
+				.getFormSectionById(SECTION_DEMOGRAPHICS_ID);
 
 		PersonDemographics demographics = student.getDemographics();
 
@@ -943,8 +927,7 @@ public class StudentIntakeFormManager {
 
 		// Childcare Arrangements
 		FormQuestionTO childCareArrangementQuestion = demographicsSection
-				.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID);
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID);
 
 		if (childCareArrangementQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setChildCareArrangement(null);
@@ -956,8 +939,7 @@ public class StudentIntakeFormManager {
 
 		// Childcare Needed
 		FormQuestionTO childCareNeededQuestion = demographicsSection
-				.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID);
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID);
 
 		if (childCareNeededQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setChildCareNeeded(false);
@@ -968,8 +950,7 @@ public class StudentIntakeFormManager {
 
 		// Citizenship
 		FormQuestionTO citizenshipQuestion = demographicsSection
-				.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID);
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID);
 
 		if (citizenshipQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setCitizenship(null);
@@ -985,11 +966,9 @@ public class StudentIntakeFormManager {
 
 		// Employed
 		FormQuestionTO employedQuestion = demographicsSection
-				.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID);
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID);
 
-		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(employedQuestion
-				.getValue())) {
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(employedQuestion.getValue())) {
 			demographics.setEmployed(false);
 		} else {
 			demographics.setEmployed(SspStringUtils
@@ -997,14 +976,12 @@ public class StudentIntakeFormManager {
 		}
 
 		demographics.setPlaceOfEmployment(demographicsSection
-				.getFormQuestionById(
-						SECTION_DEMOGRAPHICS_QUESTION_EMPLOYER_ID)
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_EMPLOYER_ID)
 				.getValue());
 
 		// Ethnicity
 		FormQuestionTO ethnicityQuestion = demographicsSection
-				.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID);
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID);
 
 		if (ethnicityQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setEthnicity(null);
@@ -1015,8 +992,7 @@ public class StudentIntakeFormManager {
 
 		// Gender
 		FormQuestionTO genderQuestion = demographicsSection
-				.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID);
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID);
 
 		if (genderQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setGender(null);
@@ -1031,8 +1007,7 @@ public class StudentIntakeFormManager {
 
 		// Marital Status
 		FormQuestionTO maritalStatusQuestion = demographicsSection
-				.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
 
 		if (maritalStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setMaritalStatus(null);
@@ -1048,8 +1023,7 @@ public class StudentIntakeFormManager {
 
 		// Primary caregiver
 		FormQuestionTO primaryCaregiverQuestion = demographicsSection
-				.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID);
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID);
 
 		if (primaryCaregiverQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setPrimaryCaregiver(false);
@@ -1059,8 +1033,8 @@ public class StudentIntakeFormManager {
 		}
 
 		// Shift
-		FormQuestionTO shiftQuestion = demographicsSection.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID);
+		FormQuestionTO shiftQuestion = demographicsSection
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID);
 
 		if (shiftQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setShift(null);
@@ -1071,8 +1045,7 @@ public class StudentIntakeFormManager {
 
 		// Veteran Status
 		FormQuestionTO veteranStatusQuestion = demographicsSection
-				.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID);
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID);
 
 		if (veteranStatusQuestion.getValue() == null) {
 			demographics.setVeteranStatus(null);
@@ -1082,13 +1055,12 @@ public class StudentIntakeFormManager {
 		}
 
 		demographics.setWage(demographicsSection.getFormQuestionById(
-				SECTION_DEMOGRAPHICS_QUESTION_WAGE_ID)
-				.getValue());
+				SECTION_DEMOGRAPHICS_QUESTION_WAGE_ID).getValue());
 
 		/* Education Plan */
 
-		FormSectionTO educationPlanSection = formTO.getFormSectionById(
-				SECTION_EDUCATIONPLAN_ID);
+		FormSectionTO educationPlanSection = formTO
+				.getFormSectionById(SECTION_EDUCATIONPLAN_ID);
 
 		PersonEducationPlan educationPlan = student.getEducationPlan();
 
@@ -1109,8 +1081,7 @@ public class StudentIntakeFormManager {
 
 		// Parents Have College Degree
 		FormQuestionTO parentsHaveCollegeDegreeQuestion = educationPlanSection
-				.getFormQuestionById(
-				SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID);
+				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID);
 
 		if (parentsHaveCollegeDegreeQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			educationPlan.setCollegeDegreeForParents(false);
@@ -1127,8 +1098,7 @@ public class StudentIntakeFormManager {
 
 		// Require Special Accomodation
 		FormQuestionTO requireSpecialAccomodationQuestion = educationPlanSection
-				.getFormQuestionById(
-				SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID);
+				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID);
 
 		if (requireSpecialAccomodationQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			educationPlan.setSpecialNeeds(false);
@@ -1140,8 +1110,7 @@ public class StudentIntakeFormManager {
 
 		// Student Status
 		FormQuestionTO studentStatusQuestion = educationPlanSection
-				.getFormQuestionById(
-				SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID);
+				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID);
 
 		if (studentStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			educationPlan.setStudentStatus(null);
@@ -1152,12 +1121,11 @@ public class StudentIntakeFormManager {
 
 		/* Education Level */
 
-		FormSectionTO educationLevelSection = formTO.getFormSectionById(
-				SECTION_EDUCATIONLEVEL_ID);
+		FormSectionTO educationLevelSection = formTO
+				.getFormSectionById(SECTION_EDUCATIONLEVEL_ID);
 
 		FormQuestionTO educationLevelQuestion = educationLevelSection
-				.getFormQuestionById(
-				SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID);
+				.getFormQuestionById(SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID);
 
 		String educationLevelQuestionValue = null;
 
@@ -1276,8 +1244,8 @@ public class StudentIntakeFormManager {
 		}
 
 		/* Education Goal */
-		FormSectionTO educationGoalSection = formTO.getFormSectionById(
-				SECTION_EDUCATIONGOAL_ID);
+		FormSectionTO educationGoalSection = formTO
+				.getFormSectionById(SECTION_EDUCATIONGOAL_ID);
 
 		PersonEducationGoal studentEducationGoal = student.getEducationGoal();
 
@@ -1307,18 +1275,17 @@ public class StudentIntakeFormManager {
 		// studentEducationGoal.setOtherDescription(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID).getValue());
 
 		studentEducationGoal.setHowSureAboutMajor(Integer
-				.valueOf(educationGoalSection
-						.getFormQuestionById(
-								SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID)
+				.valueOf(educationGoalSection.getFormQuestionById(
+						SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID)
 						.getValue()));
 
 		studentEducationGoalDao.save(studentEducationGoal);
 
 		/* Funding */
-		FormSectionTO fundingSection = formTO.getFormSectionById(
-				SECTION_FUNDING_ID);
-		FormQuestionTO fundingQuestion = fundingSection.getFormQuestionById(
-				SECTION_FUNDING_QUESTION_FUNDING_ID);
+		FormSectionTO fundingSection = formTO
+				.getFormSectionById(SECTION_FUNDING_ID);
+		FormQuestionTO fundingQuestion = fundingSection
+				.getFormQuestionById(SECTION_FUNDING_QUESTION_FUNDING_ID);
 
 		// Delete all funding sources
 		Set<PersonFundingSource> studentFundingSources = student
@@ -1330,8 +1297,8 @@ public class StudentIntakeFormManager {
 
 		for (String value : fundingQuestion.getValues()) {
 
-			FormOptionTO formOptionTO =
-					fundingQuestion.getFormOptionByValue(value);
+			FormOptionTO formOptionTO = fundingQuestion
+					.getFormOptionByValue(value);
 
 			if (formOptionTO != null) {
 
@@ -1358,11 +1325,10 @@ public class StudentIntakeFormManager {
 		}
 
 		/* Challenges */
-		FormSectionTO challengeSection = formTO.getFormSectionById(
-				SECTION_CHALLENGE_ID);
+		FormSectionTO challengeSection = formTO
+				.getFormSectionById(SECTION_CHALLENGE_ID);
 		FormQuestionTO challengeQuestion = challengeSection
-				.getFormQuestionById(
-				SECTION_CHALLENGE_QUESTION_CHALLENGE_ID);
+				.getFormQuestionById(SECTION_CHALLENGE_QUESTION_CHALLENGE_ID);
 
 		// Delete all student challenges
 		Set<PersonChallenge> studentChallenges = student.getChallenges();
@@ -1389,8 +1355,7 @@ public class StudentIntakeFormManager {
 
 		}
 
-		studentDao.save(student);
-
+		personService.save(student);
 	}
 
 	private FormSectionTO buildConfidentialitySection() {
@@ -2107,8 +2072,7 @@ public class StudentIntakeFormManager {
 				.setLabel("Have your parents obtained a college degree?");
 		parentsObtainedCollegeDegreeQuestion
 				.setOptions(newStudentOrientationQuestionOptions);
-		parentsObtainedCollegeDegreeQuestion
-				.setType(FORM_TYPE_RADIOLIST);
+		parentsObtainedCollegeDegreeQuestion.setType(FORM_TYPE_RADIOLIST);
 
 		eduPlanSectionQuestions.add(parentsObtainedCollegeDegreeQuestion);
 
@@ -2160,8 +2124,7 @@ public class StudentIntakeFormManager {
 				.setLabel("What grade did you typically earn at your highest level of education?");
 		gradeEarnedHighestLevelEducationQuestion
 				.setOptions(gradeEarnedHighestLevelEducationQuestionOptions);
-		gradeEarnedHighestLevelEducationQuestion
-				.setType(FORM_TYPE_RADIOLIST);
+		gradeEarnedHighestLevelEducationQuestion.setType(FORM_TYPE_RADIOLIST);
 
 		eduPlanSectionQuestions.add(gradeEarnedHighestLevelEducationQuestion);
 
@@ -2206,8 +2169,7 @@ public class StudentIntakeFormManager {
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMALASTYEARATTENDED_ID);
 		noDiplomaLastYearAttendedQuestion.setLabel("Last Year Attended");
 		noDiplomaLastYearAttendedQuestion.setMaximumLength("4");
-		noDiplomaLastYearAttendedQuestion
-				.setType(FORM_TYPE_TEXTINPUT);
+		noDiplomaLastYearAttendedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		noDiplomaLastYearAttendedQuestion.setRequired(true);
 		// DEPENDENCY -> noDiplomaLastYearAttendedQuestion shown when
 		// educationLevelCompletedQuestion value is
@@ -2226,8 +2188,7 @@ public class StudentIntakeFormManager {
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMAHIGHESTGRADECOMPLETED_ID);
 		noDiplomaHighestGradeCompletedQuestion
 				.setLabel("Highest Grade Completed");
-		noDiplomaHighestGradeCompletedQuestion
-				.setType(FORM_TYPE_TEXTINPUT);
+		noDiplomaHighestGradeCompletedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		noDiplomaHighestGradeCompletedQuestion.setRequired(true);
 		// DEPENDENCY -> noDiplomaHighestGradeCompletedQuestion shown when
 		// educationLevelCompletedQuestion value is
@@ -2304,8 +2265,7 @@ public class StudentIntakeFormManager {
 		someCollegeCreditsLastYearAttendedQuestion
 				.setLabel("Last Year Attended");
 		someCollegeCreditsLastYearAttendedQuestion.setMaximumLength("4");
-		someCollegeCreditsLastYearAttendedQuestion
-				.setType(FORM_TYPE_TEXTINPUT);
+		someCollegeCreditsLastYearAttendedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		someCollegeCreditsLastYearAttendedQuestion.setRequired(true);
 		// DEPENDENCY -> someCollegeCreditsLastYearAttendedQuestion shown when
 		// educationLevelCompletedQuestion value is
