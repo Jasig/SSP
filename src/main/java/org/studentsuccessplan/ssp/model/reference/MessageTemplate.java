@@ -25,6 +25,8 @@ public class MessageTemplate extends AbstractReference {
 			.fromString("919F6FF5-8F22-4684-8729-D615206A2644");
 	public static final UUID NEW_STUDENT_INTAKE_TASK_EMAIL_ID = UUID
 			.fromString("9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0");
+	public static final UUID EMPTY_TEMPLATE_EMAIL_ID = UUID.
+			fromString("7c945020-86b0-11e1-849a-0026b9e7ff4c");
 
 	@Column(name = "subject", nullable = false, length = 250)
 	private String subject;

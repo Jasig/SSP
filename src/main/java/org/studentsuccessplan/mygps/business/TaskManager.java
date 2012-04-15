@@ -139,7 +139,7 @@ public class TaskManager {
 		templateParameters.put("taskTOs", taskTOs);
 
 		try {
-			messageService.createMessageFromTemplate(emailAddress,
+			messageService.createMessage(emailAddress,
 					MessageTemplate.ACTION_PLAN_EMAIL_ID, templateParameters);
 			return true;
 		} catch (Exception e) {
@@ -246,8 +246,8 @@ public class TaskManager {
 		templateParameters.put("dueDate", format.format(dueDate));
 
 		try {
-			messageService.createMessageFromTemplate(
-					student.getPrimaryEmailAddress(), messageTemplateId,
+			messageService.createMessage(
+					student, messageTemplateId,
 					templateParameters);
 		} catch (Exception e) {
 			LOGGER.error("ERROR : email() : {}", e);
@@ -324,8 +324,8 @@ public class TaskManager {
 				if (now.after(startDateCalendar)
 						&& (now.before(dueDateCalendar))) {
 					;
-					messageService.createMessageFromTemplate(customTask
-							.getPerson().getEmailAddressWithName(),
+					messageService.createMessage(customTask
+							.getPerson(),
 							MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID,
 							new HashMap<String, Object>());
 
@@ -349,8 +349,8 @@ public class TaskManager {
 
 				if (now.after(startDateCalendar)
 						&& (now.before(dueDateCalendar))) {
-					messageService.createMessageFromTemplate(actionPlanStep
-							.getPerson().getEmailAddressWithName(),
+					messageService.createMessage(actionPlanStep
+							.getPerson(),
 							MessageTemplate.ACTION_PLAN_STEP_ID,
 							new HashMap<String, Object>());
 					taskService.setReminderSentDateToToday(actionPlanStep);

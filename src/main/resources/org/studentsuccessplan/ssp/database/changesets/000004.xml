@@ -50,5 +50,25 @@
 			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 	</changeSet>
+
+	<changeSet id="add empty message_template" author="daniel.bower">
+		<insert tableName="message_template">
+			<column name="id" value="7c945020-86b0-11e1-849a-0026b9e7ff4c" />
+			<column name="name" value="empty_template" />
+			<column name="description" value="A template that will just contain formatting for a generic subject and message" />
+			<column name="subject" value="$subj" />
+			<column name="body" value="$mesg" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="message_template">
+				<where>id='7c945020-86b0-11e1-849a-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 	
 </databaseChangeLog>

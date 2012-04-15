@@ -1,5 +1,8 @@
 package org.studentsuccessplan.mygps.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.studentsuccessplan.mygps.model.transferobject.MessageTO;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
 import org.studentsuccessplan.ssp.service.MessageService;
 
 @Controller
@@ -39,8 +43,13 @@ public class MyGpsMessageController extends AbstractMyGpsController {
 			Person coach = securityService.currentUser()
 					.getPerson().getDemographics().getCoach();
 
-			messageService.createMessage(coach, messageTO.getSubject(),
-					messageTO.getMessage());
+			Map<String, Object> messageParams = new HashMap<String, Object>();
+			messageParams.put("subj", messageTO.getSubject());
+			messageParams.put("mesg", messageTO.getMessage());
+
+			messageService.createMessage(coach,
+					MessageTemplate.EMPTY_TEMPLATE_EMAIL_ID,
+					messageParams);
 
 			return true;
 		} catch (Exception e) {

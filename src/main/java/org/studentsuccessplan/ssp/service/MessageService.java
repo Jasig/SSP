@@ -12,14 +12,13 @@ public interface MessageService {
 	void setBcc(String bcc);
 
 	@Transactional(readOnly = false)
-	void createMessage(Person to, String subject, String body)
+	void createMessage(Person to, UUID messageTemplateId,
+			final Map<String, Object> templateParameters)
 			throws Exception;
 
-	void createMessage(String to, String subject, String body)
+	void createMessage(String to, UUID messageTemplateId,
+			Map<String, Object> templateParameters)
 			throws Exception;
-
-	void createMessageFromTemplate(String emailAddress, UUID messageTemplateId,
-			Map<String, Object> templateParameters) throws Exception;
 
 	@Transactional(readOnly = false)
 	void sendQueuedMessages();

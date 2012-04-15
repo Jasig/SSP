@@ -24,6 +24,7 @@ import org.studentsuccessplan.ssp.model.Message;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
 import org.studentsuccessplan.ssp.service.MessageService;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.VelocityTemplateService;
@@ -64,87 +65,56 @@ public class MessageServiceImpl implements MessageService {
 		this.bcc = bcc;
 	}
 
-	/**
-	 * Send a message to the email address with the given MessageTemplate and
-	 * parameters
-	 */
-	@Override
-	public void createMessageFromTemplate(final String emailAddress,
+	private Message createMessage(
 			final UUID messageTemplateId,
-			final Map<String, Object> templateParameters) throws Exception {
+			final Map<String, Object> templateParameters)
+			throws ObjectNotFoundException {
+
 		MessageTemplate messageTemplate = messageTemplateDao
 				.get(messageTemplateId);
 
-		createMessage(emailAddress,
-				velocityTemplateService.generateContentFromTemplate(
-						messageTemplate.subjectTemplateId(),
-						messageTemplate.getSubject(), templateParameters),
-				velocityTemplateService.generateContentFromTemplate(
-						messageTemplate.bodyTemplateId(),
-						messageTemplate.getBody(), templateParameters));
+		Message message = new Message();
 
+		message.setSubject(velocityTemplateService.generateContentFromTemplate(
+				messageTemplate.subjectTemplateId(),
+				messageTemplate.getSubject(), templateParameters));
+
+		message.setBody(velocityTemplateService.generateContentFromTemplate(
+				messageTemplate.bodyTemplateId(),
+				messageTemplate.getBody(), templateParameters));
+
+		Person person;
+		if (securityService.isAuthenticated()) {
+			person = securityService.currentUser().getPerson();
+			message.setCreatedBy(person);
+			message.setSender(person);
+		} else {
+			person = personService.get(Person.SYSTEM_ADMINISTRATOR_ID);
+			message.setCreatedBy(person);
+			message.setSender(person);
+		}
+
+		return message;
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public void createMessage(Person to, String subject, String body)
+	public void createMessage(final Person to,
+			final UUID messageTemplateId,
+			final Map<String, Object> templateParameters)
 			throws Exception {
-
-		Message message = new Message();
-
-		message.setBody(body);
-
-		if (securityService.isAuthenticated()) {
-			message.setCreatedBy(securityService.currentUser()
-					.getPerson());
-		} else {
-			message.setCreatedBy(personService
-					.get(Person.SYSTEM_ADMINISTRATOR_ID));
-		}
-
-		message.setCreatedDate(new Date());
+		Message message = createMessage(messageTemplateId, templateParameters);
 		message.setRecipient(to);
-
-		if (securityService.isAuthenticated()) {
-			message.setSender(securityService.currentUser()
-					.getPerson());
-		} else {
-			message.setSender(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
-		}
-
-		message.setSubject(subject);
-
 		messageDao.save(message);
 	}
 
 	@Override
-	public void createMessage(String to, String subject, String body)
+	public void createMessage(final String to,
+			final UUID messageTemplateId,
+			final Map<String, Object> templateParameters)
 			throws Exception {
-
-		Message message = new Message();
-
-		message.setBody(body);
-
-		if (securityService.isAuthenticated()) {
-			message.setCreatedBy(securityService.currentUser()
-					.getPerson());
-		} else {
-			message.setCreatedBy(personService
-					.get(Person.SYSTEM_ADMINISTRATOR_ID));
-		}
-
-		message.setCreatedDate(new Date());
+		Message message = createMessage(messageTemplateId, templateParameters);
 		message.setRecipientEmailAddress(to);
-
-		if (securityService.isAuthenticated()) {
-			message.setSender(securityService.currentUser()
-					.getPerson());
-		} else {
-			message.setSender(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
-		}
-
-		message.setSubject(subject);
-
 		messageDao.save(message);
 	}
 
