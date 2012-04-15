@@ -2,6 +2,8 @@ package org.studentsuccessplan.ssp.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -16,13 +18,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.MessageDao;
+import org.studentsuccessplan.ssp.dao.reference.MessageTemplateDao;
 import org.studentsuccessplan.ssp.model.Message;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
 import org.studentsuccessplan.ssp.service.MessageService;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.service.VelocityTemplateService;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,6 +44,12 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private SecurityService securityService;
 
+	@Autowired
+	private VelocityTemplateService velocityTemplateService;
+
+	@Autowired
+	private MessageTemplateDao messageTemplateDao;
+
 	@Value("#{configProperties.messageManager_bcc}")
 	private String bcc;
 
@@ -50,8 +60,29 @@ public class MessageServiceImpl implements MessageService {
 			.getLogger(MessageServiceImpl.class);
 
 	@Override
-	public void setBcc(String bcc) {
+	public void setBcc(final String bcc) {
 		this.bcc = bcc;
+	}
+
+	/**
+	 * Send a message to the email address with the given MessageTemplate and
+	 * parameters
+	 */
+	@Override
+	public void createMessageFromTemplate(final String emailAddress,
+			final UUID messageTemplateId,
+			final Map<String, Object> templateParameters) throws Exception {
+		MessageTemplate messageTemplate = messageTemplateDao
+				.get(messageTemplateId);
+
+		createMessage(emailAddress,
+				velocityTemplateService.generateContentFromTemplate(
+						messageTemplate.subjectTemplateId(),
+						messageTemplate.getSubject(), templateParameters),
+				velocityTemplateService.generateContentFromTemplate(
+						messageTemplate.bodyTemplateId(),
+						messageTemplate.getBody(), templateParameters));
+
 	}
 
 	@Override
@@ -207,4 +238,5 @@ public class MessageServiceImpl implements MessageService {
 
 		return retVal;
 	}
+
 }

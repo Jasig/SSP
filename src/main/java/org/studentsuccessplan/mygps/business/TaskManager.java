@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -18,11 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.mygps.model.transferobject.TaskReportTO;
 import org.studentsuccessplan.mygps.model.transferobject.TaskTO;
 import org.studentsuccessplan.mygps.model.transferobject.TaskTOComparator;
-import org.studentsuccessplan.ssp.dao.MessageDao;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
-import org.studentsuccessplan.ssp.dao.reference.MessageTemplateDao;
 import org.studentsuccessplan.ssp.model.CustomTask;
-import org.studentsuccessplan.ssp.model.Message;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
@@ -34,7 +32,8 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.TaskService;
-import org.studentsuccessplan.ssp.util.VelocityTemplateHelper;
+
+import com.google.common.collect.Maps;
 
 @Service
 public class TaskManager {
@@ -49,22 +48,13 @@ public class TaskManager {
 	private ChallengeReferralDao challengeReferralDao;
 
 	@Autowired
-	private MessageDao messageDao;
-
-	@Autowired
-	private MessageService messageManager;
-
-	@Autowired
-	private MessageTemplateDao messageTemplateDao;
+	private MessageService messageService;
 
 	@Autowired
 	private PersonService personService;
 
 	@Autowired
 	private SecurityService securityService;
-
-	@Autowired
-	private VelocityTemplateHelper velocityTemplateHelper;
 
 	@Value("#{configProperties.numberOfDaysPriorForTaskReminder}")
 	private int numberOfDaysPriorForTaskReminder;
@@ -121,54 +111,42 @@ public class TaskManager {
 	}
 
 	@Transactional(readOnly = false)
-	public boolean email(String emailAddress) {
+	public boolean email(final String emailAddress) {
+
+		// Get all tasks to be placed in the action plan email.
+		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
+
+		if (securityService.isAuthenticated()) {
+			Person student = securityService.currentUser().getPerson();
+			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
+					.getAllForPersonId(student, false)));
+			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
+					.getAllForPersonId(student, false)));
+		} else {
+			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
+					.getAllForSessionId(securityService.getSessionId(),
+							true)));
+			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
+					.getAllForSessionId(securityService.getSessionId(),
+							true)));
+		}
+
+		Collections.sort(taskTOs, new TaskTOComparator());
+
+		Map<String, Object> templateParameters = Maps.newHashMap();
+		Person student = securityService.currentUser().getPerson();
+		templateParameters.put("fullName", student.getFullName());
+		templateParameters.put("taskTOs", taskTOs);
 
 		try {
-
-			// Get all tasks to be placed in the action plan email.
-			List<TaskTO> taskTOs = new ArrayList<TaskTO>();
-
-			if (securityService.isAuthenticated()) {
-				Person student = securityService.currentUser().getPerson();
-				taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
-						.getAllForPersonId(student, false)));
-				taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
-						.getAllForPersonId(student, false)));
-			} else {
-				taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
-						.getAllForSessionId(securityService.getSessionId(),
-								true)));
-				taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
-						.getAllForSessionId(securityService.getSessionId(),
-								true)));
-			}
-
-			Collections.sort(taskTOs, new TaskTOComparator());
-
-			// Get the message template
-			MessageTemplate messageTemplate = messageTemplateDao
-					.get(MessageTemplate.ACTION_PLAN_EMAIL_ID);
-
-			// Template parameters
-			HashMap<String, Object> templateParameters = new HashMap<String, Object>();
-
-			Person student = securityService.currentUser().getPerson();
-
-			templateParameters.put("fullName", student.getFullName());
-			templateParameters.put("taskTOs", taskTOs);
-
-			// Create message, add to queue for delivery
-			messageManager.createMessage(emailAddress, velocityTemplateHelper
-					.generateContentFromTemplate(messageTemplate.getSubject(),
-							templateParameters), velocityTemplateHelper
-					.generateContentFromTemplate(messageTemplate.getBody(),
-							templateParameters));
-
+			messageService.createMessageFromTemplate(emailAddress,
+					MessageTemplate.ACTION_PLAN_EMAIL_ID, templateParameters);
 			return true;
 		} catch (Exception e) {
 			LOGGER.error("ERROR : email() : {}", e);
 			return false;
 		}
+
 	}
 
 	public List<TaskTO> getAllTasks() {
@@ -254,12 +232,8 @@ public class TaskManager {
 			return taskTO;
 		}
 
-		// Get the message template
-		MessageTemplate messageTemplate = messageTemplateDao
-				.get(messageTemplateId);
-
 		// Template parameters
-		HashMap<String, Object> templateParameters = new HashMap<String, Object>();
+		Map<String, Object> templateParameters = new HashMap<String, Object>();
 		templateParameters.put("fullName", student.getFullName());
 		templateParameters.put("name", name);
 
@@ -272,14 +246,11 @@ public class TaskManager {
 		templateParameters.put("dueDate", format.format(dueDate));
 
 		try {
-			// Create message, add to queue for delivery
-			messageManager.createMessage(student.getPrimaryEmailAddress(),
-					velocityTemplateHelper.generateContentFromTemplate(
-							messageTemplate.getSubject(), templateParameters),
-					velocityTemplateHelper.generateContentFromTemplate(
-							messageTemplate.getBody(), templateParameters));
+			messageService.createMessageFromTemplate(
+					student.getPrimaryEmailAddress(), messageTemplateId,
+					templateParameters);
 		} catch (Exception e) {
-			LOGGER.error("Unable to send email", e);
+			LOGGER.error("ERROR : email() : {}", e);
 		}
 
 		return taskTO;
@@ -329,11 +300,6 @@ public class TaskManager {
 
 		try {
 
-			MessageTemplate actionPlanStepMessageTemplate = messageTemplateDao
-					.get(MessageTemplate.ACTION_PLAN_STEP_ID);
-			MessageTemplate customTaskMessageTemplate = messageTemplateDao
-					.get(MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID);
-
 			// Calculate reminder window start date
 			Calendar now = Calendar.getInstance();
 			now.setTime(new Date());
@@ -357,26 +323,11 @@ public class TaskManager {
 
 				if (now.after(startDateCalendar)
 						&& (now.before(dueDateCalendar))) {
-
-					Message message = new Message();
-					HashMap<String, Object> templateParameters = new HashMap<String, Object>();
-
-					message.setBody(velocityTemplateHelper
-							.generateContentFromTemplate(
-									customTaskMessageTemplate.getBody(),
-									templateParameters));
-					message.setCreatedBy(personService
-							.get(Person.SYSTEM_ADMINISTRATOR_ID));
-					message.setCreatedDate(new Date());
-					message.setRecipient(customTask.getPerson());
-					message.setSender(personService
-							.get(Person.SYSTEM_ADMINISTRATOR_ID));
-					message.setSubject(velocityTemplateHelper
-							.generateContentFromTemplate(
-									customTaskMessageTemplate.getSubject(),
-									templateParameters));
-
-					messageDao.save(message);
+					;
+					messageService.createMessageFromTemplate(customTask
+							.getPerson().getEmailAddressWithName(),
+							MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID,
+							new HashMap<String, Object>());
 
 					customTaskService.setReminderSentDateToToday(customTask);
 				}
@@ -398,27 +349,10 @@ public class TaskManager {
 
 				if (now.after(startDateCalendar)
 						&& (now.before(dueDateCalendar))) {
-
-					Message message = new Message();
-					HashMap<String, Object> templateParameters = new HashMap<String, Object>();
-
-					message.setBody(velocityTemplateHelper
-							.generateContentFromTemplate(
-									actionPlanStepMessageTemplate.getBody(),
-									templateParameters));
-					message.setCreatedBy(personService
-							.get(Person.SYSTEM_ADMINISTRATOR_ID));
-					message.setCreatedDate(new Date());
-					message.setRecipient(actionPlanStep.getPerson());
-					message.setSender(personService
-							.get(Person.SYSTEM_ADMINISTRATOR_ID));
-					message.setSubject(velocityTemplateHelper
-							.generateContentFromTemplate(
-									actionPlanStepMessageTemplate.getSubject(),
-									templateParameters));
-
-					messageDao.save(message);
-
+					messageService.createMessageFromTemplate(actionPlanStep
+							.getPerson().getEmailAddressWithName(),
+							MessageTemplate.ACTION_PLAN_STEP_ID,
+							new HashMap<String, Object>());
 					taskService.setReminderSentDateToToday(actionPlanStep);
 				}
 

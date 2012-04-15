@@ -18,19 +18,6 @@
 		base-package="org.studentsuccessplan.ssp,org.studentsuccessplan.mygps" />
 	<mvc:annotation-driven />
 
-	<!-- Util -->
-	<bean id="velocityTemplateHelper" class="org.studentsuccessplan.ssp.util.VelocityTemplateHelper" />
-
-	<bean id="velocityEngine"
-		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-		<property name="velocityProperties">
-			<value>
-				resource.loader=string
-				string.resource.loader.class=org.apache.velocity.runtime.resource.loader.StringResourceLoader
-			</value>
-		</property>
-	</bean>
-
 	<mvc:interceptors>
 		<bean
 			class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">

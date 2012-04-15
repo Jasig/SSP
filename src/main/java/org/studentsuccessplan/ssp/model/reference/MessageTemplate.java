@@ -5,7 +5,9 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-
+/*
+ * Allows emails and other messaging to be customized using the Velocity Framework
+ */
 @Entity
 public class MessageTemplate extends AbstractReference {
 
@@ -27,10 +29,11 @@ public class MessageTemplate extends AbstractReference {
 	@Column(name = "subject", nullable = false, length = 250)
 	private String subject;
 
-	@Column(name = "body", nullable = false, columnDefinition="text")
+	@Column(name = "body", nullable = false, columnDefinition = "text")
 	private String body;
 
-	public MessageTemplate() {}
+	public MessageTemplate() {
+	}
 
 	public MessageTemplate(UUID id) {
 		super(id);
@@ -43,14 +46,33 @@ public class MessageTemplate extends AbstractReference {
 	public String getSubject() {
 		return subject;
 	}
+
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+
 	public String getBody() {
 		return body;
 	}
+
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	/**
+	 * Get a cacheable id for the subject template
+	 */
+	public String subjectTemplateId() {
+		return getId().toString() + "-s-" + getModifiedDate().getTime();
+	}
+
+	/**
+	 * Get a cacheable id for the body template
+	 * 
+	 * @return
+	 */
+	public String bodyTemplateId() {
+		return getId().toString() + "-b-" + getModifiedDate().getTime();
 	}
 
 }

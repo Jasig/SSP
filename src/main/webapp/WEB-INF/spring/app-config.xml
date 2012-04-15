@@ -23,9 +23,6 @@
 		<context:exclude-filter type="regex" expression=".*Controller"/>
 	</context:component-scan>
 	
-	<!-- Util -->
-	<bean id="velocityTemplateHelper" class="org.studentsuccessplan.ssp.util.VelocityTemplateHelper" />
-
 	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
 			<value>
