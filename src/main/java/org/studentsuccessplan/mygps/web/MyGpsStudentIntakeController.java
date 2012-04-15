@@ -3,6 +3,7 @@ package org.studentsuccessplan.mygps.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +23,10 @@ public class MyGpsStudentIntakeController extends AbstractMyGpsController {
 			.getLogger(MyGpsStudentIntakeController.class);
 
 	protected void setManager(StudentIntakeFormManager manager) {
-		this.studentIntakeFormManager = manager;
+		studentIntakeFormManager = manager;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/getForm", method = RequestMethod.GET)
 	public @ResponseBody
 	FormTO getForm() throws Exception {
@@ -36,7 +38,8 @@ public class MyGpsStudentIntakeController extends AbstractMyGpsController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
 	Boolean saveForm(@RequestBody FormTO formTO) throws Exception {
 

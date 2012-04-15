@@ -1,44 +1,39 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.AbstractReference;
 import org.studentsuccessplan.ssp.util.SspStringUtils;
 
-public class FormQuestionTO {
+public class FormQuestionTO implements Serializable {
+
+	private static final long serialVersionUID = -4773730489429626123L;
 
 	private UUID id;
+
 	private String label;
+
 	private String type;
+
 	private boolean readOnly;
+
 	private boolean required;
+
 	private String value;
+
 	private List<String> values;
+
 	private String maximumLength;
+
 	private List<FormOptionTO> options;
+
 	private String validationExpression;
+
 	private String visibilityExpression;
+
 	private String availabilityExpression;
-
-	public FormOptionTO getFormOptionByValue(String value) {
-		for (FormOptionTO formOptionTO : getOptions()) {
-			if (formOptionTO.getValue().toUpperCase()
-					.equals(value.toUpperCase())) {
-				return formOptionTO;
-			}
-		}
-		return null;
-	}
-
-	public FormOptionTO getFormOptionById(UUID formOptionId) {
-		for (FormOptionTO formOptionTO : getOptions()) {
-			if (formOptionTO.getId().equals(formOptionId)) {
-				return formOptionTO;
-			}
-		}
-		return null;
-	}
 
 	public UUID getId() {
 		return id;
@@ -88,19 +83,19 @@ public class FormQuestionTO {
 		this.value = value;
 	}
 
-	public void setValue(UUID value) {
+	public void setValueUUID(UUID value) {
 		this.value = value.toString();
 	}
 
-	public void setValue(AbstractReference value) {
+	public void setValueAbstractReference(AbstractReference value) {
 		this.value = value.getId().toString();
 	}
 
-	public void setValue(boolean value) {
+	public void setValueBoolean(boolean value) {
 		this.value = SspStringUtils.stringFromBoolean(value);
 	}
 
-	public void setValue(int value) {
+	public void setValueInt(int value) {
 		this.value = String.valueOf(value);
 	}
 
@@ -152,4 +147,24 @@ public class FormQuestionTO {
 		this.availabilityExpression = availabilityExpression;
 	}
 
+	public FormOptionTO getFormOptionByValue(String value) {
+		for (FormOptionTO formOptionTO : getOptions()) {
+			if (formOptionTO.getValue().toUpperCase()
+					.equals(value.toUpperCase())) {
+				return formOptionTO;
+			}
+		}
+
+		return null;
+	}
+
+	public FormOptionTO getFormOptionById(UUID formOptionId) {
+		for (FormOptionTO formOptionTO : getOptions()) {
+			if (formOptionTO.getId().equals(formOptionId)) {
+				return formOptionTO;
+			}
+		}
+
+		return null;
+	}
 }

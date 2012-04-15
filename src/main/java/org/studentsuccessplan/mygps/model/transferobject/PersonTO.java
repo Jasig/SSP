@@ -1,11 +1,15 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.io.Serializable;
+
 import org.studentsuccessplan.ssp.model.Person;
 
 /**
  * Transfer class for {@link Person}.
  */
-public class PersonTO {
+public class PersonTO implements Serializable {
+
+	private static final long serialVersionUID = 7386277650707089183L;
 
 	private String id;
 

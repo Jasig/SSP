@@ -39,7 +39,7 @@ namespace 'mygps.viewmodel'
 					result: ( result ) =>
 						@form( result )
 					fault: ( fault ) =>
-						alert( fault.responseText )
+						alert( $.parseJSON(fault.responseText)?.message ? fault.responseText )
 				)
 				return
 			

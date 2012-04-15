@@ -73,9 +73,10 @@ How to set up your development environment:
 	- Modify the files you copied from externalConfig to suit your environment
 	- Add the following parameter, after setting the appropriate path for
 	    your environment, to your Tomcat context.xml found in Tomcat/conf/:
-	    	<Parameter name="SSP_CONFIGDIR" value="/usr/local/etc/ssp/" />
+	    	<Parameter name="SSP_CONFIGDIR" value="/usr/local/etc/ssp/" override="false" />
 	    Example Windows version:
-	    	<Parameter name="SSP_CONFIGDIR" value="C:\\ssp\\" />
+	    	<Parameter name="SSP_CONFIGDIR" value="C:\\ssp\\" override="false" />
+	    	 />
 	  OR
 	    Copy the /ssp/src/main/webapp/META-INF/context.xml file to your
 		Tomcat directory at

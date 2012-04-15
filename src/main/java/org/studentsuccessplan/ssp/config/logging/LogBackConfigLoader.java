@@ -26,10 +26,14 @@ public class LogBackConfigLoader {
 	 * @param configPath
 	 *            A config file in an external location
 	 * @throws IOException
+	 *             If external config file coult not be processed because it
+	 *             could not be accessed or read.
 	 * @throws JoranException
+	 *             If the logback configuration file coult not be processed by
+	 *             logback.
 	 */
-	public LogBackConfigLoader(final String configPath)
-			throws IOException, JoranException {
+	public LogBackConfigLoader(final String configPath) throws IOException,
+			JoranException {
 		final LoggerContext loggerContext = (LoggerContext) LoggerFactory
 				.getILoggerFactory();
 

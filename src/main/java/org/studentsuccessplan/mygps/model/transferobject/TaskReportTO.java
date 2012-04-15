@@ -1,5 +1,6 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,9 @@ import org.studentsuccessplan.ssp.model.AbstractTask;
 import org.studentsuccessplan.ssp.model.CustomTask;
 import org.studentsuccessplan.ssp.model.Task;
 
-public class TaskReportTO implements Comparable<TaskReportTO> {
+public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
+
+	private static final long serialVersionUID = 914070219523802658L;
 
 	private String type;
 	private String challengeName;
@@ -23,11 +26,9 @@ public class TaskReportTO implements Comparable<TaskReportTO> {
 
 	public TaskReportTO(Task task) {
 		this.setChallengeName(task.getChallenge().getName());
-		this.setChallengeReferralName(task.getChallengeReferral()
-				.getName());
+		this.setChallengeReferralName(task.getChallengeReferral().getName());
 		this.setCreatedBy(task.getCreatedBy().getId());
-		this.setDescription(task.getChallengeReferral()
-				.getPublicDescription());
+		this.setDescription(task.getChallengeReferral().getPublicDescription());
 		this.setDueDate(null);
 
 		// :TODO how do determine between ACTION_PLAN_TASK and
