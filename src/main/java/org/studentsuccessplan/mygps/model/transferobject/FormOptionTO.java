@@ -13,6 +13,9 @@ public class FormOptionTO implements Serializable {
 
 	private String value;
 
+	/**
+	 * Empty constructor
+	 */
 	public FormOptionTO() {
 	}
 

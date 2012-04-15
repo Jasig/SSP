@@ -1,5 +1,6 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,10 @@ import org.studentsuccessplan.ssp.model.AbstractTask;
 import org.studentsuccessplan.ssp.model.CustomTask;
 import org.studentsuccessplan.ssp.model.Task;
 
-public class TaskTO {
+public class TaskTO implements Serializable {
+
+	private static final long serialVersionUID = 5796302591576434925L;
+
 	public static final String TASKTO_ID_PREFIX_DELIMITER = ":";
 	public static final String TASKTO_ID_PREFIX_ACTION_PLAN_TASK = "ACT";
 	public static final String TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK = "CUS";

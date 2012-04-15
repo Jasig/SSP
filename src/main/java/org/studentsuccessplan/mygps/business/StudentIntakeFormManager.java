@@ -277,17 +277,11 @@ public class StudentIntakeFormManager {
 		}
 
 		formSections.add(buildPersonalSection());
-
 		formSections.add(buildDemographicsSection());
-
 		formSections.add(buildEducationPlanSection());
-
 		formSections.add(buildEducationLevelsSection());
-
 		formSections.add(buildEducationGoalSection());
-
 		formSections.add(buildFundingSection());
-
 		formSections.add(buildChallengesSection());
 
 		// FormTO
@@ -318,7 +312,7 @@ public class StudentIntakeFormManager {
 				.getFormSectionById(SECTION_CONFIDENTIALTY_ID);
 		if (null != formSectionTO) {
 			formSectionTO.getFormQuestionById(
-					SECTION_CONFIDENTIALITY_QUESTION_AGREE_ID).setValue(
+					SECTION_CONFIDENTIALITY_QUESTION_AGREE_ID).setValueBoolean(
 					(null == studentConfidentialityDisclosureAgreementService
 							.hasStudentAgreedToOne(student)));
 		}
@@ -344,7 +338,7 @@ public class StudentIntakeFormManager {
 
 		// Student Id
 		formSectionTO.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_STUDENTID_ID).setValue(
+				SECTION_PERSONAL_QUESTION_STUDENTID_ID).setValueUUID(
 				student.getId());
 
 		// Birthdate
@@ -502,7 +496,7 @@ public class StudentIntakeFormManager {
 			} else {
 				formSectionTO.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID)
-						.setValue(
+						.setValueUUID(
 								student.getDemographics().getVeteranStatus()
 										.getId());
 			}
@@ -510,7 +504,8 @@ public class StudentIntakeFormManager {
 			// Primary Caregiver
 			formSectionTO.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID)
-					.setValue(student.getDemographics().isPrimaryCaregiver());
+					.setValueBoolean(
+							student.getDemographics().isPrimaryCaregiver());
 
 			// How Many Children
 			formSectionTO.getFormQuestionById(
@@ -525,8 +520,9 @@ public class StudentIntakeFormManager {
 
 			// Childcare Needed
 			formSectionTO.getFormQuestionById(
-					SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID).setValue(
-					student.getDemographics().isChildCareNeeded());
+					SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID)
+					.setValueBoolean(
+							student.getDemographics().isChildCareNeeded());
 
 			// Childcare Arrangements
 			if (student.getDemographics().getChildCareArrangement() == null) {
@@ -544,14 +540,14 @@ public class StudentIntakeFormManager {
 			} else {
 				formSectionTO.getFormQuestionById(
 						SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID)
-						.setValue(
+						.setValueAbstractReference(
 								student.getDemographics()
-										.getChildCareArrangement().getId());
+										.getChildCareArrangement());
 			}
 
 			// Employed
 			formSectionTO.getFormQuestionById(
-					SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID).setValue(
+					SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID).setValueBoolean(
 					student.getDemographics().isEmployed());
 
 			// Employer
@@ -599,13 +595,14 @@ public class StudentIntakeFormManager {
 
 			// Student Status
 			formSectionTO.getFormQuestionById(
-					SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID).setValue(
-					student.getEducationPlan().getStudentStatus());
+					SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID)
+					.setValueAbstractReference(
+							student.getEducationPlan().getStudentStatus());
 
 			// New Student Orientation
 			formSectionTO.getFormQuestionById(
 					SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
-					.setValue(
+					.setValueBoolean(
 							student.getEducationPlan()
 									.isNewOrientationComplete());
 
@@ -613,13 +610,13 @@ public class StudentIntakeFormManager {
 			formSectionTO
 					.getFormQuestionById(
 							SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID)
-					.setValue(
+					.setValueBoolean(
 							student.getEducationPlan().isRegisteredForClasses());
 
 			// Have Parents Obtained a College Degree
 			formSectionTO.getFormQuestionById(
 					SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID)
-					.setValue(
+					.setValueBoolean(
 							student.getEducationPlan()
 									.isCollegeDegreeForParents());
 
@@ -627,7 +624,8 @@ public class StudentIntakeFormManager {
 			formSectionTO
 					.getFormQuestionById(
 							SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID)
-					.setValue(student.getEducationPlan().isSpecialNeeds());
+					.setValueBoolean(
+							student.getEducationPlan().isSpecialNeeds());
 
 			// Grade at Highest Education Level
 			formSectionTO
@@ -730,8 +728,9 @@ public class StudentIntakeFormManager {
 
 			// Goal
 			formSectionTO.getFormQuestionById(
-					SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID).setValue(
-					student.getEducationGoal().getEducationGoal());
+					SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID)
+					.setValueAbstractReference(
+							student.getEducationGoal().getEducationGoal());
 
 			// Goal Description
 			formSectionTO.getFormQuestionById(
@@ -748,7 +747,7 @@ public class StudentIntakeFormManager {
 
 			// Sure of Major
 			formSectionTO.getFormQuestionById(
-					SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID).setValue(
+					SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID).setValueInt(
 					student.getEducationGoal().getHowSureAboutMajor());
 
 			// Career Goal
@@ -2526,5 +2525,4 @@ public class StudentIntakeFormManager {
 
 		return challengeSection;
 	}
-
 }

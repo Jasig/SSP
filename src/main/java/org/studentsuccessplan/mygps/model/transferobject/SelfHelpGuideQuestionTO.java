@@ -1,5 +1,6 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +14,9 @@ import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
 import com.google.common.collect.Sets;
 
 public class SelfHelpGuideQuestionTO extends
-		AbstractReferenceTO<SelfHelpGuideQuestion> {
+		AbstractReferenceTO<SelfHelpGuideQuestion> implements Serializable {
+
+	private static final long serialVersionUID = 6074881529172652403L;
 
 	private int questionNumber;
 

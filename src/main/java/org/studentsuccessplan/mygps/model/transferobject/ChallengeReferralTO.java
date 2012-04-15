@@ -1,5 +1,6 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -7,13 +8,18 @@ import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 
 import com.google.common.collect.Lists;
 
-public class ChallengeReferralTO {
+public class ChallengeReferralTO implements Serializable {
+
+	private static final long serialVersionUID = -2762464670983684801L;
 
 	public static final int SHORTENED_TEXT_LENGTH = 140;
 
 	private UUID id;
+
 	private String name;
+
 	private String description;
+
 	private String details;
 
 	public ChallengeReferralTO() {

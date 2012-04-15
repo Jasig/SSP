@@ -1,11 +1,14 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
-public class SelfHelpGuideResponseTO {
+public class SelfHelpGuideResponseTO implements Serializable {
+
+	private static final long serialVersionUID = 676780205975872735L;
 
 	private UUID id;
 	private String summaryText;
@@ -19,21 +22,27 @@ public class SelfHelpGuideResponseTO {
 	public void setId(UUID id) {
 		this.id = id;
 	}
+
 	public String getSummaryText() {
 		return summaryText;
 	}
+
 	public void setSummaryText(String summaryText) {
 		this.summaryText = summaryText;
 	}
+
 	public List<ChallengeTO> getChallengesIdentified() {
 		return challengesIdentified;
 	}
+
 	public void setChallengesIdentified(List<ChallengeTO> challengesIdentified) {
 		this.challengesIdentified = challengesIdentified;
 	}
+
 	public boolean isTriggeredEarlyAlert() {
 		return triggeredEarlyAlert;
 	}
+
 	public void setTriggeredEarlyAlert(boolean triggeredEarlyAlert) {
 		this.triggeredEarlyAlert = triggeredEarlyAlert;
 	}
