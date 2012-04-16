@@ -3,9 +3,14 @@ package org.studentsuccessplan.ssp.model.reference;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * ConfidentialityLevel reference object.
@@ -16,6 +21,12 @@ public class ConfidentialityLevel extends AbstractReference implements
 		Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	@Column(nullable = false, length = 10)
+	@NotNull
+	@NotEmpty
+	@Size(max = 10)
+	private String acronym;
 
 	/**
 	 * Constructor
@@ -60,5 +71,13 @@ public class ConfidentialityLevel extends AbstractReference implements
 	 */
 	public ConfidentialityLevel(UUID id, String name, String description) {
 		super(id, name, description);
+	}
+
+	public String getAcronym() {
+		return acronym;
+	}
+
+	public void setAcronym(String acronym) {
+		this.acronym = acronym;
 	}
 }

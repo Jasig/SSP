@@ -17,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
@@ -50,6 +49,7 @@ public class ConfidentialityLevelDaoTest {
 		ConfidentialityLevel obj = new ConfidentialityLevel();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setAcronym("acro");
 		dao.save(obj);
 
 		assertNotNull(obj.getId());
@@ -90,11 +90,13 @@ public class ConfidentialityLevelDaoTest {
 		ConfidentialityLevel obj = new ConfidentialityLevel();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setAcronym("acro");
 		dao.save(obj);
 
 		ConfidentialityLevel obj2 = new ConfidentialityLevel();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
+		obj2.setAcronym("acro2");
 		dao.save(obj2);
 
 		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "

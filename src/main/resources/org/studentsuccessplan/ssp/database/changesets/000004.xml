@@ -71,4 +71,14 @@
 		</rollback>
 	</changeSet>
 	
+	<changeSet id="" author="daniel.bower">
+		<addColumn tableName="confidentiality_level">
+			<column name="acronym" type="character varying(10)">
+					<constraints nullable="false" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="confidentiality_level" columnName="acronym"/>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>
