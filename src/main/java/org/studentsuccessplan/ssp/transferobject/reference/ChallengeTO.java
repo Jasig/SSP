@@ -1,9 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeChallengeReferral;
@@ -13,7 +16,10 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 import com.google.common.collect.Lists;
 
 public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
-		TransferObject<Challenge> {
+		TransferObject<Challenge>, Serializable {
+
+	private static final long serialVersionUID = 2320351255526248904L;
+
 	/**
 	 * This is the text that will be used in a selfHelpGuideQuestion.
 	 */
@@ -42,7 +48,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	private Set<ChallengeReferralTO> challengeChallengeReferrals = new HashSet<ChallengeReferralTO>(
 			0);
 
-	private int referralCount = 0;
+	private UUID confidentialityLevel = null;
 
 	public ChallengeTO() {
 		super();
@@ -56,14 +62,19 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		super(id, name);
 	}
 
+	/**
+	 * Constructor for a ChallengeTO transfer object.
+	 * 
+	 * @param id
+	 *            Identifier; required
+	 * @param name
+	 *            Name; required; max 100 characters
+	 * @param description
+	 *            Description; max 64000 characters
+	 */
 	public ChallengeTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
-	}
-
-	public ChallengeTO(final Challenge model) {
-		super();
-		fromModel(model);
 	}
 
 	public String getSelfHelpGuideQuestion() {
@@ -116,6 +127,21 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		this.tags = tags;
 	}
 
+	/**
+	 * @return the confidentialityLevel
+	 */
+	public UUID getConfidentialityLevel() {
+		return confidentialityLevel;
+	}
+
+	/**
+	 * @param confidentialityLevel
+	 *            the confidentialityLevel to set
+	 */
+	public void setConfidentialityLevel(UUID confidentialityLevel) {
+		this.confidentialityLevel = confidentialityLevel;
+	}
+
 	public Set<ChallengeReferralTO> getChallengeChallengeReferrals() {
 		return challengeChallengeReferrals;
 	}
@@ -123,20 +149,19 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	public void setChallengeChallengeReferrals(
 			final Set<ChallengeReferralTO> challengeChallengeReferrals) {
 		this.challengeChallengeReferrals = challengeChallengeReferrals;
-		setReferralCount(challengeChallengeReferrals == null ? 0
-				: challengeChallengeReferrals.size());
 	}
 
 	public long getReferralCount() {
-		return referralCount;
+		return challengeChallengeReferrals == null ? 0
+				: challengeChallengeReferrals.size();
 	}
 
 	public void setReferralCount(final int referralCount) {
-		this.referralCount = referralCount;
+		/* ignore this since it is auto-calculated */
 	}
 
 	@Override
-	public final void fromModel(final Challenge model) {
+	public final void fromModel(@NotNull final Challenge model) {
 		super.fromModel(model);
 
 		selfHelpGuideQuestion = model.getSelfHelpGuideQuestion();
@@ -145,6 +170,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		showInStudentIntake = model.isShowInStudentIntake();
 		showInSelfHelpSearch = model.isShowInSelfHelpSearch();
 		tags = model.getTags();
+		// TODO confidentialityLevel = model.getConfidentialityLevel().getId();
 
 		if ((model.getChallengeChallengeReferrals() == null)
 				|| model.getChallengeChallengeReferrals().isEmpty()) {
@@ -172,6 +198,13 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		model.setShowInStudentIntake(isShowInStudentIntake());
 		model.setShowInSelfHelpSearch(isShowInSelfHelpSearch());
 		model.setTags(getTags());
+		// TODO need to do a session.load() on this, can't change the method
+		// signature, and not @Autowirable (I think), so how do we fix this?
+
+		// model.setConfidentialityLevel(session.load(ConfidentialityLevel.class,
+		// confidentialityLevel));
+
+		// see http://stackoverflow.com/a/1901959/2291
 
 		// TODO Implement deep set copy if necessary
 		/*
@@ -218,7 +251,9 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	public static List<ChallengeTO> listToTOList(final List<Challenge> models) {
 		final List<ChallengeTO> tos = Lists.newArrayList();
 		for (Challenge model : models) {
-			tos.add(new ChallengeTO(model));
+			ChallengeTO challenge = new ChallengeTO();
+			challenge.fromModel(model);
+			tos.add(challenge);
 		}
 
 		return tos;

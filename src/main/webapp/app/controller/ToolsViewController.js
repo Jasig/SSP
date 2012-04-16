@@ -1,5 +1,4 @@
-Ext.require('Ext.tab.*');
-Ext.define('Ssp.controller.Tool', {
+Ext.define('Ssp.controller.ToolsViewController', {
 	extend: 'Ssp.controller.AbstractViewController',
 
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -23,9 +22,17 @@ Ext.define('Ssp.controller.Tool', {
 			
 		});
 		
-		this.application.addListener('afterLoadStudent', function(){
+		this.application.addListener('afterLoadPerson', function(){
 			// Load the profile for the selected record.
-			Ext.getStore('Tools').loadRawData( this.currentPerson.get('tools') );
+			Ext.getStore('Tools').loadRawData(
+				[{
+			        name: "Profile",
+			        toolType: "Profile"
+			    },{
+			        name: "Student Intake",
+			        toolType: "StudentIntake"
+			    }]		
+			);// this.currentPerson.get('tools') );
 			Ext.ComponentQuery.query('toolsmenu')[0].getSelectionModel().select(0);
 			this.loadTool('Profile');
 		},this);
@@ -70,7 +77,6 @@ Ext.define('Ssp.controller.Tool', {
 				Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
 				Form.load(personId,{
 					success: function( formData ) {
-						console.log( formData );
 						var formUtils = Ext.create('Ssp.util.FormRendererUtils');
 						
 						// PERSON RECORD
@@ -88,25 +94,28 @@ Ext.define('Ssp.controller.Tool', {
 						var citizenships = formData.data.referenceData.citizenships;
 						var educationGoals = formData.data.referenceData.educationGoals;
 						var educationLevels = formData.data.referenceData.educationLevels;
-						var ethnicities = formData.data.referenceData.ethnicities;
+						var employmentShifts = formData.data.referenceData.employmentShifts;
+						var ethnicities = formData.data.referenceData.ethnicitys;
 						var fundingSources = formData.data.referenceData.fundingSources;
-						var maritalStatuses = formData.data.referenceData.maritalStatuses;
-						var studentStatuses = formData.data.referenceData.studentStatuses;
-						var veteranStatuses = formData.data.referenceData.veteranStatuses;
+						var genders = formData.data.referenceData.genders;
+						var maritalStatuses = formData.data.referenceData.maritalStatuss;
+						var states = formData.data.referenceData.states;
+						var studentStatuses = formData.data.referenceData.studentStatuss;
+						var veteranStatuses = formData.data.referenceData.veteranStatuss;
 
 						Ext.getStore('reference.Challenges').loadData( challenges );
-						Ext.getStore('reference.ChildCareArrangements').load( childCareArrangements );
-						Ext.getStore('reference.Citizenships').load( citizenships );
-						Ext.getStore('reference.EducationalGoals').load( educationGoals );
-						Ext.getStore('reference.EducationLevels').load( educationLevels );
-						Ext.getStore('reference.EmploymentShifts').load();
-						Ext.getStore('reference.Ethnicities').load( ethnicities );
-						Ext.getStore('reference.FundingSources').load( fundingSources );
-						Ext.getStore('reference.Genders').load();
-						Ext.getStore('reference.MaritalStatuses').load( maritalStatuses );
-						Ext.getStore('reference.States').load();
-						Ext.getStore('reference.StudentStatuses').load( studentStatuses );
-						Ext.getStore('reference.VeteranStatuses').load( veteranStatuses ); 
+						Ext.getStore('reference.ChildCareArrangements').loadData( childCareArrangements );
+						Ext.getStore('reference.Citizenships').loadData( citizenships );
+						Ext.getStore('reference.EducationalGoals').loadData( educationGoals );
+						Ext.getStore('reference.EducationLevels').loadData( educationLevels );
+						Ext.getStore('reference.EmploymentShifts').loadData( employmentShifts );
+						Ext.getStore('reference.Ethnicities').loadData( ethnicities );
+						Ext.getStore('reference.FundingSources').loadData( fundingSources );
+						Ext.getStore('reference.Genders').loadData( genders );
+						Ext.getStore('reference.MaritalStatuses').loadData( maritalStatuses );
+						Ext.getStore('reference.States').loadData( states );
+						Ext.getStore('reference.StudentStatuses').loadData( studentStatuses );
+						Ext.getStore('reference.VeteranStatuses').loadData( veteranStatuses ); 
 						Ext.getStore('reference.YesNo').load();						
 						
 						// Load records for each of the forms

@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.reference.ChildCareArrangements', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.ChildCareArrangementTO',
+    model: 'Ssp.model.reference.ChildCareArrangement',
     storeId: 'childCareArrangementsReferenceStore',
 	autoLoad: false,
 	autoSync: true,

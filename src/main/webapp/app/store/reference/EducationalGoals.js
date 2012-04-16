@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.reference.EducationalGoals', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.EducationalGoalTO',
+    model: 'Ssp.model.reference.EducationalGoal',
     storeId: 'educationalGoalsReferenceStore',
 	autoLoad: false,
 	autoSync: true,

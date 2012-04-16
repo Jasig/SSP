@@ -1,7 +1,7 @@
 Deft.Injector.configure({
     currentPerson: {
     	fn: function(){
-    		return new Ssp.model.StudentTO({id:"0"}, {})
+    		return new Ssp.model.Student({id:"0"}, {})
     	},
     	singleton: true
     }
@@ -20,13 +20,14 @@ Ext.application({
 			   ,
 	*/		
 	
-	requires: ['Ssp.model.StudentTO',
+	requires: ['Ssp.model.Student',
 			   'Ssp.model.tool.studentintake.StudentIntakeForm',
-			   'Ssp.model.tool.studentintake.StudentDemographics',
-			   'Ssp.model.tool.studentintake.StudentEducationGoal',
-			   'Ssp.model.tool.studentintake.StudentEducationPlan',
-			   'Ssp.model.reference.AbstractReferenceTO',
-			   'Ssp.view.admin.forms.AbstractReferenceAdmin'],
+			   'Ssp.model.tool.studentintake.PersonDemographics',
+			   'Ssp.model.tool.studentintake.PersonEducationGoal',
+			   'Ssp.model.tool.studentintake.PersonEducationPlan',
+			   'Ssp.model.reference.AbstractReference',
+			   'Ssp.view.admin.forms.AbstractReferenceAdmin',
+			   'Ssp.mixin.ApiProperties'],
 	
 			   
     name: 'Ssp',
@@ -54,11 +55,11 @@ Ext.application({
 	
 	controllers: [
         	'AbstractViewController',
-        	'Admin',
-        	'Main',
-        	'Search',
-        	'StudentIntakeTool',
-        	'Tool'     	
+        	'AdminViewController',
+        	'MainViewController',
+        	'SearchResultsViewController',
+        	'tool.StudentIntakeToolViewController',
+        	'ToolsViewController'     	
     ],
           		
     launch: function( app ) {
@@ -72,6 +73,6 @@ Ext.application({
         });   
     	
  		// Display the application
-        this.getController('Main').displayApplication();
+        this.getController('MainViewController').displayApplication();
    }
 });

@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.reference.MaritalStatuses', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.MaritalStatusTO',
+    model: 'Ssp.model.reference.MaritalStatus',
     storeId: 'maritalStatusesReferenceStore',
 	autoLoad: false,
 	autoSync: true,

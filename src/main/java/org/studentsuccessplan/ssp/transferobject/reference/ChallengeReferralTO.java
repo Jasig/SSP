@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +10,9 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 import com.google.common.collect.Lists;
 
 public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
-		implements TransferObject<ChallengeReferral> {
+		implements TransferObject<ChallengeReferral>, Serializable {
+
+	private static final long serialVersionUID = 1193408160654677796L;
 
 	private String publicDescription;
 

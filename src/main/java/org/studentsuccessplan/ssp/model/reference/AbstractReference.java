@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
-
 import org.studentsuccessplan.ssp.model.Auditable;
 
 /**
@@ -21,9 +20,9 @@ public abstract class AbstractReference extends Auditable {
 	/**
 	 * Name
 	 * 
-	 * Required, not null, max length 100 characters.
+	 * Required, not null, max length 80 characters.
 	 */
-	@Column(name = "name", nullable = false, length = 100)
+	@Column(name = "name", nullable = false, length = 80)
 	@NotNull
 	@NotEmpty
 	@Size(max = 80)
@@ -61,7 +60,7 @@ public abstract class AbstractReference extends Auditable {
 	 * @param id
 	 *            Identifier; required
 	 * @param name
-	 *            Name; required; max 100 characters
+	 *            Name; required; max 80 characters
 	 */
 	public AbstractReference(@NotNull final UUID id, @NotNull final String name) {
 		super(id);
@@ -74,9 +73,9 @@ public abstract class AbstractReference extends Auditable {
 	 * @param id
 	 *            Identifier; required
 	 * @param name
-	 *            Name; required; max 100 characters
+	 *            Name; required; max 80 characters
 	 * @param description
-	 *            Description; max 150 characters
+	 *            Description; max 64000 characters
 	 */
 	public AbstractReference(@NotNull final UUID id,
 			@NotNull final String name, final String description) {
@@ -93,7 +92,7 @@ public abstract class AbstractReference extends Auditable {
 	 * Sets the name
 	 * 
 	 * @param name
-	 *            Name; required; max 100 characters
+	 *            Name; required; max 80 characters
 	 */
 	public void setName(@NotNull final String name) {
 		this.name = name;
@@ -107,7 +106,7 @@ public abstract class AbstractReference extends Auditable {
 	 * Sets the description
 	 * 
 	 * @param description
-	 *            Name; null allowed; max 150 characters
+	 *            Name; null allowed; max 80 characters
 	 */
 	public void setDescription(final String description) {
 		this.description = description;
@@ -123,5 +122,4 @@ public abstract class AbstractReference extends Auditable {
 		setName(source.getName());
 		setDescription(source.getDescription());
 	}
-
 }

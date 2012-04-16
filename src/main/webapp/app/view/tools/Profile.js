@@ -39,7 +39,7 @@ Ext.define('Ssp.view.tools.Profile', {
 	        name: 'cellPhone'
 	    }, {
 	        fieldLabel: 'Address',
-	        name: 'address'
+	        name: 'addressLine1'
 	    }, {
 	        fieldLabel: 'City',
 	        name: 'city'

@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.reference.Ethnicities', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.EthnicityTO',
+    model: 'Ssp.model.reference.Ethnicity',
     storeId: 'ethnicitiesReferenceStore',
 	autoLoad: false,
 	autoSync: true,

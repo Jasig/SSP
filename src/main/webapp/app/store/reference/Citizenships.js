@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.reference.Citizenships', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.CitizenshipTO',
+    model: 'Ssp.model.reference.Citizenship',
     storeId: 'citizenshipsReferenceStore',
 	autoLoad: false,
 	autoSync: true,

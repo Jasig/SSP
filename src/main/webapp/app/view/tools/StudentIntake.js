@@ -10,23 +10,7 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 	width: '100%',
 	height: '100%',   
     items: [],
-	
-	/* Example of a loader
-	 * {   title: 'Personal', 
-		   store: Ext.getStore('Students'),
-		   loader: {
-		        url:'templates/students.html',
-		        contentType: 'html',
-		        renderer: Ext.create( 'Ssp.util.Util' ).loaderXTemplateRenderer
-		    },
-		    listeners: {
-	            activate: function(tab) {
-	                tab.loader.load();
-	            }
-	        }
-		}
-	 * 
-	 */
+
     buttons: [ { text: 'Save', id: 'SaveStudentIntakeButton'} ],
 	
 	initComponent: function() {	

@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.reference.VeteranStatuses', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.VeteranStatusTO',
+    model: 'Ssp.model.reference.VeteranStatus',
     storeId: 'veteranStatusesReferenceStore',
 	autoLoad: false,
 	autoSync: true,

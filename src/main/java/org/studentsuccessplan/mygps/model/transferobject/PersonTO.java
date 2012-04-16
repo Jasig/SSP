@@ -27,6 +27,9 @@ public class PersonTO implements Serializable {
 
 	private String strengths;
 
+	/**
+	 * Empty constructor
+	 */
 	public PersonTO() {
 	}
 
@@ -34,7 +37,7 @@ public class PersonTO implements Serializable {
 		this.id = id;
 	}
 
-	private static final int depthLimit = 1;
+	private static final int DEPTH_LIMIT = 1;
 
 	public PersonTO(Person person, int depth) {
 		id = person.getId().toString();
@@ -46,7 +49,7 @@ public class PersonTO implements Serializable {
 
 		if ((null != person.getDemographics().getCoach())
 				&& (person.getId() != person.getDemographics().getCoach()
-						.getId()) && (depth < depthLimit)) {
+						.getId()) && (depth < DEPTH_LIMIT)) {
 			coach = new PersonTO(person.getDemographics().getCoach(), depth + 1);
 		} else {
 			coach = null;

@@ -55,9 +55,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 	public Challenge save(final Challenge obj) throws ObjectNotFoundException {
 		Challenge current = get(obj.getId());
 
-		current.setName(obj.getName());
-		current.setDescription(obj.getDescription());
-		current.setObjectStatus(obj.getObjectStatus());
+		current.overwrite(obj);
 
 		return dao.save(current);
 	}
