@@ -81,4 +81,52 @@
 			<dropColumn tableName="confidentiality_level" columnName="acronym"/>
 		</rollback>
 	</changeSet>
+	
+	<changeSet author='daniel.bower' id='Add goal table'>
+		<createTable tableName="goal">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false"/>
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false"/>
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" 
+					foreignKeyName="goal_created_by_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="goal_modified_by_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="confidentiality_level_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="goal_confidentiality_level_id_confidentiality_level_id"
+					references="confidentiality_level(id)"/>
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<sql>grant all on goal to ssp</sql>
+		<rollback>
+			<dropTable tableName="goal"/>
+		</rollback>
+		
+		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
+		Specifying "Without" timezone-->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+		</modifySql>
+	</changeSet> 
+	
 </databaseChangeLog>
