@@ -21,7 +21,12 @@ public class SspUser extends User implements Serializable {
 
 	private String emailAddress;
 
-	private Person person;
+	/**
+	 * Persisted Person data.
+	 * <p>
+	 * Marked transient because it needs refreshed each request from Hibernate.
+	 */
+	private transient Person person;
 
 	public SspUser(String username, String password, boolean enabled,
 			boolean accountNonExpired, boolean credentialsNonExpired,

@@ -819,7 +819,10 @@ public class StudentIntakeFormManager {
 
 	public void save(FormTO formTO) throws ObjectNotFoundException {
 
-		Person student = securityService.currentUser().getPerson();
+		// Refresh Person from Hibernate so lazy-loading works in case the
+		// person instance was loaded in a previous request
+		Person student = personService.get(securityService.currentUser()
+				.getPerson().getId());
 
 		/* Add intake form to student's record */
 		personToolService.addToolToStudent(student, Tools.INTAKE);
@@ -947,7 +950,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO childCareNeededQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID);
 
-		if (childCareNeededQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (childCareNeededQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
+				|| childCareNeededQuestion.getValue() == null) {
 			demographics.setChildCareNeeded(false);
 		} else {
 			demographics.setChildCareNeeded(SspStringUtils
@@ -974,7 +978,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO employedQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID);
 
-		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(employedQuestion.getValue())) {
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(employedQuestion.getValue())
+				|| employedQuestion.getValue() == null) {
 			demographics.setEmployed(false);
 		} else {
 			demographics.setEmployed(SspStringUtils
@@ -989,7 +994,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO ethnicityQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID);
 
-		if (ethnicityQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (ethnicityQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
+				|| ethnicityQuestion.getValue() == null) {
 			demographics.setEthnicity(null);
 		} else {
 			demographics.setEthnicity(ethnicityDao.get(ethnicityQuestion
@@ -1016,7 +1022,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO maritalStatusQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
 
-		if (maritalStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (maritalStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
+				|| maritalStatusQuestion.getValue() == null) {
 			demographics.setMaritalStatus(null);
 		} else {
 			demographics.setMaritalStatus(martitalStatusService
@@ -1032,7 +1039,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO primaryCaregiverQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID);
 
-		if (primaryCaregiverQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (primaryCaregiverQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
+				|| primaryCaregiverQuestion.getValue() == null) {
 			demographics.setPrimaryCaregiver(false);
 		} else {
 			demographics.setPrimaryCaregiver(SspStringUtils
@@ -1043,7 +1051,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO shiftQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID);
 
-		if (shiftQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (shiftQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
+				|| shiftQuestion.getValue() == null) {
 			demographics.setShift(null);
 		} else {
 			demographics.setShift(EmploymentShifts.valueOf(shiftQuestion
@@ -1090,7 +1099,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO parentsHaveCollegeDegreeQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID);
 
-		if (parentsHaveCollegeDegreeQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (parentsHaveCollegeDegreeQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
+				|| parentsHaveCollegeDegreeQuestion.getValue() == null) {
 			educationPlan.setCollegeDegreeForParents(false);
 		} else {
 			educationPlan.setCollegeDegreeForParents(SspStringUtils
@@ -1107,7 +1117,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO requireSpecialAccomodationQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID);
 
-		if (requireSpecialAccomodationQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (requireSpecialAccomodationQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
+				|| requireSpecialAccomodationQuestion.getValue() == null) {
 			educationPlan.setSpecialNeeds(false);
 		} else {
 			educationPlan.setSpecialNeeds(SspStringUtils
@@ -1119,7 +1130,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO studentStatusQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID);
 
-		if (studentStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (studentStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
+				|| studentStatusQuestion.getValue() == null) {
 			educationPlan.setStudentStatus(null);
 		} else {
 			educationPlan.setStudentStatus(studentStatusDao.get(UUID
