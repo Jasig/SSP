@@ -940,8 +940,7 @@ public class StudentIntakeFormManager {
 			demographics.setChildCareArrangement(null);
 		} else {
 			demographics.setChildCareArrangement(childcareArrangementDao
-					.get(UUID.fromString(childCareArrangementQuestion
-							.getValue())));
+					.get(childCareArrangementQuestion.getId()));
 		}
 
 		// Childcare Needed
@@ -993,15 +992,16 @@ public class StudentIntakeFormManager {
 		if (ethnicityQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setEthnicity(null);
 		} else {
-			demographics.setEthnicity(ethnicityDao.get(UUID
-					.fromString(ethnicityQuestion.getValue())));
+			demographics.setEthnicity(ethnicityDao.get(ethnicityQuestion
+					.getId()));
 		}
 
 		// Gender
 		FormQuestionTO genderQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID);
 
-		if (genderQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (genderQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
+				|| genderQuestion.getValue() == null) {
 			demographics.setGender(null);
 		} else {
 			demographics.setGender(Genders.valueOf(genderQuestion.getValue()));
@@ -1019,8 +1019,8 @@ public class StudentIntakeFormManager {
 		if (maritalStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setMaritalStatus(null);
 		} else {
-			demographics.setMaritalStatus(martitalStatusService.get(UUID
-					.fromString(maritalStatusQuestion.getValue())));
+			demographics.setMaritalStatus(martitalStatusService
+					.get(maritalStatusQuestion.getId()));
 		}
 
 		demographics.setNumberOfChildren(Integer.parseInt(demographicsSection
@@ -1858,7 +1858,7 @@ public class StudentIntakeFormManager {
 
 		demographicSectionQuestions.add(howManyChildrenQuestion);
 
-		// Chidren Ages
+		// Children Ages
 		FormQuestionTO childrenAgesQuestion = new FormQuestionTO();
 
 		childrenAgesQuestion
