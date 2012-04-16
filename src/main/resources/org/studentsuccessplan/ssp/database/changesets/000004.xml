@@ -129,4 +129,47 @@
 		</modifySql>
 	</changeSet> 
 	
+	<changeSet author='daniel.bower' id='Add task_group table'>
+		<createTable tableName="task_group">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false"/>
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false"/>
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" 
+					foreignKeyName="task_group_created_by_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="task_group_modified_by_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<sql>grant all on task_group to ssp</sql>
+		<rollback>
+			<dropTable tableName="task_group"/>
+		</rollback>
+		
+		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
+		Specifying "Without" timezone-->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+		</modifySql>
+
+	</changeSet> 	
 </databaseChangeLog>
