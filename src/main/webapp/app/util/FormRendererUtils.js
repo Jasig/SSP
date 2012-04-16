@@ -110,7 +110,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		for ( prop in values )
 		{
 			var obj = Ext.create(modelType,{id: values[prop]} );
-			selectedItems.push( obj );
+			selectedItems.push( obj.data );
 		}
 		return selectedItems;
     }

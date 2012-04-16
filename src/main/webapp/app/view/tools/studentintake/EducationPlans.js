@@ -27,7 +27,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
             },
        items: [{
         xtype: 'combobox',
-        name: 'studentStatus',
+        name: 'studentStatusId',
         fieldLabel: 'Student Status',
         emptyText: 'Select One',
         store: Ext.getStore('reference.StudentStatuses'),
@@ -47,19 +47,18 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
             {boxLabel: 'Registered for Classes', name: 'registeredForClasses'}
         ]
     },{
-        xtype: "radiogroup",
-        fieldLabel: "Have your parents obtained a college degree?",
+        xtype: 'checkboxgroup',
+        fieldLabel: 'Have your parents obtained a college degree?',
         columns: 1,
-        items: [
-            {boxLabel: "Yes", name: "collegeDegreeForParents", inputValue:"Y"},
-            {boxLabel: "No", name: "collegeDegreeForParents", inputValue:"N"}]
+        items: [   	
+		        { name: "collegeDegreeForParents" }
+        	]
     },{
-        xtype: "radiogroup",
+    	xtype: 'checkboxgroup',
         fieldLabel: "Require special accommodations?",
-        columns: 1,
-        items: [
-            {boxLabel: "Yes", name: "specialNeeds", inputValue:"Y"},
-            {boxLabel: "No", name: "specialNeeds", inputValue:"N"}]
+        items: [   	
+		        { name: "specialNeeds" }
+        	]
     },{
             xtype: 'radiogroup',
             fieldLabel: 'What grade did you typically earn at your highest level of education?',

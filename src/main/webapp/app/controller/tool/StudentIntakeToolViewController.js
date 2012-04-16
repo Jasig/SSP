@@ -1,4 +1,4 @@
-Ext.define('Ssp.controller.StudentIntakeTool', {
+Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
     extend: 'Ssp.controller.AbstractViewController',
     
 	views: [
@@ -63,32 +63,52 @@ Ext.define('Ssp.controller.StudentIntakeTool', {
 			educationGoalForm.updateRecord( educationGoalFormModel );
 			
 			// save the full model
-			selectedEducationLevels = formUtils.getSelectedValuesAsTransferObject( educationLevelsForm.getValues(), 'Ssp.model.reference.EducationLevelTO' );
-			selectedFunding = formUtils.getSelectedValuesAsTransferObject( fundingForm.getValues(), 'Ssp.model.reference.FundingSourceTO' );
-			selectedChallenges = formUtils.getSelectedValuesAsTransferObject( challengesForm.getValues(), 'Ssp.model.reference.ChallengeTO' );
+			selectedEducationLevels = formUtils.getSelectedValuesAsTransferObject( educationLevelsForm.getValues(), 'Ssp.model.reference.EducationLevel' );
+			selectedFunding = formUtils.getSelectedValuesAsTransferObject( fundingForm.getValues(), 'Ssp.model.reference.FundingSource' );
+			selectedChallenges = formUtils.getSelectedValuesAsTransferObject( challengesForm.getValues(), 'Ssp.model.reference.Challenge' );
 
-			studentIntakeFormModel = Ext.create('Ssp.model.tool.studentintake.StudentIntakeForm',{
-				person: personalFormModel.data,
-				personDemographics: demographicsFormModel.data,
-				personEducationGoal: educationGoalFormModel.data,
-				personEducationPlan: educationPlansFormModel.data,
-				personEducationLevels: selectedEducationLevels,
-				personFundingSources: selectedFunding,
-				personChallenges: selectedChallenges
+			/*
+			studentIntakeFormModel = Ext.create('Ssp.model.tool.studentintake.StudentIntakeForm',{});
+			studentIntakeFormModel.set('person', personalFormModel.data );
+			studentIntakeFormModel.set('personDemographics', demographicsFormModel.data);
+			studentIntakeFormModel.set('personEducationGoal', educationGoalFormModel.data);
+			studentIntakeFormModel.set('personEducationPlan', educationPlansFormModel.data);
+			studentIntakeFormModel.set('personEducationLevels', selectedEducationLevels );			
+			studentIntakeFormModel.set('personFundingSources', selectedFunding );
+			studentIntakeFormModel.set('personChallenges', selectedChallenges );
+			*/
+			// console.log( studentIntakeFormModel );
+			// studentIntakeFormModel.save();
+
+			Ext.Ajax.request({
+				url: '/ssp/api/tool/studentIntake/' + personalFormModel.data.id,
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				jsonData: {
+					person: personalFormModel.data,
+					personDemographics: demographicsFormModel.data,
+					personEducationGoal: educationGoalFormModel.data,
+					personEducationPlan: educationPlansFormModel.data,
+					personEducationLevels: selectedEducationLevels,
+					personFundingSources: selectedFunding,
+					personChallenges: selectedChallenges
+				},
+				success: function(response) {
+					var r = Ext.decode(response.responseText);
+					if(r.success == true) {
+						console.log('student intake saved successfully')							
+					}								
+				},
+				failure: function(response) {
+					var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
+					Ext.Msg.alert('SSP Error', msg);								
+				}
 			});
-			//studentIntakeFormModel.set('person', personalFormModel.data );
-			//studentIntakeFormModel.set('personDemographics', demographicsFormModel.data);
-			//studentIntakeFormModel.set('personEducationGoal', educationGoalFormModel.data);
-			//studentIntakeFormModel.set('personEducationPlan', educationPlansFormModel.data);
-			//studentIntakeFormModel.set('personEducationLevels', selectedEducationLevels );			
-			//studentIntakeFormModel.set('personFundingSources', selectedFunding );
-			// studentIntakeFormModel.set('personChallenges', selectedChallenges );
-			console.log( studentIntakeFormModel.get('person').get('id') );
-			// studentIntakeFormModel.saveIntake();
+			
 		}else{
 			Ext.Msg.alert('Invalid Data','Please correct the errors in this Student Intake before saving the record.');
 		}
 		
-	}
+	} 
     
 });

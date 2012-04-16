@@ -1,14 +1,11 @@
-Ext.define('Ssp.controller.Main', {
+Ext.define('Ssp.controller.MainViewController', {
     extend: 'Ssp.controller.AbstractViewController',
-    requires: ['Ext.window.*'],
-	
+    
 	views: [
         'Main'
     ],
- 
-		
+ 	
 	init: function() {
-
 		this.control({
 			'#studentViewNav': {
 				click: this.studentRecordViewNavClick,
@@ -46,7 +43,6 @@ Ext.define('Ssp.controller.Main', {
     
     cleanSspView: function(){
     	var sspView = Ext.getCmp('sspView');
-    	console.log(sspView.items)
     	if (sspView.items.length > 0)
     	{
     		this.formRendererUtils.cleanAll(sspView);

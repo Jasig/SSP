@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.reference.FundingSources', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.FundingSourceTO',
+    model: 'Ssp.model.reference.FundingSource',
     storeId: 'fundingSourcesReferenceStore',
 	autoLoad: false,
 	autoSync: true,

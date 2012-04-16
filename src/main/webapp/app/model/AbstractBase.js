@@ -1,6 +1,14 @@
-Ext.define('Ssp.model.AbstractBaseTO', {
+Ext.define('Ssp.model.AbstractBase', {
     extend: 'Ext.data.Model',
-    fields: ['id','createdDate','createdById','modifiedDate','modifiedById','objectStatus'],
+    fields: ['id'],
+    
+    /*
+     'createdDate',
+     'createdById',
+     'modifiedDate',
+     'modifiedById',
+     'objectStatus'
+     */
     
 	populateFromGenericObject: function( record ){
 		if (record != null)

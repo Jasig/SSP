@@ -7,7 +7,7 @@ Ext.onReady(function() {
         name: 'Ssp',
 
         controllers: [
-            'Main'
+            'MainViewController'
         ],
 
         launch: function() {

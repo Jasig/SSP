@@ -1,9 +1,10 @@
 Ext.define('Ssp.store.reference.States', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.StateTO',
+    model: 'Ssp.model.reference.State',
     storeId: 'statesStore',
 	autoLoad: false,
 
+	/*
     proxy: {
 		type: 'ajax',
 		api: {
@@ -14,6 +15,7 @@ Ext.define('Ssp.store.reference.States', {
 			root: 'states',
 			successProperty: 'success'
 		}
-	}	
+	}
+	*/
 	
 });

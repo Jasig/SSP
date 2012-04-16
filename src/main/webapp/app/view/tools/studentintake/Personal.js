@@ -83,7 +83,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
         allowBlank:true
     },{
         fieldLabel: 'Address',
-        name: 'address',
+        name: 'addressLine1',
         maxLength: 50,
         allowBlank:true
     },{
@@ -97,8 +97,8 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
         fieldLabel: 'State',
         emptyText: 'Select a State',
         store: Ext.getStore('reference.States'),
-        valueField: 'abbr',
-        displayField: 'name',
+        valueField: 'code',
+        displayField: 'title',
         mode: 'local',
         typeAhead: true,
         queryMode: 'local',

@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.reference.AbstractReferences', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.AbstractReferenceTO',
+    model: 'Ssp.model.reference.AbstractReference',
     storeId: 'abstractReferencesStore',
     pageSize: 15,
 	params : {

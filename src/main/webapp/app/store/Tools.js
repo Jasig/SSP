@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.Tools', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.ToolTO',
+    model: 'Ssp.model.Tool',
     storeId: 'toolsStore',
 	autoLoad: false,
 

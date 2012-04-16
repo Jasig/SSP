@@ -1,10 +1,11 @@
 Ext.define('Ssp.store.reference.EmploymentShifts', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.AbstractReferenceTO',
+    model: 'Ssp.model.reference.EmploymentShift',
     storeId: 'employmentShiftsReferenceStore',
 	autoLoad: false,
 
-    proxy: {
+    /*
+	proxy: {
 		type: 'ajax',
 		api: {
 			read: 'data/reference/employmentshifts.json'
@@ -14,6 +15,7 @@ Ext.define('Ssp.store.reference.EmploymentShifts', {
 			root: 'items',
 			successProperty: 'success'
 		}
-	}	
+	}
+	*/	
 	
 });

@@ -1,4 +1,4 @@
-Ext.define('Ssp.controller.Search', {
+Ext.define('Ssp.controller.SearchResultsViewController', {
     extend: 'Ext.app.Controller', 
 	
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.Search', {
 	handleSelectionChange: function(selModel,records,eOpts){ 
 		// select the person
 		this.currentPerson.data = records[0].data;
-		this.application.fireEvent('afterLoadStudent');
+		this.application.fireEvent('afterLoadPerson');
 	},
 
 	handleViewReady: function(view, eobj){

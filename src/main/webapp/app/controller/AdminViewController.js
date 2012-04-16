@@ -1,4 +1,4 @@
-Ext.define('Ssp.controller.Admin', {
+Ext.define('Ssp.controller.AdminViewController', {
     extend: 'Ssp.controller.AbstractViewController',
     
     views: [

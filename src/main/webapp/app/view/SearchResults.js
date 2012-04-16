@@ -9,8 +9,9 @@ Ext.define('Ssp.view.SearchResults', {
   
     columns: [
         { header: "Photo", dataIndex: 'photoUrl', renderer: Ext.create('Ssp.util.ColumnRendererUtils').renderPhotoIcon, flex: 50 },		        
-        { header: 'Name',  dataIndex: 'name', flex: 50 }
+        { text: 'Name', xtype:'templatecolumn', tpl:'{firstName} {middleInitial} {lastName}', flex: 50}
     ],
+    // { header: 'Name',  dataIndex: 'name',  }
     
     dockedItems: [{
         xtype: 'pagingtoolbar',

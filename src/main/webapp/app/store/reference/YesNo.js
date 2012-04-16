@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.reference.YesNo', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.AbstractReferenceTO',
+    model: 'Ssp.model.reference.AbstractReference',
     storeId: 'yesNoReferenceStore',
 	autoLoad: false,
 

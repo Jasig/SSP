@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.reference.EducationLevels', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.EducationLevelTO',
+    model: 'Ssp.model.reference.EducationLevel',
     storeId: 'educationLevelsReferenceStore',
 	autoLoad: false,
 	autoSync: true,

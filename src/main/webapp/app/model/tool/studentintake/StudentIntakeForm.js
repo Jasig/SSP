@@ -1,62 +1,39 @@
 Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 	extend: 'Ext.data.Model',
 	autoLoad: false,
-	fields: [
-             {name: 'person', 
+	fields: [{name: 'person', 
 		      convert: function(value, record) {
-		            var person  = new Ssp.model.StudentTO();
-		            
-		            person.populateFromGenericObject( value );
-		
+		            var person  = Ext.create('Ssp.model.Student',{});
+		            person.populateFromGenericObject( value );		
 		            return person;
 		      	}
              },
- 
-             {name: 'personDemographics', 
+              {name: 'personDemographics', 
    		      convert: function(value, record) {
-		            var personDemographics  = new Ssp.model.tool.studentintake.StudentDemographics();
-		            
-		            personDemographics.populateFromGenericObject( value );
-		
+		            var personDemographics = Ext.create('Ssp.model.tool.studentintake.PersonDemographics',{});
+		            personDemographics.populateFromGenericObject( value );		
 		            return personDemographics;
 		      	}
              },
              {name: 'personEducationGoal', 
    		      convert: function(value, record) {
-   		            var personEducationGoal  = new Ssp.model.tool.studentintake.StudentEducationGoal();
-   		            
-   		            personEducationGoal.populateFromGenericObject( value );
-   		
+   		            var personEducationGoal = Ext.create('Ssp.model.tool.studentintake.PersonEducationGoal',{});
+   		            personEducationGoal.populateFromGenericObject( value );  		
    		            return personEducationGoal;
    		      	}
              },
              {name: 'personEducationPlan', 
       		  convert: function(value, record) {
-      		            var personEducationPlan  = new Ssp.model.tool.studentintake.StudentEducationPlan();
-      		            
+      		            var personEducationPlan = Ext.create('Ssp.model.tool.studentintake.PersonEducationPlan',{});
       		            personEducationPlan.populateFromGenericObject( value );
-      		
       		            return personEducationPlan;
       		    }
              },
              'personEducationLevels',
              'personFundingSources',
              'personChallenges',
-             'referenceData'
-             ],
-   
-    /*
-    proxy: {
-		type: 'ajax',
-		api: {
-			read: 'data/tools/StudentIntakeForm.json'
-		},
-		reader: {
-			type: 'json'
-		}
-	}
-	*/
-
+             'referenceData'],
+             
 	proxy: {
 		type: 'rest',
 		url: '/ssp/api/tool/studentIntake/',

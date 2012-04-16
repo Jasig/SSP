@@ -32,7 +32,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
             },
        items: [{
         xtype: 'combobox',
-        name: 'maritalStatus',
+        name: 'maritalStatusId',
         fieldLabel: 'Marital Status',
         emptyText: 'Select One',
         store: Ext.getStore('reference.MaritalStatuses'),
@@ -45,7 +45,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         forceSelection: true
 	},{
         xtype: 'combobox',
-        name: 'ethnicity',
+        name: 'ethnicityId',
         fieldLabel: 'Ethnicity',
         emptyText: 'Select One',
         store: Ext.getStore('reference.Ethnicities'),
@@ -61,15 +61,15 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         fieldLabel: 'Gender',
         emptyText: 'Select One',
         store: Ext.getStore('reference.Genders'),
-        valueField: 'id',
-        displayField: 'name',
+        valueField: 'code',
+        displayField: 'title',
         mode: 'local',
         typeAhead: true,
         queryMode: 'local',
         allowBlank: true
 	},{
         xtype: 'combobox',
-        name: 'citizenship',
+        name: 'citizenshipId',
         fieldLabel: 'Citizenship',
         emptyText: 'Select One',
         store: Ext.getStore('reference.Citizenships'),
@@ -81,7 +81,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         allowBlank: true
 	},{
         xtype: 'combobox',
-        name: 'veteranStatus',
+        name: 'veteranStatusId',
         fieldLabel: 'Veteran Status',
         emptyText: 'Select One',
         store: Ext.getStore('reference.VeteranStatuses'),
@@ -96,8 +96,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         fieldLabel: "Are you a Primary Caregiver?",
         columns: 1,
         items: [
-            {boxLabel: "Yes", name: "primaryCaregiver", inputValue:"Y"},
-            {boxLabel: "No", name: "primaryCaregiver", inputValue:"N"}]
+            {boxLabel: "Yes", name: "primaryCaregiver", inputValue:"true"},
+            {boxLabel: "No", name: "primaryCaregiver", inputValue:"false"}]
     }, {
         xtype: 'displayfield',
         fieldLabel: 'If you have children, please indicate below'
@@ -116,11 +116,11 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         fieldLabel: "Childcare Needed?",
         columns: 1,
         items: [
-            {boxLabel: "Yes", name: "childCareNeeded", inputValue:"Y"},
-            {boxLabel: "No", name: "childCareNeeded", inputValue:"N"}]
+            {boxLabel: "Yes", name: "childCareNeeded", inputValue:"true"},
+            {boxLabel: "No", name: "childCareNeeded", inputValue:"false"}]
     },{
         xtype: 'combobox',
-        name: 'childCareArrangement',
+        name: 'childCareArrangementId',
         fieldLabel: 'If yes, what are your childcare arrangments?',
         emptyText: 'Select One',
         store: Ext.getStore('reference.ChildCareArrangements'),
@@ -135,8 +135,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         fieldLabel: "Are you employed?",
         columns: 1,
         items: [
-            {boxLabel: "Yes", name: "employed", inputValue:"Y"},
-            {boxLabel: "No", name: "employed", inputValue:"N"}]
+            {boxLabel: "Yes", name: "employed", inputValue:"true"},
+            {boxLabel: "No", name: "employed", inputValue:"false"}]
     },{
         fieldLabel: 'Place of employment',
         name: 'placeOfEmployment'
@@ -146,8 +146,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         fieldLabel: 'Shift',
         emptyText: 'Select One',
         store: Ext.getStore('reference.EmploymentShifts'),
-        valueField: 'id',
-        displayField: 'name',
+        valueField: 'code',
+        displayField: 'title',
         mode: 'local',
         typeAhead: true,
         queryMode: 'local',
