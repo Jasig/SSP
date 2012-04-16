@@ -279,13 +279,14 @@ class ReferenceDataTemplater {
 //"EducationLevel", 
 //"Ethnicity", 
 //"FundingSource", 
-"Goal"
+//"Goal",
 //"MaritalStatus", 
 //"MessageTemplate",
 //"SelfHelpGuideGroup",
 //"SelfHelpGuideQuestion", 
 //"SelfHelpGuide", 
 //"StudentStatus", 
+"TaskGroup"	
 //"VeteranStatus",
 ]
 

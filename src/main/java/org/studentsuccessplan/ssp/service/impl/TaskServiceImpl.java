@@ -39,6 +39,8 @@ public class TaskServiceImpl
 		current.setReminderSentDate(obj.getReminderSentDate());
 		current.setSessionId(obj.getSessionId());
 
+		current.setTaskGroups(obj.getTaskGroups());
+
 		return getDao().save(current);
 
 	}

@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,8 +45,8 @@ public class TaskGroupTO extends AbstractReferenceTO<TaskGroup>
 		return addToModel(new TaskGroup());
 	}
 
-	public static List<TaskGroupTO> listToTOList(
-			final List<TaskGroup> models) {
+	public static List<TaskGroupTO> toTOList(
+			final Collection<TaskGroup> models) {
 		final List<TaskGroupTO> tos = Lists.newArrayList();
 		for (TaskGroup model : models) {
 			tos.add(new TaskGroupTO(model));

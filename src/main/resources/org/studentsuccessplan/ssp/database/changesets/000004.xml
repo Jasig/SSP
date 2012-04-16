@@ -171,5 +171,25 @@
 			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
 		</modifySql>
 
+	</changeSet> 
+	
+	<changeSet author='daniel.bower' id='Add task_group_task table'>
+		<createTable tableName="task_group_task">
+			<column name="task_group_id" type="uuid">
+				<constraints nullable="false" 
+					foreignKeyName="task_group_task_task_group_id_task_group_id"
+					references="task_group(id)"/>
+			</column>
+			<column name="task_id" type="uuid">
+				<constraints nullable="false" 
+					foreignKeyName="task_group_task_task_id_task_id"
+					references="task(id)"/>
+			</column>
+		</createTable>
+		
+		<sql>grant all on task_group_task to ssp</sql>
+		<rollback>
+			<dropTable tableName="task_group_task"/>
+		</rollback>
 	</changeSet> 	
 </databaseChangeLog>

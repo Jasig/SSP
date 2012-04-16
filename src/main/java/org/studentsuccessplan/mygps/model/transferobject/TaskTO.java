@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.studentsuccessplan.ssp.model.AbstractTask;
 import org.studentsuccessplan.ssp.model.CustomTask;
 import org.studentsuccessplan.ssp.model.Task;
+import org.studentsuccessplan.ssp.transferobject.reference.TaskGroupTO;
 
 public class TaskTO implements Serializable {
 
@@ -29,6 +30,8 @@ public class TaskTO implements Serializable {
 	private boolean deletable;
 	private UUID challengeId;
 	private UUID challengeReferralId;
+
+	private List<TaskGroupTO> groups;
 
 	/**
 	 * Empty constructor
@@ -62,6 +65,10 @@ public class TaskTO implements Serializable {
 		// SSP_ACTION_PLAN_TASK
 		setType(AbstractTask.ACTION_PLAN_TASK);
 		// this.setType(AbstractTask.SSP_ACTION_PLAN_TASK);
+
+		if ((task.getTaskGroups() != null) && (task.getTaskGroups().size() > 0)) {
+			groups = TaskGroupTO.toTOList(task.getTaskGroups());
+		}
 	}
 
 	public TaskTO(CustomTask customTask) {
@@ -86,7 +93,7 @@ public class TaskTO implements Serializable {
 	public static List<TaskTO> tasksToTaskTOs(List<Task> tasks) {
 		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
 
-		if (tasks != null && !tasks.isEmpty()) {
+		if ((tasks != null) && !tasks.isEmpty()) {
 			for (Task task : tasks) {
 				taskTOs.add(new TaskTO(task));
 			}
@@ -98,7 +105,7 @@ public class TaskTO implements Serializable {
 	public static List<TaskTO> customTasksToTaskTOs(List<CustomTask> customTasks) {
 		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
 
-		if (customTasks != null && !customTasks.isEmpty()) {
+		if ((customTasks != null) && !customTasks.isEmpty()) {
 			for (CustomTask customTask : customTasks) {
 				taskTOs.add(new TaskTO(customTask));
 			}
@@ -185,5 +192,13 @@ public class TaskTO implements Serializable {
 
 	public void setChallengeReferralId(UUID challengeReferralId) {
 		this.challengeReferralId = challengeReferralId;
+	}
+
+	public List<TaskGroupTO> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<TaskGroupTO> groups) {
+		this.groups = groups;
 	}
 }
