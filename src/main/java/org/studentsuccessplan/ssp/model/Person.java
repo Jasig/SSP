@@ -232,7 +232,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@ManyToOne()
-	@Cascade(CascadeType.ALL)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "person_demographics_id", unique = true, nullable = true)
 	private PersonDemographics demographics;
 
@@ -243,7 +243,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@ManyToOne()
-	@Cascade(CascadeType.ALL)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "person_education_goal_id", unique = true, nullable = true)
 	private PersonEducationGoal educationGoal;
 
@@ -254,7 +254,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@ManyToOne()
-	@Cascade(CascadeType.ALL)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "person_education_plan_id", unique = true, nullable = true)
 	private PersonEducationPlan educationPlan;
 

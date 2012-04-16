@@ -21,6 +21,9 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 	private UUID createdBy;
 	private Date dueDate;
 
+	/**
+	 * Empty constructor
+	 */
 	public TaskReportTO() {
 	}
 
@@ -115,5 +118,4 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 	public int compareTo(TaskReportTO taskReportTO) {
 		return challengeName.compareTo(taskReportTO.getChallengeName());
 	}
-
 }

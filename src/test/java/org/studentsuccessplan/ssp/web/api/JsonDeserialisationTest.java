@@ -46,8 +46,7 @@ import org.studentsuccessplan.ssp.transferobject.tool.IntakeFormTO;
  * Test that all the transfer objects are serializable by the Json serializer.
  * <p>
  * The sample code for this test was provided by the code at the blog post
- * {@link http://bit.ly/IY3ryz} (full link:
- * http://blog.cuttleworks.com/2011/12/http-media-type-not-supported-exception/)
+ * {@link "http://blog.cuttleworks.com/2011/12/http-media-type-not-supported-exception/"}
  * 
  * @author jon.adams
  */

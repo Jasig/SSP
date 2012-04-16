@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -58,6 +59,22 @@ public class Challenge extends AbstractReference implements Serializable {
 	private String tags;
 
 	/**
+	 * Education plan for a student.
+	 * 
+	 * Should be null for non-student users.
+	 */
+	/*
+	 * @Nullable()
+	 * 
+	 * @ManyToOne()
+	 * 
+	 * @Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	 * 
+	 * @JoinColumn(name = "confidentiality_level_id", nullable = true) private
+	 * ConfidentialityLevel confidentialityLevel;
+	 */
+
+	/**
 	 * Constructor
 	 */
 	public Challenge() {
@@ -89,14 +106,14 @@ public class Challenge extends AbstractReference implements Serializable {
 	}
 
 	/**
-	 * Constructor
+	 * Constructor for a Challenge model instance.
 	 * 
 	 * @param id
 	 *            Identifier; required
 	 * @param name
 	 *            Name; required; max 100 characters
 	 * @param description
-	 *            Description; max 150 characters
+	 *            Description; max 64000 characters
 	 */
 	public Challenge(final UUID id, final String name, final String description) {
 		super(id, name, description);
@@ -160,4 +177,47 @@ public class Challenge extends AbstractReference implements Serializable {
 	public void setTags(final String tags) {
 		this.tags = tags;
 	}
+
+	/**
+	 * @return the confidentialityLevel
+	 */
+	/*
+	 * public ConfidentialityLevel getConfidentialityLevel() { return
+	 * confidentialityLevel; }
+	 */
+	/**
+	 * @param confidentialityLevel
+	 *            the confidentialityLevel to set
+	 */
+	/*
+	 * public void setConfidentialityLevel( ConfidentialityLevel
+	 * confidentialityLevel) { this.confidentialityLevel = confidentialityLevel;
+	 * }
+	 */
+
+	/**
+	 * Overwrites properties with the source object's properties. DOES NOT
+	 * overwrite any mapped collections.
+	 * 
+	 * @param source
+	 *            Source to use for overwrites.
+	 */
+	public void overwrite(@NotNull final Challenge source) {
+		super.overwrite(source);
+
+		setSelfHelpGuideQuestion(source.getSelfHelpGuideQuestion());
+		setSelfHelpGuideDescription(source.getSelfHelpGuideDescription());
+		setShowInStudentIntake(source.isShowInStudentIntake());
+		setShowInSelfHelpSearch(source.isShowInSelfHelpSearch());
+		setTags(source.getTags());
+		// TODO setConfidentialityLevel(source.getConfidentialityLevel());
+
+		// TODO: OverwriteWithCollections
+		/*
+		 * setSelfHelpGuideQuestions(source.setSelfHelpGuideQuestions());
+		 * setChallengeChallengeReferrals
+		 * (source.setChallengeChallengeReferrals());
+		 */
+	}
+
 }

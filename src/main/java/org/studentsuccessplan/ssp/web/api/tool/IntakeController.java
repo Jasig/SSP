@@ -141,46 +141,34 @@ public class IntakeController {
 	public Map<String, Object> referenceData() throws Exception {
 		final Map<String, Object> refData = new HashMap<String, Object>();
 
-		refData.put("challenges",
-				ChallengeTO.listToTOList(
-						challengeService.getAll(
-								ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("childCareArrangements",
-				ChildCareArrangementTO.listToTOList(
-						childCareArrangementService.getAll(
-								ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("citizenships",
-				CitizenshipTO.listToTOList(
-						citizenshipService.getAll(
-								ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("educationGoals",
-				EducationGoalTO.listToTOList(
-						educationGoalService.getAll(
-								ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("educationLevels",
-				EducationLevelTO.listToTOList(
-						educationLevelService.getAll(
-								ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("ethnicitys",
-				EthnicityTO.listToTOList(
-						ethnicityService.getAll(
-								ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("fundingSources",
-				FundingSourceTO.listToTOList(
-						fundingSourceService.getAll(
-								ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("maritalStatuses",
-				MaritalStatusTO.listToTOList(
-						maritalStatusService.getAll(
-								ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("studentStatuses",
-				StudentStatusTO.listToTOList(
-						studentStatusService.getAll(
-								ObjectStatus.ACTIVE, null, null, null, null)));
-		refData.put("veteranStatuses",
-				VeteranStatusTO.listToTOList(
-						veteranStatusService.getAll(
-								ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("challenges", ChallengeTO.listToTOList(challengeService
+				.getAll(ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("childCareArrangements", ChildCareArrangementTO
+				.listToTOList(childCareArrangementService.getAll(
+						ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("citizenships", CitizenshipTO
+				.listToTOList(citizenshipService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
+		refData.put("educationGoals", EducationGoalTO
+				.listToTOList(educationGoalService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
+		refData.put("educationLevels", EducationLevelTO
+				.listToTOList(educationLevelService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
+		refData.put("ethnicitys", EthnicityTO.listToTOList(ethnicityService
+				.getAll(ObjectStatus.ACTIVE, null, null, null, null)));
+		refData.put("fundingSources", FundingSourceTO
+				.listToTOList(fundingSourceService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
+		refData.put("maritalStatuses", MaritalStatusTO
+				.listToTOList(maritalStatusService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
+		refData.put("studentStatuses", StudentStatusTO
+				.listToTOList(studentStatusService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
+		refData.put("veteranStatuses", VeteranStatusTO
+				.listToTOList(veteranStatusService.getAll(ObjectStatus.ACTIVE,
+						null, null, null, null)));
 
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());
@@ -201,7 +189,7 @@ public class IntakeController {
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public @ResponseBody
 	ServiceResponse handleNotFound(final ObjectNotFoundException e) {
-		LOGGER.error("Error: ", e);
+		LOGGER.error("IntakeController ObjectNotFoundException: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 
@@ -211,7 +199,7 @@ public class IntakeController {
 	public @ResponseBody
 	ServiceResponse handleValidationError(
 			final MethodArgumentNotValidException e) {
-		LOGGER.error("Error: ", e);
+		LOGGER.error("IntakeController Bad Request: ", e);
 		return new ServiceResponse(false, e);
 	}
 
@@ -220,7 +208,7 @@ public class IntakeController {
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public @ResponseBody
 	ServiceResponse handleAccessDenied(final AccessDeniedException e) {
-		LOGGER.error("Error: ", e);
+		LOGGER.error("IntakeController Access Denied: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 
@@ -229,7 +217,7 @@ public class IntakeController {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public @ResponseBody
 	ServiceResponse handle(final Exception e) {
-		LOGGER.error("Error: ", e);
+		LOGGER.error("IntakeController Internal Server Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 }

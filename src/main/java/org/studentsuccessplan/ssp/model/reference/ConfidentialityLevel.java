@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.validation.constraints.NotNull;
 
 /**
  * ConfidentialityLevel reference object.
@@ -15,7 +16,7 @@ import javax.persistence.InheritanceType;
 public class ConfidentialityLevel extends AbstractReference implements
 		Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2346103896744918201L;
 
 	/**
 	 * Constructor
@@ -30,8 +31,7 @@ public class ConfidentialityLevel extends AbstractReference implements
 	 * @param id
 	 *            Identifier; required
 	 */
-
-	public ConfidentialityLevel(UUID id) {
+	public ConfidentialityLevel(final UUID id) {
 		super(id);
 	}
 
@@ -41,10 +41,10 @@ public class ConfidentialityLevel extends AbstractReference implements
 	 * @param id
 	 *            Identifier; required
 	 * @param name
-	 *            Name; required; max 100 characters
+	 *            Name; required; max 80 characters
 	 */
-
-	public ConfidentialityLevel(UUID id, String name) {
+	public ConfidentialityLevel(@NotNull final UUID id,
+			@NotNull final String name) {
 		super(id, name);
 	}
 
@@ -54,11 +54,12 @@ public class ConfidentialityLevel extends AbstractReference implements
 	 * @param id
 	 *            Identifier; required
 	 * @param name
-	 *            Name; required; max 100 characters
+	 *            Name; required; max 80 characters
 	 * @param description
-	 *            Description; max 150 characters
+	 *            Description; max 64000 characters
 	 */
-	public ConfidentialityLevel(UUID id, String name, String description) {
+	public ConfidentialityLevel(@NotNull final UUID id,
+			@NotNull final String name, final String description) {
 		super(id, name, description);
 	}
 }
