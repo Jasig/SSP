@@ -91,21 +91,14 @@ public class TaskManager {
 		String taskType = arrTaskId[0];
 		UUID id = UUID.fromString(arrTaskId[1]);
 
-		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)) {
+		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)
+				|| taskType
+						.equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
 			taskService.delete(id);
 		} else if (taskType
 				.equals(TaskTO.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
 			customTaskService.delete(id);
 		}
-
-		/*
-		 * else if (taskType
-		 * .equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
-		 * 
-		 * // Do nothing, not deletable as in SSP
-		 * 
-		 * }
-		 */
 
 		return true;
 	}
