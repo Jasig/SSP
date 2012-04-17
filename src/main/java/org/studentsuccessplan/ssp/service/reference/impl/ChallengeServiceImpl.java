@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
+import org.studentsuccessplan.ssp.dao.reference.ConfidentialityLevelDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
@@ -21,13 +22,16 @@ import com.google.common.collect.Lists;
 public class ChallengeServiceImpl implements ChallengeService {
 
 	@Autowired
-	private ChallengeDao dao;
+	private transient ChallengeDao dao;
 
 	@Autowired
-	private ChallengeReferralService challengeReferralService;
+	private transient ConfidentialityLevelDao confidentialityLevelDao;
 
 	@Autowired
-	private SecurityService securityService;
+	private transient ChallengeReferralService challengeReferralService;
+
+	@Autowired
+	private transient SecurityService securityService;
 
 	@Override
 	public List<Challenge> getAll(final ObjectStatus status,
@@ -54,6 +58,13 @@ public class ChallengeServiceImpl implements ChallengeService {
 	@Override
 	public Challenge save(final Challenge obj) throws ObjectNotFoundException {
 		Challenge current = get(obj.getId());
+
+		if (obj.getConfidentialityLevel() == null) {
+			obj.setConfidentialityLevel(null);
+		} else {
+			obj.setConfidentialityLevel(confidentialityLevelDao.load(obj
+					.getConfidentialityLevel().getId()));
+		}
 
 		current.overwrite(obj);
 

@@ -79,13 +79,12 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	 *            Transfer object class type
 	 */
 	protected AbstractAuditableReferenceController(
-			final Class<T> persistentClass,
-			final Class<TO> transferObjectClass) {
+			final Class<T> persistentClass, final Class<TO> transferObjectClass) {
 		super();
 		this.persistentClass = persistentClass;
 		this.transferObjectClass = transferObjectClass;
-		this.listFactory =
-				TransferObjectListFactory.newFactory(transferObjectClass);
+		this.listFactory = TransferObjectListFactory
+				.newFactory(transferObjectClass);
 	}
 
 	@Override
@@ -108,30 +107,30 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	public @ResponseBody
 	TO get(final @PathVariable UUID id) throws Exception {
 		final T model = getService().get(id);
-		if (model != null) {
-			final TO out = this.transferObjectClass.newInstance();
-			out.fromModel(model);
-			return out;
-		} else {
+		if (model == null) {
 			return null;
 		}
+
+		final TO out = this.transferObjectClass.newInstance();
+		out.fromModel(model);
+		return out;
 	}
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	TO create(@Valid @RequestBody TO obj) throws Exception {
+	TO create(@Valid @RequestBody final TO obj) throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send a reference entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
 
-		T model = obj.asModel();
+		final T model = obj.asModel();
 
 		if (null != model) {
-			T createdModel = getService().create(model);
+			final T createdModel = getService().create(model);
 			if (null != createdModel) {
-				TO out = this.transferObjectClass.newInstance();
+				final TO out = this.transferObjectClass.newInstance();
 				out.fromModel(createdModel);
 				return out;
 			}
@@ -142,41 +141,59 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	TO save(@PathVariable UUID id, @Valid @RequestBody TO obj) throws Exception {
+	TO save(@PathVariable final UUID id, @Valid @RequestBody final TO obj)
+			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a citizenship without an id to the save method.  Did you mean to create?");
 		}
 
-		T model = obj.asModel();
+		final T model = obj.asModel();
 		model.setId(id);
 
-		T savedT = getService().save(model);
+		final T savedT = getService().save(model);
 		if (null != savedT) {
-			TO out = this.transferObjectClass.newInstance();
+			final TO out = this.transferObjectClass.newInstance();
 			out.fromModel(savedT);
 			return out;
 		}
+
 		return null;
 	}
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
-	ServiceResponse delete(@PathVariable UUID id) throws Exception {
+	ServiceResponse delete(@PathVariable final UUID id) throws Exception {
 		getService().delete(id);
 		return new ServiceResponse(true);
 	}
 
+	/**
+	 * Log and return an appropriate message for a page not found (HTTP 404,
+	 * {@link HttpStatus#NOT_FOUND}).
+	 * 
+	 * @param e
+	 *            Original exception
+	 * @return An appropriate service response message to send to the client.
+	 */
 	@PreAuthorize("permitAll")
 	@ExceptionHandler(ObjectNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public @ResponseBody
-	ServiceResponse handleNotFound(ObjectNotFoundException e) {
+	ServiceResponse handleNotFound(final ObjectNotFoundException e) {
 		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 
+	/**
+	 * Log and return an appropriate message for a bad request error (
+	 * {@link HttpStatus#BAD_REQUEST}).
+	 * 
+	 * @param e
+	 *            Original exception
+	 * @return An appropriate service response message to send to the client.
+	 */
 	@PreAuthorize("permitAll")
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -187,21 +204,37 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		return new ServiceResponse(false, e);
 	}
 
+	/**
+	 * Log and return an appropriate message for an access denied error (
+	 * {@link HttpStatus#FORBIDDEN}).
+	 * 
+	 * @param e
+	 *            Original exception
+	 * @return An appropriate service response message to send to the client.
+	 */
 	@PreAuthorize("permitAll")
 	@ExceptionHandler(AccessDeniedException.class)
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public @ResponseBody
-	ServiceResponse handleAccessDenied(AccessDeniedException e) {
+	ServiceResponse handleAccessDenied(final AccessDeniedException e) {
 		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 
+	/**
+	 * Log and return an appropriate message for an internal server error (HTTP
+	 * 500, {@link HttpStatus#INTERNAL_SERVER_ERROR}).
+	 * 
+	 * @param e
+	 *            Original exception
+	 * @return An appropriate service response message to send to the client.
+	 */
 	@Override
 	@PreAuthorize("permitAll")
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public @ResponseBody
-	ServiceResponse handle(Exception e) {
+	ServiceResponse handle(final Exception e) {
 		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}

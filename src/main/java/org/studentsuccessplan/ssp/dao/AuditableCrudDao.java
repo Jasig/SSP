@@ -6,6 +6,12 @@ import java.util.UUID;
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 
+/**
+ * Required interface for all the basic CRUD methods for the DAO layer.
+ * 
+ * @param <T>
+ *            Any Auditable model class
+ */
 public interface AuditableCrudDao<T extends Auditable> {
 
 	/**
@@ -57,6 +63,16 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @return The specified instance if found; null otherwise.
 	 */
 	T get(UUID id);
+
+	/**
+	 * Lazily retrieves the specified instance from persistent storage.
+	 * Exception will be thrown later, on usage, if any, if the object is not
+	 * found.
+	 * 
+	 * @param id
+	 * @return The specified instance.
+	 */
+	T load(UUID id);
 
 	/**
 	 * Save instance to persistent storage.

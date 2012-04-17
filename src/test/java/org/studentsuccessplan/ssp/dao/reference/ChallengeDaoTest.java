@@ -1,8 +1,9 @@
 package org.studentsuccessplan.ssp.dao.reference;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
@@ -32,8 +32,16 @@ public class ChallengeDaoTest {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ChallengeDaoTest.class);
 
+	private static final UUID CONFIDENTIALITYLEVEL_ID = UUID
+			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
+
+	private static final String CONFIDENTIALITYLEVEL_NAME = "Test Confidentiality Level";
+
 	@Autowired
 	transient private ChallengeDao dao;
+
+	@Autowired
+	transient private ConfidentialityLevelDao confidentialityLevelDao;
 
 	@Autowired
 	transient private SecurityServiceInTestEnvironment securityService;
@@ -52,6 +60,8 @@ public class ChallengeDaoTest {
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setShowInSelfHelpSearch(false);
 		obj.setShowInStudentIntake(false);
+		obj.setConfidentialityLevel(confidentialityLevelDao
+				.load(CONFIDENTIALITYLEVEL_ID));
 		dao.save(obj);
 
 		assertNotNull("obj.id should not have been null.", obj.getId());
@@ -63,10 +73,13 @@ public class ChallengeDaoTest {
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
+		assertEquals("Confidentiality level name did not match.",
+				CONFIDENTIALITYLEVEL_NAME, obj.getConfidentialityLevel()
+						.getName());
 
 		final List<Challenge> all = dao.getAll(ObjectStatus.ACTIVE);
 		assertNotNull(all);
-		assertTrue(all.size() > 0);
+		assertFalse(all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);
@@ -80,7 +93,7 @@ public class ChallengeDaoTest {
 		assertNull(challenge);
 	}
 
-	private void assertList(List<Challenge> objects) {
+	private void assertList(final List<Challenge> objects) {
 		for (Challenge object : objects) {
 			assertNotNull(object.getId());
 		}
@@ -111,7 +124,7 @@ public class ChallengeDaoTest {
 
 		List<Challenge> challenges = dao.searchByQuery(filter);
 		assertList(challenges);
-		assertTrue(!challenges.isEmpty());
+		assertFalse(challenges.isEmpty());
 
 		LOGGER.debug(Integer.toString(challenges.size()));
 	}
@@ -120,7 +133,7 @@ public class ChallengeDaoTest {
 	public void getAllInStudentIntake() {
 		List<Challenge> challenges = dao.getAllInStudentIntake();
 		assertList(challenges);
-		assertTrue(!challenges.isEmpty());
+		assertFalse(challenges.isEmpty());
 	}
 
 	@Test
