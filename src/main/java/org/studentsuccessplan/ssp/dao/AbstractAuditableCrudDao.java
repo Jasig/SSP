@@ -14,31 +14,34 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 
 public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		AuditableCrudDao<T> {
+
 	@Autowired
-	protected SessionFactory sessionFactory;
+	protected transient SessionFactory sessionFactory;
 
-	protected Class<T> persistentClass;
+	protected transient Class<T> persistentClass;
 
-	protected AbstractAuditableCrudDao(Class<T> persistentClass) {
+	protected AbstractAuditableCrudDao(final Class<T> persistentClass) {
 		this.persistentClass = persistentClass;
 	}
 
 	@Override
-	public List<T> getAll(ObjectStatus status) {
+	public List<T> getAll(final ObjectStatus status) {
 		return getAllWithDefault(status, null, null, null, null, null);
 	}
 
 	@Override
-	public List<T> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection) {
+	public List<T> getAll(final ObjectStatus status, final Integer firstResult,
+			final Integer maxResults, final String sort,
+			final String sortDirection) {
 		return getAllWithDefault(status, firstResult, maxResults,
 				sortDirection, sortDirection, null);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected List<T> getAllWithDefault(ObjectStatus status,
-			Integer firstResult, Integer maxResults, String sort,
-			String sortDirection, String defaultSortProperty) {
+	protected List<T> getAllWithDefault(final ObjectStatus status,
+			final Integer firstResult, final Integer maxResults,
+			final String sort, final String sortDirection,
+			final String defaultSortProperty) {
 		Criteria query = createCriteria();
 
 		if (firstResult != null && firstResult.intValue() >= 0) {
@@ -66,21 +69,27 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T get(UUID id) {
+	public T get(final UUID id) {
 		return (T) sessionFactory.getCurrentSession().get(this.persistentClass,
 				id);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public T load(final UUID id) {
+		return (T) sessionFactory.getCurrentSession().load(
+				this.persistentClass, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
 	public T save(T obj) {
-		if (obj.getId() != null) {
-			obj = (T) sessionFactory.getCurrentSession().merge(obj);
-		} else {
+		if (obj.getId() == null) {
 			sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			return obj;
 		}
 
-		return obj;
+		return (T) sessionFactory.getCurrentSession().merge(obj);
 	}
 
 	@Override
@@ -114,7 +123,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		}
 
 		// Add sort property with the specified order
-		if (sortDirection == "DESC" || sortDirection == "DESCENDING") {
+		if ("DESC".equals(sortDirection) || "DESCENDING".equals(sortDirection)) {
 			criteria.addOrder(Order.desc(sort));
 		} else {
 			// If not descending, assume ascending

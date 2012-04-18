@@ -6,14 +6,6 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	autoScroll: true,
 	height: '100%',
 	width: '100%',
-    /*
-	plugins: [
-		Ext.create('Ext.grid.plugin.RowEditing', { 
-			id: 'AbstractReferenceAdminRowEditing',
-		    clicksToEdit: 2
-		})
-    ],
-    */
     selType: 'rowmodel',
     columns: [
          { header: 'Name',  
@@ -31,7 +23,6 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
          }
     ],
  
-   
     dockedItems: [
 		{
 			xtype: 'pagingtoolbar',
@@ -47,9 +38,9 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
             text: 'Add',
             iconCls: 'icon-add',
             handler: function(){
-            	var abstractReferenceTO = new Ssp.model.reference.AbstractReferenceTO();
-    			abstractReferenceTO.set('name','default');
-            	this.up('grid').getStore().insert(0, abstractReferenceTO );
+            	var item = new Ssp.model.reference.AbstractReference();
+    			item.set('name','default');
+            	this.up('grid').getStore().insert(0, item );
             	this.up('grid').plugins[0].startEdit(0, 0);
             }
         }, '-', {
@@ -64,8 +55,11 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
         }]
     }], 
     
-    
     initComponent: function(){
+    	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', { 
+                                     id: 'AbstractReferenceAdminRowEditing',
+		                             clicksToEdit: 2 });
+    	Ext.apply(this,{plugins:cellEditor});
     	this.callParent(arguments);
     },
     

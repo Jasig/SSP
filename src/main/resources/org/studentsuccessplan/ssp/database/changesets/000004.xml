@@ -8,8 +8,8 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet id="remove duplicate referral table" author="daniel.bower">
-		<dropTable tableName="referral"/>
-		
+		<dropTable tableName="referral" />
+
 		<rollback>
 			<createTable tableName="referral">
 				<column name="id" type="uuid">
@@ -43,7 +43,7 @@
 
 			<sql>grant all on referral to ssp</sql>
 		</rollback>
-		
+
 		<!-- Theres a different assumption in the liquibase handling of timezones 
 			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
@@ -55,7 +55,8 @@
 		<insert tableName="message_template">
 			<column name="id" value="7c945020-86b0-11e1-849a-0026b9e7ff4c" />
 			<column name="name" value="empty_template" />
-			<column name="description" value="A template that will just contain formatting for a generic subject and message" />
+			<column name="description"
+				value="A template that will just contain formatting for a generic subject and message" />
 			<column name="subject" value="$subj" />
 			<column name="body" value="$mesg" />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
@@ -70,18 +71,18 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="" author="daniel.bower">
 		<addColumn tableName="confidentiality_level">
 			<column name="acronym" type="character varying(10)">
-					<constraints nullable="false" />
+				<constraints nullable="false" />
 			</column>
 		</addColumn>
 		<rollback>
-			<dropColumn tableName="confidentiality_level" columnName="acronym"/>
+			<dropColumn tableName="confidentiality_level" columnName="acronym" />
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet author='daniel.bower' id='Add goal table'>
 		<createTable tableName="goal">
 			<column name="id" type="uuid">
@@ -94,41 +95,41 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="modified_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="goal_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false" foreignKeyName="goal_created_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="false" foreignKeyName="goal_modified_by_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="confidentiality_level_id" type="uuid">
-				<constraints nullable="false" foreignKeyName="goal_confidentiality_level_id_confidentiality_level_id"
-					references="confidentiality_level(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="goal_confidentiality_level_id_confidentiality_level_id"
+					references="confidentiality_level(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on goal to ssp</sql>
 		<rollback>
-			<dropTable tableName="goal"/>
+			<dropTable tableName="goal" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
-	</changeSet> 
-	
+	</changeSet>
+
 	<changeSet author='daniel.bower' id='Add task_group table'>
 		<createTable tableName="task_group">
 			<column name="id" type="uuid">
@@ -141,55 +142,68 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="modified_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="task_group_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false" foreignKeyName="task_group_created_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="false" foreignKeyName="task_group_modified_by_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on task_group to ssp</sql>
 		<rollback>
-			<dropTable tableName="task_group"/>
+			<dropTable tableName="task_group" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
-	
+	</changeSet>
+
 	<changeSet author='daniel.bower' id='Add task_group_task table'>
 		<createTable tableName="task_group_task">
 			<column name="task_group_id" type="uuid">
-				<constraints nullable="false" 
+				<constraints nullable="false"
 					foreignKeyName="task_group_task_task_group_id_task_group_id"
-					references="task_group(id)"/>
+					references="task_group(id)" />
 			</column>
 			<column name="task_id" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="task_group_task_task_id_task_id"
-					references="task(id)"/>
+				<constraints nullable="false" foreignKeyName="task_group_task_task_id_task_id"
+					references="task(id)" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on task_group_task to ssp</sql>
 		<rollback>
-			<dropTable tableName="task_group_task"/>
+			<dropTable tableName="task_group_task" />
 		</rollback>
-	</changeSet> 	
+	</changeSet>
+
+	<changeSet id="Add confidentiality_level to challenge"
+		author="jon.adams">
+		<addColumn tableName="challenge">
+			<column name="confidentiality_level_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="challenge_confidentiality_level_id_confidentiality_level_id"
+					references="confidentiality_level(id)" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="challenge" columnName="confidentiality_level_id" />
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

@@ -44,6 +44,7 @@ import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
 import org.studentsuccessplan.ssp.model.reference.Ethnicity;
 import org.studentsuccessplan.ssp.model.reference.FundingSource;
 import org.studentsuccessplan.ssp.model.reference.Genders;
+import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
 import org.studentsuccessplan.ssp.model.reference.StudentStatus;
 import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 import org.studentsuccessplan.ssp.model.tool.Tools;
@@ -83,7 +84,7 @@ public class StudentIntakeFormManager {
 	private transient FundingSourceDao fundingSourceDao;
 
 	@Autowired
-	private MaritalStatusService martitalStatusService;
+	private MaritalStatusService maritalStatusService;
 
 	@Autowired
 	private PersonChallengeDao studentChallengeDao;
@@ -272,7 +273,7 @@ public class StudentIntakeFormManager {
 	private static final UUID SECTION_CHALLENGE_QUESTION_OTHER_ID = UUID
 			.fromString("839dc532-1aec-4580-8294-8c97bb72fa72");
 
-	public FormTO create() {
+	public FormTO create() throws ObjectNotFoundException {
 
 		FormTO formTO = new FormTO();
 		List<FormSectionTO> formSections = new ArrayList<FormSectionTO>();
@@ -344,8 +345,8 @@ public class StudentIntakeFormManager {
 
 		// Student Id
 		formSectionTO.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_STUDENTID_ID).setValueUUID(
-				student.getId());
+				SECTION_PERSONAL_QUESTION_STUDENTID_ID).setValue(
+				student.getUserId());
 
 		// Birthdate
 		formSectionTO.getFormQuestionById(
@@ -817,7 +818,7 @@ public class StudentIntakeFormManager {
 		return formTO;
 	}
 
-	public void save(FormTO formTO) throws ObjectNotFoundException {
+	public void save(final FormTO formTO) throws ObjectNotFoundException {
 
 		// Refresh Person from Hibernate so lazy-loading works in case the
 		// person instance was loaded in a previous request
@@ -1026,8 +1027,14 @@ public class StudentIntakeFormManager {
 				|| maritalStatusQuestion.getValue() == null) {
 			demographics.setMaritalStatus(null);
 		} else {
-			demographics.setMaritalStatus(martitalStatusService
-					.get(maritalStatusQuestion.getId()));
+			List<MaritalStatus> maritalStatuses = maritalStatusService.getAll(
+					ObjectStatus.ACTIVE, null, null, null, null);
+			for (MaritalStatus ms : maritalStatuses) {
+				if (ms.getName().equals(maritalStatusQuestion.getValue())) {
+					demographics.setMaritalStatus(ms);
+					break;
+				}
+			}
 		}
 
 		demographics.setNumberOfChildren(Integer.parseInt(demographicsSection
@@ -1371,13 +1378,13 @@ public class StudentIntakeFormManager {
 				// studentChallenge.setOtherDescription(formOptionTO.getValue());
 				studentChallenge.setPerson(student);
 			}
-
 		}
 
 		personService.save(student);
 	}
 
-	private FormSectionTO buildConfidentialitySection() {
+	private FormSectionTO buildConfidentialitySection()
+			throws ObjectNotFoundException {
 		Person student = securityService.currentUser().getPerson();
 		if (null != studentConfidentialityDisclosureAgreementService
 				.hasStudentAgreedToOne(student)) {

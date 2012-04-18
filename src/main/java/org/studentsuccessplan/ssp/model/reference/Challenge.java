@@ -5,13 +5,19 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 /**
  * Challenge reference object.
@@ -63,16 +69,12 @@ public class Challenge extends AbstractReference implements Serializable {
 	 * 
 	 * Should be null for non-student users.
 	 */
-	/*
-	 * @Nullable()
-	 * 
-	 * @ManyToOne()
-	 * 
-	 * @Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
-	 * 
-	 * @JoinColumn(name = "confidentiality_level_id", nullable = true) private
-	 * ConfidentialityLevel confidentialityLevel;
-	 */
+
+	@Nullable()
+	@ManyToOne()
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "confidentiality_level_id", nullable = true)
+	private ConfidentialityLevel confidentialityLevel;
 
 	/**
 	 * Constructor
@@ -181,19 +183,18 @@ public class Challenge extends AbstractReference implements Serializable {
 	/**
 	 * @return the confidentialityLevel
 	 */
-	/*
-	 * public ConfidentialityLevel getConfidentialityLevel() { return
-	 * confidentialityLevel; }
-	 */
+	public ConfidentialityLevel getConfidentialityLevel() {
+		return confidentialityLevel;
+	}
+
 	/**
 	 * @param confidentialityLevel
 	 *            the confidentialityLevel to set
 	 */
-	/*
-	 * public void setConfidentialityLevel( ConfidentialityLevel
-	 * confidentialityLevel) { this.confidentialityLevel = confidentialityLevel;
-	 * }
-	 */
+	public void setConfidentialityLevel(
+			final ConfidentialityLevel confidentialityLevel) {
+		this.confidentialityLevel = confidentialityLevel;
+	}
 
 	/**
 	 * Overwrites properties with the source object's properties. DOES NOT
@@ -210,7 +211,7 @@ public class Challenge extends AbstractReference implements Serializable {
 		setShowInStudentIntake(source.isShowInStudentIntake());
 		setShowInSelfHelpSearch(source.isShowInSelfHelpSearch());
 		setTags(source.getTags());
-		// TODO setConfidentialityLevel(source.getConfidentialityLevel());
+		setConfidentialityLevel(source.getConfidentialityLevel());
 
 		// TODO: OverwriteWithCollections
 		/*

@@ -265,7 +265,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
@@ -275,7 +275,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@OneToMany(mappedBy = "person")
-	@Cascade(CascadeType.ALL)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
@@ -285,27 +285,27 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@OneToMany(mappedBy = "person")
-	@Cascade(CascadeType.ALL)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<PersonChallenge> challenges;
 
 	@Nullable()
 	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<PersonTool> tools;
 
 	@Nullable()
 	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
 
 	@Nullable()
 	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<Task> tasks;
 
 	@Nullable()
 	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<CustomTask> customTasks;
 
 	/**
@@ -319,7 +319,7 @@ public class Person extends Auditable implements Serializable {
 
 	@Transient
 	public Set<AbstractTask> getTasksAndCustomTasks() {
-		Set<AbstractTask> tasks = Sets.newHashSet();
+		final Set<AbstractTask> tasks = Sets.newHashSet();
 		tasks.addAll(getTasks());
 		tasks.addAll(getCustomTasks());
 		return tasks;
@@ -343,7 +343,7 @@ public class Person extends Auditable implements Serializable {
 	 * @param id
 	 *            Identifier
 	 */
-	public Person(UUID id) {
+	public Person(final UUID id) {
 		super(id);
 		challenges = new HashSet<PersonChallenge>();
 		fundingSources = new HashSet<PersonFundingSource>();
@@ -362,7 +362,7 @@ public class Person extends Auditable implements Serializable {
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -370,7 +370,7 @@ public class Person extends Auditable implements Serializable {
 		return middleInitial;
 	}
 
-	public void setMiddleInitial(String middleInitial) {
+	public void setMiddleInitial(final String middleInitial) {
 		this.middleInitial = middleInitial;
 	}
 
@@ -378,7 +378,7 @@ public class Person extends Auditable implements Serializable {
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -386,7 +386,7 @@ public class Person extends Auditable implements Serializable {
 		return birthDate == null ? null : new Date(birthDate.getTime());
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(final Date birthDate) {
 		this.birthDate = birthDate == null ? null : new Date(
 				birthDate.getTime());
 	}
@@ -564,6 +564,11 @@ public class Person extends Auditable implements Serializable {
 	}
 
 	public void setUserId(String userId) {
+		if (userId != null && userId.length() > 25) {
+			throw new IllegalArgumentException(
+					"UserId must be 25 or fewer characters.");
+		}
+
 		this.userId = userId;
 	}
 

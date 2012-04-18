@@ -24,6 +24,9 @@ import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 public class ChallengeController extends
 		AbstractAuditableReferenceController<Challenge, ChallengeTO> {
 
+	/**
+	 * Challenge service
+	 */
 	@Autowired
 	protected transient ChallengeService service;
 
@@ -32,6 +35,10 @@ public class ChallengeController extends
 		return service;
 	}
 
+	/**
+	 * Default constructor that initializes the instance with specific class
+	 * types for use by the parent methods.
+	 */
 	protected ChallengeController() {
 		super(Challenge.class, ChallengeTO.class);
 	}

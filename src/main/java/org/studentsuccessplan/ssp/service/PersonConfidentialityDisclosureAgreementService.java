@@ -12,7 +12,8 @@ public interface PersonConfidentialityDisclosureAgreementService {
 	 * 
 	 * @param student
 	 *            Student
-	 * @return
+	 * @return Latest, agreed agreement, or null if student has not agreed to
+	 *         the latest agreement.
 	 */
 	PersonConfidentialityDisclosureAgreement hasStudentAgreedToLatest(
 			Person student);
@@ -22,7 +23,9 @@ public interface PersonConfidentialityDisclosureAgreementService {
 	 * 
 	 * @param student
 	 *            Student
-	 * @return
+	 * @return Returns null if student has not agreed to any agreements.
+	 *         Otherwise returns one of them, though it is not defined which one
+	 *         is returned.
 	 */
 	PersonConfidentialityDisclosureAgreement hasStudentAgreedToOne(
 			Person student);
@@ -34,7 +37,8 @@ public interface PersonConfidentialityDisclosureAgreementService {
 	 *            Student
 	 * @param agreement
 	 *            Agreement
-	 * @return
+	 * @return Returns the agreement if student has already agreed to the
+	 *         agreement, otherwise null.
 	 */
 	PersonConfidentialityDisclosureAgreement hasStudentAgreedTo(Person student,
 			ConfidentialityDisclosureAgreement agreement);
@@ -42,9 +46,12 @@ public interface PersonConfidentialityDisclosureAgreementService {
 	/**
 	 * Return the most recent agreement
 	 * 
-	 * @return The most recent agreement
+	 * @exception ObjectNotFoundException
+	 *                if latest agreement could not be found.
+	 * @return The most recent agreement.
 	 */
-	ConfidentialityDisclosureAgreement latestAgreement();
+	ConfidentialityDisclosureAgreement latestAgreement()
+			throws ObjectNotFoundException;
 
 	/**
 	 * Mark the given student as agreeing to the agreement
@@ -62,6 +69,8 @@ public interface PersonConfidentialityDisclosureAgreementService {
 	 * 
 	 * @param student
 	 *            Student to be marked as agreeing to the most recent agreement
+	 * @exception ObjectNotFoundException
+	 *                if latest agreement could not be found.
 	 */
-	void studentAgreed(Person student);
+	void studentAgreed(Person student) throws ObjectNotFoundException;
 }
