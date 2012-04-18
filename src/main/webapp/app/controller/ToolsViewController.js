@@ -98,10 +98,10 @@ Ext.define('Ssp.controller.ToolsViewController', {
 						var ethnicities = formData.data.referenceData.ethnicitys;
 						var fundingSources = formData.data.referenceData.fundingSources;
 						var genders = formData.data.referenceData.genders;
-						var maritalStatuses = formData.data.referenceData.maritalStatuss;
+						var maritalStatuses = formData.data.referenceData.maritalStatuses;
 						var states = formData.data.referenceData.states;
-						var studentStatuses = formData.data.referenceData.studentStatuss;
-						var veteranStatuses = formData.data.referenceData.veteranStatuss;
+						var studentStatuses = formData.data.referenceData.studentStatuses;
+						var veteranStatuses = formData.data.referenceData.veteranStatuses;
 
 						Ext.getStore('reference.Challenges').loadData( challenges );
 						Ext.getStore('reference.ChildCareArrangements').loadData( childCareArrangements );
