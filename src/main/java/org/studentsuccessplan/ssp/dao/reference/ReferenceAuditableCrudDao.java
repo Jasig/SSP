@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.studentsuccessplan.ssp.dao.AbstractAuditableCrudDao;
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
  * Base CRUD methods for reference model objects.
@@ -30,9 +31,12 @@ public abstract class ReferenceAuditableCrudDao<T extends Auditable> extends
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<T> getAll(ObjectStatus status, Integer firstResult,
 			Integer maxResults, String sort, String sortDirection) {
-		return getAllWithDefault(status, firstResult, maxResults, sort,
-				sortDirection, "name");
+		return createCriteria(
+				new SortingAndPaging(status, firstResult, maxResults, sort,
+						sortDirection, "name"))
+				.list();
 	}
 }

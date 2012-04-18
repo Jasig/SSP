@@ -10,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
  * CRUD methods for the Person model.
@@ -46,25 +47,20 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	public List<Person> getAll(ObjectStatus status, Integer firstResult,
 			Integer maxResults, String sort, String sortDirection) {
 
+		SortingAndPaging sAndP = new SortingAndPaging(status, firstResult,
+				maxResults, sort,
+				sortDirection, null);
+
 		Criteria criteria = createCriteria();
 
-		if (firstResult != null && firstResult.intValue() >= 0) {
-			criteria.setFirstResult(firstResult);
-		}
-
-		if (maxResults != null && maxResults.intValue() > 0) {
-			criteria.setMaxResults(maxResults);
-		}
+		sAndP.addPagingToCriteria(criteria);
+		sAndP.addStatusFilterToCriteria(criteria);
 
 		if (StringUtils.isEmpty(sort)) {
 			criteria.addOrder(Order.asc("lastName")).addOrder(
 					Order.asc("firstName"));
 		} else {
-			criteria = addOrderToCriteria(criteria, sort, sortDirection);
-		}
-
-		if (status != ObjectStatus.ALL) {
-			criteria.add(Restrictions.eq("objectStatus", status));
+			sAndP.addSortingToCriteria(criteria);
 		}
 
 		return criteria.list();

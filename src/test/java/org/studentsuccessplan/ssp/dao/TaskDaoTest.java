@@ -86,4 +86,9 @@ public class TaskDaoTest extends AbstractTaskDaoTest<Task> {
 				"test sessionId", true, testChallengeReferral.getId()));
 	}
 
+	@Test
+	public void getAllForTaskGroupId() {
+		assertList(dao.getAllForTaskGroupId(UUID.randomUUID(), true,
+				UUID.randomUUID(), null));
+	}
 }
