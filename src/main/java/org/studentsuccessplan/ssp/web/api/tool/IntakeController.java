@@ -154,7 +154,7 @@ public class IntakeController {
 				.listToTOList(educationGoalService.getAll(sAndP)));
 		refData.put("educationLevels", EducationLevelTO
 				.listToTOList(educationLevelService.getAll(sAndP)));
-		refData.put("ethnicitys", EthnicityTO.listToTOList(ethnicityService
+		refData.put("ethnicities", EthnicityTO.listToTOList(ethnicityService
 				.getAll(sAndP)));
 		refData.put("fundingSources", FundingSourceTO
 				.listToTOList(fundingSourceService.getAll(sAndP)));
