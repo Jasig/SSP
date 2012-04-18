@@ -8,6 +8,7 @@ import org.studentsuccessplan.ssp.model.AbstractTask;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.AbstractAuditableCrudService;
 import org.studentsuccessplan.ssp.service.AbstractTaskService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
  * Base class for creating the Task Services
@@ -25,28 +26,30 @@ public abstract class AbstractAbstractTaskService<T extends AbstractTask>
 	protected abstract AbstractTaskDao<T> getDao();
 
 	@Override
-	public List<T> getAllForPersonId(Person person) {
-		return getDao().getAllForPersonId(person.getId());
+	public List<T> getAllForPersonId(Person person, SortingAndPaging sAndP) {
+		return getDao().getAllForPersonId(person.getId(), sAndP);
 	}
 
 	@Override
-	public List<T> getAllForPersonId(Person person, boolean complete) {
-		return getDao().getAllForPersonId(person.getId(), complete);
+	public List<T> getAllForPersonId(Person person, boolean complete,
+			SortingAndPaging sAndP) {
+		return getDao().getAllForPersonId(person.getId(), complete, sAndP);
 	}
 
 	@Override
-	public List<T> getAllForSessionId(String sessionId) {
-		return getDao().getAllForSessionId(sessionId);
+	public List<T> getAllForSessionId(String sessionId, SortingAndPaging sAndP) {
+		return getDao().getAllForSessionId(sessionId, sAndP);
 	}
 
 	@Override
-	public List<T> getAllForSessionId(String sessionId, boolean complete) {
-		return getDao().getAllForSessionId(sessionId, complete);
+	public List<T> getAllForSessionId(String sessionId, boolean complete,
+			SortingAndPaging sAndP) {
+		return getDao().getAllForSessionId(sessionId, complete, sAndP);
 	}
 
 	@Override
-	public List<T> getAllWhichNeedRemindersSent() {
-		return getDao().getAllWhichNeedRemindersSent();
+	public List<T> getAllWhichNeedRemindersSent(SortingAndPaging sAndP) {
+		return getDao().getAllWhichNeedRemindersSent(sAndP);
 	}
 
 	@Override

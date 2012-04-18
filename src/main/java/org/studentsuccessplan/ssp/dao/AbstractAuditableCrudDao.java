@@ -34,8 +34,6 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	@SuppressWarnings("unchecked")
 	public List<T> getAll(final SortingAndPaging sAndP) {
 		return createCriteria(sAndP)
-				// new SortingAndPaging(status, firstResult, maxResults, sort,
-				// sortDirection, null))
 				.list();
 	}
 

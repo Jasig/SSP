@@ -10,6 +10,7 @@ import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.TaskService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 public class TaskServiceImpl
@@ -46,17 +47,20 @@ public class TaskServiceImpl
 	}
 
 	@Override
-	public List<Task> getAllForPersonAndChallengeReferral(Person person,
-			boolean complete, ChallengeReferral challengeReferral) {
+	public List<Task> getAllForPersonAndChallengeReferral(final Person person,
+			final boolean complete, final ChallengeReferral challengeReferral,
+			final SortingAndPaging sAndP) {
 		return dao.getAllForPersonIdAndChallengeReferralId(person.getId(),
-				complete, challengeReferral.getId());
+				complete, challengeReferral.getId(), sAndP);
 	}
 
 	@Override
 	public List<Task> getAllForSessionIdAndChallengeReferral(
-			String sessionId, boolean complete,
-			ChallengeReferral challengeReferral) {
+			final String sessionId,
+			final boolean complete,
+			final ChallengeReferral challengeReferral,
+			final SortingAndPaging sAndP) {
 		return dao.getAllForSessionIdAndChallengeReferralId(sessionId,
-				complete, challengeReferral.getId());
+				complete, challengeReferral.getId(), sAndP);
 	}
 }

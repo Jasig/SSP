@@ -22,6 +22,7 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
@@ -131,7 +132,8 @@ public class ChallengeDaoTest {
 
 	@Test
 	public void getAllInStudentIntake() {
-		List<Challenge> challenges = dao.getAllInStudentIntake();
+		List<Challenge> challenges = dao
+				.getAllInStudentIntake(new SortingAndPaging(ObjectStatus.ACTIVE));
 		assertList(challenges);
 		assertFalse(challenges.isEmpty());
 	}

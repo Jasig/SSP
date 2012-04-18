@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
  * Data access class for the Challenge reference entity.
@@ -95,18 +96,15 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 	}
 
 	/**
-	 * Retrieves all {@link ObjectStatus#ACTIVE} Challenges that are marked to
+	 * Retrieves all Challenges that are marked to
 	 * be able to be shown in the Student Intake interface.
 	 * 
 	 * @return List of all Challenges that are marked to be able to be shown in
 	 *         the Student Intake interface.
 	 */
 	@SuppressWarnings("unchecked")
-	// :TODO paging?
-	public List<Challenge> getAllInStudentIntake() {
-		final Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(Challenge.class)
-				.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE))
+	public List<Challenge> getAllInStudentIntake(SortingAndPaging sAndP) {
+		final Criteria query = createCriteria(sAndP)
 				.add(Restrictions.eq("showInStudentIntake", true));
 		return query.list();
 	}

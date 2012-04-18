@@ -2509,6 +2509,8 @@ public class StudentIntakeFormManager {
 
 	private FormSectionTO buildChallengesSection() {
 
+		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
+
 		FormSectionTO challengeSection = new FormSectionTO();
 		List<FormQuestionTO> challengeSectionQuestions = new ArrayList<FormQuestionTO>();
 
@@ -2519,7 +2521,7 @@ public class StudentIntakeFormManager {
 		FormQuestionTO challengeQuestionTO = new FormQuestionTO();
 		List<FormOptionTO> challengeOptions = new ArrayList<FormOptionTO>();
 
-		for (Challenge challenge : challengeDao.getAllInStudentIntake()) {
+		for (Challenge challenge : challengeDao.getAllInStudentIntake(sAndP)) {
 			challengeOptions.add(new FormOptionTO(challenge.getId(), challenge
 					.getName(), challenge.getId().toString()));
 		}

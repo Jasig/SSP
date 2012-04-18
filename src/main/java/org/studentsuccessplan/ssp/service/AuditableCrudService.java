@@ -10,7 +10,9 @@ public interface AuditableCrudService<T> {
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
-	 * @param sAndP TODO
+	 * 
+	 * @param sAndP
+	 *            SortingAndPaging
 	 * 
 	 * @return All entities in the database filtered by the supplied status.
 	 */

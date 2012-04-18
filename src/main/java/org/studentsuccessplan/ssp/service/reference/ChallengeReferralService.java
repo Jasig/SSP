@@ -35,7 +35,7 @@ public interface ChallengeReferralService extends
 	List<ChallengeReferral> challengeReferralSearch(Challenge challenge);
 
 	int getChallengeReferralCountByChallengeAndQuery(Challenge challenge,
-			String query);
+			String query, SortingAndPaging sAndP);
 
 	int countByChallengeIdNotOnActiveTaskList(Challenge challenge,
 			Person student, String sessionId);

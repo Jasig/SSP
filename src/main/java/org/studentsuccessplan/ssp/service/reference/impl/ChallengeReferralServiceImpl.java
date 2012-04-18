@@ -87,7 +87,8 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 
 	@Override
 	public int getChallengeReferralCountByChallengeAndQuery(
-			Challenge challenge, String query) {
+			final Challenge challenge, final String query,
+			final SortingAndPaging sAndP) {
 
 		int count = 0;
 
@@ -103,11 +104,11 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 			if (securityService.isAuthenticated()) {
 				Person student = securityService.currentUser().getPerson();
 				size = taskService.getAllForPersonAndChallengeReferral(student,
-						false, challengeReferral).size();
+						false, challengeReferral, sAndP).size();
 			} else {
 				size = taskService.getAllForSessionIdAndChallengeReferral(
 						securityService.getSessionId(), false,
-						challengeReferral).size();
+						challengeReferral, sAndP).size();
 			}
 
 			if (size == 0) {
