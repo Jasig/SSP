@@ -43,7 +43,7 @@ class SortingAndPagingTest {
 
 	@Test
 	public void testSingleSortConstructor(){
-		sAndP = new SortingAndPaging(ObjectStatus.ACTIVE, 0, 10, "name", "ASC", null)
+		sAndP = SortingAndPaging.createForSingleSort(ObjectStatus.ACTIVE, 0, 10, "name", "ASC", null)
 		assertEquals(0, sAndP.getFirstResult())
 		assertEquals(10, sAndP.getMaxResults())
 		assertNull(sAndP.getDefaultSortProperty())
@@ -64,7 +64,7 @@ class SortingAndPagingTest {
 
 	@Test
 	public void testSingleSortConstructor_withDefault(){
-		sAndP = new SortingAndPaging(ObjectStatus.ACTIVE, 0, 10, null, "ASC", "id")
+		sAndP = SortingAndPaging.createForSingleSort(ObjectStatus.ACTIVE, 0, 10, null, "ASC", "id")
 		assertEquals(0, sAndP.getFirstResult())
 		assertEquals(10, sAndP.getMaxResults())
 		assertEquals("id", sAndP.getDefaultSortProperty())

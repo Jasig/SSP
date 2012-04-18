@@ -6,12 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /*
- * Allows emails and other messaging to be customized using the Velocity Framework
+ * Allows e-mails and other messaging to be customized using the Velocity Framework
  */
 @Entity
 public class MessageTemplate extends AbstractReference {
 
-	// :TODO match these to actual db values
+	// :TODO match these to actual database values
 	// Message Templates
 	public static final UUID CUSTOM_ACTION_PLAN_TASK_ID = UUID
 			.fromString("31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0");
@@ -25,8 +25,8 @@ public class MessageTemplate extends AbstractReference {
 			.fromString("919F6FF5-8F22-4684-8729-D615206A2644");
 	public static final UUID NEW_STUDENT_INTAKE_TASK_EMAIL_ID = UUID
 			.fromString("9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0");
-	public static final UUID EMPTY_TEMPLATE_EMAIL_ID = UUID.
-			fromString("7c945020-86b0-11e1-849a-0026b9e7ff4c");
+	public static final UUID EMPTY_TEMPLATE_EMAIL_ID = UUID
+			.fromString("7c945020-86b0-11e1-849a-0026b9e7ff4c");
 
 	@Column(name = "subject", nullable = false, length = 250)
 	private String subject;
@@ -34,14 +34,17 @@ public class MessageTemplate extends AbstractReference {
 	@Column(name = "body", nullable = false, columnDefinition = "text")
 	private String body;
 
+	/**
+	 * Empty constructor
+	 */
 	public MessageTemplate() {
 	}
 
-	public MessageTemplate(UUID id) {
+	public MessageTemplate(final UUID id) {
 		super(id);
 	}
 
-	public MessageTemplate(UUID id, String name) {
+	public MessageTemplate(final UUID id, final String name) {
 		super(id, name);
 	}
 
@@ -49,7 +52,7 @@ public class MessageTemplate extends AbstractReference {
 		return subject;
 	}
 
-	public void setSubject(String subject) {
+	public void setSubject(final String subject) {
 		this.subject = subject;
 	}
 
@@ -57,12 +60,14 @@ public class MessageTemplate extends AbstractReference {
 		return body;
 	}
 
-	public void setBody(String body) {
+	public void setBody(final String body) {
 		this.body = body;
 	}
 
 	/**
 	 * Get a cacheable id for the subject template
+	 * 
+	 * @return A cacheable id for the subject template
 	 */
 	public String subjectTemplateId() {
 		return getId().toString() + "-s-" + getModifiedDate().getTime();
@@ -71,10 +76,9 @@ public class MessageTemplate extends AbstractReference {
 	/**
 	 * Get a cacheable id for the body template
 	 * 
-	 * @return
+	 * @return A cacheable id for the body template
 	 */
 	public String bodyTemplateId() {
 		return getId().toString() + "-b-" + getModifiedDate().getTime();
 	}
-
 }

@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeChallengeReferral;
+import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
@@ -48,7 +49,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	private Set<ChallengeReferralTO> challengeChallengeReferrals = new HashSet<ChallengeReferralTO>(
 			0);
 
-	private UUID confidentialityLevel = null;
+	private ConfidentialityLevel confidentialityLevel = null;
 
 	public ChallengeTO() {
 		super();
@@ -130,7 +131,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	/**
 	 * @return the confidentialityLevel
 	 */
-	public UUID getConfidentialityLevel() {
+	public ConfidentialityLevel getConfidentialityLevel() {
 		return confidentialityLevel;
 	}
 
@@ -138,7 +139,8 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	 * @param confidentialityLevel
 	 *            the confidentialityLevel to set
 	 */
-	public void setConfidentialityLevel(UUID confidentialityLevel) {
+	public void setConfidentialityLevel(
+			final ConfidentialityLevel confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
 	}
 
@@ -170,7 +172,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		showInStudentIntake = model.isShowInStudentIntake();
 		showInSelfHelpSearch = model.isShowInSelfHelpSearch();
 		tags = model.getTags();
-		// TODO confidentialityLevel = model.getConfidentialityLevel().getId();
+		confidentialityLevel = model.getConfidentialityLevel();
 
 		if ((model.getChallengeChallengeReferrals() == null)
 				|| model.getChallengeChallengeReferrals().isEmpty()) {
@@ -198,13 +200,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		model.setShowInStudentIntake(isShowInStudentIntake());
 		model.setShowInSelfHelpSearch(isShowInSelfHelpSearch());
 		model.setTags(getTags());
-		// TODO need to do a session.load() on this, can't change the method
-		// signature, and not @Autowirable (I think), so how do we fix this?
-
-		// model.setConfidentialityLevel(session.load(ConfidentialityLevel.class,
-		// confidentialityLevel));
-
-		// see http://stackoverflow.com/a/1901959/2291
+		model.setConfidentialityLevel(confidentialityLevel);
 
 		// TODO Implement deep set copy if necessary
 		/*

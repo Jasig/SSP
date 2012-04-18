@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 import org.studentsuccessplan.ssp.dao.AbstractAuditableCrudDao;
 import org.studentsuccessplan.ssp.model.Auditable;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
@@ -32,11 +31,7 @@ public abstract class ReferenceAuditableCrudDao<T extends Auditable> extends
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<T> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection) {
-		return createCriteria(
-				new SortingAndPaging(status, firstResult, maxResults, sort,
-						sortDirection, "name"))
-				.list();
+	public List<T> getAll(final SortingAndPaging sAndP) {
+		return createCriteria(sAndP).list();
 	}
 }

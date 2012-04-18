@@ -3916,4 +3916,20 @@
 			<dropColumn tableName="person" columnName="strengths" />
 		</rollback>
 	</changeSet>
+
+	<changeSet
+		id="Fix FK on person_confidentiality_disclosure_agreement"
+		author="jon.adams">
+		<dropColumn tableName="person_confidentiality_disclosure_agreement"
+			columnName="confidentiality_disclosure_agreement_id" />
+		<addColumn tableName="person_confidentiality_disclosure_agreement">
+			<column name="confidentiality_disclosure_agreement_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_confidentiality_disclosure_agreement_agreement_id"
+					references="confidentiality_disclosure_agreement(id)" />
+			</column>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+
 </databaseChangeLog>

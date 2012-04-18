@@ -17,7 +17,27 @@ public class SortingAndPaging {
 	final private Integer firstResult, maxResults;
 	final private String defaultSortProperty;
 	final private SortDirection defaultSortDirection;
-	final private LinkedHashMap<String, SortDirection> sortFields;
+	private LinkedHashMap<String, SortDirection> sortFields;
+
+	public void appendSortField(String fieldname, SortDirection direction) {
+		if (sortFields == null) {
+			sortFields = new LinkedHashMap<String, SortDirection>();
+		}
+		sortFields.put(fieldname, direction);
+	}
+
+	public void prependSortField(String fieldname, SortDirection direction) {
+		if (sortFields == null) {
+			sortFields = new LinkedHashMap<String, SortDirection>();
+			sortFields.put(fieldname, direction);
+		} else {
+			LinkedHashMap<String, SortDirection> newOrdering = Maps
+					.newLinkedHashMap();
+			newOrdering.put(fieldname, direction);
+			newOrdering.putAll(sortFields);
+			sortFields = newOrdering;
+		}
+	}
 
 	public SortingAndPaging(final ObjectStatus status) {
 		this.status = status;
@@ -28,13 +48,14 @@ public class SortingAndPaging {
 		this.sortFields = null;
 	}
 
-	public SortingAndPaging(final ObjectStatus status,
+	public static SortingAndPaging createForSingleSort(
+			final ObjectStatus status,
 			final Integer firstResult, final Integer maxResults,
 			final String sort, final String sortDirection,
 			final String defaultSortProperty) {
-		this.status = status;
-		this.firstResult = firstResult;
-		this.maxResults = maxResults;
+
+		LinkedHashMap<String, SortDirection> sortFields;
+		SortDirection defaultSortDirection;
 
 		// if there has been a sort passed in, use it, otherwise use the default
 		// sort
@@ -48,7 +69,12 @@ public class SortingAndPaging {
 					.getSortDirection(sortDirection);
 		}
 
-		this.defaultSortProperty = defaultSortProperty;
+		SortingAndPaging sAndP = new SortingAndPaging(
+				status == null ? ObjectStatus.ACTIVE : status,
+				firstResult, maxResults, sortFields, defaultSortProperty,
+				defaultSortDirection);
+
+		return sAndP;
 	}
 
 	public SortingAndPaging(final ObjectStatus status,

@@ -12,18 +12,19 @@ import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		AuditableCrudDao<T> {
+
 	@Autowired
-	protected SessionFactory sessionFactory;
+	protected transient SessionFactory sessionFactory;
 
-	protected Class<T> persistentClass;
+	protected transient Class<T> persistentClass;
 
-	protected AbstractAuditableCrudDao(Class<T> persistentClass) {
+	protected AbstractAuditableCrudDao(final Class<T> persistentClass) {
 		this.persistentClass = persistentClass;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<T> getAll(ObjectStatus status) {
+	public List<T> getAll(final ObjectStatus status) {
 		return createCriteria(
 				new SortingAndPaging(status))
 				.list();
@@ -31,35 +32,40 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<T> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection) {
-		return createCriteria(
-				new SortingAndPaging(status, firstResult, maxResults, sort,
-						sortDirection, null))
+	public List<T> getAll(final SortingAndPaging sAndP) {
+		return createCriteria(sAndP)
+				// new SortingAndPaging(status, firstResult, maxResults, sort,
+				// sortDirection, null))
 				.list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T get(UUID id) {
+	public T get(final UUID id) {
 		return (T) sessionFactory.getCurrentSession().get(this.persistentClass,
 				id);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T save(T obj) {
-		if (obj.getId() != null) {
-			obj = (T) sessionFactory.getCurrentSession().merge(obj);
-		} else {
+	public T load(final UUID id) {
+		return (T) sessionFactory.getCurrentSession().load(
+				this.persistentClass, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T save(final T obj) {
+		if (obj.getId() == null) {
 			sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			return obj;
 		}
 
-		return obj;
+		return (T) sessionFactory.getCurrentSession().merge(obj);
 	}
 
 	@Override
-	public void delete(T obj) {
+	public void delete(final T obj) {
 		sessionFactory.getCurrentSession().delete(obj);
 	}
 
@@ -68,7 +74,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 				this.persistentClass);
 	}
 
-	protected Criteria createCriteria(SortingAndPaging sAndP) {
+	protected Criteria createCriteria(final SortingAndPaging sAndP) {
 		Criteria query = createCriteria();
 
 		if (sAndP != null) {

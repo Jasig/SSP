@@ -2,14 +2,13 @@ package org.studentsuccessplan.ssp.dao;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.util.sort.SortDirection;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
@@ -39,29 +38,19 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	@Override
 	public List<Person> getAll(ObjectStatus status) {
-		return getAll(status, null, null, null, null);
+		return getAll(new SortingAndPaging(status));
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Person> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection) {
+	public List<Person> getAll(final SortingAndPaging sAndP) {
 
-		SortingAndPaging sAndP = new SortingAndPaging(status, firstResult,
-				maxResults, sort,
-				sortDirection, null);
-
-		Criteria criteria = createCriteria();
-
-		sAndP.addPagingToCriteria(criteria);
-		sAndP.addStatusFilterToCriteria(criteria);
-
-		if (StringUtils.isEmpty(sort)) {
-			criteria.addOrder(Order.asc("lastName")).addOrder(
-					Order.asc("firstName"));
-		} else {
-			sAndP.addSortingToCriteria(criteria);
+		if (!sAndP.isSorted()) {
+			sAndP.appendSortField("lastName", SortDirection.ASC);
+			sAndP.appendSortField("firstName", SortDirection.ASC);
 		}
+
+		Criteria criteria = createCriteria(sAndP);
 
 		return criteria.list();
 	}

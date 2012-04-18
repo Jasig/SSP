@@ -2,6 +2,7 @@ package org.studentsuccessplan.ssp.service.reference.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
@@ -18,6 +19,7 @@ import org.studentsuccessplan.ssp.dao.reference.VeteranStatusDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
  * Test the Veteran Status reference service.
@@ -43,13 +45,13 @@ public class VeteranStatusServiceTest {
 		List<VeteranStatus> daoAll = new ArrayList<VeteranStatus>();
 		daoAll.add(new VeteranStatus());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+		expect(dao.getAll(isA(SortingAndPaging.class)))
 				.andReturn(daoAll);
 
 		replay(dao);
 
-		List<VeteranStatus> all = service.getAll(ObjectStatus.ACTIVE, null,
-				null, null, null);
+		List<VeteranStatus> all = service.getAll(new SortingAndPaging(
+				ObjectStatus.ACTIVE));
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

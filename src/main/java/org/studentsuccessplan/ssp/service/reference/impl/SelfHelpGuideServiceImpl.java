@@ -13,6 +13,7 @@ import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 @Transactional
@@ -34,13 +35,11 @@ public class SelfHelpGuideServiceImpl implements SelfHelpGuideService {
 	}
 
 	@Override
-	public List<SelfHelpGuide> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection) {
+	public List<SelfHelpGuide> getAll(SortingAndPaging sAndP) {
 		if (!securityService.isAuthenticated()) {
 			return dao.findAllActiveForUnauthenticated();
 		} else {
-			return dao.getAll(status, firstResult, maxResults, sort,
-					sortDirection);
+			return dao.getAll(sAndP);
 		}
 	}
 

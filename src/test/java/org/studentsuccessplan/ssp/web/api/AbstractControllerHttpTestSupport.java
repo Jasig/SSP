@@ -29,7 +29,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
 public abstract class AbstractControllerHttpTestSupport<C extends RestController<TO>, TO> {
 	@Autowired
-	protected ApplicationContext applicationContext;
+	protected transient ApplicationContext applicationContext;
 
 	/**
 	 * Request that is setup in the test method with the sample test data and is
@@ -37,16 +37,16 @@ public abstract class AbstractControllerHttpTestSupport<C extends RestController
 	 * mocked HTTP response with the result of the test on the controller based
 	 * on the request data.
 	 */
-	protected MockHttpServletRequest request;
+	protected transient MockHttpServletRequest request;
 
 	/**
 	 * Response that should be used in the test method's call to
 	 * {@link #handlerAdapter} that will fill the mocked HTTP response with the
 	 * result of the test on the controller.
 	 */
-	protected MockHttpServletResponse response;
+	protected transient MockHttpServletResponse response;
 
-	protected RequestMappingHandlerAdapter handlerAdapter;
+	protected transient RequestMappingHandlerAdapter handlerAdapter;
 
 	@Before
 	public void setUp() {

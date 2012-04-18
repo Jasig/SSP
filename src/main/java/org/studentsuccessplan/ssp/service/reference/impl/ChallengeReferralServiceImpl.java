@@ -15,6 +15,7 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.TaskService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 @Transactional
@@ -30,10 +31,8 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 	private SecurityService securityService;
 
 	@Override
-	public List<ChallengeReferral> getAll(ObjectStatus status,
-			Integer firstResult, Integer maxResults, String sort,
-			String sortDirection) {
-		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
+	public List<ChallengeReferral> getAll(SortingAndPaging sAndP) {
+		return dao.getAll(sAndP);
 	}
 
 	@Override

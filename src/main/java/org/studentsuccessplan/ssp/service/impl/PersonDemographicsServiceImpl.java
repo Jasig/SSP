@@ -17,6 +17,7 @@ import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
 import org.studentsuccessplan.ssp.service.reference.EthnicityService;
 import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
 import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 public class PersonDemographicsServiceImpl implements PersonDemographicsService {
@@ -40,10 +41,8 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 	private VeteranStatusService veteranStatusService;
 
 	@Override
-	public List<PersonDemographics> getAll(ObjectStatus status,
-			Integer firstResult, Integer maxResults, String sort,
-			String sortDirection) {
-		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
+	public List<PersonDemographics> getAll(SortingAndPaging sAndP) {
+		return dao.getAll(sAndP);
 	}
 
 	@Override

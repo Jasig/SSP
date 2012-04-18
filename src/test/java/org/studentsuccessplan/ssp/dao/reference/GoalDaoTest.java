@@ -23,6 +23,7 @@ import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 import org.studentsuccessplan.ssp.model.reference.Goal;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.studentsuccessplan.ssp.service.reference.ConfidentialityLevelService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
@@ -48,7 +49,8 @@ public class GoalDaoTest {
 	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 		testConfidentialityLevel = confidentialityLevelService.getAll(
-				ObjectStatus.ACTIVE, null, null, null, null).get(0);
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE)).get(0);
 	}
 
 	@Test

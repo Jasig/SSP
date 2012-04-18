@@ -27,6 +27,7 @@ import org.studentsuccessplan.ssp.service.reference.FundingSourceService;
 import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
 import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
 import org.studentsuccessplan.ssp.service.tool.IntakeService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 @Transactional
@@ -57,9 +58,8 @@ public class PersonServiceImpl implements PersonService {
 	private FundingSourceService fundingSourceService;
 
 	@Override
-	public List<Person> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection) {
-		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
+	public List<Person> getAll(SortingAndPaging sAndP) {
+		return dao.getAll(sAndP);
 	}
 
 	/**
