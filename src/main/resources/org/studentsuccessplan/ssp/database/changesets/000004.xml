@@ -206,4 +206,77 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet author='daniel.bower' id='drop task_group tables'>
+		<dropTable tableName="task_group_task" />
+		<dropTable tableName="task_group" />
+		<rollback>
+			<createTable tableName="task_group">
+				<column name="id" type="uuid">
+					<constraints primaryKey="true" nullable="false" />
+				</column>
+				<column name="name" type="character varying(80)">
+					<constraints nullable="false" />
+				</column>
+				<column name="description" type="text">
+					<constraints nullable="true" />
+				</column>
+				<column name="created_date" type="datetime">
+					<constraints nullable="false" />
+				</column>
+				<column name="modified_date" type="datetime">
+					<constraints nullable="false" />
+				</column>
+				<column name="created_by" type="uuid">
+					<constraints nullable="false" foreignKeyName="task_group_created_by_person_id"
+						references="person(id)" />
+				</column>
+				<column name="modified_by" type="uuid">
+					<constraints nullable="false"
+						foreignKeyName="task_group_modified_by_person_id" references="person(id)" />
+				</column>
+				<column name="object_status" type="int">
+					<constraints nullable="false" />
+				</column>
+			</createTable>
+			<createTable tableName="task_group_task">
+				<column name="task_group_id" type="uuid">
+					<constraints nullable="false"
+						foreignKeyName="task_group_task_task_group_id_task_group_id"
+						references="task_group(id)" />
+				</column>
+				<column name="task_id" type="uuid">
+					<constraints nullable="false" foreignKeyName="task_group_task_task_id_task_id"
+						references="task(id)" />
+				</column>
+			</createTable>
+			<sql>grant all on task_group to ssp</sql>
+			<sql>grant all on task_group_task to ssp</sql>
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet id="merge task and custom task" author="daniel.bower">
+		<addColumn tableName="task">
+			<column name="name" type="character varying(100)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<dropTable tableName="custom_task"/>
+		<dropNotNullConstraint tableName="task" columnName="challenge_id"/>
+		<dropNotNullConstraint tableName="task" columnName="challenge_referral_id"/>
+		<rollback>
+			<dropColumn tableName="task" columnName="name" />
+			<!-- Could Add table custom_task here-->
+			<addNotNullConstraint tableName="task" columnName="challenge_id"/>
+			<addNotNullConstraint tableName="task" columnName="challenge_referral_id"/>
+			
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

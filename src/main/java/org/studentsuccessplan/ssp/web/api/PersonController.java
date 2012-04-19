@@ -34,8 +34,6 @@ import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 /**
  * Some basic methods for manipulating people in the system.
  * 
- * :TODO Lock down the methods in the class based on business requirements
- * 
  */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller

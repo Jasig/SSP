@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.AbstractTask;
-import org.studentsuccessplan.ssp.model.CustomTask;
 import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.transferobject.reference.TaskGroupTO;
 
@@ -16,9 +14,9 @@ public class TaskTO implements Serializable {
 	private static final long serialVersionUID = 5796302591576434925L;
 
 	public static final String TASKTO_ID_PREFIX_DELIMITER = ":";
-	public static final String TASKTO_ID_PREFIX_ACTION_PLAN_TASK = AbstractTask.ACTION_PLAN_TASK;
-	public static final String TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK = AbstractTask.CUSTOM_ACTION_PLAN_TASK;
-	public static final String TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK = AbstractTask.SSP_ACTION_PLAN_TASK;
+	public static final String TASKTO_ID_PREFIX_ACTION_PLAN_TASK = Task.ACTION_PLAN_TASK;
+	public static final String TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK = Task.CUSTOM_ACTION_PLAN_TASK;
+	public static final String TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK = Task.SSP_ACTION_PLAN_TASK;
 
 	private String id;
 	private String type;
@@ -44,49 +42,37 @@ public class TaskTO implements Serializable {
 		setChallengeReferralId(task.getChallengeReferral().getId());
 		setCompleted((task.getCompletedDate() != null) ? true : false);
 		setDeletable(true);
+		setDueDate(task.getDueDate());
 
-		if (task.getChallengeReferral().getPublicDescription() != null) {
-			setDescription(task.getChallengeReferral().getPublicDescription()
-					.replaceAll("\\<.*?>", ""));
+		if (task.getChallengeReferral() != null) {
+			setName(task.getChallengeReferral().getName());
+			setDetails(task.getChallengeReferral().getPublicDescription());
+			setDescription(task.getChallengeReferral().getPublicDescription());
+		} else {
+			setName(task.getName());
+			setDetails(task.getDescription());
+			setDescription(task.getDescription());
 		}
 
-		setDetails(task.getChallengeReferral().getPublicDescription());
-		setDueDate(null);
+		if (description != null) {
+			description = description.replaceAll("\\<.*?>", "");
+		}
 
-		if (task.getType().equals(AbstractTask.ACTION_PLAN_TASK)) {
+		if (task.getType().equals(Task.ACTION_PLAN_TASK)) {
 			setId(TASKTO_ID_PREFIX_ACTION_PLAN_TASK
 					+ TASKTO_ID_PREFIX_DELIMITER
 					+ task.getId());
-		} else {
+		} else if (task.getType().equals(Task.SSP_ACTION_PLAN_TASK)) {
 			setId(TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK
 					+ TASKTO_ID_PREFIX_DELIMITER + task.getId());
+		} else if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
+			setId(TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK
+					+ TASKTO_ID_PREFIX_DELIMITER + task.getId());
+		} else {
+			throw new IllegalArgumentException("Invalid Task type");
 		}
 
-		setName(task.getChallengeReferral().getName());
 		setType(task.getType());
-
-		if ((task.getTaskGroups() != null) && (task.getTaskGroups().size() > 0)) {
-			groups = TaskGroupTO.toTOList(task.getTaskGroups());
-		}
-	}
-
-	public TaskTO(CustomTask customTask) {
-		setChallengeId(null);
-		setChallengeReferralId(null);
-		setCompleted((customTask.getCompletedDate() != null) ? true : false);
-		setDeletable(true);
-
-		if (customTask.getDescription() != null) {
-			setDescription(customTask.getDescription()
-					.replaceAll("\\<.*?>", ""));
-		}
-
-		setDetails(customTask.getDescription());
-		setDueDate(customTask.getDueDate());
-		setId(TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK
-				+ TASKTO_ID_PREFIX_DELIMITER + customTask.getId());
-		setName(customTask.getName());
-		setType(customTask.getType());
 	}
 
 	public static List<TaskTO> tasksToTaskTOs(List<Task> tasks) {
@@ -95,18 +81,6 @@ public class TaskTO implements Serializable {
 		if ((tasks != null) && !tasks.isEmpty()) {
 			for (Task task : tasks) {
 				taskTOs.add(new TaskTO(task));
-			}
-		}
-
-		return taskTOs;
-	}
-
-	public static List<TaskTO> customTasksToTaskTOs(List<CustomTask> customTasks) {
-		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
-
-		if ((customTasks != null) && !customTasks.isEmpty()) {
-			for (CustomTask customTask : customTasks) {
-				taskTOs.add(new TaskTO(customTask));
 			}
 		}
 

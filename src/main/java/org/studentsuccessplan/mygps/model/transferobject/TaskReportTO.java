@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.CustomTask;
 import org.studentsuccessplan.ssp.model.Task;
 
 public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
@@ -27,36 +26,25 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 	}
 
 	public TaskReportTO(Task task) {
-		setChallengeName(task.getChallenge().getName());
-		setChallengeReferralName(task.getChallengeReferral().getName());
+		if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
+			setChallengeName("Custom Action Plan Task");
+			setChallengeReferralName(task.getName());
+			setDescription(task.getDescription());
+			setDueDate(task.getDueDate());
+		} else {
+			setChallengeName(task.getChallenge().getName());
+			setChallengeReferralName(task.getChallengeReferral().getName());
+			setDescription(task.getChallengeReferral().getPublicDescription());
+			setDueDate(null);
+		}
 		setCreatedBy(task.getCreatedBy().getId());
-		setDescription(task.getChallengeReferral().getPublicDescription());
-		setDueDate(null);
 		setType(task.getType());
-	}
-
-	public TaskReportTO(CustomTask customTask) {
-		setChallengeName("Custom Action Plan Task");
-		setChallengeReferralName(customTask.getName());
-		setCreatedBy(customTask.getCreatedBy().getId());
-		setDescription(customTask.getDescription());
-		setDueDate(customTask.getDueDate());
-		setType(customTask.getType());
 	}
 
 	public static List<TaskReportTO> tasksToTaskReportTOs(List<Task> tasks) {
 		List<TaskReportTO> taskReportTOs = new ArrayList<TaskReportTO>();
 		for (Task task : tasks) {
 			taskReportTOs.add(new TaskReportTO(task));
-		}
-		return taskReportTOs;
-	}
-
-	public static List<TaskReportTO> customTasksToTaskReportTOs(
-			List<CustomTask> customTasks) {
-		List<TaskReportTO> taskReportTOs = new ArrayList<TaskReportTO>();
-		for (CustomTask customTask : customTasks) {
-			taskReportTOs.add(new TaskReportTO(customTask));
 		}
 		return taskReportTOs;
 	}

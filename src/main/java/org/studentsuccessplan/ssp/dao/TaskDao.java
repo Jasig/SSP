@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,10 +11,67 @@ import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Repository
-public class TaskDao extends AbstractTaskDao<Task> {
+public class TaskDao extends
+		AbstractAuditableCrudDao<Task> implements AuditableCrudDao<Task> {
 
 	protected TaskDao() {
 		super(Task.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Task> getAllForPersonId(final UUID personId,
+			final SortingAndPaging sAndP) {
+		Criteria criteria = createCriteria(sAndP);
+		criteria.add(Restrictions.eq("person.id", personId));
+		return criteria.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Task> getAllForPersonId(final UUID personId,
+			final boolean complete, final SortingAndPaging sAndP) {
+		Criteria criteria = createCriteria(sAndP);
+		criteria.add(Restrictions.eq("person.id", personId));
+
+		if (complete) {
+			criteria.add(Restrictions.isNull("completedDate"));
+		} else {
+			criteria.add(Restrictions.isNotNull("completedDate"));
+		}
+
+		return criteria.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Task> getAllForSessionId(final String sessionId,
+			final SortingAndPaging sAndP) {
+		Criteria criteria = createCriteria(sAndP);
+		criteria.add(Restrictions.eq("sessionId", sessionId));
+		return criteria.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Task> getAllForSessionId(final String sessionId,
+			final boolean complete, final SortingAndPaging sAndP) {
+		Criteria criteria = createCriteria(sAndP);
+		criteria.add(Restrictions.eq("sessionId", sessionId));
+
+		if (complete) {
+			criteria.add(Restrictions.isNull("completedDate"));
+		} else {
+			criteria.add(Restrictions.isNotNull("completedDate"));
+		}
+
+		return criteria.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Task> getAllWhichNeedRemindersSent(final SortingAndPaging sAndP) {
+		Criteria criteria = createCriteria(sAndP);
+		criteria.add(Restrictions.isNull("completedDate"));
+		criteria.add(Restrictions.isNull("reminderSentDate"));
+		criteria.add(Restrictions.isNotNull("dueDate"));
+		criteria.add(Restrictions.gt("dueDate", new Date()));
+		return criteria.list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -43,22 +101,6 @@ public class TaskDao extends AbstractTaskDao<Task> {
 		criteria.add(Restrictions.eq("sessionId", sessionId));
 		criteria.add(Restrictions.eq("challengeReferral.id",
 				challengeReferralId));
-
-		if (complete) {
-			criteria.add(Restrictions.isNull("completedDate"));
-		} else {
-			criteria.add(Restrictions.isNotNull("completedDate"));
-		}
-
-		return criteria.list();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Task> getAllForTaskGroupId(UUID taskGroupId,
-			boolean complete, UUID createdBy, SortingAndPaging sAndP) {
-		Criteria criteria = createCriteria(sAndP);
-		criteria.createCriteria("taskGroups")
-				.add(Restrictions.eq("id", taskGroupId));
 
 		if (complete) {
 			criteria.add(Restrictions.isNull("completedDate"));

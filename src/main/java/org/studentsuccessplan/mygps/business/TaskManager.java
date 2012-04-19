@@ -20,13 +20,11 @@ import org.studentsuccessplan.mygps.model.transferobject.TaskReportTO;
 import org.studentsuccessplan.mygps.model.transferobject.TaskTO;
 import org.studentsuccessplan.mygps.model.transferobject.TaskTOComparator;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
-import org.studentsuccessplan.ssp.model.CustomTask;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
-import org.studentsuccessplan.ssp.service.CustomTaskService;
 import org.studentsuccessplan.ssp.service.MessageService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
@@ -41,9 +39,6 @@ public class TaskManager {
 
 	@Autowired
 	private TaskService taskService;
-
-	@Autowired
-	private CustomTaskService customTaskService;
 
 	@Autowired
 	private ChallengeReferralDao challengeReferralDao;
@@ -86,21 +81,10 @@ public class TaskManager {
 
 	@Transactional(readOnly = false)
 	public boolean deleteTask(String taskId) throws ObjectNotFoundException {
-
 		// Determine what type of task this is from the id
 		String[] arrTaskId = taskId.split(TaskTO.TASKTO_ID_PREFIX_DELIMITER);
-		String taskType = arrTaskId[0];
 		UUID id = UUID.fromString(arrTaskId[1]);
-
-		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)
-				|| taskType
-						.equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
-			taskService.delete(id);
-		} else if (taskType
-				.equals(TaskTO.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
-			customTaskService.delete(id);
-		}
-
+		taskService.delete(id);
 		return true;
 	}
 
@@ -117,13 +101,8 @@ public class TaskManager {
 			Person student = securityService.currentUser().getPerson();
 			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
 					.getAllForPersonId(student, false, sAndP)));
-			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
-					.getAllForPersonId(student, false, sAndP)));
 		} else {
 			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
-					.getAllForSessionId(securityService.getSessionId(),
-							true, sAndP)));
-			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
 					.getAllForSessionId(securityService.getSessionId(),
 							true, sAndP)));
 		}
@@ -158,16 +137,9 @@ public class TaskManager {
 
 			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
 					.getAllForPersonId(student, sAndP)));
-			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
-					.getAllForPersonId(student, sAndP)));
-
 		} else {
-
 			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
 					.getAllForSessionId(securityService.getSessionId(), sAndP)));
-			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
-					.getAllForSessionId(securityService.getSessionId(), sAndP)));
-
 		}
 
 		return taskTOs;
@@ -176,7 +148,7 @@ public class TaskManager {
 	@Transactional(readOnly = false)
 	public TaskTO createCustom(String name, String description) {
 
-		CustomTask customTask = new CustomTask();
+		Task customTask = new Task();
 
 		Person student = securityService.currentUser().getPerson();
 
@@ -188,7 +160,7 @@ public class TaskManager {
 		customTask.setName(name);
 		customTask.setSessionId(securityService.getSessionId());
 
-		customTaskService.create(customTask);
+		taskService.create(customTask);
 
 		return new TaskTO(customTask);
 	}
@@ -208,7 +180,7 @@ public class TaskManager {
 							+ studentId);
 		}
 
-		CustomTask customTask = new CustomTask();
+		Task customTask = new Task();
 
 		customTask.setCreatedDate(new Date());
 		customTask.setCreatedBy(personService
@@ -220,7 +192,7 @@ public class TaskManager {
 		customTask.setSessionId(securityService.getSessionId());
 		customTask.setDueDate(dueDate);
 
-		customTaskService.create(customTask);
+		taskService.create(customTask);
 
 		TaskTO taskTO = new TaskTO(customTask);
 
@@ -263,32 +235,11 @@ public class TaskManager {
 		TaskTO taskTO = null;
 
 		String[] arrTaskId = taskId.split(TaskTO.TASKTO_ID_PREFIX_DELIMITER);
-		String taskType = arrTaskId[0];
 		UUID id = UUID.fromString(arrTaskId[1]);
 
-		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)) {
-
-			Task task = taskService.get(id);
-			taskService.markTaskCompletion(task, complete);
-
-			taskTO = new TaskTO(task);
-
-		} else if (taskType
-				.equals(TaskTO.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
-
-			CustomTask customTask = customTaskService.get(id);
-			customTaskService.markTaskCompletion(customTask, complete);
-
-			taskTO = new TaskTO(customTask);
-
-		} else if (taskType
-				.equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
-
-			Task task = taskService.get(id);
-			taskService.markTaskCompletion(task, complete);
-
-			taskTO = new TaskTO(task);
-		}
+		Task task = taskService.get(id);
+		taskService.markTaskCompletion(task, complete);
+		taskTO = new TaskTO(task);
 
 		return taskTO;
 	}
@@ -311,55 +262,36 @@ public class TaskManager {
 			Calendar dueDateCalendar = Calendar.getInstance();
 
 			// Send reminders for custom action plan tasks
-			List<CustomTask> customTasks = customTaskService
+			List<Task> tasks = taskService
 					.getAllWhichNeedRemindersSent(sAndP);
 
-			for (CustomTask customTask : customTasks) {
+			for (Task task : tasks) {
 
 				// Calculate reminder window start date
-				startDateCalendar.setTime(customTask.getDueDate());
+				startDateCalendar.setTime(task.getDueDate());
 				startDateCalendar.add(Calendar.HOUR,
 						numberOfDaysPriorForTaskReminder * 24 * -1);
 
 				// Due date
-				dueDateCalendar.setTime(customTask.getDueDate());
+				dueDateCalendar.setTime(task.getDueDate());
 
 				if (now.after(startDateCalendar)
 						&& (now.before(dueDateCalendar))) {
-					;
-					messageService.createMessage(customTask
-							.getPerson(),
-							MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID,
+
+					UUID templateId;
+					if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
+						templateId = MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID;
+					} else {
+						templateId = MessageTemplate.ACTION_PLAN_STEP_ID;
+					}
+
+					messageService.createMessage(task.getPerson(), templateId,
 							new HashMap<String, Object>());
 
-					customTaskService.setReminderSentDateToToday(customTask);
+					taskService.setReminderSentDateToToday(task);
 				}
 			}
 
-			// Send reminders for action plan steps
-			List<Task> actionPlanSteps = taskService
-					.getAllWhichNeedRemindersSent(sAndP);
-
-			for (Task actionPlanStep : actionPlanSteps) {
-
-				// Calculate reminder window start date
-				startDateCalendar.setTime(actionPlanStep.getDueDate());
-				startDateCalendar.add(Calendar.HOUR,
-						numberOfDaysPriorForTaskReminder * 24 * -1);
-
-				// Due date
-				dueDateCalendar.setTime(actionPlanStep.getDueDate());
-
-				if (now.after(startDateCalendar)
-						&& (now.before(dueDateCalendar))) {
-					messageService.createMessage(actionPlanStep
-							.getPerson(),
-							MessageTemplate.ACTION_PLAN_STEP_ID,
-							new HashMap<String, Object>());
-					taskService.setReminderSentDateToToday(actionPlanStep);
-				}
-
-			}
 		} catch (Exception e) {
 			LOGGER.error("ERROR : sendTaskReminderNotifications() : {}",
 					e.getMessage(), e);
@@ -379,21 +311,12 @@ public class TaskManager {
 			Person student = securityService.currentUser().getPerson();
 			taskReportTOs.addAll(TaskReportTO.tasksToTaskReportTOs(taskService
 					.getAllForPersonId(student, false, sAndP)));
-			taskReportTOs.addAll(TaskReportTO
-					.customTasksToTaskReportTOs(customTaskService
-							.getAllForPersonId(student, false, sAndP)));
 
 		} else {
-
 			taskReportTOs
 					.addAll(TaskReportTO.tasksToTaskReportTOs(taskService
 							.getAllForSessionId(securityService.getSessionId(),
 									false, sAndP)));
-			taskReportTOs.addAll(TaskReportTO
-					.customTasksToTaskReportTOs(customTaskService
-							.getAllForSessionId(securityService.getSessionId(),
-									false, sAndP)));
-
 		}
 
 		Collections.sort(taskReportTOs);

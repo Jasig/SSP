@@ -1,6 +1,9 @@
 package org.studentsuccessplan.ssp.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,13 +11,16 @@ import org.studentsuccessplan.ssp.dao.TaskDao;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.service.AbstractAuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.TaskService;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
+import com.google.common.collect.Maps;
+
 @Service
 public class TaskServiceImpl
-		extends AbstractAbstractTaskService<Task>
+		extends AbstractAuditableCrudService<Task>
 		implements TaskService {
 
 	@Autowired
@@ -40,10 +46,63 @@ public class TaskServiceImpl
 		current.setReminderSentDate(obj.getReminderSentDate());
 		current.setSessionId(obj.getSessionId());
 
-		current.setTaskGroups(obj.getTaskGroups());
-
 		return getDao().save(current);
 
+	}
+
+	@Override
+	public List<Task> getAllForPersonId(Person person, SortingAndPaging sAndP) {
+		return getDao().getAllForPersonId(person.getId(), sAndP);
+	}
+
+	@Override
+	public List<Task> getAllForPersonId(Person person, boolean complete,
+			SortingAndPaging sAndP) {
+		return getDao().getAllForPersonId(person.getId(), complete, sAndP);
+	}
+
+	@Override
+	public List<Task> getAllForSessionId(String sessionId,
+			SortingAndPaging sAndP) {
+		return getDao().getAllForSessionId(sessionId, sAndP);
+	}
+
+	@Override
+	public List<Task> getAllForSessionId(String sessionId, boolean complete,
+			SortingAndPaging sAndP) {
+		return getDao().getAllForSessionId(sessionId, complete, sAndP);
+	}
+
+	@Override
+	public List<Task> getAllWhichNeedRemindersSent(SortingAndPaging sAndP) {
+		return getDao().getAllWhichNeedRemindersSent(sAndP);
+	}
+
+	@Override
+	public void markTaskComplete(Task task) {
+		task.setCompletedDate(new Date());
+		getDao().save(task);
+	}
+
+	@Override
+	public void markTaskIncomplete(Task task) {
+		task.setCompletedDate(null);
+		getDao().save(task);
+	}
+
+	@Override
+	public void markTaskCompletion(Task task, boolean complete) {
+		if (complete) {
+			markTaskComplete(task);
+		} else {
+			markTaskIncomplete(task);
+		}
+	}
+
+	@Override
+	public void setReminderSentDateToToday(Task task) {
+		task.setReminderSentDate(new Date());
+		getDao().save(task);
 	}
 
 	@Override
@@ -62,5 +121,25 @@ public class TaskServiceImpl
 			final SortingAndPaging sAndP) {
 		return dao.getAllForSessionIdAndChallengeReferralId(sessionId,
 				complete, challengeReferral.getId(), sAndP);
+	}
+
+	@Override
+	public Map<String, List<Task>> getAllGroupedByTaskGroup(Person person,
+			SortingAndPaging sAndP) {
+		Map<String, List<Task>> grouped = Maps.newTreeMap();
+		List<Task> tasksForPerson = dao
+				.getAllForPersonId(person.getId(), sAndP);
+		for (Task task : tasksForPerson) {
+			String group = task.getGroup();
+			List<Task> tasksForGroup;
+			if (!grouped.keySet().contains(group)) {
+				tasksForGroup = new ArrayList<Task>();
+				grouped.put(group, tasksForGroup);
+			} else {
+				tasksForGroup = grouped.get(group);
+			}
+			tasksForGroup.add(task);
+		}
+		return grouped;
 	}
 }

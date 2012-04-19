@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
@@ -25,8 +24,6 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.studentsuccessplan.ssp.model.tool.PersonTool;
-
-import com.google.common.collect.Sets;
 
 /**
  * A Person entity.
@@ -302,12 +299,6 @@ public class Person extends Auditable implements Serializable {
 	@OneToMany(mappedBy = "person")
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<Task> tasks;
-
-	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
-	private Set<CustomTask> customTasks;
-
 	/**
 	 * Strengths
 	 * 
@@ -316,14 +307,6 @@ public class Person extends Auditable implements Serializable {
 	@Column(length = 4000)
 	@Size(max = 4000)
 	private String strengths;
-
-	@Transient
-	public Set<AbstractTask> getTasksAndCustomTasks() {
-		final Set<AbstractTask> tasks = Sets.newHashSet();
-		tasks.addAll(getTasks());
-		tasks.addAll(getCustomTasks());
-		return tasks;
-	}
 
 	/**
 	 * Initialize a Person.
@@ -564,7 +547,7 @@ public class Person extends Auditable implements Serializable {
 	}
 
 	public void setUserId(String userId) {
-		if (userId != null && userId.length() > 25) {
+		if ((userId != null) && (userId.length() > 25)) {
 			throw new IllegalArgumentException(
 					"UserId must be 25 or fewer characters.");
 		}
@@ -587,14 +570,6 @@ public class Person extends Auditable implements Serializable {
 
 	public void setTasks(Set<Task> tasks) {
 		this.tasks = tasks;
-	}
-
-	public Set<CustomTask> getCustomTasks() {
-		return customTasks;
-	}
-
-	public void setCustomTasks(Set<CustomTask> customTasks) {
-		this.customTasks = customTasks;
 	}
 
 	/**
