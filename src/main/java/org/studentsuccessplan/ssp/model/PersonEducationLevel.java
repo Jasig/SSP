@@ -51,7 +51,7 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 	private Person person;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "education_level_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "education_level_id")
 	private EducationLevel educationLevel;
 
 	public PersonEducationLevel() {
