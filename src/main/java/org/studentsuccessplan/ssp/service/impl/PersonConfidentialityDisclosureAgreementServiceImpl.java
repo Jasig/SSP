@@ -14,6 +14,7 @@ import org.studentsuccessplan.ssp.model.PersonConfidentialityDisclosureAgreement
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonConfidentialityDisclosureAgreementService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Sets;
 
@@ -56,8 +57,10 @@ public class PersonConfidentialityDisclosureAgreementServiceImpl implements
 	@Override
 	public ConfidentialityDisclosureAgreement latestAgreement()
 			throws ObjectNotFoundException {
-		List<ConfidentialityDisclosureAgreement> agreements = cdaDao.getAll(
-				ObjectStatus.ACTIVE, 0, 1, "modifiedDate", "DESC");
+		List<ConfidentialityDisclosureAgreement> agreements = cdaDao
+				.getAll(SortingAndPaging
+						.createForSingleSort(ObjectStatus.ACTIVE, 0, 1,
+								"modifiedDate", "DESC", null));
 		if ((agreements != null) && (!agreements.isEmpty())) {
 			return agreements.get(0);
 		} else {

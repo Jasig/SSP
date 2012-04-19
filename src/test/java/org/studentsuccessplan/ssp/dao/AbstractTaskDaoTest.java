@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.model.AbstractTask;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Transactional
 public abstract class AbstractTaskDaoTest<T extends AbstractTask> {
@@ -43,37 +45,44 @@ public abstract class AbstractTaskDaoTest<T extends AbstractTask> {
 
 	@Test
 	public void getAllForPersonId() {
-		assertList(getDao().getAllForPersonId(ken.getId()));
+		assertList(getDao().getAllForPersonId(ken.getId(),
+				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForPersonId_complete() {
-		assertList(getDao().getAllForPersonId(ken.getId(), true));
+		assertList(getDao().getAllForPersonId(ken.getId(), true,
+				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForPersonId_incomplete() {
-		assertList(getDao().getAllForPersonId(ken.getId(), false));
+		assertList(getDao().getAllForPersonId(ken.getId(), false,
+				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionId() {
-		assertList(getDao().getAllForSessionId("test session id"));
+		assertList(getDao().getAllForSessionId("test session id",
+				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionId_complete() {
-		assertList(getDao().getAllForSessionId("test session id", true));
+		assertList(getDao().getAllForSessionId("test session id", true,
+				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionId_incomplete() {
-		assertList(getDao().getAllForSessionId("test session id", false));
+		assertList(getDao().getAllForSessionId("test session id", false,
+				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllWhichNeedRemindersSent() {
-		assertList(getDao().getAllWhichNeedRemindersSent());
+		assertList(getDao().getAllWhichNeedRemindersSent(
+				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	protected void assertList(List<T> objects) {

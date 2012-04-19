@@ -55,6 +55,7 @@ import org.studentsuccessplan.ssp.service.reference.StudentStatusService;
 import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
 import org.studentsuccessplan.ssp.service.tool.PersonToolService;
 import org.studentsuccessplan.ssp.util.SspStringUtils;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 public class StudentIntakeFormManager {
@@ -951,8 +952,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO childCareNeededQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID);
 
-		if (childCareNeededQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
-				|| childCareNeededQuestion.getValue() == null) {
+		if ((childCareNeededQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+				|| (childCareNeededQuestion.getValue() == null)) {
 			demographics.setChildCareNeeded(false);
 		} else {
 			demographics.setChildCareNeeded(SspStringUtils
@@ -980,7 +981,7 @@ public class StudentIntakeFormManager {
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID);
 
 		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(employedQuestion.getValue())
-				|| employedQuestion.getValue() == null) {
+				|| (employedQuestion.getValue() == null)) {
 			demographics.setEmployed(false);
 		} else {
 			demographics.setEmployed(SspStringUtils
@@ -995,8 +996,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO ethnicityQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID);
 
-		if (ethnicityQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
-				|| ethnicityQuestion.getValue() == null) {
+		if ((ethnicityQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+				|| (ethnicityQuestion.getValue() == null)) {
 			demographics.setEthnicity(null);
 		} else {
 			demographics.setEthnicity(ethnicityDao.get(ethnicityQuestion
@@ -1007,8 +1008,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO genderQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID);
 
-		if (genderQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
-				|| genderQuestion.getValue() == null) {
+		if ((genderQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+				|| (genderQuestion.getValue() == null)) {
 			demographics.setGender(null);
 		} else {
 			demographics.setGender(Genders.valueOf(genderQuestion.getValue()));
@@ -1023,12 +1024,12 @@ public class StudentIntakeFormManager {
 		FormQuestionTO maritalStatusQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
 
-		if (maritalStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
-				|| maritalStatusQuestion.getValue() == null) {
+		if ((maritalStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+				|| (maritalStatusQuestion.getValue() == null)) {
 			demographics.setMaritalStatus(null);
 		} else {
 			List<MaritalStatus> maritalStatuses = maritalStatusService.getAll(
-					ObjectStatus.ACTIVE, null, null, null, null);
+					new SortingAndPaging(ObjectStatus.ACTIVE));
 			for (MaritalStatus ms : maritalStatuses) {
 				if (ms.getName().equals(maritalStatusQuestion.getValue())) {
 					demographics.setMaritalStatus(ms);
@@ -1046,8 +1047,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO primaryCaregiverQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID);
 
-		if (primaryCaregiverQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
-				|| primaryCaregiverQuestion.getValue() == null) {
+		if ((primaryCaregiverQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+				|| (primaryCaregiverQuestion.getValue() == null)) {
 			demographics.setPrimaryCaregiver(false);
 		} else {
 			demographics.setPrimaryCaregiver(SspStringUtils
@@ -1058,8 +1059,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO shiftQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID);
 
-		if (shiftQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
-				|| shiftQuestion.getValue() == null) {
+		if ((shiftQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+				|| (shiftQuestion.getValue() == null)) {
 			demographics.setShift(null);
 		} else {
 			demographics
@@ -1112,8 +1113,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO parentsHaveCollegeDegreeQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID);
 
-		if (parentsHaveCollegeDegreeQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
-				|| parentsHaveCollegeDegreeQuestion.getValue() == null) {
+		if ((parentsHaveCollegeDegreeQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+				|| (parentsHaveCollegeDegreeQuestion.getValue() == null)) {
 			educationPlan.setCollegeDegreeForParents(false);
 		} else {
 			educationPlan.setCollegeDegreeForParents(SspStringUtils
@@ -1133,8 +1134,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO requireSpecialAccomodationQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMMODATIONS_ID);
 
-		if (requireSpecialAccomodationQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
-				|| requireSpecialAccomodationQuestion.getValue() == null) {
+		if ((requireSpecialAccomodationQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+				|| (requireSpecialAccomodationQuestion.getValue() == null)) {
 			educationPlan.setSpecialNeeds(false);
 		} else {
 			educationPlan.setSpecialNeeds(SspStringUtils
@@ -1146,8 +1147,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO studentStatusQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID);
 
-		if (studentStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
-				|| studentStatusQuestion.getValue() == null) {
+		if ((studentStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+				|| (studentStatusQuestion.getValue() == null)) {
 			educationPlan.setStudentStatus(null);
 		} else {
 			List<StudentStatus> studentStatuses = studentStatusService.getAll(
@@ -2530,6 +2531,8 @@ public class StudentIntakeFormManager {
 
 	private FormSectionTO buildChallengesSection() {
 
+		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
+
 		FormSectionTO challengeSection = new FormSectionTO();
 		List<FormQuestionTO> challengeSectionQuestions = new ArrayList<FormQuestionTO>();
 
@@ -2540,7 +2543,7 @@ public class StudentIntakeFormManager {
 		FormQuestionTO challengeQuestionTO = new FormQuestionTO();
 		List<FormOptionTO> challengeOptions = new ArrayList<FormOptionTO>();
 
-		for (Challenge challenge : challengeDao.getAllInStudentIntake()) {
+		for (Challenge challenge : challengeDao.getAllInStudentIntake(sAndP)) {
 			challengeOptions.add(new FormOptionTO(challenge.getId(), challenge
 					.getName(), challenge.getId().toString()));
 		}

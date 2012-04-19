@@ -50,6 +50,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.MaritalStatusTO;
 import org.studentsuccessplan.ssp.transferobject.reference.StudentStatusTO;
 import org.studentsuccessplan.ssp.transferobject.reference.VeteranStatusTO;
 import org.studentsuccessplan.ssp.transferobject.tool.IntakeFormTO;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
@@ -141,34 +142,28 @@ public class IntakeController {
 	public Map<String, Object> referenceData() throws Exception {
 		final Map<String, Object> refData = new HashMap<String, Object>();
 
+		SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 		refData.put("challenges", ChallengeTO.listToTOList(challengeService
-				.getAll(ObjectStatus.ACTIVE, null, null, null, null)));
+				.getAll(sAndP)));
 		refData.put("childCareArrangements", ChildCareArrangementTO
 				.listToTOList(childCareArrangementService.getAll(
-						ObjectStatus.ACTIVE, null, null, null, null)));
+						sAndP)));
 		refData.put("citizenships", CitizenshipTO
-				.listToTOList(citizenshipService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
+				.listToTOList(citizenshipService.getAll(sAndP)));
 		refData.put("educationGoals", EducationGoalTO
-				.listToTOList(educationGoalService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
+				.listToTOList(educationGoalService.getAll(sAndP)));
 		refData.put("educationLevels", EducationLevelTO
-				.listToTOList(educationLevelService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
+				.listToTOList(educationLevelService.getAll(sAndP)));
 		refData.put("ethnicitys", EthnicityTO.listToTOList(ethnicityService
-				.getAll(ObjectStatus.ACTIVE, null, null, null, null)));
+				.getAll(sAndP)));
 		refData.put("fundingSources", FundingSourceTO
-				.listToTOList(fundingSourceService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
+				.listToTOList(fundingSourceService.getAll(sAndP)));
 		refData.put("maritalStatuses", MaritalStatusTO
-				.listToTOList(maritalStatusService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
+				.listToTOList(maritalStatusService.getAll(sAndP)));
 		refData.put("studentStatuses", StudentStatusTO
-				.listToTOList(studentStatusService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
+				.listToTOList(studentStatusService.getAll(sAndP)));
 		refData.put("veteranStatuses", VeteranStatusTO
-				.listToTOList(veteranStatusService.getAll(ObjectStatus.ACTIVE,
-						null, null, null, null)));
+				.listToTOList(veteranStatusService.getAll(sAndP)));
 
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());

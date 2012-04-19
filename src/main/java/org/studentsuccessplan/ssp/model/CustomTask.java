@@ -24,4 +24,9 @@ public class CustomTask extends AbstractTask implements Serializable {
 		this.name = name;
 	}
 
+	@Override
+	public String getType() {
+		return AbstractTask.CUSTOM_ACTION_PLAN_TASK;
+	}
+
 }

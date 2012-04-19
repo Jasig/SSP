@@ -2,6 +2,7 @@ package org.studentsuccessplan.ssp.service.reference.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
@@ -14,11 +15,11 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.studentsuccessplan.ssp.dao.reference.CategoryDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Category;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public class CategoryServiceTest {
 
@@ -39,13 +40,13 @@ public class CategoryServiceTest {
 		List<Category> daoAll = new ArrayList<Category>();
 		daoAll.add(new Category());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+		expect(dao.getAll(isA(SortingAndPaging.class)))
 				.andReturn(daoAll);
 
 		replay(dao);
 
-		final List<Category> all = service.getAll(ObjectStatus.ACTIVE, null,
-				null, null, null);
+		final List<Category> all = service.getAll(new SortingAndPaging(
+				ObjectStatus.ACTIVE));
 		assertTrue(!all.isEmpty());
 		verify(dao);
 	}

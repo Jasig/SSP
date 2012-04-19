@@ -26,6 +26,7 @@ import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
 import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import org.studentsuccessplan.ssp.web.api.RestController;
 import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
@@ -97,9 +98,10 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 			final @RequestParam(required = false) String sortDirection)
 			throws Exception {
 
-		return listFactory.toTOList(getService().getAll(
-				status == null ? ObjectStatus.ACTIVE : status, start, limit,
-				sort, sortDirection));
+		return listFactory.toTOList(
+				getService().getAll(
+						SortingAndPaging.createForSingleSort(status, start,
+								limit, sort, sortDirection, "name")));
 	}
 
 	@Override

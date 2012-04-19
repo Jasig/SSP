@@ -3,14 +3,12 @@ package org.studentsuccessplan.ssp.dao;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		AuditableCrudDao<T> {
@@ -25,46 +23,18 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<T> getAll(final ObjectStatus status) {
-		return getAllWithDefault(status, null, null, null, null, null);
+		return createCriteria(
+				new SortingAndPaging(status))
+				.list();
 	}
 
 	@Override
-	public List<T> getAll(final ObjectStatus status, final Integer firstResult,
-			final Integer maxResults, final String sort,
-			final String sortDirection) {
-		return getAllWithDefault(status, firstResult, maxResults,
-				sortDirection, sortDirection, null);
-	}
-
 	@SuppressWarnings("unchecked")
-	protected List<T> getAllWithDefault(final ObjectStatus status,
-			final Integer firstResult, final Integer maxResults,
-			final String sort, final String sortDirection,
-			final String defaultSortProperty) {
-		Criteria query = createCriteria();
-
-		if (firstResult != null && firstResult.intValue() >= 0) {
-			query.setFirstResult(firstResult);
-		}
-
-		if (maxResults != null && maxResults.intValue() > 0) {
-			query.setMaxResults(maxResults);
-		}
-
-		if (StringUtils.isEmpty(defaultSortProperty)) {
-			query = addOrderToCriteria(query, sort, sortDirection);
-		} else {
-			query = addOrderToCriteria(query, sort, sortDirection,
-					defaultSortProperty);
-		}
-
-		// Add object status filter
-		if (status != ObjectStatus.ALL) {
-			query.add(Restrictions.eq("objectStatus", status));
-		}
-
-		return query.list();
+	public List<T> getAll(final SortingAndPaging sAndP) {
+		return createCriteria(sAndP)
+				.list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -83,7 +53,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T save(T obj) {
+	public T save(final T obj) {
 		if (obj.getId() == null) {
 			sessionFactory.getCurrentSession().saveOrUpdate(obj);
 			return obj;
@@ -93,7 +63,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	}
 
 	@Override
-	public void delete(T obj) {
+	public void delete(final T obj) {
 		sessionFactory.getCurrentSession().delete(obj);
 	}
 
@@ -102,34 +72,14 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 				this.persistentClass);
 	}
 
-	protected Criteria addOrderToCriteria(Criteria criteria, String sort,
-			String sortDirection, String defaultSortProperty) {
-		return addOrderToCriteria(criteria,
-				StringUtils.isEmpty(sort) ? defaultSortProperty : sort,
-				sortDirection);
+	protected Criteria createCriteria(final SortingAndPaging sAndP) {
+		Criteria query = createCriteria();
+
+		if (sAndP != null) {
+			sAndP.addAll(query);
+		}
+
+		return query;
 	}
 
-	protected Criteria addOrderToCriteria(Criteria criteria, String sort,
-			String sortDirection) {
-		if (StringUtils.isEmpty(sort)) {
-			return criteria;
-		}
-
-		// Clean/validate sort direction input
-		if (StringUtils.isEmpty(sortDirection)) {
-			sortDirection = "ASC"; // Default to ascending
-		} else {
-			sortDirection = sortDirection.toUpperCase();
-		}
-
-		// Add sort property with the specified order
-		if ("DESC".equals(sortDirection) || "DESCENDING".equals(sortDirection)) {
-			criteria.addOrder(Order.desc(sort));
-		} else {
-			// If not descending, assume ascending
-			criteria.addOrder(Order.asc(sort));
-		}
-
-		return criteria;
-	}
 }

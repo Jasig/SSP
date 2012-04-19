@@ -2,6 +2,7 @@ package org.studentsuccessplan.ssp.service.reference.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
@@ -14,11 +15,11 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.studentsuccessplan.ssp.dao.reference.StudentStatusDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.StudentStatus;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public class StudentStatusServiceTest {
 
@@ -38,13 +39,13 @@ public class StudentStatusServiceTest {
 		List<StudentStatus> daoAll = new ArrayList<StudentStatus>();
 		daoAll.add(new StudentStatus());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+		expect(dao.getAll(isA(SortingAndPaging.class)))
 				.andReturn(daoAll);
 
 		replay(dao);
 
-		List<StudentStatus> all = service.getAll(ObjectStatus.ACTIVE, null, null,
-				null, null);
+		List<StudentStatus> all = service.getAll(new SortingAndPaging(
+				ObjectStatus.ACTIVE));
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

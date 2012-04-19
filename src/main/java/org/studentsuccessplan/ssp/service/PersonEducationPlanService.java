@@ -3,17 +3,15 @@ package org.studentsuccessplan.ssp.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonEducationPlan;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public interface PersonEducationPlanService extends
 		AuditableCrudService<PersonEducationPlan> {
 
 	@Override
-	public List<PersonEducationPlan> getAll(ObjectStatus status,
-			Integer firstResult, Integer maxResults, String sort,
-			String sortDirection);
+	public List<PersonEducationPlan> getAll(SortingAndPaging sAndP);
 
 	@Override
 	public PersonEducationPlan get(UUID id) throws ObjectNotFoundException;

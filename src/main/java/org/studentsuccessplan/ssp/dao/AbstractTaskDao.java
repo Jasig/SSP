@@ -7,9 +7,8 @@ import java.util.UUID;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.studentsuccessplan.ssp.model.AbstractTask;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
-//:TODO paging for all of these
 /**
  * Base class for reading AbstractTasks from the Database
  * 
@@ -19,22 +18,22 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 public abstract class AbstractTaskDao<T extends AbstractTask> extends
 		AbstractAuditableCrudDao<T> implements AuditableCrudDao<T> {
 
-	protected AbstractTaskDao(Class<T> persistentClass) {
+	protected AbstractTaskDao(final Class<T> persistentClass) {
 		super(persistentClass);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> getAllForPersonId(UUID personId) {
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+	public List<T> getAllForPersonId(final UUID personId,
+			final SortingAndPaging sAndP) {
+		Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("person.id", personId));
 		return criteria.list();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> getAllForPersonId(UUID personId, boolean complete) {
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+	public List<T> getAllForPersonId(final UUID personId,
+			final boolean complete, final SortingAndPaging sAndP) {
+		Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("person.id", personId));
 
 		if (complete) {
@@ -47,17 +46,17 @@ public abstract class AbstractTaskDao<T extends AbstractTask> extends
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> getAllForSessionId(String sessionId) {
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+	public List<T> getAllForSessionId(final String sessionId,
+			final SortingAndPaging sAndP) {
+		Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("sessionId", sessionId));
 		return criteria.list();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> getAllForSessionId(String sessionId, boolean complete) {
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+	public List<T> getAllForSessionId(final String sessionId,
+			final boolean complete, final SortingAndPaging sAndP) {
+		Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("sessionId", sessionId));
 
 		if (complete) {
@@ -70,9 +69,8 @@ public abstract class AbstractTaskDao<T extends AbstractTask> extends
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> getAllWhichNeedRemindersSent() {
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+	public List<T> getAllWhichNeedRemindersSent(final SortingAndPaging sAndP) {
+		Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.isNull("completedDate"));
 		criteria.add(Restrictions.isNull("reminderSentDate"));
 		criteria.add(Restrictions.isNotNull("dueDate"));

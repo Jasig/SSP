@@ -28,6 +28,7 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.transferobject.PersonTO;
 import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
 /**
@@ -62,9 +63,9 @@ public class PersonController extends RestController<PersonTO> {
 
 		return TO_FACTORY.toTOList(
 				service.getAll(
-						(status == null ? ObjectStatus.ACTIVE : status),
-						start, limit, sort,
-						sortDirection));
+						SortingAndPaging.createForSingleSort(status, start,
+								limit, sort,
+								sortDirection, null)));
 	}
 
 	@Override

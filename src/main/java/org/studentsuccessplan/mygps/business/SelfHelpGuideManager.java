@@ -15,6 +15,7 @@ import org.studentsuccessplan.ssp.dao.SelfHelpGuideResponseDao;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
 import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideDao;
 import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideQuestionDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
 import org.studentsuccessplan.ssp.model.SelfHelpGuideResponse;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
@@ -23,6 +24,7 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 public class SelfHelpGuideManager {
@@ -100,6 +102,7 @@ public class SelfHelpGuideManager {
 	public SelfHelpGuideResponseTO getSelfHelpGuideResponseById(
 			UUID selfHelpGuideResponseId) {
 
+		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
 				.get(selfHelpGuideResponseId);
 		SelfHelpGuideResponseTO selfHelpGuideResponseTO = new SelfHelpGuideResponseTO();
@@ -118,7 +121,8 @@ public class SelfHelpGuideManager {
 				.selectAffirmativeBySelfHelpGuideResponseId(selfHelpGuideResponseId)) {
 
 			count = challengeReferralService
-					.getChallengeReferralCountByChallengeAndQuery(challenge, "");
+					.getChallengeReferralCountByChallengeAndQuery(challenge,
+							"", sAndP);
 
 			if (count > 0) {
 

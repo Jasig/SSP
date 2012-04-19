@@ -2,6 +2,7 @@ package org.studentsuccessplan.mygps.web;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertNotNull;
@@ -16,13 +17,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideGroupService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public class MyGpsSelfHelpGuideControllerTest {
 
@@ -49,8 +50,8 @@ public class MyGpsSelfHelpGuideControllerTest {
 		List<SelfHelpGuide> guides = new ArrayList<SelfHelpGuide>();
 		guides.add(new SelfHelpGuide());
 		expect(
-				selfHelpGuideService.getAll(ObjectStatus.ACTIVE, null, null,
-						null, null)).andReturn(guides);
+				selfHelpGuideService.getAll(isA(SortingAndPaging.class)))
+				.andReturn(guides);
 
 		replay(manager);
 		replay(selfHelpGuideService);

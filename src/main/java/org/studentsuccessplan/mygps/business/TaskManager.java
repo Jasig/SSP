@@ -32,6 +32,7 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.TaskService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Maps;
 
@@ -91,21 +92,14 @@ public class TaskManager {
 		String taskType = arrTaskId[0];
 		UUID id = UUID.fromString(arrTaskId[1]);
 
-		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)) {
+		if (taskType.equals(TaskTO.TASKTO_ID_PREFIX_ACTION_PLAN_TASK)
+				|| taskType
+						.equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
 			taskService.delete(id);
 		} else if (taskType
 				.equals(TaskTO.TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK)) {
 			customTaskService.delete(id);
 		}
-
-		/*
-		 * else if (taskType
-		 * .equals(TaskTO.TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK)) {
-		 * 
-		 * // Do nothing, not deletable as in SSP
-		 * 
-		 * }
-		 */
 
 		return true;
 	}
@@ -114,21 +108,24 @@ public class TaskManager {
 	public boolean email(final String emailAddress) {
 
 		// Get all tasks to be placed in the action plan email.
-		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
+		final List<TaskTO> taskTOs = new ArrayList<TaskTO>();
+
+		final SortingAndPaging sAndP = new SortingAndPaging(
+				ObjectStatus.ACTIVE);
 
 		if (securityService.isAuthenticated()) {
 			Person student = securityService.currentUser().getPerson();
 			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
-					.getAllForPersonId(student, false)));
+					.getAllForPersonId(student, false, sAndP)));
 			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
-					.getAllForPersonId(student, false)));
+					.getAllForPersonId(student, false, sAndP)));
 		} else {
 			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
 					.getAllForSessionId(securityService.getSessionId(),
-							true)));
+							true, sAndP)));
 			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
 					.getAllForSessionId(securityService.getSessionId(),
-							true)));
+							true, sAndP)));
 		}
 
 		Collections.sort(taskTOs, new TaskTOComparator());
@@ -151,22 +148,25 @@ public class TaskManager {
 
 	public List<TaskTO> getAllTasks() {
 
+		final SortingAndPaging sAndP = new SortingAndPaging(
+				ObjectStatus.ACTIVE);
+
 		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
 
 		if (securityService.isAuthenticated()) {
 			Person student = securityService.currentUser().getPerson();
 
 			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
-					.getAllForPersonId(student)));
+					.getAllForPersonId(student, sAndP)));
 			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
-					.getAllForPersonId(student)));
+					.getAllForPersonId(student, sAndP)));
 
 		} else {
 
 			taskTOs.addAll(TaskTO.tasksToTaskTOs(taskService
-					.getAllForSessionId(securityService.getSessionId())));
+					.getAllForSessionId(securityService.getSessionId(), sAndP)));
 			taskTOs.addAll(TaskTO.customTasksToTaskTOs(customTaskService
-					.getAllForSessionId(securityService.getSessionId())));
+					.getAllForSessionId(securityService.getSessionId(), sAndP)));
 
 		}
 
@@ -296,6 +296,9 @@ public class TaskManager {
 	@Transactional(readOnly = false)
 	public void sendTaskReminderNotifications() {
 
+		final SortingAndPaging sAndP = new SortingAndPaging(
+				ObjectStatus.ACTIVE);
+
 		LOGGER.info("BEGIN : sendTaskReminderNotifications()");
 
 		try {
@@ -309,7 +312,7 @@ public class TaskManager {
 
 			// Send reminders for custom action plan tasks
 			List<CustomTask> customTasks = customTaskService
-					.getAllWhichNeedRemindersSent();
+					.getAllWhichNeedRemindersSent(sAndP);
 
 			for (CustomTask customTask : customTasks) {
 
@@ -335,7 +338,7 @@ public class TaskManager {
 
 			// Send reminders for action plan steps
 			List<Task> actionPlanSteps = taskService
-					.getAllWhichNeedRemindersSent();
+					.getAllWhichNeedRemindersSent(sAndP);
 
 			for (Task actionPlanStep : actionPlanSteps) {
 
@@ -367,26 +370,29 @@ public class TaskManager {
 
 	public List<TaskReportTO> getActionPlanReportData() {
 
+		final SortingAndPaging sAndP = new SortingAndPaging(
+				ObjectStatus.ACTIVE);
+
 		List<TaskReportTO> taskReportTOs = new ArrayList<TaskReportTO>();
 
 		if (securityService.isAuthenticated()) {
 			Person student = securityService.currentUser().getPerson();
 			taskReportTOs.addAll(TaskReportTO.tasksToTaskReportTOs(taskService
-					.getAllForPersonId(student, false)));
+					.getAllForPersonId(student, false, sAndP)));
 			taskReportTOs.addAll(TaskReportTO
 					.customTasksToTaskReportTOs(customTaskService
-							.getAllForPersonId(student, false)));
+							.getAllForPersonId(student, false, sAndP)));
 
 		} else {
 
 			taskReportTOs
 					.addAll(TaskReportTO.tasksToTaskReportTOs(taskService
 							.getAllForSessionId(securityService.getSessionId(),
-									false)));
+									false, sAndP)));
 			taskReportTOs.addAll(TaskReportTO
 					.customTasksToTaskReportTOs(customTaskService
 							.getAllForSessionId(securityService.getSessionId(),
-									false)));
+									false, sAndP)));
 
 		}
 

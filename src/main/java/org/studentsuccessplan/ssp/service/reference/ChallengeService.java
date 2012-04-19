@@ -3,16 +3,15 @@ package org.studentsuccessplan.ssp.service.reference;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public interface ChallengeService extends AuditableCrudService<Challenge> {
 
 	@Override
-	List<Challenge> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection);
+	List<Challenge> getAll(SortingAndPaging sAndP);
 
 	@Override
 	Challenge get(UUID id) throws ObjectNotFoundException;

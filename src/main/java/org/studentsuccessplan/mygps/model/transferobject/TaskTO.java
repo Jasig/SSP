@@ -16,9 +16,9 @@ public class TaskTO implements Serializable {
 	private static final long serialVersionUID = 5796302591576434925L;
 
 	public static final String TASKTO_ID_PREFIX_DELIMITER = ":";
-	public static final String TASKTO_ID_PREFIX_ACTION_PLAN_TASK = "ACT";
-	public static final String TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK = "CUS";
-	public static final String TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK = "SSP";
+	public static final String TASKTO_ID_PREFIX_ACTION_PLAN_TASK = AbstractTask.ACTION_PLAN_TASK;
+	public static final String TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK = AbstractTask.CUSTOM_ACTION_PLAN_TASK;
+	public static final String TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK = AbstractTask.SSP_ACTION_PLAN_TASK;
 
 	private String id;
 	private String type;
@@ -52,19 +52,18 @@ public class TaskTO implements Serializable {
 
 		setDetails(task.getChallengeReferral().getPublicDescription());
 		setDueDate(null);
-		// :TODO how do determine between ACTION_PLAN_TASK and
-		// SSP_ACTION_PLAN_TASK
-		setId(TASKTO_ID_PREFIX_ACTION_PLAN_TASK + TASKTO_ID_PREFIX_DELIMITER
-				+ task.getId());
-		setId(TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK
-				+ TASKTO_ID_PREFIX_DELIMITER + task.getId());
+
+		if (task.getType().equals(AbstractTask.ACTION_PLAN_TASK)) {
+			setId(TASKTO_ID_PREFIX_ACTION_PLAN_TASK
+					+ TASKTO_ID_PREFIX_DELIMITER
+					+ task.getId());
+		} else {
+			setId(TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK
+					+ TASKTO_ID_PREFIX_DELIMITER + task.getId());
+		}
 
 		setName(task.getChallengeReferral().getName());
-
-		// :TODO how do determine between ACTION_PLAN_TASK and
-		// SSP_ACTION_PLAN_TASK
-		setType(AbstractTask.ACTION_PLAN_TASK);
-		// this.setType(AbstractTask.SSP_ACTION_PLAN_TASK);
+		setType(task.getType());
 
 		if ((task.getTaskGroups() != null) && (task.getTaskGroups().size() > 0)) {
 			groups = TaskGroupTO.toTOList(task.getTaskGroups());
@@ -87,7 +86,7 @@ public class TaskTO implements Serializable {
 		setId(TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK
 				+ TASKTO_ID_PREFIX_DELIMITER + customTask.getId());
 		setName(customTask.getName());
-		setType(AbstractTask.CUSTOM_ACTION_PLAN_TASK);
+		setType(customTask.getType());
 	}
 
 	public static List<TaskTO> tasksToTaskTOs(List<Task> tasks) {

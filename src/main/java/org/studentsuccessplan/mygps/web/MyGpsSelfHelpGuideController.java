@@ -18,6 +18,7 @@ import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideGroupService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Controller
 @RequestMapping("/mygps/selfhelpguide")
@@ -53,7 +54,7 @@ public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 
 		try {
 			return SelfHelpGuideTO.listToTOList(selfHelpGuideService.getAll(
-					ObjectStatus.ACTIVE, null, null, null, null));
+					new SortingAndPaging(ObjectStatus.ACTIVE)));
 		} catch (Exception e) {
 			LOGGER.error("ERROR : getAll() : {}", e.getMessage(), e);
 			throw e;

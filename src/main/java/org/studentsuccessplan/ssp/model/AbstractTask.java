@@ -13,21 +13,19 @@ import javax.validation.constraints.Size;
 @MappedSuperclass
 public abstract class AbstractTask extends Auditable {
 
-	public static final String ACTION_PLAN_TASK = "ActionPlanTask";
-	public static final String CUSTOM_ACTION_PLAN_TASK = "CustomActionPlanTask";
-	public static final String SSP_ACTION_PLAN_TASK = "SSPActionPlanTask"; // action
-																			// plan
-																			// tasks
-																			// created
-																			// by
-																			// your
-																			// advisor
-																			// -
-																			// someone
-																			// other
-																			// than
-																			// the
-																			// student
+	public static final String ACTION_PLAN_TASK = "ACT";
+	public static final String CUSTOM_ACTION_PLAN_TASK = "CUS";
+	public static final String SSP_ACTION_PLAN_TASK = "SSP";
+
+	public String getType() {
+		// action plan tasks created by your advisor - someone other than the
+		// student
+		if (person.getId() != getCreatedBy().getId()) {
+			return SSP_ACTION_PLAN_TASK;
+		} else {
+			return ACTION_PLAN_TASK;
+		}
+	}
 
 	@Column(nullable = false, length = 64000)
 	@Size(max = 64000)

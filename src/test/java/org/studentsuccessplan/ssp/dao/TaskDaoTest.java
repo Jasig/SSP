@@ -14,9 +14,11 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
@@ -77,13 +79,20 @@ public class TaskDaoTest extends AbstractTaskDaoTest<Task> {
 	@Test
 	public void getAllForPersonIdAndChallengeReferralId() {
 		assertList(dao.getAllForPersonIdAndChallengeReferralId(ken.getId(),
-				true, testChallengeReferral.getId()));
+				true, testChallengeReferral.getId(), new SortingAndPaging(
+						ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionIdAndChallengeReferralId() {
 		assertList(dao.getAllForSessionIdAndChallengeReferralId(
-				"test sessionId", true, testChallengeReferral.getId()));
+				"test sessionId", true, testChallengeReferral.getId(),
+				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
+	@Test
+	public void getAllForTaskGroupId() {
+		assertList(dao.getAllForTaskGroupId(UUID.randomUUID(), true,
+				UUID.randomUUID(), null));
+	}
 }
