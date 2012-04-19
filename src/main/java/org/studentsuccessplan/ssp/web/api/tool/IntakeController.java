@@ -9,24 +9,18 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
 import org.studentsuccessplan.ssp.model.reference.Genders;
 import org.studentsuccessplan.ssp.model.reference.States;
 import org.studentsuccessplan.ssp.model.tool.IntakeForm;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
 import org.studentsuccessplan.ssp.service.reference.ChildCareArrangementService;
 import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
@@ -51,11 +45,12 @@ import org.studentsuccessplan.ssp.transferobject.reference.StudentStatusTO;
 import org.studentsuccessplan.ssp.transferobject.reference.VeteranStatusTO;
 import org.studentsuccessplan.ssp.transferobject.tool.IntakeFormTO;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.studentsuccessplan.ssp.web.api.BaseController;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/tool/studentIntake")
-public class IntakeController {
+public class IntakeController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(IntakeController.class);
@@ -172,47 +167,8 @@ public class IntakeController {
 		return refData;
 	}
 
-	/**
-	 * Wraps any Exceptions in a {@link ServiceResponse}
-	 * 
-	 * @param e
-	 *            Exception to handle
-	 * @return Service response with success value, in the JSON format.
-	 */
-	@PreAuthorize("permitAll")
-	@ExceptionHandler(ObjectNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public @ResponseBody
-	ServiceResponse handleNotFound(final ObjectNotFoundException e) {
-		LOGGER.error("IntakeController ObjectNotFoundException: ", e);
-		return new ServiceResponse(false, e.getMessage());
-	}
-
-	@PreAuthorize("permitAll")
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public @ResponseBody
-	ServiceResponse handleValidationError(
-			final MethodArgumentNotValidException e) {
-		LOGGER.error("IntakeController Bad Request: ", e);
-		return new ServiceResponse(false, e);
-	}
-
-	@PreAuthorize("permitAll")
-	@ExceptionHandler(AccessDeniedException.class)
-	@ResponseStatus(HttpStatus.FORBIDDEN)
-	public @ResponseBody
-	ServiceResponse handleAccessDenied(final AccessDeniedException e) {
-		LOGGER.error("IntakeController Access Denied: ", e);
-		return new ServiceResponse(false, e.getMessage());
-	}
-
-	@PreAuthorize("permitAll")
-	@ExceptionHandler(Exception.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public @ResponseBody
-	ServiceResponse handle(final Exception e) {
-		LOGGER.error("IntakeController Internal Server Error: ", e);
-		return new ServiceResponse(false, e.getMessage());
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
 	}
 }

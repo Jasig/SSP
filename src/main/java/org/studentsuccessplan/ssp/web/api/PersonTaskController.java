@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,10 +24,10 @@ import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/person/{personId}/task")
-public class PersonTaskController {
+public class PersonTaskController extends BaseController {
 
-	// private static final Logger LOGGER = LoggerFactory
-	// .getLogger(PersonTaskController.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonTaskController.class);
 
 	@Autowired
 	private transient TaskService service;
@@ -58,4 +60,10 @@ public class PersonTaskController {
 
 		return null;
 	}
+
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
+	}
+
 }
