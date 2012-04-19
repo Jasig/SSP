@@ -31,6 +31,8 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * Return all entities in the database, filtered only by the specified
 	 * parameters.
 	 * 
+	 * @param sAndP
+	 *            Sorting and paging parameters
 	 * @return All entities in the database, filtered only by the specified
 	 *         parameters.
 	 */

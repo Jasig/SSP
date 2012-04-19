@@ -96,16 +96,18 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 	}
 
 	/**
-	 * Retrieves all Challenges that are marked to
-	 * be able to be shown in the Student Intake interface.
+	 * Retrieves all Challenges that are marked to be able to be shown in the
+	 * StudentIntake interface.
 	 * 
+	 * @param sAndP
+	 *            Sorting and paging parameters
 	 * @return List of all Challenges that are marked to be able to be shown in
-	 *         the Student Intake interface.
+	 *         the StudentIntake interface.
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Challenge> getAllInStudentIntake(SortingAndPaging sAndP) {
-		final Criteria query = createCriteria(sAndP)
-				.add(Restrictions.eq("showInStudentIntake", true));
+		final Criteria query = createCriteria(sAndP).add(
+				Restrictions.eq("showInStudentIntake", true));
 		return query.list();
 	}
 }
