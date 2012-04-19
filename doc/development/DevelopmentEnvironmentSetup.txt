@@ -83,7 +83,17 @@ How to set up your development environment:
 			[your Tomcat (Catalina) directory]/conf/[enginename]/[hostname]/
 		Replace the items in brackets as appropriate for your
 		environment. Example: $CATALINA_HOME/conf/[enginename]/[hostname]/
-11. Build & Deploy
+11. Setup MyGPS CoffeeScript compilation tools
+	- Install node.js http://nodejs.org/#download
+	- Download closure https://developers.google.com/closure/compiler/
+	- Once installed (and maybe re-log if your PATH variable isn't updated yet), run
+		npm install -g coffee-script
+	- After changes to any .coffee file
+		- Manually run at the command line/prompt:
+			cd MY_PATH_TO_EXTERNAL_CONFIG_FILES
+			cake build
+	
+12. Build & Deploy
 
 Additional, optional tasks:
 	- To run with SQL Server instead of PostgreSQL:

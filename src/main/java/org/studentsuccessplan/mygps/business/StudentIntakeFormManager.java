@@ -27,8 +27,6 @@ import org.studentsuccessplan.ssp.dao.reference.EducationGoalDao;
 import org.studentsuccessplan.ssp.dao.reference.EducationLevelDao;
 import org.studentsuccessplan.ssp.dao.reference.EthnicityDao;
 import org.studentsuccessplan.ssp.dao.reference.FundingSourceDao;
-import org.studentsuccessplan.ssp.dao.reference.StudentStatusDao;
-import org.studentsuccessplan.ssp.dao.reference.VeteranStatusDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonChallenge;
@@ -53,6 +51,8 @@ import org.studentsuccessplan.ssp.service.PersonConfidentialityDisclosureAgreeme
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
+import org.studentsuccessplan.ssp.service.reference.StudentStatusService;
+import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
 import org.studentsuccessplan.ssp.service.tool.PersonToolService;
 import org.studentsuccessplan.ssp.util.SspStringUtils;
 
@@ -108,10 +108,10 @@ public class StudentIntakeFormManager {
 	private PersonToolService personToolService;
 
 	@Autowired
-	private StudentStatusDao studentStatusDao;
+	private StudentStatusService studentStatusService;
 
 	@Autowired
-	private VeteranStatusDao veteranStatusDao;
+	private VeteranStatusService veteranStatusService;
 
 	@Autowired
 	private SecurityService securityService;
@@ -214,7 +214,7 @@ public class StudentIntakeFormManager {
 			.fromString("42d36849-2095-444c-81a4-6d7a38226a65");
 	private static final UUID SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID = UUID
 			.fromString("5ce514a2-45db-4b8a-b054-26df63420d22");
-	private static final UUID SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID = UUID
+	private static final UUID SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMMODATIONS_ID = UUID
 			.fromString("67bcc088-3fc4-4d0f-aa88-4c34d36acc8b");
 	private static final UUID SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID = UUID
 			.fromString("30def0f2-d89a-47e4-a8f3-61471c570f3b");
@@ -630,7 +630,7 @@ public class StudentIntakeFormManager {
 			// Special Needs or Accommodations
 			formSectionTO
 					.getFormQuestionById(
-							SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID)
+							SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMMODATIONS_ID)
 					.setValueBoolean(
 							student.getEducationPlan().isSpecialNeeds());
 
@@ -1062,8 +1062,10 @@ public class StudentIntakeFormManager {
 				|| shiftQuestion.getValue() == null) {
 			demographics.setShift(null);
 		} else {
-			demographics.setShift(EmploymentShifts.valueOf(shiftQuestion
-					.getValue()));
+			demographics
+					.setShift(EmploymentShifts.getEnumByValue(shiftQuestion
+							.getFormOptionByValue(shiftQuestion.getValue())
+							.getLabel()));
 		}
 
 		// Veteran Status
@@ -1073,8 +1075,9 @@ public class StudentIntakeFormManager {
 		if (veteranStatusQuestion.getValue() == null) {
 			demographics.setVeteranStatus(null);
 		} else {
-			demographics.setVeteranStatus(veteranStatusDao.get(UUID
-					.fromString(veteranStatusQuestion.getValue())));
+			demographics.setVeteranStatus(veteranStatusService
+					.get(veteranStatusQuestion.getFormOptionByValue(
+							veteranStatusQuestion.getValue()).getId()));
 		}
 
 		demographics.setWage(demographicsSection.getFormQuestionById(
@@ -1091,7 +1094,10 @@ public class StudentIntakeFormManager {
 			educationPlan = new PersonEducationPlan();
 		}
 
-		educationPlan.setNewOrientationComplete(SspStringUtils
+		educationPlan.setNewOrientationComplete(educationPlanSection
+				.getFormQuestionById(
+						SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
+				.getValue() == null ? false : SspStringUtils
 				.booleanFromString(educationPlanSection.getFormQuestionById(
 						SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
 						.getValue()));
@@ -1115,14 +1121,17 @@ public class StudentIntakeFormManager {
 							.getValue()));
 		}
 
-		educationPlan.setRegisteredForClasses(SspStringUtils
+		educationPlan.setRegisteredForClasses(educationPlanSection
+				.getFormQuestionById(
+						SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID)
+				.getValue() == null ? false : SspStringUtils
 				.booleanFromString(educationPlanSection.getFormQuestionById(
 						SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID)
 						.getValue()));
 
-		// Require Special Accomodation
+		// Require Special Accommodation
 		FormQuestionTO requireSpecialAccomodationQuestion = educationPlanSection
-				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID);
+				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMMODATIONS_ID);
 
 		if (requireSpecialAccomodationQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE
 				|| requireSpecialAccomodationQuestion.getValue() == null) {
@@ -1141,8 +1150,14 @@ public class StudentIntakeFormManager {
 				|| studentStatusQuestion.getValue() == null) {
 			educationPlan.setStudentStatus(null);
 		} else {
-			educationPlan.setStudentStatus(studentStatusDao.get(UUID
-					.fromString(studentStatusQuestion.getValue())));
+			List<StudentStatus> studentStatuses = studentStatusService.getAll(
+					ObjectStatus.ALL, null, null, null, null);
+			for (StudentStatus ss : studentStatuses) {
+				if (ss.getName().equals(studentStatusQuestion.getValue())) {
+					educationPlan.setStudentStatus(studentStatusService.get(ss
+							.getId()));
+				}
+			}
 		}
 
 		/* Education Level */
@@ -1275,37 +1290,44 @@ public class StudentIntakeFormManager {
 
 		PersonEducationGoal studentEducationGoal = student.getEducationGoal();
 
-		if (studentEducationGoal == null) {
+		if (studentEducationGoal == null
+				&& educationGoalSection.getFormQuestionById(
+						SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID).getValue() != null) {
 			studentEducationGoal = new PersonEducationGoal();
 		}
 
-		studentEducationGoal.setPlannedOccupation(educationGoalSection
-				.getFormQuestionById(
-						SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID)
-				.getValue());
-		studentEducationGoal.setEducationGoal(educationGoalDao.get(UUID
-				.fromString(educationGoalSection.getFormQuestionById(
-						SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID).getValue())));
-		studentEducationGoal.setDescription(educationGoalSection
-				.getFormQuestionById(
-						SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID)
-				.getValue());
+		if (studentEducationGoal != null) {
+			studentEducationGoal.setPlannedOccupation(educationGoalSection
+					.getFormQuestionById(
+							SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID)
+					.getValue());
+			studentEducationGoal
+					.setEducationGoal(educationGoalDao.get(UUID
+							.fromString(educationGoalSection
+									.getFormQuestionById(
+											SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID)
+									.getValue())));
+			studentEducationGoal.setDescription(educationGoalSection
+					.getFormQuestionById(
+							SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID)
+					.getValue());
 
-		studentEducationGoal
-				.setMilitaryBranchDescription(educationGoalSection
-						.getFormQuestionById(
-								SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID)
-						.getValue());
+			studentEducationGoal
+					.setMilitaryBranchDescription(educationGoalSection
+							.getFormQuestionById(
+									SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID)
+							.getValue());
 
-		// :TODO
-		// studentEducationGoal.setOtherDescription(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID).getValue());
+			// :TODO
+			// studentEducationGoal.setOtherDescription(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID).getValue());
 
-		studentEducationGoal.setHowSureAboutMajor(Integer
-				.valueOf(educationGoalSection.getFormQuestionById(
-						SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID)
-						.getValue()));
+			studentEducationGoal.setHowSureAboutMajor(Integer
+					.valueOf(educationGoalSection.getFormQuestionById(
+							SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID)
+							.getValue()));
 
-		studentEducationGoalDao.save(studentEducationGoal);
+			studentEducationGoalDao.save(studentEducationGoal);
+		}
 
 		/* Funding */
 		FormSectionTO fundingSection = formTO
@@ -1810,8 +1832,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO veteranStatusQuestion = new FormQuestionTO();
 		List<FormOptionTO> veteranStatusQuestionOptions = new ArrayList<FormOptionTO>();
 
-		for (VeteranStatus veteranStatus : veteranStatusDao
-				.getAll(ObjectStatus.ACTIVE)) {
+		for (VeteranStatus veteranStatus : veteranStatusService.getAll(
+				ObjectStatus.ACTIVE, null, null, null, null)) {
 			veteranStatusQuestionOptions
 					.add(new FormOptionTO(veteranStatus.getId(), veteranStatus
 							.getName(), veteranStatus.getName()));
@@ -2030,8 +2052,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO studentStatusQuestion = new FormQuestionTO();
 		List<FormOptionTO> studentStatusQuestionOptions = new ArrayList<FormOptionTO>();
 
-		for (StudentStatus studentStatus : studentStatusDao
-				.getAll(ObjectStatus.ACTIVE)) {
+		for (StudentStatus studentStatus : studentStatusService.getAll(
+				ObjectStatus.ACTIVE, null, null, null, null)) {
 			studentStatusQuestionOptions
 					.add(new FormOptionTO(studentStatus.getId(), studentStatus
 							.getName(), studentStatus.getName()));
@@ -2112,7 +2134,7 @@ public class StudentIntakeFormManager {
 				.randomUUID(), "No", "N"));
 
 		specialAccomodationQuestion
-				.setId(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMODATIONS_ID);
+				.setId(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMMODATIONS_ID);
 		specialAccomodationQuestion
 				.setLabel("Special needs or require special accomodation?");
 		specialAccomodationQuestion
