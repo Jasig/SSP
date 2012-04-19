@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.Task;
-import org.studentsuccessplan.ssp.transferobject.reference.TaskGroupTO;
 
 public class TaskTO implements Serializable {
 
@@ -28,8 +27,6 @@ public class TaskTO implements Serializable {
 	private boolean deletable;
 	private UUID challengeId;
 	private UUID challengeReferralId;
-
-	private List<TaskGroupTO> groups;
 
 	/**
 	 * Empty constructor
@@ -165,13 +162,5 @@ public class TaskTO implements Serializable {
 
 	public void setChallengeReferralId(UUID challengeReferralId) {
 		this.challengeReferralId = challengeReferralId;
-	}
-
-	public List<TaskGroupTO> getGroups() {
-		return groups;
-	}
-
-	public void setGroups(List<TaskGroupTO> groups) {
-		this.groups = groups;
 	}
 }
