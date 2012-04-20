@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.studentsuccessplan.ssp.model.reference.EducationGoal;
 
 /**
@@ -30,7 +32,8 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 	private static final long serialVersionUID = -5687416606848336981L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "education_goal_id", nullable = true, insertable = false, updatable = false)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "education_goal_id", nullable = false)
 	private EducationGoal educationGoal;
 
 	@Column(length = 50)
