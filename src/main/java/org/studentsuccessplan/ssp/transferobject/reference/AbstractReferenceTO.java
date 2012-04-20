@@ -7,9 +7,10 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.studentsuccessplan.ssp.model.reference.AbstractReference;
 import org.studentsuccessplan.ssp.transferobject.AuditableTO;
+import org.studentsuccessplan.ssp.transferobject.NamedTO;
 
 public abstract class AbstractReferenceTO<T extends AbstractReference>
-		extends AuditableTO<T> {
+		extends AuditableTO<T> implements NamedTO {
 
 	@NotNull
 	@NotEmpty
@@ -58,10 +59,12 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 	@Override
 	public abstract T asModel();
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(final String name) {
 		this.name = name;
 	}
