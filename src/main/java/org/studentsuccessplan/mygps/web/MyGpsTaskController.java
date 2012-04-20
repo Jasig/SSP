@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.studentsuccessplan.mygps.business.TaskManager;
 import org.studentsuccessplan.mygps.model.transferobject.TaskTO;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.service.TaskService;
 
 @Controller
 @RequestMapping("/mygps/task")
@@ -26,11 +27,18 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 	@Autowired
 	private TaskManager taskManager;
 
+	@Autowired
+	private TaskService taskService;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsTaskController.class);
 
-	protected void setManager(TaskManager taskManager) {
+	public MyGpsTaskController() {
+	}
+
+	public MyGpsTaskController(TaskManager taskManager, TaskService taskService) {
 		this.taskManager = taskManager;
+		this.taskService = taskService;
 	}
 
 	/*
@@ -102,10 +110,11 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public @ResponseBody
-	boolean delete(@RequestParam("taskId") String taskId) throws Exception {
+	boolean delete(@RequestParam("taskId") UUID taskId) throws Exception {
 
 		try {
-			return taskManager.deleteTask(taskId);
+			taskService.delete(taskId);
+			return true;
 		} catch (Exception e) {
 			LOGGER.error("ERROR : delete() : {}", e.getMessage(), e);
 			throw e;
@@ -171,5 +180,10 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 			LOGGER.error("ERROR : print() : {}", e.getMessage(), e);
 			throw e;
 		}
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
 	}
 }

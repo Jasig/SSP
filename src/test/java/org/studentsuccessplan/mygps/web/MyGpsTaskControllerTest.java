@@ -19,11 +19,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studentsuccessplan.mygps.business.TaskManager;
 import org.studentsuccessplan.mygps.model.transferobject.TaskTO;
+import org.studentsuccessplan.ssp.service.TaskService;
 
 public class MyGpsTaskControllerTest {
 
 	private MyGpsTaskController controller;
 	private TaskManager manager;
+	private TaskService service;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsTaskControllerTest.class);
@@ -31,9 +33,9 @@ public class MyGpsTaskControllerTest {
 	@Before
 	public void setup() {
 		manager = createMock(TaskManager.class);
+		service = createMock(TaskService.class);
 
-		controller = new MyGpsTaskController();
-		controller.setManager(manager);
+		controller = new MyGpsTaskController(manager, service);
 	}
 
 	@Ignore
@@ -72,16 +74,16 @@ public class MyGpsTaskControllerTest {
 
 	@Test
 	public void delete() {
-		String taskId = "prefix-taskId-postfix";
+		UUID taskId = UUID.randomUUID();
 
 		try {
-			expect(manager.deleteTask(taskId)).andReturn(false);
+			service.delete(taskId);
 
-			replay(manager);
+			replay(service);
 
 			Boolean response = controller.delete(taskId);
 
-			verify(manager);
+			verify(service);
 			assertFalse(response);
 		} catch (Exception e) {
 			LOGGER.error("controller error", e);
