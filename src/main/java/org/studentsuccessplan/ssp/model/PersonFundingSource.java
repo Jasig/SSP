@@ -79,7 +79,5 @@ public class PersonFundingSource extends Auditable implements Serializable {
 	 */
 	public void overwrite(PersonFundingSource source) {
 		this.setDescription(source.getDescription());
-		this.setPerson(source.getPerson());
-		this.setFundingSource(source.getFundingSource());
 	}
 }

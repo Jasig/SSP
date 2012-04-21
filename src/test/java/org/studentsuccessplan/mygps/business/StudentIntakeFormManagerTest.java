@@ -445,12 +445,13 @@ public class StudentIntakeFormManagerTest {
 				challenge.getChallenge());
 
 		assertTrue(
-				"Challenge did not match.",
+				"Challenge did not match. Was: "
+						+ challenge.getChallenge().getName(),
 				"Social Support (Lack of Support)".equals(challenge
 						.getChallenge().getName())
 						|| "Finances - Education".equals(challenge
 								.getChallenge().getName())
-						|| "Test Challenges".equals(challenge.getChallenge()
+						|| "Test Challenge".equals(challenge.getChallenge()
 								.getName()));
 	}
 
