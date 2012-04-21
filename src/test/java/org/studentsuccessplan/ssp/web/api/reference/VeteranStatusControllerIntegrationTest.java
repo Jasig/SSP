@@ -6,7 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -157,8 +158,8 @@ public class VeteranStatusControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<VeteranStatusTO> list = controller.getAll(ObjectStatus.ACTIVE,
-				null, null, null, null);
+		Collection<VeteranStatusTO> list = controller.getAll(
+				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
@@ -175,16 +176,18 @@ public class VeteranStatusControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerGetAllResults() throws Exception {
-		List<VeteranStatusTO> list = controller.getAll(ObjectStatus.ACTIVE,
-				null, null, null, null);
+		Collection<VeteranStatusTO> list = controller.getAll(
+				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
-		VeteranStatusTO veteranStatus = list.get(0);
+		Iterator<VeteranStatusTO> iter = list.iterator();
+
+		VeteranStatusTO veteranStatus = iter.next();
 		assertEquals("Name should have been " + VETERANSTATUS_NAME,
 				VETERANSTATUS_NAME, veteranStatus.getName());
 		assertTrue("ModifiedBy id should not have been empty.", !veteranStatus
 				.getModifiedById().equals(UUID.randomUUID()));
 
-		veteranStatus = list.get(1);
+		veteranStatus = iter.next();
 		assertTrue("Description should have been longer than 0 characters.",
 				veteranStatus.getDescription().length() > 0);
 		assertTrue("CreatedBy id should not have been empty.", !veteranStatus

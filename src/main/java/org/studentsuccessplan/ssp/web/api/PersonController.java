@@ -21,6 +21,7 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.transferobject.PagingTO;
 import org.studentsuccessplan.ssp.transferobject.PersonTO;
 import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
@@ -33,7 +34,7 @@ import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/person")
-public class PersonController extends RestController<PersonTO> {
+public class PersonController extends RestController<PersonTO, Person> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonController.class);
@@ -41,24 +42,23 @@ public class PersonController extends RestController<PersonTO> {
 	@Autowired
 	private transient PersonService service;
 
-	private static final TransferObjectListFactory<PersonTO, Person> TO_FACTORY =
-			TransferObjectListFactory.newFactory(PersonTO.class);
+	private static final TransferObjectListFactory<PersonTO, Person> TO_FACTORY = TransferObjectListFactory
+			.newFactory(PersonTO.class);
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<PersonTO> getAll(
+	PagingTO<PersonTO, Person> getAll(
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
 
-		return TO_FACTORY.toTOList(
-				service.getAll(
-						SortingAndPaging.createForSingleSort(status, start,
-								limit, sort,
-								sortDirection, null)));
+		List<PersonTO> data = TO_FACTORY.toTOList(service
+				.getAll(SortingAndPaging.createForSingleSort(status, start,
+						limit, sort, sortDirection, null)));
+		return new PagingTO<PersonTO, Person>(true, data);
 	}
 
 	@Override
