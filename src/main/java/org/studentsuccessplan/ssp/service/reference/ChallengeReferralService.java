@@ -8,13 +8,14 @@ import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public interface ChallengeReferralService extends
 		AuditableCrudService<ChallengeReferral> {
 
 	@Override
-	List<ChallengeReferral> getAll(SortingAndPaging sAndP);
+	PagingWrapper<ChallengeReferral> getAll(SortingAndPaging sAndP);
 
 	@Override
 	ChallengeReferral get(UUID id) throws ObjectNotFoundException;

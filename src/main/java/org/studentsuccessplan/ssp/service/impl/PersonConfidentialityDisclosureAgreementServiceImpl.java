@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.service.impl;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -57,12 +58,12 @@ public class PersonConfidentialityDisclosureAgreementServiceImpl implements
 	@Override
 	public ConfidentialityDisclosureAgreement latestAgreement()
 			throws ObjectNotFoundException {
-		List<ConfidentialityDisclosureAgreement> agreements = cdaDao
+		Collection<ConfidentialityDisclosureAgreement> agreements = cdaDao
 				.getAll(SortingAndPaging
 						.createForSingleSort(ObjectStatus.ACTIVE, 0, 1,
-								"modifiedDate", "DESC", null));
+								"modifiedDate", "DESC", null)).getRows();
 		if ((agreements != null) && (!agreements.isEmpty())) {
-			return agreements.get(0);
+			return agreements.iterator().next();
 		} else {
 			throw new ObjectNotFoundException(
 					"Latest Confidentiality Agreement could not be found.");

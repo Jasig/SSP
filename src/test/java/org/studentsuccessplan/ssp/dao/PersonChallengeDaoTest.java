@@ -52,8 +52,9 @@ public class PersonChallengeDaoTest {
 	@Before
 	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
-		testChallenge = challengeService.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE)).get(0);
+		testChallenge = challengeService
+				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()
+				.iterator().next();
 	}
 
 	@Test

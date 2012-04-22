@@ -23,6 +23,7 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideGroupService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public class MyGpsSelfHelpGuideControllerTest {
@@ -49,9 +50,8 @@ public class MyGpsSelfHelpGuideControllerTest {
 	public void getAll() {
 		List<SelfHelpGuide> guides = new ArrayList<SelfHelpGuide>();
 		guides.add(new SelfHelpGuide());
-		expect(
-				selfHelpGuideService.getAll(isA(SortingAndPaging.class)))
-				.andReturn(guides);
+		expect(selfHelpGuideService.getAll(isA(SortingAndPaging.class)))
+				.andReturn(new PagingWrapper<SelfHelpGuide>(guides));
 
 		replay(manager);
 		replay(selfHelpGuideService);

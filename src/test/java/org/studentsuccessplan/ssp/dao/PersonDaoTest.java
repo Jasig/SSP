@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -52,7 +52,7 @@ public class PersonDaoTest {
 
 	@Test
 	public void testGetAll() {
-		List<Person> list = dao.getAll(ObjectStatus.ALL);
+		Collection<Person> list = dao.getAll(ObjectStatus.ALL).getRows();
 		assertNotNull(list);
 		assertTrue("List should have included multiple entities.",
 				list.size() > 1);
@@ -60,10 +60,10 @@ public class PersonDaoTest {
 
 	@Test
 	public void testGetAllWithRowFilter() {
-		List<Person> listAll = dao.getAll(ObjectStatus.ALL);
-		List<Person> listFiltered = dao.getAll(new SortingAndPaging(
-				ObjectStatus.ALL, 1, 2, null,
-				"lastName", SortDirection.ASC));
+		Collection<Person> listAll = dao.getAll(ObjectStatus.ALL).getRows();
+		Collection<Person> listFiltered = dao.getAll(
+				new SortingAndPaging(ObjectStatus.ALL, 1, 2, null, "lastName",
+						SortDirection.ASC)).getRows();
 
 		assertNotNull(listAll);
 		assertTrue("List should have included multiple entities.",
@@ -109,7 +109,7 @@ public class PersonDaoTest {
 		assertEquals("Strengths property did not match.", "strengths",
 				obj.getStrengths());
 
-		List<Person> all = dao.getAll(ObjectStatus.ACTIVE);
+		Collection<Person> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
 		assertNotNull(all);
 		assertFalse(all.isEmpty());
 		assertList(all);
@@ -131,7 +131,7 @@ public class PersonDaoTest {
 				.getId());
 	}
 
-	private void assertList(List<Person> objects) {
+	private void assertList(Collection<Person> objects) {
 		for (Person object : objects) {
 			assertNotNull(object.getId());
 		}

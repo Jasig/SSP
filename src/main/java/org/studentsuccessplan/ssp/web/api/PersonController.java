@@ -55,9 +55,9 @@ public class PersonController extends RestController<PersonTO, Person> {
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
 
-		List<PersonTO> data = TO_FACTORY.toTOList(service
-				.getAll(SortingAndPaging.createForSingleSort(status, start,
-						limit, sort, sortDirection, null)));
+		List<PersonTO> data = TO_FACTORY.toTOList(service.getAll(
+				SortingAndPaging.createForSingleSort(status, start, limit,
+						sort, sortDirection, null)).getRows());
 		return new PagingTO<PersonTO, Person>(true, data);
 	}
 

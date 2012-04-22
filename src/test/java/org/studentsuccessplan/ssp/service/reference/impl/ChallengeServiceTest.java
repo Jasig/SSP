@@ -7,9 +7,9 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +19,7 @@ import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public class ChallengeServiceTest {
@@ -39,14 +40,14 @@ public class ChallengeServiceTest {
 		List<Challenge> daoAll = new ArrayList<Challenge>();
 		daoAll.add(new Challenge());
 
-		expect(dao.getAll(isA(SortingAndPaging.class)))
-				.andReturn(daoAll);
+		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
+				new PagingWrapper<Challenge>(daoAll));
 
 		replay(dao);
 
-		List<Challenge> all = service.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE));
-		assertTrue(all.size() > 0);
+		Collection<Challenge> all = service.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
+		assertFalse(all.isEmpty());
 		verify(dao);
 	}
 

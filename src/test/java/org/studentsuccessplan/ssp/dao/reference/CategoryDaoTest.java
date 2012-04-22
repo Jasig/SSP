@@ -1,10 +1,10 @@
 package org.studentsuccessplan.ssp.dao.reference;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -17,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.reference.Category;
@@ -62,9 +61,9 @@ public class CategoryDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		List<Category> all = dao.getAll(ObjectStatus.ACTIVE);
+		Collection<Category> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
 		assertNotNull(all);
-		assertTrue(!all.isEmpty());
+		assertFalse(all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);
@@ -78,7 +77,7 @@ public class CategoryDaoTest {
 		assertNull(category);
 	}
 
-	private void assertList(List<Category> objects) {
+	private void assertList(Collection<Category> objects) {
 		for (Category object : objects) {
 			assertNotNull(object.getId());
 		}

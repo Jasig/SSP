@@ -1,11 +1,9 @@
 package org.studentsuccessplan.ssp.service.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.studentsuccessplan.ssp.dao.PersonDemographicsDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
@@ -17,6 +15,7 @@ import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
 import org.studentsuccessplan.ssp.service.reference.EthnicityService;
 import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
 import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -41,7 +40,7 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 	private VeteranStatusService veteranStatusService;
 
 	@Override
-	public List<PersonDemographics> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<PersonDemographics> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 

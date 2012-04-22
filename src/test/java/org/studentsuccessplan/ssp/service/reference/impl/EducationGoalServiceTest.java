@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import org.studentsuccessplan.ssp.dao.reference.EducationGoalDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.EducationGoal;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public class EducationGoalServiceTest {
@@ -39,13 +41,13 @@ public class EducationGoalServiceTest {
 		List<EducationGoal> daoAll = new ArrayList<EducationGoal>();
 		daoAll.add(new EducationGoal());
 
-		expect(dao.getAll(isA(SortingAndPaging.class)))
-				.andReturn(daoAll);
+		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
+				new PagingWrapper<EducationGoal>(daoAll));
 
 		replay(dao);
 
-		List<EducationGoal> all = service.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE));
+		Collection<EducationGoal> all = service.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

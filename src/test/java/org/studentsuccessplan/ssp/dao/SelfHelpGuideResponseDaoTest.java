@@ -65,14 +65,16 @@ public class SelfHelpGuideResponseDaoTest {
 
 	@Test
 	public void testGetAll() {
-		assertList(dao.getAll(ObjectStatus.ALL));
+		assertList((List<SelfHelpGuideResponse>) dao.getAll(ObjectStatus.ALL)
+				.getRows());
 	}
 
 	@Test
 	public void testSaveNew() {
 		UUID saved;
 
-		Person person = personDao.getAll(ObjectStatus.ACTIVE).get(0);
+		Person person = personDao.getAll(ObjectStatus.ACTIVE).getRows()
+				.iterator().next();
 		assertNotNull(
 				"Needed random Person to use for testing, but none was found in the database.",
 				person.getId());
@@ -94,7 +96,8 @@ public class SelfHelpGuideResponseDaoTest {
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
 
-		List<SelfHelpGuideResponse> all = dao.getAll(ObjectStatus.ACTIVE);
+		List<SelfHelpGuideResponse> all = (List<SelfHelpGuideResponse>) dao
+				.getAll(ObjectStatus.ACTIVE).getRows();
 		assertNotNull(all);
 		assertFalse(all.isEmpty());
 		assertList(all);

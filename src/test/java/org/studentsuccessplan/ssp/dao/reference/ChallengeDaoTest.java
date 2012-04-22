@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,7 +79,8 @@ public class ChallengeDaoTest {
 				CONFIDENTIALITYLEVEL_NAME, obj.getConfidentialityLevel()
 						.getName());
 
-		final List<Challenge> all = dao.getAll(ObjectStatus.ACTIVE);
+		final Collection<Challenge> all = dao.getAll(ObjectStatus.ACTIVE)
+				.getRows();
 		assertNotNull(all);
 		assertFalse(all.isEmpty());
 		assertList(all);
@@ -94,7 +96,7 @@ public class ChallengeDaoTest {
 		assertNull(challenge);
 	}
 
-	private void assertList(final List<Challenge> objects) {
+	private void assertList(final Collection<Challenge> objects) {
 		for (Challenge object : objects) {
 			assertNotNull(object.getId());
 		}

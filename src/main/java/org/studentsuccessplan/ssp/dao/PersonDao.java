@@ -1,13 +1,13 @@
 package org.studentsuccessplan.ssp.dao;
 
-import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortDirection;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
@@ -37,22 +37,26 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 *         parameters.
 	 */
 	@Override
-	public List<Person> getAll(ObjectStatus status) {
+	public PagingWrapper<Person> getAll(ObjectStatus status) {
 		return getAll(new SortingAndPaging(status));
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Person> getAll(final SortingAndPaging sAndP) {
+	public PagingWrapper<Person> getAll(final SortingAndPaging sAndP) {
 
 		if (!sAndP.isSorted()) {
 			sAndP.appendSortField("lastName", SortDirection.ASC);
 			sAndP.appendSortField("firstName", SortDirection.ASC);
 		}
 
-		Criteria criteria = createCriteria(sAndP);
+		Criteria criteria = createCriteria();
+		long totalRows = (Long) criteria.setProjection(Projections.rowCount())
+				.uniqueResult();
 
-		return criteria.list();
+		criteria = createCriteria(sAndP);
+
+		return new PagingWrapper<Person>(totalRows, criteria.list());
 	}
 
 	public Person fromUsername(String username) {

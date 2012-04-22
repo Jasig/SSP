@@ -1,10 +1,10 @@
 package org.studentsuccessplan.ssp.dao.reference;
 
-import java.util.List;
-
+import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
 import org.studentsuccessplan.ssp.dao.AbstractAuditableCrudDao;
 import org.studentsuccessplan.ssp.model.Auditable;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
@@ -31,7 +31,10 @@ public abstract class ReferenceAuditableCrudDao<T extends Auditable> extends
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<T> getAll(final SortingAndPaging sAndP) {
-		return createCriteria(sAndP).list();
+	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
+		long totalRows = (Long) createCriteria().setProjection(
+				Projections.rowCount()).uniqueResult();
+
+		return new PagingWrapper<T>(totalRows, createCriteria(sAndP).list());
 	}
 }

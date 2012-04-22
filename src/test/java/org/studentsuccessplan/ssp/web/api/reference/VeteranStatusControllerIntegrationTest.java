@@ -20,8 +20,10 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.studentsuccessplan.ssp.transferobject.PagingTO;
 import org.studentsuccessplan.ssp.transferobject.reference.VeteranStatusTO;
 import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
@@ -176,8 +178,17 @@ public class VeteranStatusControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerGetAllResults() throws Exception {
-		Collection<VeteranStatusTO> list = controller.getAll(
-				ObjectStatus.ACTIVE, null, null, null, null).getRows();
+		final PagingTO<VeteranStatusTO, VeteranStatus> results = controller
+				.getAll(ObjectStatus.ACTIVE, 0, 4, null, null);
+
+		final Collection<VeteranStatusTO> list = results.getRows();
+
+		assertNotNull("The list should not have been null.", list);
+		assertFalse("There should have been some results.", list.isEmpty());
+		assertTrue("Returned results (" + list.size()
+				+ ") should have been fewer than the maximum available ("
+				+ results.getResults() + ") in the database.",
+				results.getResults() > list.size());
 
 		Iterator<VeteranStatusTO> iter = list.iterator();
 

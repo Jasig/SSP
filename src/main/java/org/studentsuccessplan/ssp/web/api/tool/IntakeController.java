@@ -1,6 +1,7 @@
 package org.studentsuccessplan.ssp.web.api.tool;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -17,9 +18,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
+import org.studentsuccessplan.ssp.model.reference.Citizenship;
+import org.studentsuccessplan.ssp.model.reference.EducationGoal;
+import org.studentsuccessplan.ssp.model.reference.EducationLevel;
 import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
+import org.studentsuccessplan.ssp.model.reference.Ethnicity;
+import org.studentsuccessplan.ssp.model.reference.FundingSource;
 import org.studentsuccessplan.ssp.model.reference.Genders;
+import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
 import org.studentsuccessplan.ssp.model.reference.States;
+import org.studentsuccessplan.ssp.model.reference.StudentStatus;
+import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 import org.studentsuccessplan.ssp.model.tool.IntakeForm;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
 import org.studentsuccessplan.ssp.service.reference.ChildCareArrangementService;
@@ -138,27 +149,38 @@ public class IntakeController extends BaseController {
 		final Map<String, Object> refData = new HashMap<String, Object>();
 
 		SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
-		refData.put("challenges", ChallengeTO.listToTOList(challengeService
-				.getAll(sAndP)));
-		refData.put("childCareArrangements", ChildCareArrangementTO
-				.listToTOList(childCareArrangementService.getAll(
-						sAndP)));
+		refData.put("challenges", ChallengeTO
+				.listToTOList((List<Challenge>) challengeService.getAll(sAndP)
+						.getRows()));
+		refData.put(
+				"childCareArrangements",
+				ChildCareArrangementTO
+						.listToTOList((List<ChildCareArrangement>) childCareArrangementService
+								.getAll(sAndP).getRows()));
 		refData.put("citizenships", CitizenshipTO
-				.listToTOList(citizenshipService.getAll(sAndP)));
+				.listToTOList((List<Citizenship>) citizenshipService.getAll(
+						sAndP).getRows()));
 		refData.put("educationGoals", EducationGoalTO
-				.listToTOList(educationGoalService.getAll(sAndP)));
+				.listToTOList((List<EducationGoal>) educationGoalService
+						.getAll(sAndP).getRows()));
 		refData.put("educationLevels", EducationLevelTO
-				.listToTOList(educationLevelService.getAll(sAndP)));
-		refData.put("ethnicities", EthnicityTO.listToTOList(ethnicityService
-				.getAll(sAndP)));
+				.listToTOList((List<EducationLevel>) educationLevelService
+						.getAll(sAndP).getRows()));
+		refData.put("ethnicities", EthnicityTO
+				.listToTOList((List<Ethnicity>) ethnicityService.getAll(sAndP)
+						.getRows()));
 		refData.put("fundingSources", FundingSourceTO
-				.listToTOList(fundingSourceService.getAll(sAndP)));
+				.listToTOList((List<FundingSource>) fundingSourceService
+						.getAll(sAndP).getRows()));
 		refData.put("maritalStatuses", MaritalStatusTO
-				.listToTOList(maritalStatusService.getAll(sAndP)));
+				.listToTOList((List<MaritalStatus>) maritalStatusService
+						.getAll(sAndP).getRows()));
 		refData.put("studentStatuses", StudentStatusTO
-				.listToTOList(studentStatusService.getAll(sAndP)));
+				.listToTOList((List<StudentStatus>) studentStatusService
+						.getAll(sAndP).getRows()));
 		refData.put("veteranStatuses", VeteranStatusTO
-				.listToTOList(veteranStatusService.getAll(sAndP)));
+				.listToTOList((List<VeteranStatus>) veteranStatusService
+						.getAll(sAndP).getRows()));
 
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());

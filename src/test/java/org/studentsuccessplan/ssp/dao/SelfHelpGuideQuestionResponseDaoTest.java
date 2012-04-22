@@ -12,7 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
 
@@ -38,6 +37,7 @@ public class SelfHelpGuideQuestionResponseDaoTest {
 	}
 
 	public void testGetAll() {
-		assertList(dao.getAll(ObjectStatus.ALL));
+		assertList((List<SelfHelpGuideQuestionResponse>) dao.getAll(
+				ObjectStatus.ALL).getRows());
 	}
 }

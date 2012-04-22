@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideGroupService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
@@ -53,8 +54,10 @@ public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 	List<SelfHelpGuideTO> getAll() throws Exception {
 
 		try {
-			return SelfHelpGuideTO.listToTOList(selfHelpGuideService.getAll(
-					new SortingAndPaging(ObjectStatus.ACTIVE)));
+			return SelfHelpGuideTO
+					.listToTOList((List<SelfHelpGuide>) selfHelpGuideService
+							.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
+							.getRows());
 		} catch (Exception e) {
 			LOGGER.error("ERROR : getAll() : {}", e.getMessage(), e);
 			throw e;

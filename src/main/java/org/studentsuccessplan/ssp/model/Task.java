@@ -66,7 +66,7 @@ public class Task extends Auditable implements Serializable {
 	private ChallengeReferral challengeReferral;
 
 	/**
-	 * Constructor that only calls {@link AbstractTask#AbstractTask()}.
+	 * Constructor that only calls {@link Auditable#Auditable()}.
 	 */
 	public Task() {
 		super();

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -17,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.reference.ChallengeCategory;
@@ -62,7 +61,8 @@ public class ChallengeCategoryDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		List<ChallengeCategory> all = dao.getAll(ObjectStatus.ACTIVE);
+		Collection<ChallengeCategory> all = dao.getAll(ObjectStatus.ACTIVE)
+				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
 		assertList(all);
@@ -78,7 +78,7 @@ public class ChallengeCategoryDaoTest {
 		assertNull(challengeCategory);
 	}
 
-	private void assertList(List<ChallengeCategory> objects) {
+	private void assertList(Collection<ChallengeCategory> objects) {
 		for (ChallengeCategory object : objects) {
 			assertNotNull(object.getId());
 		}

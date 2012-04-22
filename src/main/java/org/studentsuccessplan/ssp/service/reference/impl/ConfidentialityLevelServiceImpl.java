@@ -1,6 +1,5 @@
 package org.studentsuccessplan.ssp.service.reference.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.ConfidentialityLevelService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -22,7 +22,7 @@ public class ConfidentialityLevelServiceImpl implements
 	private ConfidentialityLevelDao dao;
 
 	@Override
-	public List<ConfidentialityLevel> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<ConfidentialityLevel> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 

@@ -1,7 +1,6 @@
 package org.studentsuccessplan.ssp.service.impl;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,6 +26,7 @@ import org.studentsuccessplan.ssp.service.reference.FundingSourceService;
 import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
 import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
 import org.studentsuccessplan.ssp.service.tool.IntakeService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -58,7 +58,7 @@ public class PersonServiceImpl implements PersonService {
 	private FundingSourceService fundingSourceService;
 
 	@Override
-	public List<Person> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<Person> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
@@ -267,8 +267,7 @@ public class PersonServiceImpl implements PersonService {
 				// too? Or will Hibernate automatic orphan control catch it?
 				target.setEducationPlan(null);
 			} else {
-				target.getEducationPlan().overwrite(
-						source.getEducationPlan());
+				target.getEducationPlan().overwrite(source.getEducationPlan());
 			}
 		}
 
