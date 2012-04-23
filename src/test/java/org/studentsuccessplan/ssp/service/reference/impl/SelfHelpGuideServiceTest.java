@@ -22,14 +22,19 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
+/**
+ * Self-Help Guide service tests
+ */
 public class SelfHelpGuideServiceTest {
 
-	private SelfHelpGuideServiceImpl service;
-	private SelfHelpGuideDao dao;
-	private SecurityService securityService;
+	private transient SelfHelpGuideServiceImpl service;
+
+	private transient SelfHelpGuideDao dao;
+
+	private transient SecurityService securityService;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		dao = createMock(SelfHelpGuideDao.class);
 		securityService = createMock(SecurityService.class);
 		service = new SelfHelpGuideServiceImpl(dao, securityService);
@@ -41,8 +46,7 @@ public class SelfHelpGuideServiceTest {
 		daoAll.add(new SelfHelpGuide());
 
 		expect(securityService.isAuthenticated()).andReturn(false);
-		expect(dao.findAllActiveForUnauthenticated())
-				.andReturn(daoAll);
+		expect(dao.findAllActiveForUnauthenticated()).andReturn(daoAll);
 
 		replay(dao);
 		replay(securityService);
@@ -60,8 +64,7 @@ public class SelfHelpGuideServiceTest {
 		daoAll.add(new SelfHelpGuide());
 
 		expect(securityService.isAuthenticated()).andReturn(true);
-		expect(dao.getAll(isA(SortingAndPaging.class)))
-				.andReturn(daoAll);
+		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(daoAll);
 
 		replay(dao);
 		replay(securityService);
