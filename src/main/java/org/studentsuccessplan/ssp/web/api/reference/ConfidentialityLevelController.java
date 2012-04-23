@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.ConfidentialityLevelT
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/confidentialityLevel")
+@RequestMapping("/1/reference/confidentialityLevel")
 public class ConfidentialityLevelController
 		extends
 		AbstractAuditableReferenceController<ConfidentialityLevel, ConfidentialityLevelTO> {

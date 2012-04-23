@@ -20,7 +20,7 @@ import org.studentsuccessplan.mygps.model.transferobject.TaskTO;
 import org.studentsuccessplan.ssp.model.Person;
 
 @Controller
-@RequestMapping("/mygps/task")
+@RequestMapping("/1/mygps/task")
 public class MyGpsTaskController extends AbstractMyGpsController {
 
 	@Autowired
@@ -157,8 +157,7 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 			Map<String, Object> model = new HashMap<String, Object>();
 
 			if (securityService.isAuthenticated()) {
-				Person student = securityService.currentUser()
-						.getPerson();
+				Person student = securityService.currentUser().getPerson();
 				model.put("studentName",
 						student.getFirstName() + " " + student.getLastName());
 			} else {

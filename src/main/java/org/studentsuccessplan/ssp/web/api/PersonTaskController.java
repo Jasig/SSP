@@ -21,9 +21,14 @@ import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.TaskService;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
+/**
+ * Services to manipulate Tasks.
+ * <p>
+ * Mapped to URI path <code>/1/person/{personId}/task</code>
+ */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/person/{personId}/task")
+@RequestMapping("/1/person/{personId}/task")
 public class PersonTaskController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory

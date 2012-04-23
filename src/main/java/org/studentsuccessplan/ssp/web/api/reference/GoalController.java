@@ -13,9 +13,8 @@ import org.studentsuccessplan.ssp.transferobject.reference.GoalTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/goal")
-public class GoalController
-		extends
+@RequestMapping("/1/reference/goal")
+public class GoalController extends
 		AbstractAuditableReferenceController<Goal, GoalTO> {
 
 	@Autowired

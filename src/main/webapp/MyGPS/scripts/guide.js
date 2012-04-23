@@ -3,15 +3,15 @@
 
   context = window.context || (window.context = {});
 
-  context.sessionService || (context.sessionService = new mygps.service.SessionService("../api/session"));
+  context.sessionService || (context.sessionService = new mygps.service.SessionService("../api/1/session"));
 
-  context.taskService || (context.taskService = new mygps.service.TaskService("../api/mygps/task"));
+  context.taskService || (context.taskService = new mygps.service.TaskService("../api/1/mygps/task"));
 
-  context.selfHelpGuideService || (context.selfHelpGuideService = new mygps.service.SelfHelpGuideService("../api/mygps/selfhelpguide"));
+  context.selfHelpGuideService || (context.selfHelpGuideService = new mygps.service.SelfHelpGuideService("../api/1/mygps/selfhelpguide"));
 
-  context.selfHelpGuideResponseService || (context.selfHelpGuideResponseService = new mygps.service.SelfHelpGuideResponseService("../api/mygps/selfhelpguideresponse"));
+  context.selfHelpGuideResponseService || (context.selfHelpGuideResponseService = new mygps.service.SelfHelpGuideResponseService("../api/1/mygps/selfhelpguideresponse"));
 
-  context.challengeReferralService || (context.challengeReferralService = new mygps.service.ChallengeReferralService("../api/mygps/challengereferral"));
+  context.challengeReferralService || (context.challengeReferralService = new mygps.service.ChallengeReferralService("../api/1/mygps/challengereferral"));
 
   context.session || (context.session = new mygps.session.Session(context.sessionService));
 
