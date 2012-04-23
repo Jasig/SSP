@@ -1,17 +1,21 @@
-namespace 'mygps.viewmodel'
+(($) ->
 
-	HomeViewModel:
-		
-		class HomeViewModel extends mygps.viewmodel.AbstractTasksViewModel
+	namespace 'mygps.viewmodel'
+	
+		HomeViewModel:
 			
-			constructor: ( session, taskService ) ->
-				super( session, taskService )
+			class HomeViewModel extends mygps.viewmodel.AbstractTasksViewModel
 				
-				@canContactCoach = ko.dependentObservable( @evaluateCanContactCoach, this )
-				
-			load: () ->
-				super()
-				return
-				
-			evaluateCanContactCoach: () ->
-				return @session?.authenticatedPerson()?.coach()?;
+				constructor: ( session, taskService ) ->
+					super( session, taskService )
+					
+					@canContactCoach = ko.dependentObservable( @evaluateCanContactCoach, this )
+					
+				load: () ->
+					super()
+					return
+					
+				evaluateCanContactCoach: () ->
+					return @session?.authenticatedPerson()?.coach()?;
+
+)(jQuery);

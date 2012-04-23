@@ -1,23 +1,27 @@
-namespace 'mygps.viewmodel'
+(($) ->
 
-	AbstractSessionViewModel:
-		
-		class AbstractSessionViewModel
+	namespace 'mygps.viewmodel'
+	
+		AbstractSessionViewModel:
 			
-			constructor: ( session ) ->
-				@session = session
+			class AbstractSessionViewModel
 				
-				@authenticated = ko.dependentObservable( @evaluateAuthenticated, this )
-				@authenticatedPersonName = ko.dependentObservable( @authenticatedPersonName, this )
+				constructor: ( session ) ->
+					@session = session
+					
+					@authenticated = ko.dependentObservable( @evaluateAuthenticated, this )
+					@authenticatedPersonName = ko.dependentObservable( @authenticatedPersonName, this )
+					
+				load: () ->
+					return
+					
+				evaluateAuthenticated: () ->
+					return @session?.authenticatedPerson()?;
 				
-			load: () ->
-				return
-				
-			evaluateAuthenticated: () ->
-				return @session?.authenticatedPerson()?;
-			
-			authenticatedPersonName: () ->
-				person = @session?.authenticatedPerson()
-				if person?
-					return "#{ person.firstName() } #{ person.lastName() }"
-				return null
+				authenticatedPersonName: () ->
+					person = @session?.authenticatedPerson()
+					if person?
+						return "#{ person.firstName() } #{ person.lastName() }"
+					return null
+
+)(jQuery);

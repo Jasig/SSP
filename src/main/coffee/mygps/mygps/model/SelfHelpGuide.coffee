@@ -1,13 +1,17 @@
-namespace 'mygps.model'
+(($) ->
 
-	SelfHelpGuide:
+	namespace 'mygps.model'
 	
-		class SelfHelpGuide
+		SelfHelpGuide:
 		
-			constructor: ( id, name, description ) ->
-				@id = ko.observable( id )
-				@name = ko.observable( name )
-				@description = ko.observable( description )
-				
-			@createFromTransferObject: ( selfHelpGuideTO ) ->
-				return new SelfHelpGuide( selfHelpGuideTO.id, selfHelpGuideTO.name, selfHelpGuideTO.description )
+			class SelfHelpGuide
+			
+				constructor: ( id, name, description ) ->
+					@id = ko.observable( id )
+					@name = ko.observable( name )
+					@description = ko.observable( description )
+					
+				@createFromTransferObject: ( selfHelpGuideTO ) ->
+					return new SelfHelpGuide( selfHelpGuideTO.id, selfHelpGuideTO.name, selfHelpGuideTO.description )
+
+)(jQuery);

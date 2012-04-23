@@ -1,20 +1,24 @@
-namespace 'mygps.model'
+(($) ->
 
-	FormOption:
+	namespace 'mygps.model'
 	
-		class FormOption
+		FormOption:
 		
-			constructor: ( id, label, value ) ->
-				@id = ko.observable( id )
-				@label = ko.observable( label )
-				@value = ko.observable( value )
-				
-			@createFromTransferObject: ( formOptionTO ) ->
-				return new FormOption( formOptionTO.id, formOptionTO.label, formOptionTO.value )
+			class FormOption
 			
-			@toTransferObject: ( formOption ) ->
-				formOptionTO =
-					id: formOption.id()
-					label: formOption.label()
-					value: formOption.value()
-				return formOptionTO
+				constructor: ( id, label, value ) ->
+					@id = ko.observable( id )
+					@label = ko.observable( label )
+					@value = ko.observable( value )
+					
+				@createFromTransferObject: ( formOptionTO ) ->
+					return new FormOption( formOptionTO.id, formOptionTO.label, formOptionTO.value )
+				
+				@toTransferObject: ( formOption ) ->
+					formOptionTO =
+						id: formOption.id()
+						label: formOption.label()
+						value: formOption.value()
+					return formOptionTO
+
+)(jQuery);

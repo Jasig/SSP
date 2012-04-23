@@ -1,11 +1,15 @@
-namespace 'mygps.service'
+(($) ->
 
-	AbstractService:
+	namespace 'mygps.service'
 	
-		class AbstractService
-			
-			constructor: ( baseURL ) ->
-				@baseURL = baseURL
+		AbstractService:
+		
+			class AbstractService
 				
-			createURL: ( value ) ->
-				return "#{ @baseURL ? '' }#{ value }"
+				constructor: ( baseURL ) ->
+					@baseURL = baseURL
+					
+				createURL: ( value ) ->
+					return '/ssp/MyGPS/' + "#{ @baseURL ? '' }#{ value }"
+
+)(jQuery);
