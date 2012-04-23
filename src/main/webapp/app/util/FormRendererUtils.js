@@ -44,7 +44,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
         return cleaner.prepareTemplateData(  applicationFormsStore );  	
     },    
     
-    createCheckBoxForm: function( formId, itemsArr, selectedItemsArr, idFieldName ){
+    createCheckBoxForm: function( formId, itemsArr, selectedItemsArr, idFieldName, selectedIdFieldName ){
     	var form = Ext.getCmp(formId);
 		var items = itemsArr;
 		var selectedItems = selectedItemsArr;
@@ -63,8 +63,8 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			{
 				for (var s=0; s<selectedItems.length; s++)
 				{
-					id = selectedItems[s][idFieldName];
-					if (id===item[idFieldName])
+					selectedId = selectedItems[s][selectedIdFieldName];
+					if (selectedId===item[idFieldName])
 					{
 						cb.checked = true;
 						break;
