@@ -267,15 +267,32 @@
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
-		<dropTable tableName="custom_task"/>
-		<dropNotNullConstraint tableName="task" columnName="challenge_id"/>
-		<dropNotNullConstraint tableName="task" columnName="challenge_referral_id"/>
+		<dropTable tableName="custom_task" />
+		<dropNotNullConstraint tableName="task"
+			columnName="challenge_id" />
+		<dropNotNullConstraint tableName="task"
+			columnName="challenge_referral_id" />
 		<rollback>
 			<dropColumn tableName="task" columnName="name" />
-			<!-- Could Add table custom_task here-->
-			<addNotNullConstraint tableName="task" columnName="challenge_id"/>
-			<addNotNullConstraint tableName="task" columnName="challenge_referral_id"/>
-			
+			<!-- Could Add table custom_task here -->
+			<addNotNullConstraint tableName="task"
+				columnName="challenge_id" />
+			<addNotNullConstraint tableName="task"
+				columnName="challenge_referral_id" />
+
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Add confidentiality_level to task" author="jon.adams">
+		<addColumn tableName="task">
+			<column name="confidentiality_level_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="task_confidentiality_level_id_confidentiality_level_id"
+					references="confidentiality_level(id)" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="task" columnName="confidentiality_level_id" />
 		</rollback>
 	</changeSet>
 

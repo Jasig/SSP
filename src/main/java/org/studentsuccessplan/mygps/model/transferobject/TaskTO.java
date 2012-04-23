@@ -7,26 +7,41 @@ import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.Task;
+import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 
 public class TaskTO implements Serializable {
 
 	private static final long serialVersionUID = 5796302591576434925L;
 
 	public static final String TASKTO_ID_PREFIX_DELIMITER = ":";
+
 	public static final String TASKTO_ID_PREFIX_ACTION_PLAN_TASK = Task.ACTION_PLAN_TASK;
+
 	public static final String TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK = Task.CUSTOM_ACTION_PLAN_TASK;
+
 	public static final String TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK = Task.SSP_ACTION_PLAN_TASK;
 
 	private String id;
+
 	private String type;
+
 	private String name;
+
 	private String description;
+
 	private String details;
+
 	private Date dueDate;
+
 	private boolean completed;
+
 	private boolean deletable;
+
 	private UUID challengeId;
+
 	private UUID challengeReferralId;
+
+	private ConfidentialityLevel confidentialityLevel = null;
 
 	/**
 	 * Empty constructor
@@ -34,21 +49,21 @@ public class TaskTO implements Serializable {
 	public TaskTO() {
 	}
 
-	public TaskTO(Task task) {
-		setChallengeId(task.getChallenge().getId());
-		setChallengeReferralId(task.getChallengeReferral().getId());
-		setCompleted((task.getCompletedDate() != null) ? true : false);
-		setDeletable(true);
-		setDueDate(task.getDueDate());
+	public TaskTO(final Task task) {
+		challengeId = task.getChallenge().getId();
+		challengeReferralId = task.getChallengeReferral().getId();
+		completed = (task.getCompletedDate() == null) ? false : true;
+		deletable = true;
+		dueDate = task.getDueDate();
 
-		if (task.getChallengeReferral() != null) {
-			setName(task.getChallengeReferral().getName());
-			setDetails(task.getChallengeReferral().getPublicDescription());
-			setDescription(task.getChallengeReferral().getPublicDescription());
+		if (task.getChallengeReferral() == null) {
+			name = task.getName();
+			details = task.getDescription();
+			description = task.getDescription();
 		} else {
-			setName(task.getName());
-			setDetails(task.getDescription());
-			setDescription(task.getDescription());
+			name = task.getChallengeReferral().getName();
+			details = task.getChallengeReferral().getPublicDescription();
+			description = task.getChallengeReferral().getPublicDescription();
 		}
 
 		if (description != null) {
@@ -56,24 +71,24 @@ public class TaskTO implements Serializable {
 		}
 
 		if (task.getType().equals(Task.ACTION_PLAN_TASK)) {
-			setId(TASKTO_ID_PREFIX_ACTION_PLAN_TASK
-					+ TASKTO_ID_PREFIX_DELIMITER
-					+ task.getId());
+			id = TASKTO_ID_PREFIX_ACTION_PLAN_TASK + TASKTO_ID_PREFIX_DELIMITER
+					+ task.getId();
 		} else if (task.getType().equals(Task.SSP_ACTION_PLAN_TASK)) {
-			setId(TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK
-					+ TASKTO_ID_PREFIX_DELIMITER + task.getId());
+			id = TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK
+					+ TASKTO_ID_PREFIX_DELIMITER + task.getId();
 		} else if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
-			setId(TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK
-					+ TASKTO_ID_PREFIX_DELIMITER + task.getId());
+			id = TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK
+					+ TASKTO_ID_PREFIX_DELIMITER + task.getId();
 		} else {
 			throw new IllegalArgumentException("Invalid Task type");
 		}
 
-		setType(task.getType());
+		type = task.getType();
+		confidentialityLevel = task.getConfidentialityLevel();
 	}
 
-	public static List<TaskTO> tasksToTaskTOs(List<Task> tasks) {
-		List<TaskTO> taskTOs = new ArrayList<TaskTO>();
+	public static List<TaskTO> tasksToTaskTOs(final List<Task> tasks) {
+		final List<TaskTO> taskTOs = new ArrayList<TaskTO>();
 
 		if ((tasks != null) && !tasks.isEmpty()) {
 			for (Task task : tasks) {
@@ -88,7 +103,7 @@ public class TaskTO implements Serializable {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -96,7 +111,7 @@ public class TaskTO implements Serializable {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -104,7 +119,7 @@ public class TaskTO implements Serializable {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -112,7 +127,7 @@ public class TaskTO implements Serializable {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -120,7 +135,7 @@ public class TaskTO implements Serializable {
 		return details;
 	}
 
-	public void setDetails(String details) {
+	public void setDetails(final String details) {
 		this.details = details;
 	}
 
@@ -128,7 +143,7 @@ public class TaskTO implements Serializable {
 		return dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(final Date dueDate) {
 		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
@@ -136,7 +151,7 @@ public class TaskTO implements Serializable {
 		return completed;
 	}
 
-	public void setCompleted(boolean completed) {
+	public void setCompleted(final boolean completed) {
 		this.completed = completed;
 	}
 
@@ -144,7 +159,7 @@ public class TaskTO implements Serializable {
 		return deletable;
 	}
 
-	public void setDeletable(boolean deletable) {
+	public void setDeletable(final boolean deletable) {
 		this.deletable = deletable;
 	}
 
@@ -152,7 +167,7 @@ public class TaskTO implements Serializable {
 		return challengeId;
 	}
 
-	public void setChallengeId(UUID challengeId) {
+	public void setChallengeId(final UUID challengeId) {
 		this.challengeId = challengeId;
 	}
 
@@ -160,7 +175,23 @@ public class TaskTO implements Serializable {
 		return challengeReferralId;
 	}
 
-	public void setChallengeReferralId(UUID challengeReferralId) {
+	public void setChallengeReferralId(final UUID challengeReferralId) {
 		this.challengeReferralId = challengeReferralId;
+	}
+
+	/**
+	 * @return the confidentialityLevel
+	 */
+	public ConfidentialityLevel getConfidentialityLevel() {
+		return confidentialityLevel;
+	}
+
+	/**
+	 * @param confidentialityLevel
+	 *            the confidentialityLevel to set
+	 */
+	public void setConfidentialityLevel(
+			final ConfidentialityLevel confidentialityLevel) {
+		this.confidentialityLevel = confidentialityLevel;
 	}
 }

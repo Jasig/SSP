@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.studentsuccessplan.ssp.dao.TaskDao;
+import org.studentsuccessplan.ssp.dao.reference.ConfidentialityLevelDao;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
@@ -19,12 +20,14 @@ import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import com.google.common.collect.Maps;
 
 @Service
-public class TaskServiceImpl
-		extends AbstractAuditableCrudService<Task>
+public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		implements TaskService {
 
 	@Autowired
-	private TaskDao dao;
+	private transient TaskDao dao;
+
+	@Autowired
+	private transient ConfidentialityLevelDao confidentialityLevelDao;
 
 	@Override
 	protected TaskDao getDao() {
@@ -46,8 +49,14 @@ public class TaskServiceImpl
 		current.setReminderSentDate(obj.getReminderSentDate());
 		current.setSessionId(obj.getSessionId());
 
-		return getDao().save(current);
+		if (obj.getConfidentialityLevel() == null) {
+			current.setConfidentialityLevel(null);
+		} else {
+			current.setConfidentialityLevel(confidentialityLevelDao.load(obj
+					.getConfidentialityLevel().getId()));
+		}
 
+		return getDao().save(current);
 	}
 
 	@Override
@@ -115,8 +124,7 @@ public class TaskServiceImpl
 
 	@Override
 	public List<Task> getAllForSessionIdAndChallengeReferral(
-			final String sessionId,
-			final boolean complete,
+			final String sessionId, final boolean complete,
 			final ChallengeReferral challengeReferral,
 			final SortingAndPaging sAndP) {
 		return dao.getAllForSessionIdAndChallengeReferralId(sessionId,

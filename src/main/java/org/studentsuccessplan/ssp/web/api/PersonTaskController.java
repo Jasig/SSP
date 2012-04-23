@@ -40,12 +40,29 @@ public class PersonTaskController extends BaseController {
 	 * Group name is equivalent to the name of the Challenge associated with the
 	 * Task. In the case of Custom Tasks, they are associated with a group named
 	 * "Custom".
+	 * 
+	 * @param personId
+	 *            Person identifier
+	 * @param id
+	 *            Task identifier (though it is currently unused)
+	 * @param status
+	 *            Object status
+	 * @param start
+	 *            First result index
+	 * @param limit
+	 *            Maximum amount of result rows to return
+	 * @param sort
+	 *            Sort property
+	 * @param sortDirection
+	 *            Sort direction
+	 * @return Task lists in task groups.
+	 * @throws ObjectNotFoundException
+	 *             If the person identifier is not valid.
 	 */
 	@RequestMapping(value = "/group/", method = RequestMethod.GET)
 	public @ResponseBody
 	Map<String, List<Task>> getAllTasksWithTaskGroup(
-			final @PathVariable UUID personId,
-			final @PathVariable UUID id,
+			final @PathVariable UUID personId, final @PathVariable UUID id,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
@@ -53,10 +70,9 @@ public class PersonTaskController extends BaseController {
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
 
-		service.getAllGroupedByTaskGroup(
-				personService.get(personId),
-				SortingAndPaging.createForSingleSort(status, start,
-						limit, sort, sortDirection, null));
+		service.getAllGroupedByTaskGroup(personService.get(personId),
+				SortingAndPaging.createForSingleSort(status, start, limit,
+						sort, sortDirection, null));
 
 		return null;
 	}

@@ -3,6 +3,7 @@ package org.studentsuccessplan.ssp.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -13,19 +14,27 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 
+/**
+ * Task
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Task extends Auditable implements Serializable {
 
-	public static final String CUSTOM_GROUP_NAME = "Custom";
-
 	private static final long serialVersionUID = 1477217415946557983L;
 
+	public static final String CUSTOM_GROUP_NAME = "Custom";
+
 	public static final String ACTION_PLAN_TASK = "ACT";
+
 	public static final String CUSTOM_ACTION_PLAN_TASK = "CUS";
+
 	public static final String SSP_ACTION_PLAN_TASK = "SSP";
 
 	@Column(nullable = false, length = 100)
@@ -65,8 +74,14 @@ public class Task extends Auditable implements Serializable {
 	@JoinColumn(name = "challenge_referral_id", updatable = false, nullable = true)
 	private ChallengeReferral challengeReferral;
 
+	@Nullable()
+	@ManyToOne()
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "confidentiality_level_id", nullable = true)
+	private ConfidentialityLevel confidentialityLevel;
+
 	/**
-	 * Constructor that only calls {@link AbstractTask#AbstractTask()}.
+	 * Constructor that only calls {@link Auditable#Auditable()}.
 	 */
 	public Task() {
 		super();
@@ -183,4 +198,19 @@ public class Task extends Auditable implements Serializable {
 		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
+	/**
+	 * @return the confidentialityLevel
+	 */
+	public ConfidentialityLevel getConfidentialityLevel() {
+		return confidentialityLevel;
+	}
+
+	/**
+	 * @param confidentialityLevel
+	 *            the confidentialityLevel to set
+	 */
+	public void setConfidentialityLevel(
+			ConfidentialityLevel confidentialityLevel) {
+		this.confidentialityLevel = confidentialityLevel;
+	}
 }

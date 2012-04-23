@@ -69,7 +69,6 @@ public class Challenge extends AbstractReference implements Serializable {
 	 * 
 	 * Should be null for non-student users.
 	 */
-
 	@Nullable()
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
