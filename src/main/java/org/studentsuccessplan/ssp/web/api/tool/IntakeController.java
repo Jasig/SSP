@@ -47,9 +47,14 @@ import org.studentsuccessplan.ssp.transferobject.tool.IntakeFormTO;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import org.studentsuccessplan.ssp.web.api.BaseController;
 
+/**
+ * Student Intake tool services
+ * <p>
+ * Mapped to URI path <code>/1/tool/studentIntake</code>
+ */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/tool/studentIntake")
+@RequestMapping("/1/tool/studentIntake")
 public class IntakeController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory
@@ -138,19 +143,18 @@ public class IntakeController extends BaseController {
 		final Map<String, Object> refData = new HashMap<String, Object>();
 
 		SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
-		refData.put("challenges", ChallengeTO.listToTOList(challengeService
-				.getAll(sAndP)));
+		refData.put("challenges",
+				ChallengeTO.listToTOList(challengeService.getAll(sAndP)));
 		refData.put("childCareArrangements", ChildCareArrangementTO
-				.listToTOList(childCareArrangementService.getAll(
-						sAndP)));
-		refData.put("citizenships", CitizenshipTO
-				.listToTOList(citizenshipService.getAll(sAndP)));
+				.listToTOList(childCareArrangementService.getAll(sAndP)));
+		refData.put("citizenships",
+				CitizenshipTO.listToTOList(citizenshipService.getAll(sAndP)));
 		refData.put("educationGoals", EducationGoalTO
 				.listToTOList(educationGoalService.getAll(sAndP)));
 		refData.put("educationLevels", EducationLevelTO
 				.listToTOList(educationLevelService.getAll(sAndP)));
-		refData.put("ethnicities", EthnicityTO.listToTOList(ethnicityService
-				.getAll(sAndP)));
+		refData.put("ethnicities",
+				EthnicityTO.listToTOList(ethnicityService.getAll(sAndP)));
 		refData.put("fundingSources", FundingSourceTO
 				.listToTOList(fundingSourceService.getAll(sAndP)));
 		refData.put("maritalStatuses", MaritalStatusTO

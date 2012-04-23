@@ -124,7 +124,7 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			console.log(intakeData);
 			
 			Ext.Ajax.request({
-				url: '/ssp/api/tool/studentIntake/' + personalFormModel.data.id,
+				url: '/ssp/api/1/tool/studentIntake/' + personalFormModel.data.id,
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
 				jsonData: intakeData,

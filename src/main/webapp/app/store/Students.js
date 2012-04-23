@@ -19,7 +19,7 @@ Ext.define('Ssp.store.Students', {
 */
     proxy: {
 		type: 'rest',
-		url: '/ssp/api/person/',
+		url: '/ssp/api/1/person/',
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 

@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.ConfidentialityDisclo
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/confidentialityDisclosureAgreement")
+@RequestMapping("/1/reference/confidentialityDisclosureAgreement")
 public class ConfidentialityDisclosureAgreementController
 		extends
 		AbstractAuditableReferenceController<ConfidentialityDisclosureAgreement, ConfidentialityDisclosureAgreementTO> {

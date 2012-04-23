@@ -15,10 +15,10 @@ import org.studentsuccessplan.ssp.transferobject.PersonTO;
 /**
  * Allows the logged in user to get their profile.
  * <p>
- * Mapped to the URI path <code>/api/session/...</code>
+ * Mapped to the URI path <code>/1/session/...</code>
  */
 @Controller
-@RequestMapping("/session")
+@RequestMapping("/1/session")
 public class SessionController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory

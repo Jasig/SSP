@@ -14,7 +14,7 @@ import org.studentsuccessplan.ssp.service.reference.ChallengeService;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
 @Controller
-@RequestMapping("/mygps/challenge")
+@RequestMapping("/1/mygps/challenge")
 public class MyGpsChallengeController extends AbstractMyGpsController {
 
 	@Autowired

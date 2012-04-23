@@ -36,7 +36,7 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
              
 	proxy: {
 		type: 'rest',
-		url: '/ssp/api/tool/studentIntake/',
+		url: '/ssp/api/1/tool/studentIntake/',
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 

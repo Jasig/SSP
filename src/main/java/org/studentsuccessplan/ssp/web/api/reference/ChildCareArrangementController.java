@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.ChildCareArrangementT
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/childCareArrangement")
+@RequestMapping("/1/reference/childCareArrangement")
 public class ChildCareArrangementController
 		extends
 		AbstractAuditableReferenceController<ChildCareArrangement, ChildCareArrangementTO> {

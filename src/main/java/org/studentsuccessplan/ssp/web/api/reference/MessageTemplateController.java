@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.MessageTemplateTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/messageTemplate")
+@RequestMapping("/1/reference/messageTemplate")
 public class MessageTemplateController
 		extends
 		AbstractAuditableReferenceController<MessageTemplate, MessageTemplateTO> {
