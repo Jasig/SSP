@@ -71,7 +71,7 @@ public class ChallengeControllerHttpIntegrationTest extends
 		// Request URI, but do not include any Spring configuration roots, but
 		// do include class-level root paths. Example:
 		// "/reference/controllerlevelmapping/mymethodmapping"
-		final String requestUri = "/reference/challenge/";
+		final String requestUri = "/1/reference/challenge/";
 		final Object handler;
 		final HandlerMethod expectedHandlerMethod;
 
@@ -115,7 +115,7 @@ public class ChallengeControllerHttpIntegrationTest extends
 		// Request URI, but do not include any Spring configuration roots, but
 		// do include class-level root paths. Example:
 		// "/reference/controllerlevelmapping/mymethodmapping"
-		final String requestUri = "/reference/challenge/"
+		final String requestUri = "/1/reference/challenge/"
 				+ CHALLENGE_ID.toString();
 		final Object handler;
 		final HandlerMethod expectedHandlerMethod;
