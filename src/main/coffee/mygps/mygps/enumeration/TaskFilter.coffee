@@ -1,3 +1,6 @@
+# Reference to jQuery not in global scope
+$ = jQuery
+
 namespace "mygps.enumeration"
 
 	TaskFilter:

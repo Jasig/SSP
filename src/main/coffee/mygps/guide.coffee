@@ -1,3 +1,6 @@
+# Reference to jQuery not in global scope
+$ = jQuery
+
 # Create context.
 context = window.context ||= {}
 
@@ -23,75 +26,75 @@ window.viewModel = viewModel
 
 # Bind to lifecycle events.
 $('#guide-introduction-page').live( 'pagecreate', ->
-	guideIntroductionPage = @
+    guideIntroductionPage = @
 
-	$("body")
-	.loadTemplates( 
-		bannerTemplate:  "templates/banner.html"
-		footerTemplate:  "templates/footer.html"
-	)
-	.done( ->
-		ko.applyBindings( viewModel, guideIntroductionPage )
-		return
-	)
-	
-	return
+    $("body")
+    .loadTemplates( 
+        bannerTemplate:  "/ssp/MyGPS/templates/banner.html"
+        footerTemplate:  "/ssp/MyGPS/templates/footer.html"
+    )
+    .done( ->
+        ko.applyBindings( viewModel, guideIntroductionPage )
+        return
+    )
+    
+    return
 )
 
 $('#guide-question-page').live( 'pagecreate', ->
-	guideQuestionPage = @
-	
-	# Load templates and then apply bindings.
-	
-	$("body")
-	.loadTemplates( 
-		bannerTemplate:    "templates/banner.html"
-		footerTemplate:    "templates/footer.html"
-		questionTemplate:  "templates/question.html"
-	)
-	.done( ->
-		ko.applyBindings( viewModel, guideQuestionPage )
-		return
-	)
-	
-	return
+    guideQuestionPage = @
+    
+    # Load templates and then apply bindings.
+    
+    $("body")
+    .loadTemplates( 
+        bannerTemplate:    "/ssp/MyGPS/templates/banner.html"
+        footerTemplate:    "/ssp/MyGPS/templates/footer.html"
+        questionTemplate:  "/ssp/MyGPS/templates/question.html"
+    )
+    .done( ->
+        ko.applyBindings( viewModel, guideQuestionPage )
+        return
+    )
+    
+    return
 )
 
 $('#guide-referrals-page').live( 'pagecreate', ->
-	guideReferralsPage = @
-	
-	# Load templates and then apply bindings.
-	
-	$("body")
-	.loadTemplates( 
-		bannerTemplate:     "templates/banner.html"
-		footerTemplate:     "templates/footer.html"
-		tasksTemplate:      "templates/tasks.html" 
-		taskTemplate:       "templates/task.html"
-		taskDetailTemplate: "templates/taskdetail.html"
-		challengeTemplate:  "templates/challenge.html"
-		referralTemplate:   "templates/referral.html"
-	)
-	.done( ->
-		ko.applyBindings( viewModel, guideReferralsPage )
-		return
-	)
-	
-	return
+    guideReferralsPage = @
+    
+    # Load templates and then apply bindings.
+    
+    $("body")
+    .loadTemplates( 
+        bannerTemplate:     "/ssp/MyGPS/templates/banner.html"
+        footerTemplate:     "/ssp/MyGPS/templates/footer.html"
+        tasksTemplate:      "/ssp/MyGPS/templates/tasks.html" 
+        taskTemplate:       "/ssp/MyGPS/templates/task.html"
+        taskDetailTemplate: "/ssp/MyGPS/templates/taskdetail.html"
+        challengeTemplate:  "/ssp/MyGPS/templates/challenge.html"
+        referralTemplate:   "/ssp/MyGPS/templates/referral.html"
+    )
+    .done( ->
+        ko.applyBindings( viewModel, guideReferralsPage )
+        return
+    )
+    
+    return
 )
 
 $('#guide-summary-page').live( 'pagecreate', ->
-	guideSummaryPage = @
+    guideSummaryPage = @
 
-	$("body")
-	.loadTemplates( 
-		bannerTemplate:  "templates/banner.html"
-		footerTemplate:  "templates/footer.html"
-	)
-	.done( ->
-		ko.applyBindings( viewModel, guideSummaryPage )
-		return
-	)
+    $("body")
+    .loadTemplates( 
+        bannerTemplate:  "/ssp/MyGPS/templates/banner.html"
+        footerTemplate:  "/ssp/MyGPS/templates/footer.html"
+    )
+    .done( ->
+        ko.applyBindings( viewModel, guideSummaryPage )
+        return
+    )
 
-	return
+    return
 )

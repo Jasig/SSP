@@ -8,4 +8,4 @@ namespace 'mygps.service'
 				@baseURL = baseURL
 				
 			createURL: ( value ) ->
-				return "#{ @baseURL ? '' }#{ value }"
+				return '/ssp/MyGPS/' + "#{ @baseURL ? '' }#{ value }"
