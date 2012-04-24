@@ -1,37 +1,33 @@
-(($) ->
+namespace 'mygps.viewmodel'
 
-	namespace 'mygps.viewmodel'
-	
-		SelfHelpGuidesViewModel:
+	SelfHelpGuidesViewModel:
+		
+		class SelfHelpGuidesViewModel extends mygps.viewmodel.AbstractSessionViewModel
 			
-			class SelfHelpGuidesViewModel extends mygps.viewmodel.AbstractSessionViewModel
-				
-				constructor: ( session, selfHelpGuideService ) ->
-					super( session )
-					@selfHelpGuideService = selfHelpGuideService
-					@selfHelpGuides = ko.observableArray()
-				
-				load: ( selfHelpGuideGroupId = null ) ->
-					super()
-					@loadSelfHelpGuides( selfHelpGuideGroupId )
-					return
-				
-				loadSelfHelpGuides: ( selfHelpGuideGroupId = null ) ->
-					if selfHelpGuideGroupId?
-						@selfHelpGuideService.getBySelfHelpGuideGroup(
-							selfHelpGuideGroupId,
-							result: ( result ) =>
-								@selfHelpGuides( result )
-							fault: ( fault ) =>
-								alert( fault.responseText )
-						)
-					else
-						@selfHelpGuideService.getAll(
-							result: ( result ) =>
-								@selfHelpGuides( result )
-							fault: ( fault ) =>
-								alert( fault.responseText )
-						)
-					return
-
-)(jQuery);
+			constructor: ( session, selfHelpGuideService ) ->
+				super( session )
+				@selfHelpGuideService = selfHelpGuideService
+				@selfHelpGuides = ko.observableArray()
+			
+			load: ( selfHelpGuideGroupId = null ) ->
+				super()
+				@loadSelfHelpGuides( selfHelpGuideGroupId )
+				return
+			
+			loadSelfHelpGuides: ( selfHelpGuideGroupId = null ) ->
+				if selfHelpGuideGroupId?
+					@selfHelpGuideService.getBySelfHelpGuideGroup(
+						selfHelpGuideGroupId,
+						result: ( result ) =>
+							@selfHelpGuides( result )
+						fault: ( fault ) =>
+							alert( fault.responseText )
+					)
+				else
+					@selfHelpGuideService.getAll(
+						result: ( result ) =>
+							@selfHelpGuides( result )
+						fault: ( fault ) =>
+							alert( fault.responseText )
+					)
+				return

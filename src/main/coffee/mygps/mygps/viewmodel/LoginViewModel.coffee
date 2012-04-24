@@ -1,14 +1,10 @@
-(($) ->
+namespace 'mygps.viewmodel'
 
-	namespace 'mygps.viewmodel'
-	
-		LoginViewModel:
+	LoginViewModel:
+		
+		class LoginViewModel
 			
-			class LoginViewModel
+			constructor: () ->
 				
-				constructor: () ->
-					
-				load: () ->
-					return
-
-)(jQuery);
+			load: () ->
+				return
