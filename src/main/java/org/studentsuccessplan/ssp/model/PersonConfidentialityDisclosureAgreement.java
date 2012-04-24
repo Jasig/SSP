@@ -3,12 +3,13 @@ package org.studentsuccessplan.ssp.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
 
 @Entity
@@ -25,8 +26,9 @@ public class PersonConfidentialityDisclosureAgreement extends Auditable
 	@JoinColumn(name = "person_id")
 	private Person person;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "confidentiality_disclosure_agreement_id", insertable = false, nullable = false, updatable = false)
+	@ManyToOne()
+	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinColumn(name = "confidentiality_disclosure_agreement_id")
 	private ConfidentialityDisclosureAgreement confidentialityDisclosureAgreement;
 
 	public PersonConfidentialityDisclosureAgreement() {
@@ -65,5 +67,8 @@ public class PersonConfidentialityDisclosureAgreement extends Auditable
 	 *            Source to use for overwrites.
 	 */
 	public void overwrite(PersonConfidentialityDisclosureAgreement source) {
+		person = source.getPerson();
+		confidentialityDisclosureAgreement = source
+				.getConfidentialityDisclosureAgreement();
 	}
 }

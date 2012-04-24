@@ -1,8 +1,8 @@
 package org.studentsuccessplan.ssp.dao.reference;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
@@ -29,17 +28,17 @@ import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class ConfidentialityLevelDaoTest {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ConfidentialityLevelDaoTest.class);
 
 	@Autowired
-	private ConfidentialityLevelDao dao;
+	private transient ConfidentialityLevelDao dao;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
@@ -50,12 +49,13 @@ public class ConfidentialityLevelDaoTest {
 		ConfidentialityLevel obj = new ConfidentialityLevel();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setAcronym("acro");
 		dao.save(obj);
 
 		assertNotNull(obj.getId());
 		saved = obj.getId();
 
-		logger.debug(obj.toString());
+		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
 		assertNotNull(obj);
@@ -64,7 +64,7 @@ public class ConfidentialityLevelDaoTest {
 
 		List<ConfidentialityLevel> all = dao.getAll(ObjectStatus.ACTIVE);
 		assertNotNull(all);
-		assertTrue(all.size() > 0);
+		assertFalse(all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);
@@ -78,11 +78,10 @@ public class ConfidentialityLevelDaoTest {
 		assertNull(confidentialityLevel);
 	}
 
-	private void assertList(List<ConfidentialityLevel> objects) {
+	private void assertList(final List<ConfidentialityLevel> objects) {
 		for (ConfidentialityLevel object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test
@@ -90,14 +89,16 @@ public class ConfidentialityLevelDaoTest {
 		ConfidentialityLevel obj = new ConfidentialityLevel();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setAcronym("acro");
 		dao.save(obj);
 
 		ConfidentialityLevel obj2 = new ConfidentialityLevel();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
+		obj2.setAcronym("acro2");
 		dao.save(obj2);
 
-		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
 				+ obj2.getId().toString());
 
 		dao.delete(obj);

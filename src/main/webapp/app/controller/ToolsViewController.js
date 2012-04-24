@@ -95,13 +95,13 @@ Ext.define('Ssp.controller.ToolsViewController', {
 						var educationGoals = formData.data.referenceData.educationGoals;
 						var educationLevels = formData.data.referenceData.educationLevels;
 						var employmentShifts = formData.data.referenceData.employmentShifts;
-						var ethnicities = formData.data.referenceData.ethnicitys;
+						var ethnicities = formData.data.referenceData.ethnicities;
 						var fundingSources = formData.data.referenceData.fundingSources;
 						var genders = formData.data.referenceData.genders;
-						var maritalStatuses = formData.data.referenceData.maritalStatuss;
+						var maritalStatuses = formData.data.referenceData.maritalStatuses;
 						var states = formData.data.referenceData.states;
-						var studentStatuses = formData.data.referenceData.studentStatuss;
-						var veteranStatuses = formData.data.referenceData.veteranStatuss;
+						var studentStatuses = formData.data.referenceData.studentStatuses;
+						var veteranStatuses = formData.data.referenceData.veteranStatuses;
 
 						Ext.getStore('reference.Challenges').loadData( challenges );
 						Ext.getStore('reference.ChildCareArrangements').loadData( childCareArrangements );
@@ -135,9 +135,9 @@ Ext.define('Ssp.controller.ToolsViewController', {
 							Ext.getCmp('StudentIntakeEducationGoals').loadRecord( personEducationGoal );
 						}
 
-						formUtils.createCheckBoxForm('StudentIntakeEducationLevels', educationLevels, personEducationLevels, 'id');
-						formUtils.createCheckBoxForm('StudentIntakeFunding', fundingSources, personFundingSources, 'id');	
-						formUtils.createCheckBoxForm('StudentIntakeChallenges', challenges, personChallenges, 'id');
+						formUtils.createCheckBoxForm('StudentIntakeEducationLevels', educationLevels, personEducationLevels, 'id', 'educationLevelId');
+						formUtils.createCheckBoxForm('StudentIntakeFunding', fundingSources, personFundingSources, 'id', 'fundingSourceId');	
+						formUtils.createCheckBoxForm('StudentIntakeChallenges', challenges, personChallenges, 'id', 'challengeId');
 					}
 				});
 				break;

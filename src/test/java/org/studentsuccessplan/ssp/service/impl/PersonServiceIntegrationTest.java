@@ -17,13 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonChallenge;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../service-testConfig.xml")
@@ -46,8 +46,8 @@ public class PersonServiceIntegrationTest {
 
 	@Test
 	public void testGetAll() {
-		List<Person> list = service.getAll(ObjectStatus.ALL, null, null, null,
-				null);
+		List<Person> list = service.getAll(new SortingAndPaging(
+				ObjectStatus.ACTIVE));
 		assertNotNull(list);
 		assertTrue("List should have included multiple entities.",
 				list.size() > 1);
@@ -55,10 +55,11 @@ public class PersonServiceIntegrationTest {
 
 	@Test
 	public void testGetAllWithRowFilter() {
-		List<Person> listAll = service.getAll(ObjectStatus.ALL, null, null,
-				null, null);
-		List<Person> listFiltered = service.getAll(ObjectStatus.ALL, 1, 2,
-				null, null);
+		List<Person> listAll = service.getAll(new SortingAndPaging(
+				ObjectStatus.ACTIVE));
+		List<Person> listFiltered = service.getAll(SortingAndPaging
+				.createForSingleSort(
+						ObjectStatus.ACTIVE, 1, 2, null, null, null));
 
 		assertNotNull(listAll);
 		assertTrue("List should have included multiple entities.",

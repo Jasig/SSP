@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studentsuccessplan.mygps.business.StudentIntakeFormManager;
 import org.studentsuccessplan.mygps.model.transferobject.FormTO;
+import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 
 public class MyGpsStudentIntakeControllerTest {
@@ -20,11 +21,12 @@ public class MyGpsStudentIntakeControllerTest {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsStudentIntakeControllerTest.class);
 
-	private MyGpsStudentIntakeController controller;
-	private StudentIntakeFormManager manager;
+	private transient MyGpsStudentIntakeController controller;
+
+	private transient StudentIntakeFormManager manager;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		manager = createMock(StudentIntakeFormManager.class);
 
 		controller = new MyGpsStudentIntakeController();
@@ -33,14 +35,14 @@ public class MyGpsStudentIntakeControllerTest {
 
 	@Test
 	public void testGetForm() throws ObjectNotFoundException {
-		FormTO form = new FormTO();
+		final FormTO form = new FormTO();
 		expect(manager.populate()).andReturn(form);
 		replay(manager);
 
 		try {
-			FormTO response = controller.getForm();
+			final FormTO response = controller.getForm();
 			verify(manager);
-			assertEquals(form, response);
+			assertEquals("Expected response was not returned.", form, response);
 		} catch (Exception e) {
 			LOGGER.error("controller error", e);
 		}
@@ -48,18 +50,19 @@ public class MyGpsStudentIntakeControllerTest {
 
 	@Test
 	public void testSaveForm() {
-		FormTO form = new FormTO();
+		final FormTO form = new FormTO();
 		try {
-			manager.save(form);
+			expect(manager.save(form)).andReturn(new Person());
 		} catch (ObjectNotFoundException e) {
 			LOGGER.error("mock object error", e);
 		}
+
 		replay(manager);
 
 		try {
-			boolean response = controller.saveForm(form);
+			final boolean response = controller.saveForm(form);
 			verify(manager);
-			assertTrue(response);
+			assertTrue("Controller response did not return success.", response);
 		} catch (Exception e) {
 			LOGGER.error("controller error", e);
 		}

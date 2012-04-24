@@ -2,6 +2,7 @@ package org.studentsuccessplan.ssp.service.reference.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
@@ -14,11 +15,11 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.studentsuccessplan.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public class ConfidentialityDisclosureAgreementServiceTest {
 
@@ -38,13 +39,14 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 		List<ConfidentialityDisclosureAgreement> daoAll = new ArrayList<ConfidentialityDisclosureAgreement>();
 		daoAll.add(new ConfidentialityDisclosureAgreement());
 
-		expect(dao.getAll(ObjectStatus.ACTIVE, null, null, null, null))
+		expect(dao.getAll(isA(SortingAndPaging.class)))
 				.andReturn(daoAll);
 
 		replay(dao);
 
-		List<ConfidentialityDisclosureAgreement> all = service.getAll(ObjectStatus.ACTIVE, null, null,
-				null, null);
+		List<ConfidentialityDisclosureAgreement> all = service.getAll(
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE));
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}
@@ -52,7 +54,8 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 	@Test
 	public void testGet() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
-		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(id);
+		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(
+				id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -65,7 +68,8 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 	@Test
 	public void testSave() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
-		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(id);
+		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(
+				id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -79,7 +83,8 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
-		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(id);
+		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(
+				id);
 
 		expect(dao.get(id)).andReturn(daoOne).times(2);
 		expect(dao.save(daoOne)).andReturn(daoOne);

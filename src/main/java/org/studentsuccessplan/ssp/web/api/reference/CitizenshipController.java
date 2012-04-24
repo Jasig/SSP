@@ -1,5 +1,7 @@
 package org.studentsuccessplan.ssp.web.api.reference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -11,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.CitizenshipTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/citizenship")
+@RequestMapping("/1/reference/citizenship")
 public class CitizenshipController extends
 		AbstractAuditableReferenceController<Citizenship, CitizenshipTO> {
 
@@ -25,5 +27,13 @@ public class CitizenshipController extends
 
 	protected CitizenshipController() {
 		super(Citizenship.class, CitizenshipTO.class);
+	}
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(CitizenshipController.class);
+
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
 	}
 }

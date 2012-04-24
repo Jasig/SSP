@@ -1,5 +1,7 @@
 package org.studentsuccessplan.ssp.web.api.reference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -11,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideQuestion
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/selfHelpGuideQuestion")
+@RequestMapping("/1/reference/selfHelpGuideQuestion")
 public class SelfHelpGuideQuestionController
 		extends
 		AbstractAuditableReferenceController<SelfHelpGuideQuestion, SelfHelpGuideQuestionTO> {
@@ -26,5 +28,13 @@ public class SelfHelpGuideQuestionController
 
 	protected SelfHelpGuideQuestionController() {
 		super(SelfHelpGuideQuestion.class, SelfHelpGuideQuestionTO.class);
+	}
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(SelfHelpGuideQuestionController.class);
+
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
 	}
 }

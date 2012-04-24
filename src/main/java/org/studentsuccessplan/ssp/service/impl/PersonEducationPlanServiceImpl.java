@@ -13,6 +13,7 @@ import org.studentsuccessplan.ssp.model.PersonEducationPlan;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonEducationPlanService;
 import org.studentsuccessplan.ssp.service.reference.StudentStatusService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 public class PersonEducationPlanServiceImpl implements
@@ -25,10 +26,8 @@ public class PersonEducationPlanServiceImpl implements
 	private StudentStatusService studentStatusService;
 
 	@Override
-	public List<PersonEducationPlan> getAll(ObjectStatus status,
-			Integer firstResult, Integer maxResults, String sort,
-			String sortDirection) {
-		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
+	public List<PersonEducationPlan> getAll(SortingAndPaging sAndP) {
+		return dao.getAll(sAndP);
 	}
 
 	@Override

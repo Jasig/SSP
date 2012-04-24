@@ -3,9 +3,9 @@
 
   context = window.context || (window.context = {});
 
-  context.sessionService || (context.sessionService = new mygps.service.SessionService("../api/session"));
+  context.sessionService || (context.sessionService = new mygps.service.SessionService("../api/1/session"));
 
-  context.taskService || (context.taskService = new mygps.service.TaskService("../api/mygps/task"));
+  context.taskService || (context.taskService = new mygps.service.TaskService("../api/1/mygps/task"));
 
   context.session || (context.session = new mygps.session.Session(context.sessionService));
 

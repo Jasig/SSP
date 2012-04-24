@@ -10,12 +10,12 @@ import org.studentsuccessplan.ssp.model.PersonChallenge;
 import org.studentsuccessplan.ssp.model.PersonEducationLevel;
 import org.studentsuccessplan.ssp.model.PersonFundingSource;
 import org.studentsuccessplan.ssp.service.tool.IntakeService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public interface PersonService extends AuditableCrudService<Person> {
 
 	@Override
-	List<Person> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection);
+	List<Person> getAll(SortingAndPaging sAndP);
 
 	/**
 	 * Retrieves the specified Person.

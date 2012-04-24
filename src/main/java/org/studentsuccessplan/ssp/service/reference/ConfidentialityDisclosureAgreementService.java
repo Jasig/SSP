@@ -3,16 +3,15 @@ package org.studentsuccessplan.ssp.service.reference;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public interface ConfidentialityDisclosureAgreementService extends AuditableCrudService<ConfidentialityDisclosureAgreement> {
 
 	@Override
-	public List<ConfidentialityDisclosureAgreement> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection);
+	public List<ConfidentialityDisclosureAgreement> getAll(SortingAndPaging sAndP);
 
 	@Override
 	public ConfidentialityDisclosureAgreement get(UUID id) throws ObjectNotFoundException;

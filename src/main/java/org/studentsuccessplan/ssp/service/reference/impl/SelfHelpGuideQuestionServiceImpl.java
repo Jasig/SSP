@@ -12,6 +12,7 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideQuestionService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 @Transactional
@@ -21,9 +22,8 @@ public class SelfHelpGuideQuestionServiceImpl implements SelfHelpGuideQuestionSe
 	private SelfHelpGuideQuestionDao dao;
 
 	@Override
-	public List<SelfHelpGuideQuestion> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection) {
-		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
+	public List<SelfHelpGuideQuestion> getAll(SortingAndPaging sAndP) {
+		return dao.getAll(sAndP);
 	}
 
 	@Override

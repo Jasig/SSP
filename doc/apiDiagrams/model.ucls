@@ -2,7 +2,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.EducationGoal" 
     project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/EducationGoal.java" binary="false">    
-    <position height="-1" width="-1" x="1328" y="162"/>    
+    <position height="-1" width="-1" x="1248" y="450"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -10,7 +10,7 @@
   </class>  
   <class id="2" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.StudentStatus" 
     project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/StudentStatus.java" binary="false">    
-    <position height="-1" width="-1" x="113" y="720"/>    
+    <position height="-1" width="-1" x="1248" y="825"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -18,23 +18,23 @@
   </class>  
   <class id="3" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.FundingSource" 
     project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/FundingSource.java" binary="false">    
-    <position height="-1" width="-1" x="208" y="141"/>    
+    <position height="-1" width="-1" x="1225" y="1794"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Citizenship" project="ssp" 
-    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Citizenship.java" binary="false">    
-    <position height="-1" width="-1" x="1642" y="1033"/>    
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Citizenship" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Citizenship.java" binary="false">    
+    <position height="-1" width="-1" x="1225" y="2793"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="5" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Challenge" project="ssp" 
-    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Challenge.java" binary="false">    
-    <position height="-1" width="-1" x="982" y="84"/>    
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Challenge" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Challenge.java" binary="false">    
+    <position height="-1" width="-1" x="1337" y="60"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -42,23 +42,24 @@
   </class>  
   <class id="6" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.VeteranStatus" 
     project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/VeteranStatus.java" binary="false">    
-    <position height="-1" width="-1" x="1654" y="1232"/>    
+    <position height="-1" width="-1" x="1225" y="2231"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
   <class id="7" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.EducationLevel" 
-    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/EducationLevel.java" binary="false">    
-    <position height="-1" width="-1" x="155" y="1422"/>    
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/EducationLevel.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1251" y="1249"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="8" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Ethnicity" project="ssp" 
-    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Ethnicity.java" binary="false">    
-    <position height="-1" width="-1" x="1681" y="1714"/>    
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Ethnicity" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Ethnicity.java" binary="false">    
+    <position height="-1" width="-1" x="1225" y="2625"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -66,7 +67,7 @@
   </class>  
   <class id="9" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.MaritalStatus" 
     project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/MaritalStatus.java" binary="false">    
-    <position height="-1" width="-1" x="1661" y="1471"/>    
+    <position height="-1" width="-1" x="1225" y="2451"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -74,186 +75,853 @@
   </class>  
   <class id="10" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.Person" project="ssp" 
     file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/Person.java" binary="false">    
-    <position height="-1" width="-1" x="796" y="1058"/>    
+    <position height="-1" width="-1" x="307" y="876"/>    
+    <display autosize="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonChallenge" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonChallenge.java" binary="false">    
+    <position height="-1" width="-1" x="823" y="62"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="11" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonFunding" project="ssp" 
-    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonFunding.java" binary="false">    
-    <position height="226" width="241" x="339" y="359"/>    
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonEducationGoal" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonEducationGoal.java" binary="false">    
+    <position height="-1" width="-1" x="836" y="449"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="12" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonChallenge" project="ssp" 
-    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonChallenge.java" binary="false">    
-    <position height="-1" width="-1" x="783" y="297"/>    
+  <class id="13" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonDemographics" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonDemographics.java" binary="false">    
+    <position height="-1" width="-1" x="301" y="2296"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="13" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonEducationGoal" project="ssp" 
-    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonEducationGoal.java" binary="false">    
-    <position height="322" width="235" x="1009" y="297"/>    
+  <class id="14" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonEducationPlan" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonEducationPlan.java" binary="false">    
+    <position height="-1" width="-1" x="842" y="827"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="14" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonDemographics" project="ssp" 
-    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonDemographics.java" binary="false">    
-    <position height="-1" width="-1" x="1273" y="1256"/>    
+  <class id="15" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonEducationLevel" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonEducationLevel.java" binary="false">    
+    <position height="-1" width="-1" x="853" y="1249"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="15" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonEducationPlan" project="ssp" 
-    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonEducationPlan.java" binary="false">    
-    <position height="-1" width="-1" x="422" y="915"/>    
+  <class id="16" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonFundingSource" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonFundingSource.java" binary="false">    
+    <position height="-1" width="-1" x="832" y="1687"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="16" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.PersonEducationLevel" project="ssp" 
-    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonEducationLevel.java" binary="false">    
-    <position height="-1" width="-1" x="464" y="1310"/>    
+  <class id="17" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.reference.ChildCareArrangement" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/ChildCareArrangement.java" binary="false">    
+    <position height="-1" width="-1" x="1225" y="2008"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <association id="17">    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="18" name="person"/>      
-      <multiplicity id="19" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="20">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="21" name="educationGoal"/>      
-      <multiplicity id="22" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="23">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="24" name="citizenship"/>      
-      <multiplicity id="25" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="26">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="27" name="coach"/>      
-      <multiplicity id="28" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="29">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="30" name="person"/>      
-      <multiplicity id="31" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="32">    
-    <end type="SOURCE" refId="16" navigable="false">      
-      <attribute id="33" name="person"/>      
-      <multiplicity id="34" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="35">    
-    <end type="SOURCE" refId="16" navigable="false">      
-      <attribute id="36" name="educationLevel"/>      
-      <multiplicity id="37" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="38">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="39" name="challenge"/>      
-      <multiplicity id="40" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="41">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="42" name="maritalStatus"/>      
-      <multiplicity id="43" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
+  <enumeration id="18" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.reference.EmploymentShifts" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/EmploymentShifts.java" binary="false">    
+    <position height="-1" width="-1" x="815" y="1953"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </enumeration>  
+  <enumeration id="19" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Genders" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Genders.java" binary="false">    
+    <position height="-1" width="-1" x="787" y="2765"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="20" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.tool.PersonTool" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/tool/PersonTool.java" binary="false">    
+    <position height="-1" width="-1" x="419" y="-111"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="21" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.tool.Tools" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/tool/Tools.java" binary="false">    
+    <position height="-1" width="-1" x="133" y="-115"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="22" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.Task" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/Task.java" binary="false">    
+    <position height="-1" width="-1" x="1649" y="1017"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="23" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.PersonConfidentialityDisclosureAgreement" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/PersonConfidentialityDisclosureAgreement.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1423" y="1527"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="24" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/ConfidentialityDisclosureAgreement.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1675" y="1806"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="25" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.reference.AbstractReference" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/AbstractReference.java" binary="false">    
+    <position height="-1" width="-1" x="2449" y="2290"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="26" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/ConfidentialityLevel.java" binary="false">    
+    <position height="-1" width="-1" x="2074" y="384"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="27" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.SelfHelpGuide" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/SelfHelpGuide.java" binary="false">    
+    <position height="-1" width="-1" x="3562" y="496"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="28" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Category" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Category.java" binary="false">    
+    <position height="-1" width="-1" x="2141" y="2656"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="29" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/SelfHelpGuideGroup.java" binary="false">    
+    <position height="-1" width="-1" x="3616" y="1343"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="30" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.reference.ChallengeReferral" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/ChallengeReferral.java" binary="false">    
+    <position height="-1" width="-1" x="3468" y="2290"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="31" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/SelfHelpGuideQuestion.java" binary="false">    
+    <position height="-1" width="-1" x="2604" y="34"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="32" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.Auditable" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/Auditable.java" binary="false">    
+    <position height="-1" width="-1" x="4360" y="1861"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="33" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.Message" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/Message.java" binary="false">    
+    <position height="-1" width="-1" x="2875" y="441"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="34" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.Goal" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/Goal.java" binary="false">    
+    <position height="-1" width="-1" x="2436" y="679"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="35" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.ObjectStatus" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/ObjectStatus.java" binary="false">    
+    <position height="-1" width="-1" x="4027" y="1349"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="36" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.SelfHelpGuideResponse" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/SelfHelpGuideResponse.java" binary="false">    
+    <position height="-1" width="-1" x="4223" y="857"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="37" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.reference.MessageTemplate" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/MessageTemplate.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="2844" y="2552"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="38" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/SelfHelpGuideQuestionResponse.java" binary="false">    
+    <position height="-1" width="-1" x="3682" y="-42"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="39" corner="BOTTOM_RIGHT" language="java" name="org.studentsuccessplan.ssp.model.tool.IntakeForm" 
+    project="ssp" file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/tool/IntakeForm.java" binary="false">    
+    <position height="52" width="225" x="-303" y="846"/>    
+    <display autosize="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="40" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.reference.ChallengeCategory" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/ChallengeCategory.java" binary="false">    
+    <position height="-1" width="-1" x="2476" y="2656"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="41" corner="BOTTOM_RIGHT" language="java" 
+    name="org.studentsuccessplan.ssp.model.reference.ChallengeChallengeReferral" project="ssp" 
+    file="/ssp/src/main/java/org/studentsuccessplan/ssp/model/reference/ChallengeChallengeReferral.java" binary="false">    
+    <position height="-1" width="-1" x="4335" y="2290"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <generalization id="42">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="43">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
   <association id="44">    
-    <end type="SOURCE" refId="14" navigable="false">      
+    <end type="SOURCE" refId="16" navigable="false">      
       <attribute id="45" name="person"/>      
       <multiplicity id="46" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="47">    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="48" name="studentStatus"/>      
-      <multiplicity id="49" minimum="0" maximum="1"/>    
+  <generalization id="47">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="48">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="49">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="50" name="selfHelpGuideQuestions"/>      
+      <multiplicity id="51" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
+    <end type="TARGET" refId="31" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="50">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="51" name="person"/>      
-      <multiplicity id="52" minimum="0" maximum="1"/>    
+  <generalization id="52">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <generalization id="53">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="54">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="55">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="56">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="57">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="58" name="challenges"/>      
+      <multiplicity id="59" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="60">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="61">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="62" name="confidentialityLevel"/>      
+      <multiplicity id="63" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="64">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="65" name="fundingSources"/>      
+      <multiplicity id="66" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="67">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <association id="68">    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="69" name="selfHelpGuideQuestion"/>      
+      <multiplicity id="70" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="31" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="71">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="72" name="person"/>      
+      <multiplicity id="73" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="53">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="54" name="veteranStatus"/>      
-      <multiplicity id="55" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="56">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="57" name="fundingSource"/>      
-      <multiplicity id="58" minimum="0" maximum="1"/>    
+  <generalization id="74">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="75">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="76" name="fundingSource"/>      
+      <multiplicity id="77" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="59">    
+  <generalization id="78">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <generalization id="79">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="80">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <association id="81">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="82" name="selfHelpGuideGroups"/>      
+      <multiplicity id="83" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="84">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <generalization id="85">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <generalization id="86">    
+    <end type="SOURCE" refId="30"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="87">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="88" name="challengeReferral"/>      
+      <multiplicity id="89" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="30" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="90">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="91" name="gender"/>      
+      <multiplicity id="92" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="93">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="94">    
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="95" name="challenge"/>      
+      <multiplicity id="96" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="97">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="98" name="shift"/>      
+      <multiplicity id="99" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="100">    
+    <end type="SOURCE" refId="41" navigable="false">      
+      <attribute id="101" name="challenge"/>      
+      <multiplicity id="102" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="103">    
+    <end type="SOURCE" refId="38"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <association id="104">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="105" name="educationPlan"/>      
+      <multiplicity id="106" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="107">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="108" name="person"/>      
+      <multiplicity id="109" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="110">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <generalization id="111">    
+    <end type="SOURCE" refId="31"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="112">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="113" name="challenge"/>      
+      <multiplicity id="114" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="115">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="116">    
     <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="60" name="ethnicity"/>      
-      <multiplicity id="61" minimum="0" maximum="1"/>    
+      <attribute id="117" name="studentStatus"/>      
+      <multiplicity id="118" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="119">    
+    <end type="SOURCE" refId="41" navigable="false">      
+      <attribute id="120" name="challengeReferral"/>      
+      <multiplicity id="121" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="30" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="122">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="123">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="124" name="challengeChallengeReferrals"/>      
+      <multiplicity id="125" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="41" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="126">    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="127" name="selfHelpGuideResponse"/>      
+      <multiplicity id="128" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="36" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="129">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="130" name="educationGoal"/>      
+      <multiplicity id="131" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="132">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="133" name="ethnicity"/>      
+      <multiplicity id="134" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="62">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="63" name="person"/>      
-      <multiplicity id="64" minimum="0" maximum="1"/>    
+  <generalization id="135">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="136">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <association id="137">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="138" name="educationLevel"/>      
+      <multiplicity id="139" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="140">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="141" name="person"/>      
+      <multiplicity id="142" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="143">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="144" name="educationGoal"/>      
+      <multiplicity id="145" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="146">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="147" name="childCareArrangement"/>      
+      <multiplicity id="148" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="149">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="150" name="recipient"/>      
+      <multiplicity id="151" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="152">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <association id="153">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="154" name="veteranStatus"/>      
+      <multiplicity id="155" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="156">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="157" name="selfHelpGuideQuestionResponses"/>      
+      <multiplicity id="158" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="38" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="159">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="160" name="person"/>      
+      <multiplicity id="161" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="162">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <generalization id="163">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="164">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="165" name="selfHelpGuide"/>      
+      <multiplicity id="166" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="167">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="168">    
+    <end type="SOURCE" refId="36"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <association id="169">    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="170" name="modifiedBy"/>      
+      <multiplicity id="171" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="172">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="173" name="maritalStatus"/>      
+      <multiplicity id="174" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="175">    
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="176" name="selfHelpGuideQuestionResponses"/>      
+      <multiplicity id="177" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="38" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="178">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="179" name="confidentialityDisclosureAgreement"/>      
+      <multiplicity id="180" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="181">    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="182" name="objectStatus"/>      
+      <multiplicity id="183" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="35" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="184">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="185" name="person"/>      
+      <multiplicity id="186" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="187">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="188" name="confidentialityDisclosureAgreements"/>      
+      <multiplicity id="189" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="190">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="191" name="demographics"/>      
+      <multiplicity id="192" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="193">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="194" name="sender"/>      
+      <multiplicity id="195" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="196">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="197" name="tools"/>      
+      <multiplicity id="198" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="199">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="200" name="tasks"/>      
+      <multiplicity id="201" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="202">    
+    <end type="SOURCE" refId="39" navigable="false">      
+      <attribute id="203" name="person"/>      
+      <multiplicity id="204" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="205">    
+    <end type="SOURCE" refId="34" navigable="false">      
+      <attribute id="206" name="confidentialityLevel"/>      
+      <multiplicity id="207" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="208">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="209" name="challenge"/>      
+      <multiplicity id="210" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="211">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="212" name="coach"/>      
+      <multiplicity id="213" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="214">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="215" name="citizenship"/>      
+      <multiplicity id="216" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="217">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="218" name="educationLevels"/>      
+      <multiplicity id="219" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="220">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="221" name="person"/>      
+      <multiplicity id="222" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="223">    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="224" name="createdBy"/>      
+      <multiplicity id="225" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="226">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <association id="227">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="228" name="tool"/>      
+      <multiplicity id="229" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="230">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="231" name="selfHelpGuideQuestions"/>      
+      <multiplicity id="232" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="31" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="233">    
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="234" name="selfHelpGuide"/>      
+      <multiplicity id="235" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="236">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="237">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <generalization id="238">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="239">    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="240" name="challengeChallengeReferrals"/>      
+      <multiplicity id="241" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="41" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    

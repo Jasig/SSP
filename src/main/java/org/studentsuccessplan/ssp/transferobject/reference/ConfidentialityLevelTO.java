@@ -3,13 +3,21 @@ package org.studentsuccessplan.ssp.transferobject.reference;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class ConfidentialityLevelTO extends AbstractReferenceTO<ConfidentialityLevel>
+public class ConfidentialityLevelTO extends
+		AbstractReferenceTO<ConfidentialityLevel>
 		implements TransferObject<ConfidentialityLevel> {
+
+	@NotNull
+	@NotEmpty
+	private String acronym;
 
 	public ConfidentialityLevelTO() {
 		super();
@@ -34,8 +42,18 @@ public class ConfidentialityLevelTO extends AbstractReferenceTO<ConfidentialityL
 	}
 
 	@Override
+	public void fromModel(final ConfidentialityLevel model) {
+		super.fromModel(model);
+
+		acronym = model.getAcronym();
+	}
+
+	@Override
 	public ConfidentialityLevel addToModel(final ConfidentialityLevel model) {
 		super.addToModel(model);
+
+		model.setAcronym(getAcronym());
+
 		return model;
 	}
 
@@ -51,6 +69,14 @@ public class ConfidentialityLevelTO extends AbstractReferenceTO<ConfidentialityL
 			tos.add(new ConfidentialityLevelTO(model));
 		}
 		return tos;
+	}
+
+	public String getAcronym() {
+		return acronym;
+	}
+
+	public void setAcronym(String acronym) {
+		this.acronym = acronym;
 	}
 
 }

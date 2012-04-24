@@ -63,9 +63,9 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			educationGoalForm.updateRecord( educationGoalFormModel );
 			
 			// save the full model
-			selectedEducationLevels = formUtils.getSelectedValuesAsTransferObject( educationLevelsForm.getValues(), 'Ssp.model.reference.EducationLevel' );
-			selectedFunding = formUtils.getSelectedValuesAsTransferObject( fundingForm.getValues(), 'Ssp.model.reference.FundingSource' );
-			selectedChallenges = formUtils.getSelectedValuesAsTransferObject( challengesForm.getValues(), 'Ssp.model.reference.Challenge' );
+			// selectedEducationLevels = formUtils.getSelectedValuesAsTransferObject( educationLevelsForm.getValues(), 'Ssp.model.reference.EducationLevel' );
+			//selectedFunding = formUtils.getSelectedValuesAsTransferObject( fundingForm.getValues(), 'Ssp.model.reference.FundingSource' );
+			// selectedChallenges = formUtils.getSelectedValuesAsTransferObject( challengesForm.getValues(), 'Ssp.model.reference.Challenge' );
 
 			/*
 			studentIntakeFormModel = Ext.create('Ssp.model.tool.studentintake.StudentIntakeForm',{});
@@ -79,20 +79,55 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			*/
 			// console.log( studentIntakeFormModel );
 			// studentIntakeFormModel.save();
+			var personId = personalFormModel.data.id;
+			var intakeData = {
+				person: personalFormModel.data,
+				personDemographics: demographicsFormModel.data,
+				personEducationGoal: educationGoalFormModel.data,
+				personEducationPlan: educationPlansFormModel.data,
+				personEducationLevels: selectedEducationLevels,
+				personFundingSources: selectedFunding,
+				personChallenges: selectedChallenges
+			};
+			
+			intakeData.personDemographics.personId = personId;
+			intakeData.personEducationGoal.personId = personId;
+			intakeData.personEducationPlan.personId = personId;
 
+			var educationLevelObj = educationLevelsForm.getValues();
+			var selectedEducationLevels = [];
+			for ( prop in educationLevelObj )
+			{
+				var obj = {educationLevelId: educationLevelObj[prop], personId: personId};
+				selectedEducationLevels.push( obj );
+			}
+			intakeData.personEducationLevels = selectedEducationLevels;
+			
+			var fundingObj = fundingForm.getValues();
+			var selectedFunding = [];
+			for ( prop in fundingObj )
+			{
+				var obj = {fundingSourceId: fundingObj[prop], personId: personId};
+				selectedFunding.push( obj );
+			}
+			intakeData.personFundingSources = selectedFunding;
+			
+			var challengeObj = challengesForm.getValues();
+			var selectedChallenges = [];
+			for ( prop in challengeObj )
+			{
+				var obj = {challengeId: challengeObj[prop], personId: personId};
+				selectedChallenges.push( obj );
+			}
+			intakeData.personChallenges = selectedChallenges;
+			
+			console.log(intakeData);
+			
 			Ext.Ajax.request({
-				url: '/ssp/api/tool/studentIntake/' + personalFormModel.data.id,
+				url: '/ssp/api/1/tool/studentIntake/' + personalFormModel.data.id,
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
-				jsonData: {
-					person: personalFormModel.data,
-					personDemographics: demographicsFormModel.data,
-					personEducationGoal: educationGoalFormModel.data,
-					personEducationPlan: educationPlansFormModel.data,
-					personEducationLevels: selectedEducationLevels,
-					personFundingSources: selectedFunding,
-					personChallenges: selectedChallenges
-				},
+				jsonData: intakeData,
 				success: function(response) {
 					var r = Ext.decode(response.responseText);
 					if(r.success == true) {

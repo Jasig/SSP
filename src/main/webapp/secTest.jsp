@@ -19,11 +19,11 @@ Your principal object is: <%= request.getUserPrincipal() %>
 </p>
 
 <p>
-<sec:authorize url='/api/reference/challenge/all'>You can currently access "/api/reference/challenge/all".</sec:authorize>
+<sec:authorize url='/api/1/reference/challenge/all'>You can currently access "/api/reference/challenge/all".</sec:authorize>
 </p>
 
 <p>
-<sec:authorize url='/ssp/api/reference/challenge/all'>You can currently access "/ssp/api/reference/challenge/all".</sec:authorize>
+<sec:authorize url='/ssp/api/1/reference/challenge/all'>You can currently access "/ssp/api/reference/challenge/all".</sec:authorize>
 </p>
 
 </body>

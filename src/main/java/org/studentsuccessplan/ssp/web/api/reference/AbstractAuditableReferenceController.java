@@ -7,25 +7,19 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.AbstractReference;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
 import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import org.studentsuccessplan.ssp.web.api.RestController;
 import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
@@ -79,13 +73,12 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	 *            Transfer object class type
 	 */
 	protected AbstractAuditableReferenceController(
-			final Class<T> persistentClass,
-			final Class<TO> transferObjectClass) {
+			final Class<T> persistentClass, final Class<TO> transferObjectClass) {
 		super();
 		this.persistentClass = persistentClass;
 		this.transferObjectClass = transferObjectClass;
-		this.listFactory =
-				TransferObjectListFactory.newFactory(transferObjectClass);
+		this.listFactory = TransferObjectListFactory
+				.newFactory(transferObjectClass);
 	}
 
 	@Override
@@ -98,9 +91,10 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 			final @RequestParam(required = false) String sortDirection)
 			throws Exception {
 
-		return listFactory.toTOList(getService().getAll(
-				status == null ? ObjectStatus.ACTIVE : status, start, limit,
-				sort, sortDirection));
+		return listFactory.toTOList(
+				getService().getAll(
+						SortingAndPaging.createForSingleSort(status, start,
+								limit, sort, sortDirection, "name")));
 	}
 
 	@Override
@@ -108,30 +102,30 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	public @ResponseBody
 	TO get(final @PathVariable UUID id) throws Exception {
 		final T model = getService().get(id);
-		if (model != null) {
-			final TO out = this.transferObjectClass.newInstance();
-			out.fromModel(model);
-			return out;
-		} else {
+		if (model == null) {
 			return null;
 		}
+
+		final TO out = this.transferObjectClass.newInstance();
+		out.fromModel(model);
+		return out;
 	}
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	TO create(@Valid @RequestBody TO obj) throws Exception {
+	TO create(@Valid @RequestBody final TO obj) throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send a reference entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
 
-		T model = obj.asModel();
+		final T model = obj.asModel();
 
 		if (null != model) {
-			T createdModel = getService().create(model);
+			final T createdModel = getService().create(model);
 			if (null != createdModel) {
-				TO out = this.transferObjectClass.newInstance();
+				final TO out = this.transferObjectClass.newInstance();
 				out.fromModel(createdModel);
 				return out;
 			}
@@ -142,67 +136,32 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	TO save(@PathVariable UUID id, @Valid @RequestBody TO obj) throws Exception {
+	TO save(@PathVariable final UUID id, @Valid @RequestBody final TO obj)
+			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a citizenship without an id to the save method.  Did you mean to create?");
 		}
 
-		T model = obj.asModel();
+		final T model = obj.asModel();
 		model.setId(id);
 
-		T savedT = getService().save(model);
+		final T savedT = getService().save(model);
 		if (null != savedT) {
-			TO out = this.transferObjectClass.newInstance();
+			final TO out = this.transferObjectClass.newInstance();
 			out.fromModel(savedT);
 			return out;
 		}
+
 		return null;
 	}
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
-	ServiceResponse delete(@PathVariable UUID id) throws Exception {
+	ServiceResponse delete(@PathVariable final UUID id) throws Exception {
 		getService().delete(id);
 		return new ServiceResponse(true);
 	}
 
-	@PreAuthorize("permitAll")
-	@ExceptionHandler(ObjectNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public @ResponseBody
-	ServiceResponse handleNotFound(ObjectNotFoundException e) {
-		LOGGER.error("Error: ", e);
-		return new ServiceResponse(false, e.getMessage());
-	}
-
-	@PreAuthorize("permitAll")
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public @ResponseBody
-	ServiceResponse handleValidationError(
-			final MethodArgumentNotValidException e) {
-		LOGGER.error("Error: ", e);
-		return new ServiceResponse(false, e);
-	}
-
-	@PreAuthorize("permitAll")
-	@ExceptionHandler(AccessDeniedException.class)
-	@ResponseStatus(HttpStatus.FORBIDDEN)
-	public @ResponseBody
-	ServiceResponse handleAccessDenied(AccessDeniedException e) {
-		LOGGER.error("Error: ", e);
-		return new ServiceResponse(false, e.getMessage());
-	}
-
-	@Override
-	@PreAuthorize("permitAll")
-	@ExceptionHandler(Exception.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public @ResponseBody
-	ServiceResponse handle(Exception e) {
-		LOGGER.error("Error: ", e);
-		return new ServiceResponse(false, e.getMessage());
-	}
 }

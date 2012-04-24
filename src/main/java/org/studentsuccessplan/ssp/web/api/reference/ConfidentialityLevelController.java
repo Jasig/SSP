@@ -1,5 +1,7 @@
 package org.studentsuccessplan.ssp.web.api.reference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -11,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.ConfidentialityLevelT
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/confidentialityLevel")
+@RequestMapping("/1/reference/confidentialityLevel")
 public class ConfidentialityLevelController
 		extends
 		AbstractAuditableReferenceController<ConfidentialityLevel, ConfidentialityLevelTO> {
@@ -26,5 +28,13 @@ public class ConfidentialityLevelController
 
 	protected ConfidentialityLevelController() {
 		super(ConfidentialityLevel.class, ConfidentialityLevelTO.class);
+	}
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ConfidentialityLevelController.class);
+
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
 	}
 }

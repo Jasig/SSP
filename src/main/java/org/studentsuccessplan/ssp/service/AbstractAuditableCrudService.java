@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
  * Base class which provides a building block for creating an
@@ -25,10 +26,8 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	protected abstract AuditableCrudDao<T> getDao();
 
 	@Override
-	public List<T> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection) {
-		return getDao().getAll(status, firstResult, maxResults, sort,
-				sortDirection);
+	public List<T> getAll(SortingAndPaging sAndP) {
+		return getDao().getAll(sAndP);
 	}
 
 	@Override

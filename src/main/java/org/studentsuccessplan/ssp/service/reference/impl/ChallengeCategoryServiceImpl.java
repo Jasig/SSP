@@ -12,6 +12,7 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.ChallengeCategory;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.ChallengeCategoryService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 @Transactional
@@ -21,9 +22,8 @@ public class ChallengeCategoryServiceImpl implements ChallengeCategoryService {
 	private ChallengeCategoryDao dao;
 
 	@Override
-	public List<ChallengeCategory> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection) {
-		return dao.getAll(status, firstResult, maxResults, sort, sortDirection);
+	public List<ChallengeCategory> getAll(SortingAndPaging sAndP) {
+		return dao.getAll(sAndP);
 	}
 
 	@Override

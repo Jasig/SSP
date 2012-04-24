@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
@@ -26,12 +25,10 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.studentsuccessplan.ssp.model.tool.PersonTool;
 
-import com.google.common.collect.Sets;
-
 /**
  * A Person entity.
  * 
- * Usually represents either a user of the backend system, or a student.
+ * Usually represents either a user of the back-end system, or a student.
  * 
  * @author jon.adams
  */
@@ -232,7 +229,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@ManyToOne()
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_demographics_id", unique = true, nullable = true)
 	private PersonDemographics demographics;
 
@@ -243,7 +240,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@ManyToOne()
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_goal_id", unique = true, nullable = true)
 	private PersonEducationGoal educationGoal;
 
@@ -254,7 +251,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@ManyToOne()
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_plan_id", unique = true, nullable = true)
 	private PersonEducationPlan educationPlan;
 
@@ -264,8 +261,9 @@ public class Person extends Auditable implements Serializable {
 	 * Should be null for non-student users.
 	 */
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
@@ -274,8 +272,8 @@ public class Person extends Auditable implements Serializable {
 	 * Should be null for non-student users.
 	 */
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(CascadeType.ALL)
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
@@ -284,30 +282,27 @@ public class Person extends Auditable implements Serializable {
 	 * Should be null for non-student users.
 	 */
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(CascadeType.ALL)
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private Set<PersonChallenge> challenges;
 
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
 	private Set<PersonTool> tools;
 
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
 	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
 
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
 	private Set<Task> tasks;
-
-	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(value = CascadeType.ALL)
-	private Set<CustomTask> customTasks;
-
 	/**
 	 * Strengths
 	 * 
@@ -316,14 +311,6 @@ public class Person extends Auditable implements Serializable {
 	@Column(length = 4000)
 	@Size(max = 4000)
 	private String strengths;
-
-	@Transient
-	public Set<AbstractTask> getTasksAndCustomTasks() {
-		Set<AbstractTask> tasks = Sets.newHashSet();
-		tasks.addAll(getTasks());
-		tasks.addAll(getCustomTasks());
-		return tasks;
-	}
 
 	/**
 	 * Initialize a Person.
@@ -343,7 +330,7 @@ public class Person extends Auditable implements Serializable {
 	 * @param id
 	 *            Identifier
 	 */
-	public Person(UUID id) {
+	public Person(final UUID id) {
 		super(id);
 		challenges = new HashSet<PersonChallenge>();
 		fundingSources = new HashSet<PersonFundingSource>();
@@ -362,7 +349,7 @@ public class Person extends Auditable implements Serializable {
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -370,7 +357,7 @@ public class Person extends Auditable implements Serializable {
 		return middleInitial;
 	}
 
-	public void setMiddleInitial(String middleInitial) {
+	public void setMiddleInitial(final String middleInitial) {
 		this.middleInitial = middleInitial;
 	}
 
@@ -378,7 +365,7 @@ public class Person extends Auditable implements Serializable {
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -386,7 +373,7 @@ public class Person extends Auditable implements Serializable {
 		return birthDate == null ? null : new Date(birthDate.getTime());
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(final Date birthDate) {
 		this.birthDate = birthDate == null ? null : new Date(
 				birthDate.getTime());
 	}
@@ -564,6 +551,11 @@ public class Person extends Auditable implements Serializable {
 	}
 
 	public void setUserId(String userId) {
+		if ((userId != null) && (userId.length() > 25)) {
+			throw new IllegalArgumentException(
+					"UserId must be 25 or fewer characters.");
+		}
+
 		this.userId = userId;
 	}
 
@@ -582,14 +574,6 @@ public class Person extends Auditable implements Serializable {
 
 	public void setTasks(Set<Task> tasks) {
 		this.tasks = tasks;
-	}
-
-	public Set<CustomTask> getCustomTasks() {
-		return customTasks;
-	}
-
-	public void setCustomTasks(Set<CustomTask> customTasks) {
-		this.customTasks = customTasks;
 	}
 
 	/**

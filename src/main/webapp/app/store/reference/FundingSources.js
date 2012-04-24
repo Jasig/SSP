@@ -7,7 +7,7 @@ Ext.define('Ssp.store.reference.FundingSources', {
 
     proxy: {
 		type: 'rest',
-		url: '/ssp/api/reference/fundingSource/',
+		url: '/ssp/api/1/reference/fundingSource/',
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 

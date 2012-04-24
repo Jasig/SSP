@@ -12,7 +12,7 @@ import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
  * @param <T>
  *            The TO type this controller works with.
  */
-public abstract class RestController<T> {
+public abstract class RestController<T> extends BaseController {
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -100,13 +100,4 @@ public abstract class RestController<T> {
 	 */
 	public abstract ServiceResponse delete(UUID id) throws Exception;
 
-	/**
-	 * Handles any exception thrown by, or allowed to propagate up through the
-	 * controller.
-	 * 
-	 * @param e
-	 *            Exception that was thrown.
-	 * @return Message containing the reason for the exception.
-	 */
-	public abstract ServiceResponse handle(Exception e);
 }

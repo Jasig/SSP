@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
 import org.studentsuccessplan.ssp.model.reference.Citizenship;
 import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
@@ -59,18 +61,21 @@ public class PersonDemographics extends Auditable implements Serializable {
 	private String paymentStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "marital_status_id", nullable = true, insertable = true, updatable = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "marital_status_id", nullable = true)
 	private MaritalStatus maritalStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ethnicity_id", nullable = true, insertable = true, updatable = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "ethnicity_id", nullable = true)
 	private Ethnicity ethnicity;
 
 	@Enumerated(EnumType.STRING)
 	private Genders gender;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "citizenship_id", nullable = true, insertable = true, updatable = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "citizenship_id", nullable = true)
 	private Citizenship citizenship;
 
 	@Column(length = 50)
@@ -78,7 +83,8 @@ public class PersonDemographics extends Auditable implements Serializable {
 	private String countryOfCitizenship;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "veteran_status_id", nullable = true, insertable = true, updatable = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "veteran_status_id", nullable = true)
 	private VeteranStatus veteranStatus;
 
 	@Column
@@ -88,7 +94,8 @@ public class PersonDemographics extends Auditable implements Serializable {
 	private int numberOfChildren;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "child_care_arrangement_id", nullable = true, insertable = true, updatable = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "child_care_arrangement_id", nullable = true)
 	private ChildCareArrangement childCareArrangement;
 
 	@Column(length = 50)
@@ -116,7 +123,8 @@ public class PersonDemographics extends Auditable implements Serializable {
 	private String totalHoursWorkedPerWeek;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "coach_id", nullable = true, insertable = true, updatable = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "coach_id", nullable = true)
 	private Person coach;
 
 	public boolean isAbilityToBenefit() {

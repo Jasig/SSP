@@ -16,7 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonEducationLevel;
@@ -25,6 +24,7 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.studentsuccessplan.ssp.service.reference.EducationLevelService;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
@@ -52,8 +52,8 @@ public class PersonEducationLevelDaoTest {
 	@Before
 	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
-		testEducationLevel = educationLevelService.getAll(ObjectStatus.ACTIVE,
-				null, null, null, null).get(0);
+		testEducationLevel = educationLevelService.getAll(new SortingAndPaging(
+				ObjectStatus.ACTIVE)).get(0);
 	}
 
 	@Test

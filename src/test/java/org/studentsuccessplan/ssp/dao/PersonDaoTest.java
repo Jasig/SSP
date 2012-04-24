@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.studentsuccessplan.ssp.util.sort.SortDirection;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
@@ -59,8 +61,9 @@ public class PersonDaoTest {
 	@Test
 	public void testGetAllWithRowFilter() {
 		List<Person> listAll = dao.getAll(ObjectStatus.ALL);
-		List<Person> listFiltered = dao.getAll(ObjectStatus.ALL, 1, 2, null,
-				null);
+		List<Person> listFiltered = dao.getAll(new SortingAndPaging(
+				ObjectStatus.ALL, 1, 2, null,
+				"lastName", SortDirection.ASC));
 
 		assertNotNull(listAll);
 		assertTrue("List should have included multiple entities.",

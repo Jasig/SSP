@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.studentsuccessplan.ssp.model.reference.FundingSource;
 
 /**
@@ -36,11 +38,13 @@ public class PersonFundingSource extends Auditable implements Serializable {
 	 * Associated person. Changes to this Person are not persisted.
 	 */
 	@ManyToOne
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "person_id")
 	private Person person;
 
 	@ManyToOne
-	@JoinColumn(name = "funding_source_id", nullable = false, insertable = false, updatable = false)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "funding_source_id", nullable = false)
 	private FundingSource fundingSource;
 
 	public String getDescription() {

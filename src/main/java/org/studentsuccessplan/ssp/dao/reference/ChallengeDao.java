@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
  * Data access class for the Challenge reference entity.
@@ -18,14 +21,30 @@ import org.studentsuccessplan.ssp.model.reference.Challenge;
 public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 		implements AuditableCrudDao<Challenge> {
 
+	/**
+	 * Constructor to initialize the class with the appropriate class type for
+	 * use by the parent class methods.
+	 */
 	public ChallengeDao() {
 		super(Challenge.class);
 	}
 
+	/**
+	 * Retrieves all Challenges that have been marked "Affirmative" for the
+	 * specified SelfHelpGuideResponseId.
+	 * <p>
+	 * Orders the list alphabetically by Challenge.Name.
+	 * 
+	 * @param selfHelpGuideResponseId
+	 *            Specific SelfHelpGuideResponse identifier to use in the
+	 *            criteria filter.
+	 * @return All Challenges that have been marked "Affirmative" for the
+	 *         specified SelfHelpGuideResponseId.
+	 */
 	@SuppressWarnings("unchecked")
 	// :TODO paging?
 	public List<Challenge> selectAffirmativeBySelfHelpGuideResponseId(
-			final UUID selfHelpGuideResponseId) {
+			@NotNull final UUID selfHelpGuideResponseId) {
 		return sessionFactory
 				.getCurrentSession()
 				.createQuery(
@@ -76,13 +95,19 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 				.setParameter("objectStatus", ObjectStatus.ACTIVE).list();
 	}
 
+	/**
+	 * Retrieves all Challenges that are marked to be able to be shown in the
+	 * StudentIntake interface.
+	 * 
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return List of all Challenges that are marked to be able to be shown in
+	 *         the StudentIntake interface.
+	 */
 	@SuppressWarnings("unchecked")
-	// :TODO paging?
-	public List<Challenge> getAllInStudentIntake() {
-		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(Challenge.class)
-				.add(Restrictions.eq("showInStudentIntake", true));
+	public List<Challenge> getAllInStudentIntake(SortingAndPaging sAndP) {
+		final Criteria query = createCriteria(sAndP).add(
+				Restrictions.eq("showInStudentIntake", true));
 		return query.list();
 	}
-
 }

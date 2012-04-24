@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">	
+		
+	<changeSet id="test confidentiality level" author="daniel.bower">
+		<insert tableName="confidentiality_level">
+			<column name="id" value="afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c" />
+			<column name="name" value="Test Confidentiality Level" />
+			<column name="description" value="This is the description of the Test Confidentiality Level." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="acronym" value="LEVEL0" />
+		</insert>
+		<rollback>
+			<delete tableName="confidentiality_level">
+				<where>id='afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

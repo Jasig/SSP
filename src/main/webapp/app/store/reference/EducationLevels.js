@@ -7,7 +7,7 @@ Ext.define('Ssp.store.reference.EducationLevels', {
 
     proxy: {
 		type: 'rest',
-		url: '/ssp/api/reference/educationLevel/',
+		url: '/ssp/api/1/reference/educationLevel/',
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 

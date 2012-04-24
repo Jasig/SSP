@@ -1,5 +1,7 @@
 package org.studentsuccessplan.ssp.web.api.reference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -11,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.EducationGoalTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/educationGoal")
+@RequestMapping("/1/reference/educationGoal")
 public class EducationGoalController extends
 		AbstractAuditableReferenceController<EducationGoal, EducationGoalTO> {
 
@@ -25,5 +27,13 @@ public class EducationGoalController extends
 
 	protected EducationGoalController() {
 		super(EducationGoal.class, EducationGoalTO.class);
+	}
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(EducationGoalController.class);
+
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
 	}
 }

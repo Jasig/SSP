@@ -6,6 +6,6 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	    } else {
 	        base = document.URL;
 	    }
-	    return base.substr(0, base.indexOf("/", base.indexOf("/", base.indexOf("//") + 2) + 1)) + '/api/';
+	    return base.substr(0, base.indexOf("/", base.indexOf("/", base.indexOf("//") + 2) + 1)) + '/api/1/';
 	}
 });

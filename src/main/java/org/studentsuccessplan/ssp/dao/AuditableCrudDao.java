@@ -5,7 +5,14 @@ import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
+/**
+ * Required interface for all the basic CRUD methods for the DAO layer.
+ * 
+ * @param <T>
+ *            Any Auditable model class
+ */
 public interface AuditableCrudDao<T extends Auditable> {
 
 	/**
@@ -24,30 +31,12 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * Return all entities in the database, filtered only by the specified
 	 * parameters.
 	 * 
-	 * @param status
-	 *            Object status filter. Set to {@link ObjectStatus#ALL} to
-	 *            return all results.
-	 * @param firstResult
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param maxResults
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer.
-	 * @param sort
-	 *            Property name. If null or empty string, the default sort will
-	 *            be used. If non-empty, must be a case-sensitive model property
-	 *            name. Often comes from client as a parameter labeled
-	 *            <code>sort</code>. Example sort expression:
-	 *            <code>propertyName</code>
-	 * @param sortDirection
-	 *            Ascending/descending keyword. If null or empty string, the
-	 *            default sort will be used. Must be <code>ASC</code> or
-	 *            <code>DESC</code>.
+	 * @param sAndP
+	 *            Sorting and paging parameters
 	 * @return All entities in the database, filtered only by the specified
 	 *         parameters.
 	 */
-	List<T> getAll(ObjectStatus status, Integer firstResult,
-			Integer maxResults, String sort, String sortDirection);
+	List<T> getAll(SortingAndPaging sAndP);
 
 	/**
 	 * Retrieves the specified instance from persistent storage, or returns null
@@ -57,6 +46,16 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @return The specified instance if found; null otherwise.
 	 */
 	T get(UUID id);
+
+	/**
+	 * Lazily retrieves the specified instance from persistent storage.
+	 * Exception will be thrown later, on usage, if any, if the object is not
+	 * found.
+	 * 
+	 * @param id
+	 * @return The specified instance.
+	 */
+	T load(UUID id);
 
 	/**
 	 * Save instance to persistent storage.

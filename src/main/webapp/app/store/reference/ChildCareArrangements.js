@@ -7,7 +7,7 @@ Ext.define('Ssp.store.reference.ChildCareArrangements', {
 
     proxy: {
 		type: 'rest',
-		url: '/ssp/api/reference/childCareArrangement/',	
+		url: '/ssp/api/1/reference/childCareArrangement/',	
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 
