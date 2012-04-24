@@ -3,10 +3,9 @@
  * Copyright (c) 2011 CodeCatalyst, LLC.
  * Open source under the MIT License.
  */
-(function() {
-  var $, TEMPLATE_NAME_EXPRESSION;
+(function($) {
+  var TEMPLATE_NAME_EXPRESSION;
   TEMPLATE_NAME_EXPRESSION = /\/*([\w]*).html$/;
-  $ = jQuery;
   $.extend({
     loadTemplates: function(templates, templateProcessorCallback) {
       var deferred, loadedTemplates, templateCount;
@@ -16,7 +15,7 @@
       if (typeof templates === "string") {
         templates = [templates];
       }
-      deferred = new jQuery.Deferred();
+      deferred = new $.Deferred();
       templateCount = 0;
       loadedTemplates = [];
       $.each(templates, function(templateName, template) {
@@ -67,4 +66,4 @@
     });
     return promise;
   };
-}).call(this);
+}).call(this, jQuery);
