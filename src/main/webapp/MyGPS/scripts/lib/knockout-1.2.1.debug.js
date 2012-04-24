@@ -2,7 +2,7 @@
 // (c) Steven Sanderson - http://knockoutjs.com/
 // License: MIT (http://www.opensource.org/licenses/mit-license.php)
 
-(function($, window,undefined){ 
+(function(window,undefined){ 
 var ko = window["ko"] = {};
 // Google Closure Compiler helpers (used only to make the minified file smaller)
 ko.exportSymbol = function(publicPath, object) {
@@ -198,7 +198,7 @@ ko.utils = new (function () {
         },
 
         registerEventHandler: function (element, eventType, handler) {
-            if (typeof $ != "undefined") {
+            if (typeof jQuery != "undefined") {
                 if (isClickOnCheckableElement(element, eventType)) {
                     // For click events on checkboxes, jQuery interferes with the event handling in an awkward way:
                     // it toggles the element checked state *after* the click event handlers run, whereas native
@@ -213,7 +213,7 @@ ko.utils = new (function () {
                         this.checked = jQuerySuppliedCheckedState; // Restore the state jQuery applied
                     };                	
                 }
-                $(element)['bind'](eventType, handler);
+                jQuery(element)['bind'](eventType, handler);
             } else if (typeof element.addEventListener == "function")
                 element.addEventListener(eventType, handler, false);
             else if (typeof element.attachEvent != "undefined")
@@ -228,13 +228,13 @@ ko.utils = new (function () {
             if (!(element && element.nodeType))
                 throw new Error("element must be a DOM node when calling triggerEvent");
 
-            if (typeof $ != "undefined") {
+            if (typeof jQuery != "undefined") {
                 var eventData = [];
                 if (isClickOnCheckableElement(element, eventType)) {
                     // Work around the jQuery "click events on checkboxes" issue described above by storing the original checked state before triggering the handler
                     eventData.push({ checkedStateBeforeEvent: element.checked });
                 }
-                $(element)['trigger'](eventType, eventData);
+                jQuery(element)['trigger'](eventType, eventData);
             } else if (typeof document.createEvent == "function") {
                 if (typeof element.dispatchEvent == "function") {
                     var eventCategory = knownEventTypesByEventName[eventType] || "HTMLEvents";
@@ -470,8 +470,8 @@ ko.utils.domNodeDisposal = new (function () {
         // Special support for jQuery here because it's so commonly used.
         // Many jQuery plugins (including jquery.tmpl) store data using jQuery's equivalent of domData
         // so notify it to tear down any resources associated with the node & descendants here.
-        if ((typeof $ == "function") && (typeof $['cleanData'] == "function"))
-            $['cleanData']([node]);			
+        if ((typeof jQuery == "function") && (typeof jQuery['cleanData'] == "function"))
+            jQuery['cleanData']([node]);			
     }
     
     return {
@@ -543,7 +543,7 @@ ko.exportSymbol('ko.utils.domNodeDisposal.removeDisposeCallback', ko.utils.domNo
     }
     
     ko.utils.parseHtmlFragment = function(html) {
-        return typeof $ != 'undefined' ? $['clean']([html]) // As below, benefit from jQuery's optimisations where possible
+        return typeof jQuery != 'undefined' ? jQuery['clean']([html]) // As below, benefit from jQuery's optimisations where possible
                                             : simpleHtmlParse(html);  // ... otherwise, this simple logic will do in most common cases.
     };
     
@@ -557,8 +557,8 @@ ko.exportSymbol('ko.utils.domNodeDisposal.removeDisposeCallback', ko.utils.domNo
             // jQuery contains a lot of sophisticated code to parse arbitrary HTML fragments,
             // for example <tr> elements which are not normally allowed to exist on their own.
             // If you've referenced jQuery we'll use that rather than duplicating its code.
-            if (typeof $ != 'undefined') {
-                $(node)['html'](html);
+            if (typeof jQuery != 'undefined') {
+                jQuery(node)['html'](html);
             } else {
                 // ... otherwise, use KO's own parsing logic.
                 var parsedNodes = ko.utils.parseHtmlFragment(html);
@@ -2108,12 +2108,12 @@ ko.jqueryTmplTemplateEngine = function () {
     // Detect which version of jquery-tmpl you're using. Unfortunately jquery-tmpl 
     // doesn't expose a version number, so we have to infer it.
     this.jQueryTmplVersion = (function() {        
-        if ((typeof($) == "undefined") || !$['tmpl'])
+        if ((typeof(jQuery) == "undefined") || !jQuery['tmpl'])
             return 0;
         // Since it exposes no official version number, we use our own numbering system. To be updated as jquery-tmpl evolves.
-        if ($['tmpl']['tag']) {
-            if ($['tmpl']['tag']['tmpl'] && $['tmpl']['tag']['tmpl']['open']) {
-                if ($['tmpl']['tag']['tmpl']['open'].toString().indexOf('__') >= 0) {
+        if (jQuery['tmpl']['tag']) {
+            if (jQuery['tmpl']['tag']['tmpl'] && jQuery['tmpl']['tag']['tmpl']['open']) {
+                if (jQuery['tmpl']['tag']['tmpl']['open'].toString().indexOf('__') >= 0) {
                     return 3; // Since 1.0.0pre, custom tags should append markup to an array called "__"
                 }
             }
@@ -2144,29 +2144,29 @@ ko.jqueryTmplTemplateEngine = function () {
             // text and doesn't try to parse the output. Then, since jquery.tmpl has jQuery as a dependency anyway, we can use jQuery to
             // parse that text into a document fragment using jQuery.clean().        
             var templateTextInWrapper = "<script type=\"text/html\">" + this['getTemplateNode'](templateId).text + "</script>";
-            var renderedMarkupInWrapper = $['tmpl'](templateTextInWrapper, data);
+            var renderedMarkupInWrapper = jQuery['tmpl'](templateTextInWrapper, data);
             var renderedMarkup = renderedMarkupInWrapper[0].text.replace(aposRegex, "'");;
-            return $['clean']([renderedMarkup], document);
+            return jQuery['clean']([renderedMarkup], document);
         }
         
         // It's easier with jquery.tmpl v2 and later - it handles any DOM structure
-        if (!(templateId in $['template'])) {
+        if (!(templateId in jQuery['template'])) {
             // Precache a precompiled version of this template (don't want to reparse on every render)
             var templateText = this['getTemplateNode'](templateId).text;
-            $['template'](templateId, templateText);
+            jQuery['template'](templateId, templateText);
         }        
         data = [data]; // Prewrap the data in an array to stop jquery.tmpl from trying to unwrap any arrays
         
-        var resultNodes = $['tmpl'](templateId, data, options['templateOptions']);
+        var resultNodes = jQuery['tmpl'](templateId, data, options['templateOptions']);
         resultNodes['appendTo'](document.createElement("div")); // Using "appendTo" forces jQuery/jQuery.tmpl to perform necessary cleanup work
-        $['fragments'] = {}; // Clear jQuery's fragment cache to avoid a memory leak after a large number of template renders
+        jQuery['fragments'] = {}; // Clear jQuery's fragment cache to avoid a memory leak after a large number of template renders
         return resultNodes; 
     },
 
     this['isTemplateRewritten'] = function (templateId) {
         // It must already be rewritten if we've already got a cached version of it
         // (this optimisation helps on IE < 9, because it greatly reduces the number of getElementById calls)
-        if (templateId in $['template'])
+        if (templateId in jQuery['template'])
             return true;
         
         return this['getTemplateNode'](templateId).isRewritten === true;
@@ -2208,7 +2208,7 @@ ko.jqueryTmplTemplateEngine = function () {
     ko.exportProperty(this, 'addTemplate', this.addTemplate);
     
     if (this.jQueryTmplVersion > 1) {
-        $['tmpl']['tag']['ko_code'] = {
+        jQuery['tmpl']['tag']['ko_code'] = {
             open: (this.jQueryTmplVersion < 3 ? "_" : "__") + ".push($1 || '');"
         };
     }    
@@ -2219,4 +2219,4 @@ ko.jqueryTmplTemplateEngine.prototype = new ko.templateEngine();
 // Use this one by default
 ko.setTemplateEngine(new ko.jqueryTmplTemplateEngine());
 
-ko.exportSymbol('ko.jqueryTmplTemplateEngine', ko.jqueryTmplTemplateEngine);})(jQuery, window);
+ko.exportSymbol('ko.jqueryTmplTemplateEngine', ko.jqueryTmplTemplateEngine);})(window);                  

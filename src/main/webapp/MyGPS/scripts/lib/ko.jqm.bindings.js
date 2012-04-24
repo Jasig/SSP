@@ -3,7 +3,7 @@
  * Copyright (c) 2011 CodeCatalyst, LLC.
  * Open source under the MIT License.
  */
-(function($) {
+(function() {
   var checkedBindingInitHandler, checkedBindingUpdateHandler, enableBindingUpdateHandler, keepNative, refreshElement, templateBindingUpdateHandler, valueBindingUpdateHandler;
   keepNative = ":jqmData(role='none'), :jqmData(role='nojs')";
   refreshElement = function(element, method) {
@@ -113,4 +113,4 @@
     ko.utils.domData.set(element, renderTemplateSubscriptionDomDataKey, renderTemplateSubscription);
   };
   ko.utils.setDomNodeChildren;
-}).call(this, jQuery);
+}).call(this);
