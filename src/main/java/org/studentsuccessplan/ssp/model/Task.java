@@ -82,6 +82,10 @@ public class Task extends Auditable implements Serializable {
 	}
 
 	public String getType() {
+		if (person == null) {
+			return null;
+		}
+
 		if (person.getId() != getCreatedBy().getId()) {
 			return SSP_ACTION_PLAN_TASK;
 		} else {
