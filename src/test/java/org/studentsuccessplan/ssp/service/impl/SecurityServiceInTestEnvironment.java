@@ -31,6 +31,14 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 				: current;
 	}
 
+	@Override
+	public SspUser anonymousUser() {
+		SspUser user = new SspUser(SspUser.ANONYMOUS_PERSON_USERNAME,
+				"", true, true, true, true,
+				new ArrayList<GrantedAuthority>(0));
+		return user;
+	}
+
 	/**
 	 * Set the current user.
 	 * 

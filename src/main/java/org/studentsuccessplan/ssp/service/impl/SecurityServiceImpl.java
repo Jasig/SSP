@@ -17,7 +17,7 @@ import org.studentsuccessplan.ssp.service.SecurityService;
 @Transactional(readOnly = true)
 public class SecurityServiceImpl implements SecurityService {
 
-	private final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SecurityServiceImpl.class);
 
 	@Autowired
@@ -28,10 +28,24 @@ public class SecurityServiceImpl implements SecurityService {
 		SspUser sspUser = currentUser();
 
 		// Check for missing data or the anonymous user
-		return sspUser == null
+		return (sspUser == null)
 				|| SspUser.ANONYMOUS_PERSON_USERNAME.equals(sspUser
-						.getUsername()) || sspUser.getPerson() == null ? null
+						.getUsername()) || (sspUser.getPerson() == null) ? null
 				: sspUser;
+	}
+
+	@Override
+	public SspUser anonymousUser() {
+		SspUser user = new SspUser(SspUser.ANONYMOUS_PERSON_USERNAME,
+				"", true, true, true, true,
+				new ArrayList<GrantedAuthority>(0));
+		try {
+			user.setPerson(personService
+					.personFromUsername(SspUser.ANONYMOUS_PERSON_USERNAME));
+		} catch (ObjectNotFoundException e) {
+			LOGGER.error("Anonymous User appears not to be configured");
+		}
+		return user;
 	}
 
 	@Override
@@ -47,16 +61,14 @@ public class SecurityServiceImpl implements SecurityService {
 				sspUser = (SspUser) principal;
 			} else if (principal instanceof String) {
 				if (SspUser.ANONYMOUS_PERSON_USERNAME.equals(principal)) {
-					sspUser = new SspUser(SspUser.ANONYMOUS_PERSON_USERNAME,
-							"", true, true, true, true,
-							new ArrayList<GrantedAuthority>(0));
+					sspUser = anonymousUser();
 				} else {
-					logger.error("Just tried to get an sspUser object from a user that is "
+					LOGGER.error("Just tried to get an sspUser object from a user that is "
 							+ principal);
 					return null;
 				}
 			} else {
-				logger.error("Just tried to get an sspUser object from an object that is really a "
+				LOGGER.error("Just tried to get an sspUser object from an object that is really a "
 						+ principal.toString());
 				return null;
 			}
@@ -69,7 +81,7 @@ public class SecurityServiceImpl implements SecurityService {
 				sspUser.setPerson(personService.personFromUsername(sspUser
 						.getUsername()));
 			} catch (ObjectNotFoundException e) {
-				logger.error("Did not find the person's domain object");
+				LOGGER.error("Did not find the person's domain object");
 				return null;
 			}
 		}
@@ -81,7 +93,7 @@ public class SecurityServiceImpl implements SecurityService {
 	public boolean isAuthenticated() {
 		return SecurityContextHolder.getContext().getAuthentication()
 				.isAuthenticated()
-				&& currentUser() != null;
+				&& (currentUser() != null);
 	}
 
 	@Override
