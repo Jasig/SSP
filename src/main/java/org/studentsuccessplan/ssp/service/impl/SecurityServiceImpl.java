@@ -21,11 +21,11 @@ public class SecurityServiceImpl implements SecurityService {
 			.getLogger(SecurityServiceImpl.class);
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	@Override
 	public SspUser currentlyAuthenticatedUser() {
-		SspUser sspUser = currentUser();
+		final SspUser sspUser = currentUser();
 
 		// Check for missing data or the anonymous user
 		return (sspUser == null)
@@ -36,7 +36,7 @@ public class SecurityServiceImpl implements SecurityService {
 
 	@Override
 	public SspUser anonymousUser() {
-		SspUser user = new SspUser(SspUser.ANONYMOUS_PERSON_USERNAME,
+		final SspUser user = new SspUser(SspUser.ANONYMOUS_PERSON_USERNAME,
 				"", true, true, true, true,
 				new ArrayList<GrantedAuthority>(0));
 		try {
@@ -54,7 +54,7 @@ public class SecurityServiceImpl implements SecurityService {
 
 		if (SecurityContextHolder.getContext().getAuthentication()
 				.isAuthenticated()) {
-			Object principal = SecurityContextHolder.getContext()
+			final Object principal = SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
 
 			if (principal instanceof SspUser) {
