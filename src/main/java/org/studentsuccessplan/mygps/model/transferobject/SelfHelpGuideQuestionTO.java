@@ -5,14 +5,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
+import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
 import com.google.common.collect.Sets;
 
+@JsonIgnoreProperties(value = { "selfHelpGuide" })
 public class SelfHelpGuideQuestionTO extends
 		AbstractReferenceTO<SelfHelpGuideQuestion> implements Serializable {
 
@@ -24,7 +26,7 @@ public class SelfHelpGuideQuestionTO extends
 
 	private boolean mandatory;
 
-	private Challenge challenge;
+	private ChallengeTO challenge;
 
 	private SelfHelpGuide selfHelpGuide;
 
@@ -79,7 +81,7 @@ public class SelfHelpGuideQuestionTO extends
 	/**
 	 * @return the challenge
 	 */
-	public Challenge getChallenge() {
+	public ChallengeTO getChallenge() {
 		return challenge;
 	}
 
@@ -87,7 +89,7 @@ public class SelfHelpGuideQuestionTO extends
 	 * @param challenge
 	 *            the challenge to set
 	 */
-	public void setChallenge(Challenge challenge) {
+	public void setChallenge(ChallengeTO challenge) {
 		this.challenge = challenge;
 	}
 
@@ -140,7 +142,9 @@ public class SelfHelpGuideQuestionTO extends
 		setQuestionNumber(model.getQuestionNumber());
 		setCritical(model.isCritical());
 		setMandatory(model.isMandatory());
-		setChallenge(model.getChallenge());
+		ChallengeTO challenge = new ChallengeTO();
+		challenge.fromModel(model.getChallenge());
+		setChallenge(challenge);
 		setSelfHelpGuide(model.getSelfHelpGuide());
 		setSelfHelpGuideQuestionResponses(model
 				.getSelfHelpGuideQuestionResponses());

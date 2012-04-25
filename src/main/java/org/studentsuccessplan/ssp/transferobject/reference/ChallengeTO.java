@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeChallengeReferral;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
@@ -16,6 +17,7 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
+@JsonIgnoreProperties(value = { "selfHelpGuideQuestions" })
 public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge>, Serializable {
 
@@ -30,7 +32,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	 * Just a reference to the questions that reference this Challenge. Think of
 	 * as selfHelpQuideChallenges
 	 */
-	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
+	private transient Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
 			0);
 
 	/**
