@@ -30,6 +30,8 @@ import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
+import com.google.common.collect.Lists;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
@@ -145,6 +147,16 @@ public class TaskDaoTest {
 		assertList(dao.getAllForSessionIdAndChallengeReferralId(
 				"test sessionId", true, testChallengeReferral.getId(),
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
+	}
+
+	@Test
+	public void getTasksInList() {
+		List<UUID> taskIds = Lists.newArrayList();
+		taskIds.add(UUID.randomUUID());
+		taskIds.add(UUID.randomUUID());
+		taskIds.add(UUID.randomUUID());
+		assertList(dao.getTasksInList(taskIds, new SortingAndPaging(
+				ObjectStatus.ACTIVE)));
 	}
 
 	protected void assertList(List<Task> objects) {

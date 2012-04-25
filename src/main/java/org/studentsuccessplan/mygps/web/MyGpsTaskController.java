@@ -15,20 +15,38 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.studentsuccessplan.mygps.business.TaskManager;
-import org.studentsuccessplan.mygps.model.transferobject.TaskTO;
+import org.studentsuccessplan.mygps.model.transferobject.TaskReportTO;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.Task;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.TaskService;
+import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
+import org.studentsuccessplan.ssp.service.reference.ChallengeService;
+import org.studentsuccessplan.ssp.transferobject.TaskTO;
+import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+
+import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/mygps/task")
 public class MyGpsTaskController extends AbstractMyGpsController {
 
 	@Autowired
-	private TaskManager taskManager;
+	private TaskService taskService;
 
 	@Autowired
-	private TaskService taskService;
+	private ChallengeService challengeService;
+
+	@Autowired
+	private ChallengeReferralService challengeReferralService;
+
+	@Autowired
+	private PersonService personService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsTaskController.class);
@@ -36,9 +54,16 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 	public MyGpsTaskController() {
 	}
 
-	public MyGpsTaskController(TaskManager taskManager, TaskService taskService) {
-		this.taskManager = taskManager;
+	public MyGpsTaskController(final TaskService taskService,
+			final ChallengeService challengeService,
+			final ChallengeReferralService challengeReferralService,
+			final PersonService personService,
+			final SecurityService securityService) {
 		this.taskService = taskService;
+		this.challengeService = challengeService;
+		this.challengeReferralService = challengeReferralService;
+		this.personService = personService;
+		this.securityService = securityService;
 	}
 
 	/*
@@ -50,8 +75,6 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 	 * @param description - description of the task
 	 * 
 	 * @param studentId - a student id of the student receiving the task
-	 * 
-	 * @param token - security token allowing access to the service.
 	 */
 	@RequestMapping(value = "/createTaskForStudent", method = RequestMethod.POST)
 	public @ResponseBody
@@ -59,23 +82,24 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 			@RequestParam("description") String description,
 			@RequestParam("studentId") String studentId,
 			@RequestParam("dueDate") Date dueDate,
-			@RequestParam("token") String token,
-			@RequestParam("messageTemplate") UUID messageTemplate)
+			@RequestParam("messageTemplate") UUID messageTemplateId)
 			throws Exception {
-		try {
-			if (token
-					.equals("30e96815b3b985df8ea6f2f3c4ef00cb9aaa11620ae3a7ae44eb3808d25083a87663c6e390400f164b9b88a9f7681cb3c96e77b830fa257d0c286e7d6")) {
-				taskManager.createTaskForStudent(name, description, studentId,
-						dueDate, messageTemplate);
-				return true;
-			} else {
-				LOGGER.error("Token exception in MyGpsTaskController.createTaskForStudent");
-				return false;
-			}
-		} catch (Exception e) {
-			LOGGER.error("ERROR: createTaskForStudent(): {}", e.getMessage(), e);
-			return false;
+
+		Person student = personService.personFromUserId(studentId);
+		if (student == null) {
+			throw new ObjectNotFoundException(
+					"Unable to acquire person for supplied student id "
+							+ studentId);
 		}
+
+		String session = securityService.getSessionId();
+
+		Task task = taskService.createCustomTaskForPerson(name,
+				description, student, session);
+
+		taskService.sendNoticeToStudentOnCustomTask(task, messageTemplateId);
+
+		return true;
 	}
 
 	@RequestMapping(value = "/createCustom", method = RequestMethod.GET)
@@ -83,12 +107,13 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 	TaskTO createCustom(@RequestParam("name") String name,
 			@RequestParam("description") String description) throws Exception {
 
-		try {
-			return taskManager.createCustom(name, description);
-		} catch (Exception e) {
-			LOGGER.error("ERROR : createCustom() : {}", e.getMessage(), e);
-			throw e;
-		}
+		Person student = securityService.currentUser().getPerson();
+		String session = securityService.getSessionId();
+
+		Task task = taskService.createCustomTaskForPerson(name, description,
+				student, session);
+
+		return new TaskTO(task);
 	}
 
 	@RequestMapping(value = "/createForChallengeReferral", method = RequestMethod.GET)
@@ -98,27 +123,27 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 			@RequestParam("challengeReferralId") UUID challengeReferralId)
 			throws Exception {
 
-		try {
-			return taskManager.createTaskForChallengeReferral(challengeId,
-					challengeReferralId);
-		} catch (Exception e) {
-			LOGGER.error("ERROR : createForChallengeReferral() : {}",
-					e.getMessage(), e);
-			throw e;
-		}
+		final Challenge challenge = challengeService.get(challengeId);
+		final ChallengeReferral challengeReferral = challengeReferralService
+				.get(challengeReferralId);
+		final Person user = securityService.currentUser().getPerson();
+		final String session = securityService.getSessionId();
+
+		final Task task = taskService.createForPersonWithChallengeReferral(
+				challenge,
+				challengeReferral,
+				user,
+				session);
+
+		return new TaskTO(task);
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public @ResponseBody
 	boolean delete(@RequestParam("taskId") UUID taskId) throws Exception {
 
-		try {
-			taskService.delete(taskId);
-			return true;
-		} catch (Exception e) {
-			LOGGER.error("ERROR : delete() : {}", e.getMessage(), e);
-			throw e;
-		}
+		taskService.delete(taskId);
+		return true;
 	}
 
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
@@ -126,60 +151,85 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 	boolean email(@RequestParam("emailAddress") String emailAddress)
 			throws Exception {
 
-		try {
-			return taskManager.email(emailAddress);
-		} catch (Exception e) {
-			LOGGER.error("ERROR : email() : {}", e.getMessage(), e);
-			throw e;
+		final SortingAndPaging sAndP = new SortingAndPaging(
+				ObjectStatus.ACTIVE);
+
+		List<Task> tasks = null;
+		Person student = null;
+		if (securityService.isAuthenticated()) {
+			student = securityService.currentUser().getPerson();
+			tasks = taskService.getAllForPerson(student, false, sAndP);
+		} else {
+			student = securityService.anonymousUser().getPerson();
+			tasks = taskService.getAllForSessionId(
+					securityService.getSessionId(), true, sAndP);
 		}
+
+		List<String> emailAddresses = Lists.newArrayList();
+		emailAddresses.add(emailAddress);
+
+		taskService.sendTasksForPersonToEmail(tasks, student, emailAddresses,
+				null);
+
+		return true;
 	}
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public @ResponseBody
 	List<TaskTO> getAll() throws Exception {
 
-		try {
-			return taskManager.getAllTasks();
-		} catch (Exception e) {
-			LOGGER.error("ERROR : getAll() : {}", e.getMessage(), e);
-			throw e;
+		final SortingAndPaging sAndP = new SortingAndPaging(
+				ObjectStatus.ACTIVE);
+
+		List<Task> tasks = null;
+
+		if (securityService.isAuthenticated()) {
+			Person student = securityService.currentUser().getPerson();
+			tasks = taskService.getAllForPerson(student, sAndP);
+		} else {
+			String sessionId = securityService.getSessionId();
+			tasks = taskService.getAllForSessionId(sessionId, sAndP);
 		}
+
+		return (tasks != null) ? TaskTO.tasksToTaskTOs(tasks) : null;
 	}
 
 	@RequestMapping(value = "/mark", method = RequestMethod.GET)
 	public @ResponseBody
-	TaskTO mark(@RequestParam("taskId") String taskId,
+	TaskTO mark(@RequestParam("taskId") UUID taskId,
 			@RequestParam("complete") Boolean complete) throws Exception {
 
-		try {
-			return taskManager.markTask(taskId, complete);
-		} catch (Exception e) {
-			LOGGER.error("ERROR : markTask() : {}", e.getMessage(), e);
-			throw e;
-		}
+		Task task = taskService.get(taskId);
+		taskService.markTaskCompletion(task, complete);
+		return new TaskTO(task);
 	}
 
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	public ModelAndView print() throws Exception {
 
-		try {
-			Map<String, Object> model = new HashMap<String, Object>();
+		final Map<String, Object> model = new HashMap<String, Object>();
 
-			if (securityService.isAuthenticated()) {
-				Person student = securityService.currentUser()
-						.getPerson();
-				model.put("studentName",
-						student.getFirstName() + " " + student.getLastName());
-			} else {
-				model.put("studentName", "");
-			}
-			model.put("myBeanData", taskManager.getActionPlanReportData());
+		final SortingAndPaging sAndP = new SortingAndPaging(
+				ObjectStatus.ACTIVE);
 
-			return new ModelAndView("actionPlanReport", model);
-		} catch (Exception e) {
-			LOGGER.error("ERROR : print() : {}", e.getMessage(), e);
-			throw e;
+		List<Task> tasks = null;
+
+		if (securityService.isAuthenticated()) {
+			Person student = securityService.currentUser().getPerson();
+			tasks = taskService.getAllForPerson(student, false, sAndP);
+			model.put("studentName",
+					student.getFirstName() + " " + student.getLastName());
+		} else {
+			String sessionId = securityService.getSessionId();
+			tasks = taskService.getAllForSessionId(sessionId, false, sAndP);
+			model.put("studentName", "");
 		}
+
+		model.put("myBeanData",
+				(tasks != null) ? TaskReportTO.tasksToTaskReportTOs(tasks)
+						: null);
+
+		return new ModelAndView("actionPlanReport", model);
 	}
 
 	@Override

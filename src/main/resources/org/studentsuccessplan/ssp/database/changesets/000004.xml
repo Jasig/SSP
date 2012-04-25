@@ -278,5 +278,14 @@
 			
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="add deletable column to task" author = "daniel.bower">
+		<addColumn tableName="task">
+			<column name="deletable" type="boolean" defaultValueBoolean="true"/>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="task" columnName="deletable"/>
+		</rollback>
+	</changeSet>
 
 </databaseChangeLog>

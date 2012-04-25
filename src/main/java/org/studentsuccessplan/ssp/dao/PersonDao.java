@@ -1,6 +1,7 @@
 package org.studentsuccessplan.ssp.dao;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
@@ -68,5 +69,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 				Person.class);
 		query.add(Restrictions.eq("userId", userId));
 		return (Person) query.uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Person> getPeopleInList(final List<UUID> personIds,
+			final SortingAndPaging sAndP) {
+		final Criteria criteria = createCriteria(sAndP);
+		criteria.add(Restrictions.in("id", personIds));
+		return criteria.list();
 	}
 }

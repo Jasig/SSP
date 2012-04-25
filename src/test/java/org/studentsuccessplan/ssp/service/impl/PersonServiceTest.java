@@ -26,6 +26,8 @@ import org.studentsuccessplan.ssp.model.PersonChallenge;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
+import com.google.common.collect.Lists;
+
 public class PersonServiceTest {
 
 	private PersonServiceImpl service;
@@ -149,5 +151,40 @@ public class PersonServiceTest {
 		assertNotNull("Set not copied correctly.", pPersistent.getChallenges());
 		assertEquals("PersonChallenge Set copied when it shouldn't have been.",
 				0, pPersistent.getChallenges().size());
+	}
+
+	@Test
+	public void personFromUserId() throws ObjectNotFoundException {
+		String userId = "12345";
+		Person person = new Person();
+		expect(dao.fromUserId(userId)).andReturn(person);
+
+		replay(dao);
+
+		Person result = service.personFromUserId(userId);
+
+		verify(dao);
+		assertEquals(person, result);
+	}
+
+	@Test
+	public void peopleFromListOfIds() {
+		final List<UUID> personIds = Lists.newArrayList();
+		personIds.add(UUID.randomUUID());
+		personIds.add(UUID.randomUUID());
+		personIds.add(UUID.randomUUID());
+
+		final List<Person> people = Lists.newArrayList();
+
+		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
+
+		expect(dao.getPeopleInList(personIds, sAndP)).andReturn(people);
+
+		replay(dao);
+
+		List<Person> result = service.peopleFromListOfIds(personIds, sAndP);
+
+		verify(dao);
+		assertEquals(people, result);
 	}
 }

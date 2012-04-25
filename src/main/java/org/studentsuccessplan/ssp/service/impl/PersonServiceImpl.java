@@ -422,4 +422,10 @@ public class PersonServiceImpl implements PersonService {
 			throws ObjectNotFoundException {
 		return dao.fromUserId(userId);
 	}
+
+	@Override
+	public List<Person> peopleFromListOfIds(List<UUID> personIds,
+			SortingAndPaging sAndP) {
+		return dao.getPeopleInList(personIds, sAndP);
+	}
 }

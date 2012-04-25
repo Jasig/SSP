@@ -25,6 +25,8 @@ import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.studentsuccessplan.ssp.util.sort.SortDirection;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
+import com.google.common.collect.Lists;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
@@ -129,6 +131,16 @@ public class PersonDaoTest {
 	public void testFromUsername() {
 		assertEquals(Person.SYSTEM_ADMINISTRATOR_ID, dao.fromUsername("system")
 				.getId());
+	}
+
+	@Test
+	public void getPeopleInList() {
+		List<UUID> personIds = Lists.newArrayList();
+		personIds.add(UUID.randomUUID());
+		personIds.add(UUID.randomUUID());
+		personIds.add(UUID.randomUUID());
+		assertList(dao.getPeopleInList(personIds, new SortingAndPaging(
+				ObjectStatus.ACTIVE)));
 	}
 
 	private void assertList(List<Person> objects) {

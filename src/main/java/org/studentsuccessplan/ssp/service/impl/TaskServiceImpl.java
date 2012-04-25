@@ -1,19 +1,31 @@
 package org.studentsuccessplan.ssp.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.studentsuccessplan.ssp.dao.TaskDao;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
 import org.studentsuccessplan.ssp.service.AbstractAuditableCrudService;
+import org.studentsuccessplan.ssp.service.MessageService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.TaskService;
+import org.studentsuccessplan.ssp.transferobject.TaskTO;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Maps;
@@ -25,6 +37,20 @@ public class TaskServiceImpl
 
 	@Autowired
 	private TaskDao dao;
+
+	@Autowired
+	private MessageService messageService;
+
+	@Value("#{configProperties.serverExternalPath}")
+	private String serverExternalPath;
+
+	private String studentUIPath = "MyGPS";
+
+	@Value("#{configProperties.numberOfDaysPriorForTaskReminder}")
+	private int numberOfDaysPriorForTaskReminder;
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(TaskServiceImpl.class);
 
 	@Override
 	protected TaskDao getDao() {
@@ -47,16 +73,15 @@ public class TaskServiceImpl
 		current.setSessionId(obj.getSessionId());
 
 		return getDao().save(current);
-
 	}
 
 	@Override
-	public List<Task> getAllForPersonId(Person person, SortingAndPaging sAndP) {
+	public List<Task> getAllForPerson(Person person, SortingAndPaging sAndP) {
 		return getDao().getAllForPersonId(person.getId(), sAndP);
 	}
 
 	@Override
-	public List<Task> getAllForPersonId(Person person, boolean complete,
+	public List<Task> getAllForPerson(Person person, boolean complete,
 			SortingAndPaging sAndP) {
 		return getDao().getAllForPersonId(person.getId(), complete, sAndP);
 	}
@@ -76,6 +101,11 @@ public class TaskServiceImpl
 	@Override
 	public List<Task> getAllWhichNeedRemindersSent(SortingAndPaging sAndP) {
 		return getDao().getAllWhichNeedRemindersSent(sAndP);
+	}
+
+	@Override
+	public List<Task> getTasksInList(List<UUID> taskIds, SortingAndPaging sAndP) {
+		return getDao().getTasksInList(taskIds, sAndP);
 	}
 
 	@Override
@@ -141,5 +171,159 @@ public class TaskServiceImpl
 			tasksForGroup.add(task);
 		}
 		return grouped;
+	}
+
+	@Override
+	public Task createForPersonWithChallengeReferral(Challenge challenge,
+			ChallengeReferral challengeReferral, Person person, String sessionId) {
+
+		// Create, fill, and persist a new Task
+		Task task = new Task();
+
+		task.setChallenge(challenge);
+		task.setChallengeReferral(challengeReferral);
+		task.setPerson(person);
+		task.setSessionId(sessionId);
+		task.setDescription("");
+
+		create(task);
+
+		return task;
+	}
+
+	@Override
+	public Task createCustomTaskForPerson(String name, String description,
+			Person student, String sessionId) {
+		Task customTask = new Task();
+		customTask.setDescription(description);
+		customTask.setPerson(student);
+		customTask.setName(name);
+
+		create(customTask);
+
+		return customTask;
+	}
+
+	@Override
+	public void sendNoticeToStudentOnCustomTask(Task customTask,
+			UUID messageTemplateId) throws Exception {
+
+		if (!messageTemplateId
+				.equals(MessageTemplate.TASK_AUTO_CREATED_EMAIL_ID)
+				&& !messageTemplateId
+						.equals(MessageTemplate.NEW_STUDENT_INTAKE_TASK_EMAIL_ID)) {
+			// exit without sending message
+			return;
+		}
+
+		// Template parameters
+		Map<String, Object> templateParameters = new HashMap<String, Object>();
+		templateParameters
+				.put("fullName", customTask.getPerson().getFullName());
+		templateParameters.put("name", customTask.getName());
+
+		// fix links in description
+		String linkedDescription = customTask.getDescription().replaceAll(
+				"href=\"/" + studentUIPath + "/",
+				"href=\"" + serverExternalPath + "/" + studentUIPath + "/");
+		templateParameters.put("description", linkedDescription);
+
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+		templateParameters.put("dueDate",
+				format.format(customTask.getDueDate()));
+
+		messageService.createMessage(customTask.getPerson(),
+				messageTemplateId, templateParameters);
+	}
+
+	/**
+	 * Send a list of the given tasks to each emailAddress and each recipient.
+	 */
+	@Override
+	public void sendTasksForPersonToEmail(final List<Task> tasks,
+			final Person student, final List<String> emailAddresses,
+			final List<Person> recipients) throws Exception {
+
+		if ((tasks == null) || (tasks.size() == 0)) {
+			return;
+		}
+
+		final List<TaskTO> taskTOs = TaskTO.tasksToTaskTOs(tasks);
+
+		final Map<String, Object> templateParameters = Maps.newHashMap();
+		templateParameters.put("fullName", student.getFullName());
+		templateParameters.put("taskTOs", taskTOs);
+
+		if (emailAddresses != null) {
+			for (String address : emailAddresses) {
+				messageService.createMessage(address,
+						MessageTemplate.ACTION_PLAN_EMAIL_ID,
+						templateParameters);
+			}
+		}
+
+		if (recipients != null) {
+			for (Person recipient : recipients) {
+				messageService.createMessage(
+						recipient.getPrimaryEmailAddress(),
+						MessageTemplate.ACTION_PLAN_EMAIL_ID,
+						templateParameters);
+			}
+		}
+	}
+
+	@Override
+	public void sendAllTaskReminderNotifications() {
+
+		final SortingAndPaging sAndP = new SortingAndPaging(
+				ObjectStatus.ACTIVE);
+
+		LOGGER.info("BEGIN : sendTaskReminderNotifications()");
+
+		try {
+
+			// Calculate reminder window start date
+			Calendar now = Calendar.getInstance();
+			now.setTime(new Date());
+
+			Calendar startDateCalendar = Calendar.getInstance();
+			Calendar dueDateCalendar = Calendar.getInstance();
+
+			// Send reminders for custom action plan tasks
+			List<Task> tasks = getAllWhichNeedRemindersSent(sAndP);
+
+			for (Task task : tasks) {
+
+				// Calculate reminder window start date
+				startDateCalendar.setTime(task.getDueDate());
+				startDateCalendar.add(Calendar.HOUR,
+						numberOfDaysPriorForTaskReminder * 24 * -1);
+
+				// Due date
+				dueDateCalendar.setTime(task.getDueDate());
+
+				if (now.after(startDateCalendar)
+						&& (now.before(dueDateCalendar))) {
+
+					UUID templateId;
+					if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
+						templateId = MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID;
+					} else {
+						templateId = MessageTemplate.ACTION_PLAN_STEP_ID;
+					}
+
+					messageService.createMessage(task.getPerson(), templateId,
+							new HashMap<String, Object>());
+
+					setReminderSentDateToToday(task);
+				}
+			}
+
+		} catch (Exception e) {
+			LOGGER.error("ERROR : sendTaskReminderNotifications() : {}",
+					e.getMessage(), e);
+		}
+
+		LOGGER.info("END : sendTaskReminderNotifications()");
 	}
 }

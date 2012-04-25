@@ -110,4 +110,12 @@ public class TaskDao extends
 
 		return criteria.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Task> getTasksInList(final List<UUID> taskIds,
+			final SortingAndPaging sAndP) {
+		final Criteria criteria = createCriteria(sAndP);
+		criteria.add(Restrictions.in("id", taskIds));
+		return criteria.list();
+	}
 }
