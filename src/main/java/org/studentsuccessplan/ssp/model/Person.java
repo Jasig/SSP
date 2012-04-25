@@ -28,7 +28,7 @@ import org.studentsuccessplan.ssp.model.tool.PersonTool;
 /**
  * A Person entity.
  * 
- * Usually represents either a user of the backend system, or a student.
+ * Usually represents either a user of the back-end system, or a student.
  * 
  * @author jon.adams
  */
@@ -229,7 +229,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@ManyToOne()
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_demographics_id", unique = true, nullable = true)
 	private PersonDemographics demographics;
 
@@ -240,7 +240,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@ManyToOne()
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_goal_id", unique = true, nullable = true)
 	private PersonEducationGoal educationGoal;
 
@@ -251,7 +251,7 @@ public class Person extends Auditable implements Serializable {
 	 */
 	@Nullable()
 	@ManyToOne()
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_plan_id", unique = true, nullable = true)
 	private PersonEducationPlan educationPlan;
 
@@ -261,8 +261,9 @@ public class Person extends Auditable implements Serializable {
 	 * Should be null for non-student users.
 	 */
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
@@ -271,8 +272,8 @@ public class Person extends Auditable implements Serializable {
 	 * Should be null for non-student users.
 	 */
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
@@ -281,23 +282,26 @@ public class Person extends Auditable implements Serializable {
 	 * Should be null for non-student users.
 	 */
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private Set<PersonChallenge> challenges;
 
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
 	private Set<PersonTool> tools;
 
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
 	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
 
 	@Nullable()
-	@OneToMany(mappedBy = "person")
-	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
 	private Set<Task> tasks;
 	/**
 	 * Strengths
