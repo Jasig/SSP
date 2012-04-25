@@ -7,7 +7,7 @@ Ext.define('Ssp.store.reference.EducationalGoals', {
 
     proxy: {
 		type: 'rest',
-		url: '/ssp/api/reference/educationGoal/',
+		url: '/ssp/api/1/reference/educationGoal/',
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 

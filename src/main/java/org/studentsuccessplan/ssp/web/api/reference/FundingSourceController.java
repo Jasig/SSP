@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.FundingSourceTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/fundingSource")
+@RequestMapping("/1/reference/fundingSource")
 public class FundingSourceController extends
 		AbstractAuditableReferenceController<FundingSource, FundingSourceTO> {
 

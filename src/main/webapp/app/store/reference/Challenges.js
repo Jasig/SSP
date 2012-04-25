@@ -6,7 +6,7 @@ Ext.define('Ssp.store.reference.Challenges', {
 	autoSync: true,
     proxy: {
 		type: 'rest',
-		url: '/ssp/api/reference/challenge/',
+		url: '/ssp/api/1/reference/challenge/',
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 

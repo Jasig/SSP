@@ -28,11 +28,12 @@ import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
 /**
  * Some basic methods for manipulating people in the system.
- * 
+ * <p>
+ * Mapped to URI path <code>/1/person</code>
  */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/person")
+@RequestMapping("/1/person")
 public class PersonController extends RestController<PersonTO> {
 
 	private static final Logger LOGGER = LoggerFactory
@@ -41,8 +42,8 @@ public class PersonController extends RestController<PersonTO> {
 	@Autowired
 	private transient PersonService service;
 
-	private static final TransferObjectListFactory<PersonTO, Person> TO_FACTORY =
-			TransferObjectListFactory.newFactory(PersonTO.class);
+	private static final TransferObjectListFactory<PersonTO, Person> TO_FACTORY = TransferObjectListFactory
+			.newFactory(PersonTO.class);
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -54,11 +55,9 @@ public class PersonController extends RestController<PersonTO> {
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
 
-		return TO_FACTORY.toTOList(
-				service.getAll(
-						SortingAndPaging.createForSingleSort(status, start,
-								limit, sort,
-								sortDirection, null)));
+		return TO_FACTORY.toTOList(service.getAll(SortingAndPaging
+				.createForSingleSort(status, start, limit, sort, sortDirection,
+						null)));
 	}
 
 	@Override

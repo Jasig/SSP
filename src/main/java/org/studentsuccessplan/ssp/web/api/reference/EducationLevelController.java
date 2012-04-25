@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.EducationLevelTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/educationLevel")
+@RequestMapping("/1/reference/educationLevel")
 public class EducationLevelController extends
 		AbstractAuditableReferenceController<EducationLevel, EducationLevelTO> {
 

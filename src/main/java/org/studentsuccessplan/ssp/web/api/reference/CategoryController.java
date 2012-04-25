@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.CategoryTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/category")
+@RequestMapping("/1/reference/category")
 public class CategoryController extends
 		AbstractAuditableReferenceController<Category, CategoryTO> {
 

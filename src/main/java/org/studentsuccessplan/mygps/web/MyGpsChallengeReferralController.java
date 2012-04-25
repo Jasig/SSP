@@ -17,7 +17,7 @@ import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
 
 @Controller
-@RequestMapping("/mygps/challengereferral")
+@RequestMapping("/1/mygps/challengereferral")
 public class MyGpsChallengeReferralController extends AbstractMyGpsController {
 
 	@Autowired

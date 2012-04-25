@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.EthnicityTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/ethnicity")
+@RequestMapping("/1/reference/ethnicity")
 public class EthnicityController extends
 		AbstractAuditableReferenceController<Ethnicity, EthnicityTO> {
 

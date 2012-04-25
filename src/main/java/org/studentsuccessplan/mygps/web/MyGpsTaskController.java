@@ -33,7 +33,7 @@ import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import com.google.common.collect.Lists;
 
 @Controller
-@RequestMapping("/mygps/task")
+@RequestMapping("/1/mygps/task")
 public class MyGpsTaskController extends AbstractMyGpsController {
 
 	@Autowired

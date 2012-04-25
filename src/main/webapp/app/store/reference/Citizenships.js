@@ -7,7 +7,7 @@ Ext.define('Ssp.store.reference.Citizenships', {
 
     proxy: {
 		type: 'rest',
-		url: '/ssp/api/reference/citizenship/',
+		url: '/ssp/api/1/reference/citizenship/',
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 

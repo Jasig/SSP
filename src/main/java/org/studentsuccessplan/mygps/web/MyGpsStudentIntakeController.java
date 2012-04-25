@@ -13,7 +13,7 @@ import org.studentsuccessplan.mygps.business.StudentIntakeFormManager;
 import org.studentsuccessplan.mygps.model.transferobject.FormTO;
 
 @Controller
-@RequestMapping("/mygps/intake")
+@RequestMapping("/1/mygps/intake")
 public class MyGpsStudentIntakeController extends AbstractMyGpsController {
 
 	@Autowired

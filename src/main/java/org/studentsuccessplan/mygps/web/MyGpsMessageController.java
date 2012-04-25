@@ -19,7 +19,7 @@ import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
 import org.studentsuccessplan.ssp.service.MessageService;
 
 @Controller
-@RequestMapping("/mygps/message")
+@RequestMapping("/1/mygps/message")
 public class MyGpsMessageController extends AbstractMyGpsController {
 
 	@Autowired
@@ -40,16 +40,15 @@ public class MyGpsMessageController extends AbstractMyGpsController {
 				return false;
 			}
 
-			Person coach = securityService.currentUser()
-					.getPerson().getDemographics().getCoach();
+			Person coach = securityService.currentUser().getPerson()
+					.getDemographics().getCoach();
 
 			Map<String, Object> messageParams = new HashMap<String, Object>();
 			messageParams.put("subj", messageTO.getSubject());
 			messageParams.put("mesg", messageTO.getMessage());
 
 			messageService.createMessage(coach,
-					MessageTemplate.EMPTY_TEMPLATE_EMAIL_ID,
-					messageParams);
+					MessageTemplate.EMPTY_TEMPLATE_EMAIL_ID, messageParams);
 
 			return true;
 		} catch (Exception e) {

@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.ChallengeReferralTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/challengeReferral")
+@RequestMapping("/1/reference/challengeReferral")
 public class ChallengeReferralController
 		extends
 		AbstractAuditableReferenceController<ChallengeReferral, ChallengeReferralTO> {

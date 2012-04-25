@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.VeteranStatusTO;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/veteranStatus")
+@RequestMapping("/1/reference/veteranStatus")
 public class VeteranStatusController extends
 		AbstractAuditableReferenceController<VeteranStatus, VeteranStatusTO> {
 

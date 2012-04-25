@@ -16,13 +16,14 @@ import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
  * {@link ChallengeTO} instances in JSON format.
  * <p>
  * Requires basic user authentication.
+ * <p>
+ * Mapped to URI path <code>/1/reference/challenge</code>
  * 
  * @author jon.adams
- * 
  */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/challenge")
+@RequestMapping("/1/reference/challenge")
 public class ChallengeController extends
 		AbstractAuditableReferenceController<Challenge, ChallengeTO> {
 

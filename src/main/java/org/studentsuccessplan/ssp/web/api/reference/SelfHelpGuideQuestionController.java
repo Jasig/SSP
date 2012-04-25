@@ -13,7 +13,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideQuestion
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/reference/selfHelpGuideQuestion")
+@RequestMapping("/1/reference/selfHelpGuideQuestion")
 public class SelfHelpGuideQuestionController
 		extends
 		AbstractAuditableReferenceController<SelfHelpGuideQuestion, SelfHelpGuideQuestionTO> {

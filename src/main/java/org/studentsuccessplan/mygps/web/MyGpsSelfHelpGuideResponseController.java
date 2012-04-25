@@ -14,9 +14,9 @@ import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
 
 @Controller
-@RequestMapping("/mygps/selfhelpguideresponse")
-public class MyGpsSelfHelpGuideResponseController
-		extends AbstractMyGpsController {
+@RequestMapping("/1/mygps/selfhelpguideresponse")
+public class MyGpsSelfHelpGuideResponseController extends
+		AbstractMyGpsController {
 
 	@Autowired
 	private SelfHelpGuideManager manager;

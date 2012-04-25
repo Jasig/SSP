@@ -29,9 +29,14 @@ import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Maps;
 
+/**
+ * Services to manipulate Tasks.
+ * <p>
+ * Mapped to URI path <code>/1/person/{personId}/task</code>
+ */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
-@RequestMapping("/person/{personId}/task")
+@RequestMapping("/1/person/{personId}/task")
 public class PersonTaskController extends
 		AbstractPersonAssocController<Task, TaskTO> {
 
