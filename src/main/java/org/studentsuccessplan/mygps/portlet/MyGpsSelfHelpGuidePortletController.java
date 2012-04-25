@@ -6,7 +6,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 @Controller
 @RequestMapping("VIEW")
-public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
+public class MyGpsSelfHelpGuidePortletController extends AbstractMyGpsController {
 
     @RenderMapping
     public String show() {
