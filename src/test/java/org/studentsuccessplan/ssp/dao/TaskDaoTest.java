@@ -1,7 +1,8 @@
 package org.studentsuccessplan.ssp.dao;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
+import org.studentsuccessplan.ssp.dao.reference.ConfidentialityLevelDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
@@ -41,24 +43,35 @@ public class TaskDaoTest {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TaskDaoTest.class);
 
-	@Autowired
-	private TaskDao dao;
+	private static final UUID CONFIDENTIALITYLEVEL_ID = UUID
+			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
+
+	private static final String CONFIDENTIALITYLEVEL_NAME = "Test Confidentiality Level";
 
 	@Autowired
-	protected PersonService personService;
+	private transient TaskDao dao;
 
 	@Autowired
-	protected SecurityServiceInTestEnvironment securityService;
+	private transient ConfidentialityLevelDao confidentialityLevelDao;
 
 	@Autowired
-	private ChallengeDao challengeDao;
+	protected transient PersonService personService;
 
 	@Autowired
-	private ChallengeReferralDao challengeReferralDao;
+	protected transient SecurityServiceInTestEnvironment securityService;
+
+	@Autowired
+	private transient ChallengeDao challengeDao;
+
+	@Autowired
+	private transient ChallengeReferralDao challengeReferralDao;
 
 	protected Person ken;
+
 	private Challenge testChallenge;
+
 	private ChallengeReferral testChallengeReferral;
+
 	private Task testTask;
 
 	@Before
@@ -70,7 +83,7 @@ public class TaskDaoTest {
 		}
 		securityService.setCurrent(ken);
 
-		Calendar cal = Calendar.getInstance();
+		final Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, 7);
 		testChallenge = challengeDao.get(UUID
 				.fromString("af7e472c-3b7c-4d00-a667-04f52f560940"));
@@ -88,25 +101,23 @@ public class TaskDaoTest {
 	}
 
 	/*
-	 * public void crud() {
-	 * This is in effect tested by the setup and teardown of the tests in this
-	 * class
-	 * }
+	 * public void crud() { This is in effect tested by the setup and teardown
+	 * of the tests in this class }
 	 */
 	@Test
 	public void getAllForPersonId() {
-		assertList(dao.getAllForPersonId(ken.getId(),
-				new SortingAndPaging(ObjectStatus.ACTIVE)));
+		assertList(dao.getAllForPersonId(ken.getId(), new SortingAndPaging(
+				ObjectStatus.ACTIVE)));
 	}
 
 	@Test
-	public void getAllForPersonId_complete() {
+	public void getAllForPersonIdComplete() {
 		assertList(dao.getAllForPersonId(ken.getId(), true,
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
-	public void getAllForPersonId_incomplete() {
+	public void getAllForPersonIdIncomplete() {
 		assertList(dao.getAllForPersonId(ken.getId(), false,
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
@@ -118,21 +129,21 @@ public class TaskDaoTest {
 	}
 
 	@Test
-	public void getAllForSessionId_complete() {
+	public void getAllForSessionIdComplete() {
 		assertList(dao.getAllForSessionId("test session id", true,
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
-	public void getAllForSessionId_incomplete() {
+	public void getAllForSessionIdIncomplete() {
 		assertList(dao.getAllForSessionId("test session id", false,
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllWhichNeedRemindersSent() {
-		assertList(dao.getAllWhichNeedRemindersSent(
-				new SortingAndPaging(ObjectStatus.ACTIVE)));
+		assertList(dao.getAllWhichNeedRemindersSent(new SortingAndPaging(
+				ObjectStatus.ACTIVE)));
 	}
 
 	@Test
@@ -159,10 +170,43 @@ public class TaskDaoTest {
 				ObjectStatus.ACTIVE)));
 	}
 
-	protected void assertList(List<Task> objects) {
+	protected void assertList(final List<Task> objects) {
 		for (Task object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
+	}
+
+	@Test
+	public void testSaveNew() {
+		UUID saved;
+
+		Task obj = new Task();
+		obj.setName("new name");
+		obj.setDescription("new description");
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setPerson(securityService.currentUser().getPerson());
+		obj.setConfidentialityLevel(confidentialityLevelDao
+				.load(CONFIDENTIALITYLEVEL_ID));
+		dao.save(obj);
+
+		assertNotNull("obj.id should not have been null.", obj.getId());
+		saved = obj.getId();
+
+		LOGGER.debug(obj.toString());
+
+		obj = dao.get(saved);
+		assertNotNull(obj);
+		assertNotNull(obj.getId());
+		assertNotNull(obj.getName());
+		assertEquals("Confidentiality level name did not match.",
+				CONFIDENTIALITYLEVEL_NAME, obj.getConfidentialityLevel()
+						.getName());
+
+		final List<Task> all = dao.getAll(ObjectStatus.ACTIVE);
+		assertNotNull(all);
+		assertFalse(all.isEmpty());
+		assertList(all);
+
+		dao.delete(obj);
 	}
 }

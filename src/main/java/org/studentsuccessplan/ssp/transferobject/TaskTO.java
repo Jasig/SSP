@@ -10,6 +10,7 @@ import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
+import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 
 public class TaskTO
 		extends AuditableTO<Task>
@@ -22,6 +23,7 @@ public class TaskTO
 	private boolean completed, deletable;
 	private Date dueDate, completedDate, reminderSentDate;
 	private UUID personId, challengeId, challengeReferralId;
+	private ConfidentialityLevel confidentialityLevel;
 
 	/**
 	 * Empty constructor
@@ -56,6 +58,8 @@ public class TaskTO
 			setName(task.getName());
 			setDescription(task.getDescription());
 		}
+		
+		confidentialityLevel = task.getConfidentialityLevel();
 
 		if (description != null) {
 			description = description.replaceAll("\\<.*?>", "");
@@ -184,5 +188,21 @@ public class TaskTO
 
 	public void setPersonId(UUID personId) {
 		this.personId = personId;
+	}
+	
+	/**
+	 * @return the confidentialityLevel
+	 */
+	public ConfidentialityLevel getConfidentialityLevel() {
+		return confidentialityLevel;
+	}
+
+	/**
+	 * @param confidentialityLevel
+	 *            the confidentialityLevel to set
+	 */
+	public void setConfidentialityLevel(
+			final ConfidentialityLevel confidentialityLevel) {
+		this.confidentialityLevel = confidentialityLevel;
 	}
 }

@@ -50,6 +50,24 @@ public class PersonTaskController extends
 	 * Group name is equivalent to the name of the Challenge associated with the
 	 * Task. In the case of Custom Tasks, they are associated with a group named
 	 * "Custom".
+	 * 
+	 * @param personId
+	 *            Person identifier
+	 * @param id
+	 *            Task identifier (though it is currently unused)
+	 * @param status
+	 *            Object status
+	 * @param start
+	 *            First result index
+	 * @param limit
+	 *            Maximum amount of result rows to return
+	 * @param sort
+	 *            Sort property
+	 * @param sortDirection
+	 *            Sort direction
+	 * @return Task lists in task groups.
+	 * @throws ObjectNotFoundException
+	 *             If the person identifier is not valid.
 	 */
 	@RequestMapping(value = "/group/", method = RequestMethod.GET)
 	public @ResponseBody
