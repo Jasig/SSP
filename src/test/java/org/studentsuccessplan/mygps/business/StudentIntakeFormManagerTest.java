@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.codehaus.jackson.JsonParseException;
@@ -28,7 +29,14 @@ import org.studentsuccessplan.mygps.model.transferobject.FormSectionTO;
 import org.studentsuccessplan.mygps.model.transferobject.FormTO;
 import org.studentsuccessplan.mygps.web.MyGpsChallengeController;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.PersonChallenge;
 import org.studentsuccessplan.ssp.model.PersonConfidentialityDisclosureAgreement;
+import org.studentsuccessplan.ssp.model.PersonDemographics;
+import org.studentsuccessplan.ssp.model.PersonEducationGoal;
+import org.studentsuccessplan.ssp.model.PersonEducationLevel;
+import org.studentsuccessplan.ssp.model.PersonEducationPlan;
+import org.studentsuccessplan.ssp.model.PersonFundingSource;
+import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
 import org.studentsuccessplan.ssp.model.reference.Genders;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
@@ -87,7 +95,7 @@ public class StudentIntakeFormManagerTest {
 		assertNotNull("Confidentiality section should not have been null.",
 				section);
 
-		assertEquals("Confidentiality section id did not match.",
+		assertEquals("Confidentiality section id does not match.",
 				StudentIntakeFormManager.SECTION_CONFIDENTIALITY_ID,
 				section.getId());
 	}
@@ -160,7 +168,43 @@ public class StudentIntakeFormManagerTest {
 
 		// Run
 		Person person = formManager.save(form);
-		assertNotNull(person);
+
+		assertNotNull(
+				"StudentIntakeFormManager.Save should have returned an updated Person instance.",
+				person);
+
+		// Assertions for Demographics
+
+		Set<PersonConfidentialityDisclosureAgreement> agreements = person
+				.getConfidentialityDisclosureAgreements();
+		assertTrue("Person agreements should have been null or empty.",
+				agreements == null || agreements.isEmpty());
+
+		PersonDemographics demographics = person.getDemographics();
+		assertNotNull("Missing demographics.", demographics);
+
+		// Assertions for Education Levels
+
+		Set<PersonEducationLevel> levels = person.getEducationLevels();
+
+		assertNotNull("Education Levels set should not have been null.", levels);
+
+		assertTrue("Education levels should have been empty.", levels.isEmpty());
+
+		// Assertions for Funding
+		Set<PersonFundingSource> sources = person.getFundingSources();
+
+		assertNotNull("Funding Sources set should not have been null.", sources);
+
+		assertTrue("Founding sources should have been empty.",
+				sources.isEmpty());
+
+		// Assertions for Challenges
+		Set<PersonChallenge> challenges = person.getChallenges();
+
+		assertNotNull("Challenges set should not have been null.", challenges);
+
+		assertTrue("Challenges should have been empty.", challenges.isEmpty());
 	}
 
 	/**
@@ -246,11 +290,11 @@ public class StudentIntakeFormManagerTest {
 		// Run
 		Person person = formManager.save(form);
 
-		// Assert
 		assertNotNull(
 				"StudentIntakeFormManager.Save should have returned an updated Person instance.",
 				person);
 
+		// Assertions for Demographics
 		Set<PersonConfidentialityDisclosureAgreement> agreements = person
 				.getConfidentialityDisclosureAgreements();
 		assertNotNull("Person agreements should not have been null.",
@@ -258,12 +302,156 @@ public class StudentIntakeFormManagerTest {
 		assertFalse("Person should have some accepted agreements.",
 				agreements.isEmpty());
 
-		assertNotNull("Missing demographics.", person.getDemographics());
+		PersonDemographics demographics = person.getDemographics();
+		assertNotNull("Missing demographics.", demographics);
 
-		assertTrue("Persion gender did not match.",
-				Genders.M.equals(person.getDemographics().getGender()));
+		assertEquals("Marital status does not match.", "Married", demographics
+				.getMaritalStatus().getName());
 
-		// TODO: More assertions
+		assertEquals("Ethnicity does not match.", "Prefer Not To Answer",
+				demographics.getEthnicity().getName());
+
+		assertTrue("Person gender does not match.",
+				Genders.M.equals(demographics.getGender()));
+
+		assertEquals("Citizenship does not match.", "US Citizen", demographics
+				.getCitizenship().getName());
+
+		assertEquals("Country of Citizenship does not match.", "United States",
+				demographics.getCountryOfCitizenship());
+
+		assertEquals("Veteran Status does not match.",
+				"Montgomery County Reservist", demographics.getVeteranStatus()
+						.getName());
+
+		assertTrue("Primary Caregiver option not match.",
+				demographics.isPrimaryCaregiver());
+
+		assertEquals("Number of children does not match.", 2,
+				demographics.getNumberOfChildren());
+
+		assertEquals("Ages of children does not match.", "4,4",
+				demographics.getChildAges());
+
+		assertTrue("Childcare needed option not match.",
+				demographics.isChildCareNeeded());
+
+		assertEquals("Childcare arrangements does not match.",
+				"Need to make arrangements", demographics
+						.getChildCareArrangement().getName());
+
+		assertTrue("Employment option not match.", demographics.isEmployed());
+
+		assertEquals("Shift option does not match.", EmploymentShifts.SECOND,
+				demographics.getShift());
+
+		// Assertions for Education Plan
+		PersonEducationPlan educationPlan = person.getEducationPlan();
+
+		assertNotNull("Missing education plan.", educationPlan);
+
+		assertEquals("Student Status option does not match.", "Former",
+				educationPlan.getStudentStatus().getName());
+
+		assertTrue("New Orientation option does not match.",
+				educationPlan.isNewOrientationComplete());
+
+		assertTrue("Registered for Classes option does not match.",
+				educationPlan.isRegisteredForClasses());
+
+		assertTrue("Parents' Degree option does not match.",
+				educationPlan.isCollegeDegreeForParents());
+
+		assertTrue("Special Needs option does not match.",
+				educationPlan.isSpecialNeeds());
+
+		assertEquals("Typical grade option does not match.", "A-B",
+				educationPlan.getGradeTypicallyEarned());
+
+		// Assertions for Education Goal
+		PersonEducationGoal goal = person.getEducationGoal();
+
+		assertNotNull("Missing education goal.", goal);
+
+		assertEquals("Career goal option does not match.", "Military", goal
+				.getEducationGoal().getName());
+
+		assertEquals("Miltary Branch option does not match.", "The Avengers",
+				goal.getMilitaryBranchDescription());
+
+		assertEquals("How Sure option does not match.", 3,
+				goal.getHowSureAboutMajor());
+
+		assertEquals("Planned Occupation option does not match.",
+				"Chimney Sweep", goal.getPlannedOccupation());
+
+		// Assertions for Education Levels
+
+		Set<PersonEducationLevel> levels = person.getEducationLevels();
+
+		assertNotNull("Education Levels set should not have been null.", levels);
+
+		assertEquals("Education levels should have included 2 items.", 2,
+				levels.size());
+
+		PersonEducationLevel level = levels.iterator().next();
+
+		assertNotNull("The first Education Level should not have been null.",
+				level);
+
+		assertTrue(
+				"EducationLevel did not match.",
+				"College Degree - 4 Year".equals(level.getEducationLevel()
+						.getName())
+						|| "No Diploma/No GED".equals(level.getEducationLevel()
+								.getName()));
+
+		// Assertions for Funding
+		Set<PersonFundingSource> sources = person.getFundingSources();
+
+		assertNotNull("Funding Sources set should not have been null.", sources);
+
+		assertEquals("Funding Sources should have included 2 items.", 2,
+				sources.size());
+
+		Iterator<PersonFundingSource> iter = sources.iterator();
+		iter.next();
+		PersonFundingSource source = iter.next();
+
+		assertNotNull("The second Funding Source should not have been null.",
+				source);
+
+		assertTrue(
+				"Funding Source did not match.",
+				"Employer".equals(source.getFundingSource().getName())
+						|| "Student Loan".equals(source.getFundingSource()
+								.getName()));
+
+		// Assertions for Challenges
+		Set<PersonChallenge> challenges = person.getChallenges();
+
+		assertNotNull("Challenges set should not have been null.", challenges);
+
+		assertEquals("Challenges should have included 3 items.", 3,
+				challenges.size());
+
+		PersonChallenge challenge = challenges.iterator().next();
+
+		assertNotNull("The first Challenge should not have been null.",
+				challenge);
+
+		assertNotNull(
+				"The first Challenge reference should not have been null.",
+				challenge.getChallenge());
+
+		assertTrue(
+				"Challenge did not match.",
+				"Social Support (Lack of Support)".equals(challenge
+						.getChallenge().getName())
+						|| "Finances - Education".equals(challenge
+								.getChallenge().getName())
+						|| "Test Challenges".equals(challenge.getChallenge()
+								.getName()));
 	}
 
 	/**

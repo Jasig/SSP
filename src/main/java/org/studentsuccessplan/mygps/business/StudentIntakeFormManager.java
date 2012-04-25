@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,7 @@ import org.studentsuccessplan.ssp.dao.PersonEducationGoalDao;
 import org.studentsuccessplan.ssp.dao.PersonEducationLevelDao;
 import org.studentsuccessplan.ssp.dao.PersonFundingSourceDao;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
-import org.studentsuccessplan.ssp.dao.reference.ChildCareArrangementDao;
-import org.studentsuccessplan.ssp.dao.reference.CitizenshipDao;
 import org.studentsuccessplan.ssp.dao.reference.EducationLevelDao;
-import org.studentsuccessplan.ssp.dao.reference.EthnicityDao;
 import org.studentsuccessplan.ssp.dao.reference.FundingSourceDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
@@ -36,6 +34,7 @@ import org.studentsuccessplan.ssp.model.PersonEducationPlan;
 import org.studentsuccessplan.ssp.model.PersonFundingSource;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
+import org.studentsuccessplan.ssp.model.reference.Citizenship;
 import org.studentsuccessplan.ssp.model.reference.EducationGoal;
 import org.studentsuccessplan.ssp.model.reference.EducationLevel;
 import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
@@ -50,13 +49,18 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonConfidentialityDisclosureAgreementService;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.service.reference.ChildCareArrangementService;
+import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
 import org.studentsuccessplan.ssp.service.reference.EducationGoalService;
+import org.studentsuccessplan.ssp.service.reference.EthnicityService;
 import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
 import org.studentsuccessplan.ssp.service.reference.StudentStatusService;
 import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
 import org.studentsuccessplan.ssp.service.tool.PersonToolService;
 import org.studentsuccessplan.ssp.util.SspStringUtils;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+
+import com.google.common.collect.Sets;
 
 @Service
 public class StudentIntakeFormManager {
@@ -68,10 +72,10 @@ public class StudentIntakeFormManager {
 	private transient ChallengeDao challengeDao;
 
 	@Autowired
-	private transient ChildCareArrangementDao childcareArrangementDao;
+	private transient ChildCareArrangementService childCareArrangementService;
 
 	@Autowired
-	private transient CitizenshipDao citizenshipDao;
+	private transient CitizenshipService citizenshipService;
 
 	@Autowired
 	private transient EducationLevelDao educationLevelDao;
@@ -80,7 +84,7 @@ public class StudentIntakeFormManager {
 	private transient EducationGoalService educationGoalService;
 
 	@Autowired
-	private transient EthnicityDao ethnicityDao;
+	private transient EthnicityService ethnicityService;
 
 	@Autowired
 	private transient FundingSourceDao fundingSourceDao;
@@ -948,8 +952,16 @@ public class StudentIntakeFormManager {
 		if (childCareArrangementQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setChildCareArrangement(null);
 		} else {
-			demographics.setChildCareArrangement(childcareArrangementDao
-					.get(childCareArrangementQuestion.getId()));
+			// get matching FormOption since IDs do not line up with database
+			List<ChildCareArrangement> childCareArrangements = childCareArrangementService
+					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+			for (ChildCareArrangement childCareArrangement : childCareArrangements) {
+				if (childCareArrangement.getName().equals(
+						childCareArrangementQuestion.getValue())) {
+					demographics.setChildCareArrangement(childCareArrangement);
+					break;
+				}
+			}
 		}
 
 		// Childcare Needed
@@ -972,8 +984,18 @@ public class StudentIntakeFormManager {
 				|| citizenshipQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
 			demographics.setCitizenship(null);
 		} else {
-			demographics.setCitizenship(citizenshipDao.get(UUID
-					.fromString(citizenshipQuestion.getValue())));
+			// get matching FormOption since IDs do not line up with database
+			String citizenshipNameSelected = citizenshipQuestion
+					.getFormOptionByValue(citizenshipQuestion.getValue())
+					.getLabel();
+			List<Citizenship> citizenships = citizenshipService
+					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+			for (Citizenship citizenship : citizenships) {
+				if (citizenship.getName().equals(citizenshipNameSelected)) {
+					demographics.setCitizenship(citizenship);
+					break;
+				}
+			}
 		}
 
 		demographics.setCountryOfCitizenship(demographicsSection
@@ -1005,8 +1027,14 @@ public class StudentIntakeFormManager {
 				|| (ethnicityQuestion.getValue() == null)) {
 			demographics.setEthnicity(null);
 		} else {
-			demographics.setEthnicity(ethnicityDao.get(ethnicityQuestion
-					.getId()));
+			List<Ethnicity> ethnicities = ethnicityService
+					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+			for (Ethnicity ethnicity : ethnicities) {
+				if (ethnicity.getName().equals(ethnicityQuestion.getValue())) {
+					demographics.setEthnicity(ethnicity);
+					break;
+				}
+			}
 		}
 
 		// Gender
@@ -1101,6 +1129,7 @@ public class StudentIntakeFormManager {
 
 		if (educationPlan == null) {
 			educationPlan = new PersonEducationPlan();
+			student.setEducationPlan(educationPlan);
 		}
 
 		educationPlan.setNewOrientationComplete(educationPlanSection
@@ -1111,11 +1140,21 @@ public class StudentIntakeFormManager {
 						SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
 						.getValue()));
 
-		educationPlan
-				.setGradeTypicallyEarned(educationPlanSection
-						.getFormQuestionById(
-								SECTION_EDUCATIONPLAN_QUESTION_GRADEATHIGHESTEDUCATIONLEVEL_ID)
-						.getValue());
+		FormQuestionTO gradeAtHighestEducationLevelQuestion = educationPlanSection
+				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_GRADEATHIGHESTEDUCATIONLEVEL_ID);
+		if (StringUtils
+				.isEmpty(gradeAtHighestEducationLevelQuestion.getValue())) {
+			educationPlan.setGradeTypicallyEarned(null);
+		} else {
+			for (FormOptionTO option : gradeAtHighestEducationLevelQuestion
+					.getOptions()) {
+				if (gradeAtHighestEducationLevelQuestion.getValue().equals(
+						option.getValue())) {
+					educationPlan.setGradeTypicallyEarned(option.getLabel());
+					break;
+				}
+			}
+		}
 
 		// Parents Have College Degree
 		FormQuestionTO parentsHaveCollegeDegreeQuestion = educationPlanSection
@@ -1187,15 +1226,14 @@ public class StudentIntakeFormManager {
 			studentEducationLevelDao.delete(studentEducationLevel);
 		}
 
-		// int counter = 1;
+		studentEducationLevels.clear();
 
+		// Create/recreate all new ones
 		for (FormOptionTO formOption : educationLevelQuestion.getOptions()) {
 
 			educationLevelQuestionValue = null;
 
 			PersonEducationLevel studentEducationLevel = new PersonEducationLevel();
-
-			// studentEducationLevel.setCounter(counter);
 			studentEducationLevel.setEducationLevel(educationLevelDao
 					.load(formOption.getId()));
 			studentEducationLevel.setPerson(student);
@@ -1291,9 +1329,12 @@ public class StudentIntakeFormManager {
 
 			}
 
+			// TODO: Is this save necessary, or does add to the set below
+			// persist the new instance?
 			studentEducationLevelDao.save(studentEducationLevel);
 
-			// counter++;
+			// Add new object to the student levels set, so it can be returned.
+			student.getEducationLevels().add(studentEducationLevel);
 		}
 
 		/* Education Goal */
@@ -1302,28 +1343,31 @@ public class StudentIntakeFormManager {
 
 		PersonEducationGoal studentEducationGoal = student.getEducationGoal();
 
+		FormQuestionTO educationGoalQuestion = educationGoalSection
+				.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID);
+
 		if (studentEducationGoal == null
-				&& educationGoalSection.getFormQuestionById(
-						SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID).getValue() != null) {
+				&& educationGoalQuestion.getValue() != null) {
 			studentEducationGoal = new PersonEducationGoal();
+			student.setEducationGoal(studentEducationGoal);
 		}
 
 		if (studentEducationGoal != null) {
-			studentEducationGoal.setPlannedOccupation(educationGoalSection
-					.getFormQuestionById(
-							SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID)
-					.getValue());
-
 			List<EducationGoal> educationGoals = educationGoalService
 					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
-			FormQuestionTO educationGoalQuestion = educationGoalSection
-					.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID);
 			for (EducationGoal eg : educationGoals) {
-				if (eg.getName().equals(educationGoalQuestion.getValue())) {
+				if (eg.getName().equals(
+						educationGoalQuestion.getFormOptionByValue(
+								educationGoalQuestion.getValue()).getLabel())) {
 					studentEducationGoal.setEducationGoal(educationGoalService
 							.get(eg.getId()));
 				}
 			}
+
+			studentEducationGoal.setPlannedOccupation(educationGoalSection
+					.getFormQuestionById(
+							SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID)
+					.getValue());
 
 			studentEducationGoal.setDescription(educationGoalSection
 					.getFormQuestionById(
@@ -1357,9 +1401,16 @@ public class StudentIntakeFormManager {
 		Set<PersonFundingSource> studentFundingSources = student
 				.getFundingSources();
 
+		if (studentFundingSources == null) {
+			studentFundingSources = Sets.newHashSet();
+			student.setFundingSources(studentFundingSources);
+		}
+
 		for (PersonFundingSource studentFundingSource : studentFundingSources) {
 			studentFundingSourceDao.delete(studentFundingSource);
 		}
+
+		studentFundingSources.clear();
 
 		if (fundingQuestion.getValues() != null) {
 			for (String value : fundingQuestion.getValues()) {
@@ -1367,11 +1418,11 @@ public class StudentIntakeFormManager {
 						.getFormOptionByValue(value);
 
 				if (formOptionTO != null) {
-
 					PersonFundingSource studentFundingSource = new PersonFundingSource();
+					studentFundingSource.setPerson(student);
 
-					studentFundingSource.setFundingSource(new FundingSource(
-							formOptionTO.getId()));
+					studentFundingSource.setFundingSource(fundingSourceDao
+							.get(formOptionTO.getId()));
 
 					if (formOptionTO.getId().equals(
 							SECTION_FUNDING_OTHER_FUNDING_SOURCE_ID)) {
@@ -1384,9 +1435,8 @@ public class StudentIntakeFormManager {
 								.getLabel());
 					}
 
-					studentFundingSource.setPerson(student);
-
 					studentFundingSourceDao.save(studentFundingSource);
+					studentFundingSources.add(studentFundingSource);
 				}
 			}
 		}
@@ -1400,23 +1450,31 @@ public class StudentIntakeFormManager {
 		// Delete all student challenges
 		Set<PersonChallenge> studentChallenges = student.getChallenges();
 
+		if (studentChallenges == null) {
+			studentChallenges = Sets.newHashSet();
+			student.setChallenges(studentChallenges);
+		}
+
 		for (PersonChallenge studentChallenge : studentChallenges) {
 			studentChallengeDao.delete(studentChallenge);
 		}
 
-		if (challengeQuestion.getValues() != null) {
-			for (String value : challengeQuestion.getValues()) { // Alcohol
-				// Issues/Concerns
+		studentChallenges.clear();
 
+		if (challengeQuestion.getValues() != null) {
+			for (String value : challengeQuestion.getValues()) {
 				FormOptionTO formOptionTO = challengeQuestion
 						.getFormOptionByValue(value);
 
 				if (formOptionTO != null) {
 					PersonChallenge studentChallenge = new PersonChallenge();
-					studentChallenge.setChallenge(new Challenge(formOptionTO
+					studentChallenge.setPerson(student);
+					studentChallenge.setChallenge(challengeDao.get(formOptionTO
 							.getId()));
 					// studentChallenge.setOtherDescription(formOptionTO.getValue());
-					studentChallenge.setPerson(student);
+
+					studentChallengeDao.save(studentChallenge);
+					studentChallenges.add(studentChallenge);
 				}
 			}
 		}
@@ -1785,7 +1843,8 @@ public class StudentIntakeFormManager {
 		ethnicityQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID);
 		ethnicityQuestion.setLabel("Ethnicity");
 
-		for (Ethnicity ethnicity : ethnicityDao.getAll(ObjectStatus.ACTIVE)) {
+		for (Ethnicity ethnicity : ethnicityService
+				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))) {
 			ethnicityQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
 					ethnicity.getName(), ethnicity.getName()));
 		}
@@ -1950,8 +2009,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO childCareArrangementQuestion = new FormQuestionTO();
 		List<FormOptionTO> childCareArrangementQuestionOptions = new ArrayList<FormOptionTO>();
 
-		for (ChildCareArrangement childcareArrangement : childcareArrangementDao
-				.getAll(ObjectStatus.ACTIVE)) {
+		for (ChildCareArrangement childcareArrangement : childCareArrangementService
+				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))) {
 			childCareArrangementQuestionOptions.add(new FormOptionTO(
 					childcareArrangement.getId(), childcareArrangement
 							.getName(), childcareArrangement.getName()));
