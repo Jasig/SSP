@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.model.transferobject;
+package org.studentsuccessplan.ssp.transferobject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,85 +6,86 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 
-public class TaskTO implements Serializable {
+public class TaskTO
+		extends AuditableTO<Task>
+		implements TransferObject<Task>, Serializable, NamedTO {
 
 	private static final long serialVersionUID = 5796302591576434925L;
 
-	public static final String TASKTO_ID_PREFIX_DELIMITER = ":";
-
-	public static final String TASKTO_ID_PREFIX_ACTION_PLAN_TASK = Task.ACTION_PLAN_TASK;
-
-	public static final String TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK = Task.CUSTOM_ACTION_PLAN_TASK;
-
-	public static final String TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK = Task.SSP_ACTION_PLAN_TASK;
-
-	private String id;
-
 	private String type;
-
-	private String name;
-
-	private String description;
-
-	private String details;
-
-	private Date dueDate;
-
-	private boolean completed;
-
-	private boolean deletable;
-
-	private UUID challengeId;
-
-	private UUID challengeReferralId;
-
-	private ConfidentialityLevel confidentialityLevel = null;
+	private String name, description;
+	private boolean completed, deletable;
+	private Date dueDate, completedDate, reminderSentDate;
+	private UUID personId, challengeId, challengeReferralId;
+	private ConfidentialityLevel confidentialityLevel;
 
 	/**
 	 * Empty constructor
 	 */
 	public TaskTO() {
+		super();
 	}
 
 	public TaskTO(final Task task) {
-		challengeId = task.getChallenge().getId();
-		challengeReferralId = task.getChallengeReferral().getId();
-		completed = (task.getCompletedDate() == null) ? false : true;
-		deletable = true;
-		dueDate = task.getDueDate();
+		super();
+		fromModel(task);
+	}
 
-		if (task.getChallengeReferral() == null) {
-			name = task.getName();
-			details = task.getDescription();
-			description = task.getDescription();
-		} else {
-			name = task.getChallengeReferral().getName();
-			details = task.getChallengeReferral().getPublicDescription();
-			description = task.getChallengeReferral().getPublicDescription();
+	@Override
+	public void fromModel(final Task task) {
+		super.fromModel(task);
+
+		setType(task.getType());
+		setCompleted((task.getCompletedDate() != null) ? true : false);
+		setDeletable(task.isDeletable());
+		setDueDate(task.getDueDate());
+
+		if (task.getChallenge() != null) {
+			setChallengeId(task.getChallenge().getId());
 		}
+
+		if (task.getChallengeReferral() != null) {
+			setChallengeReferralId(task.getChallengeReferral().getId());
+			setName(task.getChallengeReferral().getName());
+			setDescription(task.getChallengeReferral().getPublicDescription());
+		} else {
+			setName(task.getName());
+			setDescription(task.getDescription());
+		}
+		
+		confidentialityLevel = task.getConfidentialityLevel();
 
 		if (description != null) {
 			description = description.replaceAll("\\<.*?>", "");
 		}
+	}
 
-		if (task.getType().equals(Task.ACTION_PLAN_TASK)) {
-			id = TASKTO_ID_PREFIX_ACTION_PLAN_TASK + TASKTO_ID_PREFIX_DELIMITER
-					+ task.getId();
-		} else if (task.getType().equals(Task.SSP_ACTION_PLAN_TASK)) {
-			id = TASKTO_ID_PREFIX_SSP_ACTION_PLAN_TASK
-					+ TASKTO_ID_PREFIX_DELIMITER + task.getId();
-		} else if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
-			id = TASKTO_ID_PREFIX_CUSTOM_ACTION_PLAN_TASK
-					+ TASKTO_ID_PREFIX_DELIMITER + task.getId();
-		} else {
-			throw new IllegalArgumentException("Invalid Task type");
-		}
+	@Override
+	public Task addToModel(final Task task) {
+		super.addToModel(task);
+		task.setName(name);
+		task.setDescription(description);
+		task.setDeletable(deletable);
+		task.setDueDate(dueDate);
+		task.setCompletedDate(completedDate);
+		task.setReminderSentDate(reminderSentDate);
+		task.setPerson(new Person(personId));
+		task.setChallenge(new Challenge(challengeId));
+		task.setChallengeReferral(new ChallengeReferral(challengeReferralId));
+		return task;
+	}
 
-		type = task.getType();
-		confidentialityLevel = task.getConfidentialityLevel();
+	@Override
+	public Task asModel() {
+		Task task = new Task();
+		super.addToModel(task);
+		return task;
 	}
 
 	public static List<TaskTO> tasksToTaskTOs(final List<Task> tasks) {
@@ -99,14 +100,6 @@ public class TaskTO implements Serializable {
 		return taskTOs;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(final String id) {
-		this.id = id;
-	}
-
 	public String getType() {
 		return type;
 	}
@@ -115,10 +108,12 @@ public class TaskTO implements Serializable {
 		this.type = type;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(final String name) {
 		this.name = name;
 	}
@@ -129,14 +124,6 @@ public class TaskTO implements Serializable {
 
 	public void setDescription(final String description) {
 		this.description = description;
-	}
-
-	public String getDetails() {
-		return details;
-	}
-
-	public void setDetails(final String details) {
-		this.details = details;
 	}
 
 	public Date getDueDate() {
@@ -179,6 +166,30 @@ public class TaskTO implements Serializable {
 		this.challengeReferralId = challengeReferralId;
 	}
 
+	public Date getCompletedDate() {
+		return completedDate;
+	}
+
+	public void setCompletedDate(Date completedDate) {
+		this.completedDate = completedDate;
+	}
+
+	public Date getReminderSentDate() {
+		return reminderSentDate;
+	}
+
+	public void setReminderSentDate(Date reminderSentDate) {
+		this.reminderSentDate = reminderSentDate;
+	}
+
+	public UUID getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(UUID personId) {
+		this.personId = personId;
+	}
+	
 	/**
 	 * @return the confidentialityLevel
 	 */

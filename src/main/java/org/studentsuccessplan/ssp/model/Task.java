@@ -59,6 +59,8 @@ public class Task extends Auditable implements Serializable {
 	@Column(length = 32, updatable = false)
 	private String sessionId;
 
+	private boolean deletable;
+
 	/**
 	 * Associated person. Changes to this Person are not persisted.
 	 */
@@ -97,6 +99,10 @@ public class Task extends Auditable implements Serializable {
 	}
 
 	public String getType() {
+		if (person == null) {
+			return null;
+		}
+
 		if (person.getId() != getCreatedBy().getId()) {
 			return SSP_ACTION_PLAN_TASK;
 		} else {
@@ -196,6 +202,14 @@ public class Task extends Auditable implements Serializable {
 
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
+	}
+
+	public boolean isDeletable() {
+		return deletable;
+	}
+
+	public void setDeletable(boolean deletable) {
+		this.deletable = deletable;
 	}
 
 	/**

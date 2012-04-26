@@ -20,8 +20,8 @@ public interface SecurityService {
 	 * Returns currently authenticated user, or null if this session has not
 	 * been authenticated.
 	 * <p>
-	 * This is similar to {@link #currentUser()} but differs by
-	 * this method returning null if the anonymous user is current.
+	 * This is similar to {@link #currentUser()} but differs by this method
+	 * returning null if the anonymous user is current.
 	 * 
 	 * @return The currently authenticated user, or null if this session has not
 	 *         been authenticated.
@@ -46,4 +46,9 @@ public interface SecurityService {
 	 * @return The session identifier.
 	 */
 	String getSessionId();
+
+	/**
+	 * Explicitly return the AnonymousUser
+	 */
+	SspUser anonymousUser();
 }

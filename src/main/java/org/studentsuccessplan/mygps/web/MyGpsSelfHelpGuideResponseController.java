@@ -21,7 +21,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 	@Autowired
 	private SelfHelpGuideManager selfHelpGuideManager;
 
-	private Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsSelfHelpGuideResponseController.class);
 
 	protected void setManager(SelfHelpGuideManager selfHelpGuideManager) {
@@ -38,7 +38,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 			return selfHelpGuideManager
 					.cancelSelfHelpGuideResponse(selfHelpGuideResponseId);
 		} catch (Exception e) {
-			logger.error("ERROR : cancel() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : cancel() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -53,7 +53,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 			return selfHelpGuideManager
 					.completeSelfHelpGuideResponse(selfHelpGuideResponseId);
 		} catch (Exception e) {
-			logger.error("ERROR : complete() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : complete() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -68,7 +68,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 			return selfHelpGuideManager
 					.getSelfHelpGuideResponseById(selfHelpGuideResponseId);
 		} catch (Exception e) {
-			logger.error("ERROR : getById() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : getById() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -83,7 +83,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 					selfHelpGuideId)
 					.toString();
 		} catch (Exception e) {
-			logger.error("ERROR : initiate() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : initiate() : {}", e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -100,8 +100,13 @@ public class MyGpsSelfHelpGuideResponseController extends
 					selfHelpGuideResponseId,
 					selfHelpGuideQuestionId, response);
 		} catch (Exception e) {
-			logger.error("ERROR : answer() : {}", e.getMessage(), e);
+			LOGGER.error("ERROR : answer() : {}", e.getMessage(), e);
 			throw e;
 		}
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
 	}
 }

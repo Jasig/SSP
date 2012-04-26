@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.web.api.reference;
+package org.studentsuccessplan.ssp.web.api;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,39 +15,40 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
+import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.reference.AbstractReference;
-import org.studentsuccessplan.ssp.service.AuditableCrudService;
+import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.service.PersonAssocService;
+import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.transferobject.AuditableTO;
 import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
-import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
-import org.studentsuccessplan.ssp.web.api.RestController;
 import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
 /**
- * Basic REST command implementation to responds with standard transfer objects
- * in JSON format.
  * 
- * @author jon.adams
+ * Basic REST command implementation to respond with standard transfer objects
+ * in JSON format for entities associated with a Person. <br />
+ * Largely based on AbstractAuditableReferenceController
  * 
  * @param <T>
- *            Model type
+ *            Model Type
  * @param <TO>
  *            Transfer object type that handles the model type T.
  */
-public abstract class AbstractAuditableReferenceController<T extends AbstractReference, TO extends AbstractReferenceTO<T>>
-		extends RestController<TO> {
+public abstract class AbstractPersonAssocController<T extends Auditable, TO extends AuditableTO<T>>
+		extends BaseController {
 
 	/**
 	 * Logger
 	 */
 	protected static final Logger LOGGER = LoggerFactory
-			.getLogger(AbstractAuditableReferenceController.class);
+			.getLogger(AbstractPersonAssocController.class);
 
 	/**
 	 * Service that handles the business logic for the implementing type for T.
 	 */
-	protected abstract AuditableCrudService<T> getService();
+	protected abstract PersonAssocService<T> getService();
 
 	/**
 	 * Transfer object factory to create new instances of the specific TO for
@@ -64,6 +66,9 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	 */
 	protected Class<TO> transferObjectClass;
 
+	@Autowired
+	protected transient PersonService personService;
+
 	/**
 	 * Construct a controller with the specified specific service and types.
 	 * 
@@ -72,7 +77,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	 * @param transferObjectClass
 	 *            Transfer object class type
 	 */
-	protected AbstractAuditableReferenceController(
+	protected AbstractPersonAssocController(
 			final Class<T> persistentClass, final Class<TO> transferObjectClass) {
 		super();
 		this.persistentClass = persistentClass;
@@ -81,26 +86,28 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 				.newFactory(transferObjectClass);
 	}
 
-	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<TO> getAll(final @RequestParam(required = false) ObjectStatus status,
+	List<TO> getAll(@PathVariable final UUID personId,
+			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
 			throws Exception {
 
+		final Person person = personService.get(personId);
+
 		return listFactory.toTOList(
-				getService().getAll(
+				getService().getAllForPerson(person,
 						SortingAndPaging.createForSingleSort(status, start,
 								limit, sort, sortDirection, "name")));
 	}
 
-	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	TO get(final @PathVariable UUID id) throws Exception {
+	TO get(final @PathVariable UUID id,
+			@PathVariable final UUID personId) throws Exception {
 		final T model = getService().get(id);
 		if (model == null) {
 			return null;
@@ -111,13 +118,13 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		return out;
 	}
 
-	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	TO create(@Valid @RequestBody final TO obj) throws Exception {
+	TO create(@PathVariable final UUID personId,
+			@Valid @RequestBody final TO obj) throws Exception {
 		if (obj.getId() != null) {
 			throw new ValidationException(
-					"It is invalid to send a reference entity with an ID to the create method. Did you mean to use the save method instead?");
+					"It is invalid to send with an ID to the create method. Did you mean to use the save method instead?");
 		}
 
 		final T model = obj.asModel();
@@ -133,10 +140,11 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		return null;
 	}
 
-	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
-	TO save(@PathVariable final UUID id, @Valid @RequestBody final TO obj)
+	TO save(@PathVariable final UUID id,
+			@PathVariable final UUID personId,
+			@Valid @RequestBody final TO obj)
 			throws Exception {
 		if (id == null) {
 			throw new ValidationException(
@@ -156,10 +164,10 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		return null;
 	}
 
-	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
-	ServiceResponse delete(@PathVariable final UUID id) throws Exception {
+	ServiceResponse delete(@PathVariable final UUID id,
+			@PathVariable final UUID personId) throws Exception {
 		getService().delete(id);
 		return new ServiceResponse(true);
 	}

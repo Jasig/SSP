@@ -137,4 +137,10 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 */
 	void overwriteWithCollectionsChallenges(Person target,
 			Set<PersonChallenge> source) throws ObjectNotFoundException;
+
+	/**
+	 * Return a person object for every personId where available.
+	 */
+	List<Person> peopleFromListOfIds(List<UUID> personIds,
+			SortingAndPaging sAndP);
 }

@@ -57,4 +57,9 @@ public class MyGpsMessageController extends AbstractMyGpsController {
 		}
 	}
 
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
+	}
+
 }

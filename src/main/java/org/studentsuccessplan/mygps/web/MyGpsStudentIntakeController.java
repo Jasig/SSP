@@ -51,4 +51,9 @@ public class MyGpsStudentIntakeController extends AbstractMyGpsController {
 			throw e;
 		}
 	}
+
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
+	}
 }
