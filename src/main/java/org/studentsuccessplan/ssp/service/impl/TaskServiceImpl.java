@@ -22,6 +22,7 @@ import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
+import org.studentsuccessplan.ssp.security.SspUser;
 import org.studentsuccessplan.ssp.service.AbstractAuditableCrudService;
 import org.studentsuccessplan.ssp.service.MessageService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
@@ -279,6 +280,29 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 						templateParameters);
 			}
 		}
+	}
+
+	/**
+	 * If tasks are selected, get them, otherwise return the tasks for the
+	 * person,
+	 * (just for the session if it is the anon user).
+	 */
+	public List<Task> getTasksForPersonIfNoneSelected(
+			final List<UUID> selectedIds, final Person person,
+			final String sessionId, final SortingAndPaging sAndP) {
+		final List<Task> tasks;
+
+		if ((selectedIds != null) && (selectedIds.size() > 0)) {
+			tasks = getTasksInList(selectedIds, sAndP);
+		} else {
+			if (person.getId() == SspUser.ANONYMOUS_PERSON_ID) {
+				tasks = getAllForSessionId(sessionId, sAndP);
+			} else {
+				tasks = getAllForPerson(person, sAndP);
+			}
+		}
+
+		return tasks;
 	}
 
 	@Override

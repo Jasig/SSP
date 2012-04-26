@@ -115,4 +115,13 @@ public interface TaskService
 	 * Sends taskReminders for all tasks in the task reminder window
 	 */
 	void sendAllTaskReminderNotifications();
+
+	/**
+	 * If tasks are selected, get them, otherwise return the tasks for the
+	 * person,
+	 * (just for the session if it is the anon user).
+	 */
+	List<Task> getTasksForPersonIfNoneSelected(
+			final List<UUID> selectedIds, final Person person,
+			final String sessionId, final SortingAndPaging sAndP);
 }
