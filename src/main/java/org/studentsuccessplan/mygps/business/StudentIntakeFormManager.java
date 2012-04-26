@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.mygps.model.transferobject.FormOptionTO;
 import org.studentsuccessplan.mygps.model.transferobject.FormQuestionTO;
 import org.studentsuccessplan.mygps.model.transferobject.FormSectionTO;
@@ -63,6 +64,7 @@ import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import com.google.common.collect.Sets;
 
 @Service
+@Transactional
 public class StudentIntakeFormManager {
 
 	private static final Logger LOGGER = LoggerFactory

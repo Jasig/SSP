@@ -19,13 +19,13 @@ public class MyGpsSelfHelpGuideResponseController extends
 		AbstractMyGpsController {
 
 	@Autowired
-	private SelfHelpGuideManager manager;
+	private SelfHelpGuideManager selfHelpGuideManager;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsSelfHelpGuideResponseController.class);
 
-	protected void setManager(SelfHelpGuideManager manager) {
-		this.manager = manager;
+	protected void setManager(SelfHelpGuideManager selfHelpGuideManager) {
+		this.selfHelpGuideManager = selfHelpGuideManager;
 	}
 
 	@RequestMapping(value = "cancel", method = RequestMethod.GET)
@@ -35,7 +35,8 @@ public class MyGpsSelfHelpGuideResponseController extends
 			throws Exception {
 
 		try {
-			return manager.cancelSelfHelpGuideResponse(selfHelpGuideResponseId);
+			return selfHelpGuideManager
+					.cancelSelfHelpGuideResponse(selfHelpGuideResponseId);
 		} catch (Exception e) {
 			LOGGER.error("ERROR : cancel() : {}", e.getMessage(), e);
 			throw e;
@@ -49,7 +50,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 			throws Exception {
 
 		try {
-			return manager
+			return selfHelpGuideManager
 					.completeSelfHelpGuideResponse(selfHelpGuideResponseId);
 		} catch (Exception e) {
 			LOGGER.error("ERROR : complete() : {}", e.getMessage(), e);
@@ -64,7 +65,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 			throws Exception {
 
 		try {
-			return manager
+			return selfHelpGuideManager
 					.getSelfHelpGuideResponseById(selfHelpGuideResponseId);
 		} catch (Exception e) {
 			LOGGER.error("ERROR : getById() : {}", e.getMessage(), e);
@@ -78,7 +79,8 @@ public class MyGpsSelfHelpGuideResponseController extends
 			throws Exception {
 
 		try {
-			return manager.initiateSelfHelpGuideResponse(selfHelpGuideId)
+			return selfHelpGuideManager.initiateSelfHelpGuideResponse(
+					selfHelpGuideId)
 					.toString();
 		} catch (Exception e) {
 			LOGGER.error("ERROR : initiate() : {}", e.getMessage(), e);
@@ -94,7 +96,8 @@ public class MyGpsSelfHelpGuideResponseController extends
 			@RequestParam("response") boolean response) throws Exception {
 
 		try {
-			return manager.answerSelfHelpGuideQuestion(selfHelpGuideResponseId,
+			return selfHelpGuideManager.answerSelfHelpGuideQuestion(
+					selfHelpGuideResponseId,
 					selfHelpGuideQuestionId, response);
 		} catch (Exception e) {
 			LOGGER.error("ERROR : answer() : {}", e.getMessage(), e);
