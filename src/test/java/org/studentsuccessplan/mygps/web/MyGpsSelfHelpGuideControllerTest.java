@@ -30,10 +30,13 @@ public class MyGpsSelfHelpGuideControllerTest {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsSelfHelpGuideControllerTest.class);
 
-	private MyGpsSelfHelpGuideController controller;
-	private SelfHelpGuideManager manager;
-	private SelfHelpGuideService selfHelpGuideService;
-	private SelfHelpGuideGroupService selfHelpGuideGroupService;
+	private transient MyGpsSelfHelpGuideController controller;
+
+	private transient SelfHelpGuideManager manager;
+
+	private transient SelfHelpGuideService selfHelpGuideService;
+
+	private transient SelfHelpGuideGroupService selfHelpGuideGroupService;
 
 	@Before
 	public void setup() {

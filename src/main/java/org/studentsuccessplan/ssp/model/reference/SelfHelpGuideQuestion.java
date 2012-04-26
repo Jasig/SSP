@@ -60,8 +60,7 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 	 * @param id
 	 *            Identifier; required
 	 */
-
-	public SelfHelpGuideQuestion(UUID id) {
+	public SelfHelpGuideQuestion(final UUID id) {
 		super(id);
 	}
 
@@ -73,8 +72,7 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 	 * @param name
 	 *            Name; required; max 100 characters
 	 */
-
-	public SelfHelpGuideQuestion(UUID id, String name) {
+	public SelfHelpGuideQuestion(final UUID id, final String name) {
 		super(id, name);
 	}
 
@@ -88,7 +86,8 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public SelfHelpGuideQuestion(UUID id, String name, String description) {
+	public SelfHelpGuideQuestion(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 

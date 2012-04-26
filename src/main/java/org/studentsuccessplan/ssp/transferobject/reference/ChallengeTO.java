@@ -32,7 +32,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	 * Just a reference to the questions that reference this Challenge. Think of
 	 * as selfHelpQuideChallenges
 	 */
-	private transient Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
+	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
 			0);
 
 	/**
@@ -249,12 +249,11 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	public static List<ChallengeTO> listToTOList(final List<Challenge> models) {
 		final List<ChallengeTO> tos = Lists.newArrayList();
 		for (Challenge model : models) {
-			ChallengeTO challenge = new ChallengeTO();
+			final ChallengeTO challenge = new ChallengeTO();
 			challenge.fromModel(model);
 			tos.add(challenge);
 		}
 
 		return tos;
 	}
-
 }

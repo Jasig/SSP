@@ -24,7 +24,7 @@ public class ChallengeReferralDao extends
 
 	@SuppressWarnings("unchecked")
 	// :TODO paging?
-	public List<ChallengeReferral> byChallengeId(UUID challengeId) {
+	public List<ChallengeReferral> byChallengeId(final UUID challengeId) {
 		return sessionFactory
 				.getCurrentSession()
 				.createQuery(
@@ -41,9 +41,10 @@ public class ChallengeReferralDao extends
 
 	@SuppressWarnings("unchecked")
 	// :TODO paging?
-	public List<ChallengeReferral> byChallengeIdAndQuery(UUID challengeId,
-			String query) {
-		query = "%" + query.toUpperCase() + "%";
+	public List<ChallengeReferral> byChallengeIdAndQuery(
+			final UUID challengeId,
+			final String query) {
+		final String wildcardQuery = "%" + query.toUpperCase() + "%";
 
 		return sessionFactory
 				.getCurrentSession()
@@ -60,14 +61,15 @@ public class ChallengeReferralDao extends
 								+ "or upper(cr.publicDescription) like ?) "
 								+ "order by cr.name")
 				.setParameter(0, challengeId)
-				.setParameter(1, ObjectStatus.ACTIVE).setParameter(2, query)
-				.setParameter(3, query).setMaxResults(100).list();
+				.setParameter(1, ObjectStatus.ACTIVE)
+				.setParameter(2, wildcardQuery)
+				.setParameter(3, wildcardQuery).setMaxResults(100).list();
 	}
 
-	public int countByChallengeIdNotOnActiveTaskList(UUID challengeId,
-			Person student, String sessionId) {
+	public long countByChallengeIdNotOnActiveTaskList(final UUID challengeId,
+			final Person student, final String sessionId) {
 
-		Long count = (Long) sessionFactory
+		return (Long) sessionFactory
 				.getCurrentSession()
 				.createQuery(
 						"select count(cr) "
@@ -89,7 +91,6 @@ public class ChallengeReferralDao extends
 				.setParameter("webSessionId", sessionId)
 				.setParameter("objectStatus", ObjectStatus.ACTIVE)
 				.uniqueResult();
-		return count.intValue();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -22,22 +22,22 @@ import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 
 	@Autowired
-	private ChallengeReferralDao dao;
+	private transient ChallengeReferralDao dao;
 
 	@Autowired
-	private TaskService taskService;
+	private transient TaskService taskService;
 
 	@Autowired
-	private SecurityService securityService;
+	private transient SecurityService securityService;
 
 	@Override
-	public List<ChallengeReferral> getAll(SortingAndPaging sAndP) {
+	public List<ChallengeReferral> getAll(final SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
 	@Override
-	public ChallengeReferral get(UUID id) throws ObjectNotFoundException {
-		ChallengeReferral obj = dao.get(id);
+	public ChallengeReferral get(final UUID id) throws ObjectNotFoundException {
+		final ChallengeReferral obj = dao.get(id);
 		if (null == obj) {
 			throw new ObjectNotFoundException(id, "ChallengeReferral");
 		}
@@ -46,14 +46,14 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 	}
 
 	@Override
-	public ChallengeReferral create(ChallengeReferral obj) {
+	public ChallengeReferral create(final ChallengeReferral obj) {
 		return dao.save(obj);
 	}
 
 	@Override
-	public ChallengeReferral save(ChallengeReferral obj)
+	public ChallengeReferral save(final ChallengeReferral obj)
 			throws ObjectNotFoundException {
-		ChallengeReferral current = get(obj.getId());
+		final ChallengeReferral current = get(obj.getId());
 
 		current.setName(obj.getName());
 		current.setDescription(obj.getDescription());
@@ -63,8 +63,8 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException {
-		ChallengeReferral current = get(id);
+	public void delete(final UUID id) throws ObjectNotFoundException {
+		final ChallengeReferral current = get(id);
 
 		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
@@ -74,12 +74,13 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 
 	@Override
 	public List<ChallengeReferral> getChallengeReferralsByChallengeId(
-			Challenge challenge) {
+			final Challenge challenge) {
 		return dao.byChallengeId(challenge.getId());
 	}
 
 	@Override
-	public List<ChallengeReferral> challengeReferralSearch(Challenge challenge) {
+	public List<ChallengeReferral> challengeReferralSearch(
+			final Challenge challenge) {
 		return dao.byChallengeIdNotOnActiveTaskList(challenge.getId(),
 				securityService.currentUser().getPerson(),
 				securityService.getSessionId());
@@ -99,19 +100,21 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 			// Need to check both the tasks created w/in MyGPS as well as those
 			// created in SSP.
 
-			int size = 0;
+			boolean isEmpty = false;
 
 			if (securityService.isAuthenticated()) {
-				Person student = securityService.currentUser().getPerson();
-				size = taskService.getAllForPersonAndChallengeReferral(student,
-						false, challengeReferral, sAndP).size();
+				final Person student = securityService.currentUser()
+						.getPerson();
+				isEmpty = taskService.getAllForPersonAndChallengeReferral(
+						student,
+						false, challengeReferral, sAndP).isEmpty();
 			} else {
-				size = taskService.getAllForSessionIdAndChallengeReferral(
+				isEmpty = taskService.getAllForSessionIdAndChallengeReferral(
 						securityService.getSessionId(), false,
-						challengeReferral, sAndP).size();
+						challengeReferral, sAndP).isEmpty();
 			}
 
-			if (size == 0) {
+			if (isEmpty) {
 				count++;
 			}
 		}
@@ -120,8 +123,9 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 	}
 
 	@Override
-	public int countByChallengeIdNotOnActiveTaskList(Challenge challenge,
-			Person student, String sessionId) {
+	public long countByChallengeIdNotOnActiveTaskList(
+			final Challenge challenge,
+			final Person student, final String sessionId) {
 		return dao.countByChallengeIdNotOnActiveTaskList(challenge.getId(),
 				student, sessionId);
 	}
