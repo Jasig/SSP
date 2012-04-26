@@ -18,8 +18,9 @@ import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO
 
 public class MyGpsSelfHelpGuideResponseControllerTest {
 
-	private MyGpsSelfHelpGuideResponseController controller;
-	private SelfHelpGuideManager manager;
+	private transient MyGpsSelfHelpGuideResponseController controller;
+
+	private transient SelfHelpGuideManager manager;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsSelfHelpGuideResponseControllerTest.class);

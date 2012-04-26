@@ -101,4 +101,21 @@ public class SelfHelpGuideResponseDaoTest {
 
 		dao.delete(obj);
 	}
+
+	public void testSave() {
+		SelfHelpGuideResponse obj = new SelfHelpGuideResponse();
+		obj.setEarlyAlertSent(false);
+		obj.setCompleted(false);
+		SelfHelpGuideResponse saved = dao.save(obj);
+
+		assertNotNull("Saved instance should not have been null.", saved);
+		assertNotNull("Saved instance ID should not have been null.",
+				saved.getId());
+		assertFalse(saved.isCompleted());
+
+		saved.setCompleted(true);
+
+		SelfHelpGuideResponse completed = dao.save(saved);
+		assertTrue(completed.isCompleted());
+	}
 }

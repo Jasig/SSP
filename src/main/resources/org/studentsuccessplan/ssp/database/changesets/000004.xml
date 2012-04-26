@@ -305,4 +305,860 @@
 		</rollback>
 	</changeSet>
 
+
+	<changeSet id="create reference data - self help guide"
+		author="jon.adams">
+		<insert tableName="self_help_guide">
+			<column name="id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="name" value="Student Success Course" />
+			<column name="description"
+				value="SCC 101 - Student success course self help guide." />
+			<column name="threshold" value="8" />
+			<column name="introductory_text"
+				value="Welcome to the MyGPS guide for SCC 101.  This course, aided by MyGPS, will help you navigate your pathway to sucess at Sinclair.  On the following screens, you will be asked a series of questions concerning typical roadblocks faced by many students.  After submiting your answers, resources will be presented as possible solutions.  You will then have an oportunity to select resources that create your Personal Road Map." />
+			<column name="summary_text"
+				value="Thank you for using MyGPS!  Hopefully you found this guide and your Personal Road Map helpful and informative.  If you have questions about this guide, the resources, your map, or have other counseling or advising questions, please contact your SCC 101 instructor." />
+			<column name="summary_text_early_alert"
+				value="Due to your answers for the self help guide we have sent an early alert on your behalf to the counseling and advising staff.  They will be contacting you to discuss various options to deal with the challenges you are facing." />
+			<column name="summary_text_threshold"
+				value="Due to your answers for the self help guide we have sent an early alert on your behalf to the counseling and advising staff.  They will be contacting you to discuss various options to deal with the challenges you are facing." />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="authentication_required" value="1" />
+		</insert>
+		<insert tableName="self_help_guide">
+			<column name="id" value="3A6352C9-E7FE-E555-7F69-0124A5E5FE71" />
+			<column name="name" value="Traveling Your Career Path" />
+			<column name="description"
+				value="A listing of resources for making the most out of your future career." />
+			<column name="threshold" value="0" />
+			<column name="introductory_text"
+				value="Welcome to the Traveling Your Career Path self-help guide.  Aided by MyGPS, you will navigate your pathway to a successful career.  On the following screens, you will be asked a series of questions concerning career issues faced by many students.  After submitting your answers, resources will be presented as possible solutions.  You will then have an opportunity to select resources that create your Personal Career Road Map." />
+			<column name="summary_text" value="" />
+			<column name="summary_text_early_alert" value="" />
+			<column name="summary_text_threshold" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="authentication_required" value="0" />
+		</insert>
+		<insert tableName="self_help_guide">
+			<column name="id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="name" value="A Quick-Start Guide to Sinclair" />
+			<column name="description"
+				value="A guide for new students immediately after testing." />
+			<column name="threshold" value="0" />
+			<column name="introductory_text"
+				value="Welcome to the Quick Start to Sinclair self-help guide.  Aided by MyGPS, you will navigate your pathway to a successful start at Sinclair.  On the following screens, you will be asked a series of questions concerning typical roadblocks faced by many students.  After submitting your answers, resources will be presented as possible solutions.  You will then have an opportunity to select resources that create your Personal Road Map." />
+			<column name="summary_text" value="" />
+			<column name="summary_text_early_alert" value="" />
+			<column name="summary_text_threshold" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="authentication_required" value="0" />
+		</insert>
+		<insert tableName="self_help_guide">
+			<column name="id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
+			<column name="name" value="Navigating Academic Success" />
+			<column name="description" value="Navigating Academic Success - The Next Step" />
+			<column name="threshold" value="7" />
+			<column name="introductory_text"
+				value="Welcome to the Navigating Academic Success self-help guide.  Aided by MyGPS, you will navigate your pathway to success at Sinclair.  On the following screens, you will be asked a series of questions concerning typical roadblocks faced by many students.  After submitting your answers, resources will be presented as possible solutions.  You will then have an opportunity to select resources that create your Personal Road Map." />
+			<column name="summary_text"
+				value="Thank you for using MyGPS!  Hopefully you found this guide and your Personal Road Map helpful and informative.  If you have questions about this guide, the resources, your map, or any other topics discussed, please contact your advisor or counselor." />
+			<column name="summary_text_early_alert"
+				value="Due to your answers for the self help guide we have sent an early alert on your behalf to the counseling and advising staff.  They will be contacting you to discuss various options to deal with the challenges you are facing." />
+			<column name="summary_text_threshold"
+				value="Due to your answers for the self help guide we have sent an early alert on your behalf to the counseling and advising staff.  They will be contacting you to discuss various options to deal with the challenges you are facing." />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="authentication_required" value="0" />
+		</insert>
+		<insert tableName="self_help_guide">
+			<column name="id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
+			<column name="name" value="Resources for Academic Intervention" />
+			<column name="description" value="A guide for students on academic intervention." />
+			<column name="threshold" value="0" />
+			<column name="introductory_text"
+				value="Welcome to Academic Intervention self-help guide. Aided by MyGPS, you will navigate your pathway to success at Sinclair.  On the following screens, you will be asked a series of questions concerning typical roadblocks faced by many students. After submitting your answers, resources will be presented as possible solutions. You will then have an opportunity to select resources that create your Personal Road Map.  After completion please mail to: counselingsvcs@sinclair.edu" />
+			<column name="summary_text" value="" />
+			<column name="summary_text_early_alert" value="" />
+			<column name="summary_text_threshold" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="authentication_required" value="0" />
+		</insert>
+
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="EE618726-1BB1-40FC-A696-01CA1FB3D558" />
+			<column name="question_number" value="9" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="431abcf2-43fe-4d6a-8f83-b47c91157a15" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="3FB44068-DF2B-49BF-B71D-035070435726" />
+			<column name="question_number" value="10" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="challenge_id" value="dbb8741c-ece0-4830-8ebf-774151cb6a1b" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="AEEE5877-EDAF-46AA-A774-05A1361EDA00" />
+			<column name="question_number" value="2" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="14F7A05A-DF89-45F4-A2B0-18C0FE9A53BE" />
+			<column name="question_number" value="7" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="80c5b019-1946-4a98-a7fd-b8d62684558c" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="81953C1B-4930-4D62-90DA-1FB032BE399A" />
+			<column name="question_number" value="6" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="challenge_id" value="38f7ae25-902f-4381-851e-2e2319adb1bd" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="209D97CF-2F51-4261-80A5-21DB7F0D7AA2" />
+			<column name="question_number" value="3" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="cab7d5a5-2ca5-4af7-a644-b3882ddc9b41" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="A828C40D-1495-4C71-971A-314B8EC55DB3" />
+			<column name="question_number" value="1" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="3C6ABE0B-69CC-4555-88C8-380EF129459A" />
+			<column name="question_number" value="3" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
+			<column name="challenge_id" value="eb0dc2c0-3157-43c1-8b2e-55a5c2e2f4c3" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="AD78DC04-BB23-4E62-B135-3983CB208BA6" />
+			<column name="question_number" value="2" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
+			<column name="challenge_id" value="cab7d5a5-2ca5-4af7-a644-b3882ddc9b41" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="DDCC44A1-9D1B-4BEC-8AAB-3AB800B31115" />
+			<column name="question_number" value="11" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="af7e472c-3b7c-4d00-a667-04f52f560940" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="9C2E722E-2EAC-4821-993B-3AF6CD2D94AF" />
+			<column name="question_number" value="2" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="f067c6ca-50ad-447a-ad12-f47dffdce42e" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="961C2085-E546-408D-8B5F-41911B053B40" />
+			<column name="question_number" value="6" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
+			<column name="challenge_id" value="f067c6ca-50ad-447a-ad12-f47dffdce42e" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="7973E86D-F0A6-4653-8DD2-4365A3861861" />
+			<column name="question_number" value="4" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
+			<column name="challenge_id" value="cab7d5a5-2ca5-4af7-a644-b3882ddc9b41" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="26523538-3D22-40DE-A3A2-4CB7C8BE2443" />
+			<column name="question_number" value="1" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="07b5c3ac-3bdf-4d12-b65d-94cb55167998" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="0E46733E-193D-4950-BA29-4CD0F9620561" />
+			<column name="question_number" value="10" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="38f7ae25-902f-4381-851e-2e2319adb1bd" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="A4BF9024-3F11-4BDD-BE01-60EC8154FD6E" />
+			<column name="question_number" value="1" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
+			<column name="challenge_id" value="80c5b019-1946-4a98-a7fd-b8d62684558c" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="3B698C0D-024A-482E-AF10-76EC52836DB7" />
+			<column name="question_number" value="3" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="3A6352C9-E7FE-E555-7F69-0124A5E5FE71" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="850942D7-86D4-470D-8A43-7A23B3BE679A" />
+			<column name="question_number" value="4" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="7c0e5b76-9933-484a-b265-58cb280305a5" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="CF39078C-183E-4E31-A912-7D4CEB59E6CE" />
+			<column name="question_number" value="5" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="challenge_id" value="f067c6ca-50ad-447a-ad12-f47dffdce42e" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="970273B5-493C-452A-86C2-7DE4CD9EBC73" />
+			<column name="question_number" value="2" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="3A6352C9-E7FE-E555-7F69-0124A5E5FE71" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="D549486E-6355-443A-A27C-8E5859A6DD25" />
+			<column name="question_number" value="5" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
+			<column name="challenge_id" value="fb206a68-78db-489d-9d5d-dce554f54eed" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="F94995E6-6D85-4755-8DB3-8F532E14F631" />
+			<column name="question_number" value="7" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="5402F3AC-395E-4E0F-A9E3-968DB1ADE087" />
+			<column name="question_number" value="4" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="DB8CDF11-9F1D-4B68-B39F-9D7AE7CE19A0" />
+			<column name="question_number" value="8" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="challenge_id" value="07b5c3ac-3bdf-4d12-b65d-94cb55167998" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="1B417345-AA6A-4859-94AB-9F1913F81872" />
+			<column name="question_number" value="1" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="3A6352C9-E7FE-E555-7F69-0124A5E5FE71" />
+			<column name="challenge_id" value="43719c57-ec92-4e4a-9fb6-25208936fd18" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="7125D031-A0B9-4DE2-9D81-A2663F032471" />
+			<column name="question_number" value="6" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="7ad819ef-d1e3-4ebf-a05b-e233f17f9e55" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="7787FAB3-D09C-4FCC-AE6A-A26898A23EE4" />
+			<column name="question_number" value="8" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="eb0dc2c0-3157-43c1-8b2e-55a5c2e2f4c3" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="C5A508FA-BDBC-4286-8999-AC208804D547" />
+			<column name="question_number" value="7" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
+			<column name="challenge_id" value="431abcf2-43fe-4d6a-8f83-b47c91157a15" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="D86CBEFE-374F-4D0B-B56E-AEB58E0BDD9C" />
+			<column name="question_number" value="5" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="3A6352C9-E7FE-E555-7F69-0124A5E5FE71" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="2DD019D4-EFAA-429B-A555-AFE5B744FE8A" />
+			<column name="question_number" value="7" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="A7EA32FE-FE67-4C97-9138-B24FD8D648D2" />
+			<column name="question_number" value="2" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="F62330BD-0FC3-4EA3-8D77-B777DABE8484" />
+			<column name="question_number" value="4" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
+			<column name="challenge_id" value="eb0dc2c0-3157-43c1-8b2e-55a5c2e2f4c3" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="E5CF1D3F-F044-41DB-8B65-C62BE7D02F3B" />
+			<column name="question_number" value="5" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
+			<column name="challenge_id" value="1f5b63a9-9b50-412b-9971-23602f87444c" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="B5755BE1-C1FD-43E5-89F4-CD4810CCA019" />
+			<column name="question_number" value="3" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="A206EF83-3F62-4F41-99DB-DC7607D43562" />
+			<column name="question_number" value="4" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="3A6352C9-E7FE-E555-7F69-0124A5E5FE71" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="1970E5F3-8167-4C00-A1DA-DDA1A9AC7260" />
+			<column name="question_number" value="9" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="53A62EF3-0AEB-489D-96B7-DE447E583A15" />
+			<column name="question_number" value="3" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="9AD572CF-9496-40B8-B2E9-E3E922DB9151" />
+			<column name="question_number" value="8" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="BDB02005-EC5E-4957-B485-E988D139EEB3" />
+			<column name="question_number" value="6" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
+			<column name="challenge_id" value="f067c6ca-50ad-447a-ad12-f47dffdce42e" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="9D3CBFEC-97CA-492B-A9D0-F4020C84ED3A" />
+			<column name="question_number" value="5" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
+			<column name="challenge_id" value="fb206a68-78db-489d-9d5d-dce554f54eed" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<insert tableName="self_help_guide_question">
+			<column name="id" value="8B9869B1-965B-42A2-85B3-FEDCCD26000D" />
+			<column name="question_number" value="1" />
+			<column name="critical" value="0" />
+			<column name="mandatory" value="0" />
+			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
+			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="object_status" value="1" />
+			<column name="name" value="" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-04-23T00:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<rollback>
+			<delete tableName="self_help_guide">
+				<where>id='4FD534DF-E7FE-E555-7C71-0042593B1990'</where>
+			</delete>
+			<delete tableName="self_help_guide">
+				<where>id='3A6352C9-E7FE-E555-7F69-0124A5E5FE71'</where>
+			</delete>
+			<delete tableName="self_help_guide">
+				<where>id='5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5'</where>
+			</delete>
+			<delete tableName="self_help_guide">
+				<where>id='6DCE9C28-E7FE-E555-762E-F82EA0C75580'</where>
+			</delete>
+			<delete tableName="self_help_guide">
+				<where>id='894073E7-E7FE-E555-7C05-FF79555478E7'</where>
+			</delete>
+
+			<delete tableName="self_help_guide_question">
+				<where>id='EE618726-1BB1-40FC-A696-01CA1FB3D558'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='3FB44068-DF2B-49BF-B71D-035070435726'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='AEEE5877-EDAF-46AA-A774-05A1361EDA00'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='14F7A05A-DF89-45F4-A2B0-18C0FE9A53BE'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='81953C1B-4930-4D62-90DA-1FB032BE399A'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='209D97CF-2F51-4261-80A5-21DB7F0D7AA2'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='A828C40D-1495-4C71-971A-314B8EC55DB3'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='3C6ABE0B-69CC-4555-88C8-380EF129459A'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='AD78DC04-BB23-4E62-B135-3983CB208BA6'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='DDCC44A1-9D1B-4BEC-8AAB-3AB800B31115'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='9C2E722E-2EAC-4821-993B-3AF6CD2D94AF'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='961C2085-E546-408D-8B5F-41911B053B40'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='7973E86D-F0A6-4653-8DD2-4365A3861861'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='26523538-3D22-40DE-A3A2-4CB7C8BE2443'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='0E46733E-193D-4950-BA29-4CD0F9620561'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='A4BF9024-3F11-4BDD-BE01-60EC8154FD6E'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='3B698C0D-024A-482E-AF10-76EC52836DB7'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='850942D7-86D4-470D-8A43-7A23B3BE679A'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='CF39078C-183E-4E31-A912-7D4CEB59E6CE'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='970273B5-493C-452A-86C2-7DE4CD9EBC73'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='D549486E-6355-443A-A27C-8E5859A6DD25'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='F94995E6-6D85-4755-8DB3-8F532E14F631'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='5402F3AC-395E-4E0F-A9E3-968DB1ADE087'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='DB8CDF11-9F1D-4B68-B39F-9D7AE7CE19A0'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='1B417345-AA6A-4859-94AB-9F1913F81872'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='7125D031-A0B9-4DE2-9D81-A2663F032471'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='7787FAB3-D09C-4FCC-AE6A-A26898A23EE4'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='C5A508FA-BDBC-4286-8999-AC208804D547'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='D86CBEFE-374F-4D0B-B56E-AEB58E0BDD9C'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='2DD019D4-EFAA-429B-A555-AFE5B744FE8A'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='A7EA32FE-FE67-4C97-9138-B24FD8D648D2'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='F62330BD-0FC3-4EA3-8D77-B777DABE8484'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='E5CF1D3F-F044-41DB-8B65-C62BE7D02F3B'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='B5755BE1-C1FD-43E5-89F4-CD4810CCA019'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='A206EF83-3F62-4F41-99DB-DC7607D43562'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='1970E5F3-8167-4C00-A1DA-DDA1A9AC7260'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='53A62EF3-0AEB-489D-96B7-DE447E583A15'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='9AD572CF-9496-40B8-B2E9-E3E922DB9151'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='BDB02005-EC5E-4957-B485-E988D139EEB3'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='9D3CBFEC-97CA-492B-A9D0-F4020C84ED3A'</where>
+			</delete>
+			<delete tableName="self_help_guide_question">
+				<where>id='8B9869B1-965B-42A2-85B3-FEDCCD26000D'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

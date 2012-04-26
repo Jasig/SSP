@@ -21,13 +21,17 @@ import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
+/**
+ * Challenge service test
+ */
 public class ChallengeServiceTest {
 
-	private ChallengeServiceImpl service;
-	private ChallengeDao dao;
+	private transient ChallengeServiceImpl service;
+
+	private transient ChallengeDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new ChallengeServiceImpl();
 		dao = createMock(ChallengeDao.class);
 
@@ -39,8 +43,7 @@ public class ChallengeServiceTest {
 		List<Challenge> daoAll = new ArrayList<Challenge>();
 		daoAll.add(new Challenge());
 
-		expect(dao.getAll(isA(SortingAndPaging.class)))
-				.andReturn(daoAll);
+		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(daoAll);
 
 		replay(dao);
 

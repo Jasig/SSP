@@ -65,5 +65,4 @@ public class SelfHelpGuideQuestionResponse extends Auditable implements
 	public void setEarlyAlertSent(Boolean earlyAlertSent) {
 		this.earlyAlertSent = earlyAlertSent;
 	}
-
 }
