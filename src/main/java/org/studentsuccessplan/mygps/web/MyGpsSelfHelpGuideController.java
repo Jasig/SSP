@@ -51,7 +51,9 @@ public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public @ResponseBody
 	List<SelfHelpGuideTO> getAll() throws Exception {
-
+		// TODO: MyGPSSelfGuideController.getAll() needs filtered based on
+		// security. Guides with authenticationRequired == true should not show
+		// for the anonymous user.
 		try {
 			return SelfHelpGuideTO.listToTOList(selfHelpGuideService
 					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE)));
@@ -59,7 +61,6 @@ public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 			LOGGER.error("ERROR : getAll() : {}", e.getMessage(), e);
 			throw e;
 		}
-
 	}
 
 	@RequestMapping(value = "/getContentById", method = RequestMethod.GET)
@@ -67,7 +68,6 @@ public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 	SelfHelpGuideContentTO getContentById(
 			@RequestParam("selfHelpGuideId") UUID selfHelpGuideId)
 			throws Exception {
-
 		try {
 			return selfHelpGuideManager.getContentById(selfHelpGuideId);
 		} catch (Exception e) {

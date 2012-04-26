@@ -95,8 +95,8 @@ public class SelfHelpGuideManager {
 		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
 				.get(selfHelpGuideResponseId);
 		selfHelpGuideResponse.setCompleted(true);
-		selfHelpGuideResponseDao.save(selfHelpGuideResponse);
-		return true;
+		return selfHelpGuideResponseDao.save(selfHelpGuideResponse)
+				.isCompleted();
 	}
 
 	public SelfHelpGuideResponseTO getSelfHelpGuideResponseById(
@@ -165,8 +165,6 @@ public class SelfHelpGuideManager {
 			UUID selfHelpGuideQuestionId, Boolean response) {
 
 		SelfHelpGuideQuestionResponse selfHelpGuideQuestionResponse = new SelfHelpGuideQuestionResponse();
-
-		selfHelpGuideQuestionResponse.setCreatedDate(new Date());
 		selfHelpGuideQuestionResponse.setEarlyAlertSent(false);
 		selfHelpGuideQuestionResponse.setResponse(response);
 		selfHelpGuideQuestionResponse
