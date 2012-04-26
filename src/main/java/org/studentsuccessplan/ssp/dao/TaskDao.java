@@ -115,6 +115,8 @@ public class TaskDao extends
 	public List<Task> getTasksInList(final List<UUID> taskIds,
 			final SortingAndPaging sAndP) {
 		final Criteria criteria = createCriteria(sAndP);
+		// :TODO this ought to start working correctly when ids are switched to
+		// Long?
 		criteria.add(Restrictions.in("id", taskIds));
 		return criteria.list();
 	}
