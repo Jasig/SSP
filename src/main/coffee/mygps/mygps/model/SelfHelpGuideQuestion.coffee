@@ -14,4 +14,4 @@ namespace 'mygps.model'
 				@response = ko.observable( null )
 				
 			@createFromTransferObject: ( selfHelpGuideQuestionTO ) ->
-				return new SelfHelpGuideQuestion( selfHelpGuideQuestionTO.id, selfHelpGuideQuestionTO.headingText, selfHelpGuideQuestionTO.descriptionText, selfHelpGuideQuestionTO.questionText, selfHelpGuideQuestionTO.mandatory )
+				return new SelfHelpGuideQuestion( selfHelpGuideQuestionTO.id, selfHelpGuideQuestionTO.headingText, selfHelpGuideQuestionTO.challenge.selfHelpGuideDescription, selfHelpGuideQuestionTO.challenge.selfHelpGuideQuestion, selfHelpGuideQuestionTO.mandatory )

@@ -1,7 +1,9 @@
 package org.studentsuccessplan.ssp.model.reference;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 /**
  * SelfHelpGuide reference object.
@@ -41,7 +44,8 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 	private boolean authenticationRequired;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "selfHelpGuide")
-	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
+	@OrderBy("questionNumber")
+	private List<SelfHelpGuideQuestion> selfHelpGuideQuestions = new ArrayList<SelfHelpGuideQuestion>(
 			0);
 
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -144,12 +148,12 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 		this.authenticationRequired = authenticationRequired;
 	}
 
-	public Set<SelfHelpGuideQuestion> getSelfHelpGuideQuestions() {
+	public List<SelfHelpGuideQuestion> getSelfHelpGuideQuestions() {
 		return selfHelpGuideQuestions;
 	}
 
 	public void setSelfHelpGuideQuestions(
-			Set<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
+			List<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
 		this.selfHelpGuideQuestions = selfHelpGuideQuestions;
 	}
 

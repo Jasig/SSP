@@ -1,17 +1,16 @@
 package org.studentsuccessplan.mygps.model.transferobject;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 @JsonIgnoreProperties(value = { "selfHelpGuide" })
@@ -29,9 +28,6 @@ public class SelfHelpGuideQuestionTO extends
 	private ChallengeTO challenge;
 
 	private SelfHelpGuide selfHelpGuide;
-
-	private Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = new HashSet<SelfHelpGuideQuestionResponse>(
-			0);
 
 	/**
 	 * @return the questionNumber
@@ -108,22 +104,6 @@ public class SelfHelpGuideQuestionTO extends
 		this.selfHelpGuide = selfHelpGuide;
 	}
 
-	/**
-	 * @return the selfHelpGuideQuestionResponses
-	 */
-	public Set<SelfHelpGuideQuestionResponse> getSelfHelpGuideQuestionResponses() {
-		return selfHelpGuideQuestionResponses;
-	}
-
-	/**
-	 * @param selfHelpGuideQuestionResponses
-	 *            the selfHelpGuideQuestionResponses to set
-	 */
-	public void setSelfHelpGuideQuestionResponses(
-			Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses) {
-		this.selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponses;
-	}
-
 	@Override
 	public SelfHelpGuideQuestion asModel() {
 		return pushAttributesToModel(new SelfHelpGuideQuestion());
@@ -146,13 +126,14 @@ public class SelfHelpGuideQuestionTO extends
 		challenge.fromModel(model.getChallenge());
 		setChallenge(challenge);
 		setSelfHelpGuide(model.getSelfHelpGuide());
-		setSelfHelpGuideQuestionResponses(model
-				.getSelfHelpGuideQuestionResponses());
+
+		// Does the TO need to know about the user responses?
+		// setSelfHelpGuideQuestionResponses(model.getSelfHelpGuideQuestionResponses());
 	}
 
-	public static Set<SelfHelpGuideQuestionTO> listToTOSet(
+	public static List<SelfHelpGuideQuestionTO> listToTOList(
 			List<SelfHelpGuideQuestion> models) {
-		Set<SelfHelpGuideQuestionTO> tos = Sets.newHashSet();
+		List<SelfHelpGuideQuestionTO> tos = Lists.newArrayList();
 		for (SelfHelpGuideQuestion model : models) {
 			SelfHelpGuideQuestionTO obj = new SelfHelpGuideQuestionTO();
 			obj.fromModel(model);

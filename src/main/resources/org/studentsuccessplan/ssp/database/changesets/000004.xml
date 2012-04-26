@@ -1152,4 +1152,67 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="Add SelfHelpGuide questions to Challenges"
+		author="jon.adams">
+		<update tableName="challenge">
+			<column name="self_help_guide_description"
+				value="Child or adult care demands often pose challenges for success in college.  It is important to develop a plan to address these challenges before they become barriers to your academic success." />
+			<column name="self_help_guide_question"
+				value="Could my child or adult care cause me to be absent from class or fail to complete assignments?" />
+			<where>id = '07b5c3ac-3bdf-4d12-b65d-94cb55167998'</where>
+		</update>
+		<update tableName="challenge">
+			<column name="self_help_guide_description"
+				value="Instructors expect students to be in class, on time, every time.  Being late or missing just one class forces you to play “catch-up” and can negatively affect your grades." />
+			<column name="self_help_guide_question"
+				value="Do I have transportation issues that could cause me to be late or miss class?" />
+			<where>id = '38f7ae25-902f-4381-851e-2e2319adb1bd'</where>
+		</update>
+		<update tableName="challenge">
+			<column name="self_help_guide_description"
+				value="Email, not post office mail, is the number one means of communication by the College with students.  Basic computer skills to access your email and web advisor tools are required for all new students even before classes begin." />
+			<column name="self_help_guide_question"
+				value="Does my lack of computer skills keep me from fully participating in class and college activities?" />
+			<where>id = 'f067c6ca-50ad-447a-ad12-f47dffdce42e'</where>
+		</update>
+		<update tableName="challenge">
+			<column name="self_help_guide_description" value="Test self-help guide description." />
+			<column name="self_help_guide_question" value="Test self-help guide question?" />
+			<where>id = 'f5bb0a62-1756-4ea2-857d-5821ee44a1d0'</where>
+		</update>
+		<update tableName="challenge">
+			<column name="self_help_guide_description" value="Educational and social support is provided through the office of ESL/Enrollment Services.  Students who speak English as a second language are encouraged to seek assistance from the ESL coordinator." />
+			<column name="self_help_guide_question" value="Would I like to learn more about services available to ESL students?" />
+			<where>id = 'dbb8741c-ece0-4830-8ebf-774151cb6a1b'</where>
+		</update>
+
+		<rollback>
+			<update tableName="challenge">
+				<column name="self_help_guide_description" value="" />
+				<column name="self_help_guide_question" value="" />
+				<where>id = '07b5c3ac-3bdf-4d12-b65d-94cb55167998'</where>
+			</update>
+			<update tableName="challenge">
+				<column name="self_help_guide_description" value="" />
+				<column name="self_help_guide_question" value="" />
+				<where>id = '38f7ae25-902f-4381-851e-2e2319adb1bd'</where>
+			</update>
+			<update tableName="challenge">
+				<column name="self_help_guide_description" value="" />
+				<column name="self_help_guide_question" value="" />
+				<where>id = 'f067c6ca-50ad-447a-ad12-f47dffdce42e'</where>
+			</update>
+			<update tableName="challenge">
+				<column name="self_help_guide_description" value="" />
+				<column name="self_help_guide_question" value="" />
+				<where>id = 'f5bb0a62-1756-4ea2-857d-5821ee44a1d0'</where>
+			</update>
+			<update tableName="challenge">
+				<column name="self_help_guide_description" value="" />
+				<column name="self_help_guide_question" value="" />
+				<where>id = 'dbb8741c-ece0-4830-8ebf-774151cb6a1b'</where>
+			</update>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>
