@@ -15,13 +15,11 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 			 'reference.MaritalStatuses',
 			 'reference.YesNo'],		
 
-    // Fields will be arranged vertically, stretched to full width
     layout: 'anchor',
     defaults: {
         anchor: '100%'
     },
 
-    // The fields
     defaultType: 'displayfield',
     items: [{
             xtype: 'fieldset',
@@ -80,6 +78,9 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         queryMode: 'local',
         allowBlank: true
 	},{
+        fieldLabel: 'Country of citizenship',
+        name: 'countryOfCitizenship'
+    },{
         xtype: 'combobox',
         name: 'veteranStatusId',
         fieldLabel: 'Veteran Status',
@@ -98,7 +99,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
         items: [
             {boxLabel: "Yes", name: "primaryCaregiver", inputValue:"true"},
             {boxLabel: "No", name: "primaryCaregiver", inputValue:"false"}]
-    }, {
+    },{
         xtype: 'displayfield',
         fieldLabel: 'If you have children, please indicate below'
     },{

@@ -15,7 +15,7 @@ Ext.define('Ssp.model.Student', {
     		 {name: 'zipCode', type: 'string'},
              {name: 'primaryEmailAddress', type: 'string'},
     		 {name: 'secondaryEmailAddress', type: 'string'},
-             {name: 'birthDate', type: 'date'},
+             {name: 'birthDate', type: 'date', dateFormat: 'time'},
     		 {name: 'username', type: 'string'},
              {name: 'userId', type: 'string'},
     		 {name: 'enabled', type: 'boolean'}

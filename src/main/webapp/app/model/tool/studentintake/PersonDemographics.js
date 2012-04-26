@@ -22,7 +22,6 @@ Ext.define('Ssp.model.tool.studentintake.PersonDemographics', {
              {name: 'shift', type: 'string'},
              {name: 'wage', type: 'string'},
              {name: 'totalHoursWorkedPerWeek', type: 'int'},
-             {name: 'local', type: 'string'},]
-	// 'childCareArrangementId',
-	 // 'caregiverTypeChild'
+             {name: 'local', type: 'string'},
+             {name: 'childCareArrangementId', type: 'string'}]
 });
