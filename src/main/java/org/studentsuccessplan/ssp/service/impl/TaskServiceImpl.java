@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.dao.TaskDao;
 import org.studentsuccessplan.ssp.dao.reference.ConfidentialityLevelDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
@@ -33,6 +34,7 @@ import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import com.google.common.collect.Maps;
 
 @Service
+@Transactional
 public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		implements TaskService {
 
@@ -287,6 +289,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	 * person,
 	 * (just for the session if it is the anon user).
 	 */
+	@Override
 	public List<Task> getTasksForPersonIfNoneSelected(
 			final List<UUID> selectedIds, final Person person,
 			final String sessionId, final SortingAndPaging sAndP) {
