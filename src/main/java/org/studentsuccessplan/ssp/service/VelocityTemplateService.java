@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class VelocityTemplateService {
 
 	@Autowired
-	private VelocityEngine velocityEngine;
+	private transient VelocityEngine velocityEngine;
 
 	/**
 	 * 

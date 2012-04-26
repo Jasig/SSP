@@ -45,7 +45,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	private transient ConfidentialityLevelDao confidentialityLevelDao;
 
 	@Autowired
-	private MessageService messageService;
+	private transient MessageService messageService;
 
 	@Value("#{configProperties.serverExternalPath}")
 	private String serverExternalPath;
@@ -64,8 +64,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	}
 
 	@Override
-	public Task save(Task obj) throws ObjectNotFoundException {
-		Task current = getDao().get(obj.getId());
+	public Task save(final Task obj) throws ObjectNotFoundException {
+		final Task current = getDao().get(obj.getId());
 
 		current.setChallenge(obj.getChallenge());
 		current.setChallengeReferral(obj.getChallengeReferral());
@@ -89,52 +89,56 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	}
 
 	@Override
-	public List<Task> getAllForPerson(Person person, SortingAndPaging sAndP) {
+	public List<Task> getAllForPerson(final Person person,
+			final SortingAndPaging sAndP) {
 		return getDao().getAllForPersonId(person.getId(), sAndP);
 	}
 
 	@Override
-	public List<Task> getAllForPerson(Person person, boolean complete,
-			SortingAndPaging sAndP) {
+	public List<Task> getAllForPerson(final Person person,
+			final boolean complete,
+			final SortingAndPaging sAndP) {
 		return getDao().getAllForPersonId(person.getId(), complete, sAndP);
 	}
 
 	@Override
-	public List<Task> getAllForSessionId(String sessionId,
-			SortingAndPaging sAndP) {
+	public List<Task> getAllForSessionId(final String sessionId,
+			final SortingAndPaging sAndP) {
 		return getDao().getAllForSessionId(sessionId, sAndP);
 	}
 
 	@Override
-	public List<Task> getAllForSessionId(String sessionId, boolean complete,
-			SortingAndPaging sAndP) {
+	public List<Task> getAllForSessionId(final String sessionId,
+			final boolean complete,
+			final SortingAndPaging sAndP) {
 		return getDao().getAllForSessionId(sessionId, complete, sAndP);
 	}
 
 	@Override
-	public List<Task> getAllWhichNeedRemindersSent(SortingAndPaging sAndP) {
+	public List<Task> getAllWhichNeedRemindersSent(final SortingAndPaging sAndP) {
 		return getDao().getAllWhichNeedRemindersSent(sAndP);
 	}
 
 	@Override
-	public List<Task> getTasksInList(List<UUID> taskIds, SortingAndPaging sAndP) {
+	public List<Task> getTasksInList(final List<UUID> taskIds,
+			final SortingAndPaging sAndP) {
 		return getDao().getTasksInList(taskIds, sAndP);
 	}
 
 	@Override
-	public void markTaskComplete(Task task) {
+	public void markTaskComplete(final Task task) {
 		task.setCompletedDate(new Date());
 		getDao().save(task);
 	}
 
 	@Override
-	public void markTaskIncomplete(Task task) {
+	public void markTaskIncomplete(final Task task) {
 		task.setCompletedDate(null);
 		getDao().save(task);
 	}
 
 	@Override
-	public void markTaskCompletion(Task task, boolean complete) {
+	public void markTaskCompletion(final Task task, final boolean complete) {
 		if (complete) {
 			markTaskComplete(task);
 		} else {
@@ -143,7 +147,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	}
 
 	@Override
-	public void setReminderSentDateToToday(Task task) {
+	public void setReminderSentDateToToday(final Task task) {
 		task.setReminderSentDate(new Date());
 		getDao().save(task);
 	}
@@ -166,14 +170,15 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	}
 
 	@Override
-	public Map<String, List<Task>> getAllGroupedByTaskGroup(Person person,
-			SortingAndPaging sAndP) {
-		Map<String, List<Task>> grouped = Maps.newTreeMap();
-		List<Task> tasksForPerson = dao
+	public Map<String, List<Task>> getAllGroupedByTaskGroup(
+			final Person person,
+			final SortingAndPaging sAndP) {
+		final Map<String, List<Task>> grouped = Maps.newTreeMap();
+		final List<Task> tasksForPerson = dao
 				.getAllForPersonId(person.getId(), sAndP);
 		for (Task task : tasksForPerson) {
-			String group = task.getGroup();
-			List<Task> tasksForGroup;
+			final String group = task.getGroup();
+			final List<Task> tasksForGroup;
 			if (!grouped.keySet().contains(group)) {
 				tasksForGroup = new ArrayList<Task>();
 				grouped.put(group, tasksForGroup);
@@ -186,11 +191,12 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	}
 
 	@Override
-	public Task createForPersonWithChallengeReferral(Challenge challenge,
-			ChallengeReferral challengeReferral, Person person, String sessionId) {
+	public Task createForPersonWithChallengeReferral(final Challenge challenge,
+			final ChallengeReferral challengeReferral, final Person person,
+			final String sessionId) {
 
 		// Create, fill, and persist a new Task
-		Task task = new Task();
+		final Task task = new Task();
 
 		task.setChallenge(challenge);
 		task.setChallengeReferral(challengeReferral);
@@ -204,9 +210,10 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	}
 
 	@Override
-	public Task createCustomTaskForPerson(String name, String description,
-			Person student, String sessionId) {
-		Task customTask = new Task();
+	public Task createCustomTaskForPerson(final String name,
+			final String description,
+			final Person student, final String sessionId) {
+		final Task customTask = new Task();
 		customTask.setDescription(description);
 		customTask.setPerson(student);
 		customTask.setName(name);
@@ -217,8 +224,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	}
 
 	@Override
-	public void sendNoticeToStudentOnCustomTask(Task customTask,
-			UUID messageTemplateId) throws Exception {
+	public void sendNoticeToStudentOnCustomTask(final Task customTask,
+			final UUID messageTemplateId) throws Exception {
 
 		if (!messageTemplateId
 				.equals(MessageTemplate.TASK_AUTO_CREATED_EMAIL_ID)
@@ -229,18 +236,20 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		}
 
 		// Template parameters
-		Map<String, Object> templateParameters = new HashMap<String, Object>();
+		final Map<String, Object> templateParameters = new HashMap<String, Object>();
 		templateParameters
 				.put("fullName", customTask.getPerson().getFullName());
 		templateParameters.put("name", customTask.getName());
 
 		// fix links in description
-		String linkedDescription = customTask.getDescription().replaceAll(
-				"href=\"/" + studentUIPath + "/",
-				"href=\"" + serverExternalPath + "/" + studentUIPath + "/");
+		final String linkedDescription = customTask.getDescription()
+				.replaceAll(
+						"href=\"/" + studentUIPath + "/",
+						"href=\"" + serverExternalPath + "/" + studentUIPath
+								+ "/");
 		templateParameters.put("description", linkedDescription);
 
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+		final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 		templateParameters.put("dueDate",
 				format.format(customTask.getDueDate()));
 
@@ -256,7 +265,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 			final Person student, final List<String> emailAddresses,
 			final List<Person> recipients) throws Exception {
 
-		if ((tasks == null) || (tasks.size() == 0)) {
+		if ((tasks == null) || (tasks.isEmpty())) {
 			return;
 		}
 
@@ -295,7 +304,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 			final String sessionId, final SortingAndPaging sAndP) {
 		final List<Task> tasks;
 
-		if ((selectedIds != null) && (selectedIds.size() > 0)) {
+		if ((selectedIds != null) && (selectedIds.isEmpty())) {
 			tasks = getTasksInList(selectedIds, sAndP);
 		} else {
 			if (person.getId() == SspUser.ANONYMOUS_PERSON_ID) {
@@ -319,14 +328,14 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		try {
 
 			// Calculate reminder window start date
-			Calendar now = Calendar.getInstance();
+			final Calendar now = Calendar.getInstance();
 			now.setTime(new Date());
 
-			Calendar startDateCalendar = Calendar.getInstance();
-			Calendar dueDateCalendar = Calendar.getInstance();
+			final Calendar startDateCalendar = Calendar.getInstance();
+			final Calendar dueDateCalendar = Calendar.getInstance();
 
 			// Send reminders for custom action plan tasks
-			List<Task> tasks = getAllWhichNeedRemindersSent(sAndP);
+			final List<Task> tasks = getAllWhichNeedRemindersSent(sAndP);
 
 			for (Task task : tasks) {
 

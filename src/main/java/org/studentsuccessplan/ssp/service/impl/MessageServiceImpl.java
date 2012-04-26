@@ -34,22 +34,22 @@ import org.studentsuccessplan.ssp.service.VelocityTemplateService;
 public class MessageServiceImpl implements MessageService {
 
 	@Autowired
-	private JavaMailSender javaMailSender;
+	private transient JavaMailSender javaMailSender;
 
 	@Autowired
-	private MessageDao messageDao;
+	private transient MessageDao messageDao;
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	@Autowired
-	private SecurityService securityService;
+	private transient SecurityService securityService;
 
 	@Autowired
-	private VelocityTemplateService velocityTemplateService;
+	private transient VelocityTemplateService velocityTemplateService;
 
 	@Autowired
-	private MessageTemplateDao messageTemplateDao;
+	private transient MessageTemplateDao messageTemplateDao;
 
 	@Value("#{configProperties.messageManager_bcc}")
 	private String bcc;
@@ -57,7 +57,7 @@ public class MessageServiceImpl implements MessageService {
 	@Value("#{configProperties.send_mail}")
 	private boolean sendMail = false;
 
-	private final Logger LOGGER = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MessageServiceImpl.class);
 
 	@Override
@@ -70,10 +70,10 @@ public class MessageServiceImpl implements MessageService {
 			final Map<String, Object> templateParameters)
 			throws ObjectNotFoundException {
 
-		MessageTemplate messageTemplate = messageTemplateDao
+		final MessageTemplate messageTemplate = messageTemplateDao
 				.get(messageTemplateId);
 
-		Message message = new Message();
+		final Message message = new Message();
 
 		message.setSubject(velocityTemplateService.generateContentFromTemplate(
 				messageTemplate.subjectTemplateId(),
@@ -103,7 +103,8 @@ public class MessageServiceImpl implements MessageService {
 			final UUID messageTemplateId,
 			final Map<String, Object> templateParameters)
 			throws Exception {
-		Message message = createMessage(messageTemplateId, templateParameters);
+		final Message message = createMessage(messageTemplateId,
+				templateParameters);
 		message.setRecipient(to);
 		messageDao.save(message);
 	}
@@ -113,7 +114,8 @@ public class MessageServiceImpl implements MessageService {
 			final UUID messageTemplateId,
 			final Map<String, Object> templateParameters)
 			throws Exception {
-		Message message = createMessage(messageTemplateId, templateParameters);
+		final Message message = createMessage(messageTemplateId,
+				templateParameters);
 		message.setRecipientEmailAddress(to);
 		messageDao.save(message);
 	}
@@ -126,7 +128,7 @@ public class MessageServiceImpl implements MessageService {
 
 		try {
 
-			List<Message> messages = messageDao.queued();
+			final List<Message> messages = messageDao.queued();
 
 			for (Message message : messages) {
 				sendMessage(message);
@@ -140,12 +142,12 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	protected boolean validateEmail(String email) {
-		EmailValidator emailValidator = EmailValidator.getInstance();
+		final EmailValidator emailValidator = EmailValidator.getInstance();
 		return emailValidator.isValid(email);
 	}
 
 	@Override
-	public boolean sendMessage(Message message) {
+	public boolean sendMessage(final Message message) {
 
 		LOGGER.info("BEGIN : sendMessage()");
 
@@ -154,8 +156,8 @@ public class MessageServiceImpl implements MessageService {
 		boolean retVal = true;
 
 		try {
-			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(
+			final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+			final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(
 					mimeMessage);
 
 			mimeMessageHelper.setFrom(personService.get(
