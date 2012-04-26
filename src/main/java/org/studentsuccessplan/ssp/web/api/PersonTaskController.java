@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +22,10 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.TaskService;
 import org.studentsuccessplan.ssp.transferobject.TaskTO;
+import org.studentsuccessplan.ssp.transferobject.form.EmailPersonTasksForm;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Maps;
@@ -50,6 +51,9 @@ public class PersonTaskController extends
 	@Autowired
 	private transient TaskService service;
 
+	@Autowired
+	private transient SecurityService securityService;
+
 	/**
 	 * Get All tasks for a given person, group them by their Task Group. A Task
 	 * Group name is equivalent to the name of the Challenge associated with the
@@ -58,8 +62,6 @@ public class PersonTaskController extends
 	 * 
 	 * @param personId
 	 *            Person identifier
-	 * @param id
-	 *            Task identifier (though it is currently unused)
 	 * @param status
 	 *            Object status
 	 * @param start
@@ -104,34 +106,59 @@ public class PersonTaskController extends
 	}
 
 	/**
+	 * <p>
+	 * Print the selected Tasks.
+	 * </p>
+	 * <p>
+	 * If no tasks are selected, then just return the tasks for the person,
+	 * (just for the session if it is the anon user).
+	 * </p>
+	 * 
+	 * <p>
 	 * Method Signature on this method will be changed to return a printable
 	 * report
+	 * </p>
 	 * 
-	 * @throws ObjectNotFoundException
 	 */
-	@RequestMapping(value = "/print/", method = RequestMethod.GET)
+	@RequestMapping(value = "/print/", method = RequestMethod.POST)
 	public @ResponseBody
 	List<TaskTO> print(
 			final @PathVariable UUID personId,
 			final @RequestBody List<UUID> taskIds)
 			throws ObjectNotFoundException {
 
-		final List<Task> tasks = service.getTasksInList(taskIds,
-				new SortingAndPaging(ObjectStatus.ACTIVE));
+		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
+
+		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
+				taskIds, personService.get(personId),
+				securityService.getSessionId(), sAndP);
 
 		return TaskTO.tasksToTaskTOs(tasks);
 	}
 
-	@RequestMapping(value = "/email/", method = RequestMethod.GET)
+	/**
+	 * <p>
+	 * Email the selected tasks to addresses and/or people.
+	 * </p>
+	 * 
+	 * <p>
+	 * If no tasks are selected, then just return the tasks for the person,
+	 * (just for the session if it is the anon user).
+	 * </p>
+	 */
+	@RequestMapping(value = "/email/", method = RequestMethod.POST)
 	public @ResponseBody
 	boolean email(
 			final @PathVariable UUID personId,
-			final @RequestBody @Valid EmailForm emailForm)
+			final @RequestBody @Valid EmailPersonTasksForm emailForm)
 			throws Exception {
 
-		final List<Task> tasks = service.getTasksInList(emailForm.getTaskIds(),
-				new SortingAndPaging(ObjectStatus.ACTIVE));
 		final Person student = personService.get(personId);
+
+		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
+				emailForm.getTaskIds(), student,
+				securityService.getSessionId(),
+				new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		final List<Person> recipients;
 
@@ -148,44 +175,6 @@ public class PersonTaskController extends
 				emailForm.getRecipientEmailAddresses(), recipients);
 
 		return true;
-	}
-
-	/**
-	 * Command Object for the email method of the PersonTaskController
-	 * Only one of either recipientEmailAddresses or recipientIds is required
-	 * 
-	 */
-	protected class EmailForm {
-		@NotNull
-		private List<UUID> taskIds;
-
-		private List<String> recipientEmailAddresses;
-		private List<UUID> recipientIds;
-
-		public List<UUID> getTaskIds() {
-			return taskIds;
-		}
-
-		public void setTaskIds(List<UUID> taskIds) {
-			this.taskIds = taskIds;
-		}
-
-		public List<String> getRecipientEmailAddresses() {
-			return recipientEmailAddresses;
-		}
-
-		public void setRecipientEmailAddresses(
-				List<String> recipientEmailAddresses) {
-			this.recipientEmailAddresses = recipientEmailAddresses;
-		}
-
-		public List<UUID> getRecipientIds() {
-			return recipientIds;
-		}
-
-		public void setRecipientIds(List<UUID> recipientIds) {
-			this.recipientIds = recipientIds;
-		}
 	}
 
 	@Override
