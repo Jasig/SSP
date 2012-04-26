@@ -47,10 +47,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 		var store = Ext.getStore('reference.' + form);
 		var comp = adminFormsView.getComponent('AbstractReferenceAdmin');
 		var pager = null;
-		
-		// set the store page size
-		// store.pageSize = 15;
-		
+
 		if (comp == undefined)
 		{
 			comp = Ext.create('Ssp.view.admin.forms.AbstractReferenceAdmin');			
@@ -63,7 +60,6 @@ Ext.define('Ssp.controller.AdminViewController', {
 	},
 	
 	adminGridEdit: function(editor, e, eOpts) {
-	    // commit the changes right after editing finished
 	    editor.record.commit();
 	    editor.grid.getStore().sync();
 	}

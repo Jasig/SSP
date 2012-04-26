@@ -5,14 +5,15 @@ Ext.define('Ssp.view.tools.Profile', {
     width: '100%',
     height: '100%',
     bodyPadding: 5,
-
-    // Fields will be arranged vertically, stretched to full width
     layout: 'anchor',
     defaults: {
         anchor: '100%'
     },
-
-    // The fields
+    fieldDefaults: {
+        msgTarget: 'side',
+        labelAlign: 'right',
+        labelWidth: 125
+    },
     defaultType: 'displayfield',
     items: [{
             xtype: 'fieldset',
@@ -29,7 +30,7 @@ Ext.define('Ssp.view.tools.Profile', {
 	        fieldLabel: 'Tartan ID',
 	        name: 'schoolId'
 	    }, {
-	        fieldLabel: 'Date of Birth',
+	        fieldLabel: 'Birth Date',
 	        name: 'birthDate'
 	    }, {
 	        fieldLabel: 'Home Phone',

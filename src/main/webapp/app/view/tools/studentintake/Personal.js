@@ -5,18 +5,18 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 	autoScroll: true,
     width: '100%',
     height: '100%',
-    fieldDefaults: {
-        msgTarget: 'side',
-        labelWidth: 100
-    },
     
     stores: ['reference.States'],
     
-    defaultType: 'textfield',
     defaults: {
         anchor: '100%'
     },
-       
+    fieldDefaults: {
+        msgTarget: 'side',
+        labelAlign: 'right',
+        labelWidth: 100
+    },
+    defaultType: 'textfield',
     items: [{
             xtype: 'fieldset',
             title: 'Personal Details',

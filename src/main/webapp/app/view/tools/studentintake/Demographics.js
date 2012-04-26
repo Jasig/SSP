@@ -12,14 +12,17 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 			 'reference.EmploymentShifts',
 			 'reference.Ethnicities',
 			 'reference.Genders',
-			 'reference.MaritalStatuses',
-			 'reference.YesNo'],		
+			 'reference.MaritalStatuses'],		
 
     layout: 'anchor',
     defaults: {
         anchor: '100%'
     },
-
+    fieldDefaults: {
+        msgTarget: 'side',
+        labelAlign: 'right',
+        labelWidth: 280
+    },
     defaultType: 'displayfield',
     items: [{
             xtype: 'fieldset',

@@ -1,26 +1,10 @@
 Ext.define('Ssp.store.reference.FundingSources', {
-    extend: 'Ext.data.Store',
+    extend: 'Ssp.store.reference.AbstractReferences',
     model: 'Ssp.model.reference.FundingSource',
     storeId: 'fundingSourcesReferenceStore',
-	autoLoad: false,
-	autoSync: true,
-
-    proxy: {
-		type: 'rest',
-		url: '/ssp/api/1/reference/fundingSource/',
-		actionMethods: {
-			create: "POST", 
-			read: "GET", 
-			update: "PUT", 
-			destroy: "DELETE"
-		},
-		reader: {
-			type: 'json'
-		},
-        writer: {
-            type: 'json',
-            successProperty: 'success'
-        }
-	}	
-	
+    constructor: function(){
+    	this.callParent(arguments);
+    	var url = this.getProxy().url;
+    	Ext.apply(this.getProxy(),{url: url+'fundingSource/'});
+    }
 });

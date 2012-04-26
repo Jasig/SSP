@@ -1,7 +1,6 @@
 Ext.define('Ssp.store.admin.AdminTreeMenus',{
 	extend: 'Ext.data.TreeStore',  
     storeId: 'adminTreeMenuStore',
-
     root: {
     	text: 'Administrative Tools',
     	title: 'Administrative Tools',
@@ -14,12 +13,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 						form: '',
 						expanded: true,
 						children: [
-								{
-									text: 'Challenges',
-									title: 'Challenges',
-									form: 'Challenges',
-									leaf: true
-								},
 								{
 									text: 'Child Care Arrangements',
 									title: 'Child Care Arrangements',
@@ -75,6 +68,18 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 									leaf: true
 							    }
 						]
+					},{
+						text: 'Counseling Reference Guide',
+						title: 'Counseling Reference Guide',
+						form: '',
+						expanded: true,
+						children: [
+								{
+									text: 'Challenges',
+									title: 'Challenges',
+									form: 'Challenges',
+									leaf: true
+								}]
 					}
                    
         ]
