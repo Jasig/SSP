@@ -26,6 +26,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
             xtype: "radiogroup",
             fieldLabel: "Education/Career Goal",
             columns: 1,
+            name: "educationGoalId",
             items: [
                 {boxLabel: "Uncertain", name: "educationGoalId", inputValue:"9bf33704-e41e-4922-bc7f-07b98b276824"},
                 {boxLabel: "Associates Degree", name: "educationGoalId", inputValue:"d25e224b-a0ca-48f0-ac30-1ddf5bdb9e0d"},
