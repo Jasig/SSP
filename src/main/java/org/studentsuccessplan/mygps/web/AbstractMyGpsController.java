@@ -26,7 +26,7 @@ public class AbstractMyGpsController {
 	@ExceptionHandler(ObjectNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public @ResponseBody
-	ServiceResponse handleNotFound(ObjectNotFoundException e) {
+	ServiceResponse handleNotFound(final ObjectNotFoundException e) {
 		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
@@ -35,7 +35,7 @@ public class AbstractMyGpsController {
 	@ExceptionHandler(AccessDeniedException.class)
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public @ResponseBody
-	ServiceResponse handleAccessDenied(AccessDeniedException e) {
+	ServiceResponse handleAccessDenied(final AccessDeniedException e) {
 		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
@@ -54,9 +54,8 @@ public class AbstractMyGpsController {
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public @ResponseBody
-	ServiceResponse handle(Exception e) {
+	ServiceResponse handle(final Exception e) {
 		LOGGER.error("Error: ", e);
 		return new ServiceResponse(false, e.getMessage());
 	}
-
 }

@@ -30,21 +30,21 @@ import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class ChallengeReferralDaoTest {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ChallengeReferralDaoTest.class);
 
 	@Autowired
-	private ChallengeReferralDao dao;
+	private transient ChallengeReferralDao dao;
 
 	@Autowired
-	private ChallengeDao challengeDao;
+	private transient ChallengeDao challengeDao;
 
-	private Challenge testChallenge;
+	private transient Challenge testChallenge;
 
 	@Autowired
-	private PersonDao personDao;
+	private transient PersonDao personDao;
 
-	private Person testStudent;
+	private transient Person testStudent;
 
 	@Autowired
 	private SecurityServiceInTestEnvironment securityService;
@@ -69,14 +69,14 @@ public class ChallengeReferralDaoTest {
 		assertNotNull(obj.getId());
 		saved = obj.getId();
 
-		logger.debug(obj.toString());
+		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		List<ChallengeReferral> all = dao.getAll(ObjectStatus.ACTIVE);
+		final List<ChallengeReferral> all = dao.getAll(ObjectStatus.ACTIVE);
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
 		assertList(all);
@@ -86,8 +86,8 @@ public class ChallengeReferralDaoTest {
 
 	@Test
 	public void testNull() {
-		UUID id = UUID.randomUUID();
-		ChallengeReferral challengeReferral = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final ChallengeReferral challengeReferral = dao.get(id);
 
 		assertNull(challengeReferral);
 	}
@@ -101,17 +101,17 @@ public class ChallengeReferralDaoTest {
 
 	@Test
 	public void uuidGeneration() {
-		ChallengeReferral obj = new ChallengeReferral();
+		final ChallengeReferral obj = new ChallengeReferral();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		ChallengeReferral obj2 = new ChallengeReferral();
+		final ChallengeReferral obj2 = new ChallengeReferral();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);
 
-		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
 				+ obj2.getId().toString());
 
 		dao.delete(obj);
@@ -134,7 +134,7 @@ public class ChallengeReferralDaoTest {
 
 	@Test
 	public void countByChallengeIdNotOnActiveTaskList() {
-		int count =
+		long count =
 				dao.countByChallengeIdNotOnActiveTaskList(
 						testChallenge.getId(), testStudent, "testSessionId");
 		assertTrue(count > -1);

@@ -35,13 +35,13 @@ public class ChallengeServiceImpl implements ChallengeService {
 	private transient SecurityService securityService;
 
 	@Override
-	public List<Challenge> getAll(SortingAndPaging sAndP) {
+	public List<Challenge> getAll(final SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
 	@Override
 	public Challenge get(final UUID id) throws ObjectNotFoundException {
-		Challenge obj = dao.get(id);
+		final Challenge obj = dao.get(id);
 		if (null == obj) {
 			throw new ObjectNotFoundException(id, "Challenge");
 		}
@@ -56,7 +56,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	@Override
 	public Challenge save(final Challenge obj) throws ObjectNotFoundException {
-		Challenge current = get(obj.getId());
+		final Challenge current = get(obj.getId());
 
 		if (obj.getConfidentialityLevel() == null) {
 			obj.setConfidentialityLevel(null);
@@ -72,7 +72,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	@Override
 	public void delete(final UUID id) throws ObjectNotFoundException {
-		Challenge current = get(id);
+		final Challenge current = get(id);
 
 		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
@@ -81,12 +81,12 @@ public class ChallengeServiceImpl implements ChallengeService {
 	}
 
 	@Override
-	public List<Challenge> challengeSearch(String query) {
-		List<Challenge> challenges = dao.searchByQuery(query);
-		List<Challenge> results = Lists.newArrayList();
+	public List<Challenge> challengeSearch(final String query) {
+		final List<Challenge> challenges = dao.searchByQuery(query);
+		final List<Challenge> results = Lists.newArrayList();
 
 		for (Challenge challenge : challenges) {
-			int count = challengeReferralService
+			long count = challengeReferralService
 					.countByChallengeIdNotOnActiveTaskList(challenge,
 							securityService.currentUser().getPerson(),
 							securityService.getSessionId());
@@ -94,6 +94,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 				results.add(challenge);
 			}
 		}
+
 		return results;
 	}
 

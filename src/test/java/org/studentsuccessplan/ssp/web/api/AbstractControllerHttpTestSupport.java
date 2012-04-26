@@ -14,7 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerMapping;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 /**
  * 
@@ -46,16 +45,16 @@ public abstract class AbstractControllerHttpTestSupport<C extends RestController
 	 */
 	protected transient MockHttpServletResponse response;
 
-	protected transient RequestMappingHandlerAdapter handlerAdapter;
+	// protected transient RequestMappingHandlerAdapter handlerAdapter;
 
 	@Before
 	public void setUp() {
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
 
-		handlerAdapter = applicationContext.getBean(
-				"sspRequestMappingHandlerAdapter",
-				RequestMappingHandlerAdapter.class);
+		// handlerAdapter =
+		// applicationContext.getBean("sspRequestMappingHandlerAdapter",
+		// RequestMappingHandlerAdapter.class);
 
 		// set returnValues since default ModelAndView isn't used in SSP
 		// TODO Figure out and then set the correct type of correct handlers
@@ -77,21 +76,20 @@ public abstract class AbstractControllerHttpTestSupport<C extends RestController
 	 * @return
 	 * @throws Exception
 	 */
-	protected Object getHandler(MockHttpServletRequest request)
+	protected Object getHandler(final MockHttpServletRequest request)
 			throws Exception {
 		HandlerExecutionChain chain = null;
 
-		Map<String, HandlerMapping> map = applicationContext
+		final Map<String, HandlerMapping> map = applicationContext
 				.getBeansOfType(HandlerMapping.class);
-		Iterator<HandlerMapping> itt = map.values().iterator();
+		final Iterator<HandlerMapping> itt = map.values().iterator();
 
 		while (itt.hasNext()) {
-			HandlerMapping mapping = itt.next();
+			final HandlerMapping mapping = itt.next();
 			chain = mapping.getHandler(request);
 			if (chain != null) {
 				break;
 			}
-
 		}
 
 		if (chain == null) {

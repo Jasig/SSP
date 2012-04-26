@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
+import org.studentsuccessplan.ssp.transferobject.reference.ChallengeReferralTO;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
 @Controller
@@ -18,7 +20,10 @@ import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 public class MyGpsChallengeController extends AbstractMyGpsController {
 
 	@Autowired
-	private ChallengeService challengeService;
+	private transient ChallengeService challengeService;
+
+	@Autowired
+	private transient ChallengeReferralService challengeReferralService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsChallengeController.class);
@@ -27,10 +32,12 @@ public class MyGpsChallengeController extends AbstractMyGpsController {
 	 * Empty constructor
 	 */
 	public MyGpsChallengeController() {
+		super();
 	}
 
 	// Needed for tests, will be removed in the future.
-	public MyGpsChallengeController(ChallengeService challengeService) {
+	public MyGpsChallengeController(final ChallengeService challengeService) {
+		super();
 		this.challengeService = challengeService;
 	}
 
@@ -50,11 +57,29 @@ public class MyGpsChallengeController extends AbstractMyGpsController {
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public @ResponseBody
-	List<ChallengeTO> search(@RequestParam("query") String query)
+	List<ChallengeTO> search(@RequestParam("query") final String query)
 			throws Exception {
 		try {
-			return ChallengeTO.listToTOList(challengeService
-					.challengeSearch(query));
+			final List<ChallengeTO> challenges = ChallengeTO
+					.listToTOList(challengeService
+							.challengeSearch(query));
+
+			// TODO: (performance) Challenge search service does the
+			// byChallengeIdNotOnActiveTaskList lookup already but doesn't
+			// return the TOs so it has to be done again here. Or better yet,
+			// done as a database set operation instead.
+			for (ChallengeTO challenge : challenges) {
+				challenge
+						.setChallengeChallengeReferrals(ChallengeReferralTO
+								.listToTOSet(challengeReferralService
+										.byChallengeIdNotOnActiveTaskList(
+												challenge.asModel(),
+												securityService.currentUser()
+														.getPerson(),
+												securityService.getSessionId())));
+			}
+
+			return challenges;
 		} catch (Exception e) {
 			LOGGER.error("ERROR : search() : {}", e.getMessage(), e);
 			throw e;

@@ -2,12 +2,14 @@ package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		implements TransferObject<ChallengeReferral>, Serializable {
@@ -62,6 +64,17 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		for (ChallengeReferral model : models) {
 			tos.add(new ChallengeReferralTO(model));
 		}
+
+		return tos;
+	}
+
+	public static Set<ChallengeReferralTO> listToTOSet(
+			final List<ChallengeReferral> models) {
+		final Set<ChallengeReferralTO> tos = Sets.newHashSet();
+		for (ChallengeReferral model : models) {
+			tos.add(new ChallengeReferralTO(model));
+		}
+
 		return tos;
 	}
 
