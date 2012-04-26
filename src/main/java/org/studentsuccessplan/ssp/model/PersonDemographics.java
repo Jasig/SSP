@@ -327,10 +327,13 @@ public class PersonDemographics extends Auditable implements Serializable {
 	 *            Veteran status
 	 * @param coach
 	 *            Coach, if any
+	 * @param childCareArrangement
+	 *            Child Care Arrangements
 	 */
 	public void overwrite(PersonDemographics source,
 			MaritalStatus maritalStatus, Ethnicity ethnicity,
-			Citizenship citizenship, VeteranStatus veterenStatus, Person coach) {
+			Citizenship citizenship, VeteranStatus veterenStatus, Person coach,
+			ChildCareArrangement childCareArrangement) {
 		this.setAbilityToBenefit(source.isAbilityToBenefit());
 		this.setAnticipatedStartTerm(source.getAnticipatedStartTerm());
 		this.setAnticipatedStartYear(source.getAnticipatedStartYear());
@@ -356,5 +359,6 @@ public class PersonDemographics extends Auditable implements Serializable {
 		this.setCitizenship(citizenship);
 		this.setVeteranStatus(veterenStatus);
 		this.setCoach(coach);
+		this.setChildCareArrangement(childCareArrangement);
 	}
 }

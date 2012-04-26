@@ -20,6 +20,7 @@ import org.studentsuccessplan.ssp.model.PersonFundingSource;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
+import org.studentsuccessplan.ssp.service.reference.ChildCareArrangementService;
 import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
 import org.studentsuccessplan.ssp.service.reference.EducationLevelService;
 import org.studentsuccessplan.ssp.service.reference.EthnicityService;
@@ -56,6 +57,9 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private FundingSourceService fundingSourceService;
+
+	@Autowired
+	private ChildCareArrangementService childCareArrangementService;
 
 	@Override
 	public List<Person> getAll(SortingAndPaging sAndP) {
@@ -235,7 +239,10 @@ public class PersonServiceImpl implements PersonService {
 								: veteranStatusService.get(demo
 										.getVeteranStatus().getId()),
 						demo.getCoach() == null ? null : get(demo.getCoach()
-								.getId()));
+								.getId()),
+						demo.getChildCareArrangement() == null ? null
+								: childCareArrangementService.get(demo
+										.getChildCareArrangement().getId()));
 			}
 		}
 

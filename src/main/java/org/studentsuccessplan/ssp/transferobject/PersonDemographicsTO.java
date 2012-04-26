@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonDemographics;
+import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
 import org.studentsuccessplan.ssp.model.reference.Citizenship;
 import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
 import org.studentsuccessplan.ssp.model.reference.Ethnicity;
@@ -24,7 +25,7 @@ public class PersonDemographicsTO
 	private UUID personId;
 
 	private UUID coachId, maritalStatusId, ethnicityId,
-			citizenshipId, veteranStatusId;
+			citizenshipId, veteranStatusId, childCareArrangementId;
 	private boolean abilityToBenefit, local, primaryCaregiver,
 			childCareNeeded, employed;
 	private int numberOfChildren;
@@ -59,6 +60,9 @@ public class PersonDemographicsTO
 		}
 		if (model.getVeteranStatus() != null) {
 			veteranStatusId = model.getVeteranStatus().getId();
+		}
+		if (model.getChildCareArrangement() != null) {
+			childCareArrangementId = model.getChildCareArrangement().getId();
 		}
 		abilityToBenefit = model.isAbilityToBenefit();
 		local = model.isLocal();
@@ -101,6 +105,10 @@ public class PersonDemographicsTO
 		}
 		if (getVeteranStatusId() != null) {
 			model.setVeteranStatus(new VeteranStatus(getVeteranStatusId()));
+		}
+		if (getChildCareArrangementId() != null) {
+			model.setChildCareArrangement(new ChildCareArrangement(
+					getChildCareArrangementId()));
 		}
 		model.setAbilityToBenefit(isAbilityToBenefit());
 		model.setLocal(isLocal());
@@ -186,6 +194,14 @@ public class PersonDemographicsTO
 
 	public void setVeteranStatusId(final UUID veteranStatusId) {
 		this.veteranStatusId = veteranStatusId;
+	}
+
+	public UUID getChildCareArrangementId() {
+		return childCareArrangementId;
+	}
+
+	public void setChildCareArrangementId(UUID childCareArrangementId) {
+		this.childCareArrangementId = childCareArrangementId;
 	}
 
 	public boolean isAbilityToBenefit() {

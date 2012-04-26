@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonDemographics;
 import org.studentsuccessplan.ssp.model.PersonEducationGoal;
@@ -11,6 +12,7 @@ import org.studentsuccessplan.ssp.model.PersonEducationPlan;
 import org.studentsuccessplan.ssp.model.tool.IntakeForm;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.service.reference.ChildCareArrangementService;
 import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
 import org.studentsuccessplan.ssp.service.reference.EthnicityService;
 import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
@@ -18,6 +20,7 @@ import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
 import org.studentsuccessplan.ssp.service.tool.IntakeService;
 
 @Service
+@Transactional
 public class IntakeServiceImpl implements IntakeService {
 
 	// private static final Logger logger =
@@ -34,6 +37,9 @@ public class IntakeServiceImpl implements IntakeService {
 
 	@Autowired
 	private VeteranStatusService veteranStatusService;
+
+	@Autowired
+	private ChildCareArrangementService childCareArrangementService;
 
 	@Autowired
 	private PersonService personService;
@@ -120,7 +126,10 @@ public class IntakeServiceImpl implements IntakeService {
 								: veteranStatusService.get(demo
 										.getVeteranStatus().getId()),
 						demo.getCoach() == null ? null : personService.get(demo
-								.getCoach().getId()));
+								.getCoach().getId()),
+						demo.getChildCareArrangement() == null ? null
+								: childCareArrangementService.get(demo
+										.getChildCareArrangement().getId()));
 			}
 		}
 
