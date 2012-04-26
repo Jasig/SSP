@@ -123,6 +123,15 @@ public class PersonController extends RestController<PersonTO> {
 		return new ServiceResponse(true);
 	}
 
+	@RequestMapping(value = "/{id}/history/print", method = RequestMethod.GET)
+	public @ResponseBody
+	PersonTO historyPrint(final @PathVariable UUID id)
+			throws ObjectNotFoundException {
+		// final Person model = service.get(id);
+		// :TODO historyPrint on PersonController
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
