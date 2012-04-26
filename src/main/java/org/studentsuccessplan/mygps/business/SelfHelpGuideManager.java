@@ -27,6 +27,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
+@Transactional
 public class SelfHelpGuideManager {
 
 	@Autowired

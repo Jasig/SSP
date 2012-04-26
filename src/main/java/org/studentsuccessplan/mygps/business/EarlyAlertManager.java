@@ -17,6 +17,7 @@ import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
 import org.studentsuccessplan.ssp.model.SelfHelpGuideResponse;
 
 @Service
+@Transactional
 public class EarlyAlertManager {
 
 	// EarlyAlertReferralReasonLU

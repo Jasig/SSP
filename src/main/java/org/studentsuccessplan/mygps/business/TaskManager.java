@@ -35,6 +35,7 @@ import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import com.google.common.collect.Maps;
 
 @Service
+@Transactional
 public class TaskManager {
 
 	@Autowired
