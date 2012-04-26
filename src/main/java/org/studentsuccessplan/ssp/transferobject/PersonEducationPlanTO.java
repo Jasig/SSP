@@ -58,6 +58,7 @@ public class PersonEducationPlanTO
 		model.setCollegeDegreeForParents(isCollegeDegreeForParents());
 		model.setSpecialNeeds(isSpecialNeeds());
 		model.setGradeTypicallyEarned(getGradeTypicallyEarned());
+		model.setStudentStatus(model.getStudentStatus());
 
 		return model;
 	}
