@@ -10,7 +10,6 @@ import org.studentsuccessplan.mygps.model.transferobject.FormQuestionTO;
 import org.studentsuccessplan.mygps.model.transferobject.FormSectionTO;
 import org.studentsuccessplan.mygps.model.transferobject.FormTO;
 import org.studentsuccessplan.mygps.model.transferobject.MessageTO;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
 import org.studentsuccessplan.mygps.model.transferobject.TaskReportTO;
 import org.studentsuccessplan.ssp.transferobject.PersonChallengeTO;
@@ -35,6 +34,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.EthnicityTO;
 import org.studentsuccessplan.ssp.transferobject.reference.FundingSourceTO;
 import org.studentsuccessplan.ssp.transferobject.reference.MaritalStatusTO;
 import org.studentsuccessplan.ssp.transferobject.reference.MessageTemplateTO;
+import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideDetailTO;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideGroupTO;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideQuestionTO;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
@@ -92,15 +92,15 @@ public class JsonDeserialisationTest {
 	 */
 	@Test
 	public void mygpsClassesUsedByOurControllersShouldBeDeserialisableByJackson() {
-		assertCanBeMapped(org.studentsuccessplan.mygps.model.transferobject.ChallengeReferralTO.class);
+		assertCanBeMapped(ChallengeReferralTO.class);
 		assertCanBeMapped(FormOptionTO.class);
 		assertCanBeMapped(FormQuestionTO.class);
 		assertCanBeMapped(FormSectionTO.class);
 		assertCanBeMapped(FormTO.class);
 		assertCanBeMapped(MessageTO.class);
 		assertCanBeMapped(org.studentsuccessplan.mygps.model.transferobject.PersonTO.class);
-		assertCanBeMapped(SelfHelpGuideContentTO.class);
-		assertCanBeMapped(org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideQuestionTO.class);
+		assertCanBeMapped(SelfHelpGuideDetailTO.class);
+		assertCanBeMapped(SelfHelpGuideQuestionTO.class);
 		assertCanBeMapped(SelfHelpGuideResponseTO.class);
 		assertCanBeMapped(TaskReportTO.class);
 		assertCanBeMapped(TaskTO.class);

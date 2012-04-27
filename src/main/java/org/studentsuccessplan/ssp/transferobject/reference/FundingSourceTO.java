@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,14 +16,6 @@ public class FundingSourceTO extends AbstractReferenceTO<FundingSource>
 		super();
 	}
 
-	public FundingSourceTO(final UUID id) {
-		super(id);
-	}
-
-	public FundingSourceTO(final UUID id, final String name) {
-		super(id, name);
-	}
-
 	public FundingSourceTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
@@ -30,27 +23,15 @@ public class FundingSourceTO extends AbstractReferenceTO<FundingSource>
 
 	public FundingSourceTO(final FundingSource model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
-	@Override
-	public FundingSource addToModel(final FundingSource model) {
-		super.addToModel(model);
-		return model;
-	}
-
-	@Override
-	public FundingSource asModel() {
-		return addToModel(new FundingSource());
-	}
-
-	public static List<FundingSourceTO> listToTOList(
-			final List<FundingSource> models) {
-		final List<FundingSourceTO> tos = Lists.newArrayList();
+	public static List<FundingSourceTO> toTOList(
+			final Collection<FundingSource> models) {
+		final List<FundingSourceTO> tObjects = Lists.newArrayList();
 		for (FundingSource model : models) {
-			tos.add(new FundingSourceTO(model));
+			tObjects.add(new FundingSourceTO(model));
 		}
-		return tos;
+		return tObjects;
 	}
-
 }

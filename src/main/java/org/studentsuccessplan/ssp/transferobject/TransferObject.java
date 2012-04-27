@@ -16,24 +16,6 @@ public interface TransferObject<T> {
 	 * @param model
 	 *            Model from which to pull attributes
 	 */
-	void fromModel(T model);
-
-	/**
-	 * Create a new Model object from this TransferObject
-	 * 
-	 * @return A model representation from the related transfer object.
-	 */
-	T asModel();
-
-	/**
-	 * Add the attributes of this TransferObject to this Model
-	 * 
-	 * Things which are sensitive do not get serialized back to the model.
-	 * 
-	 * @param model
-	 *            Model from which to pull attributes
-	 * @return An updated model with new values from the supplied parameter.
-	 */
-	T addToModel(T model);
+	void from(T model);
 
 }

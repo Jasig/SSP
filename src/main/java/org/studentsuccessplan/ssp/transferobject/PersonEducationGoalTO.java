@@ -1,12 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.studentsuccessplan.ssp.model.PersonEducationGoal;
-import org.studentsuccessplan.ssp.model.reference.EducationGoal;
 
 import com.google.common.collect.Lists;
 
@@ -29,12 +29,12 @@ public class PersonEducationGoalTO
 
 	public PersonEducationGoalTO(final PersonEducationGoal model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
 	@Override
-	public final void fromModel(final PersonEducationGoal model) {
-		super.fromModel(model);
+	public final void from(final PersonEducationGoal model) {
+		super.from(model);
 
 		howSureAboutMajor = model.getHowSureAboutMajor();
 		description = model.getDescription();
@@ -45,27 +45,8 @@ public class PersonEducationGoalTO
 		}
 	}
 
-	@Override
-	public PersonEducationGoal addToModel(final PersonEducationGoal model) {
-		super.addToModel(model);
-
-		model.setHowSureAboutMajor(getHowSureAboutMajor());
-		model.setDescription(model.getDescription());
-		model.setPlannedOccupation(getPlannedOccupation());
-		if (getEducationGoalId() != null) {
-			model.setEducationGoal(new EducationGoal(getEducationGoalId()));
-		}
-
-		return model;
-	}
-
-	@Override
-	public PersonEducationGoal asModel() {
-		return addToModel(new PersonEducationGoal());
-	}
-
-	public static List<PersonEducationGoalTO> listToTOList(
-			final List<PersonEducationGoal> models) {
+	public static List<PersonEducationGoalTO> toTOList(
+			final Collection<PersonEducationGoal> models) {
 		final List<PersonEducationGoalTO> tos = Lists.newArrayList();
 		for (PersonEducationGoal model : models) {
 			tos.add(new PersonEducationGoalTO(model));

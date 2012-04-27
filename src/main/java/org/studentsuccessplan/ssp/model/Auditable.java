@@ -57,7 +57,7 @@ public class Auditable {
 	 * Person that created this entity.
 	 * 
 	 * Set to load eagerly because
-	 * {@link org.studentsuccessplan.ssp.transferobject.AuditableTO#fromModel(org.studentsuccessplan.ssp.model.Auditable)}
+	 * {@link org.studentsuccessplan.ssp.transferobject.AuditableTO#from(org.studentsuccessplan.ssp.model.Auditable)}
 	 * pulls the ID from the full Person object and would require an extra
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses {@link Auditable} transfer objects).
@@ -77,7 +77,7 @@ public class Auditable {
 	 * Last person to modify this entity.
 	 * 
 	 * Set to load eagerly because
-	 * {@link org.studentsuccessplan.ssp.transferobject.AuditableTO#fromModel(org.studentsuccessplan.ssp.model.Auditable)}
+	 * {@link org.studentsuccessplan.ssp.transferobject.AuditableTO#from(org.studentsuccessplan.ssp.model.Auditable)}
 	 * pulls the ID from the full Person object and would require an extra
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses Auditable transfer objects).

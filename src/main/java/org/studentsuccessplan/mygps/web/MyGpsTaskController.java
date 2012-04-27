@@ -191,7 +191,7 @@ public class MyGpsTaskController extends AbstractMyGpsController {
 			tasks = taskService.getAllForSessionId(sessionId, sAndP);
 		}
 
-		return (tasks != null) ? TaskTO.tasksToTaskTOs(tasks) : null;
+		return (tasks != null) ? TaskTO.toTOList(tasks) : null;
 	}
 
 	@RequestMapping(value = "/mark", method = RequestMethod.GET)

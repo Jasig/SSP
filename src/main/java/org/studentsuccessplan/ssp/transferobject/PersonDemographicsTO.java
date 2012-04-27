@@ -1,19 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
-import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonDemographics;
-import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
-import org.studentsuccessplan.ssp.model.reference.Citizenship;
-import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
-import org.studentsuccessplan.ssp.model.reference.Ethnicity;
-import org.studentsuccessplan.ssp.model.reference.Genders;
-import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
-import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 
 import com.google.common.collect.Lists;
 
@@ -39,12 +32,12 @@ public class PersonDemographicsTO
 
 	public PersonDemographicsTO(final PersonDemographics model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
 	@Override
-	public final void fromModel(final PersonDemographics model) {
-		super.fromModel(model);
+	public final void from(final PersonDemographics model) {
+		super.from(model);
 
 		if (model.getCoach() != null) {
 			coachId = model.getCoach().getId();
@@ -87,60 +80,8 @@ public class PersonDemographicsTO
 		totalHoursWorkedPerWeek = model.getTotalHoursWorkedPerWeek();
 	}
 
-	@Override
-	public PersonDemographics addToModel(final PersonDemographics model) {
-		super.addToModel(model);
-
-		if (getCoachId() != null) {
-			model.setCoach(new Person(getCoachId()));
-		}
-		if (getMaritalStatusId() != null) {
-			model.setMaritalStatus(new MaritalStatus(getMaritalStatusId()));
-		}
-		if (getEthnicityId() != null) {
-			model.setEthnicity(new Ethnicity(getEthnicityId()));
-		}
-		if (getCitizenshipId() != null) {
-			model.setCitizenship(new Citizenship(getCitizenshipId()));
-		}
-		if (getVeteranStatusId() != null) {
-			model.setVeteranStatus(new VeteranStatus(getVeteranStatusId()));
-		}
-		if (getChildCareArrangementId() != null) {
-			model.setChildCareArrangement(new ChildCareArrangement(
-					getChildCareArrangementId()));
-		}
-		model.setAbilityToBenefit(isAbilityToBenefit());
-		model.setLocal(isLocal());
-		model.setPrimaryCaregiver(isPrimaryCaregiver());
-		model.setChildCareNeeded(isChildCareNeeded());
-		model.setEmployed(isEmployed());
-		model.setNumberOfChildren(getNumberOfChildren());
-		model.setAnticipatedStartTerm(getAnticipatedStartTerm());
-		model.setAnticipatedStartYear(getAnticipatedStartYear());
-		model.setCountryOfResidence(getCountryOfResidence());
-		model.setPaymentStatus(getPaymentStatus());
-		if (getGender() != null) {
-			model.setGender(Genders.valueOf(getGender()));
-		}
-		model.setCountryOfCitizenship(getCountryOfCitizenship());
-		model.setChildAges(getChildAges());
-		model.setPlaceOfEmployment(getPlaceOfEmployment());
-		if (getShift() != null) {
-			model.setShift(EmploymentShifts.valueOf(getShift()));
-		}
-		model.setWage(getWage());
-		model.setTotalHoursWorkedPerWeek(getTotalHoursWorkedPerWeek());
-		return model;
-	}
-
-	@Override
-	public PersonDemographics asModel() {
-		return addToModel(new PersonDemographics());
-	}
-
-	public static List<PersonDemographicsTO> listToTOList(
-			final List<PersonDemographics> models) {
+	public static List<PersonDemographicsTO> toTOList(
+			final Collection<PersonDemographics> models) {
 		final List<PersonDemographicsTO> tos = Lists.newArrayList();
 		for (PersonDemographics model : models) {
 			tos.add(new PersonDemographicsTO(model));
@@ -200,7 +141,7 @@ public class PersonDemographicsTO
 		return childCareArrangementId;
 	}
 
-	public void setChildCareArrangementId(UUID childCareArrangementId) {
+	public void setChildCareArrangementId(final UUID childCareArrangementId) {
 		this.childCareArrangementId = childCareArrangementId;
 	}
 

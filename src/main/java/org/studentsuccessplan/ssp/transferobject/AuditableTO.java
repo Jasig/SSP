@@ -9,6 +9,15 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 public abstract class AuditableTO<T extends Auditable>
 		implements TransferObject<T> {
 
+	public AuditableTO() {
+		super();
+	}
+
+	public AuditableTO(final UUID id) {
+		super();
+		this.id = id;
+	}
+
 	private UUID id;
 
 	private Date createdDate;
@@ -21,16 +30,8 @@ public abstract class AuditableTO<T extends Auditable>
 
 	private ObjectStatus objectStatus;
 
-	public AuditableTO() {
-		// allowed
-	}
-
-	public AuditableTO(final UUID id) {
-		this.id = id;
-	}
-
 	@Override
-	public void fromModel(final T model) {
+	public void from(final T model) {
 		id = model.getId();
 		if (model.getCreatedBy() != null) {
 			createdById = model.getCreatedBy().getId();
@@ -41,13 +42,6 @@ public abstract class AuditableTO<T extends Auditable>
 		createdDate = model.getCreatedDate();
 		modifiedDate = model.getModifiedDate();
 		objectStatus = model.getObjectStatus();
-	}
-
-	@Override
-	public T addToModel(final T model) {
-		model.setId(getId());
-		model.setObjectStatus(getObjectStatus());
-		return model;
 	}
 
 	public UUID getId() {

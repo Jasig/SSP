@@ -1,13 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
-import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonChallenge;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
 
 import com.google.common.collect.Lists;
 
@@ -29,50 +28,25 @@ public class PersonChallengeTO
 
 	public PersonChallengeTO(final PersonChallenge model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
 	@Override
-	public final void fromModel(final PersonChallenge model) {
-		super.fromModel(model);
-
+	public final void from(final PersonChallenge model) {
+		super.from(model);
 		setDescription(model.getDescription());
 
-		if ((model.getChallenge() != null)
-				&& (model.getChallenge().getId() != null)) {
+		if (model.getChallenge() != null) {
 			setChallengeId(model.getChallenge().getId());
 		}
 
-		if ((model.getPerson() != null)
-				&& (model.getPerson().getId() != null)) {
+		if (model.getPerson() != null) {
 			setPersonId(model.getPerson().getId());
 		}
 	}
 
-	@Override
-	public PersonChallenge addToModel(final PersonChallenge model) {
-		super.addToModel(model);
-
-		model.setDescription(getDescription());
-
-		if (getChallengeId() != null) {
-			model.setChallenge(new Challenge(getChallengeId()));
-		}
-
-		if (getPersonId() != null) {
-			model.setPerson(new Person(getPersonId()));
-		}
-
-		return model;
-	}
-
-	@Override
-	public PersonChallenge asModel() {
-		return addToModel(new PersonChallenge());
-	}
-
-	public static List<PersonChallengeTO> listToTOList(
-			final List<PersonChallenge> models) {
+	public static List<PersonChallengeTO> toTOList(
+			final Collection<PersonChallenge> models) {
 		final List<PersonChallengeTO> tos = Lists.newArrayList();
 		for (PersonChallenge model : models) {
 			tos.add(new PersonChallengeTO(model));

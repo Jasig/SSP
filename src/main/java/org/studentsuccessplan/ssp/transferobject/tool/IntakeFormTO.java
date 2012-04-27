@@ -5,10 +5,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
-import org.studentsuccessplan.ssp.model.PersonChallenge;
-import org.studentsuccessplan.ssp.model.PersonEducationLevel;
-import org.studentsuccessplan.ssp.model.PersonFundingSource;
 import org.studentsuccessplan.ssp.model.tool.IntakeForm;
 import org.studentsuccessplan.ssp.transferobject.PersonChallengeTO;
 import org.studentsuccessplan.ssp.transferobject.PersonDemographicsTO;
@@ -44,26 +40,17 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 
 	private Map<String, Object> referenceData;
 
-	private static final TransferObjectListFactory<PersonEducationLevelTO, PersonEducationLevel> PERSON_EDUCATION_LEVEL_FACTORY =
-			TransferObjectListFactory.newFactory(PersonEducationLevelTO.class);
-
-	private static final TransferObjectListFactory<PersonFundingSourceTO, PersonFundingSource> PERSON_FUNDING_SOURCE_FACTORY =
-			TransferObjectListFactory.newFactory(PersonFundingSourceTO.class);
-
-	private static final TransferObjectListFactory<PersonChallengeTO, PersonChallenge> PERSON_CHALLENGE_FACTORY =
-			TransferObjectListFactory.newFactory(PersonChallengeTO.class);
-
 	public IntakeFormTO() {
-		// allowed
+		super();
 	}
 
 	public IntakeFormTO(final IntakeForm model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
 	@Override
-	public final void fromModel(final IntakeForm model) {
+	public final void from(final IntakeForm model) {
 		if (model.getPerson() != null) {
 			person = new PersonTO(model.getPerson());
 		}
@@ -94,70 +81,21 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 
 		if ((model.getPerson().getEducationLevels() != null)
 				&& (model.getPerson().getEducationLevels().size() > 0)) {
-			personEducationLevels = PERSON_EDUCATION_LEVEL_FACTORY
+			personEducationLevels = PersonEducationLevelTO
 					.toTOList(model.getPerson().getEducationLevels());
 		}
 
 		if ((model.getPerson().getFundingSources() != null)
 				&& (model.getPerson().getFundingSources().size() > 0)) {
-			personFundingSources = PERSON_FUNDING_SOURCE_FACTORY.toTOList(model
+			personFundingSources = PersonFundingSourceTO.toTOList(model
 					.getPerson().getFundingSources());
 		}
 
 		if ((model.getPerson().getChallenges() != null)
 				&& (model.getPerson().getChallenges().size() > 0)) {
-			personChallenges = PERSON_CHALLENGE_FACTORY.toTOList(model
+			personChallenges = PersonChallengeTO.toTOList(model
 					.getPerson().getChallenges());
 		}
-	}
-
-	@Override
-	public IntakeForm addToModel(final IntakeForm model) {
-		if (getPerson() != null) {
-			model.setPerson(getPerson().asModel());
-		}
-
-		if (getPersonDemographics() != null) {
-			model.getPerson()
-					.setDemographics(getPersonDemographics().asModel());
-		}
-
-		if (getPersonEducationGoal() != null) {
-			model.getPerson().setEducationGoal(
-					getPersonEducationGoal().asModel());
-		}
-
-		if (getPersonEducationPlan() != null) {
-			model.getPerson().setEducationPlan(
-					getPersonEducationPlan().asModel());
-		}
-
-		if ((getPersonEducationLevels() != null)
-				&& (getPersonEducationLevels().size() > 0)) {
-			model.getPerson().setEducationLevels(
-					PERSON_EDUCATION_LEVEL_FACTORY
-							.toModelSet(getPersonEducationLevels()));
-		}
-
-		if ((getPersonFundingSources() != null)
-				&& (getPersonFundingSources().size() > 0)) {
-			model.getPerson().setFundingSources(
-					PERSON_FUNDING_SOURCE_FACTORY
-							.toModelSet(getPersonFundingSources()));
-		}
-
-		if ((getPersonChallenges() != null)
-				&& (getPersonChallenges().size() > 0)) {
-			model.getPerson().setChallenges(
-					PERSON_CHALLENGE_FACTORY.toModelSet(getPersonChallenges()));
-		}
-
-		return model;
-	}
-
-	@Override
-	public IntakeForm asModel() {
-		return addToModel(new IntakeForm());
 	}
 
 	public PersonTO getPerson() {

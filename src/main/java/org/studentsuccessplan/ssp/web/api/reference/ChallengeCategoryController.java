@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.ChallengeCategoryTOFactory;
 import org.studentsuccessplan.ssp.model.reference.ChallengeCategory;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeCategoryService;
@@ -24,6 +26,14 @@ public class ChallengeCategoryController
 	@Override
 	protected AuditableCrudService<ChallengeCategory> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient ChallengeCategoryTOFactory factory;
+
+	@Override
+	protected TOFactory<ChallengeCategoryTO, ChallengeCategory> getFactory() {
+		return factory;
 	}
 
 	protected ChallengeCategoryController() {

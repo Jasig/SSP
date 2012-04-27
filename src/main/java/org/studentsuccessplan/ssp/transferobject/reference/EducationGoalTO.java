@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,14 +16,6 @@ public class EducationGoalTO extends AbstractReferenceTO<EducationGoal>
 		super();
 	}
 
-	public EducationGoalTO(final UUID id) {
-		super(id);
-	}
-
-	public EducationGoalTO(final UUID id, final String name) {
-		super(id, name);
-	}
-
 	public EducationGoalTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
@@ -30,27 +23,15 @@ public class EducationGoalTO extends AbstractReferenceTO<EducationGoal>
 
 	public EducationGoalTO(final EducationGoal model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
-	@Override
-	public EducationGoal addToModel(final EducationGoal model) {
-		super.addToModel(model);
-		return model;
-	}
-
-	@Override
-	public EducationGoal asModel() {
-		return addToModel(new EducationGoal());
-	}
-
-	public static List<EducationGoalTO> listToTOList(
-			final List<EducationGoal> models) {
-		final List<EducationGoalTO> tos = Lists.newArrayList();
+	public static List<EducationGoalTO> toTOList(
+			final Collection<EducationGoal> models) {
+		final List<EducationGoalTO> tObjects = Lists.newArrayList();
 		for (EducationGoal model : models) {
-			tos.add(new EducationGoalTO(model));
+			tObjects.add(new EducationGoalTO(model));
 		}
-		return tos;
+		return tObjects;
 	}
-
 }

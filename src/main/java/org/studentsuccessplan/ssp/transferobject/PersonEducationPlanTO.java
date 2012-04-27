@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,12 +30,12 @@ public class PersonEducationPlanTO
 
 	public PersonEducationPlanTO(final PersonEducationPlan model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
 	@Override
-	public final void fromModel(final PersonEducationPlan model) {
-		super.fromModel(model);
+	public final void from(final PersonEducationPlan model) {
+		super.from(model);
 
 		newOrientationComplete = model.isNewOrientationComplete();
 		registeredForClasses = model.isRegisteredForClasses();
@@ -49,27 +50,8 @@ public class PersonEducationPlanTO
 		gradeTypicallyEarned = model.getGradeTypicallyEarned();
 	}
 
-	@Override
-	public PersonEducationPlan addToModel(final PersonEducationPlan model) {
-		super.addToModel(model);
-
-		model.setNewOrientationComplete(isNewOrientationComplete());
-		model.setRegisteredForClasses(isRegisteredForClasses());
-		model.setCollegeDegreeForParents(isCollegeDegreeForParents());
-		model.setSpecialNeeds(isSpecialNeeds());
-		model.setGradeTypicallyEarned(getGradeTypicallyEarned());
-		model.setStudentStatus(model.getStudentStatus());
-
-		return model;
-	}
-
-	@Override
-	public PersonEducationPlan asModel() {
-		return addToModel(new PersonEducationPlan());
-	}
-
-	public static List<PersonEducationPlanTO> listToTOList(
-			final List<PersonEducationPlan> models) {
+	public static List<PersonEducationPlanTO> toTOList(
+			final Collection<PersonEducationPlan> models) {
 		final List<PersonEducationPlanTO> tos = Lists.newArrayList();
 		for (PersonEducationPlan model : models) {
 			tos.add(new PersonEducationPlanTO(model));

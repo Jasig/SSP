@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
 import org.studentsuccessplan.ssp.dao.SelfHelpGuideQuestionResponseDao;
 import org.studentsuccessplan.ssp.dao.SelfHelpGuideResponseDao;
@@ -24,6 +23,7 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideDetailTO;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -60,7 +60,7 @@ public class SelfHelpGuideManager {
 	 * @throws ObjectNotFoundException
 	 *             If the specified guide could not be found.
 	 */
-	public SelfHelpGuideContentTO getContentById(UUID selfHelpGuideId)
+	public SelfHelpGuideDetailTO getContentById(UUID selfHelpGuideId)
 			throws ObjectNotFoundException {
 
 		// Look up specified guide
@@ -71,12 +71,14 @@ public class SelfHelpGuideManager {
 					"Specified guide could not be loaded.");
 		}
 
-		// Create, fill, and return the SelfHelpGuideContentTO response
-		SelfHelpGuideContentTO selfHelpGuideContentTO = new SelfHelpGuideContentTO();
-		selfHelpGuideContentTO.fromModel(selfHelpGuide,
-				selfHelpGuideQuestionDao.bySelfHelpGuide(selfHelpGuideId));
+		selfHelpGuide.setSelfHelpGuideQuestions(selfHelpGuideQuestionDao
+				.bySelfHelpGuide(selfHelpGuideId));
 
-		return selfHelpGuideContentTO;
+		// Create, fill, and return the SelfHelpGuideDetailTO response
+		SelfHelpGuideDetailTO selfHelpGuideDetailTO = new SelfHelpGuideDetailTO();
+		selfHelpGuideDetailTO.from(selfHelpGuide);
+
+		return selfHelpGuideDetailTO;
 	}
 
 	public boolean cancelSelfHelpGuideResponse(UUID selfHelpGuideResponseId) {

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
+import org.studentsuccessplan.ssp.factory.TOFactory;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.AbstractReference;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
@@ -52,7 +52,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	 * Transfer object factory to create new instances of the specific TO for
 	 * extending classes.
 	 */
-	private final TransferObjectListFactory<TO, T> listFactory;
+	protected abstract TOFactory<TO, T> getFactory();
 
 	/**
 	 * Model class type
@@ -77,8 +77,6 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		super();
 		this.persistentClass = persistentClass;
 		this.transferObjectClass = transferObjectClass;
-		this.listFactory = TransferObjectListFactory
-				.newFactory(transferObjectClass);
 	}
 
 	@Override
@@ -91,7 +89,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 			final @RequestParam(required = false) String sortDirection)
 			throws Exception {
 
-		return listFactory.toTOList(
+		return getFactory().asTOList(
 				getService().getAll(
 						SortingAndPaging.createForSingleSort(status, start,
 								limit, sort, sortDirection, "name")));
@@ -107,7 +105,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		}
 
 		final TO out = this.transferObjectClass.newInstance();
-		out.fromModel(model);
+		out.from(model);
 		return out;
 	}
 
@@ -120,13 +118,13 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 					"It is invalid to send a reference entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
 
-		final T model = obj.asModel();
+		final T model = getFactory().from(obj);
 
 		if (null != model) {
 			final T createdModel = getService().create(model);
 			if (null != createdModel) {
 				final TO out = this.transferObjectClass.newInstance();
-				out.fromModel(createdModel);
+				out.from(createdModel);
 				return out;
 			}
 		}
@@ -143,13 +141,13 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 					"You submitted without an id to the save method.  Did you mean to create?");
 		}
 
-		final T model = obj.asModel();
+		final T model = getFactory().from(obj);
 		model.setId(id);
 
 		final T savedT = getService().save(model);
 		if (null != savedT) {
 			final TO out = this.transferObjectClass.newInstance();
-			out.fromModel(savedT);
+			out.from(savedT);
 			return out;
 		}
 

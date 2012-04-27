@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.SelfHelpGuideTOFactory;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
@@ -14,7 +16,8 @@ import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/reference/selfHelpGuide")
-public class SelfHelpGuideController extends
+public class SelfHelpGuideController
+		extends
 		AbstractAuditableReferenceController<SelfHelpGuide, SelfHelpGuideTO> {
 
 	@Autowired
@@ -23,6 +26,14 @@ public class SelfHelpGuideController extends
 	@Override
 	protected AuditableCrudService<SelfHelpGuide> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient SelfHelpGuideTOFactory factory;
+
+	@Override
+	protected TOFactory<SelfHelpGuideTO, SelfHelpGuide> getFactory() {
+		return factory;
 	}
 
 	protected SelfHelpGuideController() {

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.CategoryTOFactory;
 import org.studentsuccessplan.ssp.model.reference.Category;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.CategoryService;
@@ -14,7 +16,8 @@ import org.studentsuccessplan.ssp.transferobject.reference.CategoryTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/reference/category")
-public class CategoryController extends
+public class CategoryController
+		extends
 		AbstractAuditableReferenceController<Category, CategoryTO> {
 
 	@Autowired
@@ -23,6 +26,14 @@ public class CategoryController extends
 	@Override
 	protected AuditableCrudService<Category> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient CategoryTOFactory factory;
+
+	@Override
+	protected TOFactory<CategoryTO, Category> getFactory() {
+		return factory;
 	}
 
 	protected CategoryController() {
