@@ -20,7 +20,7 @@ public class FundingSourceTOFactoryImpl extends
 	}
 
 	@Autowired
-	private FundingSourceDao dao;
+	private transient FundingSourceDao dao;
 
 	@Override
 	protected FundingSourceDao getDao() {

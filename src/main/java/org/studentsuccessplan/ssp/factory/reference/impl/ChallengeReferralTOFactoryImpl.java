@@ -21,7 +21,7 @@ public class ChallengeReferralTOFactoryImpl extends
 	}
 
 	@Autowired
-	private ChallengeReferralDao dao;
+	private transient ChallengeReferralDao dao;
 
 	@Override
 	protected ChallengeReferralDao getDao() {
@@ -29,9 +29,9 @@ public class ChallengeReferralTOFactoryImpl extends
 	}
 
 	@Override
-	public ChallengeReferral from(ChallengeReferralTO tObject)
+	public ChallengeReferral from(final ChallengeReferralTO tObject)
 			throws ObjectNotFoundException {
-		ChallengeReferral model = super.from(tObject);
+		final ChallengeReferral model = super.from(tObject);
 
 		model.setPublicDescription(tObject.getPublicDescription());
 

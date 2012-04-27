@@ -24,16 +24,16 @@ public class TaskTOFactoryImpl extends
 	}
 
 	@Autowired
-	private TaskDao dao;
+	private transient TaskDao dao;
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	@Autowired
-	private ChallengeService challengeService;
+	private transient ChallengeService challengeService;
 
 	@Autowired
-	private ChallengeReferralService challengeReferralService;
+	private transient ChallengeReferralService challengeReferralService;
 
 	@Override
 	protected TaskDao getDao() {
@@ -41,9 +41,9 @@ public class TaskTOFactoryImpl extends
 	}
 
 	@Override
-	public Task from(TaskTO tObject)
+	public Task from(final TaskTO tObject)
 			throws ObjectNotFoundException {
-		Task model = super.from(tObject);
+		final Task model = super.from(tObject);
 
 		model.setName(tObject.getName());
 		model.setDescription(tObject.getDescription());

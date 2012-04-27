@@ -22,7 +22,7 @@ public class ConfidentialityDisclosureAgreementTOFactoryImpl
 	}
 
 	@Autowired
-	private ConfidentialityDisclosureAgreementDao dao;
+	private transient ConfidentialityDisclosureAgreementDao dao;
 
 	@Override
 	protected ConfidentialityDisclosureAgreementDao getDao() {

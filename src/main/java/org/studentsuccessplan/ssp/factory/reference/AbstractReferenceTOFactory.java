@@ -10,14 +10,14 @@ public abstract class AbstractReferenceTOFactory<TObject extends AbstractReferen
 		extends AbstractAuditableTOFactory<TObject, M>
 		implements TOFactory<TObject, M> {
 
-	public AbstractReferenceTOFactory(Class<TObject> tObjectClass,
-			Class<M> mClass) {
+	public AbstractReferenceTOFactory(final Class<TObject> tObjectClass,
+			final Class<M> mClass) {
 		super(tObjectClass, mClass);
 	}
 
 	@Override
-	public M from(TObject tObject) throws ObjectNotFoundException {
-		M model = super.from(tObject);
+	public M from(final TObject tObject) throws ObjectNotFoundException {
+		final M model = super.from(tObject);
 
 		model.setName(tObject.getName());
 		model.setDescription(tObject.getDescription());

@@ -23,13 +23,13 @@ public class PersonChallengeTOFactoryImpl extends
 	}
 
 	@Autowired
-	private PersonChallengeDao dao;
+	private transient PersonChallengeDao dao;
 
 	@Autowired
-	private ChallengeService challengeService;
+	private transient ChallengeService challengeService;
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	@Override
 	protected PersonChallengeDao getDao() {
@@ -37,9 +37,9 @@ public class PersonChallengeTOFactoryImpl extends
 	}
 
 	@Override
-	public PersonChallenge from(PersonChallengeTO tObject)
+	public PersonChallenge from(final PersonChallengeTO tObject)
 			throws ObjectNotFoundException {
-		PersonChallenge model = super.from(tObject);
+		final PersonChallenge model = super.from(tObject);
 
 		model.setDescription(tObject.getDescription());
 

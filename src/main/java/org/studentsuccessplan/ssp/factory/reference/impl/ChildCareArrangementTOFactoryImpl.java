@@ -21,7 +21,7 @@ public class ChildCareArrangementTOFactoryImpl
 	}
 
 	@Autowired
-	private ChildCareArrangementDao dao;
+	private transient ChildCareArrangementDao dao;
 
 	@Override
 	protected ChildCareArrangementDao getDao() {

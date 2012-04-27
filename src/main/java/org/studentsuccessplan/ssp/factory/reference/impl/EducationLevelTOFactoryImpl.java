@@ -20,7 +20,7 @@ public class EducationLevelTOFactoryImpl extends
 	}
 
 	@Autowired
-	private EducationLevelDao dao;
+	private transient EducationLevelDao dao;
 
 	@Override
 	protected EducationLevelDao getDao() {

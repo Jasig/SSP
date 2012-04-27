@@ -20,7 +20,7 @@ public class CitizenshipTOFactoryImpl extends
 	}
 
 	@Autowired
-	private CitizenshipDao dao;
+	private transient CitizenshipDao dao;
 
 	@Override
 	protected CitizenshipDao getDao() {

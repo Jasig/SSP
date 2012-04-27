@@ -29,25 +29,25 @@ public class PersonDemographicsTOFactoryImpl extends
 	}
 
 	@Autowired
-	private PersonDemographicsDao dao;
+	private transient PersonDemographicsDao dao;
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	@Autowired
-	private MaritalStatusService maritalStatusService;
+	private transient MaritalStatusService maritalStatusService;
 
 	@Autowired
-	private EthnicityService ethnicityService;
+	private transient EthnicityService ethnicityService;
 
 	@Autowired
-	private CitizenshipService citizenshipService;
+	private transient CitizenshipService citizenshipService;
 
 	@Autowired
-	private ChildCareArrangementService childCareArrangementService;
+	private transient ChildCareArrangementService childCareArrangementService;
 
 	@Autowired
-	private VeteranStatusService veteranStatusService;
+	private transient VeteranStatusService veteranStatusService;
 
 	@Override
 	protected PersonDemographicsDao getDao() {
@@ -55,9 +55,9 @@ public class PersonDemographicsTOFactoryImpl extends
 	}
 
 	@Override
-	public PersonDemographics from(PersonDemographicsTO tObject)
+	public PersonDemographics from(final PersonDemographicsTO tObject)
 			throws ObjectNotFoundException {
-		PersonDemographics model = super.from(tObject);
+		final PersonDemographics model = super.from(tObject);
 
 		if (tObject.getCoachId() != null) {
 			model.setCoach(personService.get(tObject.getCoachId()));

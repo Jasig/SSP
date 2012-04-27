@@ -20,7 +20,7 @@ public class ChallengeCategoryTOFactoryImpl extends
 	}
 
 	@Autowired
-	private ChallengeCategoryDao dao;
+	private transient ChallengeCategoryDao dao;
 
 	@Override
 	protected ChallengeCategoryDao getDao() {

@@ -20,7 +20,7 @@ public class CategoryTOFactoryImpl extends
 	}
 
 	@Autowired
-	private CategoryDao dao;
+	private transient CategoryDao dao;
 
 	@Override
 	protected CategoryDao getDao() {

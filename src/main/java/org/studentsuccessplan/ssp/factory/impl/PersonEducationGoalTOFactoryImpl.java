@@ -22,10 +22,10 @@ public class PersonEducationGoalTOFactoryImpl extends
 	}
 
 	@Autowired
-	private PersonEducationGoalDao dao;
+	private transient PersonEducationGoalDao dao;
 
 	@Autowired
-	private EducationGoalService educationGoalService;
+	private transient EducationGoalService educationGoalService;
 
 	@Override
 	protected PersonEducationGoalDao getDao() {
@@ -33,9 +33,9 @@ public class PersonEducationGoalTOFactoryImpl extends
 	}
 
 	@Override
-	public PersonEducationGoal from(PersonEducationGoalTO tObject)
+	public PersonEducationGoal from(final PersonEducationGoalTO tObject)
 			throws ObjectNotFoundException {
-		PersonEducationGoal model = super.from(tObject);
+		final PersonEducationGoal model = super.from(tObject);
 
 		model.setHowSureAboutMajor(tObject.getHowSureAboutMajor());
 		model.setDescription(tObject.getDescription());

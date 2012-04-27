@@ -24,13 +24,13 @@ public class PersonEducationLevelTOFactoryImpl
 	}
 
 	@Autowired
-	private PersonEducationLevelDao dao;
+	private transient PersonEducationLevelDao dao;
 
 	@Autowired
-	private EducationLevelService educationLevelService;
+	private transient EducationLevelService educationLevelService;
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	@Override
 	protected PersonEducationLevelDao getDao() {
@@ -38,9 +38,9 @@ public class PersonEducationLevelTOFactoryImpl
 	}
 
 	@Override
-	public PersonEducationLevel from(PersonEducationLevelTO tObject)
+	public PersonEducationLevel from(final PersonEducationLevelTO tObject)
 			throws ObjectNotFoundException {
-		PersonEducationLevel model = super.from(tObject);
+		final PersonEducationLevel model = super.from(tObject);
 
 		model.setDescription(tObject.getDescription());
 

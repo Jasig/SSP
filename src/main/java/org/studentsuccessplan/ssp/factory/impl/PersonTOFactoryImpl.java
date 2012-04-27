@@ -21,7 +21,7 @@ public class PersonTOFactoryImpl extends
 	}
 
 	@Autowired
-	private PersonDao dao;
+	private transient PersonDao dao;
 
 	@Override
 	protected PersonDao getDao() {
@@ -29,9 +29,9 @@ public class PersonTOFactoryImpl extends
 	}
 
 	@Override
-	public Person from(PersonTO tObject)
+	public Person from(final PersonTO tObject)
 			throws ObjectNotFoundException {
-		Person model = super.from(tObject);
+		final Person model = super.from(tObject);
 
 		model.setFirstName(tObject.getFirstName());
 		model.setMiddleInitial(tObject.getMiddleInitial());

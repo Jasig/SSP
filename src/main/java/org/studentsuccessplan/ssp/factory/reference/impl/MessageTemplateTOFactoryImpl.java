@@ -20,7 +20,7 @@ public class MessageTemplateTOFactoryImpl extends
 	}
 
 	@Autowired
-	private MessageTemplateDao dao;
+	private transient MessageTemplateDao dao;
 
 	@Override
 	protected MessageTemplateDao getDao() {

@@ -21,7 +21,7 @@ public class SelfHelpGuideQuestionTOFactoryImpl
 	}
 
 	@Autowired
-	private SelfHelpGuideQuestionDao dao;
+	private transient SelfHelpGuideQuestionDao dao;
 
 	@Override
 	protected SelfHelpGuideQuestionDao getDao() {

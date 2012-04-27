@@ -20,7 +20,7 @@ public class StudentStatusTOFactoryImpl extends
 	}
 
 	@Autowired
-	private StudentStatusDao dao;
+	private transient StudentStatusDao dao;
 
 	@Override
 	protected StudentStatusDao getDao() {

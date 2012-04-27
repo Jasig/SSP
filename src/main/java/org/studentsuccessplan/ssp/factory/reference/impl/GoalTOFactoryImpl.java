@@ -22,10 +22,10 @@ public class GoalTOFactoryImpl extends
 	}
 
 	@Autowired
-	private GoalDao dao;
+	private transient GoalDao dao;
 
 	@Autowired
-	private ConfidentialityLevelService confidentialityLevelService;
+	private transient ConfidentialityLevelService confidentialityLevelService;
 
 	@Override
 	protected GoalDao getDao() {
@@ -33,8 +33,8 @@ public class GoalTOFactoryImpl extends
 	}
 
 	@Override
-	public Goal from(GoalTO tObject) throws ObjectNotFoundException {
-		Goal model = super.from(tObject);
+	public Goal from(final GoalTO tObject) throws ObjectNotFoundException {
+		final Goal model = super.from(tObject);
 
 		model.setConfidentialityLevel(confidentialityLevelService.get(tObject
 				.getConfidentialityLevelId()));

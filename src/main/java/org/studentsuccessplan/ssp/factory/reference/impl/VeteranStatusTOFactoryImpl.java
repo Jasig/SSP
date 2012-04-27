@@ -20,7 +20,7 @@ public class VeteranStatusTOFactoryImpl extends
 	}
 
 	@Autowired
-	private VeteranStatusDao dao;
+	private transient VeteranStatusDao dao;
 
 	@Override
 	protected VeteranStatusDao getDao() {

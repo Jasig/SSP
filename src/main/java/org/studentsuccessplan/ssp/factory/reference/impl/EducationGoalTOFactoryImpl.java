@@ -20,7 +20,7 @@ public class EducationGoalTOFactoryImpl extends
 	}
 
 	@Autowired
-	private EducationGoalDao dao;
+	private transient EducationGoalDao dao;
 
 	@Override
 	protected EducationGoalDao getDao() {

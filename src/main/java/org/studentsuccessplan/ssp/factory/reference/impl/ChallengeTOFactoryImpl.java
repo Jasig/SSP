@@ -21,7 +21,7 @@ public class ChallengeTOFactoryImpl extends
 	}
 
 	@Autowired
-	private ChallengeDao dao;
+	private transient ChallengeDao dao;
 
 	@Override
 	protected ChallengeDao getDao() {
@@ -29,9 +29,9 @@ public class ChallengeTOFactoryImpl extends
 	}
 
 	@Override
-	public Challenge from(ChallengeTO tObject)
+	public Challenge from(final ChallengeTO tObject)
 			throws ObjectNotFoundException {
-		Challenge model = super.from(tObject);
+		final Challenge model = super.from(tObject);
 
 		model.setSelfHelpGuideDescription(tObject.getSelfHelpGuideDescription());
 		model.setSelfHelpGuideQuestion(tObject.getSelfHelpGuideQuestion());

@@ -20,7 +20,7 @@ public class MaritalStatusTOFactoryImpl extends
 	}
 
 	@Autowired
-	private MaritalStatusDao dao;
+	private transient MaritalStatusDao dao;
 
 	@Override
 	protected MaritalStatusDao getDao() {

@@ -20,7 +20,7 @@ public class SelfHelpGuideTOFactoryImpl extends
 	}
 
 	@Autowired
-	private SelfHelpGuideDao dao;
+	private transient SelfHelpGuideDao dao;
 
 	@Override
 	protected SelfHelpGuideDao getDao() {

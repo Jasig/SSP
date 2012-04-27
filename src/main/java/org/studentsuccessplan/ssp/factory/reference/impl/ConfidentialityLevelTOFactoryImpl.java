@@ -22,7 +22,7 @@ public class ConfidentialityLevelTOFactoryImpl
 	}
 
 	@Autowired
-	private ConfidentialityLevelDao dao;
+	private transient ConfidentialityLevelDao dao;
 
 	@Override
 	protected ConfidentialityLevelDao getDao() {
@@ -30,9 +30,9 @@ public class ConfidentialityLevelTOFactoryImpl
 	}
 
 	@Override
-	public ConfidentialityLevel from(ConfidentialityLevelTO tObject)
+	public ConfidentialityLevel from(final ConfidentialityLevelTO tObject)
 			throws ObjectNotFoundException {
-		ConfidentialityLevel model = super.from(tObject);
+		final ConfidentialityLevel model = super.from(tObject);
 
 		model.setAcronym(tObject.getAcronym());
 

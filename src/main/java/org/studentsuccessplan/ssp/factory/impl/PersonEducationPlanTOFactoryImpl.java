@@ -22,10 +22,10 @@ public class PersonEducationPlanTOFactoryImpl extends
 	}
 
 	@Autowired
-	private PersonEducationPlanDao dao;
+	private transient PersonEducationPlanDao dao;
 
 	@Autowired
-	private StudentStatusService studentStatusService;
+	private transient StudentStatusService studentStatusService;
 
 	@Override
 	protected PersonEducationPlanDao getDao() {
@@ -33,9 +33,9 @@ public class PersonEducationPlanTOFactoryImpl extends
 	}
 
 	@Override
-	public PersonEducationPlan from(PersonEducationPlanTO tObject)
+	public PersonEducationPlan from(final PersonEducationPlanTO tObject)
 			throws ObjectNotFoundException {
-		PersonEducationPlan model = super.from(tObject);
+		final PersonEducationPlan model = super.from(tObject);
 
 		model.setNewOrientationComplete(tObject.isNewOrientationComplete());
 		model.setRegisteredForClasses(tObject.isRegisteredForClasses());

@@ -20,7 +20,7 @@ public class EthnicityTOFactoryImpl extends
 	}
 
 	@Autowired
-	private EthnicityDao dao;
+	private transient EthnicityDao dao;
 
 	@Override
 	protected EthnicityDao getDao() {

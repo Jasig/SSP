@@ -23,13 +23,13 @@ public class PersonFundingSourceTOFactoryImpl extends
 	}
 
 	@Autowired
-	private PersonFundingSourceDao dao;
+	private transient PersonFundingSourceDao dao;
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	@Autowired
-	private FundingSourceService fundingSourceService;
+	private transient FundingSourceService fundingSourceService;
 
 	@Override
 	protected PersonFundingSourceDao getDao() {
@@ -37,9 +37,9 @@ public class PersonFundingSourceTOFactoryImpl extends
 	}
 
 	@Override
-	public PersonFundingSource from(PersonFundingSourceTO tObject)
+	public PersonFundingSource from(final PersonFundingSourceTO tObject)
 			throws ObjectNotFoundException {
-		PersonFundingSource model = super.from(tObject);
+		final PersonFundingSource model = super.from(tObject);
 
 		model.setDescription(tObject.getDescription());
 

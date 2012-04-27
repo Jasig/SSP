@@ -20,35 +20,35 @@ import org.studentsuccessplan.ssp.transferobject.tool.IntakeFormTO;
 public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 
 	@Autowired
-	private PersonTOFactory personTOFactory;
+	private transient PersonTOFactory personTOFactory;
 
 	@Autowired
-	private PersonDemographicsTOFactory personDemographicsTOFactory;
+	private transient PersonDemographicsTOFactory personDemographicsTOFactory;
 
 	@Autowired
-	private PersonEducationGoalTOFactory personEducationGoalTOFactory;
+	private transient PersonEducationGoalTOFactory personEducationGoalTOFactory;
 
 	@Autowired
-	private PersonEducationPlanTOFactory personEducationPlanTOFactory;
+	private transient PersonEducationPlanTOFactory personEducationPlanTOFactory;
 
 	@Autowired
-	private PersonEducationLevelTOFactory personEducationLevelTOFactory;
+	private transient PersonEducationLevelTOFactory personEducationLevelTOFactory;
 
 	@Autowired
-	private PersonFundingSourceTOFactory personFundingSourceTOFactory;
+	private transient PersonFundingSourceTOFactory personFundingSourceTOFactory;
 
 	@Autowired
-	private PersonChallengeTOFactory personChallengeTOFactory;
+	private transient PersonChallengeTOFactory personChallengeTOFactory;
 
 	@Override
-	public IntakeFormTO from(IntakeForm model) {
+	public IntakeFormTO from(final IntakeForm model) {
 		return new IntakeFormTO(model);
 	}
 
 	@Override
-	public IntakeForm from(IntakeFormTO tObject)
+	public IntakeForm from(final IntakeFormTO tObject)
 			throws ObjectNotFoundException {
-		IntakeForm model = new IntakeForm();
+		final IntakeForm model = new IntakeForm();
 
 		if (tObject.getPerson() != null) {
 			model.setPerson(personTOFactory.from(tObject.getPerson()));
