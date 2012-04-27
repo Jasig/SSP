@@ -1,6 +1,6 @@
 Ext.define('Ssp.model.AbstractBase', {
     extend: 'Ext.data.Model',
-    fields: ['id'],
+    fields: [{name: 'id', type: 'string'}],
     
     /*
      'createdDate',

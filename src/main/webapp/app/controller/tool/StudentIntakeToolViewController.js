@@ -9,7 +9,7 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
         
 		this.control({
 			'#SaveStudentIntakeButton': {
-				click: this.saveStudentIntakeButtonClick,
+				click: this.save,
 				scope: this
 			}
 			
@@ -17,13 +17,6 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 				
 		this.callParent(arguments);
     },
- 
- 	/*
- 	 * Handle click for save student intake button.
-	 */    
-	saveStudentIntakeButtonClick: function(){ 
-		this.save();		
-	},
 	
 	save: function() {
 		
@@ -46,6 +39,8 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 		var selectedChallenges = null;
 		
 		var studentIntakeFormModel = null;
+		var personId = "";
+		var intakeData = {};
 		
 		// validate and save the model
 		if (personalForm.isValid() && demographicsForm.isValid() && educationPlansForm.isValid()  && educationLevelsForm.isValid() && educationGoalForm.isValid() && fundingForm.isValid() && challengesForm.isValid() )
@@ -63,8 +58,8 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			educationGoalForm.updateRecord( educationGoalFormModel );
 			
 			// save the full model
-			var personId = personalFormModel.data.id;
-			var intakeData = {
+			personId = personalFormModel.data.id;
+			intakeData = {
 				person: personalFormModel.data,
 				personDemographics: demographicsFormModel.data,
 				personEducationGoal: educationGoalFormModel.data,

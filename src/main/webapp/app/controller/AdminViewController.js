@@ -14,7 +14,7 @@ Ext.define('Ssp.controller.AdminViewController', {
              'reference.FundingSources',
              'reference.StudentStatuses',
              'reference.VeteranStatuses'],
-
+             
 	init: function() {
 
 		this.control({

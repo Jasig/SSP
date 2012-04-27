@@ -32,8 +32,7 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
              'personEducationLevels',
              'personFundingSources',
              'personChallenges',
-             'referenceData'],
-             
+             'referenceData'],    
 	proxy: {
 		type: 'rest',
 		url: '/ssp/api/1/tool/studentIntake/',
@@ -51,5 +50,4 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 	        successProperty: 'success'
 	    }
 	}
-	
 });

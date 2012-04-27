@@ -13,6 +13,11 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
     defaults: {
         anchor: '100%'
     },
+    fieldDefaults: {
+        msgTarget: 'side',
+        labelAlign: 'left',
+        labelWidth: 225
+    },
     defaultType: 'displayfield',
     items: [{
             xtype: 'fieldset',
@@ -56,19 +61,20 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
             {boxLabel: "Yes", name: "specialNeeds", inputValue:"true"},
             {boxLabel: "No", name: "specialNeeds", inputValue:"false"}]
     },{
-            xtype: 'radiogroup',
-            fieldLabel: 'What grade did you typically earn at your highest level of education?',
-            items: [
-                {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "A"},
-                {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "A-B"},
-                {boxLabel: 'B', name: 'gradeTypicallyEarned', inputValue: "B"},
-                {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "B-C"},
-                {boxLabel: 'C', name: 'gradeTypicallyEarned', inputValue: "C"},
-                {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "C-D"},
-                {boxLabel: 'D', name: 'gradeTypicallyEarned', inputValue: "D"},
-                {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "D-F"},
-                {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
-        		]
+        xtype: 'radiogroup',
+        fieldLabel: 'What grade did you typically earn at your highest level of education?',
+        columns: 1,
+        items: [
+            {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "A"},
+            {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "A-B"},
+            {boxLabel: 'B', name: 'gradeTypicallyEarned', inputValue: "B"},
+            {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "B-C"},
+            {boxLabel: 'C', name: 'gradeTypicallyEarned', inputValue: "C"},
+            {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "C-D"},
+            {boxLabel: 'D', name: 'gradeTypicallyEarned', inputValue: "D"},
+            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "D-F"},
+            {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
+    		]
         }]
     }]
 	

@@ -1,5 +1,5 @@
 /*
-DeftJS 0.6.1
+DeftJS 0.6.3
 
 Copyright (c) 2012 [DeftJS Framework Contributors](http://deftjs.org)
 Open source under the [MIT License](http://en.wikipedia.org/wiki/MIT_License).
@@ -36,6 +36,38 @@ Ext.define('Deft.log.Logger', {
         level: priority
       });
     };
+  }
+});
+
+Ext.define('Deft.util.Function', {
+  alternateClassName: ['Deft.Function'],
+  statics: {
+    /**
+    		Creates a new wrapper function that spreads the passed Array over the target function arguments.
+    */
+    spread: function(fn, scope) {
+      return function(array) {
+        if (!Ext.isArray(array)) {
+          Ext.Error.raise({
+            msg: "Error spreading passed Array over target function arguments: passed a non-Array."
+          });
+        }
+        return fn.apply(scope, array);
+      };
+    },
+    /**
+    		Returns a new function that wraps the specified function and caches the results for previously processed inputs.
+    */
+    memoize: function(fn, scope, hashFn) {
+      var memo;
+      memo = {};
+      return function(value) {
+        var key;
+        key = Ext.isFunction(hashFn) ? hashFn.apply(scope, arguments) : value;
+        if (!(key in memo)) memo[key] = fn.apply(scope, arguments);
+        return memo[key];
+      };
+    }
   }
 });
 
@@ -195,8 +227,9 @@ Ext.define('Deft.ioc.Injector', {
   /**
   	Inject dependencies (by their identifiers) into the target object instance.
   */
-  inject: function(identifiers, targetInstance) {
+  inject: function(identifiers, targetInstance, targetInstanceIsInitialized) {
     var injectConfig, name, originalInitConfigFunction, setterFunctionName, value;
+    if (targetInstanceIsInitialized == null) targetInstanceIsInitialized = true;
     injectConfig = {};
     if (Ext.isString(identifiers)) identifiers = [identifiers];
     Ext.Object.each(identifiers, function(key, value) {
@@ -212,7 +245,7 @@ Ext.define('Deft.ioc.Injector', {
         targetInstance[targetProperty] = resolvedValue;
       }
     }, this);
-    if (targetInstance.$configInited || targetInstance.wasInstantiated) {
+    if (targetInstanceIsInitialized) {
       for (name in injectConfig) {
         value = injectConfig[name];
         setterFunctionName = 'set' + Ext.String.capitalize(name);
@@ -224,7 +257,6 @@ Ext.define('Deft.ioc.Injector', {
         targetInstance.initConfig = function(config) {
           var result;
           result = originalInitConfigFunction.call(this, Ext.Object.merge({}, config || {}, injectConfig));
-          this.initConfig = originalInitConfigFunction;
           return result;
         };
       }
@@ -245,7 +277,7 @@ Ext.define('Deft.mixin.Injectable', {
   */
   onClassMixedIn: function(targetClass) {
     targetClass.prototype.constructor = Ext.Function.createInterceptor(targetClass.prototype.constructor, function() {
-      return Deft.Injector.inject(this.inject, this);
+      return Deft.Injector.inject(this.inject, this, false);
     });
   }
 });
@@ -318,10 +350,7 @@ Ext.define('Deft.mvc.ViewController', {
       self = this;
       originalViewDestroyFunction = this.getView().destroy;
       this.getView().destroy = function() {
-        if (self.destroy()) {
-          originalViewDestroyFunction.call(this);
-          this.destroy = originalViewDestroyFunction;
-        }
+        if (self.destroy()) originalViewDestroyFunction.call(this);
       };
     }
     _ref = this.control;
@@ -363,7 +392,7 @@ Ext.define('Deft.mvc.ViewController', {
   	@private
   */
   registerComponent: function(id, component, listeners) {
-    var event, existingComponent, getterName, listener;
+    var event, existingComponent, fn, getterName, listener, options, scope;
     Deft.Logger.log("Registering '" + id + "' component.");
     existingComponent = this.getComponent(id);
     if (existingComponent != null) {
@@ -384,12 +413,28 @@ Ext.define('Deft.mvc.ViewController', {
     if (Ext.isObject(listeners)) {
       for (event in listeners) {
         listener = listeners[event];
+        fn = listener;
+        scope = this;
+        options = null;
+        if (Ext.isObject(listener)) {
+          options = Ext.apply({}, listener);
+          if (options.fn != null) {
+            fn = options.fn;
+            delete options.fn;
+          }
+          if (options.scope != null) {
+            scope = options.scope;
+            delete options.scope;
+          }
+        }
         Deft.Logger.log("Adding '" + event + "' listener to '" + id + "'.");
-        if (Ext.isFunction(this[listener])) {
-          component.on(event, this[listener], this);
+        if (Ext.isFunction(fn)) {
+          component.on(event, fn, scope, options);
+        } else if (Ext.isFunction(this[fn])) {
+          component.on(event, this[fn], scope, options);
         } else {
           Ext.Error.raise({
-            msg: "Error adding '" + event + "' listener: the specified handler '" + listener + "' is not a Function or does not exist."
+            msg: "Error adding '" + event + "' listener: the specified handler '" + fn + "' is not a Function or does not exist."
           });
         }
       }
@@ -399,7 +444,7 @@ Ext.define('Deft.mvc.ViewController', {
   	@private
   */
   unregisterComponent: function(id) {
-    var component, event, existingComponent, getterName, listener, listeners, _ref;
+    var component, event, existingComponent, fn, getterName, listener, listeners, options, scope, _ref;
     Deft.Logger.log("Unregistering '" + id + "' component.");
     existingComponent = this.getComponent(id);
     if (!(existingComponent != null)) {
@@ -411,12 +456,21 @@ Ext.define('Deft.mvc.ViewController', {
     if (Ext.isObject(listeners)) {
       for (event in listeners) {
         listener = listeners[event];
+        fn = listener;
+        scope = this;
+        if (Ext.isObject(listener)) {
+          options = listener;
+          if (options.fn != null) fn = options.fn;
+          if (options.scope != null) scope = options.scope;
+        }
         Deft.Logger.log("Removing '" + event + "' listener from '" + id + "'.");
-        if (Ext.isFunction(this[listener])) {
-          component.un(event, this[listener], this);
+        if (Ext.isFunction(fn)) {
+          component.un(event, fn, scope);
+        } else if (Ext.isFunction(this[fn])) {
+          component.un(event, this[fn], scope);
         } else {
           Ext.Error.raise({
-            msg: "Error removing '" + event + "' listener: the specified handler '" + listener + "' is not a Function or does not exist."
+            msg: "Error removing '" + event + "' listener: the specified handler '" + fn + "' is not a Function or does not exist."
           });
         }
       }
@@ -762,6 +816,15 @@ Ext.define('Deft.promise.Promise', {
       return deferred.then(callbacks);
     },
     /**
+    		Returns a new function that wraps the specified function and caches the results for previously processed inputs.
+    		Similar to `Deft.util.Function::memoize()`, except it allows input to contain promises and/or values.
+    */
+    memoize: function(fn, scope, hashFn) {
+      return this.all(Ext.Array.toArray(arguments)).then(Deft.util.Function.spread(function() {
+        return Deft.util.memoize(arguments, scope, hashFn);
+      }, scope));
+    },
+    /**
     		Traditional map function, similar to `Array.prototype.map()`, that allows input to contain promises and/or values.
     		The specified map function may return either a value or a promise.
     */
@@ -863,21 +926,3 @@ Ext.define('Deft.promise.Promise', {
   if (Array.prototype.reduce != null) this.reduceArray = Array.prototype.reduce;
 });
 
-Ext.define('Deft.util.Function', {
-  alternateClassName: ['Deft.Function'],
-  statics: {
-    /**
-    		Creates a new wrapper function that spreads the passed Array over the target function arguments.
-    */
-    spread: function(fn, scope) {
-      return function(array) {
-        if (!Ext.isArray(array)) {
-          Ext.Error.raise({
-            msg: "Error spreading passed Array over target function arguments: passed a non-Array."
-          });
-        }
-        return fn.apply(scope, array);
-      };
-    }
-  }
-});

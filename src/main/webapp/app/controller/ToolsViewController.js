@@ -5,7 +5,6 @@ Ext.define('Ssp.controller.ToolsViewController', {
     inject: {
         currentPerson: 'currentPerson'
     },
-	
 	views: [
         'ToolsMenu','Tools'
     ],
@@ -52,7 +51,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 		var toolsView = Ext.ComponentQuery.query('tools')[0];
 		var comp = null;
 		var tabs;
-		var form = "";
+		var form = null;
 		var person = this.currentPerson;
 		var personId = person.get('id');
 		

@@ -1,11 +1,39 @@
-Deft.Injector.configure({
-    currentPerson: {
-    	fn: function(){
-    		return new Ssp.model.Student({id:"0"}, {})
-    	},
-    	singleton: true
-    }
+Ext.Loader.setConfig({
+	enabled: true,
+	paths: {
+		'Ssp': './app'
+	}
 });
+
+Ext.require([
+	'Ssp.model.Student',
+	'Ssp.model.tool.studentintake.StudentIntakeForm',
+	'Ssp.model.tool.studentintake.PersonDemographics',
+	'Ssp.model.tool.studentintake.PersonEducationGoal',
+	'Ssp.model.tool.studentintake.PersonEducationPlan',
+	'Ssp.model.reference.AbstractReference',
+	'Ssp.view.admin.forms.AbstractReferenceAdmin',
+	'Ssp.mixin.ApiProperties',
+	'Ext.tab.*'
+]);
+
+Ext.onReady(function(){
+	Deft.Injector.configure({
+	    currentPerson: {
+	    	fn: function(){
+	    		return new Ssp.model.Student({id:"0"}, {})
+	    	},
+	    	singleton: true
+	    },
+	    apiProperties: {
+	    	fn: function(){
+	    		return new Ssp.mixin.ApiProperties({})
+	    	},
+	    	singleton: true
+	    }
+	});
+});
+
 
 Ext.application({
 	/*  To-DO determine required objects in the Requires config. These reference items
@@ -18,17 +46,7 @@ Ext.application({
 			   ,
                'Ssp.util.FormRendererUtils'
 			   ,
-	*/		
-	
-	requires: ['Ssp.model.Student',
-			   'Ssp.model.tool.studentintake.StudentIntakeForm',
-			   'Ssp.model.tool.studentintake.PersonDemographics',
-			   'Ssp.model.tool.studentintake.PersonEducationGoal',
-			   'Ssp.model.tool.studentintake.PersonEducationPlan',
-			   'Ssp.model.reference.AbstractReference',
-			   'Ssp.view.admin.forms.AbstractReferenceAdmin',
-			   'Ssp.mixin.ApiProperties'],
-	
+	*/
 			   
     name: 'Ssp',
     appFolder: 'app',

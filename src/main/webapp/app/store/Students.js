@@ -2,22 +2,8 @@ Ext.define('Ssp.store.Students', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.Student',
     storeId: 'studentsStore',
-	autoLoad: true,
-	
-	/*    
+    autoLoad: true,
 	proxy: {
-		type: 'ajax',
-		api: {
-			read: 'data/students.json'
-		},
-		reader: {
-			type: 'json',
-			root: 'students',
-			successProperty: 'success'
-		}
-	}
-*/
-    proxy: {
 		type: 'rest',
 		url: '/ssp/api/1/person/',
 		actionMethods: {
@@ -29,11 +15,10 @@ Ext.define('Ssp.store.Students', {
 		reader: {
 			type: 'json'
 		},
-        writer: {
-            type: 'json',
-            successProperty: 'success'
-        }
+	    writer: {
+	        type: 'json',
+	        successProperty: 'success'
+	    }
 	}
-	
-	
+
 });
