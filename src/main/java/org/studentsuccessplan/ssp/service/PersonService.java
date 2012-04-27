@@ -140,6 +140,10 @@ public interface PersonService extends AuditableCrudService<Person> {
 
 	/**
 	 * Return a person object for every personId where available.
+	 * 
+	 * @param personIds
+	 * @param sAndP
+	 * @return A person object for every personId where available
 	 */
 	List<Person> peopleFromListOfIds(List<UUID> personIds,
 			SortingAndPaging sAndP);

@@ -5,12 +5,9 @@ Ext.define('Ssp.controller.ToolsViewController', {
     inject: {
         currentPerson: 'currentPerson'
     },
-	
 	views: [
         'ToolsMenu','Tools'
     ],
-    
-    stores: ['reference.FundingSources','reference.Challenges'],
 
 	init: function() {
         
@@ -54,7 +51,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 		var toolsView = Ext.ComponentQuery.query('tools')[0];
 		var comp = null;
 		var tabs;
-		var form = "";
+		var form = null;
 		var person = this.currentPerson;
 		var personId = person.get('id');
 		
@@ -116,7 +113,6 @@ Ext.define('Ssp.controller.ToolsViewController', {
 						Ext.getStore('reference.States').loadData( states );
 						Ext.getStore('reference.StudentStatuses').loadData( studentStatuses );
 						Ext.getStore('reference.VeteranStatuses').loadData( veteranStatuses ); 
-						Ext.getStore('reference.YesNo').load();						
 						
 						// Load records for each of the forms
 						Ext.getCmp('StudentIntakePersonal').loadRecord( person );

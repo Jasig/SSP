@@ -142,19 +142,22 @@ public class TaskTO
 	}
 
 	public Date getCompletedDate() {
-		return completedDate;
+		return completedDate == null ? null : new Date(completedDate.getTime());
 	}
 
 	public void setCompletedDate(Date completedDate) {
-		this.completedDate = completedDate;
+		this.completedDate = completedDate == null ? null : new Date(
+				completedDate.getTime());
 	}
 
 	public Date getReminderSentDate() {
-		return reminderSentDate;
+		return reminderSentDate == null ? null : new Date(
+				reminderSentDate.getTime());
 	}
 
 	public void setReminderSentDate(Date reminderSentDate) {
-		this.reminderSentDate = reminderSentDate;
+		this.reminderSentDate = reminderSentDate == null ? null : new Date(
+				reminderSentDate.getTime());
 	}
 
 	public UUID getPersonId() {

@@ -9,7 +9,7 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
         
 		this.control({
 			'#SaveStudentIntakeButton': {
-				click: this.saveStudentIntakeButtonClick,
+				click: this.save,
 				scope: this
 			}
 			
@@ -17,13 +17,6 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 				
 		this.callParent(arguments);
     },
- 
- 	/*
- 	 * Handle click for save student intake button.
-	 */    
-	saveStudentIntakeButtonClick: function(){ 
-		this.save();		
-	},
 	
 	save: function() {
 		
@@ -46,6 +39,8 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 		var selectedChallenges = null;
 		
 		var studentIntakeFormModel = null;
+		var personId = "";
+		var intakeData = {};
 		
 		// validate and save the model
 		if (personalForm.isValid() && demographicsForm.isValid() && educationPlansForm.isValid()  && educationLevelsForm.isValid() && educationGoalForm.isValid() && fundingForm.isValid() && challengesForm.isValid() )
@@ -63,24 +58,8 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			educationGoalForm.updateRecord( educationGoalFormModel );
 			
 			// save the full model
-			// selectedEducationLevels = formUtils.getSelectedValuesAsTransferObject( educationLevelsForm.getValues(), 'Ssp.model.reference.EducationLevel' );
-			//selectedFunding = formUtils.getSelectedValuesAsTransferObject( fundingForm.getValues(), 'Ssp.model.reference.FundingSource' );
-			// selectedChallenges = formUtils.getSelectedValuesAsTransferObject( challengesForm.getValues(), 'Ssp.model.reference.Challenge' );
-
-			/*
-			studentIntakeFormModel = Ext.create('Ssp.model.tool.studentintake.StudentIntakeForm',{});
-			studentIntakeFormModel.set('person', personalFormModel.data );
-			studentIntakeFormModel.set('personDemographics', demographicsFormModel.data);
-			studentIntakeFormModel.set('personEducationGoal', educationGoalFormModel.data);
-			studentIntakeFormModel.set('personEducationPlan', educationPlansFormModel.data);
-			studentIntakeFormModel.set('personEducationLevels', selectedEducationLevels );			
-			studentIntakeFormModel.set('personFundingSources', selectedFunding );
-			studentIntakeFormModel.set('personChallenges', selectedChallenges );
-			*/
-			// console.log( studentIntakeFormModel );
-			// studentIntakeFormModel.save();
-			var personId = personalFormModel.data.id;
-			var intakeData = {
+			personId = personalFormModel.data.id;
+			intakeData = {
 				person: personalFormModel.data,
 				personDemographics: demographicsFormModel.data,
 				personEducationGoal: educationGoalFormModel.data,
@@ -121,7 +100,7 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			}
 			intakeData.personChallenges = selectedChallenges;
 			
-			console.log(intakeData);
+			// console.log(intakeData);
 			
 			Ext.Ajax.request({
 				url: '/ssp/api/1/tool/studentIntake/' + personalFormModel.data.id,
@@ -144,6 +123,6 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			Ext.Msg.alert('Invalid Data','Please correct the errors in this Student Intake before saving the record.');
 		}
 		
-	} 
+	}
     
 });

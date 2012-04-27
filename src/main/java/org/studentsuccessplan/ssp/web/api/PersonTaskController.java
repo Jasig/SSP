@@ -128,6 +128,13 @@ public class PersonTaskController extends
 	 * report
 	 * </p>
 	 * 
+	 * @param personId
+	 *            Person id
+	 * @param taskIds
+	 *            Task identifiers to retrieve
+	 * @return All (or all specified) tasks for the specified Person
+	 * @throws ObjectNotFoundException
+	 *             If the Person id could not be found
 	 */
 	@RequestMapping(value = "/print/", method = RequestMethod.POST)
 	public @ResponseBody
@@ -154,6 +161,14 @@ public class PersonTaskController extends
 	 * If no tasks are selected, then just return the tasks for the person,
 	 * (just for the session if it is the anon user).
 	 * </p>
+	 * 
+	 * @param personId
+	 *            Persion identifier
+	 * @param emailForm
+	 *            e-mail form data
+	 * @return True if action was successful
+	 * @throws Exception
+	 *             If there were any exceptions.
 	 */
 	@RequestMapping(value = "/email/", method = RequestMethod.POST)
 	public @ResponseBody

@@ -6,15 +6,11 @@ Ext.define('Ssp.view.tools.studentintake.Challenges', {
     width: '100%',
     height: '100%',
     bodyPadding: 5,
-
     layout: 'anchor',
     defaults: {
         anchor: '100%'
     },
-    
-    // The fields
-    defaultType: 'checkbox',
-    
+    defaultType: 'checkbox',   
     items: []
 	
 });

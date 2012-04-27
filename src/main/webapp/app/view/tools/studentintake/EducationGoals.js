@@ -6,14 +6,15 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
     width: "100%",
     height: "100%",
     bodyPadding: 5,
-
-    // Fields will be arranged vertically, stretched to full width
     layout: "anchor",
     defaults: {
         anchor: "100%"
     },
-
-    // The fields
+    fieldDefaults: {
+        msgTarget: 'side',
+        labelAlign: 'right',
+        labelWidth: 200
+    },
     defaultType: "displayfield",
     items: [{
             xtype: "fieldset",
@@ -26,6 +27,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
             xtype: "radiogroup",
             fieldLabel: "Education/Career Goal",
             columns: 1,
+            name: "educationGoalId",
             items: [
                 {boxLabel: "Uncertain", name: "educationGoalId", inputValue:"9bf33704-e41e-4922-bc7f-07b98b276824"},
                 {boxLabel: "Associates Degree", name: "educationGoalId", inputValue:"d25e224b-a0ca-48f0-ac30-1ddf5bdb9e0d"},

@@ -56,7 +56,8 @@ public class MyGpsSelfHelpGuideControllerIntegrationTest extends
 	}
 
 	/**
-	 * Test the {@link MyGpsSelfHelpGuideController#complete(UUID)} action.
+	 * Test the {@link MyGpsSelfHelpGuideController#getContentById(UUID)} 
+	 * action's collection sorting annotations.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.

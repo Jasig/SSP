@@ -6,17 +6,18 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
     width: '100%',
     height: '100%',
     bodyPadding: 5,
-
-	stores: ['StudentStatuses',
-			 'YesNo'],
-
-    // Fields will be arranged vertically, stretched to full width
+    
+	stores: ['reference.StudentStatuses'],
+			 
     layout: 'anchor',
     defaults: {
         anchor: '100%'
     },
-
-    // The fields
+    fieldDefaults: {
+        msgTarget: 'side',
+        labelAlign: 'left',
+        labelWidth: 225
+    },
     defaultType: 'displayfield',
     items: [{
             xtype: 'fieldset',
@@ -36,8 +37,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
         mode: 'local',
         typeAhead: true,
         queryMode: 'local',
-        allowBlank: false,
-        forceSelection: true
+        allowBlank: true
 	},{
         xtype: 'checkboxgroup',
         fieldLabel: 'Check all that you have completed',
@@ -47,32 +47,34 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
             {boxLabel: 'Registered for Classes', name: 'registeredForClasses'}
         ]
     },{
-        xtype: 'checkboxgroup',
-        fieldLabel: 'Have your parents obtained a college degree?',
+        xtype: "radiogroup",
+        fieldLabel: "Have your parents obtained a college degree?",
         columns: 1,
-        items: [   	
-		        { name: "collegeDegreeForParents" }
-        	]
+        items: [
+            {boxLabel: "Yes", name: "collegeDegreeForParents", inputValue:"true"},
+            {boxLabel: "No", name: "collegeDegreeForParents", inputValue:"false"}]
     },{
-    	xtype: 'checkboxgroup',
+        xtype: "radiogroup",
         fieldLabel: "Require special accommodations?",
-        items: [   	
-		        { name: "specialNeeds" }
-        	]
+        columns: 1,
+        items: [
+            {boxLabel: "Yes", name: "specialNeeds", inputValue:"true"},
+            {boxLabel: "No", name: "specialNeeds", inputValue:"false"}]
     },{
-            xtype: 'radiogroup',
-            fieldLabel: 'What grade did you typically earn at your highest level of education?',
-            items: [
-                {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "A"},
-                {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "A-B"},
-                {boxLabel: 'B', name: 'gradeTypicallyEarned', inputValue: "B"},
-                {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "B-C"},
-                {boxLabel: 'C', name: 'gradeTypicallyEarned', inputValue: "C"},
-                {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "C-D"},
-                {boxLabel: 'D', name: 'gradeTypicallyEarned', inputValue: "D"},
-                {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "D-F"},
-                {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
-        		]
+        xtype: 'radiogroup',
+        fieldLabel: 'What grade did you typically earn at your highest level of education?',
+        columns: 1,
+        items: [
+            {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "A"},
+            {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "A-B"},
+            {boxLabel: 'B', name: 'gradeTypicallyEarned', inputValue: "B"},
+            {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "B-C"},
+            {boxLabel: 'C', name: 'gradeTypicallyEarned', inputValue: "C"},
+            {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "C-D"},
+            {boxLabel: 'D', name: 'gradeTypicallyEarned', inputValue: "D"},
+            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "D-F"},
+            {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
+    		]
         }]
     }]
 	
