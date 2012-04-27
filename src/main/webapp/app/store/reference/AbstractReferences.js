@@ -1,7 +1,6 @@
 Ext.define('Ssp.store.reference.AbstractReferences', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.reference.AbstractReference',
-    storeId: 'abstractReferencesStore',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties'

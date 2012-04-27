@@ -1,7 +1,6 @@
 Ext.define('Ssp.store.Students', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.Student',
-    storeId: 'studentsStore',
+    model: 'Ssp.model.Person',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties'

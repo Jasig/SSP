@@ -1,9 +1,7 @@
 Ext.define('Ssp.store.ApplicationForms', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.ApplicationForm',
-    storeId: 'applicationFormsStore',
 	autoLoad: true,
-
     proxy: {
 		type: 'ajax',
 		api: {

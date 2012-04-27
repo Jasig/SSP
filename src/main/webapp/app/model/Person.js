@@ -1,4 +1,4 @@
-Ext.define('Ssp.model.Student', {
+Ext.define('Ssp.model.Person', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name: 'photoUrl', type: 'string', defaultValue: 'images/student-pic-small.png'},
              {name: 'schoolId', type: 'string'},
@@ -19,6 +19,7 @@ Ext.define('Ssp.model.Student', {
     		 {name: 'username', type: 'string'},
              {name: 'userId', type: 'string'},
     		 {name: 'enabled', type: 'boolean'}
+             //{name: 'strengths', type: 'string'}
     		 //'studentType',
     		 //'programStatus',
     		 //'registrationStatus',
