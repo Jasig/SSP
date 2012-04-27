@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,42 +16,22 @@ public class EducationLevelTO extends AbstractReferenceTO<EducationLevel>
 		super();
 	}
 
-	public EducationLevelTO(final UUID id) {
-		super(id);
-	}
-
-	public EducationLevelTO(final UUID id, final String name) {
-		super(id, name);
-	}
-
 	public EducationLevelTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
 	}
 
-	public EducationLevelTO(final EducationLevel model) {
+	public EducationLevelTO(EducationLevel model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
-	@Override
-	public EducationLevel addToModel(final EducationLevel model) {
-		super.addToModel(model);
-		return model;
-	}
-
-	@Override
-	public EducationLevel asModel() {
-		return addToModel(new EducationLevel());
-	}
-
-	public static List<EducationLevelTO> listToTOList(
-			final List<EducationLevel> models) {
-		final List<EducationLevelTO> tos = Lists.newArrayList();
+	public static List<EducationLevelTO> toTOList(
+			final Collection<EducationLevel> models) {
+		final List<EducationLevelTO> tObjects = Lists.newArrayList();
 		for (EducationLevel model : models) {
-			tos.add(new EducationLevelTO(model));
+			tObjects.add(new EducationLevelTO(model));
 		}
-		return tos;
+		return tObjects;
 	}
-
 }

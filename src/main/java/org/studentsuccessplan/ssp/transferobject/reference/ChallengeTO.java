@@ -1,9 +1,9 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeChallengeReferral;
-import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
@@ -32,8 +31,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	 * Just a reference to the questions that reference this Challenge. Think of
 	 * as selfHelpQuideChallenges
 	 */
-	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
-			0);
+	private List<SelfHelpGuideQuestionTO> selfHelpGuideQuestions;
 
 	/**
 	 * Public description of the challenge
@@ -48,36 +46,73 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 
 	private String tags;
 
-	private Set<ChallengeReferralTO> challengeChallengeReferrals = new HashSet<ChallengeReferralTO>(
-			0);
+	private UUID defaultConfidentialityLevelId;
 
-	private ConfidentialityLevel confidentialityLevel = null;
+	private List<ChallengeReferralTO> challengeChallengeReferrals;
 
 	public ChallengeTO() {
 		super();
 	}
 
-	public ChallengeTO(final UUID id) {
-		super(id);
-	}
-
-	public ChallengeTO(final UUID id, final String name) {
-		super(id, name);
-	}
-
-	/**
-	 * Constructor for a ChallengeTO transfer object.
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 64000 characters
-	 */
 	public ChallengeTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
+	}
+
+	public ChallengeTO(Challenge model) {
+		super();
+		from(model);
+	}
+
+	public static List<ChallengeTO> toTOList(
+			final Collection<Challenge> models) {
+		final List<ChallengeTO> tObjects = Lists.newArrayList();
+		for (Challenge model : models) {
+			tObjects.add(new ChallengeTO(model));
+		}
+		return tObjects;
+	}
+
+	@Override
+	public final void from(@NotNull final Challenge model) {
+		super.from(model);
+
+		selfHelpGuideQuestion = model.getSelfHelpGuideQuestion();
+
+		selfHelpGuideQuestions = Lists.newArrayList();
+		if (model.getSelfHelpGuideQuestions() != null) {
+			for (SelfHelpGuideQuestion question : model
+					.getSelfHelpGuideQuestions()) {
+				SelfHelpGuideQuestionTO questionTO = new SelfHelpGuideQuestionTO();
+				questionTO.from(question);
+				selfHelpGuideQuestions.add(questionTO);
+			}
+		}
+
+		selfHelpGuideDescription = model.getSelfHelpGuideDescription();
+		showInStudentIntake = model.isShowInStudentIntake();
+		showInSelfHelpSearch = model.isShowInSelfHelpSearch();
+		tags = model.getTags();
+
+		if (model.getDefaultConfidentialityLevel() != null) {
+			setDefaultConfidentialityLevelId(model
+					.getDefaultConfidentialityLevel()
+					.getId());
+		}
+
+		if ((model.getChallengeChallengeReferrals() == null)
+				|| model.getChallengeChallengeReferrals().isEmpty()) {
+			setChallengeChallengeReferrals(new ArrayList<ChallengeReferralTO>());
+		} else {
+			final List<ChallengeReferralTO> referralTOs = Lists.newArrayList();
+			for (ChallengeChallengeReferral challengeReferral : model
+					.getChallengeChallengeReferrals()) {
+				ChallengeReferralTO referralTO = new ChallengeReferralTO();
+				referralTO.from(challengeReferral.getChallengeReferral());
+				referralTOs.add(referralTO);
+			}
+			setChallengeChallengeReferrals(referralTOs);
+		}
 	}
 
 	public String getSelfHelpGuideQuestion() {
@@ -113,12 +148,12 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		this.showInSelfHelpSearch = showInSelfHelpSearch;
 	}
 
-	public Set<SelfHelpGuideQuestion> getSelfHelpGuideQuestions() {
+	public List<SelfHelpGuideQuestionTO> getSelfHelpGuideQuestions() {
 		return selfHelpGuideQuestions;
 	}
 
 	public void setSelfHelpGuideQuestions(
-			final Set<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
+			final List<SelfHelpGuideQuestionTO> selfHelpGuideQuestions) {
 		this.selfHelpGuideQuestions = selfHelpGuideQuestions;
 	}
 
@@ -130,28 +165,12 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		this.tags = tags;
 	}
 
-	/**
-	 * @return the confidentialityLevel
-	 */
-	public ConfidentialityLevel getConfidentialityLevel() {
-		return confidentialityLevel;
-	}
-
-	/**
-	 * @param confidentialityLevel
-	 *            the confidentialityLevel to set
-	 */
-	public void setConfidentialityLevel(
-			final ConfidentialityLevel confidentialityLevel) {
-		this.confidentialityLevel = confidentialityLevel;
-	}
-
-	public Set<ChallengeReferralTO> getChallengeChallengeReferrals() {
+	public List<ChallengeReferralTO> getChallengeChallengeReferrals() {
 		return challengeChallengeReferrals;
 	}
 
 	public void setChallengeChallengeReferrals(
-			final Set<ChallengeReferralTO> challengeChallengeReferrals) {
+			final List<ChallengeReferralTO> challengeChallengeReferrals) {
 		this.challengeChallengeReferrals = challengeChallengeReferrals;
 	}
 
@@ -164,96 +183,13 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		/* ignore this since it is auto-calculated */
 	}
 
-	@Override
-	public final void fromModel(@NotNull final Challenge model) {
-		super.fromModel(model);
-
-		selfHelpGuideQuestion = model.getSelfHelpGuideQuestion();
-		selfHelpGuideQuestions = model.getSelfHelpGuideQuestions();
-		selfHelpGuideDescription = model.getSelfHelpGuideDescription();
-		showInStudentIntake = model.isShowInStudentIntake();
-		showInSelfHelpSearch = model.isShowInSelfHelpSearch();
-		tags = model.getTags();
-		confidentialityLevel = model.getConfidentialityLevel();
-
-		if ((model.getChallengeChallengeReferrals() == null)
-				|| model.getChallengeChallengeReferrals().isEmpty()) {
-			setChallengeChallengeReferrals(new HashSet<ChallengeReferralTO>(0));
-		} else {
-			final Set<ChallengeReferralTO> set = new HashSet<ChallengeReferralTO>(
-					model.getChallengeChallengeReferrals().size());
-			for (ChallengeChallengeReferral challengeReferral : model
-					.getChallengeChallengeReferrals()) {
-				set.add(new ChallengeReferralTO(challengeReferral
-						.getChallengeReferral()));
-			}
-
-			setChallengeChallengeReferrals(set);
-		}
+	public UUID getDefaultConfidentialityLevelId() {
+		return defaultConfidentialityLevelId;
 	}
 
-	@Override
-	public Challenge addToModel(final Challenge model) {
-		super.addToModel(model);
-
-		model.setSelfHelpGuideQuestion(getSelfHelpGuideQuestion());
-		model.setSelfHelpGuideQuestions(getSelfHelpGuideQuestions());
-		model.setSelfHelpGuideDescription(getSelfHelpGuideDescription());
-		model.setShowInStudentIntake(isShowInStudentIntake());
-		model.setShowInSelfHelpSearch(isShowInSelfHelpSearch());
-		model.setTags(getTags());
-		model.setConfidentialityLevel(confidentialityLevel);
-
-		// TODO Implement deep set copy if necessary
-		/*
-		 * if (getChallengeChallengeReferrals() == null ||
-		 * getChallengeChallengeReferrals().isEmpty())
-		 * 
-		 * {
-		 * 
-		 * model.setChallengeChallengeReferrals(new
-		 * HashSet<ChallengeChallengeReferral>( 0));
-		 * 
-		 * } else {
-		 * 
-		 * Set<ChallengeChallengeReferral> set = new
-		 * HashSet<ChallengeChallengeReferral>(
-		 * getChallengeChallengeReferrals().size());
-		 * 
-		 * for (ChallengeReferralTO challengeReferral :
-		 * getChallengeChallengeReferrals())
-		 * 
-		 * {
-		 * 
-		 * ChallengeChallengeReferral crt = new ChallengeChallengeReferral();
-		 * 
-		 * crt.addToModel(challengeReferral);
-		 * 
-		 * set.add(crt);
-		 * 
-		 * }
-		 * 
-		 * model.setChallengeChallengeReferrals(set);
-		 * 
-		 * }
-		 */
-
-		return model;
+	public void setDefaultConfidentialityLevelId(
+			UUID defaultConfidentialityLevelId) {
+		this.defaultConfidentialityLevelId = defaultConfidentialityLevelId;
 	}
 
-	@Override
-	public Challenge asModel() {
-		return addToModel(new Challenge());
-	}
-
-	public static List<ChallengeTO> listToTOList(final List<Challenge> models) {
-		final List<ChallengeTO> tos = Lists.newArrayList();
-		for (Challenge model : models) {
-			final ChallengeTO challenge = new ChallengeTO();
-			challenge.fromModel(model);
-			tos.add(challenge);
-		}
-
-		return tos;
-	}
 }

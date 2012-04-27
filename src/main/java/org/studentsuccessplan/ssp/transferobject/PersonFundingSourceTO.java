@@ -1,13 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
-import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonFundingSource;
-import org.studentsuccessplan.ssp.model.reference.FundingSource;
 
 import com.google.common.collect.Lists;
 
@@ -29,12 +28,12 @@ public class PersonFundingSourceTO
 
 	public PersonFundingSourceTO(final PersonFundingSource model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
 	@Override
-	public final void fromModel(final PersonFundingSource model) {
-		super.fromModel(model);
+	public final void from(final PersonFundingSource model) {
+		super.from(model);
 
 		description = model.getDescription();
 
@@ -49,30 +48,8 @@ public class PersonFundingSourceTO
 		}
 	}
 
-	@Override
-	public PersonFundingSource addToModel(final PersonFundingSource model) {
-		super.addToModel(model);
-
-		model.setDescription(getDescription());
-
-		if (getFundingSourceId() != null) {
-			model.setFundingSource(new FundingSource(getFundingSourceId()));
-		}
-
-		if (getPersonId() != null) {
-			model.setPerson(new Person(getPersonId()));
-		}
-
-		return model;
-	}
-
-	@Override
-	public PersonFundingSource asModel() {
-		return addToModel(new PersonFundingSource());
-	}
-
-	public static List<PersonFundingSourceTO> listToTOList(
-			final List<PersonFundingSource> models) {
+	public static List<PersonFundingSourceTO> toTOList(
+			final Collection<PersonFundingSource> models) {
 		final List<PersonFundingSourceTO> tos = Lists.newArrayList();
 		for (PersonFundingSource model : models) {
 			tos.add(new PersonFundingSourceTO(model));

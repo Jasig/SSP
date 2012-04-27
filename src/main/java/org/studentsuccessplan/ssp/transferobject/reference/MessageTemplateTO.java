@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,42 +16,22 @@ public class MessageTemplateTO extends AbstractReferenceTO<MessageTemplate>
 		super();
 	}
 
-	public MessageTemplateTO(final UUID id) {
-		super(id);
-	}
-
-	public MessageTemplateTO(final UUID id, final String name) {
-		super(id, name);
-	}
-
 	public MessageTemplateTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
 	}
 
-	public MessageTemplateTO(final MessageTemplate model) {
+	public MessageTemplateTO(MessageTemplate model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
-	@Override
-	public MessageTemplate addToModel(final MessageTemplate model) {
-		super.addToModel(model);
-		return model;
-	}
-
-	@Override
-	public MessageTemplate asModel() {
-		return addToModel(new MessageTemplate());
-	}
-
-	public static List<MessageTemplateTO> listToTOList(
-			final List<MessageTemplate> models) {
-		final List<MessageTemplateTO> tos = Lists.newArrayList();
+	public static List<MessageTemplateTO> toTOList(
+			final Collection<MessageTemplate> models) {
+		final List<MessageTemplateTO> tObjects = Lists.newArrayList();
 		for (MessageTemplate model : models) {
-			tos.add(new MessageTemplateTO(model));
+			tObjects.add(new MessageTemplateTO(model));
 		}
-		return tos;
+		return tObjects;
 	}
-
 }

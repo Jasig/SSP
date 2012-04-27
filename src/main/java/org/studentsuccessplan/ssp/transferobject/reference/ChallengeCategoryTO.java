@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,42 +16,22 @@ public class ChallengeCategoryTO extends AbstractReferenceTO<ChallengeCategory>
 		super();
 	}
 
-	public ChallengeCategoryTO(final UUID id) {
-		super(id);
-	}
-
-	public ChallengeCategoryTO(final UUID id, final String name) {
-		super(id, name);
-	}
-
 	public ChallengeCategoryTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
 	}
 
-	public ChallengeCategoryTO(final ChallengeCategory model) {
+	public ChallengeCategoryTO(ChallengeCategory model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
-	@Override
-	public ChallengeCategory addToModel(final ChallengeCategory model) {
-		super.addToModel(model);
-		return model;
-	}
-
-	@Override
-	public ChallengeCategory asModel() {
-		return addToModel(new ChallengeCategory());
-	}
-
-	public static List<ChallengeCategoryTO> listToTOList(
-			final List<ChallengeCategory> models) {
-		final List<ChallengeCategoryTO> tos = Lists.newArrayList();
+	public static List<ChallengeCategoryTO> toTOList(
+			final Collection<ChallengeCategory> models) {
+		final List<ChallengeCategoryTO> tObjects = Lists.newArrayList();
 		for (ChallengeCategory model : models) {
-			tos.add(new ChallengeCategoryTO(model));
+			tObjects.add(new ChallengeCategoryTO(model));
 		}
-		return tos;
+		return tObjects;
 	}
-
 }

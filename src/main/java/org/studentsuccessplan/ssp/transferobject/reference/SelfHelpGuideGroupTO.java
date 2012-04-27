@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,42 +16,22 @@ public class SelfHelpGuideGroupTO extends AbstractReferenceTO<SelfHelpGuideGroup
 		super();
 	}
 
-	public SelfHelpGuideGroupTO(final UUID id) {
-		super(id);
-	}
-
-	public SelfHelpGuideGroupTO(final UUID id, final String name) {
-		super(id, name);
-	}
-
 	public SelfHelpGuideGroupTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
 	}
 
-	public SelfHelpGuideGroupTO(final SelfHelpGuideGroup model) {
+	public SelfHelpGuideGroupTO(SelfHelpGuideGroup model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
-	@Override
-	public SelfHelpGuideGroup addToModel(final SelfHelpGuideGroup model) {
-		super.addToModel(model);
-		return model;
-	}
-
-	@Override
-	public SelfHelpGuideGroup asModel() {
-		return addToModel(new SelfHelpGuideGroup());
-	}
-
-	public static List<SelfHelpGuideGroupTO> listToTOList(
-			final List<SelfHelpGuideGroup> models) {
-		final List<SelfHelpGuideGroupTO> tos = Lists.newArrayList();
+	public static List<SelfHelpGuideGroupTO> toTOList(
+			final Collection<SelfHelpGuideGroup> models) {
+		final List<SelfHelpGuideGroupTO> tObjects = Lists.newArrayList();
 		for (SelfHelpGuideGroup model : models) {
-			tos.add(new SelfHelpGuideGroupTO(model));
+			tObjects.add(new SelfHelpGuideGroupTO(model));
 		}
-		return tos;
+		return tObjects;
 	}
-
 }

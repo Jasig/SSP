@@ -2,15 +2,12 @@ package org.studentsuccessplan.ssp.transferobject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
-import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 
 public class TaskTO
 		extends AuditableTO<Task>
@@ -22,8 +19,8 @@ public class TaskTO
 	private String name, description;
 	private boolean completed, deletable;
 	private Date dueDate, completedDate, reminderSentDate;
-	private UUID personId, challengeId, challengeReferralId;
-	private ConfidentialityLevel confidentialityLevel;
+	private UUID personId, challengeId, challengeReferralId,
+			confidentialityLevel;
 
 	/**
 	 * Empty constructor
@@ -34,12 +31,12 @@ public class TaskTO
 
 	public TaskTO(final Task task) {
 		super();
-		fromModel(task);
+		from(task);
 	}
 
 	@Override
-	public void fromModel(final Task task) {
-		super.fromModel(task);
+	public void from(final Task task) {
+		super.from(task);
 
 		setType(task.getType());
 		setCompleted((task.getCompletedDate() != null) ? true : false);
@@ -58,45 +55,23 @@ public class TaskTO
 			setName(task.getName());
 			setDescription(task.getDescription());
 		}
-		
-		confidentialityLevel = task.getConfidentialityLevel();
+
+		if (task.getConfidentialityLevel() != null) {
+			confidentialityLevel = task.getConfidentialityLevel().getId();
+		}
 
 		if (description != null) {
 			description = description.replaceAll("\\<.*?>", "");
 		}
 	}
 
-	@Override
-	public Task addToModel(final Task task) {
-		super.addToModel(task);
-		task.setName(name);
-		task.setDescription(description);
-		task.setDeletable(deletable);
-		task.setDueDate(dueDate);
-		task.setCompletedDate(completedDate);
-		task.setReminderSentDate(reminderSentDate);
-		task.setPerson(new Person(personId));
-		task.setChallenge(new Challenge(challengeId));
-		task.setChallengeReferral(new ChallengeReferral(challengeReferralId));
-		return task;
-	}
-
-	@Override
-	public Task asModel() {
-		Task task = new Task();
-		super.addToModel(task);
-		return task;
-	}
-
-	public static List<TaskTO> tasksToTaskTOs(final List<Task> tasks) {
+	public static List<TaskTO> toTOList(final Collection<Task> tasks) {
 		final List<TaskTO> taskTOs = new ArrayList<TaskTO>();
-
 		if ((tasks != null) && !tasks.isEmpty()) {
 			for (Task task : tasks) {
 				taskTOs.add(new TaskTO(task));
 			}
 		}
-
 		return taskTOs;
 	}
 
@@ -189,20 +164,13 @@ public class TaskTO
 	public void setPersonId(UUID personId) {
 		this.personId = personId;
 	}
-	
-	/**
-	 * @return the confidentialityLevel
-	 */
-	public ConfidentialityLevel getConfidentialityLevel() {
+
+	public UUID getConfidentialityLevel() {
 		return confidentialityLevel;
 	}
 
-	/**
-	 * @param confidentialityLevel
-	 *            the confidentialityLevel to set
-	 */
 	public void setConfidentialityLevel(
-			final ConfidentialityLevel confidentialityLevel) {
+			final UUID confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
 	}
 }
