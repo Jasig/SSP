@@ -10,10 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.studentsuccessplan.ssp.factory.reference.ChallengeReferralTOFactory;
+import org.studentsuccessplan.ssp.factory.reference.ChallengeTOFactory;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
-import org.studentsuccessplan.ssp.transferobject.reference.ChallengeReferralTO;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+
+import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/1/mygps/challenge")
@@ -24,6 +29,12 @@ public class MyGpsChallengeController extends AbstractMyGpsController {
 
 	@Autowired
 	private transient ChallengeReferralService challengeReferralService;
+
+	@Autowired
+	private transient ChallengeReferralTOFactory challengeReferralTOFactory;
+
+	@Autowired
+	private transient ChallengeTOFactory challengeTOFactory;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsChallengeController.class);
@@ -60,26 +71,30 @@ public class MyGpsChallengeController extends AbstractMyGpsController {
 	List<ChallengeTO> search(@RequestParam("query") final String query)
 			throws Exception {
 		try {
-			final List<ChallengeTO> challenges = ChallengeTO
-					.listToTOList(challengeService
-							.challengeSearch(query));
+			final List<Challenge> challenges = challengeService
+					.challengeSearch(query);
+
+			final List<ChallengeTO> challengeTOs = Lists.newArrayList();
+
+			for (Challenge challenge : challenges) {
+				ChallengeTO challengeTO = challengeTOFactory.from(challenge);
+
+				List<ChallengeReferral> referrals = challengeReferralService
+						.byChallengeIdNotOnActiveTaskList(challenge,
+								securityService.currentUser().getPerson(),
+								securityService.getSessionId());
+				challengeTO
+						.setChallengeChallengeReferrals(challengeReferralTOFactory
+								.asTOList(referrals));
+				challengeTOs.add(challengeTO);
+			}
 
 			// TODO: (performance) Challenge search service does the
 			// byChallengeIdNotOnActiveTaskList lookup already but doesn't
 			// return the TOs so it has to be done again here. Or better yet,
 			// done as a database set operation instead.
-			for (ChallengeTO challenge : challenges) {
-				challenge
-						.setChallengeChallengeReferrals(ChallengeReferralTO
-								.listToTOSet(challengeReferralService
-										.byChallengeIdNotOnActiveTaskList(
-												challenge.asModel(),
-												securityService.currentUser()
-														.getPerson(),
-												securityService.getSessionId())));
-			}
 
-			return challenges;
+			return challengeTOs;
 		} catch (Exception e) {
 			LOGGER.error("ERROR : search() : {}", e.getMessage(), e);
 			throw e;
