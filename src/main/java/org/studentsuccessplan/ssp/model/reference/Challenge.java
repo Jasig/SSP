@@ -73,7 +73,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "confidentiality_level_id", nullable = true)
-	private ConfidentialityLevel confidentialityLevel;
+	private ConfidentialityLevel defaultConfidentialityLevel;
 
 	/**
 	 * Constructor
@@ -180,19 +180,19 @@ public class Challenge extends AbstractReference implements Serializable {
 	}
 
 	/**
-	 * @return the confidentialityLevel
+	 * @return the defaultConfidentialityLevel
 	 */
-	public ConfidentialityLevel getConfidentialityLevel() {
-		return confidentialityLevel;
+	public ConfidentialityLevel getDefaultConfidentialityLevel() {
+		return defaultConfidentialityLevel;
 	}
 
 	/**
-	 * @param confidentialityLevel
-	 *            the confidentialityLevel to set
+	 * @param defaultConfidentialityLevel
+	 *            the defaultConfidentialityLevel to set
 	 */
-	public void setConfidentialityLevel(
-			final ConfidentialityLevel confidentialityLevel) {
-		this.confidentialityLevel = confidentialityLevel;
+	public void setDefaultConfidentialityLevel(
+			final ConfidentialityLevel defaultConfidentialityLevel) {
+		this.defaultConfidentialityLevel = defaultConfidentialityLevel;
 	}
 
 	/**
@@ -210,7 +210,7 @@ public class Challenge extends AbstractReference implements Serializable {
 		setShowInStudentIntake(source.isShowInStudentIntake());
 		setShowInSelfHelpSearch(source.isShowInSelfHelpSearch());
 		setTags(source.getTags());
-		setConfidentialityLevel(source.getConfidentialityLevel());
+		setDefaultConfidentialityLevel(source.getDefaultConfidentialityLevel());
 
 		// TODO: OverwriteWithCollections
 		/*
