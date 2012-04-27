@@ -18,7 +18,7 @@ public class EmailPersonTasksForm {
 		return taskIds;
 	}
 
-	public void setTaskIds(List<UUID> taskIds) {
+	public void setTaskIds(final List<UUID> taskIds) {
 		this.taskIds = taskIds;
 	}
 
@@ -27,7 +27,7 @@ public class EmailPersonTasksForm {
 	}
 
 	public void setRecipientEmailAddresses(
-			List<String> recipientEmailAddresses) {
+			final List<String> recipientEmailAddresses) {
 		this.recipientEmailAddresses = recipientEmailAddresses;
 	}
 
@@ -35,7 +35,7 @@ public class EmailPersonTasksForm {
 		return recipientIds;
 	}
 
-	public void setRecipientIds(List<UUID> recipientIds) {
+	public void setRecipientIds(final List<UUID> recipientIds) {
 		this.recipientIds = recipientIds;
 	}
 }

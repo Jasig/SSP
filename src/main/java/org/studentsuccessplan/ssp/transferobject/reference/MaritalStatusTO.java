@@ -21,7 +21,7 @@ public class MaritalStatusTO extends AbstractReferenceTO<MaritalStatus>
 		super(id, name, description);
 	}
 
-	public MaritalStatusTO(MaritalStatus model) {
+	public MaritalStatusTO(final MaritalStatus model) {
 		super();
 		from(model);
 	}

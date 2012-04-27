@@ -35,25 +35,25 @@ public class TaskTO
 	}
 
 	@Override
-	public void from(final Task task) {
+	public final void from(final Task task) {
 		super.from(task);
 
-		setType(task.getType());
-		setCompleted((task.getCompletedDate() != null) ? true : false);
-		setDeletable(task.isDeletable());
-		setDueDate(task.getDueDate());
+		type = task.getType();
+		completed = (task.getCompletedDate() != null) ? true : false;
+		deletable = task.isDeletable();
+		dueDate = task.getDueDate();
 
 		if (task.getChallenge() != null) {
-			setChallengeId(task.getChallenge().getId());
+			challengeId = task.getChallenge().getId();
 		}
 
 		if (task.getChallengeReferral() != null) {
-			setChallengeReferralId(task.getChallengeReferral().getId());
-			setName(task.getChallengeReferral().getName());
-			setDescription(task.getChallengeReferral().getPublicDescription());
+			challengeReferralId = task.getChallengeReferral().getId();
+			name = task.getChallengeReferral().getName();
+			description = task.getChallengeReferral().getPublicDescription();
 		} else {
-			setName(task.getName());
-			setDescription(task.getDescription());
+			name = task.getName();
+			description = task.getDescription();
 		}
 
 		if (task.getConfidentialityLevel() != null) {
@@ -145,7 +145,7 @@ public class TaskTO
 		return completedDate == null ? null : new Date(completedDate.getTime());
 	}
 
-	public void setCompletedDate(Date completedDate) {
+	public void setCompletedDate(final Date completedDate) {
 		this.completedDate = completedDate == null ? null : new Date(
 				completedDate.getTime());
 	}
@@ -155,7 +155,7 @@ public class TaskTO
 				reminderSentDate.getTime());
 	}
 
-	public void setReminderSentDate(Date reminderSentDate) {
+	public void setReminderSentDate(final Date reminderSentDate) {
 		this.reminderSentDate = reminderSentDate == null ? null : new Date(
 				reminderSentDate.getTime());
 	}
@@ -164,7 +164,7 @@ public class TaskTO
 		return personId;
 	}
 
-	public void setPersonId(UUID personId) {
+	public void setPersonId(final UUID personId) {
 		this.personId = personId;
 	}
 

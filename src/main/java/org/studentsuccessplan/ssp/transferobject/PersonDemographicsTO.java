@@ -141,7 +141,7 @@ public class PersonDemographicsTO
 		return childCareArrangementId;
 	}
 
-	public void setChildCareArrangementId(UUID childCareArrangementId) {
+	public void setChildCareArrangementId(final UUID childCareArrangementId) {
 		this.childCareArrangementId = childCareArrangementId;
 	}
 

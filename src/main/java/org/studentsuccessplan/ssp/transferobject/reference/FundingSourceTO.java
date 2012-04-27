@@ -21,7 +21,7 @@ public class FundingSourceTO extends AbstractReferenceTO<FundingSource>
 		super(id, name, description);
 	}
 
-	public FundingSourceTO(FundingSource model) {
+	public FundingSourceTO(final FundingSource model) {
 		super();
 		from(model);
 	}

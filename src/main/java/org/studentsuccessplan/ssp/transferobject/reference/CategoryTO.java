@@ -21,7 +21,7 @@ public class CategoryTO extends AbstractReferenceTO<Category>
 		super(id, name, description);
 	}
 
-	public CategoryTO(Category model) {
+	public CategoryTO(final Category model) {
 		super();
 		from(model);
 	}

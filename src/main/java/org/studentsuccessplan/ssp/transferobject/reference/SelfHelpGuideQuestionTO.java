@@ -35,7 +35,7 @@ public class SelfHelpGuideQuestionTO extends
 		super(id, name, description);
 	}
 
-	public SelfHelpGuideQuestionTO(SelfHelpGuideQuestion model) {
+	public SelfHelpGuideQuestionTO(final SelfHelpGuideQuestion model) {
 		super();
 		from(model);
 	}
@@ -52,16 +52,16 @@ public class SelfHelpGuideQuestionTO extends
 	@Override
 	public final void from(final SelfHelpGuideQuestion model) {
 		super.from(model);
-		setQuestionNumber(model.getQuestionNumber());
-		setCritical(model.isCritical());
-		setMandatory(model.isMandatory());
+		questionNumber = model.getQuestionNumber();
+		critical = model.isCritical();
+		mandatory = model.isMandatory();
 
 		if (model.getSelfHelpGuide() != null) {
-			setSelfHelpGuideId(model.getSelfHelpGuide().getId());
+			selfHelpGuideId = model.getSelfHelpGuide().getId();
 		}
 
 		if (model.getChallenge() != null) {
-			setChallengeId(model.getChallenge().getId());
+			challengeId = model.getChallenge().getId();
 		}
 	}
 
@@ -69,7 +69,7 @@ public class SelfHelpGuideQuestionTO extends
 		return questionNumber;
 	}
 
-	public void setQuestionNumber(int questionNumber) {
+	public void setQuestionNumber(final int questionNumber) {
 		this.questionNumber = questionNumber;
 	}
 
@@ -77,7 +77,7 @@ public class SelfHelpGuideQuestionTO extends
 		return critical;
 	}
 
-	public void setCritical(boolean critical) {
+	public void setCritical(final boolean critical) {
 		this.critical = critical;
 	}
 
@@ -85,7 +85,7 @@ public class SelfHelpGuideQuestionTO extends
 		return mandatory;
 	}
 
-	public void setMandatory(boolean mandatory) {
+	public void setMandatory(final boolean mandatory) {
 		this.mandatory = mandatory;
 	}
 
@@ -93,7 +93,7 @@ public class SelfHelpGuideQuestionTO extends
 		return challengeId;
 	}
 
-	public void setChallengeId(UUID challengeId) {
+	public void setChallengeId(final UUID challengeId) {
 		this.challengeId = challengeId;
 	}
 
@@ -101,7 +101,7 @@ public class SelfHelpGuideQuestionTO extends
 		return selfHelpGuideId;
 	}
 
-	public void setSelfHelpGuideId(UUID selfHelpGuideId) {
+	public void setSelfHelpGuideId(final UUID selfHelpGuideId) {
 		this.selfHelpGuideId = selfHelpGuideId;
 	}
 

@@ -23,7 +23,7 @@ public class GoalTO extends AbstractReferenceTO<Goal>
 		super(id, name, description);
 	}
 
-	public GoalTO(Goal model) {
+	public GoalTO(final Goal model) {
 		super();
 		from(model);
 	}
@@ -41,12 +41,12 @@ public class GoalTO extends AbstractReferenceTO<Goal>
 		return confidentialityLevelId;
 	}
 
-	public void setConfidentialityLevelId(UUID confidentialityLevelId) {
+	public void setConfidentialityLevelId(final UUID confidentialityLevelId) {
 		this.confidentialityLevelId = confidentialityLevelId;
 	}
 
 	@Override
-	public void from(final Goal model) {
+	public final void from(final Goal model) {
 		super.from(model);
 
 		if (model.getConfidentialityLevel() != null) {

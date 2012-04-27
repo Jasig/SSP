@@ -21,7 +21,7 @@ public class MessageTemplateTO extends AbstractReferenceTO<MessageTemplate>
 		super(id, name, description);
 	}
 
-	public MessageTemplateTO(MessageTemplate model) {
+	public MessageTemplateTO(final MessageTemplate model) {
 		super();
 		from(model);
 	}

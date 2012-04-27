@@ -42,13 +42,13 @@ public class ServiceResponse {
 		StringBuilder sb;
 
 		// collect the error messages
-		List<String> errorMessages = Lists.newArrayList();
+		final List<String> errorMessages = Lists.newArrayList();
 		for (ObjectError error : e.getBindingResult().getAllErrors()) {
 			sb = new StringBuilder();
 
 			// get the field name if it is a field error.
 			if (error instanceof FieldError) {
-				FieldError fe = (FieldError) error;
+				final FieldError fe = (FieldError) error;
 				sb.append("[").append(fe.getField());
 			} else {
 				sb.append("[");

@@ -21,7 +21,7 @@ public class SelfHelpGuideTO extends AbstractReferenceTO<SelfHelpGuide>
 		super(id, name, description);
 	}
 
-	public SelfHelpGuideTO(SelfHelpGuide model) {
+	public SelfHelpGuideTO(final SelfHelpGuide model) {
 		super();
 		from(model);
 	}

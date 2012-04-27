@@ -26,7 +26,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		super(id, name, description);
 	}
 
-	public ChallengeReferralTO(ChallengeReferral model) {
+	public ChallengeReferralTO(final ChallengeReferral model) {
 		super();
 		from(model);
 	}

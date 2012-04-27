@@ -59,7 +59,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		super(id, name, description);
 	}
 
-	public ChallengeTO(Challenge model) {
+	public ChallengeTO(final Challenge model) {
 		super();
 		from(model);
 	}
@@ -83,9 +83,8 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		if (model.getSelfHelpGuideQuestions() != null) {
 			for (SelfHelpGuideQuestion question : model
 					.getSelfHelpGuideQuestions()) {
-				SelfHelpGuideQuestionTO questionTO = new SelfHelpGuideQuestionTO();
-				questionTO.from(question);
-				selfHelpGuideQuestions.add(questionTO);
+				selfHelpGuideQuestions
+						.add(new SelfHelpGuideQuestionTO(question));
 			}
 		}
 
@@ -95,23 +94,22 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		tags = model.getTags();
 
 		if (model.getDefaultConfidentialityLevel() != null) {
-			setDefaultConfidentialityLevelId(model
+			defaultConfidentialityLevelId = model
 					.getDefaultConfidentialityLevel()
-					.getId());
+					.getId();
 		}
 
 		if ((model.getChallengeChallengeReferrals() == null)
 				|| model.getChallengeChallengeReferrals().isEmpty()) {
-			setChallengeChallengeReferrals(new ArrayList<ChallengeReferralTO>());
+			challengeChallengeReferrals = new ArrayList<ChallengeReferralTO>();
 		} else {
 			final List<ChallengeReferralTO> referralTOs = Lists.newArrayList();
 			for (ChallengeChallengeReferral challengeReferral : model
 					.getChallengeChallengeReferrals()) {
-				ChallengeReferralTO referralTO = new ChallengeReferralTO();
-				referralTO.from(challengeReferral.getChallengeReferral());
-				referralTOs.add(referralTO);
+				referralTOs.add(new ChallengeReferralTO(challengeReferral
+						.getChallengeReferral()));
 			}
-			setChallengeChallengeReferrals(referralTOs);
+			challengeChallengeReferrals = referralTOs;
 		}
 	}
 
@@ -188,7 +186,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	}
 
 	public void setDefaultConfidentialityLevelId(
-			UUID defaultConfidentialityLevelId) {
+			final UUID defaultConfidentialityLevelId) {
 		this.defaultConfidentialityLevelId = defaultConfidentialityLevelId;
 	}
 

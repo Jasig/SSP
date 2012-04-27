@@ -21,7 +21,7 @@ public class VeteranStatusTO extends AbstractReferenceTO<VeteranStatus>
 		super(id, name, description);
 	}
 
-	public VeteranStatusTO(VeteranStatus model) {
+	public VeteranStatusTO(final VeteranStatus model) {
 		super();
 		from(model);
 	}

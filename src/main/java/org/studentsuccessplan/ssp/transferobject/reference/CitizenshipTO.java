@@ -21,7 +21,7 @@ public class CitizenshipTO extends AbstractReferenceTO<Citizenship>
 		super(id, name, description);
 	}
 
-	public CitizenshipTO(Citizenship model) {
+	public CitizenshipTO(final Citizenship model) {
 		super();
 		from(model);
 	}

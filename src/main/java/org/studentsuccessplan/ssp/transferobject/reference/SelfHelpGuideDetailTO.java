@@ -18,16 +18,14 @@ public class SelfHelpGuideDetailTO extends SelfHelpGuideTO implements
 	private List<SelfHelpGuideQuestionTO> questions;
 
 	@Override
-	public final void from(SelfHelpGuide model) {
+	public final void from(final SelfHelpGuide model) {
 		super.from(model);
 
 		setIntroductoryText(model.getIntroductoryText());
 
 		questions = Lists.newArrayList();
 		for (SelfHelpGuideQuestion question : model.getSelfHelpGuideQuestions()) {
-			SelfHelpGuideQuestionTO questionTO = new SelfHelpGuideQuestionTO();
-			questionTO.from(question);
-			questions.add(questionTO);
+			questions.add(new SelfHelpGuideQuestionTO(question));
 		}
 	}
 

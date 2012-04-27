@@ -9,7 +9,8 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class SelfHelpGuideGroupTO extends AbstractReferenceTO<SelfHelpGuideGroup>
+public class SelfHelpGuideGroupTO extends
+		AbstractReferenceTO<SelfHelpGuideGroup>
 		implements TransferObject<SelfHelpGuideGroup> {
 
 	public SelfHelpGuideGroupTO() {
@@ -21,7 +22,7 @@ public class SelfHelpGuideGroupTO extends AbstractReferenceTO<SelfHelpGuideGroup
 		super(id, name, description);
 	}
 
-	public SelfHelpGuideGroupTO(SelfHelpGuideGroup model) {
+	public SelfHelpGuideGroupTO(final SelfHelpGuideGroup model) {
 		super();
 		from(model);
 	}

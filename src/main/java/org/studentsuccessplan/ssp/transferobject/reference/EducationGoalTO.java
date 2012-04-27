@@ -21,7 +21,7 @@ public class EducationGoalTO extends AbstractReferenceTO<EducationGoal>
 		super(id, name, description);
 	}
 
-	public EducationGoalTO(EducationGoal model) {
+	public EducationGoalTO(final EducationGoal model) {
 		super();
 		from(model);
 	}

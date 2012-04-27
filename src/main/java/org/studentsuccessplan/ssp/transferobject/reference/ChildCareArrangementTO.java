@@ -9,7 +9,8 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class ChildCareArrangementTO extends AbstractReferenceTO<ChildCareArrangement>
+public class ChildCareArrangementTO extends
+		AbstractReferenceTO<ChildCareArrangement>
 		implements TransferObject<ChildCareArrangement> {
 
 	public ChildCareArrangementTO() {
@@ -21,7 +22,7 @@ public class ChildCareArrangementTO extends AbstractReferenceTO<ChildCareArrange
 		super(id, name, description);
 	}
 
-	public ChildCareArrangementTO(ChildCareArrangement model) {
+	public ChildCareArrangementTO(final ChildCareArrangement model) {
 		super();
 		from(model);
 	}

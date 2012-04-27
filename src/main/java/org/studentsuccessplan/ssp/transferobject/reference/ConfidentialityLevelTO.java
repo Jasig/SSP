@@ -29,7 +29,7 @@ public class ConfidentialityLevelTO extends
 		super(id, name, description);
 	}
 
-	public ConfidentialityLevelTO(ConfidentialityLevel model) {
+	public ConfidentialityLevelTO(final ConfidentialityLevel model) {
 		super();
 		from(model);
 	}
@@ -44,7 +44,7 @@ public class ConfidentialityLevelTO extends
 	}
 
 	@Override
-	public void from(final ConfidentialityLevel model) {
+	public final void from(final ConfidentialityLevel model) {
 		super.from(model);
 		acronym = model.getAcronym();
 	}
@@ -53,7 +53,7 @@ public class ConfidentialityLevelTO extends
 		return acronym;
 	}
 
-	public void setAcronym(String acronym) {
+	public void setAcronym(final String acronym) {
 		this.acronym = acronym;
 	}
 

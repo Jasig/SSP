@@ -21,7 +21,7 @@ public class ChallengeCategoryTO extends AbstractReferenceTO<ChallengeCategory>
 		super(id, name, description);
 	}
 
-	public ChallengeCategoryTO(ChallengeCategory model) {
+	public ChallengeCategoryTO(final ChallengeCategory model) {
 		super();
 		from(model);
 	}

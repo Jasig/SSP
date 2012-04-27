@@ -21,7 +21,7 @@ public class EthnicityTO extends AbstractReferenceTO<Ethnicity>
 		super(id, name, description);
 	}
 
-	public EthnicityTO(Ethnicity model) {
+	public EthnicityTO(final Ethnicity model) {
 		super();
 		from(model);
 	}

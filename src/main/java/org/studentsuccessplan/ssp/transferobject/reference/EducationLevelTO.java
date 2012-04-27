@@ -21,7 +21,7 @@ public class EducationLevelTO extends AbstractReferenceTO<EducationLevel>
 		super(id, name, description);
 	}
 
-	public EducationLevelTO(EducationLevel model) {
+	public EducationLevelTO(final EducationLevel model) {
 		super();
 		from(model);
 	}

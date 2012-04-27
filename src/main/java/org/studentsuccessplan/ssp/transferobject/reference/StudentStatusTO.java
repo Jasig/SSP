@@ -21,7 +21,7 @@ public class StudentStatusTO extends AbstractReferenceTO<StudentStatus>
 		super(id, name, description);
 	}
 
-	public StudentStatusTO(StudentStatus model) {
+	public StudentStatusTO(final StudentStatus model) {
 		super();
 		from(model);
 	}
