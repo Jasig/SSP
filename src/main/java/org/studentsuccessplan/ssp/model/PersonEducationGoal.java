@@ -111,5 +111,6 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		this.setPlannedOccupation(source.getPlannedOccupation());
 		this.setHowSureAboutMajor(source.getHowSureAboutMajor());
 		this.setMilitaryBranchDescription(source.getMilitaryBranchDescription());
+		this.setEducationGoal(source.getEducationGoal());
 	}
 }
