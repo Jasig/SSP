@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.studentsuccessplan.ssp.factory.tool.IntakeFormTOFactory;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
 import org.studentsuccessplan.ssp.model.reference.Genders;
@@ -64,6 +65,9 @@ public class IntakeController extends BaseController {
 	private transient IntakeService service;
 
 	@Autowired
+	private transient IntakeFormTOFactory factory;
+
+	@Autowired
 	private transient ChallengeService challengeService;
 
 	@Autowired
@@ -108,7 +112,7 @@ public class IntakeController extends BaseController {
 	public @ResponseBody
 	ServiceResponse save(final @PathVariable UUID studentId,
 			final @Valid @RequestBody IntakeFormTO intakeForm) throws Exception {
-		final IntakeForm model = intakeForm.asModel();
+		final IntakeForm model = factory.from(intakeForm);
 		model.getPerson().setId(studentId);
 		return new ServiceResponse(service.save(model));
 	}
@@ -144,25 +148,25 @@ public class IntakeController extends BaseController {
 
 		SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 		refData.put("challenges",
-				ChallengeTO.listToTOList(challengeService.getAll(sAndP)));
+				ChallengeTO.toTOList(challengeService.getAll(sAndP)));
 		refData.put("childCareArrangements", ChildCareArrangementTO
-				.listToTOList(childCareArrangementService.getAll(sAndP)));
+				.toTOList(childCareArrangementService.getAll(sAndP)));
 		refData.put("citizenships",
-				CitizenshipTO.listToTOList(citizenshipService.getAll(sAndP)));
+				CitizenshipTO.toTOList(citizenshipService.getAll(sAndP)));
 		refData.put("educationGoals", EducationGoalTO
-				.listToTOList(educationGoalService.getAll(sAndP)));
+				.toTOList(educationGoalService.getAll(sAndP)));
 		refData.put("educationLevels", EducationLevelTO
-				.listToTOList(educationLevelService.getAll(sAndP)));
+				.toTOList(educationLevelService.getAll(sAndP)));
 		refData.put("ethnicities",
-				EthnicityTO.listToTOList(ethnicityService.getAll(sAndP)));
+				EthnicityTO.toTOList(ethnicityService.getAll(sAndP)));
 		refData.put("fundingSources", FundingSourceTO
-				.listToTOList(fundingSourceService.getAll(sAndP)));
+				.toTOList(fundingSourceService.getAll(sAndP)));
 		refData.put("maritalStatuses", MaritalStatusTO
-				.listToTOList(maritalStatusService.getAll(sAndP)));
+				.toTOList(maritalStatusService.getAll(sAndP)));
 		refData.put("studentStatuses", StudentStatusTO
-				.listToTOList(studentStatusService.getAll(sAndP)));
+				.toTOList(studentStatusService.getAll(sAndP)));
 		refData.put("veteranStatuses", VeteranStatusTO
-				.listToTOList(veteranStatusService.getAll(sAndP)));
+				.toTOList(veteranStatusService.getAll(sAndP)));
 
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());

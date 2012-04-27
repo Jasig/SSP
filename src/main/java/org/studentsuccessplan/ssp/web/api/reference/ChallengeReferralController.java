@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.ChallengeReferralTOFactory;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
@@ -24,6 +26,14 @@ public class ChallengeReferralController
 	@Override
 	protected AuditableCrudService<ChallengeReferral> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient ChallengeReferralTOFactory factory;
+
+	@Override
+	protected TOFactory<ChallengeReferralTO, ChallengeReferral> getFactory() {
+		return factory;
 	}
 
 	protected ChallengeReferralController() {

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.studentsuccessplan.ssp.factory.TransferObjectListFactory;
+import org.studentsuccessplan.ssp.factory.PersonTOFactory;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
@@ -42,8 +42,8 @@ public class PersonController extends RestController<PersonTO> {
 	@Autowired
 	private transient PersonService service;
 
-	private static final TransferObjectListFactory<PersonTO, Person> TO_FACTORY = TransferObjectListFactory
-			.newFactory(PersonTO.class);
+	@Autowired
+	private transient PersonTOFactory factory;
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -55,7 +55,7 @@ public class PersonController extends RestController<PersonTO> {
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
 
-		return TO_FACTORY.toTOList(service.getAll(SortingAndPaging
+		return factory.asTOList(service.getAll(SortingAndPaging
 				.createForSingleSort(status, start, limit, sort, sortDirection,
 						null)));
 	}
@@ -82,7 +82,7 @@ public class PersonController extends RestController<PersonTO> {
 					"You submitted a person with an id to the create method.  Did you mean to save?");
 		}
 
-		final Person model = obj.asModel();
+		final Person model = factory.from(obj);
 
 		if (null != model) {
 			final Person createdModel = service.create(model);
@@ -104,7 +104,7 @@ public class PersonController extends RestController<PersonTO> {
 					"You submitted a person without an id to the save method.  Did you mean to create?");
 		}
 
-		final Person model = obj.asModel();
+		final Person model = factory.from(obj);
 		model.setId(id);
 
 		final Person savedPerson = service.save(model);

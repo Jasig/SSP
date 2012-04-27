@@ -53,7 +53,7 @@ public class SessionController extends BaseController {
 
 		// Convert model to a transfer object
 		final PersonTO pTo = new PersonTO();
-		pTo.fromModel(user.getPerson());
+		pTo.from(user.getPerson());
 
 		// Return authenticated person transfer object
 		return pTo;
