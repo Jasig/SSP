@@ -61,7 +61,7 @@ public class ChallengeDaoTest {
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setShowInSelfHelpSearch(false);
 		obj.setShowInStudentIntake(false);
-		obj.setConfidentialityLevel(confidentialityLevelDao
+		obj.setDefaultConfidentialityLevel(confidentialityLevelDao
 				.load(CONFIDENTIALITYLEVEL_ID));
 		dao.save(obj);
 
@@ -75,7 +75,7 @@ public class ChallengeDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 		assertEquals("Confidentiality level name did not match.",
-				CONFIDENTIALITYLEVEL_NAME, obj.getConfidentialityLevel()
+				CONFIDENTIALITYLEVEL_NAME, obj.getDefaultConfidentialityLevel()
 						.getName());
 
 		final List<Challenge> all = dao.getAll(ObjectStatus.ACTIVE);
