@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.ConfidentialityDisclosureAgreementTOFactory;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.ConfidentialityDisclosureAgreementService;
@@ -24,6 +26,14 @@ public class ConfidentialityDisclosureAgreementController
 	@Override
 	protected AuditableCrudService<ConfidentialityDisclosureAgreement> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient ConfidentialityDisclosureAgreementTOFactory factory;
+
+	@Override
+	protected TOFactory<ConfidentialityDisclosureAgreementTO, ConfidentialityDisclosureAgreement> getFactory() {
+		return factory;
 	}
 
 	protected ConfidentialityDisclosureAgreementController() {

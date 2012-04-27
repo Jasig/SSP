@@ -14,11 +14,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideContentTO;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideQuestionTO;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideDetailTO;
+import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideQuestionTO;
 import org.studentsuccessplan.ssp.web.api.AbstractControllerHttpTestSupport;
 import org.studentsuccessplan.ssp.web.api.reference.ChallengeController;
 
@@ -68,7 +68,7 @@ public class MyGpsSelfHelpGuideControllerIntegrationTest extends
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final SelfHelpGuideContentTO obj = controller
+		final SelfHelpGuideDetailTO obj = controller
 				.getContentById(SELFHELPGUIDE_ID);
 
 		assertEquals("Expected success from answer().", SELFHELPGUIDE_NAME,

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.FundingSourceTOFactory;
 import org.studentsuccessplan.ssp.model.reference.FundingSource;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.FundingSourceService;
@@ -14,7 +16,8 @@ import org.studentsuccessplan.ssp.transferobject.reference.FundingSourceTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/reference/fundingSource")
-public class FundingSourceController extends
+public class FundingSourceController
+		extends
 		AbstractAuditableReferenceController<FundingSource, FundingSourceTO> {
 
 	@Autowired
@@ -23,6 +26,14 @@ public class FundingSourceController extends
 	@Override
 	protected AuditableCrudService<FundingSource> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient FundingSourceTOFactory factory;
+
+	@Override
+	protected TOFactory<FundingSourceTO, FundingSource> getFactory() {
+		return factory;
 	}
 
 	protected FundingSourceController() {

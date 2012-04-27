@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.EducationGoalTOFactory;
 import org.studentsuccessplan.ssp.model.reference.EducationGoal;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.EducationGoalService;
@@ -14,7 +16,8 @@ import org.studentsuccessplan.ssp.transferobject.reference.EducationGoalTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/reference/educationGoal")
-public class EducationGoalController extends
+public class EducationGoalController
+		extends
 		AbstractAuditableReferenceController<EducationGoal, EducationGoalTO> {
 
 	@Autowired
@@ -23,6 +26,14 @@ public class EducationGoalController extends
 	@Override
 	protected AuditableCrudService<EducationGoal> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient EducationGoalTOFactory factory;
+
+	@Override
+	protected TOFactory<EducationGoalTO, EducationGoal> getFactory() {
+		return factory;
 	}
 
 	protected EducationGoalController() {

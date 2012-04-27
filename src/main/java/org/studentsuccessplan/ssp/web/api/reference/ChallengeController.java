@@ -6,30 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.ChallengeTOFactory;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 
-/**
- * Challenge controller responds to common REST requests with
- * {@link ChallengeTO} instances in JSON format.
- * <p>
- * Requires basic user authentication.
- * <p>
- * Mapped to URI path <code>/1/reference/challenge</code>
- * 
- * @author jon.adams
- */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/reference/challenge")
-public class ChallengeController extends
+public class ChallengeController
+		extends
 		AbstractAuditableReferenceController<Challenge, ChallengeTO> {
 
-	/**
-	 * Challenge service
-	 */
 	@Autowired
 	protected transient ChallengeService service;
 
@@ -38,10 +28,14 @@ public class ChallengeController extends
 		return service;
 	}
 
-	/**
-	 * Default constructor that initializes the instance with specific class
-	 * types for use by the parent methods.
-	 */
+	@Autowired
+	protected transient ChallengeTOFactory factory;
+
+	@Override
+	protected TOFactory<ChallengeTO, Challenge> getFactory() {
+		return factory;
+	}
+
 	protected ChallengeController() {
 		super(Challenge.class, ChallengeTO.class);
 	}

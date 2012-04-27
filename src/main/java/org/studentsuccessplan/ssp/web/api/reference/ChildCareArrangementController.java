@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.ChildCareArrangementTOFactory;
 import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.ChildCareArrangementService;
@@ -24,6 +26,14 @@ public class ChildCareArrangementController
 	@Override
 	protected AuditableCrudService<ChildCareArrangement> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient ChildCareArrangementTOFactory factory;
+
+	@Override
+	protected TOFactory<ChildCareArrangementTO, ChildCareArrangement> getFactory() {
+		return factory;
 	}
 
 	protected ChildCareArrangementController() {

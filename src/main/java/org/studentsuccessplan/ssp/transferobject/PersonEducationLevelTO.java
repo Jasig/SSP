@@ -1,13 +1,12 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
-import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonEducationLevel;
-import org.studentsuccessplan.ssp.model.reference.EducationLevel;
 
 import com.google.common.collect.Lists;
 
@@ -30,12 +29,12 @@ public class PersonEducationLevelTO
 
 	public PersonEducationLevelTO(final PersonEducationLevel model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
 	@Override
-	public final void fromModel(final PersonEducationLevel model) {
-		super.fromModel(model);
+	public final void from(final PersonEducationLevel model) {
+		super.from(model);
 
 		description = model.getDescription();
 
@@ -56,36 +55,8 @@ public class PersonEducationLevelTO
 		schoolName = model.getSchoolName();
 	}
 
-	@Override
-	public PersonEducationLevel addToModel(final PersonEducationLevel model) {
-		super.addToModel(model);
-
-		model.setDescription(getDescription());
-
-		if (getEducationLevelId() != null) {
-			model.setEducationLevel(new EducationLevel(getEducationLevelId()));
-		}
-
-		model.setGraduatedYear(getGraduatedYear());
-		model.setHighestGradeCompleted(getHighestGradeCompleted());
-		model.setLastYearAttended(getLastYearAttended());
-
-		if (getPersonId() != null) {
-			model.setPerson(new Person(getPersonId()));
-		}
-
-		model.setSchoolName(getSchoolName());
-
-		return model;
-	}
-
-	@Override
-	public PersonEducationLevel asModel() {
-		return addToModel(new PersonEducationLevel());
-	}
-
-	public static List<PersonEducationLevelTO> listToTOList(
-			final List<PersonEducationLevel> models) {
+	public static List<PersonEducationLevelTO> toTOList(
+			final Collection<PersonEducationLevel> models) {
 		final List<PersonEducationLevelTO> tos = Lists.newArrayList();
 		for (PersonEducationLevel model : models) {
 			tos.add(new PersonEducationLevelTO(model));

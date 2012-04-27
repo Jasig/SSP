@@ -269,7 +269,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 			return;
 		}
 
-		final List<TaskTO> taskTOs = TaskTO.tasksToTaskTOs(tasks);
+		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
 
 		final Map<String, Object> templateParameters = Maps.newHashMap();
 		templateParameters.put("fullName", student.getFullName());

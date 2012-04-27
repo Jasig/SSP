@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,14 +24,6 @@ public class ConfidentialityLevelTO extends
 		super();
 	}
 
-	public ConfidentialityLevelTO(final UUID id) {
-		super(id);
-	}
-
-	public ConfidentialityLevelTO(final UUID id, final String name) {
-		super(id, name);
-	}
-
 	public ConfidentialityLevelTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
@@ -38,44 +31,29 @@ public class ConfidentialityLevelTO extends
 
 	public ConfidentialityLevelTO(final ConfidentialityLevel model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
-	@Override
-	public void fromModel(final ConfidentialityLevel model) {
-		super.fromModel(model);
-
-		acronym = model.getAcronym();
-	}
-
-	@Override
-	public ConfidentialityLevel addToModel(final ConfidentialityLevel model) {
-		super.addToModel(model);
-
-		model.setAcronym(getAcronym());
-
-		return model;
-	}
-
-	@Override
-	public ConfidentialityLevel asModel() {
-		return addToModel(new ConfidentialityLevel());
-	}
-
-	public static List<ConfidentialityLevelTO> listToTOList(
-			final List<ConfidentialityLevel> models) {
-		final List<ConfidentialityLevelTO> tos = Lists.newArrayList();
+	public static List<ConfidentialityLevelTO> toTOList(
+			final Collection<ConfidentialityLevel> models) {
+		final List<ConfidentialityLevelTO> tObjects = Lists.newArrayList();
 		for (ConfidentialityLevel model : models) {
-			tos.add(new ConfidentialityLevelTO(model));
+			tObjects.add(new ConfidentialityLevelTO(model));
 		}
-		return tos;
+		return tObjects;
+	}
+
+	@Override
+	public final void from(final ConfidentialityLevel model) {
+		super.from(model);
+		acronym = model.getAcronym();
 	}
 
 	public String getAcronym() {
 		return acronym;
 	}
 
-	public void setAcronym(String acronym) {
+	public void setAcronym(final String acronym) {
 		this.acronym = acronym;
 	}
 

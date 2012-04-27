@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.studentsuccessplan.ssp.factory.TaskTOFactory;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.Task;
@@ -50,6 +51,14 @@ public class PersonTaskController extends
 
 	@Autowired
 	private transient TaskService service;
+
+	@Autowired
+	private transient TaskTOFactory factory;
+
+	@Override
+	protected TaskTOFactory getFactory() {
+		return factory;
+	}
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -99,7 +108,7 @@ public class PersonTaskController extends
 		for (Entry<String, List<Task>> tasksWithTaskGroup : tasksWithTaskGroups
 				.entrySet()) {
 			taskTOsWithTaskGroups.put(tasksWithTaskGroup.getKey(),
-					TaskTO.tasksToTaskTOs(tasksWithTaskGroup.getValue()));
+					TaskTO.toTOList(tasksWithTaskGroup.getValue()));
 		}
 
 		return taskTOsWithTaskGroups;
@@ -140,7 +149,7 @@ public class PersonTaskController extends
 				taskIds, personService.get(personId),
 				securityService.getSessionId(), sAndP);
 
-		return TaskTO.tasksToTaskTOs(tasks);
+		return TaskTO.toTOList(tasks);
 	}
 
 	/**

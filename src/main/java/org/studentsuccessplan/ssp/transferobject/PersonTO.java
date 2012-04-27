@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.transferobject;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -27,12 +28,12 @@ public class PersonTO
 
 	public PersonTO(final Person model) {
 		super();
-		fromModel(model);
+		from(model);
 	}
 
 	@Override
-	public final void fromModel(final Person model) {
-		super.fromModel(model);
+	public final void from(final Person model) {
+		super.from(model);
 
 		firstName = model.getFirstName();
 		middleInitial = model.getMiddleInitial();
@@ -55,39 +56,8 @@ public class PersonTO
 		enabled = model.isEnabled();
 	}
 
-	@Override
-	public Person addToModel(final Person model) {
-		super.addToModel(model);
-		model.setFirstName(getFirstName());
-		model.setMiddleInitial(getMiddleInitial());
-		model.setLastName(getLastName());
-		model.setBirthDate(getBirthDate());
-		model.setPrimaryEmailAddress(getPrimaryEmailAddress());
-		model.setSecondaryEmailAddress(getSecondaryEmailAddress());
-		model.setUsername(getUsername());
-		model.setUserId(getUserId());
-		model.setHomePhone(getHomePhone());
-		model.setWorkPhone(getWorkPhone());
-		model.setCellPhone(getCellPhone());
-		model.setAddressLine1(getAddressLine1());
-		model.setAddressLine2(getAddressLine2());
-		model.setCity(getCity());
-		model.setState(getState());
-		model.setZipCode(getZipCode());
-		model.setPhotoUrl(getPhotoUrl());
-		model.setSchoolId(getSchoolId());
-		model.setEnabled(isEnabled());
-
-		return model;
-	}
-
-	@Override
-	public Person asModel() {
-		return addToModel(new Person());
-	}
-
-	public static List<PersonTO> listToTOList(
-			final List<Person> models) {
+	public static List<PersonTO> toTOList(
+			final Collection<Person> models) {
 		final List<PersonTO> tos = Lists.newArrayList();
 		for (Person model : models) {
 			tos.add(new PersonTO(model));

@@ -58,11 +58,11 @@ public class ChallengeServiceImpl implements ChallengeService {
 	public Challenge save(final Challenge obj) throws ObjectNotFoundException {
 		final Challenge current = get(obj.getId());
 
-		if (obj.getConfidentialityLevel() == null) {
-			obj.setConfidentialityLevel(null);
+		if (obj.getDefaultConfidentialityLevel() == null) {
+			obj.setDefaultConfidentialityLevel(null);
 		} else {
-			obj.setConfidentialityLevel(confidentialityLevelDao.load(obj
-					.getConfidentialityLevel().getId()));
+			obj.setDefaultConfidentialityLevel(confidentialityLevelDao.load(obj
+					.getDefaultConfidentialityLevel().getId()));
 		}
 
 		current.overwrite(obj);

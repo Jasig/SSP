@@ -22,15 +22,6 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 		super();
 	}
 
-	public AbstractReferenceTO(final UUID id) {
-		super(id);
-	}
-
-	public AbstractReferenceTO(final UUID id, final String name) {
-		super(id);
-		this.name = name;
-	}
-
 	public AbstractReferenceTO(final UUID id, final String name,
 			final String description) {
 		super(id);
@@ -39,25 +30,12 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 	}
 
 	@Override
-	public void fromModel(final T model) {
-		super.fromModel(model);
+	public void from(final T model) {
+		super.from(model);
 
 		name = model.getName();
 		description = model.getDescription();
 	}
-
-	@Override
-	public T addToModel(final T model) {
-		super.addToModel(model);
-
-		model.setName(getName());
-		model.setDescription(getDescription());
-
-		return model;
-	}
-
-	@Override
-	public abstract T asModel();
 
 	@Override
 	public String getName() {

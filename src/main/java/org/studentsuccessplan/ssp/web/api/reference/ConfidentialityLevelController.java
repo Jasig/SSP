@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.ConfidentialityLevelTOFactory;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.ConfidentialityLevelService;
@@ -24,6 +26,14 @@ public class ConfidentialityLevelController
 	@Override
 	protected AuditableCrudService<ConfidentialityLevel> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient ConfidentialityLevelTOFactory factory;
+
+	@Override
+	protected TOFactory<ConfidentialityLevelTO, ConfidentialityLevel> getFactory() {
+		return factory;
 	}
 
 	protected ConfidentialityLevelController() {

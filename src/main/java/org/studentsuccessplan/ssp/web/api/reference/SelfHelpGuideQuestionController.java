@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.SelfHelpGuideQuestionTOFactory;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideQuestionService;
@@ -24,6 +26,14 @@ public class SelfHelpGuideQuestionController
 	@Override
 	protected AuditableCrudService<SelfHelpGuideQuestion> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient SelfHelpGuideQuestionTOFactory factory;
+
+	@Override
+	protected TOFactory<SelfHelpGuideQuestionTO, SelfHelpGuideQuestion> getFactory() {
+		return factory;
 	}
 
 	protected SelfHelpGuideQuestionController() {

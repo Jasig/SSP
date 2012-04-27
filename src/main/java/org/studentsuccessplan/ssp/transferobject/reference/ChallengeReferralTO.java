@@ -1,15 +1,14 @@
 package org.studentsuccessplan.ssp.transferobject.reference;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		implements TransferObject<ChallengeReferral>, Serializable {
@@ -22,14 +21,6 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		super();
 	}
 
-	public ChallengeReferralTO(final UUID id) {
-		super(id);
-	}
-
-	public ChallengeReferralTO(final UUID id, final String name) {
-		super(id, name);
-	}
-
 	public ChallengeReferralTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
@@ -37,45 +28,22 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 
 	public ChallengeReferralTO(final ChallengeReferral model) {
 		super();
-		fromModel(model);
+		from(model);
+	}
+
+	public static List<ChallengeReferralTO> toTOList(
+			final Collection<ChallengeReferral> models) {
+		final List<ChallengeReferralTO> tObjects = Lists.newArrayList();
+		for (ChallengeReferral model : models) {
+			tObjects.add(new ChallengeReferralTO(model));
+		}
+		return tObjects;
 	}
 
 	@Override
-	public final void fromModel(final ChallengeReferral model) {
-		super.fromModel(model);
+	public final void from(final ChallengeReferral model) {
+		super.from(model);
 		publicDescription = model.getPublicDescription();
-	}
-
-	@Override
-	public ChallengeReferral addToModel(final ChallengeReferral model) {
-		super.addToModel(model);
-		model.setPublicDescription(getPublicDescription());
-		return model;
-	}
-
-	@Override
-	public ChallengeReferral asModel() {
-		return addToModel(new ChallengeReferral());
-	}
-
-	public static List<ChallengeReferralTO> listToTOList(
-			final List<ChallengeReferral> models) {
-		final List<ChallengeReferralTO> tos = Lists.newArrayList();
-		for (ChallengeReferral model : models) {
-			tos.add(new ChallengeReferralTO(model));
-		}
-
-		return tos;
-	}
-
-	public static Set<ChallengeReferralTO> listToTOSet(
-			final List<ChallengeReferral> models) {
-		final Set<ChallengeReferralTO> tos = Sets.newHashSet();
-		for (ChallengeReferral model : models) {
-			tos.add(new ChallengeReferralTO(model));
-		}
-
-		return tos;
 	}
 
 	public String getPublicDescription() {

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.EthnicityTOFactory;
 import org.studentsuccessplan.ssp.model.reference.Ethnicity;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.EthnicityService;
@@ -14,7 +16,8 @@ import org.studentsuccessplan.ssp.transferobject.reference.EthnicityTO;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/reference/ethnicity")
-public class EthnicityController extends
+public class EthnicityController
+		extends
 		AbstractAuditableReferenceController<Ethnicity, EthnicityTO> {
 
 	@Autowired
@@ -23,6 +26,14 @@ public class EthnicityController extends
 	@Override
 	protected AuditableCrudService<Ethnicity> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient EthnicityTOFactory factory;
+
+	@Override
+	protected TOFactory<EthnicityTO, Ethnicity> getFactory() {
+		return factory;
 	}
 
 	protected EthnicityController() {

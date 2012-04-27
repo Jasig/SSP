@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.studentsuccessplan.ssp.factory.TOFactory;
+import org.studentsuccessplan.ssp.factory.reference.MessageTemplateTOFactory;
 import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.reference.MessageTemplateService;
@@ -24,6 +26,14 @@ public class MessageTemplateController
 	@Override
 	protected AuditableCrudService<MessageTemplate> getService() {
 		return service;
+	}
+
+	@Autowired
+	protected transient MessageTemplateTOFactory factory;
+
+	@Override
+	protected TOFactory<MessageTemplateTO, MessageTemplate> getFactory() {
+		return factory;
 	}
 
 	protected MessageTemplateController() {
