@@ -4,7 +4,6 @@ Ext.define('Ssp.store.reference.FundingSources', {
     storeId: 'fundingSourcesReferenceStore',
     constructor: function(){
     	this.callParent(arguments);
-    	var url = this.getProxy().url;
-    	Ext.apply(this.getProxy(),{url: url+'fundingSource/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'fundingSource/'});
     }
 });

@@ -1,5 +1,5 @@
 Ext.define('Ssp.controller.AdminViewController', {
-    extend: 'Ssp.controller.AbstractViewController',
+    extend: 'Ext.app.Controller',
     
     views: [
         'admin.AdminTreeMenu', 'admin.forms.AbstractReferenceAdmin'

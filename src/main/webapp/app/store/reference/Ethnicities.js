@@ -4,7 +4,6 @@ Ext.define('Ssp.store.reference.Ethnicities', {
     storeId: 'ethnicitiesReferenceStore',
     constructor: function(){
     	this.callParent(arguments);
-    	var url = this.getProxy().url;
-    	Ext.apply(this.getProxy(),{url: url+'ethnicity/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'ethnicity/'});
     }
 });

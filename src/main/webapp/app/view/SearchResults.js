@@ -6,12 +6,11 @@ Ext.define('Ssp.view.SearchResults', {
     collapsible: false,
     collapseDirection: 'left',
     store: Ext.getStore('Students'),
-  
+    
     columns: [
-        { header: "Photo", dataIndex: 'photoUrl', renderer: Ext.create('Ssp.util.ColumnRendererUtils').renderPhotoIcon, flex: 50 },		        
+        { header: "Photo", dataIndex: 'photoUrl', renderer: Ssp.util.ColumnRendererUtils.renderPhotoIcon, flex: 50 },		        
         { text: 'Name', xtype:'templatecolumn', tpl:'{firstName} {middleInitial} {lastName}', flex: 50}
     ],
-    // { header: 'Name',  dataIndex: 'name',  }
     
     dockedItems: [{
         xtype: 'pagingtoolbar',

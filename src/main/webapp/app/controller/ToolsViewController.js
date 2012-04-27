@@ -1,9 +1,9 @@
 Ext.define('Ssp.controller.ToolsViewController', {
-	extend: 'Ssp.controller.AbstractViewController',
-
+	extend: 'Ext.app.Controller',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-        currentPerson: 'currentPerson'
+        currentPerson: 'currentPerson',
+        formUtils: 'formRendererUtils'
     },
 	views: [
         'ToolsMenu','Tools'
@@ -29,7 +29,8 @@ Ext.define('Ssp.controller.ToolsViewController', {
 			        name: "Student Intake",
 			        toolType: "StudentIntake"
 			    }]		
-			);// this.currentPerson.get('tools') );
+			);
+			// this.currentPerson.get('tools') );
 			Ext.ComponentQuery.query('toolsmenu')[0].getSelectionModel().select(0);
 			this.loadTool('Profile');
 		},this);
@@ -50,15 +51,16 @@ Ext.define('Ssp.controller.ToolsViewController', {
 	loadTool: function( toolType ) {
 		var toolsView = Ext.ComponentQuery.query('tools')[0];
 		var comp = null;
+		var formUtils = this.formUtils;
 		var tabs;
 		var form = null;
 		var person = this.currentPerson;
 		var personId = person.get('id');
-		
+				
 		// Kill existing tools, so no dupe ids are registered
 		if (toolsView != null)
 		{
-			Ssp.util.FormRendererUtils.cleanAll(toolsView);
+			this.formUtils.cleanAll(toolsView);
 		}
 		
 		// create the tool by type
@@ -74,8 +76,6 @@ Ext.define('Ssp.controller.ToolsViewController', {
 				Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
 				Form.load(personId,{
 					success: function( formData ) {
-						var formUtils = Ext.create('Ssp.util.FormRendererUtils');
-						
 						// PERSON RECORD
 						var person = formData.data.person;
 						var personDemographics = formData.data.personDemographics;
@@ -114,7 +114,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 						Ext.getStore('reference.StudentStatuses').loadData( studentStatuses );
 						Ext.getStore('reference.VeteranStatuses').loadData( veteranStatuses ); 
 						
-						// Load records for each of the forms
+						// LOAD RECORDS FOR EACH OF THE FORMS
 						Ext.getCmp('StudentIntakePersonal').loadRecord( person );
 						
 						if ( personDemographics != null && personDemographics != undefined ){

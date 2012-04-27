@@ -1,5 +1,9 @@
 Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 	extend: 'Ext.data.Model',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    }, 
 	autoLoad: false,
 	fields: [{name: 'person', 
 		      convert: function(value, record) {
@@ -32,7 +36,8 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
              'personEducationLevels',
              'personFundingSources',
              'personChallenges',
-             'referenceData'],    
+             'referenceData'],
+
 	proxy: {
 		type: 'rest',
 		url: '/ssp/api/1/tool/studentIntake/',

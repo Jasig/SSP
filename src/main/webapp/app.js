@@ -14,40 +14,35 @@ Ext.require([
 	'Ssp.model.reference.AbstractReference',
 	'Ssp.view.admin.forms.AbstractReferenceAdmin',
 	'Ssp.mixin.ApiProperties',
+	'Ssp.util.FormRendererUtils',
+	'Ssp.util.ColumnRendererUtils',
 	'Ext.tab.*'
 ]);
 
 Ext.onReady(function(){
 	Deft.Injector.configure({
 	    currentPerson: {
-	    	fn: function(){
-	    		return new Ssp.model.Student({id:"0"}, {})
-	    	},
-	    	singleton: true
+	        fn: function(){
+	            return new Ssp.model.Student({id:"0"});
+	        },
+	        singleton: true
 	    },
 	    apiProperties: {
-	    	fn: function(){
-	    		return new Ssp.mixin.ApiProperties({})
+	        fn: function(){
+	            return new Ssp.mixin.ApiProperties({});
+	        },
+	        singleton: true
+	    },
+	    formRendererUtils:{
+	        fn: function(){
+	            return new Ssp.util.FormRendererUtils({});
 	    	},
-	    	singleton: true
+	        singleton: true
 	    }
 	});
 });
 
-
 Ext.application({
-	/*  To-DO determine required objects in the Requires config. These reference items
-	 * cause an issue with loading the interface in Firefox and not in Chrome. 
-			   ,
-			   'Ssp.view.admin.forms.Challenges',
-			   'Ssp.view.admin.forms.Ethnicity',
-			   'Ext.data.UuidGenerator',
-			   'Ext.container.Viewport',
-			   ,
-               'Ssp.util.FormRendererUtils'
-			   ,
-	*/
-			   
     name: 'Ssp',
     appFolder: 'app',
 			
@@ -72,7 +67,6 @@ Ext.application({
 			  'reference.YesNo'], 
 	
 	controllers: [
-        	'AbstractViewController',
         	'AdminViewController',
         	'MainViewController',
         	'SearchResultsViewController',
@@ -81,6 +75,8 @@ Ext.application({
     ],
           		
     launch: function( app ) {
+
+    	//Ext.getStore('Students').load();
     	
 		// Load the application shell
         Ext.create('Ext.container.Viewport', {
@@ -88,8 +84,8 @@ Ext.application({
             id: 'sspView',
             alias: 'widget.sspview',
             items: []
-        });   
-    	
+        });
+        
  		// Display the application
         this.getController('MainViewController').displayApplication();
    }

@@ -8,17 +8,14 @@ Ext.define('Ssp.store.reference.AbstractReferences', {
     },
 	autoLoad: false,
 	autoSync: true,
-    pageSize: 15,
+    pageSize: 40,
     params : {
 		page : 0,
 		start : 0,
-		limit : 15
+		limit : 40
 	},
 	constructor: function(){
-		var url = this.apiProperties.getContext.call(this);
-		url += 'reference/';
-		Ext.apply(this, { proxy: this.apiProperties.proxy });
-    	Ext.apply(this.getProxy(),{url: url});
-    	this.callParent(arguments);
+		Ext.apply(this, { proxy: this.apiProperties.getProxy('reference/') });
+		this.callParent(arguments);
 	}
 });

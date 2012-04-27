@@ -1,6 +1,9 @@
 Ext.define('Ssp.controller.MainViewController', {
-    extend: 'Ssp.controller.AbstractViewController',
-    
+    extend: 'Ext.app.Controller',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        formUtils: 'formRendererUtils'
+    },    
 	views: [
         'Main'
     ],
@@ -45,7 +48,7 @@ Ext.define('Ssp.controller.MainViewController', {
     	var sspView = Ext.getCmp('sspView');
     	if (sspView.items.length > 0)
     	{
-    		this.formRendererUtils.cleanAll(sspView);
+    		this.formUtils.cleanAll(sspView);
     	}
     	return sspView;
     },
@@ -54,6 +57,8 @@ Ext.define('Ssp.controller.MainViewController', {
     	var mainView;
     	var arrViewItems;
     	var sspView = this.cleanSspView();
+    	// load students
+    	Ext.getStore('Students').load();
     	mainView = Ext.create('Ssp.view.Main');
 		arrViewItems = [{ 
 							xtype: 'searchresults', 

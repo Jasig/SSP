@@ -3,7 +3,6 @@ Ext.define('Ssp.store.Tools', {
     model: 'Ssp.model.Tool',
     storeId: 'toolsStore',
 	autoLoad: false,
-
     proxy: {
 		type: 'ajax',
 		api: {
@@ -15,5 +14,4 @@ Ext.define('Ssp.store.Tools', {
 			successProperty: 'success'
 		}
 	}
-	
 });

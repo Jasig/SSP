@@ -1,18 +1,6 @@
 Ext.define('Ssp.util.FormRendererUtils',{	
 	extend: 'Ext.Component',
 	
-	statics: {
-	    cleanAll: function(view){
-	    	if (view.items)
-	    	{
-	        	if (view.items.length > 0)
-	        	{
-	        		view.removeAll(true);
-	        	}	
-	    	}
-	    }
-	},
-	
 	init: function() {
 		this.callParent(arguments);
     },	

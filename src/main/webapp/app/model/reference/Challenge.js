@@ -4,7 +4,7 @@ Ssp.ChallengeTO = Ext.define('Ssp.model.reference.Challenge', {
              {name: 'showInStudentIntake', type: 'boolean'},
              {name: 'showInSelfHelpSearch', type: 'boolean'},
              {name: 'selfHelpGuideQuestion', type: 'string'},
-             {name: 'selfHelpGuideDescription', type: 'string'},
-             {name: 'defaultConfidentialityLevel', type: 'string'}
+             {name: 'selfHelpGuideDescription', type: 'string'}
+             // {name: 'defaultConfidentialityLevel', type: 'string'}
              ]
 });

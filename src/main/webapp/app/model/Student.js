@@ -26,14 +26,4 @@ Ext.define('Ssp.model.Student', {
     		 //'cumGPA',
     		 //'academicPrograms'
     		 ]
-
-/*
-{name: 'name', 
-    convert: function(value, record) {
-  	  return record.get('firstName') + " " + record.get('middleInitial') + " " + record.get('lastName');
-    	}
-},
-*/
-
-    
 });

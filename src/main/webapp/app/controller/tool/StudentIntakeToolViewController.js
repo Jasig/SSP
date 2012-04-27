@@ -1,6 +1,9 @@
 Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
-    extend: 'Ssp.controller.AbstractViewController',
-    
+    extend: 'Ext.app.Controller',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    }, 
 	views: [
         'tools.StudentIntake'
     ],
@@ -19,9 +22,6 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
     },
 	
 	save: function() {
-		
-		var formUtils = Ext.create('Ssp.util.FormRendererUtils');
-		
 		var personalForm = Ext.getCmp('StudentIntakePersonal').getForm();
 		var demographicsForm = Ext.getCmp('StudentIntakeDemographics').getForm();
 		var educationPlansForm = Ext.getCmp('StudentIntakeEducationPlans').getForm();
@@ -103,7 +103,7 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			// console.log(intakeData);
 			
 			Ext.Ajax.request({
-				url: '/ssp/api/1/tool/studentIntake/' + personalFormModel.data.id,
+				url: this.apiProperties.createUrl('tool/studentIntake/' + personalFormModel.data.id),
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
 				jsonData: intakeData,

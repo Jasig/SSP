@@ -4,7 +4,6 @@ Ext.define('Ssp.store.reference.ChildCareArrangements', {
     storeId: 'childCareArrangementsReferenceStore',
     constructor: function(){
     	this.callParent(arguments);
-    	var url = this.getProxy().url;
-    	Ext.apply(this.getProxy(),{url: url+'childCareArrangement/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'childCareArrangement/'});
     }
 });

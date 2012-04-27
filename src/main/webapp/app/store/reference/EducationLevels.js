@@ -4,7 +4,6 @@ Ext.define('Ssp.store.reference.EducationLevels', {
     storeId: 'educationLevelsReferenceStore',
     constructor: function(){
     	this.callParent(arguments);
-    	var url = this.getProxy().url;
-    	Ext.apply(this.getProxy(),{url: url+'educationLevel/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'educationLevel/'});
     }
 });

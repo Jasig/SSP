@@ -4,7 +4,6 @@ Ext.define('Ssp.store.reference.VeteranStatuses', {
     storeId: 'veteranStatusesReferenceStore',
     constructor: function(){
     	this.callParent(arguments);
-    	var url = this.getProxy().url;
-    	Ext.apply(this.getProxy(),{url: url+'veteranStatus/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'veteranStatus/'});
     }
 });
