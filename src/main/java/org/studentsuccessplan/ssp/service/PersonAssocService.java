@@ -9,9 +9,9 @@ public interface PersonAssocService<T> extends AuditableCrudService<T> {
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
 	 * 
+	 * @param person
 	 * @param sAndP
-	 *            SortingAndPaging
-	 * 
+	 *            Sorting and paging options
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	List<T> getAllForPerson(Person person, SortingAndPaging sAndP);

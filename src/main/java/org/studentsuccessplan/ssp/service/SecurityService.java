@@ -49,6 +49,8 @@ public interface SecurityService {
 
 	/**
 	 * Explicitly return the AnonymousUser
+	 * 
+	 * @return The anonymous user
 	 */
 	SspUser anonymousUser();
 }

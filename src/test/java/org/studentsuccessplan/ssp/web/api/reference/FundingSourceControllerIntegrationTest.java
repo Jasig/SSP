@@ -1,6 +1,7 @@
 package org.studentsuccessplan.ssp.web.api.reference;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -16,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
@@ -35,16 +35,16 @@ import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 @Transactional
 public class FundingSourceControllerIntegrationTest {
 
-	@Autowired
-	private FundingSourceController controller;
-
-	private static final UUID FundingSource_ID = UUID
+	private static final UUID FUNDINGSOURCE_ID = UUID
 			.fromString("a6521a04-b531-4c25-b6a6-609f3a509f85");
 
-	private static final String FundingSource_NAME = "Test Funding Source";
+	private static final String FUNDINGSOURCE_NAME = "Test Funding Source";
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient FundingSourceController controller;
+
+	@Autowired
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	/**
 	 * Setup the security service with the admin user for use by
@@ -52,7 +52,7 @@ public class FundingSourceControllerIntegrationTest {
 	 * auto-fill properties are correctly filled.
 	 */
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
@@ -68,14 +68,14 @@ public class FundingSourceControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		FundingSourceTO obj = controller.get(FundingSource_ID);
+		final FundingSourceTO obj = controller.get(FUNDINGSOURCE_ID);
 
 		assertNotNull(
 				"Returned FundingSourceTO from the controller should not have been null.",
 				obj);
 
 		assertEquals("Returned FundingSource.Name did not match.",
-				FundingSource_NAME, obj.getName());
+				FUNDINGSOURCE_NAME, obj.getName());
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class FundingSourceControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		FundingSourceTO obj = controller.get(UUID.randomUUID());
+		final FundingSourceTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned FundingSourceTO from the controller should have been null.",
@@ -111,8 +111,8 @@ public class FundingSourceControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		String testString1 = "testString1";
-		String testString2 = "testString1";
+		final String testString1 = "testString1";
+		final String testString2 = "testString1";
 
 		// Check validation of 'no ID for create()'
 		FundingSourceTO obj = new FundingSourceTO(UUID.randomUUID(),
@@ -157,11 +157,12 @@ public class FundingSourceControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<FundingSourceTO> list = controller.getAll(ObjectStatus.ACTIVE,
+		final List<FundingSourceTO> list = controller.getAll(
+				ObjectStatus.ACTIVE,
 				null, null, null, null);
 
 		assertNotNull("List should not have been null.", list);
-		assertTrue("List action should have returned some objects.",
-				list.size() > 0);
+		assertFalse("List action should have returned some objects.",
+				list.isEmpty());
 	}
 }

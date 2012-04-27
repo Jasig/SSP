@@ -35,17 +35,17 @@ import org.studentsuccessplan.ssp.web.api.reference.ChallengeController;
 public class MyGpsSelfHelpGuideResponseControllerIntegrationTest extends
 		AbstractControllerHttpTestSupport<ChallengeController, ChallengeTO> {
 
-	private static final UUID SelfHelpGuide_ID = UUID
+	private static final UUID SELFHELPGUIE_ID = UUID
 			.fromString("4fd534df-e7fe-e555-7c71-0042593b1990");
 
-	private static final UUID SelfHelpGuideQuestion_ID = UUID
+	private static final UUID SELFHELPGUIDEQUESTION_ID = UUID
 			.fromString("0e46733e-193d-4950-ba29-4cd0f9620561");
 
-	private static final UUID Challenge_ID = UUID
+	private static final UUID CHALLENGE_ID = UUID
 			.fromString("38f7ae25-902f-4381-851e-2e2319adb1bd");
 
 	@Autowired
-	private MyGpsSelfHelpGuideResponseController controller;
+	private transient MyGpsSelfHelpGuideResponseController controller;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -73,22 +73,23 @@ public class MyGpsSelfHelpGuideResponseControllerIntegrationTest extends
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		UUID shgrId = UUID.fromString(controller.initiate(SelfHelpGuide_ID));
+		final UUID shgrId = UUID.fromString(controller
+				.initiate(SELFHELPGUIE_ID));
 
-		boolean success = controller.answer(shgrId, SelfHelpGuideQuestion_ID,
+		boolean success = controller.answer(shgrId, SELFHELPGUIDEQUESTION_ID,
 				true);
 		assertTrue("Expected success from answer().", success);
 
 		success = controller.complete(shgrId);
 		assertTrue("Expected success from answer().", success);
 
-		SelfHelpGuideResponseTO obj = controller.getById(shgrId);
-		List<ChallengeTO> challenges = obj.getChallengesIdentified();
+		final SelfHelpGuideResponseTO obj = controller.getById(shgrId);
+		final List<ChallengeTO> challenges = obj.getChallengesIdentified();
 		assertFalse("Challenges identified should not have been empty.",
 				challenges.isEmpty());
 
-		ChallengeTO challenge = challenges.get(0);
-		assertEquals("Challenge ID did not match.", Challenge_ID,
+		final ChallengeTO challenge = challenges.get(0);
+		assertEquals("Challenge ID did not match.", CHALLENGE_ID,
 				challenge.getId());
 	}
 }
