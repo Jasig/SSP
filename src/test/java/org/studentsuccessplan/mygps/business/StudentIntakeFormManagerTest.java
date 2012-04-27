@@ -52,11 +52,11 @@ import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class StudentIntakeFormManagerTest {
 
-	private static String STUDENTINTAKEFORM_EMPTY = "studentintakeform_empty.json";
+	private static final String STUDENTINTAKEFORM_EMPTY = "studentintakeform_empty.json";
 
-	private static String STUDENTINTAKEFORM_COMPLETED = "studentintakeform_completed.json";
+	private static final String STUDENTINTAKEFORM_COMPLETED = "studentintakeform_completed.json";
 
-	private static String STUDENTINTAKEFORM_COMPLETED_WITHOUTAGREEMENT = "studentintakeform_completed_withoutagreement.json";
+	private static final String STUDENTINTAKEFORM_COMPLETED_WITHOUTAGREEMENT = "studentintakeform_completed_withoutagreement.json";
 
 	@Autowired
 	private transient StudentIntakeFormManager formManager;
@@ -85,11 +85,11 @@ public class StudentIntakeFormManagerTest {
 	 */
 	@Test
 	public void testCreate() throws ObjectNotFoundException {
-		FormTO form = formManager.create();
+		final FormTO form = formManager.create();
 
 		assertNotNull("Form should not have been null.", form);
 
-		FormSectionTO section = form
+		final FormSectionTO section = form
 				.getFormSectionById(StudentIntakeFormManager.SECTION_CONFIDENTIALITY_ID);
 
 		assertNotNull("Confidentiality section should not have been null.",
@@ -110,39 +110,35 @@ public class StudentIntakeFormManagerTest {
 	@Test
 	public void testSaveInMemory() throws ObjectNotFoundException {
 		// Setup
-		FormTO form = formManager.create();
+		final FormTO form = formManager.create();
 
 		assertNotNull("FormTO should not have been null.", form);
 
-		FormSectionTO section = form
+		final FormSectionTO section = form
 				.getFormSectionById(StudentIntakeFormManager.SECTION_CONFIDENTIALITY_ID);
 
 		assertNotNull("Confidentiality section should not have been null.",
 				section);
 
 		// Fill in values
-		// TODO
-
 		section.getFormQuestionById(
 				StudentIntakeFormManager.SECTION_CONFIDENTIALITY_QUESTION_AGREE_ID)
 				.setValueBoolean(true);
 
 		// Run
-		Person person = formManager.save(form);
+		final Person person = formManager.save(form);
 
 		// Assert
 		assertNotNull(
 				"StudentIntakeFormManager.Save should have returned an updated Person instance.",
 				person);
 
-		Set<PersonConfidentialityDisclosureAgreement> agreements = person
+		final Set<PersonConfidentialityDisclosureAgreement> agreements = person
 				.getConfidentialityDisclosureAgreements();
 		assertNotNull("Person agreements should not have been null.",
 				agreements);
 		assertFalse("Person should have some accepted agreements.",
 				agreements.isEmpty());
-
-		// TODO: More assertions
 	}
 
 	/**
@@ -162,12 +158,12 @@ public class StudentIntakeFormManagerTest {
 	public void testSaveEmpty() throws JsonParseException,
 			JsonMappingException, IOException, ObjectNotFoundException {
 		// Setup
-		FormTO form = loadJson(STUDENTINTAKEFORM_EMPTY);
+		final FormTO form = loadJson(STUDENTINTAKEFORM_EMPTY);
 
 		assertNotNull("FormTO should not have been null.", form);
 
 		// Run
-		Person person = formManager.save(form);
+		final Person person = formManager.save(form);
 
 		assertNotNull(
 				"StudentIntakeFormManager.Save should have returned an updated Person instance.",
@@ -175,24 +171,24 @@ public class StudentIntakeFormManagerTest {
 
 		// Assertions for Demographics
 
-		Set<PersonConfidentialityDisclosureAgreement> agreements = person
+		final Set<PersonConfidentialityDisclosureAgreement> agreements = person
 				.getConfidentialityDisclosureAgreements();
 		assertTrue("Person agreements should have been null or empty.",
 				agreements == null || agreements.isEmpty());
 
-		PersonDemographics demographics = person.getDemographics();
+		final PersonDemographics demographics = person.getDemographics();
 		assertNotNull("Missing demographics.", demographics);
 
 		// Assertions for Education Levels
 
-		Set<PersonEducationLevel> levels = person.getEducationLevels();
+		final Set<PersonEducationLevel> levels = person.getEducationLevels();
 
 		assertNotNull("Education Levels set should not have been null.", levels);
 
 		assertTrue("Education levels should have been empty.", levels.isEmpty());
 
 		// Assertions for Funding
-		Set<PersonFundingSource> sources = person.getFundingSources();
+		final Set<PersonFundingSource> sources = person.getFundingSources();
 
 		assertNotNull("Funding Sources set should not have been null.", sources);
 
@@ -200,7 +196,7 @@ public class StudentIntakeFormManagerTest {
 				sources.isEmpty());
 
 		// Assertions for Challenges
-		Set<PersonChallenge> challenges = person.getChallenges();
+		final Set<PersonChallenge> challenges = person.getChallenges();
 
 		assertNotNull("Challenges set should not have been null.", challenges);
 
@@ -225,17 +221,17 @@ public class StudentIntakeFormManagerTest {
 	public void testSaveCompletedWithoutAgreement() throws JsonParseException,
 			JsonMappingException, IOException, ObjectNotFoundException {
 		// Setup
-		FormTO form = loadJson(STUDENTINTAKEFORM_COMPLETED_WITHOUTAGREEMENT);
+		final FormTO form = loadJson(STUDENTINTAKEFORM_COMPLETED_WITHOUTAGREEMENT);
 
 		assertNotNull("FormTO should not have been null.", form);
 
-		FormSectionTO section = form
+		final FormSectionTO section = form
 				.getFormSectionById(StudentIntakeFormManager.SECTION_CONFIDENTIALITY_ID);
 
 		assertNull("Confidentiality section should have been null.", section);
 
 		// Run
-		Person person = formManager.save(form);
+		final Person person = formManager.save(form);
 
 		// Assert
 		assertNotNull(
@@ -260,7 +256,7 @@ public class StudentIntakeFormManagerTest {
 	public void testSaveCompleted() throws JsonParseException,
 			JsonMappingException, IOException, ObjectNotFoundException {
 		// Setup
-		FormTO form = loadJson(STUDENTINTAKEFORM_COMPLETED);
+		final FormTO form = loadJson(STUDENTINTAKEFORM_COMPLETED);
 		FormSectionTO section = null;
 		String value = null;
 
@@ -288,21 +284,21 @@ public class StudentIntakeFormManagerTest {
 						+ value, Genders.M, Genders.valueOf(value));
 
 		// Run
-		Person person = formManager.save(form);
+		final Person person = formManager.save(form);
 
 		assertNotNull(
 				"StudentIntakeFormManager.Save should have returned an updated Person instance.",
 				person);
 
 		// Assertions for Demographics
-		Set<PersonConfidentialityDisclosureAgreement> agreements = person
+		final Set<PersonConfidentialityDisclosureAgreement> agreements = person
 				.getConfidentialityDisclosureAgreements();
 		assertNotNull("Person agreements should not have been null.",
 				agreements);
 		assertFalse("Person should have some accepted agreements.",
 				agreements.isEmpty());
 
-		PersonDemographics demographics = person.getDemographics();
+		final PersonDemographics demographics = person.getDemographics();
 		assertNotNull("Missing demographics.", demographics);
 
 		assertEquals("Marital status does not match.", "Married", demographics
@@ -311,8 +307,8 @@ public class StudentIntakeFormManagerTest {
 		assertEquals("Ethnicity does not match.", "Prefer Not To Answer",
 				demographics.getEthnicity().getName());
 
-		assertTrue("Person gender does not match.",
-				Genders.M.equals(demographics.getGender()));
+		assertEquals("Person gender does not match.",
+				Genders.M, demographics.getGender());
 
 		assertEquals("Citizenship does not match.", "US Citizen", demographics
 				.getCitizenship().getName());
@@ -346,7 +342,7 @@ public class StudentIntakeFormManagerTest {
 				demographics.getShift());
 
 		// Assertions for Education Plan
-		PersonEducationPlan educationPlan = person.getEducationPlan();
+		final PersonEducationPlan educationPlan = person.getEducationPlan();
 
 		assertNotNull("Missing education plan.", educationPlan);
 
@@ -369,7 +365,7 @@ public class StudentIntakeFormManagerTest {
 				educationPlan.getGradeTypicallyEarned());
 
 		// Assertions for Education Goal
-		PersonEducationGoal goal = person.getEducationGoal();
+		final PersonEducationGoal goal = person.getEducationGoal();
 
 		assertNotNull("Missing education goal.", goal);
 
@@ -387,14 +383,14 @@ public class StudentIntakeFormManagerTest {
 
 		// Assertions for Education Levels
 
-		Set<PersonEducationLevel> levels = person.getEducationLevels();
+		final Set<PersonEducationLevel> levels = person.getEducationLevels();
 
 		assertNotNull("Education Levels set should not have been null.", levels);
 
 		assertEquals("Education levels should have included 2 items.", 2,
 				levels.size());
 
-		PersonEducationLevel level = levels.iterator().next();
+		final PersonEducationLevel level = levels.iterator().next();
 
 		assertNotNull("The first Education Level should not have been null.",
 				level);
@@ -407,16 +403,16 @@ public class StudentIntakeFormManagerTest {
 								.getName()));
 
 		// Assertions for Funding
-		Set<PersonFundingSource> sources = person.getFundingSources();
+		final Set<PersonFundingSource> sources = person.getFundingSources();
 
 		assertNotNull("Funding Sources set should not have been null.", sources);
 
 		assertEquals("Funding Sources should have included 2 items.", 2,
 				sources.size());
 
-		Iterator<PersonFundingSource> iter = sources.iterator();
+		final Iterator<PersonFundingSource> iter = sources.iterator();
 		iter.next();
-		PersonFundingSource source = iter.next();
+		final PersonFundingSource source = iter.next();
 
 		assertNotNull("The second Funding Source should not have been null.",
 				source);
@@ -428,14 +424,14 @@ public class StudentIntakeFormManagerTest {
 								.getName()));
 
 		// Assertions for Challenges
-		Set<PersonChallenge> challenges = person.getChallenges();
+		final Set<PersonChallenge> challenges = person.getChallenges();
 
 		assertNotNull("Challenges set should not have been null.", challenges);
 
 		assertEquals("Challenges should have included 3 items.", 3,
 				challenges.size());
 
-		PersonChallenge challenge = challenges.iterator().next();
+		final PersonChallenge challenge = challenges.iterator().next();
 
 		assertNotNull("The first Challenge should not have been null.",
 				challenge);
@@ -467,16 +463,16 @@ public class StudentIntakeFormManagerTest {
 	 * @exception IOException
 	 *                if test file could not be loaded
 	 */
-	private FormTO loadJson(String file) throws JsonParseException,
+	private FormTO loadJson(final String file) throws JsonParseException,
 			JsonMappingException, IOException {
 		// Load file
 		BufferedReader in = new BufferedReader(new InputStreamReader(getClass()
 				.getResourceAsStream(file)));
 
-		String json = in.readLine();
+		final String json = in.readLine();
 		LOGGER.warn(json);
 
-		FormTO form = objectMapper.readValue(json, FormTO.class);
+		final FormTO form = objectMapper.readValue(json, FormTO.class);
 
 		if (in != null) {
 			in.close();

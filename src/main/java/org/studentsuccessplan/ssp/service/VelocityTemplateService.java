@@ -14,8 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Exposes velocity templating engine to the application. Caches Templates by
- * the templateId.
+ * Exposes the velocity template engine to the application.
+ * <p>
+ * Caches Templates by the templateId.
  */
 @Service
 public class VelocityTemplateService {
@@ -33,6 +34,12 @@ public class VelocityTemplateService {
 	 * @param parameters
 	 *            - variables that are inserted as requested by the template
 	 * @return content
+	 * @throws ResourceNotFoundException
+	 *             If resource was not found
+	 * @throws ParseErrorException
+	 *             If there was a parsing error
+	 * @throws MethodInvocationException
+	 *             MethodInvocationException
 	 */
 	public String generateContentFromTemplate(final String templateText,
 			final String templateId,

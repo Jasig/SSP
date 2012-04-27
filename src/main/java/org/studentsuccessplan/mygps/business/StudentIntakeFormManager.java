@@ -1382,7 +1382,7 @@ public class StudentIntakeFormManager {
 									SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID)
 							.getValue());
 
-			// :TODO
+			// TODO Add EducationGoal.OtherDescription field
 			// studentEducationGoal.setOtherDescription(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID).getValue());
 
 			studentEducationGoal.setHowSureAboutMajor(Integer

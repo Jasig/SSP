@@ -7,7 +7,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +40,8 @@ public class SelfHelpGuideServiceTest {
 	}
 
 	@Test
-	public void testGetAll_notAuthenticated() {
-		List<SelfHelpGuide> daoAll = new ArrayList<SelfHelpGuide>();
+	public void testGetAllNotAuthenticated() {
+		final List<SelfHelpGuide> daoAll = new ArrayList<SelfHelpGuide>();
 		daoAll.add(new SelfHelpGuide());
 
 		expect(securityService.isAuthenticated()).andReturn(false);
@@ -51,16 +50,16 @@ public class SelfHelpGuideServiceTest {
 		replay(dao);
 		replay(securityService);
 
-		List<SelfHelpGuide> all = service.getAll(new SortingAndPaging(
+		final List<SelfHelpGuide> all = service.getAll(new SortingAndPaging(
 				ObjectStatus.ACTIVE));
-		assertTrue(all.size() > 0);
+		assertFalse(all.isEmpty());
 		verify(dao);
 		verify(securityService);
 	}
 
 	@Test
-	public void testGetAll_authenticated() {
-		List<SelfHelpGuide> daoAll = new ArrayList<SelfHelpGuide>();
+	public void testGetAllAuthenticated() {
+		final List<SelfHelpGuide> daoAll = new ArrayList<SelfHelpGuide>();
 		daoAll.add(new SelfHelpGuide());
 
 		expect(securityService.isAuthenticated()).andReturn(true);
@@ -69,17 +68,17 @@ public class SelfHelpGuideServiceTest {
 		replay(dao);
 		replay(securityService);
 
-		List<SelfHelpGuide> all = service.getAll(new SortingAndPaging(
+		final List<SelfHelpGuide> all = service.getAll(new SortingAndPaging(
 				ObjectStatus.ACTIVE));
-		assertTrue(all.size() > 0);
+		assertFalse(all.isEmpty());
 		verify(dao);
 		verify(securityService);
 	}
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuide daoOne = new SelfHelpGuide(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuide daoOne = new SelfHelpGuide(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -91,8 +90,8 @@ public class SelfHelpGuideServiceTest {
 
 	@Test
 	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuide daoOne = new SelfHelpGuide(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuide daoOne = new SelfHelpGuide(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -105,8 +104,8 @@ public class SelfHelpGuideServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuide daoOne = new SelfHelpGuide(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuide daoOne = new SelfHelpGuide(id);
 
 		expect(dao.get(id)).andReturn(daoOne).times(2);
 		expect(dao.save(daoOne)).andReturn(daoOne);
