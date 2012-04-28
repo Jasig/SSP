@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.studentsuccessplan.ssp.dao.PersonDemographicsDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
@@ -56,7 +55,7 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 
 	@Override
 	public PersonDemographics forPerson(Person person) {
-		return dao.forPerson(person);
+		return person.getDemographics();
 	}
 
 	@Override
