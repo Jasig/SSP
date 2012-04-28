@@ -31,15 +31,15 @@ import org.hibernate.annotations.Type;
  * </p>
  * 
  * <p>
- * {@link org.studentsuccessplan.ssp.dao.AuditableEntityInterceptor} will automatically
- * fill the creation/modification stamps as appropriate in the persistence
- * layer.
+ * {@link org.studentsuccessplan.ssp.dao.AuditableEntityInterceptor} will
+ * automatically fill the creation/modification stamps as appropriate in the
+ * persistence layer.
  * </p>
  * 
  * @author daniel.bower
  */
 @MappedSuperclass
-public class Auditable {
+public abstract class Auditable {
 	@Id
 	@Type(type = "pg-uuid")
 	@GeneratedValue(generator = "uuid")
@@ -100,17 +100,76 @@ public class Auditable {
 	 * Empty constructor.
 	 */
 	public Auditable() {
+		super();
 	}
 
-	public Auditable(UUID id) {
+	public Auditable(final UUID id) {
+		super();
 		this.id = id;
+	}
+
+	protected abstract int hashPrime();
+
+	@Override
+	public int hashCode() {
+		int result = 1;
+		result = (hashPrime() * result)
+				+ ((id == null) ? 0 : id.hashCode())
+				+ ((objectStatus == null) ? 0 : objectStatus.hashCode())
+				+ ((modifiedDate == null) ? 0 : modifiedDate.hashCode())
+				+ ((modifiedBy == null) ? 0 : modifiedBy.getId().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Auditable other = (Auditable) obj;
+
+		return hasSameDomainSignature(other);
+	}
+
+	private boolean hasSameDomainSignature(final Auditable other) {
+		if ((modifiedBy == null) || (modifiedBy.getId() == null)) {
+			if ((other.getModifiedBy() != null)
+					&& (other.getModifiedBy().getId() != null)) {
+				return false;
+			}
+		} else if (other.getModifiedBy() == null) {
+			return false;
+		} else if (!modifiedBy.getId().equals(other.getModifiedBy().getId())) {
+			return false;
+		}
+
+		return compareProps(id, other.getId()) &&
+				compareProps(objectStatus, other.getObjectStatus()) &&
+				compareProps(modifiedDate, other.getModifiedDate());
+	}
+
+	private boolean compareProps(Object o1, Object o2) {
+		if (o1 == null) {
+			if (o2 != null) {
+				return false;
+			}
+		} else if (!o1.equals(o2)) {
+			return false;
+		}
+		return true;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(final UUID id) {
 		this.id = id;
 	}
 

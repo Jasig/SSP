@@ -590,4 +590,9 @@ public class Person extends Auditable implements Serializable {
 	public void setStrengths(String strengths) {
 		this.strengths = strengths;
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 3;
+	};
 }

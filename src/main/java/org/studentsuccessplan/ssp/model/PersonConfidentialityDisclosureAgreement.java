@@ -71,4 +71,9 @@ public class PersonConfidentialityDisclosureAgreement extends Auditable
 		confidentialityDisclosureAgreement = source
 				.getConfidentialityDisclosureAgreement();
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 7;
+	};
 }

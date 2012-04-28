@@ -60,4 +60,9 @@ public class Ethnicity extends AbstractReference implements Serializable {
 	public Ethnicity(UUID id, String name, String description) {
 		super(id, name, description);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 101;
+	};
 }

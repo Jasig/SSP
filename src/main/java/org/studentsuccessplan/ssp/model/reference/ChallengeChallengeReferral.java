@@ -40,4 +40,9 @@ public class ChallengeChallengeReferral extends Auditable implements
 		this.challengeReferral = challengeReferral;
 	}
 
+	@Override
+	protected int hashPrime() {
+		return 59;
+	};
+
 }

@@ -60,4 +60,9 @@ public class FundingSource extends AbstractReference implements Serializable {
 	public FundingSource(UUID id, String name, String description) {
 		super(id, name, description);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 103;
+	};
 }

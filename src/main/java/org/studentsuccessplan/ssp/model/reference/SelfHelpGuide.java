@@ -166,4 +166,9 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 		this.selfHelpGuideGroups = selfHelpGuideGroups;
 	}
 
+	@Override
+	protected int hashPrime() {
+		return 127;
+	};
+
 }

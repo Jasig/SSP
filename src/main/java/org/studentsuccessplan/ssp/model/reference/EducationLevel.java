@@ -72,4 +72,9 @@ public class EducationLevel extends AbstractReference implements Serializable {
 	public EducationLevel(UUID id, String name, String description) {
 		super(id, name, description);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 97;
+	};
 }

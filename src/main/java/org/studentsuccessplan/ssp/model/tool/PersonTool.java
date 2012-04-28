@@ -55,4 +55,9 @@ public class PersonTool extends Auditable implements Serializable {
 		this.tool = tool;
 	}
 
+	@Override
+	protected int hashPrime() {
+		return 41;
+	};
+
 }

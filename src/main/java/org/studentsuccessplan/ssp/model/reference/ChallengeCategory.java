@@ -61,4 +61,9 @@ public class ChallengeCategory extends AbstractReference implements
 	public ChallengeCategory(UUID id, String name, String description) {
 		super(id, name, description);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 53;
+	};
 }

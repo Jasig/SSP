@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ChallengeReferral extends AbstractReference implements
-Serializable {
+		Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,7 +36,7 @@ Serializable {
 
 	@OneToMany(mappedBy = "challengeReferral")
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals =
-	new HashSet<ChallengeChallengeReferral>(0);
+			new HashSet<ChallengeChallengeReferral>(0);
 
 	/**
 	 * Constructor
@@ -107,4 +107,9 @@ Serializable {
 	public void setShowInSelfHelpGuide(boolean showInSelfHelpGuide) {
 		this.showInSelfHelpGuide = showInSelfHelpGuide;
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 61;
+	};
 }

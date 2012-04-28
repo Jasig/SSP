@@ -61,4 +61,9 @@ public class SelfHelpGuideGroup extends AbstractReference implements
 	public SelfHelpGuideGroup(UUID id, String name, String description) {
 		super(id, name, description);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 131;
+	};
 }

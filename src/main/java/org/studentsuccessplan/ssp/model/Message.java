@@ -84,4 +84,8 @@ public class Message extends Auditable {
 		this.sentDate = sentDate == null ? null : new Date(sentDate.getTime());
 	}
 
+	@Override
+	protected int hashPrime() {
+		return 2;
+	};
 }

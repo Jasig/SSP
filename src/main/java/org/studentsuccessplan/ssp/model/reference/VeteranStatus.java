@@ -81,4 +81,9 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 	public void setSortOrder(short sortOrder) {
 		this.sortOrder = sortOrder;
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 149;
+	};
 }

@@ -81,4 +81,9 @@ public class MessageTemplate extends AbstractReference {
 	public String bodyTemplateId() {
 		return getId().toString() + "-b-" + getModifiedDate().getTime();
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 113;
+	};
 }

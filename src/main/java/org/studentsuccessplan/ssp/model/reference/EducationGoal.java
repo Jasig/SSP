@@ -75,4 +75,9 @@ public class EducationGoal extends AbstractReference implements Serializable {
 		this.otherDescription = otherDescription;
 	}
 
+	@Override
+	protected int hashPrime() {
+		return 83;
+	};
+
 }

@@ -61,4 +61,9 @@ public class ChildCareArrangement extends AbstractReference implements
 	public ChildCareArrangement(UUID id, String name, String description) {
 		super(id, name, description);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 71;
+	};
 }

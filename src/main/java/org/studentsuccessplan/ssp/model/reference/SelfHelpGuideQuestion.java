@@ -140,4 +140,9 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 		this.selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponses;
 	}
 
+	@Override
+	protected int hashPrime() {
+		return 137;
+	};
+
 }

@@ -227,4 +227,9 @@ public class Task extends Auditable implements Serializable {
 			ConfidentialityLevel confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 37;
+	};
 }

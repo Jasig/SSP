@@ -60,4 +60,9 @@ public class StudentStatus extends AbstractReference implements Serializable {
 	public StudentStatus(UUID id, String name, String description) {
 		super(id, name, description);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 139;
+	};
 }

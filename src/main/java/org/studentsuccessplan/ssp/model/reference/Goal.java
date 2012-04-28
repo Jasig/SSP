@@ -86,4 +86,9 @@ public class Goal extends AbstractReference implements
 			ConfidentialityLevel confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 107;
+	};
 }

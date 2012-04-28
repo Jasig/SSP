@@ -113,4 +113,9 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		this.setMilitaryBranchDescription(source.getMilitaryBranchDescription());
 		this.setEducationGoal(source.getEducationGoal());
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 13;
+	};
 }

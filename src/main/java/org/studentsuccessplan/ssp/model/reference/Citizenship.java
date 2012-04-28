@@ -60,4 +60,9 @@ public class Citizenship extends AbstractReference implements Serializable {
 	public Citizenship(UUID id, String name, String description) {
 		super(id, name, description);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 67;
+	};
 }

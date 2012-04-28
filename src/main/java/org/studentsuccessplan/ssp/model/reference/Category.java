@@ -59,4 +59,9 @@ public class Category extends AbstractReference implements Serializable {
 	public Category(final UUID id, final String name, final String description) {
 		super(id, name, description);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 43;
+	};
 }

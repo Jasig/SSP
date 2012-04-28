@@ -80,4 +80,9 @@ public class ConfidentialityLevel extends AbstractReference implements
 	public void setAcronym(String acronym) {
 		this.acronym = acronym;
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 79;
+	};
 }

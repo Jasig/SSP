@@ -81,4 +81,9 @@ public class ConfidentialityDisclosureAgreement extends AbstractReference
 	public void setText(String text) {
 		this.text = text;
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 73;
+	};
 }

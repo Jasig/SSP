@@ -129,4 +129,9 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 	public void overwrite(PersonEducationLevel source) {
 		this.setDescription(source.getDescription());
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 17;
+	};
 }

@@ -87,4 +87,9 @@ public class PersonChallenge extends Auditable implements Serializable {
 	public void overwrite(PersonChallenge source) {
 		this.setDescription(source.getDescription());
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 5;
+	};
 }

@@ -219,4 +219,9 @@ public class Challenge extends AbstractReference implements Serializable {
 		 * (source.setChallengeChallengeReferrals());
 		 */
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 47;
+	};
 }

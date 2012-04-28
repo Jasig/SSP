@@ -80,4 +80,9 @@ public class PersonFundingSource extends Auditable implements Serializable {
 	public void overwrite(PersonFundingSource source) {
 		this.setDescription(source.getDescription());
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 23;
+	};
 }

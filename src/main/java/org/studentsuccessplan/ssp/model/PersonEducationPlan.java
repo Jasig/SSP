@@ -111,4 +111,9 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 		setGradeTypicallyEarned(source.getGradeTypicallyEarned());
 		setStudentStatus(source.getStudentStatus());
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 19;
+	};
 }

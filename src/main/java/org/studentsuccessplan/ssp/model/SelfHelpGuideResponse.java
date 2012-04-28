@@ -94,4 +94,9 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 		this.selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponses;
 	}
 
+	@Override
+	protected int hashPrime() {
+		return 31;
+	};
+
 }

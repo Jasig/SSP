@@ -361,4 +361,9 @@ public class PersonDemographics extends Auditable implements Serializable {
 		this.setCoach(coach);
 		this.setChildCareArrangement(childCareArrangement);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 11;
+	};
 }

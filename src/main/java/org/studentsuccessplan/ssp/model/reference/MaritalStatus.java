@@ -60,4 +60,9 @@ public class MaritalStatus extends AbstractReference implements Serializable {
 	public MaritalStatus(UUID id, String name, String description) {
 		super(id, name, description);
 	}
+
+	@Override
+	protected int hashPrime() {
+		return 109;
+	};
 }
