@@ -74,22 +74,22 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 		}
 
 		if ((tObject.getPersonEducationLevels() != null)
-				&& (tObject.getPersonEducationLevels().size() > 0)) {
-			model.getPerson().setEducationLevels(
-					personEducationLevelTOFactory.asSet(
+				&& !tObject.getPersonEducationLevels().isEmpty()) {
+			model.getPerson().getEducationLevels()
+					.addAll(personEducationLevelTOFactory.asSet(
 							tObject.getPersonEducationLevels()));
 		}
 
 		if ((tObject.getPersonFundingSources() != null)
-				&& (tObject.getPersonFundingSources().size() > 0)) {
-			model.getPerson().setFundingSources(
+				&& tObject.getPersonFundingSources().isEmpty()) {
+			model.getPerson().getFundingSources().addAll(
 					personFundingSourceTOFactory.asSet(
 							tObject.getPersonFundingSources()));
 		}
 
 		if ((tObject.getPersonChallenges() != null)
-				&& (tObject.getPersonChallenges().size() > 0)) {
-			model.getPerson().setChallenges(
+				&& !tObject.getPersonChallenges().isEmpty()) {
+			model.getPerson().getChallenges().addAll(
 					personChallengeTOFactory.asSet(
 							tObject.getPersonChallenges()));
 		}
