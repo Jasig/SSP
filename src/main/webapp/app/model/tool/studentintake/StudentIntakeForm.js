@@ -7,7 +7,7 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 	autoLoad: false,
 	fields: [{name: 'person', 
 		      convert: function(value, record) {
-		            var person  = Ext.create('Ssp.model.Student',{});
+		            var person  = Ext.create('Ssp.model.Person',{});
 		            person.populateFromGenericObject( value );		
 		            return person;
 		      	}

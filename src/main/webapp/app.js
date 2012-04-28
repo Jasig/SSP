@@ -6,7 +6,7 @@ Ext.Loader.setConfig({
 });
 
 Ext.require([
-	'Ssp.model.Student',
+	'Ssp.model.Person',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -23,7 +23,7 @@ Ext.onReady(function(){
 	Deft.Injector.configure({
 	    currentPerson: {
 	        fn: function(){
-	            return new Ssp.model.Student({id:"0"});
+	            return new Ssp.model.Person({id:"0"});
 	        },
 	        singleton: true
 	    },
