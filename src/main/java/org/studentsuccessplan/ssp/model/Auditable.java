@@ -115,17 +115,19 @@ public abstract class Auditable {
 		int result = 1;
 		result = (hashPrime() * result);
 
-		if (id == null) {
+		if (getId() == null) {
 			result = result + super.hashCode();
 		} else {
-			result = result + ((id == null) ? 0 : id.hashCode());
+			result = result + ((getId() == null) ? 0 : getId().hashCode());
 		}
 
 		result = result
-				+ ((objectStatus == null) ? 0 : objectStatus.hashCode())
-				+ ((modifiedDate == null) ? 0 : modifiedDate.hashCode())
-				+ (((modifiedBy == null) || (modifiedBy.getId() == null)) ? 0
-						: modifiedBy.getId().hashCode());
+				+ ((getObjectStatus() == null) ? 0 : getObjectStatus()
+						.hashCode())
+				+ ((getModifiedDate() == null) ? 0 : getModifiedDate()
+						.hashCode())
+				+ (((getModifiedBy() == null) || (getModifiedBy().getId() == null)) ? 0
+						: getModifiedBy().getId().hashCode());
 		return result;
 	}
 
@@ -134,32 +136,41 @@ public abstract class Auditable {
 		if (this == obj) {
 			return true;
 		}
+
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
+
+		if (!(obj instanceof Auditable)) {
 			return false;
 		}
+
 		final Auditable other = (Auditable) obj;
+
+		// secretly checking for same model object
+		if (other.hashPrime() != hashPrime()) {
+			return false;
+		}
 
 		return hasSameDomainSignature(other);
 	}
 
 	private boolean hasSameDomainSignature(final Auditable other) {
-		if ((modifiedBy == null) || (modifiedBy.getId() == null)) {
+		if ((getModifiedBy() == null) || (getModifiedBy().getId() == null)) {
 			if ((other.getModifiedBy() != null)
 					&& (other.getModifiedBy().getId() != null)) {
 				return false;
 			}
 		} else if (other.getModifiedBy() == null) {
 			return false;
-		} else if (!modifiedBy.getId().equals(other.getModifiedBy().getId())) {
+		} else if (!getModifiedBy().getId().equals(
+				other.getModifiedBy().getId())) {
 			return false;
 		}
 
-		return compareProps(id, other.getId()) &&
-				compareProps(objectStatus, other.getObjectStatus()) &&
-				compareProps(modifiedDate, other.getModifiedDate());
+		return compareProps(getId(), other.getId()) &&
+				compareProps(getObjectStatus(), other.getObjectStatus()) &&
+				compareProps(getModifiedDate(), other.getModifiedDate());
 	}
 
 	private boolean compareProps(Object o1, Object o2) {

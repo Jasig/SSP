@@ -51,11 +51,7 @@ class AuditableTest {
 		Auditable a2 = new AuditableSubClass2(id:id)
 		assertFalse("with diff classes, obj should not be equal, even with same id", a1.equals(a2))
 		assertFalse("with diff classes, obj should not be equal, even with same id - backwards", a2.equals(a1))
-		assertTrue("obj1 should be equal to self", a2.equals(a2))
-		assertTrue("obj2 should be equal to self",a1.equals(a1))
 		assertTrue("hashcode should be different for different classes", a1.hashCode()!= a2.hashCode())
-		assertEquals("hashcode should be same for same classes - obj1", a1.hashCode(), a1.hashCode())
-		assertEquals("hashcode should be same for same classes - obj2", a2.hashCode(), a2.hashCode() )
 	}
 
 	@Test
