@@ -3,6 +3,8 @@ package org.studentsuccessplan.ssp.model
 import static org.junit.Assert.*
 import org.junit.Test
 
+import com.google.common.collect.Sets
+
 class AuditableTest {
 
 	class AuditableSubClass extends Auditable{
@@ -54,5 +56,32 @@ class AuditableTest {
 		assertTrue("hashcode should be different for different classes", a1.hashCode()!= a2.hashCode())
 		assertEquals("hashcode should be same for same classes - obj1", a1.hashCode(), a1.hashCode())
 		assertEquals("hashcode should be same for same classes - obj2", a2.hashCode(), a2.hashCode() )
+	}
+
+	@Test
+	public void testSetOperations() {
+		Auditable pel1 = new AuditableSubClass()
+		Auditable pel2 = new AuditableSubClass()
+		Set<Auditable> container = Sets.newHashSet();
+
+		container.add(pel1)
+		container.add(pel2);
+
+		assertEquals("hashcode with null id calculated incorrectly", 2, container.size())
+
+		container = Sets.newHashSet()
+		pel1.setId(UUID.randomUUID())
+		container.add(pel1)
+		pel2.setId(UUID.randomUUID())
+		container.add(pel2)
+
+		assertEquals("hashcode with different id should not be equal", 2, container.size())
+
+		container = Sets.newHashSet()
+		container.add(pel1)
+		pel2.setId(pel1.getId())
+		container.add(pel2)
+
+		assertEquals("hashcode with same id should be equal", 1, container.size())
 	}
 }

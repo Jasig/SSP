@@ -113,11 +113,19 @@ public abstract class Auditable {
 	@Override
 	public int hashCode() {
 		int result = 1;
-		result = (hashPrime() * result)
-				+ ((id == null) ? 0 : id.hashCode())
+		result = (hashPrime() * result);
+
+		if (id == null) {
+			result = result + super.hashCode();
+		} else {
+			result = result + ((id == null) ? 0 : id.hashCode());
+		}
+
+		result = result
 				+ ((objectStatus == null) ? 0 : objectStatus.hashCode())
 				+ ((modifiedDate == null) ? 0 : modifiedDate.hashCode())
-				+ ((modifiedBy == null) ? 0 : modifiedBy.getId().hashCode());
+				+ (((modifiedBy == null) || (modifiedBy.getId() == null)) ? 0
+						: modifiedBy.getId().hashCode());
 		return result;
 	}
 
