@@ -6,8 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.dao.PersonEducationGoalDao;
 import org.studentsuccessplan.ssp.factory.AbstractAuditableTOFactory;
 import org.studentsuccessplan.ssp.factory.PersonEducationGoalTOFactory;
+import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonEducationGoal;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.reference.EducationGoalService;
 import org.studentsuccessplan.ssp.transferobject.PersonEducationGoalTO;
 
@@ -27,6 +29,9 @@ public class PersonEducationGoalTOFactoryImpl extends
 	@Autowired
 	private transient EducationGoalService educationGoalService;
 
+	@Autowired
+	private transient PersonService personService;
+
 	@Override
 	protected PersonEducationGoalDao getDao() {
 		return dao;
@@ -35,6 +40,15 @@ public class PersonEducationGoalTOFactoryImpl extends
 	@Override
 	public PersonEducationGoal from(final PersonEducationGoalTO tObject)
 			throws ObjectNotFoundException {
+
+		if ((tObject.getId() == null) && (tObject.getPersonId() != null)) {
+			Person person = personService.get(tObject.getPersonId());
+			PersonEducationGoal unsetModel = person.getEducationGoal();
+			if (unsetModel != null) {
+				tObject.setId(unsetModel.getId());
+			}
+		}
+
 		final PersonEducationGoal model = super.from(tObject);
 
 		model.setHowSureAboutMajor(tObject.getHowSureAboutMajor());

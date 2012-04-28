@@ -6,8 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.dao.PersonEducationPlanDao;
 import org.studentsuccessplan.ssp.factory.AbstractAuditableTOFactory;
 import org.studentsuccessplan.ssp.factory.PersonEducationPlanTOFactory;
+import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonEducationPlan;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.reference.StudentStatusService;
 import org.studentsuccessplan.ssp.transferobject.PersonEducationPlanTO;
 
@@ -27,6 +29,9 @@ public class PersonEducationPlanTOFactoryImpl extends
 	@Autowired
 	private transient StudentStatusService studentStatusService;
 
+	@Autowired
+	private transient PersonService personService;
+
 	@Override
 	protected PersonEducationPlanDao getDao() {
 		return dao;
@@ -35,6 +40,15 @@ public class PersonEducationPlanTOFactoryImpl extends
 	@Override
 	public PersonEducationPlan from(final PersonEducationPlanTO tObject)
 			throws ObjectNotFoundException {
+
+		if ((tObject.getId() == null) && (tObject.getPersonId() != null)) {
+			Person person = personService.get(tObject.getPersonId());
+			PersonEducationPlan unsetModel = person.getEducationPlan();
+			if (unsetModel != null) {
+				tObject.setId(unsetModel.getId());
+			}
+		}
+
 		final PersonEducationPlan model = super.from(tObject);
 
 		model.setNewOrientationComplete(tObject.isNewOrientationComplete());

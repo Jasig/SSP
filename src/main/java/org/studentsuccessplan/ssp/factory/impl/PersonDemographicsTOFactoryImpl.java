@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.dao.PersonDemographicsDao;
 import org.studentsuccessplan.ssp.factory.AbstractAuditableTOFactory;
 import org.studentsuccessplan.ssp.factory.PersonDemographicsTOFactory;
+import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonDemographics;
 import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
 import org.studentsuccessplan.ssp.model.reference.Genders;
@@ -57,6 +58,15 @@ public class PersonDemographicsTOFactoryImpl extends
 	@Override
 	public PersonDemographics from(final PersonDemographicsTO tObject)
 			throws ObjectNotFoundException {
+
+		if ((tObject.getId() == null) && (tObject.getPersonId() != null)) {
+			Person person = personService.get(tObject.getPersonId());
+			PersonDemographics unsetModel = person.getDemographics();
+			if (unsetModel != null) {
+				tObject.setId(unsetModel.getId());
+			}
+		}
+
 		final PersonDemographics model = super.from(tObject);
 
 		if (tObject.getCoachId() != null) {

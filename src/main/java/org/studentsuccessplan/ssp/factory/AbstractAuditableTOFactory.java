@@ -38,6 +38,11 @@ public abstract class AbstractAuditableTOFactory<TObject extends AuditableTO<M>,
 			model = newModel();
 		} else {
 			model = getDao().get(tObject.getId());
+			if (model == null) {
+				throw new ObjectNotFoundException(
+						"id provided, but not valid: "
+								+ tObject.getId().toString());
+			}
 		}
 
 		model.setObjectStatus(tObject.getObjectStatus());
