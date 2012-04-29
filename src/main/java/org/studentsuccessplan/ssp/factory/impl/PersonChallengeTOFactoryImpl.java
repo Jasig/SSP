@@ -43,9 +43,8 @@ public class PersonChallengeTOFactoryImpl extends
 
 		model.setDescription(tObject.getDescription());
 
-		if (tObject.getChallengeId() != null) {
-			model.setChallenge(challengeService.get(tObject.getChallengeId()));
-		}
+		model.setChallenge((tObject.getChallengeId() == null) ? null :
+				challengeService.get(tObject.getChallengeId()));
 
 		if (tObject.getPersonId() != null) {
 			model.setPerson(personService.get(tObject.getPersonId()));

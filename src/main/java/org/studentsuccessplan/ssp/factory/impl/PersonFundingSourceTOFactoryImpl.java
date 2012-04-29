@@ -43,10 +43,8 @@ public class PersonFundingSourceTOFactoryImpl extends
 
 		model.setDescription(tObject.getDescription());
 
-		if (tObject.getFundingSourceId() != null) {
-			model.setFundingSource(fundingSourceService.get(tObject
-					.getFundingSourceId()));
-		}
+		model.setFundingSource((tObject.getFundingSourceId() == null) ? null :
+				fundingSourceService.get(tObject.getFundingSourceId()));
 
 		if (tObject.getPersonId() != null) {
 			model.setPerson(personService.get(tObject.getPersonId()));

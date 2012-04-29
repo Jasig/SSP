@@ -44,10 +44,8 @@ public class PersonEducationLevelTOFactoryImpl
 
 		model.setDescription(tObject.getDescription());
 
-		if (tObject.getEducationLevelId() != null) {
-			model.setEducationLevel(educationLevelService.get(tObject
-					.getEducationLevelId()));
-		}
+		model.setEducationLevel((tObject.getEducationLevelId() == null) ? null :
+				educationLevelService.get(tObject.getEducationLevelId()));
 
 		model.setGraduatedYear(tObject.getGraduatedYear());
 		model.setHighestGradeCompleted(tObject.getHighestGradeCompleted());

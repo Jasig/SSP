@@ -69,29 +69,31 @@ public class PersonDemographicsTOFactoryImpl extends
 
 		final PersonDemographics model = super.from(tObject);
 
-		if (tObject.getCoachId() != null) {
-			model.setCoach(personService.get(tObject.getCoachId()));
-		}
-		if (tObject.getMaritalStatusId() != null) {
-			model.setMaritalStatus(maritalStatusService.get(tObject
-					.getMaritalStatusId()));
-		}
-		if (tObject.getEthnicityId() != null) {
-			model.setEthnicity(ethnicityService.get(tObject.getEthnicityId()));
-		}
-		if (tObject.getCitizenshipId() != null) {
-			model.setCitizenship(citizenshipService.get(tObject
-					.getCitizenshipId()));
-		}
-		if (tObject.getVeteranStatusId() != null) {
-			model.setVeteranStatus(veteranStatusService.get(tObject
-					.getVeteranStatusId()));
-		}
-		if (tObject.getChildCareArrangementId() != null) {
-			model.setChildCareArrangement(childCareArrangementService
-					.get(tObject.
-							getChildCareArrangementId()));
-		}
+		model.setCoach((tObject.getCoachId() == null) ? null : personService
+				.get(tObject.getCoachId()));
+
+		model.setMaritalStatus((tObject.getMaritalStatusId() == null) ? null :
+				maritalStatusService.get(tObject.getMaritalStatusId()));
+
+		model.setEthnicity((tObject.getEthnicityId() == null) ? null :
+				ethnicityService.get(tObject.getEthnicityId()));
+
+		model.setCitizenship((tObject.getCitizenshipId() == null) ? null :
+				citizenshipService.get(tObject.getCitizenshipId()));
+
+		model.setVeteranStatus((tObject.getVeteranStatusId() == null) ? null :
+				veteranStatusService.get(tObject.getVeteranStatusId()));
+
+		model.setChildCareArrangement((tObject.getChildCareArrangementId() == null) ? null
+				: childCareArrangementService.get(tObject
+						.getChildCareArrangementId()));
+
+		model.setGender((tObject.getGender() == null) ? null :
+				Genders.valueOf(tObject.getGender()));
+
+		model.setShift((tObject.getShift() == null) ? null :
+				EmploymentShifts.valueOf(tObject.getShift()));
+
 		model.setAbilityToBenefit(tObject.isAbilityToBenefit());
 		model.setLocal(tObject.isLocal());
 		model.setPrimaryCaregiver(tObject.isPrimaryCaregiver());
@@ -102,15 +104,9 @@ public class PersonDemographicsTOFactoryImpl extends
 		model.setAnticipatedStartYear(tObject.getAnticipatedStartYear());
 		model.setCountryOfResidence(tObject.getCountryOfResidence());
 		model.setPaymentStatus(tObject.getPaymentStatus());
-		if (tObject.getGender() != null) {
-			model.setGender(Genders.valueOf(tObject.getGender()));
-		}
 		model.setCountryOfCitizenship(tObject.getCountryOfCitizenship());
 		model.setChildAges(tObject.getChildAges());
 		model.setPlaceOfEmployment(tObject.getPlaceOfEmployment());
-		if (tObject.getShift() != null) {
-			model.setShift(EmploymentShifts.valueOf(tObject.getShift()));
-		}
 		model.setWage(tObject.getWage());
 		model.setTotalHoursWorkedPerWeek(tObject.getTotalHoursWorkedPerWeek());
 

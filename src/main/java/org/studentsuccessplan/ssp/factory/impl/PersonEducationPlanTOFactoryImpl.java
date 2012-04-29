@@ -57,10 +57,8 @@ public class PersonEducationPlanTOFactoryImpl extends
 		model.setSpecialNeeds(tObject.isSpecialNeeds());
 		model.setGradeTypicallyEarned(tObject.getGradeTypicallyEarned());
 
-		if (tObject.getStudentStatusId() != null) {
-			model.setStudentStatus(studentStatusService.get(tObject
-					.getStudentStatusId()));
-		}
+		model.setStudentStatus((tObject.getStudentStatusId() == null) ? null :
+				studentStatusService.get(tObject.getStudentStatusId()));
 
 		return model;
 	}
