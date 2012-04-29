@@ -137,10 +137,6 @@ public abstract class Auditable {
 			return true;
 		}
 
-		if (obj == null) {
-			return false;
-		}
-
 		if (!(obj instanceof Auditable)) {
 			return false;
 		}
