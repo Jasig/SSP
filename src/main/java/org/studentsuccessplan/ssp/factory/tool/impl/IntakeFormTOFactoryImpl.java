@@ -11,10 +11,12 @@ import org.studentsuccessplan.ssp.factory.PersonEducationPlanTOFactory;
 import org.studentsuccessplan.ssp.factory.PersonFundingSourceTOFactory;
 import org.studentsuccessplan.ssp.factory.PersonTOFactory;
 import org.studentsuccessplan.ssp.factory.tool.IntakeFormTOFactory;
+import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.tool.IntakeForm;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.transferobject.tool.IntakeFormTO;
 import org.studentsuccessplan.ssp.util.SetOps;
+import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
 @Service
 @Transactional(readOnly = true)
@@ -48,11 +50,13 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 
 	@Override
 	public IntakeForm from(final IntakeFormTO tObject)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 		final IntakeForm model = new IntakeForm();
 
 		if (tObject.getPerson() != null) {
 			model.setPerson(personTOFactory.from(tObject.getPerson()));
+		} else {
+			throw new ValidationException("Person is Required");
 		}
 
 		if (tObject.getPersonDemographics() != null) {
@@ -60,18 +64,40 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 					.setDemographics(
 							personDemographicsTOFactory.from(tObject
 									.getPersonDemographics()));
+		} else {
+			// soft delete it if it exists
+			if ((model.getPerson() != null)
+					&& (model.getPerson().getDemographics() != null)) {
+				model.getPerson().getDemographics()
+						.setObjectStatus(ObjectStatus.DELETED);
+			}
+
 		}
 
 		if (tObject.getPersonEducationGoal() != null) {
 			model.getPerson().setEducationGoal(
 					personEducationGoalTOFactory.from(tObject
 							.getPersonEducationGoal()));
+		} else {
+			// soft delete it if it exists
+			if ((model.getPerson() != null)
+					&& (model.getPerson().getEducationPlan() != null)) {
+				model.getPerson().getEducationPlan()
+						.setObjectStatus(ObjectStatus.DELETED);
+			}
 		}
 
 		if (tObject.getPersonEducationPlan() != null) {
 			model.getPerson().setEducationPlan(
 					personEducationPlanTOFactory.from(tObject
 							.getPersonEducationPlan()));
+		} else {
+			// soft delete it if it exists
+			if ((model.getPerson() != null)
+					&& (model.getPerson().getEducationPlan() != null)) {
+				model.getPerson().getEducationPlan()
+						.setObjectStatus(ObjectStatus.DELETED);
+			}
 		}
 
 		if ((tObject.getPersonEducationLevels() != null)
@@ -80,6 +106,9 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 					model.getPerson().getEducationLevels(),
 					personEducationLevelTOFactory.asSet(
 							tObject.getPersonEducationLevels()));
+		} else {
+			// clearing education levels
+			SetOps.softDeleteSetItems(model.getPerson().getEducationLevels());
 		}
 
 		if ((tObject.getPersonFundingSources() != null)
@@ -88,6 +117,9 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 					model.getPerson().getFundingSources(),
 					personFundingSourceTOFactory.asSet(
 							tObject.getPersonFundingSources()));
+		} else {
+			// clearing fundingSources
+			SetOps.softDeleteSetItems(model.getPerson().getFundingSources());
 		}
 
 		if ((tObject.getPersonChallenges() != null)
@@ -96,6 +128,8 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 					model.getPerson().getChallenges(),
 					personChallengeTOFactory.asSet(
 							tObject.getPersonChallenges()));
+		} else {
+			SetOps.softDeleteSetItems(model.getPerson().getChallenges());
 		}
 
 		return model;
