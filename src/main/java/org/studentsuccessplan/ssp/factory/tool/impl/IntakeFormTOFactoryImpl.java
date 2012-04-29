@@ -14,6 +14,7 @@ import org.studentsuccessplan.ssp.factory.tool.IntakeFormTOFactory;
 import org.studentsuccessplan.ssp.model.tool.IntakeForm;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.transferobject.tool.IntakeFormTO;
+import org.studentsuccessplan.ssp.util.SetOps;
 
 @Service
 @Transactional(readOnly = true)
@@ -75,21 +76,24 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 
 		if ((tObject.getPersonEducationLevels() != null)
 				&& !tObject.getPersonEducationLevels().isEmpty()) {
-			model.getPerson().getEducationLevels()
-					.addAll(personEducationLevelTOFactory.asSet(
+			SetOps.updateSet(
+					model.getPerson().getEducationLevels(),
+					personEducationLevelTOFactory.asSet(
 							tObject.getPersonEducationLevels()));
 		}
 
 		if ((tObject.getPersonFundingSources() != null)
 				&& tObject.getPersonFundingSources().isEmpty()) {
-			model.getPerson().getFundingSources().addAll(
+			SetOps.updateSet(
+					model.getPerson().getFundingSources(),
 					personFundingSourceTOFactory.asSet(
 							tObject.getPersonFundingSources()));
 		}
 
 		if ((tObject.getPersonChallenges() != null)
 				&& !tObject.getPersonChallenges().isEmpty()) {
-			model.getPerson().getChallenges().addAll(
+			SetOps.updateSet(
+					model.getPerson().getChallenges(),
 					personChallengeTOFactory.asSet(
 							tObject.getPersonChallenges()));
 		}
