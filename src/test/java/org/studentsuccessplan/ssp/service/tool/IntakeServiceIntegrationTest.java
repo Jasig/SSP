@@ -5,12 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,8 +97,6 @@ public class IntakeServiceIntegrationTest {
 	 *             Thrown if any of the expected test data identifiers are not
 	 *             found in the database.
 	 */
-	@Ignore
-	// :TODO reenable
 	@Test
 	public void testIntakeServiceForNewUser() throws ObjectNotFoundException {
 		// test data
@@ -122,6 +118,8 @@ public class IntakeServiceIntegrationTest {
 		person.setFirstName("first");
 		person.setLastName(lastName);
 		person.setPrimaryEmailAddress("email");
+		person.setAddressLine1("address line 1");
+		person.setCellPhone("867-5309");
 
 		// Save new person
 
@@ -145,9 +143,10 @@ public class IntakeServiceIntegrationTest {
 		person = form.getPerson(); // refresh
 
 		// Setup - fill the IntakeForm with test data
+
 		PersonDemographics pd1 = new PersonDemographics();
 		pd1.setChildAges(testString1);
-		pd1.setCoach(new Person(person.getId()));
+		pd1.setCoach(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
 		person.setDemographics(pd1);
 
 		PersonEducationGoal peg1 = new PersonEducationGoal();
@@ -165,23 +164,17 @@ public class IntakeServiceIntegrationTest {
 		PersonEducationLevel pel1 = new PersonEducationLevel();
 		pel1.setEducationLevel(new EducationLevel(testEducationLevelId));
 		pel1.setDescription(testString1);
-		Set<PersonEducationLevel> educationLevels = new HashSet<PersonEducationLevel>();
-		educationLevels.add(pel1);
-		person.setEducationLevels(educationLevels);
+		person.getEducationLevels().add(pel1);
 
 		PersonFundingSource pfs1 = new PersonFundingSource();
 		pfs1.setFundingSource(new FundingSource());
 		pfs1.setDescription(testString3);
-		Set<PersonFundingSource> fundingSources = new HashSet<PersonFundingSource>();
-		fundingSources.add(pfs1);
-		person.setFundingSources(fundingSources);
+		person.getFundingSources().add(pfs1);
 
 		PersonChallenge pc1 = new PersonChallenge();
 		pc1.setChallenge(new Challenge(testChallengeId));
 		pc1.setDescription(testString1);
-		Set<PersonChallenge> challenges = new HashSet<PersonChallenge>();
-		challenges.add(pc1);
-		person.setChallenges(challenges);
+		person.getChallenges().add(pc1);
 
 		// Run
 		assertTrue("IntakeFormService did not return success (true).",
@@ -203,8 +196,9 @@ public class IntakeServiceIntegrationTest {
 				.getPerson().getDemographics().getChildAges());
 		assertNotNull("Demographic.Coach data did not exist.", person
 				.getDemographics().getCoach());
-		assertEquals("Demographic.Coach.LastName did not match.", lastName,
-				person.getDemographics().getCoach().getLastName());
+		assertEquals("Demographic.Coach.id did not match.",
+				Person.SYSTEM_ADMINISTRATOR_ID,
+				person.getDemographics().getCoach().getId());
 
 		// Assert Education Goal data
 		assertNotNull("Education Goal data did not exist.",
