@@ -42,6 +42,11 @@ class AuditableTest {
 		assertTrue(a1.hashCode() != a2.hashCode())
 		assertEquals(a1.hashCode(), a1.hashCode())
 		assertEquals(a2.hashCode(), a2.hashCode())
+
+		AuditableSubClass a3 = new AuditableSubClass(id:id)
+		assertTrue("with same id, should be equal", a1.equals(a3))
+		assertTrue("with same id, should be equal - backwards", a3.equals(a1))
+		assertEquals("with same id, hashcode should be equal", a1.hashCode(), a3.hashCode())
 	}
 
 	@Test

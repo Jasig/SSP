@@ -331,7 +331,7 @@ public class Person extends Auditable implements Serializable {
 	 *            Identifier
 	 */
 	public Person(final UUID id) {
-		super(id);
+		setId(id);
 		challenges = new HashSet<PersonChallenge>();
 		fundingSources = new HashSet<PersonFundingSource>();
 		educationLevels = new HashSet<PersonEducationLevel>();
@@ -595,4 +595,116 @@ public class Person extends Auditable implements Serializable {
 	protected int hashPrime() {
 		return 3;
 	};
+
+	@Override
+	public int hashCode() {
+		int result = hashPrime() * super.hashCode();
+
+		result *= firstName == null ? "firstName".hashCode() : firstName
+				.hashCode();
+		result *= middleInitial == null ? "middleInitial".hashCode()
+				: middleInitial.hashCode();
+		result *= lastName == null ? "middleInitial".hashCode() : lastName
+				.hashCode();
+		result *= birthDate == null ? "birthDate".hashCode() : birthDate
+				.hashCode();
+		result *= primaryEmailAddress == null ? "primaryEmailAddress"
+				.hashCode() : primaryEmailAddress.hashCode();
+		result *= secondaryEmailAddress == null ? "secondaryEmailAddress"
+				.hashCode() : secondaryEmailAddress.hashCode();
+		result *= username == null ? "primaryEmailAddress".hashCode()
+				: primaryEmailAddress.hashCode();
+		result *= userId == null ? "userId".hashCode() : userId.hashCode();
+		result *= homePhone == null ? "homePhone".hashCode() : homePhone
+				.hashCode();
+		result *= workPhone == null ? "workPhone".hashCode() : workPhone
+				.hashCode();
+		result *= cellPhone == null ? "cellPhone".hashCode() : cellPhone
+				.hashCode();
+		result *= userId == null ? "userId".hashCode() : userId.hashCode();
+		result *= addressLine1 == null ? "addressLine1".hashCode()
+				: addressLine1
+						.hashCode();
+		result *= addressLine2 == null ? "addressLine2".hashCode()
+				: addressLine2
+						.hashCode();
+		result *= city == null ? "city".hashCode() : city.hashCode();
+		result *= state == null ? "state".hashCode() : state.hashCode();
+		result *= zipCode == null ? "zipCode".hashCode() : zipCode.hashCode();
+		result *= photoUrl == null ? "photoUrl".hashCode() : photoUrl
+				.hashCode();
+		result *= schoolId == null ? "schoolId".hashCode() : schoolId
+				.hashCode();
+		result *= strengths == null ? "strengths".hashCode() : strengths
+				.hashCode();
+		// not all fields included. only the business or non-expensive set
+		// fields are included in the hashCode
+
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (super.equals(obj)) {
+			return true;
+		}
+
+		if (obj == null || !(obj instanceof Person)) {
+			return false;
+		}
+
+		final Person other = (Person) obj;
+
+		return hasSameNonDefaultIdAs(other) ||
+				((isTransient() || other.isTransient()) &&
+				hasSameDomainSignature(other));
+	}
+
+	/**
+	 * This method MUST be implemented for each class and must compare to all
+	 * properties that define an equal instance for business rule comparison
+	 * purposes.
+	 * 
+	 * @param other
+	 *            The object to compare
+	 * @return True if properties for business equality are all equal.
+	 */
+	private boolean hasSameDomainSignature(final Person other) {
+		return areEqual(firstName, other.getFirstName()) &&
+				areEqual(middleInitial, other.getMiddleInitial()) &&
+				areEqual(lastName, other.getLastName()) &&
+				areEqual(birthDate, other.getBirthDate()) &&
+				areEqual(primaryEmailAddress,
+						other.getPrimaryEmailAddress()) &&
+				areEqual(secondaryEmailAddress,
+						other.getSecondaryEmailAddress()) &&
+				areEqual(username, other.getUsername()) &&
+				areEqual(userId, other.getUserId()) &&
+				areEqual(homePhone, other.getHomePhone()) &&
+				areEqual(workPhone, other.getWorkPhone()) &&
+				areEqual(cellPhone, other.getCellPhone()) &&
+				areEqual(addressLine1, other.getAddressLine1()) &&
+				areEqual(addressLine2, other.getAddressLine2()) &&
+				areEqual(city, other.getCity()) &&
+				areEqual(state, other.getState()) &&
+				areEqual(zipCode, other.getZipCode()) &&
+				areEqual(photoUrl, other.getPhotoUrl()) &&
+				areEqual(schoolId, other.getSchoolId()) &&
+				areEqual(enabled, other.isEnabled()) &&
+				areEqual(strengths, other.getStrengths()) &&
+				areEqual(demographics, other.getDemographics()) &&
+				areEqual(educationGoal, other.getEducationGoal()) &&
+				areEqual(educationPlan, other.getEducationPlan()) &&
+				areEqual(educationLevels, other.getEducationLevels()) &&
+				areEqual(fundingSources, other.getFundingSources()) &&
+				areEqual(challenges, other.getChallenges()) &&
+				areEqual(tools, other.getTools()) &&
+				areEqual(tasks, other.getTasks());
+	}
+
+	@Override
+	public String toString() {
+		return "Name: \"" + firstName + " " + lastName + "\" Id: "
+				+ super.toString();
+	}
 }
