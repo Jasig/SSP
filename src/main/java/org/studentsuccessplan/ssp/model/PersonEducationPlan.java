@@ -116,4 +116,26 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 	protected int hashPrime() {
 		return 19;
 	};
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// PersonEducationLevel
+		result *= studentStatus == null ? "studentStatus".hashCode()
+				: studentStatus.hashCode();
+		result *= newOrientationComplete ? 3 : 5;
+		result *= registeredForClasses ? 7 : 11;
+		result *= collegeDegreeForParents ? 13 : 17;
+		result *= specialNeeds ? 19 : 23;
+		result *= gradeTypicallyEarned == null ? "gradeTypicallyEarned"
+				.hashCode() : gradeTypicallyEarned.hashCode();
+
+		return result;
+	}
 }

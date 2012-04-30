@@ -51,7 +51,7 @@ public abstract class AbstractReference extends Auditable {
 	 *            Identifier; required
 	 */
 	public AbstractReference(@NotNull final UUID id) {
-		super(id);
+		setId(id);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public abstract class AbstractReference extends Auditable {
 	 *            Name; required; max 80 characters
 	 */
 	public AbstractReference(@NotNull final UUID id, @NotNull final String name) {
-		super(id);
+		setId(id);
 		this.name = name;
 	}
 
@@ -79,7 +79,7 @@ public abstract class AbstractReference extends Auditable {
 	 */
 	public AbstractReference(@NotNull final UUID id,
 			@NotNull final String name, final String description) {
-		super(id);
+		setId(id);
 		this.name = name;
 		this.description = description;
 	}
@@ -121,5 +121,22 @@ public abstract class AbstractReference extends Auditable {
 	public void overwrite(@NotNull final AbstractReference source) {
 		setName(source.getName());
 		setDescription(source.getDescription());
+	}
+
+	@Override
+	public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// AbstractReference
+		result *= name == null ? "name".hashCode() : name.hashCode();
+		result *= description == null ? "description".hashCode() : description
+				.hashCode();
+
+		return result;
 	}
 }

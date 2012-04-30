@@ -34,7 +34,7 @@ import org.studentsuccessplan.ssp.model.tool.PersonTool;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Person extends Auditable implements Serializable {
+public final class Person extends Auditable implements Serializable {
 
 	private static final long serialVersionUID = 4122282021549627683L;
 
@@ -331,7 +331,7 @@ public class Person extends Auditable implements Serializable {
 	 *            Identifier
 	 */
 	public Person(final UUID id) {
-		super(id);
+		setId(id);
 		challenges = new HashSet<PersonChallenge>();
 		fundingSources = new HashSet<PersonFundingSource>();
 		educationLevels = new HashSet<PersonEducationLevel>();
@@ -592,7 +592,66 @@ public class Person extends Auditable implements Serializable {
 	}
 
 	@Override
-	protected int hashPrime() {
+	final protected int hashPrime() {
 		return 3;
 	};
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// Person
+		result *= firstName == null ? "firstName".hashCode() : firstName
+				.hashCode();
+		result *= middleInitial == null ? "middleInitial".hashCode()
+				: middleInitial.hashCode();
+		result *= lastName == null ? "middleInitial".hashCode() : lastName
+				.hashCode();
+		result *= birthDate == null ? "birthDate".hashCode() : birthDate
+				.hashCode();
+		result *= primaryEmailAddress == null ? "primaryEmailAddress"
+				.hashCode() : primaryEmailAddress.hashCode();
+		result *= secondaryEmailAddress == null ? "secondaryEmailAddress"
+				.hashCode() : secondaryEmailAddress.hashCode();
+		result *= username == null ? "primaryEmailAddress".hashCode()
+				: primaryEmailAddress.hashCode();
+		result *= userId == null ? "userId".hashCode() : userId.hashCode();
+		result *= homePhone == null ? "homePhone".hashCode() : homePhone
+				.hashCode();
+		result *= workPhone == null ? "workPhone".hashCode() : workPhone
+				.hashCode();
+		result *= cellPhone == null ? "cellPhone".hashCode() : cellPhone
+				.hashCode();
+		result *= userId == null ? "userId".hashCode() : userId.hashCode();
+		result *= addressLine1 == null ? "addressLine1".hashCode()
+				: addressLine1
+						.hashCode();
+		result *= addressLine2 == null ? "addressLine2".hashCode()
+				: addressLine2
+						.hashCode();
+		result *= city == null ? "city".hashCode() : city.hashCode();
+		result *= state == null ? "state".hashCode() : state.hashCode();
+		result *= zipCode == null ? "zipCode".hashCode() : zipCode.hashCode();
+		result *= photoUrl == null ? "photoUrl".hashCode() : photoUrl
+				.hashCode();
+		result *= schoolId == null ? "schoolId".hashCode() : schoolId
+				.hashCode();
+		result *= strengths == null ? "strengths".hashCode() : strengths
+				.hashCode();
+		// not all fields included. only the business or non-expensive set
+		// fields are included in the hashCode
+
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Name: \"" + firstName + " " + lastName + "\" Id: "
+				+ super.toString();
+	}
 }

@@ -37,6 +37,7 @@ import org.hibernate.annotations.Type;
  * </p>
  * 
  * @author daniel.bower
+ * @author jon.adams
  */
 @MappedSuperclass
 public abstract class Auditable {
@@ -96,88 +97,49 @@ public abstract class Auditable {
 	@Column(nullable = false)
 	private ObjectStatus objectStatus;
 
-	/**
-	 * Empty constructor.
-	 */
-	public Auditable() {
-		super();
-	}
-
-	public Auditable(final UUID id) {
-		super();
-		this.id = id;
-	}
-
 	protected abstract int hashPrime();
 
 	@Override
-	public int hashCode() {
-		int result = 1;
-		result = (hashPrime() * result);
-
-		if (getId() == null) {
-			result = result + super.hashCode();
-		} else {
-			result = result + ((getId() == null) ? 0 : getId().hashCode());
-		}
-
-		result = result
-				+ ((getObjectStatus() == null) ? 0 : getObjectStatus()
-						.hashCode())
-				+ ((getModifiedDate() == null) ? 0 : getModifiedDate()
-						.hashCode())
-				+ (((getModifiedBy() == null) || (getModifiedBy().getId() == null)) ? 0
-						: getModifiedBy().getId().hashCode());
-		return result;
-	}
+	public abstract int hashCode();
 
 	@Override
-	public boolean equals(final Object obj) {
+	final public boolean equals(final Object obj) {
 		if (this == obj) {
+			// exact references that point to the same place in memory are
+			// always equal
 			return true;
 		}
 
-		if (!(obj instanceof Auditable)) {
+		if (!(Auditable.class.isInstance(obj))
+				|| !(getClass().equals(obj.getClass()))) {
 			return false;
 		}
 
-		final Auditable other = (Auditable) obj;
+		Auditable other = (Auditable) obj;
 
-		// secretly checking for same model object
-		if (other.hashPrime() != hashPrime()) {
-			return false;
-		}
-
-		return hasSameDomainSignature(other);
+		return hasSameNonDefaultIdAs(other) ||
+				// Since the IDs aren't the same, either of them must be
+				// transient to compare business value signatures
+				((isTransient() || other.isTransient()) &&
+				hasSameDomainSignature(other));
 	}
 
-	private boolean hasSameDomainSignature(final Auditable other) {
-		if ((getModifiedBy() == null) || (getModifiedBy().getId() == null)) {
-			if ((other.getModifiedBy() != null)
-					&& (other.getModifiedBy().getId() != null)) {
-				return false;
-			}
-		} else if (other.getModifiedBy() == null) {
-			return false;
-		} else if (!getModifiedBy().getId().equals(
-				other.getModifiedBy().getId())) {
-			return false;
-		}
-
-		return compareProps(getId(), other.getId()) &&
-				compareProps(getObjectStatus(), other.getObjectStatus()) &&
-				compareProps(getModifiedDate(), other.getModifiedDate());
+	/**
+	 * This method MUST be implemented for each class and must compare to all
+	 * properties that define an equal instance for business rule comparison
+	 * purposes.
+	 * 
+	 * @param other
+	 *            The object to compare
+	 * @return True if properties for business equality are all equal.
+	 */
+	private boolean hasSameDomainSignature(final Object other) {
+		return hashCode() == other.hashCode();
 	}
 
-	private boolean compareProps(Object o1, Object o2) {
-		if (o1 == null) {
-			if (o2 != null) {
-				return false;
-			}
-		} else if (!o1.equals(o2)) {
-			return false;
-		}
-		return true;
+	@Override
+	public String toString() {
+		return id == null ? super.toString() : id.toString();
 	}
 
 	public UUID getId() {
@@ -230,8 +192,46 @@ public abstract class Auditable {
 		this.objectStatus = objectStatus;
 	}
 
-	@Override
-	public String toString() {
-		return id == null ? super.toString() : id.toString();
+	/**
+	 * Transient objects are not associated with an item already in storage. For
+	 * instance, an object is transient if its id is null.
+	 * 
+	 * @return The object is associated or not with an item already in storage.
+	 */
+	final public boolean isTransient()
+	{
+		return id == null;
+	}
+
+	/**
+	 * Checks to see if one object has an id but the other doesn't or if they
+	 * have the exact same id.
+	 * 
+	 * @param compareTo
+	 *            Object to check for persistence layer equality
+	 * @return True if both objects share the same, valid id
+	 */
+	final protected boolean hasSameNonDefaultIdAs(Auditable compareTo)
+	{
+		if (compareTo == null)
+		{
+			throw new IllegalArgumentException(
+					"Object to be compared can not be null.");
+		}
+
+		return (id != null) &&
+				(compareTo.id != null) &&
+				id.equals(compareTo.id);
+	}
+
+	final protected boolean areEqual(Object o1, Object o2) {
+		if (o1 == null) {
+			if (o2 != null) {
+				return false;
+			}
+		} else if (!o1.equals(o2)) {
+			return false;
+		}
+		return true;
 	}
 }

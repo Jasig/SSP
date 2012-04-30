@@ -60,4 +60,20 @@ public class PersonTool extends Auditable implements Serializable {
 		return 41;
 	};
 
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// PersonTool
+		result *= person == null || person.getId() == null ? "person"
+				.hashCode() : person.getId().hashCode();
+		result *= tool == null ? "tool".hashCode() : tool.hashCode();
+
+		return result;
+	}
 }

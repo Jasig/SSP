@@ -32,7 +32,6 @@ public class SelfHelpGuideDao extends ReferenceAuditableCrudDao<SelfHelpGuide>
 	}
 
 	@SuppressWarnings("unchecked")
-	// :TODO paging
 	public List<SelfHelpGuide> findAllActiveForUnauthenticated() {
 		return sessionFactory
 				.getCurrentSession()
@@ -44,7 +43,6 @@ public class SelfHelpGuideDao extends ReferenceAuditableCrudDao<SelfHelpGuide>
 	}
 
 	@SuppressWarnings("unchecked")
-	// :TODO paging
 	public List<SelfHelpGuide> findAllActiveBySelfHelpGuideGroup(
 			UUID selfHelpGuideGroupId) {
 		return sessionFactory

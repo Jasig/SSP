@@ -99,4 +99,27 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 		return 31;
 	};
 
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// SelfHelpGuideResponse
+		result *= completed ? 3 : 5;
+		result *= cancelled ? 7 : 11;
+		result *= earlyAlertSent ? 13 : 17;
+		result *= person == null || person.getId() == null ? "person"
+				.hashCode() : person.getId().hashCode();
+		result *= selfHelpGuide == null ? "selfHelpGuide"
+				.hashCode() : selfHelpGuide.hashCode();
+		result *= selfHelpGuideQuestionResponses == null ? "selfHelpGuideQuestionResponses"
+				.hashCode()
+				: selfHelpGuideQuestionResponses.hashCode();
+
+		return result;
+	}
 }

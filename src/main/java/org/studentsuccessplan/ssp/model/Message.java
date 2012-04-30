@@ -88,4 +88,27 @@ public class Message extends Auditable {
 	protected int hashPrime() {
 		return 2;
 	};
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// Message
+		result *= subject == null ? "subject".hashCode() : subject.hashCode();
+		result *= body == null ? "body".hashCode() : body.hashCode();
+		result *= sender == null ? "sender".hashCode() : sender.hashCode();
+		result *= recipient == null ? "recipient".hashCode() : recipient
+				.hashCode();
+		result *= recipientEmailAddress == null ? "recipientEmailAddress"
+				.hashCode() : recipientEmailAddress.hashCode();
+		result *= sentDate == null ? "sentDate".hashCode() : sentDate
+				.hashCode();
+
+		return result;
+	}
 }
