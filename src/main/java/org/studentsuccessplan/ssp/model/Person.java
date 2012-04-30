@@ -34,7 +34,7 @@ import org.studentsuccessplan.ssp.model.tool.PersonTool;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Person extends Auditable implements Serializable {
+public final class Person extends Auditable implements Serializable {
 
 	private static final long serialVersionUID = 4122282021549627683L;
 
@@ -592,14 +592,20 @@ public class Person extends Auditable implements Serializable {
 	}
 
 	@Override
-	protected int hashPrime() {
+	final protected int hashPrime() {
 		return 3;
 	};
 
 	@Override
-	public int hashCode() {
-		int result = hashPrime() * super.hashCode();
+	final public int hashCode() {
+		int result = hashPrime();
 
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// Person
 		result *= firstName == null ? "firstName".hashCode() : firstName
 				.hashCode();
 		result *= middleInitial == null ? "middleInitial".hashCode()
@@ -641,65 +647,6 @@ public class Person extends Auditable implements Serializable {
 		// fields are included in the hashCode
 
 		return result;
-	}
-
-	@Override
-	public boolean equals(final Object obj) {
-		if (super.equals(obj)) {
-			return true;
-		}
-
-		if (obj == null || !(obj instanceof Person)) {
-			return false;
-		}
-
-		final Person other = (Person) obj;
-
-		return hasSameNonDefaultIdAs(other) ||
-				((isTransient() || other.isTransient()) &&
-				hasSameDomainSignature(other));
-	}
-
-	/**
-	 * This method MUST be implemented for each class and must compare to all
-	 * properties that define an equal instance for business rule comparison
-	 * purposes.
-	 * 
-	 * @param other
-	 *            The object to compare
-	 * @return True if properties for business equality are all equal.
-	 */
-	private boolean hasSameDomainSignature(final Person other) {
-		return areEqual(firstName, other.getFirstName()) &&
-				areEqual(middleInitial, other.getMiddleInitial()) &&
-				areEqual(lastName, other.getLastName()) &&
-				areEqual(birthDate, other.getBirthDate()) &&
-				areEqual(primaryEmailAddress,
-						other.getPrimaryEmailAddress()) &&
-				areEqual(secondaryEmailAddress,
-						other.getSecondaryEmailAddress()) &&
-				areEqual(username, other.getUsername()) &&
-				areEqual(userId, other.getUserId()) &&
-				areEqual(homePhone, other.getHomePhone()) &&
-				areEqual(workPhone, other.getWorkPhone()) &&
-				areEqual(cellPhone, other.getCellPhone()) &&
-				areEqual(addressLine1, other.getAddressLine1()) &&
-				areEqual(addressLine2, other.getAddressLine2()) &&
-				areEqual(city, other.getCity()) &&
-				areEqual(state, other.getState()) &&
-				areEqual(zipCode, other.getZipCode()) &&
-				areEqual(photoUrl, other.getPhotoUrl()) &&
-				areEqual(schoolId, other.getSchoolId()) &&
-				areEqual(enabled, other.isEnabled()) &&
-				areEqual(strengths, other.getStrengths()) &&
-				areEqual(demographics, other.getDemographics()) &&
-				areEqual(educationGoal, other.getEducationGoal()) &&
-				areEqual(educationPlan, other.getEducationPlan()) &&
-				areEqual(educationLevels, other.getEducationLevels()) &&
-				areEqual(fundingSources, other.getFundingSources()) &&
-				areEqual(challenges, other.getChallenges()) &&
-				areEqual(tools, other.getTools()) &&
-				areEqual(tasks, other.getTasks());
 	}
 
 	@Override

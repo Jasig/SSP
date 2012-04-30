@@ -118,4 +118,28 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 	protected int hashPrime() {
 		return 13;
 	};
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// PersonEducationGoal
+		result *= educationGoal == null ? "educationGoal".hashCode()
+				: educationGoal.hashCode();
+		result *= description == null ? "description".hashCode() : description
+				.hashCode();
+		result *= plannedOccupation == null ? "plannedOccupation".hashCode()
+				: plannedOccupation.hashCode();
+		result *= militaryBranchDescription == null ? "militaryBranchDescription"
+				.hashCode()
+				: militaryBranchDescription.hashCode();
+		result *= howSureAboutMajor;
+
+		return result;
+	}
 }

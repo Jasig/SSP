@@ -70,4 +70,25 @@ public class SelfHelpGuideQuestionResponse extends Auditable implements
 	protected int hashPrime() {
 		return 29;
 	};
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// SelfHelpGuideQuestionResponse
+		result *= selfHelpGuideResponse == null ? "selfHelpGuideResponse"
+				.hashCode()
+				: selfHelpGuideResponse.hashCode();
+		result *= selfHelpGuideQuestion == null ? "selfHelpGuideQuestion"
+				.hashCode() : selfHelpGuideQuestion.hashCode();
+		result *= response ? 3 : 5;
+		result *= earlyAlertSent ? 7 : 11;
+
+		return result;
+	}
 }

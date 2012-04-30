@@ -122,4 +122,21 @@ public abstract class AbstractReference extends Auditable {
 		setName(source.getName());
 		setDescription(source.getDescription());
 	}
+
+	@Override
+	public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// AbstractReference
+		result *= name == null ? "name".hashCode() : name.hashCode();
+		result *= description == null ? "description".hashCode() : description
+				.hashCode();
+
+		return result;
+	}
 }

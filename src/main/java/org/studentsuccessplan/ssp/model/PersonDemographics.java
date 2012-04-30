@@ -366,4 +366,55 @@ public class PersonDemographics extends Auditable implements Serializable {
 	protected int hashPrime() {
 		return 11;
 	};
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// PersonDemographics
+		result *= abilityToBenefit ? 7 : 11;
+		result *= anticipatedStartTerm == null ? "anticipatedStartTerm"
+				.hashCode() : anticipatedStartTerm.hashCode();
+		result *= anticipatedStartYear == null ? "anticipatedStartYear"
+				.hashCode() : anticipatedStartYear.hashCode();
+		result *= local ? 3 : 5;
+		result *= countryOfResidence == null ? "countryOfResidence".hashCode()
+				: countryOfResidence.hashCode();
+		result *= paymentStatus == null ? "paymentStatus".hashCode()
+				: paymentStatus.hashCode();
+		result *= maritalStatus == null ? "maritalStatus".hashCode()
+				: maritalStatus.hashCode();
+		result *= ethnicity == null ? "ethnicity".hashCode() : ethnicity
+				.hashCode();
+		result *= gender == null ? "gender".hashCode() : gender.hashCode();
+		result *= citizenship == null ? "citizenship".hashCode() : citizenship
+				.hashCode();
+		result *= countryOfCitizenship == null ? "countryOfCitizenship"
+				.hashCode() : countryOfCitizenship.hashCode();
+		result *= veteranStatus == null ? "veteranStatus".hashCode()
+				: veteranStatus.hashCode();
+		result *= primaryCaregiver ? 13 : 17;
+		result *= numberOfChildren;
+		result *= childCareArrangement == null ? "childCareArrangement"
+				.hashCode() : childCareArrangement.hashCode();
+		result *= childAges == null ? "childAges".hashCode() : childAges
+				.hashCode();
+		result *= childCareNeeded ? 19 : 23;
+		result *= employed ? 29 : 31;
+		result *= placeOfEmployment == null ? "placeOfEmployment".hashCode()
+				: placeOfEmployment.hashCode();
+		result *= shift == null ? "shift".hashCode() : shift.hashCode();
+		result *= wage == null ? "wage".hashCode() : wage.hashCode();
+		result *= totalHoursWorkedPerWeek == null ? "totalHoursWorkedPerWeek"
+				.hashCode() : totalHoursWorkedPerWeek.hashCode();
+		result *= coach == null || coach.getId() == null ? "coach".hashCode()
+				: coach.getId().hashCode();
+
+		return result;
+	}
 }

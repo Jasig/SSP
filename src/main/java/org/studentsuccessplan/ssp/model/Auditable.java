@@ -100,38 +100,22 @@ public abstract class Auditable {
 	protected abstract int hashPrime();
 
 	@Override
-	public int hashCode() {
-		int result = hashPrime();
-
-		if (id == null) {
-			result *= super.hashCode();
-		} else {
-			result *= id.hashCode();
-		}
-
-		result *= objectStatus == null ? hashPrime() : objectStatus.hashCode();
-
-		return result;
-	}
+	public abstract int hashCode();
 
 	@Override
-	public boolean equals(final Object obj) {
+	final public boolean equals(final Object obj) {
 		if (this == obj) {
 			// exact references that point to the same place in memory are
 			// always equal
 			return true;
 		}
 
-		if (obj == null) {
-			// this is not null, but the object to compare is, so not equal
+		if (!(Auditable.class.isInstance(obj))
+				|| !(getClass().equals(obj.getClass()))) {
 			return false;
 		}
 
-		if (!(obj.getClass().equals(getClass()))) {
-			return false;
-		}
-
-		final Auditable other = (Auditable) obj;
+		Auditable other = (Auditable) obj;
 
 		return hasSameNonDefaultIdAs(other) ||
 				// Since the IDs aren't the same, either of them must be
@@ -149,8 +133,8 @@ public abstract class Auditable {
 	 *            The object to compare
 	 * @return True if properties for business equality are all equal.
 	 */
-	private boolean hasSameDomainSignature(final Auditable other) {
-		return areEqual(id, other.getId());
+	private boolean hasSameDomainSignature(final Object other) {
+		return hashCode() == other.hashCode();
 	}
 
 	@Override

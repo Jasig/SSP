@@ -85,4 +85,25 @@ public class PersonFundingSource extends Auditable implements Serializable {
 	protected int hashPrime() {
 		return 23;
 	};
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// PersonFundingSource
+		result *= description == null ? "description".hashCode() : description
+				.hashCode();
+		result *= person == null || person.getId() == null ? "person"
+				.hashCode() : person.getId().hashCode();
+		result *= fundingSource == null ? "fundingSource".hashCode()
+				: fundingSource
+						.hashCode();
+
+		return result;
+	}
 }

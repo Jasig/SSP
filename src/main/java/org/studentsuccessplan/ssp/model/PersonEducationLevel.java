@@ -134,4 +134,32 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 	protected int hashPrime() {
 		return 17;
 	};
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// PersonEducationLevel
+		result *= description == null ? "description".hashCode() : description
+				.hashCode();
+		result *= lastYearAttended == null ? "lastYearAttended".hashCode()
+				: lastYearAttended.hashCode();
+		result *= highestGradeCompleted == null ? "highestGradeCompleted"
+				.hashCode() : highestGradeCompleted.hashCode();
+		result *= graduatedYear == null ? "graduatedYear".hashCode()
+				: graduatedYear.hashCode();
+		result *= schoolName == null ? "schoolName".hashCode() : schoolName
+				.hashCode();
+		result *= person == null || person.getId() == null ? "person"
+				.hashCode() : person.getId().hashCode();
+		result *= educationLevel == null ? "educationLevel".hashCode()
+				: educationLevel.hashCode();
+
+		return result;
+	}
 }

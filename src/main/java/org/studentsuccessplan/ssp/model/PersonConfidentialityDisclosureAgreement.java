@@ -76,4 +76,23 @@ public class PersonConfidentialityDisclosureAgreement extends Auditable
 	protected int hashPrime() {
 		return 7;
 	};
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// PersonConfidentialityDisclosureAgreement
+		result *= person == null || person.getId() == null ? "person"
+				.hashCode() : person.getId().hashCode();
+		result *= confidentialityDisclosureAgreement == null ? "confidentialityDisclosureAgreement"
+				.hashCode()
+				: confidentialityDisclosureAgreement.hashCode();
+
+		return result;
+	}
 }

@@ -12,6 +12,10 @@ class PersonTest {
 		protected int hashPrime(){
 			return 11
 		};
+
+		public int hashCode() {
+			return hashPrime() * (id == null ? "id".hashCode() : id.hashCode());
+		}
 	}
 
 	@Test
@@ -45,7 +49,7 @@ class PersonTest {
 		assertTrue(a2.equals(a1))
 		assertTrue(a2.equals(a2))
 		assertTrue(a1.equals(a1))
-		assertTrue(a1.hashCode() != a2.hashCode())
+		assertEquals(a1.hashCode(), a2.hashCode())
 		assertEquals(a1.hashCode(), a1.hashCode())
 		assertEquals(a2.hashCode(), a2.hashCode())
 	}

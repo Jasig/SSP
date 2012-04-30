@@ -232,4 +232,37 @@ public class Task extends Auditable implements Serializable {
 	protected int hashPrime() {
 		return 37;
 	};
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// Task
+		result *= name == null ? "name".hashCode() : name.hashCode();
+		result *= description == null ? "description".hashCode() : description
+				.hashCode();
+		result *= dueDate == null ? "dueDate".hashCode() : dueDate.hashCode();
+		result *= completedDate == null ? "completedDate".hashCode()
+				: completedDate.hashCode();
+		result *= reminderSentDate == null ? "reminderSentDate".hashCode()
+				: reminderSentDate.hashCode();
+		result *= sessionId == null ? "sessionId".hashCode() : sessionId
+				.hashCode();
+		result *= deletable ? 3 : 5;
+		result *= person == null || person.getId() == null ? "person"
+				.hashCode() : person.getId().hashCode();
+		result *= challenge == null ? "challenge".hashCode() : challenge
+				.hashCode();
+		result *= challengeReferral == null ? "challengeReferral".hashCode()
+				: challengeReferral.hashCode();
+		result *= confidentialityLevel == null ? "confidentialityLevel"
+				.hashCode() : confidentialityLevel.hashCode();
+
+		return result;
+	}
 }

@@ -45,4 +45,21 @@ public class ChallengeChallengeReferral extends Auditable implements
 		return 59;
 	};
 
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		// ChallengeChallengeReferral
+		result *= challenge == null ? "challenge".hashCode() : challenge
+				.hashCode();
+		result *= challengeReferral == null ? "challengeReferral".hashCode()
+				: challengeReferral.hashCode();
+
+		return result;
+	}
 }
