@@ -1,4 +1,4 @@
-Ext.define('Ssp.model.reference.EducationalGoal', {
+Ext.define('Ssp.model.reference.EducationGoal', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: []
     

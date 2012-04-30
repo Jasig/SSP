@@ -103,7 +103,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 						Ext.getStore('reference.Challenges').loadData( challenges );
 						Ext.getStore('reference.ChildCareArrangements').loadData( childCareArrangements );
 						Ext.getStore('reference.Citizenships').loadData( citizenships );
-						Ext.getStore('reference.EducationalGoals').loadData( educationGoals );
+						Ext.getStore('reference.EducationGoals').loadData( educationGoals );
 						Ext.getStore('reference.EducationLevels').loadData( educationLevels );
 						Ext.getStore('reference.EmploymentShifts').loadData( employmentShifts );
 						Ext.getStore('reference.Ethnicities').loadData( ethnicities );
