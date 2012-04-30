@@ -98,7 +98,6 @@ public class PersonServiceImpl implements PersonService {
 		this.dao = dao;
 	}
 
-	// overwrite
 	@Override
 	public Person personFromUserId(String userId)
 			throws ObjectNotFoundException {

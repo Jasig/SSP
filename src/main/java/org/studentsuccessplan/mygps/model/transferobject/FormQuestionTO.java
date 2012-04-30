@@ -88,7 +88,15 @@ public class FormQuestionTO implements Serializable {
 	}
 
 	public void setValueAbstractReference(AbstractReference value) {
-		this.value = value.getId().toString();
+		if (null == value) {
+			this.value = null;
+		} else {
+			if (null == value.getId()) {
+				throw new IllegalArgumentException("An object must have an id");
+			} else {
+				this.value = value.getId().toString();
+			}
+		}
 	}
 
 	public void setValueBoolean(boolean value) {
