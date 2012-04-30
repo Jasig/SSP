@@ -4,17 +4,7 @@ Ext.define('Ssp.controller.AdminViewController', {
     views: [
         'admin.AdminTreeMenu', 'admin.forms.AbstractReferenceAdmin'
     ],
-
-    stores: ['reference.Challenges',
-             'reference.ChildCareArrangements',
-             'reference.Citizenships',
-             'reference.EducationalGoals',
-             'reference.EducationLevels',
-             'reference.Ethnicities',
-             'reference.FundingSources',
-             'reference.StudentStatuses',
-             'reference.VeteranStatuses'],
-             
+       
 	init: function() {
 
 		this.control({

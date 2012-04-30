@@ -40,53 +40,53 @@ Ext.onReady(function(){
 	        singleton: true
 	    }
 	});
-});
-
-Ext.application({
-    name: 'Ssp',
-    appFolder: 'app',
-			
-	stores: [ 'Students', 
-			  'ApplicationForms', 
-			  'Tools',
-			  'admin.AdminTreeMenus',
-			  'reference.AbstractReferences',
-			  'reference.Challenges',
-			  'reference.ChildCareArrangements',
-			  'reference.Citizenships',
-			  'reference.EducationalGoals',
-			  'reference.EducationLevels',
-			  'reference.EmploymentShifts',
-			  'reference.Ethnicities',
-			  'reference.FundingSources',
-			  'reference.Genders',
-			  'reference.MaritalStatuses',
-			  'reference.States', 
-			  'reference.StudentStatuses',
-			  'reference.VeteranStatuses',
-			  'reference.YesNo'], 
 	
-	controllers: [
-        	'AdminViewController',
-        	'MainViewController',
-        	'SearchResultsViewController',
-        	'tool.StudentIntakeToolViewController',
-        	'ToolsViewController'     	
-    ],
-          		
-    launch: function( app ) {
+	Ext.application({
+	    name: 'Ssp',
+	    appFolder: 'app',
+				
+		stores: [ 'Students', 
+				  'ApplicationForms', 
+				  'Tools',
+				  'admin.AdminTreeMenus',
+				  'reference.AbstractReferences',
+				  'reference.Challenges',
+				  'reference.ChildCareArrangements',
+				  'reference.Citizenships',
+				  'reference.EducationGoals',
+				  'reference.EducationLevels',
+				  'reference.EmploymentShifts',
+				  'reference.Ethnicities',
+				  'reference.FundingSources',
+				  'reference.Genders',
+				  'reference.MaritalStatuses',
+				  'reference.States', 
+				  'reference.StudentStatuses',
+				  'reference.VeteranStatuses',
+				  'reference.YesNo'], 
+		
+		controllers: [
+	        	'AdminViewController',
+	        	'MainViewController',
+	        	'SearchResultsViewController',
+	        	'tool.StudentIntakeToolViewController',
+	        	'ToolsViewController'     	
+	    ],
+	          		
+	    launch: function( app ) {
 
-    	//Ext.getStore('Students').load();
-    	
-		// Load the application shell
-        Ext.create('Ext.container.Viewport', {
-            layout: 'fit',
-            id: 'sspView',
-            alias: 'widget.sspview',
-            items: []
-        });
-        
- 		// Display the application
-        this.getController('MainViewController').displayApplication();
-   }
+	    	//Ext.getStore('Students').load();
+	    	
+			// Load the application shell
+	        Ext.create('Ext.container.Viewport', {
+	            layout: 'fit',
+	            id: 'sspView',
+	            alias: 'widget.sspview',
+	            items: []
+	        });
+	        
+	 		// Display the application
+	        this.getController('MainViewController').displayApplication();
+	   }
+	});	
 });

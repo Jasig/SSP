@@ -27,7 +27,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 							    ,{
 							    	text: 'Education Goals',
 							    	title: 'Education Goals',
-							        form: 'EducationalGoals',
+							        form: 'EducationGoals',
 									leaf: true
 							    }
 							    ,{

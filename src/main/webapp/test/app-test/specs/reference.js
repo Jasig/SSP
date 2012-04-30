@@ -79,29 +79,29 @@ describe("reference.js --> Citizenship Items", function() {
 
 });
 
-describe("reference.js --> Educational Goal Items", function() {
-	var educationalGoalsStore = null;
+describe("reference.js --> Education Goal Items", function() {
+	var educationGoalsStore = null;
 
     beforeEach(function(){
     	
-        if (!educationalGoalsStore) {
-        	educationalGoalsStore = Application.getStore('reference.EducationalGoals');
+        if (!educationGoalsStore) {
+        	educationGoalsStore = Application.getStore('reference.EducationGoals');
         }
 
-        expect(educationalGoalsStore).toBeTruthy();
+        expect(educationGoalsStore).toBeTruthy();
         
-        educationalGoalsStore.load();
+        educationGoalsStore.load();
        	
         waitsFor(
-            function(){ return !educationalGoalsStore.isLoading(); },
-            "Educational Goals Reference Store load never completed",
+            function(){ return !educationGoalsStore.isLoading(); },
+            "Education Goals Reference Store load never completed",
             4000
         );
 
     });   
     
-    it("Educational Goals Reference should have at least one item",function(){
-        expect(educationalGoalsStore.getCount()).toBeGreaterThan(0);
+    it("Education Goals Reference should have at least one item",function(){
+        expect(educationGoalsStore.getCount()).toBeGreaterThan(0);
     });
 
 });
@@ -129,33 +129,6 @@ describe("reference.js --> Education Level Items", function() {
     
     it("Education Levels Reference should have at least one",function(){
         expect(educationLevelsStore.getCount()).toBeGreaterThan(0);
-    });
-
-});
-
-describe("reference.js --> Employment Shift Items", function() {
-	var employmentShiftsStore = null;
-
-    beforeEach(function(){
-    	
-        if (!employmentShiftsStore) {
-        	employmentShiftsStore = Application.getStore('reference.EmploymentShifts');
-        }
-
-        expect(employmentShiftsStore).toBeTruthy();
-        
-        employmentShiftsStore.load();
-       	
-        waitsFor(
-            function(){ return !employmentShiftsStore.isLoading(); },
-            "Employment Shifts Reference Store load never completed",
-            4000
-        );
-
-    });   
-    
-    it("Employment Shifts Reference should have at least one item",function(){
-        expect(employmentShiftsStore.getCount()).toBeGreaterThan(0);
     });
 
 });
@@ -215,33 +188,6 @@ describe("reference.js --> Funding Source Items", function() {
 
 });
 
-describe("reference.js --> Gender Items", function() {
-	var gendersStore = null;
-
-    beforeEach(function(){
-    	
-        if (!gendersStore) {
-        	gendersStore = Application.getStore('reference.Genders');
-        }
-
-        expect(gendersStore).toBeTruthy();
-        
-        gendersStore.load();
-       	
-        waitsFor(
-            function(){ return !gendersStore.isLoading(); },
-            "Genders Reference Store load never completed",
-            4000
-        );
-
-    });   
-    
-    it("Genders Reference should have at least one item",function(){
-        expect(gendersStore.getCount()).toBeGreaterThan(0);
-    });
-
-});
-
 
 describe("reference.js --> Marital Status Items", function() {
 	var maritalStatusesStore = null;
@@ -266,33 +212,6 @@ describe("reference.js --> Marital Status Items", function() {
     
     it("MaritalStatuses Reference should have at least one item",function(){
         expect(maritalStatusesStore.getCount()).toBeGreaterThan(0);
-    });
-
-});
-
-describe("reference.js --> States Items", function() {
-	var statesStore = null;
-
-    beforeEach(function(){
-    	
-        if (!statesStore) {
-        	statesStore = Application.getStore('reference.States');
-        }
-
-        expect(statesStore).toBeTruthy();
-        
-        statesStore.load();
-       	
-        waitsFor(
-            function(){ return !statesStore.isLoading(); },
-            "States Reference Store load never completed",
-            4000
-        );
-
-    });   
-    
-    it("States Reference should have at least one item",function(){
-        expect(statesStore.getCount()).toBeGreaterThan(0);
     });
 
 });
@@ -347,33 +266,6 @@ describe("reference.js --> Veteran Status Items", function() {
     
     it("VeteranStatuses Reference should have at least one item",function(){
         expect(veteranStatusesStore.getCount()).toBeGreaterThan(0);
-    });
-
-});
-
-describe("reference.js --> Yes/No Items", function() {
-	var yesNoStore = null;
-
-    beforeEach(function(){
-    	
-        if (!yesNoStore) {
-        	yesNoStore = Application.getStore('reference.YesNo');
-        }
-
-        expect(yesNoStore).toBeTruthy();
-        
-        yesNoStore.load();
-       	
-        waitsFor(
-            function(){ return !yesNoStore.isLoading(); },
-            "Yes/No Reference Store load never completed",
-            4000
-        );
-
-    });   
-    
-    it("YesNo Reference should have at least one item",function(){
-        expect(yesNoStore.getCount()).toBeGreaterThan(0);
     });
 
 });
