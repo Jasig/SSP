@@ -68,17 +68,51 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 							    }
 						]
 					},{
-						text: 'Counseling Reference Guide',
-						title: 'Counseling Reference Guide',
+						text: 'Action Plan',
+						title: 'Action Plan',
 						form: '',
-						expanded: true,
-						children: [
+						expanded: false,
+						children: [{
+									text: 'Categories',
+									title: 'Categories',
+									form: 'Categories',
+									leaf: true
+								},
 								{
 									text: 'Challenges',
 									title: 'Challenges',
 									form: 'Challenges',
 									leaf: true
+								},{
+									text: 'Referrals',
+									title: 'Referrals',
+									form: 'Referrals',
+									leaf: true
 								}]
+					},{
+						text: 'Self Help Guide',
+						title: 'Self Help Guide',
+						form: '',
+						expanded: false,
+						children: []
+					},{
+						text: 'Security',
+						title: 'Security',
+						form: '',
+						expanded: false,
+						children: [{text: 'Confidentiality Levels',
+									title: 'Confidentiality Levels',
+									form: 'ConfidentialityLevels',
+									leaf: true }]
+					},{
+						text: 'Campus',
+						title: 'Campus',
+						form: '',
+						expanded: false,
+						children: [{text: 'Campuses',
+									title: 'Campuses',
+									form: 'Campuses',
+									leaf: true }]
 					}
                    
         ]

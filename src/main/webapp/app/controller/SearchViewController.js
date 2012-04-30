@@ -1,18 +1,21 @@
-Ext.define('Ssp.controller.SearchResultsViewController', {
+Ext.define('Ssp.controller.SearchViewController', {
     extend: 'Ext.app.Controller', 
-	
+
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         currentPerson: 'currentPerson'
     },
     
     views: [
-        'SearchResults'
+        'Search'
     ],
  
 	init: function() {
- 		this.control({
-			'searchresults': {
+    	// load students
+    	Ext.getStore('Students').load();
+		
+		this.control({
+			'search': {
 				selectionchange: this.handleSelectionChange,
 				viewready: this.handleViewReady,
 				scope: this
@@ -31,5 +34,5 @@ Ext.define('Ssp.controller.SearchResultsViewController', {
 	handleViewReady: function(view, eobj){
 		view.getSelectionModel().select(0);
 	}
-	
+
 });

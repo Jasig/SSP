@@ -57,13 +57,9 @@ Ext.define('Ssp.controller.MainViewController', {
     	var mainView;
     	var arrViewItems;
     	var sspView = this.cleanSspView();
-    	// load students
-    	Ext.getStore('Students').load();
+    	
     	mainView = Ext.create('Ssp.view.Main');
-		arrViewItems = [{ 
-							xtype: 'searchresults', 
-							flex: 2 
-						},
+		arrViewItems = [{xtype: 'search', flex: 2 },
 							Ext.create('Ssp.view.StudentRecord',{
 								flex: 4,
 				 			  items: [{

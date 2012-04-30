@@ -50,9 +50,12 @@ Ext.onReady(function(){
 				  'Tools',
 				  'admin.AdminTreeMenus',
 				  'reference.AbstractReferences',
+				  'reference.Campuses',
+				  'reference.Categories',
 				  'reference.Challenges',
 				  'reference.ChildCareArrangements',
 				  'reference.Citizenships',
+				  'reference.ConfidentialityLevels',
 				  'reference.EducationGoals',
 				  'reference.EducationLevels',
 				  'reference.EmploymentShifts',
@@ -60,6 +63,7 @@ Ext.onReady(function(){
 				  'reference.FundingSources',
 				  'reference.Genders',
 				  'reference.MaritalStatuses',
+				  'reference.Referrals',
 				  'reference.States', 
 				  'reference.StudentStatuses',
 				  'reference.VeteranStatuses',
@@ -68,15 +72,12 @@ Ext.onReady(function(){
 		controllers: [
 	        	'AdminViewController',
 	        	'MainViewController',
-	        	'SearchResultsViewController',
+	        	'SearchViewController',
 	        	'tool.StudentIntakeToolViewController',
 	        	'ToolsViewController'     	
 	    ],
 	          		
 	    launch: function( app ) {
-
-	    	//Ext.getStore('Students').load();
-	    	
 			// Load the application shell
 	        Ext.create('Ext.container.Viewport', {
 	            layout: 'fit',
