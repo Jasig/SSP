@@ -8,7 +8,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -71,11 +70,6 @@ public class Goal extends AbstractReference implements
 	 */
 	public Goal(UUID id, String name, String description) {
 		super(id, name, description);
-	}
-
-	public void overwrite(@NotNull final Goal source) {
-		super.overwrite(source);
-		setConfidentialityLevel(source.getConfidentialityLevel());
 	}
 
 	public ConfidentialityLevel getConfidentialityLevel() {

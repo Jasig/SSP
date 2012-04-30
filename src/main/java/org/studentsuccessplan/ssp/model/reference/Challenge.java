@@ -13,7 +13,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
@@ -193,31 +192,6 @@ public class Challenge extends AbstractReference implements Serializable {
 	public void setDefaultConfidentialityLevel(
 			final ConfidentialityLevel defaultConfidentialityLevel) {
 		this.defaultConfidentialityLevel = defaultConfidentialityLevel;
-	}
-
-	/**
-	 * Overwrites properties with the source object's properties. DOES NOT
-	 * overwrite any mapped collections.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 */
-	public void overwrite(@NotNull final Challenge source) {
-		super.overwrite(source);
-
-		setSelfHelpGuideQuestion(source.getSelfHelpGuideQuestion());
-		setSelfHelpGuideDescription(source.getSelfHelpGuideDescription());
-		setShowInStudentIntake(source.isShowInStudentIntake());
-		setShowInSelfHelpSearch(source.isShowInSelfHelpSearch());
-		setTags(source.getTags());
-		setDefaultConfidentialityLevel(source.getDefaultConfidentialityLevel());
-
-		// TODO: OverwriteWithCollections
-		/*
-		 * setSelfHelpGuideQuestions(source.setSelfHelpGuideQuestions());
-		 * setChallengeChallengeReferrals
-		 * (source.setChallengeChallengeReferrals());
-		 */
 	}
 
 	@Override
