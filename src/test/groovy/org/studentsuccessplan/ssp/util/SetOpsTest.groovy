@@ -14,6 +14,16 @@ class SetOpsTest {
 		private String other;
 		protected int hashPrime(){
 			return 11
+		}
+		@Override
+		public int hashCode() {
+			int result = hashPrime();
+
+			// Auditable properties
+			result *= getId() == null ? "id".hashCode() : getId().hashCode();
+			result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+					.hashCode();
+			return result
 		};
 	}
 
