@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -17,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.Message;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
@@ -68,7 +67,7 @@ public class MessageDaoTest {
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
 
-		List<Message> all = dao.getAll(ObjectStatus.ACTIVE);
+		Collection<Message> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
 		assertList(all);
@@ -84,7 +83,7 @@ public class MessageDaoTest {
 		assertNull(fundingSource);
 	}
 
-	private void assertList(List<Message> objects) {
+	private void assertList(Collection<Message> objects) {
 		for (Message object : objects) {
 			assertNotNull(object.getId());
 		}

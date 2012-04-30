@@ -1,28 +1,28 @@
 package org.studentsuccessplan.ssp.service.reference.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.reference.ChildCareArrangementDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.ChildCareArrangementService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 @Transactional
-public class ChildCareArrangementServiceImpl implements ChildCareArrangementService {
+public class ChildCareArrangementServiceImpl implements
+		ChildCareArrangementService {
 
 	@Autowired
 	private ChildCareArrangementDao dao;
 
 	@Override
-	public List<ChildCareArrangement> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<ChildCareArrangement> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
@@ -42,7 +42,8 @@ public class ChildCareArrangementServiceImpl implements ChildCareArrangementServ
 	}
 
 	@Override
-	public ChildCareArrangement save(ChildCareArrangement obj) throws ObjectNotFoundException {
+	public ChildCareArrangement save(ChildCareArrangement obj)
+			throws ObjectNotFoundException {
 		ChildCareArrangement current = get(obj.getId());
 
 		current.setName(obj.getName());

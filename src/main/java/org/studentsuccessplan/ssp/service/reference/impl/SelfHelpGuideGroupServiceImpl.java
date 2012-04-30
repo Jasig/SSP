@@ -1,17 +1,16 @@
 package org.studentsuccessplan.ssp.service.reference.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideGroupDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideGroupService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -22,7 +21,7 @@ public class SelfHelpGuideGroupServiceImpl implements SelfHelpGuideGroupService 
 	private SelfHelpGuideGroupDao dao;
 
 	@Override
-	public List<SelfHelpGuideGroup> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<SelfHelpGuideGroup> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
@@ -42,7 +41,8 @@ public class SelfHelpGuideGroupServiceImpl implements SelfHelpGuideGroupService 
 	}
 
 	@Override
-	public SelfHelpGuideGroup save(SelfHelpGuideGroup obj) throws ObjectNotFoundException {
+	public SelfHelpGuideGroup save(SelfHelpGuideGroup obj)
+			throws ObjectNotFoundException {
 		SelfHelpGuideGroup current = get(obj.getId());
 
 		current.setName(obj.getName());

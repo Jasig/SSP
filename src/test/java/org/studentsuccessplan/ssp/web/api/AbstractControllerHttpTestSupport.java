@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerMapping;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 /**
  * 
@@ -23,10 +24,12 @@ import org.springframework.web.servlet.HandlerMapping;
  *            Controller class under test
  * @param <TO>
  *            Transfer object to send and receive from the controller.
+ * @param <T>
+ *            Model to send and receive via the transfer object class.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
-public abstract class AbstractControllerHttpTestSupport<C extends RestController<TO>, TO> {
+public abstract class AbstractControllerHttpTestSupport<C extends RestController<TO, T>, TO extends TransferObject<T>, T> {
 	@Autowired
 	protected transient ApplicationContext applicationContext;
 

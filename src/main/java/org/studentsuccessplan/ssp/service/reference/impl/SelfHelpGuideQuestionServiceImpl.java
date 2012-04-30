@@ -1,28 +1,28 @@
 package org.studentsuccessplan.ssp.service.reference.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideQuestionDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideQuestionService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 @Transactional
-public class SelfHelpGuideQuestionServiceImpl implements SelfHelpGuideQuestionService {
+public class SelfHelpGuideQuestionServiceImpl implements
+		SelfHelpGuideQuestionService {
 
 	@Autowired
 	private SelfHelpGuideQuestionDao dao;
 
 	@Override
-	public List<SelfHelpGuideQuestion> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<SelfHelpGuideQuestion> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
@@ -42,7 +42,8 @@ public class SelfHelpGuideQuestionServiceImpl implements SelfHelpGuideQuestionSe
 	}
 
 	@Override
-	public SelfHelpGuideQuestion save(SelfHelpGuideQuestion obj) throws ObjectNotFoundException {
+	public SelfHelpGuideQuestion save(SelfHelpGuideQuestion obj)
+			throws ObjectNotFoundException {
 		SelfHelpGuideQuestion current = get(obj.getId());
 
 		current.setName(obj.getName());

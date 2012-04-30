@@ -6,12 +6,13 @@ import java.util.UUID;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.tool.IntakeService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public interface PersonService extends AuditableCrudService<Person> {
 
 	@Override
-	List<Person> getAll(SortingAndPaging sAndP);
+	PagingWrapper<Person> getAll(SortingAndPaging sAndP);
 
 	/**
 	 * Retrieves the specified Person.

@@ -12,6 +12,7 @@ import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
 import org.studentsuccessplan.ssp.service.tool.IntakeService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -22,7 +23,7 @@ public class PersonServiceImpl implements PersonService {
 	private PersonDao dao;
 
 	@Override
-	public List<Person> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<Person> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 

@@ -50,10 +50,11 @@ public class ChallengeReferralDaoTest {
 	private SecurityServiceInTestEnvironment securityService;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 
-		testChallenge = challengeDao.getAll(ObjectStatus.ACTIVE).get(0);
+		testChallenge = challengeDao.getAll(ObjectStatus.ACTIVE).getRows()
+				.iterator().next();
 		testStudent = personDao.fromUsername("ken");
 	}
 
@@ -76,7 +77,9 @@ public class ChallengeReferralDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		final List<ChallengeReferral> all = dao.getAll(ObjectStatus.ACTIVE);
+		final List<ChallengeReferral> all = (List<ChallengeReferral>) dao
+				.getAll(
+						ObjectStatus.ACTIVE).getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
 		assertList(all);
@@ -120,31 +123,28 @@ public class ChallengeReferralDaoTest {
 
 	@Test
 	public void byChallengeId() {
-		List<ChallengeReferral> crs =
-				dao.byChallengeId(testChallenge.getId());
+		List<ChallengeReferral> crs = dao.byChallengeId(testChallenge.getId());
 		assertList(crs);
 	}
 
 	@Test
 	public void byChallengeIdAndQuery() {
-		List<ChallengeReferral> crs =
-				dao.byChallengeIdAndQuery(testChallenge.getId(), "issue");
+		List<ChallengeReferral> crs = dao.byChallengeIdAndQuery(
+				testChallenge.getId(), "issue");
 		assertList(crs);
 	}
 
 	@Test
 	public void countByChallengeIdNotOnActiveTaskList() {
-		long count =
-				dao.countByChallengeIdNotOnActiveTaskList(
-						testChallenge.getId(), testStudent, "testSessionId");
+		long count = dao.countByChallengeIdNotOnActiveTaskList(
+				testChallenge.getId(), testStudent, "testSessionId");
 		assertTrue(count > -1);
 	}
 
 	@Test
 	public void byChallengeIdNotOnActiveTaskList() {
-		List<ChallengeReferral> crs =
-				dao.byChallengeIdNotOnActiveTaskList(testChallenge.getId(),
-						testStudent, "testSessionId");
+		List<ChallengeReferral> crs = dao.byChallengeIdNotOnActiveTaskList(
+				testChallenge.getId(), testStudent, "testSessionId");
 		assertList(crs);
 	}
 

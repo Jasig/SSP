@@ -38,6 +38,7 @@ public class SelfHelpGuideQuestionResponseDaoTest {
 
 	@Test
 	public void testGetAll() {
-		assertList(dao.getAll(ObjectStatus.ALL));
+		assertList((List<SelfHelpGuideQuestionResponse>) dao.getAll(
+				ObjectStatus.ALL).getRows());
 	}
 }

@@ -1,17 +1,16 @@
 package org.studentsuccessplan.ssp.service.reference.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.reference.MessageTemplateDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.MessageTemplateService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -22,7 +21,7 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
 	private MessageTemplateDao dao;
 
 	@Override
-	public List<MessageTemplate> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<MessageTemplate> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
@@ -42,7 +41,8 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
 	}
 
 	@Override
-	public MessageTemplate save(MessageTemplate obj) throws ObjectNotFoundException {
+	public MessageTemplate save(MessageTemplate obj)
+			throws ObjectNotFoundException {
 		MessageTemplate current = get(obj.getId());
 
 		current.setName(obj.getName());

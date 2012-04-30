@@ -5,7 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class PersonControllerIntegrationTest {
 
 	private static final String PERSON_SORTEDBY_FIRSTNAME_0 = "Alan";
 
-	private static final String PERSON_SORTEDBY_FIRSTNAME_2 = "James";
+	private static final String PERSON_SORTEDBY_FIRSTNAME_3 = "James";
 
 	/**
 	 * Test the {@link PersonController#get(UUID)} action.
@@ -98,8 +99,8 @@ public class PersonControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE, null,
-				null, null, null);
+		Collection<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE,
+				null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 		assertTrue("List action should have returned some objects.",
@@ -119,10 +120,10 @@ public class PersonControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAllWithPaging() throws Exception {
-		List<PersonTO> listAll = controller.getAll(ObjectStatus.ACTIVE, null,
-				null, null, null);
-		List<PersonTO> listFiltered = controller.getAll(ObjectStatus.ACTIVE, 1,
-				2, null, null);
+		Collection<PersonTO> listAll = controller.getAll(ObjectStatus.ACTIVE,
+				null, null, null, null).getRows();
+		Collection<PersonTO> listFiltered = controller.getAll(
+				ObjectStatus.ACTIVE, 1, 2, null, null).getRows();
 
 		assertNotNull("ListAll should not have been null.", listAll);
 		assertNotNull("ListFiltered should not have been null.", listFiltered);
@@ -149,12 +150,19 @@ public class PersonControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAllWithSorting() throws Exception {
-		List<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE, 0, 200,
-				"firstName", "ASC");
+		Collection<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE, 0,
+				200, "firstName", "ASC").getRows();
 
 		assertNotNull("The list should not have been null.", list);
-		assertNotNull("List[0] should not have been null.", list.get(0));
-		assertEquals(PERSON_SORTEDBY_FIRSTNAME_0, list.get(0).getFirstName());
-		assertEquals(PERSON_SORTEDBY_FIRSTNAME_2, list.get(3).getFirstName());
+
+		Iterator<PersonTO> iter = list.iterator();
+
+		PersonTO person = iter.next();
+		assertNotNull("List[0] should not have been null.", person);
+		assertEquals(PERSON_SORTEDBY_FIRSTNAME_0, person.getFirstName());
+		person = iter.next();
+		person = iter.next();
+		person = iter.next();
+		assertEquals(PERSON_SORTEDBY_FIRSTNAME_3, person.getFirstName());
 	}
 }

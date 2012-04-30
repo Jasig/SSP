@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
 import org.studentsuccessplan.ssp.factory.reference.SelfHelpGuideTOFactory;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideGroupService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
@@ -61,8 +62,9 @@ public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 		// security. Guides with authenticationRequired == true should not show
 		// for the anonymous user.
 		try {
-			return selfHelpGuideTOFactory.asTOList(selfHelpGuideService
-					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE)));
+			return selfHelpGuideTOFactory.asTOList((List<SelfHelpGuide>) selfHelpGuideService
+							.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
+							.getRows());
 		} catch (Exception e) {
 			LOGGER.error("ERROR : getAll() : {}", e.getMessage(), e);
 			throw e;

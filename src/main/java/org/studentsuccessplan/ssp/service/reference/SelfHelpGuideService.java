@@ -7,13 +7,14 @@ import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public interface SelfHelpGuideService extends
 		AuditableCrudService<SelfHelpGuide> {
 
 	@Override
-	List<SelfHelpGuide> getAll(SortingAndPaging sAndP);
+	PagingWrapper<SelfHelpGuide> getAll(SortingAndPaging sAndP);
 
 	@Override
 	SelfHelpGuide get(UUID id) throws ObjectNotFoundException;

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -157,9 +157,8 @@ public class FundingSourceControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		final List<FundingSourceTO> list = controller.getAll(
-				ObjectStatus.ACTIVE,
-				null, null, null, null);
+		final Collection<FundingSourceTO> list = controller.getAll(
+				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",

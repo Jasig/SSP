@@ -1,11 +1,11 @@
 package org.studentsuccessplan.ssp.service;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
@@ -26,7 +26,7 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	protected abstract AuditableCrudDao<T> getDao();
 
 	@Override
-	public List<T> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<T> getAll(SortingAndPaging sAndP) {
 		return getDao().getAll(sAndP);
 	}
 

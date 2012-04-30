@@ -1,17 +1,16 @@
 package org.studentsuccessplan.ssp.service.reference.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.reference.ChallengeCategoryDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.ChallengeCategory;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.ChallengeCategoryService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -22,7 +21,7 @@ public class ChallengeCategoryServiceImpl implements ChallengeCategoryService {
 	private ChallengeCategoryDao dao;
 
 	@Override
-	public List<ChallengeCategory> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<ChallengeCategory> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
@@ -42,7 +41,8 @@ public class ChallengeCategoryServiceImpl implements ChallengeCategoryService {
 	}
 
 	@Override
-	public ChallengeCategory save(ChallengeCategory obj) throws ObjectNotFoundException {
+	public ChallengeCategory save(ChallengeCategory obj)
+			throws ObjectNotFoundException {
 		ChallengeCategory current = get(obj.getId());
 
 		current.setName(obj.getName());

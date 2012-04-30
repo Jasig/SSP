@@ -1,17 +1,16 @@
 package org.studentsuccessplan.ssp.service.reference.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.reference.CitizenshipDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Citizenship;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -22,7 +21,7 @@ public class CitizenshipServiceImpl implements CitizenshipService {
 	private CitizenshipDao dao;
 
 	@Override
-	public List<Citizenship> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<Citizenship> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 

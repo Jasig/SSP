@@ -1,11 +1,9 @@
 package org.studentsuccessplan.ssp.service.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.studentsuccessplan.ssp.dao.PersonEducationGoalDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
@@ -13,6 +11,7 @@ import org.studentsuccessplan.ssp.model.PersonEducationGoal;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonEducationGoalService;
 import org.studentsuccessplan.ssp.service.reference.EducationGoalService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -26,7 +25,7 @@ public class PersonEducationGoalServiceImpl implements
 	private EducationGoalService educationGoalService;
 
 	@Override
-	public List<PersonEducationGoal> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<PersonEducationGoal> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 

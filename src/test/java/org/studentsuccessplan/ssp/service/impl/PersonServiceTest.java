@@ -6,10 +6,11 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonChallenge;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Lists;
@@ -46,14 +48,14 @@ public class PersonServiceTest {
 		List<Person> daoAll = new ArrayList<Person>();
 		daoAll.add(new Person());
 
-		expect(dao.getAll(isA(SortingAndPaging.class)))
-				.andReturn(daoAll);
+		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
+				new PagingWrapper<Person>(daoAll));
 
 		replay(dao);
 
-		List<Person> all = service.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE));
-		assertTrue(all.size() > 0);
+		Collection<Person> all = service.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
+		assertFalse(all.isEmpty());
 		verify(dao);
 	}
 

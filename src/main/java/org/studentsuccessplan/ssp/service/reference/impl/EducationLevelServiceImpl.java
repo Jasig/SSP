@@ -1,17 +1,16 @@
 package org.studentsuccessplan.ssp.service.reference.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.reference.EducationLevelDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.EducationLevel;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.EducationLevelService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -22,7 +21,7 @@ public class EducationLevelServiceImpl implements EducationLevelService {
 	private EducationLevelDao dao;
 
 	@Override
-	public List<EducationLevel> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<EducationLevel> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
@@ -42,7 +41,8 @@ public class EducationLevelServiceImpl implements EducationLevelService {
 	}
 
 	@Override
-	public EducationLevel save(EducationLevel obj) throws ObjectNotFoundException {
+	public EducationLevel save(EducationLevel obj)
+			throws ObjectNotFoundException {
 		EducationLevel current = get(obj.getId());
 
 		current.setName(obj.getName());

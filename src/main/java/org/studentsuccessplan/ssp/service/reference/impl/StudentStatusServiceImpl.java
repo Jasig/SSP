@@ -1,17 +1,16 @@
 package org.studentsuccessplan.ssp.service.reference.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.dao.reference.StudentStatusDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.StudentStatus;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.reference.StudentStatusService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -22,7 +21,7 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 	private StudentStatusDao dao;
 
 	@Override
-	public List<StudentStatus> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<StudentStatus> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 

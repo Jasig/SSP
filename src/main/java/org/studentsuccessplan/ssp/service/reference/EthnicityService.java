@@ -1,17 +1,17 @@
 package org.studentsuccessplan.ssp.service.reference;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.Ethnicity;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public interface EthnicityService extends AuditableCrudService<Ethnicity> {
 
 	@Override
-	public List<Ethnicity> getAll(SortingAndPaging sAndP);
+	public PagingWrapper<Ethnicity> getAll(SortingAndPaging sAndP);
 
 	@Override
 	public Ethnicity get(UUID id) throws ObjectNotFoundException;

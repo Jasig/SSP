@@ -1,6 +1,5 @@
 package org.studentsuccessplan.ssp.web.api.reference;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -17,8 +16,10 @@ import org.studentsuccessplan.ssp.factory.TOFactory;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.AbstractReference;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
+import org.studentsuccessplan.ssp.transferobject.PagingTO;
 import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
 import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import org.studentsuccessplan.ssp.web.api.RestController;
 import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
@@ -35,7 +36,7 @@ import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
  *            Transfer object type that handles the model type T.
  */
 public abstract class AbstractAuditableReferenceController<T extends AbstractReference, TO extends AbstractReferenceTO<T>>
-		extends RestController<TO> {
+		extends RestController<TO, T> {
 
 	/**
 	 * Logger
@@ -82,17 +83,20 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<TO> getAll(final @RequestParam(required = false) ObjectStatus status,
+	PagingTO<TO, T> getAll(
+			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
 			throws Exception {
 
-		return getFactory().asTOList(
-				getService().getAll(
-						SortingAndPaging.createForSingleSort(status, start,
-								limit, sort, sortDirection, "name")));
+		PagingWrapper<T> data = getService().getAll(
+				SortingAndPaging.createForSingleSort(status, start,
+						limit, sort, sortDirection, "name"));
+
+		return new PagingTO<TO, T>(true, data.getResults(), getFactory()
+				.asTOList(data.getRows()));
 	}
 
 	@Override

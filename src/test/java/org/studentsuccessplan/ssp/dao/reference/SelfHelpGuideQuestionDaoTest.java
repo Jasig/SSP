@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -17,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
@@ -54,7 +53,8 @@ public class SelfHelpGuideQuestionDaoTest {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 		testGuide = selfHelpGuideDao.get(UUID
 				.fromString("2597d6a8-c95e-40a5-a3fd-e0d95967b1a0"));
-		testChallenge = challengeDao.getAll(ObjectStatus.ACTIVE).get(0);
+		testChallenge = challengeDao.getAll(ObjectStatus.ACTIVE).getRows()
+				.iterator().next();
 	}
 
 	@Test
@@ -78,7 +78,8 @@ public class SelfHelpGuideQuestionDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		List<SelfHelpGuideQuestion> all = dao.getAll(ObjectStatus.ACTIVE);
+		Collection<SelfHelpGuideQuestion> all = dao.getAll(ObjectStatus.ACTIVE)
+				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
 		assertList(all);
@@ -94,7 +95,7 @@ public class SelfHelpGuideQuestionDaoTest {
 		assertNull(selfHelpGuideQuestion);
 	}
 
-	private void assertList(List<SelfHelpGuideQuestion> objects) {
+	private void assertList(Collection<SelfHelpGuideQuestion> objects) {
 		for (SelfHelpGuideQuestion object : objects) {
 			assertNotNull(object.getId());
 		}

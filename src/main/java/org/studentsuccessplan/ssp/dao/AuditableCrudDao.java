@@ -1,10 +1,10 @@
 package org.studentsuccessplan.ssp.dao;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
@@ -25,7 +25,7 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @return All entities in the database, filtered only by the specified
 	 *         parameters.
 	 */
-	List<T> getAll(ObjectStatus status);
+	PagingWrapper<T> getAll(ObjectStatus status);
 
 	/**
 	 * Return all entities in the database, filtered only by the specified
@@ -36,7 +36,7 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @return All entities in the database, filtered only by the specified
 	 *         parameters.
 	 */
-	List<T> getAll(SortingAndPaging sAndP);
+	PagingWrapper<T> getAll(SortingAndPaging sAndP);
 
 	/**
 	 * Retrieves the specified instance from persistent storage, or returns null

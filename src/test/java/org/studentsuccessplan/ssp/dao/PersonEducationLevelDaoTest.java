@@ -52,8 +52,9 @@ public class PersonEducationLevelDaoTest {
 	@Before
 	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
-		testEducationLevel = educationLevelService.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE)).get(0);
+		testEducationLevel = educationLevelService
+				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()
+				.iterator().next();
 	}
 
 	@Test

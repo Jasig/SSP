@@ -1,17 +1,17 @@
 package org.studentsuccessplan.ssp.service;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.PersonEducationGoal;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public interface PersonEducationGoalService extends
 		AuditableCrudService<PersonEducationGoal> {
 
 	@Override
-	public List<PersonEducationGoal> getAll(SortingAndPaging sAndP);
+	public PagingWrapper<PersonEducationGoal> getAll(SortingAndPaging sAndP);
 
 	@Override
 	public PersonEducationGoal get(UUID id) throws ObjectNotFoundException;

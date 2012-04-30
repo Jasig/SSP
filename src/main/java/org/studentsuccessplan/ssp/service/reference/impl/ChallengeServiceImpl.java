@@ -14,6 +14,7 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Lists;
@@ -35,7 +36,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 	private transient SecurityService securityService;
 
 	@Override
-	public List<Challenge> getAll(final SortingAndPaging sAndP) {
+	public PagingWrapper<Challenge> getAll(SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -62,7 +62,8 @@ public class ConfidentialityLevelDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		List<ConfidentialityLevel> all = dao.getAll(ObjectStatus.ACTIVE);
+		Collection<ConfidentialityLevel> all = dao.getAll(ObjectStatus.ACTIVE)
+				.getRows();
 		assertNotNull(all);
 		assertFalse(all.isEmpty());
 		assertList(all);
@@ -78,7 +79,7 @@ public class ConfidentialityLevelDaoTest {
 		assertNull(confidentialityLevel);
 	}
 
-	private void assertList(final List<ConfidentialityLevel> objects) {
+	private void assertList(final Collection<ConfidentialityLevel> objects) {
 		for (ConfidentialityLevel object : objects) {
 			assertNotNull(object.getId());
 		}

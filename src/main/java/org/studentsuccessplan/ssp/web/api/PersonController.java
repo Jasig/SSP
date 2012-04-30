@@ -1,6 +1,5 @@
 package org.studentsuccessplan.ssp.web.api;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -21,8 +20,10 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.PersonService;
+import org.studentsuccessplan.ssp.transferobject.PagingTO;
 import org.studentsuccessplan.ssp.transferobject.PersonTO;
 import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
@@ -34,7 +35,7 @@ import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/person")
-public class PersonController extends RestController<PersonTO> {
+public class PersonController extends RestController<PersonTO, Person> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonController.class);
@@ -48,16 +49,19 @@ public class PersonController extends RestController<PersonTO> {
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<PersonTO> getAll(
+	PagingTO<PersonTO, Person> getAll(
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
 
-		return factory.asTOList(service.getAll(SortingAndPaging
+		PagingWrapper<Person> people = service.getAll(SortingAndPaging
 				.createForSingleSort(status, start, limit, sort, sortDirection,
-						null)));
+						null));
+
+		return new PagingTO<PersonTO, Person>(true, people.getResults(),
+				factory.asTOList(people.getRows()));
 	}
 
 	@Override
