@@ -84,7 +84,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 						children: [{
 									text: 'Categories',
 									title: 'Categories',
-									store: 'categories',
+									store: 'challengeCategories',
 									form: 'AbstractReferenceAdmin',
 									leaf: true
 								},
@@ -97,7 +97,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 								},{
 									text: 'Referrals',
 									title: 'Referrals',
-									store: 'referrals',
+									store: 'challengeReferrals',
 									form: 'AbstractReferenceAdmin',
 									leaf: true
 								}]
@@ -127,6 +127,18 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 									store: 'campuses',
 									form: 'AbstractReferenceAdmin',
 									leaf: true }]
+					},{
+						text: 'Journal',
+						title: 'Journal',
+						form: '',
+						expanded: false,
+						children: []
+					},{
+						text: 'Early Alert',
+						title: 'Early Alert',
+						form: '',
+						expanded: false,
+						children: []
 					}
                    
         ]

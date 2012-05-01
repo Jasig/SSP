@@ -4,8 +4,9 @@ Ext.define('Ssp.controller.AdminViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	campusesStore: 'campusesStore',
-    	categoriesStore: 'categoriesStore',
+    	challengeCategoriesStore: 'challengeCategoriesStore',
         challengesStore: 'challengesStore',
+    	challengeReferralsStore: 'challengeReferralsStore',
     	childCareArrangementsStore: 'childCareArrangementsStore',
     	citizenshipsStore: 'citizenshipsStore',
     	confidentialityLevelsStore: 'confidentialityLevelsStore', 
@@ -16,7 +17,6 @@ Ext.define('Ssp.controller.AdminViewController', {
     	fundingSourcesStore: 'fundingSourcesStore',
     	gendersStore: 'gendersStore',
     	maritalStatusesStore: 'maritalStatusesStore',
-    	referralsStore: 'referralsStore',
         statesStore: 'statesStore',
         studentStatusesStore: 'studentStatusesStore',
     	veteranStatusesStore: 'veteranStatusesStore'

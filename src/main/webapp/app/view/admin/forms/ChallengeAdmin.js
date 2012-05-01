@@ -21,20 +21,15 @@ Ext.define('Ssp.view.admin.forms.ChallengeAdmin', {
     		                  field: {
     		                      xtype: 'textfield'
     		                  },
-    		                  flex: 50 },
+    		                  flex: 1 
+    		                },
     		                { header: 'Description',
     		                  dataIndex: 'description', 
-    		                  flex: 50,
+    		                  flex: 1,
     		                  field: {
     		                      xtype: 'textfield'
     		                  },
-    		                  flex: 50 },
-      		                { header: 'Tags',
-      		                  dataIndex: 'tags', 
-      		                  flex: 50,
-      		                  field: {
-      		                      xtype: 'textfield'
-      		                  }
+    		                  flex: 1 
     		                }
     		           ],
     		        

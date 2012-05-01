@@ -53,12 +53,13 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 		var personEducationLevels = formData.data.personEducationLevels;
 		var personFundingSources = formData.data.personFundingSources;
 		var personChallenges = formData.data.personChallenges;
+		var personEducationGoalId = "";
 
 		// REFERENCE OBJECTS
-		var challenges = formData.data.referenceData.challenges;
-		var educationGoals = formData.data.referenceData.educationGoals;
-		var educationLevels = formData.data.referenceData.educationLevels;
-		var fundingSources = formData.data.referenceData.fundingSources;
+		var challenges = this.formUtils.alphaSortByField( formData.data.referenceData.challenges, 'name' );
+		var educationGoals = this.formUtils.alphaSortByField( formData.data.referenceData.educationGoals, 'name' );
+		var educationLevels = this.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
+		var fundingSources = this.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
 
 		this.challengesStore.loadData( challenges );
 		this.childCareArrangementsStore.loadData( formData.data.referenceData.childCareArrangements );
@@ -89,8 +90,13 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 		if ( personEducationGoal != null && personEducationGoal != undefined )
 		{
 			Ext.getCmp('StudentIntakeEducationGoals').loadRecord( personEducationGoal );
+			if (personEducationGoal.get('educationGoalId') != null)
+			{
+				personEducationGoalId = personEducationGoal.get('educationGoalId')
+			}			 
 		}
-
+		
+		this.formUtils.createRadioButtonGroup('StudentIntakeEducationGoals','StudentIntakeEducationGoalsRadioGroup', educationGoals, personEducationGoalId, 'id', 'educationGoalId');
 		this.formUtils.createCheckBoxForm('StudentIntakeEducationLevels', educationLevels, personEducationLevels, 'id', 'educationLevelId');
 		this.formUtils.createCheckBoxForm('StudentIntakeFunding', fundingSources, personFundingSources, 'id', 'fundingSourceId');	
 		this.formUtils.createCheckBoxForm('StudentIntakeChallenges', challenges, personChallenges, 'id', 'challengeId');
@@ -175,8 +181,6 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			}
 			intakeData.personChallenges = selectedChallenges;
 			
-			// console.log(intakeData);
-			
 			Ext.Ajax.request({
 				url: this.apiProperties.createUrl('tool/studentIntake/' + this.currentPerson.get('id')),
 				method: 'PUT',
@@ -185,7 +189,7 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 				success: function(response) {
 					var r = Ext.decode(response.responseText);
 					if(r.success == true) {
-						console.log('student intake saved successfully')							
+						console.log('student intake saved successfully');							
 					}								
 				},
 				failure: function(response) {
