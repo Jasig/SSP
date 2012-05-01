@@ -25,7 +25,11 @@ Ext.define('Ssp.mixin.ApiProperties', {
 				destroy: "DELETE"
 			},
 			reader: {
-				type: 'json'
+				type: 'json',
+				root: 'rows',
+				totalProperty: 'results',
+				successProperty: 'success',
+				message: 'message'
 			},
 		    writer: {
 		        type: 'json',

@@ -65,7 +65,7 @@ public class MyGpsSelfHelpGuideControllerIntegrationTest
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerComplete() throws Exception {
+	public void testControllerGetContentById() throws Exception {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -83,6 +83,10 @@ public class MyGpsSelfHelpGuideControllerIntegrationTest
 			assertEquals("Question number did not match the list order.",
 					i + 1,
 					question.getQuestionNumber());
+			assertNotNull("Challenge should not have been null.",
+					question.getChallenge());
+			assertNotNull("Challenge.Id should not have been null.", question
+					.getChallenge().getId());
 		}
 	}
 }

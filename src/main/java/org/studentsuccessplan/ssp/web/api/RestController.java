@@ -2,6 +2,7 @@ package org.studentsuccessplan.ssp.web.api;
 
 import java.util.UUID;
 
+import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.transferobject.PagingTO;
 import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
@@ -15,7 +16,8 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
  * @param <T>
  *            The model that the TO type T works with.
  */
-public abstract class RestController<TO extends TransferObject<T>, T> extends
+public abstract class RestController<TO extends TransferObject<T>, T extends Auditable>
+		extends
 		BaseController {
 
 	/**

@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerMapping;
+import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 /**
@@ -29,7 +30,7 @@ import org.studentsuccessplan.ssp.transferobject.TransferObject;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
-public abstract class AbstractControllerHttpTestSupport<C extends RestController<TO, T>, TO extends TransferObject<T>, T> {
+public abstract class AbstractControllerHttpTestSupport<C extends RestController<TO, T>, TO extends TransferObject<T>, T extends Auditable> {
 	@Autowired
 	protected transient ApplicationContext applicationContext;
 

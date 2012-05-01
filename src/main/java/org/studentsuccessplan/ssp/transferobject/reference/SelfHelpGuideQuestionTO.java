@@ -22,7 +22,7 @@ public class SelfHelpGuideQuestionTO extends
 
 	private boolean mandatory;
 
-	private UUID challengeId;
+	private ChallengeTO challenge;
 
 	private UUID selfHelpGuideId;
 
@@ -61,7 +61,7 @@ public class SelfHelpGuideQuestionTO extends
 		}
 
 		if (model.getChallenge() != null) {
-			challengeId = model.getChallenge().getId();
+			setChallenge(new ChallengeTO(model.getChallenge()));
 		}
 	}
 
@@ -90,11 +90,22 @@ public class SelfHelpGuideQuestionTO extends
 	}
 
 	public UUID getChallengeId() {
-		return challengeId;
+		return challenge == null ? null : challenge.getId();
 	}
 
-	public void setChallengeId(final UUID challengeId) {
-		this.challengeId = challengeId;
+	/**
+	 * @return the challenge
+	 */
+	public ChallengeTO getChallenge() {
+		return challenge;
+	}
+
+	/**
+	 * @param challenge
+	 *            the challenge to set
+	 */
+	public void setChallenge(ChallengeTO challenge) {
+		this.challenge = challenge;
 	}
 
 	public UUID getSelfHelpGuideId() {

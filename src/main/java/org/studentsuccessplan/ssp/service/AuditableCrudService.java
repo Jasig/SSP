@@ -2,11 +2,12 @@ package org.studentsuccessplan.ssp.service;
 
 import java.util.UUID;
 
+import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
-public interface AuditableCrudService<T> {
+public interface AuditableCrudService<T extends Auditable> {
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.

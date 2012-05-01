@@ -3,7 +3,18 @@ package org.studentsuccessplan.ssp.util.sort;
 import java.io.Serializable;
 import java.util.Collection;
 
-public class PagingWrapper<T> implements Serializable {
+import org.studentsuccessplan.ssp.model.Auditable;
+
+/**
+ * Wrap results (rows) that have been paged but still include the total record
+ * count in this returned data instance.
+ * 
+ * @author jon.adams
+ * 
+ * @param <T>
+ *            Model type that must inherit from Auditable
+ */
+public class PagingWrapper<T extends Auditable> implements Serializable {
 
 	private static final long serialVersionUID = -6028264862839080192L;
 

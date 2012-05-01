@@ -34,12 +34,10 @@ public class ChallengeTOFactoryImpl extends
 		final Challenge model = super.from(tObject);
 
 		model.setSelfHelpGuideDescription(tObject.getSelfHelpGuideDescription());
-		model.setSelfHelpGuideQuestion(tObject.getSelfHelpGuideQuestion());
 		model.setShowInSelfHelpSearch(tObject.isShowInSelfHelpSearch());
 		model.setShowInStudentIntake(tObject.isShowInStudentIntake());
 		model.setTags(tObject.getTags());
 
 		return model;
 	}
-
 }

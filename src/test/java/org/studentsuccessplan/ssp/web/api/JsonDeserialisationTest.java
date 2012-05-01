@@ -12,6 +12,7 @@ import org.studentsuccessplan.mygps.model.transferobject.FormTO;
 import org.studentsuccessplan.mygps.model.transferobject.MessageTO;
 import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
 import org.studentsuccessplan.mygps.model.transferobject.TaskReportTO;
+import org.studentsuccessplan.ssp.transferobject.PagingTO;
 import org.studentsuccessplan.ssp.transferobject.PersonChallengeTO;
 import org.studentsuccessplan.ssp.transferobject.PersonDemographicsTO;
 import org.studentsuccessplan.ssp.transferobject.PersonEducationGoalTO;
@@ -43,7 +44,7 @@ import org.studentsuccessplan.ssp.transferobject.reference.VeteranStatusTO;
 import org.studentsuccessplan.ssp.transferobject.tool.IntakeFormTO;
 
 /**
- * Test that all the transfer objects are serializable by the Json serializer.
+ * Test that all the transfer objects are serializable by the JSON serializer.
  * <p>
  * The sample code for this test was provided by the code at the blog post
  * {@link "http://blog.cuttleworks.com/2011/12/http-media-type-not-supported-exception/"}
@@ -58,6 +59,8 @@ public class JsonDeserialisationTest {
 	 */
 	@Test
 	public void sspClassesUsedByOurControllersShouldBeDeserialisableByJackson() {
+
+		// SSP transfer objects
 		assertCanBeMapped(CategoryTO.class);
 		assertCanBeMapped(ChallengeCategoryTO.class);
 		assertCanBeMapped(ChallengeReferralTO.class);
@@ -85,6 +88,19 @@ public class JsonDeserialisationTest {
 		assertCanBeMapped(PersonEducationPlanTO.class);
 		assertCanBeMapped(PersonFundingSourceTO.class);
 		assertCanBeMapped(PersonTO.class);
+
+		// MyGPS transfer objects
+		assertCanBeMapped(FormOptionTO.class);
+		assertCanBeMapped(FormQuestionTO.class);
+		assertCanBeMapped(FormSectionTO.class);
+		assertCanBeMapped(FormTO.class);
+		assertCanBeMapped(MessageTO.class);
+		assertCanBeMapped(org.studentsuccessplan.mygps.model.transferobject.PersonTO.class);
+		assertCanBeMapped(SelfHelpGuideResponseTO.class);
+		assertCanBeMapped(TaskReportTO.class);
+
+		// General purpose transfer objects
+		assertCanBeMapped(PagingTO.class);
 	}
 
 	/**

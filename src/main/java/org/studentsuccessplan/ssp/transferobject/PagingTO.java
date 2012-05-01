@@ -3,19 +3,25 @@ package org.studentsuccessplan.ssp.transferobject;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.studentsuccessplan.ssp.model.Auditable;
+
 /**
  * Wrap a paged response in a form that ExtJS may consume.
  * 
  * @author jon.adams
  * 
- * @param <T>
+ * @param <TO>
  *            Any serializable domain model. Must be TransferObject<M>, but
- *            should be some type of {@link AuditableTO} though Auditable is not
- *            required.
- * @param <M>
+ *            should be some type of {@link TransferObject}.
+ *            <p>
+ *            This should be enforced with an extends requirement like
+ *            <code>TO extends TransferObject&lt;TO&gt;</code>, but Jackson can
+ *            not serialize it correctly then due to its bugs with generics.
+ * @param <T>
  *            The model type that the transfer object T maps.
  */
-public class PagingTO<T extends TransferObject<M>, M> implements Serializable {
+public class PagingTO<TO, T extends Auditable>
+		implements Serializable {
 
 	private static final long serialVersionUID = -4699337121115833047L;
 
@@ -23,7 +29,7 @@ public class PagingTO<T extends TransferObject<M>, M> implements Serializable {
 
 	private long results;
 
-	private Collection<T> rows;
+	private Collection<TO> rows;
 
 	/**
 	 * Constructor that initializes the success of the service call and the
@@ -37,7 +43,7 @@ public class PagingTO<T extends TransferObject<M>, M> implements Serializable {
 	 * @param rows
 	 *            Only the paged rows that were requested
 	 */
-	public PagingTO(final boolean success, final Collection<T> rows) {
+	public PagingTO(final boolean success, final Collection<TO> rows) {
 		this(success, rows == null ? 0 : rows.size(), rows);
 	}
 
@@ -53,7 +59,7 @@ public class PagingTO<T extends TransferObject<M>, M> implements Serializable {
 	 *            Only the paged rows that were requested
 	 */
 	public PagingTO(final boolean success, final long totalCount,
-			final Collection<T> rows) {
+			final Collection<TO> rows) {
 		if (totalCount < 0) {
 			throw new IllegalArgumentException(
 					"Total row count may not be a negative value.");
@@ -102,7 +108,7 @@ public class PagingTO<T extends TransferObject<M>, M> implements Serializable {
 	/**
 	 * @return the rows
 	 */
-	public Collection<T> getRows() {
+	public Collection<TO> getRows() {
 		return rows;
 	}
 
@@ -110,7 +116,7 @@ public class PagingTO<T extends TransferObject<M>, M> implements Serializable {
 	 * @param rows
 	 *            the rows to set
 	 */
-	public void setRows(Collection<T> rows) {
+	public void setRows(Collection<TO> rows) {
 		this.rows = rows;
 	}
 }
