@@ -2,18 +2,18 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.studentintake',
 	id: 'StudentIntake',
-    title: 'Student Intake',
-    autoScroll: true,
-	store: Ext.getStore('Students'),
-	
+    title: 'Student Intake',	
 	width: '100%',
 	height: '100%',   
-    items: [],
-
-    buttons: [ { text: 'Save', id: 'SaveStudentIntakeButton'} ],
 	
 	initComponent: function() {	
-		this.items = [ Ext.createWidget('tabpanel', {
+		Ext.apply(this, 
+				{
+		    		buttons: [ { text: 'Save', id: 'SaveStudentIntakeButton'} ],
+		    	    autoScroll: true,
+		    		store: Ext.getStore('Students'),
+		    		
+		    		items: [ Ext.createWidget('tabpanel', {
 						        width: '100%',
 						        height: '100%',
 						        activeTab: 0,
@@ -47,7 +47,8 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 						        		}]
 						    })
 					    
-						];
+						]
+			});
 						
 		this.callParent(arguments);
 	}

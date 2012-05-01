@@ -4,77 +4,85 @@ Ext.define('Ssp.view.tools.Profile', {
 	id: 'Profile',
     width: '100%',
     height: '100%',
-    bodyPadding: 5,
-    layout: 'anchor',
-    defaults: {
-        anchor: '100%'
-    },
-    fieldDefaults: {
-        msgTarget: 'side',
-        labelAlign: 'right',
-        labelWidth: 125
-    },
-    defaultType: 'displayfield',
-    items: [{
-            xtype: 'fieldset',
-            title: 'Student Profile',
-            defaultType: 'displayfield',
-            defaults: {
-                anchor: '100%'
-            },
-       items: 
-       [{
-	        fieldLabel: 'Student',
-	        name: 'name'
-	    }, {
-	        fieldLabel: 'Tartan ID',
-	        name: 'schoolId'
-	    }, {
-	        fieldLabel: 'Birth Date',
-	        name: 'birthDate'
-	    }, {
-	        fieldLabel: 'Home Phone',
-	        name: 'homePhone'
-	    }, {
-	        fieldLabel: 'Cell Phone',
-	        name: 'cellPhone'
-	    }, {
-	        fieldLabel: 'Address',
-	        name: 'addressLine1'
-	    }, {
-	        fieldLabel: 'City',
-	        name: 'city'
-	    }, {
-	        fieldLabel: 'State',
-	        name: 'state'
-	    }, {
-	        fieldLabel: 'Zip Code',
-	        name: 'zipCode'
-	    }, {
-	        fieldLabel: 'School Email',
-	        name: 'primaryEmailAddress'
-	    }, {
-	        fieldLabel: 'Alternate Email',
-	        name: 'secondaryEmailAddress'
-	    }, {
-	        fieldLabel: 'Student Type',
-	        name: 'studentType'
-	    }, {
-	        fieldLabel: 'SSP Program Status',
-	        name: 'programStatus'
-	    }, {
-	        fieldLabel: 'Registration Status',
-	        name: 'registrationStatus'
-	    }, {
-	        fieldLabel: 'Payment Status',
-	        name: 'paymentStatus'
-	    }, {
-	        fieldLabel: 'CUM GPA',
-	        name: 'cumGPA'
-	    }, {
-	        fieldLabel: 'Academic Programs',
-	        name: 'academicPrograms'
-	    }]
-	    }]
+	initComponent: function() {	
+		Ext.apply(this, 
+				{
+    
+				    bodyPadding: 5,
+				    layout: 'anchor',
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    fieldDefaults: {
+				        msgTarget: 'side',
+				        labelAlign: 'right',
+				        labelWidth: 125
+				    },
+				    defaultType: 'displayfield',
+				    items: [{
+				            xtype: 'fieldset',
+				            title: 'Student Profile',
+				            defaultType: 'displayfield',
+				            defaults: {
+				                anchor: '100%'
+				            },
+				       items: 
+				       [{
+					        fieldLabel: 'Student',
+					        name: 'name'
+					    }, {
+					        fieldLabel: 'Tartan ID',
+					        name: 'schoolId'
+					    }, {
+					        fieldLabel: 'Birth Date',
+					        name: 'birthDate'
+					    }, {
+					        fieldLabel: 'Home Phone',
+					        name: 'homePhone'
+					    }, {
+					        fieldLabel: 'Cell Phone',
+					        name: 'cellPhone'
+					    }, {
+					        fieldLabel: 'Address',
+					        name: 'addressLine1'
+					    }, {
+					        fieldLabel: 'City',
+					        name: 'city'
+					    }, {
+					        fieldLabel: 'State',
+					        name: 'state'
+					    }, {
+					        fieldLabel: 'Zip Code',
+					        name: 'zipCode'
+					    }, {
+					        fieldLabel: 'School Email',
+					        name: 'primaryEmailAddress'
+					    }, {
+					        fieldLabel: 'Alternate Email',
+					        name: 'secondaryEmailAddress'
+					    }, {
+					        fieldLabel: 'Student Type',
+					        name: 'studentType'
+					    }, {
+					        fieldLabel: 'SSP Program Status',
+					        name: 'programStatus'
+					    }, {
+					        fieldLabel: 'Registration Status',
+					        name: 'registrationStatus'
+					    }, {
+					        fieldLabel: 'Payment Status',
+					        name: 'paymentStatus'
+					    }, {
+					        fieldLabel: 'CUM GPA',
+					        name: 'cumGPA'
+					    }, {
+					        fieldLabel: 'Academic Programs',
+					        name: 'academicPrograms'
+					    }]
+					    }]
+				});
+		
+	     this.callParent(arguments);
+	}
 	
 });
