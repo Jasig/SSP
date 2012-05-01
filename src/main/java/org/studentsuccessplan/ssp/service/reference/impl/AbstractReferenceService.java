@@ -3,6 +3,7 @@ package org.studentsuccessplan.ssp.service.reference.impl;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.dao.reference.ReferenceAuditableCrudDao;
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
@@ -10,6 +11,7 @@ import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
+@Transactional
 public abstract class AbstractReferenceService<T extends Auditable>
 		implements AuditableCrudService<T> {
 
