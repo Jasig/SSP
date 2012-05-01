@@ -1,12 +1,13 @@
 package org.studentsuccessplan.ssp.service;
 
-import java.util.List;
 import java.util.UUID;
 
+import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
-public interface AuditableCrudService<T> {
+public interface AuditableCrudService<T extends Auditable> {
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -16,7 +17,7 @@ public interface AuditableCrudService<T> {
 	 * 
 	 * @return All entities in the database filtered by the supplied status.
 	 */
-	List<T> getAll(SortingAndPaging sAndP);
+	PagingWrapper<T> getAll(SortingAndPaging sAndP);
 
 	/**
 	 * Retrieves the specified instance from persistent storage.

@@ -13,7 +13,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Message extends Auditable {
+final public class Message extends Auditable {
 
 	@Column(nullable = false, length = 250)
 	private String subject;
@@ -90,7 +90,7 @@ public class Message extends Auditable {
 	};
 
 	@Override
-	final public int hashCode() {
+	public int hashCode() {
 		int result = hashPrime();
 
 		// Auditable properties

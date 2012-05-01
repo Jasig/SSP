@@ -10,7 +10,6 @@ import org.studentsuccessplan.ssp.model.ObjectStatus
 import com.google.common.collect.Sets
 
 
-
 class SetOpsTest {
 
 	class AuditableSubClass extends Auditable{
@@ -19,6 +18,14 @@ class SetOpsTest {
 		}
 
 		private String other;
+
+		public getOther() {
+			return	this.other;
+		}
+
+		public setOther(String other) {
+			this.other = other;
+		}
 
 		protected int hashPrime(){
 			return 11

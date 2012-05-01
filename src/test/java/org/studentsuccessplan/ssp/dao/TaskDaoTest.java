@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -170,7 +171,7 @@ public class TaskDaoTest {
 				ObjectStatus.ACTIVE)));
 	}
 
-	protected void assertList(final List<Task> objects) {
+	protected void assertList(final Collection<Task> objects) {
 		for (Task object : objects) {
 			assertNotNull(object.getId());
 		}
@@ -202,7 +203,7 @@ public class TaskDaoTest {
 				CONFIDENTIALITYLEVEL_NAME, obj.getConfidentialityLevel()
 						.getName());
 
-		final List<Task> all = dao.getAll(ObjectStatus.ACTIVE);
+		final Collection<Task> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
 		assertNotNull(all);
 		assertFalse(all.isEmpty());
 		assertList(all);

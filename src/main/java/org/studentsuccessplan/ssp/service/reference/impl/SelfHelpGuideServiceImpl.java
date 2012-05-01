@@ -10,6 +10,7 @@ import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
@@ -36,9 +37,10 @@ public class SelfHelpGuideServiceImpl extends
 	private SecurityService securityService;
 
 	@Override
-	public List<SelfHelpGuide> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<SelfHelpGuide> getAll(SortingAndPaging sAndP) {
 		if (!securityService.isAuthenticated()) {
-			return dao.findAllActiveForUnauthenticated();
+			return new PagingWrapper<SelfHelpGuide>(
+					dao.findAllActiveForUnauthenticated());
 		} else {
 			return dao.getAll(sAndP);
 		}

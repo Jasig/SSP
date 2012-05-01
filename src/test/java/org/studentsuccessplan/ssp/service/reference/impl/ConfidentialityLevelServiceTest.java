@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import org.studentsuccessplan.ssp.dao.reference.ConfidentialityLevelDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public class ConfidentialityLevelServiceTest {
@@ -39,13 +41,13 @@ public class ConfidentialityLevelServiceTest {
 		List<ConfidentialityLevel> daoAll = new ArrayList<ConfidentialityLevel>();
 		daoAll.add(new ConfidentialityLevel());
 
-		expect(dao.getAll(isA(SortingAndPaging.class)))
-				.andReturn(daoAll);
+		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
+				new PagingWrapper<ConfidentialityLevel>(daoAll));
 
 		replay(dao);
 
-		List<ConfidentialityLevel> all = service.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE));
+		Collection<ConfidentialityLevel> all = service.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}

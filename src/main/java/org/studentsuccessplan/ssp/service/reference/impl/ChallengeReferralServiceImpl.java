@@ -20,17 +20,18 @@ public class ChallengeReferralServiceImpl extends
 		AbstractReferenceService<ChallengeReferral>
 		implements ChallengeReferralService {
 
-	public ChallengeReferralServiceImpl() {
-		super(ChallengeReferral.class);
-	}
-
 	@Autowired
 	transient private ChallengeReferralDao dao;
+
 	@Autowired
 	private transient TaskService taskService;
 
 	@Autowired
 	private transient SecurityService securityService;
+
+	public ChallengeReferralServiceImpl() {
+		super(ChallengeReferral.class);
+	}
 
 	@Override
 	public List<ChallengeReferral> getChallengeReferralsByChallengeId(

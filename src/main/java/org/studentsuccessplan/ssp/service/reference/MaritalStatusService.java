@@ -1,17 +1,18 @@
 package org.studentsuccessplan.ssp.service.reference;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
 import org.studentsuccessplan.ssp.service.AuditableCrudService;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
-public interface MaritalStatusService extends AuditableCrudService<MaritalStatus> {
+public interface MaritalStatusService extends
+		AuditableCrudService<MaritalStatus> {
 
 	@Override
-	public List<MaritalStatus> getAll(SortingAndPaging sAndP);
+	public PagingWrapper<MaritalStatus> getAll(SortingAndPaging sAndP);
 
 	@Override
 	public MaritalStatus get(UUID id) throws ObjectNotFoundException;

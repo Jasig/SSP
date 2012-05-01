@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,8 +36,8 @@ public class PersonServiceIntegrationTest {
 
 	@Test
 	public void testGetAll() {
-		List<Person> list = service.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE));
+		Collection<Person> list = service.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertNotNull(list);
 		assertTrue("List should have included multiple entities.",
 				list.size() > 1);
@@ -45,11 +45,11 @@ public class PersonServiceIntegrationTest {
 
 	@Test
 	public void testGetAllWithRowFilter() {
-		List<Person> listAll = service.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE));
-		List<Person> listFiltered = service.getAll(SortingAndPaging
-				.createForSingleSort(
-						ObjectStatus.ACTIVE, 1, 2, null, null, null));
+		Collection<Person> listAll = service.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
+		Collection<Person> listFiltered = service.getAll(
+				SortingAndPaging.createForSingleSort(ObjectStatus.ACTIVE, 1, 2,
+						null, null, null)).getRows();
 
 		assertNotNull(listAll);
 		assertTrue("List should have included multiple entities.",

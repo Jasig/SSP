@@ -9,6 +9,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.SecurityService;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 /**
@@ -50,8 +52,8 @@ public class SelfHelpGuideServiceTest {
 		replay(dao);
 		replay(securityService);
 
-		final List<SelfHelpGuide> all = service.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE));
+		final Collection<SelfHelpGuide> all = service.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertFalse(all.isEmpty());
 		verify(dao);
 		verify(securityService);
@@ -63,13 +65,14 @@ public class SelfHelpGuideServiceTest {
 		daoAll.add(new SelfHelpGuide());
 
 		expect(securityService.isAuthenticated()).andReturn(true);
-		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(daoAll);
+		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
+				new PagingWrapper<SelfHelpGuide>(daoAll));
 
 		replay(dao);
 		replay(securityService);
 
-		final List<SelfHelpGuide> all = service.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE));
+		final Collection<SelfHelpGuide> all = service.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertFalse(all.isEmpty());
 		verify(dao);
 		verify(securityService);

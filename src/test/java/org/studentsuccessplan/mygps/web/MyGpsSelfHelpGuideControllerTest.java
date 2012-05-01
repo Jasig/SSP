@@ -24,6 +24,7 @@ import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideGroupService;
 import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideDetailTO;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Lists;
@@ -59,10 +60,10 @@ public class MyGpsSelfHelpGuideControllerTest {
 	public void getAll() {
 		List<SelfHelpGuide> guides = Lists.newArrayList();
 		guides.add(new SelfHelpGuide());
+
 		List<SelfHelpGuideTO> guideTOs = Lists.newArrayList();
-		expect(
-				selfHelpGuideService.getAll(isA(SortingAndPaging.class)))
-				.andReturn(guides);
+		expect(selfHelpGuideService.getAll(isA(SortingAndPaging.class)))
+				.andReturn(new PagingWrapper<SelfHelpGuide>(guides));
 
 		expect(selfHelpGuideTOFactory.asTOList(guides)).andReturn(guideTOs);
 
@@ -83,7 +84,6 @@ public class MyGpsSelfHelpGuideControllerTest {
 		} catch (Exception e) {
 			LOGGER.error("controller error", e);
 		}
-
 	}
 
 	@Test

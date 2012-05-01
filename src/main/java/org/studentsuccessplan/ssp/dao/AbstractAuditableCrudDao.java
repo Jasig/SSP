@@ -5,9 +5,11 @@ import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
@@ -24,17 +26,18 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<T> getAll(final ObjectStatus status) {
-		return createCriteria(
-				new SortingAndPaging(status))
-				.list();
+	public PagingWrapper<T> getAll(final ObjectStatus status) {
+		List<T> list = createCriteria(new SortingAndPaging(status)).list();
+		return new PagingWrapper<T>(list);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<T> getAll(final SortingAndPaging sAndP) {
-		return createCriteria(sAndP)
-				.list();
+	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
+		long totalRows = (Long) createCriteria().setProjection(
+				Projections.rowCount()).uniqueResult();
+
+		return new PagingWrapper<T>(totalRows, createCriteria(sAndP).list());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -81,5 +84,4 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 
 		return query;
 	}
-
 }

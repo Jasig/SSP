@@ -592,12 +592,12 @@ public final class Person extends Auditable implements Serializable {
 	}
 
 	@Override
-	final protected int hashPrime() {
+	protected int hashPrime() {
 		return 3;
 	};
 
 	@Override
-	final public int hashCode() {
+	public int hashCode() {
 		int result = hashPrime();
 
 		// Auditable properties

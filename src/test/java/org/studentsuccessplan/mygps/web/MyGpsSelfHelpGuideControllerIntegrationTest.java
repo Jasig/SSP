@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideDetailTO;
@@ -31,8 +32,9 @@ import org.studentsuccessplan.ssp.web.api.reference.ChallengeController;
 @ContextConfiguration("../../ssp/web/ControllerIntegrationTests-context.xml")
 @TransactionConfiguration
 @Transactional
-public class MyGpsSelfHelpGuideControllerIntegrationTest extends
-		AbstractControllerHttpTestSupport<ChallengeController, ChallengeTO> {
+public class MyGpsSelfHelpGuideControllerIntegrationTest
+		extends
+		AbstractControllerHttpTestSupport<ChallengeController, ChallengeTO, Challenge> {
 
 	private static final UUID SELFHELPGUIDE_ID = UUID
 			.fromString("4fd534df-e7fe-e555-7c71-0042593b1990");
@@ -63,7 +65,7 @@ public class MyGpsSelfHelpGuideControllerIntegrationTest extends
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerComplete() throws Exception {
+	public void testControllerGetContentById() throws Exception {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -81,6 +83,10 @@ public class MyGpsSelfHelpGuideControllerIntegrationTest extends
 			assertEquals("Question number did not match the list order.",
 					i + 1,
 					question.getQuestionNumber());
+			assertNotNull("Challenge should not have been null.",
+					question.getChallenge());
+			assertNotNull("Challenge.Id should not have been null.", question
+					.getChallenge().getId());
 		}
 	}
 }

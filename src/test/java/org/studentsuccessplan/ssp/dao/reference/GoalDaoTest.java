@@ -1,5 +1,6 @@
 package org.studentsuccessplan.ssp.dao.reference;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -48,9 +49,9 @@ public class GoalDaoTest {
 	@Before
 	public void setup() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
-		testConfidentialityLevel = confidentialityLevelService.getAll(
-				new SortingAndPaging(
-						ObjectStatus.ACTIVE)).get(0);
+		testConfidentialityLevel = confidentialityLevelService
+				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()
+				.iterator().next();
 	}
 
 	@Test
@@ -73,9 +74,9 @@ public class GoalDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		List<Goal> all = dao.getAll(ObjectStatus.ACTIVE);
+		List<Goal> all = (List<Goal>) dao.getAll(ObjectStatus.ACTIVE).getRows();
 		assertNotNull(all);
-		assertTrue(all.size() > 0);
+		assertFalse(all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);

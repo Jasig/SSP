@@ -3,6 +3,7 @@ package org.studentsuccessplan.mygps.business;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -955,8 +956,9 @@ public class StudentIntakeFormManager {
 			demographics.setChildCareArrangement(null);
 		} else {
 			// get matching FormOption since IDs do not line up with database
-			List<ChildCareArrangement> childCareArrangements = childCareArrangementService
-					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+			List<ChildCareArrangement> childCareArrangements = (List<ChildCareArrangement>) childCareArrangementService
+					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
+					.getRows();
 			for (ChildCareArrangement childCareArrangement : childCareArrangements) {
 				if (childCareArrangement.getName().equals(
 						childCareArrangementQuestion.getValue())) {
@@ -990,8 +992,8 @@ public class StudentIntakeFormManager {
 			String citizenshipNameSelected = citizenshipQuestion
 					.getFormOptionByValue(citizenshipQuestion.getValue())
 					.getLabel();
-			List<Citizenship> citizenships = citizenshipService
-					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+			Collection<Citizenship> citizenships = citizenshipService.getAll(
+					new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 			for (Citizenship citizenship : citizenships) {
 				if (citizenship.getName().equals(citizenshipNameSelected)) {
 					demographics.setCitizenship(citizenship);
@@ -1029,8 +1031,8 @@ public class StudentIntakeFormManager {
 				|| (ethnicityQuestion.getValue() == null)) {
 			demographics.setEthnicity(null);
 		} else {
-			List<Ethnicity> ethnicities = ethnicityService
-					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+			Collection<Ethnicity> ethnicities = ethnicityService.getAll(
+					new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 			for (Ethnicity ethnicity : ethnicities) {
 				if (ethnicity.getName().equals(ethnicityQuestion.getValue())) {
 					demographics.setEthnicity(ethnicity);
@@ -1063,8 +1065,9 @@ public class StudentIntakeFormManager {
 				|| (maritalStatusQuestion.getValue() == null)) {
 			demographics.setMaritalStatus(null);
 		} else {
-			List<MaritalStatus> maritalStatuses = maritalStatusService
-					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+			Collection<MaritalStatus> maritalStatuses = maritalStatusService
+					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
+					.getRows();
 			for (MaritalStatus ms : maritalStatuses) {
 				if (ms.getName().equals(maritalStatusQuestion.getValue())) {
 					demographics.setMaritalStatus(ms);
@@ -1200,8 +1203,9 @@ public class StudentIntakeFormManager {
 				|| (studentStatusQuestion.getValue() == null)) {
 			educationPlan.setStudentStatus(null);
 		} else {
-			List<StudentStatus> studentStatuses = studentStatusService
-					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+			Collection<StudentStatus> studentStatuses = studentStatusService
+					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
+					.getRows();
 			for (StudentStatus ss : studentStatuses) {
 				if (ss.getName().equals(studentStatusQuestion.getValue())) {
 					educationPlan.setStudentStatus(studentStatusService.get(ss
@@ -1355,8 +1359,9 @@ public class StudentIntakeFormManager {
 		}
 
 		if (studentEducationGoal != null) {
-			List<EducationGoal> educationGoals = educationGoalService
-					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+			Collection<EducationGoal> educationGoals = educationGoalService
+					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
+					.getRows();
 			for (EducationGoal eg : educationGoals) {
 				if (eg.getName().equals(
 						educationGoalQuestion.getFormOptionByValue(
@@ -1845,8 +1850,8 @@ public class StudentIntakeFormManager {
 		ethnicityQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID);
 		ethnicityQuestion.setLabel("Ethnicity");
 
-		for (Ethnicity ethnicity : ethnicityService
-				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))) {
+		for (Ethnicity ethnicity : ethnicityService.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
 			ethnicityQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
 					ethnicity.getName(), ethnicity.getName()));
 		}
@@ -1912,8 +1917,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO veteranStatusQuestion = new FormQuestionTO();
 		List<FormOptionTO> veteranStatusQuestionOptions = new ArrayList<FormOptionTO>();
 
-		for (VeteranStatus veteranStatus : veteranStatusService
-				.getAll(new SortingAndPaging(ObjectStatus.ALL))) {
+		for (VeteranStatus veteranStatus : veteranStatusService.getAll(
+				new SortingAndPaging(ObjectStatus.ALL)).getRows()) {
 			veteranStatusQuestionOptions
 					.add(new FormOptionTO(veteranStatus.getId(), veteranStatus
 							.getName(), veteranStatus.getName()));
@@ -2012,7 +2017,7 @@ public class StudentIntakeFormManager {
 		List<FormOptionTO> childCareArrangementQuestionOptions = new ArrayList<FormOptionTO>();
 
 		for (ChildCareArrangement childcareArrangement : childCareArrangementService
-				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))) {
+				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
 			childCareArrangementQuestionOptions.add(new FormOptionTO(
 					childcareArrangement.getId(), childcareArrangement
 							.getName(), childcareArrangement.getName()));
@@ -2132,8 +2137,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO studentStatusQuestion = new FormQuestionTO();
 		List<FormOptionTO> studentStatusQuestionOptions = new ArrayList<FormOptionTO>();
 
-		for (StudentStatus studentStatus : studentStatusService
-				.getAll(new SortingAndPaging(ObjectStatus.ALL))) {
+		for (StudentStatus studentStatus : studentStatusService.getAll(
+				new SortingAndPaging(ObjectStatus.ALL)).getRows()) {
 			studentStatusQuestionOptions
 					.add(new FormOptionTO(studentStatus.getId(), studentStatus
 							.getName(), studentStatus.getName()));
@@ -2274,8 +2279,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO educationLevelCompletedQuestion = new FormQuestionTO();
 		List<FormOptionTO> educationLevelCompletedQuestionOptions = new ArrayList<FormOptionTO>();
 
-		for (EducationLevel educationLevel : educationLevelDao
-				.getAll(ObjectStatus.ACTIVE)) {
+		for (EducationLevel educationLevel : educationLevelDao.getAll(
+				ObjectStatus.ACTIVE).getRows()) {
 			educationLevelCompletedQuestionOptions.add(new FormOptionTO(
 					educationLevel.getId(), educationLevel.getName(),
 					educationLevel.getId().toString()));
@@ -2573,8 +2578,8 @@ public class StudentIntakeFormManager {
 		FormQuestionTO fundingQuestionTO = new FormQuestionTO();
 		List<FormOptionTO> fundingSourceOptions = new ArrayList<FormOptionTO>();
 
-		for (FundingSource fundingSource : fundingSourceDao
-				.getAll(ObjectStatus.ACTIVE)) {
+		for (FundingSource fundingSource : fundingSourceDao.getAll(
+				ObjectStatus.ACTIVE).getRows()) {
 			fundingSourceOptions.add(new FormOptionTO(fundingSource.getId(),
 					fundingSource.getName(), fundingSource.getId().toString()));
 		}

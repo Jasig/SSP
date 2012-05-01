@@ -1,18 +1,24 @@
 package org.studentsuccessplan.ssp.web.api;
 
-import java.util.List;
 import java.util.UUID;
 
+import org.studentsuccessplan.ssp.model.Auditable;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.studentsuccessplan.ssp.transferobject.PagingTO;
 import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
+import org.studentsuccessplan.ssp.transferobject.TransferObject;
 
 /**
  * All the Methods a Reference Controller needs to be useful.
  * 
- * @param <T>
+ * @param <TO>
  *            The TO type this controller works with.
+ * @param <T>
+ *            The model that the TO type T works with.
  */
-public abstract class RestController<T> extends BaseController {
+public abstract class RestController<TO extends TransferObject<T>, T extends Auditable>
+		extends
+		BaseController {
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -44,7 +50,7 @@ public abstract class RestController<T> extends BaseController {
 	 *                Generic exception thrown if there were any errors.
 	 * @return All entities in the database filtered by the supplied status.
 	 */
-	public abstract List<T> getAll(ObjectStatus status, Integer start,
+	public abstract PagingTO<TO, T> getAll(ObjectStatus status, Integer start,
 			Integer limit, String sort, String sortDirection) throws Exception;
 
 	/**
@@ -56,7 +62,7 @@ public abstract class RestController<T> extends BaseController {
 	 * @throws Exception
 	 *             If there were any unexpected exceptions thrown.
 	 */
-	public abstract T get(UUID id) throws Exception;
+	public abstract TO get(UUID id) throws Exception;
 
 	/**
 	 * Persist a new instance of the specified object.
@@ -71,7 +77,7 @@ public abstract class RestController<T> extends BaseController {
 	 * @throws Exception
 	 *             If there were any unexpected exceptions thrown.
 	 */
-	public abstract T create(T obj) throws Exception;
+	public abstract TO create(TO obj) throws Exception;
 
 	/**
 	 * Persist any changes to the specified instance.
@@ -86,7 +92,7 @@ public abstract class RestController<T> extends BaseController {
 	 * @throws Exception
 	 *             If there were any unexpected exceptions thrown.
 	 */
-	public abstract T save(UUID id, T obj) throws Exception;
+	public abstract TO save(UUID id, TO obj) throws Exception;
 
 	/**
 	 * Marks the specified data instance with a status of

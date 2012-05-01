@@ -6,7 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -19,8 +20,10 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.studentsuccessplan.ssp.transferobject.PagingTO;
 import org.studentsuccessplan.ssp.transferobject.reference.VeteranStatusTO;
 import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
 
@@ -157,8 +160,8 @@ public class VeteranStatusControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<VeteranStatusTO> list = controller.getAll(ObjectStatus.ACTIVE,
-				null, null, null, null);
+		Collection<VeteranStatusTO> list = controller.getAll(
+				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
@@ -175,16 +178,27 @@ public class VeteranStatusControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerGetAllResults() throws Exception {
-		List<VeteranStatusTO> list = controller.getAll(ObjectStatus.ACTIVE,
-				null, null, null, null);
+		final PagingTO<VeteranStatusTO, VeteranStatus> results = controller
+				.getAll(ObjectStatus.ACTIVE, 0, 4, null, null);
 
-		VeteranStatusTO veteranStatus = list.get(0);
+		final Collection<VeteranStatusTO> list = results.getRows();
+
+		assertNotNull("The list should not have been null.", list);
+		assertFalse("There should have been some results.", list.isEmpty());
+		assertTrue("Returned results (" + list.size()
+				+ ") should have been fewer than the maximum available ("
+				+ results.getResults() + ") in the database.",
+				results.getResults() > list.size());
+
+		Iterator<VeteranStatusTO> iter = list.iterator();
+
+		VeteranStatusTO veteranStatus = iter.next();
 		assertEquals("Name should have been " + VETERANSTATUS_NAME,
 				VETERANSTATUS_NAME, veteranStatus.getName());
 		assertTrue("ModifiedBy id should not have been empty.", !veteranStatus
 				.getModifiedById().equals(UUID.randomUUID()));
 
-		veteranStatus = list.get(1);
+		veteranStatus = iter.next();
 		assertTrue("Description should have been longer than 0 characters.",
 				veteranStatus.getDescription().length() > 0);
 		assertTrue("CreatedBy id should not have been empty.", !veteranStatus

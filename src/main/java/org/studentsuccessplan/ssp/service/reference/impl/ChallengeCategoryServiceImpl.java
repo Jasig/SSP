@@ -13,12 +13,12 @@ public class ChallengeCategoryServiceImpl extends
 		AbstractReferenceService<ChallengeCategory>
 		implements ChallengeCategoryService {
 
+	@Autowired
+	transient private ChallengeCategoryDao dao;
+
 	public ChallengeCategoryServiceImpl() {
 		super(ChallengeCategory.class);
 	}
-
-	@Autowired
-	transient private ChallengeCategoryDao dao;
 
 	protected void setDao(final ChallengeCategoryDao dao) {
 		this.dao = dao;

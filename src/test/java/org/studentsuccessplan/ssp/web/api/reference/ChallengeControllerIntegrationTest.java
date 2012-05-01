@@ -6,7 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -157,8 +158,8 @@ public class ChallengeControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		List<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE, null,
-				null, null, null);
+		Collection<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE,
+				null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
@@ -175,10 +176,12 @@ public class ChallengeControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerGetAllResults() throws Exception {
-		List<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE, null,
-				null, null, null);
+		Collection<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE,
+				null, null, null, null).getRows();
 
-		ChallengeTO challenge = list.get(0);
+		Iterator<ChallengeTO> iter = list.iterator();
+
+		ChallengeTO challenge = iter.next();
 		assertTrue("Name should have been longer than 0 characters.", challenge
 				.getName().length() > 0);
 		assertTrue("ModifiedBy id should not have been empty.", !challenge
@@ -186,7 +189,7 @@ public class ChallengeControllerIntegrationTest {
 		assertTrue("ShowInStudentIntake should have been true.",
 				challenge.isShowInStudentIntake());
 
-		challenge = list.get(1);
+		challenge = iter.next();
 		assertTrue("Description should have been longer than 0 characters.",
 				challenge.getDescription().length() > 0);
 		assertTrue("CreatedBy id should not have been empty.", !challenge

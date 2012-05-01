@@ -25,24 +25,25 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 	public TaskReportTO() {
 	}
 
-	public TaskReportTO(Task task) {
+	public TaskReportTO(final Task task) {
 		if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
-			setChallengeName("Custom Action Plan Task");
-			setChallengeReferralName(task.getName());
-			setDescription(task.getDescription());
-			setDueDate(task.getDueDate());
+			challengeName = "Custom Action Plan Task";
+			challengeReferralName = task.getName();
+			description = task.getDescription();
+			dueDate = task.getDueDate();
 		} else {
-			setChallengeName(task.getChallenge().getName());
-			setChallengeReferralName(task.getChallengeReferral().getName());
-			setDescription(task.getChallengeReferral().getPublicDescription());
-			setDueDate(null);
+			challengeName = task.getChallenge().getName();
+			challengeReferralName = task.getChallengeReferral().getName();
+			description = task.getChallengeReferral().getPublicDescription();
+			dueDate = null;
 		}
-		setCreatedBy(task.getCreatedBy().getId());
-		setType(task.getType());
+
+		createdBy = task.getCreatedBy().getId();
+		type = task.getType();
 	}
 
-	public static List<TaskReportTO> tasksToTaskReportTOs(List<Task> tasks) {
-		List<TaskReportTO> taskReportTOs = new ArrayList<TaskReportTO>();
+	public static List<TaskReportTO> tasksToTaskReportTOs(final List<Task> tasks) {
+		final List<TaskReportTO> taskReportTOs = new ArrayList<TaskReportTO>();
 		for (Task task : tasks) {
 			taskReportTOs.add(new TaskReportTO(task));
 		}
@@ -53,7 +54,7 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -61,7 +62,7 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 		return challengeName;
 	}
 
-	public void setChallengeName(String challengeName) {
+	public void setChallengeName(final String challengeName) {
 		this.challengeName = challengeName;
 	}
 
@@ -69,7 +70,7 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 		return challengeReferralName;
 	}
 
-	public void setChallengeReferralName(String challengeReferralName) {
+	public void setChallengeReferralName(final String challengeReferralName) {
 		this.challengeReferralName = challengeReferralName;
 	}
 
@@ -77,7 +78,7 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -85,20 +86,78 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 		return dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
+	public void setDueDate(final Date dueDate) {
+		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
+	}
+
 	public UUID getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(UUID createdBy) {
+	public void setCreatedBy(final UUID createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
+	protected int hashPrime() {
+		return 61;
 	}
 
 	@Override
-	public int compareTo(TaskReportTO taskReportTO) {
+	public int hashCode() {
+		int result = hashPrime();
+
+		result *= type == null ? "type".hashCode() : type.hashCode();
+		result *= challengeName == null ? "challengeName".hashCode()
+				: challengeName.hashCode();
+		result *= challengeReferralName == null ? "challengeReferralName"
+				.hashCode() : challengeReferralName.hashCode();
+		result *= description == null ? "description".hashCode() : description
+				.hashCode();
+		result *= createdBy == null ? "createdBy".hashCode() : createdBy
+				.hashCode();
+		result *= dueDate == null ? "dueDate".hashCode() : dueDate.hashCode();
+
+		return result;
+	}
+
+	@Override
+	final public boolean equals(final Object obj) {
+		if (this == obj) {
+			// exact references that point to the same place in memory are
+			// always equal
+			return true;
+		}
+
+		if (!(TaskReportTO.class.isInstance(obj))
+				|| !(getClass().equals(obj.getClass()))) {
+			return false;
+		}
+
+		final TaskReportTO other = (TaskReportTO) obj;
+
+		return hasSameDomainSignature(other);
+	}
+
+	/**
+	 * This method MUST be implemented for each class and must compare to all
+	 * properties that define an equal instance for business rule comparison
+	 * purposes.
+	 * 
+	 * @param other
+	 *            The object to compare
+	 * @return True if properties for business equality are all equal.
+	 */
+	private boolean hasSameDomainSignature(final Object other) {
+		return hashCode() == other.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return challengeName == null ? super.toString() : challengeName;
+	}
+
+	@Override
+	public int compareTo(final TaskReportTO taskReportTO) {
 		return challengeName.compareTo(taskReportTO.getChallengeName());
 	}
 }

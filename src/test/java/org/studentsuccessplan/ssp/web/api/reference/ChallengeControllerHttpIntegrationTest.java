@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
+import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
 import org.studentsuccessplan.ssp.web.api.AbstractControllerHttpTestSupport;
@@ -31,8 +32,9 @@ import org.studentsuccessplan.ssp.web.api.AbstractControllerHttpTestSupport;
 @ContextConfiguration("../../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration
 @Transactional
-public class ChallengeControllerHttpIntegrationTest extends
-		AbstractControllerHttpTestSupport<ChallengeController, ChallengeTO> {
+public class ChallengeControllerHttpIntegrationTest
+		extends
+		AbstractControllerHttpTestSupport<ChallengeController, ChallengeTO, Challenge> {
 
 	/**
 	 * Controller instance used to run tests.

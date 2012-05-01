@@ -19,7 +19,6 @@ class TaskServiceImplTest {
 	private Task testTask1
 
 	private Person testStudent = new Person(id:UUID.randomUUID());
-	private Person testAdvisor = new Person(id:UUID.randomUUID());
 
 	private List<Task> all
 

@@ -148,25 +148,26 @@ public class IntakeController extends BaseController {
 
 		SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 		refData.put("challenges",
-				ChallengeTO.toTOList(challengeService.getAll(sAndP)));
+				ChallengeTO.toTOList(challengeService.getAll(sAndP).getRows()));
 		refData.put("childCareArrangements", ChildCareArrangementTO
-				.toTOList(childCareArrangementService.getAll(sAndP)));
+				.toTOList(childCareArrangementService.getAll(sAndP).getRows()));
 		refData.put("citizenships",
-				CitizenshipTO.toTOList(citizenshipService.getAll(sAndP)));
+				CitizenshipTO.toTOList(citizenshipService.getAll(sAndP)
+						.getRows()));
 		refData.put("educationGoals", EducationGoalTO
-				.toTOList(educationGoalService.getAll(sAndP)));
+				.toTOList(educationGoalService.getAll(sAndP).getRows()));
 		refData.put("educationLevels", EducationLevelTO
-				.toTOList(educationLevelService.getAll(sAndP)));
+				.toTOList(educationLevelService.getAll(sAndP).getRows()));
 		refData.put("ethnicities",
-				EthnicityTO.toTOList(ethnicityService.getAll(sAndP)));
+				EthnicityTO.toTOList(ethnicityService.getAll(sAndP).getRows()));
 		refData.put("fundingSources", FundingSourceTO
-				.toTOList(fundingSourceService.getAll(sAndP)));
+				.toTOList(fundingSourceService.getAll(sAndP).getRows()));
 		refData.put("maritalStatuses", MaritalStatusTO
-				.toTOList(maritalStatusService.getAll(sAndP)));
+				.toTOList(maritalStatusService.getAll(sAndP).getRows()));
 		refData.put("studentStatuses", StudentStatusTO
-				.toTOList(studentStatusService.getAll(sAndP)));
+				.toTOList(studentStatusService.getAll(sAndP).getRows()));
 		refData.put("veteranStatuses", VeteranStatusTO
-				.toTOList(veteranStatusService.getAll(sAndP)));
+				.toTOList(veteranStatusService.getAll(sAndP).getRows()));
 
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());

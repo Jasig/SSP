@@ -16,6 +16,12 @@ public class SetOps {
 	 * Soft delete ones in existing that are not in replacingWith <br />
 	 * Ignore ones in existing that are in replacingWith <br />
 	 * Add from replacingWith where not in existing.
+	 * 
+	 * @param existing
+	 *            Existing set
+	 * @param replacingWith
+	 *            Replace existing set with this set.
+	 * @return Updated set.
 	 */
 	public static <T extends Auditable> Set<T> updateSet(final Set<T> existing,
 			final Set<T> replacingWith) {
@@ -65,6 +71,9 @@ public class SetOps {
 
 	/**
 	 * Mark each item as deleted by setting its ObjectStatus to deleted
+	 * 
+	 * @param items
+	 *            Items to be marked as deleted
 	 */
 	public static <T extends Auditable> void softDeleteSetItems(
 			final Set<T> items) {

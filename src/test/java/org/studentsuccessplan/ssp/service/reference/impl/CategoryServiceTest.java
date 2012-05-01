@@ -19,6 +19,7 @@ import org.studentsuccessplan.ssp.dao.reference.CategoryDao;
 import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.reference.Category;
 import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public class CategoryServiceTest {
@@ -39,13 +40,13 @@ public class CategoryServiceTest {
 		List<Category> daoAll = new ArrayList<Category>();
 		daoAll.add(new Category());
 
-		expect(dao.getAll(isA(SortingAndPaging.class)))
-				.andReturn(daoAll);
+		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
+				new PagingWrapper<Category>(daoAll));
 
 		replay(dao);
 
-		List<Category> all = service.getAll(new SortingAndPaging(
-				ObjectStatus.ACTIVE));
+		final List<Category> all = (List<Category>) service.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertTrue(all.size() > 0);
 		verify(dao);
 	}
