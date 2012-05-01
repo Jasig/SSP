@@ -68,7 +68,7 @@
 	<logger name="org.springframework.web" level="info" />
 	<logger name="org.springframework.orm" level="info" />
 	<logger name="org.springframework.security" level="info" />
-
+    <!--logger name="org.hibernate.SQL" level="debug" / -->
 
 	<root level="info">
 		<!-- It might be prudent to turn the consoleAppender off in prod, as it is already being logged in the rolling File Appender -->
