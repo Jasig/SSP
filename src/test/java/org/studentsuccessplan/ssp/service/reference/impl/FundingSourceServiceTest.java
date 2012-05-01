@@ -68,7 +68,6 @@ public class FundingSourceServiceTest {
 		UUID id = UUID.randomUUID();
 		FundingSource daoOne = new FundingSource(id);
 
-		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
@@ -82,7 +81,7 @@ public class FundingSourceServiceTest {
 		UUID id = UUID.randomUUID();
 		FundingSource daoOne = new FundingSource(id);
 
-		expect(dao.get(id)).andReturn(daoOne).times(2);
+		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
 

@@ -68,7 +68,6 @@ public class ChallengeCategoryServiceTest {
 		UUID id = UUID.randomUUID();
 		ChallengeCategory daoOne = new ChallengeCategory(id);
 
-		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
@@ -82,7 +81,7 @@ public class ChallengeCategoryServiceTest {
 		UUID id = UUID.randomUUID();
 		ChallengeCategory daoOne = new ChallengeCategory(id);
 
-		expect(dao.get(id)).andReturn(daoOne).times(2);
+		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
 

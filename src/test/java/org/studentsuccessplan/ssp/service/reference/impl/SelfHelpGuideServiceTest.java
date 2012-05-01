@@ -93,7 +93,6 @@ public class SelfHelpGuideServiceTest {
 		final UUID id = UUID.randomUUID();
 		final SelfHelpGuide daoOne = new SelfHelpGuide(id);
 
-		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
@@ -107,7 +106,7 @@ public class SelfHelpGuideServiceTest {
 		final UUID id = UUID.randomUUID();
 		final SelfHelpGuide daoOne = new SelfHelpGuide(id);
 
-		expect(dao.get(id)).andReturn(daoOne).times(2);
+		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
 
