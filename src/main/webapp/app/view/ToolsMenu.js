@@ -3,6 +3,6 @@ Ext.define('Ssp.view.ToolsMenu', {
 	alias : 'widget.toolsmenu',
 	id: 'ToolsMenu',
 	store: Ext.getStore('Tools'),
-	columns:[ {header: "Assigned Tools",  dataIndex: "name", flex:1} ]
+	columns:[ {header: "Assigned Tools", dataIndex: "name", flex:1} ]
 	
 });

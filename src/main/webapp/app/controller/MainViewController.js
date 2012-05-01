@@ -85,7 +85,7 @@ Ext.define('Ssp.controller.MainViewController', {
 		arrViewItems = [
 		 		  Ext.create('Ssp.view.admin.AdminMain',
 					{items:[
-					        Ext.create('Ssp.view.admin.AdminTreeMenu',{ flex:2 }), 
+					        Ext.create('Ssp.view.admin.AdminTreeMenu',{ flex:1 }), 
 					        Ext.create('Ssp.view.admin.AdminForms',{ flex:4 }) 
 					],flex:4})
 		 		 ];

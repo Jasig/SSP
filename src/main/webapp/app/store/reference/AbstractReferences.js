@@ -7,7 +7,7 @@ Ext.define('Ssp.store.reference.AbstractReferences', {
     },
 	autoLoad: false,
 	autoSync: true,
-    pageSize: 40,
+    pageSize: 20,
     params : {
 		page : 0,
 		start : 0,

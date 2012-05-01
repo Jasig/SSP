@@ -1,15 +1,15 @@
-Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
+Ext.define('Ssp.view.admin.forms.ConfidentialityLevelAdmin', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.abstractreferenceadmin',
+	alias : 'widget.confidentialityleveladmin',
 	title: 'Admin',
-	id: 'AbstractReferenceAdmin',
+	id: 'ConfidentialityLevelAdmin',
 	autoScroll: true,
 	height: '100%',
 	width: '100%',
     selType: 'rowmodel',
 
     initComponent: function(){
-    	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing',
+    	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', 
 		                             { clicksToEdit: 2 });
     	Ext.apply(this,
     			{
@@ -27,7 +27,14 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     		                  flex: 50,
     		                  field: {
     		                      xtype: 'textfield'
-    		                  }
+    		                  },
+    		                  flex: 50 },
+      		                { header: 'Acronym',
+      		                  dataIndex: 'acronym', 
+      		                  flex: 50,
+      		                  field: {
+      		                      xtype: 'textfield'
+      		                  }
     		                }
     		           ],
     		        
@@ -45,7 +52,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     		                   text: 'Add',
     		                   iconCls: 'icon-add',
     		                   handler: function(){
-    		                   	var item = new Ssp.model.reference.AbstractReference();
+    		                   	var item = new Ssp.model.reference.ConfidentialityLevel();
     		           			item.set('name','default');
     		                   	this.up('grid').getStore().insert(0, item );
     		                   	this.up('grid').plugins[0].startEdit(0, 0);
