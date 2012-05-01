@@ -11,8 +11,8 @@ Ext.require([
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
 	'Ssp.model.tool.studentintake.PersonEducationPlan',
+	'Ssp.model.tool.actionplan.Task',
 	'Ssp.model.reference.AbstractReference',
-	'Ssp.view.admin.forms.AbstractReferenceAdmin',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
@@ -45,14 +45,18 @@ Ext.onReady(function(){
 	    name: 'Ssp',
 	    appFolder: 'app',
 				
-		stores: [ 'Students', 
+		stores: [ 'Students',
+		          'Tasks',
 				  'ApplicationForms', 
 				  'Tools',
 				  'admin.AdminTreeMenus',
 				  'reference.AbstractReferences',
+				  'reference.Campuses',
+				  'reference.Categories',
 				  'reference.Challenges',
 				  'reference.ChildCareArrangements',
 				  'reference.Citizenships',
+				  'reference.ConfidentialityLevels',
 				  'reference.EducationGoals',
 				  'reference.EducationLevels',
 				  'reference.EmploymentShifts',
@@ -60,6 +64,7 @@ Ext.onReady(function(){
 				  'reference.FundingSources',
 				  'reference.Genders',
 				  'reference.MaritalStatuses',
+				  'reference.Referrals',
 				  'reference.States', 
 				  'reference.StudentStatuses',
 				  'reference.VeteranStatuses',
@@ -68,15 +73,12 @@ Ext.onReady(function(){
 		controllers: [
 	        	'AdminViewController',
 	        	'MainViewController',
-	        	'SearchResultsViewController',
+	        	'SearchViewController',
 	        	'tool.StudentIntakeToolViewController',
 	        	'ToolsViewController'     	
 	    ],
 	          		
 	    launch: function( app ) {
-
-	    	//Ext.getStore('Students').load();
-	    	
 			// Load the application shell
 	        Ext.create('Ext.container.Viewport', {
 	            layout: 'fit',

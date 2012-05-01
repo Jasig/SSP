@@ -1,4 +1,3 @@
-Ext.require('Ext.tab.*');
 Ext.define('Ssp.view.tools.StudentIntake', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.studentintake',

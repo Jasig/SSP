@@ -5,6 +5,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
         currentPerson: 'currentPerson',
         formUtils: 'formRendererUtils'
     },
+    
 	views: [
         'ToolsMenu','Tools'
     ],
@@ -20,16 +21,6 @@ Ext.define('Ssp.controller.ToolsViewController', {
 		});
 		
 		this.application.addListener('afterLoadPerson', function(){
-			// Load the profile for the selected record.
-			Ext.getStore('Tools').loadRawData(
-				[{
-			        name: "Profile",
-			        toolType: "Profile"
-			    },{
-			        name: "Student Intake",
-			        toolType: "StudentIntake"
-			    }]		
-			);
 			// this.currentPerson.get('tools') );
 			Ext.ComponentQuery.query('toolsmenu')[0].getSelectionModel().select(0);
 			this.loadTool('Profile');

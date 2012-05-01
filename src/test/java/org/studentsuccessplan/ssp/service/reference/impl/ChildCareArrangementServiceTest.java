@@ -70,7 +70,6 @@ public class ChildCareArrangementServiceTest {
 		UUID id = UUID.randomUUID();
 		ChildCareArrangement daoOne = new ChildCareArrangement(id);
 
-		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
@@ -84,7 +83,7 @@ public class ChildCareArrangementServiceTest {
 		UUID id = UUID.randomUUID();
 		ChildCareArrangement daoOne = new ChildCareArrangement(id);
 
-		expect(dao.get(id)).andReturn(daoOne).times(2);
+		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
 

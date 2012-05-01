@@ -112,17 +112,6 @@ public abstract class AbstractReference extends Auditable {
 		this.description = description;
 	}
 
-	/**
-	 * Overwrites properties with the source object's properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 */
-	public void overwrite(@NotNull final AbstractReference source) {
-		setName(source.getName());
-		setDescription(source.getDescription());
-	}
-
 	@Override
 	public int hashCode() {
 		int result = hashPrime();

@@ -1,9 +1,13 @@
 package org.studentsuccessplan.ssp.model;
 
+import java.util.Collection;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 /**
  * Basis for soft delete functionality.
  * 
- * @author daniel.bower
  */
 public enum ObjectStatus {
 	/*
@@ -35,4 +39,17 @@ public enum ObjectStatus {
 	 * records
 	 */
 	DELETED;
+
+	public static <T extends Auditable> List<T> filterForStatus(
+			Collection<T> list, ObjectStatus status) {
+		List<T> inStatus = Lists.newArrayList();
+
+		for (T t : list) {
+			if (status.equals(t.getObjectStatus())) {
+				inStatus.add(t);
+			}
+		}
+
+		return inStatus;
+	}
 }

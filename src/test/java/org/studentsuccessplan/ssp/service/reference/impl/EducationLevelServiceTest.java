@@ -70,7 +70,6 @@ public class EducationLevelServiceTest {
 		UUID id = UUID.randomUUID();
 		EducationLevel daoOne = new EducationLevel(id);
 
-		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
@@ -84,7 +83,7 @@ public class EducationLevelServiceTest {
 		UUID id = UUID.randomUUID();
 		EducationLevel daoOne = new EducationLevel(id);
 
-		expect(dao.get(id)).andReturn(daoOne).times(2);
+		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
 

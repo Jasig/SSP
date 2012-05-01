@@ -15,70 +15,118 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 								{
 									text: 'Child Care Arrangements',
 									title: 'Child Care Arrangements',
-							        form: 'ChildCareArrangements',
+									store: 'ChildCareArrangements',
+							        form: 'AbstractReferenceAdmin',
 									leaf: true
 								},
 								{
 									text: 'Citizenships',
 									title: 'Citizenships',
-							        form: 'Citizenships',
+									store: 'Citizenships',
+							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Education Goals',
 							    	title: 'Education Goals',
-							        form: 'EducationGoals',
+							    	store: 'EducationGoals',
+							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Education Levels',
 							    	title: 'Education Levels',
-							        form: 'EducationLevels',
+							    	store: 'EducationLevels',
+							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Ethnicities',
 							    	title: 'Ethnicities',
-							        form: 'Ethnicities',
+							    	store: 'Ethnicities',
+							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Funding Sources',
 							    	title: 'Funding Sources',
-							        form: 'FundingSources',
+							    	store: 'FundingSources',
+							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Marital Statuses',
 							    	title: 'Marital Statuses',
-							        form: 'MaritalStatuses',
+							    	store: 'MaritalStatuses',
+							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Student Statuses',
 							    	title: 'Student Statuses',
-							        form: 'StudentStatuses',
+							    	store: 'StudentStatuses',
+							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Veteran Statuses',
 							    	title: 'Veteran Statuses',
-							        form: 'VeteranStatuses',
+							    	store: 'VeteranStatuses',
+							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 						]
 					},{
-						text: 'Counseling Reference Guide',
-						title: 'Counseling Reference Guide',
+						text: 'Action Plan',
+						title: 'Action Plan',
 						form: '',
-						expanded: true,
-						children: [
+						expanded: false,
+						children: [{
+									text: 'Categories',
+									title: 'Categories',
+									store: 'Categories',
+									form: 'AbstractReferenceAdmin',
+									leaf: true
+								},
 								{
 									text: 'Challenges',
 									title: 'Challenges',
-									form: 'Challenges',
+									store: 'Challenges',
+									form: 'ChallengeAdmin',
+									leaf: true
+								},{
+									text: 'Referrals',
+									title: 'Referrals',
+									store: 'Referrals',
+									form: 'AbstractReferenceAdmin',
 									leaf: true
 								}]
+					},{
+						text: 'Self Help Guide',
+						title: 'Self Help Guide',
+						form: '',
+						expanded: false,
+						children: []
+					},{
+						text: 'Security',
+						title: 'Security',
+						form: '',
+						expanded: false,
+						children: [{text: 'Confidentiality Levels',
+									title: 'Confidentiality Levels',
+									store: 'ConfidentialityLevels',
+									form: 'ConfidentialityLevelAdmin',
+									leaf: true }]
+					},{
+						text: 'Campus',
+						title: 'Campus',
+						form: '',
+						expanded: false,
+						children: [{text: 'Campuses',
+									title: 'Campuses',
+									store: 'Campuses',
+									form: 'AbstractReferenceAdmin',
+									leaf: true }]
 					}
                    
         ]

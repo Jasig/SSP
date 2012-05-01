@@ -23,19 +23,13 @@ import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
-/**
- * Test the Veteran Status reference service.
- * 
- * @author jon.adams
- */
 public class VeteranStatusServiceTest {
 
-	private transient VeteranStatusServiceImpl service;
-
-	private transient VeteranStatusDao dao;
+	private VeteranStatusServiceImpl service;
+	private VeteranStatusDao dao;
 
 	@Before
-	public void setUp() {
+	public void setup() {
 		service = new VeteranStatusServiceImpl();
 		dao = createMock(VeteranStatusDao.class);
 
@@ -76,7 +70,6 @@ public class VeteranStatusServiceTest {
 		UUID id = UUID.randomUUID();
 		VeteranStatus daoOne = new VeteranStatus(id);
 
-		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
@@ -90,7 +83,7 @@ public class VeteranStatusServiceTest {
 		UUID id = UUID.randomUUID();
 		VeteranStatus daoOne = new VeteranStatus(id);
 
-		expect(dao.get(id)).andReturn(daoOne).times(2);
+		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
 

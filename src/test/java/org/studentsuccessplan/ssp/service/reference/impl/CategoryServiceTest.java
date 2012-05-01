@@ -24,12 +24,11 @@ import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 public class CategoryServiceTest {
 
-	transient private CategoryServiceImpl service;
-
-	transient private CategoryDao dao;
+	private CategoryServiceImpl service;
+	private CategoryDao dao;
 
 	@Before
-	public void setUp() {
+	public void setup() {
 		service = new CategoryServiceImpl();
 		dao = createMock(CategoryDao.class);
 
@@ -48,7 +47,7 @@ public class CategoryServiceTest {
 
 		final List<Category> all = (List<Category>) service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertTrue(!all.isEmpty());
+		assertTrue(all.size() > 0);
 		verify(dao);
 	}
 
@@ -70,7 +69,6 @@ public class CategoryServiceTest {
 		UUID id = UUID.randomUUID();
 		Category daoOne = new Category(id);
 
-		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
@@ -84,7 +82,7 @@ public class CategoryServiceTest {
 		UUID id = UUID.randomUUID();
 		Category daoOne = new Category(id);
 
-		expect(dao.get(id)).andReturn(daoOne).times(2);
+		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
 

@@ -70,7 +70,6 @@ public class EducationGoalServiceTest {
 		UUID id = UUID.randomUUID();
 		EducationGoal daoOne = new EducationGoal(id);
 
-		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
@@ -84,7 +83,7 @@ public class EducationGoalServiceTest {
 		UUID id = UUID.randomUUID();
 		EducationGoal daoOne = new EducationGoal(id);
 
-		expect(dao.get(id)).andReturn(daoOne).times(2);
+		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andReturn(null);
 

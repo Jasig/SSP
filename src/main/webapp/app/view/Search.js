@@ -1,8 +1,8 @@
-Ext.define('Ssp.view.SearchResults', {
+Ext.define('Ssp.view.Search', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.searchresults',
+	alias : 'widget.search',
 	title: 'Students',
-	id: 'SearchResults',
+	id: 'Search',
     collapsible: false,
     collapseDirection: 'left',
     store: Ext.getStore('Students'),

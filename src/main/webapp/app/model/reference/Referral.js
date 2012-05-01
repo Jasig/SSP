@@ -1,4 +1,4 @@
 Ext.define('Ssp.model.reference.Referral', {
-    extend: 'Ssp.model.AbstractReference',
+    extend: 'Ssp.model.reference.AbstractReference',
     fields: [{name:'publicDescription',type:'string'}]
 });

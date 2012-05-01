@@ -1,29 +1,27 @@
 package org.studentsuccessplan.ssp.service.reference.impl;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
 import org.studentsuccessplan.ssp.model.Person;
 import org.studentsuccessplan.ssp.model.reference.Challenge;
 import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
 import org.studentsuccessplan.ssp.service.SecurityService;
 import org.studentsuccessplan.ssp.service.TaskService;
 import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
-import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
 import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
 
 @Service
 @Transactional
-public class ChallengeReferralServiceImpl implements ChallengeReferralService {
+public class ChallengeReferralServiceImpl extends
+		AbstractReferenceService<ChallengeReferral>
+		implements ChallengeReferralService {
 
 	@Autowired
-	private transient ChallengeReferralDao dao;
+	transient private ChallengeReferralDao dao;
 
 	@Autowired
 	private transient TaskService taskService;
@@ -31,46 +29,8 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 	@Autowired
 	private transient SecurityService securityService;
 
-	@Override
-	public PagingWrapper<ChallengeReferral> getAll(SortingAndPaging sAndP) {
-		return dao.getAll(sAndP);
-	}
-
-	@Override
-	public ChallengeReferral get(final UUID id) throws ObjectNotFoundException {
-		final ChallengeReferral obj = dao.get(id);
-		if (null == obj) {
-			throw new ObjectNotFoundException(id, "ChallengeReferral");
-		}
-
-		return obj;
-	}
-
-	@Override
-	public ChallengeReferral create(final ChallengeReferral obj) {
-		return dao.save(obj);
-	}
-
-	@Override
-	public ChallengeReferral save(final ChallengeReferral obj)
-			throws ObjectNotFoundException {
-		final ChallengeReferral current = get(obj.getId());
-
-		current.setName(obj.getName());
-		current.setDescription(obj.getDescription());
-		current.setObjectStatus(obj.getObjectStatus());
-
-		return dao.save(current);
-	}
-
-	@Override
-	public void delete(final UUID id) throws ObjectNotFoundException {
-		final ChallengeReferral current = get(id);
-
-		if (null != current) {
-			current.setObjectStatus(ObjectStatus.DELETED);
-			save(current);
-		}
+	public ChallengeReferralServiceImpl() {
+		super(ChallengeReferral.class);
 	}
 
 	@Override
@@ -136,6 +96,11 @@ public class ChallengeReferralServiceImpl implements ChallengeReferralService {
 			Challenge challenge, Person student, String sessionId) {
 		return dao.byChallengeIdNotOnActiveTaskList(challenge.getId(), student,
 				sessionId);
+	}
+
+	@Override
+	protected ChallengeReferralDao getDao() {
+		return dao;
 	}
 
 	protected void setDao(ChallengeReferralDao dao) {
