@@ -19,14 +19,6 @@ class SetOpsTest {
 
 		private String other;
 
-		public getOther() {
-			return	this.other;
-		}
-
-		public setOther(String other) {
-			this.other = other;
-		}
-
 		protected int hashPrime(){
 			return 11
 		}
