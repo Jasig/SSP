@@ -3,8 +3,14 @@ Ext.define('Ssp.view.tools.EarlyAlert', {
 	alias : 'widget.earlyalert',
 	id: 'EarlyAlert',
     title: 'Early Alert',
-    autoScroll: true,
 	width: '100%',
-	height: '100%',   
-    items: []
+	height: '100%',
+	initComponent: function() {	
+		Ext.apply(this, 
+				{
+					autoScroll: true
+				});
+		
+	     this.callParent(arguments);
+	}
 });

@@ -84,7 +84,7 @@ Ext.onReady(function(){
 	            layout: 'fit',
 	            id: 'sspView',
 	            alias: 'widget.sspview',
-	            items: []
+	            items: [ Ext.create('Ssp.view.Main') ]
 	        });
 	        
 	 		// Display the application

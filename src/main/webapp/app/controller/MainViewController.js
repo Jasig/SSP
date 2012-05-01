@@ -41,24 +41,14 @@ Ext.define('Ssp.controller.MainViewController', {
  
     displayApplication: function(){
 		// display the default record view
-    	this.displayRecordView();
+    	this.displayStudentRecordView();
     },
     
-    cleanSspView: function(){
-    	var sspView = Ext.getCmp('sspView');
-    	if (sspView.items.length > 0)
-    	{
-    		this.formUtils.cleanAll(sspView);
-    	}
-    	return sspView;
-    },
-    
-    displayRecordView: function(){
-    	var mainView;
+    displayStudentRecordView: function(){
+    	var mainView = Ext.getCmp('MainView');
+		if (mainView.items.length > 0)
+			mainView.removeAll();
     	var arrViewItems;
-    	var sspView = this.cleanSspView();
-    	
-    	mainView = Ext.create('Ssp.view.Main');
 		arrViewItems = [{xtype: 'search', flex: 2 },
 							Ext.create('Ssp.view.StudentRecord',{
 								flex: 4,
@@ -73,15 +63,14 @@ Ext.define('Ssp.controller.MainViewController', {
 						})];
 		
 		mainView.add( arrViewItems );
-		sspView.add(mainView);
-		sspView.render();
+		mainView.render();
     },    
     
     displayAdminView: function() { 
-    	var mainView;
+    	var mainView = Ext.getCmp('MainView');
+		if (mainView.items.length > 0)
+			mainView.removeAll();
     	var arrViewItems;
-    	var sspView = this.cleanSspView();
-    	mainView = Ext.create('Ssp.view.Main');
 		arrViewItems = [
 		 		  Ext.create('Ssp.view.admin.AdminMain',
 					{items:[
@@ -91,6 +80,6 @@ Ext.define('Ssp.controller.MainViewController', {
 		 		 ];
 		
 		mainView.add( arrViewItems ); 
-		sspView.add(mainView);
+		mainView.render();
     }
 });
