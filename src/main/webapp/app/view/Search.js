@@ -3,6 +3,11 @@ Ext.define('Ssp.view.Search', {
 	alias : 'widget.search',
 	title: 'Students',
 	id: 'Search',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	columnRendererUtils: 'columnRendererUtils',
+        studentsStore: 'studentsStore'
+    },
 	width: '100%',
 	height: '100%',
 
@@ -11,10 +16,10 @@ Ext.define('Ssp.view.Search', {
     			   {
     	            collapsible: false,
     	            collapseDirection: 'left',
-    	            store: Ext.getStore('Students'),
+    	            store: this.studentsStore,
     		
 		    	    columns: [
-		    	              { header: "Photo", dataIndex: 'photoUrl', renderer: Ssp.util.ColumnRendererUtils.renderPhotoIcon, flex: 50 },		        
+		    	              { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 },		        
 		    	              { text: 'Name', xtype:'templatecolumn', tpl:'{firstName} {middleInitial} {lastName}', flex: 50}
 		    	          ],
     	          

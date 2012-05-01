@@ -3,18 +3,18 @@ Ext.define('Ssp.view.admin.forms.ChallengeAdmin', {
 	alias : 'widget.challengeadmin',
 	title: 'Admin',
 	id: 'ChallengeAdmin',
-	autoScroll: true,
 	height: '100%',
 	width: '100%',
-    selType: 'rowmodel',
 
     initComponent: function(){
     	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', 
 		                             { clicksToEdit: 2 });
     	Ext.apply(this,
     			{
+    		      autoScroll: true,
     		      plugins:cellEditor,
-    		      
+    		      selType: 'rowmodel',
+
     		      columns: [
     		                { header: 'Name',  
     		                  dataIndex: 'name',

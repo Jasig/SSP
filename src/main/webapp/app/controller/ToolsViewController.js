@@ -5,7 +5,6 @@ Ext.define('Ssp.controller.ToolsViewController', {
         currentPerson: 'currentPerson',
         formUtils: 'formRendererUtils'
     },
-    
 	views: [
         'ToolsMenu','Tools'
     ],
@@ -20,7 +19,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 			
 		});
 		
-		this.application.addListener('afterLoadPerson', function(){
+		this.application.addListener('loadPerson', function(){
 			// this.currentPerson.get('tools') );
 			Ext.ComponentQuery.query('toolsmenu')[0].getSelectionModel().select(0);
 			this.loadTool('Profile');
@@ -39,14 +38,10 @@ Ext.define('Ssp.controller.ToolsViewController', {
  	/*
 	 * Loads a tool.
 	 */	
-	loadTool: function( toolType ) {
-		var toolsView = Ext.ComponentQuery.query('tools')[0];
+	loadTool: function( toolType ) {	
+    	var toolsView = Ext.ComponentQuery.query('tools')[0];
 		var comp = null;
-		var formUtils = this.formUtils;
-		var tabs;
-		var form = null;
 		var person = this.currentPerson;
-		var personId = person.get('id');
 				
 		// Kill existing tools, so no dupe ids are registered
 		if (toolsView != null)
@@ -64,69 +59,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 				break;
 			
 			case 'StudentIntake':
-				Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
-				Form.load(personId,{
-					success: function( formData ) {
-						// PERSON RECORD
-						var person = formData.data.person;
-						var personDemographics = formData.data.personDemographics;
-						var personEducationPlan = formData.data.personEducationPlan;
-						var personEducationGoal = formData.data.personEducationGoal;
-						var personEducationLevels = formData.data.personEducationLevels;
-						var personFundingSources = formData.data.personFundingSources;
-						var personChallenges = formData.data.personChallenges;
-
-						// REFERENCE OBJECTS
-						var challenges = formData.data.referenceData.challenges;
-						var childCareArrangements = formData.data.referenceData.childCareArrangements;
-						var citizenships = formData.data.referenceData.citizenships;
-						var educationGoals = formData.data.referenceData.educationGoals;
-						var educationLevels = formData.data.referenceData.educationLevels;
-						var employmentShifts = formData.data.referenceData.employmentShifts;
-						var ethnicities = formData.data.referenceData.ethnicities;
-						var fundingSources = formData.data.referenceData.fundingSources;
-						var genders = formData.data.referenceData.genders;
-						var maritalStatuses = formData.data.referenceData.maritalStatuses;
-						var states = formData.data.referenceData.states;
-						var studentStatuses = formData.data.referenceData.studentStatuses;
-						var veteranStatuses = formData.data.referenceData.veteranStatuses;
-
-						Ext.getStore('reference.Challenges').loadData( challenges );
-						Ext.getStore('reference.ChildCareArrangements').loadData( childCareArrangements );
-						Ext.getStore('reference.Citizenships').loadData( citizenships );
-						Ext.getStore('reference.EducationGoals').loadData( educationGoals );
-						Ext.getStore('reference.EducationLevels').loadData( educationLevels );
-						Ext.getStore('reference.EmploymentShifts').loadData( employmentShifts );
-						Ext.getStore('reference.Ethnicities').loadData( ethnicities );
-						Ext.getStore('reference.FundingSources').loadData( fundingSources );
-						Ext.getStore('reference.Genders').loadData( genders );
-						Ext.getStore('reference.MaritalStatuses').loadData( maritalStatuses );
-						Ext.getStore('reference.States').loadData( states );
-						Ext.getStore('reference.StudentStatuses').loadData( studentStatuses );
-						Ext.getStore('reference.VeteranStatuses').loadData( veteranStatuses ); 
-						
-						// LOAD RECORDS FOR EACH OF THE FORMS
-						Ext.getCmp('StudentIntakePersonal').loadRecord( person );
-						
-						if ( personDemographics != null && personDemographics != undefined ){
-							Ext.getCmp('StudentIntakeDemographics').loadRecord( personDemographics );
-						}
-						
-						if ( personEducationPlan != null && personEducationPlan != undefined )
-						{
-							Ext.getCmp('StudentIntakeEducationPlans').loadRecord( personEducationPlan );
-						}
-						
-						if ( personEducationGoal != null && personEducationGoal != undefined )
-						{
-							Ext.getCmp('StudentIntakeEducationGoals').loadRecord( personEducationGoal );
-						}
-
-						formUtils.createCheckBoxForm('StudentIntakeEducationLevels', educationLevels, personEducationLevels, 'id', 'educationLevelId');
-						formUtils.createCheckBoxForm('StudentIntakeFunding', fundingSources, personFundingSources, 'id', 'fundingSourceId');	
-						formUtils.createCheckBoxForm('StudentIntakeChallenges', challenges, personChallenges, 'id', 'challengeId');
-					}
-				});
+				this.application.fireEvent('loadStudentIntake');
 				break;
 		}
 		

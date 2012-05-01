@@ -13,9 +13,32 @@ Ext.require([
 	'Ssp.model.tool.studentintake.PersonEducationPlan',
 	'Ssp.model.tool.actionplan.Task',
 	'Ssp.model.reference.AbstractReference',
+	'Ssp.model.reference.Challenge',
+	'Ssp.model.reference.ConfidentialityLevel',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
+    'Ssp.store.Tasks',
+	'Ssp.store.reference.AbstractReferences',
+	'Ssp.store.reference.Campuses',
+	'Ssp.store.reference.Categories',
+	'Ssp.store.reference.ConfidentialityLevels',
+	'Ssp.store.reference.Referrals',
+	'Ssp.store.admin.AdminTreeMenus',
+	'Ssp.store.reference.Challenges',
+    'Ssp.store.reference.ChildCareArrangements',
+    'Ssp.store.reference.Citizenships',
+    'Ssp.store.reference.EmploymentShifts',
+    'Ssp.store.reference.Ethnicities',
+    'Ssp.store.reference.FundingSources',
+    'Ssp.store.reference.Genders',
+    'Ssp.store.reference.MaritalStatuses',
+    'Ssp.store.reference.States', 
+    'Ssp.store.Students',
+    'Ssp.store.reference.StudentStatuses',
+    'Ssp.store.Tools',
+    'Ssp.store.reference.VeteranStatuses',
+    'Ssp.store.reference.YesNo',
 	'Ext.tab.*'
 ]);
 
@@ -38,37 +61,42 @@ Ext.onReady(function(){
 	            return new Ssp.util.FormRendererUtils({});
 	    	},
 	        singleton: true
-	    }
+	    },
+	    columnRendererUtils:{
+	        fn: function(){
+	            return new Ssp.util.ColumnRendererUtils({});
+	    	},
+	        singleton: true
+	    },
+	    tasksStore: 'Ssp.store.Tasks',
+		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
+		campusesStore: 'Ssp.store.reference.Campuses',
+		categoriesStore: 'Ssp.store.reference.Categories',
+		confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
+		referralsStore: 'Ssp.store.reference.Referrals',
+	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
+	    challengesStore: 'Ssp.store.reference.Challenges',
+	    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
+    	citizenshipsStore: 'Ssp.store.reference.Citizenships',
+    	educationGoalsStore: 'Ssp.store.reference.EducationGoals',
+    	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
+    	employmentShiftsStore: 'Ssp.store.reference.EmploymentShifts',
+    	ethnicitiesStore: 'Ssp.store.reference.Ethnicities',
+    	fundingSourcesStore: 'Ssp.store.reference.FundingSources',
+    	gendersStore: 'Ssp.store.reference.Genders',
+    	maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
+	    statesStore: 'Ssp.store.reference.States',
+	    studentsStore: 'Ssp.store.Students',
+	    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
+	    toolsStore: 'Ssp.store.Tools',
+    	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
+        yesNoStore: 'Ssp.store.reference.YesNo'
 	});
+
 	
 	Ext.application({
 	    name: 'Ssp',
 	    appFolder: 'app',
-				
-		stores: [ 'Students',
-		          'Tasks',
-				  'ApplicationForms', 
-				  'Tools',
-				  'admin.AdminTreeMenus',
-				  'reference.AbstractReferences',
-				  'reference.Campuses',
-				  'reference.Categories',
-				  'reference.Challenges',
-				  'reference.ChildCareArrangements',
-				  'reference.Citizenships',
-				  'reference.ConfidentialityLevels',
-				  'reference.EducationGoals',
-				  'reference.EducationLevels',
-				  'reference.EmploymentShifts',
-				  'reference.Ethnicities',
-				  'reference.FundingSources',
-				  'reference.Genders',
-				  'reference.MaritalStatuses',
-				  'reference.Referrals',
-				  'reference.States', 
-				  'reference.StudentStatuses',
-				  'reference.VeteranStatuses',
-				  'reference.YesNo'], 
 		
 		controllers: [
 	        	'AdminViewController',

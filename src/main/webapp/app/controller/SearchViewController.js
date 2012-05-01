@@ -3,7 +3,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-        currentPerson: 'currentPerson'
+        currentPerson: 'currentPerson',
+        studentsStore: 'studentsStore'
     },
     
     views: [
@@ -12,7 +13,7 @@ Ext.define('Ssp.controller.SearchViewController', {
  
 	init: function() {
     	// load students
-    	Ext.getStore('Students').load();
+    	this.studentsStore.load();
 		
 		this.control({
 			'search': {
@@ -28,7 +29,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	handleSelectionChange: function(selModel,records,eOpts){ 
 		// select the person
 		this.currentPerson.data = records[0].data;
-		this.application.fireEvent('afterLoadPerson');
+		this.application.fireEvent('loadPerson');
 	},
 
 	handleViewReady: function(view, eobj){

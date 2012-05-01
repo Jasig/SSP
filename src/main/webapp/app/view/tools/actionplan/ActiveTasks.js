@@ -1,12 +1,16 @@
 Ext.define('Ssp.view.tools.actionplan.ActiveTasks', {
 	extend: 'Ext.grid.Panel',    
+    title: 'Active Tasks',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        tasksStore: 'tasksStore'
+    },
 	width: '100%',
     height: '100%',
-    title: 'Active Tasks',
     initComponent: function(){
     	Ext.apply(this,
     			{
-    	    		store: Ext.getStore('Tasks'),    		
+    	    		store: this.tasksStore,    		
 		    	    
     	    		features: [{
 		    	        id: 'group',

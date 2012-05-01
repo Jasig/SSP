@@ -15,63 +15,63 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 								{
 									text: 'Child Care Arrangements',
 									title: 'Child Care Arrangements',
-									store: 'ChildCareArrangements',
+									store: 'childCareArrangements',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 								},
 								{
 									text: 'Citizenships',
 									title: 'Citizenships',
-									store: 'Citizenships',
+									store: 'citizenships',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Education Goals',
 							    	title: 'Education Goals',
-							    	store: 'EducationGoals',
+							    	store: 'educationGoals',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Education Levels',
 							    	title: 'Education Levels',
-							    	store: 'EducationLevels',
+							    	store: 'educationLevels',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Ethnicities',
 							    	title: 'Ethnicities',
-							    	store: 'Ethnicities',
+							    	store: 'ethnicities',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Funding Sources',
 							    	title: 'Funding Sources',
-							    	store: 'FundingSources',
+							    	store: 'fundingSources',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Marital Statuses',
 							    	title: 'Marital Statuses',
-							    	store: 'MaritalStatuses',
+							    	store: 'maritalStatuses',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Student Statuses',
 							    	title: 'Student Statuses',
-							    	store: 'StudentStatuses',
+							    	store: 'studentStatuses',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
 							    ,{
 							    	text: 'Veteran Statuses',
 							    	title: 'Veteran Statuses',
-							    	store: 'VeteranStatuses',
+							    	store: 'veteranStatuses',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 							    }
@@ -84,20 +84,20 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 						children: [{
 									text: 'Categories',
 									title: 'Categories',
-									store: 'Categories',
+									store: 'categories',
 									form: 'AbstractReferenceAdmin',
 									leaf: true
 								},
 								{
 									text: 'Challenges',
 									title: 'Challenges',
-									store: 'Challenges',
+									store: 'challenges',
 									form: 'ChallengeAdmin',
 									leaf: true
 								},{
 									text: 'Referrals',
 									title: 'Referrals',
-									store: 'Referrals',
+									store: 'referrals',
 									form: 'AbstractReferenceAdmin',
 									leaf: true
 								}]
@@ -114,7 +114,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 						expanded: false,
 						children: [{text: 'Confidentiality Levels',
 									title: 'Confidentiality Levels',
-									store: 'ConfidentialityLevels',
+									store: 'confidentialityLevels',
 									form: 'ConfidentialityLevelAdmin',
 									leaf: true }]
 					},{
@@ -124,7 +124,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 						expanded: false,
 						children: [{text: 'Campuses',
 									title: 'Campuses',
-									store: 'Campuses',
+									store: 'campuses',
 									form: 'AbstractReferenceAdmin',
 									leaf: true }]
 					}
