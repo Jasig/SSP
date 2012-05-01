@@ -58,12 +58,12 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	/**
 	 * Model class type
 	 */
-	protected Class<T> persistentClass;
+	protected transient Class<T> persistentClass;
 
 	/**
 	 * Transfer object class type
 	 */
-	protected Class<TO> transferObjectClass;
+	protected transient Class<TO> transferObjectClass;
 
 	/**
 	 * Construct a controller with the specified specific service and types.
@@ -91,7 +91,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 			final @RequestParam(required = false) String sortDirection)
 			throws Exception {
 
-		PagingWrapper<T> data = getService().getAll(
+		final PagingWrapper<T> data = getService().getAll(
 				SortingAndPaging.createForSingleSort(status, start,
 						limit, sort, sortDirection, "name"));
 
