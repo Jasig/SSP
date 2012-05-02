@@ -1,4 +1,4 @@
-package org.jasig.ssp.transferobject.reference;
+package org.jasig.mygps.model.transferobject;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
 import org.jasig.ssp.transferobject.TransferObject;
+import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
 
 import com.google.common.collect.Lists;
 
@@ -22,7 +23,7 @@ public class SelfHelpGuideQuestionTO extends
 
 	private boolean mandatory;
 
-	private UUID challengeId;
+	private ChallengeTO challenge;
 
 	private UUID selfHelpGuideId;
 
@@ -61,7 +62,7 @@ public class SelfHelpGuideQuestionTO extends
 		}
 
 		if (model.getChallenge() != null) {
-			setChallengeId(model.getChallenge().getId());
+			setChallenge(new ChallengeTO(model.getChallenge()));
 		}
 	}
 
@@ -90,11 +91,22 @@ public class SelfHelpGuideQuestionTO extends
 	}
 
 	public UUID getChallengeId() {
-		return challengeId;
+		return challenge == null ? null : challenge.getId();
 	}
 
-	public void setChallengeId(UUID challengeId) {
-		this.challengeId = challengeId;
+	/**
+	 * @return the challenge
+	 */
+	public ChallengeTO getChallenge() {
+		return challenge;
+	}
+
+	/**
+	 * @param challenge
+	 *            the challenge to set
+	 */
+	public void setChallenge(ChallengeTO challenge) {
+		this.challenge = challenge;
 	}
 
 	public UUID getSelfHelpGuideId() {

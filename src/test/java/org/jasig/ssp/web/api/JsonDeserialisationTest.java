@@ -2,9 +2,6 @@ package org.jasig.ssp.web.api;
 
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.jasig.mygps.model.transferobject.FormOptionTO;
 import org.jasig.mygps.model.transferobject.FormQuestionTO;
 import org.jasig.mygps.model.transferobject.FormSectionTO;
@@ -42,6 +39,9 @@ import org.jasig.ssp.transferobject.reference.SelfHelpGuideTO;
 import org.jasig.ssp.transferobject.reference.StudentStatusTO;
 import org.jasig.ssp.transferobject.reference.VeteranStatusTO;
 import org.jasig.ssp.transferobject.tool.IntakeFormTO;
+import org.junit.Test;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 
 /**
  * Test that all the transfer objects are serializable by the JSON serializer.
@@ -90,12 +90,14 @@ public class JsonDeserialisationTest {
 		assertCanBeMapped(PersonTO.class);
 
 		// MyGPS transfer objects
+		assertCanBeMapped(org.jasig.mygps.model.transferobject.ChallengeTO.class);
 		assertCanBeMapped(FormOptionTO.class);
 		assertCanBeMapped(FormQuestionTO.class);
 		assertCanBeMapped(FormSectionTO.class);
 		assertCanBeMapped(FormTO.class);
 		assertCanBeMapped(MessageTO.class);
 		assertCanBeMapped(org.jasig.mygps.model.transferobject.PersonTO.class);
+		assertCanBeMapped(org.jasig.mygps.model.transferobject.SelfHelpGuideQuestionTO.class);
 		assertCanBeMapped(SelfHelpGuideResponseTO.class);
 		assertCanBeMapped(TaskReportTO.class);
 
