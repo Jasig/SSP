@@ -1,8 +1,8 @@
-package org.studentsuccessplan.ssp.factory.reference;
+package org.jasig.ssp.factory.reference;
 
-import org.studentsuccessplan.ssp.factory.TOFactory;
-import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
-import org.studentsuccessplan.ssp.transferobject.reference.ConfidentialityDisclosureAgreementTO;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
+import org.jasig.ssp.transferobject.reference.ConfidentialityDisclosureAgreementTO;
 
 public interface ConfidentialityDisclosureAgreementTOFactory extends
 		TOFactory<ConfidentialityDisclosureAgreementTO, ConfidentialityDisclosureAgreement> {

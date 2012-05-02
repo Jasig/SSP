@@ -1,11 +1,11 @@
-package org.studentsuccessplan.ssp.dao;
+package org.jasig.ssp.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.PersonEducationGoal;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonEducationGoal;
 
 /**
  * CRUD methods for the PersonEducationGoal model.

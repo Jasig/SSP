@@ -1,12 +1,12 @@
-package org.studentsuccessplan.ssp.web.api;
+package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.Auditable;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.transferobject.PagingTO;
-import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
-import org.studentsuccessplan.ssp.transferobject.TransferObject;
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.TransferObject;
 
 /**
  * All the Methods a Reference Controller needs to be useful.
@@ -72,7 +72,7 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @param obj
 	 *            New instance to persist.
 	 * @return Original instance plus the generated id.
-	 * @throws org.studentsuccessplan.ssp.web.api.validation.ValidationException
+	 * @throws org.jasig.ssp.web.api.validation.ValidationException
 	 *             If the obj contains an id (since it shouldn't).
 	 * @throws Exception
 	 *             If there were any unexpected exceptions thrown.
@@ -87,7 +87,7 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @param obj
 	 *            Full instance to persist.
 	 * @return The update data object instance.
-	 * @throws org.studentsuccessplan.ssp.web.api.validation.ValidationException
+	 * @throws org.jasig.ssp.web.api.validation.ValidationException
 	 *             If the specified id is null.
 	 * @throws Exception
 	 *             If there were any unexpected exceptions thrown.

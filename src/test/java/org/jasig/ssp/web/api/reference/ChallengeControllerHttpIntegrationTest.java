@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.web.api.reference;
+package org.jasig.ssp.web.api.reference;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,12 +16,12 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
-import org.studentsuccessplan.ssp.web.api.AbstractControllerHttpTestSupport;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.web.api.AbstractControllerHttpTestSupport;
 
 /**
  * {@link ChallengeController} tests
@@ -62,7 +62,7 @@ public class ChallengeControllerHttpIntegrationTest
 
 	/**
 	 * Test the
-	 * {@link ChallengeController#getAll(org.studentsuccessplan.ssp.model.ObjectStatus, Integer, Integer, String, String)}
+	 * {@link ChallengeController#getAll(org.jasig.ssp.model.ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws Exception

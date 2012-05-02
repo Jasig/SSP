@@ -1,8 +1,8 @@
-package org.studentsuccessplan.mygps.model.transferobject;
+package org.jasig.mygps.model.transferobject;
 
 import java.io.Serializable;
 
-import org.studentsuccessplan.ssp.model.Person;
+import org.jasig.ssp.model.Person;
 
 /**
  * Transfer class for {@link Person}.

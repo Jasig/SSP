@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.dao.reference;
+package org.jasig.ssp.dao.reference;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -17,10 +17,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.reference.EducationGoal;
-import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.EducationGoal;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")

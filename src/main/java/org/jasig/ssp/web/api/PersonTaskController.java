@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.web.api;
+package org.jasig.ssp.web.api;
 
 import java.util.List;
 import java.util.Map;
@@ -18,16 +18,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.studentsuccessplan.ssp.factory.TaskTOFactory;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.Task;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.SecurityService;
-import org.studentsuccessplan.ssp.service.TaskService;
-import org.studentsuccessplan.ssp.transferobject.TaskTO;
-import org.studentsuccessplan.ssp.transferobject.form.EmailPersonTasksForm;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.factory.TaskTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Task;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Maps;
 

@@ -1,13 +1,13 @@
-package org.studentsuccessplan.ssp.service.impl;
+package org.jasig.ssp.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.security.MockUser;
-import org.studentsuccessplan.ssp.security.SspUser;
-import org.studentsuccessplan.ssp.service.SecurityService;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.security.MockUser;
+import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.service.SecurityService;
 
 /**
  * A Security Service for use in a test environment. Allows an integration test

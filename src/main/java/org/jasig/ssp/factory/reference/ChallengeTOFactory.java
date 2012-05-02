@@ -1,8 +1,8 @@
-package org.studentsuccessplan.ssp.factory.reference;
+package org.jasig.ssp.factory.reference;
 
-import org.studentsuccessplan.ssp.factory.TOFactory;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
 
 public interface ChallengeTOFactory extends
 		TOFactory<ChallengeTO, Challenge> {

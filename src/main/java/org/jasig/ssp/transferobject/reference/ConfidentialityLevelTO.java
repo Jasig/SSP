@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.transferobject.reference;
+package org.jasig.ssp.transferobject.reference;
 
 import java.util.Collection;
 import java.util.List;
@@ -7,8 +7,8 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
-import org.studentsuccessplan.ssp.transferobject.TransferObject;
+import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 

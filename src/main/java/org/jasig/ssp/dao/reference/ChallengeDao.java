@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.dao.reference;
+package org.jasig.ssp.dao.reference;
 
 import java.util.List;
 import java.util.Locale;
@@ -9,10 +9,10 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * Data access class for the Challenge reference entity.

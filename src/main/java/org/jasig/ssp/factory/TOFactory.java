@@ -1,12 +1,12 @@
-package org.studentsuccessplan.ssp.factory;
+package org.jasig.ssp.factory;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.transferobject.TransferObject;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.TransferObject;
 
 public interface TOFactory<TObject extends TransferObject<M>, M> {
 

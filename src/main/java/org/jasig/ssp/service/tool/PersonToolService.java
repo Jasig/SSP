@@ -1,10 +1,10 @@
-package org.studentsuccessplan.ssp.service.tool;
+package org.jasig.ssp.service.tool;
 
 import java.util.List;
 
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.tool.PersonTool;
-import org.studentsuccessplan.ssp.model.tool.Tools;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.tool.PersonTool;
+import org.jasig.ssp.model.tool.Tools;
 
 public interface PersonToolService {
 

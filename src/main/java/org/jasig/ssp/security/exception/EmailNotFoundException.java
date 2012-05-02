@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.security.exception;
+package org.jasig.ssp.security.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

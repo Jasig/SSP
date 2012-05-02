@@ -1,12 +1,12 @@
-package org.studentsuccessplan.ssp.dao.reference;
+package org.jasig.ssp.dao.reference;
 
 import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
-import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
-import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
-import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
-import org.studentsuccessplan.ssp.util.sort.SortDirection;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.reference.VeteranStatus;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * Data access class for the VeteranStatus reference entity.

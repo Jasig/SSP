@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.transferobject;
+package org.jasig.ssp.transferobject;
 
 /**
  * Used to note TO's that have a name property. Good for sorting.

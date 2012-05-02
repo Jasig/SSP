@@ -1,6 +1,6 @@
-package org.studentsuccessplan.ssp.model.tool;
+package org.jasig.ssp.model.tool;
 
-import org.studentsuccessplan.ssp.model.Person;
+import org.jasig.ssp.model.Person;
 
 /**
  * The model for the Intake Form tool.

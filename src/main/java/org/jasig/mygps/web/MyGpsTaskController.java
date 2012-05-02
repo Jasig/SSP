@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.web;
+package org.jasig.mygps.web;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -15,20 +15,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.studentsuccessplan.mygps.model.transferobject.TaskReportTO;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.Task;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.PersonService;
-import org.studentsuccessplan.ssp.service.SecurityService;
-import org.studentsuccessplan.ssp.service.TaskService;
-import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
-import org.studentsuccessplan.ssp.service.reference.ChallengeService;
-import org.studentsuccessplan.ssp.transferobject.TaskTO;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.mygps.model.transferobject.TaskReportTO;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.service.reference.ChallengeReferralService;
+import org.jasig.ssp.service.reference.ChallengeService;
+import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Lists;
 

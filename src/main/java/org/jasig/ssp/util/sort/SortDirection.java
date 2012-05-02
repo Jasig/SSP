@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.util.sort;
+package org.jasig.ssp.util.sort;
 
 public enum SortDirection {
 	ASC, DESC;

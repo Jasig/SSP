@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.service.impl;
+package org.jasig.ssp.service.impl;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -7,15 +7,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.PersonConfidentialityDisclosureAgreementDao;
-import org.studentsuccessplan.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.PersonConfidentialityDisclosureAgreement;
-import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.PersonConfidentialityDisclosureAgreementService;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.dao.PersonConfidentialityDisclosureAgreementDao;
+import org.jasig.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
+import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonConfidentialityDisclosureAgreementService;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Sets;
 

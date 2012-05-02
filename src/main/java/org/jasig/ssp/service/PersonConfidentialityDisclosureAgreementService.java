@@ -1,8 +1,8 @@
-package org.studentsuccessplan.ssp.service;
+package org.jasig.ssp.service;
 
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.PersonConfidentialityDisclosureAgreement;
-import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
+import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
 
 public interface PersonConfidentialityDisclosureAgreementService {
 

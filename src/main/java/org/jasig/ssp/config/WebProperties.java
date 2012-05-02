@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.config;
+package org.jasig.ssp.config;
 
 import org.springframework.beans.factory.annotation.Value;
 

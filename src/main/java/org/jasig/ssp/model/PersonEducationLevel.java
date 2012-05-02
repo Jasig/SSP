@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model;
+package org.jasig.ssp.model;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import org.studentsuccessplan.ssp.model.reference.EducationLevel;
+import org.jasig.ssp.model.reference.EducationLevel;
 
 /**
  * Students may have zero or multiple Education Levels.

@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.business;
+package org.jasig.mygps.business;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.studentsuccessplan.ssp.dao.SelfHelpGuideQuestionResponseDao;
-import org.studentsuccessplan.ssp.dao.SelfHelpGuideResponseDao;
-import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
-import org.studentsuccessplan.ssp.model.SelfHelpGuideResponse;
+import org.jasig.ssp.dao.SelfHelpGuideQuestionResponseDao;
+import org.jasig.ssp.dao.SelfHelpGuideResponseDao;
+import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
+import org.jasig.ssp.model.SelfHelpGuideResponse;
 
 @Service
 @Transactional

@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model;
+package org.jasig.ssp.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,9 +16,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
-import org.studentsuccessplan.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.model.reference.ConfidentialityLevel;
 
 /**
  * Task

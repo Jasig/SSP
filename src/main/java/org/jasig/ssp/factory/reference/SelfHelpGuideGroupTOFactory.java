@@ -1,8 +1,8 @@
-package org.studentsuccessplan.ssp.factory.reference;
+package org.jasig.ssp.factory.reference;
 
-import org.studentsuccessplan.ssp.factory.TOFactory;
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
-import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideGroupTO;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideGroupTO;
 
 public interface SelfHelpGuideGroupTOFactory extends
 		TOFactory<SelfHelpGuideGroupTO, SelfHelpGuideGroup> {

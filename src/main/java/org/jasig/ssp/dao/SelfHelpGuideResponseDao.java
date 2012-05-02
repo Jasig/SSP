@@ -1,11 +1,11 @@
-package org.studentsuccessplan.ssp.dao;
+package org.jasig.ssp.dao;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import org.studentsuccessplan.ssp.model.SelfHelpGuideResponse;
-import org.studentsuccessplan.ssp.security.SspUser;
+import org.jasig.ssp.model.SelfHelpGuideResponse;
+import org.jasig.ssp.security.SspUser;
 
 @Repository
 public class SelfHelpGuideResponseDao extends

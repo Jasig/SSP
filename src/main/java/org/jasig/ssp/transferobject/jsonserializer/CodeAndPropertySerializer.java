@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.transferobject.jsonserializer;
+package org.jasig.ssp.transferobject.jsonserializer;
 
 import java.io.IOException;
 

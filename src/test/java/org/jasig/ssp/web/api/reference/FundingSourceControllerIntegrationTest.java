@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.web.api.reference;
+package org.jasig.ssp.web.api.reference;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -17,12 +17,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.studentsuccessplan.ssp.transferobject.reference.FundingSourceTO;
-import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reference.FundingSourceTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * FundingSource controller tests

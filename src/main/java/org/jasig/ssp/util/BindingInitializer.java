@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.util;
+package org.jasig.ssp.util;
 
 import java.util.UUID;
 
@@ -6,7 +6,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebBindingInitializer;
 import org.springframework.web.context.request.WebRequest;
 
-import org.studentsuccessplan.ssp.util.uuid.UuidPropertyEditor;
+import org.jasig.ssp.util.uuid.UuidPropertyEditor;
 
 /**
  * SSP specific WebBindingInitializer. Registers custom Property Editors.

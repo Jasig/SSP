@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.transferobject.form;
+package org.jasig.ssp.transferobject.form;
 
 import java.util.List;
 import java.util.UUID;

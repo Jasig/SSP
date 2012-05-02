@@ -1,19 +1,19 @@
-package org.studentsuccessplan.ssp.transferobject.tool;
+package org.jasig.ssp.transferobject.tool;
 
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.studentsuccessplan.ssp.model.tool.IntakeForm;
-import org.studentsuccessplan.ssp.transferobject.PersonChallengeTO;
-import org.studentsuccessplan.ssp.transferobject.PersonDemographicsTO;
-import org.studentsuccessplan.ssp.transferobject.PersonEducationGoalTO;
-import org.studentsuccessplan.ssp.transferobject.PersonEducationLevelTO;
-import org.studentsuccessplan.ssp.transferobject.PersonEducationPlanTO;
-import org.studentsuccessplan.ssp.transferobject.PersonFundingSourceTO;
-import org.studentsuccessplan.ssp.transferobject.PersonTO;
-import org.studentsuccessplan.ssp.transferobject.TransferObject;
+import org.jasig.ssp.model.tool.IntakeForm;
+import org.jasig.ssp.transferobject.PersonChallengeTO;
+import org.jasig.ssp.transferobject.PersonDemographicsTO;
+import org.jasig.ssp.transferobject.PersonEducationGoalTO;
+import org.jasig.ssp.transferobject.PersonEducationLevelTO;
+import org.jasig.ssp.transferobject.PersonEducationPlanTO;
+import org.jasig.ssp.transferobject.PersonFundingSourceTO;
+import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.TransferObject;
 
 public class IntakeFormTO implements TransferObject<IntakeForm> {
 

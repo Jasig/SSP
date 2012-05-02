@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.web;
+package org.jasig.mygps.web;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.studentsuccessplan.mygps.model.transferobject.MessageTO;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
-import org.studentsuccessplan.ssp.service.MessageService;
+import org.jasig.mygps.model.transferobject.MessageTO;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.service.MessageService;
 
 @Controller
 @RequestMapping("/1/mygps/message")

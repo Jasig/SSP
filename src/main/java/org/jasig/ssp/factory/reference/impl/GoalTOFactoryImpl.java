@@ -1,15 +1,15 @@
-package org.studentsuccessplan.ssp.factory.reference.impl;
+package org.jasig.ssp.factory.reference.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.GoalDao;
-import org.studentsuccessplan.ssp.factory.reference.AbstractReferenceTOFactory;
-import org.studentsuccessplan.ssp.factory.reference.GoalTOFactory;
-import org.studentsuccessplan.ssp.model.reference.Goal;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.reference.ConfidentialityLevelService;
-import org.studentsuccessplan.ssp.transferobject.reference.GoalTO;
+import org.jasig.ssp.dao.reference.GoalDao;
+import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
+import org.jasig.ssp.factory.reference.GoalTOFactory;
+import org.jasig.ssp.model.reference.Goal;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.transferobject.reference.GoalTO;
 
 @Service
 @Transactional(readOnly = true)

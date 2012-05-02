@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.dao;
+package org.jasig.ssp.dao;
 
 import static org.junit.Assert.fail;
 

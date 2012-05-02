@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -16,12 +16,12 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.studentsuccessplan.ssp.dao.reference.FundingSourceDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.reference.FundingSource;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.dao.reference.FundingSourceDao;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.FundingSource;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public class FundingSourceServiceTest {
 

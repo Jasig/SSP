@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.service;
+package org.jasig.ssp.service;
 
 import java.io.Serializable;
 import java.util.UUID;

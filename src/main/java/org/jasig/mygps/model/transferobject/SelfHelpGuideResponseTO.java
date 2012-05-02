@@ -1,10 +1,10 @@
-package org.studentsuccessplan.mygps.model.transferobject;
+package org.jasig.mygps.model.transferobject;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
 
 public class SelfHelpGuideResponseTO implements Serializable {
 

@@ -1,15 +1,15 @@
-package org.studentsuccessplan.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.service.SecurityService;
-import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
-import org.studentsuccessplan.ssp.service.reference.ChallengeService;
+import org.jasig.ssp.dao.reference.ChallengeDao;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.reference.ChallengeReferralService;
+import org.jasig.ssp.service.reference.ChallengeService;
 
 import com.google.common.collect.Lists;
 

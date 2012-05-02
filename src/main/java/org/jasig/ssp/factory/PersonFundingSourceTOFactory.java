@@ -1,7 +1,7 @@
-package org.studentsuccessplan.ssp.factory;
+package org.jasig.ssp.factory;
 
-import org.studentsuccessplan.ssp.model.PersonFundingSource;
-import org.studentsuccessplan.ssp.transferobject.PersonFundingSourceTO;
+import org.jasig.ssp.model.PersonFundingSource;
+import org.jasig.ssp.transferobject.PersonFundingSourceTO;
 
 public interface PersonFundingSourceTOFactory extends
 		TOFactory<PersonFundingSourceTO, PersonFundingSource> {

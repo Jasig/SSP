@@ -1,15 +1,15 @@
-package org.studentsuccessplan.ssp.service.tool.impl;
+package org.jasig.ssp.service.tool.impl;
 
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.tool.IntakeForm;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.PersonService;
-import org.studentsuccessplan.ssp.service.tool.IntakeService;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.tool.IntakeForm;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.tool.IntakeService;
 
 @Service
 @Transactional

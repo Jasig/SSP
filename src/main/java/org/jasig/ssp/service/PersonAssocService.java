@@ -1,10 +1,10 @@
-package org.studentsuccessplan.ssp.service;
+package org.jasig.ssp.service;
 
 import java.util.List;
 
-import org.studentsuccessplan.ssp.model.Auditable;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public interface PersonAssocService<T extends Auditable> extends
 		AuditableCrudService<T> {

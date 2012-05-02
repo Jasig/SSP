@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.service.tool;
+package org.jasig.ssp.service.tool;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,23 +16,23 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.PersonDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.PersonChallenge;
-import org.studentsuccessplan.ssp.model.PersonDemographics;
-import org.studentsuccessplan.ssp.model.PersonEducationGoal;
-import org.studentsuccessplan.ssp.model.PersonEducationLevel;
-import org.studentsuccessplan.ssp.model.PersonEducationPlan;
-import org.studentsuccessplan.ssp.model.PersonFundingSource;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.EducationLevel;
-import org.studentsuccessplan.ssp.model.reference.FundingSource;
-import org.studentsuccessplan.ssp.model.reference.StudentStatus;
-import org.studentsuccessplan.ssp.model.tool.IntakeForm;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.PersonService;
-import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.dao.PersonDao;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonChallenge;
+import org.jasig.ssp.model.PersonDemographics;
+import org.jasig.ssp.model.PersonEducationGoal;
+import org.jasig.ssp.model.PersonEducationLevel;
+import org.jasig.ssp.model.PersonEducationPlan;
+import org.jasig.ssp.model.PersonFundingSource;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.EducationLevel;
+import org.jasig.ssp.model.reference.FundingSource;
+import org.jasig.ssp.model.reference.StudentStatus;
+import org.jasig.ssp.model.tool.IntakeForm;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../service-testConfig.xml")

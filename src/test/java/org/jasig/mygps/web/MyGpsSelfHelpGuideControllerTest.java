@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.web;
+package org.jasig.mygps.web;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -15,17 +15,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
-import org.studentsuccessplan.ssp.factory.reference.SelfHelpGuideTOFactory;
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideGroupService;
-import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
-import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideDetailTO;
-import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideTO;
-import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.mygps.business.SelfHelpGuideManager;
+import org.jasig.ssp.factory.reference.SelfHelpGuideTOFactory;
+import org.jasig.ssp.model.reference.SelfHelpGuide;
+import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.reference.SelfHelpGuideGroupService;
+import org.jasig.ssp.service.reference.SelfHelpGuideService;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Lists;
 

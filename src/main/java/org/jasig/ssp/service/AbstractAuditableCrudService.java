@@ -1,12 +1,12 @@
-package org.studentsuccessplan.ssp.service;
+package org.jasig.ssp.service;
 
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
-import org.studentsuccessplan.ssp.model.Auditable;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * Base class which provides a building block for creating an

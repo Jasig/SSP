@@ -1,14 +1,14 @@
-package org.studentsuccessplan.ssp.service;
+package org.jasig.ssp.service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.Task;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public interface TaskService
 		extends PersonAssocService<Task> {

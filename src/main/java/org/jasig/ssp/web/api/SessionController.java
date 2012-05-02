@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.web.api;
+package org.jasig.ssp.web.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,10 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.security.SspUser;
-import org.studentsuccessplan.ssp.service.SecurityService;
-import org.studentsuccessplan.ssp.transferobject.PersonTO;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.transferobject.PersonTO;
 
 /**
  * Allows the logged in user to get their profile.

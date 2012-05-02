@@ -1,9 +1,9 @@
-package org.studentsuccessplan.ssp.util.sort;
+package org.jasig.ssp.util.sort;
 
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.studentsuccessplan.ssp.model.Auditable;
+import org.jasig.ssp.model.Auditable;
 
 /**
  * Wrap results (rows) that have been paged but still include the total record

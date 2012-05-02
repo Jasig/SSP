@@ -1,11 +1,11 @@
-package org.studentsuccessplan.ssp.util;
+package org.jasig.ssp.util;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.Auditable;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.ObjectStatus;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;

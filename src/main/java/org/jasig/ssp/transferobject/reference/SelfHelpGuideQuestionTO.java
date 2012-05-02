@@ -1,12 +1,12 @@
-package org.studentsuccessplan.ssp.transferobject.reference;
+package org.jasig.ssp.transferobject.reference;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideQuestion;
-import org.studentsuccessplan.ssp.transferobject.TransferObject;
+import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
+import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 

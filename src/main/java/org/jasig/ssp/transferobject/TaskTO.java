@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.transferobject;
+package org.jasig.ssp.transferobject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.Task;
+import org.jasig.ssp.model.Task;
 
 public class TaskTO
 		extends AuditableTO<Task>

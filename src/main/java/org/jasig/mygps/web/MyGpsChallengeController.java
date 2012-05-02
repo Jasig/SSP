@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.web;
+package org.jasig.mygps.web;
 
 import java.util.List;
 
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.studentsuccessplan.ssp.factory.reference.ChallengeReferralTOFactory;
-import org.studentsuccessplan.ssp.factory.reference.ChallengeTOFactory;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
-import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
-import org.studentsuccessplan.ssp.service.reference.ChallengeService;
-import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.factory.reference.ChallengeReferralTOFactory;
+import org.jasig.ssp.factory.reference.ChallengeTOFactory;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.service.reference.ChallengeReferralService;
+import org.jasig.ssp.service.reference.ChallengeService;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
 
 import com.google.common.collect.Lists;
 

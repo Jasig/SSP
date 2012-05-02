@@ -1,13 +1,13 @@
-package org.studentsuccessplan.ssp.factory.reference.impl;
+package org.jasig.ssp.factory.reference.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.ChildCareArrangementDao;
-import org.studentsuccessplan.ssp.factory.reference.AbstractReferenceTOFactory;
-import org.studentsuccessplan.ssp.factory.reference.ChildCareArrangementTOFactory;
-import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
-import org.studentsuccessplan.ssp.transferobject.reference.ChildCareArrangementTO;
+import org.jasig.ssp.dao.reference.ChildCareArrangementDao;
+import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
+import org.jasig.ssp.factory.reference.ChildCareArrangementTOFactory;
+import org.jasig.ssp.model.reference.ChildCareArrangement;
+import org.jasig.ssp.transferobject.reference.ChildCareArrangementTO;
 
 @Service
 @Transactional(readOnly = true)

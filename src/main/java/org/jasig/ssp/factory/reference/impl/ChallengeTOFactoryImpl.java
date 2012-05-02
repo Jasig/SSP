@@ -1,14 +1,14 @@
-package org.studentsuccessplan.ssp.factory.reference.impl;
+package org.jasig.ssp.factory.reference.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
-import org.studentsuccessplan.ssp.factory.reference.AbstractReferenceTOFactory;
-import org.studentsuccessplan.ssp.factory.reference.ChallengeTOFactory;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.dao.reference.ChallengeDao;
+import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
+import org.jasig.ssp.factory.reference.ChallengeTOFactory;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
 
 @Service
 @Transactional(readOnly = true)

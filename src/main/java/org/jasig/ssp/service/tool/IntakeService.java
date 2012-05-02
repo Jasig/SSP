@@ -1,9 +1,9 @@
-package org.studentsuccessplan.ssp.service.tool;
+package org.jasig.ssp.service.tool;
 
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.tool.IntakeForm;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.model.tool.IntakeForm;
+import org.jasig.ssp.service.ObjectNotFoundException;
 
 public interface IntakeService {
 

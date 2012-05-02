@@ -1,11 +1,11 @@
-package org.studentsuccessplan.ssp.transferobject;
+package org.jasig.ssp.transferobject;
 
 /**
  * An object which exposes the model to another layer
  * 
  * @param <T>
  *            Should be any model class from the
- *            org.studentsuccessplan.ssp.model
+ *            org.jasig.ssp.model
  *            namespace.
  */
 public interface TransferObject<T> {

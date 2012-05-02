@@ -1,14 +1,14 @@
-package org.studentsuccessplan.ssp.dao.reference;
+package org.jasig.ssp.dao.reference;
 
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
-import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
-import org.studentsuccessplan.ssp.security.SspUser;
+import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.security.SspUser;
 
 /**
  * Data access class for the ChallengeReferral reference entity.

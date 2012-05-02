@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.dao;
+package org.jasig.ssp.dao;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,10 +7,10 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.studentsuccessplan.ssp.model.Auditable;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		AuditableCrudDao<T> {

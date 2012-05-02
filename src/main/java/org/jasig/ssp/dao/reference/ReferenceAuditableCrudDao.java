@@ -1,11 +1,11 @@
-package org.studentsuccessplan.ssp.dao.reference;
+package org.jasig.ssp.dao.reference;
 
 import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
-import org.studentsuccessplan.ssp.dao.AbstractAuditableCrudDao;
-import org.studentsuccessplan.ssp.model.Auditable;
-import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.dao.AbstractAuditableCrudDao;
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * Base CRUD methods for reference model objects.

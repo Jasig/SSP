@@ -1,11 +1,11 @@
-package org.studentsuccessplan.mygps.model.transferobject;
+package org.jasig.mygps.model.transferobject;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.reference.AbstractReference;
-import org.studentsuccessplan.ssp.util.SspStringUtils;
+import org.jasig.ssp.model.reference.AbstractReference;
+import org.jasig.ssp.util.SspStringUtils;
 
 public class FormQuestionTO implements Serializable {
 

@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model;
+package org.jasig.ssp.model;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
+import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

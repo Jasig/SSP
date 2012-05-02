@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.dao;
+package org.jasig.ssp.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -7,8 +7,8 @@ import java.util.UUID;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.studentsuccessplan.ssp.model.Task;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.model.Task;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 @Repository
 public class TaskDao extends

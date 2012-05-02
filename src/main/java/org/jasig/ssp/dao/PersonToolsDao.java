@@ -1,8 +1,8 @@
-package org.studentsuccessplan.ssp.dao;
+package org.jasig.ssp.dao;
 
 import org.springframework.stereotype.Repository;
 
-import org.studentsuccessplan.ssp.model.tool.PersonTool;
+import org.jasig.ssp.model.tool.PersonTool;
 
 /**
  * CRUD methods for the PersonDemographics model.

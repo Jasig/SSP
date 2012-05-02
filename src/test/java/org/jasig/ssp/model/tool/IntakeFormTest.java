@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model.tool;
+package org.jasig.ssp.model.tool;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.PersonDemographics;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonDemographics;
 
 /**
  * Simple tests on the {@link IntakeForm} model.

@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.web.api;
+package org.jasig.ssp.web.api;
 
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.ServiceResponse;
 
 public abstract class BaseController {
 	/**

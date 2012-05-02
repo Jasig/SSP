@@ -1,13 +1,13 @@
-package org.studentsuccessplan.ssp.transferobject.reference;
+package org.jasig.ssp.transferobject.reference;
 
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.studentsuccessplan.ssp.model.reference.AbstractReference;
-import org.studentsuccessplan.ssp.transferobject.AuditableTO;
-import org.studentsuccessplan.ssp.transferobject.NamedTO;
+import org.jasig.ssp.model.reference.AbstractReference;
+import org.jasig.ssp.transferobject.AuditableTO;
+import org.jasig.ssp.transferobject.NamedTO;
 
 public abstract class AbstractReferenceTO<T extends AbstractReference>
 		extends AuditableTO<T> implements NamedTO {

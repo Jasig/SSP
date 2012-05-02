@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model;
+package org.jasig.ssp.model;
 
 import java.io.Serializable;
 
@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.studentsuccessplan.ssp.model.reference.EducationGoal;
+import org.jasig.ssp.model.reference.EducationGoal;
 
 /**
  * Students may have an Education Goal stored for use in notifications to

@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.web.api.validation;
+package org.jasig.ssp.web.api.validation;
 
 /**
  * Thrown when a business object or TO is invalid

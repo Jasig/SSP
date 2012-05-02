@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.web;
+package org.jasig.mygps.web;
 
 import java.util.UUID;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
+import org.jasig.mygps.business.SelfHelpGuideManager;
+import org.jasig.mygps.model.transferobject.SelfHelpGuideResponseTO;
 
 @Controller
 @RequestMapping("/1/mygps/selfhelpguideresponse")

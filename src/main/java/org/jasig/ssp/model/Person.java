@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model;
+package org.jasig.ssp.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,7 +23,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.studentsuccessplan.ssp.model.tool.PersonTool;
+import org.jasig.ssp.model.tool.PersonTool;
 
 /**
  * A Person entity.

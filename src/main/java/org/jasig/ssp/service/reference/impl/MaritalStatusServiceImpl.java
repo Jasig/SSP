@@ -1,11 +1,11 @@
-package org.studentsuccessplan.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.MaritalStatusDao;
-import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
-import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
+import org.jasig.ssp.dao.reference.MaritalStatusDao;
+import org.jasig.ssp.model.reference.MaritalStatus;
+import org.jasig.ssp.service.reference.MaritalStatusService;
 
 @Service
 @Transactional

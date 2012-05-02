@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.util;
+package org.jasig.ssp.util;
 
 public class Constants {
 

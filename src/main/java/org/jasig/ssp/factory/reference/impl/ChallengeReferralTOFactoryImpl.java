@@ -1,14 +1,14 @@
-package org.studentsuccessplan.ssp.factory.reference.impl;
+package org.jasig.ssp.factory.reference.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.ChallengeReferralDao;
-import org.studentsuccessplan.ssp.factory.reference.AbstractReferenceTOFactory;
-import org.studentsuccessplan.ssp.factory.reference.ChallengeReferralTOFactory;
-import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.transferobject.reference.ChallengeReferralTO;
+import org.jasig.ssp.dao.reference.ChallengeReferralDao;
+import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
+import org.jasig.ssp.factory.reference.ChallengeReferralTOFactory;
+import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 
 @Service
 @Transactional(readOnly = true)

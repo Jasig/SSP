@@ -1,10 +1,10 @@
-package org.studentsuccessplan.ssp.security;
+package org.jasig.ssp.security;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import org.studentsuccessplan.ssp.model.Person;
+import org.jasig.ssp.model.Person;
 
 public class MockUser extends SspUser {
 

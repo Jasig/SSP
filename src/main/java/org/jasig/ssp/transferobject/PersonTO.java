@@ -1,10 +1,10 @@
-package org.studentsuccessplan.ssp.transferobject;
+package org.jasig.ssp.transferobject;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import org.studentsuccessplan.ssp.model.Person;
+import org.jasig.ssp.model.Person;
 
 import com.google.common.collect.Lists;
 

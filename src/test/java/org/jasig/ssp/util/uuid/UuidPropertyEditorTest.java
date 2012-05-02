@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.util.uuid;
+package org.jasig.ssp.util.uuid;
 
 import static org.junit.Assert.*;
 import java.beans.PropertyEditor;

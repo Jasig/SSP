@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.util;
+package org.jasig.ssp.util;
 
 /**
  * A few simple helper methods to convert from value types to Strings and vice

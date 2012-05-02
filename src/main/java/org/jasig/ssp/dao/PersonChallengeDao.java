@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.dao;
+package org.jasig.ssp.dao;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.PersonChallenge;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonChallenge;
 
 /**
  * CRUD methods for the PersonChallenge model.

@@ -1,13 +1,13 @@
-package org.studentsuccessplan.ssp.factory.reference.impl;
+package org.jasig.ssp.factory.reference.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.EducationLevelDao;
-import org.studentsuccessplan.ssp.factory.reference.AbstractReferenceTOFactory;
-import org.studentsuccessplan.ssp.factory.reference.EducationLevelTOFactory;
-import org.studentsuccessplan.ssp.model.reference.EducationLevel;
-import org.studentsuccessplan.ssp.transferobject.reference.EducationLevelTO;
+import org.jasig.ssp.dao.reference.EducationLevelDao;
+import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
+import org.jasig.ssp.factory.reference.EducationLevelTOFactory;
+import org.jasig.ssp.model.reference.EducationLevel;
+import org.jasig.ssp.transferobject.reference.EducationLevelTO;
 
 @Service
 @Transactional(readOnly = true)

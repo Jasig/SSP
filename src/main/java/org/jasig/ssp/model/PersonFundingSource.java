@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model;
+package org.jasig.ssp.model;
 
 import java.io.Serializable;
 
@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.studentsuccessplan.ssp.model.reference.FundingSource;
+import org.jasig.ssp.model.reference.FundingSource;
 
 /**
  * Students may have zero or multiple Funding Sources.

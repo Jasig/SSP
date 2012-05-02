@@ -1,22 +1,22 @@
-package org.studentsuccessplan.ssp.factory.tool.impl;
+package org.jasig.ssp.factory.tool.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.factory.PersonChallengeTOFactory;
-import org.studentsuccessplan.ssp.factory.PersonDemographicsTOFactory;
-import org.studentsuccessplan.ssp.factory.PersonEducationGoalTOFactory;
-import org.studentsuccessplan.ssp.factory.PersonEducationLevelTOFactory;
-import org.studentsuccessplan.ssp.factory.PersonEducationPlanTOFactory;
-import org.studentsuccessplan.ssp.factory.PersonFundingSourceTOFactory;
-import org.studentsuccessplan.ssp.factory.PersonTOFactory;
-import org.studentsuccessplan.ssp.factory.tool.IntakeFormTOFactory;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.tool.IntakeForm;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.transferobject.tool.IntakeFormTO;
-import org.studentsuccessplan.ssp.util.SetOps;
-import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
+import org.jasig.ssp.factory.PersonChallengeTOFactory;
+import org.jasig.ssp.factory.PersonDemographicsTOFactory;
+import org.jasig.ssp.factory.PersonEducationGoalTOFactory;
+import org.jasig.ssp.factory.PersonEducationLevelTOFactory;
+import org.jasig.ssp.factory.PersonEducationPlanTOFactory;
+import org.jasig.ssp.factory.PersonFundingSourceTOFactory;
+import org.jasig.ssp.factory.PersonTOFactory;
+import org.jasig.ssp.factory.tool.IntakeFormTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.tool.IntakeForm;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.tool.IntakeFormTO;
+import org.jasig.ssp.util.SetOps;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 @Service
 @Transactional(readOnly = true)

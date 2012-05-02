@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.model.transferobject;
+package org.jasig.mygps.model.transferobject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.Task;
+import org.jasig.ssp.model.Task;
 
 public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 

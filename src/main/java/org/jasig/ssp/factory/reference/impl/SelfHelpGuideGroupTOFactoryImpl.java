@@ -1,13 +1,13 @@
-package org.studentsuccessplan.ssp.factory.reference.impl;
+package org.jasig.ssp.factory.reference.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideGroupDao;
-import org.studentsuccessplan.ssp.factory.reference.AbstractReferenceTOFactory;
-import org.studentsuccessplan.ssp.factory.reference.SelfHelpGuideGroupTOFactory;
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
-import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideGroupTO;
+import org.jasig.ssp.dao.reference.SelfHelpGuideGroupDao;
+import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
+import org.jasig.ssp.factory.reference.SelfHelpGuideGroupTOFactory;
+import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideGroupTO;
 
 @Service
 @Transactional(readOnly = true)

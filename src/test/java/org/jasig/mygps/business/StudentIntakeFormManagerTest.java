@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.business;
+package org.jasig.mygps.business;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,21 +25,21 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.mygps.model.transferobject.FormSectionTO;
-import org.studentsuccessplan.mygps.model.transferobject.FormTO;
-import org.studentsuccessplan.mygps.web.MyGpsChallengeController;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.PersonChallenge;
-import org.studentsuccessplan.ssp.model.PersonConfidentialityDisclosureAgreement;
-import org.studentsuccessplan.ssp.model.PersonDemographics;
-import org.studentsuccessplan.ssp.model.PersonEducationGoal;
-import org.studentsuccessplan.ssp.model.PersonEducationLevel;
-import org.studentsuccessplan.ssp.model.PersonEducationPlan;
-import org.studentsuccessplan.ssp.model.PersonFundingSource;
-import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
-import org.studentsuccessplan.ssp.model.reference.Genders;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.mygps.model.transferobject.FormSectionTO;
+import org.jasig.mygps.model.transferobject.FormTO;
+import org.jasig.mygps.web.MyGpsChallengeController;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonChallenge;
+import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
+import org.jasig.ssp.model.PersonDemographics;
+import org.jasig.ssp.model.PersonEducationGoal;
+import org.jasig.ssp.model.PersonEducationLevel;
+import org.jasig.ssp.model.PersonEducationPlan;
+import org.jasig.ssp.model.PersonFundingSource;
+import org.jasig.ssp.model.reference.EmploymentShifts;
+import org.jasig.ssp.model.reference.Genders;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 /**
  * {@link MyGpsChallengeController} tests

@@ -1,6 +1,6 @@
 import java.util.UUID
 
-File output = new File("../src/main/resources/org/studentsuccessplan/ssp/database/changesets/000003.xml")
+File output = new File("../src/main/resources/org/jasig/ssp/database/changesets/000003.xml")
 
 String recordsSql = """INSERT INTO "student_status" VALUES ('7cdaf7ae-ab45-4cc1-9768-a3fdbb889a7f', 'Pre-College/ESP', 'Pre-College/ESP', '2012-03-08 17:37:28.231', '2012-03-08 17:37:33.338', '1010e4a0-1001-0110-1011-4ffc02fe81ff', '1010e4a0-1001-0110-1011-4ffc02fe81ff', '1');
 INSERT INTO "student_status" VALUES ('6d23ab89-66bf-4278-9655-1e68a3b08ab4', 'New', 'New', '2012-03-08 17:37:34.704', '2012-03-08 17:37:44.902', '1010e4a0-1001-0110-1011-4ffc02fe81ff', '1010e4a0-1001-0110-1011-4ffc02fe81ff', '1');

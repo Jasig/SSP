@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.model.transferobject;
+package org.jasig.mygps.model.transferobject;
 
 import java.io.Serializable;
 import java.util.UUID;

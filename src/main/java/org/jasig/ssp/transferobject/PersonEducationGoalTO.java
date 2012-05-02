@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.transferobject;
+package org.jasig.ssp.transferobject;
 
 import java.util.Collection;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
-import org.studentsuccessplan.ssp.model.PersonEducationGoal;
+import org.jasig.ssp.model.PersonEducationGoal;
 
 import com.google.common.collect.Lists;
 

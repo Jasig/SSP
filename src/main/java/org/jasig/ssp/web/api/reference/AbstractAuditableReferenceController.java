@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.web.api.reference;
+package org.jasig.ssp.web.api.reference;
 
 import java.util.UUID;
 
@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.studentsuccessplan.ssp.factory.TOFactory;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.reference.AbstractReference;
-import org.studentsuccessplan.ssp.service.AuditableCrudService;
-import org.studentsuccessplan.ssp.transferobject.PagingTO;
-import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
-import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
-import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
-import org.studentsuccessplan.ssp.web.api.RestController;
-import org.studentsuccessplan.ssp.web.api.validation.ValidationException;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.AbstractReference;
+import org.jasig.ssp.service.AuditableCrudService;
+import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.RestController;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * Basic REST command implementation to responds with standard transfer objects

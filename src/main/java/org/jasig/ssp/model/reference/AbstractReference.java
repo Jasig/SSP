@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model.reference;
+package org.jasig.ssp.model.reference;
 
 import java.util.UUID;
 
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.studentsuccessplan.ssp.model.Auditable;
+import org.jasig.ssp.model.Auditable;
 
 /**
  * Reference entities must all share this abstract class, so they inherit the

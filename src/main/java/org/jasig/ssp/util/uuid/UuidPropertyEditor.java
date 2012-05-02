@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.util.uuid;
+package org.jasig.ssp.util.uuid;
 
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;

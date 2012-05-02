@@ -1,9 +1,9 @@
-package org.studentsuccessplan.ssp.dao;
+package org.jasig.ssp.dao;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.studentsuccessplan.ssp.model.Message;
+import org.jasig.ssp.model.Message;
 
 /**
  * DAO for the {@link Message} model

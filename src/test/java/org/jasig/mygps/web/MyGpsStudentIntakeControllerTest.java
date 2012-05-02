@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.web;
+package org.jasig.mygps.web;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -11,10 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.studentsuccessplan.mygps.business.StudentIntakeFormManager;
-import org.studentsuccessplan.mygps.model.transferobject.FormTO;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
+import org.jasig.mygps.business.StudentIntakeFormManager;
+import org.jasig.mygps.model.transferobject.FormTO;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
 
 public class MyGpsStudentIntakeControllerTest {
 

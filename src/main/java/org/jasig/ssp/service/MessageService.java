@@ -1,11 +1,11 @@
-package org.studentsuccessplan.ssp.service;
+package org.jasig.ssp.service;
 
 import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.model.Message;
-import org.studentsuccessplan.ssp.model.Person;
+import org.jasig.ssp.model.Message;
+import org.jasig.ssp.model.Person;
 
 public interface MessageService {
 

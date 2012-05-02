@@ -1,16 +1,16 @@
-package org.studentsuccessplan.ssp.factory.impl;
+package org.jasig.ssp.factory.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.PersonFundingSourceDao;
-import org.studentsuccessplan.ssp.factory.AbstractAuditableTOFactory;
-import org.studentsuccessplan.ssp.factory.PersonFundingSourceTOFactory;
-import org.studentsuccessplan.ssp.model.PersonFundingSource;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.PersonService;
-import org.studentsuccessplan.ssp.service.reference.FundingSourceService;
-import org.studentsuccessplan.ssp.transferobject.PersonFundingSourceTO;
+import org.jasig.ssp.dao.PersonFundingSourceDao;
+import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.PersonFundingSourceTOFactory;
+import org.jasig.ssp.model.PersonFundingSource;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.FundingSourceService;
+import org.jasig.ssp.transferobject.PersonFundingSourceTO;
 
 @Service
 @Transactional(readOnly = true)

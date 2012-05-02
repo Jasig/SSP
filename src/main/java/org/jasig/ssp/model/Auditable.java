@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model;
+package org.jasig.ssp.model;
 
 import java.util.Date;
 import java.util.UUID;
@@ -31,7 +31,7 @@ import org.hibernate.annotations.Type;
  * </p>
  * 
  * <p>
- * {@link org.studentsuccessplan.ssp.dao.AuditableEntityInterceptor} will
+ * {@link org.jasig.ssp.dao.AuditableEntityInterceptor} will
  * automatically fill the creation/modification stamps as appropriate in the
  * persistence layer.
  * </p>
@@ -58,7 +58,7 @@ public abstract class Auditable {
 	 * Person that created this entity.
 	 * 
 	 * Set to load eagerly because
-	 * {@link org.studentsuccessplan.ssp.transferobject.AuditableTO#from(org.studentsuccessplan.ssp.model.Auditable)}
+	 * {@link org.jasig.ssp.transferobject.AuditableTO#from(org.jasig.ssp.model.Auditable)}
 	 * pulls the ID from the full Person object and would require an extra
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses {@link Auditable} transfer objects).
@@ -78,7 +78,7 @@ public abstract class Auditable {
 	 * Last person to modify this entity.
 	 * 
 	 * Set to load eagerly because
-	 * {@link org.studentsuccessplan.ssp.transferobject.AuditableTO#from(org.studentsuccessplan.ssp.model.Auditable)}
+	 * {@link org.jasig.ssp.transferobject.AuditableTO#from(org.jasig.ssp.model.Auditable)}
 	 * pulls the ID from the full Person object and would require an extra
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses Auditable transfer objects).

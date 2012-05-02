@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.security;
+package org.jasig.ssp.security;
 
 import java.util.Collection;
 
@@ -10,11 +10,11 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.security.exception.EmailNotFoundException;
-import org.studentsuccessplan.ssp.security.exception.UserNotAuthorizedException;
-import org.studentsuccessplan.ssp.security.exception.UserNotEnabledException;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.PersonService;
+import org.jasig.ssp.security.exception.EmailNotFoundException;
+import org.jasig.ssp.security.exception.UserNotAuthorizedException;
+import org.jasig.ssp.security.exception.UserNotEnabledException;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 
 import com.google.common.collect.Lists;
 

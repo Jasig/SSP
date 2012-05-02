@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.security;
+package org.jasig.ssp.security;
 
 import java.util.Collection;
 

@@ -1,9 +1,9 @@
-package org.studentsuccessplan.ssp.model.reference;
+package org.jasig.ssp.model.reference;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import org.studentsuccessplan.ssp.transferobject.jsonserializer.CodeAndProperty;
-import org.studentsuccessplan.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
+import org.jasig.ssp.transferobject.jsonserializer.CodeAndProperty;
+import org.jasig.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
 
 @JsonSerialize(using = CodeAndPropertySerializer.class)
 public enum States implements CodeAndProperty {

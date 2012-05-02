@@ -1,17 +1,17 @@
-package org.studentsuccessplan.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideDao;
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuideGroup;
-import org.studentsuccessplan.ssp.service.SecurityService;
-import org.studentsuccessplan.ssp.service.reference.SelfHelpGuideService;
-import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.dao.reference.SelfHelpGuideDao;
+import org.jasig.ssp.model.reference.SelfHelpGuide;
+import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.reference.SelfHelpGuideService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 @Service
 @Transactional

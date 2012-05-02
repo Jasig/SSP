@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.config.logging;
+package org.jasig.ssp.config.logging;
 
 import java.io.File;
 import java.io.IOException;

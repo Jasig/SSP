@@ -1,12 +1,12 @@
-package org.studentsuccessplan.ssp.util.sort
+package org.jasig.ssp.util.sort
 
 import static org.junit.Assert.*
 
 import org.hibernate.Criteria
 import org.junit.Before
 import org.junit.Test
-import org.studentsuccessplan.ssp.model.ObjectStatus
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.model.ObjectStatus
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 class SortingAndPagingTest {
 	private SortingAndPaging sAndP

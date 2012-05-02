@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.security;
+package org.jasig.ssp.security;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.studentsuccessplan.ssp.model.Person;
+import org.jasig.ssp.model.Person;
 
 public class SspUser extends User implements Serializable {
 

@@ -15,7 +15,7 @@
 	<!-- Scans within the base package of the application for @Components, @Service 
 		& @Repository to configure as beans -->
 	<context:component-scan
-		base-package="org.studentsuccessplan.ssp,org.studentsuccessplan.mygps" />
+		base-package="org.jasig.ssp,org.jasig.mygps" />
 	<mvc:annotation-driven />
 
 	<mvc:interceptors>
@@ -31,7 +31,7 @@
 		<property name="cacheSeconds" value="0" />
 		<property name="webBindingInitializer">
 			<!-- Allows binding of UUIDs -->
-			<bean class="org.studentsuccessplan.ssp.util.BindingInitializer" />
+			<bean class="org.jasig.ssp.util.BindingInitializer" />
 		</property>
 	</bean>
 
@@ -41,7 +41,7 @@
 		<property name="basename" value="views" />
 	</bean>
 
-	<bean id="webProperties" class="org.studentsuccessplan.ssp.config.WebProperties"
+	<bean id="webProperties" class="org.jasig.ssp.config.WebProperties"
 		factory-method="getInstance"></bean>
 
 	<bean id="multipartResolver"

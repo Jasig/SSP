@@ -1,9 +1,9 @@
-package org.studentsuccessplan.ssp.transferobject;
+package org.jasig.ssp.transferobject;
 
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.studentsuccessplan.ssp.model.Auditable;
+import org.jasig.ssp.model.Auditable;
 
 /**
  * Wrap a paged response in a form that ExtJS may consume.

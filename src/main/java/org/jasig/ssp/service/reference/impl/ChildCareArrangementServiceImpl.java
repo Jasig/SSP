@@ -1,11 +1,11 @@
-package org.studentsuccessplan.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.ChildCareArrangementDao;
-import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
-import org.studentsuccessplan.ssp.service.reference.ChildCareArrangementService;
+import org.jasig.ssp.dao.reference.ChildCareArrangementDao;
+import org.jasig.ssp.model.reference.ChildCareArrangement;
+import org.jasig.ssp.service.reference.ChildCareArrangementService;
 
 @Service
 @Transactional

@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.web;
+package org.jasig.mygps.web;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -21,18 +21,18 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.Task;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
-import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
-import org.studentsuccessplan.ssp.service.PersonService;
-import org.studentsuccessplan.ssp.service.TaskService;
-import org.studentsuccessplan.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
-import org.studentsuccessplan.ssp.service.reference.ChallengeService;
-import org.studentsuccessplan.ssp.transferobject.TaskTO;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.service.reference.ChallengeReferralService;
+import org.jasig.ssp.service.reference.ChallengeService;
+import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Lists;
 

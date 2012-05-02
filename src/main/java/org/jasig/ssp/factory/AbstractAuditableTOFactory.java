@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.factory;
+package org.jasig.ssp.factory;
 
 import java.util.Collection;
 import java.util.List;
@@ -7,10 +7,10 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
-import org.studentsuccessplan.ssp.model.Auditable;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.transferobject.AuditableTO;
+import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.AuditableTO;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

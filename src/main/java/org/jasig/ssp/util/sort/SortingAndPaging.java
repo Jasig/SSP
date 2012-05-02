@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.util.sort;
+package org.jasig.ssp.util.sort;
 
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.ObjectStatus;
 
 import com.google.common.collect.Maps;
 

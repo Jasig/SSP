@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.transferobject.reference;
+package org.jasig.ssp.transferobject.reference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,9 +9,9 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.ChallengeChallengeReferral;
-import org.studentsuccessplan.ssp.transferobject.TransferObject;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeChallengeReferral;
+import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 

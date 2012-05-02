@@ -1,8 +1,8 @@
-package org.studentsuccessplan.ssp.factory.reference;
+package org.jasig.ssp.factory.reference;
 
-import org.studentsuccessplan.ssp.factory.TOFactory;
-import org.studentsuccessplan.ssp.model.reference.Goal;
-import org.studentsuccessplan.ssp.transferobject.reference.GoalTO;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.Goal;
+import org.jasig.ssp.transferobject.reference.GoalTO;
 
 public interface GoalTOFactory extends
 		TOFactory<GoalTO, Goal> {

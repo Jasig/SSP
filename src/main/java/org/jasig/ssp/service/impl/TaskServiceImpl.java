@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.service.impl;
+package org.jasig.ssp.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,21 +15,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.TaskDao;
-import org.studentsuccessplan.ssp.dao.reference.ConfidentialityLevelDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.Task;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.ChallengeReferral;
-import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
-import org.studentsuccessplan.ssp.security.SspUser;
-import org.studentsuccessplan.ssp.service.AbstractAuditableCrudService;
-import org.studentsuccessplan.ssp.service.MessageService;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.TaskService;
-import org.studentsuccessplan.ssp.transferobject.TaskTO;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.dao.TaskDao;
+import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.service.AbstractAuditableCrudService;
+import org.jasig.ssp.service.MessageService;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Maps;
 

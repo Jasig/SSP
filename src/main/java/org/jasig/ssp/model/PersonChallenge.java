@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model;
+package org.jasig.ssp.model;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import org.studentsuccessplan.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.Challenge;
 
 /**
  * Students may have zero or multiple Challenges in their way to success.

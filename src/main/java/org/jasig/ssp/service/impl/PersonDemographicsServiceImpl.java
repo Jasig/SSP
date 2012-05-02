@@ -1,22 +1,22 @@
-package org.studentsuccessplan.ssp.service.impl;
+package org.jasig.ssp.service.impl;
 
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.studentsuccessplan.ssp.dao.PersonDemographicsDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.PersonDemographics;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.PersonDemographicsService;
-import org.studentsuccessplan.ssp.service.PersonService;
-import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
-import org.studentsuccessplan.ssp.service.reference.EthnicityService;
-import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
-import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
-import org.studentsuccessplan.ssp.util.sort.PagingWrapper;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.dao.PersonDemographicsDao;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonDemographics;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonDemographicsService;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.CitizenshipService;
+import org.jasig.ssp.service.reference.EthnicityService;
+import org.jasig.ssp.service.reference.MaritalStatusService;
+import org.jasig.ssp.service.reference.VeteranStatusService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 @Service
 public class PersonDemographicsServiceImpl implements PersonDemographicsService {

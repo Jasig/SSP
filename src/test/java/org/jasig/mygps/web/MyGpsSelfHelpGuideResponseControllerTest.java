@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.web;
+package org.jasig.mygps.web;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.studentsuccessplan.mygps.business.SelfHelpGuideManager;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
+import org.jasig.mygps.business.SelfHelpGuideManager;
+import org.jasig.mygps.model.transferobject.SelfHelpGuideResponseTO;
 
 public class MyGpsSelfHelpGuideResponseControllerTest {
 

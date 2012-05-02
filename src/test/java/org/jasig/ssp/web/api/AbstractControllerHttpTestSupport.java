@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.web.api;
+package org.jasig.ssp.web.api;
 
 import java.security.InvalidParameterException;
 import java.util.Iterator;
@@ -14,8 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerMapping;
-import org.studentsuccessplan.ssp.model.Auditable;
-import org.studentsuccessplan.ssp.transferobject.TransferObject;
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.transferobject.TransferObject;
 
 /**
  * 

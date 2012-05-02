@@ -1,10 +1,10 @@
-package org.studentsuccessplan.ssp.factory.reference;
+package org.jasig.ssp.factory.reference;
 
-import org.studentsuccessplan.ssp.factory.AbstractAuditableTOFactory;
-import org.studentsuccessplan.ssp.factory.TOFactory;
-import org.studentsuccessplan.ssp.model.reference.AbstractReference;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.transferobject.reference.AbstractReferenceTO;
+import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.AbstractReference;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
 
 public abstract class AbstractReferenceTOFactory<TObject extends AbstractReferenceTO<M>, M extends AbstractReference>
 		extends AbstractAuditableTOFactory<TObject, M>

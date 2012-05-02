@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.service.impl
+package org.jasig.ssp.service.impl
 
 import static org.junit.Assert.*
 
@@ -6,12 +6,12 @@ import java.util.UUID
 
 import org.junit.Test
 import org.junit.Before
-import org.studentsuccessplan.ssp.dao.TaskDao
-import org.studentsuccessplan.ssp.model.ObjectStatus
-import org.studentsuccessplan.ssp.model.Person
-import org.studentsuccessplan.ssp.model.Task
-import org.studentsuccessplan.ssp.model.reference.Challenge
-import org.studentsuccessplan.ssp.model.reference.ChallengeReferral
+import org.jasig.ssp.dao.TaskDao
+import org.jasig.ssp.model.ObjectStatus
+import org.jasig.ssp.model.Person
+import org.jasig.ssp.model.Task
+import org.jasig.ssp.model.reference.Challenge
+import org.jasig.ssp.model.reference.ChallengeReferral
 
 
 class TaskServiceImplTest {

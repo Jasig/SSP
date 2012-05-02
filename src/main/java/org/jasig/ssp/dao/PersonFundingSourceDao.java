@@ -1,8 +1,8 @@
-package org.studentsuccessplan.ssp.dao;
+package org.jasig.ssp.dao;
 
 import org.springframework.stereotype.Repository;
 
-import org.studentsuccessplan.ssp.model.PersonFundingSource;
+import org.jasig.ssp.model.PersonFundingSource;
 
 /**
  * CRUD methods for the PersonFundingSource model.

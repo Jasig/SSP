@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.dao;
+package org.jasig.ssp.dao;
 
 import java.util.List;
 
@@ -7,10 +7,10 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.PersonConfidentialityDisclosureAgreement;
-import org.studentsuccessplan.ssp.model.reference.ConfidentialityDisclosureAgreement;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
+import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
 
 @Repository
 public class PersonConfidentialityDisclosureAgreementDao extends

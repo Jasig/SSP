@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model
+package org.jasig.ssp.model
 
 import static org.junit.Assert.*
 import org.junit.Test

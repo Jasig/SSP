@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.web;
+package org.jasig.ssp.web;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,10 +1,10 @@
-package org.studentsuccessplan.ssp.transferobject;
+package org.jasig.ssp.transferobject;
 
 import java.util.Date;
 import java.util.UUID;
 
-import org.studentsuccessplan.ssp.model.Auditable;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.ObjectStatus;
 
 public abstract class AuditableTO<T extends Auditable>
 		implements TransferObject<T> {

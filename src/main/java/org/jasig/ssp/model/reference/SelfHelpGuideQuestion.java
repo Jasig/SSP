@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model.reference;
+package org.jasig.ssp.model.reference;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
+import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
 
 /**
  * SelfHelpGuideQuestion reference object.

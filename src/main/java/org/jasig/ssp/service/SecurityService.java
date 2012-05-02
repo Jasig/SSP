@@ -1,6 +1,6 @@
-package org.studentsuccessplan.ssp.service;
+package org.jasig.ssp.service;
 
-import org.studentsuccessplan.ssp.security.SspUser;
+import org.jasig.ssp.security.SspUser;
 
 /**
  * Security service to provide authenticated user and session information.

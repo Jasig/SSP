@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.dao.reference;
+package org.jasig.ssp.dao.reference;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,9 +7,9 @@ import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.studentsuccessplan.ssp.dao.AuditableCrudDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
+import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.SelfHelpGuide;
 
 /**
  * Data access class for the SelfHelpGuide reference entity.

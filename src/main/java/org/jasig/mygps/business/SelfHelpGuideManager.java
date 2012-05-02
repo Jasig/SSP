@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.business;
+package org.jasig.mygps.business;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,23 +8,23 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.mygps.model.transferobject.SelfHelpGuideResponseTO;
-import org.studentsuccessplan.ssp.dao.SelfHelpGuideQuestionResponseDao;
-import org.studentsuccessplan.ssp.dao.SelfHelpGuideResponseDao;
-import org.studentsuccessplan.ssp.dao.reference.ChallengeDao;
-import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideDao;
-import org.studentsuccessplan.ssp.dao.reference.SelfHelpGuideQuestionDao;
-import org.studentsuccessplan.ssp.model.ObjectStatus;
-import org.studentsuccessplan.ssp.model.SelfHelpGuideQuestionResponse;
-import org.studentsuccessplan.ssp.model.SelfHelpGuideResponse;
-import org.studentsuccessplan.ssp.model.reference.Challenge;
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.SecurityService;
-import org.studentsuccessplan.ssp.service.reference.ChallengeReferralService;
-import org.studentsuccessplan.ssp.transferobject.reference.ChallengeTO;
-import org.studentsuccessplan.ssp.transferobject.reference.SelfHelpGuideDetailTO;
-import org.studentsuccessplan.ssp.util.sort.SortingAndPaging;
+import org.jasig.mygps.model.transferobject.SelfHelpGuideResponseTO;
+import org.jasig.ssp.dao.SelfHelpGuideQuestionResponseDao;
+import org.jasig.ssp.dao.SelfHelpGuideResponseDao;
+import org.jasig.ssp.dao.reference.ChallengeDao;
+import org.jasig.ssp.dao.reference.SelfHelpGuideDao;
+import org.jasig.ssp.dao.reference.SelfHelpGuideQuestionDao;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
+import org.jasig.ssp.model.SelfHelpGuideResponse;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.SelfHelpGuide;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.reference.ChallengeReferralService;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 @Service
 @Transactional

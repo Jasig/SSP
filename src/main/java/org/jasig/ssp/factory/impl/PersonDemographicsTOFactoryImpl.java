@@ -1,23 +1,23 @@
-package org.studentsuccessplan.ssp.factory.impl;
+package org.jasig.ssp.factory.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.PersonDemographicsDao;
-import org.studentsuccessplan.ssp.factory.AbstractAuditableTOFactory;
-import org.studentsuccessplan.ssp.factory.PersonDemographicsTOFactory;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.PersonDemographics;
-import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
-import org.studentsuccessplan.ssp.model.reference.Genders;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.PersonService;
-import org.studentsuccessplan.ssp.service.reference.ChildCareArrangementService;
-import org.studentsuccessplan.ssp.service.reference.CitizenshipService;
-import org.studentsuccessplan.ssp.service.reference.EthnicityService;
-import org.studentsuccessplan.ssp.service.reference.MaritalStatusService;
-import org.studentsuccessplan.ssp.service.reference.VeteranStatusService;
-import org.studentsuccessplan.ssp.transferobject.PersonDemographicsTO;
+import org.jasig.ssp.dao.PersonDemographicsDao;
+import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.PersonDemographicsTOFactory;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonDemographics;
+import org.jasig.ssp.model.reference.EmploymentShifts;
+import org.jasig.ssp.model.reference.Genders;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.ChildCareArrangementService;
+import org.jasig.ssp.service.reference.CitizenshipService;
+import org.jasig.ssp.service.reference.EthnicityService;
+import org.jasig.ssp.service.reference.MaritalStatusService;
+import org.jasig.ssp.service.reference.VeteranStatusService;
+import org.jasig.ssp.transferobject.PersonDemographicsTO;
 
 @Service
 @Transactional(readOnly = true)

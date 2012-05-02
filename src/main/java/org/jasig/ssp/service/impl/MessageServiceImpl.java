@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.service.impl;
+package org.jasig.ssp.service.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -18,16 +18,16 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.MessageDao;
-import org.studentsuccessplan.ssp.dao.reference.MessageTemplateDao;
-import org.studentsuccessplan.ssp.model.Message;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.model.reference.MessageTemplate;
-import org.studentsuccessplan.ssp.service.MessageService;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.PersonService;
-import org.studentsuccessplan.ssp.service.SecurityService;
-import org.studentsuccessplan.ssp.service.VelocityTemplateService;
+import org.jasig.ssp.dao.MessageDao;
+import org.jasig.ssp.dao.reference.MessageTemplateDao;
+import org.jasig.ssp.model.Message;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.service.MessageService;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.VelocityTemplateService;
 
 @Service
 @Transactional(readOnly = true)

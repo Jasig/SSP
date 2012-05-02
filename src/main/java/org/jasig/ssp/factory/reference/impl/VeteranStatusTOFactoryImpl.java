@@ -1,13 +1,13 @@
-package org.studentsuccessplan.ssp.factory.reference.impl;
+package org.jasig.ssp.factory.reference.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.reference.VeteranStatusDao;
-import org.studentsuccessplan.ssp.factory.reference.AbstractReferenceTOFactory;
-import org.studentsuccessplan.ssp.factory.reference.VeteranStatusTOFactory;
-import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
-import org.studentsuccessplan.ssp.transferobject.reference.VeteranStatusTO;
+import org.jasig.ssp.dao.reference.VeteranStatusDao;
+import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
+import org.jasig.ssp.factory.reference.VeteranStatusTOFactory;
+import org.jasig.ssp.model.reference.VeteranStatus;
+import org.jasig.ssp.transferobject.reference.VeteranStatusTO;
 
 @Service
 @Transactional(readOnly = true)

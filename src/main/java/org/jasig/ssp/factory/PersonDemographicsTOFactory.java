@@ -1,7 +1,7 @@
-package org.studentsuccessplan.ssp.factory;
+package org.jasig.ssp.factory;
 
-import org.studentsuccessplan.ssp.model.PersonDemographics;
-import org.studentsuccessplan.ssp.transferobject.PersonDemographicsTO;
+import org.jasig.ssp.model.PersonDemographics;
+import org.jasig.ssp.transferobject.PersonDemographicsTO;
 
 public interface PersonDemographicsTOFactory extends
 		TOFactory<PersonDemographicsTO, PersonDemographics> {

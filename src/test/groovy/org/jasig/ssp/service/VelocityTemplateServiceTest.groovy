@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.service
+package org.jasig.ssp.service
 import static org.junit.Assert.*;
 
 import org.junit.Test;

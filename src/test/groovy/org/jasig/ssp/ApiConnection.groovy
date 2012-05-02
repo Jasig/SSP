@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp
+package org.jasig.ssp
 
 import org.apache.http.HttpEntity
 import org.apache.http.HttpEntityEnclosingRequest

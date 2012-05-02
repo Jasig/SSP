@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.transferobject;
+package org.jasig.ssp.transferobject;
 
 import java.util.Collections;
 import java.util.List;

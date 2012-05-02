@@ -1,4 +1,4 @@
-import org.studentsuccessplan.ssp.*
+import org.jasig.ssp.*
 
 /**
  * You can exercise the ssp api from within STS (eclipse) using this script

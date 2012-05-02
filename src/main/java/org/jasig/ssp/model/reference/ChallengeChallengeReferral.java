@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model.reference;
+package org.jasig.ssp.model.reference;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.studentsuccessplan.ssp.model.Auditable;
+import org.jasig.ssp.model.Auditable;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

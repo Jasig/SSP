@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model;
+package org.jasig.ssp.model;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.studentsuccessplan.ssp.model.reference.SelfHelpGuide;
+import org.jasig.ssp.model.reference.SelfHelpGuide;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

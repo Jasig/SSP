@@ -1,14 +1,14 @@
-package org.studentsuccessplan.ssp.factory.impl;
+package org.jasig.ssp.factory.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.studentsuccessplan.ssp.dao.PersonDao;
-import org.studentsuccessplan.ssp.factory.AbstractAuditableTOFactory;
-import org.studentsuccessplan.ssp.factory.PersonTOFactory;
-import org.studentsuccessplan.ssp.model.Person;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.transferobject.PersonTO;
+import org.jasig.ssp.dao.PersonDao;
+import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.PersonTOFactory;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.PersonTO;
 
 @Service
 @Transactional(readOnly = true)

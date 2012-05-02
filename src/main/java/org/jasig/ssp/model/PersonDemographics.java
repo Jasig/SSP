@@ -1,4 +1,4 @@
-package org.studentsuccessplan.ssp.model;
+package org.jasig.ssp.model;
 
 import java.io.Serializable;
 
@@ -15,13 +15,13 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
-import org.studentsuccessplan.ssp.model.reference.Citizenship;
-import org.studentsuccessplan.ssp.model.reference.EmploymentShifts;
-import org.studentsuccessplan.ssp.model.reference.Ethnicity;
-import org.studentsuccessplan.ssp.model.reference.Genders;
-import org.studentsuccessplan.ssp.model.reference.MaritalStatus;
-import org.studentsuccessplan.ssp.model.reference.VeteranStatus;
+import org.jasig.ssp.model.reference.ChildCareArrangement;
+import org.jasig.ssp.model.reference.Citizenship;
+import org.jasig.ssp.model.reference.EmploymentShifts;
+import org.jasig.ssp.model.reference.Ethnicity;
+import org.jasig.ssp.model.reference.Genders;
+import org.jasig.ssp.model.reference.MaritalStatus;
+import org.jasig.ssp.model.reference.VeteranStatus;
 
 /**
  * Students should have some demographic information stored for use in

@@ -1,8 +1,8 @@
-package org.studentsuccessplan.ssp.factory.reference;
+package org.jasig.ssp.factory.reference;
 
-import org.studentsuccessplan.ssp.factory.TOFactory;
-import org.studentsuccessplan.ssp.model.reference.ChildCareArrangement;
-import org.studentsuccessplan.ssp.transferobject.reference.ChildCareArrangementTO;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.ChildCareArrangement;
+import org.jasig.ssp.transferobject.reference.ChildCareArrangementTO;
 
 public interface ChildCareArrangementTOFactory extends
 		TOFactory<ChildCareArrangementTO, ChildCareArrangement> {

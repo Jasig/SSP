@@ -19,7 +19,7 @@
 	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
 	
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
-	<context:component-scan base-package="org.studentsuccessplan.ssp,org.studentsuccessplan.mygps">
+	<context:component-scan base-package="org.jasig.ssp,org.jasig.mygps">
 		<context:exclude-filter type="regex" expression=".*Controller"/>
 	</context:component-scan>
 	
@@ -46,7 +46,7 @@
 				<property name="password" value="#{configProperties.db_admin_password}" />
 			</bean>
 		</property>
-			<property name="changeLog" value="classpath:org/studentsuccessplan/ssp/database/masterChangeLog.xml" />
+			<property name="changeLog" value="classpath:org/jasig/ssp/database/masterChangeLog.xml" />
 	</bean>
 	
 	<!-- Hibernate -->
@@ -54,15 +54,15 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
-	<bean id="securityService" class="org.studentsuccessplan.ssp.service.impl.SecurityServiceImpl"/>
+	<bean id="securityService" class="org.jasig.ssp.service.impl.SecurityServiceImpl"/>
 	
 	<!-- Hibernate Session Factory -->
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
 		depends-on="liquibase">
 		<property name="dataSource" ref="sspDataSource" />
-		<property name="packagesToScan" value="org.studentsuccessplan.ssp.model"/>
+		<property name="packagesToScan" value="org.jasig.ssp.model"/>
 		<property name="entityInterceptor">
-			<bean class="org.studentsuccessplan.ssp.dao.AuditableEntityInterceptor"/>
+			<bean class="org.jasig.ssp.dao.AuditableEntityInterceptor"/>
 		</property>
 		<property name="hibernateProperties">
 			<value>

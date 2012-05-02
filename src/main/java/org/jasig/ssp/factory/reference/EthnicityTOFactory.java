@@ -1,8 +1,8 @@
-package org.studentsuccessplan.ssp.factory.reference;
+package org.jasig.ssp.factory.reference;
 
-import org.studentsuccessplan.ssp.factory.TOFactory;
-import org.studentsuccessplan.ssp.model.reference.Ethnicity;
-import org.studentsuccessplan.ssp.transferobject.reference.EthnicityTO;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.Ethnicity;
+import org.jasig.ssp.transferobject.reference.EthnicityTO;
 
 public interface EthnicityTOFactory extends
 		TOFactory<EthnicityTO, Ethnicity> {

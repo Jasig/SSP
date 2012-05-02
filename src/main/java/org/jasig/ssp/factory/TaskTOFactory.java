@@ -1,7 +1,7 @@
-package org.studentsuccessplan.ssp.factory;
+package org.jasig.ssp.factory;
 
-import org.studentsuccessplan.ssp.model.Task;
-import org.studentsuccessplan.ssp.transferobject.TaskTO;
+import org.jasig.ssp.model.Task;
+import org.jasig.ssp.transferobject.TaskTO;
 
 public interface TaskTOFactory extends
 		TOFactory<TaskTO, Task> {
