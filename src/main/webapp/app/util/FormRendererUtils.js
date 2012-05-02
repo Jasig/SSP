@@ -54,37 +54,80 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		form.doLayout();
     },
     
-    createCheckBoxForm: function( formId, itemsArr, selectedItemsArr, idFieldName, selectedIdFieldName ){
+    /**
+     * If you provide an 'Other' option in the items array
+     * then an 'Other Description' field will be created
+     * and inserted into the form alongside the checkboxes.
+     * 
+     * Assumes an items array with: {id: id, name: name, description: description}
+     * @formId = the form to add the items into
+     * @itemsArr = the array of items to add to the form
+     * @selectedItemsArr = the array of items to select in the form
+     * @idFieldName = the id field in the items array
+     * @selectedIdFieldName - the id field in the selectedItems array. 
+     *                        This value can be the same name or a different name than the idFieldName.
+     * @fieldSetTitle - Provides a fieldset title for the fields
+     */
+    createCheckBoxForm: function( formId, fieldSetTitle, itemsArr, selectedItemsArr, idFieldName, selectedIdFieldName ){
     	var form = Ext.getCmp(formId);
-		var items = itemsArr;
 		var selectedItems = selectedItemsArr;
+		var selectedItem;
+		var selectedId;
 		var setSelectedItems = false;
-		if (selectedItems != null)
-		{
-			setSelectedItems = true;
-		}
-		for (i=0; i<items.length; i++)
-		{
+		var otherId = "";
+		var fieldSet = {xtype: 'fieldset', padding: 0, layout: { type: 'auto' },title: fieldSetTitle};
+		var formFields = [];
+		Ext.each(itemsArr, function(item, index){
+			// create the items for the form
 			var cb = {xtype:'checkbox'};
-			var item = items[i];
 			cb.boxLabel = item.name;
+			cb.name = item.name;
 			cb.inputValue = item[idFieldName];
-			if (setSelectedItems == true)
+			if (item.name.toLowerCase()=='other')
 			{
-				for (var s=0; s<selectedItems.length; s++)
+				otherId = item[idFieldName];
+				var fields = {xtype: 'fieldset', padding: 0, layout: { type: 'auto' },title: ''};
+				var otherField = { xtype: 'textfield', name: 'otherDescription', fieldLabel: 'Description' };
+				cb.anchor = '100%';
+				Ext.apply(fields, {items: [cb, otherField]});
+			}
+			// set selected items in the form
+			for (var s=0; s<selectedItems.length; s++)
+			{
+				selectedItem = selectedItems[s]
+				selectedId = selectedItem[selectedIdFieldName];					
+				if (selectedId==item[idFieldName])
 				{
-					selectedId = selectedItems[s][selectedIdFieldName];
-					if (selectedId==item[idFieldName])
+					cb.checked = true;
+					if (selectedId == otherId)
 					{
-						cb.checked = true;
-						break;
-					}
+						otherField.value = selectedItem['description'];
+					}					
+					break;
 				}
 			}
-			
-			form.insert(i,cb);
-		}
+			// insert the fields in the form
+			if (item.name.toLowerCase()!='other')
+			{
+				formFields.push(cb);
+			}else{
+				formFields.push(fields);
+			}
+		});
+		Ext.apply(fieldSet, {items: formFields});
+		form.insert(form.items.length, fieldSet);
 		form.doLayout();
+    },
+    
+    findPropByName: function(obj, propName){
+    	var result = "";
+    	Ext.iterate(obj, function(key, value) {
+    		if (key.toLowerCase()=='otherdescription')
+			{
+    			result = value;
+			}
+		},this);
+    	return result;
     },
     
     createCheckBoxFormFromStore: function( formId, itemsArr, selectedItemsArr, idFieldName ){

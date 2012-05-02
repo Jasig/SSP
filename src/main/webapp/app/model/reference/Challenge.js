@@ -5,6 +5,8 @@ Ext.define('Ssp.model.reference.Challenge', {
              {name: 'showInSelfHelpSearch', type: 'boolean'},
              //{name: 'selfHelpGuideQuestion', type: 'string'},
              {name: 'selfHelpGuideDescription', type: 'string'}
-             //{name: 'defaultConfidentialityLevelId', type: 'string'}
+             //{name: 'defaultConfidentialityLevelId', type: 'string'},
+             //{name: 'challengeChallengeReferrals'},
+             //{name: 'referralCount', type: 'int'}
              ]
 });

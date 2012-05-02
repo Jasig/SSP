@@ -101,6 +101,9 @@ Ext.onReady(function(){
 		
 		controllers: [
 	        	'AdminViewController',
+	        	'admin.AbstractReferenceAdminViewController',
+	        	'admin.ChallengeAdminViewController',
+	        	'admin.ConfidentialityLevelAdminViewController',
 	        	'MainViewController',
 	        	'SearchViewController',
 	        	'tool.StudentIntakeToolViewController',
