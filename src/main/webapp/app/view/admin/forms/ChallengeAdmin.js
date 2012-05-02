@@ -30,6 +30,14 @@ Ext.define('Ssp.view.admin.forms.ChallengeAdmin', {
     		                      xtype: 'textfield'
     		                  },
     		                  flex: 1 
+    		                },
+    		                {
+    		                	header: 'Show In Intake',
+    		                	dataIndex: 'showInStudentIntake',
+    		                	xtype: 'checkcolumn',
+    		                	field: {
+    		                		xtype: 'checkbox'
+    		                	}
     		                }
     		           ],
     		        
