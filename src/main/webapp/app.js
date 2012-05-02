@@ -39,7 +39,8 @@ Ext.require([
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
-	'Ext.tab.*'
+	'Ext.tab.*',
+	'Ext.ux.CheckColumn'
 ]);
 
 Ext.onReady(function(){
