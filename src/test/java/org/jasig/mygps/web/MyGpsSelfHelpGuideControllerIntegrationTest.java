@@ -6,6 +6,14 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.UUID;
 
+import org.jasig.mygps.model.transferobject.SelfHelpGuideQuestionTO;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
+import org.jasig.ssp.web.api.AbstractControllerHttpTestSupport;
+import org.jasig.ssp.web.api.reference.ChallengeController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,14 +22,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.Challenge;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.reference.ChallengeTO;
-import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
-import org.jasig.ssp.transferobject.reference.SelfHelpGuideQuestionTO;
-import org.jasig.ssp.web.api.AbstractControllerHttpTestSupport;
-import org.jasig.ssp.web.api.reference.ChallengeController;
 
 /**
  * {@link MyGpsSelfHelpGuideController} tests

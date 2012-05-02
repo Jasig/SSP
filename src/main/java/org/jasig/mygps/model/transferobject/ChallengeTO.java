@@ -1,4 +1,4 @@
-package org.jasig.ssp.transferobject.reference;
+package org.jasig.mygps.model.transferobject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,8 +11,9 @@ import javax.validation.constraints.NotNull;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeChallengeReferral;
-import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
 import org.jasig.ssp.transferobject.TransferObject;
+import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 
 import com.google.common.collect.Lists;
 
@@ -21,17 +22,6 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge>, Serializable {
 
 	private static final long serialVersionUID = 2320351255526248904L;
-
-	/**
-	 * This is the text that will be used in a selfHelpGuideQuestion.
-	 */
-	private String selfHelpGuideQuestion;
-
-	/**
-	 * Just a reference to the questions that reference this Challenge. Think of
-	 * as selfHelpQuideChallenges
-	 */
-	private List<SelfHelpGuideQuestionTO> selfHelpGuideQuestions;
 
 	/**
 	 * Public description of the challenge
@@ -80,17 +70,6 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	public final void from(@NotNull final Challenge model) {
 		super.from(model);
 
-		selfHelpGuideQuestion = model.getSelfHelpGuideQuestion();
-
-		selfHelpGuideQuestions = Lists.newArrayList();
-		if (model.getSelfHelpGuideQuestions() != null) {
-			for (SelfHelpGuideQuestion question : model
-					.getSelfHelpGuideQuestions()) {
-				selfHelpGuideQuestions
-						.add(new SelfHelpGuideQuestionTO(question));
-			}
-		}
-
 		selfHelpGuideDescription = model.getSelfHelpGuideDescription();
 		showInStudentIntake = model.isShowInStudentIntake();
 		showInSelfHelpSearch = model.isShowInSelfHelpSearch();
@@ -116,14 +95,6 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		}
 	}
 
-	public String getSelfHelpGuideQuestion() {
-		return selfHelpGuideQuestion;
-	}
-
-	public void setSelfHelpGuideQuestion(final String selfHelpGuideQuestion) {
-		this.selfHelpGuideQuestion = selfHelpGuideQuestion;
-	}
-
 	public String getSelfHelpGuideDescription() {
 		return selfHelpGuideDescription;
 	}
@@ -147,15 +118,6 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 
 	public void setShowInSelfHelpSearch(final boolean showInSelfHelpSearch) {
 		this.showInSelfHelpSearch = showInSelfHelpSearch;
-	}
-
-	public List<SelfHelpGuideQuestionTO> getSelfHelpGuideQuestions() {
-		return selfHelpGuideQuestions;
-	}
-
-	public void setSelfHelpGuideQuestions(
-			final List<SelfHelpGuideQuestionTO> selfHelpGuideQuestions) {
-		this.selfHelpGuideQuestions = selfHelpGuideQuestions;
 	}
 
 	public String getTags() {

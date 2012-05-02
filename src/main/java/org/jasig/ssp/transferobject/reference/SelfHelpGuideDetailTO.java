@@ -3,6 +3,7 @@ package org.jasig.ssp.transferobject.reference;
 import java.io.Serializable;
 import java.util.List;
 
+import org.jasig.mygps.model.transferobject.SelfHelpGuideQuestionTO;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
 
