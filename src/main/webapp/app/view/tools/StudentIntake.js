@@ -9,10 +9,22 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
-		    		buttons: [ { text: 'Save', id: 'SaveStudentIntakeButton'} ],
-		    	    autoScroll: true,
+		    buttons: [{text:'Save', id: 'SaveStudentIntakeButton'}],	    
+			autoScroll: true,
 		    		store: Ext.getStore('Students'),
-		    		
+				    dockedItems: [{
+				        dock: 'top',
+				        xtype: 'toolbar',
+				        items: [
+				                { 
+				        	     xtype: 'tbspacer',
+				        	     flex: 1
+				               },{
+				            	   xtype: 'button',
+				            	   text: 'View Confidentiality Agreement', 
+				            	   id: 'ViewConfidentialityAgreementButton'}]
+				    }],
+				    
 		    		items: [ Ext.createWidget('tabpanel', {
 						        width: '100%',
 						        height: '100%',

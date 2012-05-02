@@ -19,7 +19,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    fieldDefaults: {
 				        msgTarget: 'side',
 				        labelAlign: 'right',
-				        labelWidth: 100
+				        labelWidth: 150
 				    },
 				    defaultType: 'textfield',
 				    items: [{
@@ -33,6 +33,14 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Intake Date',
 				        name: 'studentIntakeCreatedDate'
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Agreed to Confidentiality',
+				        name: 'confidentialityAgreement'
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Date of Agreement',
+				        name: 'confidentialityAgreementDate'
 				    },{
 				        fieldLabel: 'First Name',
 				        name: 'firstName',
