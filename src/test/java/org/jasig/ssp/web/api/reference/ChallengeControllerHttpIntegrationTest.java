@@ -5,6 +5,12 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.web.api.AbstractControllerHttpTestSupport;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,12 +22,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.Challenge;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.reference.ChallengeTO;
-import org.jasig.ssp.web.api.AbstractControllerHttpTestSupport;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * {@link ChallengeController} tests
@@ -142,24 +143,19 @@ public class ChallengeControllerHttpIntegrationTest
 		Assert.assertNotNull("Response mock object should not have been null.",
 				response);
 
-		// TODO Handle the actual request
-		// ChallengeTO result = handlerAdapter.handle(request, response,
-		// handler);
+		// Handle the actual request
+		ModelAndView mav = handlerAdapter.handle(request, response, handler);
+		assertNotNull("Response was not handled.", mav);
 
-		// Ensure that the right view is returned
+		ChallengeTO result = (ChallengeTO) getFirstModelObject(mav);
 
-		// assertViewName(mav, "message-show");
+		assertNotNull(
+				"Return object from the controller should not have been null.",
+				result);
 
-		// Ensure that the view will receive the message object and that it is
-		// a string
-
-		// String message = assertAndReturnModelAttributeOfType(mav, "message",
-		// String.class);
-
-		// We can test the message in case
-		// String expectedMessage = "";
-
-		// Assert.assertEquals(("Message returned was " + expectedMessage),
-		// expectedMessage, message);
+		assertEquals("Challenge identifiers did not match.", CHALLENGE_ID,
+				result.getId());
+		assertEquals("Challenge names did not match.", CHALLENGE_NAME,
+				result.getName());
 	}
 }

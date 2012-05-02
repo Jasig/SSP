@@ -1,9 +1,16 @@
 package org.jasig.ssp.web.api;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.transferobject.TransferObject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +19,11 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerMapping;
-import org.jasig.ssp.model.Auditable;
-import org.jasig.ssp.transferobject.TransferObject;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 /**
  * 
@@ -49,25 +57,46 @@ public abstract class AbstractControllerHttpTestSupport<C extends RestController
 	 */
 	protected transient MockHttpServletResponse response;
 
-	// protected transient RequestMappingHandlerAdapter handlerAdapter;
+	protected transient RequestMappingHandlerAdapter handlerAdapter;
 
 	@Before
 	public void setUp() {
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
 
-		// handlerAdapter =
-		// applicationContext.getBean("sspRequestMappingHandlerAdapter",
-		// RequestMappingHandlerAdapter.class);
+		handlerAdapter = applicationContext.getBean(
+				"sspRequestMappingHandlerAdapter",
+				RequestMappingHandlerAdapter.class);
 
 		// set returnValues since default ModelAndView isn't used in SSP
 		// TODO Figure out and then set the correct type of correct handlers
-		/*
-		 * List<HandlerMethodReturnValueHandler> returnValueHandlers = new
-		 * ArrayList<HandlerMethodReturnValueHandler>(1);
-		 * returnValueHandlers.add(new HandlerMethodReturnValueHandler());
-		 * handlerAdapter.setCustomReturnValueHandlers(returnValueHandlers);
-		 */
+
+		List<HandlerMethodReturnValueHandler> returnValueHandlers = new
+				ArrayList<HandlerMethodReturnValueHandler>(1);
+		returnValueHandlers.add(new JacksonMethodReturnValueHandler());
+		handlerAdapter.setReturnValueHandlers(returnValueHandlers);
+	}
+
+	/**
+	 * Once handleAdapter.handle is called, use this helper method to retrieve
+	 * the returned object as Jackson would have seen it before serialization.
+	 * 
+	 * <p>
+	 * Example usage:
+	 * <code>ChallengeTO result = (ChallengeTO) getFirstModelObject(mav);</code>
+	 * 
+	 * @param mav
+	 *            Model and view response from handleAdapter.handle
+	 * @return The first model object found in the ModelAndView model property.
+	 */
+	protected Object getFirstModelObject(ModelAndView mav) {
+		assertNotNull("Model and View response should not have been null.", mav);
+
+		Map<String, Object> m = mav.getModel();
+		assertNotNull("Model should not have been null.", m);
+		assertFalse("Model should not have been empty.", m.isEmpty());
+
+		return m.values().iterator().next();
 	}
 
 	/**
