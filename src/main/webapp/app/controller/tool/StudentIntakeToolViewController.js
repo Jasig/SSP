@@ -2,7 +2,22 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
     extend: 'Ext.app.Controller',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-        apiProperties: 'apiProperties'
+        apiProperties: 'apiProperties',
+        currentPerson: 'currentPerson',
+        challengesStore: 'challengesStore',
+    	childCareArrangementsStore: 'childCareArrangementsStore',
+    	citizenshipsStore: 'citizenshipsStore',
+    	educationGoalsStore: 'educationGoalsStore',
+    	educationLevelsStore: 'educationLevelsStore',
+    	employmentShiftsStore: 'employmentShiftsStore',
+    	ethnicitiesStore: 'ethnicitiesStore',
+    	formUtils: 'formRendererUtils',
+    	fundingSourcesStore: 'fundingSourcesStore',
+    	gendersStore: 'gendersStore',
+    	maritalStatusesStore: 'maritalStatusesStore',
+        statesStore: 'statesStore',
+        studentStatusesStore: 'studentStatusesStore',
+    	veteranStatusesStore: 'veteranStatusesStore'        
     }, 
 	views: [
         'tools.StudentIntake'
@@ -17,10 +32,76 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			}
 			
 		}); 
-				
+
+		this.application.addListener('loadStudentIntake', function(){
+			Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
+			Form.load(this.currentPerson.getId(),{
+				success: this.loadStudentIntakeResult,
+				scope: this
+			});
+		},this);		
+		
 		this.callParent(arguments);
     },
-	
+
+	loadStudentIntakeResult: function( formData ){
+		// PERSON RECORD
+		var person = formData.data.person;
+		var personDemographics = formData.data.personDemographics;
+		var personEducationPlan = formData.data.personEducationPlan;
+		var personEducationGoal = formData.data.personEducationGoal;
+		var personEducationLevels = formData.data.personEducationLevels;
+		var personFundingSources = formData.data.personFundingSources;
+		var personChallenges = formData.data.personChallenges;
+		var personEducationGoalId = "";
+
+		// REFERENCE OBJECTS
+		var challenges = this.formUtils.alphaSortByField( formData.data.referenceData.challenges, 'name' );
+		var educationGoals = this.formUtils.alphaSortByField( formData.data.referenceData.educationGoals, 'name' );
+		var educationLevels = this.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
+		var fundingSources = this.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
+
+		this.challengesStore.loadData( challenges );
+		this.childCareArrangementsStore.loadData( formData.data.referenceData.childCareArrangements );
+		this.citizenshipsStore.loadData( formData.data.referenceData.citizenships );
+		this.educationGoalsStore.loadData( educationGoals );
+		this.educationLevelsStore.loadData( educationLevels );
+		this.employmentShiftsStore.loadData( formData.data.referenceData.employmentShifts );
+		this.ethnicitiesStore.loadData( formData.data.referenceData.ethnicities );
+		this.fundingSourcesStore.loadData( fundingSources );
+		this.gendersStore.loadData( formData.data.referenceData.genders );
+		this.maritalStatusesStore.loadData( formData.data.referenceData.maritalStatuses );
+		this.statesStore.loadData( formData.data.referenceData.states );
+		this.studentStatusesStore.loadData( formData.data.referenceData.studentStatuses );
+		this.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
+		
+		// LOAD RECORDS FOR EACH OF THE FORMS
+		Ext.getCmp('StudentIntakePersonal').loadRecord( person );
+		
+		if ( personDemographics != null && personDemographics != undefined ){
+			Ext.getCmp('StudentIntakeDemographics').loadRecord( personDemographics );
+		}
+		
+		if ( personEducationPlan != null && personEducationPlan != undefined )
+		{
+			Ext.getCmp('StudentIntakeEducationPlans').loadRecord( personEducationPlan );
+		}
+		
+		if ( personEducationGoal != null && personEducationGoal != undefined )
+		{
+			Ext.getCmp('StudentIntakeEducationGoals').loadRecord( personEducationGoal );
+			if (personEducationGoal.get('educationGoalId') != null)
+			{
+				personEducationGoalId = personEducationGoal.get('educationGoalId')
+			}			 
+		}
+		
+		this.formUtils.createRadioButtonGroup('StudentIntakeEducationGoals','StudentIntakeEducationGoalsRadioGroup', educationGoals, personEducationGoalId, 'id', 'educationGoalId');
+		this.formUtils.createCheckBoxForm('StudentIntakeEducationLevels', educationLevels, personEducationLevels, 'id', 'educationLevelId');
+		this.formUtils.createCheckBoxForm('StudentIntakeFunding', fundingSources, personFundingSources, 'id', 'fundingSourceId');	
+		this.formUtils.createCheckBoxForm('StudentIntakeChallenges', challenges, personChallenges, 'id', 'challengeId');
+	},    
+    
 	save: function() {
 		var personalForm = Ext.getCmp('StudentIntakePersonal').getForm();
 		var demographicsForm = Ext.getCmp('StudentIntakeDemographics').getForm();
@@ -100,24 +181,22 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			}
 			intakeData.personChallenges = selectedChallenges;
 			
-			// console.log(intakeData);
-			
 			Ext.Ajax.request({
-				url: this.apiProperties.createUrl('tool/studentIntake/' + personalFormModel.data.id),
+				url: this.apiProperties.createUrl('tool/studentIntake/' + this.currentPerson.get('id')),
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
 				jsonData: intakeData,
 				success: function(response) {
 					var r = Ext.decode(response.responseText);
 					if(r.success == true) {
-						console.log('student intake saved successfully')							
+						console.log('student intake saved successfully');							
 					}								
 				},
 				failure: function(response) {
 					var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
 					Ext.Msg.alert('SSP Error', msg);								
 				}
-			});
+			}, this);
 			
 		}else{
 			Ext.Msg.alert('Invalid Data','Please correct the errors in this Student Intake before saving the record.');

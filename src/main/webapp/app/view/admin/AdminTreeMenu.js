@@ -3,16 +3,17 @@ Ext.define('Ssp.view.admin.AdminTreeMenu', {
 	alias : 'widget.AdminTreeMenu',
 	id: 'AdminTreeMenu', 
     store: Ext.getStore('admin.AdminTreeMenus'),  
-    fields: ['title','form','text']
-	/*
-	,
-    columns: [{
-        xtype: 'treecolumn',
-        text: 'Administrative Tools',
-        flex: 1,
-        sortable: true,
-        text: 'text',
-        dataIndex: 'text'
-    }]
-    */
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	adminTreeMenusStore: 'adminTreeMenusStore'
+    },    
+	initComponent: function() {	
+		Ext.apply(this, 
+				{
+					store: this.adminTreeMenusStore,
+					fields: ['title','form','text'],	
+				});
+		
+	     this.callParent(arguments);
+	}	
 }); 

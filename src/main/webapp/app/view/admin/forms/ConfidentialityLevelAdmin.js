@@ -3,18 +3,17 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityLevelAdmin', {
 	alias : 'widget.confidentialityleveladmin',
 	title: 'Admin',
 	id: 'ConfidentialityLevelAdmin',
-	autoScroll: true,
 	height: '100%',
 	width: '100%',
-    selType: 'rowmodel',
 
     initComponent: function(){
     	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', 
 		                             { clicksToEdit: 2 });
     	Ext.apply(this,
     			{
+    		      autoScroll: true,
     		      plugins:cellEditor,
-    		      
+    		      selType: 'rowmodel',
     		      columns: [
     		                { header: 'Name',  
     		                  dataIndex: 'name',

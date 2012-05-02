@@ -3,8 +3,15 @@ Ext.define('Ssp.view.admin.AdminMain', {
     alias: 'widget.AdminMain',
     id: 'AdminMain',
     title: 'Admin Main',
-    layout: {
-    	type: 'hbox',
-    	align: 'stretch'
-    }
+	initComponent: function() {	
+		Ext.apply(this, 
+				{
+				    layout: {
+				    	type: 'hbox',
+				    	align: 'stretch'
+				    }
+				});
+		
+	     this.callParent(arguments);
+	}
 });

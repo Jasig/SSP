@@ -1,6 +1,27 @@
 Ext.define('Ssp.controller.AdminViewController', {
     extend: 'Ext.app.Controller',
     
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	campusesStore: 'campusesStore',
+    	challengeCategoriesStore: 'challengeCategoriesStore',
+        challengesStore: 'challengesStore',
+    	challengeReferralsStore: 'challengeReferralsStore',
+    	childCareArrangementsStore: 'childCareArrangementsStore',
+    	citizenshipsStore: 'citizenshipsStore',
+    	confidentialityLevelsStore: 'confidentialityLevelsStore', 
+    	educationGoalsStore: 'educationGoalsStore',
+    	educationLevelsStore: 'educationLevelsStore',
+    	employmentShiftsStore: 'employmentShiftsStore',
+    	ethnicitiesStore: 'ethnicitiesStore',
+    	fundingSourcesStore: 'fundingSourcesStore',
+    	gendersStore: 'gendersStore',
+    	maritalStatusesStore: 'maritalStatusesStore',
+        statesStore: 'statesStore',
+        studentStatusesStore: 'studentStatusesStore',
+    	veteranStatusesStore: 'veteranStatusesStore'
+    },
+    
     views: [
         'admin.AdminTreeMenu', 
         'admin.forms.AbstractReferenceAdmin',
@@ -48,9 +69,13 @@ Ext.define('Ssp.controller.AdminViewController', {
 	loadAdmin: function( title ,form, storeName ) {
 		var adminFormsView = Ext.getCmp('AdminForms');
 		if (adminFormsView.items.length > 0)
-			adminFormsView.removeAll();
-		var store = Ext.getStore('reference.' + storeName);
-		var comp = adminFormsView.getComponent(form); // 'AbstractReferenceAdmin'
+		{
+			adminFormsView.removeAll();			
+		}	
+		console.log(form);
+		console.log(storeName+'Store');
+		var store = this[storeName+'Store'];
+		var comp = adminFormsView.getComponent( form ); // 'AbstractReferenceAdmin'
 
 		if (comp == undefined)
 		{

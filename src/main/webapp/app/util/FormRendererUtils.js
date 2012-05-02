@@ -31,6 +31,28 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		var applicationFormsStore =  Ext.getStore('ApplicationForms');
         return cleaner.prepareTemplateData(  applicationFormsStore );  	
     },    
+   
+    createRadioButtonGroup: function( formId, groupId, itemsArr, selectedItemId, idFieldName, selectedIdFieldName ){
+    	var form = Ext.getCmp(formId);
+    	var rbGroup = Ext.getCmp(groupId);
+		var items = itemsArr;
+		var setSelectedItems = false;
+		for (i=0; i<items.length; i++)
+		{
+			var rb = {xtype:'radio'};
+			var item = items[i];
+			rb.boxLabel = item.name;
+			rb.name = selectedIdFieldName;
+			rb.inputValue = item[idFieldName];
+			if (selectedItemId==item[idFieldName])
+			{
+				rb.checked = true;
+			}
+			
+			rbGroup.insert(i,rb);
+		}
+		form.doLayout();
+    },
     
     createCheckBoxForm: function( formId, itemsArr, selectedItemsArr, idFieldName, selectedIdFieldName ){
     	var form = Ext.getCmp(formId);
@@ -52,7 +74,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 				for (var s=0; s<selectedItems.length; s++)
 				{
 					selectedId = selectedItems[s][selectedIdFieldName];
-					if (selectedId===item[idFieldName])
+					if (selectedId==item[idFieldName])
 					{
 						cb.checked = true;
 						break;
@@ -60,7 +82,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 				}
 			}
 			
-			form.insert(i-1,cb);
+			form.insert(i,cb);
 		}
 		form.doLayout();
     },
@@ -87,10 +109,21 @@ Ext.define('Ssp.util.FormRendererUtils',{
 				}
 			}
 			
-			form.insert(form.items.length,cb);
+			form.insert(i,cb);
 		}
 		
 		form.doLayout();
+    },
+   
+    alphaSortByField: function( arrayToSort, fieldName ){
+    	return Ext.Array.sort(arrayToSort, function(a, b){
+    		 var nameA=a[fieldName].toLowerCase(), nameB=b[fieldName].toLowerCase()
+    		 if (nameA < nameB) //sort string ascending
+    		  return -1
+    		 if (nameA > nameB)
+    		  return 1
+    		 return 0 //default return value (no sorting)
+    		});
     },
     
     getSelectedValuesAsTransferObject: function( values, modelType ){

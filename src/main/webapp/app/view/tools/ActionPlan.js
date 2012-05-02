@@ -38,6 +38,9 @@ Ext.define('Ssp.view.tools.ActionPlan', {
 				        items: [{
 				            xtype: 'checkbox',
 				            boxLabel: 'Display only items that I created'
+				           },{ 
+				        	   xtype: 'tbspacer',
+				        	   flex: 1
 				           },{
 				            tooltip: 'Print the History for this student',
 				            text: 'View History',

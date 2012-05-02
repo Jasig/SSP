@@ -5,9 +5,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		this.callParent( arguments );
     },	
 	
-    statics: {
-    	renderPhotoIcon: function(val) {
-    	    return '<img src="' + val + '">';
-    	}    	
-    }
+	renderPhotoIcon: function(val) {
+	    return '<img src="' + val + '">';
+	}    	
 });
