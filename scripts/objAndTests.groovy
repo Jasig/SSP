@@ -72,7 +72,7 @@ class Templater{
 	/*
 	 * Set some paths to access the files
 	 */
-	List<String> appPath = ["org", "studentsuccessplan", "ssp"]
+	List<String> appPath = ["org", "jasig", "ssp"]
 	String basePath = "/data/code/infinum/javaWorkspace/ssp/"
 	
 	private String javaMainPath = basePath + "src/main/java/"

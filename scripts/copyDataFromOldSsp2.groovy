@@ -8,7 +8,7 @@ class TableImporter {
     }
 
     public void insert(String newTableName){
-        File output = new File("../src/main/resources/org/studentsuccessplan/ssp/database/changesets/a.xml")
+        File output = new File("../src/main/resources/org/jasig/ssp/database/changesets/a.xml")
 
         output << """\n    <changeSet id="create reference data - ${newTableName}" author="daniel.bower">"""
 

@@ -13,7 +13,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="org.studentsuccessplan" level="debug" />
+	<logger name="org.jasig" level="debug" />
 	<logger name="org.springframework.core" level="info" />
 	<logger name="org.springframework.beans" level="info" />
 	<logger name="org.springframework.context" level="info" />

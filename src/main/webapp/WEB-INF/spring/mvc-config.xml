@@ -15,7 +15,7 @@
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
 
-	<context:component-scan base-package="org.studentsuccessplan.ssp.web,org.studentsuccessplan.mygps.web"/>
+	<context:component-scan base-package="org.jasig.ssp.web,org.jasig.mygps.web"/>
 		<!-- context:include-filter type="regex" expression=".*Controller"/>
 	</context:component-scan -->
 	
@@ -33,7 +33,7 @@
 		<property name="cacheSeconds" value="0" />
 		<property name="webBindingInitializer">
 			<!-- Allows binding of UUIDs -->
-			<bean class="org.studentsuccessplan.ssp.util.BindingInitializer" />
+			<bean class="org.jasig.ssp.util.BindingInitializer" />
 		</property>
 	</bean>
 	
@@ -42,7 +42,7 @@
 		<property name="basename" value="views"/>
 	</bean>
 
-	<bean id="webProperties" class="org.studentsuccessplan.ssp.config.WebProperties" factory-method="getInstance"></bean>
+	<bean id="webProperties" class="org.jasig.ssp.config.WebProperties" factory-method="getInstance"></bean>
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 

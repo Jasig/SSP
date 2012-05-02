@@ -1,6 +1,6 @@
 <map version="0.9.0">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1329410900503" ID="ID_981785889" MODIFIED="1329411024543" TEXT="org.studentsuccessplan.ssp">
+<node CREATED="1329410900503" ID="ID_981785889" MODIFIED="1329411024543" TEXT="org.jasig.ssp">
 <node CREATED="1329411061239" ID="ID_411473751" MODIFIED="1329411063254" POSITION="right" TEXT="model">
 <node CREATED="1329411108117" ID="ID_689345272" MODIFIED="1329411114320" TEXT="/"/>
 <node CREATED="1329411114799" ID="ID_840594561" MODIFIED="1329411118067" TEXT="factory"/>

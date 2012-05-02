@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="inTestEnvironment" />
+
+
+	<!-- Script can only run as user sspDbAdmin -->
+	<preConditions onFail="HALT">
+		<runningAs username="sspadmin" />
+	</preConditions>
+
+	<include file="org/jasig/ssp/database/changesets/000001.xml"/>
+	<include file="org/jasig/ssp/database/changesets/000001-test.xml"/>
+	<include file="org/jasig/ssp/database/changesets/000002.xml"/>
+	<include file="org/jasig/ssp/database/changesets/000002-test.xml"/>
+	<include file="org/jasig/ssp/database/changesets/000003.xml"/>
+	<include file="org/jasig/ssp/database/changesets/000003-test.xml"/>
+	<include file="org/jasig/ssp/database/changesets/000004.xml"/>
+	<include file="org/jasig/ssp/database/changesets/000004-test.xml"/>
+</databaseChangeLog>
