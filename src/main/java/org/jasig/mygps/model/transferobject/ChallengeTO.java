@@ -2,7 +2,6 @@ package org.jasig.mygps.model.transferobject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,17 +16,21 @@ import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 
 import com.google.common.collect.Lists;
 
+/**
+ * Transfer object very similar to
+ * {@link org.jasig.ssp.transferobject.reference.ChallengeTO} except that it
+ * does not map SelfHelpGuideQuestion so a serialization infinite loop doesn't
+ * occur.
+ * 
+ * @author jon.adams
+ * 
+ */
 @JsonIgnoreProperties(value = { "selfHelpGuideQuestions" })
 public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge>, Serializable {
 
 	private static final long serialVersionUID = 2320351255526248904L;
 
-	/**
-	 * Public description of the challenge
-	 * 
-	 * Optional, null allowed, max length 64000 characters.
-	 */
 	private String selfHelpGuideDescription;
 
 	private boolean showInStudentIntake;
@@ -40,30 +43,9 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 
 	private List<ChallengeReferralTO> challengeChallengeReferrals;
 
-	/**
-	 * Simple constructor that calls the empty super() constructor.
-	 */
-	public ChallengeTO() {
-		super();
-	}
-
-	public ChallengeTO(final UUID id, final String name,
-			final String description) {
-		super(id, name, description);
-	}
-
 	public ChallengeTO(final Challenge model) {
 		super();
 		from(model);
-	}
-
-	public static List<ChallengeTO> toTOList(
-			final Collection<Challenge> models) {
-		final List<ChallengeTO> tObjects = Lists.newArrayList();
-		for (Challenge model : models) {
-			tObjects.add(new ChallengeTO(model));
-		}
-		return tObjects;
 	}
 
 	@Override

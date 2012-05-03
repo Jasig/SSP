@@ -26,6 +26,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 /**
+ * Setup the mock controller, request, and response objects for testing Spring
+ * Controller annotation mappings. Replaces the default response handlers with
+ * {@link JacksonMethodReturnValueHandler}.
+ * 
+ * <p>
+ * The custom resolve handler is used since Jackson requests are handled by full
+ * runtime Spring, but that the built-in Spring mock objects do not support
+ * anything but View and String responses.
  * 
  * @author jon.adams
  * 
@@ -68,9 +76,8 @@ public abstract class AbstractControllerHttpTestSupport<C extends RestController
 				"sspRequestMappingHandlerAdapter",
 				RequestMappingHandlerAdapter.class);
 
-		// set returnValues since default ModelAndView isn't used in SSP
-		// TODO Figure out and then set the correct type of correct handlers
-
+		// set custom handler for SSP return object types since the default
+		// handlers provided by Spring don't work for Jackson-serialized objects
 		List<HandlerMethodReturnValueHandler> returnValueHandlers = new
 				ArrayList<HandlerMethodReturnValueHandler>(1);
 		returnValueHandlers.add(new JacksonMethodReturnValueHandler());
