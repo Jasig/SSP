@@ -121,6 +121,27 @@
 		</security-role-ref>
 	</portlet>
 	
+<<<<<<< HEAD
+    <portlet>
+        <portlet-name>SSP</portlet-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/spring/portlet/SSP-portlet.xml</value>
+        </init-param>
+        <!-- This value is to 0 in dev, can set to cache at a positive value in seconds 
+            for caching, or -1 to never expire cache -->
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>SSP</title>
+        </portlet-info>
+    </portlet>
+=======
+>>>>>>> 881370ae51f302e90a05f5b3c4fcab471252371d
 
 	<!-- user-attribute>
 		<description>User Display Name</description>

@@ -51,9 +51,9 @@
 			<p>This self help tool will assist you in identifying and overcoming challenges or barriers to your success at Sinclair Community College. Please use the Self Help Guides to begin the process of identifying the challenges you might face, and discovering the solutions available to meet those challenges. The tool will assist you in building a Personal Road Map that will guide you on your journey to success. Good luck on that journey!</p>		
 			<h2>Tools for Your Success</h2>
 			<ul data-role="listview" data-inset="true">
-				<li><a href="guides.html">Self Help Guides</a></li>
-				<li style="display: none;" data-bind="visible: canContactCoach"><a href="contact.html">Contact Your Coach</a></li>
-				<li><a href="search.html">Search for Resources</a></li>
+				<li><a href="<portlet:renderURL><portlet:param name="action" value="showGuides"/></portlet:renderURL>">Self Help Guides</a></li>
+				<li style="display: none;" data-bind="visible: canContactCoach"><a href="<portlet:renderURL><portlet:param name="action" value="showContacts"/></portlet:renderURL>">Contact Your Coach</a></li>
+				<li><a href="<portlet:renderURL><portlet:param name="action" value="search"/></portlet:renderURL>">Search for Resources</a></li>
 			</ul>
 			
 		</div>
