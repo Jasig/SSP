@@ -1,8 +1,12 @@
 Ext.define('Ssp.view.admin.forms.ChallengeAdmin', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.challengeadmin',
+	alias : 'widget.ChallengeAdmin',
 	title: 'Admin',
 	id: 'ChallengeAdmin',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
 	height: '100%',
 	width: '100%',
 
@@ -42,35 +46,26 @@ Ext.define('Ssp.view.admin.forms.ChallengeAdmin', {
     		           ],
     		        
     		           dockedItems: [
-    		       		{
-    		       			xtype: 'pagingtoolbar',
-    		       		    dock: 'bottom',
-    		       		    displayInfo: true,
-    		       		    pageSize: 15
-    		       		},
-
-    		              {
-    		               xtype: 'toolbar',
-    		               items: [{
-    		                   text: 'Add',
-    		                   iconCls: 'icon-add',
-    		                   handler: function(){
-    		                   	var item = new Ssp.model.reference.Challenge();
-    		           			item.set('name','default');
-    		                   	this.up('grid').getStore().insert(0, item );
-    		                   	this.up('grid').plugins[0].startEdit(0, 0);
-    		                   }
-    		               }, '-', {
-    		                   text: 'Delete',
-    		                   iconCls: 'icon-delete',
-    		                   handler: function(){
-    		                   	var selection = this.up('grid').getView().getSelectionModel().getSelection()[0];
-    		                       if (selection) {
-    		                       	this.up('grid').getStore().remove( selection );           	
-    		                       }
-    		                   }
-    		               }]
-    		           }]    	
+     		       		{
+     		       			xtype: 'pagingtoolbar',
+     		       		    dock: 'bottom',
+     		       		    displayInfo: true,
+     		       		    pageSize: this.apiProperties.getPagingSize()
+     		       		},
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Add',
+     		                   iconCls: 'icon-add',
+     		                   xtype: 'button',
+     		                   action: 'add'
+     		               }, '-', {
+     		                   text: 'Delete',
+     		                   iconCls: 'icon-delete',
+     		                   xtype: 'button',
+     		                   action: 'delete'
+     		               }]
+     		           }]    	
     	});
     	this.callParent(arguments);
     },

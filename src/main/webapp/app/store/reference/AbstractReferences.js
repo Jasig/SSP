@@ -5,16 +5,20 @@ Ext.define('Ssp.store.reference.AbstractReferences', {
     inject: {
         apiProperties: 'apiProperties'
     },
-	autoLoad: false,
-	autoSync: true,
-    pageSize: 20,
-    params : {
-		page : 0,
-		start : 0,
-		limit : 40
-	},
+
 	constructor: function(){
-		Ext.apply(this, { proxy: this.apiProperties.getProxy('reference/') });
+		Ext.apply(this, { 
+						    proxy: this.apiProperties.getProxy('reference/'), 
+							autoLoad: false,
+							autoSync: false,
+						    pageSize: this.apiProperties.getPagingSize(),
+						    params : {
+								page : 0,
+								start : 0,
+								limit : this.apiProperties.getPagingSize()
+							}						
+						}
+		);
 		this.callParent(arguments);
 	}
 });

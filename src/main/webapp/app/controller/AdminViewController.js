@@ -22,12 +22,7 @@ Ext.define('Ssp.controller.AdminViewController', {
     	veteranStatusesStore: 'veteranStatusesStore'
     },
     
-    views: [
-        'admin.AdminTreeMenu', 
-        'admin.forms.AbstractReferenceAdmin',
-        'admin.forms.ChallengeAdmin',
-        'admin.forms.ConfidentialityLevelAdmin'
-    ],
+    views: [ 'admin.AdminTreeMenu' ],
        
 	init: function() {
 
@@ -35,23 +30,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 			'AdminTreeMenu': {
 				itemclick : this.treeItemClick,
 				scope: this
-			},
-
-			'AbstractReferenceAdmin': {
-				edit: this.adminGridEdit,
-				scope: this
-			},
-
-			'ChallengeAdmin': {
-				edit: this.adminGridEdit,
-				scope: this
-			},
-
-			'ConfidentialityLevelAdmin': {
-				edit: this.adminGridEdit,
-				scope: this
 			}
-        
 		}); 
 
 		this.callParent(arguments);
@@ -71,9 +50,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 		if (adminFormsView.items.length > 0)
 		{
 			adminFormsView.removeAll();			
-		}	
-		console.log(form);
-		console.log(storeName+'Store');
+		}
 		var store = this[storeName+'Store'];
 		var comp = adminFormsView.getComponent( form ); // 'AbstractReferenceAdmin'
 
@@ -86,11 +63,5 @@ Ext.define('Ssp.controller.AdminViewController', {
 		comp.setTitle(title + ' Admin');
 		comp.reconfigure(store); // ,columns
 		comp.getStore().load();		
-	},
-
-	adminGridEdit: function(editor, e, eOpts) {
-	    editor.record.commit();
-	    editor.grid.getStore().sync();
 	}
-    
 });

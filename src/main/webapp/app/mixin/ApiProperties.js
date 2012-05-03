@@ -14,6 +14,10 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		return this.getContext() + value;
 	},
 	
+	getPagingSize: function(){
+		return 10;
+	},
+	
 	getProxy: function(url){
 		var proxyObj = {
 			type: 'rest',

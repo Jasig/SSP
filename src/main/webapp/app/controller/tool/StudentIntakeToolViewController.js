@@ -19,15 +19,19 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
         studentStatusesStore: 'studentStatusesStore',
     	veteranStatusesStore: 'veteranStatusesStore'        
     }, 
-	views: [
-        'tools.StudentIntake'
-    ],
+    
+	views: [ 'tools.StudentIntake' ],
 
 	init: function() {
-        
+		
 		this.control({
-			'#SaveStudentIntakeButton': {
+			'#saveStudentIntakeButton': {
 				click: this.save,
+				scope: this
+			},
+			
+			'#viewConfidentialityAgreementButton': {
+				click: this.viewConfidentialityAgreement,
 				scope: this
 			}
 			
@@ -40,7 +44,7 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 				scope: this
 			});
 		},this);		
-		
+				
 		this.callParent(arguments);
     },
 
@@ -97,12 +101,12 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 		}
 		
 		this.formUtils.createRadioButtonGroup('StudentIntakeEducationGoals','StudentIntakeEducationGoalsRadioGroup', educationGoals, personEducationGoalId, 'id', 'educationGoalId');
-		this.formUtils.createCheckBoxForm('StudentIntakeEducationLevels', educationLevels, personEducationLevels, 'id', 'educationLevelId');
-		this.formUtils.createCheckBoxForm('StudentIntakeFunding', fundingSources, personFundingSources, 'id', 'fundingSourceId');	
-		this.formUtils.createCheckBoxForm('StudentIntakeChallenges', challenges, personChallenges, 'id', 'challengeId');
+		this.formUtils.createCheckBoxForm('StudentIntakeEducationLevels', 'Education Levels: Select all that apply', educationLevels, personEducationLevels, 'id', 'educationLevelId');
+		this.formUtils.createCheckBoxForm('StudentIntakeFunding', 'Funding Sources', fundingSources, personFundingSources, 'id', 'fundingSourceId');	
+		this.formUtils.createCheckBoxForm('StudentIntakeChallenges', 'Challenges', challenges, personChallenges, 'id', 'challengeId');
 	},    
     
-	save: function() {
+	save: function( button ) {
 		var personalForm = Ext.getCmp('StudentIntakePersonal').getForm();
 		var demographicsForm = Ext.getCmp('StudentIntakeDemographics').getForm();
 		var educationPlansForm = Ext.getCmp('StudentIntakeEducationPlans').getForm();
@@ -115,9 +119,12 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 		var demographicsFormModel = null;
 		var educationPlansFormModel = null;
 		var educationGoalFormModel = null;
-		var selectedEducationLevels = null;
-		var selectedFunding = null;
-		var selectedChallenges = null;
+		var educationLevelObj = null;
+		var otherEducationLevelDescription = "";
+		var fundingObj = null;
+		var otherFundingDescription = "";
+		var challengeObj = null;
+		var otherChallengeDescription = "";
 		
 		var studentIntakeFormModel = null;
 		var personId = "";
@@ -145,42 +152,42 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 				personDemographics: demographicsFormModel.data,
 				personEducationGoal: educationGoalFormModel.data,
 				personEducationPlan: educationPlansFormModel.data,
-				personEducationLevels: selectedEducationLevels,
-				personFundingSources: selectedFunding,
-				personChallenges: selectedChallenges
+				personEducationLevels: [],
+				personFundingSources: [],
+				personChallenges: []
 			};
 			
 			intakeData.personDemographics.personId = personId;
 			intakeData.personEducationGoal.personId = personId;
 			intakeData.personEducationPlan.personId = personId;
 
-			var educationLevelObj = educationLevelsForm.getValues();
-			var selectedEducationLevels = [];
-			for ( prop in educationLevelObj )
+			// set selected education levels
+			educationLevelObj = educationLevelsForm.getValues();
+			otherEducationLevelDescription = this.formUtils.findPropByName(educationLevelObj, 'otherDescription');
+			if (otherEducationLevelDescription.length>0)
 			{
-				var obj = {educationLevelId: educationLevelObj[prop], personId: personId};
-				selectedEducationLevels.push( obj );
+				delete educationLevelObj['otherDescription'];
 			}
-			intakeData.personEducationLevels = selectedEducationLevels;
+			intakeData.personEducationLevels = this.getSelectedEducationLevels(educationLevelObj, personId, otherEducationLevelDescription);;
 			
-			var fundingObj = fundingForm.getValues();
-			var selectedFunding = [];
-			for ( prop in fundingObj )
+			// set selected funding
+			fundingObj = fundingForm.getValues();
+			otherFundingDescription = this.formUtils.findPropByName(fundingObj, 'otherDescription');
+			if (otherFundingDescription.length>0)
 			{
-				var obj = {fundingSourceId: fundingObj[prop], personId: personId};
-				selectedFunding.push( obj );
+				delete fundingObj['otherDescription'];
 			}
-			intakeData.personFundingSources = selectedFunding;
+			intakeData.personFundingSources = this.getSelectedFunding(fundingObj, personId, otherFundingDescription);
 			
-			var challengeObj = challengesForm.getValues();
-			var selectedChallenges = [];
-			for ( prop in challengeObj )
+			// set selected challenges
+			challengeObj = challengesForm.getValues();
+			otherChallengeDescription = this.formUtils.findPropByName(challengeObj, 'otherDescription');
+			if (otherChallengeDescription.length>0)
 			{
-				var obj = {challengeId: challengeObj[prop], personId: personId};
-				selectedChallenges.push( obj );
+				delete challengeObj['otherDescription'];
 			}
-			intakeData.personChallenges = selectedChallenges;
-			
+			intakeData.personChallenges = this.getSelectedChallenges(challengeObj, personId, otherChallengeDescription);
+
 			Ext.Ajax.request({
 				url: this.apiProperties.createUrl('tool/studentIntake/' + this.currentPerson.get('id')),
 				method: 'PUT',
@@ -197,11 +204,60 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 					Ext.Msg.alert('SSP Error', msg);								
 				}
 			}, this);
-			
+
 		}else{
 			Ext.Msg.alert('Invalid Data','Please correct the errors in this Student Intake before saving the record.');
 		}
 		
+	},
+	
+	getSelectedFunding: function(formValues, personId, otherFieldValue){
+		var selectedItems = [];
+		Ext.iterate(formValues, function(key, value) {
+			var obj;
+			if (key.toLowerCase()=='other')
+			{
+				obj = {fundingSourceId: value, personId: personId, description: otherFieldValue};
+			}else{
+				obj = {fundingSourceId: value, personId: personId};
+			}
+			selectedItems.push( obj );
+		});
+		return selectedItems;
+	},
+
+	getSelectedChallenges: function(formValues, personId, otherFieldValue){
+		var selectedItems = [];
+		Ext.iterate(formValues, function(key, value) {
+			var obj;
+			if (key.toLowerCase()=='other')
+			{
+				obj = {challengeId: value, personId: personId, description: otherFieldValue};
+			}else{
+				obj = {challengeId: value, personId: personId};
+			}
+			selectedItems.push( obj );
+		});
+		return selectedItems;
+	},
+	
+	getSelectedEducationLevels: function(formValues, personId, otherFieldValue){
+		var selectedItems = [];
+		Ext.iterate(formValues, function(key, value) {
+			var obj;
+			if (key.toLowerCase()=='other')
+			{
+				obj = {educationLevelId: value, personId: personId, description: otherFieldValue};
+			}else{
+				obj = {educationLevelId: value, personId: personId};
+			}
+			selectedItems.push( obj );
+		});
+		return selectedItems;
+	},
+	
+	viewConfidentialityAgreement: function(button){
+		Ext.Msg.alert("Alert", "Don't forget to print the confidentiality agreement");
 	}
     
 });

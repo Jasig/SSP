@@ -2,27 +2,32 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.studentintake',
 	id: 'StudentIntake',
-    title: 'Student Intake',	
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        studentsStore: 'studentsStore'
+    },
+	title: 'Student Intake',	
 	width: '100%',
 	height: '100%',   
 	
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
-		    buttons: [{text:'Save', id: 'SaveStudentIntakeButton'}],	    
-			autoScroll: true,
-		    		store: Ext.getStore('Students'),
+					autoScroll: true,
+		    		store: this.studentsStore,
+
 				    dockedItems: [{
 				        dock: 'top',
 				        xtype: 'toolbar',
-				        items: [
+				        items: [{xtype: 'button', id: 'saveStudentIntakeButton', text:'Save', action: 'save' },
 				                { 
 				        	     xtype: 'tbspacer',
 				        	     flex: 1
 				               },{
 				            	   xtype: 'button',
-				            	   text: 'View Confidentiality Agreement', 
-				            	   id: 'ViewConfidentialityAgreementButton'}]
+				            	   id: 'viewConfidentialityAgreementButton',
+				            	   text: 'View Confidentiality Agreement',
+				            	   action: 'viewConfidentialityAgreement'}]
 				    }],
 				    
 		    		items: [ Ext.createWidget('tabpanel', {

@@ -1,8 +1,12 @@
 Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.abstractreferenceadmin',
+	alias : 'widget.AbstractReferenceAdmin',
 	title: 'Admin',
 	id: 'AbstractReferenceAdmin',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
 	height: '100%',
 	width: '100%',
 
@@ -35,32 +39,24 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     		       			xtype: 'pagingtoolbar',
     		       		    dock: 'bottom',
     		       		    displayInfo: true,
-    		       		    pageSize: 15
+    		       		    pageSize: this.apiProperties.getPagingSize()
     		       		},
-
     		              {
     		               xtype: 'toolbar',
     		               items: [{
     		                   text: 'Add',
     		                   iconCls: 'icon-add',
-    		                   handler: function(){
-    		                   	var item = new Ssp.model.reference.AbstractReference();
-    		           			item.set('name','default');
-    		                   	this.up('grid').getStore().insert(0, item );
-    		                   	this.up('grid').plugins[0].startEdit(0, 0);
-    		                   }
+    		                   xtype: 'button',
+    		                   action: 'add'
     		               }, '-', {
     		                   text: 'Delete',
     		                   iconCls: 'icon-delete',
-    		                   handler: function(){
-    		                   	var selection = this.up('grid').getView().getSelectionModel().getSelection()[0];
-    		                       if (selection) {
-    		                       	this.up('grid').getStore().remove( selection );           	
-    		                       }
-    		                   }
+    		                   xtype: 'button',
+    		                   action: 'delete'
     		               }]
     		           }]    	
     	});
+    	
     	this.callParent(arguments);
     },
     
