@@ -98,16 +98,16 @@ class Templater{
 	 */
 	public void run(String modelName, String newModelName, List<String> subpackage){
 		List<ExampleFile> exampleFiles = [
-					//new ExampleFile(javaMainPath, appPath, ["dao"] + subpackage, modelName, "Dao.java"),
-					//new ExampleFile(javaMainPath, appPath, ["model"] + subpackage, modelName, ".java"),
-					//new ExampleFile(javaMainPath, appPath, ["service"] + subpackage, modelName, "Service.java"),
-					//new ExampleFile(javaMainPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceImpl.java"),
-					//new ExampleFile(javaMainPath, appPath, ["web", "api"] + subpackage, modelName, "Controller.java"),
+					new ExampleFile(javaMainPath, appPath, ["dao"] + subpackage, modelName, "Dao.java"),
+					new ExampleFile(javaMainPath, appPath, ["model"] + subpackage, modelName, ".java"),
+					new ExampleFile(javaMainPath, appPath, ["service"] + subpackage, modelName, "Service.java"),
+					new ExampleFile(javaMainPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceImpl.java"),
+					new ExampleFile(javaMainPath, appPath, ["web", "api"] + subpackage, modelName, "Controller.java"),
 					new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage, modelName, "TOFactory.java"),
-					//new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryImpl.java"),
-					//new ExampleFile(javaMainPath, appPath, ["transferobject"] + subpackage, modelName, "TO.java"),
-					//new ExampleFile(javaTestPath, appPath, ["dao"] + subpackage, modelName, "DaoTest.java"),
-					//new ExampleFile(javaTestPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceTest.java")
+					new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryImpl.java"),
+					new ExampleFile(javaMainPath, appPath, ["transferobject"] + subpackage, modelName, "TO.java"),
+					new ExampleFile(javaTestPath, appPath, ["dao"] + subpackage, modelName, "DaoTest.java"),
+					new ExampleFile(javaTestPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceTest.java")
 					//new ExampleFile(javaTestPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryTest.java")
 					]
 		
@@ -269,25 +269,29 @@ class ReferenceDataTemplater {
 	String templateModel = "ChallengeCategory"
 	List<String> subpackage = ["reference"]
 	List<String> referenceDataModels = [
-"Category",
-"ChallengeReferral", 
-"Challenge", 
-"ChildCareArrangement",
-"Citizenship", 
-"ConfidentialityDisclosureAgreement", 
-"ConfidentialityLevel", 
-"EducationGoal", 
-"EducationLevel", 
-"Ethnicity", 
-"FundingSource", 
-"Goal",
-"MaritalStatus", 
-"MessageTemplate",
-"SelfHelpGuideGroup",
-"SelfHelpGuideQuestion", 
-"SelfHelpGuide", 
-"StudentStatus", 
-"VeteranStatus"
+//"Category",
+//"ChallengeReferral", 
+//"Challenge", 
+//"ChildCareArrangement",
+//"Citizenship", 
+//"ConfidentialityDisclosureAgreement", 
+//"ConfidentialityLevel", 
+//"EducationGoal", 
+//"EducationLevel", 
+//"Ethnicity", 
+//"FundingSource", 
+//"Goal",
+//"MaritalStatus", 
+//"MessageTemplate",
+//"SelfHelpGuideGroup",
+//"SelfHelpGuideQuestion", 
+//"SelfHelpGuide", 
+//"StudentStatus", 
+//"VeteranStatus",
+"JournalSource",
+"JournalStep",
+"JournalTrack",
+"JournalStepDetail"
 ]
 
 	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
@@ -299,4 +303,4 @@ class ReferenceDataTemplater {
 }
 
 
-new ReferenceDataTemplater().run(true, true, false, false, true) 
+new ReferenceDataTemplater().run(true, false, true, false, false) 
