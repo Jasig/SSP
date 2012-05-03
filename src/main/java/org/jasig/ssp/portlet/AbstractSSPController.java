@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.portlet;
+package org.studentsuccessplan.ssp.portlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,17 +10,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.studentsuccessplan.ssp.service.ObjectNotFoundException;
-import org.studentsuccessplan.ssp.service.SecurityService;
-import org.studentsuccessplan.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.transferobject.ServiceResponse;
 
-public class AbstractMyGpsController {
+public class AbstractSSPController {
 
 	@Autowired
 	protected SecurityService securityService;
 
 	private static final Logger LOGGER =
-			LoggerFactory.getLogger(AbstractMyGpsController.class);
+			LoggerFactory.getLogger(AbstractSSPController.class);
 
 	@PreAuthorize("permitAll")
 	@ExceptionHandler(ObjectNotFoundException.class)
