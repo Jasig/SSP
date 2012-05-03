@@ -76,9 +76,8 @@ public abstract class AbstractControllerHttpTestSupport<C extends RestController
 				"sspRequestMappingHandlerAdapter",
 				RequestMappingHandlerAdapter.class);
 
-		// set returnValues since default ModelAndView isn't used in SSP
-		// TODO Figure out and then set the correct type of correct handlers
-
+		// set custom handler for SSP return object types since the default
+		// handlers provided by Spring don't work for Jackson-serialized objects
 		List<HandlerMethodReturnValueHandler> returnValueHandlers = new
 				ArrayList<HandlerMethodReturnValueHandler>(1);
 		returnValueHandlers.add(new JacksonMethodReturnValueHandler());

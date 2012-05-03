@@ -1,10 +1,11 @@
 package org.jasig.ssp.web.api;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.jasig.ssp.transferobject.AuditableTO;
 import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TransferObject;
 import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
 import org.springframework.core.MethodParameter;
@@ -41,11 +42,29 @@ public class JacksonMethodReturnValueHandler implements
 	@Override
 	public boolean supportsReturnType(MethodParameter returnType) {
 		Class<?> paramType = returnType.getParameterType();
-		return (AbstractReferenceTO.class
-				.equals(paramType) || AuditableTO.class.equals(paramType)
-				|| TransferObject.class
-						.equals(paramType) || PagingTO.class
-					.equals(paramType));
+
+		List<Class<?>> classes = new ArrayList<Class<?>>();
+
+		// Valid base classes or interfaces that the SSP API is expected to
+		// serialize
+		classes.add(AbstractReferenceTO.class);
+		classes.add(AuditableTO.class);
+		classes.add(PagingTO.class);
+		classes.add(ServiceResponse.class);
+		classes.add(TransferObject.class);
+
+		for (Class<?> valid : classes) {
+			Class<?> currentClass = paramType;
+			while (currentClass != null && !Object.class.equals(currentClass)) {
+				if (valid.equals(currentClass)) {
+					return true;
+				}
+
+				currentClass = currentClass.getSuperclass();
+			}
+		}
+
+		return false;
 	}
 
 	@Override
@@ -56,17 +75,8 @@ public class JacksonMethodReturnValueHandler implements
 
 		if (returnValue == null) {
 			return;
-		} else if (returnValue instanceof TransferObject<?> ||
-				returnValue instanceof PagingTO<?, ?> ||
-				returnValue instanceof List<?> ||
-				returnValue instanceof Set<?>) {
-			mavContainer.getModel().addAttribute(returnValue);
 		} else {
-			// should not happen — check that supportsReturnType() matches any
-			// checks here in handleReturnValue().
-			throw new UnsupportedOperationException("Unexpected return type: " +
-					returnType.getParameterType().getName() + " in method: "
-					+ returnType.getMethod());
+			mavContainer.getModel().addAttribute(returnValue);
 		}
 	}
 }
