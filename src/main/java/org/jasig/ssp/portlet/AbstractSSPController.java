@@ -1,5 +1,8 @@
-package org.studentsuccessplan.ssp.portlet;
+package org.jasig.ssp.portlet;
 
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.transferobject.ServiceResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +13,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.transferobject.ServiceResponse;
 
 public class AbstractSSPController {
 

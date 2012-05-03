@@ -420,7 +420,7 @@
 					<propertyFile>/usr/local/etc/ssp/ssp-liquibase.properties</propertyFile>
 					<!-- In order for the liquibase-maven-plugin to pickup any updates you have 
 						made to the changesets, you will need to "mvn compile" the project first -->
-					<changeLogFile>org/studentsuccessplan/ssp/database/masterChangeLog-test.xml</changeLogFile>
+					<changeLogFile>org/jasig/ssp/database/masterChangeLog-test.xml</changeLogFile>
 				</configuration>
 			</plugin>
 		</plugins>
