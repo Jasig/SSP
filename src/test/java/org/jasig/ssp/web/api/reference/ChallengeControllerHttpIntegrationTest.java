@@ -13,6 +13,7 @@ import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.web.api.AbstractControllerHttpTestSupport;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,7 @@ public class ChallengeControllerHttpIntegrationTest
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
+	@Ignore
 	public void testControllerGet() throws Exception {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
