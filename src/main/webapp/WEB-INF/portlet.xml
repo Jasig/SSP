@@ -121,7 +121,6 @@
 		</security-role-ref>
 	</portlet>
 	
-<<<<<<< HEAD
     <portlet>
         <portlet-name>SSP</portlet-name>
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
@@ -140,8 +139,6 @@
             <title>SSP</title>
         </portlet-info>
     </portlet>
-=======
->>>>>>> 881370ae51f302e90a05f5b3c4fcab471252371d
 
 	<!-- user-attribute>
 		<description>User Display Name</description>
