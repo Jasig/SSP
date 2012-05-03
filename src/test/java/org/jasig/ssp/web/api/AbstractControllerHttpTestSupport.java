@@ -26,6 +26,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 /**
+ * Setup the mock controller, request, and response objects for testing Spring
+ * Controller annotation mappings. Replaces the default response handlers with
+ * {@link JacksonMethodReturnValueHandler}.
+ * 
+ * <p>
+ * The custom resolve handler is used since Jackson requests are handled by full
+ * runtime Spring, but that the built-in Spring mock objects do not support
+ * anything but View and String responses.
  * 
  * @author jon.adams
  * 

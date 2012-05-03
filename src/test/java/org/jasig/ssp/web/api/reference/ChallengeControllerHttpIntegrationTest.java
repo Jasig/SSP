@@ -1,6 +1,7 @@
 package org.jasig.ssp.web.api.reference;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.UUID;
@@ -9,6 +10,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.PagingTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.web.api.AbstractControllerHttpTestSupport;
 import org.junit.Assert;
@@ -25,7 +27,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * {@link ChallengeController} tests
+ * {@link ChallengeController} Spring annotation mapping tests.
  * 
  * @author jon.adams
  */
@@ -70,7 +72,7 @@ public class ChallengeControllerHttpIntegrationTest
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerGetAllWithPagingParameters() throws Exception {
+	public void testControllerGetAllRequest() throws Exception {
 		// Request URI, but do not include any Spring configuration roots, but
 		// do include class-level root paths. Example:
 		// "/reference/controllerlevelmapping/mymethodmapping"
@@ -95,7 +97,57 @@ public class ChallengeControllerHttpIntegrationTest
 	}
 
 	/**
-	 * Test the {@link ChallengeController#get(UUID)} action.
+	 * Test the
+	 * {@link ChallengeController#getAll(ObjectStatus, Integer, Integer, String, String)}
+	 * mapping.
+	 * 
+	 * <p>
+	 * Assumes that there is some sample data in the Challenges database.
+	 * 
+	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
+	 */
+	@Test
+	public void testControllerGetAllResponse() throws Exception {
+		final String requestUri = "/1/reference/challenge/";
+		request.setMethod(RequestMethod.GET.toString());
+		request.setRequestURI(requestUri);
+
+		final Object handler = getHandler(request);
+
+		final HandlerMethod expectedHandlerMethod = new HandlerMethod(
+				controller, "getAll", ObjectStatus.class, Integer.class,
+				Integer.class, String.class, String.class);
+
+		Assert.assertEquals("Correct handler found for request url: "
+				+ requestUri, expectedHandlerMethod.toString(),
+				handler.toString());
+
+		Assert.assertNotNull("Response mock object should not have been null.",
+				response);
+
+		// Handle the actual request
+		ModelAndView mav = handlerAdapter.handle(request, response, handler);
+		assertNotNull("Response was not handled.", mav);
+
+		@SuppressWarnings("unchecked")
+		PagingTO<ChallengeTO, Challenge> result = (PagingTO<ChallengeTO, Challenge>) getFirstModelObject(mav);
+
+		assertNotNull(
+				"Return object from the controller should not have been null.",
+				result);
+
+		assertFalse("Result should not have been empty.", result.getRows()
+				.isEmpty());
+		assertEquals("Challenge list counts did not match.",
+				result.getResults(), result.getRows().size());
+	}
+
+	/**
+	 * Test the {@link ChallengeController#get(UUID)} mapping.
+	 * 
+	 * <p>
+	 * Assumes that the sample reference data instances are in the database.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.

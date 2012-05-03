@@ -1,16 +1,22 @@
 package org.jasig.mygps.model.transferobject;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
 import org.jasig.ssp.transferobject.TransferObject;
 import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
 
-import com.google.common.collect.Lists;
-
+/**
+ * Transfer object very similar to
+ * {@link org.jasig.ssp.transferobject.reference.SelfHelpGuideQuestionTO} except
+ * that it maps back to a formal Challenge instance (instead of only the
+ * ChallengeId) so the MyGPS TO model does not need to be changed, since it is
+ * different from the SSP front-end transfer object.
+ * 
+ * @author jon.adams
+ * 
+ */
 public class SelfHelpGuideQuestionTO extends
 		AbstractReferenceTO<SelfHelpGuideQuestion>
 		implements TransferObject<SelfHelpGuideQuestion>, Serializable {
@@ -27,27 +33,9 @@ public class SelfHelpGuideQuestionTO extends
 
 	private UUID selfHelpGuideId;
 
-	public SelfHelpGuideQuestionTO() {
-		super();
-	}
-
-	public SelfHelpGuideQuestionTO(final UUID id, final String name,
-			final String description) {
-		super(id, name, description);
-	}
-
 	public SelfHelpGuideQuestionTO(final SelfHelpGuideQuestion model) {
 		super();
 		from(model);
-	}
-
-	public static List<SelfHelpGuideQuestionTO> toTOList(
-			final Collection<SelfHelpGuideQuestion> models) {
-		final List<SelfHelpGuideQuestionTO> tObjects = Lists.newArrayList();
-		for (SelfHelpGuideQuestion model : models) {
-			tObjects.add(new SelfHelpGuideQuestionTO(model));
-		}
-		return tObjects;
 	}
 
 	@Override
@@ -116,5 +104,4 @@ public class SelfHelpGuideQuestionTO extends
 	public void setSelfHelpGuideId(final UUID selfHelpGuideId) {
 		this.selfHelpGuideId = selfHelpGuideId;
 	}
-
 }
