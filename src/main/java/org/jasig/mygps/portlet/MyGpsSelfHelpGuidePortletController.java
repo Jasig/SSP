@@ -1,4 +1,4 @@
-package org.studentsuccessplan.mygps.portlet;
+package org.jasig.mygps.portlet;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
