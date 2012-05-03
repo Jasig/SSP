@@ -51,6 +51,7 @@ public abstract class AbstractReference extends Auditable {
 	 *            Identifier; required
 	 */
 	public AbstractReference(@NotNull final UUID id) {
+		super();
 		setId(id);
 	}
 
@@ -63,6 +64,7 @@ public abstract class AbstractReference extends Auditable {
 	 *            Name; required; max 80 characters
 	 */
 	public AbstractReference(@NotNull final UUID id, @NotNull final String name) {
+		super();
 		setId(id);
 		this.name = name;
 	}
@@ -79,6 +81,7 @@ public abstract class AbstractReference extends Auditable {
 	 */
 	public AbstractReference(@NotNull final UUID id,
 			@NotNull final String name, final String description) {
+		super();
 		setId(id);
 		this.name = name;
 		this.description = description;
@@ -113,7 +116,7 @@ public abstract class AbstractReference extends Auditable {
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime();
 
 		// Auditable properties

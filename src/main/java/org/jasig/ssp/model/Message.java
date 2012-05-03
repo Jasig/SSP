@@ -40,7 +40,7 @@ final public class Message extends Auditable {
 		return subject;
 	}
 
-	public void setSubject(String subject) {
+	public void setSubject(final String subject) {
 		this.subject = subject;
 	}
 
@@ -48,7 +48,7 @@ final public class Message extends Auditable {
 		return sender;
 	}
 
-	public void setSender(Person sender) {
+	public void setSender(final Person sender) {
 		this.sender = sender;
 	}
 
@@ -56,7 +56,7 @@ final public class Message extends Auditable {
 		return recipient;
 	}
 
-	public void setRecipient(Person recipient) {
+	public void setRecipient(final Person recipient) {
 		this.recipient = recipient;
 	}
 
@@ -64,7 +64,7 @@ final public class Message extends Auditable {
 		return recipientEmailAddress;
 	}
 
-	public void setRecipientEmailAddress(String recipientEmailAddress) {
+	public void setRecipientEmailAddress(final String recipientEmailAddress) {
 		this.recipientEmailAddress = recipientEmailAddress;
 	}
 
@@ -72,7 +72,7 @@ final public class Message extends Auditable {
 		return body;
 	}
 
-	public void setBody(String body) {
+	public void setBody(final String body) {
 		this.body = body;
 	}
 
@@ -80,7 +80,7 @@ final public class Message extends Auditable {
 		return sentDate == null ? null : new Date(sentDate.getTime());
 	}
 
-	public void setSentDate(Date sentDate) {
+	public void setSentDate(final Date sentDate) {
 		this.sentDate = sentDate == null ? null : new Date(sentDate.getTime());
 	}
 
@@ -90,7 +90,7 @@ final public class Message extends Auditable {
 	};
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:46 AM
 		int result = hashPrime();
 
 		// Auditable properties
