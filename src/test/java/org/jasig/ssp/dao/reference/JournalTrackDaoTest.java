@@ -7,10 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.UUID;
 
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.Citizenship;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,21 +17,25 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
-public class CitizenshipDaoTest {
+public class JournalTrackDaoTest {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(CitizenshipDaoTest.class);
-
-	@Autowired
-	private transient CitizenshipDao dao;
+	private static final Logger logger = LoggerFactory
+			.getLogger(JournalTrackDaoTest.class);
 
 	@Autowired
-	private transient SecurityServiceInTestEnvironment securityService;
+	private JournalTrackDao dao;
+
+	@Autowired
+	private SecurityServiceInTestEnvironment securityService;
 
 	@Before
 	public void setup() {
@@ -46,7 +46,7 @@ public class CitizenshipDaoTest {
 	public void testSaveNew() {
 		UUID saved;
 
-		Citizenship obj = new Citizenship();
+		JournalTrack obj = new JournalTrack();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
@@ -54,14 +54,15 @@ public class CitizenshipDaoTest {
 		assertNotNull(obj.getId());
 		saved = obj.getId();
 
-		LOGGER.debug(obj.toString());
+		logger.debug(obj.toString());
 
 		obj = dao.get(saved);
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<Citizenship> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
+		Collection<JournalTrack> all = dao.getAll(ObjectStatus.ACTIVE)
+				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
 		assertList(all);
@@ -72,13 +73,13 @@ public class CitizenshipDaoTest {
 	@Test
 	public void testNull() {
 		UUID id = UUID.randomUUID();
-		Citizenship citizenship = dao.get(id);
+		JournalTrack journalTrack = dao.get(id);
 
-		assertNull(citizenship);
+		assertNull(journalTrack);
 	}
 
-	private void assertList(Collection<Citizenship> objects) {
-		for (Citizenship object : objects) {
+	private void assertList(Collection<JournalTrack> objects) {
+		for (JournalTrack object : objects) {
 			assertNotNull(object.getId());
 		}
 		assertTrue(true);
@@ -86,17 +87,17 @@ public class CitizenshipDaoTest {
 
 	@Test
 	public void uuidGeneration() {
-		Citizenship obj = new Citizenship();
+		JournalTrack obj = new JournalTrack();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		Citizenship obj2 = new Citizenship();
+		JournalTrack obj2 = new JournalTrack();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);
 
-		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
 				+ obj2.getId().toString());
 
 		dao.delete(obj);

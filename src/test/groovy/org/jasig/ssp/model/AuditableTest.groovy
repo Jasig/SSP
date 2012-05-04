@@ -9,7 +9,7 @@ class AuditableTest {
 
 	class AuditableSubClass extends Auditable{
 		protected int hashPrime(){
-			return 11
+			return 197
 		};
 
 		public int hashCode() {
@@ -19,7 +19,7 @@ class AuditableTest {
 
 	class AuditableSubClass2 extends Auditable{
 		protected int hashPrime(){
-			return 7
+			return 193
 		};
 
 		public int hashCode() {
