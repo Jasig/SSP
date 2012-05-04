@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet author='jon.adams' id='Add early_alert_suggestion table'>
+		<createTable tableName="early_alert_suggestion">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_suggestion_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="early_alert_suggestion_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="sort_order" type="smallint" defaultValue="0">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_suggestion to ssp</sql>
+		<rollback>
+			<dropTable tableName="early_alert_suggestion" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet id="create reference data - early_alert_suggestion"
+		author="jon.adams">
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="B2D11160-5056-A51A-807D9897C14BDD44" />
+			<column name="name" value="Counseling Services" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="3" />
+		</insert>
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="B2D111FD-5056-A51A-80FE6F3344174DBE" />
+			<column name="name" value="DEV Professional Tutoring" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="9" />
+		</insert>
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="B2D111DD-5056-A51A-8034909BD6AF80D5" />
+			<column name="name" value="Disability Service Intervention" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="7" />
+		</insert>
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="B2D1120C-5056-A51A-80EAC779A3109F8F" />
+			<column name="name" value="Other" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="10" />
+		</insert>
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="B2D11151-5056-A51A-80513ACDF99FEF84" />
+			<column name="name" value="See Advisor or Coach" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="2" />
+		</insert>
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="B2D11141-5056-A51A-80C1C1250BA820F8" />
+			<column name="name" value="See Instructor" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="1" />
+		</insert>
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="B2D11170-5056-A51A-8002B5CE9F25E2BC" />
+			<column name="name" value="The Tutoring/Learning Center" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="4" />
+		</insert>
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="B2D111CE-5056-A51A-8017676C4D8C4F1D" />
+			<column name="name" value="Tutoring Svcs (Bldg 10)" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="6" />
+		</insert>
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="B2D111ED-5056-A51A-80465291453E8720" />
+			<column name="name" value="Withdraw" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="8" />
+		</insert>
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="B2D111BE-5056-A51A-8075C5A65DA17079" />
+			<column name="name" value="Writing Center" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="5" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert_suggestion">
+				<where>id='B2D11160-5056-A51A-807D9897C14BDD44'</where>
+			</delete>
+			<delete tableName="early_alert_suggestion">
+				<where>id='B2D111FD-5056-A51A-80FE6F3344174DBE'</where>
+			</delete>
+			<delete tableName="early_alert_suggestion">
+				<where>id='B2D111DD-5056-A51A-8034909BD6AF80D5'</where>
+			</delete>
+			<delete tableName="early_alert_suggestion">
+				<where>id='B2D1120C-5056-A51A-80EAC779A3109F8F'</where>
+			</delete>
+			<delete tableName="early_alert_suggestion">
+				<where>id='B2D11151-5056-A51A-80513ACDF99FEF84'</where>
+			</delete>
+			<delete tableName="early_alert_suggestion">
+				<where>id='B2D11141-5056-A51A-80C1C1250BA820F8'</where>
+			</delete>
+			<delete tableName="early_alert_suggestion">
+				<where>id='B2D11170-5056-A51A-8002B5CE9F25E2BC'</where>
+			</delete>
+			<delete tableName="early_alert_suggestion">
+				<where>id='B2D111CE-5056-A51A-8017676C4D8C4F1D'</where>
+			</delete>
+			<delete tableName="early_alert_suggestion">
+				<where>id='B2D111ED-5056-A51A-80465291453E8720'</where>
+			</delete>
+			<delete tableName="early_alert_suggestion">
+				<where>id='B2D111BE-5056-A51A-8075C5A65DA17079'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>
+    

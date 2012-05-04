@@ -1,57 +1,57 @@
+/**
+ * Make sure the sqlserver-jdbc4-2.0.jar is installed in your Groovy user lib 
+ * directory. For example: users/myusername/.groovy/lib/sqlserver-jdbc4-2.0.jar
+ */
+
 import groovy.sql.Sql
 
 class TableImporter {
-    private Sql db
+	private Sql db
 
-    TableImporter(){
-        db = Sql.newInstance('jdbc:sqlserver://192.168.56.101;databaseName=SSP', 'SSPUser', '123456789', 'com.microsoft.sqlserver.jdbc.SQLServerDriver')
-    }
+	TableImporter(){
+		db = Sql.newInstance('jdbc:sqlserver://127.0.0.1\\SQLEXPRESS;databaseName=SSP', 'SSPUser', '123456789', 'com.microsoft.sqlserver.jdbc.SQLServerDriver')
+	}
 
-    public void insert(String newTableName){
-        File output = new File("../src/main/resources/org/jasig/ssp/database/changesets/a.xml")
+	public void insert(String newTableName){
+		File output = new File("../src/main/resources/org/jasig/ssp/database/changesets/000005.xml")
 
-        output << """\n    <changeSet id="create reference data - ${newTableName}" author="daniel.bower">"""
+		output << """\n    <changeSet id="create reference data - ${newTableName}" author="jon.adams">"""
 
-        def records = db.rows("""select c.name as cname, cr.id as crid, cr.name as crname, ccr.id as ccrid 
-from SSP.dbo.ChallengeChallengeReferral ccr
-inner join SSP.dbo.Challenge c on ccr.challengeId = c.id
-inner join SSP.dbo.ChallengeReferral cr on ccr.challengeReferralId = cr.id
-order by c.name""")
-       
-        records.each {
-            output << """\n        <insert tableName="${newTableName}">
-                <column name="id" value="${it.ccrid}" />
-                <column name="challenge_id" value="" />${it.cname}
-                <column name="challenge_referral_id" value="${it.crid}" />${it.crname}
-                <column name="created_date" valueDate="2012-03-20T00:00:00" />
-                <column name="modified_date" valueDate="2012-03-20T00:00:00" />
+		def records = db.rows("""select facultySuggestion as crname, [earlyAlertFacultySuggestionLUID] as crid, [treeOrder] as crorder 
+from SSP.dbo.[EarlyAlertFacultySuggestionLU] c
+order by crname""")
+
+		records.each { output << """\n        <insert tableName="${newTableName}">
+                <column name="id" value="${it.crid}" />
+                <column name="name" value="${it.crname}" />
+                <column name="description" value="" />
+                <column name="created_date" valueDate="2012-05-03T00:00:00" />
+                <column name="modified_date" valueDate="2012-05-03T00:00:00" />
                 <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
                 <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
                 <column name="object_status" value="1" />
-            </insert>"""
-        }
+                <column name="sort_order" value="${it.crorder}" />
+            </insert>""" }
 
-        output << "\n        <rollback>"
-        records.each {
-          output << """\n            <delete tableName="${newTableName}">
-                        <where>id='${it.ccrid}'</where>
-                    </delete>"""
-        }
-        output << "\n        </rollback>"
-        output << "\n    </changeSet>" 
-    } 
+		output << "\n        <rollback>"
+		records.each { output << """\n            <delete tableName="${newTableName}">
+                        <where>id='${it.crid}'</where>
+                    </delete>""" }
+		output << "\n        </rollback>"
+		output << "\n    </changeSet>"
+	}
 
-    public String cleanString(String name, String val, int length){
-        String newVal = val?.replaceAll("\"", "'")?.replaceAll("&", "&amp;")?.replaceAll("“", "'")?.replaceAll("”", "'")
-        if(newVal && newVal.size()>length){
-            newVal = newVal[0..length-1]
-            println (name + ' ' + val.size().toString() + ', ' + length.toString() + ', ' + val)
-        }
-        return newVal
-    }
+	public String cleanString(String name, String val, int length){
+		String newVal = val?.replaceAll("\"", "'")?.replaceAll("&", "&amp;")?.replaceAll("“", "'")?.replaceAll("”", "'")
+		if(newVal && newVal.size()>length){
+			newVal = newVal[0..length-1]
+			println (name + ' ' + val.size().toString() + ', ' + length.toString() + ', ' + val)
+		}
+		return newVal
+	}
 }
 
 
 TableImporter importer = new TableImporter();
-importer.insert('challenge_challenge_referral')
+importer.insert('early_alert_suggestions')
 

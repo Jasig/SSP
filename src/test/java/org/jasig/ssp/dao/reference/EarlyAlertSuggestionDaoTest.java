@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.VeteranStatus;
+import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,19 +24,21 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Tests for {@link VeteranStatusDao}.
+ * Tests for {@link EarlyAlertSuggestionDao}.
+ * 
+ * @author jon.adams
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration
 @Transactional
-public class VeteranStatusDaoTest {
+public class EarlyAlertSuggestionDaoTest {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(VeteranStatusDaoTest.class);
+			.getLogger(EarlyAlertSuggestionDaoTest.class);
 
 	@Autowired
-	private transient VeteranStatusDao dao;
+	private transient EarlyAlertSuggestionDao dao;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -50,13 +52,13 @@ public class VeteranStatusDaoTest {
 	}
 
 	/**
-	 * Test {@link VeteranStatusDao#save(VeteranStatus)}
+	 * Test {@link EarlyAlertSuggestionDao#save(EarlyAlertSuggestion)}
 	 */
 	@Test
 	public void testSaveNew() {
 		UUID savedId;
 
-		VeteranStatus obj = new VeteranStatus();
+		EarlyAlertSuggestion obj = new EarlyAlertSuggestion();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj = dao.save(obj);
@@ -65,14 +67,15 @@ public class VeteranStatusDaoTest {
 
 		LOGGER.debug(obj.toString());
 
-		final VeteranStatus saved = dao.get(savedId);
+		final EarlyAlertSuggestion saved = dao.get(savedId);
 		assertNotNull("Reloading did not return the correct saved data.", saved);
 		assertNotNull("Reloaded data did not have a set Name property.",
 				saved.getName());
 		assertEquals("Reloaded data did not have matching data.",
 				obj.getName(), saved.getName());
 
-		final Collection<VeteranStatus> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<EarlyAlertSuggestion> all = dao.getAll(
+				ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull("GetAll() should not have returned a null collection.",
 				all);
@@ -85,17 +88,17 @@ public class VeteranStatusDaoTest {
 	}
 
 	/**
-	 * Test that {@link VeteranStatusDao#get(UUID)} returns null if identifier
-	 * is not found.
+	 * Test that {@link EarlyAlertSuggestionDao#get(UUID)} returns null if
+	 * identifier is not found.
 	 */
 	@Test
 	public void testNotFoundIdReturnsNull() {
 		final UUID id = UUID.randomUUID();
-		final VeteranStatus veteranStatus = dao.get(id);
+		final EarlyAlertSuggestion earlyAlertSuggestion = dao.get(id);
 
 		assertNull(
 				"Get() did not return null when a missing identifier was used.",
-				veteranStatus);
+				earlyAlertSuggestion);
 	}
 
 	/**
@@ -104,21 +107,22 @@ public class VeteranStatusDaoTest {
 	 * @param objects
 	 *            Collection of objects to assert have non-null identifiers.
 	 */
-	private void assertList(final Collection<VeteranStatus> objects) {
+	private void assertList(final Collection<EarlyAlertSuggestion> objects) {
 		assertFalse("List should not have been empty.", objects.isEmpty());
 
-		for (VeteranStatus object : objects) {
+		for (EarlyAlertSuggestion object : objects) {
 			assertNotNull("List item should not have a null id.",
 					object.getId());
 		}
 	}
 
 	/**
-	 * Test UUID generation, {@link VeteranStatusDao#save(VeteranStatus)}.
+	 * Test UUID generation,
+	 * {@link EarlyAlertSuggestionDao#save(EarlyAlertSuggestion)}.
 	 */
 	@Test
 	public void uuidGeneration() {
-		final VeteranStatus obj = new VeteranStatus();
+		final EarlyAlertSuggestion obj = new EarlyAlertSuggestion();
 		obj.setName("A name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
