@@ -20,7 +20,8 @@ public class HashPrimeTest {
 
 	@Test
 	void testForUniqueHashPrimes(){
-		List<Class> offenders = []
+		boolean success = true;
+
 		Map<Integer, List<Class>> primeGroups = [:]
 
 		List<Class> classes = getClasses("org.jasig.ssp.model")
@@ -36,7 +37,6 @@ public class HashPrimeTest {
 			}
 		}
 
-		boolean success = true;
 		primeGroups.each{ key, value ->
 			if(value.size()>1 && key!=0){
 				success = false
@@ -45,6 +45,51 @@ public class HashPrimeTest {
 		}
 
 		assertTrue("More than one class using the same hashPrime", success);
+	}
+
+	@Test
+	void testForValidHashPrimes(){
+		boolean success = true;
+
+		Map<Integer, List<Class>> primeGroups = [:]
+
+		List<Class> classes = getClasses("org.jasig.ssp.model")
+		classes.each{ Class clazz ->
+			if(Auditable.class.isAssignableFrom(clazz) && !Modifier.isAbstract(clazz.getModifiers())){
+				Auditable auditable = clazz.newInstance()
+				if(!isPrime(auditable.hashPrime())){
+					LOGGER.error("Class has a non prime number as its hashprime, see: " + clazz.toString())
+					success = false;
+				}
+			}
+		}
+
+		assertTrue("Invalid Primes Detected", success);
+	}
+
+	public boolean isPrime(int value) {
+
+		//exclude negative, 0, and 1, 2
+		if(value < 3) return false
+
+		//if even drop right away
+		if((value % 2) == 0) return false
+
+		int count = 0
+		int i = 3
+		//for each number up to the number, is it divisible? (%==0)
+		//exit if number is more than half of its number square root
+		while(i <= (Math.sqrt(value))){
+			if((value % i) == 0) count += 1
+
+			//if we've gotten a hit, don't bother continuing
+			if(count > 0) return false
+
+			//next value - no point in trying the next number, an even
+			i+=2
+		}
+
+		return true
 	}
 
 	/**
