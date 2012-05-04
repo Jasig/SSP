@@ -86,7 +86,7 @@ final public class Message extends Auditable {
 
 	@Override
 	protected int hashPrime() {
-		return 2;
+		return 181;
 	};
 
 	@Override
