@@ -10,25 +10,29 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
 /**
- * EarlyAlertSuggestion reference object.
+ * EarlyAlertReferral reference object.
  * 
  * @author jon.adams
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EarlyAlertSuggestion extends AbstractReference implements
+public class EarlyAlertReferral extends AbstractReference implements
 		Serializable {
 
-	private static final long serialVersionUID = 118184491549077723L;
+	private static final long serialVersionUID = -1740796259941040664L;
 
 	@Column(nullable = false)
 	@NotNull
 	private short sortOrder = 0;
 
+	@Column(nullable = false)
+	@NotNull
+	private String acronym;
+
 	/**
 	 * Constructor
 	 */
-	public EarlyAlertSuggestion() {
+	public EarlyAlertReferral() {
 		super();
 	}
 
@@ -39,7 +43,7 @@ public class EarlyAlertSuggestion extends AbstractReference implements
 	 *            Identifier; required
 	 */
 
-	public EarlyAlertSuggestion(@NotNull UUID id) {
+	public EarlyAlertReferral(@NotNull UUID id) {
 		super(id);
 	}
 
@@ -54,11 +58,14 @@ public class EarlyAlertSuggestion extends AbstractReference implements
 	 *            Description; max 64000 characters
 	 * @param sortOrder
 	 *            Default sort order when displaying objects to the user
+	 * @param acronym
+	 *            acronym (a.k.a. code)
 	 */
-	public EarlyAlertSuggestion(@NotNull UUID id, @NotNull String name,
-			String description, short sortOrder) {
+	public EarlyAlertReferral(@NotNull UUID id, @NotNull String name,
+			String description, short sortOrder, final String acronym) {
 		super(id, name, description);
 		this.sortOrder = sortOrder;
+		this.acronym = acronym;
 	}
 
 	/**
@@ -81,16 +88,40 @@ public class EarlyAlertSuggestion extends AbstractReference implements
 	}
 
 	/**
+	 * @return the acronym (a.k.a. code)
+	 */
+	public String getAcronym() {
+		return acronym;
+	}
+
+	/**
+	 * @param acronym
+	 *            the acronym (a.k.a. code) to set
+	 */
+	public void setAcronym(@NotNull String acronym) {
+		this.acronym = acronym;
+	}
+
+	/**
 	 * Unique (amongst all Models in the system) prime for use by
 	 * {@link #hashCode()}
 	 */
 	@Override
 	protected int hashPrime() {
-		return 151;
+		return 157;
 	};
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
-		return hashPrime() * super.hashCode() * sortOrder;
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= super.hashCode();
+
+		result *= sortOrder;
+		result *= acronym == null ? "acronym".hashCode() : acronym
+				.hashCode();
+
+		return result;
 	}
 }
