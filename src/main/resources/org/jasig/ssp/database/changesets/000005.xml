@@ -403,5 +403,321 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet author='jon.adams' id='Add early_alert_reason table'>
+		<createTable tableName="early_alert_reason">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_reason_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="early_alert_reason_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="sort_order" type="smallint" defaultValue="0">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_reason to ssp</sql>
+		<rollback>
+			<dropTable tableName="early_alert_reason" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet id="create reference data - early_alert_reason"
+		author="jon.adams">
+		<insert tableName="early_alert_reason">
+			<column name="id" value="1F5729AF-0337-4E58-A001-8A9F80DBF8AA" />
+			<column name="name"
+				value="Answered Yes to Critical Self Help Guide Question" />
+			<column name="description"
+				value="Answered Yes to Critical Self Help Guide Question" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="9" />
+		</insert>
+		<insert tableName="early_alert_reason">
+			<column name="id" value="300D68EF-38C2-4B7D-AD46-7874AA5D34AC" />
+			<column name="name" value="Self Help Guide Threshold Exceeded" />
+			<column name="description" value="Self Help Guide Threshold Exceeded" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="10" />
+		</insert>
+		<insert tableName="early_alert_reason">
+			<column name="id" value="B2D112A9-5056-A51A-8010B510525EA3A8" />
+			<column name="name" value="Academic Concern" />
+			<column name="description" value="Academic Concern" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="1" />
+		</insert>
+		<insert tableName="early_alert_reason">
+			<column name="id" value="B2D112B8-5056-A51A-80671FDA2849C3E5" />
+			<column name="name" value="Excessive Absences" />
+			<column name="description" value="Excessive Absences" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="2" />
+		</insert>
+		<insert tableName="early_alert_reason">
+			<column name="id" value="B2D112C8-5056-A51A-80D5BEEC7D48CB5D" />
+			<column name="name" value="Low Homework/Quizzes" />
+			<column name="description" value="Low Homework/Quizzes" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="3" />
+		</insert>
+		<insert tableName="early_alert_reason">
+			<column name="id" value="B2D112D7-5056-A51A-80AA795E56155AF5" />
+			<column name="name" value="Low Test Scores" />
+			<column name="description" value="Low Test Scores" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="4" />
+		</insert>
+		<insert tableName="early_alert_reason">
+			<column name="id" value="B2D112E7-5056-A51A-80E8A30645C463E4" />
+			<column name="name" value="Never Attended" />
+			<column name="description" value="Never Attended" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="5" />
+		</insert>
+		<insert tableName="early_alert_reason">
+			<column name="id" value="B2D11316-5056-A51A-80F979421BDF08BF" />
+			<column name="name" value="Personal Concern" />
+			<column name="description" value="Personal Concern" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="6" />
+		</insert>
+		<insert tableName="early_alert_reason">
+			<column name="id" value="B2D11326-5056-A51A-806C79F352D0C2B2" />
+			<column name="name" value="Tardiness" />
+			<column name="description" value="Tardiness" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="7" />
+		</insert>
+		<insert tableName="early_alert_reason">
+			<column name="id" value="B2D11335-5056-A51A-80EA074F8FEF94EA" />
+			<column name="name" value="Other" />
+			<column name="description" value="Other" />
+			<column name="created_date" valueDate="2012-05-03T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-03T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="8" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert_reason">
+				<where>id='1F5729AF-0337-4E58-A001-8A9F80DBF8AA'</where>
+			</delete>
+			<delete tableName="early_alert_reason">
+				<where>id='300D68EF-38C2-4B7D-AD46-7874AA5D34AC'</where>
+			</delete>
+			<delete tableName="early_alert_reason">
+				<where>id='B2D112A9-5056-A51A-8010B510525EA3A8'</where>
+			</delete>
+			<delete tableName="early_alert_reason">
+				<where>id='B2D112B8-5056-A51A-80671FDA2849C3E5'</where>
+			</delete>
+			<delete tableName="early_alert_reason">
+				<where>id='B2D112C8-5056-A51A-80D5BEEC7D48CB5D'</where>
+			</delete>
+			<delete tableName="early_alert_reason">
+				<where>id='B2D112D7-5056-A51A-80AA795E56155AF5'</where>
+			</delete>
+			<delete tableName="early_alert_reason">
+				<where>id='B2D112E7-5056-A51A-80E8A30645C463E4'</where>
+			</delete>
+			<delete tableName="early_alert_reason">
+				<where>id='B2D11316-5056-A51A-80F979421BDF08BF'</where>
+			</delete>
+			<delete tableName="early_alert_reason">
+				<where>id='B2D11326-5056-A51A-806C79F352D0C2B2'</where>
+			</delete>
+			<delete tableName="early_alert_reason">
+				<where>id='B2D11335-5056-A51A-80EA074F8FEF94EA'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet author='jon.adams' id='Add early_alert_outreach table'>
+		<createTable tableName="early_alert_outreach">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_outreach_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="early_alert_outreach_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="sort_order" type="smallint" defaultValue="0">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_outreach to ssp</sql>
+		<rollback>
+			<dropTable tableName="early_alert_outreach" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet id="create reference data - early_alert_outreach"
+		author="jon.adams">
+		<insert tableName="early_alert_outreach">
+			<column name="id" value="9842EFF0-6557-4FB2-81C2-614991D5CBFB" />
+			<column name="name"
+				value="Phone Call" />
+			<column name="description"
+				value="Phone call" />
+			<column name="created_date" valueDate="2012-05-04T00:00:00" />
+			<column name="modified_date" valueDate="2012-05-04T15:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="5" />
+		</insert>
+		<insert tableName="early_alert_outreach">
+			<column name="id" value="3383D46F-8051-4A86-886D-A3EFE75B8F3A" />
+			<column name="name" value="Email" />
+			<column name="description" value="Email" />
+			<column name="created_date" valueDate="2012-05-04T15:00:00" />
+			<column name="modified_date" valueDate="2012-05-04T15:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="10" />
+		</insert>
+		<insert tableName="early_alert_outreach">
+			<column name="id" value="BA387302-B08B-4DC2-BD3F-AEFC2FC8D092" />
+			<column name="name" value="Letter" />
+			<column name="description" value="Letter" />
+			<column name="created_date" valueDate="2012-05-04T15:00:00" />
+			<column name="modified_date" valueDate="2012-05-04T15:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="15" />
+		</insert>
+		<insert tableName="early_alert_outreach">
+			<column name="id" value="E7908476-E67D-4FB2-890B-2D4E6C9B0E42" />
+			<column name="name" value="Text" />
+			<column name="description" value="Text" />
+			<column name="created_date" valueDate="2012-05-04T15:00:00" />
+			<column name="modified_date" valueDate="2012-05-04T15:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="20" />
+		</insert>
+		<insert tableName="early_alert_outreach">
+			<column name="id" value="612ED2C5-6D9A-4CDA-9007-B22756888CA8" />
+			<column name="name" value="In Person" />
+			<column name="description" value="In person" />
+			<column name="created_date" valueDate="2012-05-04T15:00:00" />
+			<column name="modified_date" valueDate="2012-05-04T15:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="25" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert_outreach">
+				<where>id='9842EFF0-6557-4FB2-81C2-614991D5CBFB'</where>
+			</delete>
+			<delete tableName="early_alert_outreach">
+				<where>id='3383D46F-8051-4A86-886D-A3EFE75B8F3A'</where>
+			</delete>
+			<delete tableName="early_alert_outreach">
+				<where>id='BA387302-B08B-4DC2-BD3F-AEFC2FC8D092'</where>
+			</delete>
+			<delete tableName="early_alert_outreach">
+				<where>id='E7908476-E67D-4FB2-890B-2D4E6C9B0E42'</where>
+			</delete>
+			<delete tableName="early_alert_outreach">
+				<where>id='612ED2C5-6D9A-4CDA-9007-B22756888CA8'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>
     
