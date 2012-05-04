@@ -10,7 +10,7 @@ import org.junit.Test
 class PersonTest {
 	class AuditableSubClass extends Auditable{
 		protected int hashPrime(){
-			return 11
+			return 199
 		};
 
 		public int hashCode() {
