@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class SspSecurityFilter implements RenderFilter {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public void destroy() {
@@ -35,14 +35,14 @@ public final class SspSecurityFilter implements RenderFilter {
 		final String username = req.getRemoteUser();
 		if (username != null) {
 			// User is authenticated so we need a permissions collection...
-			LOGGER.debug("Analyzing UserPermissions for user:  {}", username);
+			logger.debug("Analyzing UserPermissions for user:  {}", username);
 
 			UserPermissions perms = (UserPermissions) req.getPortletSession(
 					true).getAttribute(
 					SimplePermissionService.USER_PERMISSIONS_KEY);
 			if (perms == null) {
 				// First time, set it up...
-				LOGGER.info("Creating new UserPermissions for user:  {}",
+				logger.info("Creating new UserPermissions for user:  {}",
 						username);
 				perms = UserPermissions.createUserPermissions(req);
 				req.getPortletSession(true).setAttribute(
