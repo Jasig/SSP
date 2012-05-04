@@ -20,7 +20,7 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 
 	@Column(nullable = false)
 	@NotNull
-	private short sortOrder = 0;
+	private short sortOrder = 0; // NOPMD by jon.adams on 5/4/12 1:41 PM
 
 	/**
 	 * Constructor
@@ -36,7 +36,7 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 	 *            Identifier; required
 	 */
 
-	public VeteranStatus(@NotNull UUID id) {
+	public VeteranStatus(@NotNull final UUID id) {
 		super(id);
 	}
 
@@ -52,8 +52,8 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 	 * @param sortOrder
 	 *            Default sort order when displaying objects to the user
 	 */
-	public VeteranStatus(@NotNull UUID id, @NotNull String name,
-			String description, short sortOrder) {
+	public VeteranStatus(@NotNull final UUID id, @NotNull final String name,
+			final String description, final short sortOrder) { // NOPMD by jon
 		super(id, name, description);
 		this.sortOrder = sortOrder;
 	}
@@ -63,7 +63,7 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 	 * 
 	 * @return the sortOrder
 	 */
-	public short getSortOrder() {
+	public short getSortOrder() { // NOPMD by jon.adams on 5/4/12 1:41 PM
 		return sortOrder;
 	}
 

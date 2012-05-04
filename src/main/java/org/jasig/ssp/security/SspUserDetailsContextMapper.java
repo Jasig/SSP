@@ -14,29 +14,30 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class SspUserDetailsContextMapper implements UserDetailsContextMapper {
 
-	private Logger logger = LoggerFactory
+	private final static Logger LOGGER = LoggerFactory
 			.getLogger(SspUserDetailsContextMapper.class);
 
 	@Override
-	public UserDetails mapUserFromContext(DirContextOperations ctx,
-			String username, Collection<GrantedAuthority> authorities) {
+	public UserDetails mapUserFromContext(final DirContextOperations ctx,
+			final String username,
+			final Collection<GrantedAuthority> authorities) {
 
-		logger.debug("BEGIN : mapUserFromContext()");
+		LOGGER.debug("BEGIN : mapUserFromContext()");
 
-		SspUser sspUser = new SspUser(username, "password", // Pwd not used,
-															// stored in AD
+		final SspUser sspUser = new SspUser(username, "password", // Pwd not
+																	// used,
+				// stored in AD
 				true, true, true, true, authorities);
 
-		logger.debug("User: {}", sspUser.toString());
-
-		logger.debug("END : mapUserFromContext()");
+		LOGGER.debug("User: {}", sspUser.toString());
+		LOGGER.debug("END : mapUserFromContext()");
 
 		return sspUser;
 	}
 
 	@Override
-	public void mapUserToContext(UserDetails arg0, DirContextAdapter arg1) {
+	public void mapUserToContext(final UserDetails arg0,
+			final DirContextAdapter arg1) {
 		// TODO Auto-generated method stub
 	}
-
 }

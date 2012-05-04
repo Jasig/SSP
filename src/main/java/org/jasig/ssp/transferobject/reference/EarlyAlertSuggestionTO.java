@@ -81,7 +81,7 @@ public class EarlyAlertSuggestionTO extends
 	}
 
 	@Override
-	public void from(final EarlyAlertSuggestion model) {
+	public final void from(final EarlyAlertSuggestion model) {
 		if (model == null) {
 			throw new IllegalArgumentException("Model can not be null.");
 		}

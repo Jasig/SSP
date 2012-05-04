@@ -78,7 +78,7 @@ public class VeteranStatusTO extends AbstractReferenceTO<VeteranStatus>
 	}
 
 	@Override
-	public void from(final VeteranStatus model) {
+	public final void from(final VeteranStatus model) {
 		if (model == null) {
 			throw new IllegalArgumentException("Model can not be null.");
 		}

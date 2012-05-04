@@ -23,7 +23,7 @@ public class EarlyAlertReferral extends AbstractReference implements
 
 	@Column(nullable = false)
 	@NotNull
-	private short sortOrder = 0;
+	private short sortOrder = 0; // NOPMD by jon.adams on 5/4/12 1:43 PM
 
 	@Column(nullable = false)
 	@NotNull
@@ -43,7 +43,7 @@ public class EarlyAlertReferral extends AbstractReference implements
 	 *            Identifier; required
 	 */
 
-	public EarlyAlertReferral(@NotNull UUID id) {
+	public EarlyAlertReferral(@NotNull final UUID id) {
 		super(id);
 	}
 
@@ -61,8 +61,10 @@ public class EarlyAlertReferral extends AbstractReference implements
 	 * @param acronym
 	 *            acronym (a.k.a. code)
 	 */
-	public EarlyAlertReferral(@NotNull UUID id, @NotNull String name,
-			String description, short sortOrder, final String acronym) {
+	public EarlyAlertReferral(@NotNull final UUID id,
+			@NotNull final String name,
+			final String description, final short sortOrder, // NOPMD by jon
+			final String acronym) {
 		super(id, name, description);
 		this.sortOrder = sortOrder;
 		this.acronym = acronym;
@@ -73,7 +75,7 @@ public class EarlyAlertReferral extends AbstractReference implements
 	 * 
 	 * @return the sortOrder
 	 */
-	public short getSortOrder() {
+	public short getSortOrder() { // NOPMD by jon.adams on 5/4/12 1:43 PM
 		return sortOrder;
 	}
 
@@ -98,7 +100,7 @@ public class EarlyAlertReferral extends AbstractReference implements
 	 * @param acronym
 	 *            the acronym (a.k.a. code) to set
 	 */
-	public void setAcronym(@NotNull String acronym) {
+	public void setAcronym(@NotNull final String acronym) {
 		this.acronym = acronym;
 	}
 

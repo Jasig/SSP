@@ -1,6 +1,7 @@
 package org.jasig.ssp.web.api.reference;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -8,6 +9,12 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reference.MaritalStatusTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +23,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.reference.MaritalStatusTO;
-import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * MaritalStatus controller tests
@@ -35,23 +36,23 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 public class MaritalStatusControllerIntegrationTest {
 
 	@Autowired
-	private MaritalStatusController controller;
+	private transient MaritalStatusController controller;
 
-	private static final UUID MaritalStatus_ID = UUID
+	private static final UUID MARITALSTATUS_ID = UUID
 			.fromString("76521a04-b531-4c25-b6a6-609f3a123456");
 
-	private static final String MaritalStatus_NAME = "I have a fiancé";
+	private static final String MARITALSTATUS_NAME = "I have a fiancé";
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	/**
-	 * Setup the security service with the admin user for use by
+	 * Setup the security service with the administrator user for use by
 	 * {@link #testControllerCreateAndDelete()} that checks that the Auditable
 	 * auto-fill properties are correctly filled.
 	 */
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
@@ -67,14 +68,14 @@ public class MaritalStatusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		MaritalStatusTO obj = controller.get(MaritalStatus_ID);
+		final MaritalStatusTO obj = controller.get(MARITALSTATUS_ID);
 
 		assertNotNull(
 				"Returned MaritalStatusTO from the controller should not have been null.",
 				obj);
 
 		assertEquals("Returned MaritalStatus.Name did not match.",
-				MaritalStatus_NAME, obj.getName());
+				MARITALSTATUS_NAME, obj.getName());
 	}
 
 	/**
@@ -90,7 +91,7 @@ public class MaritalStatusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		MaritalStatusTO obj = controller.get(UUID.randomUUID());
+		final MaritalStatusTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned MaritalStatusTO from the controller should have been null.",
@@ -110,8 +111,8 @@ public class MaritalStatusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		String testString1 = "testString1";
-		String testString2 = "testString1";
+		final String testString1 = "testString1";
+		final String testString2 = "testString1";
 
 		// Check validation of 'no ID for create()'
 		MaritalStatusTO obj = new MaritalStatusTO(UUID.randomUUID(),
@@ -156,11 +157,11 @@ public class MaritalStatusControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		Collection<MaritalStatusTO> list = controller.getAll(
+		final Collection<MaritalStatusTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
-		assertTrue("List action should have returned some objects.",
-				list.size() > 0);
+		assertFalse("List action should have returned some objects.",
+				list.isEmpty());
 	}
 }

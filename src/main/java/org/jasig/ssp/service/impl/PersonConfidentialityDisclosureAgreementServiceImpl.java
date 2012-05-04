@@ -4,9 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.apache.commons.lang.NotImplementedException;
 import org.jasig.ssp.dao.PersonConfidentialityDisclosureAgreementDao;
 import org.jasig.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
 import org.jasig.ssp.model.ObjectStatus;
@@ -16,6 +14,9 @@ import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonConfidentialityDisclosureAgreementService;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Sets;
 
@@ -25,21 +26,21 @@ public class PersonConfidentialityDisclosureAgreementServiceImpl implements
 		PersonConfidentialityDisclosureAgreementService {
 
 	@Autowired
-	private PersonConfidentialityDisclosureAgreementDao dao;
+	private transient PersonConfidentialityDisclosureAgreementDao dao;
 
 	@Autowired
-	private ConfidentialityDisclosureAgreementDao cdaDao;
+	private transient ConfidentialityDisclosureAgreementDao cdaDao;
 
 	@Override
 	public PersonConfidentialityDisclosureAgreement hasStudentAgreedToLatest(
-			Person student) {
-		throw new RuntimeException("not implemented");
+			final Person student) {
+		throw new NotImplementedException();
 	}
 
 	@Override
 	public PersonConfidentialityDisclosureAgreement hasStudentAgreedToOne(
-			Person student) {
-		List<PersonConfidentialityDisclosureAgreement> agreements = dao
+			final Person student) {
+		final List<PersonConfidentialityDisclosureAgreement> agreements = dao
 				.forStudent(student);
 
 		if ((agreements != null) && !agreements.isEmpty()) {
@@ -51,30 +52,33 @@ public class PersonConfidentialityDisclosureAgreementServiceImpl implements
 
 	@Override
 	public PersonConfidentialityDisclosureAgreement hasStudentAgreedTo(
-			Person student, ConfidentialityDisclosureAgreement agreement) {
+			final Person student,
+			final ConfidentialityDisclosureAgreement agreement) {
 		return dao.forStudentAndAgreement(student, agreement);
 	}
 
 	@Override
 	public ConfidentialityDisclosureAgreement latestAgreement()
 			throws ObjectNotFoundException {
-		Collection<ConfidentialityDisclosureAgreement> agreements = cdaDao
+		final Collection<ConfidentialityDisclosureAgreement> agreements = cdaDao
 				.getAll(SortingAndPaging
 						.createForSingleSort(ObjectStatus.ACTIVE, 0, 1,
 								"modifiedDate", "DESC", null)).getRows();
-		if ((agreements != null) && (!agreements.isEmpty())) {
+
+		if ((agreements != null) && !agreements.isEmpty()) {
 			return agreements.iterator().next();
-		} else {
-			throw new ObjectNotFoundException(
-					"Latest Confidentiality Agreement could not be found.");
 		}
+
+		throw new ObjectNotFoundException(
+				"Latest Confidentiality Agreement could not be found.");
+
 		// :TODO should we create an active flag on
 		// ConfidentialityDisclosureAgreement?
 	}
 
 	@Override
-	public void studentAgreedTo(Person student,
-			ConfidentialityDisclosureAgreement agreement) {
+	public void studentAgreedTo(final Person student,
+			final ConfidentialityDisclosureAgreement agreement) {
 		if (null == hasStudentAgreedTo(student, agreement)) {
 			// create new
 			PersonConfidentialityDisclosureAgreement pAgreement = new PersonConfidentialityDisclosureAgreement();
@@ -83,7 +87,7 @@ public class PersonConfidentialityDisclosureAgreementServiceImpl implements
 			pAgreement = dao.save(pAgreement);
 
 			if (student.getConfidentialityDisclosureAgreements() == null) {
-				HashSet<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreementsSet = Sets
+				final HashSet<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreementsSet = Sets
 						.newHashSet();
 				student.setConfidentialityDisclosureAgreements(confidentialityDisclosureAgreementsSet);
 			}
@@ -93,7 +97,8 @@ public class PersonConfidentialityDisclosureAgreementServiceImpl implements
 	}
 
 	@Override
-	public void studentAgreed(Person student) throws ObjectNotFoundException {
+	public void studentAgreed(final Person student)
+			throws ObjectNotFoundException {
 		studentAgreedTo(student, latestAgreement());
 	}
 }

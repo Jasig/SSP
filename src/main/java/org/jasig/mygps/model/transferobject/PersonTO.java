@@ -55,7 +55,7 @@ public class PersonTO implements Serializable {
 			coach = null;
 		}
 
-		setStrengths(person.getStrengths());
+		strengths = person.getStrengths();
 	}
 
 	public String getId() {

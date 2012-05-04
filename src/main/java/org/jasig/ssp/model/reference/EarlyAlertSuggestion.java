@@ -23,7 +23,7 @@ public class EarlyAlertSuggestion extends AbstractReference implements
 
 	@Column(nullable = false)
 	@NotNull
-	private short sortOrder = 0;
+	private short sortOrder = 0; // NOPMD by jon.adams on 5/4/12 1:42 PM
 
 	/**
 	 * Constructor
@@ -39,7 +39,7 @@ public class EarlyAlertSuggestion extends AbstractReference implements
 	 *            Identifier; required
 	 */
 
-	public EarlyAlertSuggestion(@NotNull UUID id) {
+	public EarlyAlertSuggestion(@NotNull final UUID id) {
 		super(id);
 	}
 
@@ -55,8 +55,9 @@ public class EarlyAlertSuggestion extends AbstractReference implements
 	 * @param sortOrder
 	 *            Default sort order when displaying objects to the user
 	 */
-	public EarlyAlertSuggestion(@NotNull UUID id, @NotNull String name,
-			String description, short sortOrder) {
+	public EarlyAlertSuggestion(@NotNull final UUID id,
+			@NotNull final String name,
+			final String description, final short sortOrder) { // NOPMD
 		super(id, name, description);
 		this.sortOrder = sortOrder;
 	}
@@ -66,7 +67,7 @@ public class EarlyAlertSuggestion extends AbstractReference implements
 	 * 
 	 * @return the sortOrder
 	 */
-	public short getSortOrder() {
+	public short getSortOrder() { // NOPMD by jon.adams on 5/4/12 1:42 PM
 		return sortOrder;
 	}
 

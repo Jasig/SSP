@@ -87,7 +87,7 @@ public class EarlyAlertReferralTO extends
 	}
 
 	@Override
-	public void from(final EarlyAlertReferral model) {
+	public final void from(final EarlyAlertReferral model) {
 		if (model == null) {
 			throw new IllegalArgumentException("Model can not be null.");
 		}
@@ -129,7 +129,7 @@ public class EarlyAlertReferralTO extends
 	 * @param acronym
 	 *            the acronym (a.k.a. code) to set
 	 */
-	public void setAcronym(@NotNull String acronym) {
+	public void setAcronym(@NotNull final String acronym) {
 		this.acronym = acronym;
 	}
 

@@ -2,6 +2,11 @@ package org.jasig.ssp.security;
 
 import java.util.Collection;
 
+import org.jasig.ssp.security.exception.EmailNotFoundException;
+import org.jasig.ssp.security.exception.UserNotAuthorizedException;
+import org.jasig.ssp.security.exception.UserNotEnabledException;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,33 +15,32 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.security.exception.EmailNotFoundException;
-import org.jasig.ssp.security.exception.UserNotAuthorizedException;
-import org.jasig.ssp.security.exception.UserNotEnabledException;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
 
 import com.google.common.collect.Lists;
 
+/**
+ * SSP User details service
+ */
 @Transactional(readOnly = true)
 public class SspUserDetailsService implements UserDetailsService {
 
-	private static Logger LOGGER = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SspUserDetailsService.class);
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	@Override
-	public UserDetails loadUserByUsername(String username)
+	public UserDetails loadUserByUsername(final String username)
 			throws UserNotAuthorizedException, EmailNotFoundException {
 
 		LOGGER.debug("BEGIN : loadUserByUsername()");
 
-		Collection<GrantedAuthority> authorities = Lists.newArrayList();
+		final Collection<GrantedAuthority> authorities = Lists.newArrayList();
 		authorities.add(new GrantedAuthorityImpl("ROLE_USER"));
 
-		SspUser sspUser = new SspUser(username, "password", true, true, true,
+		final SspUser sspUser = new SspUser(username, "password", true, true,
+				true,
 				true, authorities);
 		sspUser.setEmailAddress("test.user@infinum.com");
 
@@ -60,10 +64,8 @@ public class SspUserDetailsService implements UserDetailsService {
 		}
 
 		LOGGER.debug("User: {}", sspUser.toString());
-
 		LOGGER.debug("END : loadUserByUsername()");
 
 		return sspUser;
 	}
-
 }
