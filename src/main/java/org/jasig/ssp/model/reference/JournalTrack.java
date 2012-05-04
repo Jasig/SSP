@@ -1,11 +1,14 @@
 package org.jasig.ssp.model.reference;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 
 /**
  * JournalTrack reference object.
@@ -18,6 +21,10 @@ public class JournalTrack extends AbstractReference implements
 	private static final long serialVersionUID = 1L;
 
 	private int sortOrder;
+
+	@OneToMany(mappedBy = "journalTrack")
+	private Set<JournalTrackJournalStep> journalTrackJournalSteps = new HashSet<JournalTrackJournalStep>(
+			0);
 
 	/**
 	 * Constructor
@@ -89,5 +96,14 @@ public class JournalTrack extends AbstractReference implements
 
 	public void setSortOrder(int sortOrder) {
 		this.sortOrder = sortOrder;
+	}
+
+	public Set<JournalTrackJournalStep> getJournalTrackJournalSteps() {
+		return journalTrackJournalSteps;
+	}
+
+	public void setJournalTrackJournalSteps(
+			Set<JournalTrackJournalStep> journalTrackJournalSteps) {
+		this.journalTrackJournalSteps = journalTrackJournalSteps;
 	}
 }
