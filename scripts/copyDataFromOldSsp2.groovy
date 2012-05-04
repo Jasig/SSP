@@ -17,14 +17,18 @@ class TableImporter {
 
 		output << """\n    <changeSet id="create reference data - ${newTableName}" author="jon.adams">"""
 
-		def records = db.rows("""select facultySuggestion as crname, [earlyAlertFacultySuggestionLUID] as crid, [treeOrder] as crorder 
-from SSP.dbo.[EarlyAlertFacultySuggestionLU] c
-order by crname""")
+		def records = db.rows("""select 
+[counselingOutcome] as crname,
+[earlyAlertCounselingOutcomeLUID] as crid, 
+[counselingOutcomeCode] as crdesc,
+[treeOrder] as crorder 
+from SSP.dbo.[EarlyAlertCounselingOutcomeLU] c
+order by crid""")
 
 		records.each { output << """\n        <insert tableName="${newTableName}">
                 <column name="id" value="${it.crid}" />
                 <column name="name" value="${it.crname}" />
-                <column name="description" value="" />
+                <column name="description" value="${it.crdesc}" />
                 <column name="created_date" valueDate="2012-05-03T00:00:00" />
                 <column name="modified_date" valueDate="2012-05-03T00:00:00" />
                 <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -51,7 +55,6 @@ order by crname""")
 	}
 }
 
-
 TableImporter importer = new TableImporter();
-importer.insert('early_alert_suggestions')
+importer.insert('early_alert_outcome')
 
