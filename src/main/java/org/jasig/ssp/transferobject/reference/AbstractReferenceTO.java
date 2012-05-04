@@ -31,6 +31,10 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 
 	@Override
 	public void from(final T model) {
+		if (model == null) {
+			throw new IllegalArgumentException("Model can not be null.");
+		}
+
 		super.from(model);
 
 		name = model.getName();

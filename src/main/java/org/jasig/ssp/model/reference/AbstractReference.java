@@ -87,6 +87,11 @@ public abstract class AbstractReference extends Auditable {
 		this.description = description;
 	}
 
+	/**
+	 * Gets the name
+	 * 
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
@@ -101,15 +106,20 @@ public abstract class AbstractReference extends Auditable {
 		this.name = name;
 	}
 
+	/**
+	 * Gets the public description
+	 * 
+	 * @return The public description
+	 */
 	public String getDescription() {
 		return description;
 	}
 
 	/**
-	 * Sets the description
+	 * Sets the public description
 	 * 
 	 * @param description
-	 *            Name; null allowed; max 80 characters
+	 *            Public description; null allowed; max 64000 characters
 	 */
 	public void setDescription(final String description) {
 		this.description = description;

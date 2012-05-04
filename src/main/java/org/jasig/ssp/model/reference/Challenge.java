@@ -98,7 +98,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	 * @param id
 	 *            Identifier; required
 	 * @param name
-	 *            Name; required; max 100 characters
+	 *            Name; required; max 80 characters
 	 */
 
 	public Challenge(final UUID id, final String name) {
@@ -111,7 +111,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	 * @param id
 	 *            Identifier; required
 	 * @param name
-	 *            Name; required; max 100 characters
+	 *            Name; required; max 80 characters
 	 * @param description
 	 *            Description; max 64000 characters
 	 */

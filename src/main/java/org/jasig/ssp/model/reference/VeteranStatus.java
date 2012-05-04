@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class VeteranStatus extends AbstractReference implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8572858642333315262L;
 
 	@Column(nullable = false)
 	@NotNull
@@ -36,7 +36,7 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 	 *            Identifier; required
 	 */
 
-	public VeteranStatus(UUID id) {
+	public VeteranStatus(@NotNull UUID id) {
 		super(id);
 	}
 
@@ -46,28 +46,21 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 	 * @param id
 	 *            Identifier; required
 	 * @param name
-	 *            Name; required; max 100 characters
-	 */
-
-	public VeteranStatus(UUID id, String name) {
-		super(id, name);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
+	 *            Name; required; max 80 characters
 	 * @param description
-	 *            Description; max 150 characters
+	 *            Description; max 64000 characters
+	 * @param sortOrder
+	 *            Default sort order when displaying objects to the user
 	 */
-	public VeteranStatus(UUID id, String name, String description) {
+	public VeteranStatus(@NotNull UUID id, @NotNull String name,
+			String description, short sortOrder) {
 		super(id, name, description);
+		this.sortOrder = sortOrder;
 	}
 
 	/**
+	 * Gets the default sort order when displaying an item list to the user
+	 * 
 	 * @return the sortOrder
 	 */
 	public short getSortOrder() {
@@ -75,13 +68,19 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 	}
 
 	/**
+	 * Sets the default sort order when displaying an item list to the user
+	 * 
 	 * @param sortOrder
 	 *            the sortOrder to set
 	 */
-	public void setSortOrder(short sortOrder) {
+	public void setSortOrder(short sortOrder) { // NOPMD by jon on 5/4/12 11:16
 		this.sortOrder = sortOrder;
 	}
 
+	/**
+	 * Unique (amongst all Models in the system) prime for use by
+	 * {@link #hashCode()}
+	 */
 	@Override
 	protected int hashPrime() {
 		return 149;

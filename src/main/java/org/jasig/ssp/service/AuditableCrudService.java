@@ -7,6 +7,14 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * CRUD services for {@link Auditable} models.
+ * 
+ * @author daniel.bower
+ * 
+ * @param <T>
+ *            Model type
+ */
 public interface AuditableCrudService<T extends Auditable> {
 
 	/**

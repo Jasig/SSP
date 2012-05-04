@@ -61,7 +61,7 @@ public class SelfHelpGuideQuestionTO extends
 		}
 
 		if (model.getChallenge() != null) {
-			setChallengeId(model.getChallenge().getId());
+			challengeId = model.getChallenge().getId();
 		}
 	}
 
@@ -93,7 +93,7 @@ public class SelfHelpGuideQuestionTO extends
 		return challengeId;
 	}
 
-	public void setChallengeId(UUID challengeId) {
+	public void setChallengeId(final UUID challengeId) {
 		this.challengeId = challengeId;
 	}
 

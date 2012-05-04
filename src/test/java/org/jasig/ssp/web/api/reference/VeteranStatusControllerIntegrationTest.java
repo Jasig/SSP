@@ -10,14 +10,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.VeteranStatus;
@@ -26,6 +18,14 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.PagingTO;
 import org.jasig.ssp.transferobject.reference.VeteranStatusTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * {@link VeteranStatusController} tests
@@ -71,7 +71,7 @@ public class VeteranStatusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		VeteranStatusTO obj = controller.get(VETERANSTATUS_ID);
+		final VeteranStatusTO obj = controller.get(VETERANSTATUS_ID);
 
 		assertNotNull(
 				"Returned VeteranStatusTO from the controller should not have been null.",
@@ -94,7 +94,7 @@ public class VeteranStatusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		VeteranStatusTO obj = controller.get(UUID.randomUUID());
+		final VeteranStatusTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned VeteranStatusTO from the controller should have been null.",
@@ -114,40 +114,43 @@ public class VeteranStatusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		String testString1 = "testString1";
-		String testString2 = "testString1";
+		final String testString1 = "testString1";
+		final String testString2 = "testString1";
 
 		// Check validation of 'no ID for create()'
-		VeteranStatusTO obj = new VeteranStatusTO(UUID.randomUUID(),
-				testString1, testString2);
 		try {
-			obj = controller.create(obj);
-			assertTrue(
+			final VeteranStatusTO obj = controller.create(new VeteranStatusTO(
+					UUID
+							.randomUUID(),
+					testString1, testString2, (short) 1)); // NOPMD by jon.adams
+			assertNull(
 					"Calling create with an object with an ID should have thrown a validation excpetion.",
-					false);
+					obj);
 		} catch (ValidationException exc) {
-			/* expected */
+			assertNotNull("ValidatedException was expected to be thrown.", exc);
 		}
 
 		// Now create a valid VeteranStatus
-		obj = new VeteranStatusTO(null, testString1, testString2);
-		obj = controller.create(obj);
+		final VeteranStatusTO valid = controller.create(new VeteranStatusTO(
+				null,
+				testString1,
+				testString2, (short) 1)); // NOPMD
 
 		assertNotNull(
 				"Returned VeteranStatusTO from the controller should not have been null.",
-				obj);
+				valid);
 		assertNotNull(
 				"Returned VeteranStatusTO.ID from the controller should not have been null.",
-				obj.getId());
+				valid.getId());
 		assertEquals(
 				"Returned VeteranStatusTO.Name from the controller did not match.",
-				testString1, obj.getName());
+				testString1, valid.getName());
 		assertEquals(
 				"Returned VeteranStatusTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedById());
+				Person.SYSTEM_ADMINISTRATOR_ID, valid.getCreatedById());
 
 		assertTrue("Delete action did not return success.",
-				controller.delete(obj.getId()).isSuccess());
+				controller.delete(valid.getId()).isSuccess());
 	}
 
 	/**
@@ -160,7 +163,7 @@ public class VeteranStatusControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		Collection<VeteranStatusTO> list = controller.getAll(
+		final Collection<VeteranStatusTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
@@ -190,18 +193,18 @@ public class VeteranStatusControllerIntegrationTest {
 				+ results.getResults() + ") in the database.",
 				results.getResults() > list.size());
 
-		Iterator<VeteranStatusTO> iter = list.iterator();
+		final Iterator<VeteranStatusTO> iter = list.iterator();
 
 		VeteranStatusTO veteranStatus = iter.next();
 		assertEquals("Name should have been " + VETERANSTATUS_NAME,
 				VETERANSTATUS_NAME, veteranStatus.getName());
-		assertTrue("ModifiedBy id should not have been empty.", !veteranStatus
+		assertFalse("ModifiedBy id should not have been empty.", veteranStatus
 				.getModifiedById().equals(UUID.randomUUID()));
 
 		veteranStatus = iter.next();
 		assertTrue("Description should have been longer than 0 characters.",
 				veteranStatus.getDescription().length() > 0);
-		assertTrue("CreatedBy id should not have been empty.", !veteranStatus
+		assertFalse("CreatedBy id should not have been empty.", veteranStatus
 				.getCreatedById().equals(UUID.randomUUID()));
 	}
 }

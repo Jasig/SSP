@@ -1,12 +1,17 @@
 package org.jasig.ssp.dao.reference;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.VeteranStatus;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,91 +22,108 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.VeteranStatus;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
+/**
+ * Tests for {@link VeteranStatusDao}.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class VeteranStatusDaoTest {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(VeteranStatusDaoTest.class);
 
 	@Autowired
-	private VeteranStatusDao dao;
+	private transient VeteranStatusDao dao;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
+	/**
+	 * Setup the security service for the tests
+	 */
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
+	/**
+	 * Test {@link VeteranStatusDao#save(VeteranStatus)}
+	 */
 	@Test
 	public void testSaveNew() {
-		UUID saved;
+		UUID savedId;
 
 		VeteranStatus obj = new VeteranStatus();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		dao.save(obj);
+		obj = dao.save(obj);
 
-		assertNotNull(obj.getId());
-		saved = obj.getId();
+		savedId = obj.getId();
 
-		logger.debug(obj.toString());
+		LOGGER.debug(obj.toString());
 
-		obj = dao.get(saved);
-		assertNotNull(obj);
-		assertNotNull(obj.getId());
-		assertNotNull(obj.getName());
+		final VeteranStatus saved = dao.get(savedId);
+		assertNotNull("Reloading did not return the correct saved data.", saved);
+		assertNotNull("Reloaded data did not have a set Name property.",
+				saved.getName());
+		assertEquals("Reloaded data did not have matching data.",
+				obj.getName(), saved.getName());
 
-		Collection<VeteranStatus> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<VeteranStatus> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
-		assertNotNull(all);
-		assertTrue(all.size() > 0);
+		assertNotNull("GetAll() should not have returned a null collection.",
+				all);
+		assertFalse(
+				"GetAll() should not have returned an empty list. (This test assumes some sample reference data exists in the testing database.)",
+				all.isEmpty());
 		assertList(all);
 
-		dao.delete(obj);
+		dao.delete(saved);
 	}
 
+	/**
+	 * Test that {@link VeteranStatusDao#get(UUID)} returns null if identifier
+	 * is not found.
+	 */
 	@Test
-	public void testNull() {
-		UUID id = UUID.randomUUID();
-		VeteranStatus veteranStatus = dao.get(id);
+	public void testNotFoundIdReturnsNull() {
+		final UUID id = UUID.randomUUID();
+		final VeteranStatus veteranStatus = dao.get(id);
 
-		assertNull(veteranStatus);
+		assertNull(
+				"Get() did not return null when a missing identifier was used.",
+				veteranStatus);
 	}
 
-	private void assertList(Collection<VeteranStatus> objects) {
+	/**
+	 * Asserts that list contains objects with non-null identifiers.
+	 * 
+	 * @param objects
+	 *            Collection of objects to assert have non-null identifiers.
+	 */
+	private void assertList(final Collection<VeteranStatus> objects) {
+		assertFalse("List should not have been empty.", objects.isEmpty());
+
 		for (VeteranStatus object : objects) {
-			assertNotNull(object.getId());
+			assertNotNull("List item should not have a null id.",
+					object.getId());
 		}
-		assertTrue(true);
 	}
 
+	/**
+	 * Test UUID generation, {@link VeteranStatusDao#save(VeteranStatus)}.
+	 */
 	@Test
 	public void uuidGeneration() {
-		VeteranStatus obj = new VeteranStatus();
-		obj.setName("new name");
+		final VeteranStatus obj = new VeteranStatus();
+		obj.setName("A name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		VeteranStatus obj2 = new VeteranStatus();
-		obj2.setName("new name");
-		obj2.setObjectStatus(ObjectStatus.ACTIVE);
-		dao.save(obj2);
-
-		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
-				+ obj2.getId().toString());
-
-		dao.delete(obj);
-		dao.delete(obj2);
+		assertNotNull("Transient instance was not assigned a new identifier.",
+				obj.getId());
 	}
-
 }
