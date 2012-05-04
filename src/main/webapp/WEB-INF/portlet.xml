@@ -45,79 +45,79 @@
 		</portlet-info>
 		<security-role-ref>
 			<role-name>AccessType_ARC</role-name>
-			<role-link>AccessType_Academic Resource Center</role-link>
+			<role-link>Academic Resource Center</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_CNSL</role-name>
-			<role-link>AccessType_Counseling Services</role-link>
+			<role-link>Counseling Services</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_DIS</role-name>
-			<role-link>AccessType_Disability</role-link>
+			<role-link>Disability</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_DSW</role-name>
-			<role-link>AccessType_Displaced Workers</role-link>
+			<role-link>Displaced Workers</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_EAL</role-name>
-			<role-link>AccessType_Early Alert</role-link>
+			<role-link>Early Alert</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_ESL</role-name>
-			<role-link>AccessType_English as a Second Language</role-link>
+			<role-link>English as a Second Language</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_FFC</role-name>
-			<role-link>AccessType_Fast Forward</role-link>
+			<role-link>Fast Forward</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_ILP</role-name>
-			<role-link>AccessType_Individualized Learning Plan</role-link>
+			<role-link>Individualized Learning Plan</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_MGR</role-name>
-			<role-link>AccessType_Manager</role-link>
+			<role-link>Manager</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_STAFF</role-name>
-			<role-link>AccessType_Staff</role-link>
+			<role-link>Staff</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Academic_Counselor_Advisor</role-name>
-			<role-link>Role_Academic Counselor or Advisor</role-link>
+			<role-link>Academic Counselor or Advisor</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Counselor</role-name>
-			<role-link>Role_Counselor</role-link>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>Role_Faculty</role-name>
-			<role-link>Role_Faculty</role-link>
+			<role-link>Counselor</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Developer</role-name>
-			<role-link>Role_Developer</role-link>
+			<role-link>Developer</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Faculty</role-name>
+			<role-link>Faculty</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Management</role-name>
-			<role-link>Role_Management</role-link>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>Role_Super_User</role-name>
-			<role-link>Role_Super User</role-link>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>Role_Support_Staff</role-name>
-			<role-link>Role_Support Staff</role-link>
+			<role-link>Management</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Student</role-name>
-			<role-link>Role_Student</role-link>
+			<role-link>Student</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Super_User</role-name>
+			<role-link>Super User</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Support_Staff</role-name>
+			<role-link>Support Staff</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Anonymous</role-name>
-			<role-link>Role_Anonymous - Unauthenticated User</role-link>
+			<role-link>Anonymous</role-link>
 		</security-role-ref>
 	</portlet>
 	
@@ -141,79 +141,79 @@
         </portlet-info>
 		<security-role-ref>
 			<role-name>AccessType_ARC</role-name>
-			<role-link>AccessType_Academic Resource Center</role-link>
+			<role-link>Academic Resource Center</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_CNSL</role-name>
-			<role-link>AccessType_Counseling Services</role-link>
+			<role-link>Counseling Services</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_DIS</role-name>
-			<role-link>AccessType_Disability</role-link>
+			<role-link>Disability</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_DSW</role-name>
-			<role-link>AccessType_Displaced Workers</role-link>
+			<role-link>Displaced Workers</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_EAL</role-name>
-			<role-link>AccessType_Early Alert</role-link>
+			<role-link>Early Alert</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_ESL</role-name>
-			<role-link>AccessType_English as a Second Language</role-link>
+			<role-link>English as a Second Language</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_FFC</role-name>
-			<role-link>AccessType_Fast Forward</role-link>
+			<role-link>Fast Forward</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_ILP</role-name>
-			<role-link>AccessType_Individualized Learning Plan</role-link>
+			<role-link>Individualized Learning Plan</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_MGR</role-name>
-			<role-link>AccessType_Manager</role-link>
+			<role-link>Manager</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>AccessType_STAFF</role-name>
-			<role-link>AccessType_Staff</role-link>
+			<role-link>Staff</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Academic_Counselor_Advisor</role-name>
-			<role-link>Role_Academic Counselor or Advisor</role-link>
+			<role-link>Academic Counselor or Advisor</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Counselor</role-name>
-			<role-link>Role_Counselor</role-link>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>Role_Faculty</role-name>
-			<role-link>Role_Faculty</role-link>
+			<role-link>Counselor</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Developer</role-name>
-			<role-link>Role_Developer</role-link>
+			<role-link>Developer</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Faculty</role-name>
+			<role-link>Faculty</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Management</role-name>
-			<role-link>Role_Management</role-link>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>Role_Super_User</role-name>
-			<role-link>Role_Super User</role-link>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>Role_Support_Staff</role-name>
-			<role-link>Role_Support Staff</role-link>
+			<role-link>Management</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Student</role-name>
-			<role-link>Role_Student</role-link>
+			<role-link>Student</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Super_User</role-name>
+			<role-link>Super User</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Support_Staff</role-name>
+			<role-link>Support Staff</role-link>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>Role_Anonymous</role-name>
-			<role-link>Role_Anonymous - Unauthenticated User</role-link>
+			<role-link>Anonymous</role-link>
 		</security-role-ref>
     </portlet>
     
