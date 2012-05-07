@@ -3,13 +3,15 @@ package org.jasig.ssp.web.api.reference;
 import java.util.UUID;
 
 import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.factory.reference.JournalStepDetailTOFactory;
 import org.jasig.ssp.factory.reference.JournalStepTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
-import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.model.reference.JournalStepDetail;
+import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.service.reference.JournalStepService;
-import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -34,16 +36,19 @@ public class JournalStepController
 	@Autowired
 	protected transient JournalStepService service;
 
+	@Autowired
+	protected transient JournalStepDetailService journalStepDetailService;
+
 	@Override
 	protected JournalStepService getService() {
 		return service;
 	}
 
 	@Autowired
-	private transient JournalTrackService journalTrackService;
+	protected transient JournalStepTOFactory factory;
 
 	@Autowired
-	protected transient JournalStepTOFactory factory;
+	protected transient JournalStepDetailTOFactory journalStepDetailTOFactory;
 
 	@Override
 	protected TOFactory<JournalStepTO, JournalStep> getFactory() {
@@ -62,10 +67,10 @@ public class JournalStepController
 		return LOGGER;
 	}
 
-	@RequestMapping(value = "/{id}/journalSteps/", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}/journalStepDetails/", method = RequestMethod.GET)
 	public @ResponseBody
-	PagingTO<JournalStepTO, JournalStep> getAllForJournalTrack(
-			final @PathVariable UUID journalTrackId,
+	PagingTO<JournalStepDetailTO, JournalStepDetail> getAllForJournalStep(
+			final @PathVariable UUID journalStepId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
@@ -73,16 +78,16 @@ public class JournalStepController
 			final @RequestParam(required = false) String sortDirection)
 			throws Exception {
 
-		final JournalTrack journalTrack = journalTrackService
-				.get(journalTrackId);
+		final JournalStep journalStep = getService()
+				.get(journalStepId);
 
-		final PagingWrapper<JournalStep> data = getService()
-				.getAllForJournalTrack(journalTrack,
+		final PagingWrapper<JournalStepDetail> data = journalStepDetailService
+				.getAllForJournalStep(journalStep,
 						SortingAndPaging.createForSingleSort(status, start,
 								limit, sort, sortDirection, "sortOrder"));
 
-		return new PagingTO<JournalStepTO, JournalStep>(true,
-				data.getResults(), getFactory()
+		return new PagingTO<JournalStepDetailTO, JournalStepDetail>(true,
+				data.getResults(), journalStepDetailTOFactory
 						.asTOList(data.getRows()));
 	}
 }
