@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.jasig.ssp.model.Auditable;
@@ -45,7 +46,12 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public T get(final UUID id) throws ObjectNotFoundException {
-		final T obj = (T) sessionFactory.getCurrentSession().get(
+		final Session session = sessionFactory.getCurrentSession();
+
+		// TODO: ObjectStatus filter isn't working right now
+		// session.enableFilter("objStatusFilter").setParameter("status", 1);
+
+		final T obj = (T) session.get(
 				this.persistentClass,
 				id);
 

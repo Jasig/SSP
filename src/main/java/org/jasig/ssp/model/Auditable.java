@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -92,7 +93,7 @@ public abstract class Auditable {
 	 * Most commonly {@link ObjectStatus#ACTIVE} or {@link ObjectStatus#DELETED}
 	 * , but other enum values possible.
 	 */
-	@Enumerated
+	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	private ObjectStatus objectStatus;
 

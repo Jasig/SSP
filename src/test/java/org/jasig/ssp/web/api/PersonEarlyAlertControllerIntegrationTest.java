@@ -199,13 +199,13 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
 		final Set<EarlyAlertSuggestionTO> suggestions = reloaded
 				.getEarlyAlertSuggestionIds();
-		/*
-		 * assertEquals("Set returned all objects instead of active only.", 1,
-		 * suggestions.size());
-		 * assertEquals("Saved instance sets did not match.",
-		 * EARLY_ALERT_SUGGESTION_NAME,
-		 * suggestions.iterator().next().getName());
-		 */
+
+		// TODO: ObjectStatus filter isn't working right now
+		// assertEquals("Set returned all objects instead of active only.", 1,
+		// suggestions.size());
+		// assertEquals("Saved instance sets did not match.",
+		// EARLY_ALERT_SUGGESTION_NAME,
+		// suggestions.iterator().next().getName());
 
 		final ServiceResponse response = controller.delete(savedId,
 				PERSON_ID);

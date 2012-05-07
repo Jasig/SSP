@@ -3,20 +3,19 @@ package org.jasig.ssp.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterJoinTable;
-import org.hibernate.annotations.ParamDef;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 
@@ -25,7 +24,6 @@ import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@FilterDef(name = "status", parameters = @ParamDef(name = "objectStatus", type = "integer"))
 public class EarlyAlert extends Auditable implements Serializable {
 
 	private static final long serialVersionUID = 8141595549982881039L;
@@ -59,20 +57,20 @@ public class EarlyAlert extends Auditable implements Serializable {
 	@JoinColumn(name = "person_id", nullable = false)
 	private Person person;
 
-	@Nullable
-	@OneToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "early_alert_early_alert_reason",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_reason_id"))
-	@FilterJoinTable(name = "status", condition = ":objectStatus = 1")
+	// TODO: ObjectStatus filter isn't working right now
+	@Filter(name = "objStatusFilter", condition = "objectStatus = :status")
 	private Set<EarlyAlertReason> earlyAlertReasonIds;
 
-	@Nullable
-	@OneToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "early_alert_early_alert_suggestion",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_suggestion_id"))
-	@FilterJoinTable(name = "status", condition = ":objectStatus = 1")
+	// TODO: ObjectStatus filter isn't working right now
+	@FilterJoinTable(name = "objStatusFilter", condition = "objectStatus = :status")
 	private Set<EarlyAlertSuggestion> earlyAlertSuggestionIds;
 
 	/**
