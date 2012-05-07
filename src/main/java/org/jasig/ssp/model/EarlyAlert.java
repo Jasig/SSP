@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.FilterJoinTable;
+import org.hibernate.annotations.ParamDef;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 
@@ -22,6 +25,7 @@ import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@FilterDef(name = "status", parameters = @ParamDef(name = "objectStatus", type = "integer"))
 public class EarlyAlert extends Auditable implements Serializable {
 
 	private static final long serialVersionUID = 8141595549982881039L;
@@ -57,14 +61,18 @@ public class EarlyAlert extends Auditable implements Serializable {
 
 	@Nullable
 	@OneToMany
-	@JoinTable(joinColumns = @JoinColumn(name = "early_alert_id"),
+	@JoinTable(name = "early_alert_early_alert_reason",
+			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_reason_id"))
+	@FilterJoinTable(name = "status", condition = ":objectStatus = 1")
 	private Set<EarlyAlertReason> earlyAlertReasonIds;
 
 	@Nullable
 	@OneToMany
-	@JoinTable(joinColumns = @JoinColumn(name = "early_alert_id"),
+	@JoinTable(name = "early_alert_early_alert_suggestion",
+			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_suggestion_id"))
+	@FilterJoinTable(name = "status", condition = ":objectStatus = 1")
 	private Set<EarlyAlertSuggestion> earlyAlertSuggestionIds;
 
 	/**
