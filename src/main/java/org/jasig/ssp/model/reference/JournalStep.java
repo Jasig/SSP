@@ -26,6 +26,10 @@ public class JournalStep extends AbstractReference implements
 	private Set<JournalTrackJournalStep> journalTrackJournalSteps = new HashSet<JournalTrackJournalStep>(
 			0);
 
+	@OneToMany(mappedBy = "journalStep")
+	private Set<JournalStepJournalStepDetail> journalStepJournalStepDetails = new HashSet<JournalStepJournalStepDetail>(
+			0);
+
 	/**
 	 * Constructor
 	 */
@@ -40,7 +44,7 @@ public class JournalStep extends AbstractReference implements
 	 *            Identifier; required
 	 */
 
-	public JournalStep(UUID id) {
+	public JournalStep(final UUID id) {
 		super(id);
 	}
 
@@ -53,7 +57,7 @@ public class JournalStep extends AbstractReference implements
 	 *            Name; required; max 100 characters
 	 */
 
-	public JournalStep(UUID id, String name) {
+	public JournalStep(final UUID id, final String name) {
 		super(id, name);
 	}
 
@@ -67,7 +71,8 @@ public class JournalStep extends AbstractReference implements
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public JournalStep(UUID id, String name, String description) {
+	public JournalStep(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
@@ -94,7 +99,7 @@ public class JournalStep extends AbstractReference implements
 		return sortOrder;
 	}
 
-	public void setSortOrder(int sortOrder) {
+	public void setSortOrder(final int sortOrder) {
 		this.sortOrder = sortOrder;
 	}
 
@@ -103,7 +108,16 @@ public class JournalStep extends AbstractReference implements
 	}
 
 	public void setJournalTrackJournalSteps(
-			Set<JournalTrackJournalStep> journalTrackJournalSteps) {
+			final Set<JournalTrackJournalStep> journalTrackJournalSteps) {
 		this.journalTrackJournalSteps = journalTrackJournalSteps;
+	}
+
+	public Set<JournalStepJournalStepDetail> getJournalStepJournalStepDetails() {
+		return journalStepJournalStepDetails;
+	}
+
+	public void setJournalStepJournalStepDetails(
+			final Set<JournalStepJournalStepDetail> journalStepJournalStepDetails) {
+		this.journalStepJournalStepDetails = journalStepJournalStepDetails;
 	}
 }
