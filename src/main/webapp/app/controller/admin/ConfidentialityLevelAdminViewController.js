@@ -1,32 +1,24 @@
 Ext.define('Ssp.controller.admin.ConfidentialityLevelAdminViewController', {
-    extend: 'Ext.app.Controller',
-    
-    views: [ 'admin.forms.ConfidentialityLevelAdmin'],
-       
+    extend: 'Deft.mvc.ViewController',     
+    control: {
+		view: {
+			edit: 'editRecord'
+		},
+		
+		'addButton': {
+			click: 'addRecord'
+		},
+
+		'deleteButton': {
+			click: 'deleteRecord'
+		}    	
+    },       
 	init: function() {
-
-		this.control({
-			'ConfidentialityLevelAdmin': {
-				edit: this.gridEdit,
-				scope: this
-			},
-		
-			'ConfidentialityLevelAdmin button[action="add"]': {
-				click: this.addRecord,
-				scope: this
-			},
-
-			'ConfidentialityLevelAdmin button[action="delete"]': {
-				click: this.deleteRecord,
-				scope: this
-			}		
-		}); 
-		
-		this.callParent(arguments);
+		return this.callParent(arguments);
     },
 
 	editRecord: function(editor, e, eOpts) {
-		var record = editor.record;
+		var record = e.record;
 		var id = record.get('id');
 		var jsonData = record.data;
 		Ext.Ajax.request({

@@ -1,12 +1,16 @@
 Ext.define('Ssp.view.StudentRecord', {
 	extend: 'Ext.container.Container',
-    alias: 'widget.studentrecord',
+    alias: 'widget.StudentRecord',
     id: 'StudentRecord',
-    // title: 'Student Record',
-    collapsible: true,
-    collapseDirection: 'right',
-    layout: {
-    	type: 'hbox',
-    	align: 'stretch'
+    initComponent: function(){
+    	Ext.apply(this,{
+    	    collapsible: true,
+    	    collapseDirection: 'right',
+    	    layout: {
+    	    	type: 'hbox',
+    	    	align: 'stretch'
+    	    }    		
+    	});
+    	return this.callParent(arguments);
     }
 });	

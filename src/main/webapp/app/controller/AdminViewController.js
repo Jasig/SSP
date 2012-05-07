@@ -1,6 +1,5 @@
 Ext.define('Ssp.controller.AdminViewController', {
-    extend: 'Ext.app.Controller',
-    
+	extend: 'Deft.mvc.ViewController',    
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	campusesStore: 'campusesStore',
@@ -21,21 +20,18 @@ Ext.define('Ssp.controller.AdminViewController', {
         studentStatusesStore: 'studentStatusesStore',
     	veteranStatusesStore: 'veteranStatusesStore'
     },
-    
-    views: [ 'admin.AdminTreeMenu' ],
-       
+
+    control: {
+		view: {
+			itemclick: 'treeItemClick'
+		}
+		
+	},
+	
 	init: function() {
-
-		this.control({
-			'AdminTreeMenu': {
-				itemclick : this.treeItemClick,
-				scope: this
-			}
-		}); 
-
-		this.callParent(arguments);
-    },	
-
+		return this.callParent(arguments);
+    }, 
+    
 	/*
 	 * Handle selecting an item in the tree grid
 	 */

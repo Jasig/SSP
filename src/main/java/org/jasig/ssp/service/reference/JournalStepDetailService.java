@@ -2,6 +2,7 @@ package org.jasig.ssp.service.reference;
 
 import java.util.UUID;
 
+import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -27,4 +28,7 @@ public interface JournalStepDetailService extends
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException;
 
+	PagingWrapper<JournalStepDetail> getAllForJournalStep(
+			final JournalStep journalStep,
+			final SortingAndPaging sAndP);
 }

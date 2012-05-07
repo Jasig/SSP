@@ -3,7 +3,9 @@ Ext.define('Ssp.view.admin.forms.ChallengeAdmin', {
 	alias : 'widget.ChallengeAdmin',
 	title: 'Admin',
 	id: 'ChallengeAdmin',
-    mixins: [ 'Deft.mixin.Injectable' ],
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.ChallengeAdminViewController',
     inject: {
         apiProperties: 'apiProperties'
     },
@@ -58,12 +60,14 @@ Ext.define('Ssp.view.admin.forms.ChallengeAdmin', {
      		                   text: 'Add',
      		                   iconCls: 'icon-add',
      		                   xtype: 'button',
-     		                   action: 'add'
+     		                   action: 'add',
+     		                   itemId: 'addButton'
      		               }, '-', {
      		                   text: 'Delete',
      		                   iconCls: 'icon-delete',
      		                   xtype: 'button',
-     		                   action: 'delete'
+     		                   action: 'delete',
+     		                   itemId: 'deleteButton'
      		               }]
      		           }]    	
     	});

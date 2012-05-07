@@ -73,7 +73,7 @@ Ext.define('Ssp.view.tools.ActionPlan', {
 				    }]
 				});
 	
-		this.callParent(arguments);
+		return this.callParent(arguments);
 	}
 		
 });

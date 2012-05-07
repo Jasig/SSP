@@ -1,30 +1,27 @@
 Ext.define('Ssp.controller.MainViewController', {
-    extend: 'Ext.app.Controller',
+    extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         formUtils: 'formRendererUtils'
-    },    
-	views: [
-        'Main'
-    ],
- 	
-	init: function() {
-		this.control({
-			'#studentViewNav': {
-				click: this.studentRecordViewNavClick,
-				scope: this
-			},
+    },  
 
-			'#adminViewNav': {
-				click: this.adminViewNavClick,
-				scope: this
-			},
-			
-		}); 
+    control: {
+		'studentViewNav': {
+			click: 'studentRecordViewNavClick'
+		},
+
+		'adminViewNav': {
+			click: 'adminViewNavClick'
+		},
 		
-		this.callParent(arguments);
-    },
+	},
+	
+	init: function() {
+		this.displayApplication();
 
+		return this.callParent(arguments);
+    },
+    
 	/*
 	 * Handle the studentRecordViewNav click.
 	 */    
@@ -47,30 +44,30 @@ Ext.define('Ssp.controller.MainViewController', {
     displayStudentRecordView: function(){
     	var mainView = Ext.getCmp('MainView');
 		if (mainView.items.length > 0)
+		{
 			mainView.removeAll();
-    	var arrViewItems;
-		arrViewItems = [{xtype: 'search', flex: 2 },
+		}
+		var arrViewItems;
+		arrViewItems = [Ext.create('Ssp.view.Search',{flex: 2}),
 							Ext.create('Ssp.view.StudentRecord',{
 								flex: 4,
-				 			  items: [{
-				 				  	xtype: 'toolsmenu',
-				 				  	flex: 1
-				 				  },{
-				 					  xtype: 'tools',
-				 					  flex: 4
-				 			  }]
+				 			  items: [
+									Ext.create('Ssp.view.ToolsMenu',{flex:1}),
+									Ext.create('Ssp.view.Tools',{flex:4})
+									]
 			 		  		 				 
 						})];
 		
 		mainView.add( arrViewItems );
-		mainView.render();
     },    
     
     displayAdminView: function() { 
     	var mainView = Ext.getCmp('MainView');
 		if (mainView.items.length > 0)
+		{
 			mainView.removeAll();
-    	var arrViewItems;
+		}
+		var arrViewItems;
 		arrViewItems = [
 		 		  Ext.create('Ssp.view.admin.AdminMain',
 					{items:[
@@ -79,7 +76,6 @@ Ext.define('Ssp.controller.MainViewController', {
 					],flex:4})
 		 		 ];
 		
-		mainView.add( arrViewItems ); 
-		mainView.render();
+		mainView.add( arrViewItems );
     }
 });

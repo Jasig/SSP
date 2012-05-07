@@ -112,4 +112,29 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 
 		return query;
 	}
+
+	/**
+	 * Run a query and get the total rows and results with out having to define
+	 * the Restrictions twice
+	 */
+	protected PagingWrapper<T> processCriteriaWithPaging(
+			final Criteria query, final SortingAndPaging sAndP) {
+		// get the query results total count
+		final long totalRows = (Long) query.setProjection(
+				Projections.rowCount()).uniqueResult();
+
+		// clear the count projection from the query
+		query.setProjection(null);
+
+		// Add Sorting and Paging
+		if (sAndP != null) {
+			sAndP.addAll(query);
+		}
+
+		// Query results
+		@SuppressWarnings("unchecked")
+		final List<T> results = query.list();
+
+		return new PagingWrapper<T>(totalRows, results);
+	}
 }

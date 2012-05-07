@@ -1,8 +1,8 @@
 Ext.define('Ssp.util.TemplateDataUtil',{
 	extend: 'Ext.Component',
 
-	init: function() {
-		this.callParent( arguments );
+	initComponent: function() {
+		return this.callParent( arguments );
     },
 	
 	prepareTemplateData: function( dataStore )

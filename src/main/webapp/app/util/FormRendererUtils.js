@@ -1,8 +1,8 @@
 Ext.define('Ssp.util.FormRendererUtils',{	
 	extend: 'Ext.Component',
 	
-	init: function() {
-		this.callParent(arguments);
+	initComponent: function() {
+		return this.callParent(arguments);
     },	
 	
     cleanAll: function(view){
@@ -77,6 +77,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		var otherId = "";
 		var fieldSet = {xtype: 'fieldset', padding: 0, layout: { type: 'auto' },title: fieldSetTitle};
 		var formFields = [];
+		var selectedItems = selectedItemsArr || [];
 		Ext.each(itemsArr, function(item, index){
 			// create the items for the form
 			var cb = {xtype:'checkbox'};

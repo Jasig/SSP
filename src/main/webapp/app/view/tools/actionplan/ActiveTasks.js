@@ -35,6 +35,6 @@ Ext.define('Ssp.view.tools.actionplan.ActiveTasks', {
 
     			});
     	
-    	this.callParent(arguments);
+    	return this.callParent(arguments);
     }
 });

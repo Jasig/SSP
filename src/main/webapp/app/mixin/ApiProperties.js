@@ -1,4 +1,10 @@
 Ext.define('Ssp.mixin.ApiProperties', {	
+	Extend: 'Ext.Component',
+	
+	initComponent: function(){
+		this.callParent(arguments);
+	},
+	
 	getContext: function() {
 		var apiVersion = "1";
 	    var base = document.getElementsByTagName('base')[0];

@@ -1,10 +1,7 @@
 package org.jasig.ssp
 
-import org.apache.http.HttpEntity
-import org.apache.http.HttpEntityEnclosingRequest
-import org.apache.http.HttpHost
-import org.apache.http.HttpResponse
-import org.apache.http.NameValuePair
+import org.apache.http.*
+import org.apache.http.entity.*
 import org.apache.http.client.*
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.HttpGet
@@ -76,13 +73,17 @@ class ApiConnection {
 	 * Make a put request to the api.  Requires Authentication.
 	 * @param url the remaining url and parameters after the baseUrl
 	 */
-	public String put(String url, Map payload){
+	public String put(String url, payload){
 		if(!authenticated) return null
+
+		String fullUrl = baseUrl + url
 
 		LOGGER.info("Put to $fullUrl")
 
-		HttpPut httpPut = new HttpPut(baseUrl + url)
+		HttpPut httpPut = new HttpPut(fullUrl)
 		attachPayload(httpPut, payload)
+
+		httpPut.addHeader("Content-Type", "application/json")
 
 		HttpResponse response = httpClient.execute(httpHost, httpPut, httpContext)
 		LOGGER.debug("Put response status: " + response.getStatusLine())
@@ -94,7 +95,7 @@ class ApiConnection {
 	 * Make a post request to the api.  Requires Authentication.
 	 * @param url the remaining url and parameters after the baseUrl
 	 */
-	public String post(String url, Map payload){
+	public String post(String url, payload){
 		if(!authenticated) return null
 
 		HttpResponse response = basePost(baseUrl + url, payload)
@@ -129,6 +130,13 @@ class ApiConnection {
 			nvps << new BasicNameValuePair(key, value)
 		}
 		request.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8))
+	}
+
+	/**
+	 * Attach the payload to the request
+	 */
+	private void attachPayload(HttpEntityEnclosingRequest request, String payload){
+		request.setEntity(new StringEntity(payload, HTTP.UTF_8))
 	}
 
 	private String extractResult(HttpResponse response){

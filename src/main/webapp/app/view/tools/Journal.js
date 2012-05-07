@@ -11,6 +11,6 @@ Ext.define('Ssp.view.tools.Journal', {
 					autoScroll: true
 				});
 		
-	     this.callParent(arguments);
+		return this.callParent(arguments);
 	}
 });

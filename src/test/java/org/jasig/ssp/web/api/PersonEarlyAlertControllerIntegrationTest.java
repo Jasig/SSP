@@ -197,10 +197,12 @@ public class PersonEarlyAlertControllerIntegrationTest {
 
 		// Reload data to make sure it filters correctly
 		final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
-		final Set<EarlyAlertSuggestionTO> suggestions = reloaded
-				.getEarlyAlertSuggestionIds();
 
 		// TODO: ObjectStatus filter isn't working right now
+
+		// final Set<EarlyAlertSuggestionTO> suggestions =
+		// reloaded.getEarlyAlertSuggestionIds();
+
 		// assertEquals("Set returned all objects instead of active only.", 1,
 		// suggestions.size());
 		// assertEquals("Saved instance sets did not match.",

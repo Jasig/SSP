@@ -200,7 +200,7 @@ Ext.define('Ext.app.Application', {
         this.launch.call(this.scope || this);
         this.launched = true;
         this.fireEvent('launch', this);
-
+        
         this.controllers.each(function(controller) {
             controller.onLaunch(this);
         }, this);

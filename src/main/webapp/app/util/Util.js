@@ -1,8 +1,8 @@
 Ext.define('Ssp.util.Util', {  
     extend: 'Ext.Component',   		
 	
-    init: function() {
-		this.callParent( arguments );
+    initComponent: function() {
+		return this.callParent( arguments );
     }, 
     
     loaderXTemplateRenderer: function(loader, response, active) {

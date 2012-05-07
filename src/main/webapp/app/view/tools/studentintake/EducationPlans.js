@@ -85,6 +85,6 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				    }]
 				});
 		
-	     this.callParent(arguments);
+		return this.callParent(arguments);
 	}	
 });

@@ -1,17 +1,17 @@
 Ext.define('Ssp.view.ToolsMenu', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.toolsmenu',
-	id: 'ToolsMenu',
-    mixins: [ 'Deft.mixin.Injectable' ],
+	alias : 'widget.ToolsMenu',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.ToolsViewController',
     inject: {
         toolsStore: 'toolsStore'
     },
-	width: '100%',
-	height: '100%',
-	
     initComponent: function(){
     	Ext.apply(this,
     			   {
+		    		width: '100%',
+		    		height: '100%',
     				store: this.toolsStore,
     				columns:[{
     				           header: "Assigned Tools", 
@@ -19,6 +19,6 @@ Ext.define('Ssp.view.ToolsMenu', {
     				           flex:1 }]
 		    	    });
     	
-    	this.callParent(arguments);
+    	return this.callParent(arguments);
     }
 });

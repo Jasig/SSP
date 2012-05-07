@@ -12,6 +12,8 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,6 +71,13 @@ public class JournalStepDaoTest {
 		assertList(all);
 
 		dao.delete(obj);
+	}
+
+	@Test
+	public void testGetAllForJournalTrack() {
+		PagingWrapper<JournalStep> all = dao.getAllForJournalTrack(
+				UUID.randomUUID(), new SortingAndPaging(ObjectStatus.ACTIVE));
+		assertList(all.getRows());
 	}
 
 	@Test(expected = ObjectNotFoundException.class)

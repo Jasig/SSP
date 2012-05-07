@@ -6,4 +6,10 @@ import org.jasig.ssp.*
 
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "student0", "student0")
 
-conn.formatAndPrintJson(conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff"))
+String intakeForm = conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff")
+
+conn.formatAndPrintJson(intakeForm);
+
+String output = conn.put("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff", intakeForm)
+
+conn.formatAndPrintJson(output)
