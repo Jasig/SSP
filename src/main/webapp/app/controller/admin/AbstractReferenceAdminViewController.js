@@ -1,35 +1,30 @@
 Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
-    extend: 'Ext.app.Controller',
+    extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
-    }, 
-    views: [ 'admin.forms.AbstractReferenceAdmin'],
-       
-	init: function() {
+    },
+
+    control: {
+		view: {
+			edit: 'editRecord'
+		},
 		
-		this.control({
-			'AbstractReferenceAdmin': {
-				edit: this.editRecord,
-				scope: this
-			},
-			
-			'AbstractReferenceAdmin button[action="add"]': {
-				click: this.addRecord,
-				scope: this
-			},
+		'addButton': {
+			click: 'addRecord'
+		},
 
-			'AbstractReferenceAdmin button[action="delete"]': {
-				click: this.deleteRecord,
-				scope: this
-			}
-		}); 
-
-		this.callParent(arguments);
+		'deleteButton': {
+			click: 'deleteRecord'
+		}    	
+    },
+    
+	init: function() {
+		return this.callParent(arguments);
     },
 
 	editRecord: function(editor, e, eOpts) {
-		var record = editor.record;
+		var record = e.record;
 		var id = record.get('id');
 		var jsonData = record.data;
 		Ext.Ajax.request({

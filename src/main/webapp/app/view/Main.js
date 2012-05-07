@@ -1,14 +1,16 @@
 Ext.define('Ssp.view.Main', {
 	extend: 'Ext.panel.Panel',
-    alias: 'widget.main',
+    alias: 'widget.Main',
     id: 'MainView',
-    title: 'Student Success Plan',
-    width: '100%',
-    height: '100%',
-
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.MainViewController',
     initComponent: function(){
     	Ext.apply(this,
-    			{
+		    			{
+		    	    title: 'Student Success Plan',
+		    	    width: '100%',
+		    	    height: '100%',
 		    	    layout: {
 		    	    	type: 'hbox',
 		    	    	align: 'stretch'
@@ -20,17 +22,19 @@ Ext.define('Ssp.view.Main', {
 		    	        items: [ 
 		    			        {
 		    			            xtype: 'button',
-		    			            id: 'studentViewNav',
-		    			            text: 'Students'
+		    			            text: 'Students',
+		    			            itemId: 'studentViewNav',
+		    			            action: 'displayStudentRecord'
 		    			        }, {
 		    			            xtype: 'button',
-		    			            id: 'adminViewNav',
-		    			            text: 'Admin'
+		    			            text: 'Admin',
+		    			            itemId: 'adminViewNav',
+		    			            action: 'displayAdmin'
 		    			        }
 		    	        ]
 		    	    }    		
     			});
     	
-    	this.callParent(arguments);
+    	return this.callParent(arguments);
     }
 });

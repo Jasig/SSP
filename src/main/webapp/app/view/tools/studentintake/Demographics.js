@@ -173,6 +173,6 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				    }]
 				});
 		
-	     this.callParent(arguments);
+		return this.callParent(arguments);
 	}
 });

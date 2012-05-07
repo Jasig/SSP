@@ -16,6 +16,6 @@ Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 				    defaultType: 'checkbox'
 				});
 		
-	     this.callParent(arguments);
+		return this.callParent(arguments);
 	}
 });

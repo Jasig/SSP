@@ -2,12 +2,14 @@ Ext.define('Ssp.view.tools.Profile', {
 	extend: 'Ext.form.Panel',
 	alias : 'widget.profile',
 	id: 'Profile',
-    width: '100%',
-    height: '100%',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.ProfileToolViewController',
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
-    
+		    		width: '100%',
+		    		height: '100%',
 				    bodyPadding: 5,
 				    layout: 'anchor',
 				    defaults: {
@@ -82,7 +84,7 @@ Ext.define('Ssp.view.tools.Profile', {
 					    }]
 				});
 		
-	     this.callParent(arguments);
+	     return this.callParent(arguments);
 	}
 	
 });

@@ -8,20 +8,18 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
     },
 	width: '100%',
     height: '100%',
-    
+	autoScroll: true,
+    defaults: {
+        anchor: '100%'
+    },
+    fieldDefaults: {
+        msgTarget: 'side',
+        labelAlign: 'right',
+        labelWidth: 150
+    },    
 	initComponent: function() {
 		Ext.apply(this, 
 				{
-					autoScroll: true,
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    fieldDefaults: {
-				        msgTarget: 'side',
-				        labelAlign: 'right',
-				        labelWidth: 150
-				    },
-				    defaultType: 'textfield',
 				    items: [{
 				            xtype: 'fieldset',
 				            title: 'Personal Details',
@@ -138,6 +136,6 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    }]
 				});
 		
-	     this.callParent(arguments);
+		return this.callParent(arguments);
 	}
 });

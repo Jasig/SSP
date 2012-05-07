@@ -1,36 +1,38 @@
 Ext.define('Ssp.view.Search', {
 	extend: 'Ext.grid.Panel',
 	alias : 'widget.search',
-	title: 'Students',
-	id: 'Search',
-    mixins: [ 'Deft.mixin.Injectable' ],
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.SearchViewController',
     inject: {
+    	apiProperties: 'apiProperties',
     	columnRendererUtils: 'columnRendererUtils',
         studentsStore: 'studentsStore'
     },
-	width: '100%',
-	height: '100%',
 
     initComponent: function(){
     	Ext.apply(this,
     			   {
+    				title: 'Students',
     	            collapsible: false,
     	            collapseDirection: 'left',
     	            store: this.studentsStore,
-    		
+    	        	width: '100%',
+    	        	height: '100%',
 		    	    columns: [
 		    	              { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 },		        
 		    	              { text: 'Name', xtype:'templatecolumn', tpl:'{firstName} {middleInitial} {lastName}', flex: 50}
 		    	          ],
     	          
-    	            dockedItems: [{
-	    	              xtype: 'pagingtoolbar',
-	    	              store: Ext.getStore('Students'),
-	    	              dock: 'bottom',
-	    	              displayInfo: true
-	    	          }]
+		    	    dockedItems: [{
+		       			xtype: 'pagingtoolbar',
+		       		    store: this.studentsStore,
+		       			dock: 'bottom',
+		       		    displayInfo: true,
+		       		    pageSize: this.apiProperties.getPagingSize()
+		       		}]
 		    	    });
     	
-    	this.callParent(arguments);
+    	return this.callParent(arguments);
     }
 });

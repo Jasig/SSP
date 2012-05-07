@@ -51,6 +51,6 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				    }]
 				});
 		
-	     this.callParent(arguments);
+		return this.callParent(arguments);
 	}	
 });

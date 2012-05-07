@@ -1,39 +1,33 @@
 Ext.define('Ssp.controller.SearchViewController', {
-    extend: 'Ext.app.Controller', 
-
-    mixins: [ 'Deft.mixin.Injectable' ],
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable'],
     inject: {
         currentPerson: 'currentPerson',
-        studentsStore: 'studentsStore'
+        studentsStore: 'studentsStore',
+        appEventsController: 'appEventsController'
+    },
+
+    control: {
+    	view: {
+    		selectionchange: 'onSelectionChange',
+			viewready: 'onViewReady'
+    	}
     },
     
-    views: [
-        'Search'
-    ],
- 
 	init: function() {
-    	// load students
+		// load students
     	this.studentsStore.load();
-		
-		this.control({
-			'search': {
-				selectionchange: this.handleSelectionChange,
-				viewready: this.handleViewReady,
-				scope: this
-			}
-		});
- 		
- 		this.callParent(arguments);
+
+ 		return this.callParent(arguments);
     },
-       
-	handleSelectionChange: function(selModel,records,eOpts){ 
+    
+	onSelectionChange: function(selModel,records,eOpts){ 
 		// select the person
 		this.currentPerson.data = records[0].data;
-		this.application.fireEvent('loadPerson');
+		this.appEventsController.getApplication().fireEvent('loadPerson');
 	},
 
-	handleViewReady: function(view, eobj){
-		view.getSelectionModel().select(0);
+	onViewReady: function(comp, eobj){
+		comp.getSelectionModel().select(0);
 	}
-
 });

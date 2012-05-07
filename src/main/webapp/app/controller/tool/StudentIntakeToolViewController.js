@@ -1,8 +1,9 @@
 Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
-    extend: 'Ext.app.Controller',
+    extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties',
+        appEventsController: 'appEventsController',
         currentPerson: 'currentPerson',
         challengesStore: 'challengesStore',
     	childCareArrangementsStore: 'childCareArrangementsStore',
@@ -19,37 +20,30 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
         studentStatusesStore: 'studentStatusesStore',
     	veteranStatusesStore: 'veteranStatusesStore'        
     }, 
-    
-	views: [ 'tools.StudentIntake' ],
 
-	init: function() {
+    control: {
+		'saveStudentIntakeButton': {
+			click: 'save'
+		},
 		
-		this.control({
-			'#saveStudentIntakeButton': {
-				click: this.save,
-				scope: this
-			},
-			
-			'#viewConfidentialityAgreementButton': {
-				click: this.viewConfidentialityAgreement,
-				scope: this
-			}
-			
-		}); 
-
-		this.application.addListener('loadStudentIntake', function(){
-			Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
-			Form.load(this.currentPerson.getId(),{
-				success: this.loadStudentIntakeResult,
-				scope: this
-			});
-		},this);		
+		'viewConfidentialityAgreementButton': {
+			click: 'viewConfidentialityAgreement'
+		}	
+	},
+    
+	init: function() {
+		// Load the Student Intake
+		Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
+		Form.load(this.currentPerson.getId(),{
+			success: this.loadStudentIntakeResult,
+			scope: this
+		});	
 				
-		this.callParent(arguments);
+		return this.callParent(arguments);
     },
-
-	loadStudentIntakeResult: function( formData ){
-		// PERSON RECORD
+    
+    loadStudentIntakeResult: function( formData ){
+    	// PERSON RECORD
 		var person = formData.data.person;
 		var personDemographics = formData.data.personDemographics;
 		var personEducationPlan = formData.data.personEducationPlan;

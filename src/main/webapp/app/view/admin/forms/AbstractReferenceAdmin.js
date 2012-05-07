@@ -3,7 +3,9 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	alias : 'widget.AbstractReferenceAdmin',
 	title: 'Admin',
 	id: 'AbstractReferenceAdmin',
-    mixins: [ 'Deft.mixin.Injectable' ],
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.AbstractReferenceAdminViewController',
     inject: {
         apiProperties: 'apiProperties'
     },
@@ -47,12 +49,14 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     		                   text: 'Add',
     		                   iconCls: 'icon-add',
     		                   xtype: 'button',
-    		                   action: 'add'
+    		                   action: 'add',
+    		                   itemId: 'addButton'
     		               }, '-', {
     		                   text: 'Delete',
     		                   iconCls: 'icon-delete',
     		                   xtype: 'button',
-    		                   action: 'delete'
+    		                   action: 'delete',
+    		                   itemId: 'deleteButton'
     		               }]
     		           }]    	
     	});

@@ -19,6 +19,6 @@ Ext.define('Ssp.store.reference.AbstractReferences', {
 							}						
 						}
 		);
-		this.callParent(arguments);
+		return this.callParent(arguments);
 	}
 });

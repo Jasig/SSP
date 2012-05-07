@@ -40,7 +40,8 @@ Ext.require([
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
 	'Ext.tab.*',
-	'Ext.ux.CheckColumn'
+	'Ext.ux.CheckColumn',
+	'Ssp.controller.ApplicationEventsController'
 ]);
 
 Ext.onReady(function(){
@@ -69,6 +70,12 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
 	    },
+        appEventsController:{
+	        fn: function(){
+	            return new Ssp.controller.ApplicationEventsController({});
+	    	},
+	        singleton: true
+        },
 	    tasksStore: 'Ssp.store.Tasks',
 		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
@@ -91,36 +98,20 @@ Ext.onReady(function(){
 	    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
 	    toolsStore: 'Ssp.store.Tools',
     	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
-        yesNoStore: 'Ssp.store.reference.YesNo'
+        yesNoStore: 'Ssp.store.reference.YesNo' 
 	});
 
-	
 	Ext.application({
 	    name: 'Ssp',
 	    appFolder: 'app',
-		
-		controllers: [
-	        	'AdminViewController',
-	        	'admin.AbstractReferenceAdminViewController',
-	        	'admin.ChallengeAdminViewController',
-	        	'admin.ConfidentialityLevelAdminViewController',
-	        	'MainViewController',
-	        	'SearchViewController',
-	        	'tool.StudentIntakeToolViewController',
-	        	'ToolsViewController'     	
-	    ],
-	          		
+		autoCreateViewport: true,
 	    launch: function( app ) {
-			// Load the application shell
-	        Ext.create('Ext.container.Viewport', {
-	            layout: 'fit',
-	            id: 'sspView',
-	            alias: 'widget.sspview',
-	            items: [ Ext.create('Ssp.view.Main') ]
-	        });
-	        
-	 		// Display the application
-	        this.getController('MainViewController').displayApplication();
+	    	console.log('Application->Launch');
+	    	console.log(Deft);
+	    	Deft.Injector.providers.appEventsController.value.config.app=this;
+	    	Deft.Injector.providers.appEventsController.value.app=this;
+	    	// Display the application
+	        //this.getController('MainViewController').displayApplication();
 	   }
 	});	
 });

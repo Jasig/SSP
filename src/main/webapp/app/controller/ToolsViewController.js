@@ -1,33 +1,32 @@
 Ext.define('Ssp.controller.ToolsViewController', {
-	extend: 'Ext.app.Controller',
-    mixins: [ 'Deft.mixin.Injectable' ],
+	extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable'],
     inject: {
         currentPerson: 'currentPerson',
-        formUtils: 'formRendererUtils'
+        formUtils: 'formRendererUtils',
+        appEventsController: 'appEventsController'
     },
-	views: [
-        'ToolsMenu','Tools'
-    ],
 
-	init: function() {
-        
-		this.control({
-			'toolsmenu': {
-				itemclick: this.itemClick,
-				scope: this
-			}
-			
-		});
+    control: {
+		view: {
+			itemclick: 'itemClick',
+			viewready: 'onViewReady'
+		}
 		
-		this.application.addListener('loadPerson', function(){
+	},
+	
+	init: function() {
+		return this.callParent(arguments);
+    }, 
+    
+    onViewReady: function(comp, obj){
+ 		this.appEventsController.getApplication().addListener('loadPerson', function(){
 			// this.currentPerson.get('tools') );
-			Ext.ComponentQuery.query('toolsmenu')[0].getSelectionModel().select(0);
+			this.getView().getSelectionModel().select(0);
 			this.loadTool('Profile');
 		},this);
-		
-		this.callParent(arguments);
     },
-     
+    
     /*
      * Handle Tool Menu Item Click.
      */
@@ -42,27 +41,17 @@ Ext.define('Ssp.controller.ToolsViewController', {
     	var toolsView = Ext.ComponentQuery.query('tools')[0];
 		var comp = null;
 		var person = this.currentPerson;
-				
+		
 		// Kill existing tools, so no dupe ids are registered
-		if (toolsView != null)
+		if (toolsView.items.length > 0)
 		{
-			this.formUtils.cleanAll(toolsView);
+			toolsView.removeAll();
 		}
 		
 		// create the tool by type
 		comp =  Ext.create('Ssp.view.tools.'+toolType);
 		
-		switch(toolType)
-		{
-			case 'Profile':
-				comp.loadRecord( person );
-				break;
-			
-			case 'StudentIntake':
-				this.application.fireEvent('loadStudentIntake');
-				break;
-		}
-		
+		// add to the view
 		toolsView.add( comp );
 	}
     

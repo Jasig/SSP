@@ -3,7 +3,13 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityLevelAdmin', {
 	alias : 'widget.ConfidentialityLevelAdmin',
 	title: 'Admin',
 	id: 'ConfidentialityLevelAdmin',
-	height: '100%',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.ConfidentialityLevelAdminViewController',
+    inject: {
+        apiProperties: 'apiProperties'
+    },
+    height: '100%',
 	width: '100%',
 
     initComponent: function(){
@@ -50,12 +56,14 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityLevelAdmin', {
      		                   text: 'Add',
      		                   iconCls: 'icon-add',
      		                   xtype: 'button',
-     		                   action: 'add'
+     		                   action: 'add',
+     		                   itemId: 'addButton'
      		               }, '-', {
      		                   text: 'Delete',
      		                   iconCls: 'icon-delete',
      		                   xtype: 'button',
-     		                   action: 'delete'
+     		                   action: 'delete',
+     		                   itemId: 'deleteButton'
      		               }]
      		           }]  	
     	});

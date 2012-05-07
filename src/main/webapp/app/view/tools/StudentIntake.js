@@ -2,30 +2,31 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.studentintake',
 	id: 'StudentIntake',
-    mixins: [ 'Deft.mixin.Injectable' ],
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.StudentIntakeToolViewController',
     inject: {
         studentsStore: 'studentsStore'
     },
 	title: 'Student Intake',	
 	width: '100%',
 	height: '100%',   
-	
+	autoScroll: true,
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
-					autoScroll: true,
 		    		store: this.studentsStore,
 
 				    dockedItems: [{
 				        dock: 'top',
 				        xtype: 'toolbar',
-				        items: [{xtype: 'button', id: 'saveStudentIntakeButton', text:'Save', action: 'save' },
+				        items: [{xtype: 'button', itemId: 'saveStudentIntakeButton', text:'Save', action: 'save' },
 				                { 
 				        	     xtype: 'tbspacer',
 				        	     flex: 1
 				               },{
 				            	   xtype: 'button',
-				            	   id: 'viewConfidentialityAgreementButton',
+				            	   itemId: 'viewConfidentialityAgreementButton',
 				            	   text: 'View Confidentiality Agreement',
 				            	   action: 'viewConfidentialityAgreement'}]
 				    }],
@@ -35,7 +36,7 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 						        height: '100%',
 						        activeTab: 0,
 						        items: [ { title: 'Personal',
-						        			autoScroll: true,
+						        	       autoScroll: true,
 						        		   items: [Ext.create('Ssp.view.tools.studentintake.Personal')]
 						        		},{
 						            		title: 'Demographics',
@@ -67,7 +68,7 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 						]
 			});
 						
-		this.callParent(arguments);
+		return this.callParent(arguments);
 	}
 
 });

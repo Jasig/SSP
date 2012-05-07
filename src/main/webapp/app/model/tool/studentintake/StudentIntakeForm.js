@@ -4,7 +4,7 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
     inject: {
         apiProperties: 'apiProperties'
     }, 
-	autoLoad: false,
+
 	fields: [{name: 'person', 
 		      convert: function(value, record) {
 		            var person  = Ext.create('Ssp.model.Person',{});
@@ -38,7 +38,8 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
              'personChallenges',
              'referenceData'],
 
-	proxy: {
+	autoLoad: false,
+ 	proxy: {
 		type: 'rest',
 		url: '/ssp/api/1/tool/studentIntake/',
 		actionMethods: {
