@@ -7,6 +7,11 @@ import static org.junit.Assert.assertNull;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Category;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +22,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.Category;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
@@ -43,7 +44,7 @@ public class CategoryDaoTest {
 	}
 
 	@Test
-	public void testSaveNew() {
+	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
 
 		Category obj = new Category();
@@ -69,8 +70,8 @@ public class CategoryDaoTest {
 		dao.delete(obj);
 	}
 
-	@Test
-	public void testNull() {
+	@Test(expected = ObjectNotFoundException.class)
+	public void testNull() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
 		Category category = dao.get(id);
 

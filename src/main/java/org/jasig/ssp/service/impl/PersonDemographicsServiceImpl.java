@@ -2,8 +2,6 @@ package org.jasig.ssp.service.impl;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.jasig.ssp.dao.PersonDemographicsDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -17,56 +15,54 @@ import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PersonDemographicsServiceImpl implements PersonDemographicsService {
 
 	@Autowired
-	private PersonDemographicsDao dao;
+	private transient PersonDemographicsDao dao;
 
 	@Autowired
-	private CitizenshipService citizenshipService;
+	private transient CitizenshipService citizenshipService;
 
 	@Autowired
-	private EthnicityService ethnicityService;
+	private transient EthnicityService ethnicityService;
 
 	@Autowired
-	private MaritalStatusService maritalStatusService;
+	private transient MaritalStatusService maritalStatusService;
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	@Autowired
-	private VeteranStatusService veteranStatusService;
+	private transient VeteranStatusService veteranStatusService;
 
 	@Override
-	public PagingWrapper<PersonDemographics> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<PersonDemographics> getAll(final SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
 	@Override
-	public PersonDemographics get(UUID id) throws ObjectNotFoundException {
-		PersonDemographics obj = dao.get(id);
-		if (null == obj) {
-			throw new ObjectNotFoundException(id, "Person");
-		}
-		return obj;
+	public PersonDemographics get(final UUID id) throws ObjectNotFoundException {
+		return dao.get(id);
 	}
 
 	@Override
-	public PersonDemographics forPerson(Person person) {
+	public PersonDemographics forPerson(final Person person) {
 		return person.getDemographics();
 	}
 
 	@Override
-	public PersonDemographics create(PersonDemographics obj) {
+	public PersonDemographics create(final PersonDemographics obj) {
 		return dao.save(obj);
 	}
 
 	@Override
-	public PersonDemographics save(PersonDemographics obj)
+	public PersonDemographics save(final PersonDemographics obj)
 			throws ObjectNotFoundException {
-		PersonDemographics current = get(obj.getId());
+		final PersonDemographics current = get(obj.getId());
 
 		if (obj.getObjectStatus() != null) {
 			current.setObjectStatus(obj.getObjectStatus());
@@ -78,7 +74,6 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 		current.setLocal(obj.isLocal());
 		current.setPrimaryCaregiver(obj.isPrimaryCaregiver());
 		current.setNumberOfChildren(obj.getNumberOfChildren());
-
 		current.setAnticipatedStartTerm(obj.getAnticipatedStartTerm());
 		current.setAnticipatedStartYear(obj.getAnticipatedStartYear());
 		current.setCountryOfResidence(obj.getCountryOfResidence());
@@ -90,36 +85,42 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 		current.setTotalHoursWorkedPerWeek(obj.getTotalHoursWorkedPerWeek());
 		current.setShift(obj.getShift());
 		current.setGender(obj.getGender());
+
 		if (obj.getMaritalStatus() != null) {
 			current.setMaritalStatus(maritalStatusService.get(obj
 					.getMaritalStatus().getId()));
 		}
+
 		if (obj.getEthnicity() != null) {
 			current.setEthnicity(ethnicityService.get(obj.getEthnicity()
 					.getId()));
 		}
+
 		if (obj.getCitizenship() != null) {
 			current.setCitizenship(citizenshipService.get(obj.getCitizenship()
 					.getId()));
 		}
+
 		if (obj.getVeteranStatus() != null) {
 			current.setVeteranStatus(veteranStatusService.get(obj
 					.getVeteranStatus().getId()));
 		}
+
 		if (obj.getCoach() != null) {
 			current.setCoach(personService.get(obj.getCoach().getId()));
 		}
+
 		return dao.save(current);
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException {
-		PersonDemographics current = get(id);
+	public void delete(final UUID id) throws ObjectNotFoundException {
+		final PersonDemographics current = get(id);
 
-		if (null != current) {
+		if (null != current
+				&& !ObjectStatus.DELETED.equals(current.getObjectStatus())) {
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}
 	}
-
 }

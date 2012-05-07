@@ -55,7 +55,9 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	public void delete(UUID id) throws ObjectNotFoundException {
 		T current = get(id);
 
-		if (null != current) {
+		if (null != current
+				&& !ObjectStatus.DELETED.equals(current.getObjectStatus())) {
+			// Object found and is not already deleted, set it and save change.
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}

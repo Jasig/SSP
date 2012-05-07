@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -44,13 +45,15 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * 
 	 * @param id
 	 * @return The specified instance if found; null otherwise.
+	 * @throws ObjectNotFoundException
+	 *             If object was not found or is not active.
 	 */
-	T get(UUID id);
+	T get(UUID id) throws ObjectNotFoundException;
 
 	/**
 	 * Lazily retrieves the specified instance from persistent storage.
 	 * Exception will be thrown later, on usage, if any, if the object is not
-	 * found.
+	 * found. DOES NOT check for {@link ObjectStatus#ACTIVE} status.
 	 * 
 	 * @param id
 	 * @return The specified instance.

@@ -7,6 +7,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonFundingSource;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,11 +20,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonFundingSource;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
@@ -45,7 +45,7 @@ public class PersonFundingSourcesDaoTest {
 	}
 
 	@Test
-	public void testGet() {
+	public void testGet() throws ObjectNotFoundException {
 		// test student = ken thompson; test description = "some description"
 		String testDescription = "some description";
 		Person person = daoPerson.get(UUID
@@ -93,9 +93,14 @@ public class PersonFundingSourcesDaoTest {
 		pfss.clear();
 		daoPerson.save(person);
 		dao.delete(pfs);
-		assertNull(
-				"Person-funding source information was not correctly deleted.",
-				dao.get(oldId));
+		try {
+			assertNull(
+					"Person-funding source information was not correctly deleted.",
+					dao.get(oldId));
+		} catch (ObjectNotFoundException e) {
+			// expected
+			e.printStackTrace();
+		}
 	}
 
 	@Test

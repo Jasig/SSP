@@ -9,17 +9,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.ChallengeDao;
 import org.jasig.ssp.dao.reference.ChallengeReferralDao;
 import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
@@ -32,6 +21,17 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
@@ -76,7 +76,7 @@ public class TaskDaoTest {
 	private Task testTask;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws ObjectNotFoundException {
 		try {
 			ken = personService.personFromUsername("ken");
 		} catch (ObjectNotFoundException e) {
@@ -178,7 +178,7 @@ public class TaskDaoTest {
 	}
 
 	@Test
-	public void testSaveNew() {
+	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
 
 		Task obj = new Task();

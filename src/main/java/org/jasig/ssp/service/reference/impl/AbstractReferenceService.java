@@ -49,7 +49,7 @@ public abstract class AbstractReferenceService<T extends Auditable>
 	@Override
 	public T get(final UUID id) throws ObjectNotFoundException {
 		final T obj = getDao().get(id);
-		if (null == obj) {
+		if (null == obj || !ObjectStatus.ACTIVE.equals(obj.getObjectStatus())) {
 			throw new ObjectNotFoundException(id, modelClass.getName());
 		}
 

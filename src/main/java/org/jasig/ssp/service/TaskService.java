@@ -137,9 +137,12 @@ public interface TaskService
 	 * @param person
 	 * @param sessionId
 	 * @return Created task
+	 * @throws ObjectNotFoundException
+	 *             If referenced data does not exist
 	 */
 	Task createForPersonWithChallengeReferral(Challenge challenge,
-			ChallengeReferral challengeReferral, Person person, String sessionId);
+			ChallengeReferral challengeReferral, Person person, String sessionId)
+			throws ObjectNotFoundException;
 
 	/**
 	 * Create a custom task for a person

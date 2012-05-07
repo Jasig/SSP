@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.VeteranStatus;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,9 +52,12 @@ public class VeteranStatusDaoTest {
 
 	/**
 	 * Test {@link VeteranStatusDao#save(VeteranStatus)}
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown for this test
 	 */
 	@Test
-	public void testSaveNew() {
+	public void testSaveNew() throws ObjectNotFoundException {
 		UUID savedId;
 
 		VeteranStatus obj = new VeteranStatus();
@@ -87,9 +91,12 @@ public class VeteranStatusDaoTest {
 	/**
 	 * Test that {@link VeteranStatusDao#get(UUID)} returns null if identifier
 	 * is not found.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             expected
 	 */
-	@Test
-	public void testNotFoundIdReturnsNull() {
+	@Test(expected = ObjectNotFoundException.class)
+	public void testNotFoundIdReturnsNull() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
 		final VeteranStatus veteranStatus = dao.get(id);
 

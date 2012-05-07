@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ChallengeCategory;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class ChallengeCategoryDaoTest {
 	}
 
 	@Test
-	public void testSaveNew() {
+	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
 
 		ChallengeCategory obj = new ChallengeCategory();
@@ -71,8 +72,8 @@ public class ChallengeCategoryDaoTest {
 		dao.delete(obj);
 	}
 
-	@Test
-	public void testNull() {
+	@Test(expected = ObjectNotFoundException.class)
+	public void testNull() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
 		final ChallengeCategory challengeCategory = dao.get(id);
 

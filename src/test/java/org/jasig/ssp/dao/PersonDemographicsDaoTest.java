@@ -6,6 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonDemographics;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,10 +19,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonDemographics;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
@@ -43,7 +44,7 @@ public class PersonDemographicsDaoTest {
 	}
 
 	@Test
-	public void testGet() {
+	public void testGet() throws ObjectNotFoundException {
 		// test student = ken thompson; test wage = "some wage"
 		String testWage = "some wage";
 		Person person = daoPerson.get(UUID
@@ -79,12 +80,18 @@ public class PersonDemographicsDaoTest {
 		person.setDemographics(null);
 		daoPerson.save(person);
 		dao.delete(pd);
-		assertNull("Demographic information was not correctly deleted.",
-				dao.get(oldId));
+
+		try {
+			assertNull("Demographic information was not correctly deleted.",
+					dao.get(oldId));
+		} catch (ObjectNotFoundException e) {
+			// expected
+			e.printStackTrace();
+		}
 	}
 
-	@Test
-	public void testNull() {
+	@Test(expected = ObjectNotFoundException.class)
+	public void testNull() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		PersonDemographics pd = dao.get(id);
 		assertNull(pd);

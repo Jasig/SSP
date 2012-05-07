@@ -9,12 +9,13 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.UUID;
 
+import org.jasig.mygps.business.SelfHelpGuideManager;
+import org.jasig.mygps.model.transferobject.SelfHelpGuideResponseTO;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jasig.mygps.business.SelfHelpGuideManager;
-import org.jasig.mygps.model.transferobject.SelfHelpGuideResponseTO;
 
 public class MyGpsSelfHelpGuideResponseControllerTest {
 
@@ -34,7 +35,7 @@ public class MyGpsSelfHelpGuideResponseControllerTest {
 	}
 
 	@Test
-	public void cancel() {
+	public void cancel() throws ObjectNotFoundException {
 		UUID selfHelpGuideResponseId = UUID.randomUUID();
 		expect(manager.cancelSelfHelpGuideResponse(selfHelpGuideResponseId))
 				.andReturn(false);
@@ -52,7 +53,7 @@ public class MyGpsSelfHelpGuideResponseControllerTest {
 	}
 
 	@Test
-	public void complete() {
+	public void complete() throws ObjectNotFoundException {
 		UUID selfHelpGuideResponseId = UUID.randomUUID();
 		expect(manager.completeSelfHelpGuideResponse(selfHelpGuideResponseId))
 				.andReturn(false);
@@ -70,7 +71,7 @@ public class MyGpsSelfHelpGuideResponseControllerTest {
 	}
 
 	@Test
-	public void getById() {
+	public void getById() throws ObjectNotFoundException {
 		UUID selfHelpGuideResponseId = UUID.randomUUID();
 		SelfHelpGuideResponseTO expectedResponseTO = new SelfHelpGuideResponseTO();
 		expect(manager.getSelfHelpGuideResponseById(selfHelpGuideResponseId))
@@ -109,7 +110,7 @@ public class MyGpsSelfHelpGuideResponseControllerTest {
 	}
 
 	@Test
-	public void answer() {
+	public void answer() throws ObjectNotFoundException {
 		UUID selfHelpGuideResponseId = UUID.randomUUID();
 		UUID selfHelpGuideQuestionId = UUID.randomUUID();
 		Boolean answerResponse = true;
