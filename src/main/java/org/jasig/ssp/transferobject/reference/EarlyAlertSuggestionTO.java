@@ -1,15 +1,17 @@
 package org.jasig.ssp.transferobject.reference;
 
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.transferobject.NamedTO;
 import org.jasig.ssp.transferobject.TransferObject;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * EarlyAlertSuggestion reference transfer objects
@@ -18,9 +20,11 @@ import com.google.common.collect.Lists;
  */
 public class EarlyAlertSuggestionTO extends
 		AbstractReferenceTO<EarlyAlertSuggestion>
-		implements TransferObject<EarlyAlertSuggestion> {
+		implements TransferObject<EarlyAlertSuggestion>, NamedTO, Serializable {
 
-	private short sortOrder; // NOPMD by jon on 5/4/12 11:16
+	private static final long serialVersionUID = 3743316755135265679L;
+
+	private short sortOrder; // NOPMD by jon.adams on 5/4/12 11:16
 
 	/**
 	 * Empty constructor
@@ -119,11 +123,11 @@ public class EarlyAlertSuggestionTO extends
 	 *            Collection of models to copy
 	 * @return A collection of equivalent transfer objects.
 	 */
-	public static List<EarlyAlertSuggestionTO> toTOList(
+	public static Set<EarlyAlertSuggestionTO> toTOSet(
 			@NotNull final Collection<EarlyAlertSuggestion> models) {
-		final List<EarlyAlertSuggestionTO> tObjects = Lists.newArrayList();
+		final Set<EarlyAlertSuggestionTO> tObjects = Sets.newHashSet();
 		for (EarlyAlertSuggestion model : models) {
-			tObjects.add(new EarlyAlertSuggestionTO(model));
+			tObjects.add(new EarlyAlertSuggestionTO(model)); // NOPMD by jon
 		}
 
 		return tObjects;

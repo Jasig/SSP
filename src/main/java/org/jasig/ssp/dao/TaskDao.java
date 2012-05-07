@@ -6,9 +6,9 @@ import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class TaskDao extends
@@ -21,7 +21,7 @@ public class TaskDao extends
 	@SuppressWarnings("unchecked")
 	public List<Task> getAllForPersonId(final UUID personId,
 			final SortingAndPaging sAndP) {
-		Criteria criteria = createCriteria(sAndP);
+		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("person.id", personId));
 		return criteria.list();
 	}
@@ -29,7 +29,7 @@ public class TaskDao extends
 	@SuppressWarnings("unchecked")
 	public List<Task> getAllForPersonId(final UUID personId,
 			final boolean complete, final SortingAndPaging sAndP) {
-		Criteria criteria = createCriteria(sAndP);
+		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("person.id", personId));
 
 		if (complete) {
@@ -44,7 +44,7 @@ public class TaskDao extends
 	@SuppressWarnings("unchecked")
 	public List<Task> getAllForSessionId(final String sessionId,
 			final SortingAndPaging sAndP) {
-		Criteria criteria = createCriteria(sAndP);
+		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("sessionId", sessionId));
 		return criteria.list();
 	}
@@ -52,7 +52,7 @@ public class TaskDao extends
 	@SuppressWarnings("unchecked")
 	public List<Task> getAllForSessionId(final String sessionId,
 			final boolean complete, final SortingAndPaging sAndP) {
-		Criteria criteria = createCriteria(sAndP);
+		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("sessionId", sessionId));
 
 		if (complete) {
@@ -66,7 +66,7 @@ public class TaskDao extends
 
 	@SuppressWarnings("unchecked")
 	public List<Task> getAllWhichNeedRemindersSent(final SortingAndPaging sAndP) {
-		Criteria criteria = createCriteria(sAndP);
+		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.isNull("completedDate"));
 		criteria.add(Restrictions.isNull("reminderSentDate"));
 		criteria.add(Restrictions.isNotNull("dueDate"));

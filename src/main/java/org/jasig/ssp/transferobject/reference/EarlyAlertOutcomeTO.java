@@ -19,7 +19,7 @@ import com.google.common.collect.Lists;
 public class EarlyAlertOutcomeTO extends AbstractReferenceTO<EarlyAlertOutcome>
 		implements TransferObject<EarlyAlertOutcome> {
 
-	private short sortOrder; // NOPMD by jon on 5/4/12 11:16
+	private short sortOrder; // NOPMD by jon.adams on 5/4/12 11:16
 
 	/**
 	 * Empty constructor

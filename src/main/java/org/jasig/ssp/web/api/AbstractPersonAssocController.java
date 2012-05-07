@@ -5,15 +5,6 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
@@ -24,6 +15,16 @@ import org.jasig.ssp.transferobject.AuditableTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 
@@ -59,12 +60,12 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 	/**
 	 * Model class type
 	 */
-	protected Class<T> persistentClass;
+	protected transient Class<T> persistentClass;
 
 	/**
 	 * Transfer object class type
 	 */
-	protected Class<TO> transferObjectClass;
+	protected transient Class<TO> transferObjectClass;
 
 	@Autowired
 	protected transient PersonService personService;
@@ -84,6 +85,27 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 		this.transferObjectClass = transferObjectClass;
 	}
 
+	/**
+	 * Get all instances for the specified criteria.
+	 * 
+	 * @param personId
+	 *            Person identifier
+	 * @param status
+	 *            Object status
+	 * @param start
+	 *            First result
+	 * @param limit
+	 *            Total results for a single page
+	 * @param sort
+	 *            Sort field (property)
+	 * @param sortDirection
+	 *            Sort direction (asc/desc)
+	 * @return All instances for the specified criteria, possibly paged based on
+	 *         start/limit filters.
+	 * @throws Exception
+	 *             If any exceptions were thrown.
+	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
 	List<TO> getAll(@PathVariable final UUID personId,
@@ -102,6 +124,7 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 								limit, sort, sortDirection, "name")));
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	TO get(final @PathVariable UUID id,
@@ -116,6 +139,7 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 		return out;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
 	TO create(@PathVariable final UUID personId,
@@ -123,6 +147,11 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send with an ID to the create method. Did you mean to use the save method instead?");
+		}
+
+		if (personId == null) {
+			throw new IllegalArgumentException(
+					"Person identifier is required.");
 		}
 
 		final T model = getFactory().from(obj);
@@ -135,9 +164,11 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 				return out;
 			}
 		}
+
 		return null;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	TO save(@PathVariable final UUID id,
@@ -162,6 +193,7 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 		return null;
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id,
@@ -169,5 +201,4 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 		getService().delete(id);
 		return new ServiceResponse(true);
 	}
-
 }

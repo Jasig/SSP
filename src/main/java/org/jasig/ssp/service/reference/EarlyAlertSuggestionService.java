@@ -22,6 +22,15 @@ public interface EarlyAlertSuggestionService extends
 	@Override
 	EarlyAlertSuggestion get(UUID id) throws ObjectNotFoundException;
 
+	/**
+	 * Lazily load an instance for the specified identifier.
+	 * 
+	 * @param id
+	 *            Identifier
+	 * @return A lazily-loaded instance for the specified identifier.
+	 */
+	EarlyAlertSuggestion load(UUID id);
+
 	@Override
 	EarlyAlertSuggestion create(EarlyAlertSuggestion obj);
 
