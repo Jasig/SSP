@@ -29,7 +29,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 	private static final long serialVersionUID = 1818887030744791834L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "student_status_id", nullable = true, insertable = false, updatable = false)
+	@JoinColumn(name = "student_status_id", nullable = true)
 	private StudentStatus studentStatus;
 
 	@Column

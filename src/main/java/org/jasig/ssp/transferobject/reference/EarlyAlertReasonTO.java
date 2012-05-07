@@ -1,15 +1,17 @@
 package org.jasig.ssp.transferobject.reference;
 
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.reference.EarlyAlertReason;
+import org.jasig.ssp.transferobject.NamedTO;
 import org.jasig.ssp.transferobject.TransferObject;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * EarlyAlertReason reference transfer objects
@@ -17,9 +19,11 @@ import com.google.common.collect.Lists;
  * @author jon.adams
  */
 public class EarlyAlertReasonTO extends AbstractReferenceTO<EarlyAlertReason>
-		implements TransferObject<EarlyAlertReason> {
+		implements TransferObject<EarlyAlertReason>, NamedTO, Serializable {
 
-	private short sortOrder; // NOPMD by jon on 5/4/12 11:16
+	private static final long serialVersionUID = -431610989454085293L;
+
+	private short sortOrder; // NOPMD by jon.adams on 5/4/12 11:16
 
 	/**
 	 * Empty constructor
@@ -117,11 +121,11 @@ public class EarlyAlertReasonTO extends AbstractReferenceTO<EarlyAlertReason>
 	 *            Collection of models to copy
 	 * @return A collection of equivalent transfer objects.
 	 */
-	public static List<EarlyAlertReasonTO> toTOList(
+	public static Set<EarlyAlertReasonTO> toTOSet(
 			@NotNull final Collection<EarlyAlertReason> models) {
-		final List<EarlyAlertReasonTO> tObjects = Lists.newArrayList();
+		final Set<EarlyAlertReasonTO> tObjects = Sets.newHashSet();
 		for (EarlyAlertReason model : models) {
-			tObjects.add(new EarlyAlertReasonTO(model));
+			tObjects.add(new EarlyAlertReasonTO(model)); // NOPMD by jon.adams
 		}
 
 		return tObjects;

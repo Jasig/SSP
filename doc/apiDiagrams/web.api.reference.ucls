@@ -1,575 +1,841 @@
-<class-diagram version="1.0.7" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+<class-diagram version="1.0.8" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.web.api.reference.CitizenshipController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/CitizenshipController.java" binary="false">    
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.CitizenshipController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/CitizenshipController.java" binary="false">    
     <position height="-1" width="-1" x="331" y="553"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
   <class id="2" corner="BOTTOM_RIGHT" language="java" 
     name="org.jasig.ssp.web.api.reference.ChildCareArrangementController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/ChildCareArrangementController.java" 
-    binary="false">    
+    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/ChildCareArrangementController.java" binary="false">    
     <position height="-1" width="-1" x="-33" y="553"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="3" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.web.api.reference.ChallengeController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/ChallengeController.java" binary="false">    
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.ChallengeController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/ChallengeController.java" binary="false">    
     <position height="-1" width="-1" x="710" y="553"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.Citizenship" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/Citizenship.java" binary="false">    
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.Citizenship" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/Citizenship.java" binary="false">    
     <position height="-1" width="-1" x="330" y="767"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="5" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.model.reference.ChildCareArrangement" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/model/reference/ChildCareArrangement.java" binary="false">    
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.ChildCareArrangement" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/ChildCareArrangement.java" binary="false">    
     <position height="-1" width="-1" x="-33" y="767"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="6" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.Challenge" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/Challenge.java" binary="false">    
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.Challenge" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/Challenge.java" binary="false">    
     <position height="-1" width="-1" x="710" y="967"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="7" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.EducationGoal" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/EducationGoal.java" binary="false">    
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.EducationGoal" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/EducationGoal.java" binary="false">    
     <position height="-1" width="-1" x="1104" y="791"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="8" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.Ethnicity" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/Ethnicity.java" binary="false">    
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.Ethnicity" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/Ethnicity.java" binary="false">    
     <position height="-1" width="-1" x="1820" y="767"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="9" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.EducationLevel" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/EducationLevel.java" 
-    binary="false">    
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.EducationLevel" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/EducationLevel.java" binary="false">    
     <position height="-1" width="-1" x="1475" y="807"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="10" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.web.api.reference.EducationGoalController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EducationGoalController.java" binary="false">    
+  <class id="10" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.EducationGoalController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EducationGoalController.java" binary="false">    
     <position height="-1" width="-1" x="1104" y="549"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="11" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.web.api.reference.EthnicityController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EthnicityController.java" binary="false">    
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.EthnicityController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EthnicityController.java" binary="false">    
     <position height="-1" width="-1" x="1820" y="553"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="12" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.web.api.reference.EducationLevelController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EducationLevelController.java" binary="false">    
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.EducationLevelController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EducationLevelController.java" binary="false">    
     <position height="-1" width="-1" x="1475" y="553"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="13" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.web.api.reference.VeteranStatusController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/VeteranStatusController.java" binary="false">    
+  <class id="13" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.VeteranStatusController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/VeteranStatusController.java" binary="false">    
     <position height="-1" width="-1" x="3290" y="553"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="14" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.web.api.reference.StudentStatusController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/StudentStatusController.java" binary="false">    
+  <class id="14" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.StudentStatusController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/StudentStatusController.java" binary="false">    
     <position height="-1" width="-1" x="2912" y="553"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="15" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.web.api.reference.FundingSourceController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/FundingSourceController.java" binary="false">    
+  <class id="15" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.FundingSourceController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/FundingSourceController.java" binary="false">    
     <position height="-1" width="-1" x="2170" y="553"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="16" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.web.api.reference.MaritalStatusController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/MaritalStatusController.java" binary="false">    
+  <class id="16" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.MaritalStatusController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/MaritalStatusController.java" binary="false">    
     <position height="-1" width="-1" x="2545" y="553"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="17" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.FundingSource" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/FundingSource.java" binary="false">    
+  <class id="17" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.FundingSource" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/FundingSource.java" binary="false">    
     <position height="-1" width="-1" x="2170" y="767"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="18" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.VeteranStatus" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/VeteranStatus.java" binary="false">    
+  <class id="18" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.VeteranStatus" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/VeteranStatus.java" binary="false">    
     <position height="-1" width="-1" x="3289" y="791"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="19" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.MaritalStatus" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/MaritalStatus.java" binary="false">    
+  <class id="19" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.MaritalStatus" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/MaritalStatus.java" binary="false">    
     <position height="-1" width="-1" x="2545" y="767"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="20" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.StudentStatus" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/StudentStatus.java" binary="false">    
+  <class id="20" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.StudentStatus" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/StudentStatus.java" binary="false">    
     <position height="-1" width="-1" x="2912" y="767"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
   <class id="21" corner="BOTTOM_RIGHT" language="java" 
     name="org.jasig.ssp.web.api.reference.AbstractAuditableReferenceController" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/AbstractAuditableReferenceController.java" 
-    binary="false">    
-    <position height="-1" width="-1" x="1512" y="142"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/AbstractAuditableReferenceController.java" binary="false">    
+    <position height="-1" width="-1" x="2288" y="122"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="22" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.model.reference.ConfidentialityLevel" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/model/reference/ConfidentialityLevel.java" binary="false">    
+  <class id="22" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.ConfidentialityLevel" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/ConfidentialityLevel.java" binary="false">    
     <position height="-1" width="-1" x="-33" y="1376"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="23" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.SelfHelpGuide" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/SelfHelpGuide.java" binary="false">    
+  <class id="23" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.SelfHelpGuide" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/SelfHelpGuide.java" binary="false">    
     <position height="-1" width="-1" x="3290" y="2348"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="24" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.Category" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/Category.java" binary="false">    
+  <class id="24" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.Category" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/Category.java" binary="false">    
     <position height="-1" width="-1" x="1589" y="2270"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="25" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.model.reference.SelfHelpGuideGroup" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/model/reference/SelfHelpGuideGroup.java" binary="false">    
+  <class id="25" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.SelfHelpGuideGroup" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/SelfHelpGuideGroup.java" binary="false">    
     <position height="-1" width="-1" x="1995" y="2270"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="26" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.model.reference.ChallengeReferral" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/model/reference/ChallengeReferral.java" binary="false">    
+  <class id="26" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.ChallengeReferral" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/ChallengeReferral.java" binary="false">    
     <position height="-1" width="-1" x="3290" y="1414"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="27" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.model.reference.SelfHelpGuideQuestion" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/model/reference/SelfHelpGuideQuestion.java" binary="false">    
+  <class id="27" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.SelfHelpGuideQuestion" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/SelfHelpGuideQuestion.java" binary="false">    
     <position height="-1" width="-1" x="3290" y="1802"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="28" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.model.reference.AbstractReference" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/model/reference/AbstractReference.java" binary="false">    
+  <class id="28" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.AbstractReference" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/AbstractReference.java" binary="false">    
     <position height="-1" width="-1" x="1512" y="1719"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="29" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.Goal" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/Goal.java" binary="false">    
+  <class id="29" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.Goal" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/Goal.java" binary="false">    
     <position height="-1" width="-1" x="-33" y="1822"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
   <class id="30" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.MessageTemplate" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/MessageTemplate.java" 
-    binary="false">    
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/MessageTemplate.java" binary="false">    
     <position height="-1" width="-1" x="315" y="2166"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
   <class id="31" corner="BOTTOM_RIGHT" language="java" 
     name="org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/model/reference/ConfidentialityDisclosureAgreement.java" 
-    binary="false">    
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/ConfidentialityDisclosureAgreement.java" binary="false">    
     <position height="-1" width="-1" x="763" y="2246"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="32" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.model.reference.ChallengeCategory" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/model/reference/ChallengeCategory.java" binary="false">    
+  <class id="32" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.ChallengeCategory" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/ChallengeCategory.java" binary="false">    
     <position height="-1" width="-1" x="1187" y="2270"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="33" corner="BOTTOM_RIGHT" language="java" 
-    name="org.jasig.ssp.model.reference.ChallengeChallengeReferral" project="ssp" 
-    file="/ssp/src/main/java/org/jasig/ssp/model/reference/ChallengeChallengeReferral.java" binary="false">    
+  <class id="33" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.ChallengeChallengeReferral" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/ChallengeChallengeReferral.java" binary="false">    
     <position height="-1" width="-1" x="3289" y="1047"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="34" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.RestController" 
-    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/RestController.java" binary="false">    
+  <class id="34" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.RestController" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/web/api/RestController.java" binary="false">    
     <position height="-1" width="-1" x="3268" y="142"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <association id="35">    
-    <end type="SOURCE" refId="29" navigable="false">      
-      <attribute id="36" name="confidentialityLevel"/>      
-      <multiplicity id="37" minimum="0" maximum="1"/>    
+  <class id="35" corner="BOTTOM_RIGHT" language="java" 
+    name="org.jasig.ssp.web.api.reference.EarlyAlertReferralController" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EarlyAlertReferralController.java" binary="false">    
+    <position height="-1" width="-1" x="3700" y="556"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="36" corner="BOTTOM_RIGHT" language="java" 
+    name="org.jasig.ssp.web.api.reference.EarlyAlertOutcomeController" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EarlyAlertOutcomeController.java" binary="false">    
+    <position height="-1" width="-1" x="4147" y="556"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="37" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.JournalTrackController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/JournalTrackController.java" binary="false">    
+    <position height="-1" width="-1" x="5004" y="556"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="38" corner="BOTTOM_RIGHT" language="java" 
+    name="org.jasig.ssp.web.api.reference.JournalStepDetailController" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/JournalStepDetailController.java" binary="false">    
+    <position height="-1" width="-1" x="4594" y="556"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="39" corner="BOTTOM_RIGHT" language="java" 
+    name="org.jasig.ssp.web.api.reference.EarlyAlertSuggestionController" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EarlyAlertSuggestionController.java" binary="false">    
+    <position height="-1" width="-1" x="5435" y="556"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="40" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.JournalStepController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/JournalStepController.java" binary="false">    
+    <position height="-1" width="-1" x="6699" y="556"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="41" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.JournalSourceController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/JournalSourceController.java" binary="false">    
+    <position height="-1" width="-1" x="6313" y="556"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="42" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.web.api.reference.EarlyAlertReasonController" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EarlyAlertReasonController.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="5894" y="556"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="43" corner="BOTTOM_RIGHT" language="java" 
+    name="org.jasig.ssp.web.api.reference.EarlyAlertOutreachController" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/web/api/reference/EarlyAlertOutreachController.java" binary="false">    
+    <position height="-1" width="-1" x="7113" y="556"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="44" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.JournalTrack" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/JournalTrack.java" binary="false">    
+    <position height="255" width="401" x="5510" y="1132"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="45" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.EarlyAlertReason" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/EarlyAlertReason.java" binary="false">    
+    <position height="204" width="272" x="4054" y="837"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="46" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.EarlyAlertSuggestion" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/EarlyAlertSuggestion.java" binary="false">    
+    <position height="204" width="293" x="4366" y="837"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="47" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.JournalStepDetail" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/JournalStepDetail.java" binary="false">    
+    <position height="221" width="239" x="6392" y="1132"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="48" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.EarlyAlertOutreach" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/EarlyAlertOutreach.java" binary="false">    
+    <position height="204" width="281" x="4699" y="837"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="49" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.EarlyAlertOutcome" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/EarlyAlertOutcome.java" binary="false">    
+    <position height="204" width="281" x="5020" y="837"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="50" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.JournalStep" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/JournalStep.java" binary="false">    
+    <position height="255" width="401" x="5951" y="1132"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="51" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.JournalSource" project="ssp" 
+    file="/ssp/src/main/java/org/jasig/ssp/model/reference/JournalSource.java" binary="false">    
+    <position height="153" width="220" x="5691" y="837"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="52" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.EarlyAlertReferral" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/EarlyAlertReferral.java" binary="false">    
+    <position height="255" width="310" x="5341" y="837"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="53" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.JournalTrackJournalStep" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/JournalTrackJournalStep.java" binary="false">    
+    <position height="187" width="222" x="5951" y="837"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="54" corner="BOTTOM_RIGHT" language="java" name="org.jasig.ssp.model.reference.JournalStepJournalStepDetail" 
+    project="ssp" file="/ssp/src/main/java/org/jasig/ssp/model/reference/JournalStepJournalStepDetail.java" 
+    binary="false">    
+    <position height="187" width="278" x="6213" y="837"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <dependency id="55">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="19"/>  
+  </dependency>  
+  <generalization id="56">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <generalization id="57">    
+    <end type="SOURCE" refId="31"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <generalization id="58">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <generalization id="59">    
+    <end type="SOURCE" refId="39"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <dependency id="60">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="61">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <generalization id="62">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <dependency id="63">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <generalization id="64">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <association id="65">    
+    <end type="SOURCE" refId="54" navigable="false">      
+      <attribute id="66" name="journalStepDetail"/>      
+      <multiplicity id="67" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="22" navigable="true"/>    
+    <end type="TARGET" refId="47" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="38">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="17"/>  
+  <generalization id="68">    
+    <end type="SOURCE" refId="50"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <dependency id="69">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="28"/>  
   </dependency>  
-  <generalization id="39">    
-    <end type="SOURCE" refId="26"/>    
+  <generalization id="70">    
+    <end type="SOURCE" refId="44"/>    
     <end type="TARGET" refId="28"/>  
   </generalization>  
-  <generalization id="40">    
-    <end type="SOURCE" refId="20"/>    
+  <generalization id="71">    
+    <end type="SOURCE" refId="17"/>    
     <end type="TARGET" refId="28"/>  
   </generalization>  
-  <association id="41">    
+  <association id="72">    
     <end type="SOURCE" refId="33" navigable="false">      
-      <attribute id="42" name="challengeReferral"/>      
-      <multiplicity id="43" minimum="0" maximum="1"/>    
+      <attribute id="73" name="challengeReferral"/>      
+      <multiplicity id="74" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="26" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="44">    
-    <end type="SOURCE" refId="19"/>    
-    <end type="TARGET" refId="28"/>  
-  </generalization>  
-  <dependency id="45">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <generalization id="46">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="21"/>  
-  </generalization>  
-  <generalization id="47">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="28"/>  
-  </generalization>  
-  <dependency id="48">    
+  <generalization id="75">    
     <end type="SOURCE" refId="16"/>    
-    <end type="TARGET" refId="19"/>  
-  </dependency>  
-  <dependency id="49">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <generalization id="50">    
-    <end type="SOURCE" refId="14"/>    
     <end type="TARGET" refId="21"/>  
   </generalization>  
-  <generalization id="51">    
-    <end type="SOURCE" refId="29"/>    
-    <end type="TARGET" refId="28"/>  
-  </generalization>  
-  <dependency id="52">    
-    <end type="SOURCE" refId="14"/>    
-    <end type="TARGET" refId="20"/>  
-  </dependency>  
-  <association id="53">    
-    <end type="SOURCE" refId="26" navigable="false">      
-      <attribute id="54" name="challengeChallengeReferrals"/>      
-      <multiplicity id="55" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="33" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="56">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="28"/>  
-  </generalization>  
-  <dependency id="57">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="17"/>  
-  </dependency>  
-  <association id="58">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="59" name="confidentialityLevel"/>      
-      <multiplicity id="60" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="22" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="61">    
-    <end type="SOURCE" refId="3"/>    
+  <generalization id="76">    
+    <end type="SOURCE" refId="35"/>    
     <end type="TARGET" refId="21"/>  
   </generalization>  
-  <association id="62">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="63" name="challengeChallengeReferrals"/>      
-      <multiplicity id="64" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="33" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="65">    
-    <end type="SOURCE" refId="25"/>    
+  <generalization id="77">    
+    <end type="SOURCE" refId="30"/>    
     <end type="TARGET" refId="28"/>  
   </generalization>  
-  <generalization id="66">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="21"/>  
-  </generalization>  
-  <generalization id="67">    
-    <end type="SOURCE" refId="18"/>    
+  <generalization id="78">    
+    <end type="SOURCE" refId="27"/>    
     <end type="TARGET" refId="28"/>  
   </generalization>  
-  <generalization id="68">    
-    <end type="SOURCE" refId="22"/>    
-    <end type="TARGET" refId="28"/>  
-  </generalization>  
-  <generalization id="69">    
-    <end type="SOURCE" refId="21"/>    
-    <end type="TARGET" refId="34"/>  
-  </generalization>  
-  <generalization id="70">    
+  <generalization id="79">    
     <end type="SOURCE" refId="13"/>    
     <end type="TARGET" refId="21"/>  
   </generalization>  
-  <generalization id="71">    
-    <end type="SOURCE" refId="31"/>    
+  <generalization id="80">    
+    <end type="SOURCE" refId="20"/>    
     <end type="TARGET" refId="28"/>  
   </generalization>  
-  <generalization id="72">    
-    <end type="SOURCE" refId="23"/>    
-    <end type="TARGET" refId="28"/>  
+  <generalization id="81">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="21"/>  
   </generalization>  
-  <association id="73">    
+  <generalization id="82">    
+    <end type="SOURCE" refId="42"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <association id="83">    
     <end type="SOURCE" refId="27" navigable="false">      
-      <attribute id="74" name="selfHelpGuide"/>      
-      <multiplicity id="75" minimum="0" maximum="1"/>    
+      <attribute id="84" name="selfHelpGuide"/>      
+      <multiplicity id="85" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="23" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="76">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="28"/>  
-  </generalization>  
-  <association id="77">    
-    <end type="SOURCE" refId="33" navigable="false">      
-      <attribute id="78" name="challenge"/>      
-      <multiplicity id="79" minimum="0" maximum="1"/>    
+  <association id="86">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="87" name="journalTrackJournalSteps"/>      
+      <multiplicity id="88" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
+    <end type="TARGET" refId="53" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="80">    
-    <end type="SOURCE" refId="21"/>    
-    <end type="TARGET" refId="28"/>  
-  </dependency>  
-  <generalization id="81">    
-    <end type="SOURCE" refId="16"/>    
-    <end type="TARGET" refId="21"/>  
-  </generalization>  
-  <generalization id="82">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="28"/>  
-  </generalization>  
-  <dependency id="83">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <generalization id="84">    
+  <generalization id="89">    
     <end type="SOURCE" refId="12"/>    
     <end type="TARGET" refId="21"/>  
   </generalization>  
-  <association id="85">    
+  <generalization id="90">    
+    <end type="SOURCE" refId="49"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <association id="91">    
     <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="86" name="selfHelpGuideQuestions"/>      
-      <multiplicity id="87" minimum="0" maximum="2147483647"/>    
+      <attribute id="92" name="defaultConfidentialityLevel"/>      
+      <multiplicity id="93" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="27" navigable="true"/>    
+    <end type="TARGET" refId="22" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="88">    
+  <generalization id="94">    
+    <end type="SOURCE" refId="48"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <generalization id="95">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <generalization id="96">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <dependency id="97">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="20"/>  
+  </dependency>  
+  <generalization id="98">    
+    <end type="SOURCE" refId="51"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <association id="99">    
+    <end type="SOURCE" refId="53" navigable="false">      
+      <attribute id="100" name="journalTrack"/>      
+      <multiplicity id="101" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="44" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="102">    
+    <end type="SOURCE" refId="36"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <generalization id="103">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <generalization id="104">    
+    <end type="SOURCE" refId="47"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <generalization id="105">    
+    <end type="SOURCE" refId="46"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <dependency id="106">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="107">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <association id="108">    
     <end type="SOURCE" refId="27" navigable="false">      
-      <attribute id="89" name="challenge"/>      
-      <multiplicity id="90" minimum="0" maximum="1"/>    
+      <attribute id="109" name="challenge"/>      
+      <multiplicity id="110" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="91">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="21"/>  
-  </generalization>  
-  <dependency id="92">    
-    <end type="SOURCE" refId="14"/>    
-    <end type="TARGET" refId="20"/>  
-  </dependency>  
-  <generalization id="93">    
-    <end type="SOURCE" refId="7"/>    
+  <generalization id="111">    
+    <end type="SOURCE" refId="29"/>    
     <end type="TARGET" refId="28"/>  
   </generalization>  
-  <association id="94">    
+  <association id="112">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="113" name="challengeChallengeReferrals"/>      
+      <multiplicity id="114" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="115">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <association id="116">    
+    <end type="SOURCE" refId="53" navigable="false">      
+      <attribute id="117" name="journalStep"/>      
+      <multiplicity id="118" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="50" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="119">    
+    <end type="SOURCE" refId="43"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <association id="120">    
     <end type="SOURCE" refId="23" navigable="false">      
-      <attribute id="95" name="selfHelpGuideQuestions"/>      
-      <multiplicity id="96" minimum="0" maximum="2147483647"/>    
+      <attribute id="121" name="selfHelpGuideQuestions"/>      
+      <multiplicity id="122" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="27" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="97">    
-    <end type="SOURCE" refId="30"/>    
+  <association id="123">    
+    <end type="SOURCE" refId="44" navigable="false">      
+      <attribute id="124" name="journalTrackJournalSteps"/>      
+      <multiplicity id="125" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="53" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="126">    
+    <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="28"/>  
   </generalization>  
-  <generalization id="98">    
-    <end type="SOURCE" refId="9"/>    
+  <generalization id="127">    
+    <end type="SOURCE" refId="18"/>    
     <end type="TARGET" refId="28"/>  
   </generalization>  
-  <association id="99">    
+  <dependency id="128">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="20"/>  
+  </dependency>  
+  <generalization id="129">    
+    <end type="SOURCE" refId="45"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <generalization id="130">    
+    <end type="SOURCE" refId="52"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <association id="131">    
     <end type="SOURCE" refId="23" navigable="false">      
-      <attribute id="100" name="selfHelpGuideGroups"/>      
-      <multiplicity id="101" minimum="0" maximum="2147483647"/>    
+      <attribute id="132" name="selfHelpGuideGroups"/>      
+      <multiplicity id="133" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="25" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="102">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="18"/>  
-  </dependency>  
-  <generalization id="103">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="21"/>  
-  </generalization>  
-  <dependency id="104">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <generalization id="105">    
-    <end type="SOURCE" refId="32"/>    
-    <end type="TARGET" refId="28"/>  
-  </generalization>  
-  <generalization id="106">    
-    <end type="SOURCE" refId="27"/>    
-    <end type="TARGET" refId="28"/>  
-  </generalization>  
-  <generalization id="107">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="21"/>  
-  </generalization>  
-  <dependency id="108">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="18"/>  
-  </dependency>  
-  <generalization id="109">    
-    <end type="SOURCE" refId="17"/>    
-    <end type="TARGET" refId="28"/>  
-  </generalization>  
-  <dependency id="110">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <dependency id="111">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="112">    
+  <dependency id="134">    
     <end type="SOURCE" refId="16"/>    
     <end type="TARGET" refId="19"/>  
   </dependency>  
-  <generalization id="113">    
+  <generalization id="135">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <generalization id="136">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <generalization id="137">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <generalization id="138">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <generalization id="139">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <dependency id="140">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <generalization id="141">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <association id="142">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="143" name="challenge"/>      
+      <multiplicity id="144" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="145">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <dependency id="146">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <generalization id="147">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <generalization id="148">    
+    <end type="SOURCE" refId="38"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <dependency id="149">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="150">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="151" name="selfHelpGuideQuestions"/>      
+      <multiplicity id="152" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="153">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <dependency id="154">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <generalization id="155">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <generalization id="156">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="28"/>  
+  </generalization>  
+  <association id="157">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="158" name="challengeChallengeReferrals"/>      
+      <multiplicity id="159" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="160">    
+    <end type="SOURCE" refId="54" navigable="false">      
+      <attribute id="161" name="journalStep"/>      
+      <multiplicity id="162" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="50" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="163">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <generalization id="164">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="34"/>  
+  </generalization>  
+  <association id="165">    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="166" name="confidentialityLevel"/>      
+      <multiplicity id="167" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="168">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <generalization id="169">    
     <end type="SOURCE" refId="24"/>    
     <end type="TARGET" refId="28"/>  
   </generalization>  
-  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+  <classifier-display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" 
+    visibility="true">    
     <attributes public="true" package="true" protected="true" private="true"/>    
     <operations public="true" package="true" protected="true" private="true"/>  
   </classifier-display>  

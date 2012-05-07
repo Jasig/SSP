@@ -22,6 +22,15 @@ public interface EarlyAlertReasonService extends
 	@Override
 	EarlyAlertReason get(UUID id) throws ObjectNotFoundException;
 
+	/**
+	 * Lazily load an instance for the specified identifier.
+	 * 
+	 * @param id
+	 *            Identifier
+	 * @return A lazily-loaded instance for the specified identifier.
+	 */
+	EarlyAlertReason load(UUID id);
+
 	@Override
 	EarlyAlertReason create(EarlyAlertReason obj);
 

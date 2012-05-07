@@ -74,7 +74,7 @@ public class PagingWrapper<T extends Auditable> implements Serializable {
 	 * @param results
 	 *            the results to set
 	 */
-	public void setResults(long results) {
+	public void setResults(final long results) {
 		this.results = results;
 	}
 
@@ -89,7 +89,7 @@ public class PagingWrapper<T extends Auditable> implements Serializable {
 	 * @param rows
 	 *            the rows to set
 	 */
-	public void setRows(Collection<T> rows) {
+	public void setRows(final Collection<T> rows) {
 		this.rows = rows;
 	}
 }

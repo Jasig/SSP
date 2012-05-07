@@ -1,11 +1,14 @@
 package org.jasig.ssp.model.reference;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 
 /**
  * JournalStepDetail reference object.
@@ -18,6 +21,10 @@ public class JournalStepDetail extends AbstractReference implements
 	private static final long serialVersionUID = 1L;
 
 	private int sortOrder;
+
+	@OneToMany(mappedBy = "journalStepDetail")
+	private Set<JournalStepJournalStepDetail> journalStepJournalStepDetails = new HashSet<JournalStepJournalStepDetail>(
+			0);
 
 	/**
 	 * Constructor
@@ -33,7 +40,7 @@ public class JournalStepDetail extends AbstractReference implements
 	 *            Identifier; required
 	 */
 
-	public JournalStepDetail(UUID id) {
+	public JournalStepDetail(final UUID id) {
 		super(id);
 	}
 
@@ -46,7 +53,7 @@ public class JournalStepDetail extends AbstractReference implements
 	 *            Name; required; max 100 characters
 	 */
 
-	public JournalStepDetail(UUID id, String name) {
+	public JournalStepDetail(final UUID id, final String name) {
 		super(id, name);
 	}
 
@@ -60,7 +67,8 @@ public class JournalStepDetail extends AbstractReference implements
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public JournalStepDetail(UUID id, String name, String description) {
+	public JournalStepDetail(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
@@ -87,7 +95,17 @@ public class JournalStepDetail extends AbstractReference implements
 		return sortOrder;
 	}
 
-	public void setSortOrder(int sortOrder) {
+	public void setSortOrder(final int sortOrder) {
 		this.sortOrder = sortOrder;
 	}
+
+	public Set<JournalStepJournalStepDetail> getJournalStepJournalStepDetails() {
+		return journalStepJournalStepDetails;
+	}
+
+	public void setJournalStepJournalStepDetails(
+			final Set<JournalStepJournalStepDetail> journalStepJournalStepDetails) {
+		this.journalStepJournalStepDetails = journalStepJournalStepDetails;
+	}
+
 }

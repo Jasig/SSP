@@ -1,5 +1,7 @@
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.UUID;
+
 import org.jasig.ssp.dao.reference.EarlyAlertReasonDao;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
@@ -42,5 +44,10 @@ public class EarlyAlertReasonServiceImpl extends
 	@Override
 	protected EarlyAlertReasonDao getDao() {
 		return dao;
+	}
+
+	@Override
+	public EarlyAlertReason load(UUID id) {
+		return dao.load(id);
 	}
 }
