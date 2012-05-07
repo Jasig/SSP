@@ -49,7 +49,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 				this.persistentClass,
 				id);
 
-		if (obj != null && ObjectStatus.ACTIVE.equals(obj.getObjectStatus())) {
+		if (obj != null) {
 			return obj;
 		}
 

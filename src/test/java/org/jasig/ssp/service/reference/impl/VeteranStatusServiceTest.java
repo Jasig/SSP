@@ -121,7 +121,7 @@ public class VeteranStatusServiceTest {
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andReturn(null);
+		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
 
 		replay(dao);
 

@@ -40,13 +40,13 @@ public interface AuditableCrudDao<T extends Auditable> {
 	PagingWrapper<T> getAll(SortingAndPaging sAndP);
 
 	/**
-	 * Retrieves the specified instance from persistent storage, or returns null
-	 * if not found.
+	 * Retrieves the specified instance from persistent storage. DOES NOT check
+	 * {@link ObjectStatus}.
 	 * 
 	 * @param id
-	 * @return The specified instance if found; null otherwise.
+	 * @return The specified instance if found
 	 * @throws ObjectNotFoundException
-	 *             If object was not found or is not active.
+	 *             If object was not found.
 	 */
 	T get(UUID id) throws ObjectNotFoundException;
 

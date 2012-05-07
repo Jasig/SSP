@@ -167,6 +167,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	public void testControllerGetSetsWithOnlyActiveReference() throws Exception {
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		obj.setPersonId(PERSON_ID);
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
 
 		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
 				.newHashSet();
@@ -198,8 +199,6 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
 		final Set<EarlyAlertSuggestionTO> suggestions = reloaded
 				.getEarlyAlertSuggestionIds();
-
-		// TODO: Check EarlyAlert set mapping filter settings
 		/*
 		 * assertEquals("Set returned all objects instead of active only.", 1,
 		 * suggestions.size());
@@ -207,5 +206,10 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		 * EARLY_ALERT_SUGGESTION_NAME,
 		 * suggestions.iterator().next().getName());
 		 */
+
+		final ServiceResponse response = controller.delete(savedId,
+				PERSON_ID);
+		assertTrue("Deletion response did not return success.",
+				response.isSuccess());
 	}
 }

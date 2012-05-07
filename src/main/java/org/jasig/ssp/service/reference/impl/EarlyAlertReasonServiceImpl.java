@@ -28,7 +28,7 @@ public class EarlyAlertReasonServiceImpl extends
 	 * methods.
 	 */
 	public EarlyAlertReasonServiceImpl() {
-		super(EarlyAlertReason.class);
+		super();
 	}
 
 	/**

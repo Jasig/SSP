@@ -26,7 +26,7 @@ public class VeteranStatusServiceImpl extends
 	 * methods.
 	 */
 	public VeteranStatusServiceImpl() {
-		super(VeteranStatus.class);
+		super();
 	}
 
 	/**

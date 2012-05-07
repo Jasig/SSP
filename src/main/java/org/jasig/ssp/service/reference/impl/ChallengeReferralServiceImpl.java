@@ -2,9 +2,6 @@ package org.jasig.ssp.service.reference.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.ChallengeReferralDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Challenge;
@@ -13,6 +10,9 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -30,7 +30,7 @@ public class ChallengeReferralServiceImpl extends
 	private transient SecurityService securityService;
 
 	public ChallengeReferralServiceImpl() {
-		super(ChallengeReferral.class);
+		super();
 	}
 
 	@Override
