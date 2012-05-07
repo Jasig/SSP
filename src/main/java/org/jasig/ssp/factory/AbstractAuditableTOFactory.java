@@ -5,25 +5,43 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.AuditableTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+/**
+ * Transfer object factory for {@link Auditable} models.
+ * 
+ * @param <TObject>
+ *            Transfer object class for the associated model type.
+ * @param <M>
+ *            Model type
+ */
 public abstract class AbstractAuditableTOFactory<TObject extends AuditableTO<M>, M extends Auditable>
 		implements TOFactory<TObject, M> {
 
-	private final Class<TObject> tObjectClass;
-	private final Class<M> mClass;
+	private final transient Class<TObject> tObjectClass;
+
+	private final transient Class<M> mClass;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AbstractAuditableTOFactory.class);
 
+	/**
+	 * Constructor that initializes specific class instances for use by the
+	 * common base class methods.
+	 * 
+	 * @param tObjectClass
+	 *            Transfer object class for the associated model class
+	 * @param mClass
+	 *            The model class
+	 */
 	public AbstractAuditableTOFactory(final Class<TObject> tObjectClass,
 			final Class<M> mClass) {
 		this.tObjectClass = tObjectClass;
@@ -114,8 +132,14 @@ public abstract class AbstractAuditableTOFactory<TObject extends AuditableTO<M>,
 		} catch (IllegalAccessException e) {
 			LOGGER.error("unable to instantiate Model object in factory.");
 		}
+
 		return null;
 	}
 
+	/**
+	 * Gets the associated data-access layer instance
+	 * 
+	 * @return The associated data-access layer instance
+	 */
 	protected abstract AuditableCrudDao<M> getDao();
 }

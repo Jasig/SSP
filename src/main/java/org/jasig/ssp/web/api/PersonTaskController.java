@@ -7,6 +7,16 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.jasig.ssp.factory.TaskTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Task;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.jasig.ssp.factory.TaskTOFactory;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.Task;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.TaskService;
-import org.jasig.ssp.transferobject.TaskTO;
-import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Maps;
 
@@ -163,7 +163,7 @@ public class PersonTaskController extends
 	 * </p>
 	 * 
 	 * @param personId
-	 *            Persion identifier
+	 *            Person identifier
 	 * @param emailForm
 	 *            e-mail form data
 	 * @return True if action was successful

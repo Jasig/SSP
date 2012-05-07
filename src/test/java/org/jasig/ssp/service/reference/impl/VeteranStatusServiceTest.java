@@ -7,38 +7,51 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.jasig.ssp.dao.reference.VeteranStatusDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.VeteranStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.junit.Before;
+import org.junit.Test;
 
+/**
+ * Test the VeteranStatus service implementation class
+ * 
+ * @author daniel.bower
+ */
 public class VeteranStatusServiceTest {
 
-	private VeteranStatusServiceImpl service;
-	private VeteranStatusDao dao;
+	private transient VeteranStatusServiceImpl service;
 
+	private transient VeteranStatusDao dao;
+
+	/**
+	 * Test setup
+	 */
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new VeteranStatusServiceImpl();
 		dao = createMock(VeteranStatusDao.class);
 
 		service.setDao(dao);
 	}
 
+	/**
+	 * Test the {@link VeteranStatusServiceImpl#getAll(SortingAndPaging)}
+	 * method.
+	 */
 	@Test
 	public void testGetAll() {
-		List<VeteranStatus> daoAll = new ArrayList<VeteranStatus>();
+		final List<VeteranStatus> daoAll = new ArrayList<VeteranStatus>();
 		daoAll.add(new VeteranStatus());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,42 +59,65 @@ public class VeteranStatusServiceTest {
 
 		replay(dao);
 
-		Collection<VeteranStatus> all = service.getAll(
+		final Collection<VeteranStatus> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertTrue(all.size() > 0);
+		assertFalse("List should not have been empty.", all.isEmpty());
 		verify(dao);
 	}
 
+	/**
+	 * Test the {@link VeteranStatusServiceImpl#get(UUID)} method.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test since it uses mocked
+	 *             objects.
+	 */
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		VeteranStatus daoOne = new VeteranStatus(id);
+		final UUID id = UUID.randomUUID();
+		final VeteranStatus daoOne = new VeteranStatus(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
 		replay(dao);
 
-		assertNotNull(service.get(id));
+		assertNotNull("Get method should have returned a non-null instance.",
+				service.get(id));
 		verify(dao);
 	}
 
+	/**
+	 * Test the {@link VeteranStatusServiceImpl#save(VeteranStatus)} method.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test since it uses mocked
+	 *             objects.
+	 */
 	@Test
 	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		VeteranStatus daoOne = new VeteranStatus(id);
+		final UUID id = UUID.randomUUID();
+		final VeteranStatus daoOne = new VeteranStatus(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		assertNotNull("Save method return model should not have been null.",
+				service.save(daoOne));
 		verify(dao);
 	}
 
+	/**
+	 * Test the {@link VeteranStatusServiceImpl#delete(UUID)} method.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test since it uses mocked
+	 *             objects.
+	 */
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		VeteranStatus daoOne = new VeteranStatus(id);
+		final UUID id = UUID.randomUUID();
+		final VeteranStatus daoOne = new VeteranStatus(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -91,15 +127,18 @@ public class VeteranStatusServiceTest {
 
 		service.delete(id);
 
-		boolean found = true;
 		try {
-			service.get(id);
+			final VeteranStatus daoTwo = service.get(id);
+			assertNull(
+					"Recently deleted object should not have been able to be reloaded.",
+					daoTwo);
 		} catch (ObjectNotFoundException e) {
-			found = false;
+			// expected exception
+			assertNotNull(
+					"Recently deleted object should not have been found when attempting to reload.",
+					e);
 		}
 
-		assertFalse(found);
 		verify(dao);
 	}
-
 }

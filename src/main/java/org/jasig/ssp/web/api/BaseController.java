@@ -1,5 +1,7 @@
 package org.jasig.ssp.web.api;
 
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.ServiceResponse;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -8,10 +10,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.ServiceResponse;
 
+/**
+ * Base controller that provides basic exceptions and loggers, that all
+ * controllers in the system must extend.
+ */
 public abstract class BaseController {
+
 	/**
 	 * Log and return an appropriate message for a page not found (HTTP 404,
 	 * {@link HttpStatus#NOT_FOUND}).
@@ -81,5 +86,10 @@ public abstract class BaseController {
 		return new ServiceResponse(false, e.getMessage());
 	}
 
+	/**
+	 * Retrieves a logger instance for system logging.
+	 * 
+	 * @return A logger instance
+	 */
 	protected abstract Logger getLogger();
 }

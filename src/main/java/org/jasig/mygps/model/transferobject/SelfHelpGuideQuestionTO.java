@@ -50,7 +50,7 @@ public class SelfHelpGuideQuestionTO extends
 		}
 
 		if (model.getChallenge() != null) {
-			setChallenge(new ChallengeTO(model.getChallenge()));
+			challenge = new ChallengeTO(model.getChallenge());
 		}
 	}
 
@@ -93,7 +93,7 @@ public class SelfHelpGuideQuestionTO extends
 	 * @param challenge
 	 *            the challenge to set
 	 */
-	public void setChallenge(ChallengeTO challenge) {
+	public void setChallenge(final ChallengeTO challenge) {
 		this.challenge = challenge;
 	}
 

@@ -15,7 +15,7 @@ class ExampleFile {
 	List<String> packagePath
 	String modelName
 	String pattern
-	
+
 	File file
 
 	ExampleFile(String srcPath, List<String> appPath, List<String> packagePath, String modelName, String pattern){
@@ -25,7 +25,7 @@ class ExampleFile {
 		this.modelName = modelName
 		this.pattern = pattern
 	}
-	
+
 	String getPath(){
 		return pathWithModelName(modelName)
 	}
@@ -42,7 +42,7 @@ class ExampleFile {
 	}
 
 	boolean isReadable(){
-	   return (getFile().exists() && file.canRead()) 
+		return (getFile().exists() && file.canRead())
 	}
 
 	/**
@@ -73,8 +73,8 @@ class Templater{
 	 * Set some paths to access the files
 	 */
 	List<String> appPath = ["org", "jasig", "ssp"]
-	String basePath = "/data/code/infinum/javaWorkspace/ssp/"
-	
+	String basePath = "D:/java/projects/ssp/"
+
 	private String javaMainPath = basePath + "src/main/java/"
 	private String javaTestPath = basePath + "src/test/java/"
 	private String resourcesMainPath = basePath + "src/main/resources/"
@@ -98,36 +98,36 @@ class Templater{
 	 */
 	public void run(String modelName, String newModelName, List<String> subpackage){
 		List<ExampleFile> exampleFiles = [
-					new ExampleFile(javaMainPath, appPath, ["dao"] + subpackage, modelName, "Dao.java"),
-					new ExampleFile(javaMainPath, appPath, ["model"] + subpackage, modelName, ".java"),
-					new ExampleFile(javaMainPath, appPath, ["service"] + subpackage, modelName, "Service.java"),
-					new ExampleFile(javaMainPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceImpl.java"),
-					new ExampleFile(javaMainPath, appPath, ["web", "api"] + subpackage, modelName, "Controller.java"),
-					new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage, modelName, "TOFactory.java"),
-					new ExampleFile(javaMainPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryImpl.java"),
-					new ExampleFile(javaMainPath, appPath, ["transferobject"] + subpackage, modelName, "TO.java"),
-					new ExampleFile(javaTestPath, appPath, ["dao"] + subpackage, modelName, "DaoTest.java"),
-					new ExampleFile(javaTestPath, appPath, ["service"] + subpackage + ["impl"], modelName, "ServiceTest.java")
-					//new ExampleFile(javaTestPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryTest.java")
-					]
-		
+			new ExampleFile(javaMainPath, appPath, ["dao"]+ subpackage, modelName, "Dao.java"),
+			new ExampleFile(javaMainPath, appPath, ["model"]+ subpackage, modelName, ".java"),
+			new ExampleFile(javaMainPath, appPath, ["service"]+ subpackage, modelName, "Service.java"),
+			new ExampleFile(javaMainPath, appPath, ["service"]+ subpackage + ["impl"], modelName, "ServiceImpl.java"),
+			new ExampleFile(javaMainPath, appPath, ["web", "api"]+ subpackage, modelName, "Controller.java"),
+			new ExampleFile(javaMainPath, appPath, ["factory"]+ subpackage, modelName, "TOFactory.java"),
+			new ExampleFile(javaMainPath, appPath, ["factory"]+ subpackage + ["impl"], modelName, "TOFactoryImpl.java"),
+			new ExampleFile(javaMainPath, appPath, ["transferobject"]+ subpackage, modelName, "TO.java"),
+			new ExampleFile(javaTestPath, appPath, ["dao"]+ subpackage, modelName, "DaoTest.java"),
+			new ExampleFile(javaTestPath, appPath, ["service"]+ subpackage + ["impl"], modelName, "ServiceTest.java")
+			//new ExampleFile(javaTestPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryTest.java")
+		]
+
 		println "\n\n"
-		exampleFiles.each { exampleFile -> 
+		exampleFiles.each { exampleFile ->
 			println "\n" + exampleFile
-			
+
 			if(!exampleFile.isReadable()){
 				return
 			}
 
 			String newFileName = exampleFile.pathWithModelName(newModelName)
 			File newFile = new File(newFileName)
-			
+
 			String tableName = modelNameToTableName(newModelName)
-	
+
 			if(create){
 				if(newFile.exists() && !overwrite){
 					println "The file $newFileName already exists, skipping"
-					
+
 					if(exampleFile.isModel()){
 						createTableForModel(tableName)
 					}
@@ -144,16 +144,16 @@ class Templater{
 							newLine = line.replaceAll(modelName, newModelName)
 							newLine = newLine.replaceAll(camelCased(modelName), camelCased(newModelName))
 						}
-						
+
 						if(dryRun){
 							if(displayFileContents){
-								println newLine 
+								println newLine
 							}
 						}else{
 							newFile.append(newLine + "\n")
 						}
 					}
-					
+
 					if(exampleFile.isModel()){
 						createTableForModel(tableName)
 					}
@@ -173,9 +173,9 @@ class Templater{
 
 	public String modelNameToTableName(String newModelName){
 		StringBuilder tableName = new StringBuilder()
-		
+
 		tableName.append(newModelName[0].toLowerCase())
-		
+
 		for(int i = 1; i< newModelName.size(); i++){
 			Character c = newModelName[i]
 			if(c.isUpperCase()){
@@ -185,16 +185,16 @@ class Templater{
 				tableName.append(c)
 			}
 		}
-	
+
 		return tableName.toString()
 	}
-	
+
 	public void createTableForModel(String tableName){
 		if(!writeLiquibaseScript){
 			println "Skipping append to Liquibase Script"
 			return
 		}
-		
+
 		File lcl = new File(liquibaseChangeLogLocation)
 		if(!lcl.canWrite()) {
 			println "Cannot write to liquibaseChangeLog"
@@ -202,7 +202,7 @@ class Templater{
 		}
 
 		StringBuilder newChangeLog = new StringBuilder()
-		
+
 		//Remove the last line
 		lcl.eachLine(){
 			if(!it.contains('</databaseChangeLog>')){
@@ -261,46 +261,22 @@ class Templater{
 
 		//Write the file
 		lcl.text = newChangeLog.toString()
-	} 
+	}
 }
 
 
 class ReferenceDataTemplater {
-	String templateModel = "ChallengeCategory"
+	String templateModel = "EarlyAlertReason"
 	List<String> subpackage = ["reference"]
-	List<String> referenceDataModels = [
-//"Category",
-//"ChallengeReferral", 
-//"Challenge", 
-//"ChildCareArrangement",
-//"Citizenship", 
-//"ConfidentialityDisclosureAgreement", 
-//"ConfidentialityLevel", 
-//"EducationGoal", 
-//"EducationLevel", 
-//"Ethnicity", 
-//"FundingSource", 
-//"Goal",
-//"MaritalStatus", 
-//"MessageTemplate",
-//"SelfHelpGuideGroup",
-//"SelfHelpGuideQuestion", 
-//"SelfHelpGuide", 
-//"StudentStatus", 
-//"VeteranStatus",
-"JournalSource",
-"JournalStep",
-"JournalTrack",
-"JournalStepDetail"
-]
+	List<String> referenceDataModels = ["EarlyAlertOutcome"]
 
 	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
 		Templater templater = new Templater(create, overwrite, writeLiquibaseScript, dryRun, displayFileContents)
 		referenceDataModels.each{
 			templater.run(templateModel, it, subpackage)
 		}
-	}	
+	}
 }
 
 
-new ReferenceDataTemplater().run(true, false, true, false, false) 
+new ReferenceDataTemplater().run(true, true, false, false, false)

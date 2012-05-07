@@ -105,5 +105,4 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 *             If there were any unexpected exceptions thrown.
 	 */
 	public abstract ServiceResponse delete(UUID id) throws Exception;
-
 }

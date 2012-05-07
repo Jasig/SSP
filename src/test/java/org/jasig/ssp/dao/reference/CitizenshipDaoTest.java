@@ -7,6 +7,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Citizenship;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +21,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.Citizenship;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
@@ -28,14 +28,14 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class CitizenshipDaoTest {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CitizenshipDaoTest.class);
 
 	@Autowired
-	private CitizenshipDao dao;
+	private transient CitizenshipDao dao;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Before
 	public void setup() {
@@ -54,7 +54,7 @@ public class CitizenshipDaoTest {
 		assertNotNull(obj.getId());
 		saved = obj.getId();
 
-		logger.debug(obj.toString());
+		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
 		assertNotNull(obj);
@@ -96,7 +96,7 @@ public class CitizenshipDaoTest {
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);
 
-		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
 				+ obj2.getId().toString());
 
 		dao.delete(obj);

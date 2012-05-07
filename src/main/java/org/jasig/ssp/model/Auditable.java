@@ -31,9 +31,8 @@ import org.hibernate.annotations.Type;
  * </p>
  * 
  * <p>
- * {@link org.jasig.ssp.dao.AuditableEntityInterceptor} will
- * automatically fill the creation/modification stamps as appropriate in the
- * persistence layer.
+ * {@link org.jasig.ssp.dao.AuditableEntityInterceptor} will automatically fill
+ * the creation/modification stamps as appropriate in the persistence layer.
  * </p>
  * 
  * @author daniel.bower
@@ -115,7 +114,7 @@ public abstract class Auditable {
 			return false;
 		}
 
-		Auditable other = (Auditable) obj;
+		final Auditable other = (Auditable) obj;
 
 		return hasSameNonDefaultIdAs(other) ||
 				// Since the IDs aren't the same, either of them must be
@@ -211,7 +210,7 @@ public abstract class Auditable {
 	 *            Object to check for persistence layer equality
 	 * @return True if both objects share the same, valid id
 	 */
-	final protected boolean hasSameNonDefaultIdAs(Auditable compareTo)
+	final protected boolean hasSameNonDefaultIdAs(final Auditable compareTo)
 	{
 		if (compareTo == null)
 		{
@@ -224,7 +223,7 @@ public abstract class Auditable {
 				id.equals(compareTo.id);
 	}
 
-	final protected boolean areEqual(Object o1, Object o2) {
+	final protected boolean areEqual(final Object o1, final Object o2) {
 		if (o1 == null) {
 			if (o2 != null) {
 				return false;

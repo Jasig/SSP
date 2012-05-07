@@ -13,38 +13,45 @@ import javax.portlet.filter.RenderFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * SSP security filter
+ */
 public final class SspSecurityFilter implements RenderFilter {
 
-	private final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
-	public void destroy() {}
+	public void destroy() {
+	}
 
 	@Override
-	public void init(FilterConfig arg0) throws PortletException {}
+	public void init(final FilterConfig arg0) throws PortletException {
+	}
 
 	@Override
-	public void doFilter(RenderRequest req, RenderResponse res, FilterChain chain) throws IOException, PortletException {
+	public void doFilter(final RenderRequest req, final RenderResponse res,
+			final FilterChain chain) throws IOException, PortletException {
 
-		String username = req.getRemoteUser();
+		final String username = req.getRemoteUser();
 		if (username != null) {
+			// User is authenticated so we need a permissions collection...
+			logger.debug("Analyzing UserPermissions for user:  {}", username);
 
-			// User is authenticated so we need a permissions colection...
-			log.debug("Analyzing UserPermissions for user:  {}", username);
-
-			UserPermissions perms = (UserPermissions) req.getPortletSession(true).getAttribute(SimplePermissionService.USER_PERMISSIONS_KEY);
+			UserPermissions perms = (UserPermissions) req.getPortletSession(
+					true).getAttribute(
+					SimplePermissionService.USER_PERMISSIONS_KEY);
 			if (perms == null) {
 				// First time, set it up...
-				log.info("Creating new UserPermissions for user:  {}", username);
+				logger.info("Creating new UserPermissions for user:  {}",
+						username);
 				perms = UserPermissions.createUserPermissions(req);
-				req.getPortletSession(true).setAttribute(SimplePermissionService.USER_PERMISSIONS_KEY, perms, PortletSession.APPLICATION_SCOPE);
+				req.getPortletSession(true).setAttribute(
+						SimplePermissionService.USER_PERMISSIONS_KEY, perms,
+						PortletSession.APPLICATION_SCOPE);
 			}
 
 		}
-		
+
 		chain.doFilter(req, res);
-
 	}
-
 }

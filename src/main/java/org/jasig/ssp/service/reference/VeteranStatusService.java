@@ -8,22 +8,26 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * VeteranStatus service
+ * 
+ * @author daniel.bower
+ */
 public interface VeteranStatusService extends
 		AuditableCrudService<VeteranStatus> {
 
 	@Override
-	public PagingWrapper<VeteranStatus> getAll(SortingAndPaging sAndP);
+	PagingWrapper<VeteranStatus> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public VeteranStatus get(UUID id) throws ObjectNotFoundException;
+	VeteranStatus get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public VeteranStatus create(VeteranStatus obj);
+	VeteranStatus create(VeteranStatus obj);
 
 	@Override
-	public VeteranStatus save(VeteranStatus obj) throws ObjectNotFoundException;
+	VeteranStatus save(VeteranStatus obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }
