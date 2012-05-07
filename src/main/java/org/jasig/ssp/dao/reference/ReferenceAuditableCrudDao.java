@@ -1,11 +1,11 @@
 package org.jasig.ssp.dao.reference;
 
 import org.hibernate.criterion.Projections;
-import org.springframework.stereotype.Repository;
 import org.jasig.ssp.dao.AbstractAuditableCrudDao;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.stereotype.Repository;
 
 /**
  * Base CRUD methods for reference model objects.
@@ -25,14 +25,14 @@ public abstract class ReferenceAuditableCrudDao<T extends Auditable> extends
 	 * 
 	 * @param persistentClass
 	 */
-	protected ReferenceAuditableCrudDao(Class<T> persistentClass) {
+	protected ReferenceAuditableCrudDao(final Class<T> persistentClass) {
 		super(persistentClass);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
-		long totalRows = (Long) createCriteria().setProjection(
+		final long totalRows = (Long) createCriteria().setProjection(
 				Projections.rowCount()).uniqueResult();
 
 		return new PagingWrapper<T>(totalRows, createCriteria(sAndP).list());

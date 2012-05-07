@@ -6,11 +6,11 @@ import java.util.UUID;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		AuditableCrudDao<T> {
@@ -27,14 +27,15 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	@Override
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<T> getAll(final ObjectStatus status) {
-		List<T> list = createCriteria(new SortingAndPaging(status)).list();
+		final List<T> list = createCriteria(new SortingAndPaging(status))
+				.list();
 		return new PagingWrapper<T>(list);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
-		long totalRows = (Long) createCriteria().setProjection(
+		final long totalRows = (Long) createCriteria().setProjection(
 				Projections.rowCount()).uniqueResult();
 
 		return new PagingWrapper<T>(totalRows, createCriteria(sAndP).list());
@@ -76,12 +77,37 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	}
 
 	protected Criteria createCriteria(final SortingAndPaging sAndP) {
-		Criteria query = createCriteria();
+		final Criteria query = createCriteria();
 
 		if (sAndP != null) {
 			sAndP.addAll(query);
 		}
 
 		return query;
+	}
+
+	/**
+	 * Run a query and get the total rows and results with out having to define
+	 * the Restrictions twice
+	 */
+	protected PagingWrapper<T> processCriteriaWithPaging(
+			final Criteria query, final SortingAndPaging sAndP) {
+		// get the query results total count
+		final long totalRows = (Long) query.setProjection(
+				Projections.rowCount()).uniqueResult();
+
+		// clear the count projection from the query
+		query.setProjection(null);
+
+		// Add Sorting and Paging
+		if (sAndP != null) {
+			sAndP.addAll(query);
+		}
+
+		// Query results
+		@SuppressWarnings("unchecked")
+		final List<T> results = query.list();
+
+		return new PagingWrapper<T>(totalRows, results);
 	}
 }

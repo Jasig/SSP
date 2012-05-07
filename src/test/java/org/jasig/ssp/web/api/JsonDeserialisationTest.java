@@ -28,6 +28,7 @@ public class JsonDeserialisationTest {
 	@Test
 	public void sspClassesUsedByOurControllersShouldBeDeserialisableByJackson() {
 
+		@SuppressWarnings("rawtypes")
 		List<Class> classes = Lists.newArrayList();
 		classes.addAll(ClassDiscovery
 				.getClasses("org.jasig.mygps.model.transferobject"));
