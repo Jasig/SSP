@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +45,21 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T get(final UUID id) {
-		return (T) sessionFactory.getCurrentSession().get(this.persistentClass,
+	public T get(final UUID id) throws ObjectNotFoundException {
+		final Session session = sessionFactory.getCurrentSession();
+
+		// TODO: ObjectStatus filter isn't working right now
+		// session.enableFilter("objStatusFilter").setParameter("status", 1);
+
+		final T obj = (T) session.get(
+				this.persistentClass,
 				id);
+
+		if (obj != null) {
+			return obj;
+		}
+
+		throw new ObjectNotFoundException(id, persistentClass.getName());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -71,11 +85,24 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		sessionFactory.getCurrentSession().delete(obj);
 	}
 
+	/**
+	 * Create a new, simple Criteria instance for the specific class
+	 * 
+	 * @return A new Criteria instance for the specific class
+	 */
 	protected Criteria createCriteria() {
 		return sessionFactory.getCurrentSession().createCriteria(
 				this.persistentClass);
 	}
 
+	/**
+	 * Create a new Criteria instance for the specific class filtered by the
+	 * specified sorting, paging, and status filters.
+	 * 
+	 * @param sAndP
+	 *            Sorting, paging, and status filters
+	 * @return A new Criteria instance for the specific class
+	 */
 	protected Criteria createCriteria(final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 

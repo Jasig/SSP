@@ -9,12 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.TaskDao;
 import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
 import org.jasig.ssp.model.ObjectStatus;
@@ -30,6 +24,12 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Maps;
 
@@ -48,12 +48,12 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	private transient MessageService messageService;
 
 	@Value("#{configProperties.serverExternalPath}")
-	private String serverExternalPath;
-
-	private String studentUIPath = "MyGPS";
+	private transient String serverExternalPath;
 
 	@Value("#{configProperties.numberOfDaysPriorForTaskReminder}")
-	private int numberOfDaysPriorForTaskReminder;
+	private transient int numberOfDaysPriorForTaskReminder;
+
+	private static final String STUDENTUIPATH = "MyGPS";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TaskServiceImpl.class);
@@ -187,6 +187,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 			}
 			tasksForGroup.add(task);
 		}
+
 		return grouped;
 	}
 
@@ -244,8 +245,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		// fix links in description
 		final String linkedDescription = customTask.getDescription()
 				.replaceAll(
-						"href=\"/" + studentUIPath + "/",
-						"href=\"" + serverExternalPath + "/" + studentUIPath
+						"href=\"/" + STUDENTUIPATH + "/",
+						"href=\"" + serverExternalPath + "/" + STUDENTUIPATH
 								+ "/");
 		templateParameters.put("description", linkedDescription);
 
@@ -295,8 +296,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 
 	/**
 	 * If tasks are selected, get them, otherwise return the tasks for the
-	 * person,
-	 * (just for the session if it is the anon user).
+	 * person, (just for the session if it is the anon user).
 	 */
 	@Override
 	public List<Task> getTasksForPersonIfNoneSelected(

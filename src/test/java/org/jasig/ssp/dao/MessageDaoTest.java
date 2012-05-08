@@ -7,6 +7,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jasig.ssp.model.Message;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +22,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.Message;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
@@ -46,7 +47,7 @@ public class MessageDaoTest {
 	}
 
 	@Test
-	public void testSaveNew() {
+	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
 
 		Message obj = new Message();
@@ -75,8 +76,8 @@ public class MessageDaoTest {
 		dao.delete(obj);
 	}
 
-	@Test
-	public void testNull() {
+	@Test(expected = ObjectNotFoundException.class)
+	public void testNull() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		Message fundingSource = dao.get(id);
 

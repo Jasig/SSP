@@ -8,14 +8,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonEducationLevel;
@@ -25,6 +17,14 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.EducationLevelService;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
@@ -95,14 +95,24 @@ public class PersonEducationLevelDaoTest {
 		person.getEducationLevels().remove(found);
 		dao.delete(model);
 
-		assertNull(dao.get(model.getId()));
-
+		try {
+			assertNull(dao.get(model.getId()));
+		} catch (ObjectNotFoundException e) {
+			// expected
+			e.printStackTrace();
+		}
 	}
 
 	@Test
 	public void testNull() {
 		UUID id = UUID.randomUUID();
-		PersonEducationLevel model = dao.get(id);
+		PersonEducationLevel model = null;
+		try {
+			model = dao.get(id);
+		} catch (ObjectNotFoundException e) {
+			// expected
+			e.printStackTrace();
+		}
 		assertNull(model);
 
 		List<PersonEducationLevel> modelsAfter = dao.forPerson(new Person(id));

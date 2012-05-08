@@ -1029,7 +1029,8 @@
 		</modifySql>
 	</changeSet>
 
-	<changeSet author='jon.adams' id='Add early_alert_early_alert_suggestion table'>
+	<changeSet author='jon.adams'
+		id='Add early_alert_early_alert_suggestion table'>
 		<createTable tableName="early_alert_early_alert_suggestion">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
@@ -1059,6 +1060,102 @@
 				<constraints nullable="false"
 					foreignKeyName="early_alert_suggestion_early_alert_suggestion_id"
 					references="early_alert_suggestion(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_early_alert_suggestion to ssp</sql>
+		<rollback>
+			<dropTable tableName="early_alert_early_alert_suggestion" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet id="sample deleted data for testing early_alert_outcome"
+		author="jon.adams">
+		<insert tableName="early_alert_outcome">
+			<column name="id" value="077A1D57-6C85-42F7-922B-7642BE9F70EB" />
+			<column name="name" value="Test deleted outcome - should never be seen" />
+			<column name="description" value="TEST" />
+			<column name="created_date" valueDate="2012-05-07T11:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T11:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="3" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert_outcome">
+				<where>id='077A1D57-6C85-42F7-922B-7642BE9F70EB'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="sample deleted data for testing early_alert_suggestion"
+		author="jon.adams">
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="881DF3DD-1AA6-4CB8-8817-E95DAF49227A" />
+			<column name="name" value="Test deleted suggestion - should never be seen" />
+			<column name="description" value="TEST" />
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="3" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert_suggestion">
+				<where>id='881DF3DD-1AA6-4CB8-8817-E95DAF49227A'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet author='jon.adams'
+		id='Change early_alert_early_alert_reason table'>
+		<dropTable tableName="early_alert_early_alert_reason" />
+		<createTable tableName="early_alert_early_alert_reason">
+			<column name="early_alert_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_early_alert_reason_early_alert_id"
+					references="early_alert(id)" primaryKey="true" />
+			</column>
+			<column name="early_alert_reason_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_early_alert_reason_ids" references="early_alert_reason(id)"
+					primaryKey="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_early_alert_reason to ssp</sql>
+		<rollback>
+			<dropTable tableName="early_alert_early_alert_reason" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet author='jon.adams'
+		id='Change early_alert_early_alert_suggestion table'>
+		<dropTable tableName="early_alert_early_alert_suggestion" />
+		<createTable tableName="early_alert_early_alert_suggestion">
+			<column name="early_alert_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_early_alert_suggestion_early_alert_id"
+					references="early_alert(id)" primaryKey="true" />
+			</column>
+			<column name="early_alert_suggestion_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_early_alert_suggestion_ids" references="early_alert_suggestion(id)"
+					primaryKey="true" />
 			</column>
 		</createTable>
 

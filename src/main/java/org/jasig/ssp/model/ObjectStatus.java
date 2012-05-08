@@ -6,8 +6,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 /**
- * Basis for soft delete functionality.
- * 
+ * Enumeration for soft delete functionality.
  */
 public enum ObjectStatus {
 	/*
@@ -25,27 +24,38 @@ public enum ObjectStatus {
 	ALL,
 
 	/**
-	 * Object is appropriate for use in creating/editing records.
+	 * Object is appropriate for use in creating/editing records. (integer: 1)
 	 */
 	ACTIVE,
 
 	/**
-	 * Object is not appropriate for use in creating/editing records.
+	 * Object is not appropriate for use in creating/editing records. (integer:
+	 * 2)
 	 */
 	INACTIVE,
 
 	/**
 	 * Object has been removed, and should not be used in creating/editing
-	 * records
+	 * records (integer: 3)
 	 */
 	DELETED;
 
+	/**
+	 * Filter a collection to return only those that have the specified status.
+	 * 
+	 * @param list
+	 *            List of {@link Auditable}
+	 * @param status
+	 *            Only return instances that match this status
+	 * @return A list of instances that match this status
+	 */
 	public static <T extends Auditable> List<T> filterForStatus(
 			Collection<T> list, ObjectStatus status) {
 		List<T> inStatus = Lists.newArrayList();
 
 		for (T t : list) {
-			if (status.equals(t.getObjectStatus())) {
+			if (status.equals(ObjectStatus.ALL)
+					|| status.equals(t.getObjectStatus())) {
 				inStatus.add(t);
 			}
 		}

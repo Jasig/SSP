@@ -76,7 +76,7 @@ public class EarlyAlertOutreachServiceTest {
 	public void testGet() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
 		final EarlyAlertOutreach daoOne = new EarlyAlertOutreach(id);
-
+		daoOne.setObjectStatus(ObjectStatus.ACTIVE);
 		expect(dao.get(id)).andReturn(daoOne);
 
 		replay(dao);
@@ -119,10 +119,10 @@ public class EarlyAlertOutreachServiceTest {
 	public void testDelete() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
 		final EarlyAlertOutreach daoOne = new EarlyAlertOutreach(id);
-
+		daoOne.setObjectStatus(ObjectStatus.ACTIVE);
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andReturn(null);
+		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
 
 		replay(dao);
 

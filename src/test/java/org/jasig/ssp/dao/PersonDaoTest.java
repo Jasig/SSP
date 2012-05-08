@@ -10,6 +10,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,11 +26,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.util.sort.SortDirection;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Lists;
 
@@ -84,13 +85,13 @@ public class PersonDaoTest {
 	}
 
 	@Test
-	public void testGet() {
+	public void testGet() throws ObjectNotFoundException {
 		assertEquals(Person.SYSTEM_ADMINISTRATOR_ID,
 				dao.get(Person.SYSTEM_ADMINISTRATOR_ID).getId());
 	}
 
 	@Test
-	public void testSaveNew() {
+	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
 
 		Person obj = new Person();
@@ -120,8 +121,8 @@ public class PersonDaoTest {
 		dao.delete(obj);
 	}
 
-	@Test
-	public void testNull() {
+	@Test(expected = ObjectNotFoundException.class)
+	public void testNull() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		Person person = dao.get(id);
 

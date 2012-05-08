@@ -3,9 +3,6 @@ package org.jasig.ssp.service.impl;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -14,6 +11,9 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -34,17 +34,13 @@ public class PersonServiceImpl implements PersonService {
 	 *            Required identifier for the Person to retrieve. Can not be
 	 *            null.
 	 * @exception ObjectNotFoundException
-	 *                If the supplied identifier does not exist in the database.
+	 *                If the supplied identifier does not exist in the database
+	 *                or is not {@link ObjectStatus#ACTIVE}.
 	 * @return The specified Person instance.
 	 */
 	@Override
 	public Person get(UUID id) throws ObjectNotFoundException {
-		Person obj = dao.get(id);
-		if (null == obj) {
-			throw new ObjectNotFoundException(id, "Person");
-		}
-
-		return obj;
+		return dao.get(id);
 	}
 
 	@Override

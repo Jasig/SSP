@@ -14,14 +14,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.jasig.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ConfidentialityDisclosureAgreementServiceTest {
 
@@ -55,7 +55,8 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 	@Test
 	public void testGet() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
-		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(id);
+		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(
+				id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -68,7 +69,8 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 	@Test
 	public void testSave() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
-		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(id);
+		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(
+				id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
@@ -81,11 +83,12 @@ public class ConfidentialityDisclosureAgreementServiceTest {
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
-		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(id);
+		ConfidentialityDisclosureAgreement daoOne = new ConfidentialityDisclosureAgreement(
+				id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andReturn(null);
+		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
 
 		replay(dao);
 

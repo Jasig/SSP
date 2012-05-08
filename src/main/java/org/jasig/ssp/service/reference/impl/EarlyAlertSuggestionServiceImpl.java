@@ -28,7 +28,7 @@ public class EarlyAlertSuggestionServiceImpl extends
 	 * methods.
 	 */
 	public EarlyAlertSuggestionServiceImpl() {
-		super(EarlyAlertSuggestion.class);
+		super();
 	}
 
 	/**

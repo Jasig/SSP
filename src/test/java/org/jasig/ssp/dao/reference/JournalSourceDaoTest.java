@@ -7,6 +7,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.JournalSource;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +22,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.JournalSource;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
@@ -28,22 +29,22 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class JournalSourceDaoTest {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(JournalSourceDaoTest.class);
 
 	@Autowired
-	private JournalSourceDao dao;
+	private transient JournalSourceDao dao;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
 	@Test
-	public void testSaveNew() {
+	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
 
 		JournalSource obj = new JournalSource();
@@ -54,7 +55,7 @@ public class JournalSourceDaoTest {
 		assertNotNull(obj.getId());
 		saved = obj.getId();
 
-		logger.debug(obj.toString());
+		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
 		assertNotNull(obj);
@@ -70,8 +71,8 @@ public class JournalSourceDaoTest {
 		dao.delete(obj);
 	}
 
-	@Test
-	public void testNull() {
+	@Test(expected = ObjectNotFoundException.class)
+	public void testNull() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		JournalSource journalSource = dao.get(id);
 
@@ -97,7 +98,7 @@ public class JournalSourceDaoTest {
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);
 
-		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
 				+ obj2.getId().toString());
 
 		dao.delete(obj);

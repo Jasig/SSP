@@ -5,9 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.mygps.model.transferobject.SelfHelpGuideResponseTO;
 import org.jasig.ssp.dao.SelfHelpGuideQuestionResponseDao;
 import org.jasig.ssp.dao.SelfHelpGuideResponseDao;
@@ -25,6 +22,9 @@ import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -81,7 +81,8 @@ public class SelfHelpGuideManager {
 		return selfHelpGuideDetailTO;
 	}
 
-	public boolean cancelSelfHelpGuideResponse(UUID selfHelpGuideResponseId) {
+	public boolean cancelSelfHelpGuideResponse(UUID selfHelpGuideResponseId)
+			throws ObjectNotFoundException {
 
 		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
 				.get(selfHelpGuideResponseId);
@@ -94,7 +95,8 @@ public class SelfHelpGuideManager {
 	}
 
 	// SelfHelpGuideResponseService
-	public Boolean completeSelfHelpGuideResponse(UUID selfHelpGuideResponseId) {
+	public Boolean completeSelfHelpGuideResponse(UUID selfHelpGuideResponseId)
+			throws ObjectNotFoundException {
 		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
 				.get(selfHelpGuideResponseId);
 		selfHelpGuideResponse.setCompleted(true);
@@ -103,7 +105,7 @@ public class SelfHelpGuideManager {
 	}
 
 	public SelfHelpGuideResponseTO getSelfHelpGuideResponseById(
-			UUID selfHelpGuideResponseId) {
+			UUID selfHelpGuideResponseId) throws ObjectNotFoundException {
 
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 		SelfHelpGuideResponse selfHelpGuideResponse = selfHelpGuideResponseDao
@@ -165,7 +167,8 @@ public class SelfHelpGuideManager {
 	}
 
 	public Boolean answerSelfHelpGuideQuestion(UUID selfHelpGuideResponseId,
-			UUID selfHelpGuideQuestionId, Boolean response) {
+			UUID selfHelpGuideQuestionId, Boolean response)
+			throws ObjectNotFoundException {
 
 		SelfHelpGuideQuestionResponse selfHelpGuideQuestionResponse = new SelfHelpGuideQuestionResponse();
 		selfHelpGuideQuestionResponse.setEarlyAlertSent(false);

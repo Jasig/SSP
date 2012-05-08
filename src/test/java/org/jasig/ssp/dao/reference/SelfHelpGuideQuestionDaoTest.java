@@ -7,6 +7,13 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.SelfHelpGuide;
+import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +24,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.Challenge;
-import org.jasig.ssp.model.reference.SelfHelpGuide;
-import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
@@ -30,26 +31,27 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 @Transactional
 public class SelfHelpGuideQuestionDaoTest {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SelfHelpGuideQuestionDaoTest.class);
 
 	@Autowired
-	private SelfHelpGuideQuestionDao dao;
+	private transient SelfHelpGuideQuestionDao dao;
 
 	@Autowired
-	private SelfHelpGuideDao selfHelpGuideDao;
+	private transient SelfHelpGuideDao selfHelpGuideDao;
 
 	@Autowired
-	private ChallengeDao challengeDao;
+	private transient ChallengeDao challengeDao;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
-	private SelfHelpGuide testGuide;
-	private Challenge testChallenge;
+	private transient SelfHelpGuide testGuide;
+
+	private transient Challenge testChallenge;
 
 	@Before
-	public void setup() {
+	public void setUp() throws ObjectNotFoundException {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 		testGuide = selfHelpGuideDao.get(UUID
 				.fromString("2597d6a8-c95e-40a5-a3fd-e0d95967b1a0"));
@@ -58,7 +60,7 @@ public class SelfHelpGuideQuestionDaoTest {
 	}
 
 	@Test
-	public void testSaveNew() {
+	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
 
 		SelfHelpGuideQuestion obj = new SelfHelpGuideQuestion();
@@ -71,7 +73,7 @@ public class SelfHelpGuideQuestionDaoTest {
 		assertNotNull(obj.getId());
 		saved = obj.getId();
 
-		logger.debug(obj.toString());
+		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
 		assertNotNull(obj);
@@ -87,8 +89,8 @@ public class SelfHelpGuideQuestionDaoTest {
 		dao.delete(obj);
 	}
 
-	@Test
-	public void testNull() {
+	@Test(expected = ObjectNotFoundException.class)
+	public void testNull() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		SelfHelpGuideQuestion selfHelpGuideQuestion = dao.get(id);
 
@@ -118,7 +120,7 @@ public class SelfHelpGuideQuestionDaoTest {
 		obj2.setSelfHelpGuide(testGuide);
 		dao.save(obj2);
 
-		logger.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
+		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
 				+ obj2.getId().toString());
 
 		dao.delete(obj);
@@ -129,5 +131,4 @@ public class SelfHelpGuideQuestionDaoTest {
 	public void bySelfHelpGuide() {
 		assertList(dao.bySelfHelpGuide(UUID.randomUUID()));
 	}
-
 }

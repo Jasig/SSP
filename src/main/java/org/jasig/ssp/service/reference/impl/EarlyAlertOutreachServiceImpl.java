@@ -26,7 +26,7 @@ public class EarlyAlertOutreachServiceImpl extends
 	 * methods.
 	 */
 	public EarlyAlertOutreachServiceImpl() {
-		super(EarlyAlertOutreach.class);
+		super();
 	}
 
 	/**

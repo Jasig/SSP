@@ -48,8 +48,9 @@ public interface TOFactory<TObject extends TransferObject<M>, M> {
 	 *            Load model for this identifier
 	 * 
 	 * @return Model loaded from persistent storage
+	 * @throws ObjectNotFoundException
 	 */
-	M from(UUID id);
+	M from(UUID id) throws ObjectNotFoundException;
 
 	/**
 	 * Copy the list of models to a new list of transfer objects.

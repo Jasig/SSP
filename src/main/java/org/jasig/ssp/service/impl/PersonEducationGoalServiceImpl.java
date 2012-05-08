@@ -2,8 +2,6 @@ package org.jasig.ssp.service.impl;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.jasig.ssp.dao.PersonEducationGoalDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -13,6 +11,8 @@ import org.jasig.ssp.service.PersonEducationGoalService;
 import org.jasig.ssp.service.reference.EducationGoalService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PersonEducationGoalServiceImpl implements
@@ -31,11 +31,7 @@ public class PersonEducationGoalServiceImpl implements
 
 	@Override
 	public PersonEducationGoal get(UUID id) throws ObjectNotFoundException {
-		PersonEducationGoal obj = dao.get(id);
-		if (null == obj) {
-			throw new ObjectNotFoundException(id, "PersonEducationGoal");
-		}
-		return obj;
+		return dao.get(id);
 	}
 
 	@Override

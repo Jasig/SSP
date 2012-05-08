@@ -26,7 +26,7 @@ public class EarlyAlertReferralServiceImpl extends
 	 * methods.
 	 */
 	public EarlyAlertReferralServiceImpl() {
-		super(EarlyAlertReferral.class);
+		super();
 	}
 
 	/**

@@ -19,7 +19,7 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 		implements AuditableCrudService<T> {
 
 	/**
-	 * Need access to the dao, so make children provide it.
+	 * Need access to the data access instance, so make children provide it.
 	 * 
 	 * @return
 	 */
@@ -33,11 +33,11 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	@Override
 	public T get(UUID id) throws ObjectNotFoundException {
 		final T obj = getDao().get(id);
-		if (null == obj) {
-			throw new ObjectNotFoundException(id, "AbstractTask");
+		if (ObjectStatus.ACTIVE.equals(obj.getObjectStatus())) {
+			return obj;
 		}
 
-		return obj;
+		throw new ObjectNotFoundException(id, this.getClass().getName());
 	}
 
 	@Override
@@ -53,9 +53,10 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
-		T current = get(id);
+		T current = getDao().get(id);
 
-		if (null != current) {
+		if (!ObjectStatus.DELETED.equals(current.getObjectStatus())) {
+			// Object found and is not already deleted, set it and save change.
 			current.setObjectStatus(ObjectStatus.DELETED);
 			save(current);
 		}

@@ -20,7 +20,7 @@ public class JournalStepServiceImpl extends
 	transient private JournalStepDao dao;
 
 	public JournalStepServiceImpl() {
-		super(JournalStep.class);
+		super();
 	}
 
 	protected void setDao(final JournalStepDao dao) {

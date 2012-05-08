@@ -1,11 +1,11 @@
 package org.jasig.ssp.service.reference.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.FundingSourceDao;
 import org.jasig.ssp.model.reference.FundingSource;
 import org.jasig.ssp.service.reference.FundingSourceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -14,7 +14,7 @@ public class FundingSourceServiceImpl extends
 		implements FundingSourceService {
 
 	public FundingSourceServiceImpl() {
-		super(FundingSource.class);
+		super();
 	}
 
 	@Autowired

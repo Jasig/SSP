@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -39,18 +40,20 @@ public interface AuditableCrudDao<T extends Auditable> {
 	PagingWrapper<T> getAll(SortingAndPaging sAndP);
 
 	/**
-	 * Retrieves the specified instance from persistent storage, or returns null
-	 * if not found.
+	 * Retrieves the specified instance from persistent storage. DOES NOT check
+	 * {@link ObjectStatus}.
 	 * 
 	 * @param id
-	 * @return The specified instance if found; null otherwise.
+	 * @return The specified instance if found
+	 * @throws ObjectNotFoundException
+	 *             If object was not found.
 	 */
-	T get(UUID id);
+	T get(UUID id) throws ObjectNotFoundException;
 
 	/**
 	 * Lazily retrieves the specified instance from persistent storage.
 	 * Exception will be thrown later, on usage, if any, if the object is not
-	 * found.
+	 * found. DOES NOT check for {@link ObjectStatus#ACTIVE} status.
 	 * 
 	 * @param id
 	 * @return The specified instance.

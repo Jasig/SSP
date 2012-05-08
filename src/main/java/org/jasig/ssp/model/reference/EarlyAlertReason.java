@@ -9,6 +9,9 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+
 /**
  * EarlyAlertReason reference object.
  * 
@@ -16,6 +19,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+// TODO: ObjectStatus filter isn't working right now
+@FilterDef(name = "objStatusFilter", parameters = { @ParamDef(name = "status", type = "integer") })
 public class EarlyAlertReason extends AbstractReference implements Serializable {
 
 	private static final long serialVersionUID = -2598053263860587723L;

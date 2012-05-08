@@ -1,11 +1,11 @@
 package org.jasig.ssp.service.reference.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
 import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
 import org.jasig.ssp.service.reference.ConfidentialityDisclosureAgreementService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -14,7 +14,7 @@ public class ConfidentialityDisclosureAgreementServiceImpl extends
 		implements ConfidentialityDisclosureAgreementService {
 
 	public ConfidentialityDisclosureAgreementServiceImpl() {
-		super(ConfidentialityDisclosureAgreement.class);
+		super();
 	}
 
 	@Autowired

@@ -76,7 +76,7 @@ public abstract class AbstractAuditableTOFactory<TObject extends AuditableTO<M>,
 	}
 
 	@Override
-	public M from(final UUID id) {
+	public M from(final UUID id) throws ObjectNotFoundException {
 		return getDao().get(id);
 	}
 

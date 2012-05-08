@@ -2,9 +2,6 @@ package org.jasig.ssp.service.reference.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.SelfHelpGuideDao;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
@@ -12,6 +9,9 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.SelfHelpGuideService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -20,12 +20,12 @@ public class SelfHelpGuideServiceImpl extends
 		implements SelfHelpGuideService {
 
 	public SelfHelpGuideServiceImpl() {
-		super(SelfHelpGuide.class);
+		super();
 	}
 
 	public SelfHelpGuideServiceImpl(SelfHelpGuideDao dao,
 			SecurityService securityService) {
-		super(SelfHelpGuide.class);
+		super();
 		this.dao = dao;
 		this.securityService = securityService;
 	}

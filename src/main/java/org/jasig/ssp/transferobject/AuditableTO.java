@@ -6,13 +6,28 @@ import java.util.UUID;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 
+/**
+ * Transfer object for copy to and from equivalent Auditable models.
+ * 
+ * @param <T>
+ *            Any {@link Auditable} model type.
+ */
 public abstract class AuditableTO<T extends Auditable>
 		implements TransferObject<T> {
 
+	/**
+	 * Empty constructor.
+	 */
 	public AuditableTO() {
 		super();
 	}
 
+	/**
+	 * Construct a simple Auditable with the specified identifier.
+	 * 
+	 * @param id
+	 *            Identifier
+	 */
 	public AuditableTO(final UUID id) {
 		super();
 		this.id = id;
@@ -36,9 +51,11 @@ public abstract class AuditableTO<T extends Auditable>
 		if (model.getCreatedBy() != null) {
 			createdById = model.getCreatedBy().getId();
 		}
+
 		if (model.getModifiedBy() != null) {
 			modifiedById = model.getModifiedBy().getId();
 		}
+
 		createdDate = model.getCreatedDate();
 		modifiedDate = model.getModifiedDate();
 		objectStatus = model.getObjectStatus();

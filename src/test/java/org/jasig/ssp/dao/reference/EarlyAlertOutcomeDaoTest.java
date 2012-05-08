@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertOutcome;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,9 +54,12 @@ public class EarlyAlertOutcomeDaoTest {
 
 	/**
 	 * Test {@link EarlyAlertOutcomeDao#save(EarlyAlertOutcome)}
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown for this test
 	 */
 	@Test
-	public void testSaveNew() {
+	public void testSaveNew() throws ObjectNotFoundException {
 		UUID savedId;
 
 		EarlyAlertOutcome obj = new EarlyAlertOutcome();
@@ -90,9 +94,12 @@ public class EarlyAlertOutcomeDaoTest {
 	/**
 	 * Test that {@link EarlyAlertOutcomeDao#get(UUID)} returns null if
 	 * identifier is not found.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should be thrown for this test
 	 */
-	@Test
-	public void testNotFoundIdReturnsNull() {
+	@Test(expected = ObjectNotFoundException.class)
+	public void testNotFoundIdReturnsNull() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
 		final EarlyAlertOutcome earlyAlertOutcome = dao.get(id);
 

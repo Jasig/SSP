@@ -1,11 +1,11 @@
 package org.jasig.ssp.service.reference.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.CitizenshipDao;
 import org.jasig.ssp.model.reference.Citizenship;
 import org.jasig.ssp.service.reference.CitizenshipService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -14,7 +14,7 @@ public class CitizenshipServiceImpl extends
 		implements CitizenshipService {
 
 	public CitizenshipServiceImpl() {
-		super(Citizenship.class);
+		super();
 	}
 
 	@Autowired

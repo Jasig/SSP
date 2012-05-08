@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.ObjectStatus;
 
 /**
  * Reference entities must all share this abstract class, so they inherit the
@@ -42,6 +43,7 @@ public abstract class AbstractReference extends Auditable {
 	 */
 	public AbstractReference() {
 		super();
+		super.setObjectStatus(ObjectStatus.ACTIVE);
 	}
 
 	/**
@@ -52,7 +54,8 @@ public abstract class AbstractReference extends Auditable {
 	 */
 	public AbstractReference(@NotNull final UUID id) {
 		super();
-		setId(id);
+		super.setId(id);
+		super.setObjectStatus(ObjectStatus.ACTIVE);
 	}
 
 	/**
@@ -65,7 +68,8 @@ public abstract class AbstractReference extends Auditable {
 	 */
 	public AbstractReference(@NotNull final UUID id, @NotNull final String name) {
 		super();
-		setId(id);
+		super.setId(id);
+		super.setObjectStatus(ObjectStatus.ACTIVE);
 		this.name = name;
 	}
 
@@ -82,7 +86,8 @@ public abstract class AbstractReference extends Auditable {
 	public AbstractReference(@NotNull final UUID id,
 			@NotNull final String name, final String description) {
 		super();
-		setId(id);
+		super.setId(id);
+		super.setObjectStatus(ObjectStatus.ACTIVE);
 		this.name = name;
 		this.description = description;
 	}

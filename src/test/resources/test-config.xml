@@ -52,10 +52,9 @@
 		<property name="hibernateProperties">
 			<value>
 				hibernate.dialect=#{configProperties.db_dialect}
+				hibernate.show_sql=false
+				hibernate.format_sql=true
 			</value>
-			<!-- 
-				hibernate.show_sql=true
-				hibernate.format_sql=true -->
 		</property>
 		<property name="namingStrategy">
 			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
@@ -80,13 +79,14 @@
 		<property name="port" value="0000" />
 		<property name="protocol" value="smtp" />
 	</bean>
-	
-	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+
+	<bean id="velocityEngine"
+		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
 			<value>
 				resource.loader=string
 				string.resource.loader.class=org.apache.velocity.runtime.resource.loader.StringResourceLoader
 			</value>
 		</property>
-	</bean>	
+	</bean>
 </beans>

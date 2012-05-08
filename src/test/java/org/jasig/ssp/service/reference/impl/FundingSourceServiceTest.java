@@ -14,22 +14,23 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.jasig.ssp.dao.reference.FundingSourceDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.FundingSource;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.junit.Before;
+import org.junit.Test;
 
 public class FundingSourceServiceTest {
 
-	private FundingSourceServiceImpl service;
-	private FundingSourceDao dao;
+	private transient FundingSourceServiceImpl service;
+
+	private transient FundingSourceDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new FundingSourceServiceImpl();
 		dao = createMock(FundingSourceDao.class);
 
@@ -38,7 +39,7 @@ public class FundingSourceServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<FundingSource> daoAll = new ArrayList<FundingSource>();
+		final List<FundingSource> daoAll = new ArrayList<FundingSource>();
 		daoAll.add(new FundingSource());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,7 +47,7 @@ public class FundingSourceServiceTest {
 
 		replay(dao);
 
-		Collection<FundingSource> all = service.getAll(
+		final Collection<FundingSource> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertTrue(all.size() > 0);
 		verify(dao);
@@ -55,7 +56,9 @@ public class FundingSourceServiceTest {
 	@Test
 	public void testGet() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
-		FundingSource daoOne = new FundingSource(id);
+		FundingSource obj = new FundingSource(id);
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		FundingSource daoOne = obj;
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -82,10 +85,11 @@ public class FundingSourceServiceTest {
 	public void testDelete() throws ObjectNotFoundException {
 		UUID id = UUID.randomUUID();
 		FundingSource daoOne = new FundingSource(id);
+		daoOne.setObjectStatus(ObjectStatus.ACTIVE);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andReturn(null);
+		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
 
 		replay(dao);
 

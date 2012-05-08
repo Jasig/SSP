@@ -13,14 +13,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.jasig.ssp.dao.reference.ChallengeDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Challenge service test
@@ -88,7 +88,7 @@ public class ChallengeServiceTest {
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andReturn(null);
+		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
 
 		replay(dao);
 

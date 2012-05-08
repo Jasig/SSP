@@ -33,6 +33,7 @@ public interface AuditableCrudService<T extends Auditable> {
 	 * @param id
 	 * @return The specified instance if found.
 	 * @exception ObjectNotFoundException
+	 *                If instance not found or inactive.
 	 */
 	T get(UUID id) throws ObjectNotFoundException;
 
