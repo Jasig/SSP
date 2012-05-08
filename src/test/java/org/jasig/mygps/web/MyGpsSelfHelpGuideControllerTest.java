@@ -6,16 +6,12 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jasig.mygps.business.SelfHelpGuideManager;
 import org.jasig.ssp.factory.reference.SelfHelpGuideTOFactory;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
@@ -26,17 +22,17 @@ import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
 import org.jasig.ssp.transferobject.reference.SelfHelpGuideTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
 public class MyGpsSelfHelpGuideControllerTest {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MyGpsSelfHelpGuideControllerTest.class);
+	// private static final Logger LOGGER = LoggerFactory
+	// .getLogger(MyGpsSelfHelpGuideControllerTest.class);
 
 	private transient MyGpsSelfHelpGuideController controller;
-
-	private transient SelfHelpGuideManager manager;
 
 	private transient SelfHelpGuideService selfHelpGuideService;
 
@@ -46,12 +42,11 @@ public class MyGpsSelfHelpGuideControllerTest {
 
 	@Before
 	public void setup() {
-		manager = createMock(SelfHelpGuideManager.class);
 		selfHelpGuideService = createMock(SelfHelpGuideService.class);
 		selfHelpGuideGroupService = createMock(SelfHelpGuideGroupService.class);
 		selfHelpGuideTOFactory = createMock(SelfHelpGuideTOFactory.class);
 
-		controller = new MyGpsSelfHelpGuideController(manager,
+		controller = new MyGpsSelfHelpGuideController(
 				selfHelpGuideService, selfHelpGuideGroupService,
 				selfHelpGuideTOFactory);
 	}
@@ -67,7 +62,6 @@ public class MyGpsSelfHelpGuideControllerTest {
 
 		expect(selfHelpGuideTOFactory.asTOList(guides)).andReturn(guideTOs);
 
-		replay(manager);
 		replay(selfHelpGuideService);
 		replay(selfHelpGuideGroupService);
 		replay(selfHelpGuideTOFactory);
@@ -75,26 +69,24 @@ public class MyGpsSelfHelpGuideControllerTest {
 		try {
 			List<SelfHelpGuideTO> results = controller.getAll();
 
-			verify(manager);
 			verify(selfHelpGuideService);
 			verify(selfHelpGuideGroupService);
 			verify(selfHelpGuideTOFactory);
 
 			assertNotNull(results);
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 	}
 
 	@Test
 	public void getContentById() throws ObjectNotFoundException {
-		SelfHelpGuideDetailTO contentTO = new SelfHelpGuideDetailTO();
+		SelfHelpGuide guide = new SelfHelpGuide();
 		UUID selfHelpGuideId = UUID
 				.fromString("7CDD9ECE-C479-4AD6-4A1D-1BB3CDD4DDE4");
 
-		expect(manager.getContentById(selfHelpGuideId)).andReturn(contentTO);
+		expect(selfHelpGuideService.get(selfHelpGuideId)).andReturn(guide);
 
-		replay(manager);
 		replay(selfHelpGuideService);
 		replay(selfHelpGuideGroupService);
 
@@ -103,12 +95,11 @@ public class MyGpsSelfHelpGuideControllerTest {
 					.getContentById(selfHelpGuideId);
 			assertNotNull(content);
 
-			verify(manager);
 			verify(selfHelpGuideService);
 			verify(selfHelpGuideGroupService);
 
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 	}
 
@@ -124,7 +115,6 @@ public class MyGpsSelfHelpGuideControllerTest {
 				guides);
 		expect(selfHelpGuideTOFactory.asTOList(guides)).andReturn(guideTOs);
 
-		replay(manager);
 		replay(selfHelpGuideService);
 		replay(selfHelpGuideGroupService);
 		replay(selfHelpGuideTOFactory);
@@ -133,14 +123,13 @@ public class MyGpsSelfHelpGuideControllerTest {
 			List<SelfHelpGuideTO> results = controller
 					.getBySelfHelpGuideGroup(group.getId());
 
-			verify(manager);
 			verify(selfHelpGuideService);
 			verify(selfHelpGuideGroupService);
 			verify(selfHelpGuideTOFactory);
 
 			assertNotNull(results);
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 
 	}

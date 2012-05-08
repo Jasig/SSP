@@ -5,14 +5,11 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jasig.ssp.factory.reference.ChallengeReferralTOFactory;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
@@ -20,13 +17,15 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
 public class MyGpsChallengeReferralControllerTest {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MyGpsChallengeReferralControllerTest.class);
+	// private static final Logger LOGGER = LoggerFactory
+	// .getLogger(MyGpsChallengeReferralControllerTest.class);
 
 	private MyGpsChallengeReferralController controller;
 
@@ -71,7 +70,7 @@ public class MyGpsChallengeReferralControllerTest {
 			verify(challengeService);
 			assertEquals(searchResultsTO, response);
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 	}
 
@@ -99,7 +98,7 @@ public class MyGpsChallengeReferralControllerTest {
 			verify(challengeService);
 			assertEquals(searchResultsTO, response);
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 	}
 }

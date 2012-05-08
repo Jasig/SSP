@@ -16,11 +16,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
@@ -33,6 +28,11 @@ import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
@@ -147,7 +147,7 @@ public class MyGpsTaskControllerTest {
 			verify(challengeReferralService);
 			assertEquals(task.getId(), response.getId());
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 	}
 
@@ -165,7 +165,6 @@ public class MyGpsTaskControllerTest {
 			verify(service);
 			assertTrue(response);
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
 			fail("controller error");
 		}
 	}
@@ -196,7 +195,7 @@ public class MyGpsTaskControllerTest {
 			verify(service);
 			assertTrue(response);
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 	}
 
@@ -221,7 +220,7 @@ public class MyGpsTaskControllerTest {
 			verify(service);
 			assertNotNull(response);
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 	}
 
@@ -243,7 +242,7 @@ public class MyGpsTaskControllerTest {
 			verify(service);
 			assertEquals(task.getId(), response.getId());
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 	}
 

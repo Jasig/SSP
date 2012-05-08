@@ -1,6 +1,7 @@
 package org.jasig.ssp.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,7 +50,7 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 		return completed;
 	}
 
-	public void setCompleted(boolean completed) {
+	public void setCompleted(final boolean completed) {
 		this.completed = completed;
 	}
 
@@ -57,7 +58,7 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 		return cancelled;
 	}
 
-	public void setCancelled(boolean cancelled) {
+	public void setCancelled(final boolean cancelled) {
 		this.cancelled = cancelled;
 	}
 
@@ -65,7 +66,7 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 		return earlyAlertSent;
 	}
 
-	public void setEarlyAlertSent(boolean earlyAlertSent) {
+	public void setEarlyAlertSent(final boolean earlyAlertSent) {
 		this.earlyAlertSent = earlyAlertSent;
 	}
 
@@ -73,7 +74,7 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 		return person;
 	}
 
-	public void setPerson(Person person) {
+	public void setPerson(final Person person) {
 		this.person = person;
 	}
 
@@ -81,7 +82,7 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 		return selfHelpGuide;
 	}
 
-	public void setSelfHelpGuide(SelfHelpGuide selfHelpGuide) {
+	public void setSelfHelpGuide(final SelfHelpGuide selfHelpGuide) {
 		this.selfHelpGuide = selfHelpGuide;
 	}
 
@@ -90,7 +91,7 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 	}
 
 	public void setSelfHelpGuideQuestionResponses(
-			Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses) {
+			final Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses) {
 		this.selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponses;
 	}
 
@@ -112,7 +113,7 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 		result *= completed ? 3 : 5;
 		result *= cancelled ? 7 : 11;
 		result *= earlyAlertSent ? 13 : 17;
-		result *= person == null || person.getId() == null ? "person"
+		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= selfHelpGuide == null ? "selfHelpGuide"
 				.hashCode() : selfHelpGuide.hashCode();
@@ -121,5 +122,19 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 				: selfHelpGuideQuestionResponses.hashCode();
 
 		return result;
+	}
+
+	public static SelfHelpGuideResponse createDefaultForSelfHelpGuideAndPerson(
+			final SelfHelpGuide guide, final Person person) {
+
+		final SelfHelpGuideResponse response = new SelfHelpGuideResponse();
+		response.setCancelled(false);
+		response.setCompleted(false);
+		response.setCreatedDate(new Date());
+		response.setEarlyAlertSent(false);
+		response.setPerson(person);
+		response.setSelfHelpGuide(guide);
+
+		return response;
 	}
 }
