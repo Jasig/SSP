@@ -3,6 +3,16 @@ package org.jasig.mygps.web;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasig.mygps.business.SelfHelpGuideManager;
+import org.jasig.ssp.factory.reference.SelfHelpGuideTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
+import org.jasig.ssp.service.reference.SelfHelpGuideGroupService;
+import org.jasig.ssp.service.reference.SelfHelpGuideService;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,20 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.jasig.mygps.business.SelfHelpGuideManager;
-import org.jasig.ssp.factory.reference.SelfHelpGuideTOFactory;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.reference.SelfHelpGuide;
-import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
-import org.jasig.ssp.service.reference.SelfHelpGuideGroupService;
-import org.jasig.ssp.service.reference.SelfHelpGuideService;
-import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
-import org.jasig.ssp.transferobject.reference.SelfHelpGuideTO;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 
 @Controller
 @RequestMapping("/1/mygps/selfhelpguide")
-public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
+public class MyGpsSelfHelpGuideController extends BaseController {
 
 	@Autowired
 	private SelfHelpGuideManager selfHelpGuideManager;
@@ -62,9 +62,9 @@ public class MyGpsSelfHelpGuideController extends AbstractMyGpsController {
 		// security. Guides with authenticationRequired == true should not show
 		// for the anonymous user.
 		try {
-			return selfHelpGuideTOFactory.asTOList((List<SelfHelpGuide>) selfHelpGuideService
-							.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
-							.getRows());
+			return selfHelpGuideTOFactory.asTOList(selfHelpGuideService
+					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
+					.getRows());
 		} catch (Exception e) {
 			LOGGER.error("ERROR : getAll() : {}", e.getMessage(), e);
 			throw e;

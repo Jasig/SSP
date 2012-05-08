@@ -18,14 +18,17 @@ import org.slf4j.LoggerFactory;
  */
 public final class SspSecurityFilter implements RenderFilter {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(SspSecurityFilter.class);
 
 	@Override
 	public void destroy() {
+		// nothing to do
 	}
 
 	@Override
 	public void init(final FilterConfig arg0) throws PortletException {
+		// nothing to do
 	}
 
 	@Override
@@ -35,14 +38,14 @@ public final class SspSecurityFilter implements RenderFilter {
 		final String username = req.getRemoteUser();
 		if (username != null) {
 			// User is authenticated so we need a permissions collection...
-			logger.debug("Analyzing UserPermissions for user:  {}", username);
+			LOGGER.debug("Analyzing UserPermissions for user:  {}", username);
 
 			UserPermissions perms = (UserPermissions) req.getPortletSession(
 					true).getAttribute(
 					SimplePermissionService.USER_PERMISSIONS_KEY);
 			if (perms == null) {
 				// First time, set it up...
-				logger.info("Creating new UserPermissions for user:  {}",
+				LOGGER.info("Creating new UserPermissions for user:  {}",
 						username);
 				perms = UserPermissions.createUserPermissions(req);
 				req.getPortletSession(true).setAttribute(

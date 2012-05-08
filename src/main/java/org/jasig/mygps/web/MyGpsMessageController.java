@@ -5,6 +5,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.jasig.mygps.model.transferobject.MessageTO;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.service.MessageService;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.web.api.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.jasig.mygps.model.transferobject.MessageTO;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.MessageTemplate;
-import org.jasig.ssp.service.MessageService;
 
 @Controller
 @RequestMapping("/1/mygps/message")
-public class MyGpsMessageController extends AbstractMyGpsController {
+public class MyGpsMessageController extends BaseController {
+
+	@Autowired
+	private transient SecurityService securityService;
 
 	@Autowired
 	private MessageService messageService;

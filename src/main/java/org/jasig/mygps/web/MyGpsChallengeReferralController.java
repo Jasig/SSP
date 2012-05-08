@@ -3,6 +3,12 @@ package org.jasig.mygps.web;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasig.ssp.factory.reference.ChallengeReferralTOFactory;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.service.reference.ChallengeReferralService;
+import org.jasig.ssp.service.reference.ChallengeService;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
+import org.jasig.ssp.web.api.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.jasig.ssp.factory.reference.ChallengeReferralTOFactory;
-import org.jasig.ssp.model.reference.Challenge;
-import org.jasig.ssp.service.reference.ChallengeReferralService;
-import org.jasig.ssp.service.reference.ChallengeService;
-import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 
 import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/1/mygps/challengereferral")
-public class MyGpsChallengeReferralController extends AbstractMyGpsController {
+public class MyGpsChallengeReferralController extends BaseController {
 
 	@Autowired
 	private transient ChallengeReferralService challengeReferralService;
