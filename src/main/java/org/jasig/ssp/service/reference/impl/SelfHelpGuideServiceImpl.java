@@ -23,32 +23,32 @@ public class SelfHelpGuideServiceImpl extends
 		super();
 	}
 
-	public SelfHelpGuideServiceImpl(SelfHelpGuideDao dao,
-			SecurityService securityService) {
+	public SelfHelpGuideServiceImpl(final SelfHelpGuideDao dao,
+			final SecurityService securityService) {
 		super();
 		this.dao = dao;
 		this.securityService = securityService;
 	}
 
 	@Autowired
-	transient private SelfHelpGuideDao dao;
+	private transient SelfHelpGuideDao dao;
 
 	@Autowired
-	private SecurityService securityService;
+	private transient SecurityService securityService;
 
 	@Override
-	public PagingWrapper<SelfHelpGuide> getAll(SortingAndPaging sAndP) {
-		if (!securityService.isAuthenticated()) {
+	public PagingWrapper<SelfHelpGuide> getAll(final SortingAndPaging sAndP) {
+		if (securityService.isAuthenticated()) {
+			return dao.getAll(sAndP);
+		} else {
 			return new PagingWrapper<SelfHelpGuide>(
 					dao.findAllActiveForUnauthenticated());
-		} else {
-			return dao.getAll(sAndP);
 		}
 	}
 
 	@Override
 	public List<SelfHelpGuide> getBySelfHelpGuideGroup(
-			SelfHelpGuideGroup selfHelpGuideGroup) {
+			final SelfHelpGuideGroup selfHelpGuideGroup) {
 		return dao
 				.findAllActiveBySelfHelpGuideGroup(selfHelpGuideGroup.getId());
 	}

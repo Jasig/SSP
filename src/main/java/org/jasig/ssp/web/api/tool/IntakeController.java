@@ -1,21 +1,12 @@
 package org.jasig.ssp.web.api.tool;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.jasig.ssp.factory.tool.IntakeFormTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.EmploymentShifts;
@@ -34,6 +25,7 @@ import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.transferobject.reference.ChildCareArrangementTO;
 import org.jasig.ssp.transferobject.reference.CitizenshipTO;
@@ -47,6 +39,18 @@ import org.jasig.ssp.transferobject.reference.VeteranStatusTO;
 import org.jasig.ssp.transferobject.tool.IntakeFormTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.BaseController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.collect.Lists;
 
 /**
  * Student Intake tool services
@@ -146,9 +150,26 @@ public class IntakeController extends BaseController {
 	public Map<String, Object> referenceData() throws Exception {
 		final Map<String, Object> refData = new HashMap<String, Object>();
 
-		SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
-		refData.put("challenges",
-				ChallengeTO.toTOList(challengeService.getAll(sAndP).getRows()));
+		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
+
+		final List<ChallengeTO> challenges = ChallengeTO
+				.toTOList(challengeService
+						.getAll(sAndP).getRows());
+		// Filter out !ChallengeReferrals.ShowInStudentIntake
+		for (ChallengeTO challenge : challenges) {
+			final List<ChallengeReferralTO> referrals = Lists.newArrayList();
+			for (ChallengeReferralTO referral : challenge
+					.getChallengeChallengeReferrals()) {
+				if (referral.isShowInStudentIntake()) {
+					referrals.add(referral);
+				}
+			}
+
+			challenge.setChallengeChallengeReferrals(referrals);
+		}
+
+		refData.put("challenges", challenges);
+
 		refData.put("childCareArrangements", ChildCareArrangementTO
 				.toTOList(childCareArrangementService.getAll(sAndP).getRows()));
 		refData.put("citizenships",

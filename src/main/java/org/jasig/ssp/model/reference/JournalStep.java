@@ -76,25 +76,6 @@ public class JournalStep extends AbstractReference implements
 		super(id, name, description);
 	}
 
-	@Override
-	protected int hashPrime() {
-		return 223;
-	}
-
-	@Override
-	final public int hashCode() {
-		int result = hashPrime();
-
-		// Auditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
-
-		result *= getSortOrder() > 0 ? getSortOrder() : hashPrime();
-
-		return result;
-	}
-
 	public int getSortOrder() {
 		return sortOrder;
 	}
@@ -119,5 +100,24 @@ public class JournalStep extends AbstractReference implements
 	public void setJournalStepJournalStepDetails(
 			final Set<JournalStepJournalStepDetail> journalStepJournalStepDetails) {
 		this.journalStepJournalStepDetails = journalStepJournalStepDetails;
+	}
+
+	@Override
+	protected int hashPrime() {
+		return 223;
+	}
+
+	@Override
+	final public int hashCode() {
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= getId() == null ? "id".hashCode() : getId().hashCode();
+		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
+				.hashCode();
+
+		result *= sortOrder > 0 ? sortOrder : hashPrime();
+
+		return result;
 	}
 }

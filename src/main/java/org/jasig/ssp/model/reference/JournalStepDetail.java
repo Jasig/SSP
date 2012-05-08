@@ -86,7 +86,7 @@ public class JournalStepDetail extends AbstractReference implements
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();
 
-		result *= getSortOrder() > 0 ? getSortOrder() : hashPrime();
+		result *= sortOrder > 0 ? sortOrder : hashPrime();
 
 		return result;
 	}

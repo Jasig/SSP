@@ -14,8 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterJoinTable;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 
@@ -61,16 +59,12 @@ public class EarlyAlert extends Auditable implements Serializable {
 	@JoinTable(name = "early_alert_early_alert_reason",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_reason_id"))
-	// TODO: ObjectStatus filter isn't working right now
-	@Filter(name = "objStatusFilter", condition = "objectStatus = :status")
 	private Set<EarlyAlertReason> earlyAlertReasonIds;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "early_alert_early_alert_suggestion",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_suggestion_id"))
-	// TODO: ObjectStatus filter isn't working right now
-	@FilterJoinTable(name = "objStatusFilter", condition = "objectStatus = :status")
 	private Set<EarlyAlertSuggestion> earlyAlertSuggestionIds;
 
 	/**

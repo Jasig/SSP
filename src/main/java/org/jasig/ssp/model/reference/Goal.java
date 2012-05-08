@@ -85,4 +85,14 @@ public class Goal extends AbstractReference implements
 	protected int hashPrime() {
 		return 107;
 	};
+
+	@Override
+	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
+		int result = hashPrime() * super.hashCode();
+
+		result *= confidentialityLevel == null ? "confidentialityLevel"
+				.hashCode() : confidentialityLevel.getId().hashCode();
+
+		return result;
+	}
 }

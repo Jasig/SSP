@@ -86,4 +86,17 @@ public class MessageTemplate extends AbstractReference {
 	protected int hashPrime() {
 		return 113;
 	};
+
+	@Override
+	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= super.hashCode();
+
+		result *= subject == null ? "subject".hashCode() : subject.hashCode();
+		result *= body == null ? "body".hashCode() : body.hashCode();
+
+		return result;
+	}
 }

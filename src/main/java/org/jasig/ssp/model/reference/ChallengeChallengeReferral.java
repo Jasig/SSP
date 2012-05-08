@@ -28,7 +28,7 @@ public class ChallengeChallengeReferral extends Auditable implements
 		return challenge;
 	}
 
-	public void setChallenge(Challenge challenge) {
+	public void setChallenge(final Challenge challenge) {
 		this.challenge = challenge;
 	}
 
@@ -36,7 +36,7 @@ public class ChallengeChallengeReferral extends Auditable implements
 		return challengeReferral;
 	}
 
-	public void setChallengeReferral(ChallengeReferral challengeReferral) {
+	public void setChallengeReferral(final ChallengeReferral challengeReferral) {
 		this.challengeReferral = challengeReferral;
 	}
 
@@ -56,9 +56,10 @@ public class ChallengeChallengeReferral extends Auditable implements
 
 		// ChallengeChallengeReferral
 		result *= challenge == null ? "challenge".hashCode() : challenge
+				.getId()
 				.hashCode();
 		result *= challengeReferral == null ? "challengeReferral".hashCode()
-				: challengeReferral.hashCode();
+				: challengeReferral.getId().hashCode();
 
 		return result;
 	}

@@ -18,11 +18,20 @@ public class SelfHelpGuideDetailTO extends SelfHelpGuideTO implements
 
 	private List<SelfHelpGuideQuestionTO> questions;
 
+	public SelfHelpGuideDetailTO() {
+		super();
+	}
+
+	public SelfHelpGuideDetailTO(final SelfHelpGuide model) {
+		super();
+		from(model);
+	}
+
 	@Override
 	public final void from(final SelfHelpGuide model) {
 		super.from(model);
 
-		setIntroductoryText(model.getIntroductoryText());
+		introductoryText = model.getIntroductoryText();
 
 		questions = Lists.newArrayList();
 		for (SelfHelpGuideQuestion question : model.getSelfHelpGuideQuestions()) {
@@ -34,7 +43,7 @@ public class SelfHelpGuideDetailTO extends SelfHelpGuideTO implements
 		return introductoryText;
 	}
 
-	public void setIntroductoryText(String introductoryText) {
+	public void setIntroductoryText(final String introductoryText) {
 		this.introductoryText = introductoryText;
 	}
 
@@ -42,7 +51,7 @@ public class SelfHelpGuideDetailTO extends SelfHelpGuideTO implements
 		return questions;
 	}
 
-	public void setQuestions(List<SelfHelpGuideQuestionTO> questions) {
+	public void setQuestions(final List<SelfHelpGuideQuestionTO> questions) {
 		this.questions = questions;
 	}
 }

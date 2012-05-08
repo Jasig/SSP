@@ -36,7 +36,7 @@ public class EducationGoal extends AbstractReference implements Serializable {
 	 *            Identifier; required
 	 */
 
-	public EducationGoal(UUID id) {
+	public EducationGoal(final UUID id) {
 		super(id);
 	}
 
@@ -49,29 +49,21 @@ public class EducationGoal extends AbstractReference implements Serializable {
 	 *            Name; required; max 100 characters
 	 */
 
-	public EducationGoal(UUID id, String name) {
+	public EducationGoal(final UUID id, final String name) {
 		super(id, name);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 150 characters
-	 */
-	public EducationGoal(UUID id, String name, String description) {
-		super(id, name, description);
 	}
 
 	public String getOtherDescription() {
 		return otherDescription;
 	}
 
-	public void setOtherDescription(String otherDescription) {
+	/**
+	 * Set other description. Maximum 255 characters.
+	 * 
+	 * @param otherDescription
+	 *            Maximum 255 characters.
+	 */
+	public void setOtherDescription(final String otherDescription) {
 		this.otherDescription = otherDescription;
 	}
 
@@ -80,4 +72,13 @@ public class EducationGoal extends AbstractReference implements Serializable {
 		return 83;
 	};
 
+	@Override
+	public int hashCode() {
+		int result = hashPrime() * super.hashCode();
+
+		result *= otherDescription == null ? "otherDescription".hashCode()
+				: otherDescription.hashCode();
+
+		return result;
+	}
 }

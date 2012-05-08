@@ -1,5 +1,8 @@
 package org.jasig.mygps.portlet;
 
+import org.jasig.ssp.web.api.BaseController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
@@ -7,7 +10,10 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @Controller
 @RequestMapping("VIEW")
 public class MyGpsSelfHelpGuidePortletController extends
-		AbstractMyGpsController {
+		BaseController {
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(MyGpsSelfHelpGuidePortletController.class);
 
 	@RenderMapping()
 	public String show() {
@@ -38,4 +44,10 @@ public class MyGpsSelfHelpGuidePortletController extends
 	public String accessDenied() {
 		return "accessDenied";
 	}
+
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
+	}
+
 }

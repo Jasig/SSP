@@ -105,20 +105,6 @@ public class Challenge extends AbstractReference implements Serializable {
 		super(id, name);
 	}
 
-	/**
-	 * Constructor for a Challenge model instance.
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 80 characters
-	 * @param description
-	 *            Description; max 64000 characters
-	 */
-	public Challenge(final UUID id, final String name, final String description) {
-		super(id, name, description);
-	}
-
 	public String getSelfHelpGuideQuestion() {
 		return selfHelpGuideQuestion;
 	}
@@ -198,4 +184,25 @@ public class Challenge extends AbstractReference implements Serializable {
 	protected int hashPrime() {
 		return 47;
 	};
+
+	@Override
+	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= super.hashCode();
+
+		result *= selfHelpGuideQuestion == null ? "selfHelpGuideQuestion"
+				.hashCode() : selfHelpGuideQuestion.hashCode();
+		result *= selfHelpGuideDescription == null ? "selfHelpGuideDescription"
+				.hashCode() : selfHelpGuideDescription.hashCode();
+		result *= showInStudentIntake ? 3 : 5;
+		result *= showInSelfHelpSearch ? 7 : 11;
+		result *= tags == null ? "tags".hashCode() : tags.hashCode();
+		result *= defaultConfidentialityLevel == null ? "defaultConfidentialityLevel"
+				.hashCode()
+				: defaultConfidentialityLevel.getId().hashCode();
+
+		return result;
+	}
 }
