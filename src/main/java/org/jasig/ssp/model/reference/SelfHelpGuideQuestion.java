@@ -76,26 +76,11 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 		super(id, name);
 	}
 
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 150 characters
-	 */
-	public SelfHelpGuideQuestion(final UUID id, final String name,
-			final String description) {
-		super(id, name, description);
-	}
-
 	public int getQuestionNumber() {
 		return questionNumber;
 	}
 
-	public void setQuestionNumber(int questionNumber) {
+	public void setQuestionNumber(final int questionNumber) {
 		this.questionNumber = questionNumber;
 	}
 
@@ -103,7 +88,7 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 		return critical;
 	}
 
-	public void setCritical(boolean critical) {
+	public void setCritical(final boolean critical) {
 		this.critical = critical;
 	}
 
@@ -111,7 +96,7 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 		return mandatory;
 	}
 
-	public void setMandatory(boolean mandatory) {
+	public void setMandatory(final boolean mandatory) {
 		this.mandatory = mandatory;
 	}
 
@@ -119,7 +104,7 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 		return challenge;
 	}
 
-	public void setChallenge(Challenge challenge) {
+	public void setChallenge(final Challenge challenge) {
 		this.challenge = challenge;
 	}
 
@@ -127,7 +112,7 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 		return selfHelpGuide;
 	}
 
-	public void setSelfHelpGuide(SelfHelpGuide selfHelpGuide) {
+	public void setSelfHelpGuide(final SelfHelpGuide selfHelpGuide) {
 		this.selfHelpGuide = selfHelpGuide;
 	}
 
@@ -136,7 +121,7 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 	}
 
 	public void setSelfHelpGuideQuestionResponses(
-			Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses) {
+			final Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses) {
 		this.selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponses;
 	}
 
@@ -145,4 +130,18 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 		return 137;
 	};
 
+	@Override
+	public int hashCode() {
+		int result = hashPrime() * super.hashCode();
+
+		result *= questionNumber > 0 ? questionNumber : hashPrime();
+		result *= critical ? 3 : 5;
+		result *= mandatory ? 7 : 11;
+		result *= challenge == null ? "challenge".hashCode() : challenge
+				.getId().hashCode();
+		result *= selfHelpGuide == null ? "selfHelpGuide".hashCode()
+				: selfHelpGuide.getId().hashCode();
+
+		return result;
+	}
 }

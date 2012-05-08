@@ -25,6 +25,8 @@ import javax.persistence.OrderBy;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class SelfHelpGuide extends AbstractReference implements Serializable {
 
+	private static final long serialVersionUID = -1522006854468084935L;
+
 	@Column(name = "threshold")
 	private int threshold;
 
@@ -53,8 +55,6 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 	private Set<SelfHelpGuideGroup> selfHelpGuideGroups = new HashSet<SelfHelpGuideGroup>(
 			0);
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Constructor
 	 */
@@ -69,7 +69,7 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 	 *            Identifier; required
 	 */
 
-	public SelfHelpGuide(UUID id) {
+	public SelfHelpGuide(final UUID id) {
 		super(id);
 	}
 
@@ -82,29 +82,15 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 	 *            Name; required; max 100 characters
 	 */
 
-	public SelfHelpGuide(UUID id, String name) {
+	public SelfHelpGuide(final UUID id, final String name) {
 		super(id, name);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 150 characters
-	 */
-	public SelfHelpGuide(UUID id, String name, String description) {
-		super(id, name, description);
 	}
 
 	public int getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(int threshold) {
+	public void setThreshold(final int threshold) {
 		this.threshold = threshold;
 	}
 
@@ -112,7 +98,7 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 		return introductoryText;
 	}
 
-	public void setIntroductoryText(String introductoryText) {
+	public void setIntroductoryText(final String introductoryText) {
 		this.introductoryText = introductoryText;
 	}
 
@@ -120,7 +106,7 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 		return summaryText;
 	}
 
-	public void setSummaryText(String summaryText) {
+	public void setSummaryText(final String summaryText) {
 		this.summaryText = summaryText;
 	}
 
@@ -128,7 +114,7 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 		return summaryTextEarlyAlert;
 	}
 
-	public void setSummaryTextEarlyAlert(String summaryTextEarlyAlert) {
+	public void setSummaryTextEarlyAlert(final String summaryTextEarlyAlert) {
 		this.summaryTextEarlyAlert = summaryTextEarlyAlert;
 	}
 
@@ -136,7 +122,7 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 		return summaryTextThreshold;
 	}
 
-	public void setSummaryTextThreshold(String summaryTextThreshold) {
+	public void setSummaryTextThreshold(final String summaryTextThreshold) {
 		this.summaryTextThreshold = summaryTextThreshold;
 	}
 
@@ -144,7 +130,7 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 		return authenticationRequired;
 	}
 
-	public void setAuthenticationRequired(boolean authenticationRequired) {
+	public void setAuthenticationRequired(final boolean authenticationRequired) {
 		this.authenticationRequired = authenticationRequired;
 	}
 
@@ -153,7 +139,7 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 	}
 
 	public void setSelfHelpGuideQuestions(
-			List<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
+			final List<SelfHelpGuideQuestion> selfHelpGuideQuestions) {
 		this.selfHelpGuideQuestions = selfHelpGuideQuestions;
 	}
 
@@ -162,7 +148,7 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 	}
 
 	public void setSelfHelpGuideGroups(
-			Set<SelfHelpGuideGroup> selfHelpGuideGroups) {
+			final Set<SelfHelpGuideGroup> selfHelpGuideGroups) {
 		this.selfHelpGuideGroups = selfHelpGuideGroups;
 	}
 
@@ -171,4 +157,24 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 		return 127;
 	};
 
+	@Override
+	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
+		int result = hashPrime();
+
+		// Auditable properties
+		result *= super.hashCode();
+
+		result *= threshold > 0 ? threshold : hashPrime();
+		result *= introductoryText == null ? "introductoryText".hashCode()
+				: introductoryText.hashCode();
+		result *= summaryText == null ? "summaryText".hashCode() : summaryText
+				.hashCode();
+		result *= summaryTextEarlyAlert == null ? "summaryTextEarlyAlert"
+				.hashCode() : summaryTextEarlyAlert.hashCode();
+		result *= summaryTextThreshold == null ? "summaryTextThreshold"
+				.hashCode() : summaryTextThreshold.hashCode();
+		result *= authenticationRequired ? 3 : 5;
+
+		return result;
+	}
 }

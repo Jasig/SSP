@@ -34,6 +34,9 @@ public class ChallengeReferral extends AbstractReference implements
 	@Column(nullable = false)
 	private boolean showInSelfHelpGuide;
 
+	@Column(nullable = false)
+	private boolean showInStudentIntake;
+
 	@OneToMany(mappedBy = "challengeReferral")
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals =
 			new HashSet<ChallengeChallengeReferral>(0);
@@ -52,7 +55,7 @@ public class ChallengeReferral extends AbstractReference implements
 	 *            Identifier; required
 	 */
 
-	public ChallengeReferral(UUID id) {
+	public ChallengeReferral(final UUID id) {
 		super(id);
 	}
 
@@ -65,29 +68,15 @@ public class ChallengeReferral extends AbstractReference implements
 	 *            Name; required; max 100 characters
 	 */
 
-	public ChallengeReferral(UUID id, String name) {
+	public ChallengeReferral(final UUID id, final String name) {
 		super(id, name);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 150 characters
-	 */
-	public ChallengeReferral(UUID id, String name, String description) {
-		super(id, name, description);
 	}
 
 	public String getPublicDescription() {
 		return publicDescription;
 	}
 
-	public void setPublicDescription(String publicDescription) {
+	public void setPublicDescription(final String publicDescription) {
 		this.publicDescription = publicDescription;
 	}
 
@@ -96,7 +85,7 @@ public class ChallengeReferral extends AbstractReference implements
 	}
 
 	public void setChallengeChallengeReferrals(
-			Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
+			final Set<ChallengeChallengeReferral> challengeChallengeReferrals) {
 		this.challengeChallengeReferrals = challengeChallengeReferrals;
 	}
 
@@ -104,12 +93,39 @@ public class ChallengeReferral extends AbstractReference implements
 		return showInSelfHelpGuide;
 	}
 
-	public void setShowInSelfHelpGuide(boolean showInSelfHelpGuide) {
+	public void setShowInSelfHelpGuide(final boolean showInSelfHelpGuide) {
 		this.showInSelfHelpGuide = showInSelfHelpGuide;
+	}
+
+	/**
+	 * @return the showInStudentIntake
+	 */
+	public boolean isShowInStudentIntake() {
+		return showInStudentIntake;
+	}
+
+	/**
+	 * @param showInStudentIntake
+	 *            the showInStudentIntake to set
+	 */
+	public void setShowInStudentIntake(final boolean showInStudentIntake) {
+		this.showInStudentIntake = showInStudentIntake;
 	}
 
 	@Override
 	protected int hashPrime() {
 		return 61;
 	};
+
+	@Override
+	public int hashCode() {
+		int result = hashPrime() * super.hashCode();
+
+		result *= publicDescription == null ? "publicDescription".hashCode()
+				: publicDescription.hashCode();
+		result *= showInSelfHelpGuide ? 5 : 11;
+		result *= showInStudentIntake ? 3 : 17;
+
+		return result;
+	}
 }

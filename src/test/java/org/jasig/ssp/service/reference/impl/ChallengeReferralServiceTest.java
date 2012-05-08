@@ -23,22 +23,33 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test the ChallengeReferral service implementation class
+ */
 public class ChallengeReferralServiceTest {
 
-	private ChallengeReferralServiceImpl service;
-	private ChallengeReferralDao dao;
+	private transient ChallengeReferralServiceImpl service;
 
+	private transient ChallengeReferralDao dao;
+
+	/**
+	 * Test setup
+	 */
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new ChallengeReferralServiceImpl();
 		dao = createMock(ChallengeReferralDao.class);
 
 		service.setDao(dao);
 	}
 
+	/**
+	 * Test the {@link ChallengeReferralServiceImpl#getAll(SortingAndPaging)}
+	 * method.
+	 */
 	@Test
 	public void testGetAll() {
-		List<ChallengeReferral> daoAll = new ArrayList<ChallengeReferral>();
+		final List<ChallengeReferral> daoAll = new ArrayList<ChallengeReferral>();
 		daoAll.add(new ChallengeReferral());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,42 +57,68 @@ public class ChallengeReferralServiceTest {
 
 		replay(dao);
 
-		Collection<ChallengeReferral> all = service.getAll(
+		final Collection<ChallengeReferral> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertTrue(all.size() > 0);
+		assertFalse("Result should not have been empty.", all.isEmpty());
 		verify(dao);
 	}
 
+	/**
+	 * Test the {@link ChallengeReferralServiceImpl#get(UUID)} method.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test since it uses mocked
+	 *             objects.
+	 */
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ChallengeReferral daoOne = new ChallengeReferral(id);
+		final UUID id = UUID.randomUUID();
+		final ChallengeReferral daoOne = new ChallengeReferral(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
 		replay(dao);
 
-		assertNotNull(service.get(id));
+		assertNotNull("Service.get() method should not have returned null.",
+				service.get(id));
 		verify(dao);
 	}
 
+	/**
+	 * Test the {@link ChallengeReferralServiceImpl#save(ChallengeReferral)}
+	 * method.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test since it uses mocked
+	 *             objects.
+	 */
 	@Test
 	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ChallengeReferral daoOne = new ChallengeReferral(id);
+		final UUID id = UUID.randomUUID();
+		final ChallengeReferral daoOne = new ChallengeReferral(id);
+		daoOne.setShowInSelfHelpGuide(true);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		final ChallengeReferral saved = service.save(daoOne);
+		assertNotNull("Saved instance should not have returned null.", saved);
+		assertTrue("Saved values did not match.", saved.isShowInSelfHelpGuide());
 		verify(dao);
 	}
 
+	/**
+	 * Test the {@link ChallengeReferralServiceImpl#delete(UUID)} method.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test since it uses mocked
+	 *             objects.
+	 */
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ChallengeReferral daoOne = new ChallengeReferral(id);
+		final UUID id = UUID.randomUUID();
+		final ChallengeReferral daoOne = new ChallengeReferral(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -101,5 +138,4 @@ public class ChallengeReferralServiceTest {
 		assertFalse(found);
 		verify(dao);
 	}
-
 }

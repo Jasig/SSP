@@ -120,7 +120,7 @@ public class EarlyAlertReferral extends AbstractReference implements
 		// Auditable properties
 		result *= super.hashCode();
 
-		result *= sortOrder;
+		result *= sortOrder > 0 ? sortOrder : hashPrime();
 		result *= acronym == null ? "acronym".hashCode() : acronym
 				.hashCode();
 

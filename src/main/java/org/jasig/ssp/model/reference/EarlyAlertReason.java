@@ -9,9 +9,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
-
 /**
  * EarlyAlertReason reference object.
  * 
@@ -19,8 +16,6 @@ import org.hibernate.annotations.ParamDef;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-// TODO: ObjectStatus filter isn't working right now
-@FilterDef(name = "objStatusFilter", parameters = { @ParamDef(name = "status", type = "integer") })
 public class EarlyAlertReason extends AbstractReference implements Serializable {
 
 	private static final long serialVersionUID = -2598053263860587723L;
@@ -95,6 +90,7 @@ public class EarlyAlertReason extends AbstractReference implements Serializable 
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
-		return hashPrime() * super.hashCode() * sortOrder;
+		return hashPrime() * super.hashCode()
+				* (sortOrder > 0 ? sortOrder : hashPrime());
 	}
 }

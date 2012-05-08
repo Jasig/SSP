@@ -92,6 +92,7 @@ public class EarlyAlertOutreach extends AbstractReference implements
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
-		return hashPrime() * super.hashCode() * sortOrder;
+		return hashPrime() * super.hashCode()
+				* (sortOrder > 0 ? sortOrder : hashPrime());
 	}
 }

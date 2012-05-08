@@ -182,7 +182,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 
 		final EarlyAlertTO saved = controller.create(PERSON_ID,
 				obj);
-		Session session = sessionFactory.getCurrentSession();
+		final Session session = sessionFactory.getCurrentSession();
 		session.flush(); // flush to ensure the INSERT commands are run now
 
 		assertNotNull("Saved instance should not have been null.", saved);
@@ -196,7 +196,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		session.clear();
 
 		// Reload data to make sure it filters correctly
-		final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
+		// final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
 
 		// TODO: ObjectStatus filter isn't working right now
 

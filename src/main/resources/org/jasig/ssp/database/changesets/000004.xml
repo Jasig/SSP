@@ -295,13 +295,13 @@
 			<dropColumn tableName="task" columnName="confidentiality_level_id" />
 		</rollback>
 	</changeSet>
-	
-	<changeSet id="add deletable column to task" author = "daniel.bower">
+
+	<changeSet id="add deletable column to task" author="daniel.bower">
 		<addColumn tableName="task">
-			<column name="deletable" type="boolean" defaultValueBoolean="true"/>
+			<column name="deletable" type="boolean" defaultValueBoolean="true" />
 		</addColumn>
 		<rollback>
-			<dropColumn tableName="task" columnName="deletable"/>
+			<dropColumn tableName="task" columnName="deletable" />
 		</rollback>
 	</changeSet>
 
@@ -1190,8 +1190,10 @@
 			<where>id = 'f5bb0a62-1756-4ea2-857d-5821ee44a1d0'</where>
 		</update>
 		<update tableName="challenge">
-			<column name="self_help_guide_description" value="Educational and social support is provided through the office of ESL/Enrollment Services.  Students who speak English as a second language are encouraged to seek assistance from the ESL coordinator." />
-			<column name="self_help_guide_question" value="Would I like to learn more about services available to ESL students?" />
+			<column name="self_help_guide_description"
+				value="Educational and social support is provided through the office of ESL/Enrollment Services.  Students who speak English as a second language are encouraged to seek assistance from the ESL coordinator." />
+			<column name="self_help_guide_question"
+				value="Would I like to learn more about services available to ESL students?" />
 			<where>id = 'dbb8741c-ece0-4830-8ebf-774151cb6a1b'</where>
 		</update>
 
@@ -1236,37 +1238,36 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="modified_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="journal_source_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="journal_source_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="false" foreignKeyName="journal_source_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="journal_source_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on journal_source to ssp</sql>
 		<rollback>
-			<dropTable tableName="journal_source"/>
+			<dropTable tableName="journal_source" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add journal_step table'>
 		<createTable tableName="journal_step">
@@ -1280,19 +1281,18 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="modified_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="journal_step_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="journal_step_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="false" foreignKeyName="journal_step_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="journal_step_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
@@ -1301,19 +1301,19 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on journal_step to ssp</sql>
 		<rollback>
-			<dropTable tableName="journal_step"/>
+			<dropTable tableName="journal_step" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add journal_track table'>
 		<createTable tableName="journal_track">
@@ -1327,19 +1327,18 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="modified_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="journal_track_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="journal_track_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="false" foreignKeyName="journal_track_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="journal_track_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
@@ -1348,19 +1347,19 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on journal_track to ssp</sql>
 		<rollback>
-			<dropTable tableName="journal_track"/>
+			<dropTable tableName="journal_track" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add journal_step_detail table'>
 		<createTable tableName="journal_step_detail">
@@ -1374,19 +1373,20 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="modified_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
+				<constraints nullable="false"
 					foreignKeyName="journal_step_detail_created_by_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="false" foreignKeyName="journal_step_detail_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="journal_step_detail_modified_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
@@ -1395,16 +1395,16 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on journal_step_detail to ssp</sql>
 		<rollback>
-			<dropTable tableName="journal_step_detail"/>
+			<dropTable tableName="journal_step_detail" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
 	</changeSet>
@@ -1506,5 +1506,25 @@
 		</modifySql>
 
 	</changeSet>
-	
+
+	<changeSet id="Add ChallengeReferral.ShowInStudentIntake"
+		author="jon.adams">
+		<addColumn tableName="challenge_referral">
+			<column name="show_in_student_intake" type="boolean"
+				defaultValueBoolean="true" />
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="challenge_referral" columnName="show_in_student_intake" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Update sample ChallengeReferral.ShowInStudentIntake data"
+		author="jon.adams">
+		<update tableName="challenge_referral">
+			<column name="show_in_student_intake" valueBoolean="false" />
+			<where>id = 'fe7ce526-758f-4a2a-838a-1482adecec6b'</where>
+		</update>
+		<rollback></rollback>
+	</changeSet>
+
 </databaseChangeLog>
