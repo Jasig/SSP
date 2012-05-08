@@ -7,74 +7,61 @@ Ext.define('Ssp.controller.MainViewController', {
 
     control: {
 		'studentViewNav': {
-			click: 'studentRecordViewNavClick'
+			click: 'onStudentRecordViewNavClick'
 		},
 
 		'adminViewNav': {
-			click: 'adminViewNavClick'
+			click: 'onAdminViewNavClick'
 		},
 		
 	},
 	
 	init: function() {
-		this.displayApplication();
+		this.displayStudentRecordView();
 
 		return this.callParent(arguments);
     },
     
-	/*
-	 * Handle the studentRecordViewNav click.
-	 */    
-	studentRecordViewNavClick: function(obj, eObj){ 
+    onStudentRecordViewNavClick: function(obj, eObj){ 
 		this.displayStudentRecordView();
 	},	
 	
-	/*
-	 * Handle the adminViewNav click.
-	 */    
-	adminViewNavClick: function(obj, eObj){ 
+	onAdminViewNavClick: function(obj, eObj){ 
 		this.displayAdminView();
 	},
- 
-    displayApplication: function(){
-		// display the default record view
-    	this.displayStudentRecordView();
-    },
     
     displayStudentRecordView: function(){
     	var mainView = Ext.getCmp('MainView');
-		if (mainView.items.length > 0)
+    	var arrViewItems;
+    	
+    	if (mainView.items.length > 0)
 		{
 			mainView.removeAll();
 		}
-		var arrViewItems;
-		arrViewItems = [Ext.create('Ssp.view.Search',{flex: 2}),
-							Ext.create('Ssp.view.StudentRecord',{
-								flex: 4,
-				 			  items: [
-									Ext.create('Ssp.view.ToolsMenu',{flex:1}),
-									Ext.create('Ssp.view.Tools',{flex:4})
-									]
-			 		  		 				 
-						})];
+		
+		arrViewItems = [{xtype:'search',flex: 2},
+					    {xtype: 'StudentRecord',
+						 flex: 4,
+			 			 items: [{xtype:'ToolsMenu',flex:1},
+								 {xtype: 'Tools', flex:4}]
+			 		  	}];
 		
 		mainView.add( arrViewItems );
     },    
     
     displayAdminView: function() { 
     	var mainView = Ext.getCmp('MainView');
-		if (mainView.items.length > 0)
+    	var arrViewItems;
+    	
+    	if (mainView.items.length > 0)
 		{
 			mainView.removeAll();
 		}
-		var arrViewItems;
-		arrViewItems = [
-		 		  Ext.create('Ssp.view.admin.AdminMain',
-					{items:[
-					        Ext.create('Ssp.view.admin.AdminTreeMenu',{ flex:1 }), 
-					        Ext.create('Ssp.view.admin.AdminForms',{ flex:4 }) 
-					],flex:4})
-		 		 ];
+		
+		arrViewItems = [{xtype:'AdminMain',
+					     items:[{xtype: 'AdminTreeMenu', flex:2 }, 
+					            {xtype: 'AdminForms', flex: 3 }],
+					     flex:5}];
 		
 		mainView.add( arrViewItems );
     }

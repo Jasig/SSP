@@ -1,6 +1,6 @@
 Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
 	extend: 'Ext.form.Panel',
-	alias : 'widget.ConfidentialityDisclosureAgreementAdmin',
+	alias : 'widget.confidentialitydisclosureagreementadmin',
 	id: 'ConfidentialityDisclosureAgreementAdmin',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],

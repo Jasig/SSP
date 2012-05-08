@@ -1,4 +1,4 @@
-Ext.define('Ssp.view.admin.forms.ChallengeAdmin',{
+Ext.define('Ssp.view.admin.forms.EditChallengeAdmin',{
 	extend: 'Ext.form.Panel',
 	height: '100%',
 	width: '100%',

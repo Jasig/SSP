@@ -1,23 +1,23 @@
-Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
+Ext.define('Ssp.view.admin.forms.EarlyAlertReferralAdmin', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.abstractreferenceadmin',
+	alias : 'widget.earlyalertreferraladmin',
 	title: 'Admin',
-	id: 'AbstractReferenceAdmin',
+	id: 'EarlyAlertReferralAdmin',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.AbstractReferenceAdminViewController',
+    controller: 'Ssp.controller.admin.EarlyAlertReferralAdminViewController',
     inject: {
         apiProperties: 'apiProperties'
     },
-	height: '100%',
+    height: '100%',
 	width: '100%',
-	autoScroll: true,
 
     initComponent: function(){
-    	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing',
+    	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', 
 		                             { clicksToEdit: 2 });
     	Ext.apply(this,
     			{
+    		      autoScroll: true,
     		      plugins:cellEditor,
     		      selType: 'rowmodel',
     		      columns: [
@@ -32,35 +32,41 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     		                  flex: 50,
     		                  field: {
     		                      xtype: 'textfield'
-    		                  }
+    		                  },
+    		                  flex: 50 },
+      		                { header: 'Acronym',
+      		                  dataIndex: 'acronym', 
+      		                  flex: 50,
+      		                  field: {
+      		                      xtype: 'textfield'
+      		                  }
     		                }
     		           ],
     		        
     		           dockedItems: [
-    		       		{
-    		       			xtype: 'pagingtoolbar',
-    		       		    dock: 'bottom',
-    		       		    displayInfo: true,
-    		       		    pageSize: this.apiProperties.getPagingSize()
-    		       		},
-    		              {
-    		               xtype: 'toolbar',
-    		               items: [{
-    		                   text: 'Add',
-    		                   iconCls: 'icon-add',
-    		                   xtype: 'button',
-    		                   action: 'add',
-    		                   itemId: 'addButton'
-    		               }, '-', {
-    		                   text: 'Delete',
-    		                   iconCls: 'icon-delete',
-    		                   xtype: 'button',
-    		                   action: 'delete',
-    		                   itemId: 'deleteButton'
-    		               }]
-    		           }]    	
+     		       		{
+     		       			xtype: 'pagingtoolbar',
+     		       		    dock: 'bottom',
+     		       		    displayInfo: true,
+     		       		    pageSize: this.apiProperties.getPagingSize()
+     		       		},
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Add',
+     		                   iconCls: 'icon-add',
+     		                   xtype: 'button',
+     		                   action: 'add',
+     		                   itemId: 'addButton'
+     		               }, '-', {
+     		                   text: 'Delete',
+     		                   iconCls: 'icon-delete',
+     		                   xtype: 'button',
+     		                   action: 'delete',
+     		                   itemId: 'deleteButton'
+     		               }]
+     		           }]  	
     	});
-    	
     	this.callParent(arguments);
     },
     

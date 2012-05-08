@@ -8,13 +8,22 @@ Ext.define('Ssp.controller.AdminViewController', {
     	challengeReferralsStore: 'challengeReferralsStore',
     	childCareArrangementsStore: 'childCareArrangementsStore',
     	citizenshipsStore: 'citizenshipsStore',
-    	confidentialityLevelsStore: 'confidentialityLevelsStore', 
+    	confidentialityLevelsStore: 'confidentialityLevelsStore',
+		earlyAlertOutcomesStore: 'earlyAlertOutcomesStore',
+		earlyAlertOutreachesStore: 'earlyAlertOutreachesStore',
+		earlyAlertReasonsStore: 'earlyAlertReasonsStore',
+		earlyAlertReferralsStore: 'earlyAlertReferralsStore',
+		earlyAlertSuggestionsStore: 'earlyAlertSuggestionsStore',
     	educationGoalsStore: 'educationGoalsStore',
     	educationLevelsStore: 'educationLevelsStore',
     	employmentShiftsStore: 'employmentShiftsStore',
     	ethnicitiesStore: 'ethnicitiesStore',
+    	formUtils: 'formRendererUtils',
     	fundingSourcesStore: 'fundingSourcesStore',
     	gendersStore: 'gendersStore',
+        journalSourcesStore: 'journalSourcesStore',
+        journalStepsStore: 'journalStepsStore',
+        journalTracksStore: 'journalTracksStore',
     	maritalStatusesStore: 'maritalStatusesStore',
         statesStore: 'statesStore',
         studentStatusesStore: 'studentStatusesStore',
@@ -51,38 +60,21 @@ Ext.define('Ssp.controller.AdminViewController', {
 	},
 
 	loadAdmin: function( title ,form, storeName ) {
-		var adminFormsView = Ext.getCmp('AdminForms');
+		var comp = this.formUtils.loadDisplay('adminforms',form, true, {});
 		var store = null;
-		var comp = null;
-		
-		// clean existing admins
-		if (adminFormsView.items.length > 0)
-		{
-			adminFormsView.removeAll();			
-		}
-		
 		// set a store if defined
 		if (storeName != "")
 		{
 			store = this[storeName+'Store'];
+			// If the store was set, then modify
+			// the component to use the store
+			if (store != null)
+			{
+				comp.reconfigure(store); // ,columns
+				comp.getStore().load();
+			}
 		}
 		
-		comp = adminFormsView.getComponent( form ); // 'AbstractReferenceAdmin'
-
-		if (comp == undefined)
-		{
-			comp = Ext.create('Ssp.view.admin.forms.' + form); // AbstractReferenceAdmin			
-			adminFormsView.add( comp );
-		}
-
 		comp.setTitle(title + ' Admin');
-		
-		// If the store was set, then modify
-		// the component to use the store
-		if (store != null)
-		{
-			comp.reconfigure(store); // ,columns
-			comp.getStore().load();
-		}
 	}
 });

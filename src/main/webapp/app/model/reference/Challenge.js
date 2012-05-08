@@ -3,10 +3,10 @@ Ext.define('Ssp.model.reference.Challenge', {
     fields: [{name: 'tags', type:'string'},
              {name: 'showInStudentIntake', type: 'boolean'},
              {name: 'showInSelfHelpSearch', type: 'boolean'},
-             //{name: 'selfHelpGuideQuestion', type: 'string'},
-             {name: 'selfHelpGuideDescription', type: 'string'}
-             //{name: 'defaultConfidentialityLevelId', type: 'string'},
-             //{name: 'challengeChallengeReferrals'},
-             //{name: 'referralCount', type: 'int'}
+             {name: 'selfHelpGuideQuestion', type: 'string'},
+             {name: 'selfHelpGuideDescription', type: 'string'},
+             {name: 'defaultConfidentialityLevelId', type: 'string'},
+             {name: 'challengeChallengeReferrals'},
+             {name: 'referralCount', type: 'int'}
              ]
 });
