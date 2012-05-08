@@ -9,17 +9,16 @@ import org.junit.Test
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-
 public class HashPrimeTest {
 
-	private static final Logger LOGGER = LoggerFactory
-	.getLogger(HashPrimeTest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HashPrimeTest.class);
 
 	@Test
 	void testForUniqueHashPrimes(){
 		boolean success = true;
 
 		Map<Integer, List<Class>> primeGroups = [:]
+		int largest = 1;
 
 		List<Class> classes = ClassDiscovery.getClasses("org.jasig.ssp.model")
 
@@ -27,6 +26,10 @@ public class HashPrimeTest {
 			if(Auditable.class.isAssignableFrom(clazz) && !Modifier.isAbstract(clazz.getModifiers())){
 				LOGGER.debug(clazz.toString() + " - Auditable")
 				Auditable auditable = clazz.newInstance()
+				if (largest < auditable.hashPrime()){
+					// update largest prime for warning purposes so the next available can be found easily
+					largest = auditable.hashPrime();
+				}
 				return auditable.hashPrime()
 			}else{
 				return 0
@@ -34,14 +37,19 @@ public class HashPrimeTest {
 			}
 		}
 
+		String dups = "";
 		primeGroups.each{ key, value ->
 			if(value.size()>1 && key!=0){
 				success = false
+				if (dups.length() > 0) {
+					dups += ",";
+				}
+				dups += key.toString() + " { " + value.toString() + "}"
 				LOGGER.error("More than one class generating $key as its hashprime, see: " + value.toString())
 			}
 		}
 
-		assertTrue("More than one class using the same hashPrime", success);
+		assertTrue("More than one class using the same hashPrime: " + dups + ". Highest prime so far: " + largest, success);
 	}
 
 	@Test
