@@ -83,7 +83,6 @@ public class ChildCareArrangementDaoTest {
 		for (ChildCareArrangement object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

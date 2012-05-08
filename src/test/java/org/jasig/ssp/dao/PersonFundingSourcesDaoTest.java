@@ -99,14 +99,12 @@ public class PersonFundingSourcesDaoTest {
 					dao.get(oldId));
 		} catch (ObjectNotFoundException e) {
 			// expected
-			e.printStackTrace();
 		}
 	}
 
 	@Test
 	public void testGetAll() {
 		dao.getAll(ObjectStatus.ALL);
-		assertTrue(true);
 	}
 
 }

@@ -2,6 +2,7 @@ package org.jasig.ssp.model;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Type;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 
@@ -38,7 +40,8 @@ public class EarlyAlert extends Auditable implements Serializable {
 	private String emailCC;
 
 	@Column(nullable = true)
-	private Integer campusId;
+	@Type(type = "pg-uuid")
+	private UUID campusId;
 
 	@Column(nullable = true, length = 64000)
 	@Size(max = 64000)
@@ -115,7 +118,7 @@ public class EarlyAlert extends Auditable implements Serializable {
 	/**
 	 * @return the campusId
 	 */
-	public Integer getCampusId() {
+	public UUID getCampusId() {
 		return campusId;
 	}
 
@@ -123,7 +126,7 @@ public class EarlyAlert extends Auditable implements Serializable {
 	 * @param campusId
 	 *            the campusId to set
 	 */
-	public void setCampusId(final Integer campusId) {
+	public void setCampusId(final UUID campusId) {
 		this.campusId = campusId;
 	}
 

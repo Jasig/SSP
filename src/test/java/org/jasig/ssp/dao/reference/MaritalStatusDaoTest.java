@@ -83,7 +83,6 @@ public class MaritalStatusDaoTest {
 		for (MaritalStatus object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

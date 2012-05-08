@@ -100,7 +100,6 @@ public class ChallengeReferralDaoTest {
 		for (ChallengeReferral object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

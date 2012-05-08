@@ -35,7 +35,7 @@ public class SelfHelpGuideDetailTO extends SelfHelpGuideTO implements
 
 		questions = Lists.newArrayList();
 		for (SelfHelpGuideQuestion question : model.getSelfHelpGuideQuestions()) {
-			questions.add(new SelfHelpGuideQuestionTO(question));
+			questions.add(new SelfHelpGuideQuestionTO(question)); // NOPMD
 		}
 	}
 

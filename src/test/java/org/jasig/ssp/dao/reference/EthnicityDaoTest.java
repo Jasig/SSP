@@ -82,7 +82,6 @@ public class EthnicityDaoTest {
 		for (Ethnicity object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

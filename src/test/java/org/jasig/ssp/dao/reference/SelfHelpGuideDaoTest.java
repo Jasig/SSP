@@ -89,7 +89,6 @@ public class SelfHelpGuideDaoTest {
 		for (SelfHelpGuide object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

@@ -100,7 +100,7 @@ public class EarlyAlertOutcomeTO extends AbstractReferenceTO<EarlyAlertOutcome>
 	 * @param sortOrder
 	 *            the sortOrder to set
 	 */
-	public void setSortOrder(final short sortOrder) { // NOPMD by jon on 5/4/12
+	public void setSortOrder(final short sortOrder) { // NOPMD by jon.adams
 		if (sortOrder < 0) {
 			throw new IllegalArgumentException(
 					"Sort order must be 0 or a positive integer, not "
@@ -122,7 +122,8 @@ public class EarlyAlertOutcomeTO extends AbstractReferenceTO<EarlyAlertOutcome>
 			@NotNull final Collection<EarlyAlertOutcome> models) {
 		final List<EarlyAlertOutcomeTO> tObjects = Lists.newArrayList();
 		for (EarlyAlertOutcome model : models) {
-			tObjects.add(new EarlyAlertOutcomeTO(model));
+			tObjects.add(new EarlyAlertOutcomeTO(model)); // NOPMD by jon on
+															// 5/8/12 6:37 PM
 		}
 
 		return tObjects;
