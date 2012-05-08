@@ -1,6 +1,6 @@
 Ext.define('Ssp.view.admin.AdminMain', {
 	extend: 'Ext.panel.Panel',
-    alias: 'widget.AdminMain',
+    alias: 'widget.adminmain',
     id: 'AdminMain',
     title: 'Admin Main',
 	initComponent: function() {	

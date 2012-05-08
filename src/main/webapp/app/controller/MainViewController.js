@@ -40,10 +40,10 @@ Ext.define('Ssp.controller.MainViewController', {
 		}
 		
 		arrViewItems = [{xtype:'search',flex: 2},
-					    {xtype: 'StudentRecord',
+					    {xtype: 'studentrecord',
 						 flex: 4,
-			 			 items: [{xtype:'ToolsMenu',flex:1},
-								 {xtype: 'Tools', flex:4}]
+			 			 items: [{xtype:'toolsmenu',flex:1},
+			 			         {xtype: 'tools', flex:4}]
 			 		  	}];
 		
 		mainView.add( arrViewItems );
@@ -58,9 +58,9 @@ Ext.define('Ssp.controller.MainViewController', {
 			mainView.removeAll();
 		}
 		
-		arrViewItems = [{xtype:'AdminMain',
-					     items:[{xtype: 'AdminTreeMenu', flex:2 }, 
-					            {xtype: 'AdminForms', flex: 3 }],
+		arrViewItems = [{xtype:'adminmain',
+					     items:[{xtype: 'admintreemenu', flex:2 }, 
+					            {xtype: 'adminforms', flex: 3 }],
 					     flex:5}];
 		
 		mainView.add( arrViewItems );

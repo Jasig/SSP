@@ -191,7 +191,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	loadDisplay: function( containerAlias, compAlias, removeExisting, args ) {	
 		var comp = null;
 		var store = null;
-		var view = Ext.ComponentQuery.query(containerAlias)[0];
+		var view = Ext.ComponentQuery.query(containerAlias.toLowerCase())[0];
 		
 		if (view.items.length > 0 && removeExisting==true)
 			view.removeAll();
