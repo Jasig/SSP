@@ -15,6 +15,7 @@ Ext.require([
 	'Ssp.model.reference.AbstractReference',
 	'Ssp.model.reference.Challenge',
 	'Ssp.model.reference.ConfidentialityLevel',
+	'Ssp.model.reference.ConfidentialityDisclosureAgreement',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
@@ -85,7 +86,8 @@ Ext.onReady(function(){
 		challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
 	    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
 	    citizenshipsStore: 'Ssp.store.reference.Citizenships',
-		confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
+    	confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',		
+	    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
 	    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
     	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
     	employmentShiftsStore: 'Ssp.store.reference.EmploymentShifts',
@@ -106,8 +108,8 @@ Ext.onReady(function(){
 	    appFolder: 'app',
 		autoCreateViewport: true,
 	    launch: function( app ) {
-	    	console.log('Application->Launch');
-	    	console.log(Deft);
+	    	//console.log('Application->Launch');
+	    	//console.log(Deft);
 	    	Deft.Injector.providers.appEventsController.value.config.app=this;
 	    	Deft.Injector.providers.appEventsController.value.app=this;
 	    	// Display the application

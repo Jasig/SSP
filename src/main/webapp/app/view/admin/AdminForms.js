@@ -3,5 +3,5 @@ Ext.define('Ssp.view.admin.AdminForms', {
 	alias : 'widget.AdminForms',
     id: 'AdminForms',
 	width: '100%',
-	height: '100%'	
+	height: '100%'
 });

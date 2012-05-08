@@ -37,7 +37,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				record.commit();
 				editor.grid.getStore().sync();
 			},
-			failure: this.handleError
+			failure: this.apiProperties.handleError
 		}, this);
 	},
 	
@@ -57,7 +57,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				grid.getStore().insert(0, item );
 		       	grid.plugins[0].startEdit(0, 0);
 			},
-			failure: this.handleError
+			failure: this.apiProperties.handleError
 		}, this);
 	},
 	
@@ -77,15 +77,10 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 					var r = Ext.decode(response.responseText);
 					store.remove( selection );
 				},
-				failure: this.handleError
+				failure: this.apiProperties.handleError
 		   }, this);
        }else{
     	   Ext.Msg.alert('SSP Error', 'Please select an item to delete.'); 
        }
-	},
-	
-	handleError: function(response) {
-		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
-		Ext.Msg.alert('SSP Error', msg);								
 	}
 });

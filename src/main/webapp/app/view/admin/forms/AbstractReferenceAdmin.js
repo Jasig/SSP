@@ -11,13 +11,13 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     },
 	height: '100%',
 	width: '100%',
+	autoScroll: true,
 
     initComponent: function(){
     	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing',
 		                             { clicksToEdit: 2 });
     	Ext.apply(this,
     			{
-    	          autoScroll: true,
     		      plugins:cellEditor,
     		      selType: 'rowmodel',
     		      columns: [

@@ -27,8 +27,15 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     										store: 'citizenships',
     								        form: 'AbstractReferenceAdmin',
     										leaf: true
-    								    }
-    								    ,{
+    								    },
+    								    {
+    								    	text: 'Confidentiality Disclosure Agreement',
+    								    	title: 'Confidentiality Disclosure Agreement',
+    								    	store: '',
+    								        form: 'ConfidentialityDisclosureAgreementAdmin',
+    										leaf: true
+    								    },
+    								    {
     								    	text: 'Education Goals',
     								    	title: 'Education Goals',
     								    	store: 'educationGoals',
