@@ -193,10 +193,7 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 						console.log('student intake saved successfully');							
 					}								
 				},
-				failure: function(response) {
-					var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
-					Ext.Msg.alert('SSP Error', msg);								
-				}
+				failure: this.apiProperties.handleError
 			}, this);
 
 		}else{

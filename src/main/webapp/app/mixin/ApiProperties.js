@@ -47,5 +47,10 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		    }
 		};
 		return proxyObj;
+	},
+	
+	handleError: function(response) {
+		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
+		Ext.Msg.alert('SSP Error', msg);								
 	}
 });

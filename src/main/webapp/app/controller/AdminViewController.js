@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 
     control: {
 		view: {
-			itemclick: 'treeItemClick'
+			itemclick: 'onItemClick'
 		}
 		
 	},
@@ -35,20 +35,39 @@ Ext.define('Ssp.controller.AdminViewController', {
 	/*
 	 * Handle selecting an item in the tree grid
 	 */
-	treeItemClick: function(view,record,item,index,eventObj) {
+	onItemClick: function(view,record,item,index,eventObj) {
+		var storeName = "";
 		if (record.raw != undefined )
+		{
 			if ( record.raw.form != "")
-				this.loadAdmin( record.raw.title, record.raw.form, record.raw.store );         
+			{
+				if (record.raw.store != "")
+				{
+					storeName = record.raw.store;
+				}
+				this.loadAdmin( record.raw.title, record.raw.form, storeName );         
+			}
+		}
 	},
 
 	loadAdmin: function( title ,form, storeName ) {
 		var adminFormsView = Ext.getCmp('AdminForms');
+		var store = null;
+		var comp = null;
+		
+		// clean existing admins
 		if (adminFormsView.items.length > 0)
 		{
 			adminFormsView.removeAll();			
 		}
-		var store = this[storeName+'Store'];
-		var comp = adminFormsView.getComponent( form ); // 'AbstractReferenceAdmin'
+		
+		// set a store if defined
+		if (storeName != "")
+		{
+			store = this[storeName+'Store'];
+		}
+		
+		comp = adminFormsView.getComponent( form ); // 'AbstractReferenceAdmin'
 
 		if (comp == undefined)
 		{
@@ -57,7 +76,13 @@ Ext.define('Ssp.controller.AdminViewController', {
 		}
 
 		comp.setTitle(title + ' Admin');
-		comp.reconfigure(store); // ,columns
-		comp.getStore().load();		
+		
+		// If the store was set, then modify
+		// the component to use the store
+		if (store != null)
+		{
+			comp.reconfigure(store); // ,columns
+			comp.getStore().load();
+		}
 	}
 });
