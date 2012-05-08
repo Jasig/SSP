@@ -6,20 +6,19 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jasig.mygps.business.StudentIntakeFormManager;
 import org.jasig.mygps.model.transferobject.FormTO;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.junit.Before;
+import org.junit.Test;
 
 public class MyGpsStudentIntakeControllerTest {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MyGpsStudentIntakeControllerTest.class);
+	// private static final Logger LOGGER = LoggerFactory
+	// .getLogger(MyGpsStudentIntakeControllerTest.class);
 
 	private transient MyGpsStudentIntakeController controller;
 
@@ -44,7 +43,7 @@ public class MyGpsStudentIntakeControllerTest {
 			verify(manager);
 			assertEquals("Expected response was not returned.", form, response);
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 	}
 
@@ -54,7 +53,7 @@ public class MyGpsStudentIntakeControllerTest {
 		try {
 			expect(manager.save(form)).andReturn(new Person());
 		} catch (ObjectNotFoundException e) {
-			LOGGER.error("mock object error", e);
+			fail("controller error");
 		}
 
 		replay(manager);
@@ -64,7 +63,7 @@ public class MyGpsStudentIntakeControllerTest {
 			verify(manager);
 			assertTrue("Controller response did not return success.", response);
 		} catch (Exception e) {
-			LOGGER.error("controller error", e);
+			fail("controller error");
 		}
 	}
 }

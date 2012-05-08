@@ -3,9 +3,9 @@ package org.jasig.mygps.web;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.mygps.business.SelfHelpGuideManager;
 import org.jasig.ssp.factory.reference.SelfHelpGuideTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
 import org.jasig.ssp.service.reference.SelfHelpGuideGroupService;
 import org.jasig.ssp.service.reference.SelfHelpGuideService;
@@ -27,29 +27,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MyGpsSelfHelpGuideController extends BaseController {
 
 	@Autowired
-	private SelfHelpGuideManager selfHelpGuideManager;
+	private transient SelfHelpGuideService selfHelpGuideService;
 
 	@Autowired
-	private SelfHelpGuideService selfHelpGuideService;
+	private transient SelfHelpGuideGroupService selfHelpGuideGroupService;
 
 	@Autowired
-	private SelfHelpGuideGroupService selfHelpGuideGroupService;
-
-	@Autowired
-	private SelfHelpGuideTOFactory selfHelpGuideTOFactory;
+	private transient SelfHelpGuideTOFactory selfHelpGuideTOFactory;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsSelfHelpGuideController.class);
 
 	public MyGpsSelfHelpGuideController() {
+		super();
 	}
 
 	public MyGpsSelfHelpGuideController(
-			SelfHelpGuideManager selfHelpGuideManager,
-			SelfHelpGuideService selfHelpGuideService,
-			SelfHelpGuideGroupService selfHelpGuideGroupService,
-			SelfHelpGuideTOFactory selfHelpGuideTOFactory) {
-		this.selfHelpGuideManager = selfHelpGuideManager;
+			final SelfHelpGuideService selfHelpGuideService,
+			final SelfHelpGuideGroupService selfHelpGuideGroupService,
+			final SelfHelpGuideTOFactory selfHelpGuideTOFactory) {
+		super();
 		this.selfHelpGuideService = selfHelpGuideService;
 		this.selfHelpGuideGroupService = selfHelpGuideGroupService;
 		this.selfHelpGuideTOFactory = selfHelpGuideTOFactory;
@@ -61,45 +58,30 @@ public class MyGpsSelfHelpGuideController extends BaseController {
 		// TODO: MyGPSSelfGuideController.getAll() needs filtered based on
 		// security. Guides with authenticationRequired == true should not show
 		// for the anonymous user.
-		try {
-			return selfHelpGuideTOFactory.asTOList(selfHelpGuideService
-					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
-					.getRows());
-		} catch (Exception e) {
-			LOGGER.error("ERROR : getAll() : {}", e.getMessage(), e);
-			throw e;
-		}
+		return selfHelpGuideTOFactory.asTOList(selfHelpGuideService
+				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
+				.getRows());
 	}
 
 	@RequestMapping(value = "/getContentById", method = RequestMethod.GET)
 	public @ResponseBody
 	SelfHelpGuideDetailTO getContentById(
-			@RequestParam("selfHelpGuideId") UUID selfHelpGuideId)
+			final @RequestParam("selfHelpGuideId") UUID selfHelpGuideId)
 			throws Exception {
-		try {
-			return selfHelpGuideManager.getContentById(selfHelpGuideId);
-		} catch (Exception e) {
-			LOGGER.error("ERROR : getContentById() : {}", e.getMessage(), e);
-			throw e;
-		}
+		final SelfHelpGuide guide = selfHelpGuideService
+				.get(selfHelpGuideId);
+		return new SelfHelpGuideDetailTO(guide);
 	}
 
 	@RequestMapping(value = "/getBySelfHelpGuideGroup", method = RequestMethod.GET)
 	public @ResponseBody
 	List<SelfHelpGuideTO> getBySelfHelpGuideGroup(
-			@RequestParam("selfHelpGuideGroupId") UUID selfHelpGuideGroupId)
+			final @RequestParam("selfHelpGuideGroupId") UUID selfHelpGuideGroupId)
 			throws Exception {
-
-		try {
-			SelfHelpGuideGroup selfHelpGuideGroup = selfHelpGuideGroupService
-					.get(selfHelpGuideGroupId);
-			return selfHelpGuideTOFactory.asTOList(selfHelpGuideService
-					.getBySelfHelpGuideGroup(selfHelpGuideGroup));
-		} catch (Exception e) {
-			LOGGER.error("ERROR : getBySelfHelpGuideGroup() : {}",
-					e.getMessage(), e);
-			throw e;
-		}
+		final SelfHelpGuideGroup selfHelpGuideGroup = selfHelpGuideGroupService
+				.get(selfHelpGuideGroupId);
+		return selfHelpGuideTOFactory.asTOList(selfHelpGuideService
+				.getBySelfHelpGuideGroup(selfHelpGuideGroup));
 	}
 
 	@Override

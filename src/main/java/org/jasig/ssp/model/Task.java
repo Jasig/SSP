@@ -25,7 +25,7 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Task extends Auditable implements Serializable {
+public class Task extends Auditable implements Restricted, Serializable {
 
 	private static final long serialVersionUID = 1477217415946557983L;
 
@@ -215,6 +215,7 @@ public class Task extends Auditable implements Serializable {
 	/**
 	 * @return the confidentialityLevel
 	 */
+	@Override
 	public ConfidentialityLevel getConfidentialityLevel() {
 		return confidentialityLevel;
 	}
@@ -254,7 +255,7 @@ public class Task extends Auditable implements Serializable {
 		result *= sessionId == null ? "sessionId".hashCode() : sessionId
 				.hashCode();
 		result *= deletable ? 3 : 5;
-		result *= person == null || person.getId() == null ? "person"
+		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= challenge == null ? "challenge".hashCode() : challenge
 				.hashCode();

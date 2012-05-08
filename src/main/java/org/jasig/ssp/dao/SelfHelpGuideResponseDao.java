@@ -1,11 +1,14 @@
 package org.jasig.ssp.dao;
 
 import java.util.List;
+import java.util.UUID;
 
-import org.springframework.stereotype.Repository;
-
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.SelfHelpGuideResponse;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class SelfHelpGuideResponseDao extends
@@ -30,6 +33,14 @@ public class SelfHelpGuideResponseDao extends
 						"and shgr.person.id != ?")
 				.setParameter(0, SspUser.ANONYMOUS_PERSON_ID)
 				.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<SelfHelpGuideResponse> getAllForPersonId(final UUID personId,
+			final SortingAndPaging sAndP) {
+		final Criteria criteria = createCriteria(sAndP);
+		criteria.add(Restrictions.eq("person.id", personId));
+		return criteria.list();
 	}
 
 }

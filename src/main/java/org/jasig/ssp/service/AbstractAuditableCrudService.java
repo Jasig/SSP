@@ -7,6 +7,7 @@ import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Base class which provides a building block for creating an
@@ -15,6 +16,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
  * @param <T>
  *            Any class that extends Auditable
  */
+@Transactional
 public abstract class AbstractAuditableCrudService<T extends Auditable>
 		implements AuditableCrudService<T> {
 

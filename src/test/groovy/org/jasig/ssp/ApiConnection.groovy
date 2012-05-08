@@ -108,16 +108,17 @@ class ApiConnection {
 	 * Does not require authentication
 	 * @param url the full url
 	 */
-	public HttpResponse basePost(String fullUrl, Map payload){
+	public HttpResponse basePost(String fullUrl, payload){
 		LOGGER.info("Post to $fullUrl")
 
 		HttpPost httpPost = new HttpPost(fullUrl)
 		attachPayload(httpPost, payload)
 
+		httpPost.addHeader("Content-Type", "application/json")
+
 		HttpResponse response = httpClient.execute(httpHost, httpPost, httpContext)
 		LOGGER.debug("Post response Status: " + response.getStatusLine())
 
-		EntityUtils.consume(response.getEntity())
 		return response
 	}
 
@@ -163,6 +164,7 @@ class ApiConnection {
 		}else{
 			LOGGER.debug("Failed to Authenticate")
 		}
+		EntityUtils.consume(response.getEntity())
 	}
 
 	/**

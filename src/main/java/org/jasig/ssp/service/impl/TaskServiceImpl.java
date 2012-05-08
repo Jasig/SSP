@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.jasig.ssp.dao.TaskDao;
-import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
@@ -42,9 +41,6 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	private transient TaskDao dao;
 
 	@Autowired
-	private transient ConfidentialityLevelDao confidentialityLevelDao;
-
-	@Autowired
 	private transient MessageService messageService;
 
 	@Value("#{configProperties.serverExternalPath}")
@@ -65,27 +61,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 
 	@Override
 	public Task save(final Task obj) throws ObjectNotFoundException {
-		final Task current = getDao().get(obj.getId());
-
-		current.setChallenge(obj.getChallenge());
-		current.setChallengeReferral(obj.getChallengeReferral());
-
-		current.setCompletedDate(obj.getCompletedDate());
-		current.setDescription(obj.getDescription());
-		current.setDueDate(obj.getDueDate());
-		current.setObjectStatus(obj.getObjectStatus());
-		current.setPerson(obj.getPerson());
-		current.setReminderSentDate(obj.getReminderSentDate());
-		current.setSessionId(obj.getSessionId());
-
-		if (obj.getConfidentialityLevel() == null) {
-			current.setConfidentialityLevel(null);
-		} else {
-			current.setConfidentialityLevel(confidentialityLevelDao.load(obj
-					.getConfidentialityLevel().getId()));
-		}
-
-		return getDao().save(current);
+		return getDao().save(obj);
 	}
 
 	@Override
