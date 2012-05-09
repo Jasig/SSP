@@ -1220,8 +1220,7 @@
 		<addColumn tableName="early_alert">
 			<column name="closed_date" type="datetime" />
 			<column name="closed_by_id" type="uuid">
-				<constraints nullable="true"
-					foreignKeyName="early_alert_closed_by_person_id"
+				<constraints nullable="true" foreignKeyName="early_alert_closed_by_person_id"
 					references="person(id)" />
 			</column>
 		</addColumn>
@@ -1229,6 +1228,113 @@
 			<dropColumn tableName="early_alert" columnName="closed_date" />
 			<dropColumn tableName="early_alert" columnName="closed_by_id" />
 		</rollback>
+	</changeSet>
+
+	<changeSet author='jon.adams' id='Add early_alert_response table'>
+		<createTable tableName="early_alert_response">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_suggestion_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="early_alert_suggestion_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="early_alert_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_response_early_alert_id" references="early_alert(id)" />
+			</column>
+			<column name="early_alert_outcome_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_response_early_alert_outcome_id"
+					references="early_alert_outcome(id)" />
+			</column>
+			<column name="early_alert_outcome_other_description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="comment" type="text">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_response to ssp</sql>
+		<rollback>
+			<dropTable tableName="early_alert_response" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet author='jon.adams'
+		id='Add early_alert_response_early_alert_outreach table'>
+		<createTable tableName="early_alert_response_early_alert_outreach">
+			<column name="early_alert_response_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_response_early_alert_outreach_early_alert_response_id"
+					references="early_alert_response(id)" primaryKey="true" />
+			</column>
+			<column name="early_alert_outreach_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_response_early_alert_outreach_ids"
+					references="early_alert_outreach(id)" primaryKey="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_response_early_alert_outreach to ssp
+		</sql>
+		<rollback>
+			<dropTable tableName="early_alert_response_early_alert_outreach" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet author='jon.adams'
+		id='Add early_alert_response_early_alert_outcome table'>
+		<createTable tableName="early_alert_response_early_alert_outcome">
+			<column name="early_alert_response_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_response_early_alert_outcome_early_alert_response_id"
+					references="early_alert_response(id)" primaryKey="true" />
+			</column>
+			<column name="early_alert_outcome_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_response_early_alert_outcome_ids"
+					references="early_alert_outcome(id)" primaryKey="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_response_early_alert_outcome to ssp
+		</sql>
+		<rollback>
+			<dropTable tableName="early_alert_response_early_alert_outcome" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
 	</changeSet>
 
 </databaseChangeLog>

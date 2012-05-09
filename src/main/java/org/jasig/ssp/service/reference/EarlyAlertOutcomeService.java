@@ -22,6 +22,15 @@ public interface EarlyAlertOutcomeService extends
 	@Override
 	EarlyAlertOutcome get(UUID id) throws ObjectNotFoundException;
 
+	/**
+	 * Loads the specified instance from persistent storage.
+	 * 
+	 * @param id
+	 *            identifier to load
+	 * @return The specified instance
+	 */
+	EarlyAlertOutcome load(UUID id);
+
 	@Override
 	EarlyAlertOutcome create(EarlyAlertOutcome obj);
 
