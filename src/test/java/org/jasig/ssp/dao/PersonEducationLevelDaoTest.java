@@ -99,7 +99,6 @@ public class PersonEducationLevelDaoTest {
 			assertNull(dao.get(model.getId()));
 		} catch (ObjectNotFoundException e) {
 			// expected
-			e.printStackTrace();
 		}
 	}
 
@@ -111,7 +110,6 @@ public class PersonEducationLevelDaoTest {
 			model = dao.get(id);
 		} catch (ObjectNotFoundException e) {
 			// expected
-			e.printStackTrace();
 		}
 		assertNull(model);
 
@@ -122,7 +120,6 @@ public class PersonEducationLevelDaoTest {
 	@Test
 	public void testGetAll() {
 		dao.getAll(ObjectStatus.ALL);
-		assertTrue(true);
 	}
 
 }

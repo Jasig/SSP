@@ -1,6 +1,7 @@
 package org.jasig.ssp.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -86,7 +87,6 @@ public class PersonDemographicsDaoTest {
 					dao.get(oldId));
 		} catch (ObjectNotFoundException e) {
 			// expected
-			e.printStackTrace();
 		}
 	}
 
@@ -101,8 +101,7 @@ public class PersonDemographicsDaoTest {
 
 	@Test
 	public void testGetAll() {
-		dao.getAll(ObjectStatus.ALL);
-		assertTrue(true);
+		assertNotNull("GetAll should not have returned null.",
+				dao.getAll(ObjectStatus.ALL));
 	}
-
 }

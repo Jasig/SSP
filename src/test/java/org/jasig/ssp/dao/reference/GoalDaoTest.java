@@ -3,7 +3,6 @@ package org.jasig.ssp.dao.reference;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.UUID;
@@ -91,11 +90,10 @@ public class GoalDaoTest {
 		assertNull(goal);
 	}
 
-	private void assertList(List<Goal> objects) {
+	private void assertList(final List<Goal> objects) {
 		for (Goal object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test
@@ -118,5 +116,4 @@ public class GoalDaoTest {
 		dao.delete(obj);
 		dao.delete(obj2);
 	}
-
 }

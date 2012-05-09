@@ -25,7 +25,7 @@ final class UserPermissions {
 	/**
 	 * Is permission expired?
 	 * 
-	 * @return
+	 * @return True if the permission has expired.
 	 */
 	public boolean isExpired() {
 		return System.currentTimeMillis() > expireTime;
@@ -38,7 +38,7 @@ final class UserPermissions {
 	 * 
 	 * @param req
 	 *            Portlet request
-	 * @return
+	 * @return The UserPermissions for the user.
 	 */
 	public static UserPermissions createUserPermissions(final PortletRequest req) {
 		Set<SspPermission> entries = new HashSet<SspPermission>();

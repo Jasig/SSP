@@ -155,12 +155,13 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		for (Task task : tasksForPerson) {
 			final String group = task.getGroup();
 			final List<Task> tasksForGroup;
-			if (!grouped.keySet().contains(group)) {
-				tasksForGroup = new ArrayList<Task>();
-				grouped.put(group, tasksForGroup);
-			} else {
+			if (grouped.keySet().contains(group)) {
 				tasksForGroup = grouped.get(group);
+			} else {
+				tasksForGroup = new ArrayList<Task>(); // NOPMD by jon.adams
+				grouped.put(group, tasksForGroup);
 			}
+
 			tasksForGroup.add(task);
 		}
 
@@ -334,7 +335,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 					}
 
 					messageService.createMessage(task.getPerson(), templateId,
-							new HashMap<String, Object>());
+							new HashMap<String, Object>()); // NOPMD
 
 					setReminderSentDateToToday(task);
 				}

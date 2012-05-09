@@ -83,7 +83,6 @@ public class FundingSourceDaoTest {
 		for (FundingSource object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

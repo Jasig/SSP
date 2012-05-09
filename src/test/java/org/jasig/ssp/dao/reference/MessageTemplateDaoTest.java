@@ -85,7 +85,6 @@ public class MessageTemplateDaoTest {
 		for (MessageTemplate object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

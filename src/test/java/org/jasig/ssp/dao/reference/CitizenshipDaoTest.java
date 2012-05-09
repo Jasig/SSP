@@ -82,7 +82,6 @@ public class CitizenshipDaoTest {
 		for (Citizenship object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

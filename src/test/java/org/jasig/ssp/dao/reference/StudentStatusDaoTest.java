@@ -83,7 +83,6 @@ public class StudentStatusDaoTest {
 		for (StudentStatus object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

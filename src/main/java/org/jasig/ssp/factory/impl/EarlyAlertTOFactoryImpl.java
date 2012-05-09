@@ -68,6 +68,8 @@ public class EarlyAlertTOFactoryImpl extends
 		model.setEarlyAlertReasonOtherDescription(tObject
 				.getEarlyAlertSuggestionOtherDescription());
 		model.setComment(tObject.getComment());
+		model.setClosedDate(tObject.getClosedDate());
+		model.setClosedById(tObject.getClosedById());
 
 		if (tObject.getPersonId() != null) {
 			model.setPerson(personService.get(tObject.getPersonId()));

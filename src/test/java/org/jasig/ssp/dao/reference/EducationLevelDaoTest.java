@@ -83,7 +83,6 @@ public class EducationLevelDaoTest {
 		for (EducationLevel object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test
