@@ -10,12 +10,18 @@ import javax.persistence.ManyToOne;
 
 import org.jasig.ssp.model.Auditable;
 
+/**
+ * JournalStepJournalStepDetail
+ * 
+ * @author daniel.bower
+ * 
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class JournalStepJournalStepDetail extends Auditable implements
 		Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -692899843955375605L;
 
 	@ManyToOne
 	@JoinColumn(name = "journal_step_id", nullable = false)
@@ -29,7 +35,7 @@ public class JournalStepJournalStepDetail extends Auditable implements
 		return journalStep;
 	}
 
-	public void setJournalStep(JournalStep journalStep) {
+	public void setJournalStep(final JournalStep journalStep) {
 		this.journalStep = journalStep;
 	}
 
@@ -37,7 +43,7 @@ public class JournalStepJournalStepDetail extends Auditable implements
 		return journalStepDetail;
 	}
 
-	public void setJournalStepDetail(JournalStepDetail journalStepDetail) {
+	public void setJournalStepDetail(final JournalStepDetail journalStepDetail) {
 		this.journalStepDetail = journalStepDetail;
 	}
 
@@ -47,7 +53,7 @@ public class JournalStepJournalStepDetail extends Auditable implements
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:29 PM
 		int result = hashPrime();
 
 		// Auditable properties

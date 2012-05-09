@@ -40,8 +40,7 @@ public class Goal extends AbstractReference implements
 	 * @param id
 	 *            Identifier; required
 	 */
-
-	public Goal(UUID id) {
+	public Goal(final UUID id) {
 		super(id);
 	}
 
@@ -53,23 +52,8 @@ public class Goal extends AbstractReference implements
 	 * @param name
 	 *            Name; required; max 100 characters
 	 */
-
-	public Goal(UUID id, String name) {
+	public Goal(final UUID id, final String name) {
 		super(id, name);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 150 characters
-	 */
-	public Goal(UUID id, String name, String description) {
-		super(id, name, description);
 	}
 
 	public ConfidentialityLevel getConfidentialityLevel() {
@@ -77,7 +61,7 @@ public class Goal extends AbstractReference implements
 	}
 
 	public void setConfidentialityLevel(
-			ConfidentialityLevel confidentialityLevel) {
+			final ConfidentialityLevel confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
 	}
 

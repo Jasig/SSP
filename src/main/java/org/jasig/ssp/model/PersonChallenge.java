@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.Challenge;
 
 /**
@@ -48,7 +49,7 @@ public class PersonChallenge extends Auditable implements Serializable {
 		super();
 	}
 
-	public PersonChallenge(Person person, Challenge challenge) {
+	public PersonChallenge(final Person person, final Challenge challenge) {
 		super();
 		this.person = person;
 		this.challenge = challenge;
@@ -58,7 +59,7 @@ public class PersonChallenge extends Auditable implements Serializable {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -66,7 +67,7 @@ public class PersonChallenge extends Auditable implements Serializable {
 		return person;
 	}
 
-	public void setPerson(Person person) {
+	public void setPerson(final Person person) {
 		this.person = person;
 	}
 
@@ -74,7 +75,7 @@ public class PersonChallenge extends Auditable implements Serializable {
 		return challenge;
 	}
 
-	public void setChallenge(Challenge challenge) {
+	public void setChallenge(final Challenge challenge) {
 		this.challenge = challenge;
 	}
 
@@ -84,7 +85,7 @@ public class PersonChallenge extends Auditable implements Serializable {
 	 * @param source
 	 *            Source to use for overwrites.
 	 */
-	public void overwrite(PersonChallenge source) {
+	public void overwrite(final PersonChallenge source) {
 		this.setDescription(source.getDescription());
 	}
 
@@ -94,7 +95,7 @@ public class PersonChallenge extends Auditable implements Serializable {
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:15 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -103,8 +104,8 @@ public class PersonChallenge extends Auditable implements Serializable {
 				.hashCode();
 
 		// PersonChallenge
-		result *= description == null ? "description".hashCode() : description
-				.hashCode();
+		result *= StringUtils.isEmpty(description) ? "description".hashCode()
+				: description.hashCode();
 		result *= person == null || person.getId() == null ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= challenge == null ? "challenge".hashCode() : challenge

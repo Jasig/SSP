@@ -14,6 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.Challenge;
@@ -89,8 +90,10 @@ public class Task extends Auditable implements Restricted, Serializable {
 		super();
 	}
 
-	public Task(String description, Date dueDate, Person person,
-			Challenge challenge, ChallengeReferral challengeReferral) {
+	public Task(final String description, final Date dueDate,
+			final Person person,
+			final Challenge challenge, final ChallengeReferral challengeReferral) {
+		super();
 		this.description = description;
 		this.dueDate = new Date(dueDate.getTime());
 		this.person = person;
@@ -115,25 +118,20 @@ public class Task extends Auditable implements Restricted, Serializable {
 	}
 
 	public String getGroup() {
-		String group;
-
-		final String type = getType();
 		if (challenge != null) {
-			group = challenge.getName();
-		} else if (type.equals(CUSTOM_ACTION_PLAN_TASK)) {
-			group = CUSTOM_GROUP_NAME;
-		} else {
-			group = "UNKNOWN";
+			return challenge.getName();
+		} else if (getType().equals(CUSTOM_ACTION_PLAN_TASK)) {
+			return CUSTOM_GROUP_NAME;
 		}
 
-		return group;
+		return "UNKNOWN";
 	}
 
 	public Challenge getChallenge() {
 		return challenge;
 	}
 
-	public void setChallenge(Challenge challenge) {
+	public void setChallenge(final Challenge challenge) {
 		this.challenge = challenge;
 	}
 
@@ -141,7 +139,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 		return challengeReferral;
 	}
 
-	public void setChallengeReferral(ChallengeReferral challengeReferral) {
+	public void setChallengeReferral(final ChallengeReferral challengeReferral) {
 		this.challengeReferral = challengeReferral;
 	}
 
@@ -149,7 +147,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -157,7 +155,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -165,7 +163,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 		return completedDate == null ? null : new Date(completedDate.getTime());
 	}
 
-	public void setCompletedDate(Date completedDate) {
+	public void setCompletedDate(final Date completedDate) {
 		this.completedDate = completedDate == null ? null : new Date(
 				completedDate.getTime());
 	}
@@ -174,7 +172,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 		return sessionId;
 	}
 
-	public void setSessionId(String sessionId) {
+	public void setSessionId(final String sessionId) {
 		this.sessionId = sessionId;
 	}
 
@@ -182,7 +180,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 		return person;
 	}
 
-	public void setPerson(Person person) {
+	public void setPerson(final Person person) {
 		this.person = person;
 	}
 
@@ -191,7 +189,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 				reminderSentDate.getTime());
 	}
 
-	public void setReminderSentDate(Date reminderSentDate) {
+	public void setReminderSentDate(final Date reminderSentDate) {
 		this.reminderSentDate = reminderSentDate == null ? null : new Date(
 				reminderSentDate.getTime());
 	}
@@ -200,7 +198,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 		return dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(final Date dueDate) {
 		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
@@ -208,7 +206,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 		return deletable;
 	}
 
-	public void setDeletable(boolean deletable) {
+	public void setDeletable(final boolean deletable) {
 		this.deletable = deletable;
 	}
 
@@ -225,7 +223,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 	 *            the confidentialityLevel to set
 	 */
 	public void setConfidentialityLevel(
-			ConfidentialityLevel confidentialityLevel) {
+			final ConfidentialityLevel confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
 	}
 
@@ -235,7 +233,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:06 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -244,16 +242,17 @@ public class Task extends Auditable implements Restricted, Serializable {
 				.hashCode();
 
 		// Task
-		result *= name == null ? "name".hashCode() : name.hashCode();
-		result *= description == null ? "description".hashCode() : description
+		result *= StringUtils.isEmpty(name) ? "name".hashCode() : name
 				.hashCode();
+		result *= StringUtils.isEmpty(description) ? "description".hashCode()
+				: description.hashCode();
 		result *= dueDate == null ? "dueDate".hashCode() : dueDate.hashCode();
 		result *= completedDate == null ? "completedDate".hashCode()
 				: completedDate.hashCode();
 		result *= reminderSentDate == null ? "reminderSentDate".hashCode()
 				: reminderSentDate.hashCode();
-		result *= sessionId == null ? "sessionId".hashCode() : sessionId
-				.hashCode();
+		result *= StringUtils.isEmpty(sessionId) ? "sessionId".hashCode()
+				: sessionId.hashCode();
 		result *= deletable ? 3 : 5;
 		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();

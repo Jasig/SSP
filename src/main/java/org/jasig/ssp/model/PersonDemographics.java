@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.ChildCareArrangement;
@@ -131,7 +132,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return abilityToBenefit;
 	}
 
-	public void setAbilityToBenefit(boolean abilityToBenefit) {
+	public void setAbilityToBenefit(final boolean abilityToBenefit) {
 		this.abilityToBenefit = abilityToBenefit;
 	}
 
@@ -139,7 +140,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return anticipatedStartTerm;
 	}
 
-	public void setAnticipatedStartTerm(String anticipatedStartTerm) {
+	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
 		this.anticipatedStartTerm = anticipatedStartTerm;
 	}
 
@@ -147,7 +148,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return anticipatedStartYear;
 	}
 
-	public void setAnticipatedStartYear(String anticipatedStartYear) {
+	public void setAnticipatedStartYear(final String anticipatedStartYear) {
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
@@ -155,7 +156,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return local;
 	}
 
-	public void setLocal(boolean isLocal) {
+	public void setLocal(final boolean isLocal) {
 		local = isLocal;
 	}
 
@@ -163,7 +164,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return countryOfResidence;
 	}
 
-	public void setCountryOfResidence(String countryOfResidence) {
+	public void setCountryOfResidence(final String countryOfResidence) {
 		this.countryOfResidence = countryOfResidence;
 	}
 
@@ -171,7 +172,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return paymentStatus;
 	}
 
-	public void setPaymentStatus(String paymentStatus) {
+	public void setPaymentStatus(final String paymentStatus) {
 		this.paymentStatus = paymentStatus;
 	}
 
@@ -179,7 +180,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return maritalStatus;
 	}
 
-	public void setMaritalStatus(MaritalStatus maritalStatus) {
+	public void setMaritalStatus(final MaritalStatus maritalStatus) {
 		this.maritalStatus = maritalStatus;
 	}
 
@@ -187,7 +188,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return ethnicity;
 	}
 
-	public void setEthnicity(Ethnicity ethnicity) {
+	public void setEthnicity(final Ethnicity ethnicity) {
 		this.ethnicity = ethnicity;
 	}
 
@@ -195,7 +196,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return gender;
 	}
 
-	public void setGender(Genders gender) {
+	public void setGender(final Genders gender) {
 		this.gender = gender;
 	}
 
@@ -203,7 +204,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return citizenship;
 	}
 
-	public void setCitizenship(Citizenship citizenship) {
+	public void setCitizenship(final Citizenship citizenship) {
 		this.citizenship = citizenship;
 	}
 
@@ -211,7 +212,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return countryOfCitizenship;
 	}
 
-	public void setCountryOfCitizenship(String countryOfCitizenship) {
+	public void setCountryOfCitizenship(final String countryOfCitizenship) {
 		this.countryOfCitizenship = countryOfCitizenship;
 	}
 
@@ -219,7 +220,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return veteranStatus;
 	}
 
-	public void setVeteranStatus(VeteranStatus veteranStatus) {
+	public void setVeteranStatus(final VeteranStatus veteranStatus) {
 		this.veteranStatus = veteranStatus;
 	}
 
@@ -227,7 +228,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return primaryCaregiver;
 	}
 
-	public void setPrimaryCaregiver(boolean primaryCaregiver) {
+	public void setPrimaryCaregiver(final boolean primaryCaregiver) {
 		this.primaryCaregiver = primaryCaregiver;
 	}
 
@@ -235,7 +236,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return numberOfChildren;
 	}
 
-	public void setNumberOfChildren(int numberOfChildren) {
+	public void setNumberOfChildren(final int numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
 	}
 
@@ -244,7 +245,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 	}
 
 	public void setChildCareArrangement(
-			ChildCareArrangement childCareArrangement) {
+			final ChildCareArrangement childCareArrangement) {
 		this.childCareArrangement = childCareArrangement;
 	}
 
@@ -252,7 +253,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return childAges;
 	}
 
-	public void setChildAges(String childAges) {
+	public void setChildAges(final String childAges) {
 		this.childAges = childAges;
 	}
 
@@ -260,7 +261,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return childCareNeeded;
 	}
 
-	public void setChildCareNeeded(boolean childCareNeeded) {
+	public void setChildCareNeeded(final boolean childCareNeeded) {
 		this.childCareNeeded = childCareNeeded;
 	}
 
@@ -268,7 +269,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return employed;
 	}
 
-	public void setEmployed(boolean employed) {
+	public void setEmployed(final boolean employed) {
 		this.employed = employed;
 	}
 
@@ -276,7 +277,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return placeOfEmployment;
 	}
 
-	public void setPlaceOfEmployment(String placeOfEmployment) {
+	public void setPlaceOfEmployment(final String placeOfEmployment) {
 		this.placeOfEmployment = placeOfEmployment;
 	}
 
@@ -284,7 +285,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return shift;
 	}
 
-	public void setShift(EmploymentShifts shift) {
+	public void setShift(final EmploymentShifts shift) {
 		this.shift = shift;
 	}
 
@@ -292,7 +293,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return wage;
 	}
 
-	public void setWage(String wage) {
+	public void setWage(final String wage) {
 		this.wage = wage;
 	}
 
@@ -300,7 +301,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return totalHoursWorkedPerWeek;
 	}
 
-	public void setTotalHoursWorkedPerWeek(String totalHoursWorkedPerWeek) {
+	public void setTotalHoursWorkedPerWeek(final String totalHoursWorkedPerWeek) {
 		this.totalHoursWorkedPerWeek = totalHoursWorkedPerWeek;
 	}
 
@@ -308,7 +309,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 		return coach;
 	}
 
-	public void setCoach(Person coach) {
+	public void setCoach(final Person coach) {
 		this.coach = coach;
 	}
 
@@ -330,10 +331,11 @@ public class PersonDemographics extends Auditable implements Serializable {
 	 * @param childCareArrangement
 	 *            Child Care Arrangements
 	 */
-	public void overwrite(PersonDemographics source,
-			MaritalStatus maritalStatus, Ethnicity ethnicity,
-			Citizenship citizenship, VeteranStatus veterenStatus, Person coach,
-			ChildCareArrangement childCareArrangement) {
+	public void overwrite(final PersonDemographics source,
+			final MaritalStatus maritalStatus, final Ethnicity ethnicity,
+			final Citizenship citizenship, final VeteranStatus veterenStatus,
+			final Person coach,
+			final ChildCareArrangement childCareArrangement) {
 		this.setAbilityToBenefit(source.isAbilityToBenefit());
 		this.setAnticipatedStartTerm(source.getAnticipatedStartTerm());
 		this.setAnticipatedStartYear(source.getAnticipatedStartYear());
@@ -368,7 +370,7 @@ public class PersonDemographics extends Auditable implements Serializable {
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:13 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -378,15 +380,18 @@ public class PersonDemographics extends Auditable implements Serializable {
 
 		// PersonDemographics
 		result *= abilityToBenefit ? 7 : 11;
-		result *= anticipatedStartTerm == null ? "anticipatedStartTerm"
-				.hashCode() : anticipatedStartTerm.hashCode();
-		result *= anticipatedStartYear == null ? "anticipatedStartYear"
-				.hashCode() : anticipatedStartYear.hashCode();
+		result *= StringUtils.isEmpty(anticipatedStartTerm) ? "anticipatedStartTerm"
+				.hashCode()
+				: anticipatedStartTerm.hashCode();
+		result *= StringUtils.isEmpty(anticipatedStartYear) ? "anticipatedStartYear"
+				.hashCode()
+				: anticipatedStartYear.hashCode();
 		result *= local ? 3 : 5;
-		result *= countryOfResidence == null ? "countryOfResidence".hashCode()
+		result *= StringUtils.isEmpty(countryOfResidence) ? "countryOfResidence"
+				.hashCode()
 				: countryOfResidence.hashCode();
-		result *= paymentStatus == null ? "paymentStatus".hashCode()
-				: paymentStatus.hashCode();
+		result *= StringUtils.isEmpty(paymentStatus) ? "paymentStatus"
+				.hashCode() : paymentStatus.hashCode();
 		result *= maritalStatus == null ? "maritalStatus".hashCode()
 				: maritalStatus.hashCode();
 		result *= ethnicity == null ? "ethnicity".hashCode() : ethnicity
@@ -394,24 +399,27 @@ public class PersonDemographics extends Auditable implements Serializable {
 		result *= gender == null ? "gender".hashCode() : gender.hashCode();
 		result *= citizenship == null ? "citizenship".hashCode() : citizenship
 				.hashCode();
-		result *= countryOfCitizenship == null ? "countryOfCitizenship"
-				.hashCode() : countryOfCitizenship.hashCode();
+		result *= StringUtils.isEmpty(countryOfCitizenship) ? "countryOfCitizenship"
+				.hashCode()
+				: countryOfCitizenship.hashCode();
 		result *= veteranStatus == null ? "veteranStatus".hashCode()
 				: veteranStatus.hashCode();
 		result *= primaryCaregiver ? 13 : 17;
 		result *= numberOfChildren;
 		result *= childCareArrangement == null ? "childCareArrangement"
 				.hashCode() : childCareArrangement.hashCode();
-		result *= childAges == null ? "childAges".hashCode() : childAges
-				.hashCode();
+		result *= StringUtils.isEmpty(childAges) ? "childAges".hashCode()
+				: childAges.hashCode();
 		result *= childCareNeeded ? 19 : 23;
 		result *= employed ? 29 : 31;
-		result *= placeOfEmployment == null ? "placeOfEmployment".hashCode()
-				: placeOfEmployment.hashCode();
+		result *= StringUtils.isEmpty(placeOfEmployment) ? "placeOfEmployment"
+				.hashCode() : placeOfEmployment.hashCode();
 		result *= shift == null ? "shift".hashCode() : shift.hashCode();
-		result *= wage == null ? "wage".hashCode() : wage.hashCode();
-		result *= totalHoursWorkedPerWeek == null ? "totalHoursWorkedPerWeek"
-				.hashCode() : totalHoursWorkedPerWeek.hashCode();
+		result *= StringUtils.isEmpty(wage) ? "wage".hashCode() : wage
+				.hashCode();
+		result *= StringUtils.isEmpty(totalHoursWorkedPerWeek) ? "totalHoursWorkedPerWeek"
+				.hashCode()
+				: totalHoursWorkedPerWeek.hashCode();
 		result *= coach == null || coach.getId() == null ? "coach".hashCode()
 				: coach.getId().hashCode();
 

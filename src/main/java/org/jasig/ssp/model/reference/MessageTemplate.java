@@ -5,6 +5,8 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import org.apache.commons.lang.StringUtils;
+
 /*
  * Allows e-mails and other messaging to be customized using the Velocity Framework
  */
@@ -38,6 +40,7 @@ public class MessageTemplate extends AbstractReference {
 	 * Empty constructor
 	 */
 	public MessageTemplate() {
+		super();
 	}
 
 	public MessageTemplate(final UUID id) {
@@ -94,8 +97,10 @@ public class MessageTemplate extends AbstractReference {
 		// Auditable properties
 		result *= super.hashCode();
 
-		result *= subject == null ? "subject".hashCode() : subject.hashCode();
-		result *= body == null ? "body".hashCode() : body.hashCode();
+		result *= StringUtils.isEmpty(subject) ? "subject".hashCode() : subject
+				.hashCode();
+		result *= StringUtils.isEmpty(body) ? "body".hashCode() : body
+				.hashCode();
 
 		return result;
 	}

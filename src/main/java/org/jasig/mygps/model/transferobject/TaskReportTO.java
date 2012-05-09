@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Task;
 
 public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
@@ -106,13 +107,15 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 	public int hashCode() {
 		int result = hashPrime();
 
-		result *= type == null ? "type".hashCode() : type.hashCode();
-		result *= challengeName == null ? "challengeName".hashCode()
-				: challengeName.hashCode();
-		result *= challengeReferralName == null ? "challengeReferralName"
-				.hashCode() : challengeReferralName.hashCode();
-		result *= description == null ? "description".hashCode() : description
+		result *= StringUtils.isEmpty(type) ? "type".hashCode() : type
 				.hashCode();
+		result *= StringUtils.isEmpty(challengeName) ? "challengeName"
+				.hashCode() : challengeName.hashCode();
+		result *= StringUtils.isEmpty(challengeReferralName) ? "challengeReferralName"
+				.hashCode()
+				: challengeReferralName.hashCode();
+		result *= StringUtils.isEmpty(description) ? "description".hashCode()
+				: description.hashCode();
 		result *= createdBy == null ? "createdBy".hashCode() : createdBy
 				.hashCode();
 		result *= dueDate == null ? "dueDate".hashCode() : dueDate.hashCode();

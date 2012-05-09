@@ -131,7 +131,7 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 	};
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:20 PM
 		int result = hashPrime() * super.hashCode();
 
 		result *= questionNumber > 0 ? questionNumber : hashPrime();

@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.StudentStatus;
 
 /**
@@ -52,7 +53,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 		return studentStatus;
 	}
 
-	public void setStudentStatus(StudentStatus studentStatus) {
+	public void setStudentStatus(final StudentStatus studentStatus) {
 		this.studentStatus = studentStatus;
 	}
 
@@ -60,7 +61,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 		return newOrientationComplete;
 	}
 
-	public void setNewOrientationComplete(boolean newOrientationComplete) {
+	public void setNewOrientationComplete(final boolean newOrientationComplete) {
 		this.newOrientationComplete = newOrientationComplete;
 	}
 
@@ -68,7 +69,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 		return registeredForClasses;
 	}
 
-	public void setRegisteredForClasses(boolean registeredForClasses) {
+	public void setRegisteredForClasses(final boolean registeredForClasses) {
 		this.registeredForClasses = registeredForClasses;
 	}
 
@@ -76,7 +77,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 		return collegeDegreeForParents;
 	}
 
-	public void setCollegeDegreeForParents(boolean collegeDegreeForParents) {
+	public void setCollegeDegreeForParents(final boolean collegeDegreeForParents) {
 		this.collegeDegreeForParents = collegeDegreeForParents;
 	}
 
@@ -84,7 +85,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 		return specialNeeds;
 	}
 
-	public void setSpecialNeeds(boolean specialNeeds) {
+	public void setSpecialNeeds(final boolean specialNeeds) {
 		this.specialNeeds = specialNeeds;
 	}
 
@@ -92,7 +93,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 		return gradeTypicallyEarned;
 	}
 
-	public void setGradeTypicallyEarned(String gradeTypicallyEarned) {
+	public void setGradeTypicallyEarned(final String gradeTypicallyEarned) {
 		this.gradeTypicallyEarned = gradeTypicallyEarned;
 	}
 
@@ -103,7 +104,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 	 *            Source to use for overwrites.
 	 * @see #overwrite(PersonEducationPlan)
 	 */
-	public void overwrite(PersonEducationPlan source) {
+	public void overwrite(final PersonEducationPlan source) {
 		setNewOrientationComplete(source.isNewOrientationComplete());
 		setRegisteredForClasses(source.isRegisteredForClasses());
 		setCollegeDegreeForParents(source.isCollegeDegreeForParents());
@@ -118,7 +119,7 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:14 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -133,8 +134,9 @@ public class PersonEducationPlan extends Auditable implements Serializable {
 		result *= registeredForClasses ? 7 : 11;
 		result *= collegeDegreeForParents ? 13 : 17;
 		result *= specialNeeds ? 19 : 23;
-		result *= gradeTypicallyEarned == null ? "gradeTypicallyEarned"
-				.hashCode() : gradeTypicallyEarned.hashCode();
+		result *= StringUtils.isEmpty(gradeTypicallyEarned) ? "gradeTypicallyEarned"
+				.hashCode()
+				: gradeTypicallyEarned.hashCode();
 
 		return result;
 	}
