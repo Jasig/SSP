@@ -158,28 +158,28 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 			// set selected education levels
 			educationLevelObj = educationLevelsForm.getValues();
 			otherEducationLevelDescription = this.formUtils.findPropByName(educationLevelObj, 'otherDescription');
-			if (otherEducationLevelDescription.length>0)
-			{
-				delete educationLevelObj['otherDescription'];
-			}
-			intakeData.personEducationLevels = this.getSelectedEducationLevels(educationLevelObj, personId, otherEducationLevelDescription);;
+			// remove the other description key
+			var key = Ext.Object.getKey(educationLevelObj,otherEducationLevelDescription);
+			if (key != null);
+				delete educationLevelObj[key];
+			intakeData.personEducationLevels = this.getSelectedEducationLevels(educationLevelObj, personId, otherEducationLevelDescription);
 			
 			// set selected funding
 			fundingObj = fundingForm.getValues();
 			otherFundingDescription = this.formUtils.findPropByName(fundingObj, 'otherDescription');
-			if (otherFundingDescription.length>0)
-			{
-				delete fundingObj['otherDescription'];
-			}
+			// remove the other description key
+			var key = Ext.Object.getKey(fundingObj,otherFundingDescription);
+			if (key != null);
+				delete fundingObj[key];
 			intakeData.personFundingSources = this.getSelectedFunding(fundingObj, personId, otherFundingDescription);
 			
 			// set selected challenges
 			challengeObj = challengesForm.getValues();
 			otherChallengeDescription = this.formUtils.findPropByName(challengeObj, 'otherDescription');
-			if (otherChallengeDescription.length>0)
-			{
-				delete challengeObj['otherDescription'];
-			}
+			// remove the other description key
+			var key = Ext.Object.getKey(challengeObj,otherChallengeDescription);
+			if (key != null);
+				delete challengeObj[key];
 			intakeData.personChallenges = this.getSelectedChallenges(challengeObj, personId, otherChallengeDescription);
 
 			Ext.Ajax.request({
@@ -195,7 +195,6 @@ Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
 				},
 				failure: this.apiProperties.handleError
 			}, this);
-
 		}else{
 			Ext.Msg.alert('Invalid Data','Please correct the errors in this Student Intake before saving the record.');
 		}

@@ -62,6 +62,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 	loadAdmin: function( title ,form, storeName ) {
 		var comp = this.formUtils.loadDisplay('adminforms',form, true, {});
 		var store = null;
+		
 		// set a store if defined
 		if (storeName != "")
 		{
@@ -75,6 +76,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 			}
 		}
 		
-		comp.setTitle(title + ' Admin');
+		if (Ext.isFunction(comp.setTitle))
+			comp.setTitle(title + ' Admin');
 	}
 });
