@@ -49,8 +49,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: false,
-				        forceSelection: true
+				        allowBlank: true
 					},{
 				        xtype: 'combobox',
 				        name: 'ethnicityId',

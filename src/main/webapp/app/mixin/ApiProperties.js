@@ -49,6 +49,24 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		return proxyObj;
 	},
 	
+	/*
+	 * @args - {}
+	 *    url - url of the request
+	 *    method - 'PUT', 'POST', 'GET', 'DELETE'
+	 *    jsonData - data to send
+	 *    successFunc - success function
+	 */
+	makeRequest: function(args){
+		Ext.Ajax.request({
+			url: args.url,
+			method: args.method,
+			headers: { 'Content-Type': 'application/json' },
+			jsonData: args.jsonData || '',
+			success: args.successFunc,
+			failure: this.handleError
+		}, this);		
+	},
+	
 	handleError: function(response) {
 		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
 		Ext.Msg.alert('SSP Error', msg);								

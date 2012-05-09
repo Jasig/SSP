@@ -59,7 +59,7 @@ Ext.define('Ssp.controller.MainViewController', {
 		}
 		
 		arrViewItems = [{xtype:'adminmain',
-					     items:[{xtype: 'admintreemenu', flex:2 }, 
+					     items:[{xtype: 'admintreemenu', flex:1 }, 
 					            {xtype: 'adminforms', flex: 3 }],
 					     flex:5}];
 		
