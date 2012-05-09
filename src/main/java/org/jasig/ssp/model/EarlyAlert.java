@@ -177,7 +177,7 @@ public class EarlyAlert extends Auditable implements Serializable {
 	 * @return the closedDate
 	 */
 	public Date getClosedDate() {
-		return closedDate;
+		return closedDate == null ? null : new Date(closedDate.getTime());
 	}
 
 	/**
@@ -185,7 +185,8 @@ public class EarlyAlert extends Auditable implements Serializable {
 	 *            the closedDate to set
 	 */
 	public void setClosedDate(final Date closedDate) {
-		this.closedDate = closedDate;
+		this.closedDate = closedDate == null ? null : new Date(
+				closedDate.getTime());
 	}
 
 	/**
