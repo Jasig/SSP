@@ -11,5 +11,4 @@ import org.jasig.ssp.transferobject.EarlyAlertTO;
  */
 public interface EarlyAlertTOFactory extends
 		TOFactory<EarlyAlertTO, EarlyAlert> {
-
 }

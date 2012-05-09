@@ -60,6 +60,8 @@ public class EarlyAlertServiceImpl extends
 		current.setEarlyAlertReasonOtherDescription(obj
 				.getEarlyAlertReasonOtherDescription());
 		current.setComment(obj.getComment());
+		current.setClosedDate(obj.getClosedDate());
+		current.setClosedById(obj.getClosedById());
 
 		if (obj.getPerson() == null) {
 			current.setPerson(null);

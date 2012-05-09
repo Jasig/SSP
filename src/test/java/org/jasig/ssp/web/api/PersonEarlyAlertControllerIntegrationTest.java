@@ -168,6 +168,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		obj.setPersonId(PERSON_ID);
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setClosedById(PERSON_ID);
 
 		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
 				.newHashSet();
@@ -186,6 +187,8 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		session.flush(); // flush to ensure the INSERT commands are run now
 
 		assertNotNull("Saved instance should not have been null.", saved);
+		assertEquals("Saved instance data did not match.", PERSON_ID,
+				saved.getClosedById());
 
 		final UUID savedId = saved.getId();
 		assertNotNull("Saved instance identifier should not have been null.",

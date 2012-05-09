@@ -1,6 +1,7 @@
 package org.jasig.ssp.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
@@ -50,6 +53,14 @@ public class EarlyAlert extends Auditable implements Serializable {
 	@Column(nullable = true, length = 64000)
 	@Size(max = 64000)
 	private String comment;
+
+	@Column(nullable = true)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date closedDate;
+
+	@Column(nullable = true)
+	@Type(type = "pg-uuid")
+	private UUID closedById;
 
 	/**
 	 * Associated person. Changes to this Person are not persisted.
@@ -161,6 +172,36 @@ public class EarlyAlert extends Auditable implements Serializable {
 		this.comment = comment;
 	}
 
+	/**
+	 * @return the closedDate
+	 */
+	public Date getClosedDate() {
+		return closedDate;
+	}
+
+	/**
+	 * @param closedDate
+	 *            the closedDate to set
+	 */
+	public void setClosedDate(final Date closedDate) {
+		this.closedDate = closedDate;
+	}
+
+	/**
+	 * @return the closedById
+	 */
+	public UUID getClosedById() {
+		return closedById;
+	}
+
+	/**
+	 * @param closedById
+	 *            the closedById to set
+	 */
+	public void setClosedById(final UUID closedById) {
+		this.closedById = closedById;
+	}
+
 	public Person getPerson() {
 		return person;
 	}
@@ -207,7 +248,7 @@ public class EarlyAlert extends Auditable implements Serializable {
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 1:50 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -233,6 +274,10 @@ public class EarlyAlert extends Auditable implements Serializable {
 				.hashCode() : earlyAlertReasonIds.hashCode();
 		result *= earlyAlertSuggestionIds == null ? "earlyAlertSuggestionIds"
 				.hashCode() : earlyAlertSuggestionIds.hashCode();
+		result *= closedDate == null ? "closedDate".hashCode() : closedDate
+				.hashCode();
+		result *= closedById == null ? "closedById".hashCode() : closedById
+				.hashCode();
 
 		return result;
 	}

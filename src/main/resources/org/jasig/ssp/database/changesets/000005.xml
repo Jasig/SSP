@@ -1216,5 +1216,20 @@
 		</modifySql>
 	</changeSet>
 
+	<changeSet id="Add close to EarlyAlert" author="jon.adams">
+		<addColumn tableName="early_alert">
+			<column name="closed_date" type="datetime" />
+			<column name="closed_by_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="early_alert_closed_by_person_id"
+					references="person(id)" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="early_alert" columnName="closed_date" />
+			<dropColumn tableName="early_alert" columnName="closed_by_id" />
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>
     
