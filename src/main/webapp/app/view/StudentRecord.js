@@ -1,6 +1,6 @@
 Ext.define('Ssp.view.StudentRecord', {
 	extend: 'Ext.container.Container',
-    alias: 'widget.StudentRecord',
+    alias: 'widget.studentrecord',
     id: 'StudentRecord',
     initComponent: function(){
     	Ext.apply(this,{

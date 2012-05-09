@@ -4,7 +4,7 @@ Ext.define('Ssp.view.Viewport',{
     id: 'sspView',
     alias: 'widget.sspview',
     initComponent: function() {
-    	Ext.apply(this,{items: [ Ext.create('Ssp.view.Main') ]})
+    	Ext.apply(this,{items: [{xtype:'Main'}]})
     	return this.callParent(arguments);
     }
 });

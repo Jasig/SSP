@@ -1,6 +1,6 @@
 Ext.define('Ssp.view.ToolsMenu', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.ToolsMenu',
+	alias : 'widget.toolsmenu',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.ToolsViewController',

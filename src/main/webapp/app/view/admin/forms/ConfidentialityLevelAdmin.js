@@ -1,6 +1,6 @@
 Ext.define('Ssp.view.admin.forms.ConfidentialityLevelAdmin', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.ConfidentialityLevelAdmin',
+	alias : 'widget.confidentialityleveladmin',
 	title: 'Admin',
 	id: 'ConfidentialityLevelAdmin',
     mixins: [ 'Deft.mixin.Injectable',

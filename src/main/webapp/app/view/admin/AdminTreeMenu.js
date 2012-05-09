@@ -1,6 +1,6 @@
 Ext.define('Ssp.view.admin.AdminTreeMenu', {
 	extend: 'Ext.tree.Panel',
-	alias : 'widget.AdminTreeMenu',
+	alias : 'widget.admintreemenu',
 	id: 'AdminTreeMenu',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],

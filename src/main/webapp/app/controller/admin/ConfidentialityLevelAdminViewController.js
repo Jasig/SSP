@@ -1,5 +1,9 @@
 Ext.define('Ssp.controller.admin.ConfidentialityLevelAdminViewController', {
     extend: 'Deft.mvc.ViewController',     
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
     control: {
 		view: {
 			edit: 'editRecord'

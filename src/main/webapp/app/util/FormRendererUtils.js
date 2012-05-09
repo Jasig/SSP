@@ -178,7 +178,32 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			selectedItems.push( obj.data );
 		}
 		return selectedItems;
-    }
+    },
+    
+ 	/*
+	 * load a display into a container in the interface.
+	 * @containerAlias = alias/xtype of the container into which to load the display.
+	 * @compAlias = alias/xtype of the component that is loaded
+	 * @removeExisting = boolean: true=remove existing items before load, 
+	 *                            false=keep existing items
+	 * @args = optional params space
+	 */	
+	loadDisplay: function( containerAlias, compAlias, removeExisting, args ) {	
+		var comp = null;
+		var store = null;
+		var view = Ext.ComponentQuery.query(containerAlias.toLowerCase())[0];
+		
+		if (view.items.length > 0 && removeExisting==true)
+			view.removeAll();
+
+		// create the new widget
+		comp =  Ext.createWidget(compAlias.toLowerCase());	
+		
+		// add to the container
+		view.add( comp );
+		
+		return comp;
+	}
 	
 });
 
