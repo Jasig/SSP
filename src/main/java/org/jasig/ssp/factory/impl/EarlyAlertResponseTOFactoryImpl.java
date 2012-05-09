@@ -7,12 +7,13 @@ import org.jasig.ssp.dao.EarlyAlertResponseDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.EarlyAlertResponseTOFactory;
 import org.jasig.ssp.model.EarlyAlertResponse;
-import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
+import org.jasig.ssp.model.reference.EarlyAlertReferral;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.EarlyAlertOutreachService;
+import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,10 +46,13 @@ public class EarlyAlertResponseTOFactoryImpl extends
 	private transient EarlyAlertService earlyAlertService;
 
 	@Autowired
+	private transient EarlyAlertOutcomeService earlyAlertOutcomeService;
+
+	@Autowired
 	private transient EarlyAlertOutreachService earlyAlertOutreachService;
 
 	@Autowired
-	private transient EarlyAlertOutcomeService earlyAlertOutcomeService;
+	private transient EarlyAlertReferralService earlyAlertReferralService;
 
 	@Override
 	protected EarlyAlertResponseDao getDao() {
@@ -68,6 +72,11 @@ public class EarlyAlertResponseTOFactoryImpl extends
 			model.setEarlyAlert(earlyAlertService.get(tObject.getEarlyAlertId()));
 		}
 
+		if (tObject.getEarlyAlertOutcomeId() != null) {
+			model.setEarlyAlertOutcome(earlyAlertOutcomeService.get(tObject
+					.getEarlyAlertOutcomeId()));
+		}
+
 		model.setEarlyAlertOutreachIds(new HashSet<EarlyAlertOutreach>());
 		if (tObject.getEarlyAlertOutreachIds() != null) {
 			for (UUID obj : tObject.getEarlyAlertOutreachIds()) {
@@ -76,11 +85,11 @@ public class EarlyAlertResponseTOFactoryImpl extends
 			}
 		}
 
-		model.setEarlyAlertOutcomeIds(new HashSet<EarlyAlertOutcome>());
-		if (tObject.getEarlyAlertOutcomeIds() != null) {
-			for (UUID obj : tObject.getEarlyAlertOutcomeIds()) {
-				model.getEarlyAlertOutcomeIds().add(
-						earlyAlertOutcomeService.load(obj));
+		model.setEarlyAlertReferralIds(new HashSet<EarlyAlertReferral>());
+		if (tObject.getEarlyAlertReferralIds() != null) {
+			for (UUID obj : tObject.getEarlyAlertReferralIds()) {
+				model.getEarlyAlertReferralIds().add(
+						earlyAlertReferralService.load(obj));
 			}
 		}
 

@@ -14,11 +14,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
+import org.jasig.ssp.model.reference.EarlyAlertReferral;
 
 /**
- * EarlyAlertResponse
+ * EarlyAlertResponse model
+ * 
+ * @author jon.adams
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -41,6 +45,14 @@ public class EarlyAlertResponse extends Auditable implements Serializable {
 	@JoinColumn(name = "early_alert_id", nullable = false)
 	private EarlyAlert earlyAlert;
 
+	/**
+	 * Associated earlyAlertOutcome. Changes to this EarlyAlertOutcome are not
+	 * persisted.
+	 */
+	@ManyToOne
+	@JoinColumn(name = "early_alert_outcome_id", nullable = false)
+	private EarlyAlertOutcome earlyAlertOutcome;
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "early_alert_response_early_alert_outreach",
 			joinColumns = @JoinColumn(name = "early_alert_response_id"),
@@ -48,10 +60,10 @@ public class EarlyAlertResponse extends Auditable implements Serializable {
 	private Set<EarlyAlertOutreach> earlyAlertOutreachIds;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "early_alert_response_early_alert_outcome",
+	@JoinTable(name = "early_alert_response_early_alert_referral",
 			joinColumns = @JoinColumn(name = "early_alert_response_id"),
-			inverseJoinColumns = @JoinColumn(name = "early_alert_outcome_id"))
-	private Set<EarlyAlertOutcome> earlyAlertOutcomeIds;
+			inverseJoinColumns = @JoinColumn(name = "early_alert_referral_id"))
+	private Set<EarlyAlertReferral> earlyAlertReferralIds;
 
 	/**
 	 * @return the earlyAlertOutcomeOtherDescription
@@ -93,6 +105,21 @@ public class EarlyAlertResponse extends Auditable implements Serializable {
 	}
 
 	/**
+	 * @return the earlyAlertOutcome
+	 */
+	public EarlyAlertOutcome getEarlyAlertOutcome() {
+		return earlyAlertOutcome;
+	}
+
+	/**
+	 * @param earlyAlertOutcome
+	 *            the earlyAlertOutcome to set
+	 */
+	public void setEarlyAlertOutcome(final EarlyAlertOutcome earlyAlertOutcome) {
+		this.earlyAlertOutcome = earlyAlertOutcome;
+	}
+
+	/**
 	 * @return the earlyAlertOutreachIds
 	 */
 	public Set<EarlyAlertOutreach> getEarlyAlertOutreachIds() {
@@ -109,19 +136,19 @@ public class EarlyAlertResponse extends Auditable implements Serializable {
 	}
 
 	/**
-	 * @return the earlyAlertOutcomeIds
+	 * @return the earlyAlertReferralIds
 	 */
-	public Set<EarlyAlertOutcome> getEarlyAlertOutcomeIds() {
-		return earlyAlertOutcomeIds;
+	public Set<EarlyAlertReferral> getEarlyAlertReferralIds() {
+		return earlyAlertReferralIds;
 	}
 
 	/**
-	 * @param earlyAlertOutcomeIds
-	 *            the earlyAlertOutcomeIds to set
+	 * @param earlyAlertReferralIds
+	 *            the earlyAlertReferralIds to set
 	 */
-	public void setEarlyAlertOutcomeIds(
-			final Set<EarlyAlertOutcome> earlyAlertOutcomeIds) {
-		this.earlyAlertOutcomeIds = earlyAlertOutcomeIds;
+	public void setEarlyAlertReferralIds(
+			final Set<EarlyAlertReferral> earlyAlertReferralIds) {
+		this.earlyAlertReferralIds = earlyAlertReferralIds;
 	}
 
 	@Override
@@ -139,18 +166,21 @@ public class EarlyAlertResponse extends Auditable implements Serializable {
 				.hashCode();
 
 		// EarlyAlertResponse
-		result *= earlyAlertOutcomeOtherDescription == null ? "earlyAlertOutcomeOtherDescription"
+		result *= StringUtils.isEmpty(earlyAlertOutcomeOtherDescription) ? "earlyAlertOutcomeOtherDescription"
 				.hashCode()
-				: earlyAlertOutcomeOtherDescription
-						.hashCode();
-		result *= comment == null ? "comment".hashCode() : comment.hashCode();
+				: earlyAlertOutcomeOtherDescription.hashCode();
+		result *= StringUtils.isEmpty(comment) ? "comment".hashCode() : comment
+				.hashCode();
 		result *= earlyAlert == null || earlyAlert.getId() == null ? "earlyAlert"
 				.hashCode()
 				: earlyAlert.getId().hashCode();
+		result *= earlyAlertOutcome == null
+				|| earlyAlertOutcome.getId() == null ? "earlyAlertOutcome"
+				.hashCode() : earlyAlertOutcome.getId().hashCode();
 		result *= earlyAlertOutreachIds == null ? "earlyAlertOutreachIds"
 				.hashCode() : earlyAlertOutreachIds.hashCode();
-		result *= earlyAlertOutcomeIds == null ? "earlyAlertOutcomeIds"
-				.hashCode() : earlyAlertOutcomeIds.hashCode();
+		result *= earlyAlertReferralIds == null ? "earlyAlertReferralIds"
+				.hashCode() : earlyAlertReferralIds.hashCode();
 
 		return result;
 	}

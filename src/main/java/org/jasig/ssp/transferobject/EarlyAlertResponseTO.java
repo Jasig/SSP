@@ -8,8 +8,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.jasig.ssp.model.EarlyAlertResponse;
-import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
+import org.jasig.ssp.model.reference.EarlyAlertReferral;
 
 import com.google.common.collect.Sets;
 
@@ -27,13 +27,15 @@ public class EarlyAlertResponseTO
 
 	private UUID earlyAlertId;
 
+	private UUID earlyAlertOutcomeId;
+
 	private String earlyAlertOutcomeOtherDescription;
 
 	private String comment;
 
 	private Set<UUID> earlyAlertOutreachIds;
 
-	private Set<UUID> earlyAlertOutcomeIds;
+	private Set<UUID> earlyAlertReferralIds;
 
 	/**
 	 * Empty constructor
@@ -62,20 +64,22 @@ public class EarlyAlertResponseTO
 		comment = earlyAlertResponse.getComment();
 
 		earlyAlertId = earlyAlertResponse.getEarlyAlert() == null ? null
-				: earlyAlertResponse
-						.getEarlyAlert().getId();
+				: earlyAlertResponse.getEarlyAlert().getId();
+
+		earlyAlertOutcomeId = earlyAlertResponse.getEarlyAlertOutcome() == null ? null
+				: earlyAlertResponse.getEarlyAlertOutcome().getId();
 
 		earlyAlertOutreachIds = Sets.newHashSet();
-		earlyAlertOutcomeIds = Sets.newHashSet();
+		earlyAlertReferralIds = Sets.newHashSet();
 
 		for (EarlyAlertOutreach obj : earlyAlertResponse
 				.getEarlyAlertOutreachIds()) {
 			earlyAlertOutreachIds.add(obj.getId());
 		}
 
-		for (EarlyAlertOutcome obj : earlyAlertResponse
-				.getEarlyAlertOutcomeIds()) {
-			earlyAlertOutcomeIds.add(obj.getId());
+		for (EarlyAlertReferral obj : earlyAlertResponse
+				.getEarlyAlertReferralIds()) {
+			earlyAlertReferralIds.add(obj.getId());
 		}
 	}
 
@@ -150,6 +154,21 @@ public class EarlyAlertResponseTO
 	}
 
 	/**
+	 * @return the earlyAlertOutcomeId
+	 */
+	public UUID getEarlyAlertOutcomeId() {
+		return earlyAlertOutcomeId;
+	}
+
+	/**
+	 * @param earlyAlertOutcomeId
+	 *            the earlyAlertOutcomeId to set
+	 */
+	public void setEarlyAlertOutcomeId(final UUID earlyAlertOutcomeId) {
+		this.earlyAlertOutcomeId = earlyAlertOutcomeId;
+	}
+
+	/**
 	 * @return The list of EarlyAlertReasons
 	 */
 	public Set<UUID> getEarlyAlertOutreachIds() {
@@ -166,18 +185,18 @@ public class EarlyAlertResponseTO
 	}
 
 	/**
-	 * @return The list of EarlyAlertOutcomes
+	 * @return The list of EarlyAlertReferrals
 	 */
-	public Set<UUID> getEarlyAlertOutcomeIds() {
-		return earlyAlertOutcomeIds;
+	public Set<UUID> getEarlyAlertReferralIds() {
+		return earlyAlertReferralIds;
 	}
 
 	/**
-	 * @param earlyAlertOutcomeIds
-	 *            The list of EarlyAlertOutcomes to set
+	 * @param earlyAlertReferralIds
+	 *            The list of EarlyAlertReferrals to set
 	 */
-	public void setEarlyAlertOutcomeIds(
-			final Set<UUID> earlyAlertOutcomeIds) {
-		this.earlyAlertOutcomeIds = earlyAlertOutcomeIds;
+	public void setEarlyAlertReferralIds(
+			final Set<UUID> earlyAlertReferralIds) {
+		this.earlyAlertReferralIds = earlyAlertReferralIds;
 	}
 }

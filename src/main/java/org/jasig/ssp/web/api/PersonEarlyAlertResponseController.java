@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Services to manipulate EarlyAlerts.
  * <p>
  * Mapped to URI path <code>/1/person/{personId}/earlyAlertResponse</code>
+ * 
+ * @author jon.adams
  */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller

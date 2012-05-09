@@ -7,14 +7,15 @@ import java.util.Set;
 import org.jasig.ssp.dao.EarlyAlertResponseDao;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
+import org.jasig.ssp.model.reference.EarlyAlertReferral;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.EarlyAlertOutreachService;
+import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,10 +37,13 @@ public class EarlyAlertResponseServiceImpl extends
 	private transient EarlyAlertResponseDao dao;
 
 	@Autowired
+	private transient EarlyAlertOutcomeService earlyAlertOutcomeService;
+
+	@Autowired
 	private transient EarlyAlertOutreachService earlyAlertOutreachService;
 
 	@Autowired
-	private transient EarlyAlertOutcomeService earlyAlertOutcomeService;
+	private transient EarlyAlertReferralService earlyAlertReferralService;
 
 	@Autowired
 	private transient EarlyAlertService earlyAlertService;
@@ -65,6 +69,13 @@ public class EarlyAlertResponseServiceImpl extends
 					.getId()));
 		}
 
+		if (obj.getEarlyAlertOutcome() == null) {
+			current.setEarlyAlertOutcome(null);
+		} else {
+			current.setEarlyAlertOutcome(earlyAlertOutcomeService.get(obj
+					.getEarlyAlertOutcome().getId()));
+		}
+
 		final Set<EarlyAlertOutreach> earlyAlertOutreachs = new HashSet<EarlyAlertOutreach>();
 		if (obj.getEarlyAlertOutreachIds() != null) {
 			for (EarlyAlertOutreach outreach : obj.getEarlyAlertOutreachIds()) {
@@ -75,15 +86,15 @@ public class EarlyAlertResponseServiceImpl extends
 
 		current.setEarlyAlertOutreachIds(earlyAlertOutreachs);
 
-		final Set<EarlyAlertOutcome> earlyAlertOutcomes = new HashSet<EarlyAlertOutcome>();
-		if (obj.getEarlyAlertOutcomeIds() != null) {
-			for (EarlyAlertOutcome outcome : obj.getEarlyAlertOutcomeIds()) {
-				earlyAlertOutcomes.add(earlyAlertOutcomeService.load(outcome
+		final Set<EarlyAlertReferral> earlyAlertReferrals = new HashSet<EarlyAlertReferral>();
+		if (obj.getEarlyAlertReferralIds() != null) {
+			for (EarlyAlertReferral outcome : obj.getEarlyAlertReferralIds()) {
+				earlyAlertReferrals.add(earlyAlertReferralService.load(outcome
 						.getId()));
 			}
 		}
 
-		current.setEarlyAlertOutcomeIds(earlyAlertOutcomes);
+		current.setEarlyAlertReferralIds(earlyAlertReferrals);
 
 		return getDao().save(current);
 	}

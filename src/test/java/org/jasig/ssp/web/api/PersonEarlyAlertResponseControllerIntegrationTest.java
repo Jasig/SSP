@@ -55,8 +55,11 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 	private static final UUID EARLY_ALERT_OUTCOME_ID = UUID
 			.fromString("b2d11076-5056-a51a-80c1-f5813762ff0b");
 
-	private static final UUID EARLY_ALERT_OUTCOME_DELETED_ID = UUID
-			.fromString("077a1d57-6c85-42f7-922b-7642be9f70eb");
+	private static final UUID EARLY_ALERT_REFERRAL_ID = UUID
+			.fromString("1f5729af-0337-4e58-a001-8a9f80dbf8aa");
+
+	private static final UUID EARLY_ALERT_REFERRAL_ID2 = UUID
+			.fromString("b2d11335-5056-a51a-80ea-074f8fef94ea");
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -130,15 +133,16 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 		obj.setEarlyAlertId(earlyAlert.getId());
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setEarlyAlertOutcomeOtherDescription("some string");
+		obj.setEarlyAlertOutcomeId(EARLY_ALERT_OUTCOME_ID);
 
-		final Set<UUID> earlyAlertOutcomeIds = Sets.newHashSet();
-		earlyAlertOutcomeIds.add(EARLY_ALERT_OUTCOME_ID);
-		earlyAlertOutcomeIds.add(EARLY_ALERT_OUTCOME_DELETED_ID);
-		obj.setEarlyAlertOutcomeIds(earlyAlertOutcomeIds);
+		final Set<UUID> earlyAlertReferralIds = Sets.newHashSet();
+		earlyAlertReferralIds.add(EARLY_ALERT_REFERRAL_ID);
+		earlyAlertReferralIds.add(EARLY_ALERT_REFERRAL_ID2);
+		obj.setEarlyAlertReferralIds(earlyAlertReferralIds);
 
 		final EarlyAlertResponseTO saved = controller.create(PERSON_ID, obj);
 		final Session session = sessionFactory.getCurrentSession();
-		// session.flush();
+		session.flush();
 
 		final UUID savedId = saved.getId();
 		assertNotNull("Saved instance identifier should not have been null.",
@@ -146,13 +150,19 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 
 		assertEquals("Saved instance values did not match.", "some string",
 				saved.getEarlyAlertOutcomeOtherDescription());
-		assertEquals("Saved instance sets did not match.",
-				EARLY_ALERT_OUTCOME_ID,
-				saved.getEarlyAlertOutcomeIds().iterator().next());
+		assertEquals("Saved outcome identifiers did not match.",
+				EARLY_ALERT_OUTCOME_ID, saved.getEarlyAlertOutcomeId());
+		assertEquals("Referral counts did not match.", 2, saved
+				.getEarlyAlertReferralIds().size());
+		final UUID referral = saved.getEarlyAlertReferralIds().iterator()
+				.next();
+		assertTrue("Saved instance sets did not match.",
+				EARLY_ALERT_REFERRAL_ID.equals(referral)
+						|| EARLY_ALERT_REFERRAL_ID2.equals(referral));
 		assertEquals("Saved instance parent Early Alert ID did not match.",
 				earlyAlert.getId(), saved.getEarlyAlertId());
 
-		// session.clear();
+		session.clear();
 
 		final ServiceResponse response = controller.delete(savedId, PERSON_ID);
 

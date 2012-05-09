@@ -1286,12 +1286,12 @@
 		<createTable tableName="early_alert_response_early_alert_outreach">
 			<column name="early_alert_response_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="early_alert_response_early_alert_outreach_early_alert_response_id"
+					foreignKeyName="ea_response_ea_outreach_ea_response_id"
 					references="early_alert_response(id)" primaryKey="true" />
 			</column>
 			<column name="early_alert_outreach_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="early_alert_response_early_alert_outreach_ids"
+					foreignKeyName="ea_response_ea_outreach_ea_outreach_id"
 					references="early_alert_outreach(id)" primaryKey="true" />
 			</column>
 		</createTable>
@@ -1310,24 +1310,24 @@
 	</changeSet>
 
 	<changeSet author='jon.adams'
-		id='Add early_alert_response_early_alert_outcome table'>
-		<createTable tableName="early_alert_response_early_alert_outcome">
+		id='Add early_alert_response_early_alert_referral table'>
+		<createTable tableName="early_alert_response_early_alert_referral">
 			<column name="early_alert_response_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="early_alert_response_early_alert_outcome_early_alert_response_id"
+					foreignKeyName="ea_response_ea_referral_ea_response_id"
 					references="early_alert_response(id)" primaryKey="true" />
 			</column>
-			<column name="early_alert_outcome_id" type="uuid">
+			<column name="early_alert_referral_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="early_alert_response_early_alert_outcome_ids"
-					references="early_alert_outcome(id)" primaryKey="true" />
+					foreignKeyName="ea_response_ea_referral_ea_referral_id"
+					references="early_alert_referral(id)" primaryKey="true" />
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_response_early_alert_outcome to ssp
+		<sql>grant all on early_alert_response_early_alert_referral to ssp
 		</sql>
 		<rollback>
-			<dropTable tableName="early_alert_response_early_alert_outcome" />
+			<dropTable tableName="early_alert_response_early_alert_referral" />
 		</rollback>
 
 		<!-- Theres a different assumption in the liquibase handling of timezones 
