@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 
 /**
  * JournalStep reference object.
+ * 
+ * @author daniel.bower
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

@@ -165,21 +165,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	@Test
 	@Transactional()
 	public void testControllerGetSetsWithOnlyActiveReference() throws Exception {
-		final EarlyAlertTO obj = new EarlyAlertTO();
-		obj.setPersonId(PERSON_ID);
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setClosedById(PERSON_ID);
-
-		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
-				.newHashSet();
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
-		final EarlyAlertSuggestionTO deletedSuggestion = new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_DELETED_ID,
-				"EARLY_ALERT_SUGGESTION_DELETED_NAME");
-		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
-		earlyAlertSuggestionIds.add(deletedSuggestion);
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		final EarlyAlertTO obj = createEarlyAlert();
 
 		final EarlyAlertTO saved = controller.create(PERSON_ID,
 				obj);
@@ -216,5 +202,24 @@ public class PersonEarlyAlertControllerIntegrationTest {
 				PERSON_ID);
 		assertTrue("Deletion response did not return success.",
 				response.isSuccess());
+	}
+
+	public static EarlyAlertTO createEarlyAlert() {
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setPersonId(PERSON_ID);
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setClosedById(PERSON_ID);
+
+		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
+				.newHashSet();
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
+		final EarlyAlertSuggestionTO deletedSuggestion = new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_DELETED_ID,
+				"EARLY_ALERT_SUGGESTION_DELETED_NAME");
+		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
+		earlyAlertSuggestionIds.add(deletedSuggestion);
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		return obj;
 	}
 }

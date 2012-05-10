@@ -12,6 +12,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * ChallengeReferral reference object.
  */
@@ -121,8 +123,8 @@ public class ChallengeReferral extends AbstractReference implements
 	public int hashCode() {
 		int result = hashPrime() * super.hashCode();
 
-		result *= publicDescription == null ? "publicDescription".hashCode()
-				: publicDescription.hashCode();
+		result *= StringUtils.isEmpty(publicDescription) ? "publicDescription"
+				.hashCode() : publicDescription.hashCode();
 		result *= showInSelfHelpGuide ? 5 : 11;
 		result *= showInStudentIntake ? 3 : 17;
 

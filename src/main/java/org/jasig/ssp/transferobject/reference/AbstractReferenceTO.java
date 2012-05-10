@@ -5,10 +5,17 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.reference.AbstractReference;
 import org.jasig.ssp.transferobject.AuditableTO;
 import org.jasig.ssp.transferobject.NamedTO;
 
+/**
+ * Transfer object with basic properties for all reference types.
+ * 
+ * @param <T>
+ *            Any {@link Auditable} model type.
+ */
 public abstract class AbstractReferenceTO<T extends AbstractReference>
 		extends AuditableTO<T> implements NamedTO {
 
@@ -18,10 +25,23 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 
 	private String description;
 
+	/**
+	 * Empty constructor
+	 */
 	public AbstractReferenceTO() {
 		super();
 	}
 
+	/**
+	 * Construct a fully initialized instance.
+	 * 
+	 * @param id
+	 *            the identifier
+	 * @param name
+	 *            the name
+	 * @param description
+	 *            the description
+	 */
 	public AbstractReferenceTO(final UUID id, final String name,
 			final String description) {
 		super(id);
@@ -51,12 +71,22 @@ public abstract class AbstractReferenceTO<T extends AbstractReference>
 		this.name = name;
 	}
 
+	/**
+	 * Gets the description
+	 * 
+	 * @return the description
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Sets the description
+	 * 
+	 * @param description
+	 *            the description
+	 */
 	public void setDescription(final String description) {
 		this.description = description;
 	}
-
 }

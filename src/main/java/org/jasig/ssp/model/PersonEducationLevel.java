@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.EducationLevel;
 
 /**
@@ -58,7 +59,8 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 		super();
 	}
 
-	public PersonEducationLevel(Person person, EducationLevel educationLevel) {
+	public PersonEducationLevel(final Person person,
+			final EducationLevel educationLevel) {
 		super();
 		this.person = person;
 		this.educationLevel = educationLevel;
@@ -68,7 +70,7 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -76,7 +78,7 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 		return lastYearAttended;
 	}
 
-	public void setLastYearAttended(Integer lastYearAttended) {
+	public void setLastYearAttended(final Integer lastYearAttended) {
 		this.lastYearAttended = lastYearAttended;
 	}
 
@@ -84,7 +86,7 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 		return highestGradeCompleted;
 	}
 
-	public void setHighestGradeCompleted(Integer highestGradeCompleted) {
+	public void setHighestGradeCompleted(final Integer highestGradeCompleted) {
 		this.highestGradeCompleted = highestGradeCompleted;
 	}
 
@@ -92,7 +94,7 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 		return graduatedYear;
 	}
 
-	public void setGraduatedYear(Integer graduatedYear) {
+	public void setGraduatedYear(final Integer graduatedYear) {
 		this.graduatedYear = graduatedYear;
 	}
 
@@ -100,7 +102,7 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 		return schoolName;
 	}
 
-	public void setSchoolName(String schoolName) {
+	public void setSchoolName(final String schoolName) {
 		this.schoolName = schoolName;
 	}
 
@@ -108,7 +110,7 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 		return person;
 	}
 
-	public void setPerson(Person person) {
+	public void setPerson(final Person person) {
 		this.person = person;
 	}
 
@@ -116,18 +118,8 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 		return educationLevel;
 	}
 
-	public void setEducationLevel(EducationLevel educationLevel) {
+	public void setEducationLevel(final EducationLevel educationLevel) {
 		this.educationLevel = educationLevel;
-	}
-
-	/**
-	 * Overwrites simple properties with the parameter's properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 */
-	public void overwrite(PersonEducationLevel source) {
-		this.setDescription(source.getDescription());
 	}
 
 	@Override
@@ -136,7 +128,7 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:10 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -145,16 +137,16 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 				.hashCode();
 
 		// PersonEducationLevel
-		result *= description == null ? "description".hashCode() : description
-				.hashCode();
+		result *= StringUtils.isEmpty(description) ? "description".hashCode()
+				: description.hashCode();
 		result *= lastYearAttended == null ? "lastYearAttended".hashCode()
 				: lastYearAttended.hashCode();
 		result *= highestGradeCompleted == null ? "highestGradeCompleted"
 				.hashCode() : highestGradeCompleted.hashCode();
 		result *= graduatedYear == null ? "graduatedYear".hashCode()
 				: graduatedYear.hashCode();
-		result *= schoolName == null ? "schoolName".hashCode() : schoolName
-				.hashCode();
+		result *= StringUtils.isEmpty(schoolName) ? "schoolName".hashCode()
+				: schoolName.hashCode();
 		result *= person == null || person.getId() == null ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= educationLevel == null ? "educationLevel".hashCode()

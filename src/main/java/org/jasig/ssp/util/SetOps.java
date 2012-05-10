@@ -56,10 +56,10 @@ public class SetOps {
 		existing.addAll(newItems);
 
 		// soft delete in existing where not in replacingWith
-		Set<UUID> idsToSoftDelete = existingIds.keySet();
+		final Set<UUID> idsToSoftDelete = existingIds.keySet();
 		idsToSoftDelete.removeAll(replacingWithIds.keySet());
 
-		Set<T> toRemove = Sets.newHashSet();
+		final Set<T> toRemove = Sets.newHashSet();
 		for (UUID id : idsToSoftDelete) {
 			toRemove.add(existingIds.get(id));
 		}
@@ -78,7 +78,9 @@ public class SetOps {
 	public static <T extends Auditable> void softDeleteSetItems(
 			final Set<T> items) {
 		for (T item : items) {
-			item.setObjectStatus(ObjectStatus.DELETED);
+			if (item.getObjectStatus() != ObjectStatus.DELETED) {
+				item.setObjectStatus(ObjectStatus.DELETED);
+			}
 		}
 	}
 }

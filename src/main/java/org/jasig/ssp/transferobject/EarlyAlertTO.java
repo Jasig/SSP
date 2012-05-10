@@ -220,7 +220,7 @@ public class EarlyAlertTO
 	 * @return the closedDate
 	 */
 	public Date getClosedDate() {
-		return closedDate;
+		return closedDate == null ? null : new Date(closedDate.getTime());
 	}
 
 	/**
@@ -228,7 +228,8 @@ public class EarlyAlertTO
 	 *            the closedDate to set
 	 */
 	public void setClosedDate(final Date closedDate) {
-		this.closedDate = closedDate;
+		this.closedDate = closedDate == null ? null : new Date(
+				closedDate.getTime());
 	}
 
 	/**

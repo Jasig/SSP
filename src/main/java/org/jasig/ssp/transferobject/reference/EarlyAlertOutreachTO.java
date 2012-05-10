@@ -1,7 +1,7 @@
 package org.jasig.ssp.transferobject.reference;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.transferobject.TransferObject;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * EarlyAlertOutreach reference transfer objects
@@ -20,7 +20,7 @@ public class EarlyAlertOutreachTO extends
 		AbstractReferenceTO<EarlyAlertOutreach>
 		implements TransferObject<EarlyAlertOutreach> {
 
-	private short sortOrder; // NOPMD by jon on 5/4/12 11:16
+	private short sortOrder; // NOPMD by jon.adams on 5/4/12 11:16
 
 	/**
 	 * Empty constructor
@@ -119,11 +119,11 @@ public class EarlyAlertOutreachTO extends
 	 *            Collection of models to copy
 	 * @return A collection of equivalent transfer objects.
 	 */
-	public static List<EarlyAlertOutreachTO> toTOList(
+	public static Set<EarlyAlertOutreachTO> toTOSet(
 			@NotNull final Collection<EarlyAlertOutreach> models) {
-		final List<EarlyAlertOutreachTO> tObjects = Lists.newArrayList();
+		final Set<EarlyAlertOutreachTO> tObjects = Sets.newHashSet();
 		for (EarlyAlertOutreach model : models) {
-			tObjects.add(new EarlyAlertOutreachTO(model));
+			tObjects.add(new EarlyAlertOutreachTO(model)); // NOPMD by jon.adams
 		}
 
 		return tObjects;

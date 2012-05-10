@@ -18,6 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * SelfHelpGuide reference object.
  */
@@ -165,14 +167,16 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 		result *= super.hashCode();
 
 		result *= threshold > 0 ? threshold : hashPrime();
-		result *= introductoryText == null ? "introductoryText".hashCode()
-				: introductoryText.hashCode();
-		result *= summaryText == null ? "summaryText".hashCode() : summaryText
-				.hashCode();
-		result *= summaryTextEarlyAlert == null ? "summaryTextEarlyAlert"
-				.hashCode() : summaryTextEarlyAlert.hashCode();
-		result *= summaryTextThreshold == null ? "summaryTextThreshold"
-				.hashCode() : summaryTextThreshold.hashCode();
+		result *= StringUtils.isEmpty(introductoryText) ? "introductoryText"
+				.hashCode() : introductoryText.hashCode();
+		result *= StringUtils.isEmpty(summaryText) ? "summaryText".hashCode()
+				: summaryText.hashCode();
+		result *= StringUtils.isEmpty(summaryTextEarlyAlert) ? "summaryTextEarlyAlert"
+				.hashCode()
+				: summaryTextEarlyAlert.hashCode();
+		result *= StringUtils.isEmpty(summaryTextThreshold) ? "summaryTextThreshold"
+				.hashCode()
+				: summaryTextThreshold.hashCode();
 		result *= authenticationRequired ? 3 : 5;
 
 		return result;

@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.EducationGoal;
@@ -55,7 +56,7 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		super();
 	}
 
-	public PersonEducationGoal(EducationGoal educationGoal) {
+	public PersonEducationGoal(final EducationGoal educationGoal) {
 		super();
 		this.educationGoal = educationGoal;
 	}
@@ -64,7 +65,7 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		return educationGoal;
 	}
 
-	public void setEducationGoal(EducationGoal educationGoal) {
+	public void setEducationGoal(final EducationGoal educationGoal) {
 		this.educationGoal = educationGoal;
 	}
 
@@ -72,7 +73,7 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -80,7 +81,7 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		return howSureAboutMajor;
 	}
 
-	public void setHowSureAboutMajor(int howSureAboutMajor) {
+	public void setHowSureAboutMajor(final int howSureAboutMajor) {
 		this.howSureAboutMajor = howSureAboutMajor;
 	}
 
@@ -88,7 +89,7 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		return plannedOccupation;
 	}
 
-	public void setPlannedOccupation(String plannedOccupation) {
+	public void setPlannedOccupation(final String plannedOccupation) {
 		this.plannedOccupation = plannedOccupation;
 	}
 
@@ -96,22 +97,9 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		return militaryBranchDescription;
 	}
 
-	public void setMilitaryBranchDescription(String militaryBranchDescription) {
+	public void setMilitaryBranchDescription(
+			final String militaryBranchDescription) {
 		this.militaryBranchDescription = militaryBranchDescription;
-	}
-
-	/**
-	 * Overwrites simple properties with the parameter's properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 */
-	public void overwrite(PersonEducationGoal source) {
-		this.setDescription(source.getDescription());
-		this.setPlannedOccupation(source.getPlannedOccupation());
-		this.setHowSureAboutMajor(source.getHowSureAboutMajor());
-		this.setMilitaryBranchDescription(source.getMilitaryBranchDescription());
-		this.setEducationGoal(source.getEducationGoal());
 	}
 
 	@Override
@@ -120,7 +108,7 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:17 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -131,11 +119,11 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 		// PersonEducationGoal
 		result *= educationGoal == null ? "educationGoal".hashCode()
 				: educationGoal.hashCode();
-		result *= description == null ? "description".hashCode() : description
-				.hashCode();
-		result *= plannedOccupation == null ? "plannedOccupation".hashCode()
-				: plannedOccupation.hashCode();
-		result *= militaryBranchDescription == null ? "militaryBranchDescription"
+		result *= StringUtils.isEmpty(description) ? "description".hashCode()
+				: description.hashCode();
+		result *= StringUtils.isEmpty(plannedOccupation) ? "plannedOccupation"
+				.hashCode() : plannedOccupation.hashCode();
+		result *= StringUtils.isEmpty(militaryBranchDescription) ? "militaryBranchDescription"
 				.hashCode()
 				: militaryBranchDescription.hashCode();
 		result *= howSureAboutMajor;

@@ -37,7 +37,7 @@ public class SelfHelpGuideQuestionResponse extends Auditable implements
 	}
 
 	public void setSelfHelpGuideResponse(
-			SelfHelpGuideResponse selfHelpGuideResponse) {
+			final SelfHelpGuideResponse selfHelpGuideResponse) {
 		this.selfHelpGuideResponse = selfHelpGuideResponse;
 	}
 
@@ -46,7 +46,7 @@ public class SelfHelpGuideQuestionResponse extends Auditable implements
 	}
 
 	public void setSelfHelpGuideQuestion(
-			SelfHelpGuideQuestion selfHelpGuideQuestion) {
+			final SelfHelpGuideQuestion selfHelpGuideQuestion) {
 		this.selfHelpGuideQuestion = selfHelpGuideQuestion;
 	}
 
@@ -54,7 +54,7 @@ public class SelfHelpGuideQuestionResponse extends Auditable implements
 		return response;
 	}
 
-	public void setResponse(Boolean response) {
+	public void setResponse(final Boolean response) {
 		this.response = response;
 	}
 
@@ -62,7 +62,7 @@ public class SelfHelpGuideQuestionResponse extends Auditable implements
 		return earlyAlertSent;
 	}
 
-	public void setEarlyAlertSent(Boolean earlyAlertSent) {
+	public void setEarlyAlertSent(final Boolean earlyAlertSent) {
 		this.earlyAlertSent = earlyAlertSent;
 	}
 
@@ -72,7 +72,7 @@ public class SelfHelpGuideQuestionResponse extends Auditable implements
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:15 PM
 		int result = hashPrime();
 
 		// Auditable properties

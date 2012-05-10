@@ -22,9 +22,6 @@ public class TaskTO
 	private UUID personId, challengeId, challengeReferralId,
 			confidentialityLevel;
 
-	/**
-	 * Empty constructor
-	 */
 	public TaskTO() {
 		super();
 	}

@@ -1171,6 +1171,118 @@
 		</modifySql>
 	</changeSet>
 
+	<changeSet id="Add Journal Entry table" author="daniel.bower">
+		<createTable tableName="journal_entry">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_created_by_person_id" 
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_modified_by_person_id" 
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="entry_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="comment" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="confidentiality_level_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_confidentiality_level_id_person_id" 
+					references="confidentiality_level(id)" />
+			</column>
+			<column name="journal_source_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_source_id_person_id" 
+					references="journal_source(id)" />
+			</column>
+			<column name="journal_track_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_track_id_person_id" 
+					references="journal_track(id)" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_person_id_person_id" 
+					references="person(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on journal_entry to ssp</sql>
+		<rollback>
+			<dropTable tableName="journal_entry" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+	
+	<changeSet id="Add JournalEntryJournalStepDetail table" author="daniel.bower">
+		<createTable tableName="journal_entry_journal_step_detail">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_step_detail_created_by_person_id" 
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_step_detail_modified_by_person_id" 
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="journal_entry_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_step_detail_journal_entry_id_journal_entry_id" 
+					references="journal_entry(id)" />
+			</column>
+			<column name="journal_step_detail_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_step_detail_journal_step_detail_id_journal_step_detail_id" 
+					references="journal_step_detail(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on journal_entry_journal_step_detail to ssp</sql>
+		<rollback>
+			<dropTable tableName="journal_entry_journal_step_detail" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
 	<changeSet author='jon.adams' id='Add campus table'>
 		<createTable tableName="campus">
 			<column name="id" type="uuid">
@@ -1193,13 +1305,13 @@
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="early_alert_suggestion_modified_by_person_id"
+                    foreignKeyName="early_alert_suggestion_modified_by_person_id"
 					references="person(id)" />
-			</column>
+            </column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
-			<column name="early_alert_coordinator_id" type="uuid">
+		    <column name="early_alert_coordinator_id" type="uuid">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -1207,7 +1319,7 @@
 		<sql>grant all on campus to ssp</sql>
 		<rollback>
 			<dropTable tableName="campus" />
-		</rollback>
+        </rollback>
 
 		<!-- Theres a different assumption in the liquibase handling of timezones 
 			on postgres. Specifying "Without" timezone -->
@@ -1220,8 +1332,7 @@
 		<addColumn tableName="early_alert">
 			<column name="closed_date" type="datetime" />
 			<column name="closed_by_id" type="uuid">
-				<constraints nullable="true"
-					foreignKeyName="early_alert_closed_by_person_id"
+				<constraints nullable="true" foreignKeyName="early_alert_closed_by_person_id"
 					references="person(id)" />
 			</column>
 		</addColumn>
@@ -1229,6 +1340,113 @@
 			<dropColumn tableName="early_alert" columnName="closed_date" />
 			<dropColumn tableName="early_alert" columnName="closed_by_id" />
 		</rollback>
+	</changeSet>
+
+	<changeSet author='jon.adams' id='Add early_alert_response table'>
+		<createTable tableName="early_alert_response">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_suggestion_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="early_alert_suggestion_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="early_alert_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_response_early_alert_id" references="early_alert(id)" />
+			</column>
+			<column name="early_alert_outcome_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_response_early_alert_outcome_id"
+					references="early_alert_outcome(id)" />
+			</column>
+			<column name="early_alert_outcome_other_description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="comment" type="text">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_response to ssp</sql>
+		<rollback>
+			<dropTable tableName="early_alert_response" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet author='jon.adams'
+		id='Add early_alert_response_early_alert_outreach table'>
+		<createTable tableName="early_alert_response_early_alert_outreach">
+			<column name="early_alert_response_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="ea_response_ea_outreach_ea_response_id"
+					references="early_alert_response(id)" primaryKey="true" />
+			</column>
+			<column name="early_alert_outreach_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="ea_response_ea_outreach_ea_outreach_id"
+					references="early_alert_outreach(id)" primaryKey="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_response_early_alert_outreach to ssp
+		</sql>
+		<rollback>
+			<dropTable tableName="early_alert_response_early_alert_outreach" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet author='jon.adams'
+		id='Add early_alert_response_early_alert_referral table'>
+		<createTable tableName="early_alert_response_early_alert_referral">
+			<column name="early_alert_response_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="ea_response_ea_referral_ea_response_id"
+					references="early_alert_response(id)" primaryKey="true" />
+			</column>
+			<column name="early_alert_referral_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="ea_response_ea_referral_ea_referral_id"
+					references="early_alert_referral(id)" primaryKey="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on early_alert_response_early_alert_referral to ssp
+		</sql>
+		<rollback>
+			<dropTable tableName="early_alert_response_early_alert_referral" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
 	</changeSet>
 
 </databaseChangeLog>

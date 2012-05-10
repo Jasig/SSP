@@ -46,7 +46,7 @@ public class ChallengeChallengeReferral extends Auditable implements
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:35 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -56,8 +56,7 @@ public class ChallengeChallengeReferral extends Auditable implements
 
 		// ChallengeChallengeReferral
 		result *= challenge == null ? "challenge".hashCode() : challenge
-				.getId()
-				.hashCode();
+				.getId().hashCode();
 		result *= challengeReferral == null ? "challengeReferral".hashCode()
 				: challengeReferral.getId().hashCode();
 

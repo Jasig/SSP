@@ -11,6 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.StringUtils;
+
+/**
+ * Message
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 final public class Message extends Auditable {
@@ -99,13 +104,16 @@ final public class Message extends Auditable {
 				.hashCode();
 
 		// Message
-		result *= subject == null ? "subject".hashCode() : subject.hashCode();
-		result *= body == null ? "body".hashCode() : body.hashCode();
+		result *= StringUtils.isEmpty(subject) ? "subject".hashCode() : subject
+				.hashCode();
+		result *= StringUtils.isEmpty(body) ? "body".hashCode() : body
+				.hashCode();
 		result *= sender == null ? "sender".hashCode() : sender.hashCode();
 		result *= recipient == null ? "recipient".hashCode() : recipient
 				.hashCode();
-		result *= recipientEmailAddress == null ? "recipientEmailAddress"
-				.hashCode() : recipientEmailAddress.hashCode();
+		result *= StringUtils.isEmpty(recipientEmailAddress) ? "recipientEmailAddress"
+				.hashCode()
+				: recipientEmailAddress.hashCode();
 		result *= sentDate == null ? "sentDate".hashCode() : sentDate
 				.hashCode();
 

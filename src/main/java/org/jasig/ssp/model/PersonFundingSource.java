@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.FundingSource;
@@ -51,7 +52,7 @@ public class PersonFundingSource extends Auditable implements Serializable {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -59,7 +60,7 @@ public class PersonFundingSource extends Auditable implements Serializable {
 		return person;
 	}
 
-	public void setPerson(Person person) {
+	public void setPerson(final Person person) {
 		this.person = person;
 	}
 
@@ -67,7 +68,7 @@ public class PersonFundingSource extends Auditable implements Serializable {
 		return fundingSource;
 	}
 
-	public void setFundingSource(FundingSource fundingSource) {
+	public void setFundingSource(final FundingSource fundingSource) {
 		this.fundingSource = fundingSource;
 	}
 
@@ -77,7 +78,7 @@ public class PersonFundingSource extends Auditable implements Serializable {
 	 * @param source
 	 *            Source to use for overwrites.
 	 */
-	public void overwrite(PersonFundingSource source) {
+	public void overwrite(final PersonFundingSource source) {
 		this.setDescription(source.getDescription());
 	}
 
@@ -87,7 +88,7 @@ public class PersonFundingSource extends Auditable implements Serializable {
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:16 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -96,8 +97,8 @@ public class PersonFundingSource extends Auditable implements Serializable {
 				.hashCode();
 
 		// PersonFundingSource
-		result *= description == null ? "description".hashCode() : description
-				.hashCode();
+		result *= StringUtils.isEmpty(description) ? "description".hashCode()
+				: description.hashCode();
 		result *= person == null || person.getId() == null ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= fundingSource == null ? "fundingSource".hashCode()
