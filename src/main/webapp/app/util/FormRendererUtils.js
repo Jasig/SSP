@@ -115,9 +115,9 @@ Ext.define('Ssp.util.FormRendererUtils',{
 				formFields.push(fields);
 			}
 		});
+		form.removeAll();
 		Ext.apply(fieldSet, {items: formFields});
 		form.insert(form.items.length, fieldSet);
-		form.doLayout();
     },
     
     findPropByName: function(obj, propName){

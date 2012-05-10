@@ -36,7 +36,12 @@ Ext.require([
     'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
     'Ssp.view.admin.forms.ConfidentialityLevelAdmin',
     'Ssp.view.admin.forms.EarlyAlertReferralAdmin',
-    'Ssp.view.admin.forms.EditChallengeAdmin',
+    'Ssp.view.admin.forms.crg.DisplayChallengesAdmin',
+    'Ssp.view.admin.forms.crg.EditChallenge',
+    'Ssp.view.admin.forms.crg.DisplayChallengeCategoriesAdmin',
+    'Ssp.view.admin.forms.crg.EditChallengeCategory',
+    'Ssp.model.reference.Challenge',
+    'Ssp.model.reference.ChallengeCategory',
 	'Ssp.model.Person',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
@@ -82,7 +87,8 @@ Ext.require([
     'Ssp.controller.ApplicationEventsController',
 	'Ext.tab.*',
 	'Ext.ux.CheckColumn',
-	'Ext.util.Filter'
+	'Ext.util.Filter',
+	'Ext.data.TreeStore'
 ]);
 
 Ext.onReady(function(){
@@ -120,6 +126,30 @@ Ext.onReady(function(){
         appEventsController:{
 	        fn: function(){
 	            return new Ssp.controller.ApplicationEventsController({});
+	    	},
+	        singleton: true
+        },
+        currentChallenge:{
+	        fn: function(){
+	            return new Ssp.model.reference.Challenge({id:""});
+	    	},
+	        singleton: true
+        },
+        currentChallengeCategory:{
+	        fn: function(){
+	            return new Ssp.model.reference.ChallengeCategory({id:""});
+	    	},
+	        singleton: true
+        },
+        challengeCategoriesTreeStore:{
+	        fn: function(){
+	            return Ext.create('Ext.data.TreeStore',{
+	            	root: {
+	    	          text: 'Create a Category',
+	    	          expanded: true,
+	    	          children: []
+	    	        }
+	            });
 	    	},
 	        singleton: true
         },

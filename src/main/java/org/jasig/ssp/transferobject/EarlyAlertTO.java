@@ -3,6 +3,7 @@ package org.jasig.ssp.transferobject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -37,6 +38,10 @@ public class EarlyAlertTO
 
 	private UUID personId;
 
+	private Date closedDate;
+
+	private UUID closedById;
+
 	private Set<EarlyAlertReasonTO> earlyAlertReasonIds;
 
 	private Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds;
@@ -70,6 +75,9 @@ public class EarlyAlertTO
 		earlyAlertSuggestionOtherDescription = earlyAlert
 				.getEarlyAlertReasonOtherDescription();
 		comment = earlyAlert.getComment();
+		closedDate = earlyAlert.getClosedDate();
+		closedById = earlyAlert.getClosedById();
+
 		personId = earlyAlert.getPerson() == null ? null : earlyAlert
 				.getPerson().getId();
 
@@ -206,6 +214,36 @@ public class EarlyAlertTO
 	 */
 	public void setPersonId(final UUID personId) {
 		this.personId = personId;
+	}
+
+	/**
+	 * @return the closedDate
+	 */
+	public Date getClosedDate() {
+		return closedDate;
+	}
+
+	/**
+	 * @param closedDate
+	 *            the closedDate to set
+	 */
+	public void setClosedDate(final Date closedDate) {
+		this.closedDate = closedDate;
+	}
+
+	/**
+	 * @return the closedById
+	 */
+	public UUID getClosedById() {
+		return closedById;
+	}
+
+	/**
+	 * @param closedById
+	 *            the closedById to set
+	 */
+	public void setClosedById(final UUID closedById) {
+		this.closedById = closedById;
 	}
 
 	/**

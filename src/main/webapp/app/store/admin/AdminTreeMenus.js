@@ -86,21 +86,20 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     								    }
     							]
     						},{
-    							text: 'Action Plan',
-    							title: 'Action Plan',
+    							text: 'Counseling Reference Guide',
+    							title: 'Counseling Reference Guide',
     							form: '',
     							expanded: false,
     							children: [{
-    										text: 'Categories',
-    										title: 'Categories',
-    										store: 'challengeCategories',
-    										form: 'AbstractReferenceAdmin',
-    										leaf: true
-    									},
-    									{
+											text: 'Categories',
+											title: 'Categories',
+											store: 'challengeCategories',
+											form: 'AbstractReferenceAdmin',
+											leaf: true
+										},{
     										text: 'Challenges',
     										title: 'Challenges',
-    										store: 'challenges',
+    										store: '',
     										form: 'ChallengeAdmin',
     										leaf: true
     									},{
