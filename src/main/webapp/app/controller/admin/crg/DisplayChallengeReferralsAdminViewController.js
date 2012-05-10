@@ -1,17 +1,17 @@
-Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewController', {
+Ext.define('Ssp.controller.admin.crg.DisplayChallengeReferralsAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
-    	model: 'currentChallengeCategory',
-    	store: 'challengeCategoriesStore',
+    	model: 'currentChallenge',
+    	store: 'challengesStore',
     	treeStore: 'treeStore',
     	treeUtils: 'treeRendererUtils'
     },
     config: {
     	containerToLoadInto: 'adminforms',
-    	formToDisplay: 'editchallengecategory'
+    	formToDisplay: 'editchallenge'
     },
     control: {
     	view: {
@@ -24,8 +24,8 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
                 beforedrop: 'onBeforeDrop'
             }
         }
+    
     	/*
-    	
     	'editButton': {
 			click: 'onEditClick'
 		},
@@ -36,7 +36,7 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
 
 		'deleteButton': {
 			click: 'onDeleteClick'
-		}*/    	
+		}*/   	
     },
     
 	init: function() {
@@ -63,7 +63,7 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
 		};
 		
 		this.apiProperties.makeRequest({
-			url: this.apiProperties.createUrl('reference/challengeCategory/'),
+			url: this.apiProperties.createUrl('reference/challenge/'),
 			method: 'GET',
 			jsonData: '',
 			successFunc: successFunc 
@@ -71,29 +71,21 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
     	
 		return this.callParent(arguments);
     },
-   
+    
     onItemExpand: function(){
-    	console.log('DisplayChallengeCategoryAdminViewController->onItemExpand');
+    	console.log('DisplayChallengeReferralsAdminViewController->onItemExpand');
     	// TODO: Retrieve related challenges and display as a subnode of the tree   	
     },
 
     onBeforeDrop: function(node, data, overModel, dropPosition, dropHandler, eOpts) {
     	dropHandler.wait=true;
-        
-    	/*
-    	console.log(data.records[0].get('name'));
-        console.log(overModel);
-        console.log(dropPosition);
-        console.log(dropHandler);
-        console.log(eOpts);
-        */
 
     	// handle drop on a folder
         if (!overModel.isLeaf() && dropPosition == 'append')
         {
-        	console.log('challengeId' + data.records[0].get('id'));
-        	console.log('challengeCategoryId' + overModel.data.id);
-        	console.log("Make a call to add the challenge to the category.");
+        	console.log('referralId' + data.records[0].get('id'));
+        	console.log('challengeId' + overModel.data.id);
+        	console.log("Make a call to add the referral to the challenge.");
         }
 
         // handle drop inside a folder
@@ -120,8 +112,7 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
 				method: 'GET',
 				jsonData: '',
 				successFunc: function(response, view){
-					var r;
-					r = Ext.decode(response.responseText);
+					var r = Ext.decode(response.responseText);
 					me.model.populateFromGenericObject(r);
 			    	me.displayEditor();
 				} 
@@ -133,7 +124,7 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
 	},
 	
 	onAddClick: function(button){
-		var model = new Ssp.model.reference.ChallengeCategory({id:""})
+		var model = new Ssp.model.reference.Challenge({id:""})
 		this.model.data = model.data;
 		this.displayEditor();
 	},
@@ -164,6 +155,5 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
 	
 	displayEditor: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-	}
-	*/	
+	}*/
 });

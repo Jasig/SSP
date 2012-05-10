@@ -1,15 +1,15 @@
-Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
+Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
-    	model: 'currentChallenge',
-    	store: 'challengesStore'
+    	model: 'currentChallengeReferral',
+    	store: 'challengeReferralsStore'
     },
     config: {
     	containerToLoadInto: 'adminforms',
-    	formToDisplay: 'challengeadmin'
+    	formToDisplay: 'challengereferraladmin'
     },
     control: {
     	'saveButton': {

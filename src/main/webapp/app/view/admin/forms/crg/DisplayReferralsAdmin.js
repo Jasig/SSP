@@ -1,14 +1,14 @@
-Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
+Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.displaychallengesadmin',
-	title: 'Challenges Admin',
+	alias : 'widget.displayreferralsadmin',
+	title: 'Referrals Admin',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.DisplayChallengesAdminViewController',
+    controller: 'Ssp.controller.admin.crg.DisplayReferralsAdminViewController',
     inject: {
         apiProperties: 'apiProperties'
     },
-    height: '100%',
+	height: '100%',
 	width: '100%',
 
     initComponent: function(){
@@ -23,7 +23,6 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
-    		      enableDragDrop: false,
     		      columns: [
     		                { header: 'Name',  
     		                  dataIndex: 'name',

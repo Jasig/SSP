@@ -4,8 +4,12 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeCategoryViewController', {
     inject: {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
-    	currentChallengeCategory: 'currentChallengeCategory',
-    	challengeCategoriesStore: 'challengeCategoriesStore'
+    	model: 'currentChallengeCategory',
+    	store: 'challengeCategoriesStore'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'challengeadmin'
     },
     control: {
     	'saveButton': {
@@ -18,17 +22,17 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeCategoryViewController', {
     },
     
 	init: function() {
-       this.getView().getForm().loadRecord(this.currentChallengeCategory);
+       this.getView().getForm().loadRecord(this.model);
 		
 		return this.callParent(arguments);
     },
     
 	onSaveClick: function(button) {
 		var me = this;
-		var record, id, jsonData;
-		var url = this.challengeCategoriesStore.getProxy().url;
+		var record, id, jsonData, url, successFunc;
+		url = this.store.getProxy().url;
 		this.getView().getForm().updateRecord();
-		record = this.currentChallengeCategory;
+		record = this.model;
 		id = record.get('id');
 		jsonData = record.data;
 		successFunc = function(response, view) {
@@ -37,6 +41,7 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeCategoryViewController', {
 		
 		if (id.length > 0)
 		{
+			// editing
 			this.apiProperties.makeRequest({
 				url: url+id,
 				method: 'PUT',
@@ -46,6 +51,7 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeCategoryViewController', {
 			
 		}else{
 			
+			// adding
 			this.apiProperties.makeRequest({
 				url: url,
 				method: 'POST',
@@ -60,6 +66,6 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeCategoryViewController', {
 	},
 	
 	displayMain: function(){
-		var comp = this.formUtils.loadDisplay('adminforms','challengeadmin', true, {});
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
 	}
 });

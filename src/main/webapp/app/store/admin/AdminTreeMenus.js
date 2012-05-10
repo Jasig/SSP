@@ -105,8 +105,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     									},{
     										text: 'Referrals',
     										title: 'Referrals',
-    										store: 'challengeReferrals',
-    										form: 'AbstractReferenceAdmin',
+    										store: '',
+    										form: 'ChallengeReferralAdmin',
     										leaf: true
     									}]
     						},{

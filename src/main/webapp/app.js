@@ -32,7 +32,10 @@ Ext.require([
     'Ssp.view.tools.EarlyAlert',
     'Ssp.view.admin.AdminForms',
     'Ssp.view.admin.forms.AbstractReferenceAdmin',
+    
+    // COUNSELING REFERENCE GUIDE VIEWS
     'Ssp.view.admin.forms.ChallengeAdmin',
+    'Ssp.view.admin.forms.ChallengeReferralAdmin',
     'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
     'Ssp.view.admin.forms.ConfidentialityLevelAdmin',
     'Ssp.view.admin.forms.EarlyAlertReferralAdmin',
@@ -40,8 +43,10 @@ Ext.require([
     'Ssp.view.admin.forms.crg.EditChallenge',
     'Ssp.view.admin.forms.crg.DisplayChallengeCategoriesAdmin',
     'Ssp.view.admin.forms.crg.EditChallengeCategory',
-    'Ssp.model.reference.Challenge',
-    'Ssp.model.reference.ChallengeCategory',
+    'Ssp.view.admin.forms.crg.DisplayChallengeReferralsAdmin',
+    'Ssp.view.admin.forms.crg.DisplayReferralsAdmin',
+    'Ssp.view.admin.forms.crg.EditReferral',
+
 	'Ssp.model.Person',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
@@ -49,12 +54,15 @@ Ext.require([
 	'Ssp.model.tool.studentintake.PersonEducationPlan',
 	'Ssp.model.tool.actionplan.Task',
 	'Ssp.model.reference.AbstractReference',
-	'Ssp.model.reference.Challenge',
+    'Ssp.model.reference.Challenge',
+    'Ssp.model.reference.ChallengeCategory',
+    'Ssp.model.reference.ChallengeReferral',
 	'Ssp.model.reference.ConfidentialityLevel',
 	'Ssp.model.reference.ConfidentialityDisclosureAgreement',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
+	'Ssp.util.TreeRendererUtils',
     'Ssp.store.Tasks',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
@@ -88,7 +96,8 @@ Ext.require([
 	'Ext.tab.*',
 	'Ext.ux.CheckColumn',
 	'Ext.util.Filter',
-	'Ext.data.TreeStore'
+	'Ext.data.TreeStore',
+	'Ext.dd.DropTarget'
 ]);
 
 Ext.onReady(function(){
@@ -123,6 +132,12 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
 	    },
+	    treeRendererUtils:{
+	        fn: function(){
+	            return new Ssp.util.TreeRendererUtils({});
+	    	},
+	        singleton: true
+	    },
         appEventsController:{
 	        fn: function(){
 	            return new Ssp.controller.ApplicationEventsController({});
@@ -135,17 +150,23 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         },
-        currentChallengeCategory:{
+        currentChallengeCategory: {
 	        fn: function(){
 	            return new Ssp.model.reference.ChallengeCategory({id:""});
 	    	},
 	        singleton: true
         },
-        challengeCategoriesTreeStore:{
+        currentChallengeReferral:{
+	        fn: function(){
+	            return new Ssp.model.reference.ChallengeReferral({id:""});
+	    	},
+	        singleton: true
+        },
+        treeStore:{
 	        fn: function(){
 	            return Ext.create('Ext.data.TreeStore',{
 	            	root: {
-	    	          text: 'Create a Category',
+	    	          text: 'root',
 	    	          expanded: true,
 	    	          children: []
 	    	        }

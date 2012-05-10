@@ -1,25 +1,18 @@
-Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
+Ext.define('Ssp.controller.admin.crg.DisplayReferralsAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'challengesStore',
+    	store: 'challengeReferralsStore',
     	formUtils: 'formRendererUtils',
-    	model: 'currentChallenge'
+    	model: 'currentChallengeReferral'
     },
     config: {
     	containerToLoadInto: 'adminforms',
-    	formToDisplay: 'editchallenge'
+    	formToDisplay: 'editreferral'
     },
     control: {
-        gridView: {
-            selector: '.gridview',
-            listeners: {
-                beforedrop: 'onBeforeDrop'
-            }
-        },		
-    	
-    	'editButton': {
+		'editButton': {
 			click: 'onEditClick'
 		},
 		
@@ -38,12 +31,6 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
 		return this.callParent(arguments);
     },
 
-    onBeforeDrop: function(node, data, dropRec, dropPosition) {
-        var dropOn = dropRec ? ' ' + dropPosition + ' ' + dropRec.get('name') : ' on empty view';
-        Ext.Msg.alert("Drag from left to right", 'Dropped ' + data.records[0].get('name') + dropOn);
-        return 0;
-    },    
-    
 	onEditClick: function(button) {
 		var grid, record;
 		grid = button.up('grid');
@@ -58,7 +45,7 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
 	},
 	
 	onAddClick: function(button){
-		var model = new Ssp.model.reference.Challenge();
+		var model = new Ssp.model.reference.ChallengeReferral();
 		this.model.data = model.data;
 		this.displayEditor();
 	},
