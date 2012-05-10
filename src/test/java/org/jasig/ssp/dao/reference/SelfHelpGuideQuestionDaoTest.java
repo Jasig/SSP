@@ -101,7 +101,6 @@ public class SelfHelpGuideQuestionDaoTest {
 		for (SelfHelpGuideQuestion object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

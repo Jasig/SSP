@@ -37,24 +37,27 @@ public class MyGpsChallengeReferralController extends BaseController {
 			.getLogger(MyGpsChallengeReferralController.class);
 
 	public MyGpsChallengeReferralController() {
+		super();
 	}
 
 	public MyGpsChallengeReferralController(
-			ChallengeReferralService challengeReferralService,
-			ChallengeService challengeService,
-			ChallengeReferralTOFactory challangeReferralTOFactory) {
+			final ChallengeReferralService challengeReferralService,
+			final ChallengeService challengeService,
+			final ChallengeReferralTOFactory challangeReferralTOFactory) {
+		super();
 		this.challengeReferralService = challengeReferralService;
 		this.challengeService = challengeService;
-		this.challengeReferralTOFactory = challangeReferralTOFactory;
+		challengeReferralTOFactory = challangeReferralTOFactory;
 	}
 
 	@RequestMapping(value = "/getByChallengeId", method = RequestMethod.GET)
 	public @ResponseBody
 	List<ChallengeReferralTO> getByChallengeId(
-			@RequestParam("challengeId") UUID challengeId) throws Exception {
+			@RequestParam("challengeId") final UUID challengeId)
+			throws Exception {
 
 		try {
-			Challenge challenge = challengeService.get(challengeId);
+			final Challenge challenge = challengeService.get(challengeId);
 			return challengeReferralTOFactory.asTOList(challengeReferralService
 					.getChallengeReferralsByChallengeId(challenge));
 
@@ -66,22 +69,23 @@ public class MyGpsChallengeReferralController extends BaseController {
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public @ResponseBody
-	List<ChallengeReferralTO> search(@RequestParam("query") String query,
-			@RequestParam("challengeId") UUID challengeId) throws Exception {
+	List<ChallengeReferralTO> search(@RequestParam("query") final String query,
+			@RequestParam("challengeId") final UUID challengeId)
+			throws Exception {
 
 		// Not using query param as we are no longer searching the
 		// referrals, simply returning based on challengeId and whether the
 		// referral is public.
 
 		try {
-			Challenge challenge = challengeService.get(challengeId);
-			if (challenge != null) {
-				return challengeReferralTOFactory
-						.asTOList(challengeReferralService
-								.challengeReferralSearch(challenge));
-			} else {
+			final Challenge challenge = challengeService.get(challengeId);
+			if (challenge == null) {
 				return Lists.newArrayList();
 			}
+
+			return challengeReferralTOFactory
+					.asTOList(challengeReferralService
+							.challengeReferralSearch(challenge));
 		} catch (Exception e) {
 			LOGGER.error("ERROR : search() : {}", e.getMessage(), e);
 			throw e;

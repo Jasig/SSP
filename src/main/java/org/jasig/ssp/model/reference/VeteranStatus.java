@@ -87,7 +87,7 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 	};
 
 	@Override
-	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
+	public int hashCode() {
 		return hashPrime() * super.hashCode()
 				* (sortOrder > 0 ? sortOrder : hashPrime());
 	}

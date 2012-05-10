@@ -149,6 +149,5 @@ public class PersonDaoTest {
 		for (Person object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 }

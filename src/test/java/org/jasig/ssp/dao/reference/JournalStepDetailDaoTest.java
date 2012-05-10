@@ -92,7 +92,6 @@ public class JournalStepDetailDaoTest {
 		for (JournalStepDetail object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

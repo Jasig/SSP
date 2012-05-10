@@ -134,7 +134,7 @@ public class PersonSelfHelpGuideResponseServiceImpl
 							"", referralSAndP);
 
 			if (count > 0) {
-				final ChallengeTO challengeTO = new ChallengeTO();
+				final ChallengeTO challengeTO = new ChallengeTO(); // NOPMD
 				challengeTO.setDescription(challenge
 						.getSelfHelpGuideDescription());
 				challengeTO.setId(challenge.getId());

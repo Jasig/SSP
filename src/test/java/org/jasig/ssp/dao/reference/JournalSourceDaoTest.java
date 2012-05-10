@@ -83,7 +83,6 @@ public class JournalSourceDaoTest {
 		for (JournalSource object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

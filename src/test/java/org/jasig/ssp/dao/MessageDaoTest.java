@@ -88,7 +88,6 @@ public class MessageDaoTest {
 		for (Message object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

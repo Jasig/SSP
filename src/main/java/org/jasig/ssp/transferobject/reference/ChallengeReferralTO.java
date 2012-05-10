@@ -33,7 +33,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 			final Collection<ChallengeReferral> models) {
 		final List<ChallengeReferralTO> tObjects = Lists.newArrayList();
 		for (ChallengeReferral model : models) {
-			tObjects.add(new ChallengeReferralTO(model));
+			tObjects.add(new ChallengeReferralTO(model)); // NOPMD by jon.adams
 		}
 
 		return tObjects;
@@ -66,7 +66,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	 * @param showInSelfHelpGuide
 	 *            the showInSelfHelpGuide to set
 	 */
-	public void setShowInSelfHelpGuide(boolean showInSelfHelpGuide) {
+	public void setShowInSelfHelpGuide(final boolean showInSelfHelpGuide) {
 		this.showInSelfHelpGuide = showInSelfHelpGuide;
 	}
 
@@ -81,7 +81,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	 * @param showInStudentIntake
 	 *            the showInStudentIntake to set
 	 */
-	public void setShowInStudentIntake(boolean showInStudentIntake) {
+	public void setShowInStudentIntake(final boolean showInStudentIntake) {
 		this.showInStudentIntake = showInStudentIntake;
 	}
 }

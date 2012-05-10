@@ -86,7 +86,6 @@ public class ConfidentialityDisclosureAgreementDaoTest {
 		for (ConfidentialityDisclosureAgreement object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

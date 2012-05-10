@@ -1283,5 +1283,50 @@
 		</modifySql>
 	</changeSet>
 
+	<changeSet author='jon.adams' id='Add campus table'>
+		<createTable tableName="campus">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_suggestion_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+                    foreignKeyName="early_alert_suggestion_modified_by_person_id"
+					references="person(id)" />
+            </column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		    <column name="early_alert_coordinator_id" type="uuid">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on campus to ssp</sql>
+		<rollback>
+			<dropTable tableName="campus" />
+        </rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
 </databaseChangeLog>
     

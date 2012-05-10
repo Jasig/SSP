@@ -29,7 +29,7 @@ public class EarlyAlertTO
 
 	private String emailCC;
 
-	private Integer campusId;
+	private UUID campusId;
 
 	private String earlyAlertSuggestionOtherDescription;
 
@@ -146,7 +146,7 @@ public class EarlyAlertTO
 	/**
 	 * @return the campusId
 	 */
-	public Integer getCampusId() {
+	public UUID getCampusId() {
 		return campusId;
 	}
 
@@ -154,7 +154,7 @@ public class EarlyAlertTO
 	 * @param campusId
 	 *            the campusId to set
 	 */
-	public void setCampusId(final Integer campusId) {
+	public void setCampusId(final UUID campusId) {
 		this.campusId = campusId;
 	}
 

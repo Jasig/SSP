@@ -31,8 +31,6 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
@@ -45,9 +43,6 @@ public class MyGpsTaskControllerTest {
 	private ChallengeReferralService challengeReferralService;
 	private PersonService personService;
 	private SecurityServiceInTestEnvironment securityService;
-
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MyGpsTaskControllerTest.class);
 
 	@Before
 	public void setup() {

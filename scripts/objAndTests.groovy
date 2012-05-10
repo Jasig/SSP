@@ -107,6 +107,7 @@ class Templater{
 			new ExampleFile(javaMainPath, appPath, ["factory"]+ subpackage + ["impl"], modelName, "TOFactoryImpl.java"),
 			new ExampleFile(javaMainPath, appPath, ["transferobject"]+ subpackage, modelName, "TO.java"),
 			new ExampleFile(javaTestPath, appPath, ["dao"]+ subpackage, modelName, "DaoTest.java"),
+			new ExampleFile(javaTestPath, appPath, ["web", "api"]+ subpackage, modelName, "ControllerIntegrationTest.java"),
 			new ExampleFile(javaTestPath, appPath, ["service"]+ subpackage + ["impl"], modelName, "ServiceTest.java")
 			//new ExampleFile(javaTestPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryTest.java")
 		]
@@ -266,9 +267,9 @@ class Templater{
 
 
 class ReferenceDataTemplater {
-	String templateModel = "EarlyAlertReason"
+	String templateModel = "VeteranStatus"
 	List<String> subpackage = ["reference"]
-	List<String> referenceDataModels = ["EarlyAlertOutcome"]
+	List<String> referenceDataModels = ["Campus"]
 
 	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
 		Templater templater = new Templater(create, overwrite, writeLiquibaseScript, dryRun, displayFileContents)

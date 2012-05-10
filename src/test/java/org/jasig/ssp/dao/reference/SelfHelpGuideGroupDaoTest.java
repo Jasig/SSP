@@ -83,7 +83,6 @@ public class SelfHelpGuideGroupDaoTest {
 		for (SelfHelpGuideGroup object : objects) {
 			assertNotNull(object.getId());
 		}
-		assertTrue(true);
 	}
 
 	@Test

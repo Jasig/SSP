@@ -9,24 +9,27 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * JournalStepDetail service
+ */
 public interface JournalStepDetailService extends
 		AuditableCrudService<JournalStepDetail> {
 
 	@Override
-	public PagingWrapper<JournalStepDetail> getAll(SortingAndPaging sAndP);
+	PagingWrapper<JournalStepDetail> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public JournalStepDetail get(UUID id) throws ObjectNotFoundException;
+	JournalStepDetail get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public JournalStepDetail create(JournalStepDetail obj);
+	JournalStepDetail create(JournalStepDetail obj);
 
 	@Override
-	public JournalStepDetail save(JournalStepDetail obj)
+	JournalStepDetail save(JournalStepDetail obj)
 			throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
+	void delete(UUID id) throws ObjectNotFoundException;
 
 	PagingWrapper<JournalStepDetail> getAllForJournalStep(
 			final JournalStep journalStep,

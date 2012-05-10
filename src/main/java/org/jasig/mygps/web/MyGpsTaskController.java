@@ -41,21 +41,22 @@ public class MyGpsTaskController extends BaseController {
 	private transient SecurityService securityService;
 
 	@Autowired
-	private TaskService taskService;
+	private transient TaskService taskService;
 
 	@Autowired
-	private ChallengeService challengeService;
+	private transient ChallengeService challengeService;
 
 	@Autowired
-	private ChallengeReferralService challengeReferralService;
+	private transient ChallengeReferralService challengeReferralService;
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsTaskController.class);
 
 	public MyGpsTaskController() {
+		super();
 	}
 
 	public MyGpsTaskController(final TaskService taskService,
@@ -63,6 +64,7 @@ public class MyGpsTaskController extends BaseController {
 			final ChallengeReferralService challengeReferralService,
 			final PersonService personService,
 			final SecurityService securityService) {
+		super();
 		this.taskService = taskService;
 		this.challengeService = challengeService;
 		this.challengeReferralService = challengeReferralService;
@@ -82,23 +84,22 @@ public class MyGpsTaskController extends BaseController {
 	 */
 	@RequestMapping(value = "/createTaskForStudent", method = RequestMethod.POST)
 	public @ResponseBody
-	boolean createTaskForStudent(@RequestParam("name") String name,
-			@RequestParam("description") String description,
-			@RequestParam("studentId") String studentId,
-			@RequestParam("dueDate") Date dueDate,
-			@RequestParam("messageTemplate") UUID messageTemplateId)
+	boolean createTaskForStudent(@RequestParam("name") final String name,
+			@RequestParam("description") final String description,
+			@RequestParam("studentId") final String studentId,
+			@RequestParam("dueDate") final Date dueDate,
+			@RequestParam("messageTemplate") final UUID messageTemplateId)
 			throws Exception {
 
-		Person student = personService.personFromUserId(studentId);
+		final Person student = personService.personFromUserId(studentId);
 		if (student == null) {
 			throw new ObjectNotFoundException(
 					"Unable to acquire person for supplied student id "
 							+ studentId);
 		}
 
-		String session = securityService.getSessionId();
-
-		Task task = taskService.createCustomTaskForPerson(name,
+		final String session = securityService.getSessionId();
+		final Task task = taskService.createCustomTaskForPerson(name,
 				description, student, session);
 
 		taskService.sendNoticeToStudentOnCustomTask(task, messageTemplateId);
@@ -108,13 +109,15 @@ public class MyGpsTaskController extends BaseController {
 
 	@RequestMapping(value = "/createCustom", method = RequestMethod.GET)
 	public @ResponseBody
-	TaskTO createCustom(@RequestParam("name") String name,
-			@RequestParam("description") String description) throws Exception {
+	TaskTO createCustom(@RequestParam("name") final String name,
+			@RequestParam("description") final String description)
+			throws Exception {
 
-		Person student = securityService.currentUser().getPerson();
-		String session = securityService.getSessionId();
+		final Person student = securityService.currentUser().getPerson();
+		final String session = securityService.getSessionId();
 
-		Task task = taskService.createCustomTaskForPerson(name, description,
+		final Task task = taskService.createCustomTaskForPerson(name,
+				description,
 				student, session);
 
 		return new TaskTO(task);
@@ -123,8 +126,8 @@ public class MyGpsTaskController extends BaseController {
 	@RequestMapping(value = "/createForChallengeReferral", method = RequestMethod.GET)
 	public @ResponseBody
 	TaskTO createForChallengeReferral(
-			@RequestParam("challengeId") UUID challengeId,
-			@RequestParam("challengeReferralId") UUID challengeReferralId)
+			@RequestParam("challengeId") final UUID challengeId,
+			@RequestParam("challengeReferralId") final UUID challengeReferralId)
 			throws Exception {
 
 		final Challenge challenge = challengeService.get(challengeId);
@@ -144,15 +147,14 @@ public class MyGpsTaskController extends BaseController {
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public @ResponseBody
-	boolean delete(@RequestParam("taskId") UUID taskId) throws Exception {
-
+	boolean delete(@RequestParam("taskId") final UUID taskId) throws Exception {
 		taskService.delete(taskId);
 		return true;
 	}
 
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
 	public @ResponseBody
-	boolean email(@RequestParam("emailAddress") String emailAddress)
+	boolean email(@RequestParam("emailAddress") final String emailAddress)
 			throws Exception {
 
 		final SortingAndPaging sAndP = new SortingAndPaging(
@@ -169,7 +171,7 @@ public class MyGpsTaskController extends BaseController {
 					securityService.getSessionId(), true, sAndP);
 		}
 
-		List<String> emailAddresses = Lists.newArrayList();
+		final List<String> emailAddresses = Lists.newArrayList();
 		emailAddresses.add(emailAddress);
 
 		taskService.sendTasksForPersonToEmail(tasks, student, emailAddresses,
@@ -188,50 +190,47 @@ public class MyGpsTaskController extends BaseController {
 		List<Task> tasks = null;
 
 		if (securityService.isAuthenticated()) {
-			Person student = securityService.currentUser().getPerson();
+			final Person student = securityService.currentUser().getPerson();
 			tasks = taskService.getAllForPerson(student, sAndP);
 		} else {
-			String sessionId = securityService.getSessionId();
+			final String sessionId = securityService.getSessionId();
 			tasks = taskService.getAllForSessionId(sessionId, sAndP);
 		}
 
-		return (tasks != null) ? TaskTO.toTOList(tasks) : null;
+		return tasks == null ? null : TaskTO.toTOList(tasks);
 	}
 
 	@RequestMapping(value = "/mark", method = RequestMethod.GET)
 	public @ResponseBody
-	TaskTO mark(@RequestParam("taskId") UUID taskId,
-			@RequestParam("complete") Boolean complete) throws Exception {
+	TaskTO mark(@RequestParam("taskId") final UUID taskId,
+			@RequestParam("complete") final Boolean complete) throws Exception {
 
-		Task task = taskService.get(taskId);
+		final Task task = taskService.get(taskId);
 		taskService.markTaskCompletion(task, complete);
 		return new TaskTO(task);
 	}
 
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	public ModelAndView print() throws Exception {
-
 		final Map<String, Object> model = new HashMap<String, Object>();
-
 		final SortingAndPaging sAndP = new SortingAndPaging(
 				ObjectStatus.ACTIVE);
 
 		List<Task> tasks = null;
 
 		if (securityService.isAuthenticated()) {
-			Person student = securityService.currentUser().getPerson();
+			final Person student = securityService.currentUser().getPerson();
 			tasks = taskService.getAllForPerson(student, false, sAndP);
 			model.put("studentName",
 					student.getFirstName() + " " + student.getLastName());
 		} else {
-			String sessionId = securityService.getSessionId();
+			final String sessionId = securityService.getSessionId();
 			tasks = taskService.getAllForSessionId(sessionId, false, sAndP);
 			model.put("studentName", "");
 		}
 
 		model.put("myBeanData",
-				(tasks != null) ? TaskReportTO.tasksToTaskReportTOs(tasks)
-						: null);
+				tasks == null ? null : TaskReportTO.tasksToTaskReportTOs(tasks));
 
 		return new ModelAndView("actionPlanReport", model);
 	}

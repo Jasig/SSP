@@ -45,7 +45,7 @@ public class SelfHelpGuideResponseTO
 			final Collection<SelfHelpGuideResponse> models) {
 		final List<SelfHelpGuideResponseTO> tos = Lists.newArrayList();
 		for (SelfHelpGuideResponse model : models) {
-			tos.add(new SelfHelpGuideResponseTO(model));
+			tos.add(new SelfHelpGuideResponseTO(model)); // NOPMD by jon.adams
 		}
 		return tos;
 	}
@@ -72,7 +72,7 @@ public class SelfHelpGuideResponseTO
 	}
 
 	public void setTriggeredEarlyAlert(final boolean triggeredEarlyAlert) {
-		this.earlyAlertSent = triggeredEarlyAlert;
+		earlyAlertSent = triggeredEarlyAlert;
 	}
 
 	public boolean isEarlyAlertSent() {
