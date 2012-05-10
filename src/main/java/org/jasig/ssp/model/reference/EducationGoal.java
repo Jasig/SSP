@@ -9,6 +9,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * EducationGoal reference object.
  */
@@ -76,8 +78,8 @@ public class EducationGoal extends AbstractReference implements Serializable {
 	public int hashCode() {
 		int result = hashPrime() * super.hashCode();
 
-		result *= otherDescription == null ? "otherDescription".hashCode()
-				: otherDescription.hashCode();
+		result *= StringUtils.isEmpty(otherDescription) ? "otherDescription"
+				.hashCode() : otherDescription.hashCode();
 
 		return result;
 	}

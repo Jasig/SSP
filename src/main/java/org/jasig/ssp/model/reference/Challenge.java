@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -192,13 +193,16 @@ public class Challenge extends AbstractReference implements Serializable {
 		// Auditable properties
 		result *= super.hashCode();
 
-		result *= selfHelpGuideQuestion == null ? "selfHelpGuideQuestion"
-				.hashCode() : selfHelpGuideQuestion.hashCode();
-		result *= selfHelpGuideDescription == null ? "selfHelpGuideDescription"
-				.hashCode() : selfHelpGuideDescription.hashCode();
+		result *= StringUtils.isEmpty(selfHelpGuideQuestion) ? "selfHelpGuideQuestion"
+				.hashCode()
+				: selfHelpGuideQuestion.hashCode();
+		result *= StringUtils.isEmpty(selfHelpGuideDescription) ? "selfHelpGuideDescription"
+				.hashCode()
+				: selfHelpGuideDescription.hashCode();
 		result *= showInStudentIntake ? 3 : 5;
 		result *= showInSelfHelpSearch ? 7 : 11;
-		result *= tags == null ? "tags".hashCode() : tags.hashCode();
+		result *= StringUtils.isEmpty(tags) ? "tags".hashCode() : tags
+				.hashCode();
 		result *= defaultConfidentialityLevel == null ? "defaultConfidentialityLevel"
 				.hashCode()
 				: defaultConfidentialityLevel.getId().hashCode();

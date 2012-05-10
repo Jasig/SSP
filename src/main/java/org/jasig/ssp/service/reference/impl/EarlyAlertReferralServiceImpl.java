@@ -1,5 +1,7 @@
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.UUID;
+
 import org.jasig.ssp.dao.reference.EarlyAlertReferralDao;
 import org.jasig.ssp.model.reference.EarlyAlertReferral;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
@@ -22,14 +24,6 @@ public class EarlyAlertReferralServiceImpl extends
 	transient private EarlyAlertReferralDao dao;
 
 	/**
-	 * Constructor that sets the specific class types to be used by base class
-	 * methods.
-	 */
-	public EarlyAlertReferralServiceImpl() {
-		super();
-	}
-
-	/**
 	 * Set the DAO instance
 	 * 
 	 * @param dao
@@ -42,5 +36,10 @@ public class EarlyAlertReferralServiceImpl extends
 	@Override
 	protected EarlyAlertReferralDao getDao() {
 		return dao;
+	}
+
+	@Override
+	public EarlyAlertReferral load(final UUID id) {
+		return dao.load(id);
 	}
 }

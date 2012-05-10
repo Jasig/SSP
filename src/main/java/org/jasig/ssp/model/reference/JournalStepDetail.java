@@ -18,7 +18,7 @@ import javax.persistence.OneToMany;
 public class JournalStepDetail extends AbstractReference implements
 		Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5855955069509045667L;
 
 	private int sortOrder;
 
@@ -72,6 +72,23 @@ public class JournalStepDetail extends AbstractReference implements
 		super(id, name, description);
 	}
 
+	public int getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(final int sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
+	public Set<JournalStepJournalStepDetail> getJournalStepJournalStepDetails() {
+		return journalStepJournalStepDetails;
+	}
+
+	public void setJournalStepJournalStepDetails(
+			final Set<JournalStepJournalStepDetail> journalStepJournalStepDetails) {
+		this.journalStepJournalStepDetails = journalStepJournalStepDetails;
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 229;
@@ -90,22 +107,4 @@ public class JournalStepDetail extends AbstractReference implements
 
 		return result;
 	}
-
-	public int getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(final int sortOrder) {
-		this.sortOrder = sortOrder;
-	}
-
-	public Set<JournalStepJournalStepDetail> getJournalStepJournalStepDetails() {
-		return journalStepJournalStepDetails;
-	}
-
-	public void setJournalStepJournalStepDetails(
-			final Set<JournalStepJournalStepDetail> journalStepJournalStepDetails) {
-		this.journalStepJournalStepDetails = journalStepJournalStepDetails;
-	}
-
 }

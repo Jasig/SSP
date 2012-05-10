@@ -22,6 +22,15 @@ public interface EarlyAlertReferralService extends
 	@Override
 	EarlyAlertReferral get(UUID id) throws ObjectNotFoundException;
 
+	/**
+	 * Loads the specified instance from persistent storage.
+	 * 
+	 * @param id
+	 *            identifier to load
+	 * @return The specified instance
+	 */
+	EarlyAlertReferral load(UUID id);
+
 	@Override
 	EarlyAlertReferral create(EarlyAlertReferral obj);
 

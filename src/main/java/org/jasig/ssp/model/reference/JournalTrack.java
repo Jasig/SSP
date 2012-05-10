@@ -18,7 +18,7 @@ import javax.persistence.OneToMany;
 public class JournalTrack extends AbstractReference implements
 		Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2719277716161933677L;
 
 	private int sortOrder;
 
@@ -40,7 +40,7 @@ public class JournalTrack extends AbstractReference implements
 	 *            Identifier; required
 	 */
 
-	public JournalTrack(UUID id) {
+	public JournalTrack(final UUID id) {
 		super(id);
 	}
 
@@ -53,22 +53,25 @@ public class JournalTrack extends AbstractReference implements
 	 *            Name; required; max 100 characters
 	 */
 
-	public JournalTrack(UUID id, String name) {
+	public JournalTrack(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 150 characters
-	 */
-	public JournalTrack(UUID id, String name, String description) {
-		super(id, name, description);
+	public int getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(final int sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
+	public Set<JournalTrackJournalStep> getJournalTrackJournalSteps() {
+		return journalTrackJournalSteps;
+	}
+
+	public void setJournalTrackJournalSteps(
+			final Set<JournalTrackJournalStep> journalTrackJournalSteps) {
+		this.journalTrackJournalSteps = journalTrackJournalSteps;
 	}
 
 	@Override
@@ -88,22 +91,5 @@ public class JournalTrack extends AbstractReference implements
 		result *= sortOrder > 0 ? sortOrder : hashPrime();
 
 		return result;
-	}
-
-	public int getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(int sortOrder) {
-		this.sortOrder = sortOrder;
-	}
-
-	public Set<JournalTrackJournalStep> getJournalTrackJournalSteps() {
-		return journalTrackJournalSteps;
-	}
-
-	public void setJournalTrackJournalSteps(
-			Set<JournalTrackJournalStep> journalTrackJournalSteps) {
-		this.journalTrackJournalSteps = journalTrackJournalSteps;
 	}
 }

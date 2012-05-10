@@ -13,6 +13,9 @@ import javax.persistence.ManyToOne;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.Person;
 
+/**
+ * PersonTool model
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class PersonTool extends Auditable implements Serializable {
@@ -33,7 +36,7 @@ public class PersonTool extends Auditable implements Serializable {
 		super();
 	}
 
-	public PersonTool(Person person, Tools tool) {
+	public PersonTool(final Person person, final Tools tool) {
 		super();
 		this.person = person;
 		this.tool = tool;
@@ -43,7 +46,7 @@ public class PersonTool extends Auditable implements Serializable {
 		return person;
 	}
 
-	public void setPerson(Person person) {
+	public void setPerson(final Person person) {
 		this.person = person;
 	}
 
@@ -51,7 +54,7 @@ public class PersonTool extends Auditable implements Serializable {
 		return tool;
 	}
 
-	public void setTool(Tools tool) {
+	public void setTool(final Tools tool) {
 		this.tool = tool;
 	}
 

@@ -7,6 +7,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
@@ -140,9 +141,10 @@ public abstract class AbstractReference extends Auditable {
 				.hashCode();
 
 		// AbstractReference
-		result *= name == null ? "name".hashCode() : name.hashCode();
-		result *= description == null ? "description".hashCode() : description
+		result *= StringUtils.isEmpty(name) ? "name".hashCode() : name
 				.hashCode();
+		result *= StringUtils.isEmpty(description) ? "description".hashCode()
+				: description.hashCode();
 
 		return result;
 	}

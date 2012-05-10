@@ -9,6 +9,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * ConfidentialityDisclosureAgreement reference object.
  */
@@ -17,7 +19,7 @@ import javax.validation.constraints.Size;
 public class ConfidentialityDisclosureAgreement extends AbstractReference
 		implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2992853251827812441L;
 
 	/**
 	 * text of the agreement
@@ -76,7 +78,8 @@ public class ConfidentialityDisclosureAgreement extends AbstractReference
 	public int hashCode() {
 		int result = hashPrime() * super.hashCode();
 
-		result *= text == null ? "text".hashCode() : text.hashCode();
+		result *= StringUtils.isEmpty(text) ? "text".hashCode() : text
+				.hashCode();
 
 		return result;
 	}

@@ -10,6 +10,7 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -58,21 +59,6 @@ public class ConfidentialityLevel extends AbstractReference implements
 		super(id, name);
 	}
 
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 80 characters
-	 * @param description
-	 *            Description; max 64000 characters
-	 */
-	public ConfidentialityLevel(@NotNull final UUID id,
-			@NotNull final String name, final String description) {
-		super(id, name, description);
-	}
-
 	public String getAcronym() {
 		return acronym;
 	}
@@ -90,7 +76,7 @@ public class ConfidentialityLevel extends AbstractReference implements
 	public int hashCode() {
 		int result = hashPrime() * super.hashCode();
 
-		result *= acronym == null ? "acronym".hashCode() : acronym
+		result *= StringUtils.isEmpty(acronym) ? "acronym".hashCode() : acronym
 				.hashCode();
 
 		return result;

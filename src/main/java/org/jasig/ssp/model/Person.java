@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -331,6 +332,7 @@ public final class Person extends Auditable implements Serializable {
 	 *            Identifier
 	 */
 	public Person(final UUID id) {
+		super();
 		setId(id);
 		challenges = new HashSet<PersonChallenge>();
 		fundingSources = new HashSet<PersonFundingSource>();
@@ -382,7 +384,7 @@ public final class Person extends Auditable implements Serializable {
 		return primaryEmailAddress;
 	}
 
-	public void setPrimaryEmailAddress(String primaryEmailAddress) {
+	public void setPrimaryEmailAddress(final String primaryEmailAddress) {
 		this.primaryEmailAddress = primaryEmailAddress;
 	}
 
@@ -390,7 +392,7 @@ public final class Person extends Auditable implements Serializable {
 		return secondaryEmailAddress;
 	}
 
-	public void setSecondaryEmailAddress(String secondaryEmailAddress) {
+	public void setSecondaryEmailAddress(final String secondaryEmailAddress) {
 		this.secondaryEmailAddress = secondaryEmailAddress;
 	}
 
@@ -398,7 +400,7 @@ public final class Person extends Auditable implements Serializable {
 		return username;
 	}
 
-	public void setUsername(String username) {
+	public void setUsername(final String username) {
 		this.username = username;
 	}
 
@@ -406,7 +408,7 @@ public final class Person extends Auditable implements Serializable {
 		return homePhone;
 	}
 
-	public void setHomePhone(String homePhone) {
+	public void setHomePhone(final String homePhone) {
 		this.homePhone = homePhone;
 	}
 
@@ -414,7 +416,7 @@ public final class Person extends Auditable implements Serializable {
 		return workPhone;
 	}
 
-	public void setWorkPhone(String workPhone) {
+	public void setWorkPhone(final String workPhone) {
 		this.workPhone = workPhone;
 	}
 
@@ -422,7 +424,7 @@ public final class Person extends Auditable implements Serializable {
 		return cellPhone;
 	}
 
-	public void setCellPhone(String cellPhone) {
+	public void setCellPhone(final String cellPhone) {
 		this.cellPhone = cellPhone;
 	}
 
@@ -430,7 +432,7 @@ public final class Person extends Auditable implements Serializable {
 		return addressLine1;
 	}
 
-	public void setAddressLine1(String addressLine1) {
+	public void setAddressLine1(final String addressLine1) {
 		this.addressLine1 = addressLine1;
 	}
 
@@ -438,7 +440,7 @@ public final class Person extends Auditable implements Serializable {
 		return addressLine2;
 	}
 
-	public void setAddressLine2(String addressLine2) {
+	public void setAddressLine2(final String addressLine2) {
 		this.addressLine2 = addressLine2;
 	}
 
@@ -446,7 +448,7 @@ public final class Person extends Auditable implements Serializable {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(final String city) {
 		this.city = city;
 	}
 
@@ -454,7 +456,7 @@ public final class Person extends Auditable implements Serializable {
 		return state;
 	}
 
-	public void setState(String state) {
+	public void setState(final String state) {
 		this.state = state;
 	}
 
@@ -462,7 +464,7 @@ public final class Person extends Auditable implements Serializable {
 		return zipCode;
 	}
 
-	public void setZipCode(String zipCode) {
+	public void setZipCode(final String zipCode) {
 		this.zipCode = zipCode;
 	}
 
@@ -470,7 +472,7 @@ public final class Person extends Auditable implements Serializable {
 		return photoUrl;
 	}
 
-	public void setPhotoUrl(String photoUrl) {
+	public void setPhotoUrl(final String photoUrl) {
 		this.photoUrl = photoUrl;
 	}
 
@@ -478,7 +480,7 @@ public final class Person extends Auditable implements Serializable {
 		return schoolId;
 	}
 
-	public void setSchoolId(String schoolId) {
+	public void setSchoolId(final String schoolId) {
 		this.schoolId = schoolId;
 	}
 
@@ -486,7 +488,7 @@ public final class Person extends Auditable implements Serializable {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -494,7 +496,7 @@ public final class Person extends Auditable implements Serializable {
 		return demographics;
 	}
 
-	public void setDemographics(PersonDemographics demographics) {
+	public void setDemographics(final PersonDemographics demographics) {
 		this.demographics = demographics;
 	}
 
@@ -502,7 +504,7 @@ public final class Person extends Auditable implements Serializable {
 		return educationGoal;
 	}
 
-	public void setEducationGoal(PersonEducationGoal educationGoal) {
+	public void setEducationGoal(final PersonEducationGoal educationGoal) {
 		this.educationGoal = educationGoal;
 	}
 
@@ -510,7 +512,7 @@ public final class Person extends Auditable implements Serializable {
 		return educationPlan;
 	}
 
-	public void setEducationPlan(PersonEducationPlan educationPlan) {
+	public void setEducationPlan(final PersonEducationPlan educationPlan) {
 		this.educationPlan = educationPlan;
 	}
 
@@ -518,7 +520,8 @@ public final class Person extends Auditable implements Serializable {
 		return educationLevels;
 	}
 
-	public void setEducationLevels(Set<PersonEducationLevel> educationLevels) {
+	public void setEducationLevels(
+			final Set<PersonEducationLevel> educationLevels) {
 		this.educationLevels = educationLevels;
 	}
 
@@ -526,7 +529,7 @@ public final class Person extends Auditable implements Serializable {
 		return fundingSources;
 	}
 
-	public void setFundingSources(Set<PersonFundingSource> fundingSources) {
+	public void setFundingSources(final Set<PersonFundingSource> fundingSources) {
 		this.fundingSources = fundingSources;
 	}
 
@@ -534,7 +537,7 @@ public final class Person extends Auditable implements Serializable {
 		return challenges;
 	}
 
-	public void setChallenges(Set<PersonChallenge> challenges) {
+	public void setChallenges(final Set<PersonChallenge> challenges) {
 		this.challenges = challenges;
 	}
 
@@ -542,7 +545,7 @@ public final class Person extends Auditable implements Serializable {
 		return tools;
 	}
 
-	public void setTools(Set<PersonTool> tools) {
+	public void setTools(final Set<PersonTool> tools) {
 		this.tools = tools;
 	}
 
@@ -550,7 +553,7 @@ public final class Person extends Auditable implements Serializable {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(final String userId) {
 		if ((userId != null) && (userId.length() > 25)) {
 			throw new IllegalArgumentException(
 					"UserId must be 25 or fewer characters.");
@@ -564,7 +567,7 @@ public final class Person extends Auditable implements Serializable {
 	}
 
 	public void setConfidentialityDisclosureAgreements(
-			Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements) {
+			final Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements) {
 		this.confidentialityDisclosureAgreements = confidentialityDisclosureAgreements;
 	}
 
@@ -572,7 +575,7 @@ public final class Person extends Auditable implements Serializable {
 		return tasks;
 	}
 
-	public void setTasks(Set<Task> tasks) {
+	public void setTasks(final Set<Task> tasks) {
 		this.tasks = tasks;
 	}
 
@@ -587,7 +590,7 @@ public final class Person extends Auditable implements Serializable {
 	 * @param strengths
 	 *            the strengths to set
 	 */
-	public void setStrengths(String strengths) {
+	public void setStrengths(final String strengths) {
 		this.strengths = strengths;
 	}
 
@@ -597,7 +600,7 @@ public final class Person extends Auditable implements Serializable {
 	};
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:25 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -606,43 +609,46 @@ public final class Person extends Auditable implements Serializable {
 				.hashCode();
 
 		// Person
-		result *= firstName == null ? "firstName".hashCode() : firstName
-				.hashCode();
-		result *= middleInitial == null ? "middleInitial".hashCode()
-				: middleInitial.hashCode();
-		result *= lastName == null ? "middleInitial".hashCode() : lastName
-				.hashCode();
+		result *= StringUtils.isEmpty(firstName) ? "firstName".hashCode()
+				: firstName.hashCode();
+		result *= StringUtils.isEmpty(middleInitial) ? "middleInitial"
+				.hashCode() : middleInitial.hashCode();
+		result *= StringUtils.isEmpty(lastName) ? "middleInitial".hashCode()
+				: lastName.hashCode();
 		result *= birthDate == null ? "birthDate".hashCode() : birthDate
 				.hashCode();
-		result *= primaryEmailAddress == null ? "primaryEmailAddress"
-				.hashCode() : primaryEmailAddress.hashCode();
-		result *= secondaryEmailAddress == null ? "secondaryEmailAddress"
-				.hashCode() : secondaryEmailAddress.hashCode();
-		result *= username == null ? "primaryEmailAddress".hashCode()
+		result *= StringUtils.isEmpty(primaryEmailAddress) ? "primaryEmailAddress"
+				.hashCode()
 				: primaryEmailAddress.hashCode();
-		result *= userId == null ? "userId".hashCode() : userId.hashCode();
-		result *= homePhone == null ? "homePhone".hashCode() : homePhone
+		result *= StringUtils.isEmpty(secondaryEmailAddress) ? "secondaryEmailAddress"
+				.hashCode()
+				: secondaryEmailAddress.hashCode();
+		result *= StringUtils.isEmpty(username) ? "primaryEmailAddress"
+				.hashCode() : primaryEmailAddress.hashCode();
+		result *= StringUtils.isEmpty(userId) ? "userId".hashCode() : userId
 				.hashCode();
-		result *= workPhone == null ? "workPhone".hashCode() : workPhone
+		result *= StringUtils.isEmpty(homePhone) ? "homePhone".hashCode()
+				: homePhone.hashCode();
+		result *= StringUtils.isEmpty(workPhone) ? "workPhone".hashCode()
+				: workPhone.hashCode();
+		result *= StringUtils.isEmpty(cellPhone) ? "cellPhone".hashCode()
+				: cellPhone.hashCode();
+		result *= StringUtils.isEmpty(addressLine1) ? "addressLine1".hashCode()
+				: addressLine1.hashCode();
+		result *= StringUtils.isEmpty(addressLine2) ? "addressLine2".hashCode()
+				: addressLine2.hashCode();
+		result *= StringUtils.isEmpty(city) ? "city".hashCode() : city
 				.hashCode();
-		result *= cellPhone == null ? "cellPhone".hashCode() : cellPhone
+		result *= StringUtils.isEmpty(state) ? "state".hashCode() : state
 				.hashCode();
-		result *= userId == null ? "userId".hashCode() : userId.hashCode();
-		result *= addressLine1 == null ? "addressLine1".hashCode()
-				: addressLine1
-						.hashCode();
-		result *= addressLine2 == null ? "addressLine2".hashCode()
-				: addressLine2
-						.hashCode();
-		result *= city == null ? "city".hashCode() : city.hashCode();
-		result *= state == null ? "state".hashCode() : state.hashCode();
-		result *= zipCode == null ? "zipCode".hashCode() : zipCode.hashCode();
-		result *= photoUrl == null ? "photoUrl".hashCode() : photoUrl
+		result *= StringUtils.isEmpty(zipCode) ? "zipCode".hashCode() : zipCode
 				.hashCode();
-		result *= schoolId == null ? "schoolId".hashCode() : schoolId
-				.hashCode();
-		result *= strengths == null ? "strengths".hashCode() : strengths
-				.hashCode();
+		result *= StringUtils.isEmpty(photoUrl) ? "photoUrl".hashCode()
+				: photoUrl.hashCode();
+		result *= StringUtils.isEmpty(schoolId) ? "schoolId".hashCode()
+				: schoolId.hashCode();
+		result *= StringUtils.isEmpty(strengths) ? "strengths".hashCode()
+				: strengths.hashCode();
 		// not all fields included. only the business or non-expensive set
 		// fields are included in the hashCode
 

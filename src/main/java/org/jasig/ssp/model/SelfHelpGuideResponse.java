@@ -101,7 +101,7 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:25 PM
 		int result = hashPrime();
 
 		// Auditable properties

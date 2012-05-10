@@ -36,7 +36,7 @@ public class JournalTrackJournalStep extends Auditable implements Serializable {
 		return journalStep;
 	}
 
-	public void setJournalStep(JournalStep journalStep) {
+	public void setJournalStep(final JournalStep journalStep) {
 		this.journalStep = journalStep;
 	}
 
@@ -46,7 +46,7 @@ public class JournalTrackJournalStep extends Auditable implements Serializable {
 	};
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:33 PM
 		int result = hashPrime();
 
 		// Auditable properties

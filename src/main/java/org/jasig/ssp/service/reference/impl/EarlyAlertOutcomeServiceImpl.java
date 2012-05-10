@@ -1,5 +1,7 @@
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.UUID;
+
 import org.jasig.ssp.dao.reference.EarlyAlertOutcomeDao;
 import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
@@ -22,14 +24,6 @@ public class EarlyAlertOutcomeServiceImpl extends
 	transient private EarlyAlertOutcomeDao dao;
 
 	/**
-	 * Constructor that sets the specific class types to be used by base class
-	 * methods.
-	 */
-	public EarlyAlertOutcomeServiceImpl() {
-		super();
-	}
-
-	/**
 	 * Set the DAO instance
 	 * 
 	 * @param dao
@@ -42,5 +36,10 @@ public class EarlyAlertOutcomeServiceImpl extends
 	@Override
 	protected EarlyAlertOutcomeDao getDao() {
 		return dao;
+	}
+
+	@Override
+	public EarlyAlertOutcome load(final UUID id) {
+		return dao.load(id);
 	}
 }

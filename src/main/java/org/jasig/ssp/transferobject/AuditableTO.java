@@ -45,22 +45,6 @@ public abstract class AuditableTO<T extends Auditable>
 
 	private ObjectStatus objectStatus;
 
-	@Override
-	public void from(final T model) {
-		id = model.getId();
-		if (model.getCreatedBy() != null) {
-			createdById = model.getCreatedBy().getId();
-		}
-
-		if (model.getModifiedBy() != null) {
-			modifiedById = model.getModifiedBy().getId();
-		}
-
-		createdDate = model.getCreatedDate();
-		modifiedDate = model.getModifiedDate();
-		objectStatus = model.getObjectStatus();
-	}
-
 	public UUID getId() {
 		return id;
 	}
@@ -109,5 +93,21 @@ public abstract class AuditableTO<T extends Auditable>
 
 	public void setObjectStatus(final ObjectStatus objectStatus) {
 		this.objectStatus = objectStatus;
+	}
+
+	@Override
+	public void from(final T model) {
+		id = model.getId();
+		if (model.getCreatedBy() != null) {
+			createdById = model.getCreatedBy().getId();
+		}
+
+		if (model.getModifiedBy() != null) {
+			modifiedById = model.getModifiedBy().getId();
+		}
+
+		createdDate = model.getCreatedDate();
+		modifiedDate = model.getModifiedDate();
+		objectStatus = model.getObjectStatus();
 	}
 }

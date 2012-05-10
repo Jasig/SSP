@@ -18,6 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Type;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
@@ -176,7 +177,7 @@ public class EarlyAlert extends Auditable implements Serializable {
 	 * @return the closedDate
 	 */
 	public Date getClosedDate() {
-		return closedDate;
+		return closedDate == null ? null : new Date(closedDate.getTime());
 	}
 
 	/**
@@ -184,7 +185,8 @@ public class EarlyAlert extends Auditable implements Serializable {
 	 *            the closedDate to set
 	 */
 	public void setClosedDate(final Date closedDate) {
-		this.closedDate = closedDate;
+		this.closedDate = closedDate == null ? null : new Date(
+				closedDate.getTime());
 	}
 
 	/**
@@ -257,17 +259,19 @@ public class EarlyAlert extends Auditable implements Serializable {
 				.hashCode();
 
 		// EarlyAlert
-		result *= courseName == null ? "courseName".hashCode() : courseName
+		result *= StringUtils.isEmpty(courseName) ? "courseName".hashCode()
+				: courseName.hashCode();
+		result *= StringUtils.isEmpty(courseTitle) ? "courseTitle".hashCode()
+				: courseTitle.hashCode();
+		result *= StringUtils.isEmpty(emailCC) ? "emailCC".hashCode() : emailCC
 				.hashCode();
-		result *= courseTitle == null ? "courseTitle".hashCode() : courseTitle
-				.hashCode();
-		result *= emailCC == null ? "emailCC".hashCode() : emailCC.hashCode();
 		result *= campusId == null ? "campusId".hashCode() : campusId
 				.hashCode();
-		result *= earlyAlertReasonOtherDescription == null ? "earlyAlertSuggestionOtherDescription"
+		result *= StringUtils.isEmpty(earlyAlertReasonOtherDescription) ? "earlyAlertSuggestionOtherDescription"
 				.hashCode()
 				: earlyAlertReasonOtherDescription.hashCode();
-		result *= comment == null ? "comment".hashCode() : comment.hashCode();
+		result *= StringUtils.isEmpty(comment) ? "comment".hashCode() : comment
+				.hashCode();
 		result *= person == null || person.getId() == null ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= earlyAlertReasonIds == null ? "earlyAlertReasonIds"

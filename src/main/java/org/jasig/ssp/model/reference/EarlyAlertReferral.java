@@ -9,6 +9,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * EarlyAlertReferral reference object.
  * 
@@ -121,7 +123,7 @@ public class EarlyAlertReferral extends AbstractReference implements
 		result *= super.hashCode();
 
 		result *= sortOrder > 0 ? sortOrder : hashPrime();
-		result *= acronym == null ? "acronym".hashCode() : acronym
+		result *= StringUtils.isEmpty(acronym) ? "acronym".hashCode() : acronym
 				.hashCode();
 
 		return result;
