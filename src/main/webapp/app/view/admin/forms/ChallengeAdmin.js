@@ -1,6 +1,6 @@
 Ext.define('Ssp.view.admin.forms.ChallengeAdmin', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.ChallengeAdmin',
+	alias : 'widget.challengeadmin',
 	title: 'Admin',
 	id: 'ChallengeAdmin',
     mixins: [ 'Deft.mixin.Injectable',

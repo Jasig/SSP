@@ -37,31 +37,31 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 						        activeTab: 0,
 						        items: [ { title: 'Personal',
 						        	       autoScroll: true,
-						        		   items: [Ext.create('Ssp.view.tools.studentintake.Personal')]
+						        		   items: [{xtype: 'studentintakepersonal'}]
 						        		},{
 						            		title: 'Demographics',
 						            		autoScroll: true,
-						            		items: [Ext.create('Ssp.view.tools.studentintake.Demographics')]
+						            		items: [{xtype: 'studentintakedemographics'}]
 						        		},{
 						            		title: 'EduPlan',
 						            		autoScroll: true,
-						            		items: [Ext.create('Ssp.view.tools.studentintake.EducationPlans')]
+						            		items: [{xtype: 'studentintakeeducationplans'}]
 						        		},{
 						            		title: 'EduLevel',
 						            		autoScroll: true,
-						            		items: [Ext.create('Ssp.view.tools.studentintake.EducationLevels')]
+						            		items: [{xtype: 'studentintakeeducationlevels'}]
 						        		},{
 						            		title: 'EduGoal',
 						            		autoScroll: true,
-						            		items: [Ext.create('Ssp.view.tools.studentintake.EducationGoals')]
+						            		items: [{xtype: 'studentintakeeducationgoals'}]
 						        		},{
 						            		title: 'Funding',
 						            		autoScroll: true,
-						            		items: [Ext.create('Ssp.view.tools.studentintake.Funding')]
+						            		items: [{xtype: 'studentintakefunding'}]
 						        		},{
 						            		title: 'Challenges',
 						            		autoScroll: true,
-						            		items: [Ext.create('Ssp.view.tools.studentintake.Challenges')]
+						            		items: [{xtype: 'studentintakechallenges'}]
 						        		}]
 						    })
 					    

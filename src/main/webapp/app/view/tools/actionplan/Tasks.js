@@ -1,17 +1,21 @@
-Ext.define('Ssp.view.tools.actionplan.ActiveTasks', {
-	extend: 'Ext.grid.Panel',    
-    title: 'Active Tasks',
+Ext.define('Ssp.view.tools.actionplan.Tasks', {
+	extend: 'Ext.grid.Panel',
+	alias: 'widget.tasks',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-        tasksStore: 'tasksStore'
+    	columnRendererUtils: 'columnRendererUtils',
+        tasksStore: 'tasksStore',
     },
 	width: '100%',
     height: '100%',
     initComponent: function(){
+    	
+    	var sm = Ext.create('Ext.selection.CheckboxModel');
+    	
     	Ext.apply(this,
     			{
     	    		store: this.tasksStore,    		
-		    	    
+    	    		selModel: sm,
     	    		features: [{
 		    	        id: 'group',
 		    	        ftype: 'groupingsummary',
@@ -25,12 +29,13 @@ Ext.define('Ssp.view.tools.actionplan.ActiveTasks', {
 		    	        flex: 1,
 		    	        tdCls: 'task',
 		    	        sortable: true,
-		    	        dataIndex: 'name'
-		    	    }, {
+		    	        dataIndex: 'name',
+		    	        renderer: this.columnRendererUtils.renderTaskName
+		    	    },{
 		    	        header: 'Due Date',
-		    	        width: 80,
+		    	        width: 100,
 		    	        dataIndex: 'dueDate',
-		    	        renderer: Ext.util.Format.dateRenderer('m/d/Y')
+		    	        renderer: this.columnRendererUtils.renderTaskDueDate
 		    	    }]    		
 
     			});

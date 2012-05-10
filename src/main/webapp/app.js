@@ -6,6 +6,37 @@ Ext.Loader.setConfig({
 });
 
 Ext.require([
+    'Ssp.view.admin.AdminMain',
+    'Ssp.view.admin.AdminTreeMenu',
+    'Ssp.view.admin.AdminForms',
+    'Ssp.view.Main',
+    'Ssp.view.Search',
+    'Ssp.view.StudentRecord',
+    'Ssp.view.ToolsMenu',
+    'Ssp.view.Tools',
+    'Ssp.view.tools.Profile',
+    'Ssp.view.tools.ActionPlan',
+    'Ssp.view.tools.actionplan.Tasks',
+    'Ssp.view.tools.actionplan.AddTask',
+    'Ssp.view.tools.actionplan.AddTaskForm',
+    'Ssp.view.tools.actionplan.ActionPlanTasks',
+    'Ssp.view.tools.StudentIntake',
+    'Ssp.view.tools.studentintake.Challenges',
+    'Ssp.view.tools.studentintake.Demographics',
+    'Ssp.view.tools.studentintake.EducationGoals',
+    'Ssp.view.tools.studentintake.EducationLevels',
+    'Ssp.view.tools.studentintake.EducationPlans',
+    'Ssp.view.tools.studentintake.Funding',
+    'Ssp.view.tools.studentintake.Personal',
+    'Ssp.view.tools.Journal',
+    'Ssp.view.tools.EarlyAlert',
+    'Ssp.view.admin.AdminForms',
+    'Ssp.view.admin.forms.AbstractReferenceAdmin',
+    'Ssp.view.admin.forms.ChallengeAdmin',
+    'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
+    'Ssp.view.admin.forms.ConfidentialityLevelAdmin',
+    'Ssp.view.admin.forms.EarlyAlertReferralAdmin',
+    'Ssp.view.admin.forms.EditChallengeAdmin',
 	'Ssp.model.Person',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
@@ -29,10 +60,18 @@ Ext.require([
     'Ssp.store.reference.ChildCareArrangements',
     'Ssp.store.reference.Citizenships',
 	'Ssp.store.reference.ConfidentialityLevels',
+	'Ssp.store.reference.EarlyAlertOutcomes',
+	'Ssp.store.reference.EarlyAlertOutreaches',
+	'Ssp.store.reference.EarlyAlertReasons',
+	'Ssp.store.reference.EarlyAlertReferrals',
+	'Ssp.store.reference.EarlyAlertSuggestions',
     'Ssp.store.reference.EmploymentShifts',
     'Ssp.store.reference.Ethnicities',
     'Ssp.store.reference.FundingSources',
     'Ssp.store.reference.Genders',
+    'Ssp.store.reference.JournalSources',
+    'Ssp.store.reference.JournalSteps',
+    'Ssp.store.reference.JournalTracks',
     'Ssp.store.reference.MaritalStatuses',
     'Ssp.store.reference.States', 
     'Ssp.store.Students',
@@ -40,9 +79,10 @@ Ext.require([
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
+    'Ssp.controller.ApplicationEventsController',
 	'Ext.tab.*',
 	'Ext.ux.CheckColumn',
-	'Ssp.controller.ApplicationEventsController'
+	'Ext.util.Filter'
 ]);
 
 Ext.onReady(function(){
@@ -50,6 +90,12 @@ Ext.onReady(function(){
 	    currentPerson: {
 	        fn: function(){
 	            return new Ssp.model.Person({id:"0"});
+	        },
+	        singleton: true
+	    },
+	    authenticatedPerson: {
+	        fn: function(){
+	            return new Ssp.model.Person({id:"91f46e39-cea8-422b-b215-00f6bcf5d280"});
 	        },
 	        singleton: true
 	    },
@@ -88,12 +134,20 @@ Ext.onReady(function(){
 	    citizenshipsStore: 'Ssp.store.reference.Citizenships',
     	confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',		
 	    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
+		earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
+		earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
+		earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
+		earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
+		earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
 	    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
     	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
     	employmentShiftsStore: 'Ssp.store.reference.EmploymentShifts',
     	ethnicitiesStore: 'Ssp.store.reference.Ethnicities',
     	fundingSourcesStore: 'Ssp.store.reference.FundingSources',
     	gendersStore: 'Ssp.store.reference.Genders',
+        journalSourcesStore: 'Ssp.store.reference.JournalSources',
+        journalStepsStore: 'Ssp.store.reference.JournalSteps',
+        journalTracksStore: 'Ssp.store.reference.JournalTracks',
     	maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
 	    statesStore: 'Ssp.store.reference.States',
 	    studentsStore: 'Ssp.store.Students',

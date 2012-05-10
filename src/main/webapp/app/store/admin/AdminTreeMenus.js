@@ -137,17 +137,65 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     										form: 'AbstractReferenceAdmin',
     										leaf: true }]
     						},{
-    							text: 'Journal',
-    							title: 'Journal',
-    							form: '',
-    							expanded: false,
-    							children: []
-    						},{
     							text: 'Early Alert',
     							title: 'Early Alert',
     							form: '',
     							expanded: false,
-    							children: []
+    							children: [{
+									text: 'Early Alert Outcomes',
+									title: 'Early Alert Outcomes',
+									store: 'earlyAlertOutcomes',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+								},{
+									text: 'Early Alert Outreaches',
+									title: 'Early Alert Outreaches',
+									store: 'earlyAlertOutreaches',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+								},{
+									text: 'Early Alert Reasons',
+									title: 'Early Alert Reasons',
+									store: 'earlyAlertReasons',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+								},{
+									text: 'Early Alert Referrals',
+									title: 'Early Alert Referrals',
+									store: 'earlyAlertReferrals',
+							        form: 'EarlyAlertReferralAdmin',
+									leaf: true
+								},{
+									text: 'Early Alert Suggestions',
+									title: 'Early Alert Suggestions',
+									store: 'earlyAlertSuggestions',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+								}]
+    						},{
+    							text: 'Journal',
+    							title: 'Journal',
+    							form: '',
+    							expanded: false,
+    							children: [{
+									text: 'Journal Sources',
+									title: 'Journal Sources',
+									store: 'journalSources',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+								},{
+									text: 'Journal Steps',
+									title: 'Journal Steps',
+									store: 'journalSteps',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+								},{
+									text: 'Journal Tracks',
+									title: 'Journal Tracks',
+									store: 'journalTracks',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+								}]
     						}
     	                   
     	        ]

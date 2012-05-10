@@ -1,5 +1,5 @@
-Ext.define('Ssp.controller.admin.ChallengeAdminViewController', {
-    extend: 'Deft.mvc.ViewController',
+Ext.define('Ssp.controller.admin.EarlyAlertReferralAdminViewController', {
+    extend: 'Deft.mvc.ViewController',     
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
@@ -40,9 +40,10 @@ Ext.define('Ssp.controller.admin.ChallengeAdminViewController', {
 	},
 	
 	addRecord: function(button){
-		var item = new Ssp.model.reference.Challenge();
+		var item = new Ssp.model.reference.EarlyAlertReferral();
        	var grid = button.up('grid');
        	item.set('name','default');
+
 		Ext.Ajax.request({
 			url: grid.getStore().getProxy().url,
 			method: 'POST',
