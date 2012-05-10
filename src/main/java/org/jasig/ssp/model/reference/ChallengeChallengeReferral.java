@@ -56,9 +56,10 @@ public class ChallengeChallengeReferral extends Auditable implements
 
 		// ChallengeChallengeReferral
 		result *= challenge == null ? "challenge".hashCode() : challenge
+				.getId()
 				.hashCode();
 		result *= challengeReferral == null ? "challengeReferral".hashCode()
-				: challengeReferral.hashCode();
+				: challengeReferral.getId().hashCode();
 
 		return result;
 	}

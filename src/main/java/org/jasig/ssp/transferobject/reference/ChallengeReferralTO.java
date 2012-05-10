@@ -3,7 +3,6 @@ package org.jasig.ssp.transferobject.reference;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.transferobject.TransferObject;
@@ -17,13 +16,12 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 
 	private String publicDescription;
 
+	private boolean showInSelfHelpGuide;
+
+	private boolean showInStudentIntake;
+
 	public ChallengeReferralTO() {
 		super();
-	}
-
-	public ChallengeReferralTO(final UUID id, final String name,
-			final String description) {
-		super(id, name, description);
 	}
 
 	public ChallengeReferralTO(final ChallengeReferral model) {
@@ -37,6 +35,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		for (ChallengeReferral model : models) {
 			tObjects.add(new ChallengeReferralTO(model));
 		}
+
 		return tObjects;
 	}
 
@@ -44,6 +43,8 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	public final void from(final ChallengeReferral model) {
 		super.from(model);
 		publicDescription = model.getPublicDescription();
+		showInSelfHelpGuide = model.isShowInSelfHelpGuide();
+		showInStudentIntake = model.isShowInStudentIntake();
 	}
 
 	public String getPublicDescription() {
@@ -54,4 +55,33 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		this.publicDescription = publicDescription;
 	}
 
+	/**
+	 * @return the showInSelfHelpGuide
+	 */
+	public boolean isShowInSelfHelpGuide() {
+		return showInSelfHelpGuide;
+	}
+
+	/**
+	 * @param showInSelfHelpGuide
+	 *            the showInSelfHelpGuide to set
+	 */
+	public void setShowInSelfHelpGuide(boolean showInSelfHelpGuide) {
+		this.showInSelfHelpGuide = showInSelfHelpGuide;
+	}
+
+	/**
+	 * @return the showInStudentIntake
+	 */
+	public boolean isShowInStudentIntake() {
+		return showInStudentIntake;
+	}
+
+	/**
+	 * @param showInStudentIntake
+	 *            the showInStudentIntake to set
+	 */
+	public void setShowInStudentIntake(boolean showInStudentIntake) {
+		this.showInStudentIntake = showInStudentIntake;
+	}
 }

@@ -42,7 +42,7 @@ public class ConfidentialityDisclosureAgreement extends AbstractReference
 	 *            Identifier; required
 	 */
 
-	public ConfidentialityDisclosureAgreement(UUID id) {
+	public ConfidentialityDisclosureAgreement(final UUID id) {
 		super(id);
 	}
 
@@ -55,30 +55,15 @@ public class ConfidentialityDisclosureAgreement extends AbstractReference
 	 *            Name; required; max 100 characters
 	 */
 
-	public ConfidentialityDisclosureAgreement(UUID id, String name) {
+	public ConfidentialityDisclosureAgreement(final UUID id, final String name) {
 		super(id, name);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 150 characters
-	 */
-	public ConfidentialityDisclosureAgreement(UUID id, String name,
-			String description) {
-		super(id, name, description);
 	}
 
 	public String getText() {
 		return text;
 	}
 
-	public void setText(String text) {
+	public void setText(final String text) {
 		this.text = text;
 	}
 
@@ -86,4 +71,13 @@ public class ConfidentialityDisclosureAgreement extends AbstractReference
 	protected int hashPrime() {
 		return 73;
 	};
+
+	@Override
+	public int hashCode() {
+		int result = hashPrime() * super.hashCode();
+
+		result *= text == null ? "text".hashCode() : text.hashCode();
+
+		return result;
+	}
 }

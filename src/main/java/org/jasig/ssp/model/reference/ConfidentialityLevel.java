@@ -77,7 +77,7 @@ public class ConfidentialityLevel extends AbstractReference implements
 		return acronym;
 	}
 
-	public void setAcronym(String acronym) {
+	public void setAcronym(final String acronym) {
 		this.acronym = acronym;
 	}
 
@@ -85,4 +85,14 @@ public class ConfidentialityLevel extends AbstractReference implements
 	protected int hashPrime() {
 		return 79;
 	};
+
+	@Override
+	public int hashCode() {
+		int result = hashPrime() * super.hashCode();
+
+		result *= acronym == null ? "acronym".hashCode() : acronym
+				.hashCode();
+
+		return result;
+	}
 }
