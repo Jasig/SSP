@@ -1171,5 +1171,117 @@
 		</modifySql>
 	</changeSet>
 
+	<changeSet id="Add Journal Entry table" author="daniel.bower">
+		<createTable tableName="journal_entry">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_created_by_person_id" 
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_modified_by_person_id" 
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="entry_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="comment" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="confidentiality_level_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_confidentiality_level_id_person_id" 
+					references="confidentiality_level(id)" />
+			</column>
+			<column name="journal_source_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_source_id_person_id" 
+					references="journal_source(id)" />
+			</column>
+			<column name="journal_track_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_track_id_person_id" 
+					references="journal_track(id)" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_person_id_person_id" 
+					references="person(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on journal_entry to ssp</sql>
+		<rollback>
+			<dropTable tableName="journal_entry" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+	
+	<changeSet id="Add JournalEntryJournalStepDetail table" author="daniel.bower">
+		<createTable tableName="journal_entry_journal_step_detail">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_step_detail_created_by_person_id" 
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_step_detail_modified_by_person_id" 
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="journal_entry_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_step_detail_journal_entry_id_journal_entry_id" 
+					references="journal_entry(id)" />
+			</column>
+			<column name="journal_step_detail_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="journal_entry_journal_step_detail_journal_step_detail_id_journal_step_detail_id" 
+					references="journal_step_detail(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on journal_entry_journal_step_detail to ssp</sql>
+		<rollback>
+			<dropTable tableName="journal_entry_journal_step_detail" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
 </databaseChangeLog>
     
