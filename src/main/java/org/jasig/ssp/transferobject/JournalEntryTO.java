@@ -8,10 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.JournalEntry;
-import org.jasig.ssp.model.JournalEntryJournalStepDetail;
-import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
-
-import com.google.common.collect.Lists;
 
 public class JournalEntryTO
 		extends AuditableTO<JournalEntry>
@@ -23,7 +19,7 @@ public class JournalEntryTO
 	private String comment;
 	private UUID personId, journalSourceId, journalTrackId,
 			confidentialityLevel;
-	private List<JournalStepDetailTO> journalStepDetails;
+	private List<JournalEntryJournalStepDetailTO> journalEntryJournalStepDetails;
 
 	public JournalEntryTO() {
 		super();
@@ -49,14 +45,10 @@ public class JournalEntryTO
 		confidentialityLevel = (journalEntry.getConfidentialityLevel() == null) ? null
 				: journalEntry.getConfidentialityLevel().getId();
 
-		journalStepDetails = Lists.newArrayList();
 		if ((journalEntry.getJournalEntryJournalStepDetails() != null)
-				&& !journalEntry.getJournalEntryJournalStepDetails().isEmpty()) {
-			for (JournalEntryJournalStepDetail stepDetail : journalEntry
-					.getJournalEntryJournalStepDetails()) {
-				journalStepDetails.add(new JournalStepDetailTO(stepDetail
-						.getJournalStepDetail()));
-			}
+				&& (journalEntry.getJournalEntryJournalStepDetails().size() > 0)) {
+			journalEntryJournalStepDetails = JournalEntryJournalStepDetailTO
+					.toTOList(journalEntry.getJournalEntryJournalStepDetails());
 		}
 
 	}
@@ -120,13 +112,13 @@ public class JournalEntryTO
 		this.confidentialityLevel = confidentialityLevel;
 	}
 
-	public List<JournalStepDetailTO> getJournalStepDetails() {
-		return journalStepDetails;
+	public List<JournalEntryJournalStepDetailTO> getJournalEntryJournalStepDetails() {
+		return journalEntryJournalStepDetails;
 	}
 
-	public void setJournalStepDetails(
-			final List<JournalStepDetailTO> journalStepDetails) {
-		this.journalStepDetails = journalStepDetails;
+	public void setJournalEntryJournalStepDetails(
+			final List<JournalEntryJournalStepDetailTO> journalEntryJournalStepDetails) {
+		this.journalEntryJournalStepDetails = journalEntryJournalStepDetails;
 	}
 
 }

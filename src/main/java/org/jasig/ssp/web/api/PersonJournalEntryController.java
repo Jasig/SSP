@@ -1,6 +1,6 @@
 package org.jasig.ssp.web.api;
 
-import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.transferobject.JournalEntryTO;
@@ -27,9 +27,12 @@ public class PersonJournalEntryController extends
 	@Autowired
 	private transient JournalEntryService service;
 
+	@Autowired
+	private transient JournalEntryTOFactory factory;
+
 	@Override
-	protected TOFactory<JournalEntryTO, JournalEntry> getFactory() {
-		return null;
+	protected JournalEntryTOFactory getFactory() {
+		return factory;
 	}
 
 	@Override
