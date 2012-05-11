@@ -1,17 +1,17 @@
-Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
+Ext.define('Ssp.controller.admin.journal.DisplayStepsAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'challengesStore',
+    	store: 'journalStepsStore',
     	formUtils: 'formRendererUtils',
-    	model: 'currentChallenge'
+    	model: 'currentJournalStep'
     },
     config: {
     	containerToLoadInto: 'adminforms',
-    	formToDisplay: 'editchallenge'
+    	formToDisplay: 'editjournalstep'
     },
-    control: {
+    control: {  	
     	'editButton': {
 			click: 'onEditClick'
 		},
@@ -24,12 +24,13 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
 			click: 'onDeleteClick'
 		}    	
     },       
+    
 	init: function() {
 		this.getView().reconfigure(this.store);
 		this.store.load();
 		
 		return this.callParent(arguments);
-    }, 
+    },    
     
 	onEditClick: function(button) {
 		var grid, record;
@@ -45,7 +46,7 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
 	},
 	
 	onAddClick: function(button){
-		var model = new Ssp.model.reference.Challenge();
+		var model = new Ssp.model.reference.JournalStep();
 		this.model.data = model.data;
 		this.displayEditor();
 	},

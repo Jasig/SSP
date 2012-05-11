@@ -1,10 +1,10 @@
-Ext.define('Ssp.view.admin.forms.crg.DisplayChallengeReferralsAdmin', {
+Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
 	extend: 'Ext.tree.Panel',
 	alias : 'widget.displaychallengereferralsadmin',
 	title: 'Challenge Referral Associations',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.DisplayChallengeReferralsAdminViewController',
+    controller: 'Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewController',
     inject: {
         store: 'treeStore'
     },
@@ -35,27 +35,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengeReferralsAdmin', {
      		               items: [{
      		                         xtype: 'label',
      		                         text: 'Associate by dragging a Referral to a folder'
-     		                       }
-     		                       
-     		                       /*{
-     		                   text: 'Add',
-     		                   iconCls: 'icon-add',
-     		                   xtype: 'button',
-     		                   action: 'add',
-     		                   itemId: 'addButton'
-     		               }, '-', {
-     		                   text: 'Edit',
-     		                   iconCls: 'icon-edit',
-     		                   xtype: 'button',
-     		                   action: 'edit',
-     		                   itemId: 'editButton'
-     		               }, '-' ,{
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   xtype: 'button',
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
-     		               }*/]  
+     		                       }]  
      		           }]
      		       	
     	});

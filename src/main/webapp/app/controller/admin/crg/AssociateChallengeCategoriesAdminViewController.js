@@ -1,18 +1,14 @@
-Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewController', {
+Ext.define('Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
-    	model: 'currentChallengeCategory',
     	store: 'challengeCategoriesStore',
     	treeStore: 'treeStore',
     	treeUtils: 'treeRendererUtils'
     },
-    config: {
-    	containerToLoadInto: 'adminforms',
-    	formToDisplay: 'editchallengecategory'
-    },
+
     control: {
     	view: {
     		itemexpand: 'onItemExpand'
@@ -23,20 +19,7 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
             listeners: {
                 beforedrop: 'onBeforeDrop'
             }
-        }
-    	/*
-    	
-    	'editButton': {
-			click: 'onEditClick'
-		},
-		
-		'addButton': {
-			click: 'onAddClick'
-		},
-
-		'deleteButton': {
-			click: 'onDeleteClick'
-		}*/    	
+        }    	
     },
     
 	init: function() {
@@ -52,14 +35,15 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
 		    	        expanded: true,
 		    	        children: nodes
 		    	});
-	    	}else{
-		    	me.treeStore.setRootNode({
-	    	        text: 'root',
-	    	        expanded: true,
-	    	        children: []
-	    	    });
 	    	}		
 		};
+		
+		// clear the current items in the tree
+    	me.treeStore.setRootNode({
+	        text: 'root',
+	        expanded: true,
+	        children: []
+	    });
 		
 		this.apiProperties.makeRequest({
 			url: this.apiProperties.createUrl('reference/challengeCategory/'),
@@ -103,66 +87,4 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
         
         return 1;
     }
-    
-    /*
-	onEditClick: function(button) {
-		var me = this;
-		var record, id;
-		var url = this.store.getProxy().url;
-		record = this.getView().getSelectionModel().getSelection()[0];
-		if (record) 
-        {		
-			id = record.get('id');
-			
-			this.apiProperties.makeRequest({
-				url: url+id,
-				method: 'GET',
-				jsonData: '',
-				successFunc: function(response, view){
-					var r;
-					r = Ext.decode(response.responseText);
-					me.model.populateFromGenericObject(r);
-			    	me.displayEditor();
-				} 
-			});
-			
-        }else{
-     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
-        }
-	},
-	
-	onAddClick: function(button){
-		var model = new Ssp.model.reference.ChallengeCategory({id:""})
-		this.model.data = model.data;
-		this.displayEditor();
-	},
-	
-	onDeleteClick: function(button){
-	   var treeStore, record, id, url;
-	   url = this.store.getProxy().url;
-	   treeStore = this.treeStore;
-       record = this.getView().getSelectionModel().getSelection()[0];
-       if (record) 
-       {
-    	   id=record.get('id');
-		   this.apiProperties.makeRequest({
-				url: url+id,
-				method: 'DELETE',
-				jsonData: '',
-				successFunc: function(response, view){
-					var r = Ext.decode(response.responseText);
-					var node = treeStore.getNodeById(id);
-					node.remove( true );
-				} 
-		   });
-
-       }else{
-    	   Ext.Msg.alert('SSP Error', 'Please select an item to delete.'); 
-       }
-	},
-	
-	displayEditor: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-	}
-	*/	
 });
