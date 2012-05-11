@@ -1463,7 +1463,7 @@
 			<column name="value" type="text">
 				<constraints nullable="true" />
 			</column>
-			<column name="valueValidation" type="text">
+			<column name="value_validation" type="text">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
