@@ -43,12 +43,15 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	private transient EarlyAlertOutcomeController controller;
 
 	private static final UUID EARLYALERT_OUTCOME_ID = UUID
-			.fromString("b2d10fca-5056-a51a-8088-8103ac163f13");
+			.fromString("D944D62E-0974-4058-85C7-E6B3D6159D73");
 
-	private static final String EARLYALERT_OUTCOME_NAME = "Appointment Scheduled";
+	private static final String EARLYALERT_OUTCOME_NAME = "Duplicate Early Alert Notice";
 
 	private static final UUID EARLY_ALERT_OUTCOME_DELETED_ID = UUID
 			.fromString("077A1D57-6C85-42F7-922B-7642BE9F70EB");
+
+	private static final UUID EARLYALERT_OUTCOME_FIRST_ID = UUID
+			.fromString("12A58804-45DC-40F2-B2F5-D7E4403ACEE1");
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -219,16 +222,18 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 
 		final Iterator<EarlyAlertOutcomeTO> iter = list.iterator();
 
-		EarlyAlertOutcomeTO veteranStatus = iter.next();
-		assertEquals("Name should have been " + EARLYALERT_OUTCOME_NAME,
-				EARLYALERT_OUTCOME_NAME, veteranStatus.getName());
-		assertFalse("ModifiedBy id should not have been empty.", veteranStatus
-				.getModifiedById().equals(UUID.randomUUID()));
+		EarlyAlertOutcomeTO earlyAlertOutcome = iter.next();
+		assertEquals("First ID did not match.",
+				EARLYALERT_OUTCOME_FIRST_ID, earlyAlertOutcome.getId());
+		assertFalse("ModifiedBy id should not have been empty.",
+				earlyAlertOutcome
+						.getModifiedById().equals(UUID.randomUUID()));
 
-		veteranStatus = iter.next();
+		earlyAlertOutcome = iter.next();
 		assertTrue("Description should have been longer than 0 characters.",
-				veteranStatus.getDescription().length() > 0);
-		assertFalse("CreatedBy id should not have been empty.", veteranStatus
-				.getCreatedById().equals(UUID.randomUUID()));
+				earlyAlertOutcome.getDescription().length() > 0);
+		assertFalse("CreatedBy id should not have been empty.",
+				earlyAlertOutcome
+						.getCreatedById().equals(UUID.randomUUID()));
 	}
 }
