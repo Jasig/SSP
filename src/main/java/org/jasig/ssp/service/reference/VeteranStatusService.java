@@ -23,7 +23,7 @@ public interface VeteranStatusService extends
 	VeteranStatus get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	VeteranStatus create(VeteranStatus obj);
+	VeteranStatus create(VeteranStatus obj) throws ObjectNotFoundException;
 
 	@Override
 	VeteranStatus save(VeteranStatus obj) throws ObjectNotFoundException;

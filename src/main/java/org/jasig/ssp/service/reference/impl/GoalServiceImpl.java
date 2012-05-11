@@ -13,10 +13,6 @@ public class GoalServiceImpl extends
 		AbstractReferenceService<Goal>
 		implements GoalService {
 
-	public GoalServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private GoalDao dao;
 

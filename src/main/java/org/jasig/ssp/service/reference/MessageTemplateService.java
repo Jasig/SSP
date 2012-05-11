@@ -18,7 +18,8 @@ public interface MessageTemplateService extends
 	public MessageTemplate get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public MessageTemplate create(MessageTemplate obj);
+	public MessageTemplate create(MessageTemplate obj)
+			throws ObjectNotFoundException;
 
 	@Override
 	public MessageTemplate save(MessageTemplate obj)
@@ -26,5 +27,4 @@ public interface MessageTemplateService extends
 
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException;
-
 }

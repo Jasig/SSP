@@ -43,7 +43,7 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	}
 
 	@Override
-	public T create(T obj) {
+	public T create(T obj) throws ObjectNotFoundException {
 		return getDao().save(obj);
 	}
 

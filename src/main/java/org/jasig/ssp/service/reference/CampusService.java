@@ -23,7 +23,7 @@ public interface CampusService extends
 	Campus get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	Campus create(Campus obj);
+	Campus create(Campus obj) throws ObjectNotFoundException;
 
 	@Override
 	Campus save(Campus obj) throws ObjectNotFoundException;

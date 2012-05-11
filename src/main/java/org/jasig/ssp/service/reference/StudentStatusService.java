@@ -8,22 +8,24 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * StudentStatus service
+ */
 public interface StudentStatusService extends
 		AuditableCrudService<StudentStatus> {
 
 	@Override
-	public PagingWrapper<StudentStatus> getAll(SortingAndPaging sAndP);
+	PagingWrapper<StudentStatus> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public StudentStatus get(UUID id) throws ObjectNotFoundException;
+	StudentStatus get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public StudentStatus create(StudentStatus obj);
+	StudentStatus create(StudentStatus obj) throws ObjectNotFoundException;
 
 	@Override
-	public StudentStatus save(StudentStatus obj) throws ObjectNotFoundException;
+	StudentStatus save(StudentStatus obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

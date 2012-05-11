@@ -13,10 +13,6 @@ public class SelfHelpGuideGroupServiceImpl extends
 		AbstractReferenceService<SelfHelpGuideGroup>
 		implements SelfHelpGuideGroupService {
 
-	public SelfHelpGuideGroupServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private SelfHelpGuideGroupDao dao;
 

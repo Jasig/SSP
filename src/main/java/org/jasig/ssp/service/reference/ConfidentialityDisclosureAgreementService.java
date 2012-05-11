@@ -12,23 +12,23 @@ public interface ConfidentialityDisclosureAgreementService extends
 		AuditableCrudService<ConfidentialityDisclosureAgreement> {
 
 	@Override
-	public PagingWrapper<ConfidentialityDisclosureAgreement> getAll(
+	PagingWrapper<ConfidentialityDisclosureAgreement> getAll(
 			SortingAndPaging sAndP);
 
 	@Override
-	public ConfidentialityDisclosureAgreement get(UUID id)
+	ConfidentialityDisclosureAgreement get(UUID id)
 			throws ObjectNotFoundException;
 
 	@Override
-	public ConfidentialityDisclosureAgreement create(
-			ConfidentialityDisclosureAgreement obj);
-
-	@Override
-	public ConfidentialityDisclosureAgreement save(
+	ConfidentialityDisclosureAgreement create(
 			ConfidentialityDisclosureAgreement obj)
 			throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
+	ConfidentialityDisclosureAgreement save(
+			ConfidentialityDisclosureAgreement obj)
+			throws ObjectNotFoundException;
 
+	@Override
+	void delete(UUID id) throws ObjectNotFoundException;
 }

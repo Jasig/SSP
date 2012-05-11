@@ -13,10 +13,6 @@ public class FundingSourceServiceImpl extends
 		AbstractReferenceService<FundingSource>
 		implements FundingSourceService {
 
-	public FundingSourceServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private FundingSourceDao dao;
 

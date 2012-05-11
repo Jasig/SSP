@@ -16,10 +16,6 @@ public class ChallengeCategoryServiceImpl extends
 	@Autowired
 	transient private ChallengeCategoryDao dao;
 
-	public ChallengeCategoryServiceImpl() {
-		super();
-	}
-
 	protected void setDao(final ChallengeCategoryDao dao) {
 		this.dao = dao;
 	}

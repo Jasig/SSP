@@ -13,10 +13,6 @@ public class ConfidentialityLevelServiceImpl extends
 		AbstractReferenceService<ConfidentialityLevel>
 		implements ConfidentialityLevelService {
 
-	public ConfidentialityLevelServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private ConfidentialityLevelDao dao;
 

@@ -11,18 +11,17 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 public interface GoalService extends AuditableCrudService<Goal> {
 
 	@Override
-	public PagingWrapper<Goal> getAll(SortingAndPaging sAndP);
+	PagingWrapper<Goal> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public Goal get(UUID id) throws ObjectNotFoundException;
+	Goal get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public Goal create(Goal obj);
+	Goal create(Goal obj) throws ObjectNotFoundException;
 
 	@Override
-	public Goal save(Goal obj) throws ObjectNotFoundException;
+	Goal save(Goal obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }
