@@ -33,21 +33,30 @@ Ext.require([
     'Ssp.view.tools.EarlyAlert',
     'Ssp.view.admin.AdminForms',
     'Ssp.view.admin.forms.AbstractReferenceAdmin',
-    
-    // COUNSELING REFERENCE GUIDE VIEWS
-    'Ssp.view.admin.forms.ChallengeAdmin',
-    'Ssp.view.admin.forms.ChallengeReferralAdmin',
     'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
     'Ssp.view.admin.forms.ConfidentialityLevelAdmin',
     'Ssp.view.admin.forms.EarlyAlertReferralAdmin',
+    
+    // COUNSELING REFERENCE GUIDE ADMIN VIEWS
+    'Ssp.view.admin.forms.crg.ChallengeAdmin',
+    'Ssp.view.admin.forms.crg.ChallengeReferralAdmin',
+    'Ssp.view.admin.forms.crg.AssociateChallengeCategoriesAdmin',
+    'Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin',
     'Ssp.view.admin.forms.crg.DisplayChallengesAdmin',
-    'Ssp.view.admin.forms.crg.EditChallenge',
-    'Ssp.view.admin.forms.crg.DisplayChallengeCategoriesAdmin',
-    'Ssp.view.admin.forms.crg.EditChallengeCategory',
-    'Ssp.view.admin.forms.crg.DisplayChallengeReferralsAdmin',
     'Ssp.view.admin.forms.crg.DisplayReferralsAdmin',
+    'Ssp.view.admin.forms.crg.EditChallenge',
     'Ssp.view.admin.forms.crg.EditReferral',
 
+    // JOURNAL ADMIN VIEWS
+    'Ssp.view.admin.forms.journal.JournalStepAdmin',
+    'Ssp.view.admin.forms.journal.JournalStepDetailAdmin',
+    'Ssp.view.admin.forms.journal.AssociateTrackStepsAdmin',
+    'Ssp.view.admin.forms.journal.AssociateStepDetailsAdmin',
+    'Ssp.view.admin.forms.journal.DisplayDetailsAdmin',
+    'Ssp.view.admin.forms.journal.DisplayStepsAdmin',
+    'Ssp.view.admin.forms.journal.EditStep',
+    'Ssp.view.admin.forms.journal.EditStepDetail',
+    
 	'Ssp.model.Person',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
@@ -58,6 +67,9 @@ Ext.require([
     'Ssp.model.reference.Challenge',
     'Ssp.model.reference.ChallengeCategory',
     'Ssp.model.reference.ChallengeReferral',
+    'Ssp.model.reference.JournalTrack',
+    'Ssp.model.reference.JournalStep',
+    'Ssp.model.reference.JournalStepDetail',
 	'Ssp.model.reference.ConfidentialityLevel',
 	'Ssp.model.reference.ConfidentialityDisclosureAgreement',
 	'Ssp.mixin.ApiProperties',
@@ -84,6 +96,7 @@ Ext.require([
     'Ssp.store.reference.FundingSources',
     'Ssp.store.reference.Genders',
     'Ssp.store.reference.JournalSources',
+    'Ssp.store.reference.JournalStepDetails',
     'Ssp.store.reference.JournalSteps',
     'Ssp.store.reference.JournalTracks',
     'Ssp.store.reference.MaritalStatuses',
@@ -151,15 +164,21 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         },
-        currentChallengeCategory: {
-	        fn: function(){
-	            return new Ssp.model.reference.ChallengeCategory({id:""});
-	    	},
-	        singleton: true
-        },
         currentChallengeReferral:{
 	        fn: function(){
 	            return new Ssp.model.reference.ChallengeReferral({id:""});
+	    	},
+	        singleton: true
+        },
+        currentJournalStep:{
+	        fn: function(){
+	            return new Ssp.model.reference.JournalStep({id:""});
+	    	},
+	        singleton: true
+        },
+        currentJournalStepDetail:{
+	        fn: function(){
+	            return new Ssp.model.reference.JournalStepDetail({id:""});
 	    	},
 	        singleton: true
         },
@@ -199,6 +218,7 @@ Ext.onReady(function(){
     	gendersStore: 'Ssp.store.reference.Genders',
         journalSourcesStore: 'Ssp.store.reference.JournalSources',
         journalStepsStore: 'Ssp.store.reference.JournalSteps',
+        journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
         journalTracksStore: 'Ssp.store.reference.JournalTracks',
     	maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
 	    statesStore: 'Ssp.store.reference.States',

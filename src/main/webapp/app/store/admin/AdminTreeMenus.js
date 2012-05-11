@@ -141,32 +141,32 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     							form: '',
     							expanded: false,
     							children: [{
-									text: 'Early Alert Outcomes',
-									title: 'Early Alert Outcomes',
+									text: 'Outcomes',
+									title: 'Outcomes',
 									store: 'earlyAlertOutcomes',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 								},{
-									text: 'Early Alert Outreaches',
-									title: 'Early Alert Outreaches',
+									text: 'Outreaches',
+									title: 'Outreaches',
 									store: 'earlyAlertOutreaches',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 								},{
-									text: 'Early Alert Reasons',
-									title: 'Early Alert Reasons',
+									text: 'Reasons',
+									title: 'Reasons',
 									store: 'earlyAlertReasons',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 								},{
-									text: 'Early Alert Referrals',
-									title: 'Early Alert Referrals',
+									text: 'Referrals',
+									title: 'Referrals',
 									store: 'earlyAlertReferrals',
 							        form: 'EarlyAlertReferralAdmin',
 									leaf: true
 								},{
-									text: 'Early Alert Suggestions',
-									title: 'Early Alert Suggestions',
+									text: 'Suggestions',
+									title: 'Suggestions',
 									store: 'earlyAlertSuggestions',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
@@ -177,21 +177,27 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     							form: '',
     							expanded: false,
     							children: [{
-									text: 'Journal Sources',
-									title: 'Journal Sources',
+									text: 'Sources',
+									title: 'Sources',
 									store: 'journalSources',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 								},{
-									text: 'Journal Steps',
-									title: 'Journal Steps',
-									store: 'journalSteps',
-							        form: 'AbstractReferenceAdmin',
+									text: 'Details',
+									title: 'Details',
+									store: '',
+							        form: 'JournalStepDetailAdmin',
 									leaf: true
 								},{
-									text: 'Journal Tracks',
-									title: 'Journal Tracks',
-									store: 'journalTracks',
+									text: 'Steps',
+									title: 'Steps',
+									store: '',
+							        form: 'JournalStepAdmin',
+									leaf: true
+								},{
+									text: 'Tracks',
+									title: 'Tracks',
+									store: '',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 								}]

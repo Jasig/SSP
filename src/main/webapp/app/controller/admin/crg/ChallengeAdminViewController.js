@@ -1,4 +1,4 @@
-Ext.define('Ssp.controller.admin.ChallengeAdminViewController', {
+Ext.define('Ssp.controller.admin.crg.ChallengeAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
