@@ -13,7 +13,6 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     },
     
 	init: function() {
-		console.log('ConfidentialityDisclosureAgreementAdminViewController->init');
 		this.confidentialityDisclosureAgreementsStore.load({scope: this, callback: this.loadConfidentialityDisclosureAgreementResult});
 		
 		return this.callParent(arguments);
@@ -26,8 +25,6 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     },
     
 	save: function(button){
-		console.log('ConfidentialityDisclosureAgreementAdminViewController->save');
-
 		var record = this.getView().getRecord();
 		var id = record.get('id');
 		var jsonData = record.data;
@@ -40,9 +37,6 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
 			success: function(response, view) {
 				var r = Ext.decode(response.responseText);
 				record.commit();
-
-				console.log('ConfidentialityDisclosureAgreementAdminViewController->save->success');
-				console.log(r);
 			},
 			failure: this.apiProperties.handleError
 		}, this);

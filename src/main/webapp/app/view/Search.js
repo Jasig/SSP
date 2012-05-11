@@ -7,7 +7,7 @@ Ext.define('Ssp.view.Search', {
     inject: {
     	apiProperties: 'apiProperties',
     	columnRendererUtils: 'columnRendererUtils',
-        studentsStore: 'studentsStore'
+        store: 'studentsStore'
     },
 
     initComponent: function(){
@@ -16,7 +16,7 @@ Ext.define('Ssp.view.Search', {
     				title: 'Students',
     	            collapsible: false,
     	            collapseDirection: 'left',
-    	            store: this.studentsStore,
+    	            store: this.store,
     	        	width: '100%',
     	        	height: '100%',
 		    	    columns: [
@@ -26,7 +26,7 @@ Ext.define('Ssp.view.Search', {
     	          
 		    	    dockedItems: [{
 		       			xtype: 'pagingtoolbar',
-		       		    store: this.studentsStore,
+		       		    store: this.store,
 		       			dock: 'bottom',
 		       		    displayInfo: true,
 		       		    pageSize: this.apiProperties.getPagingSize()

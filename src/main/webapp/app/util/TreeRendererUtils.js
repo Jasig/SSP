@@ -5,25 +5,35 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		return this.callParent(arguments);
     },
 
-    createNodes: function(records){
+    /*
+     * @records - Array of records in json format.
+     * @isLeaf - Determines if the returned nodes array contains branch or leaf elements
+     *             The default is to return branch elements.  
+     */
+    createNodes: function(records, isLeaf){
     	var nodes = [];
     	Ext.each(records, function(name, index) {
     		nodes.push({
     	    	        text: records[index].get('name'),
     	    	        id: records[index].get('id'),
-    	    	        leaf: false
+    	    	        leaf: isLeaf || false
     	    	      });
     	});
     	return nodes;
     },
     
-    createNodesFromJson: function(records){
+    /*
+     * @records - Array of records in json format.
+     * @isLeaf - Determines if the returned nodes array contains branch or leaf elements
+     *             The default is to return branch elements.  
+     */
+    createNodesFromJson: function(records, isLeaf){
     	var nodes = [];
     	Ext.each(records, function(name, index) {
     		nodes.push({
     	    	        text: records[index].name,
     	    	        id: records[index].id,
-    	    	        leaf: false
+    	    	        leaf: isLeaf || false
     	    	      });
     	});
     	return nodes;

@@ -1,4 +1,4 @@
-Ext.define('Ssp.controller.tool.ActionPlanToolViewController', {
+Ext.define('Ssp.controller.tool.actionplan.ActionPlanToolViewController', {
     extend: 'Deft.mvc.ViewController',	
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {

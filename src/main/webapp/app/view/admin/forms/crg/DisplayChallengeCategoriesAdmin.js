@@ -6,14 +6,14 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengeCategoriesAdmin', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewController',
     inject: {
-        treeStore: 'treeStore'
+        store: 'treeStore'
     },
 	height: '100%',
 	width: '100%',
     initComponent: function(){
     	Ext.apply(this,
     			{
-    			 store: this.treeStore,
+    			 store: this.store,
     			 useArrows: true,
     			 rootVisible: false,
 			     viewConfig: {

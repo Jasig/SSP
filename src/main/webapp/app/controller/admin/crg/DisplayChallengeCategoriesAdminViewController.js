@@ -42,7 +42,6 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengeCategoriesAdminViewControll
 	init: function() {
 		var me = this;
 		var successFunc = function(response,view){
-	    	console.log(response);
 	    	var r = Ext.decode(response.responseText);
 	    	var records = r.rows;
 	    	if (records.length > 0)

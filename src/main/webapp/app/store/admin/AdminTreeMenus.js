@@ -2,7 +2,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 	extend: 'Ext.data.TreeStore',
 	autoLoad: false,
     constructor: function(){
-    	var items= {
+    	var items = {
     	    	text: 'Administrative Tools',
     	    	title: 'Administrative Tools',
     	    	form: '',
@@ -12,7 +12,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     							text: 'Student Intake',
     							title: 'Student Intake',
     							form: '',
-    							expanded: true,
+    							expanded: false,
     							children: [
     									{
     										text: 'Child Care Arrangements',

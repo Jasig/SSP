@@ -1,10 +1,9 @@
 Ext.define('Ssp.view.tools.ActionPlan', {
 	extend: 'Ext.container.Container',
 	alias : 'widget.actionplan',
-	id: 'ActionPlan',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.ActionPlanToolViewController',
+    controller: 'Ssp.controller.tool.actionplan.ActionPlanToolViewController',
     width: '100%',
 	height: '100%',   
 	

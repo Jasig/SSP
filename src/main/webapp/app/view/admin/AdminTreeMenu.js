@@ -6,12 +6,12 @@ Ext.define('Ssp.view.admin.AdminTreeMenu', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.AdminViewController',
     inject: {
-    	adminTreeMenusStore: 'adminTreeMenusStore'
+    	store: 'adminTreeMenusStore'
     },    
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
-					store: this.adminTreeMenusStore,
+					store: this.store,
 					fields: ['title','form','text'],	
 				});
 		

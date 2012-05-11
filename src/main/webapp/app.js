@@ -20,6 +20,7 @@ Ext.require([
     'Ssp.view.tools.actionplan.AddTask',
     'Ssp.view.tools.actionplan.AddTaskForm',
     'Ssp.view.tools.actionplan.ActionPlanTasks',
+    'Ssp.view.tools.actionplan.TaskTree',
     'Ssp.view.tools.StudentIntake',
     'Ssp.view.tools.studentintake.Challenges',
     'Ssp.view.tools.studentintake.Demographics',

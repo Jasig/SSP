@@ -5,14 +5,14 @@ Ext.define('Ssp.view.ToolsMenu', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.ToolsViewController',
     inject: {
-        toolsStore: 'toolsStore'
+        store: 'toolsStore'
     },
     initComponent: function(){
     	Ext.apply(this,
     			   {
 		    		width: '100%',
 		    		height: '100%',
-    				store: this.toolsStore,
+    				store: this.store,
     				columns:[{
     				           header: "Assigned Tools", 
     				           dataIndex: "name", 

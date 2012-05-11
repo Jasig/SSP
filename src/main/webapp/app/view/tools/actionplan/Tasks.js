@@ -4,7 +4,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	columnRendererUtils: 'columnRendererUtils',
-        tasksStore: 'tasksStore',
+        store: 'tasksStore',
     },
 	width: '100%',
     height: '100%',
@@ -14,7 +14,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     	
     	Ext.apply(this,
     			{
-    	    		store: this.tasksStore,    		
+    	    		store: this.store,    		
     	    		selModel: sm,
     	    		features: [{
 		    	        id: 'group',

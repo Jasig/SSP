@@ -8,39 +8,6 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
     inject: {
         apiProperties: 'apiProperties'
     },
-    /*
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-	    	      height: '100%',
-	    		  width: '100%',
-	    		  autoScroll: true,
-    		      items: [{
-				        fieldLabel: 'Name',
-				        name: 'name'
-				    },{
-    		          xtype: 'htmleditor',
-    		          enableColors: false,
-    		          enableAlignments: false,
-    		          height: '100%',
-    		          width: '100%',
-    		          name: 'description'
-    		      }],
-    		        
-    		           dockedItems: [
-     		              {
-     		               xtype: 'toolbar',
-     		               items: [{
-     		                   text: 'Save',
-     		                   xtype: 'button',
-     		                   action: 'save',
-     		                   itemId: 'saveButton'
-     		               }]
-     		           }]  	
-    	});
-    	return this.callParent(arguments);
-    }
-    */
 
 	initComponent: function() {	
 		Ext.apply(this, 

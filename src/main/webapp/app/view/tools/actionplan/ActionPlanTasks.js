@@ -4,7 +4,7 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
 	id: 'ActionPlanTasks',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.ActionPlanTasksViewController',
+    controller: 'Ssp.controller.tool.actionplan.ActionPlanTasksViewController',
     width: '100%',
 	height: '100%',   
 	

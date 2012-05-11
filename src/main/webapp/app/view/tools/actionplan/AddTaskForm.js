@@ -1,8 +1,9 @@
 Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.addtaskform',
-	id: 'AddTaskForm',
-    mixins: [ 'Deft.mixin.Injectable' ],
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.actionplan.AddTasksFormViewController',
     inject: {
         confidentialityLevelsStore: 'confidentialityLevelsStore'
     },
@@ -56,6 +57,20 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        name: 'dueDate',
 				        allowBlank:false    	
 				    }]
+				    }],
+				    
+				    dockedItems: [{
+				        dock: 'bottom',
+				        xtype: 'toolbar',
+				        items: [{xtype: 'button', 
+				        	     itemId: 'addButton', 
+				        	     text:'Add', 
+				        	     action: 'add' },
+				        	     {
+				            	   xtype: 'button',
+				            	   itemId: 'closeButton',
+				            	   text: 'Finished',
+				            	   action: 'close'}]
 				    }]
 				});
 		

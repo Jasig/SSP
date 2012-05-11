@@ -6,7 +6,7 @@ Ext.define('Ssp.view.tools.StudentIntake', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.StudentIntakeToolViewController',
     inject: {
-        studentsStore: 'studentsStore'
+        store: 'studentsStore'
     },
 	title: 'Student Intake',	
 	width: '100%',
@@ -15,7 +15,7 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
-		    		store: this.studentsStore,
+		    		store: this.store,
 
 				    dockedItems: [{
 				        dock: 'top',

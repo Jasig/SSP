@@ -1,4 +1,4 @@
-Ext.define('Ssp.controller.tool.ActionPlanTasksViewController', {
+Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
@@ -174,7 +174,7 @@ Ext.define('Ssp.controller.tool.ActionPlanTasksViewController', {
     },
     
     onAddTasksClick: function(button) {
-		var comp = this.formUtils.loadDisplay('actionplan','addtask', true, {});
+		var comp = this.formUtils.loadDisplay('tools','addtask', true, {});
     },
     
     onCloseTasksClick: function(button) {
