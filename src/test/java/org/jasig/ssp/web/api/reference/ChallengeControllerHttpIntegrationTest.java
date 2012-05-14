@@ -133,7 +133,7 @@ public class ChallengeControllerHttpIntegrationTest
 		assertNotNull("Response was not handled.", mav);
 
 		@SuppressWarnings("unchecked")
-		PagingTO<ChallengeTO, Challenge> result = (PagingTO<ChallengeTO, Challenge>) getFirstModelObject(mav);
+		PagingTO<ChallengeTO, Challenge> result = (PagingTO<ChallengeTO, Challenge>) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",
@@ -201,7 +201,7 @@ public class ChallengeControllerHttpIntegrationTest
 		ModelAndView mav = handlerAdapter.handle(request, response, handler);
 		assertNotNull("Response was not handled.", mav);
 
-		ChallengeTO result = (ChallengeTO) getFirstModelObject(mav);
+		ChallengeTO result = (ChallengeTO) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",
@@ -248,7 +248,7 @@ public class ChallengeControllerHttpIntegrationTest
 		ModelAndView mav = handlerAdapter.handle(request, response, handler);
 		assertNotNull("Response was not handled.", mav);
 
-		ServiceResponse result = (ServiceResponse) getFirstModelObject(mav);
+		ServiceResponse result = (ServiceResponse) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",

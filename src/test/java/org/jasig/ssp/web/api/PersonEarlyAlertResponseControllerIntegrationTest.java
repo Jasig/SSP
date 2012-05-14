@@ -106,7 +106,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 		final Collection<EarlyAlertResponseTO> list = controller.getAll(
 				PERSON_ID,
 				ObjectStatus.ACTIVE,
-				null, null, null, null);
+				null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 	}

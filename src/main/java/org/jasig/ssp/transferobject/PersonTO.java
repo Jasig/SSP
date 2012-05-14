@@ -5,10 +5,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.Person;
 
 import com.google.common.collect.Lists;
 
+/**
+ * Person transfer object
+ */
 public class PersonTO
 		extends AuditableTO<Person>
 		implements TransferObject<Person> {
@@ -24,10 +29,19 @@ public class PersonTO
 	private boolean enabled;
 	private UUID coachId;
 
+	/**
+	 * Empty constructor
+	 */
 	public PersonTO() {
 		super();
 	}
 
+	/**
+	 * Construct a transfer object from a related model instance
+	 * 
+	 * @param model
+	 *            Initialize instance from the data in this model
+	 */
 	public PersonTO(final Person model) {
 		super();
 		from(model);
@@ -59,8 +73,15 @@ public class PersonTO
 		coachId = model.getCoach() == null ? null : model.getCoach().getId();
 	}
 
+	/**
+	 * Convert a collection of models to a List of equivalent transfer objects.
+	 * 
+	 * @param models
+	 *            A collection of models to convert to transfer objects
+	 * @return List of equivalent transfer objects
+	 */
 	public static List<PersonTO> toTOList(
-			final Collection<Person> models) {
+			@NotNull final Collection<Person> models) {
 		final List<PersonTO> tos = Lists.newArrayList();
 		for (Person model : models) {
 			tos.add(new PersonTO(model)); // NOPMD by jon.adams on 5/13/12
@@ -206,10 +227,22 @@ public class PersonTO
 		this.photoUrl = photoUrl;
 	}
 
+	/**
+	 * Gets the SchoolID (a.k.a. Student ID given by the school)
+	 * 
+	 * @return the SchoolID
+	 */
 	public String getSchoolId() {
 		return schoolId;
 	}
 
+	/**
+	 * Sets the SchoolID (a.k.a. Student ID given by the school)
+	 * 
+	 * @param schoolId
+	 *            the SchoolID (a.k.a. Student ID given by the school); maximum
+	 *            length of 50 characters
+	 */
 	public void setSchoolId(final String schoolId) {
 		this.schoolId = schoolId;
 	}

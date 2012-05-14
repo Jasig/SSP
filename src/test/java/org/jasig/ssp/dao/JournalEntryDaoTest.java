@@ -53,7 +53,7 @@ public class JournalEntryDaoTest {
 	@Autowired
 	protected transient SecurityServiceInTestEnvironment securityService;
 
-	protected Person ken;
+	protected transient Person ken;
 
 	@Before
 	public void setUp() throws ObjectNotFoundException {
@@ -68,7 +68,7 @@ public class JournalEntryDaoTest {
 	@Test
 	public void getAllForPersonId() {
 		assertList(dao.getAllForPersonId(ken.getId(), new SortingAndPaging(
-				ObjectStatus.ACTIVE)));
+				ObjectStatus.ACTIVE)).getRows());
 	}
 
 	protected void assertList(final Collection<JournalEntry> objects) {

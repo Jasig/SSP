@@ -49,6 +49,8 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	private static final UUID PERSON_ID = UUID
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
 
+	private static final String PERSON_STUDENTID = "student0";
+
 	private static final UUID EARLY_ALERT_SUGGESTION_ID = UUID
 			.fromString("b2d11141-5056-a51a-80c1-c1250ba820f8");
 
@@ -100,7 +102,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	public void testControllerAll() throws Exception {
 		final Collection<EarlyAlertTO> list = controller.getAll(PERSON_ID,
 				ObjectStatus.ACTIVE,
-				null, null, null, null);
+				null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 	}
@@ -221,5 +223,54 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		earlyAlertSuggestionIds.add(deletedSuggestion);
 		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 		return obj;
+	}
+
+	/**
+	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
+	 * action.
+	 * 
+	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
+	 */
+	@Test
+	public void testControllerCreateWithStudentId() throws Exception {
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
+				obj);
+		assertNotNull("Saved instance should not have been null.", saved);
+
+		final UUID savedId = saved.getId();
+		assertNotNull("Saved instance identifier should not have been null.",
+				savedId);
+
+		assertEquals("Saved instance Person ID values did not match.",
+				PERSON_ID,
+				saved.getPersonId());
+
+		sessionFactory.getCurrentSession().flush();
+
+		final ServiceResponse response = controller.delete(savedId, PERSON_ID);
+
+		assertNotNull("Deletion response should not have been null.",
+				response);
+		assertTrue("Deletion response did not return success.",
+				response.isSuccess());
+	}
+
+	/**
+	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
+	 * action.
+	 * 
+	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
+	 */
+	@Test(expected = ObjectNotFoundException.class)
+	public void testControllerCreateWithInvalidStudentId() throws Exception {
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		final EarlyAlertTO saved = controller.create("invalid id",
+				obj);
+		assertNull(
+				"Invalid StudentID should have thrown an ObjectNotFoundException.",
+				saved);
 	}
 }

@@ -9,13 +9,17 @@ import java.util.UUID;
 import org.jasig.ssp.model.JournalEntryJournalStepDetail;
 import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
 
+/**
+ * JournalEntryJournalStepDetail transfer object
+ */
 public class JournalEntryJournalStepDetailTO extends
 		AuditableTO<JournalEntryJournalStepDetail> implements
 		TransferObject<JournalEntryJournalStepDetail>, Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2753609690043435376L;
 
 	private UUID journalEntryId;
+
 	private JournalStepDetailTO journalStepDetail;
 
 	public JournalEntryJournalStepDetailTO() {
@@ -32,9 +36,9 @@ public class JournalEntryJournalStepDetailTO extends
 	public final void from(final JournalEntryJournalStepDetail model) {
 		super.from(model);
 
-		journalEntryId = (model.getJournalEntry() == null) ? null : model
+		journalEntryId = model.getJournalEntry() == null ? null : model
 				.getJournalEntry().getId();
-		journalStepDetail = (model.getJournalStepDetail() == null) ? null
+		journalStepDetail = model.getJournalStepDetail() == null ? null
 				: new JournalStepDetailTO(model.getJournalStepDetail());
 	}
 
@@ -43,9 +47,10 @@ public class JournalEntryJournalStepDetailTO extends
 		final List<JournalEntryJournalStepDetailTO> tos = new ArrayList<JournalEntryJournalStepDetailTO>();
 		if ((models != null) && !models.isEmpty()) {
 			for (JournalEntryJournalStepDetail model : models) {
-				tos.add(new JournalEntryJournalStepDetailTO(model));
+				tos.add(new JournalEntryJournalStepDetailTO(model)); // NOPMD
 			}
 		}
+
 		return tos;
 	}
 

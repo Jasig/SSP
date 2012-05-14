@@ -95,7 +95,7 @@ public class MyGpsTaskController extends BaseController {
 		if (student == null) {
 			throw new ObjectNotFoundException(
 					"Unable to acquire person for supplied student id "
-							+ studentId);
+							+ studentId, "Person");
 		}
 
 		final String session = securityService.getSessionId();
@@ -191,7 +191,8 @@ public class MyGpsTaskController extends BaseController {
 
 		if (securityService.isAuthenticated()) {
 			final Person student = securityService.currentUser().getPerson();
-			tasks = taskService.getAllForPerson(student, sAndP);
+			tasks = (List<Task>) taskService.getAllForPerson(student, sAndP)
+					.getRows();
 		} else {
 			final String sessionId = securityService.getSessionId();
 			tasks = taskService.getAllForSessionId(sessionId, sAndP);

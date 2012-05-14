@@ -1,6 +1,5 @@
 package org.jasig.ssp.web.api;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -12,7 +11,9 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.PersonAssocService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.AuditableTO;
+import org.jasig.ssp.transferobject.PagingTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -108,7 +109,7 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<TO> getAll(@PathVariable final UUID personId,
+	PagingTO<TO, T> getAll(@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
@@ -117,11 +118,12 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 			throws Exception {
 
 		final Person person = personService.get(personId);
+		final PagingWrapper<T> data = getService().getAllForPerson(person,
+				SortingAndPaging.createForSingleSort(status, start,
+						limit, sort, sortDirection, "name"));
 
-		return getFactory().asTOList(
-				getService().getAllForPerson(person,
-						SortingAndPaging.createForSingleSort(status, start,
-								limit, sort, sortDirection, "name")));
+		return new PagingTO<TO, T>(true, data.getResults(), getFactory()
+				.asTOList(data.getRows()));
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")

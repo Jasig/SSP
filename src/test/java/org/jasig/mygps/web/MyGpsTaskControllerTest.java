@@ -27,6 +27,7 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -198,7 +199,8 @@ public class MyGpsTaskControllerTest {
 	public void getAll() {
 		final Person student = new Person();
 		final String session = "12345";
-		List<Task> tasks = new ArrayList<Task>();
+		PagingWrapper<Task> tasks = new PagingWrapper<Task>(
+				new ArrayList<Task>());
 
 		securityService.setCurrent(student);
 		securityService.setSessionId(session);

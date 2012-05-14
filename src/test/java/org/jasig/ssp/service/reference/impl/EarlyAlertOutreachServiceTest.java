@@ -122,7 +122,8 @@ public class EarlyAlertOutreachServiceTest {
 		daoOne.setObjectStatus(ObjectStatus.ACTIVE);
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
+		expect(dao.get(id)).andThrow(
+				new ObjectNotFoundException(id, "EarlyAlertOutreach"));
 
 		replay(dao);
 

@@ -1,7 +1,6 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
@@ -17,6 +16,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -103,7 +103,7 @@ public class EarlyAlertServiceImpl extends
 	}
 
 	@Override
-	public List<EarlyAlert> getAllForPerson(final Person person,
+	public PagingWrapper<EarlyAlert> getAllForPerson(final Person person,
 			final SortingAndPaging sAndP) {
 		return getDao().getAllForPersonId(person.getId(), sAndP);
 	}

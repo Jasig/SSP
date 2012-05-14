@@ -2,14 +2,14 @@ package org.jasig.ssp.service.tool.impl;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.tool.IntakeForm;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.tool.IntakeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -45,7 +45,9 @@ public class IntakeServiceImpl implements IntakeService {
 	@Override
 	public boolean save(IntakeForm form) throws ObjectNotFoundException {
 		if (form.getPerson() == null) {
-			throw new ObjectNotFoundException("Missing person identifier.");
+			throw new ObjectNotFoundException(
+					"Missing (null) Person.",
+					"Person");
 		}
 
 		// Save changes to persistent storage.

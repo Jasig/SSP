@@ -70,7 +70,8 @@ public class PersonConfidentialityDisclosureAgreementServiceImpl implements
 		}
 
 		throw new ObjectNotFoundException(
-				"Latest Confidentiality Agreement could not be found.");
+				"Latest Confidentiality Agreement could not be found.",
+				"PersonConfidentialityDisclosureAgreement");
 
 		// :TODO should we create an active flag on
 		// ConfidentialityDisclosureAgreement?

@@ -31,18 +31,18 @@ public class JournalEntryTO
 	}
 
 	@Override
-	public final void from(final JournalEntry journalEntry) {
+	public final void from(final JournalEntry journalEntry) { // NOPMD
 		super.from(journalEntry);
 
 		entryDate = journalEntry.getEntryDate();
 		comment = journalEntry.getComment();
-		personId = (journalEntry.getPerson() == null) ? null
+		personId = journalEntry.getPerson() == null ? null
 				: journalEntry.getPerson().getId();
-		journalSourceId = (journalEntry.getJournalSource() == null) ? null
+		journalSourceId = journalEntry.getJournalSource() == null ? null
 				: journalEntry.getJournalSource().getId();
-		journalTrackId = (journalEntry.getJournalTrack() == null) ? null
+		journalTrackId = journalEntry.getJournalTrack() == null ? null
 				: journalEntry.getJournalTrack().getId();
-		confidentialityLevel = (journalEntry.getConfidentialityLevel() == null) ? null
+		confidentialityLevel = journalEntry.getConfidentialityLevel() == null ? null
 				: journalEntry.getConfidentialityLevel().getId();
 
 		if ((journalEntry.getJournalEntryJournalStepDetails() != null)
@@ -58,18 +58,20 @@ public class JournalEntryTO
 		final List<JournalEntryTO> journalEntryTOs = new ArrayList<JournalEntryTO>();
 		if ((journalEntries != null) && !journalEntries.isEmpty()) {
 			for (JournalEntry journalEntry : journalEntries) {
-				journalEntryTOs.add(new JournalEntryTO(journalEntry));
+				journalEntryTOs.add(new JournalEntryTO(journalEntry)); // NOPMD
 			}
 		}
+
 		return journalEntryTOs;
 	}
 
 	public Date getEntryDate() {
-		return entryDate;
+		return entryDate == null ? null : new Date(entryDate.getTime());
 	}
 
 	public void setEntryDate(final Date entryDate) {
-		this.entryDate = entryDate;
+		this.entryDate = entryDate == null ? null : new Date(
+				entryDate.getTime());
 	}
 
 	public String getComment() {

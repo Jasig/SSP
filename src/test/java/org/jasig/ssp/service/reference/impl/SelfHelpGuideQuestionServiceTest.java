@@ -7,7 +7,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,11 +24,12 @@ import org.junit.Test;
 
 public class SelfHelpGuideQuestionServiceTest {
 
-	private SelfHelpGuideQuestionServiceImpl service;
-	private SelfHelpGuideQuestionDao dao;
+	private transient SelfHelpGuideQuestionServiceImpl service;
+
+	private transient SelfHelpGuideQuestionDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new SelfHelpGuideQuestionServiceImpl();
 		dao = createMock(SelfHelpGuideQuestionDao.class);
 
@@ -38,7 +38,7 @@ public class SelfHelpGuideQuestionServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<SelfHelpGuideQuestion> daoAll = new ArrayList<SelfHelpGuideQuestion>();
+		final List<SelfHelpGuideQuestion> daoAll = new ArrayList<SelfHelpGuideQuestion>();
 		daoAll.add(new SelfHelpGuideQuestion());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,16 +46,16 @@ public class SelfHelpGuideQuestionServiceTest {
 
 		replay(dao);
 
-		Collection<SelfHelpGuideQuestion> all = service.getAll(
+		final Collection<SelfHelpGuideQuestion> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertTrue(all.size() > 0);
+		assertFalse(all.isEmpty());
 		verify(dao);
 	}
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuideQuestion daoOne = new SelfHelpGuideQuestion(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuideQuestion daoOne = new SelfHelpGuideQuestion(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -67,8 +67,8 @@ public class SelfHelpGuideQuestionServiceTest {
 
 	@Test
 	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuideQuestion daoOne = new SelfHelpGuideQuestion(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuideQuestion daoOne = new SelfHelpGuideQuestion(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
@@ -80,12 +80,13 @@ public class SelfHelpGuideQuestionServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuideQuestion daoOne = new SelfHelpGuideQuestion(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuideQuestion daoOne = new SelfHelpGuideQuestion(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
+		expect(dao.get(id)).andThrow(
+				new ObjectNotFoundException(id, "SelfHelpGuideQuestion"));
 
 		replay(dao);
 

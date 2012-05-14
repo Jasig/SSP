@@ -22,6 +22,7 @@ import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +66,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	}
 
 	@Override
-	public List<Task> getAllForPerson(final Person person,
+	public PagingWrapper<Task> getAllForPerson(final Person person,
 			final SortingAndPaging sAndP) {
 		return getDao().getAllForPersonId(person.getId(), sAndP);
 	}
@@ -150,9 +151,9 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 			final Person person,
 			final SortingAndPaging sAndP) {
 		final Map<String, List<Task>> grouped = Maps.newTreeMap();
-		final List<Task> tasksForPerson = dao
+		final PagingWrapper<Task> tasksForPerson = dao
 				.getAllForPersonId(person.getId(), sAndP);
-		for (Task task : tasksForPerson) {
+		for (Task task : tasksForPerson.getRows()) {
 			final String group = task.getGroup();
 			final List<Task> tasksForGroup;
 			if (grouped.keySet().contains(group)) {
@@ -288,7 +289,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 			if (person.getId() == SspUser.ANONYMOUS_PERSON_ID) {
 				tasks = getAllForSessionId(sessionId, sAndP);
 			} else {
-				tasks = getAllForPerson(person, sAndP);
+				tasks = (List<Task>) getAllForPerson(person, sAndP).getRows();
 			}
 		}
 
