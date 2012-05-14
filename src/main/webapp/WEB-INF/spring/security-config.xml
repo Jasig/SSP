@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.0.xsd
 		http://www.springframework.org/schema/util	  http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
-	<beans:import resource="file:${SSP_CONFIGDIR}ssp-sec-local.xml"/>
+	<beans:import resource="local/ssp-sec-local.xml"/>
 
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>

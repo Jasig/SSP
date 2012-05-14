@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Similar to ssp-local, this file allows you greater access to the 
+application's SECURITY configuration on a per site basis.  This is a primary 
+point of access for integration into systems like ldap. 
+-->
+
+<beans:beans 
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.0.xsd
+		http://www.springframework.org/schema/util		
+		http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+	<!-- Properties file configuration of existing beans -->
+	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
+
+	<beans:import resource="ssp-sec-dev.xml"/>
+</beans:beans>
