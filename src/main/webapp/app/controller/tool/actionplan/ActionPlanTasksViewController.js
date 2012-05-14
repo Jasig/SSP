@@ -56,11 +56,9 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 	    	r = Ext.decode(response.responseText);
 	    	if (r.length > 0)
 	    	{
-	    		if (r.rows != null)
-	    		{
-		    		me.store.loadData(r.rows);
-	    		}
+		    	me.store.loadData(r);
 	    	}else{
+	    		/*
 	    		var sampDataArr = [{"id" : "23befc50-7f91-11e1-b0c4-0800200c9a66",
 	    	        "createdDate" : "1332216000000",
 	    	        "createdById" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
@@ -112,7 +110,8 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 	    	        "closableByStudent" : true,
 	    	        "confidentialityLevel" : "DISABILITY",
 	    	        "type" : "SSP"}];
-	    		me.store.loadData(sampDataArr);
+	    	       */
+	    		me.store.loadData([]);
 	    	}
     		me.filteredTaskStatus="ACTIVE";
     		me.filterTasks();
@@ -170,7 +169,18 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
     },
     
     onViewHistoryClick: function(button) {
-		Ext.Msg.alert('Display History Report.');
+		Ext.Msg.alert('ActionPlanTasksViewController->onViewHistoryClick. This item is completed in the ui. Uncomment to display the History Report when it is complete.');
+		/*
+		var url = this.apiProperties.createUrl('person/' + this.currentPerson.get('id') + '/history/print');
+        this.apiProperties.makeRequest({
+			url: url,
+			method: 'GET',
+			jsonData: jsonData,
+			successFunc: function(){
+				// handle response here
+			}
+		});
+		*/
     },
     
     onAddTasksClick: function(button) {
@@ -182,29 +192,29 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
     },
     
     onDeleteTasksClick: function(button) {
-	   console.log('ActionPlanToolViewController->onDeleteTasksClick');
-	   var grid = Ext.ComponentQuery.query('actionplantasks')[0];;
-	   var store = grid.getStore();
-       var selectionArr = grid.getView().getSelectionModel().getSelection();
-       var id="";
+       var url, grid, store, selectionArr, id, successFunc;
+	   var me=this;
+       grid = button.up('panel').down('grid');
+	   store = grid.getStore();
+       selectionArr = grid.getView().getSelectionModel().getSelection();
+       url = this.apiProperties.createUrl('person/' + this.currentPerson.get('id') + '/task/');
        if (selectionArr.length > 0) 
        {
     	   Ext.each(selectionArr, function(item, index){
     		   id = item.get('id');
-		   	   Ext.Ajax.request({
-					url: store.getProxy().url+id,
-					method: 'DELETE',
-					headers: { 'Content-Type': 'application/json' },
-					success: function(response, view) {
-						var r = Ext.decode(response.responseText);
-						store.remove( item );
-					},
-					failure: this.apiProperties.handleError
-			   }, this);	    		   
+   	           me.apiProperties.makeRequest({
+				   url: url+id,
+				   method: 'DELETE',
+				   successFunc: function(response,responseText){
+					   var r = Ext.decode(response.responseText);
+					   store.remove( item );
+				   },
+				   scope: me
+			   });   
     	   });
        }else{
     	   Ext.Msg.alert('SSP Error', 'Please select an item to delete.'); 
-       }    
+       }
     },
 
     onEmailTasksClick: function(button) {
@@ -212,6 +222,35 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
     },
     
     onPrintTasksClick: function(button) {
-		Ext.Msg.alert('Print all selected tasks.');
+		Ext.Msg.alert('ActionPlanTasksViewController->onPrintTasksClick. This item is completed in the ui. Uncomment to display the printed task report when it is complete.'); 	
+    	/*
+    	var grid, url, jsonData;	
+		var grid = button.up('panel').down('grid');
+	    var jsonData = this.getSelectedIdsArray( grid.getView().getSelectionModel().getSelection() );
+	    if (jsonData.length > 0)
+	    {
+			url = this.apiProperties.createUrl('person/' + this.currentPerson.get('id') + '/task/print');
+	        this.apiProperties.makeRequest({
+				url: url,
+				method: 'GET',
+				jsonData: jsonData,
+				successFunc: function(){
+					// handle response here
+				}
+			});	    	
+	    }else{
+	    	Ext.Msg.alert('Please select the tasks you would like to print.');
+	    }
+	    */
+    },
+    
+    getSelectedIdsArray: function(arr){
+		var selectedIds = [];
+		Ext.each(arr, function(item, index) {
+			var obj = {id: item.get('id')};
+			selectedIds.push( obj );
+		});
+		
+		return selectedIds;
     }
 });
