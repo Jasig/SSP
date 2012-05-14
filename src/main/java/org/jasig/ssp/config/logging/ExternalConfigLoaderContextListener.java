@@ -28,7 +28,7 @@ public class ExternalConfigLoaderContextListener implements
 				"SSP_CONFIGDIR");
 		if (configLocation == null) {
 			configLocation = System.getenv("SSP_CONFIGDIR")
-					+ System.getProperty("path.separator");
+					+ System.getProperty("file.separator");
 		}
 
 		try {

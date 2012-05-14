@@ -48,15 +48,18 @@ public class LogBackConfigLoader {
 							+ configPath);
 				} else {
 					throw new IOException(
-							"Logback External Config File exists and is a file, but cannot be read.");
+							"Logback External Config File exists and is a file, but cannot be read:  "
+									+ configPath);
 				}
 			} else {
 				throw new IOException(
-						"Logback External Config File Parameter exists, but does not reference a file");
+						"Logback External Config File Parameter exists, but does not reference a file:  "
+								+ configPath);
 			}
 		} else {
 			throw new IOException(
-					"Logback External Config File Parameter does not reference a file that exists");
+					"Logback External Config File Parameter does not reference a file that exists:  "
+							+ configPath);
 		}
 	}
 
