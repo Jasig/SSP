@@ -1,7 +1,6 @@
 Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.actionplantasks',
-	id: 'ActionPlanTasks',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.ActionPlanTasksViewController',
@@ -12,7 +11,7 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
 		Ext.apply(this, 
 				{
 		            autoScroll: true,
-		            title: 'Action Plan Tasks',
+		            title: 'Action Plan',
 					items: [
 						Ext.createWidget('tabpanel', {
 						    width: '100%',
@@ -36,6 +35,7 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
 						    		  items: [{xtype: 'tasks'}]
 						    		}]
 						})
+						,{xtype: 'actionplangoals'}
 				    ],
 				    
 				    dockedItems: [{

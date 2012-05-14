@@ -5,7 +5,6 @@ Ext.define('Ssp.controller.admin.journal.AssociateStepDetailsAdminViewController
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
     	store: 'journalStepsStore',
-    	treeStore: 'treeStore',
     	treeUtils: 'treeRendererUtils'
     },
     control: {
@@ -22,41 +21,23 @@ Ext.define('Ssp.controller.admin.journal.AssociateStepDetailsAdminViewController
     },
     
 	init: function() {
-		var me = this;
-		var successFunc = function(response,view){
-	    	var r = Ext.decode(response.responseText);
-	    	var records = r.rows;
-	    	if (records.length > 0)
-	    	{
-	    		var nodes = me.treeUtils.createNodesFromJson(records);
-		    	me.treeStore.setRootNode({
-		    	        text: 'root',
-		    	        expanded: true,
-		    	        children: nodes
-		    	});
-	    	}		
-		};
+		this.treeUtils.clearRootCategories();
 
-		// clear the current items in the tree
-    	me.treeStore.setRootNode({
-	        text: 'root',
-	        expanded: true,
-	        children: []
-	    });		
-		
-		this.apiProperties.makeRequest({
-			url: this.apiProperties.createUrl('reference/journalStep/'),
-			method: 'GET',
-			jsonData: '',
-			successFunc: successFunc 
-		});
+    	this.treeUtils.getItems({url: 'reference/journalStep/', 
+                                 nodeType: 'journalStep', 
+                                 isLeaf: false});
     	
 		return this.callParent(arguments);
     },
     
     onItemExpand: function(){
     	console.log('AssociateStepDetailsAdminViewController->onItemExpand');
-    	// TODO: Retrieve related items and display as a subnode of the tree   	
+    	var node = nodeInt;
+    	var id = this.treeUtils.getIdFromNodeId(node.data.id);
+    	this.treeUtils.getItems({url: 'reference/journalDetail/', 
+                                 nodeType: 'journalDetail', 
+                                 isLeaf: true, 
+                                 nodeToAppendTo: node});      	
     },
 
     onBeforeDrop: function(node, data, overModel, dropPosition, dropHandler, eOpts) {
