@@ -71,7 +71,8 @@ public class EarlyAlertTO
 		courseName = earlyAlert.getCourseName();
 		courseTitle = earlyAlert.getCourseTitle();
 		emailCC = earlyAlert.getEmailCC();
-		campusId = earlyAlert.getCampusId();
+		campusId = earlyAlert.getCampus() == null ? null : earlyAlert
+				.getCampus().getId();
 		earlyAlertSuggestionOtherDescription = earlyAlert
 				.getEarlyAlertReasonOtherDescription();
 		comment = earlyAlert.getComment();

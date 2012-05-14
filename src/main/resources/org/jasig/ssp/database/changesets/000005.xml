@@ -1541,5 +1541,27 @@
 		<rollback></rollback>
 	</changeSet>
 
+	<changeSet id="add SHG_question_response.EA_sent index"
+		author="jon.adams">
+		<createIndex tableName="self_help_guide_question_response"
+			indexName="idx_self_help_guide_question_response_early_alert_sent">
+			<column name="early_alert_sent" />
+		</createIndex>
+		<rollback>
+			<dropIndex tableName="self_help_guide_question_response"
+				indexName="idx_self_help_guide_question_response_early_alert_sent" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="change early_alert.campus_id type" author="jon.adams">
+		<dropColumn tableName="early_alert" columnName="campus_id" />
+		<addColumn tableName="early_alert">
+			<column name="campus_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="early_alert_campus_id"
+					references="campus(id)" />
+			</column>
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>
     

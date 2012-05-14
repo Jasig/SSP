@@ -36,9 +36,13 @@ public class EarlyAlertServiceImpl extends
 
 	@Autowired
 	private transient EarlyAlertDao dao;
+
 	/*
-	 * @Autowired private transient CampusService campusService;
+	 * @Autowired
+	 * 
+	 * private transient CampusService campusService;
 	 */
+
 	@Autowired
 	private transient EarlyAlertReasonService earlyAlertReasonService;
 
@@ -61,7 +65,7 @@ public class EarlyAlertServiceImpl extends
 		current.setCourseName(obj.getCourseName());
 		current.setCourseTitle(obj.getCourseTitle());
 		current.setEmailCC(obj.getEmailCC());
-		current.setCampusId(obj.getCampusId());
+		current.setCampus(obj.getCampus());
 		current.setEarlyAlertReasonOtherDescription(obj
 				.getEarlyAlertReasonOtherDescription());
 		current.setComment(obj.getComment());

@@ -20,6 +20,7 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Type;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 
@@ -43,9 +44,9 @@ public class EarlyAlert extends Auditable implements Serializable {
 	@Column(name = "email_cc", nullable = true, length = 255)
 	private String emailCC;
 
-	@Column(nullable = true)
-	@Type(type = "pg-uuid")
-	private UUID campusId;
+	@ManyToOne
+	@JoinColumn(name = "campus_id", nullable = true)
+	private Campus campus;
 
 	@Column(nullable = true, length = 64000)
 	@Size(max = 64000)
@@ -128,18 +129,18 @@ public class EarlyAlert extends Auditable implements Serializable {
 	}
 
 	/**
-	 * @return the campusId
+	 * @return the campus
 	 */
-	public UUID getCampusId() {
-		return campusId;
+	public Campus getCampus() {
+		return campus;
 	}
 
 	/**
-	 * @param campusId
-	 *            the campusId to set
+	 * @param campus
+	 *            the campus to set
 	 */
-	public void setCampusId(final UUID campusId) {
-		this.campusId = campusId;
+	public void setCampus(final Campus campus) {
+		this.campus = campus;
 	}
 
 	/**
@@ -265,7 +266,7 @@ public class EarlyAlert extends Auditable implements Serializable {
 				: courseTitle.hashCode();
 		result *= StringUtils.isEmpty(emailCC) ? "emailCC".hashCode() : emailCC
 				.hashCode();
-		result *= campusId == null ? "campusId".hashCode() : campusId
+		result *= campus == null ? "campus".hashCode() : campus.getId()
 				.hashCode();
 		result *= StringUtils.isEmpty(earlyAlertReasonOtherDescription) ? "earlyAlertSuggestionOtherDescription"
 				.hashCode()
