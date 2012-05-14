@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -126,6 +127,8 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	@Transactional(readOnly = false)
+	@Scheduled(fixedDelay = 300000)
+	// run 5 mins after the end of the last invocation
 	public void sendQueuedMessages() {
 
 		LOGGER.info("BEGIN : sendQueuedMessages()");

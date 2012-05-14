@@ -28,6 +28,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -307,6 +308,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	}
 
 	@Override
+	@Scheduled(cron = "0 0 1 * * *")
+	// run at 1 am every day
 	public void sendAllTaskReminderNotifications() {
 
 		final SortingAndPaging sAndP = new SortingAndPaging(
