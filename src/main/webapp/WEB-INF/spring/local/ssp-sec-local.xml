@@ -18,7 +18,7 @@ point of access for integration into systems like ldap.
 		http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
+	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}/ssp-config.properties"/>
 
 	<beans:import resource="ssp-sec-dev.xml"/>
 </beans:beans>

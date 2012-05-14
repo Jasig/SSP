@@ -15,8 +15,11 @@ public final class LogBackConfigLoaderTest {
 	@Test
 	public void test() {
 		try {
-			assertNotNull("Failed to load file", new LogBackConfigLoader(
-					System.getenv("SSP_TESTCONFIGDIR") + "logback.xml"));
+			assertNotNull("Failed to load file",
+					new LogBackConfigLoader(
+							System.getenv("SSP_TESTCONFIGDIR")
+									+ System.getProperty("path.separator")
+									+ "logback.xml"));
 		} catch (Exception e) {
 			LOGGER.error("Failed to load file", e);
 			fail("Failed to load file");

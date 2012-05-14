@@ -7,8 +7,8 @@
 # Optionally, you can simply set the environment variable below in your global
 # environment instead of having to run it in each console.
 
-set SSP_CONFIGDIR=C:\\sspConf\\
-set SSP_TESTCONFIGDIR=C:\\sspConf\\
+set SSP_CONFIGDIR=C:\\sspConf
+set SSP_TESTCONFIGDIR=C:\\sspConf
 
 # Uncomment the following to allow SSP to run in absence of uportal in the dev environment
 #set spring.profiles.active=dev-standalone

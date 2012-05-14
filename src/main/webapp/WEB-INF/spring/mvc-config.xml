@@ -13,7 +13,7 @@
 		http://www.springframework.org/schema/util	 http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
+	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}/ssp-config.properties"/>
 
 	<context:component-scan base-package="org.jasig.ssp.web,org.jasig.mygps.web"/>
 		<!-- context:include-filter type="regex" expression=".*Controller"/>

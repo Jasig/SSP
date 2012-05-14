@@ -16,7 +16,7 @@
 	<import resource="local/ssp-local.xml"/>
 	
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}ssp-config.properties"/>
+	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}/ssp-config.properties"/>
 	
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
 	<context:component-scan base-package="org.jasig.ssp,org.jasig.mygps">

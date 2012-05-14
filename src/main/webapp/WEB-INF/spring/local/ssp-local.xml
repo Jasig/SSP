@@ -14,7 +14,7 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
 	<util:properties id="configProperties"
-		location="file:${SSP_CONFIGDIR}ssp-config.properties" />
+		location="file:${SSP_CONFIGDIR}/ssp-config.properties" />
 
 	<!-- Mail Server Configuration -->
 	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

@@ -7,8 +7,8 @@
 # Optionally, you can simply set the environment variable below in your global
 # environment instead of having to run it in each console.
 
-export SSP_CONFIGDIR=/usr/local/etc/ssp/
-export SSP_TESTCONFIGDIR=/usr/local/etc/ssp/
+export SSP_CONFIGDIR=/usr/local/etc/ssp
+export SSP_TESTCONFIGDIR=/usr/local/etc/ssp
 
 # Uncomment the following to allow SSP to run in absence of uportal in the dev environment
 #export spring.profiles.active=dev-standalone

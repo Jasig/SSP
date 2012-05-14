@@ -51,7 +51,7 @@ Configure SSP
       - On Unix/Mac:
       	- SSP_CONFIGDIR=/usr/local/etc/ssp
       - On Windows:
-      	- SSP_CONFIGDIR=C:\ssp\
+      	- SSP_CONFIGDIR=C:\ssp
     
 Deploy SSP
   - Right now the deployment file is not available anywhere, so it must be 

@@ -459,7 +459,7 @@
 				<version>1.0-alpha-2</version>
 				<configuration>
 					<files>
-						<file>${env.SSP_CONFIGDIR}ssp-config.properties</file>
+						<file>${env.SSP_CONFIGDIR}/ssp-config.properties</file>
 					</files>
 				</configuration>
 			</plugin>

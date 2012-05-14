@@ -27,7 +27,8 @@ public class ExternalConfigLoaderContextListener implements
 		String configLocation = sce.getServletContext().getInitParameter(
 				"SSP_CONFIGDIR");
 		if (configLocation == null) {
-			configLocation = System.getenv("SSP_CONFIGDIR");
+			configLocation = System.getenv("SSP_CONFIGDIR")
+					+ System.getProperty("path.separator");
 		}
 
 		try {
