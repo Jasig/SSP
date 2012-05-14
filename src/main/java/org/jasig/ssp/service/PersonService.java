@@ -72,4 +72,16 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 */
 	List<Person> peopleFromListOfIds(List<UUID> personIds,
 			SortingAndPaging sAndP);
+
+	/**
+	 * Retrieves the specified Person by their Student ID (school_id).
+	 * 
+	 * @param studentId
+	 *            Required school identifier for the Person to retrieve. Can not
+	 *            be null.
+	 * @exception ObjectNotFoundException
+	 *                If the supplied identifier does not exist in the database.
+	 * @return The specified Person instance.
+	 */
+	Person getByStudentId(String studentId) throws ObjectNotFoundException;
 }

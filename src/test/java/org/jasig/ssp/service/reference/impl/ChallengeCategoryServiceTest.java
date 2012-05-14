@@ -25,11 +25,12 @@ import org.junit.Test;
 
 public class ChallengeCategoryServiceTest {
 
-	private ChallengeCategoryServiceImpl service;
-	private ChallengeCategoryDao dao;
+	private transient ChallengeCategoryServiceImpl service;
+
+	private transient ChallengeCategoryDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new ChallengeCategoryServiceImpl();
 		dao = createMock(ChallengeCategoryDao.class);
 
@@ -38,7 +39,7 @@ public class ChallengeCategoryServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<ChallengeCategory> daoAll = new ArrayList<ChallengeCategory>();
+		final List<ChallengeCategory> daoAll = new ArrayList<ChallengeCategory>();
 		daoAll.add(new ChallengeCategory());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,7 +47,7 @@ public class ChallengeCategoryServiceTest {
 
 		replay(dao);
 
-		Collection<ChallengeCategory> all = service.getAll(
+		final Collection<ChallengeCategory> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertTrue(all.size() > 0);
 		verify(dao);
@@ -54,8 +55,8 @@ public class ChallengeCategoryServiceTest {
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ChallengeCategory daoOne = new ChallengeCategory(id);
+		final UUID id = UUID.randomUUID();
+		final ChallengeCategory daoOne = new ChallengeCategory(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -67,8 +68,8 @@ public class ChallengeCategoryServiceTest {
 
 	@Test
 	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ChallengeCategory daoOne = new ChallengeCategory(id);
+		final UUID id = UUID.randomUUID();
+		final ChallengeCategory daoOne = new ChallengeCategory(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
@@ -80,12 +81,13 @@ public class ChallengeCategoryServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ChallengeCategory daoOne = new ChallengeCategory(id);
+		final UUID id = UUID.randomUUID();
+		final ChallengeCategory daoOne = new ChallengeCategory(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
+		expect(dao.get(id)).andThrow(
+				new ObjectNotFoundException(id, "ChallengeCategory"));
 
 		replay(dao);
 

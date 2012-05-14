@@ -44,12 +44,19 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
+	public Person getByStudentId(String studentId)
+			throws ObjectNotFoundException {
+		return dao.getByStudentId(studentId);
+	}
+
+	@Override
 	public Person personFromUsername(final String username)
 			throws ObjectNotFoundException {
 		final Person obj = dao.fromUsername(username);
 		if (null == obj) {
 			throw new ObjectNotFoundException(
-					"Could not find person with username: " + username);
+					"Could not find person with username: " + username,
+					"Person");
 		}
 		return obj;
 	}

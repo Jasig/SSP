@@ -25,11 +25,12 @@ import org.junit.Test;
 
 public class SelfHelpGuideGroupServiceTest {
 
-	private SelfHelpGuideGroupServiceImpl service;
-	private SelfHelpGuideGroupDao dao;
+	private transient SelfHelpGuideGroupServiceImpl service;
+
+	private transient SelfHelpGuideGroupDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new SelfHelpGuideGroupServiceImpl();
 		dao = createMock(SelfHelpGuideGroupDao.class);
 
@@ -38,7 +39,7 @@ public class SelfHelpGuideGroupServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<SelfHelpGuideGroup> daoAll = new ArrayList<SelfHelpGuideGroup>();
+		final List<SelfHelpGuideGroup> daoAll = new ArrayList<SelfHelpGuideGroup>();
 		daoAll.add(new SelfHelpGuideGroup());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,7 +47,7 @@ public class SelfHelpGuideGroupServiceTest {
 
 		replay(dao);
 
-		Collection<SelfHelpGuideGroup> all = service.getAll(
+		final Collection<SelfHelpGuideGroup> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertTrue(all.size() > 0);
 		verify(dao);
@@ -54,8 +55,8 @@ public class SelfHelpGuideGroupServiceTest {
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuideGroup daoOne = new SelfHelpGuideGroup(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuideGroup daoOne = new SelfHelpGuideGroup(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -67,8 +68,8 @@ public class SelfHelpGuideGroupServiceTest {
 
 	@Test
 	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuideGroup daoOne = new SelfHelpGuideGroup(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuideGroup daoOne = new SelfHelpGuideGroup(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
@@ -80,12 +81,13 @@ public class SelfHelpGuideGroupServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuideGroup daoOne = new SelfHelpGuideGroup(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuideGroup daoOne = new SelfHelpGuideGroup(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
+		expect(dao.get(id)).andThrow(
+				new ObjectNotFoundException(id, "SelfHelpGuideGroup"));
 
 		replay(dao);
 

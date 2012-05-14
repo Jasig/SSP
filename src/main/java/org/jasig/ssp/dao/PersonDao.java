@@ -7,12 +7,13 @@ import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.stereotype.Repository;
 
 /**
  * CRUD methods for the Person model.
@@ -83,5 +84,22 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.in("id", personIds));
 		return criteria.list();
+	}
+
+	/**
+	 * Retrieves the specified Person by their Student ID (school_id).
+	 * 
+	 * @param studentId
+	 *            Required school identifier for the Person to retrieve. Can not
+	 *            be null.
+	 * @exception ObjectNotFoundException
+	 *                If the supplied identifier does not exist in the database.
+	 * @return The specified Person instance.
+	 */
+	public Person getByStudentId(String studentId)
+			throws ObjectNotFoundException {
+		return (Person) createCriteria()
+				.add(Restrictions.eq("schoolId", studentId))
+				.uniqueResult();
 	}
 }

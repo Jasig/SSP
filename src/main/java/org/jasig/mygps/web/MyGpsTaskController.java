@@ -95,7 +95,7 @@ public class MyGpsTaskController extends BaseController {
 		if (student == null) {
 			throw new ObjectNotFoundException(
 					"Unable to acquire person for supplied student id "
-							+ studentId);
+							+ studentId, "Person");
 		}
 
 		final String session = securityService.getSessionId();
