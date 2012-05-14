@@ -7,11 +7,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.UUID;
 
+import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.PagingTO;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,7 +29,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * {@link PersonController} Spring annotation mapping tests.
+ * {@link PersonEarlyAlertController} Spring annotation mapping tests.
  * 
  * @author jon.adams
  */
@@ -35,20 +37,20 @@ import org.springframework.web.servlet.ModelAndView;
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration
 @Transactional
-public class PersonControllerHttpIntegrationTest
+public class PersonEarlyAlertControllerHttpIntegrationTest
 		extends
-		AbstractControllerHttpTestSupport<PersonController, PersonTO, Person> {
+		AbstractControllerHttpTestSupport<PersonEarlyAlertController, EarlyAlertTO, EarlyAlert> {
 
 	/**
 	 * Controller instance used to run tests.
 	 */
 	@Autowired
-	private transient PersonController controller;
+	private transient PersonEarlyAlertController controller;
 
 	private static final UUID PERSON_ID = UUID
 			.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea");
 
-	private static final String PERSON_FIRSTNAME = "Kenneth";
+	private static final String PERSON_STUDENTID = "student0";
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -65,18 +67,15 @@ public class PersonControllerHttpIntegrationTest
 
 	/**
 	 * Test the
-	 * {@link PersonController#getAll(org.jasig.ssp.model.ObjectStatus, Integer, Integer, String, String)}
+	 * {@link PersonEarlyAlertController#getAll(UUID, ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 *             Thrown if the test throws any unexpected exceptions.
 	 */
 	@Test
 	public void testControllerGetAllRequest() throws Exception {
-		// Request URI, but do not include any Spring configuration roots, but
-		// do include class-level root paths. Example:
-		// "/controllerlevelmapping/mymethodmapping"
-		final String requestUri = "/1/person/";
+		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert/";
 
 		request.setMethod(RequestMethod.GET.toString());
 		request.setRequestURI(requestUri);
@@ -87,7 +86,8 @@ public class PersonControllerHttpIntegrationTest
 		// HandlerMethod(controller, action (method) name, parameters)
 		final HandlerMethod expectedHandlerMethod = new HandlerMethod(
 				controller, "getAll",
-				ObjectStatus.class, Integer.class, Integer.class, String.class,
+				UUID.class, ObjectStatus.class, Integer.class, Integer.class,
+				String.class,
 				String.class);
 
 		Assert.assertEquals("Correct handler found for request url: "
@@ -97,25 +97,27 @@ public class PersonControllerHttpIntegrationTest
 
 	/**
 	 * Test the
-	 * {@link PersonController#getAll(ObjectStatus, Integer, Integer, String, String)}
+	 * {@link PersonEarlyAlertController#getAll(UUID, ObjectStatus, Integer, Integer, String, String)}
 	 * mapping.
 	 * 
 	 * <p>
-	 * Assumes that there is some sample data in the Persons database.
+	 * Assumes that there is no sample data in the EarlyAlert database for the
+	 * usual sample test person.
 	 * 
 	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 *             Thrown if the test throws any unexpected exceptions.
 	 */
 	@Test
 	public void testControllerGetAllResponse() throws Exception {
-		final String requestUri = "/1/person/";
+		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert/";
 		request.setMethod(RequestMethod.GET.toString());
 		request.setRequestURI(requestUri);
 
 		final Object handler = getHandler(request);
 
 		final HandlerMethod expectedHandlerMethod = new HandlerMethod(
-				controller, "getAll", ObjectStatus.class, Integer.class,
+				controller, "getAll", UUID.class, ObjectStatus.class,
+				Integer.class,
 				Integer.class, String.class, String.class);
 
 		Assert.assertEquals("Correct handler found for request url: "
@@ -126,102 +128,36 @@ public class PersonControllerHttpIntegrationTest
 				response);
 
 		// Handle the actual request
-		ModelAndView mav = handlerAdapter.handle(request, response, handler);
+		final ModelAndView mav = handlerAdapter.handle(request, response,
+				handler);
 		assertNotNull("Response was not handled.", mav);
 
 		@SuppressWarnings("unchecked")
-		PagingTO<PersonTO, Person> result = (PagingTO<PersonTO, Person>) getModelObject(mav);
+		final PagingTO<EarlyAlertTO, Person> result = (PagingTO<EarlyAlertTO, Person>) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",
 				result);
 
-		assertFalse("Result should not have been empty.", result.getRows()
+		assertTrue("Result should have been empty.", result.getRows()
 				.isEmpty());
 		assertEquals("Person list counts did not match.",
 				result.getResults(), result.getRows().size());
 	}
 
 	/**
-	 * Test the {@link PersonController#get(UUID)} mapping.
+	 * Test the {@link PersonEarlyAlertController#delete(UUID, UUID)} mapping.
 	 * 
 	 * <p>
 	 * Assumes that the sample data instances are in the database.
 	 * 
 	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 *             Thrown if the test throws any unexpected exceptions.
 	 */
-	@Test
-	public void testControllerGet() throws Exception {
-		assertNotNull(
-				"Controller under test was not initialized by the container correctly.",
-				controller);
-
-		PersonTO obj = controller.get(PERSON_ID);
-
-		assertNotNull(
-				"Returned PersonTO from the controller should not have been null.",
-				obj);
-
-		assertEquals("Returned Person.Name did not match.", PERSON_FIRSTNAME,
-				obj.getFirstName());
-
-		// Request URI, but do not include any Spring configuration roots, but
-		// do include class-level root paths. Example:
-		// "/controllerlevelmapping/mymethodmapping"
-		final String requestUri = "/1/person/"
-				+ PERSON_ID.toString();
-
-		request.setMethod(RequestMethod.GET.toString());
-		request.setRequestURI(requestUri);
-
-		final Object handler = getHandler(request);
-
-		// Lookup the expected handler that Spring should have pulled.
-		// HandlerMethod(controller, action (method) name, parameters)
-		final HandlerMethod expectedHandlerMethod = new HandlerMethod(
-				controller, "get", UUID.class);
-
-		// For the most part we will be expecting HandlerMethod objects to be
-		// returned for our controllers.
-		// Calling the to string method will print the complete method
-		// signature.
-		Assert.assertEquals("Correct handler found for request url: "
-				+ requestUri, expectedHandlerMethod.toString(),
-				handler.toString());
-
-		Assert.assertNotNull("Response mock object should not have been null.",
-				response);
-
-		// Handle the actual request
-		ModelAndView mav = handlerAdapter.handle(request, response, handler);
-		assertNotNull("Response was not handled.", mav);
-
-		PersonTO result = (PersonTO) getModelObject(mav);
-
-		assertNotNull(
-				"Return object from the controller should not have been null.",
-				result);
-
-		assertEquals("Person identifiers did not match.", PERSON_ID,
-				result.getId());
-		assertEquals("Person names did not match.", PERSON_FIRSTNAME,
-				result.getFirstName());
-	}
-
-	/**
-	 * Test the {@link PersonController#delete(UUID)} mapping.
-	 * 
-	 * <p>
-	 * Assumes that the sample data instances are in the database.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
-	 */
-	@Test
-	public void testControllerDelete() throws Exception {
-		final String requestUri = "/1/person/"
-				+ PERSON_ID.toString();
+	@Test(expected = ObjectNotFoundException.class)
+	public void testControllerDeleteInvalidId() throws Exception {
+		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert/"
+				+ UUID.randomUUID().toString();
 
 		request.setMethod(RequestMethod.DELETE.toString());
 		request.setRequestURI(requestUri);
@@ -231,8 +167,7 @@ public class PersonControllerHttpIntegrationTest
 		// Lookup the expected handler that Spring should have pulled.
 		// HandlerMethod(controller, action (method) name, parameters)
 		final HandlerMethod expectedHandlerMethod = new HandlerMethod(
-				controller, "delete",
-				UUID.class);
+				controller, "delete", UUID.class, UUID.class);
 
 		Assert.assertEquals("Correct handler found for request url: "
 				+ requestUri, expectedHandlerMethod.toString(),
@@ -241,15 +176,72 @@ public class PersonControllerHttpIntegrationTest
 				response);
 
 		// Handle the actual request
-		ModelAndView mav = handlerAdapter.handle(request, response, handler);
+		final ModelAndView mav = handlerAdapter.handle(request, response,
+				handler);
 		assertNotNull("Response was not handled.", mav);
 
-		ServiceResponse result = (ServiceResponse) getModelObject(mav);
+		final ServiceResponse result = (ServiceResponse) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",
 				result);
 
-		assertTrue("Person was not deleted.", result.isSuccess());
+		assertFalse("Invalid person ID did not return a failure message.",
+				result.isSuccess());
+	}
+
+	/**
+	 * Test the {@link PersonEarlyAlertController#create(String, EarlyAlertTO)}
+	 * mapping.
+	 * 
+	 * @throws Exception
+	 *             Thrown if the test throws any unexpected exceptions.
+	 */
+	@Test
+	public void testControllerCreateWithStudentId() throws Exception {
+		final String requestUri = "/1/person/earlyAlert/";
+
+		request.setMethod(RequestMethod.POST.toString());
+		request.setRequestURI(requestUri);
+		request.setQueryString("?studentId=" + PERSON_STUDENTID);
+
+		final Object handler = getHandler(request);
+
+		// Lookup the expected handler that Spring should have pulled.
+		// HandlerMethod(controller, action (method) name, parameters)
+		final HandlerMethod expectedHandlerMethod = new HandlerMethod(
+				controller, "create",
+				String.class, EarlyAlertTO.class);
+
+		Assert.assertEquals("Correct handler found for request url: "
+				+ requestUri, expectedHandlerMethod.toString(),
+				handler.toString());
+	}
+
+	/**
+	 * Test the {@link PersonEarlyAlertController#create(String, EarlyAlertTO)}
+	 * mapping.
+	 * 
+	 * @throws Exception
+	 *             Thrown if the test throws any unexpected exceptions.
+	 */
+	@Test
+	public void testControllerCreateWithPersonId() throws Exception {
+		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert/";
+
+		request.setMethod(RequestMethod.POST.toString());
+		request.setRequestURI(requestUri);
+
+		final Object handler = getHandler(request);
+
+		// Lookup the expected handler that Spring should have pulled.
+		// HandlerMethod(controller, action (method) name, parameters)
+		final HandlerMethod expectedHandlerMethod = new HandlerMethod(
+				controller, "create",
+				UUID.class, EarlyAlertTO.class);
+
+		Assert.assertEquals("Correct handler found for request url: "
+				+ requestUri, expectedHandlerMethod.toString(),
+				handler.toString());
 	}
 }

@@ -3,10 +3,11 @@ package org.jasig.ssp.dao;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.SelfHelpGuideResponse;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -59,10 +60,17 @@ public class SelfHelpGuideResponseDao extends
 	 *         the specified sorting and paging option.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<SelfHelpGuideResponse> getAllForPersonId(final UUID personId,
+	public PagingWrapper<SelfHelpGuideResponse> getAllForPersonId(
+			final UUID personId,
 			final SortingAndPaging sAndP) {
-		final Criteria criteria = createCriteria(sAndP);
-		criteria.add(Restrictions.eq("person.id", personId));
-		return criteria.list();
+		final long totalRows = (Long) createCriteria()
+				.add(Restrictions.eq("person.id", personId))
+				.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		return new PagingWrapper<SelfHelpGuideResponse>(totalRows,
+				createCriteria(sAndP)
+						.add(Restrictions.eq("person.id", personId))
+						.list());
 	}
 }

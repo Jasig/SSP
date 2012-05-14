@@ -102,7 +102,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	public void testControllerAll() throws Exception {
 		final Collection<EarlyAlertTO> list = controller.getAll(PERSON_ID,
 				ObjectStatus.ACTIVE,
-				null, null, null, null);
+				null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 	}
