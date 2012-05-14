@@ -1,6 +1,8 @@
 package org.jasig.ssp.dao.reference;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -36,5 +38,11 @@ public class ConfigDao extends ReferenceAuditableCrudDao<Config>
 
 		return new PagingWrapper<Config>(totalRows,
 				createCriteria(sAndP).list());
+	}
+
+	public Config getByName(final String name) {
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("name", name));
+		return (Config) query.uniqueResult();
 	}
 }

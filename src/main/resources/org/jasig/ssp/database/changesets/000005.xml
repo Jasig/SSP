@@ -1501,6 +1501,107 @@
 		</modifySql>
 
 	</changeSet>
+	<changeSet id="Config Data - Default Values"
+		author="daniel.bower">
+		<insert tableName="config">
+			<column name="id" value="3eb8d2ee-9baa-11e1-844c-0026b9e7ff4c" />
+			<column name="name" value="send_mail" />
+			<column name="description" value="Whether the system should send out mails, or just log their generation" />
+			<column name="value">false</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="67bd120e-9be1-11e1-ad1f-0026b9e7ff4c" />
+			<column name="name" value="app_title" />
+			<column name="description" value="The Title of the application" />
+			<column name="value">SSP</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="8298fc28-9be1-11e1-933d-0026b9e7ff4c" />
+			<column name="name" value="inst_home_url" />
+			<column name="description" value="The homepage of the Organization" />
+			<column name="value">http://sinclair.edu</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="e6c63bb0-9be2-11e1-a6cb-0026b9e7ff4c" />
+			<column name="name" value="serverExternalPath" />
+			<column name="description" value="The externally visible url of the application"/>
+			<column name="value">http://ssp.sinclair.edu</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="59dbcf48-9be3-11e1-bded-0026b9e7ff4c" />
+			<column name="name" value="bcc_email_address" />
+			<column name="description" value="The email address to blind carbon copy on every message"/>
+			<column name="value">test@sinclair.edu</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="645d19ea-9be3-11e1-8ffe-0026b9e7ff4c" />
+			<column name="name" value="numberOfDaysPriorForTaskReminder" />
+			<column name="description" value="The Number of days prior to expiration to send out a Task Reminder"/>
+			<column name="value">3</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<rollback>
+			<delete tableName="config">
+				<where>id='3eb8d2ee-9baa-11e1-844c-0026b9e7ff4c'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='67bd120e-9be1-11e1-ad1f-0026b9e7ff4c'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='8298fc28-9be1-11e1-933d-0026b9e7ff4c'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='e6c63bb0-9be2-11e1-a6cb-0026b9e7ff4c'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='59dbcf48-9be3-11e1-bded-0026b9e7ff4c'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='645d19ea-9be3-11e1-8ffe-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 
+	<changeSet id="add index to config table" author="daniel.bower">
+		<createIndex tableName="config" indexName="idx_config_name">
+			<column name="name"/>
+		</createIndex>
+		<!-- Create Index has automatic rollback support -->
+	</changeSet>
 </databaseChangeLog>
     

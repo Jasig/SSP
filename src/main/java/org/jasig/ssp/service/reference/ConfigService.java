@@ -22,6 +22,12 @@ public interface ConfigService extends
 	@Override
 	Config get(UUID id) throws ObjectNotFoundException;
 
+	String getByNameEmpty(String name);
+
+	String getByNameException(String name) throws ObjectNotFoundException;
+
+	String getByNameNull(String name);
+
 	@Override
 	Config create(Config obj);
 

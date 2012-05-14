@@ -4,17 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import org.jasig.ssp.dao.SelfHelpGuideQuestionResponseDao;
 import org.jasig.ssp.dao.SelfHelpGuideResponseDao;
 import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
 import org.jasig.ssp.model.SelfHelpGuideResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @Transactional
@@ -38,13 +37,6 @@ public class EarlyAlertManager {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertManager.class);
-
-	@Value("#{configProperties.earlyAlertApiBaseUrl}")
-	private String earlyAlertApiBaseUrl;
-
-	public void setEarlyAlertApiBaseUrl(String earlyAlertApiBaseUrl) {
-		this.earlyAlertApiBaseUrl = earlyAlertApiBaseUrl;
-	}
 
 	@Transactional(readOnly = false)
 	public void generateCriticalAlerts() {
@@ -81,8 +73,10 @@ public class EarlyAlertManager {
 								.getSelfHelpGuideResponse().getPerson()
 								.getUserId() + " : generateCriticalAlerts()");
 
-				String result = restTemplate.postForObject(earlyAlertApiBaseUrl
-						+ "/createEarlyAlert", params, String.class);
+				// :TODO post to early alert api
+				String result = restTemplate.postForObject(
+						"Something goes here"
+								+ "/createEarlyAlert", params, String.class);
 
 				if (Boolean.parseBoolean(result.trim())) {
 					selfHelpGuideQuestionResponse.setEarlyAlertSent(true);
@@ -139,8 +133,10 @@ public class EarlyAlertManager {
 						+ selfHelpGuideResponse.getPerson().getUserId()
 						+ " : generateThresholdAlerts()");
 
-				String result = restTemplate.postForObject(earlyAlertApiBaseUrl
-						+ "/createEarlyAlert", params, String.class);
+				// :TODO post early alert
+				String result = restTemplate.postForObject(
+						"something goes here"
+								+ "/createEarlyAlert", params, String.class);
 
 				if (Boolean.parseBoolean(result.trim())) {
 					selfHelpGuideResponse.setEarlyAlertSent(true);

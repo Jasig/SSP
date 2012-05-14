@@ -16,9 +16,6 @@ import org.slf4j.LoggerFactory;
  *     <listener-class>org.jasig.ssp.config.logging.ExternalConfigLoaderContextListener</listener-class>
  *   </listener>
  * </pre>
- * 
- * @author daniel
- * 
  */
 public class ExternalConfigLoaderContextListener implements
 		ServletContextListener {

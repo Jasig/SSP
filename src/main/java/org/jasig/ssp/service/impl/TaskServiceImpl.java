@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.TaskDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -21,12 +22,12 @@ import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,11 +44,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	@Autowired
 	private transient MessageService messageService;
 
-	@Value("#{configProperties.serverExternalPath}")
-	private transient String serverExternalPath;
-
-	@Value("#{configProperties.numberOfDaysPriorForTaskReminder}")
-	private transient int numberOfDaysPriorForTaskReminder;
+	@Autowired
+	private transient ConfigService configService;
 
 	private static final String STUDENTUIPATH = "MyGPS";
 
@@ -57,6 +55,19 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	@Override
 	protected TaskDao getDao() {
 		return dao;
+	}
+
+	private int getNumberOfDaysPriorForTaskReminder() {
+		final String numVal = configService
+				.getByNameNull("numberOfDaysPriorForTaskReminder");
+		if (!StringUtils.isEmpty(numVal) && StringUtils.isNumeric(numVal)) {
+			return Integer.valueOf(numVal);
+		}
+		return 14;
+	}
+
+	private String getServerExternalPath() {
+		return configService.getByNameNull("serverExternalPath");
 	}
 
 	@Override
@@ -223,7 +234,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		final String linkedDescription = customTask.getDescription()
 				.replaceAll(
 						"href=\"/" + STUDENTUIPATH + "/",
-						"href=\"" + serverExternalPath + "/" + STUDENTUIPATH
+						"href=\"" + getServerExternalPath() + "/"
+								+ STUDENTUIPATH
 								+ "/");
 		templateParameters.put("description", linkedDescription);
 
@@ -319,7 +331,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 				// Calculate reminder window start date
 				startDateCalendar.setTime(task.getDueDate());
 				startDateCalendar.add(Calendar.HOUR,
-						numberOfDaysPriorForTaskReminder * 24 * -1);
+						getNumberOfDaysPriorForTaskReminder() * 24 * -1);
 
 				// Due date
 				dueDateCalendar.setTime(task.getDueDate());
