@@ -1,8 +1,5 @@
 package org.jasig.ssp.factory.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.PersonDemographicsDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.PersonDemographicsTOFactory;
@@ -18,6 +15,9 @@ import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.transferobject.PersonDemographicsTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -60,17 +60,14 @@ public class PersonDemographicsTOFactoryImpl extends
 			throws ObjectNotFoundException {
 
 		if ((tObject.getId() == null) && (tObject.getPersonId() != null)) {
-			Person person = personService.get(tObject.getPersonId());
-			PersonDemographics unsetModel = person.getDemographics();
+			final Person person = personService.get(tObject.getPersonId());
+			final PersonDemographics unsetModel = person.getDemographics();
 			if (unsetModel != null) {
 				tObject.setId(unsetModel.getId());
 			}
 		}
 
 		final PersonDemographics model = super.from(tObject);
-
-		model.setCoach((tObject.getCoachId() == null) ? null : personService
-				.get(tObject.getCoachId()));
 
 		model.setMaritalStatus((tObject.getMaritalStatusId() == null) ? null :
 				maritalStatusService.get(tObject.getMaritalStatusId()));

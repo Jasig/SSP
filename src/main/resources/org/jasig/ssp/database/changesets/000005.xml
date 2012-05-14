@@ -1563,5 +1563,15 @@
 		</addColumn>
 	</changeSet>
 
+	<changeSet id="move coach FK" author="jon.adams">
+		<dropColumn tableName="person_demographics" columnName="coach_id" />
+		<addColumn tableName="person">
+			<column name="coach_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_coach_id_person_id"
+					references="person(id)" />
+			</column>
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>
     

@@ -28,27 +28,26 @@ public class MyGpsMessageController extends BaseController {
 	private transient SecurityService securityService;
 
 	@Autowired
-	private MessageService messageService;
+	private transient MessageService messageService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsMessageController.class);
 
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
-	Boolean contactCoach(@RequestBody MessageTO messageTO,
-			HttpServletResponse response) throws Exception {
+	Boolean contactCoach(@RequestBody final MessageTO messageTO,
+			final HttpServletResponse response) throws Exception {
 
 		try {
 			if ((securityService.currentUser().getPerson() == null)
-					|| (securityService.currentUser().getPerson()
-							.getDemographics().getCoach() == null)) {
+					|| (securityService.currentUser().getPerson().getCoach() == null)) {
 				return false;
 			}
 
-			Person coach = securityService.currentUser().getPerson()
-					.getDemographics().getCoach();
+			final Person coach = securityService.currentUser().getPerson()
+					.getCoach();
 
-			Map<String, Object> messageParams = new HashMap<String, Object>();
+			final Map<String, Object> messageParams = new HashMap<String, Object>();
 			messageParams.put("subj", messageTO.getSubject());
 			messageParams.put("mesg", messageTO.getMessage());
 

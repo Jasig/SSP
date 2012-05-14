@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -313,6 +314,11 @@ public final class Person extends Auditable implements Serializable {
 	@Size(max = 4000)
 	private String strengths;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "coach_id", nullable = true)
+	private Person coach;
+
 	/**
 	 * Initialize a Person.
 	 * 
@@ -594,6 +600,14 @@ public final class Person extends Auditable implements Serializable {
 		this.strengths = strengths;
 	}
 
+	public Person getCoach() {
+		return coach;
+	}
+
+	public void setCoach(final Person coach) {
+		this.coach = coach;
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 3;
@@ -649,6 +663,7 @@ public final class Person extends Auditable implements Serializable {
 				: schoolId.hashCode();
 		result *= StringUtils.isEmpty(strengths) ? "strengths".hashCode()
 				: strengths.hashCode();
+		result *= coach == null ? "coach".hashCode() : coach.getId().hashCode();
 		// not all fields included. only the business or non-expensive set
 		// fields are included in the hashCode
 

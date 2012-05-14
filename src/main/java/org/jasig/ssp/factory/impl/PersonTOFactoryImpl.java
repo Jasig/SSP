@@ -1,14 +1,15 @@
 package org.jasig.ssp.factory.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,6 +23,9 @@ public class PersonTOFactoryImpl extends
 
 	@Autowired
 	private transient PersonDao dao;
+
+	@Autowired
+	private transient PersonService personService;
 
 	@Override
 	protected PersonDao getDao() {
@@ -52,6 +56,9 @@ public class PersonTOFactoryImpl extends
 		model.setPhotoUrl(tObject.getPhotoUrl());
 		model.setSchoolId(tObject.getSchoolId());
 		model.setEnabled(tObject.isEnabled());
+
+		model.setCoach((tObject.getCoachId() == null) ? null : personService
+				.get(tObject.getCoachId()));
 
 		return model;
 	}
