@@ -30,7 +30,7 @@ Ext.define('Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewControl
 	    	if (records.length > 0)
 	    	{
 	    		var nodes = me.treeUtils.createNodesFromJson(records);
-		    	me.treeStore.setRootNode({
+	    		me.treeStore.setRootNode({
 		    	        text: 'root',
 		    	        expanded: true,
 		    	        children: nodes

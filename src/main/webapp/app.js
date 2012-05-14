@@ -182,6 +182,12 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         },
+        currentTask:{
+	        fn: function(){
+	            return new Ssp.model.tool.actionplan.Task({id:""});
+	    	},
+	        singleton: true
+        },
         treeStore:{
 	        fn: function(){
 	            return Ext.create('Ext.data.TreeStore',{

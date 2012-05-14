@@ -2,21 +2,10 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanToolViewController', {
     extend: 'Deft.mvc.ViewController',	
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-        appEventsController: 'appEventsController',
-        formRendererUtils: 'formRendererUtils'
+        store: 'confidentialityLevelsStore'
     },
-    
-    control: {
-		view: {
-			viewready: 'onViewReady'
-		}
-	},
-    
-    init: function() {
+    constructor: function() {
+    	this.store.load();
 		return this.callParent(arguments);
-    },
-    
-    onViewReady: function(comp, obj){
-		console.log('ActionPlanToolViewController->onViewReady');
     }
 });
