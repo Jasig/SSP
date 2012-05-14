@@ -8,14 +8,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -33,6 +25,14 @@ import org.jasig.ssp.model.tool.IntakeForm;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../service-testConfig.xml")
@@ -146,7 +146,7 @@ public class IntakeServiceIntegrationTest {
 
 		PersonDemographics pd1 = new PersonDemographics();
 		pd1.setChildAges(testString1);
-		pd1.setCoach(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
+		person.setCoach(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
 		person.setDemographics(pd1);
 
 		PersonEducationGoal peg1 = new PersonEducationGoal();
@@ -195,10 +195,9 @@ public class IntakeServiceIntegrationTest {
 		assertEquals("Demographic.ChildAges did not match.", testString1, form
 				.getPerson().getDemographics().getChildAges());
 		assertNotNull("Demographic.Coach data did not exist.", person
-				.getDemographics().getCoach());
+				.getCoach());
 		assertEquals("Demographic.Coach.id did not match.",
-				Person.SYSTEM_ADMINISTRATOR_ID,
-				person.getDemographics().getCoach().getId());
+				Person.SYSTEM_ADMINISTRATOR_ID, person.getCoach().getId());
 
 		// Assert Education Goal data
 		assertNotNull("Education Goal data did not exist.",

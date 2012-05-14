@@ -12,19 +12,17 @@ public interface JournalSourceService extends
 		AuditableCrudService<JournalSource> {
 
 	@Override
-	public PagingWrapper<JournalSource> getAll(SortingAndPaging sAndP);
+	PagingWrapper<JournalSource> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public JournalSource get(UUID id) throws ObjectNotFoundException;
+	JournalSource get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public JournalSource create(JournalSource obj);
+	JournalSource create(JournalSource obj) throws ObjectNotFoundException;
 
 	@Override
-	public JournalSource save(JournalSource obj)
-			throws ObjectNotFoundException;
+	JournalSource save(JournalSource obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

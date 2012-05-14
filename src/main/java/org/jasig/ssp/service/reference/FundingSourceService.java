@@ -12,18 +12,17 @@ public interface FundingSourceService extends
 		AuditableCrudService<FundingSource> {
 
 	@Override
-	public PagingWrapper<FundingSource> getAll(SortingAndPaging sAndP);
+	PagingWrapper<FundingSource> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public FundingSource get(UUID id) throws ObjectNotFoundException;
+	FundingSource get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public FundingSource create(FundingSource obj);
+	FundingSource create(FundingSource obj) throws ObjectNotFoundException;
 
 	@Override
-	public FundingSource save(FundingSource obj) throws ObjectNotFoundException;
+	FundingSource save(FundingSource obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

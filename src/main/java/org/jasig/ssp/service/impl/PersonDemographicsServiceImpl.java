@@ -8,7 +8,6 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonDemographicsService;
-import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.CitizenshipService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
@@ -32,9 +31,6 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 
 	@Autowired
 	private transient MaritalStatusService maritalStatusService;
-
-	@Autowired
-	private transient PersonService personService;
 
 	@Autowired
 	private transient VeteranStatusService veteranStatusService;
@@ -104,10 +100,6 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 		if (obj.getVeteranStatus() != null) {
 			current.setVeteranStatus(veteranStatusService.get(obj
 					.getVeteranStatus().getId()));
-		}
-
-		if (obj.getCoach() != null) {
-			current.setCoach(personService.get(obj.getCoach().getId()));
 		}
 
 		return dao.save(current);

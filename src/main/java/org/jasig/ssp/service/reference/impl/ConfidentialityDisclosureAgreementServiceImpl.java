@@ -13,10 +13,6 @@ public class ConfidentialityDisclosureAgreementServiceImpl extends
 		AbstractReferenceService<ConfidentialityDisclosureAgreement>
 		implements ConfidentialityDisclosureAgreementService {
 
-	public ConfidentialityDisclosureAgreementServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private ConfidentialityDisclosureAgreementDao dao;
 

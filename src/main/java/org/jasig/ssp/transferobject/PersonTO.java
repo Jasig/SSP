@@ -3,6 +3,7 @@ package org.jasig.ssp.transferobject;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jasig.ssp.model.Person;
 
@@ -21,6 +22,7 @@ public class PersonTO
 	private String photoUrl;
 	private String schoolId;
 	private boolean enabled;
+	private UUID coachId;
 
 	public PersonTO() {
 		super();
@@ -54,14 +56,16 @@ public class PersonTO
 		photoUrl = model.getPhotoUrl();
 		schoolId = model.getSchoolId();
 		enabled = model.isEnabled();
+		coachId = model.getCoach() == null ? null : model.getCoach().getId();
 	}
 
 	public static List<PersonTO> toTOList(
 			final Collection<Person> models) {
 		final List<PersonTO> tos = Lists.newArrayList();
 		for (Person model : models) {
-			tos.add(new PersonTO(model));
+			tos.add(new PersonTO(model)); // NOPMD by jon.adams on 5/13/12
 		}
+
 		return tos;
 	}
 
@@ -218,4 +222,18 @@ public class PersonTO
 		this.enabled = enabled;
 	}
 
+	/**
+	 * @return the coachId
+	 */
+	public UUID getCoachId() {
+		return coachId;
+	}
+
+	/**
+	 * @param coachId
+	 *            the coachId to set
+	 */
+	public void setCoachId(final UUID coachId) {
+		this.coachId = coachId;
+	}
 }

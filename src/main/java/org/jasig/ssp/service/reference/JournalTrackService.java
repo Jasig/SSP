@@ -8,23 +8,27 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * JournalTrackService
+ * 
+ * @author daniel.bower
+ * 
+ */
 public interface JournalTrackService extends
 		AuditableCrudService<JournalTrack> {
 
 	@Override
-	public PagingWrapper<JournalTrack> getAll(SortingAndPaging sAndP);
+	PagingWrapper<JournalTrack> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public JournalTrack get(UUID id) throws ObjectNotFoundException;
+	JournalTrack get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public JournalTrack create(JournalTrack obj);
+	JournalTrack create(JournalTrack obj) throws ObjectNotFoundException;
 
 	@Override
-	public JournalTrack save(JournalTrack obj)
-			throws ObjectNotFoundException;
+	JournalTrack save(JournalTrack obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

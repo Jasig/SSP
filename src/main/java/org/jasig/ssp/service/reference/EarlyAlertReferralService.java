@@ -32,7 +32,8 @@ public interface EarlyAlertReferralService extends
 	EarlyAlertReferral load(UUID id);
 
 	@Override
-	EarlyAlertReferral create(EarlyAlertReferral obj);
+	EarlyAlertReferral create(EarlyAlertReferral obj)
+			throws ObjectNotFoundException;
 
 	@Override
 	EarlyAlertReferral save(EarlyAlertReferral obj)

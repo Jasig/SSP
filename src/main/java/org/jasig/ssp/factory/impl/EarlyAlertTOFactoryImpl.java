@@ -10,6 +10,7 @@ import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
@@ -43,6 +44,9 @@ public class EarlyAlertTOFactoryImpl extends
 	private transient EarlyAlertDao dao;
 
 	@Autowired
+	private transient CampusService campusService;
+
+	@Autowired
 	private transient PersonService personService;
 
 	@Autowired
@@ -64,7 +68,8 @@ public class EarlyAlertTOFactoryImpl extends
 		model.setCourseName(tObject.getCourseName());
 		model.setCourseTitle(tObject.getCourseTitle());
 		model.setEmailCC(tObject.getEmailCC());
-		model.setCampusId(tObject.getCampusId());
+		model.setCampus(tObject.getCampusId() == null ? null : campusService
+				.get(tObject.getCampusId()));
 		model.setEarlyAlertReasonOtherDescription(tObject
 				.getEarlyAlertSuggestionOtherDescription());
 		model.setComment(tObject.getComment());

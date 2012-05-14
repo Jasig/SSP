@@ -13,10 +13,6 @@ public class CitizenshipServiceImpl extends
 		AbstractReferenceService<Citizenship>
 		implements CitizenshipService {
 
-	public CitizenshipServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private CitizenshipDao dao;
 

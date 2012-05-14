@@ -21,7 +21,8 @@ public interface ChallengeReferralService extends
 	ChallengeReferral get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	ChallengeReferral create(ChallengeReferral obj);
+	ChallengeReferral create(ChallengeReferral obj)
+			throws ObjectNotFoundException;
 
 	@Override
 	ChallengeReferral save(ChallengeReferral obj)

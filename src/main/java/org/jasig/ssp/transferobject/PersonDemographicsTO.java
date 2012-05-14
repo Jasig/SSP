@@ -39,9 +39,6 @@ public class PersonDemographicsTO
 	public final void from(final PersonDemographics model) {
 		super.from(model);
 
-		if (model.getCoach() != null) {
-			coachId = model.getCoach().getId();
-		}
 		if (model.getMaritalStatus() != null) {
 			maritalStatusId = model.getMaritalStatus().getId();
 		}
@@ -84,7 +81,7 @@ public class PersonDemographicsTO
 			final Collection<PersonDemographics> models) {
 		final List<PersonDemographicsTO> tos = Lists.newArrayList();
 		for (PersonDemographics model : models) {
-			tos.add(new PersonDemographicsTO(model));
+			tos.add(new PersonDemographicsTO(model)); // NOPMD by jon.adams
 		}
 		return tos;
 	}

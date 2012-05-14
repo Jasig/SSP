@@ -1184,13 +1184,11 @@
 			</column>
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="journal_entry_created_by_person_id" 
-					references="person(id)" />
+					foreignKeyName="journal_entry_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="journal_entry_modified_by_person_id" 
-					references="person(id)" />
+					foreignKeyName="journal_entry_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
@@ -1203,23 +1201,22 @@
 			</column>
 			<column name="confidentiality_level_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="journal_entry_confidentiality_level_id_person_id" 
+					foreignKeyName="journal_entry_confidentiality_level_id_person_id"
 					references="confidentiality_level(id)" />
 			</column>
 			<column name="journal_source_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="journal_entry_journal_source_id_person_id" 
+					foreignKeyName="journal_entry_journal_source_id_person_id"
 					references="journal_source(id)" />
 			</column>
 			<column name="journal_track_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="journal_entry_journal_track_id_person_id" 
+					foreignKeyName="journal_entry_journal_track_id_person_id"
 					references="journal_track(id)" />
 			</column>
 			<column name="person_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="journal_entry_person_id_person_id" 
-					references="person(id)" />
+					foreignKeyName="journal_entry_person_id_person_id" references="person(id)" />
 			</column>
 		</createTable>
 
@@ -1234,8 +1231,9 @@
 			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 	</changeSet>
-	
-	<changeSet id="Add JournalEntryJournalStepDetail table" author="daniel.bower">
+
+	<changeSet id="Add JournalEntryJournalStepDetail table"
+		author="daniel.bower">
 		<createTable tableName="journal_entry_journal_step_detail">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
@@ -1248,12 +1246,12 @@
 			</column>
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="journal_entry_journal_step_detail_created_by_person_id" 
+					foreignKeyName="journal_entry_journal_step_detail_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="journal_entry_journal_step_detail_modified_by_person_id" 
+					foreignKeyName="journal_entry_journal_step_detail_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -1261,12 +1259,12 @@
 			</column>
 			<column name="journal_entry_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="journal_entry_journal_step_detail_journal_entry_id_journal_entry_id" 
+					foreignKeyName="journal_entry_journal_step_detail_journal_entry_id_journal_entry_id"
 					references="journal_entry(id)" />
 			</column>
 			<column name="journal_step_detail_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="journal_entry_journal_step_detail_journal_step_detail_id_journal_step_detail_id" 
+					foreignKeyName="journal_entry_journal_step_detail_journal_step_detail_id_journal_step_detail_id"
 					references="journal_step_detail(id)" />
 			</column>
 		</createTable>
@@ -1305,13 +1303,13 @@
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-                    foreignKeyName="early_alert_suggestion_modified_by_person_id"
+					foreignKeyName="early_alert_suggestion_modified_by_person_id"
 					references="person(id)" />
-            </column>
+			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
-		    <column name="early_alert_coordinator_id" type="uuid">
+			<column name="early_alert_coordinator_id" type="uuid">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -1319,7 +1317,7 @@
 		<sql>grant all on campus to ssp</sql>
 		<rollback>
 			<dropTable tableName="campus" />
-        </rollback>
+		</rollback>
 
 		<!-- Theres a different assumption in the liquibase handling of timezones 
 			on postgres. Specifying "Without" timezone -->
@@ -1398,13 +1396,13 @@
 		<createTable tableName="early_alert_response_early_alert_outreach">
 			<column name="early_alert_response_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="ea_response_ea_outreach_ea_response_id"
-					references="early_alert_response(id)" primaryKey="true" />
+					foreignKeyName="ea_response_ea_outreach_ea_response_id" references="early_alert_response(id)"
+					primaryKey="true" />
 			</column>
 			<column name="early_alert_outreach_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="ea_response_ea_outreach_ea_outreach_id"
-					references="early_alert_outreach(id)" primaryKey="true" />
+					foreignKeyName="ea_response_ea_outreach_ea_outreach_id" references="early_alert_outreach(id)"
+					primaryKey="true" />
 			</column>
 		</createTable>
 
@@ -1426,13 +1424,13 @@
 		<createTable tableName="early_alert_response_early_alert_referral">
 			<column name="early_alert_response_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="ea_response_ea_referral_ea_response_id"
-					references="early_alert_response(id)" primaryKey="true" />
+					foreignKeyName="ea_response_ea_referral_ea_response_id" references="early_alert_response(id)"
+					primaryKey="true" />
 			</column>
 			<column name="early_alert_referral_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="ea_response_ea_referral_ea_referral_id"
-					references="early_alert_referral(id)" primaryKey="true" />
+					foreignKeyName="ea_response_ea_referral_ea_referral_id" references="early_alert_referral(id)"
+					primaryKey="true" />
 			</column>
 		</createTable>
 
@@ -1447,6 +1445,132 @@
 		<modifySql dbms="postgresql">
 			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
+	</changeSet>
+
+	<changeSet id="clean up early_alert_outcome sample data"
+		author="jon.adams">
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D10FCA-5056-A51A-80888103AC163F13'</where>
+		</delete>
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D10FE9-5056-A51A-80456B36326A6463'</where>
+		</delete>
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D10FF9-5056-A51A-80BEED3F1F11C9A9'</where>
+		</delete>
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D11009-5056-A51A-8072ED4EBFA88DA5'</where>
+		</delete>
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D11018-5056-A51A-801FBEF6DC4AC7EF'</where>
+		</delete>
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D11028-5056-A51A-80E9E86DEA9498D8'</where>
+		</delete>
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D11076-5056-A51A-80C1F5813762FF0B'</where>
+		</delete>
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D11086-5056-A51A-8034893608D7A6C7'</where>
+		</delete>
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D11095-5056-A51A-80A8F6F9B7975595'</where>
+		</delete>
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D110A5-5056-A51A-808BF40B80601A46'</where>
+		</delete>
+		<delete tableName="early_alert_outcome">
+			<where>id='B2D110B4-5056-A51A-809B35E8C9C4DE86'</where>
+		</delete>
+		<insert tableName="early_alert_outcome">
+			<column name="id" value="12A58804-45DC-40F2-B2F5-D7E4403ACEE1" />
+			<column name="name" value="Student Responded" />
+			<column name="description" value="Student responded" />
+			<column name="created_date" valueDate="2012-05-11T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-11T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="1" />
+		</insert>
+		<insert tableName="early_alert_outcome">
+			<column name="id" value="9A98FF78-92AF-4681-8111-ADB3300CBE1C" />
+			<column name="name" value="Student Did Not Responsd" />
+			<column name="description" value="Student did not responsd" />
+			<column name="created_date" valueDate="2012-05-11T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-11T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="2" />
+		</insert>
+		<insert tableName="early_alert_outcome">
+			<column name="id" value="7148606F-9034-4538-8FC2-C852A5C912EE" />
+			<column name="name" value="Waiting for Response" />
+			<column name="description" value="Waiting for response" />
+			<column name="created_date" valueDate="2012-05-11T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-11T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="3" />
+		</insert>
+		<insert tableName="early_alert_outcome">
+			<column name="id" value="14E390D5-2371-48B4-A9DE-2D35BC18E868" />
+			<column name="name" value="Not an Early Alert Class" />
+			<column name="description" value="Not an early alert class" />
+			<column name="created_date" valueDate="2012-05-11T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-11T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="4" />
+		</insert>
+		<insert tableName="early_alert_outcome">
+			<column name="id" value="D944D62E-0974-4058-85C7-E6B3D6159D73" />
+			<column name="name" value="Duplicate Early Alert Notice" />
+			<column name="description" value="Duplicate early alert notice" />
+			<column name="created_date" valueDate="2012-05-11T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-11T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="5" />
+		</insert>
+
+		<rollback></rollback>
+	</changeSet>
+
+	<changeSet id="add SHG_question_response.EA_sent index"
+		author="jon.adams">
+		<createIndex tableName="self_help_guide_question_response"
+			indexName="idx_self_help_guide_question_response_early_alert_sent">
+			<column name="early_alert_sent" />
+		</createIndex>
+		<rollback>
+			<dropIndex tableName="self_help_guide_question_response"
+				indexName="idx_self_help_guide_question_response_early_alert_sent" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="change early_alert.campus_id type" author="jon.adams">
+		<dropColumn tableName="early_alert" columnName="campus_id" />
+		<addColumn tableName="early_alert">
+			<column name="campus_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="early_alert_campus_id"
+					references="campus(id)" />
+			</column>
+		</addColumn>
+	</changeSet>
+
+	<changeSet id="move coach FK" author="jon.adams">
+		<dropColumn tableName="person_demographics" columnName="coach_id" />
+		<addColumn tableName="person">
+			<column name="coach_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_coach_id_person_id"
+					references="person(id)" />
+			</column>
+		</addColumn>
 	</changeSet>
 
 </databaseChangeLog>

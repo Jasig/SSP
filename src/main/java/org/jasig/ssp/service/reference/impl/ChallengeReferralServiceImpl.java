@@ -29,10 +29,6 @@ public class ChallengeReferralServiceImpl extends
 	@Autowired
 	private transient SecurityService securityService;
 
-	public ChallengeReferralServiceImpl() {
-		super();
-	}
-
 	@Override
 	public List<ChallengeReferral> getChallengeReferralsByChallengeId(
 			final Challenge challenge) {

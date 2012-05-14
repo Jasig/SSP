@@ -19,10 +19,6 @@ public class JournalStepServiceImpl extends
 	@Autowired
 	transient private JournalStepDao dao;
 
-	public JournalStepServiceImpl() {
-		super();
-	}
-
 	protected void setDao(final JournalStepDao dao) {
 		this.dao = dao;
 	}

@@ -10,6 +10,9 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * SelfHelpGuide service
+ */
 public interface SelfHelpGuideService extends
 		AuditableCrudService<SelfHelpGuide> {
 
@@ -20,7 +23,7 @@ public interface SelfHelpGuideService extends
 	SelfHelpGuide get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	SelfHelpGuide create(SelfHelpGuide obj);
+	SelfHelpGuide create(SelfHelpGuide obj) throws ObjectNotFoundException;
 
 	@Override
 	SelfHelpGuide save(SelfHelpGuide obj) throws ObjectNotFoundException;

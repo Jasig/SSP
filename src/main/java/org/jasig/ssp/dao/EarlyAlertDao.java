@@ -35,7 +35,8 @@ public class EarlyAlertDao extends
 	 *            Person identifier
 	 * @param sAndP
 	 *            Sorting and paging filters
-	 * @return All EarlyAlerts for the specified person.
+	 * @return All EarlyAlerts for the specified person, filtered by the
+	 *         specified sorting and paging filters.
 	 */
 	@SuppressWarnings("unchecked")
 	public List<EarlyAlert> getAllForPersonId(final UUID personId,

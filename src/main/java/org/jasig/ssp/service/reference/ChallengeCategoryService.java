@@ -12,19 +12,19 @@ public interface ChallengeCategoryService extends
 		AuditableCrudService<ChallengeCategory> {
 
 	@Override
-	public PagingWrapper<ChallengeCategory> getAll(SortingAndPaging sAndP);
+	PagingWrapper<ChallengeCategory> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public ChallengeCategory get(UUID id) throws ObjectNotFoundException;
+	ChallengeCategory get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public ChallengeCategory create(ChallengeCategory obj);
-
-	@Override
-	public ChallengeCategory save(ChallengeCategory obj)
+	ChallengeCategory create(ChallengeCategory obj)
 			throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
+	ChallengeCategory save(ChallengeCategory obj)
+			throws ObjectNotFoundException;
 
+	@Override
+	void delete(UUID id) throws ObjectNotFoundException;
 }

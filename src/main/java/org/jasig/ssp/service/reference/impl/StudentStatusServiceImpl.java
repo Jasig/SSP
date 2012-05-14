@@ -7,15 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * StudentStatus implementation service
+ */
 @Service
 @Transactional
 public class StudentStatusServiceImpl extends
 		AbstractReferenceService<StudentStatus>
 		implements StudentStatusService {
-
-	public StudentStatusServiceImpl() {
-		super();
-	}
 
 	@Autowired
 	transient private StudentStatusDao dao;

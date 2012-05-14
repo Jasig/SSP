@@ -13,10 +13,6 @@ public class MessageTemplateServiceImpl extends
 		AbstractReferenceService<MessageTemplate>
 		implements MessageTemplateService {
 
-	public MessageTemplateServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private MessageTemplateDao dao;
 

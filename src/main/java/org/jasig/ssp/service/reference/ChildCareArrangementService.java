@@ -12,19 +12,19 @@ public interface ChildCareArrangementService extends
 		AuditableCrudService<ChildCareArrangement> {
 
 	@Override
-	public PagingWrapper<ChildCareArrangement> getAll(SortingAndPaging sAndP);
+	PagingWrapper<ChildCareArrangement> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public ChildCareArrangement get(UUID id) throws ObjectNotFoundException;
+	ChildCareArrangement get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public ChildCareArrangement create(ChildCareArrangement obj);
-
-	@Override
-	public ChildCareArrangement save(ChildCareArrangement obj)
+	ChildCareArrangement create(ChildCareArrangement obj)
 			throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
+	ChildCareArrangement save(ChildCareArrangement obj)
+			throws ObjectNotFoundException;
 
+	@Override
+	void delete(UUID id) throws ObjectNotFoundException;
 }

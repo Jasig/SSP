@@ -152,9 +152,10 @@ public interface TaskService
 	 * @param student
 	 * @param sessionId
 	 * @return Created task
+	 * @throws ObjectNotFoundException
 	 */
 	Task createCustomTaskForPerson(String name, String description,
-			Person student, String sessionId);
+			Person student, String sessionId) throws ObjectNotFoundException;
 
 	/**
 	 * Send a notice to the student about the task using the messageTemplate

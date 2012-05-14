@@ -24,14 +24,6 @@ public class EarlyAlertSuggestionServiceImpl extends
 	transient private EarlyAlertSuggestionDao dao;
 
 	/**
-	 * Constructor that sets the specific class types to be used by base class
-	 * methods.
-	 */
-	public EarlyAlertSuggestionServiceImpl() {
-		super();
-	}
-
-	/**
 	 * Set the DAO instance
 	 * 
 	 * @param dao

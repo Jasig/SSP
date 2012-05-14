@@ -22,7 +22,8 @@ public interface JournalStepDetailService extends
 	JournalStepDetail get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	JournalStepDetail create(JournalStepDetail obj);
+	JournalStepDetail create(JournalStepDetail obj)
+			throws ObjectNotFoundException;
 
 	@Override
 	JournalStepDetail save(JournalStepDetail obj)

@@ -38,19 +38,30 @@ public interface AuditableCrudService<T extends Auditable> {
 	T get(UUID id) throws ObjectNotFoundException;
 
 	/**
-	 * Save instance to persistent storage.
+	 * Save a new instance to persistent storage.
+	 * 
+	 * <p>
+	 * Side effect: Assigns a new ID to the specified object.
 	 * 
 	 * @param obj
-	 * @return The update data object instance.
+	 *            Data to use to create a new instance in persistent storage.
+	 * @throws ObjectNotFoundException
+	 *             If any foreign key lookups were not found.
+	 * @return The updated data object instance.
 	 */
-	T create(T obj);
+	T create(T obj) throws ObjectNotFoundException;
 
 	/**
-	 * Save instance to persistent storage.
+	 * Updates an existing instance to persistent storage with the specified
+	 * values.
 	 * 
 	 * @param obj
-	 * @return The update data object instance.
+	 *            New data to use to overwrite the existing data, matched by the
+	 *            ID.
+	 * @return The updated data object instance.
 	 * @exception ObjectNotFoundException
+	 *                If the specified ID does not already exist, or if any
+	 *                foreign key lookups were not found.
 	 */
 	T save(T obj) throws ObjectNotFoundException;
 

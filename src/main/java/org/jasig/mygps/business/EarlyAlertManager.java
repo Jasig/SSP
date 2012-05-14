@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jasig.ssp.dao.SelfHelpGuideQuestionResponseDao;
+import org.jasig.ssp.dao.SelfHelpGuideResponseDao;
+import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
+import org.jasig.ssp.model.SelfHelpGuideResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.jasig.ssp.dao.SelfHelpGuideQuestionResponseDao;
-import org.jasig.ssp.dao.SelfHelpGuideResponseDao;
-import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
-import org.jasig.ssp.model.SelfHelpGuideResponse;
 
 @Service
 @Transactional
@@ -62,6 +62,7 @@ public class EarlyAlertManager {
 
 			params.put("studentId", selfHelpGuideQuestionResponse
 					.getSelfHelpGuideResponse().getPerson().getUserId());
+			// TODO Default campuId needs pulled from database
 			params.put("campusId", EARLY_ALERT_DEFAULT_CAMPUS_ID);
 			params.put(
 					"referralReason",
@@ -76,10 +77,10 @@ public class EarlyAlertManager {
 									.getSelfHelpGuideQuestion());
 
 			try {
-				LOGGER.info("Sending Alert for student "
+				LOGGER.info("Sending Alert for student ID \""
 						+ selfHelpGuideQuestionResponse
 								.getSelfHelpGuideResponse().getPerson()
-								.getUserId() + " : generateCriticalAlerts()");
+								.getUserId() + "\" : generateCriticalAlerts()");
 
 				String result = restTemplate.postForObject(earlyAlertApiBaseUrl
 						+ "/createEarlyAlert", params, String.class);

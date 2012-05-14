@@ -171,7 +171,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	@Override
 	public Task createForPersonWithChallengeReferral(final Challenge challenge,
 			final ChallengeReferral challengeReferral, final Person person,
-			final String sessionId) {
+			final String sessionId) throws ObjectNotFoundException {
 
 		// Create, fill, and persist a new Task
 		final Task task = new Task();
@@ -190,7 +190,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	@Override
 	public Task createCustomTaskForPerson(final String name,
 			final String description,
-			final Person student, final String sessionId) {
+			final Person student, final String sessionId)
+			throws ObjectNotFoundException {
 		final Task customTask = new Task();
 		customTask.setDescription(description);
 		customTask.setPerson(student);

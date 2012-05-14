@@ -19,11 +19,10 @@ public interface JournalStepService extends
 	JournalStep get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	JournalStep create(JournalStep obj);
+	JournalStep create(JournalStep obj) throws ObjectNotFoundException;
 
 	@Override
-	JournalStep save(JournalStep obj)
-			throws ObjectNotFoundException;
+	JournalStep save(JournalStep obj) throws ObjectNotFoundException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;
