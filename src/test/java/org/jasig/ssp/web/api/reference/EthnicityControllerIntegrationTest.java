@@ -9,6 +9,12 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reference.EthnicityTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +23,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.reference.EthnicityTO;
-import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * Ethnicity controller tests
@@ -141,7 +141,7 @@ public class EthnicityControllerIntegrationTest {
 				testString1, obj.getName());
 		assertEquals(
 				"Returned EthnicityTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedById());
+				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
 				controller.delete(obj.getId()).isSuccess());
@@ -157,8 +157,8 @@ public class EthnicityControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		Collection<EthnicityTO> list = controller.getAll(ObjectStatus.ACTIVE,
-				null, null, null, null).getRows();
+		final Collection<EthnicityTO> list = controller.getAll(
+				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",

@@ -12,8 +12,6 @@ import ch.qos.logback.core.joran.spi.JoranException;
 
 /**
  * Simple Utility class for loading an external config file for logback
- * 
- * @author daniel
  */
 public class LogBackConfigLoader {
 
@@ -26,10 +24,10 @@ public class LogBackConfigLoader {
 	 * @param configPath
 	 *            A config file in an external location
 	 * @throws IOException
-	 *             If external config file coult not be processed because it
+	 *             If external config file could not be processed because it
 	 *             could not be accessed or read.
 	 * @throws JoranException
-	 *             If the logback configuration file coult not be processed by
+	 *             If the logback configuration file could not be processed by
 	 *             logback.
 	 */
 	public LogBackConfigLoader(final String configPath) throws IOException,
@@ -50,15 +48,18 @@ public class LogBackConfigLoader {
 							+ configPath);
 				} else {
 					throw new IOException(
-							"Logback External Config File exists and is a file, but cannot be read.");
+							"Logback External Config File exists and is a file, but cannot be read:  "
+									+ configPath);
 				}
 			} else {
 				throw new IOException(
-						"Logback External Config File Parameter exists, but does not reference a file");
+						"Logback External Config File Parameter exists, but does not reference a file:  "
+								+ configPath);
 			}
 		} else {
 			throw new IOException(
-					"Logback External Config File Parameter does not reference a file that exists");
+					"Logback External Config File Parameter does not reference a file that exists:  "
+							+ configPath);
 		}
 	}
 

@@ -9,15 +9,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.validator.EmailValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.MessageDao;
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.Message;
@@ -28,6 +19,16 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.VelocityTemplateService;
+import org.jasig.ssp.service.reference.ConfigService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -51,18 +52,22 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private transient MessageTemplateDao messageTemplateDao;
 
-	@Value("#{configProperties.messageManager_bcc}")
-	private String bcc;
-
-	@Value("#{configProperties.send_mail}")
-	private boolean sendMail = false;
+	@Autowired
+	private transient ConfigService configService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MessageServiceImpl.class);
 
-	@Override
-	public void setBcc(final String bcc) {
-		this.bcc = bcc;
+	public String getBcc() {
+		return configService.getByNameEmpty("bcc_email_address");
+	}
+
+	public boolean shouldSendMail() {
+		final String shouldSendMail = configService.getByNameNull("send_mail");
+		if (shouldSendMail != null) {
+			return Boolean.valueOf(shouldSendMail);
+		}
+		return false;
 	}
 
 	private Message createMessage(
@@ -122,6 +127,8 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	@Transactional(readOnly = false)
+	@Scheduled(fixedDelay = 300000)
+	// run 5 mins after the end of the last invocation
 	public void sendQueuedMessages() {
 
 		LOGGER.info("BEGIN : sendQueuedMessages()");
@@ -141,7 +148,7 @@ public class MessageServiceImpl implements MessageService {
 		LOGGER.info("END : sendQueuedMessages()");
 	}
 
-	protected boolean validateEmail(String email) {
+	protected boolean validateEmail(final String email) {
 		final EmailValidator emailValidator = EmailValidator.getInstance();
 		return emailValidator.isValid(email);
 	}
@@ -179,8 +186,8 @@ public class MessageServiceImpl implements MessageService {
 						+ message.getRecipientEmailAddress() + "' is invalid");
 			}
 
-			if ((bcc != null) && (bcc.length() > 0)) {
-				mimeMessageHelper.setBcc(bcc);
+			if ((getBcc() != null) && (getBcc().length() > 0)) {
+				mimeMessageHelper.setBcc(getBcc());
 			}
 
 			mimeMessageHelper.setSubject(message.getSubject());
@@ -188,7 +195,7 @@ public class MessageServiceImpl implements MessageService {
 
 			mimeMessage.setContent(message.getBody(), "text/html");
 
-			if (sendMail) {
+			if (shouldSendMail()) {
 				javaMailSender.send(mimeMessage);
 			}
 

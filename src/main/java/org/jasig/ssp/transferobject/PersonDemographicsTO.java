@@ -11,7 +11,7 @@ import org.jasig.ssp.model.PersonDemographics;
 import com.google.common.collect.Lists;
 
 public class PersonDemographicsTO
-		extends AuditableTO<PersonDemographics>
+		extends AbstractAuditableTO<PersonDemographics>
 		implements TransferObject<PersonDemographics> {
 
 	@NotNull

@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.AuditableTO;
+import org.jasig.ssp.transferobject.AbstractAuditableTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ import com.google.common.collect.Sets;
  * @param <M>
  *            Model type
  */
-public abstract class AbstractAuditableTOFactory<TObject extends AuditableTO<M>, M extends Auditable>
+public abstract class AbstractAuditableTOFactory<TObject extends AbstractAuditableTO<M>, M extends Auditable>
 		implements TOFactory<TObject, M> {
 
 	private final transient Class<TObject> tObjectClass;

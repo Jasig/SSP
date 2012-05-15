@@ -43,12 +43,14 @@ Ext.define('Ssp.controller.admin.ConfidentialityLevelAdminViewController', {
 		var item = new Ssp.model.reference.ConfidentialityLevel();
        	var grid = button.up('grid');
        	item.set('name','default');
+       	
+       	console.log(item);
 
 		Ext.Ajax.request({
 			url: grid.getStore().getProxy().url,
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			jsonData: {"id":"","name":"default","description":""},
+			jsonData: item.data,
 			success: function(response, view) {
 				var r = Ext.decode(response.responseText);
 				item.populateFromGenericObject(r);

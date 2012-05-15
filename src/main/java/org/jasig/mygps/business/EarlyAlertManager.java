@@ -11,7 +11,6 @@ import org.jasig.ssp.model.SelfHelpGuideResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -38,13 +37,6 @@ public class EarlyAlertManager {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertManager.class);
-
-	@Value("#{configProperties.earlyAlertApiBaseUrl}")
-	private transient String earlyAlertApiBaseUrl;
-
-	public void setEarlyAlertApiBaseUrl(final String earlyAlertApiBaseUrl) {
-		this.earlyAlertApiBaseUrl = earlyAlertApiBaseUrl;
-	}
 
 	@Transactional(readOnly = false)
 	public void generateCriticalAlerts() {
@@ -82,8 +74,9 @@ public class EarlyAlertManager {
 								.getSelfHelpGuideResponse().getPerson()
 								.getUserId() + "\" : generateCriticalAlerts()");
 
+				// :TODO post to early alert api
 				final String result = restTemplate.postForObject(
-						earlyAlertApiBaseUrl
+						"Something goes here"
 								+ "/createEarlyAlert", params, String.class);
 
 				if (Boolean.parseBoolean(result.trim())) {
@@ -141,8 +134,9 @@ public class EarlyAlertManager {
 						+ selfHelpGuideResponse.getPerson().getUserId()
 						+ " : generateThresholdAlerts()");
 
+				// :TODO post early alert
 				final String result = restTemplate.postForObject(
-						earlyAlertApiBaseUrl
+						"something goes here"
 								+ "/createEarlyAlert", params, String.class);
 
 				if (Boolean.parseBoolean(result.trim())) {
@@ -167,5 +161,4 @@ public class EarlyAlertManager {
 
 		LOGGER.info("END : generateThresholdAlerts()");
 	}
-
 }

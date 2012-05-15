@@ -5,11 +5,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,12 +25,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.reference.ChallengeTO;
-import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * Challenge controller tests
@@ -37,7 +38,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 public class ChallengeControllerIntegrationTest {
 
 	@Autowired
-	private ChallengeController controller;
+	private transient ChallengeController controller;
 
 	private static final UUID CHALLENGE_ID = UUID
 			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
@@ -112,17 +113,15 @@ public class ChallengeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		String testString1 = "testString1";
-		String testString2 = "testString1";
+		final String testString1 = "testString1";
+		final String testString2 = "testString1";
 
 		// Check validation of 'no ID for create()'
 		ChallengeTO obj = new ChallengeTO(UUID.randomUUID(), testString1,
 				testString2);
 		try {
 			obj = controller.create(obj);
-			assertTrue(
-					"Calling create with an object with an ID should have thrown a validation excpetion.",
-					false);
+			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
 		} catch (ValidationException exc) {
 			/* expected */
 		}
@@ -142,7 +141,7 @@ public class ChallengeControllerIntegrationTest {
 				testString1, obj.getName());
 		assertEquals(
 				"Returned ChallengeTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedById());
+				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
 				controller.delete(obj.getId()).isSuccess());
@@ -158,7 +157,8 @@ public class ChallengeControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		Collection<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE,
+		final Collection<ChallengeTO> list = controller.getAll(
+				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
@@ -176,24 +176,25 @@ public class ChallengeControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerGetAllResults() throws Exception {
-		Collection<ChallengeTO> list = controller.getAll(ObjectStatus.ACTIVE,
+		final Collection<ChallengeTO> list = controller.getAll(
+				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
 
-		Iterator<ChallengeTO> iter = list.iterator();
+		final Iterator<ChallengeTO> iter = list.iterator();
 
 		ChallengeTO challenge = iter.next();
 		assertTrue("Name should have been longer than 0 characters.", challenge
 				.getName().length() > 0);
-		assertTrue("ModifiedBy id should not have been empty.", !challenge
-				.getModifiedById().equals(UUID.randomUUID()));
+		assertFalse("ModifiedBy id should not have been empty.", challenge
+				.getModifiedBy().getId().equals(UUID.randomUUID()));
 		assertTrue("ShowInStudentIntake should have been true.",
 				challenge.isShowInStudentIntake());
 
 		challenge = iter.next();
 		assertTrue("Description should have been longer than 0 characters.",
 				challenge.getDescription().length() > 0);
-		assertTrue("CreatedBy id should not have been empty.", !challenge
-				.getCreatedById().equals(UUID.randomUUID()));
+		assertFalse("CreatedBy id should not have been empty.", challenge
+				.getCreatedBy().getId().equals(UUID.randomUUID()));
 		assertTrue("ShowInSelfHelpSearch should have been true.",
 				challenge.isShowInSelfHelpSearch());
 	}

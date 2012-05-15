@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.jasig.ssp.transferobject.AuditableTO;
+import org.jasig.ssp.transferobject.AbstractAuditableTO;
 import org.jasig.ssp.transferobject.PagingTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TransferObject;
@@ -20,7 +20,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * 
  * <p>
  * Handles return types from controllers used in the SSP API like
- * {@link AbstractReferenceTO}, {@link AuditableTO}, {@link PagingTO}, and Lists
+ * {@link AbstractReferenceTO}, {@link AbstractAuditableTO}, {@link PagingTO}, and Lists
  * and Sets with values of those types.
  * <p>
  * This custom resolver is required because the built-in Spring mocks only
@@ -49,7 +49,7 @@ public class JacksonMethodReturnValueHandler implements
 		// Valid base classes or interfaces that the SSP API is expected to
 		// serialize
 		classes.add(AbstractReferenceTO.class);
-		classes.add(AuditableTO.class);
+		classes.add(AbstractAuditableTO.class);
 		classes.add(List.class);
 		classes.add(PagingTO.class);
 		classes.add(ServiceResponse.class);

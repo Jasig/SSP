@@ -58,7 +58,7 @@ public abstract class Auditable {
 	 * Person that created this entity.
 	 * 
 	 * Set to load eagerly because
-	 * {@link org.jasig.ssp.transferobject.AuditableTO#from(org.jasig.ssp.model.Auditable)}
+	 * {@link org.jasig.ssp.transferobject.AbstractAuditableTO#from(org.jasig.ssp.model.Auditable)}
 	 * pulls the ID from the full Person object and would require an extra
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses {@link Auditable} transfer objects).
@@ -78,7 +78,7 @@ public abstract class Auditable {
 	 * Last person to modify this entity.
 	 * 
 	 * Set to load eagerly because
-	 * {@link org.jasig.ssp.transferobject.AuditableTO#from(org.jasig.ssp.model.Auditable)}
+	 * {@link org.jasig.ssp.transferobject.AbstractAuditableTO#from(org.jasig.ssp.model.Auditable)}
 	 * pulls the ID from the full Person object and would require an extra
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses Auditable transfer objects).

@@ -183,6 +183,13 @@
 			<version>${spring.version}</version>
 		</dependency>
 		
+		<!-- Apache Commons Configuration - allows loading config from the db -->
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.8</version>
+		</dependency>
+		
 		<!--  JSR 303 with Hibernate Validator -->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -357,6 +364,13 @@
 			<version>${apache.httpcomponents.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- Allow use of properties files in maven script -->
+		<dependency>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>properties-maven-plugin</artifactId>
+			<version>1.0-alpha-2</version>
+		</dependency> 
 	</dependencies>
 	
 	<build>	 
@@ -430,10 +444,23 @@
 				<version>2.0.3</version>
 				<configuration>
 					<!-- verbose>true</verbose -->
-					<propertyFile>/usr/local/etc/ssp/ssp-liquibase.properties</propertyFile>
+					<driver>${db_driver_class}</driver>
+					<url>${db_url}</url>
+					<username>${db_admin_username}</username>
+					<password>${db_admin_password}</password>
 					<!-- In order for the liquibase-maven-plugin to pickup any updates you have 
 						made to the changesets, you will need to "mvn compile" the project first -->
 					<changeLogFile>org/jasig/ssp/database/masterChangeLog-test.xml</changeLogFile>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<configuration>
+					<files>
+						<file>${env.SSP_CONFIGDIR}/ssp-config.properties</file>
+					</files>
 				</configuration>
 			</plugin>
 		</plugins>
