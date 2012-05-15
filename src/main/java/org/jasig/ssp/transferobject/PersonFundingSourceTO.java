@@ -11,7 +11,7 @@ import org.jasig.ssp.model.PersonFundingSource;
 import com.google.common.collect.Lists;
 
 public class PersonFundingSourceTO
-		extends AuditableTO<PersonFundingSource>
+		extends AbstractAuditableTO<PersonFundingSource>
 		implements TransferObject<PersonFundingSource> {
 
 	@NotNull

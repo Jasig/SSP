@@ -11,7 +11,7 @@ import org.jasig.ssp.model.PersonChallenge;
 import com.google.common.collect.Lists;
 
 public class PersonChallengeTO
-		extends AuditableTO<PersonChallenge>
+		extends AbstractAuditableTO<PersonChallenge>
 		implements TransferObject<PersonChallenge> {
 
 	@NotNull

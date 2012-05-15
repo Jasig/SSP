@@ -11,7 +11,7 @@ import org.jasig.ssp.model.PersonEducationPlan;
 import com.google.common.collect.Lists;
 
 public class PersonEducationPlanTO
-		extends AuditableTO<PersonEducationPlan>
+		extends AbstractAuditableTO<PersonEducationPlan>
 		implements TransferObject<PersonEducationPlan> {
 
 	@NotNull

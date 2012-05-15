@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.jasig.ssp.model.Task;
 
 public class TaskTO
-		extends AuditableTO<Task>
+		extends AbstractAuditableTO<Task>
 		implements TransferObject<Task>, Serializable, NamedTO {
 
 	private static final long serialVersionUID = 5796302591576434925L;

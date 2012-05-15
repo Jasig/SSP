@@ -8,6 +8,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +19,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.reference.ChallengeTO;
 
 /**
  * {@link MyGpsChallengeController} tests
@@ -71,7 +71,7 @@ public class MyGpsChallengeControllerIntegrationTest {
 				CHALLENGE_ID, challenge.getId());
 
 		assertNotNull("ModifiedBy id should not have been empty.",
-				challenge.getModifiedById());
+				challenge.getModifiedBy());
 		assertTrue("ShowInStudentIntake should have been true.",
 				challenge.isShowInStudentIntake());
 
