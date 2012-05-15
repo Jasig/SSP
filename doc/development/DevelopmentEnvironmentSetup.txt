@@ -1,110 +1,213 @@
 How to set up your development environment:
 
-1. Create a base directory for everything. Windows example: C:\java\
-2. Create a sub-directory to hold your binaries and tools.
-	Windows example: C:\java\bin
-3. Install (extract ZIP files to their own directories) the following packages:
-	- Maven (apache-maven-3.0.3)
-	- Tomcat (apache-tomcat-6.0.35)
-		(may soon be replaced by VMware vFabric tc Server (vfabric-tc-server-developer-2.6.3.RELEASE) hopefully)
-	- Groovy (groovy-1.8.6)
-	- SpringSource Tool Suite (sts-2.9.0.RELEASE)
-4. Install PostgreSQL 9.1 or newer (http://www.postgresql.org/download/)
-5. Setup a PostgreSQL database
-	- Launch the newly installed pgAdmin application.
-	- In the Object browser, navigate to and right click on
-		"Server Groups->Servers->PostgreSQL 9.1 (localhost:5432)". (The last 
-		item may be different depending on the settings you made during 
-		installation.)
-	- In the pop-up context menu, click "Connect" (enter the admin password you chose when you installed PostgreSQL if prompted)
-	- Right click on "Login Roles" and click "New Login Role..."
-	   - In the Properties tab, enter a Role name of "sspadmin" (no quotes).
-	   - In the Definition tab, enter a Password of "sspadmin" (no quotes).
-	   - Click Ok.
-	- Perform the previous steps again, but use "ssp" instead of "sspadmin".
-	- Check that the new "sspadmin" and "ssp" roles exist in the Login Roles
-		section of the Object browser.
-	- Back in the Object browser right-click on "Databases" and click "New Database...".
-	- Enter a Name of "ssp", Owner of "sspadmin", and click Ok.
-	- You may now exit pgAdmin.
-6. Download and install the latest version of Sun Java JDK 6.
-7. Create a project files directory. Windows example: C:\java\projects
-8. Setup environment variables pointing to the appropriate locations where they
-	were installed. The below use Windows environment path examples, but the
-	environment variable names match exactly:
-	- GROOVY_HOME=C:\java\bin\groovy-1.8.6
-	- JAVA_HOME=C:\Program Files\Java\jdk1.6.0_31
-	- MAVEN_HOME=C:\java\bin\apache-maven-3.0.3
-	- SSP_TESTCONFIGDIR=C:\java\projects\ssp\src\test\resources\
-		This will point to wherever your projects directory and Git checkouts
-		were placed. You may need to alter the "C:\java\projects\ssp" part, but
-		the "src\test\resources\" is relative to the root of the project.
-		Make sure to include the trailing directory separator!
-	- Add the following elements to your system PATH environment variable:
-		- %JAVA_HOME%\bin (you may want to add this one at or near the beginning, in case there is another copy of Java already installed on your system)
-		- %MAVEN_HOME%\bin
-		- %GROOVY_HOME%\bin
-9. Setup your editing and testing environment in SpringSource Tool Suite:
+* Download and install the latest version of Sun Java JDK 6 or install the 
+	Java6 package (OpenJDK is acceptable)
+
+
+* Create Directories
+	- Create a base directory for everything, or choose appropriate paths. 
+		Windows: C:\java
+		Unix: /usr/local and /home/user/projects
+
+	- Create a sub-directory to hold your binaries and tools.
+		Windows: C:\java\bin
+		Unix: /usr/local/
+	
+	- Create another sub-directory to hold ssp configuration:
+		Windows: C:\java\etc\ssp
+		Unix: /usr/local/etc/ssp
+
+	- Create a project directory for ssp src code. 
+		Windows: C:\java\projects
+		Unix:  /home/user/java/projects
+
+
+* Install the following packages by extracting the ZIP or .tar.gz files to their own directories.
+	- Approximate walkthrough of setting up a Java development environment on 
+		Linux also available at:  https://bowerstudios.com/node/720
+	- Ignore the groovy sections of the steps unless you need one of the groovy 
+		scripts in the scripts directory
+	- If you only need to build the project (and not edit anything) feel free 
+		to skip the sts sections of the steps.
+
+	- SpringSource Tool Suite (sts-2.9.x or greater recommended) 
+		- Recommended, but any editor/ide is fine.
+		Windows: C:\java\bin\springsource
+		Unix: /usr/local/springsource
+		If you install sts, you won't need to download Maven, as sts packages a version of maven.
+		
+	- Maven (apache-maven-3.0.x)
+		Windows: C:\java\bin\apache-maven-3.0.x
+		Unix: /usr/local/apache-maven-3.0.x
+		
+	- Tomcat (apache-tomcat-6.0.x) 
+		- app is tested here, but should run in other app containers
+		Windows: C:\java\bin\apache-tomcat-6.0.x
+		Unix: /usr/local/apache-tomcat-6.0.x
+		
+	- Groovy (groovy-1.8.x) 
+		Windows: C:\java\bin\groovy-1.8.6
+		Unix: /usr/local/groovy-1.8.6
+
+	- On Unix, I recommend creating symlinks to make switching versions simpler.
+		- sts
+			ln -s /usr/local/springsource/sts-2.9.1.RELEASE /usr/local/sts
+		- maven under sts:
+			ln -s /usr/local/springsource/apache-maven-3.0.3 /usr/local/maven
+		- maven separately downloaded:
+			ln -s /usr/local/apache-maven-3.0.3 /usr/local/maven
+		- tomcat
+			ln -s /usr/local/apache-tomcat-6.0.35 /usr/local/tomcat
+		- groovy
+			ln -s /usr/local/groovy-1.8.6 /usr/local/groovy
+
+	- Create environment variables
+		- Java
+			Windows: JAVA_HOME=C:\Program Files\Java\jdk1.6.0_31
+			Unix (64 bit Ubuntu): JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
+		- Groovy
+			Windows: GROOVY_HOME=C:\java\bin\groovy-1.8.6 
+			Unix:  GROOVY_HOME=/usr/local/groovy
+		- Maven
+			Windows: MAVEN_HOME=C:\java\bin\apache-maven-3.0.3
+			Unix:  MAVEN_HOME=/usr/local/maven
+		- SSP
+			- SSP_CONFIGDIR can be set system wide here - or via the deployed 
+				context.xml (as specified later in this document)
+			- SSP_TESTCONFIGDIR allows 2 installations of SSP to exist on the 
+				same box, one to be used for unit testing purposes, the other to 
+				deploy the app in tomcat.  It is fine to set them to be the 
+				same location.
+			Windows:
+				SSP_CONFIGDIR=C:\java\etc\ssp
+				SSP_TESTCONFIGDIR=C:\java\etc\ssp
+			Unix:
+				SSP_CONFIGDIR=/usr/local/etc/ssp
+				SSP_TESTCONFIGDIR=/usr/local/etc/ssp
+				
+		- Update the PATH environment variable by appending the following items
+			Windows:
+				- (A tool called RapidEE can make this less painful in windows environments):
+				PATH=%JAVA_HOME%\bin;%MAVEN_HOME%\bin;%GROOVY_HOME%\bin
+			Unix:
+				PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$GROOVY_HOME/bin 
+
+
+* Install PostgreSQL 9.1 or newer (http://www.postgresql.org/download/) 
+	- pgAdmin recommended, but not required.  You should be able to use any db client
+	though this and the following step might not line up exactly.
+
+
+* Setup a PostgreSQL database
+	- Add the sspadmin and ssp roles
+		- Launch the newly installed pgAdmin application.
+		- In the Object browser, navigate to and right click on
+			"Server Groups->Servers->PostgreSQL 9.1 (localhost:5432)". (The last 
+			item may be different depending on the settings you made during 
+			installation.)
+		- In the pop-up context menu, click "Connect" (enter the admin password 
+			you chose when you installed PostgreSQL if prompted)
+		- Right click on "Login Roles" and click "New Login Role..."
+			- In the Properties tab, enter a Role name of "sspadmin" (no quotes).
+			- In the Definition tab, enter a Password, and write it down for use later.
+		- Perform the previous steps again, but use "ssp" instead of "sspadmin" 
+			and use a different password.
+		- Check that the new "sspadmin" and "ssp" roles exist in the Login Roles
+			section of the Object browser.
+		- Back in the Object browser right-click on "Databases" and click "New Database...".
+		- Enter a Name of "ssp", Owner of "sspadmin", and click Ok.
+
+	
+* Setup SpringSource Tool Suite:
 	- Launch sts.exe from your SpringSource Tool Suite directory.
-		Windows example: C:\java\bin\sts-2.9.0.RELEASE\STS.exe
-	- Confirm that in the Package Explorer (Window->Show View->Package Explorer)
-		lists "Apache Tomcat v6.0" or similar in "Servers". If not, add it
-		pointing to your Tomcat installation directory.
+		Windows: C:\java\bin\sts-2.9.0.RELEASE\STS.exe
+		Unix: /usr/local/springsource/sts/STS
 	- Install required extensions:
-		- Once the application launches, from the Dashboard view (if not 
-			showing already, the Dashboard may be accessed via Help->Dashboard) 
-			click the Extensions tab at the bottom of the Dashboard view.
-		- Mark with a checkmark the following extensions:
-			- Groovy Eclipse
-		- Click the Install button in the lower right. Accept any dialog boxes
-			that are shown.
-	- Checkout the project with git.
+		- Once the sts launches, from the Dashboard view click the Extensions 
+			tab at the bottom of the Dashboard view. If it is not showing already, 
+			the Dashboard may be accessed via Help->Dashboard) 
+		- Install the Groovy Eclipse extension:
+			- necessary for viewing/writing tests in src/groovy
+
+
+* Checkout the project with git.
 		- https://github.com/russlittle/SSP-Open-Source-Project
 	- Import project into Eclipse
-	- (Don't forget to update the SSP_TESTCONFIGDIR environment variable if the
-		path you chose for the project checkout from Git differs from what you
-		set it to before.)
-10. Setup local configuration files
+
+
+* Setup local configuration files
 	- Symbolically link to, or copy (and manually watch for changes), the files
-		in /src/main/config/external. The links/copies should be in a directory outside of
-		the source control tree, since your local versions need modified
-		appropriately for your environment and must not be committed back to
-		the repository.
-	- Modify the files you copied from externalConfig to suit your environment
-	- Add the following parameter, after setting the appropriate path for
-	    your environment, to your Tomcat context.xml found in Tomcat/conf/:
-	    	<Parameter name="SSP_CONFIGDIR" value="/usr/local/etc/ssp" override="false" />
-	    Example Windows version:
-	    	<Parameter name="SSP_CONFIGDIR" value="C:\\ssp" override="false" />
-	    	 />
-	  OR
-	    Copy the /ssp/src/main/webapp/META-INF/context.xml file to your
+		in /src/main/config/external to the directory you specified for 
+		SSP_TESTCONFIGDIR and SSP_CONFIGDIR.  The links/copies should be in a 
+		directory outside of the source control tree, since your local versions 
+		need modified appropriately for your environment and must not be 
+		committed back to the repository.
+	- Modify the files you copied into SSP_TESTCONFIGDIR and SSP_CONFIGDIR 
+		to suit your environment.  Be sure to set the db passwords for sspadmin 
+		and ssp users in the ssp-config.properties file
+	- If you have set your config directory to something other than 
+	/usr/local/etc/ssp and do not wish to set the SSP_CONFIGDIR environment 
+	variable, then you can add that path to the Tomcat context.xml.
+		Example Windows version:
+			<Parameter name="SSP_CONFIGDIR" value="C:\\ssp" override="false" />
+		OR
+		Copy the ssp/src/main/webapp/META-INF/context.xml file to your
 		Tomcat directory at
 			[your Tomcat (Catalina) directory]/conf/[enginename]/[hostname]/
-		Replace the items in brackets as appropriate for your
-		environment. Example: $CATALINA_HOME/conf/[enginename]/[hostname]/
-11. Setup MyGPS CoffeeScript compilation tools
+		Replace the items in brackets as appropriate for your environment.
+		
+* Setup CoffeeScript compilation tools (if updating legacy student-ui application)
 	- Install node.js http://nodejs.org/#download
-	- Download closure https://developers.google.com/closure/compiler/
-	- Once installed (and maybe re-log if your PATH variable isn't updated yet), run
+	- Download the closure compiler https://developers.google.com/closure/compiler/
+	- Once installed, run:
 		npm install -g coffee-script
 	- After changes to any .coffee file
 		- Manually run at the command line/prompt:
-			cd MY_PATH_TO_EXTERNAL_CONFIG_FILES
+			cd scripts/coffeeScriptBuilds
 			cake build
 	
-12. Build & Deploy
+* Build & Deploy
+	- SSP can be run in one of 3 modes - dev-standalone, standalone, and uPortal
+		- dev-standalone
+			- completely free of uPortal - useful for development work only.
+		- standalone
+			- as the only portlet in a uPortal instance
+		- uPortal
+			- as one of many portlets in a uPortal instance
+	
+	- To run ssp in dev-standalone mode:
+		- set the spring.profiles.active environment variable: 
+			export spring.profiles.active=dev-standalone
+		
+		- Use sts to deploy the application to an embedded tomcat:
+			- Confirm that in the Package Explorer (Window->Show View->Package Explorer)
+				lists "Apache Tomcat v6.0" or similar in "Servers". If not, add it
+				pointing to your Tomcat installation directory.
+			- use the sts server pane to start / debug / stop the application
+		OR
+		- Deploy straight to an app server.o
+		
+	- Building should be fairly straightforward, at the command line, run: 
+		mvn package
 
-Additional, optional tasks:
-	- To run with SQL Server instead of PostgreSQL:
+* Additional, optional tasks:
+	- SQL Server instead of PostgreSQL (not complete yet)
 		- Follow the instructions located in the source code 
 			/externalLibs/msSQL-JDBC_toMaven.sh script file.
-			On a Windows system you can open that script file in a text editor
-			to read the instructions.
+			Open that script file in a text editor to read the instructions.
+			
 	- To view/edit some of the documentation in the source /doc directory, install
 		the following applications:
 		- ObjectAid: http://www.objectaid.com/installation
 		- FreeMind
+		
 	- To run the FindBug reports locally before the build server runs them, install
 		the FindBug plugin via the "Install New Software" tool in Eclipse:
 		- FindBugs: http://findbugs.cs.umd.edu/eclipse/
+
+	- Liquibase:
+		- You can run liquibase from maven to advance and rollback database versions:
+		mvn properties:read-project-properties liquibase:update
+		mvn properties:read-project-properties liquibase:rollback -Dliquibase.rollbackCount=1
+	
+	
