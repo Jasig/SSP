@@ -2,7 +2,9 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.studentintakedemographics',
 	id : 'StudentIntakeDemographics',
-    mixins: [ 'Deft.mixin.Injectable' ],
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.studentintake.DemographicsViewController',
     inject: {
     	childCareArrangementsStore: 'childCareArrangementsStore',
     	citizenshipsStore: 'citizenshipsStore',
@@ -76,6 +78,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        allowBlank: true
 					},{
 				        xtype: 'combobox',
+				        itemId: 'citizenship',
 				        name: 'citizenshipId',
 				        fieldLabel: 'Citizenship',
 				        emptyText: 'Select One',
@@ -88,6 +91,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        allowBlank: true
 					},{
 				        fieldLabel: 'Country of citizenship',
+				        itemId: 'countryOfCitizenship',
 				        name: 'countryOfCitizenship'
 				    },{
 				        xtype: 'combobox',
@@ -124,14 +128,16 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				    },{
 				        xtype: "radiogroup",
 				        fieldLabel: "Childcare Needed?",
+				        itemId: 'childcareNeeded',
 				        columns: 1,
 				        items: [
 				            {boxLabel: "Yes", name: "childCareNeeded", inputValue:"true"},
 				            {boxLabel: "No", name: "childCareNeeded", inputValue:"false"}]
 				    },{
 				        xtype: 'combobox',
+				        itemId: 'childcareArrangement',
 				        name: 'childCareArrangementId',
-				        fieldLabel: 'If yes, what are your childcare arrangments?',
+				        fieldLabel: 'If yes, what are your childcare arrangements?',
 				        emptyText: 'Select One',
 				        store: this.childCareArrangementsStore,
 				        valueField: 'id',
@@ -142,6 +148,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        allowBlank: true
 					},{
 				        xtype: "radiogroup",
+				        itemId: 'isEmployed',
 				        fieldLabel: "Are you employed?",
 				        columns: 1,
 				        items: [
@@ -149,10 +156,12 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				            {boxLabel: "No", name: "employed", inputValue:"false"}]
 				    },{
 				        fieldLabel: 'Place of employment',
+				        itemId: 'placeOfEmployment',
 				        name: 'placeOfEmployment'
 				    },{
 				        xtype: 'combobox',
 				        name: 'shift',
+				        itemId: 'shift',
 				        fieldLabel: 'Shift',
 				        emptyText: 'Select One',
 				        store: this.employmentShiftsStore,
@@ -164,9 +173,11 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        allowBlank: true
 					},{
 				        fieldLabel: 'Wage',
+				        itemId: 'wage',
 				        name: 'wage'
 				    },{
 				        fieldLabel: 'Total hours worked weekly while attending school',
+				        itemId: 'totalHoursWorkedPerWeek',
 				        name: 'totalHoursWorkedPerWeek'
 				    }]
 				    }]

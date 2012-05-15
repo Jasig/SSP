@@ -4,7 +4,7 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 	id: 'StudentIntake',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.StudentIntakeToolViewController',
+    controller: 'Ssp.controller.tool.studentintake.StudentIntakeToolViewController',
     inject: {
         store: 'studentsStore'
     },

@@ -1,4 +1,4 @@
-Ext.define('Ssp.controller.tool.StudentIntakeToolViewController', {
+Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
