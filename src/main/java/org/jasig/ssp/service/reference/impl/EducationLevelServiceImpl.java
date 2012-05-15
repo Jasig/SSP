@@ -13,10 +13,6 @@ public class EducationLevelServiceImpl extends
 		AbstractReferenceService<EducationLevel>
 		implements EducationLevelService {
 
-	public EducationLevelServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private EducationLevelDao dao;
 

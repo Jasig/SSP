@@ -12,13 +12,6 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
     	formToDisplay: 'editchallenge'
     },
     control: {
-        gridView: {
-            selector: '.gridview',
-            listeners: {
-                beforedrop: 'onBeforeDrop'
-            }
-        },		
-    	
     	'editButton': {
 			click: 'onEditClick'
 		},
@@ -36,13 +29,7 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
 		this.store.load();
 		
 		return this.callParent(arguments);
-    },
-
-    onBeforeDrop: function(node, data, dropRec, dropPosition) {
-        var dropOn = dropRec ? ' ' + dropPosition + ' ' + dropRec.get('name') : ' on empty view';
-        Ext.Msg.alert("Drag from left to right", 'Dropped ' + data.records[0].get('name') + dropOn);
-        return 0;
-    },    
+    }, 
     
 	onEditClick: function(button) {
 		var grid, record;

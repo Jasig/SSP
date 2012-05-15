@@ -18,6 +18,7 @@ import org.jasig.ssp.service.PersonSelfHelpGuideResponseService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.transferobject.SelfHelpGuideResponseTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,8 @@ public class PersonSelfHelpGuideResponseServiceImpl
 	// .getLogger(PersonSelfHelpGuideResponseServiceImpl.class);
 
 	@Override
-	public List<SelfHelpGuideResponse> getAllForPerson(final Person person,
+	public PagingWrapper<SelfHelpGuideResponse> getAllForPerson(
+			final Person person,
 			final SortingAndPaging sAndP) {
 		return dao.getAllForPersonId(person.getId(), sAndP);
 	}

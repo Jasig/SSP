@@ -32,7 +32,8 @@ public interface EarlyAlertReasonService extends
 	EarlyAlertReason load(UUID id);
 
 	@Override
-	EarlyAlertReason create(EarlyAlertReason obj);
+	EarlyAlertReason create(EarlyAlertReason obj)
+			throws ObjectNotFoundException;
 
 	@Override
 	EarlyAlertReason save(EarlyAlertReason obj) throws ObjectNotFoundException;

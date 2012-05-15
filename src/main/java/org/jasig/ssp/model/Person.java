@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -116,7 +117,7 @@ public final class Person extends Auditable implements Serializable {
 
 	/**
 	 * User Id Secondary Id for used to identify the user in secondary systems
-	 * like ldap.
+	 * like LDAP.
 	 * 
 	 * Maximum length of 25.
 	 */
@@ -206,7 +207,7 @@ public final class Person extends Auditable implements Serializable {
 	private String photoUrl;
 
 	/**
-	 * School identifier.
+	 * School identifier for the student. A.k.a. Student ID.
 	 * 
 	 * Maximum length of 50.
 	 */
@@ -313,6 +314,11 @@ public final class Person extends Auditable implements Serializable {
 	@Size(max = 4000)
 	private String strengths;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "coach_id", nullable = true)
+	private Person coach;
+
 	/**
 	 * Initialize a Person.
 	 * 
@@ -339,10 +345,22 @@ public final class Person extends Auditable implements Serializable {
 		educationLevels = new HashSet<PersonEducationLevel>();
 	}
 
+	/**
+	 * Gets the full name
+	 * 
+	 * @return The first name and last name concatenated with a space in
+	 *         between.
+	 */
 	public String getFullName() {
 		return firstName + " " + lastName;
 	}
 
+	/**
+	 * Gets the e-mail address with the full name in the standard full e-mail
+	 * address syntax.
+	 * 
+	 * @return The e-mail address with the full name.
+	 */
 	public String getEmailAddressWithName() {
 		return getFullName() + " <" + primaryEmailAddress + ">";
 	}
@@ -351,7 +369,7 @@ public final class Person extends Auditable implements Serializable {
 		return firstName;
 	}
 
-	public void setFirstName(final String firstName) {
+	public void setFirstName(@NotNull final String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -367,7 +385,7 @@ public final class Person extends Auditable implements Serializable {
 		return lastName;
 	}
 
-	public void setLastName(final String lastName) {
+	public void setLastName(@NotNull final String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -384,7 +402,7 @@ public final class Person extends Auditable implements Serializable {
 		return primaryEmailAddress;
 	}
 
-	public void setPrimaryEmailAddress(final String primaryEmailAddress) {
+	public void setPrimaryEmailAddress(@NotNull final String primaryEmailAddress) {
 		this.primaryEmailAddress = primaryEmailAddress;
 	}
 
@@ -476,10 +494,22 @@ public final class Person extends Auditable implements Serializable {
 		this.photoUrl = photoUrl;
 	}
 
+	/**
+	 * Gets the SchoolID (a.k.a. Student ID given by the school)
+	 * 
+	 * @return the SchoolID
+	 */
 	public String getSchoolId() {
 		return schoolId;
 	}
 
+	/**
+	 * Sets the SchoolID (a.k.a. Student ID given by the school)
+	 * 
+	 * @param schoolId
+	 *            the SchoolID (a.k.a. Student ID given by the school); maximum
+	 *            length of 50 characters
+	 */
 	public void setSchoolId(final String schoolId) {
 		this.schoolId = schoolId;
 	}
@@ -594,6 +624,14 @@ public final class Person extends Auditable implements Serializable {
 		this.strengths = strengths;
 	}
 
+	public Person getCoach() {
+		return coach;
+	}
+
+	public void setCoach(final Person coach) {
+		this.coach = coach;
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 3;
@@ -649,6 +687,7 @@ public final class Person extends Auditable implements Serializable {
 				: schoolId.hashCode();
 		result *= StringUtils.isEmpty(strengths) ? "strengths".hashCode()
 				: strengths.hashCode();
+		result *= coach == null ? "coach".hashCode() : coach.getId().hashCode();
 		// not all fields included. only the business or non-expensive set
 		// fields are included in the hashCode
 

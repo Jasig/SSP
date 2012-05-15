@@ -24,11 +24,12 @@ import org.junit.Test;
 
 public class CategoryServiceTest {
 
-	private CategoryServiceImpl service;
-	private CategoryDao dao;
+	private transient CategoryServiceImpl service;
+
+	private transient CategoryDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new CategoryServiceImpl();
 		dao = createMock(CategoryDao.class);
 
@@ -84,7 +85,8 @@ public class CategoryServiceTest {
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
+		expect(dao.get(id)).andThrow(
+				new ObjectNotFoundException(id, "Category"));
 
 		replay(dao);
 

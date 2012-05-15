@@ -1,6 +1,5 @@
 package org.jasig.ssp.web.api;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.factory.EarlyAlertResponseTOFactory;
@@ -9,6 +8,8 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
+import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +68,8 @@ public class PersonEarlyAlertResponseController extends
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	List<EarlyAlertResponseTO> getAll(@PathVariable final UUID personId,
+	PagingTO<EarlyAlertResponseTO, EarlyAlertResponse> getAll(
+			@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
@@ -76,10 +78,13 @@ public class PersonEarlyAlertResponseController extends
 			throws Exception {
 
 		final Person person = personService.get(personId);
-
-		return getFactory().asTOList(
-				getService().getAllForPerson(person,
+		final PagingWrapper<EarlyAlertResponse> data = getService()
+				.getAllForPerson(
+						person,
 						SortingAndPaging.createForSingleSort(status, start,
-								limit, sort, sortDirection, "createdDate")));
+								limit, sort, sortDirection, "createdDate"));
+
+		return new PagingTO<EarlyAlertResponseTO, EarlyAlertResponse>(true,
+				data.getResults(), getFactory().asTOList(data.getRows()));
 	}
 }

@@ -1,19 +1,16 @@
-Ext.define('Ssp.view.admin.forms.crg.EditChallengeCategory',{
+Ext.define('Ssp.view.admin.forms.journal.EditStep',{
 	extend: 'Ext.form.Panel',
-	alias : 'widget.editchallengecategory',
+	alias : 'widget.editjournalstep',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.EditChallengeCategoryViewController',
-	height: '100%',
-	width: '100%',
-	anchor: '100%',
-	title: 'Edit Category',
+    controller: 'Ssp.controller.admin.journal.EditStepViewController',
+	title: 'Edit Step',
 	initComponent: function() {
         Ext.applyIf(this, {
             items: [
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Category Name',
+                    fieldLabel: 'Step Name',
                     anchor: '100%',
                     name: 'name'
                 },
@@ -22,8 +19,7 @@ Ext.define('Ssp.view.admin.forms.crg.EditChallengeCategory',{
                     fieldLabel: 'Description',
                     anchor: '100%',
                     name: 'description'
-                }
-            ],
+                }],
             
             dockedItems: [{
        		               xtype: 'toolbar',

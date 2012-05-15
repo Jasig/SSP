@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * SelfHelpGuide implementation service
+ */
 @Service
 @Transactional
 public class SelfHelpGuideServiceImpl extends
@@ -57,5 +60,4 @@ public class SelfHelpGuideServiceImpl extends
 	protected SelfHelpGuideDao getDao() {
 		return dao;
 	}
-
 }

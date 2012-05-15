@@ -59,7 +59,7 @@ public abstract class AbstractAuditableTOFactory<TObject extends AuditableTO<M>,
 			if (model == null) {
 				throw new ObjectNotFoundException(
 						"id provided, but not valid: "
-								+ tObject.getId().toString());
+								+ tObject.getId().toString(), mClass.getName());
 			}
 		}
 

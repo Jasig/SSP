@@ -47,10 +47,10 @@ public class PersonTO implements Serializable {
 		emailAddress = person.getPrimaryEmailAddress();
 		photoUrl = person.getPhotoUrl();
 
-		if ((null != person.getDemographics().getCoach())
-				&& (person.getId() != person.getDemographics().getCoach()
+		if ((null != person.getCoach())
+				&& (person.getId() != person.getCoach()
 						.getId()) && (depth < DEPTH_LIMIT)) {
-			coach = new PersonTO(person.getDemographics().getCoach(), depth + 1);
+			coach = new PersonTO(person.getCoach(), depth + 1);
 		} else {
 			coach = null;
 		}

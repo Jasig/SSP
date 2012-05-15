@@ -16,10 +16,6 @@ public class JournalSourceServiceImpl extends
 	@Autowired
 	transient private JournalSourceDao dao;
 
-	public JournalSourceServiceImpl() {
-		super();
-	}
-
 	protected void setDao(final JournalSourceDao dao) {
 		this.dao = dao;
 	}

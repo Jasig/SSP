@@ -22,14 +22,6 @@ public class ConfigServiceImpl extends
 	transient private ConfigDao dao;
 
 	/**
-	 * Constructor that sets the specific class types to be used by base class
-	 * methods.
-	 */
-	public ConfigServiceImpl() {
-		super();
-	}
-
-	/**
 	 * Set the DAO instance
 	 * 
 	 * @param dao
@@ -63,12 +55,12 @@ public class ConfigServiceImpl extends
 		final Config config = getByName(name);
 		if (config == null) {
 			throw new ObjectNotFoundException(
-					"Could not find Config value with key: " + name);
+					"Could not find Config value with key: " + name, "Config");
 		}
 
 		if (config.getValue() == null) {
 			throw new ObjectNotFoundException(
-					"Value not set for key: " + name);
+					"Value not set for key: " + name, "Config");
 
 		}
 		return config.getValue();

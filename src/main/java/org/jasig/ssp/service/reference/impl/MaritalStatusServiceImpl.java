@@ -13,10 +13,6 @@ public class MaritalStatusServiceImpl extends
 		AbstractReferenceService<MaritalStatus>
 		implements MaritalStatusService {
 
-	public MaritalStatusServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private MaritalStatusDao dao;
 

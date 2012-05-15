@@ -20,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class PersonServiceImpl implements PersonService {
 
 	@Autowired
-	private PersonDao dao;
+	private transient PersonDao dao;
 
 	@Override
-	public PagingWrapper<Person> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<Person> getAll(final SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
@@ -39,17 +39,24 @@ public class PersonServiceImpl implements PersonService {
 	 * @return The specified Person instance.
 	 */
 	@Override
-	public Person get(UUID id) throws ObjectNotFoundException {
+	public Person get(final UUID id) throws ObjectNotFoundException {
 		return dao.get(id);
 	}
 
 	@Override
-	public Person personFromUsername(String username)
+	public Person getByStudentId(String studentId)
 			throws ObjectNotFoundException {
-		Person obj = dao.fromUsername(username);
+		return dao.getByStudentId(studentId);
+	}
+
+	@Override
+	public Person personFromUsername(final String username)
+			throws ObjectNotFoundException {
+		final Person obj = dao.fromUsername(username);
 		if (null == obj) {
 			throw new ObjectNotFoundException(
-					"Could not find person with username: " + username);
+					"Could not find person with username: " + username,
+					"Person");
 		}
 		return obj;
 	}
@@ -61,7 +68,7 @@ public class PersonServiceImpl implements PersonService {
 	 *            Model instance
 	 */
 	@Override
-	public Person create(Person obj) {
+	public Person create(final Person obj) {
 		return dao.save(obj);
 	}
 
@@ -71,7 +78,7 @@ public class PersonServiceImpl implements PersonService {
 	 * @see IntakeService
 	 */
 	@Override
-	public Person save(Person obj) throws ObjectNotFoundException {
+	public Person save(final Person obj) throws ObjectNotFoundException {
 		return dao.save(obj);
 	}
 
@@ -82,8 +89,8 @@ public class PersonServiceImpl implements PersonService {
 	 * to {@link ObjectStatus#DELETED}.
 	 */
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException {
-		Person current = get(id);
+	public void delete(final UUID id) throws ObjectNotFoundException {
+		final Person current = get(id);
 
 		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);
@@ -91,19 +98,19 @@ public class PersonServiceImpl implements PersonService {
 		}
 	}
 
-	protected void setDao(PersonDao dao) {
+	protected void setDao(final PersonDao dao) {
 		this.dao = dao;
 	}
 
 	@Override
-	public Person personFromUserId(String userId)
+	public Person personFromUserId(final String userId)
 			throws ObjectNotFoundException {
 		return dao.fromUserId(userId);
 	}
 
 	@Override
-	public List<Person> peopleFromListOfIds(List<UUID> personIds,
-			SortingAndPaging sAndP) {
+	public List<Person> peopleFromListOfIds(final List<UUID> personIds,
+			final SortingAndPaging sAndP) {
 		return dao.getPeopleInList(personIds, sAndP);
 	}
 }

@@ -13,10 +13,6 @@ public class ChildCareArrangementServiceImpl extends
 		AbstractReferenceService<ChildCareArrangement>
 		implements ChildCareArrangementService {
 
-	public ChildCareArrangementServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private ChildCareArrangementDao dao;
 

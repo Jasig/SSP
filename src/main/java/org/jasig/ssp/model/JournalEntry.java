@@ -63,11 +63,12 @@ public class JournalEntry extends Auditable implements Restricted, Serializable 
 	}
 
 	public Date getEntryDate() {
-		return entryDate;
+		return entryDate == null ? null : new Date(entryDate.getTime());
 	}
 
 	public void setEntryDate(final Date entryDate) {
-		this.entryDate = entryDate;
+		this.entryDate = entryDate == null ? null : new Date(
+				entryDate.getTime());
 	}
 
 	public String getComment() {
@@ -117,7 +118,7 @@ public class JournalEntry extends Auditable implements Restricted, Serializable 
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/14/12 1:49 PM
 		int result = hashPrime();
 
 		// Auditable properties
@@ -138,6 +139,7 @@ public class JournalEntry extends Auditable implements Restricted, Serializable 
 				: journalTrack.getId().hashCode();
 		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
+
 		return result;
 	}
 

@@ -13,10 +13,6 @@ public class EthnicityServiceImpl extends
 		AbstractReferenceService<Ethnicity>
 		implements EthnicityService {
 
-	public EthnicityServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private EthnicityDao dao;
 

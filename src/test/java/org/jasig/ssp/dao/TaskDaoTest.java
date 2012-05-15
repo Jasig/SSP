@@ -67,13 +67,13 @@ public class TaskDaoTest {
 	@Autowired
 	private transient ChallengeReferralDao challengeReferralDao;
 
-	protected Person ken;
+	protected transient Person ken;
 
-	private Challenge testChallenge;
+	private transient Challenge testChallenge;
 
-	private ChallengeReferral testChallengeReferral;
+	private transient ChallengeReferral testChallengeReferral;
 
-	private Task testTask;
+	private transient Task testTask;
 
 	@Before
 	public void setUp() throws ObjectNotFoundException {
@@ -108,7 +108,7 @@ public class TaskDaoTest {
 	@Test
 	public void getAllForPersonId() {
 		assertList(dao.getAllForPersonId(ken.getId(), new SortingAndPaging(
-				ObjectStatus.ACTIVE)));
+				ObjectStatus.ACTIVE)).getRows());
 	}
 
 	@Test
@@ -163,7 +163,7 @@ public class TaskDaoTest {
 
 	@Test
 	public void getTasksInList() {
-		List<UUID> taskIds = Lists.newArrayList();
+		final List<UUID> taskIds = Lists.newArrayList();
 		taskIds.add(UUID.randomUUID());
 		taskIds.add(UUID.randomUUID());
 		taskIds.add(UUID.randomUUID());

@@ -11,18 +11,17 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 public interface CitizenshipService extends AuditableCrudService<Citizenship> {
 
 	@Override
-	public PagingWrapper<Citizenship> getAll(SortingAndPaging sAndP);
+	PagingWrapper<Citizenship> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public Citizenship get(UUID id) throws ObjectNotFoundException;
+	Citizenship get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public Citizenship create(Citizenship obj);
+	Citizenship create(Citizenship obj) throws ObjectNotFoundException;
 
 	@Override
-	public Citizenship save(Citizenship obj) throws ObjectNotFoundException;
+	Citizenship save(Citizenship obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

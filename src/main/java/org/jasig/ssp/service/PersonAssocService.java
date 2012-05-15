@@ -1,9 +1,8 @@
 package org.jasig.ssp.service;
 
-import java.util.List;
-
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public interface PersonAssocService<T extends Auditable> extends
@@ -16,5 +15,5 @@ public interface PersonAssocService<T extends Auditable> extends
 	 *            Sorting and paging options
 	 * @return All entities in the database filtered by the supplied status.
 	 */
-	List<T> getAllForPerson(Person person, SortingAndPaging sAndP);
+	PagingWrapper<T> getAllForPerson(Person person, SortingAndPaging sAndP);
 }

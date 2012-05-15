@@ -8,6 +8,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public interface TaskService
@@ -17,7 +18,7 @@ public interface TaskService
 	 * Get all tasks for the Person
 	 */
 	@Override
-	List<Task> getAllForPerson(Person person, SortingAndPaging sAndP);
+	PagingWrapper<Task> getAllForPerson(Person person, SortingAndPaging sAndP);
 
 	/**
 	 * Get all tasks for the Person in the given completion state
@@ -152,9 +153,10 @@ public interface TaskService
 	 * @param student
 	 * @param sessionId
 	 * @return Created task
+	 * @throws ObjectNotFoundException
 	 */
 	Task createCustomTaskForPerson(String name, String description,
-			Person student, String sessionId);
+			Person student, String sessionId) throws ObjectNotFoundException;
 
 	/**
 	 * Send a notice to the student about the task using the messageTemplate

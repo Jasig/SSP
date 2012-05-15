@@ -11,18 +11,17 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 public interface EthnicityService extends AuditableCrudService<Ethnicity> {
 
 	@Override
-	public PagingWrapper<Ethnicity> getAll(SortingAndPaging sAndP);
+	PagingWrapper<Ethnicity> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public Ethnicity get(UUID id) throws ObjectNotFoundException;
+	Ethnicity get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public Ethnicity create(Ethnicity obj);
+	Ethnicity create(Ethnicity obj) throws ObjectNotFoundException;
 
 	@Override
-	public Ethnicity save(Ethnicity obj) throws ObjectNotFoundException;
+	Ethnicity save(Ethnicity obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

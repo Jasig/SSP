@@ -32,7 +32,8 @@ public interface EarlyAlertSuggestionService extends
 	EarlyAlertSuggestion load(UUID id);
 
 	@Override
-	EarlyAlertSuggestion create(EarlyAlertSuggestion obj);
+	EarlyAlertSuggestion create(EarlyAlertSuggestion obj)
+			throws ObjectNotFoundException;
 
 	@Override
 	EarlyAlertSuggestion save(EarlyAlertSuggestion obj)

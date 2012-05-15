@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * JournalTrack implementation service
+ * 
+ * @author daniel.bower
+ */
 @Service
 @Transactional
 public class JournalTrackServiceImpl extends
@@ -15,10 +20,6 @@ public class JournalTrackServiceImpl extends
 
 	@Autowired
 	transient private JournalTrackDao dao;
-
-	public JournalTrackServiceImpl() {
-		super();
-	}
 
 	protected void setDao(final JournalTrackDao dao) {
 		this.dao = dao;

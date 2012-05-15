@@ -13,10 +13,6 @@ public class SelfHelpGuideQuestionServiceImpl extends
 		AbstractReferenceService<SelfHelpGuideQuestion>
 		implements SelfHelpGuideQuestionService {
 
-	public SelfHelpGuideQuestionServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private SelfHelpGuideQuestionDao dao;
 

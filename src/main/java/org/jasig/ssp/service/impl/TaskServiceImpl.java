@@ -24,6 +24,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	}
 
 	@Override
-	public List<Task> getAllForPerson(final Person person,
+	public PagingWrapper<Task> getAllForPerson(final Person person,
 			final SortingAndPaging sAndP) {
 		return getDao().getAllForPersonId(person.getId(), sAndP);
 	}
@@ -162,9 +163,9 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 			final Person person,
 			final SortingAndPaging sAndP) {
 		final Map<String, List<Task>> grouped = Maps.newTreeMap();
-		final List<Task> tasksForPerson = dao
+		final PagingWrapper<Task> tasksForPerson = dao
 				.getAllForPersonId(person.getId(), sAndP);
-		for (Task task : tasksForPerson) {
+		for (Task task : tasksForPerson.getRows()) {
 			final String group = task.getGroup();
 			final List<Task> tasksForGroup;
 			if (grouped.keySet().contains(group)) {
@@ -183,7 +184,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	@Override
 	public Task createForPersonWithChallengeReferral(final Challenge challenge,
 			final ChallengeReferral challengeReferral, final Person person,
-			final String sessionId) {
+			final String sessionId) throws ObjectNotFoundException {
 
 		// Create, fill, and persist a new Task
 		final Task task = new Task();
@@ -202,7 +203,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	@Override
 	public Task createCustomTaskForPerson(final String name,
 			final String description,
-			final Person student, final String sessionId) {
+			final Person student, final String sessionId)
+			throws ObjectNotFoundException {
 		final Task customTask = new Task();
 		customTask.setDescription(description);
 		customTask.setPerson(student);
@@ -300,7 +302,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 			if (person.getId() == SspUser.ANONYMOUS_PERSON_ID) {
 				tasks = getAllForSessionId(sessionId, sAndP);
 			} else {
-				tasks = getAllForPerson(person, sAndP);
+				tasks = (List<Task>) getAllForPerson(person, sAndP).getRows();
 			}
 		}
 

@@ -12,19 +12,19 @@ public interface ConfidentialityLevelService extends
 		AuditableCrudService<ConfidentialityLevel> {
 
 	@Override
-	public PagingWrapper<ConfidentialityLevel> getAll(SortingAndPaging sAndP);
+	PagingWrapper<ConfidentialityLevel> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public ConfidentialityLevel get(UUID id) throws ObjectNotFoundException;
+	ConfidentialityLevel get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public ConfidentialityLevel create(ConfidentialityLevel obj);
-
-	@Override
-	public ConfidentialityLevel save(ConfidentialityLevel obj)
+	ConfidentialityLevel create(ConfidentialityLevel obj)
 			throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
+	ConfidentialityLevel save(ConfidentialityLevel obj)
+			throws ObjectNotFoundException;
 
+	@Override
+	void delete(UUID id) throws ObjectNotFoundException;
 }

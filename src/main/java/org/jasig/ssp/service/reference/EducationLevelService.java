@@ -12,19 +12,17 @@ public interface EducationLevelService extends
 		AuditableCrudService<EducationLevel> {
 
 	@Override
-	public PagingWrapper<EducationLevel> getAll(SortingAndPaging sAndP);
+	PagingWrapper<EducationLevel> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public EducationLevel get(UUID id) throws ObjectNotFoundException;
+	EducationLevel get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public EducationLevel create(EducationLevel obj);
+	EducationLevel create(EducationLevel obj) throws ObjectNotFoundException;
 
 	@Override
-	public EducationLevel save(EducationLevel obj)
-			throws ObjectNotFoundException;
+	EducationLevel save(EducationLevel obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

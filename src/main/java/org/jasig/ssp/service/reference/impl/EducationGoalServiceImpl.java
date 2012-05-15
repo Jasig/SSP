@@ -13,10 +13,6 @@ public class EducationGoalServiceImpl extends
 		AbstractReferenceService<EducationGoal>
 		implements EducationGoalService {
 
-	public EducationGoalServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private EducationGoalDao dao;
 

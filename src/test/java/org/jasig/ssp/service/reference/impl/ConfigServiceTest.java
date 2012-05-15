@@ -46,8 +46,7 @@ public class ConfigServiceTest {
 	}
 
 	/**
-	 * Test the {@link ConfigServiceImpl#getAll(SortingAndPaging)}
-	 * method.
+	 * Test the {@link ConfigServiceImpl#getAll(SortingAndPaging)} method.
 	 */
 	@Test
 	public void testGetAll() {
@@ -121,7 +120,7 @@ public class ConfigServiceTest {
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
+		expect(dao.get(id)).andThrow(new ObjectNotFoundException("", "Config"));
 
 		replay(dao);
 

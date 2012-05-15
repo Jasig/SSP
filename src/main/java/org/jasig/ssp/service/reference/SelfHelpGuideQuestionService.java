@@ -12,19 +12,19 @@ public interface SelfHelpGuideQuestionService extends
 		AuditableCrudService<SelfHelpGuideQuestion> {
 
 	@Override
-	public PagingWrapper<SelfHelpGuideQuestion> getAll(SortingAndPaging sAndP);
+	PagingWrapper<SelfHelpGuideQuestion> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public SelfHelpGuideQuestion get(UUID id) throws ObjectNotFoundException;
+	SelfHelpGuideQuestion get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public SelfHelpGuideQuestion create(SelfHelpGuideQuestion obj);
-
-	@Override
-	public SelfHelpGuideQuestion save(SelfHelpGuideQuestion obj)
+	SelfHelpGuideQuestion create(SelfHelpGuideQuestion obj)
 			throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
+	SelfHelpGuideQuestion save(SelfHelpGuideQuestion obj)
+			throws ObjectNotFoundException;
 
+	@Override
+	void delete(UUID id) throws ObjectNotFoundException;
 }

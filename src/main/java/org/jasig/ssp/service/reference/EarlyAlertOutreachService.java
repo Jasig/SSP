@@ -32,7 +32,8 @@ public interface EarlyAlertOutreachService extends
 	EarlyAlertOutreach load(UUID id);
 
 	@Override
-	EarlyAlertOutreach create(EarlyAlertOutreach obj);
+	EarlyAlertOutreach create(EarlyAlertOutreach obj)
+			throws ObjectNotFoundException;
 
 	@Override
 	EarlyAlertOutreach save(EarlyAlertOutreach obj)

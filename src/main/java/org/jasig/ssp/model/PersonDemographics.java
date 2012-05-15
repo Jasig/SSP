@@ -123,11 +123,6 @@ public class PersonDemographics extends Auditable implements Serializable {
 	@Size(max = 3)
 	private String totalHoursWorkedPerWeek;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@JoinColumn(name = "coach_id", nullable = true)
-	private Person coach;
-
 	public boolean isAbilityToBenefit() {
 		return abilityToBenefit;
 	}
@@ -305,14 +300,6 @@ public class PersonDemographics extends Auditable implements Serializable {
 		this.totalHoursWorkedPerWeek = totalHoursWorkedPerWeek;
 	}
 
-	public Person getCoach() {
-		return coach;
-	}
-
-	public void setCoach(final Person coach) {
-		this.coach = coach;
-	}
-
 	/**
 	 * Overwrites simple properties with the parameter's properties.
 	 * 
@@ -360,7 +347,6 @@ public class PersonDemographics extends Auditable implements Serializable {
 		this.setEthnicity(ethnicity);
 		this.setCitizenship(citizenship);
 		this.setVeteranStatus(veterenStatus);
-		this.setCoach(coach);
 		this.setChildCareArrangement(childCareArrangement);
 	}
 
@@ -420,8 +406,6 @@ public class PersonDemographics extends Auditable implements Serializable {
 		result *= StringUtils.isEmpty(totalHoursWorkedPerWeek) ? "totalHoursWorkedPerWeek"
 				.hashCode()
 				: totalHoursWorkedPerWeek.hashCode();
-		result *= coach == null || coach.getId() == null ? "coach".hashCode()
-				: coach.getId().hashCode();
 
 		return result;
 	}

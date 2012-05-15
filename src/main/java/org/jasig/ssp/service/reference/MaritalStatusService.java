@@ -12,18 +12,17 @@ public interface MaritalStatusService extends
 		AuditableCrudService<MaritalStatus> {
 
 	@Override
-	public PagingWrapper<MaritalStatus> getAll(SortingAndPaging sAndP);
+	PagingWrapper<MaritalStatus> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public MaritalStatus get(UUID id) throws ObjectNotFoundException;
+	MaritalStatus get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public MaritalStatus create(MaritalStatus obj);
+	MaritalStatus create(MaritalStatus obj) throws ObjectNotFoundException;
 
 	@Override
-	public MaritalStatus save(MaritalStatus obj) throws ObjectNotFoundException;
+	MaritalStatus save(MaritalStatus obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

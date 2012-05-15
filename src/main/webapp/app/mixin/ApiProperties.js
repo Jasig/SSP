@@ -55,6 +55,7 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	 *    method - 'PUT', 'POST', 'GET', 'DELETE'
 	 *    jsonData - data to send
 	 *    successFunc - success function
+	 *    scope - scope
 	 */
 	makeRequest: function(args){
 		Ext.Ajax.request({
@@ -64,7 +65,7 @@ Ext.define('Ssp.mixin.ApiProperties', {
 			jsonData: args.jsonData || '',
 			success: args.successFunc,
 			failure: this.handleError
-		}, this);		
+		}, args.scope || this);		
 	},
 	
 	handleError: function(response) {

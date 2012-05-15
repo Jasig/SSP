@@ -10,6 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * JournalStepDetail implementation service
+ * 
+ * @author daniel.bower
+ * 
+ */
 @Service
 @Transactional
 public class JournalStepDetailServiceImpl extends
@@ -18,10 +24,6 @@ public class JournalStepDetailServiceImpl extends
 
 	@Autowired
 	transient private JournalStepDetailDao dao;
-
-	public JournalStepDetailServiceImpl() {
-		super();
-	}
 
 	protected void setDao(final JournalStepDetailDao dao) {
 		this.dao = dao;

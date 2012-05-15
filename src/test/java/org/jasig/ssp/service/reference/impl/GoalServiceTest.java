@@ -80,12 +80,12 @@ public class GoalServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Goal daoOne = new Goal(id);
+		final UUID id = UUID.randomUUID();
+		final Goal daoOne = new Goal(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
+		expect(dao.get(id)).andThrow(new ObjectNotFoundException(id, "Goal"));
 
 		replay(dao);
 

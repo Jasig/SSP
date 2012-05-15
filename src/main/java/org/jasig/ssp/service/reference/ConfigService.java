@@ -29,7 +29,7 @@ public interface ConfigService extends
 	String getByNameNull(String name);
 
 	@Override
-	Config create(Config obj);
+	Config create(Config obj) throws ObjectNotFoundException;
 
 	@Override
 	Config save(Config obj) throws ObjectNotFoundException;

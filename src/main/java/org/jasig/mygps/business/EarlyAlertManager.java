@@ -30,10 +30,10 @@ public class EarlyAlertManager {
 	public static final String EARLY_ALERT_DEFAULT_CAMPUS_ID = "1";
 
 	@Autowired
-	private SelfHelpGuideQuestionResponseDao selfHelpGuideQuestionResponseDao;
+	private transient SelfHelpGuideQuestionResponseDao selfHelpGuideQuestionResponseDao;
 
 	@Autowired
-	private SelfHelpGuideResponseDao selfHelpGuideResponseDao;
+	private transient SelfHelpGuideResponseDao selfHelpGuideResponseDao;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertManager.class);
@@ -43,17 +43,18 @@ public class EarlyAlertManager {
 
 		LOGGER.info("BEGIN : generateCriticalAlerts()");
 
-		List<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponseDao
+		final List<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponseDao
 				.criticalResponsesForEarlyAlert();
 
 		for (SelfHelpGuideQuestionResponse selfHelpGuideQuestionResponse : selfHelpGuideQuestionResponses) {
 
-			RestTemplate restTemplate = new RestTemplate();
+			final RestTemplate restTemplate = new RestTemplate();
 
-			Map<String, Object> params = new HashMap<String, Object>();
+			final Map<String, Object> params = new HashMap<String, Object>();
 
 			params.put("studentId", selfHelpGuideQuestionResponse
 					.getSelfHelpGuideResponse().getPerson().getUserId());
+			// TODO Default campuId needs pulled from database
 			params.put("campusId", EARLY_ALERT_DEFAULT_CAMPUS_ID);
 			params.put(
 					"referralReason",
@@ -68,13 +69,13 @@ public class EarlyAlertManager {
 									.getSelfHelpGuideQuestion());
 
 			try {
-				LOGGER.info("Sending Alert for student "
+				LOGGER.info("Sending Alert for student ID \""
 						+ selfHelpGuideQuestionResponse
 								.getSelfHelpGuideResponse().getPerson()
-								.getUserId() + " : generateCriticalAlerts()");
+								.getUserId() + "\" : generateCriticalAlerts()");
 
 				// :TODO post to early alert api
-				String result = restTemplate.postForObject(
+				final String result = restTemplate.postForObject(
 						"Something goes here"
 								+ "/createEarlyAlert", params, String.class);
 
@@ -106,14 +107,14 @@ public class EarlyAlertManager {
 
 		LOGGER.info("BEGIN : generateThresholdAlerts()");
 
-		List<SelfHelpGuideResponse> selfHelpGuideResponses = selfHelpGuideResponseDao
+		final List<SelfHelpGuideResponse> selfHelpGuideResponses = selfHelpGuideResponseDao
 				.forEarlyAlert();
 
 		for (SelfHelpGuideResponse selfHelpGuideResponse : selfHelpGuideResponses) {
 
-			RestTemplate restTemplate = new RestTemplate();
+			final RestTemplate restTemplate = new RestTemplate();
 
-			Map<String, Object> params = new HashMap<String, Object>();
+			final Map<String, Object> params = new HashMap<String, Object>();
 
 			params.put("studentId", selfHelpGuideResponse.getPerson()
 					.getUserId());
@@ -134,7 +135,7 @@ public class EarlyAlertManager {
 						+ " : generateThresholdAlerts()");
 
 				// :TODO post early alert
-				String result = restTemplate.postForObject(
+				final String result = restTemplate.postForObject(
 						"something goes here"
 								+ "/createEarlyAlert", params, String.class);
 
@@ -160,5 +161,4 @@ public class EarlyAlertManager {
 
 		LOGGER.info("END : generateThresholdAlerts()");
 	}
-
 }

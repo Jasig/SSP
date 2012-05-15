@@ -122,7 +122,8 @@ public class ChallengeReferralServiceTest {
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
-		expect(dao.get(id)).andThrow(new ObjectNotFoundException(""));
+		expect(dao.get(id)).andThrow(
+				new ObjectNotFoundException(id, "ChallengeReferral"));
 
 		replay(dao);
 
@@ -135,7 +136,7 @@ public class ChallengeReferralServiceTest {
 			found = false;
 		}
 
-		assertFalse(found);
+		assertFalse("Id should not have been found after deletion.", found);
 		verify(dao);
 	}
 }

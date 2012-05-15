@@ -17,7 +17,7 @@ public interface CategoryService extends AuditableCrudService<Category> {
 	Category get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	Category create(Category obj);
+	Category create(Category obj) throws ObjectNotFoundException;
 
 	@Override
 	Category save(Category obj) throws ObjectNotFoundException;

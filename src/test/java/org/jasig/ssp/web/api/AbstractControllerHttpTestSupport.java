@@ -46,7 +46,9 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
-public abstract class AbstractControllerHttpTestSupport<C extends RestController<TO, T>, TO extends TransferObject<T>, T extends Auditable> {
+public abstract class AbstractControllerHttpTestSupport<C extends BaseController, TO extends TransferObject<T>, T extends Auditable> { // NOPMD
+	// Class needs to be abstract so it won't try to run tests on it
+
 	@Autowired
 	protected transient ApplicationContext applicationContext;
 
@@ -78,7 +80,7 @@ public abstract class AbstractControllerHttpTestSupport<C extends RestController
 
 		// set custom handler for SSP return object types since the default
 		// handlers provided by Spring don't work for Jackson-serialized objects
-		List<HandlerMethodReturnValueHandler> returnValueHandlers = new
+		final List<HandlerMethodReturnValueHandler> returnValueHandlers = new
 				ArrayList<HandlerMethodReturnValueHandler>(1);
 		returnValueHandlers.add(new JacksonMethodReturnValueHandler());
 		handlerAdapter.setReturnValueHandlers(returnValueHandlers);
@@ -94,16 +96,16 @@ public abstract class AbstractControllerHttpTestSupport<C extends RestController
 	 * 
 	 * @param mav
 	 *            Model and view response from handleAdapter.handle
-	 * @return The first model object found in the ModelAndView model property.
+	 * @return The model object in the ModelAndView model property.
 	 */
-	protected Object getFirstModelObject(ModelAndView mav) {
+	protected Object getModelObject(final ModelAndView mav) {
 		assertNotNull("Model and View response should not have been null.", mav);
 
-		Map<String, Object> m = mav.getModel();
+		final Map<String, Object> m = mav.getModel();
 		assertNotNull("Model should not have been null.", m);
 		assertFalse("Model should not have been empty.", m.isEmpty());
 
-		return m.values().iterator().next();
+		return m.get(JacksonMethodReturnValueHandler.KEY);
 	}
 
 	/**
@@ -118,7 +120,7 @@ public abstract class AbstractControllerHttpTestSupport<C extends RestController
 	 */
 	protected Object getHandler(final MockHttpServletRequest request)
 			throws Exception {
-		HandlerExecutionChain chain = null;
+		HandlerExecutionChain chain = null; // NOPMD by jon.adams on 5/14/12
 
 		final Map<String, HandlerMapping> map = applicationContext
 				.getBeansOfType(HandlerMapping.class);

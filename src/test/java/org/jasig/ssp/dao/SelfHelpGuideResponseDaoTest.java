@@ -77,7 +77,7 @@ public class SelfHelpGuideResponseDaoTest {
 	@Test
 	public void getAllForPersonId() {
 		assertList(dao.getAllForPersonId(admin.getId(), new SortingAndPaging(
-				ObjectStatus.ACTIVE)));
+				ObjectStatus.ACTIVE)).getRows());
 	}
 
 	@Test

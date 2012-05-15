@@ -40,11 +40,11 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        allowBlank:false
 				    },{
 				        xtype: 'combobox',
-				        name: 'confidentialityLevelId',
+				        name: 'confidentialityLevel',
 				        fieldLabel: 'Confidentiality Level',
 				        emptyText: 'Select One',
 				        store: this.confidentialityLevelsStore,
-				        valueField: 'id',
+				        valueField: 'acronym',
 				        displayField: 'acronym',
 				        mode: 'local',
 				        typeAhead: true,

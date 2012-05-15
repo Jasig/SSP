@@ -12,18 +12,17 @@ public interface EducationGoalService extends
 		AuditableCrudService<EducationGoal> {
 
 	@Override
-	public PagingWrapper<EducationGoal> getAll(SortingAndPaging sAndP);
+	PagingWrapper<EducationGoal> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public EducationGoal get(UUID id) throws ObjectNotFoundException;
+	EducationGoal get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public EducationGoal create(EducationGoal obj);
+	EducationGoal create(EducationGoal obj) throws ObjectNotFoundException;
 
 	@Override
-	public EducationGoal save(EducationGoal obj) throws ObjectNotFoundException;
+	EducationGoal save(EducationGoal obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

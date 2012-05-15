@@ -2,6 +2,7 @@ package org.jasig.ssp.web.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.jasig.ssp.transferobject.AuditableTO;
 import org.jasig.ssp.transferobject.PagingTO;
@@ -40,17 +41,19 @@ public class JacksonMethodReturnValueHandler implements
 	public final static String KEY = "JacksonMethodReturnValueHandler_ObjectKey";
 
 	@Override
-	public boolean supportsReturnType(MethodParameter returnType) {
-		Class<?> paramType = returnType.getParameterType();
+	public boolean supportsReturnType(final MethodParameter returnType) {
+		final Class<?> paramType = returnType.getParameterType(); // NOPMD
 
-		List<Class<?>> classes = new ArrayList<Class<?>>();
+		final List<Class<?>> classes = new ArrayList<Class<?>>();
 
 		// Valid base classes or interfaces that the SSP API is expected to
 		// serialize
 		classes.add(AbstractReferenceTO.class);
 		classes.add(AuditableTO.class);
+		classes.add(List.class);
 		classes.add(PagingTO.class);
 		classes.add(ServiceResponse.class);
+		classes.add(Set.class);
 		classes.add(TransferObject.class);
 
 		for (Class<?> valid : classes) {
@@ -69,14 +72,15 @@ public class JacksonMethodReturnValueHandler implements
 
 	@Override
 	public void handleReturnValue(
-			Object returnValue, MethodParameter returnType,
-			ModelAndViewContainer mavContainer, NativeWebRequest webRequest)
+			final Object returnValue, final MethodParameter returnType,
+			final ModelAndViewContainer mavContainer,
+			final NativeWebRequest webRequest)
 			throws Exception {
 
 		if (returnValue == null) {
 			return;
 		} else {
-			mavContainer.getModel().addAttribute(returnValue);
+			mavContainer.getModel().addAttribute(KEY, returnValue);
 		}
 	}
 }

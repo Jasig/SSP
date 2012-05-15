@@ -53,7 +53,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
 
 	private static final UUID EARLY_ALERT_OUTCOME_ID = UUID
-			.fromString("b2d11076-5056-a51a-80c1-f5813762ff0b");
+			.fromString("9A98FF78-92AF-4681-8111-ADB3300CBE1C");
 
 	private static final UUID EARLY_ALERT_REFERRAL_ID = UUID
 			.fromString("1f5729af-0337-4e58-a001-8a9f80dbf8aa");
@@ -106,7 +106,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 		final Collection<EarlyAlertResponseTO> list = controller.getAll(
 				PERSON_ID,
 				ObjectStatus.ACTIVE,
-				null, null, null, null);
+				null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 	}
