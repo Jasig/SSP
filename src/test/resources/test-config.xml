@@ -12,7 +12,7 @@
 
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties"
-		location="file:${SSP_CONFIGDIR}/ssp-config.properties" />
+		location="file:${SSP_TESTCONFIGDIR}/ssp-config.properties" />
 
 	<tx:annotation-driven />
 
