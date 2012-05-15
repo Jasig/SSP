@@ -20,12 +20,17 @@ It allows ssp to be run outside in absence of uportal.
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}/ssp-config.properties"/>
 	
+	<!-- Interesting kludge to get the ldap-server element to read the config directory -->
+	<beans:bean id="configDir" class="org.springframework.util.SystemPropertyUtils" factory-method="resolvePlaceholders">
+		<beans:constructor-arg value="${SSP_CONFIGDIR}" /> 
+	</beans:bean>
+	
 	<authentication-manager>
 		<authentication-provider ref="sspPreAuthenticatedAuthenticationProvider" />
 		<authentication-provider ref="localLdapAuthenticationProvider" />
 	</authentication-manager>
 
-	<ldap-server ldif="file:${SSP_CONFIGDIR}/users.ldif" />
+	<ldap-server ldif="file:#{configDir}/users.ldif" />
 
 	<beans:bean id="localSpringSecurityContextSource"
 		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">

@@ -203,7 +203,32 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		view.add( comp );
 		
 		return comp;
-	}
-	
+	},
+
+    /*
+     * Compares a value against a record in a store, based on a provided
+     * field for the comparison, as well as, criteria to find the record
+     * in the store to use to compare against. If the values match
+     * then the associated field will be hidden in the interface. Otherwise,
+     * the field is shown.
+     * @elementName - the field to hide
+     * @compareValue - the value to compare against
+     * @compareFieldName - the field in a record to compare against. For example: 'id'
+     * @store - the store in which to find a value to compare against
+     * @recordField - the name of the field in the store to find a record
+     * @recordValue - the value of the field in the store to find a record against
+     */
+    showHideFieldByStoreValue: function( elementName, compareValue, compareFieldName, store, recordField, recordValue ){
+		var queryValue = '#'+elementName;
+    	var field = Ext.ComponentQuery.query(queryValue)[0];
+		var record = store.findRecord(recordField, recordValue);
+		if ( compareValue==record.get( compareFieldName ) )
+		{
+			field.show();
+		}else{
+			field.hide();
+		}
+    }    
+    
 });
 
