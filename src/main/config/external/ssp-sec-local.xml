@@ -14,6 +14,7 @@ It is necessary to include this file in the production config directory.-->
 		http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
 	<authentication-manager>
+		<authentication-provider ref="sspPreAuthenticatedAuthenticationProvider" />
 		<authentication-provider ref="localLdapAuthenticationProvider" />
 	</authentication-manager>
 
@@ -40,10 +41,14 @@ It is necessary to include this file in the production config directory.-->
 		</beans:constructor-arg>
 		<beans:constructor-arg>
 			<beans:bean class="org.jasig.ssp.security.SspLdapAuthoritiesPopulator">
-				<beans:constructor-arg ref="sspUserDetailsService" />
+				<beans:constructor-arg>
+					<beans:bean id="sspUserDetailsService" class="org.jasig.ssp.security.SspUserDetailsService" />
+				</beans:constructor-arg>
 			</beans:bean>
 		</beans:constructor-arg>
-		<beans:property name="userDetailsContextMapper" ref="sspUserDetailsContextMapper" />
+		<beans:property name="userDetailsContextMapper">
+			<beans:bean class="org.jasig.ssp.security.SspUserDetailsContextMapper" />		
+		</beans:property>
 	</beans:bean>
 
 </beans:beans>

@@ -34,15 +34,15 @@
 
 		<access-denied-handler error-page="/accessDenied.htm" />
 
-		<remember-me data-source-ref="sspDataSource" />
+		<!-- remember-me data-source-ref="sspDataSource" /-->
 
 		<logout logout-success-url="/login.jsp" />
 	</http>
-
-	<beans:bean id="sspUserDetailsService" class="org.jasig.ssp.security.SspUserDetailsService">
-	</beans:bean>
-
-	<beans:bean id="sspUserDetailsContextMapper" class="org.jasig.ssp.security.SspUserDetailsContextMapper">
-	</beans:bean>
+	
+	<beans:bean id="sspPreAuthenticatedAuthenticationProvider" class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+		<beans:property name="preAuthenticatedUserDetailsService">
+			<beans:bean class="org.springframework.security.web.authentication.preauth.PreAuthenticatedGrantedAuthoritiesUserDetailsService" />
+		</beans:property>
+	</beans:bean>	
 
 </beans:beans>
