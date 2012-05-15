@@ -24,17 +24,30 @@ public class ExternalConfigLoaderContextListener implements
 
 	@Override
 	public void contextInitialized(final ServletContextEvent sce) {
-		String configLocation = sce.getServletContext().getInitParameter(
-				"SSP_CONFIGDIR");
-		if (configLocation == null) {
-			configLocation = System.getenv("SSP_CONFIGDIR")
-					+ System.getProperty("file.separator");
+		final StringBuffer configLocation = new StringBuffer();
+
+		final String environmentDefinedConf = System.getenv("SSP_CONFIGDIR");
+		final String contextDefinedConf = sce.getServletContext()
+				.getInitParameter("SSP_CONFIGDIR");
+
+		// Give precedence to the environmentDefined Config directory
+		if ((environmentDefinedConf == null) && (contextDefinedConf == null)) {
+			LOGGER.error("No config directory set");
+		} else if (environmentDefinedConf == null) {
+			configLocation.append(contextDefinedConf);
+		} else {
+			configLocation.append(environmentDefinedConf);
 		}
 
+		configLocation.append(System.getProperty("file.separator"));
+		configLocation.append("logback.xml");
+
 		try {
-			new LogBackConfigLoader(configLocation + "logback.xml");
+			new LogBackConfigLoader(configLocation.toString());
 		} catch (Exception e) {
-			LOGGER.error("Unable to read config file", e);
+			LOGGER.error(
+					"Unable to read config file from "
+							+ configLocation.toString(), e);
 		}
 	}
 
