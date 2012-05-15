@@ -64,6 +64,7 @@ Ext.require([
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
 	'Ssp.model.tool.studentintake.PersonEducationPlan',
 	'Ssp.model.tool.actionplan.Task',
+	'Ssp.model.tool.journal.Note',
 	'Ssp.model.reference.AbstractReference',
     'Ssp.model.reference.Challenge',
     'Ssp.model.reference.ChallengeCategory',
@@ -78,6 +79,7 @@ Ext.require([
 	'Ssp.util.ColumnRendererUtils',
 	'Ssp.util.TreeRendererUtils',
     'Ssp.store.Tasks',
+    'Ssp.store.JournalNotes',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
 	'Ssp.store.reference.Campuses',
@@ -202,6 +204,7 @@ Ext.onReady(function(){
 	        singleton: true
         },
 	    tasksStore: 'Ssp.store.Tasks',
+	    journalNotesStore: 'Ssp.store.JournalNotes',
 		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 		campusesStore: 'Ssp.store.reference.Campuses',

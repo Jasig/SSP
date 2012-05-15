@@ -25,9 +25,11 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     },
     
 	save: function(button){
-		var record = this.getView().getRecord();
-		var id = record.get('id');
-		var jsonData = record.data;
+		var record, id, jsonData;
+		this.getView().getForm().updateRecord();
+		record = this.getView().getRecord();
+		id = record.get('id');
+		jsonData = record.data;
 		
 		Ext.Ajax.request({
 			url: this.confidentialityDisclosureAgreementsStore.getProxy().url+id,
