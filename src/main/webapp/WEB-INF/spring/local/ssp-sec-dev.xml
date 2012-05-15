@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Similar to ssp-local, this file allows you greater access to the 
-application's SECURITY configuration on a per site basis.  This is a primary 
-point of access for integration into systems like ldap. 
+<!-- This is a custom security configuration that can be used in dev environments.
+It allows ssp to be run outside in absence of uportal.
+-->
 
-It is necessary to include this file in the production config directory.-->
-
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans:beans 
+	profile="dev-standalone"
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+		http://www.springframework.org/schema/security/spring-security-3.0.xsd
+		http://www.springframework.org/schema/util		
+		http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
+	<!-- Properties file configuration of existing beans -->
+	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}/ssp-config.properties"/>
+	
 	<authentication-manager>
 		<authentication-provider ref="localLdapAuthenticationProvider" />
 	</authentication-manager>
 
-	<ldap-server ldif="file:${SSP_CONFIGDIR}users.ldif" />
+	<ldap-server ldif="file:${SSP_CONFIGDIR}/users.ldif" />
 
 	<beans:bean id="localSpringSecurityContextSource"
 		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">

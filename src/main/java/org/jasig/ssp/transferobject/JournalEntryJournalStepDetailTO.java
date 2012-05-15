@@ -13,7 +13,7 @@ import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
  * JournalEntryJournalStepDetail transfer object
  */
 public class JournalEntryJournalStepDetailTO extends
-		AuditableTO<JournalEntryJournalStepDetail> implements
+		AbstractAuditableTO<JournalEntryJournalStepDetail> implements
 		TransferObject<JournalEntryJournalStepDetail>, Serializable {
 
 	private static final long serialVersionUID = -2753609690043435376L;

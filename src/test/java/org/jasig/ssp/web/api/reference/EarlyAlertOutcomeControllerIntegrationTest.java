@@ -174,7 +174,7 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 				testString1, valid.getName());
 		assertEquals(
 				"Returned EarlyAlertOutcomeTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, valid.getCreatedById());
+				Person.SYSTEM_ADMINISTRATOR_ID, valid.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
 				controller.delete(valid.getId()).isSuccess());
@@ -227,13 +227,13 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 				EARLYALERT_OUTCOME_FIRST_ID, earlyAlertOutcome.getId());
 		assertFalse("ModifiedBy id should not have been empty.",
 				earlyAlertOutcome
-						.getModifiedById().equals(UUID.randomUUID()));
+						.getModifiedBy().getId().equals(UUID.randomUUID()));
 
 		earlyAlertOutcome = iter.next();
 		assertTrue("Description should have been longer than 0 characters.",
 				earlyAlertOutcome.getDescription().length() > 0);
 		assertFalse("CreatedBy id should not have been empty.",
 				earlyAlertOutcome
-						.getCreatedById().equals(UUID.randomUUID()));
+						.getCreatedBy().getId().equals(UUID.randomUUID()));
 	}
 }

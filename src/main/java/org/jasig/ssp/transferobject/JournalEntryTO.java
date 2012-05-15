@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.jasig.ssp.model.JournalEntry;
 
 public class JournalEntryTO
-		extends AuditableTO<JournalEntry>
+		extends AbstractAuditableTO<JournalEntry>
 		implements TransferObject<JournalEntry>, Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -2,12 +2,12 @@ This document will walk through the general process of creating an environment t
 
 Required:
  - Database Server         - PostgreSQL 8 or greater suggested  (will support MS-SQL in future release)
- - Java Application Server - Apache Tomcat 6 suggested
+ - Java Application Server - Apache Tomcat 6 suggested (app is tested on Tomcat6, but should run on other containers)
   
 Installing PostgreSQL (http://www.postgresql.org/)
   On Unix:
     - PostgreSQL is available in the package manager of most linux distributions.  
-      Install it according to the distributions instructions.
+      Install it according to the distribution's instructions.
         Ubuntu - https://help.ubuntu.com/11.10/serverguide/C/postgresql.html
   On Mac:
     - PostgreSQL is available via the homebrew package manager or as a download on 
@@ -23,7 +23,7 @@ Configure PostgreSQL
 Installing Apache Tomcat 6
   On Unix:
     - Tomcat is available in the package manager of most linux distributions.  
-      Install it according to the distributions instructions.
+      Install it according to the distribution's instructions.
         Ubuntu - https://help.ubuntu.com/11.10/serverguide/C/tomcat.html
   On Mac:
     - Tomcat is available via the homebrew package manager or as a download at:  
@@ -36,7 +36,7 @@ Configure SSP
     - Create a directory at /usr/local/etc/ssp
     - Make it only readable by the user that is running tomcat
   On Windows:
-    - Create a directory at C:\ssp\
+    - Create a directory at C:\ssp
     - Make it only readable by the user that is running tomcat
     - In the next step, be sure to use Windows paths formatted in Java
     - There is a context.xml file that is put into the conf directory of tomcat 
@@ -44,14 +44,14 @@ Configure SSP
       It is available from this project in src/main/webapp/META-INF/context.xml
       The destination path is $CATALINA_HOME/conf/context.xml
   After Above on Unix/Mac/Windows:
-    - copy the files from this project in src/main/config/external to /usr/local/etc/ssp or C:\ssp\
+    - copy the files from this project in src/main/config/external to /usr/local/etc/ssp or C:\ssp
     - Review each file carefully to set the appropriate settings.
     - Add the following environment variables to your system, and point
       them to the appropriate external configuration path:
       - On Unix/Mac:
       	- SSP_CONFIGDIR=/usr/local/etc/ssp
       - On Windows:
-      	- SSP_CONFIGDIR=C:\ssp\
+      	- SSP_CONFIGDIR=C:\ssp
     
 Deploy SSP
   - Right now the deployment file is not available anywhere, so it must be 

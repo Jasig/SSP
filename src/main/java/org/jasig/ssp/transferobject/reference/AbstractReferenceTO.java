@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.reference.AbstractReference;
-import org.jasig.ssp.transferobject.AuditableTO;
+import org.jasig.ssp.transferobject.AbstractAuditableTO;
 import org.jasig.ssp.transferobject.NamedTO;
 
 /**
@@ -17,7 +17,7 @@ import org.jasig.ssp.transferobject.NamedTO;
  *            Any {@link Auditable} model type.
  */
 public abstract class AbstractReferenceTO<T extends AbstractReference>
-		extends AuditableTO<T> implements NamedTO {
+		extends AbstractAuditableTO<T> implements NamedTO {
 
 	@NotNull
 	@NotEmpty

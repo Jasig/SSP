@@ -5,10 +5,17 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reference.FundingSourceTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +24,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.reference.FundingSourceTO;
-import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * FundingSource controller tests
@@ -111,18 +112,16 @@ public class FundingSourceControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final String testString1 = "testString1";
-		final String testString2 = "testString1";
+		final String testString1 = "testString1"; // NOPMD by jon.adams
+		final String testString2 = "testString2"; // NOPMD by jon.adams
 
 		// Check validation of 'no ID for create()'
 		FundingSourceTO obj = new FundingSourceTO(UUID.randomUUID(),
 				testString1, testString2);
 		try {
 			obj = controller.create(obj);
-			assertTrue(
-					"Calling create with an object with an ID should have thrown a validation excpetion.",
-					false);
-		} catch (ValidationException exc) {
+			fail("Calling create with an object with an ID should have thrown a validation excpetion."); // NOPMD
+		} catch (ValidationException exc) { // NOPMD by jon.adams on 5/14/12
 			/* expected */
 		}
 
@@ -141,7 +140,7 @@ public class FundingSourceControllerIntegrationTest {
 				testString1, obj.getName());
 		assertEquals(
 				"Returned FundingSourceTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedById());
+				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
 				controller.delete(obj.getId()).isSuccess());

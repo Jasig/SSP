@@ -1,3 +1,9 @@
+/*
+
+For some insert statement sql from the old ssp, turn it into some liquibase inserts
+
+*/
+
 import java.util.UUID
 
 File output = new File("../src/main/resources/org/jasig/ssp/database/changesets/000003.xml")
