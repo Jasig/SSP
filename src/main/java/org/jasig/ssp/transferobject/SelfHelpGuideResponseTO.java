@@ -10,7 +10,7 @@ import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import com.google.common.collect.Lists;
 
 public class SelfHelpGuideResponseTO
-		extends AuditableTO<SelfHelpGuideResponse>
+		extends AbstractAuditableTO<SelfHelpGuideResponse>
 		implements TransferObject<SelfHelpGuideResponse> {
 
 	private String summaryText;

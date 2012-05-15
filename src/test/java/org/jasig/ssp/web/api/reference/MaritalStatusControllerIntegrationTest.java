@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -119,9 +120,7 @@ public class MaritalStatusControllerIntegrationTest {
 				testString1, testString2);
 		try {
 			obj = controller.create(obj);
-			assertTrue(
-					"Calling create with an object with an ID should have thrown a validation excpetion.",
-					false);
+			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
 		} catch (ValidationException exc) {
 			/* expected */
 		}
@@ -141,7 +140,7 @@ public class MaritalStatusControllerIntegrationTest {
 				testString1, obj.getName());
 		assertEquals(
 				"Returned MaritalStatusTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedById());
+				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
 				controller.delete(obj.getId()).isSuccess());

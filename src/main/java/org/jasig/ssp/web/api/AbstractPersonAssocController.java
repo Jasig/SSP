@@ -10,7 +10,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.PersonAssocService;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.transferobject.AuditableTO;
+import org.jasig.ssp.transferobject.AbstractAuditableTO;
 import org.jasig.ssp.transferobject.PagingTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @param <TO>
  *            Transfer object type that handles the model type T.
  */
-public abstract class AbstractPersonAssocController<T extends Auditable, TO extends AuditableTO<T>>
+public abstract class AbstractPersonAssocController<T extends Auditable, TO extends AbstractAuditableTO<T>>
 		extends BaseController {
 
 	/**

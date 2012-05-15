@@ -20,7 +20,7 @@ import com.google.common.collect.Sets;
  * 
  */
 public class EarlyAlertResponseTO
-		extends AuditableTO<EarlyAlertResponse>
+		extends AbstractAuditableTO<EarlyAlertResponse>
 		implements TransferObject<EarlyAlertResponse>, Serializable {
 
 	private static final long serialVersionUID = -4281524583857509499L;

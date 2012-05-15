@@ -147,7 +147,7 @@ public class VeteranStatusControllerIntegrationTest {
 				testString1, valid.getName());
 		assertEquals(
 				"Returned VeteranStatusTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, valid.getCreatedById());
+				Person.SYSTEM_ADMINISTRATOR_ID, valid.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
 				controller.delete(valid.getId()).isSuccess());
@@ -199,12 +199,12 @@ public class VeteranStatusControllerIntegrationTest {
 		assertEquals("Name should have been " + VETERANSTATUS_NAME,
 				VETERANSTATUS_NAME, veteranStatus.getName());
 		assertFalse("ModifiedBy id should not have been empty.", veteranStatus
-				.getModifiedById().equals(UUID.randomUUID()));
+				.getModifiedBy().getId().equals(UUID.randomUUID()));
 
 		veteranStatus = iter.next();
 		assertTrue("Description should have been longer than 0 characters.",
 				veteranStatus.getDescription().length() > 0);
 		assertFalse("CreatedBy id should not have been empty.", veteranStatus
-				.getCreatedById().equals(UUID.randomUUID()));
+				.getCreatedBy().getId().equals(UUID.randomUUID()));
 	}
 }

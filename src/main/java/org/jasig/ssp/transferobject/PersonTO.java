@@ -15,18 +15,27 @@ import com.google.common.collect.Lists;
  * Person transfer object
  */
 public class PersonTO
-		extends AuditableTO<Person>
+		extends AbstractAuditableTO<Person>
 		implements TransferObject<Person> {
 
 	private String firstName, middleInitial, lastName;
+
 	private Date birthDate;
+
 	private String primaryEmailAddress, secondaryEmailAddress;
+
 	private String username, userId;
+
 	private String homePhone, workPhone, cellPhone;
+
 	private String addressLine1, addressLine2, city, state, zipCode;
+
 	private String photoUrl;
+
 	private String schoolId;
+
 	private boolean enabled;
+
 	private UUID coachId;
 
 	/**
