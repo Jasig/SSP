@@ -41,9 +41,6 @@
 		<property name="basename" value="views" />
 	</bean>
 
-	<bean id="webProperties" class="org.jasig.ssp.config.WebProperties"
-		factory-method="getInstance"></bean>
-
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
