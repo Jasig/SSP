@@ -41,7 +41,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 *         parameters.
 	 */
 	@Override
-	public PagingWrapper<Person> getAll(ObjectStatus status) {
+	public PagingWrapper<Person> getAll(final ObjectStatus status) {
 		return getAll(new SortingAndPaging(status));
 	}
 
@@ -55,7 +55,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 
 		Criteria criteria = createCriteria();
-		long totalRows = (Long) criteria.setProjection(Projections.rowCount())
+		final long totalRows = (Long) criteria.setProjection(
+				Projections.rowCount())
 				.uniqueResult();
 
 		criteria = createCriteria(sAndP);
@@ -63,17 +64,19 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return new PagingWrapper<Person>(totalRows, criteria.list());
 	}
 
-	public Person fromUsername(String username) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(
-				Person.class);
+	public Person fromUsername(final String username) {
+		final Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(
+						Person.class);
 		query.add(Restrictions.eq("username", username)).setFlushMode(
 				FlushMode.COMMIT);
 		return (Person) query.uniqueResult();
 	}
 
-	public Person fromUserId(String userId) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(
-				Person.class);
+	public Person fromUserId(final String userId) {
+		final Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(
+						Person.class);
 		query.add(Restrictions.eq("userId", userId));
 		return (Person) query.uniqueResult();
 	}
@@ -96,7 +99,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 *                If the supplied identifier does not exist in the database.
 	 * @return The specified Person instance.
 	 */
-	public Person getByStudentId(String studentId)
+	public Person getByStudentId(final String studentId)
 			throws ObjectNotFoundException {
 		return (Person) createCriteria()
 				.add(Restrictions.eq("schoolId", studentId))

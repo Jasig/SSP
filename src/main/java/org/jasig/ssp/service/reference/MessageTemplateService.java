@@ -12,19 +12,17 @@ public interface MessageTemplateService extends
 		AuditableCrudService<MessageTemplate> {
 
 	@Override
-	public PagingWrapper<MessageTemplate> getAll(SortingAndPaging sAndP);
+	PagingWrapper<MessageTemplate> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public MessageTemplate get(UUID id) throws ObjectNotFoundException;
+	MessageTemplate get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	public MessageTemplate create(MessageTemplate obj)
-			throws ObjectNotFoundException;
+	MessageTemplate create(MessageTemplate obj) throws ObjectNotFoundException;
 
 	@Override
-	public MessageTemplate save(MessageTemplate obj)
-			throws ObjectNotFoundException;
+	MessageTemplate save(MessageTemplate obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
+	void delete(UUID id) throws ObjectNotFoundException;
 }

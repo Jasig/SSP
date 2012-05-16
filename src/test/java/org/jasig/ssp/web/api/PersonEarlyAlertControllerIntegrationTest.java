@@ -78,7 +78,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws Exception { // NOPMD
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -99,7 +99,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() throws Exception { // NOPMD
 		final Collection<EarlyAlertTO> list = controller.getAll(PERSON_ID,
 				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
@@ -115,7 +115,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerDelete() throws Exception {
+	public void testControllerDelete() throws Exception { // NOPMD
 		final String testEmailCC = "some@email.address.com"; // NOPMD by jon
 
 		final EarlyAlertTO obj = new EarlyAlertTO();
@@ -166,7 +166,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 */
 	@Test
 	@Transactional()
-	public void testControllerGetSetsWithOnlyActiveReference() throws Exception {
+	public void testControllerGetSetsWithOnlyActiveReference() throws Exception { // NOPMD
 		final EarlyAlertTO obj = createEarlyAlert();
 
 		final EarlyAlertTO saved = controller.create(PERSON_ID,
@@ -233,7 +233,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerCreateWithStudentId() throws Exception {
+	public void testControllerCreateWithStudentId() throws Exception { // NOPMD
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
 				obj);
@@ -265,7 +265,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerCreateWithInvalidStudentId() throws Exception {
+	public void testControllerCreateWithInvalidStudentId() throws Exception { // NOPMD
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		final EarlyAlertTO saved = controller.create("invalid id",
 				obj);

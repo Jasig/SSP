@@ -11,7 +11,7 @@ import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
  */
 @Repository
 public class ConfidentialityDisclosureAgreementDao extends
-		ReferenceAuditableCrudDao<ConfidentialityDisclosureAgreement>
+		AbstractReferenceAuditableCrudDao<ConfidentialityDisclosureAgreement>
 		implements AuditableCrudDao<ConfidentialityDisclosureAgreement> {
 
 	public ConfidentialityDisclosureAgreementDao() {

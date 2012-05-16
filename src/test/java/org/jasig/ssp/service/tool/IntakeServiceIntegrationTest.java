@@ -34,29 +34,29 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * IntakeService integration tests
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../service-testConfig.xml")
 @TransactionConfiguration
 @Transactional
 public class IntakeServiceIntegrationTest {
 
-	// private static final Logger logger =
-	// LoggerFactory.getLogger(StudentIntakeServiceTest.class);
+	@Autowired
+	private transient IntakeService service;
 
 	@Autowired
-	private IntakeService service;
+	private transient PersonService personService;
 
 	@Autowired
-	private PersonService personService;
+	private transient PersonDao personDao;
 
 	@Autowired
-	private PersonDao personDao;
-
-	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
@@ -76,7 +76,8 @@ public class IntakeServiceIntegrationTest {
 	@Test
 	public void testIntakeServiceFromLoadForPersonFromDatabaseForAdminUser()
 			throws ObjectNotFoundException {
-		IntakeForm form = service.loadForPerson(Person.SYSTEM_ADMINISTRATOR_ID);
+		final IntakeForm form = service
+				.loadForPerson(Person.SYSTEM_ADMINISTRATOR_ID);
 		assertNotNull("Admin user could not be loaded.", form.getPerson());
 		assertNotNull("Admin user loaded but was missing the Person instance.",
 				form.getPerson());
@@ -100,17 +101,17 @@ public class IntakeServiceIntegrationTest {
 	@Test
 	public void testIntakeServiceForNewUser() throws ObjectNotFoundException {
 		// test data
-		String lastName = "last";
-		String testString1 = "testString1";
-		String testString2 = "testString2";
-		String testString3 = "testString3";
+		final String lastName = "last";
+		final String testString1 = "testString1";
+		final String testString2 = "testString2";
+		final String testString3 = "testString3";
 		// From test database, see the test liquibase XML
-		UUID testEducationLevelId = UUID
+		final UUID testEducationLevelId = UUID
 				.fromString("841652e8-7b80-41e7-9ef2-ce456d2606ca");
-		String testEducationLevelName = "Test Education Level";
-		UUID testChallengeId = UUID
+		final String testEducationLevelName = "Test Education Level";
+		final UUID testChallengeId = UUID
 				.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
-		String testChallengeName = "Test Challenge";
+		final String testChallengeName = "Test Challenge";
 
 		// Setup - create a new blank Person
 		UUID id = null;
@@ -144,18 +145,18 @@ public class IntakeServiceIntegrationTest {
 
 		// Setup - fill the IntakeForm with test data
 
-		PersonDemographics pd1 = new PersonDemographics();
+		final PersonDemographics pd1 = new PersonDemographics();
 		pd1.setChildAges(testString1);
 		person.setCoach(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
 		person.setDemographics(pd1);
 
-		PersonEducationGoal peg1 = new PersonEducationGoal();
+		final PersonEducationGoal peg1 = new PersonEducationGoal();
 		peg1.setDescription(testString1);
 		person.setEducationGoal(peg1);
 
-		PersonEducationPlan pep1 = new PersonEducationPlan();
+		final PersonEducationPlan pep1 = new PersonEducationPlan();
 		pep1.setObjectStatus(ObjectStatus.INACTIVE);
-		StudentStatus ss1 = new StudentStatus();
+		final StudentStatus ss1 = new StudentStatus();
 		ss1.setName(testString1);
 		ss1.setDescription(testString2);
 		pep1.setStudentStatus(ss1);
@@ -223,7 +224,8 @@ public class IntakeServiceIntegrationTest {
 		 */
 
 		// Assert Education Level data
-		Set<PersonEducationLevel> testLevels = person.getEducationLevels();
+		final Set<PersonEducationLevel> testLevels = person
+				.getEducationLevels();
 		assertNotNull("Education Level data did not exist.", testLevels);
 		assertEquals(
 				"Education Level data did not contain the expected 1 element.",
@@ -240,7 +242,7 @@ public class IntakeServiceIntegrationTest {
 				testEducationLevelName, pel1.getEducationLevel().getName());
 
 		// Assert FundingSource data
-		Set<PersonFundingSource> testSources = person.getFundingSources();
+		final Set<PersonFundingSource> testSources = person.getFundingSources();
 		assertNotNull("FundingSource data did not exist.", testSources);
 		assertEquals(
 				"FundingSource data did not contain the expected 1 element.",
@@ -253,7 +255,7 @@ public class IntakeServiceIntegrationTest {
 				testString3, pfs1.getDescription());
 
 		// Assert Challenge data
-		Set<PersonChallenge> testChallenges = person.getChallenges();
+		final Set<PersonChallenge> testChallenges = person.getChallenges();
 		assertNotNull("Challenge data did not exist.", testChallenges);
 		assertEquals("Challenge data did not contain the expected 1 element.",
 				1, testChallenges.size());

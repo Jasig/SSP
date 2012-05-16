@@ -177,16 +177,18 @@ How to set up your development environment:
 	
 	- To run ssp in dev-standalone mode:
 		- set the spring.profiles.active environment variable: 
-			export spring.profiles.active=dev-standalone
-		-set the SSP_CONFIGDIR as an environment variable...  context.xml will not be sufficient.
-		
+			Unix: export spring.profiles.active=dev-standalone
+			Windows: SET spring.profiles.active=dev-standalone
+			SpringSource Tool Suite: In the Run Configurations... -> Environment tab: (Variable) spring.profiles.active (Value) dev-standalone 
+		- set the SSP_CONFIGDIR as an environment variable...  context.xml will not be sufficient.
+	
 		- Use sts to deploy the application to an embedded tomcat:
 			- Confirm that in the Package Explorer (Window->Show View->Package Explorer)
 				lists "Apache Tomcat v6.0" or similar in "Servers". If not, add it
 				pointing to your Tomcat installation directory.
 			- use the sts server pane to start / debug / stop the application
 		OR
-		- Deploy straight to an app server.o
+		- Deploy straight to an app server.
 		
 	- Building should be fairly straightforward, at the command line, run: 
 		mvn package

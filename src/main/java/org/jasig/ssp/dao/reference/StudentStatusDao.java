@@ -9,7 +9,7 @@ import org.jasig.ssp.model.reference.StudentStatus;
  * Data access class for the StudentStatus reference entity.
  */
 @Repository
-public class StudentStatusDao extends ReferenceAuditableCrudDao<StudentStatus>
+public class StudentStatusDao extends AbstractReferenceAuditableCrudDao<StudentStatus>
 		implements AuditableCrudDao<StudentStatus> {
 
 	public StudentStatusDao() {

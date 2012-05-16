@@ -44,7 +44,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public Person getByStudentId(String studentId)
+	public Person getByStudentId(final String studentId)
 			throws ObjectNotFoundException {
 		return dao.getByStudentId(studentId);
 	}

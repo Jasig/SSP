@@ -10,7 +10,7 @@ import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
  */
 @Repository
 public class SelfHelpGuideGroupDao extends
-		ReferenceAuditableCrudDao<SelfHelpGuideGroup>
+		AbstractReferenceAuditableCrudDao<SelfHelpGuideGroup>
 		implements AuditableCrudDao<SelfHelpGuideGroup> {
 
 	public SelfHelpGuideGroupDao() {

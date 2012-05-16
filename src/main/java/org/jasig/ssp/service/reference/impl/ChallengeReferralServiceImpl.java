@@ -50,8 +50,9 @@ public class ChallengeReferralServiceImpl extends
 
 		int count = 0;
 
-		for (ChallengeReferral challengeReferral : dao.byChallengeIdAndQuery(
-				challenge.getId(), query)) {
+		for (final ChallengeReferral challengeReferral : dao
+				.byChallengeIdAndQuery(
+						challenge.getId(), query)) {
 
 			// Does the referral exist as an active/incomplete task?
 			// Need to check both the tasks created w/in MyGPS as well as those
@@ -89,7 +90,8 @@ public class ChallengeReferralServiceImpl extends
 
 	@Override
 	public List<ChallengeReferral> byChallengeIdNotOnActiveTaskList(
-			Challenge challenge, Person student, String sessionId) {
+			final Challenge challenge, final Person student,
+			final String sessionId) {
 		return dao.byChallengeIdNotOnActiveTaskList(challenge.getId(), student,
 				sessionId);
 	}
@@ -99,7 +101,7 @@ public class ChallengeReferralServiceImpl extends
 		return dao;
 	}
 
-	protected void setDao(ChallengeReferralDao dao) {
+	protected void setDao(final ChallengeReferralDao dao) {
 		this.dao = dao;
 	}
 }

@@ -6,24 +6,25 @@ import java.util.UUID;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
+import org.springframework.stereotype.Repository;
 
 /**
  * Data access class for the SelfHelpGuide reference entity.
  */
 @Repository
-public class SelfHelpGuideDao extends ReferenceAuditableCrudDao<SelfHelpGuide>
+public class SelfHelpGuideDao extends
+		AbstractReferenceAuditableCrudDao<SelfHelpGuide>
 		implements AuditableCrudDao<SelfHelpGuide> {
 
 	public SelfHelpGuideDao() {
 		super(SelfHelpGuide.class);
 	}
 
-	public SelfHelpGuide getWithQuestions(UUID id) {
-		Criteria query = sessionFactory.getCurrentSession()
+	public SelfHelpGuide getWithQuestions(final UUID id) {
+		final Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(SelfHelpGuide.class)
 				.add(Restrictions.eq("id", id))
 				.setFetchMode("selfHelpGuideQuestions", FetchMode.JOIN);
@@ -44,7 +45,7 @@ public class SelfHelpGuideDao extends ReferenceAuditableCrudDao<SelfHelpGuide>
 
 	@SuppressWarnings("unchecked")
 	public List<SelfHelpGuide> findAllActiveBySelfHelpGuideGroup(
-			UUID selfHelpGuideGroupId) {
+			final UUID selfHelpGuideGroupId) {
 		return sessionFactory
 				.getCurrentSession()
 				.createQuery(
@@ -56,5 +57,4 @@ public class SelfHelpGuideDao extends ReferenceAuditableCrudDao<SelfHelpGuide>
 				.setParameter(0, selfHelpGuideGroupId)
 				.setParameter(1, ObjectStatus.ACTIVE).list();
 	}
-
 }

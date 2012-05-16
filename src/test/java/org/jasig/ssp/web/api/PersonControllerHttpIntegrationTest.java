@@ -72,11 +72,11 @@ public class PersonControllerHttpIntegrationTest
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerGetAllRequest() throws Exception {
+	public void testControllerGetAllRequest() throws Exception { // NOPMD
 		// Request URI, but do not include any Spring configuration roots, but
 		// do include class-level root paths. Example:
 		// "/controllerlevelmapping/mymethodmapping"
-		final String requestUri = "/1/person/";
+		final String requestUri = "/1/person/"; // NOPMD
 
 		request.setMethod(RequestMethod.GET.toString());
 		request.setRequestURI(requestUri);
@@ -90,8 +90,9 @@ public class PersonControllerHttpIntegrationTest
 				ObjectStatus.class, Integer.class, Integer.class, String.class,
 				String.class);
 
-		Assert.assertEquals("Correct handler found for request url: "
-				+ requestUri, expectedHandlerMethod.toString(),
+		Assert.assertEquals(
+				"Correct handler found for request url should have been "
+						+ requestUri, expectedHandlerMethod.toString(),
 				handler.toString());
 	}
 
@@ -107,8 +108,8 @@ public class PersonControllerHttpIntegrationTest
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerGetAllResponse() throws Exception {
-		final String requestUri = "/1/person/";
+	public void testControllerGetAllResponse() throws Exception { // NOPMD
+		final String requestUri = "/1/person/"; // NOPMD
 		request.setMethod(RequestMethod.GET.toString());
 		request.setRequestURI(requestUri);
 
@@ -126,11 +127,12 @@ public class PersonControllerHttpIntegrationTest
 				response);
 
 		// Handle the actual request
-		ModelAndView mav = handlerAdapter.handle(request, response, handler);
+		final ModelAndView mav = handlerAdapter.handle(request, response,
+				handler);
 		assertNotNull("Response was not handled.", mav);
 
 		@SuppressWarnings("unchecked")
-		PagingTO<PersonTO, Person> result = (PagingTO<PersonTO, Person>) getModelObject(mav);
+		final PagingTO<PersonTO, Person> result = (PagingTO<PersonTO, Person>) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",
@@ -152,12 +154,12 @@ public class PersonControllerHttpIntegrationTest
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws Exception { // NOPMD
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		PersonTO obj = controller.get(PERSON_ID);
+		final PersonTO obj = controller.get(PERSON_ID);
 
 		assertNotNull(
 				"Returned PersonTO from the controller should not have been null.",
@@ -194,10 +196,11 @@ public class PersonControllerHttpIntegrationTest
 				response);
 
 		// Handle the actual request
-		ModelAndView mav = handlerAdapter.handle(request, response, handler);
+		final ModelAndView mav = handlerAdapter.handle(request, response,
+				handler);
 		assertNotNull("Response was not handled.", mav);
 
-		PersonTO result = (PersonTO) getModelObject(mav);
+		final PersonTO result = (PersonTO) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",
@@ -219,7 +222,7 @@ public class PersonControllerHttpIntegrationTest
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerDelete() throws Exception {
+	public void testControllerDelete() throws Exception { // NOPMD
 		final String requestUri = "/1/person/"
 				+ PERSON_ID.toString();
 
@@ -241,10 +244,11 @@ public class PersonControllerHttpIntegrationTest
 				response);
 
 		// Handle the actual request
-		ModelAndView mav = handlerAdapter.handle(request, response, handler);
+		final ModelAndView mav = handlerAdapter.handle(request, response,
+				handler);
 		assertNotNull("Response was not handled.", mav);
 
-		ServiceResponse result = (ServiceResponse) getModelObject(mav);
+		final ServiceResponse result = (ServiceResponse) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",
