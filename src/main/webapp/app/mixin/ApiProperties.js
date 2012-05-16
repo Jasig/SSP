@@ -1,6 +1,10 @@
 Ext.define('Ssp.mixin.ApiProperties', {	
 	Extend: 'Ext.Component',
-	
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiUrlStore: 'apiUrlStore' 
+    },
+    
 	initComponent: function(){
 		this.callParent(arguments);
 	},
@@ -71,5 +75,18 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	handleError: function(response) {
 		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
 		Ext.Msg.alert('SSP Error', msg);								
+	},
+	
+	/*
+	 * Returns the base url of an item in the system.
+	 * @itemName - the name of the item to locate.
+	 * 	the returned item is returned by name from the apiUrlStore.
+	 */
+	getItemUrl: function( itemName ){
+		var record = this.apiUrlStore.findRecord('name', itemName);
+		var url = "";
+		if (record != null)
+			url = record.get('url');
+		return url;
 	}
 });

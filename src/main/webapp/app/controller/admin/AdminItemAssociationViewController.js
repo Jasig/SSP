@@ -8,9 +8,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     },
 
     config: {
-        associatedItemUrl: "",
         associatedItemType: "",
-        parentItemUrl: "",
         parentItemType: "",
         parentIdAttribute: "",
         associatedItemIdAttribute: ""
@@ -45,7 +43,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     },
     
     getParentItems: function(){
-    	this.treeUtils.getItems({url: this.getParentItemUrl(), 
+    	this.treeUtils.getItems({url: this.apiProperties.getItemUrl( this.getParentItemType() ), 
             nodeType: this.getParentItemType(), 
             isLeaf: false});
     },
@@ -53,7 +51,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     getAssociatedItems: function(node, id){
     	// TODO: Use the id prop to pull only the items associated with
     	// the expanded node
-    	this.treeUtils.getItems({url: this.getAssociatedItemUrl(), 
+    	this.treeUtils.getItems({url: this.apiProperties.getItemUrl( this.getAssociatedItemType() ), 
             nodeType: this.getAssociatedItemType(), 
             isLeaf: true, 
             nodeToAppendTo: node});
@@ -78,20 +76,20 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         	jsonData = new Object();
         	jsonData[me.getParentIdAttribute()] = parentId;
         	jsonData[me.getAssociatedItemIdAttribute()] = associatedItemId;
-        	url = me.apiProperties.createUrl(this.getParentItemUrl() + parentId +'/' + this.getAssociatedItemType());
+        	parentUrl = this.apiProperties.getItemUrl( this.getParentItemType() ) + parentId +'/' + this.getAssociatedItemType(); 	
+        	url = me.apiProperties.createUrl( parentUrl );
         	console.log(jsonData);
         	console.log(url);
         	console.log
-        	/*
+
 			me.apiProperties.makeRequest({
-				url: ,
+				url: url,
 				method: 'POST',
 				jsonData: jsonData,
-				successFunc: successFunc = function(response, view) {
+				successFunc: function(response, view) {
 					me.getAssociatedItems(node, parentId);
-				}; 
+				}
 			});
-			*/
         }
 
         // handle drop inside a folder
@@ -119,7 +117,8 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	jsonData = new Object();
     	jsonData[me.getParentIdAttribute()] = parentId;
     	jsonData[me.getAssociatedItemIdAttribute()] = associatedItemId;
-    	url = me.apiProperties.createUrl(this.getParentItemUrl() + parentId +'/' + this.getAssociatedItemType());
+    	parentUrl = this.apiProperties.getItemUrl( this.getParentItemType() ) + parentId +'/' + this.getAssociatedItemType();
+    	url = me.apiProperties.createUrl( parentUrl );
 
     	me.apiProperties.makeRequest({
 			url: ,

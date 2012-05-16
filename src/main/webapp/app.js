@@ -74,6 +74,7 @@ Ext.require([
     'Ssp.model.reference.JournalStepDetail',
 	'Ssp.model.reference.ConfidentialityLevel',
 	'Ssp.model.reference.ConfidentialityDisclosureAgreement',
+	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
@@ -114,12 +115,41 @@ Ext.require([
 	'Ext.ux.CheckColumn',
 	'Ext.util.Filter',
 	'Ext.data.TreeStore',
-	'Ext.dd.DropTarget'
+	'Ext.dd.DropTarget',
+	'Ext.data.Store'
 ]);
+
+var apiUrls = [
+  {name: 'category', url: 'reference/category/'},
+  {name: 'challenge', url: 'reference/challenge/'},
+  {name: 'challengeReferral', url: 'reference/challengeReferral/'},
+  {name: 'journalStep', url: 'reference/journalStep/'},
+  {name: 'journalStepDetail', url: 'reference/journalStepDetail/'},
+  {name: 'journalTrack', url: 'reference/journalTrack/'},
+  {name: 'person', url: 'person/'},
+  {name: 'personChallenge', url: 'person/{id}/challenge/'},
+  {name: 'personTask', url: 'person/{id}/task/'},
+  {name: 'personViewHistory', url: 'person/{id}/history/print/'},
+  {name: 'personPrintTask', url: 'person/{id}/task/print/'},
+  {name: 'studentIntakeTool', url: 'tool/studentIntake/'}                   
+];
 
 Ext.onReady(function(){
 	Deft.Injector.configure({
-	    currentPerson: {
+		apiUrlStore: {
+			fn: function(){
+				var urlStore = Ext.create('Ext.data.Store', {
+				     model: 'Ssp.model.ApiUrl',
+				     storeId: 'apiUrlStore'
+				 });
+				
+				urlStore.loadData( apiUrls );
+				
+				return urlStore;
+			},
+			singleton: true
+		},
+		currentPerson: {
 	        fn: function(){
 	            return new Ssp.model.Person({id:"0"});
 	        },
