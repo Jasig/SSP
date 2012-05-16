@@ -4,6 +4,9 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.ActionPlanTasksViewController',
+    inject: {
+    	person: 'currentPerson'
+    },
     width: '100%',
 	height: '100%',   
 	
@@ -36,6 +39,19 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
 						    		}]
 						})
 						,{xtype: 'actionplangoals'}
+						,{
+					        xtype:'form',
+					        title: 'Strengths',
+					        layout:'anchor',
+					        items :[{
+					            xtype: 'textarea',
+					            anchor: '100%',
+					            height: 50,
+					            fieldLabel: 'Strengths',
+					            name: 'strengths',
+					            value: this.person.get('strengths')
+					        }]
+						}
 				    ],
 				    
 				    dockedItems: [{

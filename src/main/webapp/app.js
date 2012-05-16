@@ -19,6 +19,7 @@ Ext.require([
     'Ssp.view.tools.actionplan.Tasks',
     'Ssp.view.tools.actionplan.AddTask',
     'Ssp.view.tools.actionplan.AddTaskForm',
+    'Ssp.view.tools.actionplan.AddGoalForm',
     'Ssp.view.tools.actionplan.ActionPlanTasks',
     'Ssp.view.tools.actionplan.ActionPlanGoals',
     'Ssp.view.tools.actionplan.TaskTree',
@@ -60,6 +61,7 @@ Ext.require([
     
     'Ssp.model.Configuration',
 	'Ssp.model.Person',
+	'Ssp.model.PersonGoal',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -81,6 +83,7 @@ Ext.require([
 	'Ssp.util.ColumnRendererUtils',
 	'Ssp.util.TreeRendererUtils',
     'Ssp.store.Tasks',
+    'Ssp.store.Goals',
     'Ssp.store.JournalNotes',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
@@ -251,6 +254,12 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         },
+        currentGoal:{
+	        fn: function(){
+	            return new Ssp.model.PersonGoal({id:""});
+	    	},
+	        singleton: true
+        },
         treeStore:{
 	        fn: function(){
 	            return Ext.create('Ext.data.TreeStore',{
@@ -264,6 +273,7 @@ Ext.onReady(function(){
 	        singleton: true
         },
 	    tasksStore: 'Ssp.store.Tasks',
+	    goalsStore: 'Ssp.store.Goals',
 	    journalNotesStore: 'Ssp.store.JournalNotes',
 		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',

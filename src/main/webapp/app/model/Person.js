@@ -18,8 +18,9 @@ Ext.define('Ssp.model.Person', {
              {name: 'birthDate', type: 'date', dateFormat: 'time'},
     		 {name: 'username', type: 'string'},
              {name: 'userId', type: 'string'},
-    		 {name: 'enabled', type: 'boolean'}
-             //{name: 'strengths', type: 'string'}
+    		 {name: 'enabled', type: 'boolean'},
+             {name: 'strengths', type: 'string', defaultValue: 'default strengths'},
+             {name: 'coachId', type: 'string'}
     		 //'studentType',
     		 //'programStatus',
     		 //'registrationStatus',

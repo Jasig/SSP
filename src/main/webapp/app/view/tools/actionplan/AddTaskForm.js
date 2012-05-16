@@ -5,7 +5,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.AddTasksFormViewController',
     inject: {
-        confidentialityLevelsStore: 'confidentialityLevelsStore'
+        store: 'confidentialityLevelsStore'
     },
 	width: '100%',
     height: '100%',
@@ -43,7 +43,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        name: 'confidentialityLevelId',
 				        fieldLabel: 'Confidentiality Level',
 				        emptyText: 'Select One',
-				        store: this.confidentialityLevelsStore,
+				        store: this.store,
 				        valueField: 'id',
 				        displayField: 'acronym',
 				        mode: 'local',

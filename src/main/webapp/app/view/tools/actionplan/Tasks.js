@@ -28,7 +28,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	    }],
 		
 		    	    columns: [{
-		    	        text: 'Task',
+		    	        text: 'Task Description',
 		    	        flex: 1,
 		    	        tdCls: 'task',
 		    	        sortable: true,
@@ -41,7 +41,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	        renderer: this.columnRendererUtils.renderTaskDueDate
 		    	    },{
 		    	        xtype:'actioncolumn',
-		    	        width:100,
+		    	        width:65,
 		    	        items: [{
 		    	            icon: 'images/edit-icon.jpg',
 		    	            tooltip: 'Edit',
@@ -70,11 +70,11 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	    }],
 		    	    
 		    	    dockedItems: [{
-				        dock: 'bottom',
+				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
 				            tooltip: 'Add a task',
-				            text: 'Add',
+				            text: 'Add Task',
 				            xtype: 'button',
 				            itemId: 'addTaskButton'
 				        }]
