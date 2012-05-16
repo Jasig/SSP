@@ -37,7 +37,7 @@ class ApiConnection {
 	private CookieStore cookieStore
 
 	//Should we connect using an http proxy (like CharlesProxy?)
-	private boolean useProxy = false
+	private boolean useProxy
 	//proxy settings for the above proxy
 	private Map proxySettings = [host:"localhost", port: 8888]
 
@@ -46,8 +46,9 @@ class ApiConnection {
 	/**
 	 * Create a connection to the API
 	 */
-	public ApiConnection(String baseUrl, String username, String password){
+	public ApiConnection(String baseUrl, String username, String password, boolean useProxy = false){
 		this.baseUrl = baseUrl
+		this.useProxy = useProxy
 		createConnection()
 		authenticate(username, password)
 	}
@@ -98,7 +99,7 @@ class ApiConnection {
 	public String post(String url, payload){
 		if(!authenticated) return null
 
-		HttpResponse response = basePost(baseUrl + url, payload)
+		HttpResponse response = basePost(baseUrl + url, payload, null)
 
 		return extractResult(response)
 	}
@@ -108,13 +109,17 @@ class ApiConnection {
 	 * Does not require authentication
 	 * @param url the full url
 	 */
-	public HttpResponse basePost(String fullUrl, payload){
+	public HttpResponse basePost(String fullUrl, payload, String contentType){
 		LOGGER.info("Post to $fullUrl")
 
 		HttpPost httpPost = new HttpPost(fullUrl)
 		attachPayload(httpPost, payload)
 
-		httpPost.addHeader("Content-Type", "application/json")
+		if(!contentType){
+			httpPost.addHeader("Content-Type", "application/json")
+		}else{
+			httpPost.addHeader("Content-Type", contentType)
+		}
 
 		HttpResponse response = httpClient.execute(httpHost, httpPost, httpContext)
 		LOGGER.debug("Post response Status: " + response.getStatusLine())
@@ -155,14 +160,14 @@ class ApiConnection {
 		//construct the url to authenticate against
 		String authUrl = baseUrl + "j_spring_security_check"
 
-		HttpResponse response = basePost(authUrl, ["j_username":username, "j_password":password])
+		HttpResponse response = basePost(authUrl, ["j_username":username, "j_password":password], "application/x-www-form-urlencoded")
 
 		//if we are told to redirect afterwards, the authentication was probably successful
-		if(response.getStatusLine().statusCode==302){
+		if(response.toString().contains("login_error=1")){
+			throw new Exception("Failed to Authenticate")
+		}else{
 			authenticated = true
 			LOGGER.debug("Successfully Authenticated")
-		}else{
-			LOGGER.debug("Failed to Authenticate")
 		}
 		EntityUtils.consume(response.getEntity())
 	}

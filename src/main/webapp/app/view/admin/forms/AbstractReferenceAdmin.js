@@ -9,7 +9,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     inject: {
         apiProperties: 'apiProperties'
     },
-	height: '100%',
+	height: '500',
 	width: '100%',
 	autoScroll: true,
 

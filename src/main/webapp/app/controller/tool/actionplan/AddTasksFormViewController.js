@@ -4,13 +4,14 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     inject: {
     	apiProperties: 'apiProperties',
     	task: 'currentTask',
-    	currentPerson: 'currentPerson',
+    	person: 'currentPerson',
     	formUtils: 'formRendererUtils',
     	appEventsController: 'appEventsController'
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'actionplan'
+    	formToDisplay: 'actionplan',
+    	personTaskUrl: ''
     },    
     control: {
     	'addButton': {
@@ -23,7 +24,12 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 	},
     
 	constructor: function(){
-    	// TODO: ensure the appropriate challengeId, challengeReferralId, confidentialityLevelId, etc. are set
+		this.personTaskUrl = this.apiProperties.getItemUrl('personTask');
+		this.personTaskUrl = this.personTaskUrl.replace('{id}',this.person.get('id'));
+    	
+		console.log(this.personTaskUrl);
+		
+		// TODO: ensure the appropriate confidentialityLevel, etc. are set
 		this.appEventsController.getApplication().addListener('loadTask', function(args){
     		var model = new Ssp.model.tool.actionplan.Task();
     		this.task.data = model.data;
@@ -31,9 +37,9 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     		this.task.set('description', args.description || '');
     		this.task.set('challengeId', args.challengeId || '');
     		this.task.set('challengeReferralId', args.challengeReferralId || '')
-    		this.task.set('confidentialityLevelId', args.confidentialityLevelId || '');
+    		this.task.set('confidentialityLevel', args.confidentialityLevel || '');
     		this.task.set('type','SSP');
-    		this.task.set('personId', this.currentPerson.get('id') || '');
+    		this.task.set('personId', this.person.get('id') || '');
     		this.getView().getForm().loadRecord(this.task);		
 		},this);
     	
@@ -47,7 +53,9 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	if ( form.isValid() )
     	{
     		form.updateRecord();
-    		url = this.apiProperties.createUrl('person/' + this.currentPerson.get('id') + '/task/');
+    		url = this.apiProperties.createUrl( this.personTaskUrl );
+    		this.task.data.createdBy=null;
+    		this.task.data.modifiedBy=null;
     		this.apiProperties.makeRequest({
     			url: url,
     			method: 'POST',

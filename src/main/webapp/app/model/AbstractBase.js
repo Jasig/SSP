@@ -1,10 +1,25 @@
 Ext.define('Ssp.model.AbstractBase', {
     extend: 'Ext.data.Model',
     fields: [{name: 'id', type: 'string'},
-    		 {name: 'createdById', type: 'string'}/*,
-             {name: 'createdDate', type: 'date', dateFormat: 'time'},
+             {name: 'createdBy',
+              convert: function(value, record) {
+		            var obj  = {id:value.id || '',
+		                        firstName: value.firstName || '',
+		                        lastName: value.lastName || ''};	
+		            return obj;
+		      }
+             },
+             {name: 'modifiedBy',
+              convert: function(value, record) {
+ 		            var obj  = {id:value.id || '',
+ 		                        firstName: value.firstName || '',
+ 		                        lastName: value.lastName || ''};	
+ 		            return obj;
+ 		      }
+             },
+             {name: 'createdDate', type: 'date', dateFormat: 'time'}
+             /*,
              {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
-             {name: 'modifiedById', type: 'string'},
              {name: 'objectStatus', type: 'string'}*/],
     
 	populateFromGenericObject: function( record ){
@@ -18,6 +33,10 @@ Ext.define('Ssp.model.AbstractBase', {
 	    		}
 	    	}
 		}
-    }
+    },
+    
+    getCreatedByPersonName: function(){
+    	return this.get('createdBy').firstName + ' ' + this.get('createdBy').lastName;
+    },
 
 });
