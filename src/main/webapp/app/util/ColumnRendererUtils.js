@@ -11,24 +11,24 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
     
     renderJournalCreatedDate: function(val, metaData, record){
 		var strHtml = '<div style="white-space:normal !important;">';
-        strHtml += '<h1>' + Ext.util.Format.date(record.data.createdDate,'m/d/Y') + '</h1>';
-		strHtml += '<p>' + record.data.confidentialityLevel + '<br/>' + record.data.createdById + '</p>';
+        strHtml += '<h1>' + Ext.util.Format.date(record.get('createdDate'),'m/d/Y') + '</h1>';
+		strHtml += '<p>' + record.get('confidentialityLevel') + '<br/>' + record.getCreatedByPersonName() + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
     },
     
 	renderTaskName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
-        strHtml += '<h1>' + record.data.name.toUpperCase() + '</h1>';
-		strHtml += '<p>' + record.data.description + '</p>';
+        strHtml += '<h1>' + record.get('name').toUpperCase() + '</h1>';
+		strHtml += '<p>' + record.get('description') + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
 	},
 
 	renderTaskDueDate: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
-        strHtml += '<h1>' + Ext.util.Format.date(record.data.dueDate,'m/d/Y') + '</h1>';
-		strHtml += '<p>' + record.data.confidentialityLevel + '<br/>' + record.data.createdById + '</p>';
+        strHtml += '<h1>' + Ext.util.Format.date( record.get('dueDate') ,'m/d/Y') + '</h1>';
+		strHtml += '<p>' + record.get('confidentialityLevel') + '<br/>' + record.getCreatedByPersonName() + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
 	},

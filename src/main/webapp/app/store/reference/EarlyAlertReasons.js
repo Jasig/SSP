@@ -3,6 +3,6 @@ Ext.define('Ssp.store.reference.EarlyAlertReasons', {
     model: 'Ssp.model.reference.EarlyAlertReason',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'earlyAlertReason/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('earlyAlertReason')});
     }
 });

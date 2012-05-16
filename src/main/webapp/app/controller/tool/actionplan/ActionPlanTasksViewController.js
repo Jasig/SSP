@@ -59,9 +59,9 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 		var successFunc = function(response,view){
 	    	var r, records;
 	    	r = Ext.decode(response.responseText);
-	    	if (r.length > 0)
+	    	if (r.rows.length > 0)
 	    	{
-		    	me.store.loadData(r);
+		    	me.store.loadData(r.rows);
 	    	}else{
 	    		me.store.loadData([]);
 	    	}
@@ -102,7 +102,7 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 		var filterStatusFunc = null;
 		var authenticatedId = this.authenticatedPerson.get('id');
 		var filterAuthenticatedFunc = function(item) { 
-			return (item.get('createdById') == authenticatedId); 
+			return (item.get('createdBy').id == authenticatedId); 
 		}; 
 
 		switch (this.filteredTaskStatus)

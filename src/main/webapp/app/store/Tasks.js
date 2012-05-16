@@ -7,7 +7,7 @@ Ext.define('Ssp.store.Tasks', {
     	apiProperties: 'apiProperties'
     },    
 	constructor: function(){
-		Ext.apply(this, { proxy: this.apiProperties.getProxy('person/' + '0' + '/task/' ),
+		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personTask') ),
 						  autoLoad: false });
 		return this.callParent(arguments);
 	},

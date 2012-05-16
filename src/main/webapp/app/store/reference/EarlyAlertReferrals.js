@@ -3,6 +3,6 @@ Ext.define('Ssp.store.reference.EarlyAlertReferrals', {
     model: 'Ssp.model.reference.EarlyAlertReferral',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'earlyAlertReferral/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('earlyAlertReferral')});
     }
 });

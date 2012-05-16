@@ -24,9 +24,11 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 	},
     
 	constructor: function(){
-		this.personPersonTaskUrl = this.apiProperties.getItemUrl('personChallenge');
-		this.personTaskUrl=this.personTaskUrl.replace('{id}',this.person.get('id'));
-    		
+		this.personTaskUrl = this.apiProperties.getItemUrl('personTask');
+		this.personTaskUrl = this.personTaskUrl.replace('{id}',this.person.get('id'));
+    	
+		console.log(this.personTaskUrl);
+		
 		// TODO: ensure the appropriate confidentialityLevel, etc. are set
 		this.appEventsController.getApplication().addListener('loadTask', function(args){
     		var model = new Ssp.model.tool.actionplan.Task();
@@ -35,9 +37,9 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     		this.task.set('description', args.description || '');
     		this.task.set('challengeId', args.challengeId || '');
     		this.task.set('challengeReferralId', args.challengeReferralId || '')
-    		this.task.set('confidentialityLevelId', args.confidentialityLevelId || '');
+    		this.task.set('confidentialityLevel', args.confidentialityLevel || '');
     		this.task.set('type','SSP');
-    		this.task.set('personId', this.currentPerson.get('id') || '');
+    		this.task.set('personId', this.person.get('id') || '');
     		this.getView().getForm().loadRecord(this.task);		
 		},this);
     	
@@ -52,6 +54,8 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	{
     		form.updateRecord();
     		url = this.apiProperties.createUrl( this.personTaskUrl );
+    		this.task.data.createdBy=null;
+    		this.task.data.modifiedBy=null;
     		this.apiProperties.makeRequest({
     			url: url,
     			method: 'POST',
