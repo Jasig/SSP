@@ -5,7 +5,10 @@ Ext.define('Ssp.view.tools.Profile', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.ProfileToolViewController',
-	initComponent: function() {	
+    inject: {
+    	config: 'config'
+    },	
+    initComponent: function() {	
 		Ext.apply(this, 
 				{
 		    		width: '100%',
@@ -33,7 +36,7 @@ Ext.define('Ssp.view.tools.Profile', {
 					        fieldLabel: 'Student',
 					        name: 'name'
 					    }, {
-					        fieldLabel: 'Tartan ID',
+					        fieldLabel: this.config.get('studentIdAlias'),
 					        name: 'schoolId'
 					    }, {
 					        fieldLabel: 'Birth Date',

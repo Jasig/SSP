@@ -58,6 +58,7 @@ Ext.require([
     'Ssp.view.admin.forms.journal.EditStep',
     'Ssp.view.admin.forms.journal.EditStepDetail',
     
+    'Ssp.model.Configuration',
 	'Ssp.model.Person',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
@@ -172,6 +173,12 @@ Ext.onReady(function(){
 			},
 			singleton: true
 		},
+		config: {
+	        fn: function(){
+	            return new Ssp.model.Configuration({});
+	        },
+	        singleton: true
+	    },
 		currentPerson: {
 	        fn: function(){
 	            return new Ssp.model.Person({id:"0"});
@@ -180,7 +187,7 @@ Ext.onReady(function(){
 	    },
 	    authenticatedPerson: {
 	        fn: function(){
-	            return new Ssp.model.Person({id:"91f46e39-cea8-422b-b215-00f6bcf5d280"});
+	            return new Ssp.model.Person({id:"1010e4a0-1001-0110-1011-4ffc02fe81ff"});
 	        },
 	        singleton: true
 	    },
