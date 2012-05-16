@@ -3,6 +3,6 @@ Ext.define('Ssp.store.reference.ConfidentialityDisclosureAgreements', {
     model: 'Ssp.model.reference.ConfidentialityDisclosureAgreement',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'confidentialityDisclosureAgreement/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('confidentialityDisclosureAgreement')});
     }
 });

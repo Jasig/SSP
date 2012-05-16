@@ -8,7 +8,7 @@ Ext.define('Ssp.store.reference.AbstractReferences', {
 
 	constructor: function(){
 		Ext.apply(this, { 
-						    proxy: this.apiProperties.getProxy('reference/'), 
+						    proxy: this.apiProperties.getProxy(''), 
 							autoLoad: false,
 							autoSync: false,
 						    pageSize: this.apiProperties.getPagingSize(),

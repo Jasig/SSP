@@ -44,8 +44,6 @@ Ext.define('Ssp.controller.admin.ConfidentialityLevelAdminViewController', {
        	var grid = button.up('grid');
        	item.set('name','default');
        	
-       	console.log(item);
-
 		Ext.Ajax.request({
 			url: grid.getStore().getProxy().url,
 			method: 'POST',

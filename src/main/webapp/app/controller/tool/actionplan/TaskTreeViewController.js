@@ -109,9 +109,10 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 		    		var args = new Object();
 		    		args.name = r.name;
 		    		args.description = r.description || '';
-		    		args.challengeReferralId = r.challengeReferralId;
+		    		args.challengeReferralId = r.id;
 		    		args.challengeId = challengeId;
 		    		args.confidentialityLevel = confidentialityLevel;
+		    		console.log(r);
 		    		me.appEventsController.getApplication().fireEvent('loadTask', args);
 		    	}		
 			};

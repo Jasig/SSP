@@ -3,6 +3,6 @@ Ext.define('Ssp.store.reference.JournalTracks', {
     model: 'Ssp.model.reference.JournalTrack',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'journalTrack/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('journalTrack')});
     }
 });
