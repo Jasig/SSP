@@ -1,12 +1,10 @@
 package org.jasig.ssp.transferobject;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
 
 /**
  * Transfer object for copy to and from equivalent Auditable models.
@@ -39,11 +37,11 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 
 	private Date createdDate;
 
-	private AbstractAuditableTO<T>.PersonLiteTO createdBy;
+	private PersonLiteTO createdBy;
 
 	private Date modifiedDate;
 
-	private AbstractAuditableTO<T>.PersonLiteTO modifiedBy;
+	private PersonLiteTO modifiedBy;
 
 	private ObjectStatus objectStatus;
 
@@ -64,11 +62,11 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 				createdDate.getTime());
 	}
 
-	public AbstractAuditableTO<T>.PersonLiteTO getCreatedBy() {
+	public PersonLiteTO getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(final AbstractAuditableTO<T>.PersonLiteTO createdBy) {
+	public void setCreatedBy(final PersonLiteTO createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -81,12 +79,12 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 				modifiedDate.getTime());
 	}
 
-	public AbstractAuditableTO<T>.PersonLiteTO getModifiedBy() {
+	public PersonLiteTO getModifiedBy() {
 		return modifiedBy;
 	}
 
 	public void setModifiedBy(
-			final AbstractAuditableTO<T>.PersonLiteTO modifiedBy) {
+			final PersonLiteTO modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -114,59 +112,4 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		objectStatus = model.getObjectStatus();
 	}
 
-	/**
-	 * Encapsulate simple Person properties.
-	 * 
-	 * @author jon.adams
-	 */
-	public class PersonLiteTO implements Serializable {
-		private static final long serialVersionUID = 2921442272658399L;
-
-		private UUID id;
-
-		private String firstName;
-
-		private String lastName;
-
-		public PersonLiteTO(final UUID id, final String firstName,
-				final String lastName) {
-			this.id = id;
-			this.firstName = firstName;
-			this.lastName = lastName;
-		}
-
-		public PersonLiteTO(final Person person) {
-			if (person == null) {
-				return;
-			}
-
-			this.id = person.getId();
-			this.firstName = person.getFirstName();
-			this.lastName = person.getLastName();
-		}
-
-		public UUID getId() {
-			return id;
-		}
-
-		public void setId(final UUID id) {
-			this.id = id;
-		}
-
-		public String getFirstName() {
-			return firstName;
-		}
-
-		public void setFirstName(final String firstName) {
-			this.firstName = firstName;
-		}
-
-		public String getLastName() {
-			return lastName;
-		}
-
-		public void setLastName(final String lastName) {
-			this.lastName = lastName;
-		}
-	}
 }

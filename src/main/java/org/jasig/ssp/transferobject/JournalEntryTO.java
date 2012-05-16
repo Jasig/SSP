@@ -18,7 +18,7 @@ public class JournalEntryTO
 	private Date entryDate;
 	private String comment;
 	private UUID personId, journalSourceId, journalTrackId,
-			confidentialityLevel;
+			confidentialityLevelId;
 	private List<JournalEntryJournalStepDetailTO> journalEntryJournalStepDetails;
 
 	public JournalEntryTO() {
@@ -42,7 +42,7 @@ public class JournalEntryTO
 				: journalEntry.getJournalSource().getId();
 		journalTrackId = journalEntry.getJournalTrack() == null ? null
 				: journalEntry.getJournalTrack().getId();
-		confidentialityLevel = journalEntry.getConfidentialityLevel() == null ? null
+		confidentialityLevelId = journalEntry.getConfidentialityLevel() == null ? null
 				: journalEntry.getConfidentialityLevel().getId();
 
 		if ((journalEntry.getJournalEntryJournalStepDetails() != null)
@@ -106,12 +106,12 @@ public class JournalEntryTO
 		this.journalTrackId = journalTrackId;
 	}
 
-	public UUID getConfidentialityLevel() {
-		return confidentialityLevel;
+	public UUID getConfidentialityLevelId() {
+		return confidentialityLevelId;
 	}
 
-	public void setConfidentialityLevel(final UUID confidentialityLevel) {
-		this.confidentialityLevel = confidentialityLevel;
+	public void setConfidentialityLevelId(final UUID confidentialityLevelId) {
+		this.confidentialityLevelId = confidentialityLevelId;
 	}
 
 	public List<JournalEntryJournalStepDetailTO> getJournalEntryJournalStepDetails() {
