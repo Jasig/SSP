@@ -5,7 +5,6 @@ It allows ssp to be run outside in absence of uportal.
 -->
 
 <beans:beans 
-	profile="dev-standalone"
 	xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -32,6 +31,12 @@ It allows ssp to be run outside in absence of uportal.
 
 	<ldap-server ldif="file:#{configDir}/users.ldif" />
 
+	<beans:bean id="sspPreAuthenticatedAuthenticationProvider" class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+		<beans:property name="preAuthenticatedUserDetailsService">
+			<beans:bean class="org.springframework.security.web.authentication.preauth.PreAuthenticatedGrantedAuthoritiesUserDetailsService" />
+		</beans:property>
+	</beans:bean>
+
 	<beans:bean id="localSpringSecurityContextSource"
 		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
 		<beans:constructor-arg
@@ -53,14 +58,10 @@ It allows ssp to be run outside in absence of uportal.
 		</beans:constructor-arg>
 		<beans:constructor-arg>
 			<beans:bean class="org.jasig.ssp.security.SspLdapAuthoritiesPopulator">
-				<beans:constructor-arg>
-					<beans:bean id="sspUserDetailsService" class="org.jasig.ssp.security.SspUserDetailsService" />
-				</beans:constructor-arg>
+				<beans:constructor-arg ref="sspUserDetailsService" />
 			</beans:bean>
 		</beans:constructor-arg>
-		<beans:property name="userDetailsContextMapper">
-			<beans:bean class="org.jasig.ssp.security.SspUserDetailsContextMapper" />		
-		</beans:property>
+		<beans:property name="userDetailsContextMapper" ref="sspUserDetailsContextMapper" />
 	</beans:bean>
 
 </beans:beans>
