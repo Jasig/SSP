@@ -181,9 +181,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			if (key != null);
 				delete challengeObj[key];
 			intakeData.personChallenges = this.getSelectedChallenges(challengeObj, personId, otherChallengeDescription);
-
+			
 			Ext.Ajax.request({
-				url: this.apiProperties.createUrl('tool/studentIntake/' + this.currentPerson.get('id')),
+				url: this.apiProperties.createUrl(this.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
 				jsonData: intakeData,
