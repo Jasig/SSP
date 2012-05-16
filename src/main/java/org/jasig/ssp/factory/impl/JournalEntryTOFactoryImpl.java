@@ -63,11 +63,11 @@ public class JournalEntryTOFactoryImpl extends
 					.getJournalTrackId()));
 		}
 
-		if (tObject.getConfidentialityLevel() == null) {
+		if (tObject.getConfidentialityLevelId() == null) {
 			model.setConfidentialityLevel(null);
 		} else {
 			model.setConfidentialityLevel(confidentialityLevelService
-					.get(tObject.getConfidentialityLevel()));
+					.get(tObject.getConfidentialityLevelId()));
 		}
 
 		if ((tObject.getJournalEntryJournalStepDetails() == null)

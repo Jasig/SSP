@@ -3,16 +3,20 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	currentPerson: 'currentPerson',
+    	person: 'currentPerson',
     	appEventsController: 'appEventsController',
     	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
     	store: 'tasksStore'
     	
     },
+    
     config: {
     	filteredTaskStatus: null,
-    	filterAuthenticated: false
+    	filterAuthenticated: false,
+    	personTaskUrl: '',
+    	personViewHistoryUrl: '',
+    	personPrintTaskUrl: ''
     },
     
     control: {
@@ -51,74 +55,31 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 	
 	init: function() {
 		var me = this;
+		var personId;
 		var successFunc = function(response,view){
 	    	var r, records;
 	    	r = Ext.decode(response.responseText);
-	    	if (r.length > 0)
+	    	if (r.rows.length > 0)
 	    	{
-		    	me.store.loadData(r);
+		    	me.store.loadData(r.rows);
 	    	}else{
-	    		/*
-	    		var sampDataArr = [{"id" : "23befc50-7f91-11e1-b0c4-0800200c9a66",
-	    	        "createdDate" : "1332216000000",
-	    	        "createdById" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-	    	        "modifiedDate" : "1332216000000",
-	    	        "modifiedById" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-	    	        "objectStatus" : "ACTIVE",
-	    	        "name" : "Family Services",
-	    	        "description" : "FAMILY SERVICES:  Contact Pat Davis at Family Services Association 222-9481 for parenting education program.  Parenting 101 Classes are offered throughout the year.  Sliding fee scale will establish the fee and scholarships may be available.",
-	    	        "dueDate" : "04/23/2012",
-	    	        "reminderSentDate" : "1332216000000",
-	    	        "completed" : "true",
-	    	        "completedDate" : "1332216000000",
-	    	        "challengeId" : "9D6E3B8F-AFB3-4D86-A527-9778035B94E1",
-	    	        "deletableByStudent" : "true",
-	    	        "closableByStudent" : "true",
-	    	        "confidentialityLevel" : "EVERYONE",
-	    	        "type" : "SSP"},
-	    		{"id" : "7ed6d720-7f91-11e1-b0c4-0800200c9a66",
-	    	        "createdDate" : "1332216000000",
-	    	        "createdById" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-	    	        "modifiedDate" : "1332216000000",
-	    	        "modifiedById" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-	    	        "objectStatus" : "ACTIVE",
-	    	        "name" : "Montgomery County Child Support Enforcement Agency",
-	    	        "description" : "Contact Montgomery County Child Support Enforcement Agency for enforcement of child support orders 225-4600 www.mcsea.org.",
-	    	        "dueDate" : "04/23/2012",
-	    	        "reminderSentDate" : "",
-	    	        "completed" : "false",
-	    	        "completedDate" : "1332216000000",
-	    	        "challengeId" : "9D6E3B8F-AFB3-4D86-A527-9778035B94E1",
-	    	        "deletableByStudent" : true,
-	    	        "closableByStudent" : true,
-	    	        "confidentialityLevel" : "DISABILITY",
-	    	        "type" : "SSP"},
-	    	        {"id" : "7ed6d720-7f91-11e1-b0c4-0800200c9a66",
-	    	        "createdDate" : "1332216000000",
-	    	        "createdById" : "7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194",
-	    	        "modifiedDate" : "1332216000000",
-	    	        "modifiedById" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-	    	        "objectStatus" : "ACTIVE",
-	    	        "name" : "Montgomery County Child Support Enforcement Agency",
-	    	        "description" : "Contact Montgomery County Child Support Enforcement Agency for enforcement of child support orders 225-4600 www.mcsea.org.",
-	    	        "dueDate" : "04/23/2012",
-	    	        "reminderSentDate" : "",
-	    	        "completed" : "false",
-	    	        "completedDate" : "1332216000000",
-	    	        "challengeId" : "9D6E3B8F-AFB3-4D86-A527-9778035B94E1",
-	    	        "deletableByStudent" : true,
-	    	        "closableByStudent" : true,
-	    	        "confidentialityLevel" : "DISABILITY",
-	    	        "type" : "SSP"}];
-	    	       */
 	    		me.store.loadData([]);
 	    	}
     		me.filteredTaskStatus="ACTIVE";
     		me.filterTasks();
 		};
 		
+		personId = this.person.get('id');
+		this.personTaskUrl = this.apiProperties.getItemUrl('personTask');
+		this.personTaskUrl=this.personTaskUrl.replace('{id}',personId);
+		
+		this.personViewHistoryUrl = this.apiProperties.getItemUrl('personViewHistory');
+		this.personViewHistoryUrl = this.personViewHistoryUrl.replace('{id}',personId);
+		this.personPrintTaskUrl = this.apiProperties.getItemUrl('personPrintTask');
+		this.personPrintTaskUrl = this.personPrintTaskUrl.replace('{id}',personId);
+
 		this.apiProperties.makeRequest({
-			url: this.apiProperties.createUrl('person/'+ this.currentPerson.get('id') + '/task/'),
+			url: this.apiProperties.createUrl(this.personTaskUrl),
 			method: 'GET',
 			successFunc: successFunc 
 		});
@@ -141,7 +102,7 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 		var filterStatusFunc = null;
 		var authenticatedId = this.authenticatedPerson.get('id');
 		var filterAuthenticatedFunc = function(item) { 
-			return (item.get('createdById') == authenticatedId); 
+			return (item.get('createdBy').id == authenticatedId); 
 		}; 
 
 		switch (this.filteredTaskStatus)
@@ -171,7 +132,7 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
     onViewHistoryClick: function(button) {
 		Ext.Msg.alert('ActionPlanTasksViewController->onViewHistoryClick. This item is completed in the ui. Uncomment to display the History Report when it is complete.');
 		/*
-		var url = this.apiProperties.createUrl('person/' + this.currentPerson.get('id') + '/history/print');
+		var url = this.apiProperties.createUrl( this.personViewHistoryUrl );
         this.apiProperties.makeRequest({
 			url: url,
 			method: 'GET',
@@ -197,7 +158,7 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
        grid = button.up('panel').down('grid');
 	   store = grid.getStore();
        selectionArr = grid.getView().getSelectionModel().getSelection();
-       url = this.apiProperties.createUrl('person/' + this.currentPerson.get('id') + '/task/');
+       url = this.apiProperties.createUrl( this.personTaskUrl );
        if (selectionArr.length > 0) 
        {
     	   Ext.each(selectionArr, function(item, index){
@@ -229,7 +190,7 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 	    var jsonData = this.getSelectedIdsArray( grid.getView().getSelectionModel().getSelection() );
 	    if (jsonData.length > 0)
 	    {
-			url = this.apiProperties.createUrl('person/' + this.currentPerson.get('id') + '/task/print');
+			url = this.apiProperties.createUrl( this.personPrintTaskUrl );
 	        this.apiProperties.makeRequest({
 				url: url,
 				method: 'GET',

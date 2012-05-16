@@ -3,7 +3,7 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	confidentialityDisclosureAgreementsStore: 'confidentialityDisclosureAgreementsStore'
+    	store: 'confidentialityDisclosureAgreementsStore'
     },
     
     control: {
@@ -13,7 +13,7 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     },
     
 	init: function() {
-		this.confidentialityDisclosureAgreementsStore.load({scope: this, callback: this.loadConfidentialityDisclosureAgreementResult});
+		this.store.load({scope: this, callback: this.loadConfidentialityDisclosureAgreementResult});
 		
 		return this.callParent(arguments);
     }, 
@@ -32,7 +32,7 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
 		jsonData = record.data;
 		
 		Ext.Ajax.request({
-			url: this.confidentialityDisclosureAgreementsStore.getProxy().url+id,
+			url: this.store.getProxy().url+id,
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			jsonData: jsonData,

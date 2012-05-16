@@ -3,6 +3,6 @@ Ext.define('Ssp.store.reference.VeteranStatuses', {
     model: 'Ssp.model.reference.VeteranStatus',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'veteranStatus/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('veteranStatus')});
     }
 });

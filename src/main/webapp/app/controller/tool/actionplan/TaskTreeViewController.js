@@ -7,6 +7,12 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
         person: 'currentPerson',
     	treeUtils: 'treeRendererUtils'
     },
+    config: {
+    	categoryUrl: '',
+    	challengeUrl: '',
+    	challengeReferralUrl: '',
+    	personChallengeUrl: ''
+    },
     control: {
     	view: {
     		itemexpand: 'onItemExpand',
@@ -21,6 +27,12 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 	init: function() {
 		var rootNode = null;
 		
+		this.categoryUrl = this.apiProperties.getItemUrl('category');
+		this.challengeUrl = this.apiProperties.getItemUrl('challenge');
+		this.challengeReferralUrl = this.apiProperties.getItemUrl('challengeReferral');
+		this.personChallengeUrl = this.apiProperties.getItemUrl('personChallenge');
+		this.personChallengeUrl = this.personChallengeUrl.replace('{id}',this.person.get('id'));
+
 		// clear the categories
 		this.treeUtils.clearRootCategories();
 
@@ -33,8 +45,8 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 	      }]);
      	     	
     	// load the categories
-    	this.treeUtils.getItems({url: 'reference/challengeCategory/', 
-                                 nodeType: 'challengeCategory', 
+    	this.treeUtils.getItems({url: this.categoryUrl, 
+                                 nodeType: 'category', 
                                  isLeaf: false});
 
 		return this.callParent(arguments);
@@ -50,18 +62,18 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
  
     	switch ( nodeName )
     	{
-    		case 'challengeCategory':
-    			url = 'reference/challenge/'; // +id;
+    		case 'category':
+    			url = this.challengeUrl; // +id;
     			nodeType = 'challenge';
     			break;
     			
     		case 'studentIntakeChallenge':
-    			url = 'person/'+this.person.get('id')+'/challenge/';
+    			url = this.personChallengeUrl;
     			nodeType = 'challenge';
      			break;
 
     		case 'challenge':
-    			url = 'reference/challengeReferral/'; // +id;
+    			url = this.challengeReferralUrl; // +id;
     			nodeType = 'referral';
     			isLeaf = true;
     			break;
@@ -97,15 +109,16 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 		    		var args = new Object();
 		    		args.name = r.name;
 		    		args.description = r.description || '';
-		    		args.challengeReferralId = r.challengeReferralId;
+		    		args.challengeReferralId = r.id;
 		    		args.challengeId = challengeId;
 		    		args.confidentialityLevel = confidentialityLevel;
+		    		console.log(r);
 		    		me.appEventsController.getApplication().fireEvent('loadTask', args);
 		    	}		
 			};
 	    	
 	    	this.apiProperties.makeRequest({
-				url: this.apiProperties.createUrl('reference/challengeReferral/')+id,
+				url: this.apiProperties.createUrl( this.challengeReferralUrl+id ),
 				method: 'GET',
 				jsonData: '',
 				successFunc: successFunc 

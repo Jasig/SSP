@@ -20,7 +20,7 @@ public class TaskTO
 	private boolean completed, deletable;
 	private Date dueDate, completedDate, reminderSentDate;
 	private UUID personId, challengeId, challengeReferralId,
-			confidentialityLevel;
+			confidentialityLevelId;
 
 	public TaskTO() {
 		super();
@@ -54,7 +54,7 @@ public class TaskTO
 		}
 
 		if (task.getConfidentialityLevel() != null) {
-			confidentialityLevel = task.getConfidentialityLevel().getId();
+			confidentialityLevelId = task.getConfidentialityLevel().getId();
 		}
 
 		if (description != null) {
@@ -165,12 +165,12 @@ public class TaskTO
 		this.personId = personId;
 	}
 
-	public UUID getConfidentialityLevel() {
-		return confidentialityLevel;
+	public UUID getConfidentialityLevelId() {
+		return confidentialityLevelId;
 	}
 
-	public void setConfidentialityLevel(
+	public void setConfidentialityLevelId(
 			final UUID confidentialityLevel) {
-		this.confidentialityLevel = confidentialityLevel;
+		this.confidentialityLevelId = confidentialityLevel;
 	}
 }

@@ -3,6 +3,6 @@ Ext.define('Ssp.store.reference.Challenges', {
     model: 'Ssp.model.reference.Challenge',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'challenge/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('challenge')});
     }
 });

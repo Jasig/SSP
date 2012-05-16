@@ -7,7 +7,7 @@ Ext.define('Ssp.store.Students', {
     },
 	constructor: function(){
 		Ext.apply(this, { 
-							proxy: this.apiProperties.getProxy('person/'),
+							proxy: this.apiProperties.getProxy(this.apiProperties.getItemUrl('person')),
 							autoLoad: false
 						});
 		return this.callParent(arguments);

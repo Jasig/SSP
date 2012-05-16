@@ -3,6 +3,6 @@ Ext.define('Ssp.store.reference.ConfidentialityLevels', {
     model: 'Ssp.model.reference.ConfidentialityLevel',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + 'confidentialityLevel/'});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('confidentialityLevel')});
     }
 });
