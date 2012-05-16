@@ -19,6 +19,10 @@ public class PersonLiteTO implements Serializable {
 
 	private String lastName;
 
+	public PersonLiteTO() {
+		super();
+	}
+
 	public PersonLiteTO(final UUID id, final String firstName,
 			final String lastName) {
 		this.id = id;
