@@ -4,6 +4,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 	id: 'StudentIntakePersonal',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
+    	config: 'config',
         statesStore: 'statesStore'
     },
 	width: '100%',
@@ -43,28 +44,33 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        fieldLabel: 'First Name',
 				        name: 'firstName',
 				        maxLength: 50,
-				        allowBlank:false
+				        allowBlank:false,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
 				        fieldLabel: 'Middle Initial',
 				        name: 'middleInitial',
 				        maxLength: 1,
-				        allowBlank:true
+				        allowBlank:true,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
 				        fieldLabel: 'Last Name',
 				        name: 'lastName',
 				        maxLength: 50,
-				        allowBlank:false
+				        allowBlank:false,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
-				        fieldLabel: 'Tartan ID',
+				        fieldLabel: this.config.get('studentIdAlias'),
 				        name: 'schoolId',
 				        minLength: 7,
 				        maxLength: 7,
-				        allowBlank:false
+				        allowBlank:false,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
 				    	xtype: 'datefield',
 				    	fieldLabel: 'Birth Date',
 				        name: 'birthDate',
-				        allowBlank:false    	
+				        allowBlank:false ,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
 				        fieldLabel: 'Home Phone',
 				        name: 'homePhone',
@@ -73,7 +79,8 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        regex: /^\d{3}-\d{3}-\d{4}$/,
 				        regexText: 'Must be in the format xxx-xxx-xxxx',
 				        maxLength: 12,
-				        allowBlank:true
+				        allowBlank:true,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
 				        fieldLabel: 'Work Phone',
 				        name: 'workPhone',
@@ -82,7 +89,8 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        regex: /^\d{3}-\d{3}-\d{4}$/,
 				        regexText: 'Must be in the format xxx-xxx-xxxx',
 				        maxLength: 12,
-				        allowBlank:true
+				        allowBlank:true,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
 				        fieldLabel: 'Cell Phone',
 				        name: 'cellPhone',
@@ -96,12 +104,14 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        fieldLabel: 'Address',
 				        name: 'addressLine1',
 				        maxLength: 50,
-				        allowBlank:true
+				        allowBlank:true,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
 				        fieldLabel: 'City',
 				        name: 'city',
 				        maxLength: 50,
-				        allowBlank:true
+				        allowBlank:true,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
 				        xtype: 'combobox',
 				        name: 'state',
@@ -114,18 +124,21 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        typeAhead: true,
 				        queryMode: 'local',
 				        allowBlank: true,
-				        forceSelection: true
+				        forceSelection: true,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 					},{
 				        fieldLabel: 'Zip Code',
 				        name: 'zipCode',
 				        maxLength: 10,
-				        allowBlank:true
+				        allowBlank:true,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
 				        fieldLabel: 'Email School',
 				        name: 'primaryEmailAddress',
 				        vtype:'email',
 				        maxLength: 100,
-				        allowBlank:true
+				        allowBlank:true,
+				        disabled: this.config.get('syncStudentPersonalDataWithExternalSISData')
 				    },{
 				        fieldLabel: 'Email Alternate',
 				        name: 'secondaryEmailAddress',
