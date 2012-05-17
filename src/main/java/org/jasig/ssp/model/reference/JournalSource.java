@@ -15,7 +15,7 @@ import javax.persistence.InheritanceType;
 public class JournalSource extends AbstractReference implements
 		Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1586445096161244662L;
 
 	/**
 	 * Constructor
@@ -31,7 +31,7 @@ public class JournalSource extends AbstractReference implements
 	 *            Identifier; required
 	 */
 
-	public JournalSource(UUID id) {
+	public JournalSource(final UUID id) {
 		super(id);
 	}
 
@@ -44,22 +44,8 @@ public class JournalSource extends AbstractReference implements
 	 *            Name; required; max 100 characters
 	 */
 
-	public JournalSource(UUID id, String name) {
+	public JournalSource(final UUID id, final String name) {
 		super(id, name);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 150 characters
-	 */
-	public JournalSource(UUID id, String name, String description) {
-		super(id, name, description);
 	}
 
 	@Override

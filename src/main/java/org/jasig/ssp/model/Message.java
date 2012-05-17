@@ -10,11 +10,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Message
+ * Email (Message) model
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -27,25 +28,64 @@ final public class Message extends Auditable {
 	private String body;
 
 	@ManyToOne
-	@JoinColumn(name = "sender_id")
+	@JoinColumn(name = "sender_id", nullable = false)
 	private Person sender;
 
-	@ManyToOne
-	@JoinColumn(name = "recipient_id")
+	@ManyToOne()
+	@JoinColumn(name = "recipient_id", nullable = false)
 	private Person recipient;
 
-	@Column(length = 100)
+	@Column(length = 100, nullable = false)
 	private String recipientEmailAddress;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column
+	@Column(nullable = true)
 	private Date sentDate;
+
+	/**
+	 * Empty constructor
+	 */
+	public Message() {
+		super();
+	}
+
+	/**
+	 * Construct a new message with the required attributes.
+	 * 
+	 * @param subject
+	 *            Message subject
+	 * @param body
+	 *            Message body
+	 * @param sender
+	 *            Message sender
+	 * @param recipient
+	 *            Message recipient
+	 * @param recipientEmailAddress
+	 *            Recipient e-mail address
+	 */
+	public Message(final String subject, final String body,
+			final Person sender,
+			final Person recipient, final String recipientEmailAddress) {
+		super();
+		setObjectStatus(ObjectStatus.ACTIVE);
+		this.subject = subject;
+		this.body = body;
+		this.sender = sender;
+		this.recipient = recipient;
+		this.recipientEmailAddress = recipientEmailAddress;
+	}
 
 	public String getSubject() {
 		return subject;
 	}
 
-	public void setSubject(final String subject) {
+	/**
+	 * Sets the email subject; maximum of 250 characters
+	 * 
+	 * @param subject
+	 *            E-mail subject; maximum of 250 characters, can not be null
+	 */
+	public void setSubject(@NotNull final String subject) {
 		this.subject = subject;
 	}
 
@@ -53,7 +93,7 @@ final public class Message extends Auditable {
 		return sender;
 	}
 
-	public void setSender(final Person sender) {
+	public void setSender(@NotNull final Person sender) {
 		this.sender = sender;
 	}
 
@@ -61,7 +101,7 @@ final public class Message extends Auditable {
 		return recipient;
 	}
 
-	public void setRecipient(final Person recipient) {
+	public void setRecipient(@NotNull final Person recipient) {
 		this.recipient = recipient;
 	}
 
@@ -69,7 +109,15 @@ final public class Message extends Auditable {
 		return recipientEmailAddress;
 	}
 
-	public void setRecipientEmailAddress(final String recipientEmailAddress) {
+	/**
+	 * Sets the recipient email address; maximum of 100 characters
+	 * 
+	 * @param recipientEmailAddress
+	 *            Recipient email address; maximum of 100 characters; can not be
+	 *            null
+	 */
+	public void setRecipientEmailAddress(
+			@NotNull final String recipientEmailAddress) {
 		this.recipientEmailAddress = recipientEmailAddress;
 	}
 
@@ -77,7 +125,7 @@ final public class Message extends Auditable {
 		return body;
 	}
 
-	public void setBody(final String body) {
+	public void setBody(@NotNull final String body) {
 		this.body = body;
 	}
 
@@ -108,9 +156,10 @@ final public class Message extends Auditable {
 				.hashCode();
 		result *= StringUtils.isEmpty(body) ? "body".hashCode() : body
 				.hashCode();
-		result *= sender == null ? "sender".hashCode() : sender.hashCode();
-		result *= recipient == null ? "recipient".hashCode() : recipient
-				.hashCode();
+		result *= sender == null || sender.getId() == null ? "sender"
+				.hashCode() : sender.getId().hashCode();
+		result *= recipient == null || recipient.getId() == null ? "recipient"
+				.hashCode() : recipient.getId().hashCode();
 		result *= StringUtils.isEmpty(recipientEmailAddress) ? "recipientEmailAddress"
 				.hashCode()
 				: recipientEmailAddress.hashCode();

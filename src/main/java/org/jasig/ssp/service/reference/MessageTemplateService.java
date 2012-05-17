@@ -8,6 +8,9 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * MessageTemplate service
+ */
 public interface MessageTemplateService extends
 		AuditableCrudService<MessageTemplate> {
 

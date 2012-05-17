@@ -1465,19 +1465,18 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="modified_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="config_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false" foreignKeyName="config_created_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="false" foreignKeyName="config_modified_by_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
@@ -1486,26 +1485,26 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on config to ssp</sql>
 		<rollback>
-			<dropTable tableName="config"/>
+			<dropTable tableName="config" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
 	</changeSet>
-	
-	<changeSet id="Config Data - Default Values"
-		author="daniel.bower">
+
+	<changeSet id="Config Data - Default Values" author="daniel.bower">
 		<insert tableName="config">
 			<column name="id" value="3eb8d2ee-9baa-11e1-844c-0026b9e7ff4c" />
 			<column name="name" value="send_mail" />
-			<column name="description" value="Whether the system should send out mails, or just log their generation" />
+			<column name="description"
+				value="Whether the system should send out mails, or just log their generation" />
 			<column name="value">false</column>
 			<column name="created_date" valueDate="2012-05-07T12:00:00" />
 			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
@@ -1541,7 +1540,7 @@
 		<insert tableName="config">
 			<column name="id" value="e6c63bb0-9be2-11e1-a6cb-0026b9e7ff4c" />
 			<column name="name" value="serverExternalPath" />
-			<column name="description" value="The externally visible url of the application"/>
+			<column name="description" value="The externally visible url of the application" />
 			<column name="value">http://ssp.sinclair.edu</column>
 			<column name="created_date" valueDate="2012-05-07T12:00:00" />
 			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
@@ -1553,7 +1552,8 @@
 		<insert tableName="config">
 			<column name="id" value="59dbcf48-9be3-11e1-bded-0026b9e7ff4c" />
 			<column name="name" value="bcc_email_address" />
-			<column name="description" value="The email address to blind carbon copy on every message"/>
+			<column name="description"
+				value="The email address to blind carbon copy on every message" />
 			<column name="value">test@sinclair.edu</column>
 			<column name="created_date" valueDate="2012-05-07T12:00:00" />
 			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
@@ -1565,7 +1565,8 @@
 		<insert tableName="config">
 			<column name="id" value="645d19ea-9be3-11e1-8ffe-0026b9e7ff4c" />
 			<column name="name" value="numberOfDaysPriorForTaskReminder" />
-			<column name="description" value="The Number of days prior to expiration to send out a Task Reminder"/>
+			<column name="description"
+				value="The Number of days prior to expiration to send out a Task Reminder" />
 			<column name="value">3</column>
 			<column name="created_date" valueDate="2012-05-07T12:00:00" />
 			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
@@ -1598,7 +1599,7 @@
 
 	<changeSet id="add index to config table" author="daniel.bower">
 		<createIndex tableName="config" indexName="idx_config_name">
-			<column name="name"/>
+			<column name="name" />
 		</createIndex>
 		<!-- Create Index has automatic rollback support -->
 	</changeSet>
@@ -1727,6 +1728,59 @@
 					references="person(id)" />
 			</column>
 		</addColumn>
+	</changeSet>
+
+	<changeSet id="add sample campus data" author="jon.adams">
+		<insert tableName="campus">
+			<column name="id" value="901E104B-4DC7-43F5-A38E-581015E204E1" />
+			<column name="name" value="Test Campus" />
+			<column name="description" value="" />
+			<column name="early_alert_coordinator_id" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="campus">
+				<where>id = '901E104B-4DC7-43F5-A38E-581015E204E1'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add EA message template data" author="jon.adams">
+		<insert tableName="message_template">
+			<column name="id" value="B528C1AC-6104-435B-AE62-08EB4F7EE2F9" />
+			<column name="name" value="Early Alert Journal Entry" />
+			<column name="description" value="" />
+			<column name="subject" value="$subj" />
+			<column name="body"
+				value="Early Alert Details:
+Faculty Member: $FacultyMember
+Faculty Office Location: $FacultyOfficeLocation
+Faculty Phone Number: #FacultyPhoneNumber
+Course: $CourseName
+Title: $CourseTitle
+Referral Reasons: 
+$ReferralReasons
+
+Faculty Suggestions:
+
+$FacultySuggestions
+
+Faculty Comments: $FacultyComments" />
+			<column name="created_date" valueDate="2012-05-17T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="message_template">
+				<where>id = 'B528C1AC-6104-435B-AE62-08EB4F7EE2F9'</where>
+			</delete>
+		</rollback>
 	</changeSet>
 
 </databaseChangeLog>

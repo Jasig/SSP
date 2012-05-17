@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -131,7 +131,7 @@ public class CampusServiceTest {
 			assertNull(
 					"Recently deleted object should not have been able to be reloaded.",
 					daoTwo);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			// expected exception
 			assertNotNull(
 					"Recently deleted object should not have been found when attempting to reload.",
