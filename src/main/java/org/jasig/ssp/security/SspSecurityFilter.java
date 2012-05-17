@@ -13,6 +13,7 @@ import javax.portlet.filter.RenderFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,14 +42,16 @@ public final class SspSecurityFilter implements RenderFilter {
 			final FilterChain chain) throws IOException, PortletException {
 
 		final String principal = req.getRemoteUser();
-		SecurityContext ctx = SecurityContextHolder.getContext();
+		final SecurityContext ctx = SecurityContextHolder.getContext();
 
-		if (principal != null && ctx.getAuthentication() == null) {
+		if ((principal != null) && (ctx.getAuthentication() == null)) {
 
-			// User is authenticated, but we haven't created the Spring context yet
-			LOGGER.debug("Setting up Spring Security context for user:  {}", principal);
-			
-			Set<GrantedAuthorityImpl> authorities = new HashSet<GrantedAuthorityImpl>();
+			// User is authenticated, but we haven't created the Spring context
+			// yet
+			LOGGER.debug("Setting up Spring Security context for user:  {}",
+					principal);
+
+			final Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 			for (AccessType y : AccessType.values()) {
 				if (req.isUserInRole(y.getRoleName())) {
 					authorities.add(new GrantedAuthorityImpl(y.getRoleName()));
@@ -59,9 +62,10 @@ public final class SspSecurityFilter implements RenderFilter {
 					authorities.add(new GrantedAuthorityImpl(r.getRoleName()));
 				}
 			}
-			
-			String credentials = req.getAuthType();
-			PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(principal, credentials, authorities);
+
+			final String credentials = req.getAuthType();
+			final PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(
+					principal, credentials, authorities);
 			ctx.setAuthentication(token);
 
 		}
