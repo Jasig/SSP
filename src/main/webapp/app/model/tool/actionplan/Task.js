@@ -4,7 +4,7 @@ Ext.define('Ssp.model.tool.actionplan.Task', {
              {name:'description',type:'string'},
              {name:'dueDate', type:'date', dateFormat:'time'},
              {name:'reminderSentDate', type:'date', dateFormat:'time'},
-             {name:'confidentialityLevel',type:'string'},
+             {name:'confidentialityLevelId',type:'string'},
              {name:'deletable',type:'boolean'},
              //{name:'closable',type:'boolean'},
              {name:'completed',type:'boolean'},

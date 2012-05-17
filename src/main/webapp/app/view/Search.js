@@ -14,7 +14,7 @@ Ext.define('Ssp.view.Search', {
     	Ext.apply(this,
     			   {
     				title: 'Students',
-    	            collapsible: false,
+    	            collapsible: true,
     	            collapseDirection: 'left',
     	            store: this.store,
     	        	width: '100%',

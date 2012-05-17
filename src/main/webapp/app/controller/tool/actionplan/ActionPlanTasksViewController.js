@@ -20,6 +20,7 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
     },
     
     control: {
+    	
     	'taskStatusTabs': {
     		tabchange: 'onTaskStatusTabChange'
     	},
@@ -30,18 +31,6 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 
 		'viewHistoryButton': {
 			click: 'onViewHistoryClick'
-		},
-
-		'addTasksButton': {
-			click: 'onAddTasksClick'
-		},
-		
-		'closeTasksButton': {
-			click: 'onCloseTasksClick'
-		},
-		
-		'deleteTasksButton': {
-			click: 'onDeleteTasksClick'
 		},
 		
 		'emailTasksButton': {
@@ -77,7 +66,7 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 		this.personViewHistoryUrl = this.personViewHistoryUrl.replace('{id}',personId);
 		this.personPrintTaskUrl = this.apiProperties.getItemUrl('personPrintTask');
 		this.personPrintTaskUrl = this.personPrintTaskUrl.replace('{id}',personId);
-
+		
 		this.apiProperties.makeRequest({
 			url: this.apiProperties.createUrl(this.personTaskUrl),
 			method: 'GET',
@@ -86,7 +75,7 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 		
 		return this.callParent(arguments);
     },
-
+    
     onTaskStatusTabChange: function(panel, newComp, oldComp, eOpts) {
 		this.filteredTaskStatus = newComp.action.toUpperCase();
 		this.filterTasks();
@@ -143,43 +132,13 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 		});
 		*/
     },
-    
-    onAddTasksClick: function(button) {
-		var comp = this.formUtils.loadDisplay('tools','addtask', true, {});
-    },
-    
-    onCloseTasksClick: function(button) {
-		console.log('ActionPlanToolViewController->onCloseTasksClick');
-    },
-    
-    onDeleteTasksClick: function(button) {
-       var url, grid, store, selectionArr, id, successFunc;
-	   var me=this;
-       grid = button.up('panel').down('grid');
-	   store = grid.getStore();
-       selectionArr = grid.getView().getSelectionModel().getSelection();
-       url = this.apiProperties.createUrl( this.personTaskUrl );
-       if (selectionArr.length > 0) 
-       {
-    	   Ext.each(selectionArr, function(item, index){
-    		   id = item.get('id');
-   	           me.apiProperties.makeRequest({
-				   url: url+id,
-				   method: 'DELETE',
-				   successFunc: function(response,responseText){
-					   var r = Ext.decode(response.responseText);
-					   store.remove( item );
-				   },
-				   scope: me
-			   });   
-    	   });
-       }else{
-    	   Ext.Msg.alert('SSP Error', 'Please select an item to delete.'); 
-       }
-    },
 
     onEmailTasksClick: function(button) {
 		Ext.Msg.alert('Email all selected tasks.');
+		// TODO:
+		// display a window to assign an email address
+		// create an object with the email addresses
+		// send the tasks through email
     },
     
     onPrintTasksClick: function(button) {

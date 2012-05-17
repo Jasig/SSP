@@ -98,7 +98,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	var name = this.treeUtils.getNameFromNodeId( record.data.id );
     	var id = this.treeUtils.getIdFromNodeId( record.data.id );
     	var challengeId = this.treeUtils.getIdFromNodeId( record.data.parentId );
-    	var confidentialityLevel = "EVERYONE";
+    	var confidentialityLevelId = "afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c";
     	// load the referral
     	if (name=='referral')
     	{
@@ -111,7 +111,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 		    		args.description = r.description || '';
 		    		args.challengeReferralId = r.id;
 		    		args.challengeId = challengeId;
-		    		args.confidentialityLevel = confidentialityLevel;
+		    		args.confidentialityLevelId = confidentialityLevelId;
 		    		console.log(r);
 		    		me.appEventsController.getApplication().fireEvent('loadTask', args);
 		    	}		
@@ -126,6 +126,4 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	
     	}
     }
-    
-	
 });
