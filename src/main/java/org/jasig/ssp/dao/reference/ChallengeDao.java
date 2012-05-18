@@ -11,6 +11,7 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -107,5 +108,16 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		final Criteria query = createCriteria(sAndP).add(
 				Restrictions.eq("showInStudentIntake", true));
 		return query.list();
+	}
+
+	public PagingWrapper<Challenge> getAllForCategory(
+			final UUID categoryId,
+			final SortingAndPaging sAndP) {
+		final Criteria query = createCriteria();
+		final Criteria subQuery = query.createCriteria("challengeCategories");
+		subQuery.add(Restrictions.eq("category.id", categoryId));
+		sAndP.addStatusFilterToCriteria(subQuery);
+
+		return processCriteriaWithPaging(query, sAndP);
 	}
 }

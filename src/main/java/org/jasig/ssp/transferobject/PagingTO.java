@@ -86,7 +86,7 @@ public class PagingTO<TO, T extends Auditable>
 	 * @param success
 	 *            the success to set
 	 */
-	public void setSuccess(boolean success) {
+	public void setSuccess(final boolean success) {
 		this.success = success;
 	}
 
@@ -101,7 +101,7 @@ public class PagingTO<TO, T extends Auditable>
 	 * @param results
 	 *            the results to set
 	 */
-	public void setResults(long results) {
+	public void setResults(final long results) {
 		this.results = results;
 	}
 
@@ -116,7 +116,7 @@ public class PagingTO<TO, T extends Auditable>
 	 * @param rows
 	 *            the rows to set
 	 */
-	public void setRows(Collection<TO> rows) {
+	public void setRows(final Collection<TO> rows) {
 		this.rows = rows;
 	}
 }

@@ -10,9 +10,6 @@
 export SSP_CONFIGDIR=/usr/local/etc/ssp
 export SSP_TESTCONFIGDIR=/usr/local/etc/ssp
 
-# Uncomment the following to allow SSP to run in absence of uportal in the dev environment
-#export spring.profiles.active=dev-standalone
-
 echo The configuration file for SSP should be in:
 echo $SSP_TESTCONFIGDIR for the TEST environment, and $SSP_CONFIGDIR for the DEPLOY environment
 echo Please verify the file exists and is populated with the correct values.

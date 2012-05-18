@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet author='daniel.bower' id='Implement ChallengeCategory'>
+		<dropColumn tableName="challenge_category" columnName="name" />
+		<dropColumn tableName="challenge_category" columnName="description" />
+		
+		<addColumn tableName="challenge_category">
+			<column name="challenge_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="challenge_category_challenge_id_challenge_id"
+					references="challenge(id)" />
+			</column>
+			<column name="category_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="challenge_category_category_id_category_id"
+					references="category(id)" />
+			</column>
+		</addColumn>
+
+		<rollback>
+			<addColumn tableName="challenge_category">
+				<column name="name" type="character varying(80)" value="default">
+					<constraints nullable="false" />
+				</column>
+				<column name="description" type="text">
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
+			<dropColumn tableName="challenge_category" columnName="challenge_id"/>
+			<dropColumn tableName="challenge_category" columnName="category_id"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

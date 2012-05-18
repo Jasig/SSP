@@ -61,6 +61,10 @@ public class Challenge extends AbstractReference implements Serializable {
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals = new HashSet<ChallengeChallengeReferral>(
 			0);
 
+	@OneToMany(mappedBy = "challenge")
+	private Set<ChallengeCategory> challengeCategories = new HashSet<ChallengeCategory>(
+			0);
+
 	@Column(length = 255)
 	private String tags;
 
@@ -179,6 +183,15 @@ public class Challenge extends AbstractReference implements Serializable {
 	public void setDefaultConfidentialityLevel(
 			final ConfidentialityLevel defaultConfidentialityLevel) {
 		this.defaultConfidentialityLevel = defaultConfidentialityLevel;
+	}
+
+	public Set<ChallengeCategory> getChallengeCategories() {
+		return challengeCategories;
+	}
+
+	public void setChallengeCategories(
+			final Set<ChallengeCategory> challengeCategories) {
+		this.challengeCategories = challengeCategories;
 	}
 
 	@Override

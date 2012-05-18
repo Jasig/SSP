@@ -3,6 +3,7 @@ package org.jasig.ssp.service.reference;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasig.ssp.model.reference.Category;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -29,4 +30,7 @@ public interface ChallengeService extends AuditableCrudService<Challenge> {
 	void delete(UUID id) throws ObjectNotFoundException;
 
 	List<Challenge> challengeSearch(String query);
+
+	PagingWrapper<Challenge> getAllForCategory(Category category,
+			SortingAndPaging sAndP);
 }

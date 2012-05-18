@@ -19,19 +19,21 @@ public class SortingAndPaging {
 	final private SortDirection defaultSortDirection;
 	private LinkedHashMap<String, SortDirection> sortFields;
 
-	public void appendSortField(String fieldname, SortDirection direction) {
+	public void appendSortField(final String fieldname,
+			final SortDirection direction) {
 		if (sortFields == null) {
 			sortFields = new LinkedHashMap<String, SortDirection>();
 		}
 		sortFields.put(fieldname, direction);
 	}
 
-	public void prependSortField(String fieldname, SortDirection direction) {
+	public void prependSortField(final String fieldname,
+			final SortDirection direction) {
 		if (sortFields == null) {
 			sortFields = new LinkedHashMap<String, SortDirection>();
 			sortFields.put(fieldname, direction);
 		} else {
-			LinkedHashMap<String, SortDirection> newOrdering = Maps
+			final LinkedHashMap<String, SortDirection> newOrdering = Maps
 					.newLinkedHashMap();
 			newOrdering.put(fieldname, direction);
 			newOrdering.putAll(sortFields);
@@ -59,17 +61,17 @@ public class SortingAndPaging {
 
 		// if there has been a sort passed in, use it, otherwise use the default
 		// sort
-		if (sort != null) {
-			sortFields = Maps.newLinkedHashMap();
-			sortFields.put(sort, SortDirection.getSortDirection(sortDirection));
-			defaultSortDirection = null;
-		} else {
+		if (sort == null) {
 			sortFields = null;
 			defaultSortDirection = SortDirection
 					.getSortDirection(sortDirection);
+		} else {
+			sortFields = Maps.newLinkedHashMap();
+			sortFields.put(sort, SortDirection.getSortDirection(sortDirection));
+			defaultSortDirection = null;
 		}
 
-		SortingAndPaging sAndP = new SortingAndPaging(
+		final SortingAndPaging sAndP = new SortingAndPaging(
 				status == null ? ObjectStatus.ACTIVE : status,
 				firstResult, maxResults, sortFields, defaultSortProperty,
 				defaultSortDirection);

@@ -1,5 +1,6 @@
 package org.jasig.ssp.factory.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PersonDemographicsDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.PersonDemographicsTOFactory;
@@ -85,10 +86,10 @@ public class PersonDemographicsTOFactoryImpl extends
 				: childCareArrangementService.get(tObject
 						.getChildCareArrangementId()));
 
-		model.setGender((tObject.getGender() == null) ? null :
+		model.setGender(StringUtils.isEmpty(tObject.getGender()) ? null :
 				Genders.valueOf(tObject.getGender()));
 
-		model.setShift((tObject.getShift() == null) ? null :
+		model.setShift(StringUtils.isEmpty(tObject.getShift()) ? null :
 				EmploymentShifts.valueOf(tObject.getShift()));
 
 		model.setAbilityToBenefit(tObject.isAbilityToBenefit());

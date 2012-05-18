@@ -111,7 +111,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 					e);
 		}
 
-		// TODO: Send e-mail to student
+		// TODO: Send e-mail to student if faculty requested it
 
 		// Send e-mail CONFIRMATION to faculty
 		try {
