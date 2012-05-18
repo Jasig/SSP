@@ -176,12 +176,10 @@ How to set up your development environment:
 			- as one of many portlets in a uPortal instance
 	
 	- To run ssp in dev-standalone mode:
-		- set the spring.profiles.active environment variable: 
-			Unix: export spring.profiles.active=dev-standalone
-			Windows: SET spring.profiles.active=dev-standalone
-			SpringSource Tool Suite: In the Run Configurations... -> Environment tab: (Variable) spring.profiles.active (Value) dev-standalone 
-		- set the SSP_CONFIGDIR as an environment variable...  context.xml will not be sufficient.
-	
+		- set the spring.profiles.active conf value in the config file : 
+			spring.profiles.active=dev-standalone
+		-set the SSP_CONFIGDIR as an environment variable...  context.xml will not be sufficient.
+		
 		- Use sts to deploy the application to an embedded tomcat:
 			- Confirm that in the Package Explorer (Window->Show View->Package Explorer)
 				lists "Apache Tomcat v6.0" or similar in "Servers". If not, add it

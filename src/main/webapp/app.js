@@ -19,6 +19,7 @@ Ext.require([
     'Ssp.view.tools.actionplan.Tasks',
     'Ssp.view.tools.actionplan.AddTask',
     'Ssp.view.tools.actionplan.AddTaskForm',
+    'Ssp.view.tools.actionplan.AddGoalForm',
     'Ssp.view.tools.actionplan.ActionPlanTasks',
     'Ssp.view.tools.actionplan.ActionPlanGoals',
     'Ssp.view.tools.actionplan.TaskTree',
@@ -58,7 +59,9 @@ Ext.require([
     'Ssp.view.admin.forms.journal.EditStep',
     'Ssp.view.admin.forms.journal.EditStepDetail',
     
+    'Ssp.model.Configuration',
 	'Ssp.model.Person',
+	'Ssp.model.PersonGoal',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -80,6 +83,7 @@ Ext.require([
 	'Ssp.util.ColumnRendererUtils',
 	'Ssp.util.TreeRendererUtils',
     'Ssp.store.Tasks',
+    'Ssp.store.Goals',
     'Ssp.store.JournalNotes',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
@@ -116,7 +120,8 @@ Ext.require([
 	'Ext.util.Filter',
 	'Ext.data.TreeStore',
 	'Ext.dd.DropTarget',
-	'Ext.data.Store'
+	'Ext.data.Store',
+	'Ext.form.field.VTypes'
 ]);
 
 var apiUrls = [
@@ -172,6 +177,12 @@ Ext.onReady(function(){
 			},
 			singleton: true
 		},
+		sspConfig: {
+	        fn: function(){
+	            return new Ssp.model.Configuration({});
+	        },
+	        singleton: true
+	    },
 		currentPerson: {
 	        fn: function(){
 	            return new Ssp.model.Person({id:"0"});
@@ -180,7 +191,7 @@ Ext.onReady(function(){
 	    },
 	    authenticatedPerson: {
 	        fn: function(){
-	            return new Ssp.model.Person({id:"91f46e39-cea8-422b-b215-00f6bcf5d280"});
+	            return new Ssp.model.Person({id:"1010e4a0-1001-0110-1011-4ffc02fe81ff"});
 	        },
 	        singleton: true
 	    },
@@ -244,6 +255,12 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         },
+        currentGoal:{
+	        fn: function(){
+	            return new Ssp.model.PersonGoal({id:""});
+	    	},
+	        singleton: true
+        },
         treeStore:{
 	        fn: function(){
 	            return Ext.create('Ext.data.TreeStore',{
@@ -257,6 +274,7 @@ Ext.onReady(function(){
 	        singleton: true
         },
 	    tasksStore: 'Ssp.store.Tasks',
+	    goalsStore: 'Ssp.store.Goals',
 	    journalNotesStore: 'Ssp.store.JournalNotes',
 		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',

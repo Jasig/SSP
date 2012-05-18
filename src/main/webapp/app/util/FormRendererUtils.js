@@ -3,7 +3,12 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	
 	initComponent: function() {
 		return this.callParent(arguments);
-    },	
+    },
+    
+    constructor: function(){
+    	this.callParent(arguments);
+    	return this;
+    },
 	
     cleanAll: function(view){
     	if (view.items)
@@ -31,93 +36,208 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		var applicationFormsStore =  Ext.getStore('ApplicationForms');
         return cleaner.prepareTemplateData(  applicationFormsStore );  	
     },    
-   
-    createRadioButtonGroup: function( formId, groupId, itemsArr, selectedItemId, idFieldName, selectedIdFieldName ){
+    
+    /**
+     * Builds a dynamic group of radio buttons.
+     * @args
+     *  @formId 
+     *  @radioGroupId
+     *  @itemsArr
+     *  @selectedItemId
+     *  @idFieldName
+     *  @selectedIdFieldName
+     */
+    createRadioButtonGroup: function( args ){
+    	var formId = args.formId;
+    	var radioGroupId = args.radioGroupId;
+    	var selectedItemId = args.selectedItemId;
+    	var additionalFieldsMap = args.additionalFieldsMap;
+    	var itemsArr = args.itemsArr;
+    	var idFieldName = args.idFieldName;
+    	var selectedIdFieldName = args.selectedIdFieldName;
+    	
     	var form = Ext.getCmp(formId);
-    	var rbGroup = Ext.getCmp(groupId);
+    	var rbGroup = Ext.getCmp(radioGroupId);
 		var items = itemsArr;
 		var setSelectedItems = false;
 		for (i=0; i<items.length; i++)
 		{
-			var rb = {xtype:'radio'};
+			var comp = {xtype:'radio'};
 			var item = items[i];
-			rb.boxLabel = item.name;
-			rb.name = selectedIdFieldName;
-			rb.inputValue = item[idFieldName];
+			comp.boxLabel = item.name;
+			comp.name = selectedIdFieldName;
+			comp.inputValue = item[idFieldName];
+			
+			// loop through additional fields map and add fields to the form
+			var fieldsArr = [];
+			fieldsArr.push( comp );
+			
+			additionalFieldsArr = this.getMappedFields( selectedItemId, additionalFieldsMap );
+			
+	    	// add a fieldset if additional fields exist for this item
+	    	if (additionalFieldsArr.length>0)
+	    	{
+		    	var fields = {xtype: 'fieldset', padding: 0, border: 0, layout: { type: 'auto' },title: ''};
+		    	Ext.Array.insert(fieldsArr, 1, additionalFieldsArr);
+		    	Ext.apply(fields, {items: fieldsArr});
+	    	}
+	    	
 			if (selectedItemId==item[idFieldName])
 			{
-				rb.checked = true;
+				comp.checked = true;
 			}
-			
-			rbGroup.insert(i,rb);
+
+			// if a fieldset is not defined, then just return a checkbox
+			if (fieldsArr.length > 1)
+			{
+				rbGroup.add(fields);
+			}else{
+				rbGroup.add(comp);
+			}
 		}
 		form.doLayout();
     },
     
     /**
-     * If you provide an 'Other' option in the items array
-     * then an 'Other Description' field will be created
-     * and inserted into the form alongside the checkboxes.
+     * Provides the ability to build a form with a dynamic
+     * set of elements. (checkboxes or radio)
      * 
      * Assumes an items array with: {id: id, name: name, description: description}
-     * @formId = the form to add the items into
-     * @itemsArr = the array of items to add to the form
-     * @selectedItemsArr = the array of items to select in the form
-     * @idFieldName = the id field in the items array
-     * @selectedIdFieldName - the id field in the selectedItems array. 
+     * @args
+     *    @mainComponentType = the main component type for the form ('checkbox', 'radio') 
+     *    @radioGroupId = the radiobuttongroup id value / optional if building a checkbox based form
+     *    @selectedItemId - required value for the 'radio' select button id and optional for 'checkbox' mainComponentType  
+     *    @formId = the form to add the items into
+     *    @fieldSetTitle - Provides a fieldset title for the fields
+     *    @itemsArr = the array of items to add to the form
+     *    @selectedItemsArr = the array of items to select in the form
+     *    @idFieldName = the id field in the items array
+     *    @selectedIdFieldName - the id field in the selectedItems array. 
      *                        This value can be the same name or a different name than the idFieldName.
-     * @fieldSetTitle - Provides a fieldset title for the fields
+     *    @additionalFieldsMap - a series of fields to provide for description related field items
      */
-    createCheckBoxForm: function( formId, fieldSetTitle, itemsArr, selectedItemsArr, idFieldName, selectedIdFieldName ){
+    createForm: function( args ){
+    	var mainComponentType = args.mainComponentType;
+    	var formId = args.formId;
+    	var fieldSetTitle = args.fieldSetTitle || null;
+    	var itemsArr = args.itemsArr;
+    	var selectedItemsArr = args.selectedItemsArr || null;
+    	var idFieldName = args.idFieldName;
+    	var selectedIdFieldName = args.selectedIdFieldName;
+    	var additionalFieldsMap = args.additionalFieldsMap || [];
     	var form = Ext.getCmp(formId);
 		var selectedItems = selectedItemsArr;
 		var selectedItem;
 		var selectedId;
 		var setSelectedItems = false;
 		var otherId = "";
-		var fieldSet = {xtype: 'fieldset', padding: 0, layout: { type: 'auto' },title: fieldSetTitle};
+		var wrapper = {xtype: 'fieldset', padding: 0, border: 0, layout: { type: 'auto' },title: fieldSetTitle};
 		var formFields = [];
 		var selectedItems = selectedItemsArr || [];
-		Ext.each(itemsArr, function(item, index){
-			// create the items for the form
-			var cb = {xtype:'checkbox'};
-			cb.boxLabel = item.name;
-			cb.name = item.name;
-			cb.inputValue = item[idFieldName];
-			if (item.name.toLowerCase()=='other')
-			{
-				otherId = item[idFieldName];
-				var fields = {xtype: 'fieldset', padding: 0, layout: { type: 'auto' },title: ''};
-				var otherField = { xtype: 'textfield', name: 'otherDescription', fieldLabel: 'Description' };
-				cb.anchor = '100%';
-				Ext.apply(fields, {items: [cb, otherField]});
-			}
-			// set selected items in the form
-			for (var s=0; s<selectedItems.length; s++)
-			{
-				selectedItem = selectedItems[s]
-				selectedId = selectedItem[selectedIdFieldName];					
-				if (selectedId==item[idFieldName])
+		if ( mainComponentType == 'radio' )
+		{
+			this.createRadioButtonGroup(args);
+		}else{
+			Ext.each(itemsArr, function(item, index){
+				// create the items for the form
+				var comp = {xtype: mainComponentType};
+				var itemId = item[idFieldName];
+				comp.boxLabel = item.name;
+				comp.name = item.name;
+				comp.inputValue = itemId;
+				
+				// loop through additional fields map and add fields to the form
+				var fieldsArr = [];
+				fieldsArr.push( comp );
+				
+				additionalFieldsArr = this.getMappedFields( itemId, additionalFieldsMap );
+				
+		    	// add a fieldset if additional fields exist for this item
+		    	if (additionalFieldsArr.length>0)
+		    	{
+			    	var fields = {xtype: 'fieldset', padding: 0, border: 0, layout: { type: 'auto' },title: ''};
+			    	Ext.Array.insert(fieldsArr, 1, additionalFieldsArr);
+			    	Ext.apply(fields, {items: fieldsArr});
+		    	}
+		    	
+				/*	
+			    if (item.name.toLowerCase()=='other')
 				{
-					cb.checked = true;
-					if (selectedId == otherId)
-					{
-						otherField.value = selectedItem['description'];
-					}					
-					break;
+					otherId = item[idFieldName];
+					var fields = {xtype: 'fieldset', padding: 0, layout: { type: 'auto' },title: ''};
+					var otherField = { xtype: 'textfield', name: 'otherDescription', fieldLabel: 'Description' };
+					cb.anchor = '100%';
+					Ext.apply(fields, {items: [cb, otherField]});
 				}
-			}
-			// insert the fields in the form
-			if (item.name.toLowerCase()!='other')
+				
+				
+				
+				// set selected items in the form
+				for (var s=0; s<selectedItems.length; s++)
+				{
+					selectedItem = selectedItems[s]
+					selectedId = selectedItem[selectedIdFieldName];					
+					if (selectedId==item[idFieldName])
+					{
+						cb.checked = true;
+						if (selectedId == otherId)
+						{
+							otherField.value = selectedItem['description'];
+						}					
+						break;
+					}
+				}
+				*/
+				
+				// if a fieldset is not defined, then just return a checkbox
+				if (fieldsArr.length > 1)
+				{
+					formFields.push(fields);
+				}else{
+					formFields.push( comp );
+				}				
+			}, this);
+			
+			form.removeAll();
+			Ext.apply(wrapper, {items: formFields});
+			form.insert(form.items.length, wrapper);
+		}
+    },
+    
+    /**
+     * Loops over a collection of field maps and 
+     * returns an array of fields
+     */
+    getMappedFields: function( itemId, maps ){
+		var additionalFieldsArr = [];
+    	for (var z=0; z<maps.length; z++)
+		{
+			var map = maps[z];
+			if ( itemId == map.parentId )
 			{
-				formFields.push(cb);
-			}else{
-				formFields.push(fields);
+				var field = this.getFieldFromMap( map );
+				additionalFieldsArr.push( field );
 			}
-		});
-		form.removeAll();
-		Ext.apply(fieldSet, {items: formFields});
-		form.insert(form.items.length, fieldSet);
+		}
+
+    	return additionalFieldsArr;
+    },
+    
+    /**
+     * returns a field based on the parameters
+     * in the map.
+     * @map
+     *  fieldType
+     *  name
+     *  parentId
+     *  label
+     *  labelWidth
+     */
+    getFieldFromMap: function(map){
+    	var field = { xtype: map.fieldType, name: map.parentId+'_'+map.name, fieldLabel: map.label, labelWidth: map.labelWidth };
+    	field.anchor = '100%';
+    	
+    	return field;
     },
     
     findPropByName: function(obj, propName){
@@ -129,34 +249,6 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			}
 		},this);
     	return result;
-    },
-    
-    createCheckBoxFormFromStore: function( formId, itemsArr, selectedItemsArr, idFieldName ){
-    	form = Ext.getCmp(formId);
-		items = itemsArr;
-		selectedItems = selectedItemsArr;
-		for (i=0; i<items.length; i++)
-		{
-			var cb = {xtype:'checkbox'};
-			var item = items[i];
-			var selectionId = item.get(idFieldName);
-			var name = item.get('name')
-			cb.boxLabel = name;
-			cb.inputValue = selectionId;
-			for (var s=0; s<selectedItems.length; s++)
-			{
-				id = selectedItems[s][idFieldName];
-				if (id===selectionId)
-				{
-					cb.checked = true;
-					break;
-				}
-			}
-			
-			form.insert(i,cb);
-		}
-		
-		form.doLayout();
     },
    
     alphaSortByField: function( arrayToSort, fieldName ){
@@ -180,7 +272,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		return selectedItems;
     },
     
- 	/*
+ 	/**
 	 * load a display into a container in the interface.
 	 * @containerAlias = alias/xtype of the container into which to load the display.
 	 * @compAlias = alias/xtype of the component that is loaded
@@ -205,7 +297,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		return comp;
 	},
 
-    /*
+    /**
      * Compares a value against a record in a store, based on a provided
      * field for the comparison, as well as, criteria to find the record
      * in the store to use to compare against. If the values match

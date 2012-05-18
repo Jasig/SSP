@@ -12,13 +12,14 @@ import javax.persistence.ManyToOne;
 
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonAssoc;
 
 /**
  * PersonTool model
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonTool extends Auditable implements Serializable {
+public class PersonTool extends Auditable implements PersonAssoc, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,10 +43,12 @@ public class PersonTool extends Auditable implements Serializable {
 		this.tool = tool;
 	}
 
+	@Override
 	public Person getPerson() {
 		return person;
 	}
 
+	@Override
 	public void setPerson(final Person person) {
 		this.person = person;
 	}
@@ -73,7 +76,7 @@ public class PersonTool extends Auditable implements Serializable {
 				.hashCode();
 
 		// PersonTool
-		result *= person == null || person.getId() == null ? "person"
+		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= tool == null ? "tool".hashCode() : tool.hashCode();
 

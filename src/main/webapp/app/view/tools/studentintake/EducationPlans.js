@@ -2,7 +2,9 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.studentintakeeducationplans',
 	id : 'StudentIntakeEducationPlans',   
-    mixins: [ 'Deft.mixin.Injectable' ],
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.studentintake.EducationPlansViewController',
     inject: {
         studentStatusesStore: 'studentStatusesStore'
     },
@@ -27,6 +29,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				    defaultType: 'displayfield',
 				    items: [{
 				            xtype: 'fieldset',
+							border: 0,
 				            title: 'Education Plans',
 				            defaultType: 'textfield',
 				            defaults: {
@@ -56,6 +59,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				        xtype: "radiogroup",
 				        fieldLabel: "Have your parents obtained a college degree?",
 				        columns: 1,
+				        itemId: 'parentsDegree',
 				        items: [
 				            {boxLabel: "Yes", name: "collegeDegreeForParents", inputValue:"true"},
 				            {boxLabel: "No", name: "collegeDegreeForParents", inputValue:"false"}]
@@ -63,6 +67,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				        xtype: "radiogroup",
 				        fieldLabel: "Require special accommodations?",
 				        columns: 1,
+				        itemId: 'specialNeeds',
 				        items: [
 				            {boxLabel: "Yes", name: "specialNeeds", inputValue:"true"},
 				            {boxLabel: "No", name: "specialNeeds", inputValue:"false"}]

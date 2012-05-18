@@ -37,7 +37,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     		this.task.set('description', args.description || '');
     		this.task.set('challengeId', args.challengeId || '');
     		this.task.set('challengeReferralId', args.challengeReferralId || '')
-    		this.task.set('confidentialityLevel', args.confidentialityLevel || '');
+    		this.task.set('confidentialityLevelId', args.confidentialityLevelId || '');
     		this.task.set('type','SSP');
     		this.task.set('personId', this.person.get('id') || '');
     		this.getView().getForm().loadRecord(this.task);		
