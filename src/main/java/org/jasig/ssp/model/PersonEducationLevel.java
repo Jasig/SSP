@@ -26,7 +26,8 @@ import org.jasig.ssp.model.reference.EducationLevel;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonEducationLevel extends Auditable implements Serializable {
+public class PersonEducationLevel extends Auditable implements PersonAssoc,
+		Serializable {
 
 	private static final long serialVersionUID = -7969723552077396105L;
 
@@ -106,10 +107,12 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 		this.schoolName = schoolName;
 	}
 
+	@Override
 	public Person getPerson() {
 		return person;
 	}
 
+	@Override
 	public void setPerson(final Person person) {
 		this.person = person;
 	}
@@ -147,7 +150,7 @@ public class PersonEducationLevel extends Auditable implements Serializable {
 				: graduatedYear.hashCode();
 		result *= StringUtils.isEmpty(schoolName) ? "schoolName".hashCode()
 				: schoolName.hashCode();
-		result *= person == null || person.getId() == null ? "person"
+		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= educationLevel == null ? "educationLevel".hashCode()
 				: educationLevel.hashCode();

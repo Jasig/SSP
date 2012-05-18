@@ -1,8 +1,7 @@
 package org.jasig.ssp.factory.tool.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.Set;
+
 import org.jasig.ssp.factory.PersonChallengeTOFactory;
 import org.jasig.ssp.factory.PersonDemographicsTOFactory;
 import org.jasig.ssp.factory.PersonEducationGoalTOFactory;
@@ -12,11 +11,16 @@ import org.jasig.ssp.factory.PersonFundingSourceTOFactory;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.factory.tool.IntakeFormTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonAssoc;
 import org.jasig.ssp.model.tool.IntakeForm;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.tool.IntakeFormTO;
 import org.jasig.ssp.util.SetOps;
 import org.jasig.ssp.web.api.validation.ValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -111,8 +115,11 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 			SetOps.softDeleteSetItems(model.getPerson().getEducationLevels());
 		}
 
+		associateWithPerson(model.getPerson().getEducationLevels(),
+				model.getPerson());
+
 		if ((tObject.getPersonFundingSources() != null)
-				&& tObject.getPersonFundingSources().isEmpty()) {
+				&& !tObject.getPersonFundingSources().isEmpty()) {
 			SetOps.updateSet(
 					model.getPerson().getFundingSources(),
 					personFundingSourceTOFactory.asSet(
@@ -121,6 +128,9 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 			// clearing fundingSources
 			SetOps.softDeleteSetItems(model.getPerson().getFundingSources());
 		}
+
+		associateWithPerson(model.getPerson().getFundingSources(),
+				model.getPerson());
 
 		if ((tObject.getPersonChallenges() != null)
 				&& !tObject.getPersonChallenges().isEmpty()) {
@@ -132,6 +142,18 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 			SetOps.softDeleteSetItems(model.getPerson().getChallenges());
 		}
 
+		associateWithPerson(model.getPerson().getChallenges(),
+				model.getPerson());
+
 		return model;
+	}
+
+	private <T extends PersonAssoc> void associateWithPerson(
+			final Set<T> personAssocs, final Person person) {
+		for (PersonAssoc pa : personAssocs) {
+			if (!pa.getPerson().getId().equals(person.getId())) {
+				pa.setPerson(person);
+			}
+		}
 	}
 }

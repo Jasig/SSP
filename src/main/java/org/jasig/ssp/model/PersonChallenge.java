@@ -26,7 +26,8 @@ import org.jasig.ssp.model.reference.Challenge;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonChallenge extends Auditable implements Serializable {
+public class PersonChallenge extends Auditable implements PersonAssoc,
+		Serializable {
 
 	private static final long serialVersionUID = 27277225191519712L;
 
@@ -63,10 +64,12 @@ public class PersonChallenge extends Auditable implements Serializable {
 		this.description = description;
 	}
 
+	@Override
 	public Person getPerson() {
 		return person;
 	}
 
+	@Override
 	public void setPerson(final Person person) {
 		this.person = person;
 	}
@@ -106,7 +109,7 @@ public class PersonChallenge extends Auditable implements Serializable {
 		// PersonChallenge
 		result *= StringUtils.isEmpty(description) ? "description".hashCode()
 				: description.hashCode();
-		result *= person == null || person.getId() == null ? "person"
+		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= challenge == null ? "challenge".hashCode() : challenge
 				.hashCode();

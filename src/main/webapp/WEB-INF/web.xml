@@ -12,6 +12,10 @@
 			/WEB-INF/spring/security-config.xml
 		</param-value>
 	</context-param>
+	<context-param>
+		<param-name>contextInitializerClasses</param-name>
+		<param-value>org.jasig.ssp.config.BeanProfileApplicationContextInitializer</param-value>
+	</context-param>
 	<listener>
 		<listener-class>org.jasig.ssp.config.logging.ExternalConfigLoaderContextListener</listener-class>
 	</listener>

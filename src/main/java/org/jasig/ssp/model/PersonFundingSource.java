@@ -27,7 +27,8 @@ import org.jasig.ssp.model.reference.FundingSource;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonFundingSource extends Auditable implements Serializable {
+public class PersonFundingSource extends Auditable implements PersonAssoc,
+		Serializable {
 
 	private static final long serialVersionUID = -1349765434053823165L;
 
@@ -56,10 +57,12 @@ public class PersonFundingSource extends Auditable implements Serializable {
 		this.description = description;
 	}
 
+	@Override
 	public Person getPerson() {
 		return person;
 	}
 
+	@Override
 	public void setPerson(final Person person) {
 		this.person = person;
 	}
@@ -99,7 +102,7 @@ public class PersonFundingSource extends Auditable implements Serializable {
 		// PersonFundingSource
 		result *= StringUtils.isEmpty(description) ? "description".hashCode()
 				: description.hashCode();
-		result *= person == null || person.getId() == null ? "person"
+		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= fundingSource == null ? "fundingSource".hashCode()
 				: fundingSource

@@ -22,7 +22,8 @@ import org.jasig.ssp.model.reference.JournalTrack;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class JournalEntry extends Auditable implements Restricted, Serializable {
+public class JournalEntry extends Auditable implements PersonAssoc, Restricted,
+		Serializable {
 
 	private static final long serialVersionUID = 1477217415946557983L;
 
@@ -104,10 +105,12 @@ public class JournalEntry extends Auditable implements Restricted, Serializable 
 		this.journalEntryJournalStepDetails = journalEntryJournalStepDetails;
 	}
 
+	@Override
 	public Person getPerson() {
 		return person;
 	}
 
+	@Override
 	public void setPerson(final Person person) {
 		this.person = person;
 	}
