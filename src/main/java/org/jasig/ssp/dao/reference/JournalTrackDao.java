@@ -10,7 +10,7 @@ import org.jasig.ssp.model.reference.JournalTrack;
  */
 @Repository
 public class JournalTrackDao extends
-		ReferenceAuditableCrudDao<JournalTrack>
+		AbstractReferenceAuditableCrudDao<JournalTrack>
 		implements AuditableCrudDao<JournalTrack> {
 
 	public JournalTrackDao() {

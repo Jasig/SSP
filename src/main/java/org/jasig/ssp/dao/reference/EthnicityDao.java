@@ -9,7 +9,7 @@ import org.jasig.ssp.model.reference.Ethnicity;
  * Data access class for the Ethnicity reference entity.
  */
 @Repository
-public class EthnicityDao extends ReferenceAuditableCrudDao<Ethnicity>
+public class EthnicityDao extends AbstractReferenceAuditableCrudDao<Ethnicity>
 		implements AuditableCrudDao<Ethnicity> {
 
 	public EthnicityDao() {

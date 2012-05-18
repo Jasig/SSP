@@ -3,19 +3,19 @@ package org.jasig.ssp.dao.reference;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.stereotype.Repository;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.security.SspUser;
+import org.springframework.stereotype.Repository;
 
 /**
  * Data access class for the ChallengeReferral reference entity.
  */
 @Repository
 public class ChallengeReferralDao extends
-		ReferenceAuditableCrudDao<ChallengeReferral> implements
+		AbstractReferenceAuditableCrudDao<ChallengeReferral> implements
 		AuditableCrudDao<ChallengeReferral> {
 
 	public ChallengeReferralDao() {
@@ -29,9 +29,9 @@ public class ChallengeReferralDao extends
 				.getCurrentSession()
 				.createQuery(
 						"select cr "
-								+ "from ChallengeReferral cr "
-								+ "inner join cr.challengeChallengeReferrals ccr "
-								+ "where cr.showInSelfHelpGuide = true "
+								+ "from ChallengeReferral cr " // NOPMD
+								+ "inner join cr.challengeChallengeReferrals ccr " // NOPMD
+								+ "where cr.showInSelfHelpGuide = true " // NOPMD
 								+ "and ccr.challenge.id = ? "
 								+ "and cr.objectStatus = ? "
 								+ "order by cr.name")
@@ -44,7 +44,7 @@ public class ChallengeReferralDao extends
 	public List<ChallengeReferral> byChallengeIdAndQuery(
 			final UUID challengeId,
 			final String query) {
-		final String wildcardQuery = "%" + query.toUpperCase() + "%";
+		final String wildcardQuery = "%" + query.toUpperCase() + "%"; // NOPMD
 
 		return sessionFactory
 				.getCurrentSession()
@@ -96,7 +96,7 @@ public class ChallengeReferralDao extends
 	@SuppressWarnings("unchecked")
 	// :TODO paging?
 	public List<ChallengeReferral> byChallengeIdNotOnActiveTaskList(
-			UUID challengeId, Person student, String sessionId) {
+			final UUID challengeId, final Person student, final String sessionId) {
 
 		return sessionFactory
 				.getCurrentSession()

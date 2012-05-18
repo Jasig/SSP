@@ -24,14 +24,6 @@ public class EarlyAlertReasonServiceImpl extends
 	transient private EarlyAlertReasonDao dao;
 
 	/**
-	 * Constructor that sets the specific class types to be used by base class
-	 * methods.
-	 */
-	public EarlyAlertReasonServiceImpl() {
-		super();
-	}
-
-	/**
 	 * Set the DAO instance
 	 * 
 	 * @param dao
@@ -47,7 +39,7 @@ public class EarlyAlertReasonServiceImpl extends
 	}
 
 	@Override
-	public EarlyAlertReason load(UUID id) {
+	public EarlyAlertReason load(final UUID id) {
 		return dao.load(id);
 	}
 }

@@ -186,7 +186,7 @@ How to set up your development environment:
 				pointing to your Tomcat installation directory.
 			- use the sts server pane to start / debug / stop the application
 		OR
-		- Deploy straight to an app server.o
+		- Deploy straight to an app server.
 		
 	- Building should be fairly straightforward, at the command line, run: 
 		mvn package

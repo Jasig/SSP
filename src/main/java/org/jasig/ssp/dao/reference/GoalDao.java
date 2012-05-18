@@ -10,7 +10,7 @@ import org.jasig.ssp.model.reference.Goal;
  */
 @Repository
 public class GoalDao extends
-		ReferenceAuditableCrudDao<Goal>
+		AbstractReferenceAuditableCrudDao<Goal>
 		implements AuditableCrudDao<Goal> {
 
 	public GoalDao() {

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * @author jon.adams
  */
 @Repository
-public class CampusDao extends ReferenceAuditableCrudDao<Campus>
+public class CampusDao extends AbstractReferenceAuditableCrudDao<Campus>
 		implements AuditableCrudDao<Campus> {
 
 	/**

@@ -52,6 +52,16 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var personFundingSources = formData.data.personFundingSources;
 		var personChallenges = formData.data.personChallenges;
 		var personEducationGoalId = "";
+		
+		var educationGoalFormProps;
+		var educationGoalsAdditionalFieldsMap;
+		var educationLevelFormProps;
+		var educationLevelsAdditionalFieldsMap;
+		var fundingSourceFormProps;
+		var fundingSourcesAdditionalFieldsMap;
+		var challengeFormProps;
+		var challengesAdditionalFieldsMap;
+		var defaultLabelWidth;
 
 		// REFERENCE OBJECTS
 		var challenges = this.formUtils.alphaSortByField( formData.data.referenceData.challenges, 'name' );
@@ -93,11 +103,122 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 				personEducationGoalId = personEducationGoal.get('educationGoalId')
 			}			 
 		}
+
+		defaultLabelWidth = 150;
+
+		educationGoalsAdditionalFieldsMap = [{parentId: '78b54da7-fb19-4092-bb44-f60485678d6b', 
+			  parentName: "other",
+			  name: "otherDescription", 
+			  label: "Please Explain", 
+			  fieldType: "textfield",
+			  labelWidth: defaultLabelWidth}];
 		
-		this.formUtils.createRadioButtonGroup('StudentIntakeEducationGoals','StudentIntakeEducationGoalsRadioGroup', educationGoals, personEducationGoalId, 'id', 'educationGoalId');
-		this.formUtils.createCheckBoxForm('StudentIntakeEducationLevels', 'Education Levels: Select all that apply', educationLevels, personEducationLevels, 'id', 'educationLevelId');
-		this.formUtils.createCheckBoxForm('StudentIntakeFunding', 'Funding Sources', fundingSources, personFundingSources, 'id', 'fundingSourceId');	
-		this.formUtils.createCheckBoxForm('StudentIntakeChallenges', 'Challenges', challenges, personChallenges, 'id', 'challengeId');
+		
+		educationGoalFormProps = {
+				mainComponentType: 'radio',
+			    formId: 'StudentIntakeEducationGoals',
+                itemsArr: educationGoals,
+                selectedItemId: personEducationGoalId,
+                idFieldName: 'id', 
+                selectedIdFieldName: 'educationGoalId',
+                additionalFieldsMap: educationGoalsAdditionalFieldsMap,
+                radioGroupId: 'StudentIntakeEducationGoalsRadioGroup'};		
+		
+		this.formUtils.createForm( educationGoalFormProps );	
+
+		educationLevelsAdditionalFieldsMap = [{parentId: '5d967ba0-e086-4426-85d5-29bc86da9295', 
+			                                   parentName: "no diploma/no ged", 
+			                                   name: "lastYearAttended", 
+			                                   label: "Last Year Attended",
+			                                   fieldType: "textfield", 
+			                                   labelWidth: defaultLabelWidth},
+		                                      {parentId: '5d967ba0-e086-4426-85d5-29bc86da9295', 
+			                                   parentName: "no diploma/no ged", 
+			                                   name: "highestGradeCompleted", 
+			                                   label: "Highest Grade Completed", 
+			                                   fieldType: "textfield", 
+			                                   labelWidth: defaultLabelWidth},
+		                                      {parentId: '710add1c-7b53-4cbe-86cb-8d7c5837d68b', 
+			                                   parentName: "ged", 
+			                                   name: "graduatedYear", 
+			                                   label: "Year of GED", 
+			                                   fieldType: "textfield",
+			                                   labelWidth: defaultLabelWidth},
+		                                      {parentId: 'f4780d23-fd8a-4758-b772-18606dca32f0', 
+			                                   parentName: "high school graduation", 
+			                                   name: "graduatedYear", 
+			                                   label: "Year Graduated", 
+			                                   fieldType: "textfield",
+			                                   labelWidth: defaultLabelWidth},
+		     		                        {parentId: 'f4780d23-fd8a-4758-b772-18606dca32f0', 
+			                                 parentName: "high school graduation", 
+			                                 name: "schoolName", 
+			                                 label: "High School Attended", 
+			                                 fieldType: "textfield",
+			                                 labelWidth: defaultLabelWidth},
+		     		                        {parentId: 'c5111182-9e2f-4252-bb61-d2cfa9700af7', 
+			                                 parentName: "some college credits", 
+			                                 name: "lastYearAttended", 
+			                                 label: "Last Year Attended", 
+			                                 fieldType: "textfield",
+			                                 labelWidth: defaultLabelWidth},
+		     		                        {parentId: '247165ae-3db4-4679-ac95-ca96488c3b27', 
+			                                 parentName: "other", 
+			                                 name: "otherDescription", 
+			                                 label: "Please Explain", 
+			                                 fieldType: "textarea",
+			                                 labelWidth: defaultLabelWidth}];		
+		
+		educationLevelFormProps = {
+				mainComponentType: 'checkbox',
+			    formId: 'StudentIntakeEducationLevels', 
+                fieldSetTitle: 'Education Levels: Select all that apply',
+                itemsArr: educationLevels, 
+                selectedItemsArr: personEducationLevels, 
+                idFieldName: 'id', 
+                selectedIdFieldName: 'educationLevelId',
+                additionalFieldsMap: educationLevelsAdditionalFieldsMap };
+		
+		this.formUtils.createForm( educationLevelFormProps );
+	
+
+		fundingSourcesAdditionalFieldsMap = [{parentId: '365e8c95-f356-4f1f-8d79-4771ae8b0291', 
+											  parentName: "other",
+											  name: "otherDescription", 
+											  label: "Please Explain", 
+											  fieldType: "textarea",
+											  labelWidth: defaultLabelWidth}];
+		
+		fundingSourceFormProps = {
+				mainComponentType: 'checkbox',
+				formId: 'StudentIntakeFunding', 
+                fieldSetTitle: 'Funding Sources',
+                itemsArr: fundingSources, 
+                selectedItemsArr: personFundingSources, 
+                idFieldName: 'id', 
+                selectedIdFieldName: 'fundingSourceId',
+                additionalFieldsMap: fundingSourcesAdditionalFieldsMap };
+		
+		this.formUtils.createForm( fundingSourceFormProps );	
+		
+		challengesAdditionalFieldsMap = [{parentId: '365e8c95-f356-4f1f-8d79-4771ae8b0291',
+			                              parentName: "other",
+			                              name: "otherDescription", 
+			                              label: "Please Explain", 
+			                              fieldType: "textarea",
+			                              labelWidth: defaultLabelWidth}];
+		
+		challengeFormProps = {
+				mainComponentType: 'checkbox',
+				formId: 'StudentIntakeChallenges', 
+                fieldSetTitle: 'Challenges',
+                itemsArr: challenges, 
+                selectedItemsArr: personChallenges, 
+                idFieldName: 'id', 
+                selectedIdFieldName: 'challengeId',
+                additionalFieldsMap: challengesAdditionalFieldsMap };
+		
+		this.formUtils.createForm( challengeFormProps );
 	},    
     
 	save: function( button ) {

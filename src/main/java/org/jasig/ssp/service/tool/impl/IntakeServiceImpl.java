@@ -11,15 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Intake service implementation
+ */
 @Service
 @Transactional
 public class IntakeServiceImpl implements IntakeService {
 
-	// private static final Logger logger =
-	// LoggerFactory.getLogger(IntakeService.class);
-
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 
 	/**
 	 * Load the specified Person.
@@ -29,11 +29,11 @@ public class IntakeServiceImpl implements IntakeService {
 	 * appropriately.
 	 */
 	@Override
-	public IntakeForm loadForPerson(UUID studentId)
+	public IntakeForm loadForPerson(final UUID studentId)
 			throws ObjectNotFoundException {
-		IntakeForm form = new IntakeForm();
+		final IntakeForm form = new IntakeForm();
 
-		Person person = personService.get(studentId);
+		final Person person = personService.get(studentId);
 		form.setPerson(person);
 
 		return form;
@@ -43,7 +43,7 @@ public class IntakeServiceImpl implements IntakeService {
 	 * Persist the form contents
 	 */
 	@Override
-	public boolean save(IntakeForm form) throws ObjectNotFoundException {
+	public boolean save(final IntakeForm form) throws ObjectNotFoundException {
 		if (form.getPerson() == null) {
 			throw new ObjectNotFoundException(
 					"Missing (null) Person.",

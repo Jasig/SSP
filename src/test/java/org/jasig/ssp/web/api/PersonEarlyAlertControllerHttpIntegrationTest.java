@@ -74,8 +74,8 @@ public class PersonEarlyAlertControllerHttpIntegrationTest
 	 *             Thrown if the test throws any unexpected exceptions.
 	 */
 	@Test
-	public void testControllerGetAllRequest() throws Exception {
-		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert/";
+	public void testControllerGetAllRequest() throws Exception { // NOPMD
+		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert/"; // NOPMD
 
 		request.setMethod(RequestMethod.GET.toString());
 		request.setRequestURI(requestUri);
@@ -90,8 +90,9 @@ public class PersonEarlyAlertControllerHttpIntegrationTest
 				String.class,
 				String.class);
 
-		Assert.assertEquals("Correct handler found for request url: "
-				+ requestUri, expectedHandlerMethod.toString(),
+		Assert.assertEquals(
+				"Correct handler was not found for request url "
+						+ requestUri, expectedHandlerMethod.toString(),
 				handler.toString());
 	}
 
@@ -108,7 +109,7 @@ public class PersonEarlyAlertControllerHttpIntegrationTest
 	 *             Thrown if the test throws any unexpected exceptions.
 	 */
 	@Test
-	public void testControllerGetAllResponse() throws Exception {
+	public void testControllerGetAllResponse() throws Exception { // NOPMD
 		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert/";
 		request.setMethod(RequestMethod.GET.toString());
 		request.setRequestURI(requestUri);
@@ -120,8 +121,9 @@ public class PersonEarlyAlertControllerHttpIntegrationTest
 				Integer.class,
 				Integer.class, String.class, String.class);
 
-		Assert.assertEquals("Correct handler found for request url: "
-				+ requestUri, expectedHandlerMethod.toString(),
+		Assert.assertEquals(
+				"The correct handler was not found for request url: "
+						+ requestUri, expectedHandlerMethod.toString(),
 				handler.toString());
 
 		Assert.assertNotNull("Response mock object should not have been null.",
@@ -155,7 +157,7 @@ public class PersonEarlyAlertControllerHttpIntegrationTest
 	 *             Thrown if the test throws any unexpected exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerDeleteInvalidId() throws Exception {
+	public void testControllerDeleteInvalidId() throws Exception { // NOPMD
 		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert/"
 				+ UUID.randomUUID().toString();
 
@@ -198,8 +200,8 @@ public class PersonEarlyAlertControllerHttpIntegrationTest
 	 *             Thrown if the test throws any unexpected exceptions.
 	 */
 	@Test
-	public void testControllerCreateWithStudentId() throws Exception {
-		final String requestUri = "/1/person/earlyAlert/";
+	public void testControllerCreateWithStudentId() throws Exception { // NOPMD
+		final String requestUri = "/1/person/earlyAlert/"; // NOPMD
 
 		request.setMethod(RequestMethod.POST.toString());
 		request.setRequestURI(requestUri);
@@ -226,7 +228,7 @@ public class PersonEarlyAlertControllerHttpIntegrationTest
 	 *             Thrown if the test throws any unexpected exceptions.
 	 */
 	@Test
-	public void testControllerCreateWithPersonId() throws Exception {
+	public void testControllerCreateWithPersonId() throws Exception { // NOPMD
 		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert/";
 
 		request.setMethod(RequestMethod.POST.toString());

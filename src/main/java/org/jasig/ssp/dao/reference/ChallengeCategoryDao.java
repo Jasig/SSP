@@ -10,7 +10,7 @@ import org.jasig.ssp.model.reference.ChallengeCategory;
  */
 @Repository
 public class ChallengeCategoryDao extends
-		ReferenceAuditableCrudDao<ChallengeCategory>
+		AbstractReferenceAuditableCrudDao<ChallengeCategory>
 		implements AuditableCrudDao<ChallengeCategory> {
 
 	public ChallengeCategoryDao() {

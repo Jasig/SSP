@@ -19,35 +19,37 @@ public class PersonEducationPlanServiceImpl implements
 		PersonEducationPlanService {
 
 	@Autowired
-	private PersonEducationPlanDao dao;
+	private transient PersonEducationPlanDao dao;
 
 	@Autowired
-	private StudentStatusService studentStatusService;
+	private transient StudentStatusService studentStatusService;
 
 	@Override
-	public PagingWrapper<PersonEducationPlan> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<PersonEducationPlan> getAll(
+			final SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
 	@Override
-	public PersonEducationPlan get(UUID id) throws ObjectNotFoundException {
+	public PersonEducationPlan get(final UUID id)
+			throws ObjectNotFoundException {
 		return dao.get(id);
 	}
 
 	@Override
-	public PersonEducationPlan forPerson(Person person) {
+	public PersonEducationPlan forPerson(final Person person) {
 		return dao.forPerson(person);
 	}
 
 	@Override
-	public PersonEducationPlan create(PersonEducationPlan obj) {
+	public PersonEducationPlan create(final PersonEducationPlan obj) {
 		return dao.save(obj);
 	}
 
 	@Override
-	public PersonEducationPlan save(PersonEducationPlan obj)
+	public PersonEducationPlan save(final PersonEducationPlan obj)
 			throws ObjectNotFoundException {
-		PersonEducationPlan current = get(obj.getId());
+		final PersonEducationPlan current = get(obj.getId());
 
 		current.setObjectStatus(obj.getObjectStatus());
 		if (obj.getStudentStatus() != null) {
@@ -64,8 +66,8 @@ public class PersonEducationPlanServiceImpl implements
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException {
-		PersonEducationPlan current = get(id);
+	public void delete(final UUID id) throws ObjectNotFoundException {
+		final PersonEducationPlan current = get(id);
 
 		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);

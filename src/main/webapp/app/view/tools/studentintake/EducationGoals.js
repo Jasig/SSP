@@ -22,6 +22,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				    defaultType: "displayfield",
 				    items: [{
 				            xtype: "fieldset",
+				            border: 0,
 				            title: "Education Goals",
 				            defaultType: "textfield",
 				            defaults: {

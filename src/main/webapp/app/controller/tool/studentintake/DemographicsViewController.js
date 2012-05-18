@@ -3,6 +3,10 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	citizenshipsStore: 'citizenshipsStore',
+    	sspConfig: 'sspConfig'
+    },
+    config: {
+    	displayEmploymentShift: 1
     },
     control: {
 		'citizenship': {
@@ -47,10 +51,12 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 		var childcareNeeded = Ext.ComponentQuery.query('#childcareNeeded')[0];
 		var isEmployed = Ext.ComponentQuery.query('#isEmployed')[0];
 		
+		this.displayStudentIntakeDemographicsEmploymentShift = this.sspConfig.get('displayStudentIntakeDemographicsEmploymentShift');
+		
 		this.showHideCountryOfCitizenship( citizenship.getValue() );
         this.showHideChildcareArrangement( childcareNeeded.getValue() );
         this.showHideEmploymentFields( isEmployed.getValue() );
-		
+        
 		return this.callParent(arguments);
     },
     
@@ -95,7 +101,12 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
     	if(value.employed=="true")
     	{
     		placeOfEmployment.show();
-    		shift.show();
+    		if (this.displayStudentIntakeDemographicsEmploymentShift)
+    		{
+    		    shift.show();
+    		}else{
+    			shift.hide();
+    		}
     		wage.show();
     		totalHoursWorkedPerWeek.show();
     	}else{

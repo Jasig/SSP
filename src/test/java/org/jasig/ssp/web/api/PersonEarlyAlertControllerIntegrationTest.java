@@ -1,4 +1,4 @@
-package org.jasig.ssp.web.api;
+package org.jasig.ssp.web.api; // NOPMD
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -15,6 +15,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
@@ -46,6 +47,9 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	@Autowired
 	protected transient SessionFactory sessionFactory;
 
+	@Autowired
+	protected transient CampusService campusService;
+
 	private static final UUID PERSON_ID = UUID
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
 
@@ -58,6 +62,9 @@ public class PersonEarlyAlertControllerIntegrationTest {
 
 	private static final UUID EARLY_ALERT_SUGGESTION_DELETED_ID = UUID
 			.fromString("881DF3DD-1AA6-4CB8-8817-E95DAF49227A");
+
+	private static final UUID CAMPUS_ID = UUID
+			.fromString("901E104B-4DC7-43F5-A38E-581015E204E1");
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -78,7 +85,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws Exception { // NOPMD
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -99,7 +106,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() throws Exception { // NOPMD
 		final Collection<EarlyAlertTO> list = controller.getAll(PERSON_ID,
 				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
@@ -115,12 +122,13 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerDelete() throws Exception {
+	public void testControllerDelete() throws Exception { // NOPMD
 		final String testEmailCC = "some@email.address.com"; // NOPMD by jon
 
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		obj.setPersonId(PERSON_ID);
 		obj.setEmailCC(testEmailCC);
+		obj.setCampusId(CAMPUS_ID);
 		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
 				.newHashSet();
 		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
@@ -166,9 +174,8 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 */
 	@Test
 	@Transactional()
-	public void testControllerGetSetsWithOnlyActiveReference() throws Exception {
+	public void testControllerGetSetsWithOnlyActiveReference() throws Exception { // NOPMD
 		final EarlyAlertTO obj = createEarlyAlert();
-
 		final EarlyAlertTO saved = controller.create(PERSON_ID,
 				obj);
 		final Session session = sessionFactory.getCurrentSession();
@@ -211,6 +218,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		obj.setPersonId(PERSON_ID);
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setClosedById(PERSON_ID);
+		obj.setCampusId(UUID.fromString("901E104B-4DC7-43F5-A38E-581015E204E1"));
 
 		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
 				.newHashSet();
@@ -233,8 +241,9 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerCreateWithStudentId() throws Exception {
+	public void testControllerCreateWithStudentId() throws Exception { // NOPMD
 		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setCampusId(CAMPUS_ID);
 		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
 				obj);
 		assertNotNull("Saved instance should not have been null.", saved);
@@ -265,7 +274,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerCreateWithInvalidStudentId() throws Exception {
+	public void testControllerCreateWithInvalidStudentId() throws Exception { // NOPMD
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		final EarlyAlertTO saved = controller.create("invalid id",
 				obj);

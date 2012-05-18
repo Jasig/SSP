@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -7,7 +7,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,11 +24,12 @@ import org.junit.Test;
 
 public class JournalStepDetailServiceTest {
 
-	private JournalStepDetailServiceImpl service;
-	private JournalStepDetailDao dao;
+	private transient JournalStepDetailServiceImpl service;
+
+	private transient JournalStepDetailDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new JournalStepDetailServiceImpl();
 		dao = createMock(JournalStepDetailDao.class);
 
@@ -38,7 +38,7 @@ public class JournalStepDetailServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<JournalStepDetail> daoAll = new ArrayList<JournalStepDetail>();
+		final List<JournalStepDetail> daoAll = new ArrayList<JournalStepDetail>();
 		daoAll.add(new JournalStepDetail());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,16 +46,16 @@ public class JournalStepDetailServiceTest {
 
 		replay(dao);
 
-		Collection<JournalStepDetail> all = service.getAll(
+		final Collection<JournalStepDetail> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertTrue(all.size() > 0);
+		assertFalse(all.isEmpty());
 		verify(dao);
 	}
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		JournalStepDetail daoOne = new JournalStepDetail(id);
+		final UUID id = UUID.randomUUID();
+		final JournalStepDetail daoOne = new JournalStepDetail(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -67,8 +67,8 @@ public class JournalStepDetailServiceTest {
 
 	@Test
 	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		JournalStepDetail daoOne = new JournalStepDetail(id);
+		final UUID id = UUID.randomUUID();
+		final JournalStepDetail daoOne = new JournalStepDetail(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
@@ -80,8 +80,8 @@ public class JournalStepDetailServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		JournalStepDetail daoOne = new JournalStepDetail(id);
+		final UUID id = UUID.randomUUID();
+		final JournalStepDetail daoOne = new JournalStepDetail(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -95,7 +95,7 @@ public class JournalStepDetailServiceTest {
 		boolean found = true;
 		try {
 			service.get(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			found = false;
 		}
 

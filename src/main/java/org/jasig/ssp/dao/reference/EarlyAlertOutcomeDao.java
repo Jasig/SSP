@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class EarlyAlertOutcomeDao extends
-		ReferenceAuditableCrudDao<EarlyAlertOutcome>
+		AbstractReferenceAuditableCrudDao<EarlyAlertOutcome>
 		implements AuditableCrudDao<EarlyAlertOutcome> {
 
 	/**

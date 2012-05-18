@@ -18,10 +18,6 @@ import com.google.common.collect.Lists;
 public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 		implements ChallengeService {
 
-	public ChallengeServiceImpl() {
-		super();
-	}
-
 	@Autowired
 	transient private ChallengeDao dao;
 
@@ -36,8 +32,8 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 		final List<Challenge> challenges = dao.searchByQuery(query);
 		final List<Challenge> results = Lists.newArrayList();
 
-		for (Challenge challenge : challenges) {
-			long count = challengeReferralService
+		for (final Challenge challenge : challenges) {
+			final long count = challengeReferralService
 					.countByChallengeIdNotOnActiveTaskList(challenge,
 							securityService.currentUser().getPerson(),
 							securityService.getSessionId());

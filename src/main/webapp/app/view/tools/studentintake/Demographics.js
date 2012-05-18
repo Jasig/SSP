@@ -35,6 +35,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				    defaultType: 'displayfield',
 				    items: [{
 				            xtype: 'fieldset',
+							border: 0,
 				            title: 'Demographic Details',
 				            defaultType: 'textfield',
 				            defaults: {

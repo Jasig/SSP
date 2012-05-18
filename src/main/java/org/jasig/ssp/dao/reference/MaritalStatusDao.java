@@ -9,7 +9,7 @@ import org.jasig.ssp.model.reference.MaritalStatus;
  * Data access class for the MaritalStatus reference entity.
  */
 @Repository
-public class MaritalStatusDao extends ReferenceAuditableCrudDao<MaritalStatus>
+public class MaritalStatusDao extends AbstractReferenceAuditableCrudDao<MaritalStatus>
 		implements AuditableCrudDao<MaritalStatus> {
 
 	public MaritalStatusDao() {

@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -7,7 +7,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,11 +24,12 @@ import org.junit.Test;
 
 public class JournalTrackServiceTest {
 
-	private JournalTrackServiceImpl service;
-	private JournalTrackDao dao;
+	private transient JournalTrackServiceImpl service;
+
+	private transient JournalTrackDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new JournalTrackServiceImpl();
 		dao = createMock(JournalTrackDao.class);
 
@@ -38,7 +38,7 @@ public class JournalTrackServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<JournalTrack> daoAll = new ArrayList<JournalTrack>();
+		final List<JournalTrack> daoAll = new ArrayList<JournalTrack>();
 		daoAll.add(new JournalTrack());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,16 +46,16 @@ public class JournalTrackServiceTest {
 
 		replay(dao);
 
-		Collection<JournalTrack> all = service.getAll(
+		final Collection<JournalTrack> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertTrue(all.size() > 0);
+		assertFalse(all.isEmpty());
 		verify(dao);
 	}
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		JournalTrack daoOne = new JournalTrack(id);
+		final UUID id = UUID.randomUUID();
+		final JournalTrack daoOne = new JournalTrack(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -67,8 +67,8 @@ public class JournalTrackServiceTest {
 
 	@Test
 	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		JournalTrack daoOne = new JournalTrack(id);
+		final UUID id = UUID.randomUUID();
+		final JournalTrack daoOne = new JournalTrack(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
@@ -80,8 +80,8 @@ public class JournalTrackServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		JournalTrack daoOne = new JournalTrack(id);
+		final UUID id = UUID.randomUUID();
+		final JournalTrack daoOne = new JournalTrack(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -95,7 +95,7 @@ public class JournalTrackServiceTest {
 		boolean found = true;
 		try {
 			service.get(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			found = false;
 		}
 

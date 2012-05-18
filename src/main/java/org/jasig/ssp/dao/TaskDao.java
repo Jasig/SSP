@@ -12,6 +12,9 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Task DAO
+ */
 @Repository
 public class TaskDao extends
 		AbstractAuditableCrudDao<Task> implements AuditableCrudDao<Task> {
