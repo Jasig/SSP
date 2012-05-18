@@ -14,6 +14,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
@@ -144,5 +145,12 @@ public class ChallengeDaoTest {
 		final List<Challenge> challenges = dao
 				.selectAffirmativeBySelfHelpGuideResponseId(UUID.randomUUID());
 		assertList(challenges);
+	}
+
+	@Test
+	public void getAllForCategory() {
+		final PagingWrapper<Challenge> challenges = dao.getAllForCategory(
+				UUID.randomUUID(), new SortingAndPaging(ObjectStatus.ACTIVE));
+		assertList(challenges.getRows());
 	}
 }

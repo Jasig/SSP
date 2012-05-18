@@ -2,11 +2,15 @@ package org.jasig.ssp.service.reference.impl;
 
 import java.util.List;
 
+import org.jasig.ssp.dao.reference.ChallengeCategoryDao;
 import org.jasig.ssp.dao.reference.ChallengeDao;
+import org.jasig.ssp.model.reference.Category;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +27,9 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 
 	@Autowired
 	private transient ChallengeReferralService challengeReferralService;
+
+	@Autowired
+	private transient ChallengeCategoryDao challengeCategoryDao;
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -43,6 +50,13 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 		}
 
 		return results;
+	}
+
+	@Override
+	public PagingWrapper<Challenge> getAllForCategory(
+			final Category category,
+			final SortingAndPaging sAndP) {
+		return dao.getAllForCategory(category.getId(), sAndP);
 	}
 
 	@Override
