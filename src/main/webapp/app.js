@@ -120,7 +120,8 @@ Ext.require([
 	'Ext.util.Filter',
 	'Ext.data.TreeStore',
 	'Ext.dd.DropTarget',
-	'Ext.data.Store'
+	'Ext.data.Store',
+	'Ext.form.field.VTypes'
 ]);
 
 var apiUrls = [
@@ -176,7 +177,7 @@ Ext.onReady(function(){
 			},
 			singleton: true
 		},
-		config: {
+		sspConfig: {
 	        fn: function(){
 	            return new Ssp.model.Configuration({});
 	        },

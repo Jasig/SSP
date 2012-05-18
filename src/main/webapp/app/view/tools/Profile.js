@@ -4,14 +4,12 @@ Ext.define('Ssp.view.tools.Profile', {
 	id: 'Profile',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.ProfileToolViewController',
-    inject: {
-    	config: 'config'
-    },	
+    controller: 'Ssp.controller.tool.ProfileToolViewController',	
     initComponent: function() {	
 		Ext.apply(this, 
 				{
-		    		width: '100%',
+			        border: 0,		
+			        width: '100%',
 		    		height: '100%',
 				    bodyPadding: 5,
 				    layout: 'anchor',
@@ -26,6 +24,7 @@ Ext.define('Ssp.view.tools.Profile', {
 				    defaultType: 'displayfield',
 				    items: [{
 				            xtype: 'fieldset',
+				            border: 0,
 				            title: 'Student Profile',
 				            defaultType: 'displayfield',
 				            defaults: {
@@ -36,7 +35,8 @@ Ext.define('Ssp.view.tools.Profile', {
 					        fieldLabel: 'Student',
 					        name: 'name'
 					    }, {
-					        fieldLabel: this.config.get('studentIdAlias'),
+					        fieldLabel: 'Student Id',
+					        itemId: 'studentId',
 					        name: 'schoolId'
 					    }, {
 					        fieldLabel: 'Birth Date',
