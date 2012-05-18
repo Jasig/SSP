@@ -93,7 +93,7 @@ public class EarlyAlertResponseServiceImpl extends
 	private transient VelocityTemplateService velocityTemplateService;
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(EarlyAlertServiceImpl.class);
+			.getLogger(EarlyAlertResponseServiceImpl.class);
 
 	@Override
 	protected EarlyAlertResponseDao getDao() {
@@ -106,6 +106,8 @@ public class EarlyAlertResponseServiceImpl extends
 			throws ObjectNotFoundException, ValidationException {
 		// Create alert response
 		final EarlyAlertResponse saved = getDao().save(earlyAlert);
+
+		// TODO: Send response to Faculty from Coach
 
 		// Save a journal note for the Early Alert
 		createJournalNoteForEarlyAlertResponse(saved);

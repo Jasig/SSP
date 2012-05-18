@@ -19,11 +19,17 @@ public class JournalEntryTO
 	private static final long serialVersionUID = -2188963893970704753L;
 
 	private Date entryDate;
+
 	private String comment;
+
 	private UUID personId, journalSourceId, journalTrackId,
 			confidentialityLevelId;
+
 	private List<JournalEntryJournalStepDetailTO> journalEntryJournalStepDetails;
 
+	/**
+	 * Empty constructor
+	 */
 	public JournalEntryTO() {
 		super();
 	}
@@ -56,6 +62,14 @@ public class JournalEntryTO
 
 	}
 
+	/**
+	 * Convert a collection of JournalEntry models to equivelent transfer
+	 * objects.
+	 * 
+	 * @param journalEntries
+	 *            A collection of models
+	 * @return A list of JournalEntry transfer objects
+	 */
 	public static List<JournalEntryTO> toTOList(
 			final Collection<JournalEntry> journalEntries) {
 		final List<JournalEntryTO> journalEntryTOs = new ArrayList<JournalEntryTO>();
@@ -68,10 +82,21 @@ public class JournalEntryTO
 		return journalEntryTOs;
 	}
 
+	/**
+	 * Gets the entry date
+	 * 
+	 * @return the entry date
+	 */
 	public Date getEntryDate() {
 		return entryDate == null ? null : new Date(entryDate.getTime());
 	}
 
+	/**
+	 * Sets the entry date
+	 * 
+	 * @param entryDate
+	 *            the entry date
+	 */
 	public void setEntryDate(final Date entryDate) {
 		this.entryDate = entryDate == null ? null : new Date(
 				entryDate.getTime());
@@ -125,5 +150,4 @@ public class JournalEntryTO
 			final List<JournalEntryJournalStepDetailTO> journalEntryJournalStepDetails) {
 		this.journalEntryJournalStepDetails = journalEntryJournalStepDetails;
 	}
-
 }

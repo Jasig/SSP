@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
+
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
@@ -169,10 +171,11 @@ public interface TaskService
 	 * @param messageTemplateId
 	 * @throws ObjectNotFoundException
 	 * @throws ValidationException
+	 * @throws SendFailedException
 	 */
 	void sendNoticeToStudentOnCustomTask(Task customTask,
 			UUID messageTemplateId) throws ObjectNotFoundException,
-			ValidationException;
+			ValidationException, SendFailedException;
 
 	/**
 	 * Send a list of the given tasks to each emailAddress and each recipient.

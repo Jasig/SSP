@@ -1,23 +1,25 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.EarlyAlertDao;
-import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.EarlyAlertService;
+import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -29,6 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Maps;
+
 /**
  * EarlyAlert service implementation
  * 
@@ -37,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class EarlyAlertServiceImpl extends
+public class EarlyAlertServiceImpl extends // NOPMD
 		AbstractAuditableCrudService<EarlyAlert>
 		implements EarlyAlertService {
 
@@ -45,10 +49,7 @@ public class EarlyAlertServiceImpl extends
 	private transient EarlyAlertDao dao;
 
 	@Autowired
-	private transient MessageTemplateDao messageTemplateDao;
-
-	@Autowired
-	private transient VelocityTemplateService velocityTemplateService;
+	private transient MessageService messageService;
 
 	@Autowired
 	private transient EarlyAlertReasonService earlyAlertReasonService;
@@ -99,10 +100,30 @@ public class EarlyAlertServiceImpl extends
 		final EarlyAlert saved = getDao().save(earlyAlert);
 
 		// Send e-mail to assigned advisor (coach)
-		sendMessageToAdvisor(saved, earlyAlert.getEmailCC());
+		try {
+			sendMessageToAdvisor(saved, earlyAlert.getEmailCC());
+		} catch (final SendFailedException e) {
+			LOGGER.warn(
+					"Could not send Early Alert message to advisor.",
+					e);
+			throw new ValidationException(
+					"Early Alert notification e-mail could not be sent to advisor. Early Alert was NOT created.",
+					e);
+		}
+
+		// TODO: Send e-mail to student
 
 		// Send e-mail CONFIRMATION to faculty
-		sendConfirmationMessageToFaculty(saved);
+		try {
+			sendConfirmationMessageToFaculty(saved);
+		} catch (final SendFailedException e) {
+			LOGGER.warn(
+					"Could not send Early Alert confirmation to faculty.",
+					e);
+			throw new ValidationException(
+					"Early Alert confirmation e-mail could not be sent. Early Alert was NOT created.",
+					e);
+		}
 
 		// TODO Send e-mail to any applicable routing/notification rule entry
 		// email addresses
@@ -205,10 +226,30 @@ public class EarlyAlertServiceImpl extends
 	 *            Early Alert
 	 * @param emailCC
 	 *            Email address to also CC this message
+	 * @throws ObjectNotFoundException
+	 * @throws SendFailedException
+	 * @throws ValidationException
 	 */
-	private void sendMessageToAdvisor(final EarlyAlert earlyAlert,
-			final String emailCC) {
-		// TODO: Implement sendMessageToAdvisor
+	private void sendMessageToAdvisor(@NotNull final EarlyAlert earlyAlert, // NOPMD
+			final String emailCC) throws ObjectNotFoundException,
+			SendFailedException, ValidationException {
+		if (earlyAlert == null) {
+			throw new IllegalArgumentException("EarlyAlert was missing.");
+		}
+
+		if (earlyAlert.getPerson() == null) {
+			throw new IllegalArgumentException("EarlyAlert.Person is missing.");
+		}
+
+		final Person person = earlyAlert.getPerson();
+		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlert);
+
+		// Create and queue the message
+		final Message message = messageService.createMessage(person, emailCC,
+				MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
+				templateParameters);
+
+		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
 	}
 
 	/**
@@ -217,8 +258,105 @@ public class EarlyAlertServiceImpl extends
 	 * 
 	 * @param earlyAlert
 	 *            Early Alert
+	 * @throws ObjectNotFoundException
+	 * @throws SendFailedException
+	 * @throws ValidationException
 	 */
-	private void sendConfirmationMessageToFaculty(final EarlyAlert earlyAlert) {
-		// TODO: Implement sendConfirmationMessageToFaculty
+	private void sendConfirmationMessageToFaculty(final EarlyAlert earlyAlert)
+			throws ObjectNotFoundException, SendFailedException,
+			ValidationException {
+		if (earlyAlert == null) {
+			throw new IllegalArgumentException("EarlyAlert was missing.");
+		}
+
+		if (earlyAlert.getPerson() == null) {
+			throw new IllegalArgumentException("EarlyAlert.Person is missing.");
+		}
+
+		final Person person = earlyAlert.getPerson();
+		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlert);
+		templateParameters.put("Comment", earlyAlert.getComment());
+
+		// Create and queue the message
+		final Message message = messageService.createMessage(person, null,
+				MessageTemplate.EARLYALERT_CONFIRMATIONTOFACULTY_ID,
+				templateParameters);
+
+		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
+	}
+
+	private Map<String, Object> fillTemplateParameters(
+			final EarlyAlert earlyAlert) {
+		if (earlyAlert == null) {
+			throw new IllegalArgumentException("EarlyAlert was missing.");
+		}
+
+		if (earlyAlert.getPerson() == null) {
+			throw new IllegalArgumentException("EarlyAlert.Person is missing.");
+		}
+
+		if (earlyAlert.getCreatedBy() == null) {
+			throw new IllegalArgumentException(
+					"EarlyAlert.CreatedBy is missing.");
+		}
+
+		if (earlyAlert.getCampus() == null) {
+			throw new IllegalArgumentException("EarlyAlert.Campus is missing.");
+		}
+
+		final Person person = earlyAlert.getPerson();
+		final Person createdBy = earlyAlert.getCreatedBy();
+		final StringBuilder reasons = new StringBuilder();
+		final StringBuilder suggestions = new StringBuilder();
+
+		for (final EarlyAlertReason reason : earlyAlert
+				.getEarlyAlertReasonIds()) {
+			if (reasons.length() > 0) {
+				reasons.append(",");
+			}
+
+			reasons.append(reason.getName());
+		}
+
+		for (final EarlyAlertSuggestion suggestion : earlyAlert
+				.getEarlyAlertSuggestionIds()) {
+			if (suggestions.length() > 0) {
+				suggestions.append(",");
+			}
+
+			suggestions.append(suggestion.getName());
+		}
+
+		final Map<String, Object> templateParameters = Maps.newHashMap();
+		templateParameters.put("TermForEarlyAlert",
+				"// TODO: TermForEarlyAlert");
+		templateParameters.put("FirstName", person.getFirstName());
+		templateParameters.put("LastName", person.getLastName());
+		templateParameters.put("SchoolId", person.getSchoolId());
+		templateParameters.put("HomePhone", person.getHomePhone());
+		templateParameters.put("PrimaryEmailAddress",
+				person.getPrimaryEmailAddress());
+		templateParameters.put("AddressLine1", person.getAddressLine1());
+		templateParameters.put("AddressLine2", person.getAddressLine2());
+		templateParameters.put("City", person.getCity());
+		templateParameters.put("State", person.getState());
+		templateParameters.put("ZipCode", person.getZipCode());
+		templateParameters.put("CourseName", earlyAlert.getCourseName());
+		templateParameters.put("CreatedByFirstName", createdBy.getFirstName());
+		templateParameters.put("CreatedByLastName", createdBy.getLastName());
+		templateParameters.put("CampusName", earlyAlert.getCampus().getName());
+		templateParameters.put("CreatedByOfficeLocation",
+				"// TODO: OfficeLocation");
+		templateParameters.put("CreatedByPrimaryEmailAddress",
+				createdBy.getPrimaryEmailAddress());
+		templateParameters.put("CreatedByWorkPhone", createdBy.getWorkPhone());
+		templateParameters.put("CoachFirstName", person.getCoach()
+				.getFirstName());
+		templateParameters
+				.put("CoachLastName", person.getCoach().getLastName());
+		templateParameters.put("Reasons", reasons.toString());
+		templateParameters.put("Suggestions", suggestions.toString());
+
+		return templateParameters;
 	}
 }

@@ -108,6 +108,7 @@ final public class Message extends Auditable {
 
 	public void setRecipient(@NotNull final Person recipient) {
 		this.recipient = recipient;
+		recipientEmailAddress = recipient.getPrimaryEmailAddress();
 	}
 
 	public String getRecipientEmailAddress() {

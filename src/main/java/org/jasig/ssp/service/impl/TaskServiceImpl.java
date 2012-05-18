@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
+
 import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.TaskDao;
 import org.jasig.ssp.model.ObjectStatus;
@@ -219,7 +221,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 
 	@Override
 	public void sendNoticeToStudentOnCustomTask(final Task customTask,
-			final UUID messageTemplateId) throws ObjectNotFoundException {
+			final UUID messageTemplateId) throws ObjectNotFoundException,
+			SendFailedException, ValidationException {
 
 		if (!messageTemplateId
 				.equals(MessageTemplate.TASK_AUTO_CREATED_EMAIL_ID)
@@ -248,7 +251,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		templateParameters.put("dueDate",
 				format.format(customTask.getDueDate()));
 
-		messageService.createMessage(customTask.getPerson(),
+		messageService.createMessage(customTask.getPerson(), null,
 				messageTemplateId, templateParameters);
 	}
 
@@ -356,8 +359,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 						templateId = MessageTemplate.ACTION_PLAN_STEP_ID;
 					}
 
-					messageService.createMessage(task.getPerson(), templateId,
-							new HashMap<String, Object>()); // NOPMD
+					messageService.createMessage(task.getPerson(), null,
+							templateId, new HashMap<String, Object>()); // NOPMD
 
 					setReminderSentDateToToday(task);
 				}
