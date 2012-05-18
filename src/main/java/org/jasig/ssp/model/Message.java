@@ -75,6 +75,11 @@ final public class Message extends Auditable {
 		this.recipientEmailAddress = recipientEmailAddress;
 	}
 
+	/**
+	 * Gets the subject
+	 * 
+	 * @return the subject
+	 */
 	public String getSubject() {
 		return subject;
 	}

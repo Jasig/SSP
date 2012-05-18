@@ -1,4 +1,4 @@
-package org.jasig.ssp.dao;
+package org.jasig.ssp.dao; // NOPMD by jon.adams on 5/17/12 8:23 PM
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -47,7 +47,7 @@ public class TaskDaoTest {
 	private static final UUID CONFIDENTIALITYLEVEL_ID = UUID
 			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
 
-	private static final String CONFIDENTIALITYLEVEL_NAME = "Test Confidentiality Level";
+	private static final String CONFIDENTIALITYLEVEL_NAME = "EVERYONE";
 
 	@Autowired
 	private transient TaskDao dao;
@@ -69,8 +69,6 @@ public class TaskDaoTest {
 
 	protected transient Person ken;
 
-	private transient Challenge testChallenge;
-
 	private transient ChallengeReferral testChallengeReferral;
 
 	private transient Task testTask;
@@ -79,14 +77,14 @@ public class TaskDaoTest {
 	public void setUp() throws ObjectNotFoundException {
 		try {
 			ken = personService.personFromUsername("ken");
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			LOGGER.error("can't find one of either sysadmin or ken");
 		}
 		securityService.setCurrent(ken);
 
 		final Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, 7);
-		testChallenge = challengeDao.get(UUID
+		final Challenge testChallenge = challengeDao.get(UUID
 				.fromString("af7e472c-3b7c-4d00-a667-04f52f560940"));
 		testChallengeReferral = challengeReferralDao.get(UUID
 				.fromString("19fbec43-8c0b-478b-9d5f-00ec6ec57511"));
@@ -172,8 +170,8 @@ public class TaskDaoTest {
 	}
 
 	protected void assertList(final Collection<Task> objects) {
-		for (Task object : objects) {
-			assertNotNull(object.getId());
+		for (final Task object : objects) {
+			assertNotNull("List items should not be null.", object.getId());
 		}
 	}
 
@@ -196,16 +194,15 @@ public class TaskDaoTest {
 		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
-		assertNotNull(obj);
-		assertNotNull(obj.getId());
-		assertNotNull(obj.getName());
+		assertNotNull("Saved instance should not have been null.", obj);
+		assertNotNull("Saved instance ID should not have been null.",
+				obj.getId());
 		assertEquals("Confidentiality level name did not match.",
 				CONFIDENTIALITYLEVEL_NAME, obj.getConfidentialityLevel()
 						.getName());
 
 		final Collection<Task> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
-		assertNotNull(all);
-		assertFalse(all.isEmpty());
+		assertFalse("GetAll() list should not have been empty.", all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);

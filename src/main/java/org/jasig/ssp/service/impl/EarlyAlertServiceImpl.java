@@ -21,7 +21,6 @@ import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.VelocityTemplateService;
@@ -56,8 +55,8 @@ public class EarlyAlertServiceImpl extends
 	@Autowired
 	private transient EarlyAlertDao dao;
 
-	@Autowired
-	private transient JournalEntryService journalEntryService;
+	// @Autowired
+	// private transient JournalEntryService journalEntryService;
 
 	@Autowired
 	private transient MessageTemplateDao messageTemplateDao;
@@ -219,11 +218,6 @@ public class EarlyAlertServiceImpl extends
 		final MessageTemplate messageTemplate = messageTemplateDao
 				.get(MessageTemplate.JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID);
 
-		// TODO: Finish the code below for createJournalNoteForEarlyAlert
-		if (true) {
-			return;
-		}
-
 		final Map<String, Object> templateParameters = Maps.newHashMap();
 		final StringBuilder sbReasons = new StringBuilder();
 		final StringBuilder sbSuggestions = new StringBuilder();
@@ -275,7 +269,9 @@ public class EarlyAlertServiceImpl extends
 
 		journalEntry.setConfidentialityLevel(confidentialityLevelService
 				.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
-		journalEntryService.create(journalEntry);
+
+		// TODO: Finish the code below for createJournalNoteForEarlyAlert
+		// journalEntryService.create(journalEntry);
 	}
 
 	/**

@@ -1749,6 +1749,161 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="add Confidentiality Level data" author="jon.adams">
+		<update tableName="confidentiality_level">
+			<column name="name" value="EVERYONE" />
+			<column name="description"
+				value="Not Confidential. Records may be viewed by all users." />
+			<column name="acronym" value="EVERYONE" />
+			<where>id = 'afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c'</where>
+		</update>
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B2D077A7-4055-0510-79574A09F93A0346" />
+			<column name="name" value="Academic Resource Center" />
+			<column name="description" value="" />
+			<column name="acronym" value="ARC" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B2D078B8-5056-A51A-80574A09F93A0347" />
+			<column name="name" value="Staff" />
+			<column name="description" value="" />
+			<column name="acronym" value="STAFF" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B2D07906-5056-A51A-80FD9D19F636E501" />
+			<column name="name" value="Manager" />
+			<column name="description" value="" />
+			<column name="acronym" value="MGR" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B2D07915-5056-A51A-80CE334ECA0E0A10" />
+			<column name="name" value="Disability" />
+			<column name="description" value="" />
+			<column name="acronym" value="DIS" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B2D07935-5056-A51A-80DBCAA0DADD3F2E" />
+			<column name="name" value="Counseling Services" />
+			<column name="description" value="" />
+			<column name="acronym" value="CNSL" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B2D07944-5056-A51A-8047654512D4D083" />
+			<column name="name" value="Individualized Learning Plan " />
+			<column name="description" value="" />
+			<column name="acronym" value="ILP" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B2D07964-5056-A51A-800AA95D3BB3C4D1" />
+			<column name="name" value="English as a Second Language" />
+			<column name="description" value="" />
+			<column name="acronym" value="ESL" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B2D07964-5157-A51A-800AA95D3BB3C4E3" />
+			<column name="name" value="Displaced Workers" />
+			<column name="description" value="" />
+			<column name="acronym" value="DSW" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B2D07964-5157-A51A-800AA95D3BB3C4F4" />
+			<column name="name" value="Early Alert " />
+			<column name="description" value="" />
+			<column name="acronym" value="EAL" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B2D07964-5157-A51A-800AA95D3BB3C505" />
+			<column name="name" value="Fast Forward" />
+			<column name="description" value="" />
+			<column name="acronym" value="FFC" />
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="confidentiality_level">
+				<where>id = 'B2D077A7-4055-0510-79574A09F93A0346'</where>
+			</delete>
+			<delete tableName="confidentiality_level">
+				<where>id = 'B2D078B8-5056-A51A-80574A09F93A0347'</where>
+			</delete>
+			<delete tableName="confidentiality_level">
+				<where>id = 'B2D07906-5056-A51A-80FD9D19F636E501'</where>
+			</delete>
+			<delete tableName="confidentiality_level">
+				<where>id = 'B2D07915-5056-A51A-80CE334ECA0E0A10'</where>
+			</delete>
+			<delete tableName="confidentiality_level">
+				<where>id = 'B2D07935-5056-A51A-80DBCAA0DADD3F2E'</where>
+			</delete>
+			<delete tableName="confidentiality_level">
+				<where>id = 'B2D07944-5056-A51A-8047654512D4D083'</where>
+			</delete>
+			<delete tableName="confidentiality_level">
+				<where>id = 'B2D07964-5056-A51A-800AA95D3BB3C4D1'</where>
+			</delete>
+			<delete tableName="confidentiality_level">
+				<where>id = 'B2D07964-5157-A51A-800AA95D3BB3C4E3'</where>
+			</delete>
+			<delete tableName="confidentiality_level">
+				<where>id = 'B2D07964-5157-A51A-800AA95D3BB3C4F4'</where>
+			</delete>
+			<delete tableName="confidentiality_level">
+				<where>id = 'B2D07964-5157-A51A-800AA95D3BB3C505'</where>
+			</delete>
+			<delete tableName="confidentiality_level">
+				<where>id = ''</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 	<changeSet id="add EA message template data" author="jon.adams">
 		<insert tableName="message_template">
 			<column name="id" value="B528C1AC-6104-435B-AE62-08EB4F7EE2F9" />

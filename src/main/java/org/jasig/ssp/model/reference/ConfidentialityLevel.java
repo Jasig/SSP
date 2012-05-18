@@ -23,7 +23,6 @@ public class ConfidentialityLevel extends AbstractReference implements
 
 	private static final long serialVersionUID = 2346103896744918201L;
 
-	// TODO: This is the wrong UUID for CONFIDENTIALITYLEVEL_EVERYONE.
 	public static final UUID CONFIDENTIALITYLEVEL_EVERYONE = UUID
 			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
 
