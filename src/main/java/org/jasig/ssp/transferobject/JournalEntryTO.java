@@ -9,11 +9,14 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.JournalEntry;
 
+/**
+ * JournalEntry transfer object
+ */
 public class JournalEntryTO
 		extends AbstractAuditableTO<JournalEntry>
 		implements TransferObject<JournalEntry>, Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2188963893970704753L;
 
 	private Date entryDate;
 	private String comment;
@@ -57,7 +60,7 @@ public class JournalEntryTO
 			final Collection<JournalEntry> journalEntries) {
 		final List<JournalEntryTO> journalEntryTOs = new ArrayList<JournalEntryTO>();
 		if ((journalEntries != null) && !journalEntries.isEmpty()) {
-			for (JournalEntry journalEntry : journalEntries) {
+			for (final JournalEntry journalEntry : journalEntries) {
 				journalEntryTOs.add(new JournalEntryTO(journalEntry)); // NOPMD
 			}
 		}

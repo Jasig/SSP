@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface GoalService extends AuditableCrudService<Goal> {
 
@@ -17,7 +18,7 @@ public interface GoalService extends AuditableCrudService<Goal> {
 	Goal get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	Goal create(Goal obj) throws ObjectNotFoundException;
+	Goal create(Goal obj) throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	Goal save(Goal obj) throws ObjectNotFoundException;

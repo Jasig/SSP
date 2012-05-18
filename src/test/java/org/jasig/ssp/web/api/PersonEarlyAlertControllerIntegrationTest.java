@@ -14,12 +14,14 @@ import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,9 @@ public class PersonEarlyAlertControllerIntegrationTest {
 
 	@Autowired
 	protected transient CampusService campusService;
+
+	@Autowired
+	protected transient PersonService personService;
 
 	private static final UUID PERSON_ID = UUID
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
@@ -173,7 +178,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	@Transactional()
+	@Ignore("Auto-filtering is not yet enabled.")
 	public void testControllerGetSetsWithOnlyActiveReference() throws Exception { // NOPMD
 		final EarlyAlertTO obj = createEarlyAlert();
 		final EarlyAlertTO saved = controller.create(PERSON_ID,
@@ -194,43 +199,22 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		session.clear();
 
 		// Reload data to make sure it filters correctly
-		// final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
+		final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
 
 		// TODO: ObjectStatus filter isn't working right now
+		final Set<EarlyAlertSuggestionTO> suggestions = reloaded
+				.getEarlyAlertSuggestionIds();
 
-		// final Set<EarlyAlertSuggestionTO> suggestions =
-		// reloaded.getEarlyAlertSuggestionIds();
-
-		// assertEquals("Set returned all objects instead of active only.", 1,
-		// suggestions.size());
-		// assertEquals("Saved instance sets did not match.",
-		// EARLY_ALERT_SUGGESTION_NAME,
-		// suggestions.iterator().next().getName());
+		assertEquals("Set returned all objects instead of active only.", 1,
+				suggestions.size());
+		assertEquals("Saved instance sets did not match.",
+				EARLY_ALERT_SUGGESTION_NAME, suggestions.iterator().next()
+						.getName());
 
 		final ServiceResponse response = controller.delete(savedId,
 				PERSON_ID);
 		assertTrue("Deletion response did not return success.",
 				response.isSuccess());
-	}
-
-	public static EarlyAlertTO createEarlyAlert() {
-		final EarlyAlertTO obj = new EarlyAlertTO();
-		obj.setPersonId(PERSON_ID);
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setClosedById(PERSON_ID);
-		obj.setCampusId(UUID.fromString("901E104B-4DC7-43F5-A38E-581015E204E1"));
-
-		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
-				.newHashSet();
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
-		final EarlyAlertSuggestionTO deletedSuggestion = new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_DELETED_ID,
-				"EARLY_ALERT_SUGGESTION_DELETED_NAME");
-		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
-		earlyAlertSuggestionIds.add(deletedSuggestion);
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
-		return obj;
 	}
 
 	/**
@@ -281,5 +265,62 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		assertNull(
 				"Invalid StudentID should have thrown an ObjectNotFoundException.",
 				saved);
+	}
+
+	/**
+	 * Test that student->coach is set during EarlyAlert creation.
+	 * 
+	 * <p>
+	 * This test assumes that the default campus EA coordinator is the system
+	 * administrator account.
+	 * 
+	 * @throws Exception
+	 *             If any exceptions are thrown by the controller.
+	 */
+	@Test
+	public void testControllerCreateAndSetCoach() throws Exception { // NOPMD
+		final Session session = sessionFactory.getCurrentSession();
+		final EarlyAlertTO obj = createEarlyAlert();
+		final UUID studentId = obj.getPersonId();
+		final Person student = personService.get(studentId);
+		student.setCoach(null);
+		assertNull("Test data coach should have been null.", student.getCoach());
+		session.flush();
+		assertNull("Student coach should have been null.", student.getCoach());
+
+		// No that coach has been cleared, save EarlyAlert to ensure it is reset
+		final EarlyAlertTO saved = controller.create(studentId, obj);
+		assertNotNull("Saved Early Alert should not have been null.", saved);
+
+		session.flush();
+		assertNotNull("Student coach should not have been null.",
+				student.getCoach());
+		session.evict(student);
+
+		final Person reloadedPerson = personService.get(studentId);
+
+		assertEquals("Coach IDs did not match.",
+				Person.SYSTEM_ADMINISTRATOR_ID,
+				reloadedPerson.getCoach().getId());
+	}
+
+	public static EarlyAlertTO createEarlyAlert() {
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setPersonId(PERSON_ID);
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setClosedById(PERSON_ID);
+		obj.setCampusId(UUID.fromString("901E104B-4DC7-43F5-A38E-581015E204E1"));
+
+		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
+				.newHashSet();
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
+		final EarlyAlertSuggestionTO deletedSuggestion = new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_DELETED_ID,
+				"EARLY_ALERT_SUGGESTION_DELETED_NAME");
+		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
+		earlyAlertSuggestionIds.add(deletedSuggestion);
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		return obj;
 	}
 }

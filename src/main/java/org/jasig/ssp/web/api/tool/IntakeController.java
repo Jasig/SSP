@@ -1,4 +1,4 @@
-package org.jasig.ssp.web.api.tool;
+package org.jasig.ssp.web.api.tool; // NOPMD by jon.adams
 
 import java.util.HashMap;
 import java.util.List;
@@ -156,9 +156,9 @@ public class IntakeController extends BaseController {
 				.toTOList(challengeService
 						.getAll(sAndP).getRows());
 		// Filter out !ChallengeReferrals.ShowInStudentIntake
-		for (ChallengeTO challenge : challenges) {
+		for (final ChallengeTO challenge : challenges) {
 			final List<ChallengeReferralTO> referrals = Lists.newArrayList();
-			for (ChallengeReferralTO referral : challenge
+			for (final ChallengeReferralTO referral : challenge
 					.getChallengeChallengeReferrals()) {
 				if (referral.isShowInStudentIntake()) {
 					referrals.add(referral);

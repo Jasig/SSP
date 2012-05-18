@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * MessageTemplate service
@@ -21,7 +22,8 @@ public interface MessageTemplateService extends
 	MessageTemplate get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	MessageTemplate create(MessageTemplate obj) throws ObjectNotFoundException;
+	MessageTemplate create(MessageTemplate obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	MessageTemplate save(MessageTemplate obj) throws ObjectNotFoundException;

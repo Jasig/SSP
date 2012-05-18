@@ -1938,4 +1938,174 @@ Faculty Comments: $FacultyComments" />
 		</rollback>
 	</changeSet>
 
+	<changeSet id="create reference data - journal_source"
+		author="jon.adams">
+		<insert tableName="journal_source">
+			<column name="id" value="B2D07973-5056-A51A-80731D3641CE507F" />
+			<column name="name" value="Appointment" />
+			<column name="description" value="Default Description" />
+			<column name="created_date" valueDate="2012-05-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="journal_source">
+			<column name="id" value="B2D07983-5056-A51A-80D03FBCF39FA253" />
+			<column name="name" value="CAP Transitioned" />
+			<column name="description" value="Default Description" />
+			<column name="created_date" valueDate="2012-05-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="journal_source">
+			<column name="id" value="B2D07993-5056-A51A-8076D6513A772D80" />
+			<column name="name" value="Case Management" />
+			<column name="description" value="Default Description" />
+			<column name="created_date" valueDate="2012-05-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="journal_source">
+			<column name="id" value="B2D079A2-5056-A51A-8075328971518FF0" />
+			<column name="name" value="Email" />
+			<column name="description" value="Default Description" />
+			<column name="created_date" valueDate="2012-05-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="journal_source">
+			<column name="id" value="B2D079B2-5056-A51A-80C8753B509BC90B" />
+			<column name="name" value="ILP Transitioned" />
+			<column name="description" value="Default Description" />
+			<column name="created_date" valueDate="2012-05-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="journal_source">
+			<column name="id" value="B2D079C1-5056-A51A-80E1C40F1E56AF00" />
+			<column name="name" value="Phone Call" />
+			<column name="description" value="Default Description" />
+			<column name="created_date" valueDate="2012-05-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="journal_source">
+			<column name="id" value="B2D079F0-5056-A51A-8013B982C069AFB7" />
+			<column name="name" value="Referral" />
+			<column name="description" value="Default Description" />
+			<column name="created_date" valueDate="2012-05-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="journal_source">
+			<column name="id" value="B2D07A00-5056-A51A-80B5F725F1C5C3E2" />
+			<column name="name" value="Early Alert Response" />
+			<column name="description" value="Default Description" />
+			<column name="created_date" valueDate="2012-05-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="journal_source">
+			<column name="id" value="B2D07A10-5056-A51A-80C22DBB2A81AAE6" />
+			<column name="name" value="Completed Action Steps" />
+			<column name="description" value="Default Description" />
+			<column name="created_date" valueDate="2012-05-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_source">
+				<where>id='B2D07973-5056-A51A-80731D3641CE507F'</where>
+			</delete>
+			<delete tableName="journal_source">
+				<where>id='B2D07983-5056-A51A-80D03FBCF39FA253'</where>
+			</delete>
+			<delete tableName="journal_source">
+				<where>id='B2D07993-5056-A51A-8076D6513A772D80'</where>
+			</delete>
+			<delete tableName="journal_source">
+				<where>id='B2D079A2-5056-A51A-8075328971518FF0'</where>
+			</delete>
+			<delete tableName="journal_source">
+				<where>id='B2D079B2-5056-A51A-80C8753B509BC90B'</where>
+			</delete>
+			<delete tableName="journal_source">
+				<where>id='B2D079C1-5056-A51A-80E1C40F1E56AF00'</where>
+			</delete>
+			<delete tableName="journal_source">
+				<where>id='B2D079F0-5056-A51A-8013B982C069AFB7'</where>
+			</delete>
+			<delete tableName="journal_source">
+				<where>id='B2D07A00-5056-A51A-80B5F725F1C5C3E2'</where>
+			</delete>
+			<delete tableName="journal_source">
+				<where>id='B2D07A10-5056-A51A-80C22DBB2A81AAE6'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create reference data - journal_track" author="jon.adams">
+		<insert tableName="journal_track">
+			<column name="id" value="B2D07A7D-5056-A51A-80A896AE5188A188" />
+			<column name="name" value="ILP" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="1" />
+		</insert>
+		<insert tableName="journal_track">
+			<column name="id" value="B2D07ABB-5056-A51A-8065991DD0F74782" />
+			<column name="name" value="CAP" />
+			<column name="description" value="" />
+			<column name="created_date" valueDate="2012-05-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="2" />
+		</insert>
+		<insert tableName="journal_track">
+			<column name="id" value="B2D07B38-5056-A51A-809D81EA2F3B27BF" />
+			<column name="name" value="EAL" />
+			<column name="description" value="Early Alert" />
+			<column name="created_date" valueDate="2012-05-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="3" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_track">
+				<where>id='B2D07A7D-5056-A51A-80A896AE5188A188'</where>
+			</delete>
+			<delete tableName="journal_track">
+				<where>id='B2D07ABB-5056-A51A-8065991DD0F74782'</where>
+			</delete>
+			<delete tableName="journal_track">
+				<where>id='B2D07B38-5056-A51A-809D81EA2F3B27BF'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

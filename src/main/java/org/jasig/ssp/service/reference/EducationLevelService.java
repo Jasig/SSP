@@ -7,7 +7,11 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
+/**
+ * EducationLevel service
+ */
 public interface EducationLevelService extends
 		AuditableCrudService<EducationLevel> {
 
@@ -18,7 +22,8 @@ public interface EducationLevelService extends
 	EducationLevel get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	EducationLevel create(EducationLevel obj) throws ObjectNotFoundException;
+	EducationLevel create(EducationLevel obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	EducationLevel save(EducationLevel obj) throws ObjectNotFoundException;

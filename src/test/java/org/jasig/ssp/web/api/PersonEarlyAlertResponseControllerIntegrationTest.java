@@ -180,8 +180,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 			assertNull(
 					"Instance should not be able to get loaded after it has been deleted.",
 					afterDeletion);
-		} catch (final ObjectNotFoundException exc) { // NOPMD by jon.adams on
-														// 5/9/12
+		} catch (final ObjectNotFoundException exc) { // NOPMD by jon.adams
 			// expected
 		}
 	}

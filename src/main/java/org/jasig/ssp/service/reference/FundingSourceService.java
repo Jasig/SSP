@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface FundingSourceService extends
 		AuditableCrudService<FundingSource> {
@@ -18,7 +19,8 @@ public interface FundingSourceService extends
 	FundingSource get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	FundingSource create(FundingSource obj) throws ObjectNotFoundException;
+	FundingSource create(FundingSource obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	FundingSource save(FundingSource obj) throws ObjectNotFoundException;

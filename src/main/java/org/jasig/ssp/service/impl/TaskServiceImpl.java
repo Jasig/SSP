@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.impl;
+package org.jasig.ssp.service.impl; // NOPMD
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,7 +166,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		final Map<String, List<Task>> grouped = Maps.newTreeMap();
 		final PagingWrapper<Task> tasksForPerson = dao
 				.getAllForPersonId(person.getId(), sAndP);
-		for (Task task : tasksForPerson.getRows()) {
+		for (final Task task : tasksForPerson.getRows()) {
 			final String group = task.getGroup();
 			final List<Task> tasksForGroup;
 			if (grouped.keySet().contains(group)) {
@@ -184,7 +185,8 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	@Override
 	public Task createForPersonWithChallengeReferral(final Challenge challenge,
 			final ChallengeReferral challengeReferral, final Person person,
-			final String sessionId) throws ObjectNotFoundException {
+			final String sessionId) throws ObjectNotFoundException,
+			ValidationException {
 
 		// Create, fill, and persist a new Task
 		final Task task = new Task();
@@ -204,7 +206,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	public Task createCustomTaskForPerson(final String name,
 			final String description,
 			final Person student, final String sessionId)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 		final Task customTask = new Task();
 		customTask.setDescription(description);
 		customTask.setPerson(student);
@@ -217,7 +219,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 
 	@Override
 	public void sendNoticeToStudentOnCustomTask(final Task customTask,
-			final UUID messageTemplateId) throws Exception {
+			final UUID messageTemplateId) throws ObjectNotFoundException {
 
 		if (!messageTemplateId
 				.equals(MessageTemplate.TASK_AUTO_CREATED_EMAIL_ID)
@@ -252,11 +254,14 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 
 	/**
 	 * Send a list of the given tasks to each emailAddress and each recipient.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             If reference objects could not be loaded.
 	 */
 	@Override
 	public void sendTasksForPersonToEmail(final List<Task> tasks,
 			final Person student, final List<String> emailAddresses,
-			final List<Person> recipients) throws Exception {
+			final List<Person> recipients) throws ObjectNotFoundException {
 
 		if ((tasks == null) || (tasks.isEmpty())) {
 			return;
@@ -269,7 +274,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		templateParameters.put("taskTOs", taskTOs);
 
 		if (emailAddresses != null) {
-			for (String address : emailAddresses) {
+			for (final String address : emailAddresses) {
 				messageService.createMessage(address,
 						MessageTemplate.ACTION_PLAN_EMAIL_ID,
 						templateParameters);
@@ -277,7 +282,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 		}
 
 		if (recipients != null) {
-			for (Person recipient : recipients) {
+			for (final Person recipient : recipients) {
 				messageService.createMessage(
 						recipient.getPrimaryEmailAddress(),
 						MessageTemplate.ACTION_PLAN_EMAIL_ID,
@@ -331,7 +336,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 			// Send reminders for custom action plan tasks
 			final List<Task> tasks = getAllWhichNeedRemindersSent(sAndP);
 
-			for (Task task : tasks) {
+			for (final Task task : tasks) {
 
 				// Calculate reminder window start date
 				startDateCalendar.setTime(task.getDueDate());
@@ -358,7 +363,7 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 				}
 			}
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.error("ERROR : sendTaskReminderNotifications() : {}",
 					e.getMessage(), e);
 		}
