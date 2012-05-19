@@ -111,7 +111,17 @@ public class EarlyAlertServiceImpl extends // NOPMD
 					e);
 		}
 
-		// TODO: Send e-mail to student if faculty requested it
+		// Send e-mail to student
+		try {
+			sendMessageToStudent(saved);
+		} catch (final SendFailedException e) {
+			LOGGER.warn(
+					"Could not send Early Alert confirmation to the student.",
+					e);
+			throw new ValidationException(
+					"Early Alert e-mail could not be sent to the student. Early Alert was NOT created.",
+					e);
+		}
 
 		// Send e-mail CONFIRMATION to faculty
 		try {
@@ -234,6 +244,37 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			final String emailCC) throws ObjectNotFoundException,
 			SendFailedException, ValidationException {
 		if (earlyAlert == null) {
+			throw new IllegalArgumentException("Early alert was missing.");
+		}
+
+		if (earlyAlert.getPerson() == null) {
+			throw new IllegalArgumentException("EarlyAlert Person is missing.");
+		}
+
+		final Person person = earlyAlert.getPerson();
+		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlert);
+
+		// Create and queue the message
+		final Message message = messageService.createMessage(person, emailCC,
+				MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
+				templateParameters);
+
+		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
+	}
+
+	/**
+	 * Send e-mail ({@link Message}) to the student.
+	 * 
+	 * @param earlyAlert
+	 *            Early Alert
+	 * @throws ObjectNotFoundException
+	 * @throws SendFailedException
+	 * @throws ValidationException
+	 */
+	private void sendMessageToStudent(@NotNull final EarlyAlert earlyAlert)
+			throws ObjectNotFoundException, SendFailedException,
+			ValidationException {
+		if (earlyAlert == null) {
 			throw new IllegalArgumentException("EarlyAlert was missing.");
 		}
 
@@ -243,10 +284,18 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 		final Person person = earlyAlert.getPerson();
 		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlert);
+		templateParameters.put("InstitutionName", "// TODO: InstitutionName");
+		templateParameters.put("CoachTitle", "// TODO: CoachTitle");
+		templateParameters.put("CoachOfficeLocation",
+				"// TODO: CoachOfficeLocation");
+		templateParameters.put("CoachWorkPhone", person.getCoach()
+				.getWorkPhone());
+		templateParameters.put("CoachPrimaryEmailAddress", person.getCoach()
+				.getPrimaryEmailAddress());
 
 		// Create and queue the message
-		final Message message = messageService.createMessage(person, emailCC,
-				MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
+		final Message message = messageService.createMessage(person, null,
+				MessageTemplate.EARLYALERT_MESSAGETOSTUDENT_ID,
 				templateParameters);
 
 		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);

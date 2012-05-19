@@ -13,6 +13,7 @@ import org.jasig.ssp.model.reference.EmploymentShifts;
 import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.model.reference.States;
 import org.jasig.ssp.model.tool.IntakeForm;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.service.reference.ChildCareArrangementService;
 import org.jasig.ssp.service.reference.CitizenshipService;
@@ -39,6 +40,7 @@ import org.jasig.ssp.transferobject.reference.VeteranStatusTO;
 import org.jasig.ssp.transferobject.tool.IntakeFormTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,14 +110,17 @@ public class IntakeController extends BaseController {
 	 *            Student identifier
 	 * @param intakeForm
 	 *            Incoming data
-	 * @exception Exception
-	 *                Any errors will throw this generic exception.
 	 * @return Service response with success value, in the JSON format.
+	 * @throws ValidationException
+	 *             If IntakeForm data was not valid.
+	 * @throws ObjectNotFoundException
+	 *             If any reference look up data couldn't be loaded.
 	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.PUT)
 	public @ResponseBody
 	ServiceResponse save(final @PathVariable UUID studentId,
-			final @Valid @RequestBody IntakeFormTO intakeForm) throws Exception {
+			final @Valid @RequestBody IntakeFormTO intakeForm)
+			throws ObjectNotFoundException, ValidationException {
 		final IntakeForm model = factory.from(intakeForm);
 		model.getPerson().setId(studentId);
 		return new ServiceResponse(service.save(model));
