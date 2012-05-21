@@ -1,9 +1,11 @@
 package org.jasig.ssp.util.sort;
 
+import java.io.Serializable;
+
 /**
  * Sort direction
  */
-public enum SortDirection {
+public enum SortDirection implements Serializable {
 	/**
 	 * Ascending sort
 	 */

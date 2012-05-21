@@ -1,9 +1,11 @@
 package org.jasig.ssp.web.api; // NOPMD
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Set;
@@ -11,6 +13,8 @@ import java.util.UUID;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jasig.ssp.dao.MessageDao;
+import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -20,10 +24,13 @@ import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -41,7 +48,7 @@ import com.google.common.collect.Sets;
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration()
 @Transactional
-public class PersonEarlyAlertControllerIntegrationTest {
+public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 
 	@Autowired
 	private transient PersonEarlyAlertController controller;
@@ -51,6 +58,10 @@ public class PersonEarlyAlertControllerIntegrationTest {
 
 	@Autowired
 	protected transient CampusService campusService;
+
+	// Can't use service because it doesn't offer GetAll or similar methods
+	@Autowired
+	protected transient MessageDao messageDao;
 
 	@Autowired
 	protected transient PersonService personService;
@@ -70,6 +81,8 @@ public class PersonEarlyAlertControllerIntegrationTest {
 
 	private static final UUID CAMPUS_ID = UUID
 			.fromString("901E104B-4DC7-43F5-A38E-581015E204E1");
+
+	private static final String COURSE_NAME = "Some Really Fancy Course Name";
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -217,6 +230,28 @@ public class PersonEarlyAlertControllerIntegrationTest {
 				response.isSuccess());
 	}
 
+	@Test(expected = ValidationException.class)
+	public void testControllerCreateWithInvalidDataGetId() throws Exception { // NOPMD
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setId(UUID.randomUUID());
+		controller.create(UUID.randomUUID(), obj);
+		fail("Create with invalid Person UUID should have thrown exception.");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerCreateWithInvalidDataEmptyId() throws Exception { // NOPMD
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		controller.create("", obj);
+		fail("Create with empty student ID should have thrown exception.");
+	}
+
+	@Test(expected = ObjectNotFoundException.class)
+	public void testControllerCreateWithInvalidData() throws Exception { // NOPMD
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		controller.create("bad id", obj);
+		fail("Create with invalid person UUID should have thrown exception.");
+	}
+
 	/**
 	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
 	 * action.
@@ -322,5 +357,61 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		earlyAlertSuggestionIds.add(deletedSuggestion);
 		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 		return obj;
+	}
+
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		logger.info("Test");
+		assertNotNull("logger should not have been null.", logger);
+		assertEquals("Logger name was not specific to the class.",
+				"org.jasig.ssp.web.api.PersonEarlyAlertController",
+				logger.getName());
+	}
+
+	/**
+	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
+	 * action and check that the appropriate {@link Message}s are created.
+	 * 
+	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
+	 */
+	@Test
+	public void testControllerCreateAndMessageResults() throws Exception { // NOPMD
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setCampusId(CAMPUS_ID);
+		obj.setCourseName(COURSE_NAME);
+		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
+				obj);
+
+		final UUID savedId = saved.getId();
+
+		sessionFactory.getCurrentSession().flush();
+
+		// Get messages
+		final PagingWrapper<Message> data = messageDao
+				.getAll(ObjectStatus.ACTIVE);
+		final Collection<Message> msgs = data.getRows();
+		assertFalse("Some messages should have been entered.", msgs.isEmpty());
+
+		boolean found = false; // NOPMD by jon.adams on 5/20/12 10:06 PM
+		for (final Message msg : msgs) {
+			final String body = msg.getBody();
+			if (body.contains("\nYour instructor for "
+					+ COURSE_NAME
+					+ " notified me that you are experiencing issues that might affect ")) {
+				controller.getLogger().debug(
+						"Applicable message found. Body: {}", body);
+				found = true;
+				break;
+			}
+		}
+
+		assertTrue("Some message for this early alert should have been found.",
+				found);
+
+		final ServiceResponse response = controller.delete(savedId, PERSON_ID);
+		assertTrue("Deletion did not return success.",
+				response.isSuccess());
 	}
 }
