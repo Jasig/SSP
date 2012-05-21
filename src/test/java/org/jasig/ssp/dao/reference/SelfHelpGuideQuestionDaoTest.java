@@ -1,8 +1,8 @@
 package org.jasig.ssp.dao.reference;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -80,10 +80,11 @@ public class SelfHelpGuideQuestionDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<SelfHelpGuideQuestion> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<SelfHelpGuideQuestion> all = dao.getAll(
+				ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull(all);
-		assertTrue(all.size() > 0);
+		assertFalse(all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);
@@ -91,28 +92,28 @@ public class SelfHelpGuideQuestionDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuideQuestion selfHelpGuideQuestion = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuideQuestion selfHelpGuideQuestion = dao.get(id);
 
 		assertNull(selfHelpGuideQuestion);
 	}
 
-	private void assertList(Collection<SelfHelpGuideQuestion> objects) {
-		for (SelfHelpGuideQuestion object : objects) {
+	private void assertList(final Collection<SelfHelpGuideQuestion> objects) {
+		for (final SelfHelpGuideQuestion object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		SelfHelpGuideQuestion obj = new SelfHelpGuideQuestion();
+		final SelfHelpGuideQuestion obj = new SelfHelpGuideQuestion();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setChallenge(testChallenge);
 		obj.setSelfHelpGuide(testGuide);
 		dao.save(obj);
 
-		SelfHelpGuideQuestion obj2 = new SelfHelpGuideQuestion();
+		final SelfHelpGuideQuestion obj2 = new SelfHelpGuideQuestion();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		obj2.setChallenge(testChallenge);
@@ -124,10 +125,5 @@ public class SelfHelpGuideQuestionDaoTest {
 
 		dao.delete(obj);
 		dao.delete(obj2);
-	}
-
-	@Test
-	public void bySelfHelpGuide() {
-		assertList(dao.bySelfHelpGuide(UUID.randomUUID()));
 	}
 }

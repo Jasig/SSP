@@ -11,12 +11,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Person JournalEntry controller
+ */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/person/{personId}/journalEntry")
 public class PersonJournalEntryController extends
 		AbstractPersonAssocController<JournalEntry, JournalEntryTO> {
 
+	/**
+	 * Construct a controller instance with the specific class types used by the
+	 * super class methods.
+	 */
 	protected PersonJournalEntryController() {
 		super(JournalEntry.class, JournalEntryTO.class);
 	}

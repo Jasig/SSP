@@ -1,6 +1,7 @@
 package org.jasig.ssp.util.sort;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,25 +14,33 @@ import com.google.common.collect.Maps;
 
 public class SortingAndPaging {
 
-	final private ObjectStatus status;
-	final private Integer firstResult, maxResults;
-	final private String defaultSortProperty;
-	final private SortDirection defaultSortDirection;
-	private LinkedHashMap<String, SortDirection> sortFields;
+	final transient private ObjectStatus status;
 
-	public void appendSortField(String fieldname, SortDirection direction) {
+	final private transient Integer firstResult;
+
+	final private transient Integer maxResults;
+
+	final private transient String defaultSortProperty;
+
+	final private transient SortDirection defaultSortDirection;
+
+	private transient Map<String, SortDirection> sortFields;
+
+	public void appendSortField(final String fieldname,
+			final SortDirection direction) {
 		if (sortFields == null) {
 			sortFields = new LinkedHashMap<String, SortDirection>();
 		}
 		sortFields.put(fieldname, direction);
 	}
 
-	public void prependSortField(String fieldname, SortDirection direction) {
+	public void prependSortField(final String fieldname,
+			final SortDirection direction) {
 		if (sortFields == null) {
 			sortFields = new LinkedHashMap<String, SortDirection>();
 			sortFields.put(fieldname, direction);
 		} else {
-			LinkedHashMap<String, SortDirection> newOrdering = Maps
+			final LinkedHashMap<String, SortDirection> newOrdering = Maps
 					.newLinkedHashMap();
 			newOrdering.put(fieldname, direction);
 			newOrdering.putAll(sortFields);
@@ -41,11 +50,10 @@ public class SortingAndPaging {
 
 	public SortingAndPaging(final ObjectStatus status) {
 		this.status = status;
-		this.firstResult = null;
-		this.maxResults = null;
-		this.defaultSortProperty = null;
-		this.defaultSortDirection = null;
-		this.sortFields = null;
+		firstResult = null;
+		maxResults = null;
+		defaultSortProperty = null;
+		defaultSortDirection = null;
 	}
 
 	public static SortingAndPaging createForSingleSort(
@@ -54,22 +62,21 @@ public class SortingAndPaging {
 			final String sort, final String sortDirection,
 			final String defaultSortProperty) {
 
-		LinkedHashMap<String, SortDirection> sortFields;
+		Map<String, SortDirection> sortFields;
 		SortDirection defaultSortDirection;
 
-		// if there has been a sort passed in, use it, otherwise use the default
-		// sort
-		if (sort != null) {
-			sortFields = Maps.newLinkedHashMap();
-			sortFields.put(sort, SortDirection.getSortDirection(sortDirection));
-			defaultSortDirection = null;
-		} else {
-			sortFields = null;
+		// use sort parameter if available, otherwise use the default
+		if (sort == null) {
+			sortFields = null; // NOPMD
 			defaultSortDirection = SortDirection
 					.getSortDirection(sortDirection);
+		} else {
+			sortFields = Maps.newLinkedHashMap();
+			sortFields.put(sort, SortDirection.getSortDirection(sortDirection));
+			defaultSortDirection = null; // NOPMD
 		}
 
-		SortingAndPaging sAndP = new SortingAndPaging(
+		final SortingAndPaging sAndP = new SortingAndPaging(
 				status == null ? ObjectStatus.ACTIVE : status,
 				firstResult, maxResults, sortFields, defaultSortProperty,
 				defaultSortDirection);
@@ -79,7 +86,7 @@ public class SortingAndPaging {
 
 	public SortingAndPaging(final ObjectStatus status,
 			final Integer firstResult, final Integer maxResults,
-			final LinkedHashMap<String, SortDirection> sortFields,
+			final Map<String, SortDirection> sortFields,
 			final String defaultSortProperty,
 			final SortDirection defaultSortDirection) {
 		this.status = status;
@@ -88,6 +95,10 @@ public class SortingAndPaging {
 		this.sortFields = sortFields;
 		this.defaultSortProperty = defaultSortProperty;
 		this.defaultSortDirection = defaultSortDirection;
+	}
+
+	public ObjectStatus getStatus() {
+		return status;
 	}
 
 	public Integer getFirstResult() {
@@ -106,7 +117,7 @@ public class SortingAndPaging {
 		return defaultSortDirection;
 	}
 
-	public LinkedHashMap<String, SortDirection> getSortFields() {
+	public Map<String, SortDirection> getSortFields() {
 		return sortFields;
 	}
 
@@ -151,7 +162,8 @@ public class SortingAndPaging {
 	public void addSortingToCriteria(final Criteria criteria) {
 		if (isSorted()) {
 			// sort by each entry in the map
-			for (Entry<String, SortDirection> entry : sortFields.entrySet()) {
+			for (final Entry<String, SortDirection> entry : sortFields
+					.entrySet()) {
 				addSortToCriteria(criteria, entry.getKey(), entry.getValue());
 			}
 		} else if (isDefaultSorted()) {

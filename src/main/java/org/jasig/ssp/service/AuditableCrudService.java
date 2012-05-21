@@ -6,6 +6,7 @@ import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * CRUD services for {@link Auditable} models.
@@ -44,12 +45,14 @@ public interface AuditableCrudService<T extends Auditable> {
 	 * Side effect: Assigns a new ID to the specified object.
 	 * 
 	 * @param obj
-	 *            Data to use to create a new instance in persistent storage.
+	 *            Data to use to create a new instance in persistent storage
+	 * @return The updated data object instance
 	 * @throws ObjectNotFoundException
-	 *             If any foreign key lookups were not found.
-	 * @return The updated data object instance.
+	 *             If any foreign key lookups were not found
+	 * @throws ValidationException
+	 *             If the business object is invalid
 	 */
-	T create(T obj) throws ObjectNotFoundException;
+	T create(T obj) throws ObjectNotFoundException, ValidationException;
 
 	/**
 	 * Updates an existing instance to persistent storage with the specified

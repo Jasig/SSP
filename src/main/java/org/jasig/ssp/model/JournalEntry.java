@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -35,15 +36,15 @@ public class JournalEntry extends Auditable implements PersonAssoc, Restricted,
 	@Nullable()
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "confidentiality_level_id", nullable = true)
+	@JoinColumn(name = "confidentiality_level_id", nullable = false)
 	private ConfidentialityLevel confidentialityLevel;
 
 	@ManyToOne
-	@JoinColumn(name = "journal_source_id", updatable = false, nullable = true)
+	@JoinColumn(name = "journal_source_id", updatable = false, nullable = false)
 	private JournalSource journalSource;
 
 	@ManyToOne
-	@JoinColumn(name = "journal_track_id", updatable = false, nullable = true)
+	@JoinColumn(name = "journal_track_id", updatable = false, nullable = false)
 	private JournalTrack journalTrack;
 
 	@OneToMany(mappedBy = "journalEntry")
@@ -67,7 +68,7 @@ public class JournalEntry extends Auditable implements PersonAssoc, Restricted,
 		return entryDate == null ? null : new Date(entryDate.getTime());
 	}
 
-	public void setEntryDate(final Date entryDate) {
+	public void setEntryDate(@NotNull final Date entryDate) {
 		this.entryDate = entryDate == null ? null : new Date(
 				entryDate.getTime());
 	}
@@ -84,7 +85,7 @@ public class JournalEntry extends Auditable implements PersonAssoc, Restricted,
 		return journalSource;
 	}
 
-	public void setJournalSource(final JournalSource journalSource) {
+	public void setJournalSource(@NotNull final JournalSource journalSource) {
 		this.journalSource = journalSource;
 	}
 
@@ -92,7 +93,7 @@ public class JournalEntry extends Auditable implements PersonAssoc, Restricted,
 		return journalTrack;
 	}
 
-	public void setJournalTrack(final JournalTrack journalTrack) {
+	public void setJournalTrack(@NotNull final JournalTrack journalTrack) {
 		this.journalTrack = journalTrack;
 	}
 
@@ -111,7 +112,7 @@ public class JournalEntry extends Auditable implements PersonAssoc, Restricted,
 	}
 
 	@Override
-	public void setPerson(final Person person) {
+	public void setPerson(@NotNull final Person person) {
 		this.person = person;
 	}
 

@@ -9,7 +9,7 @@ import org.jasig.ssp.model.reference.FundingSource;
  * Data access class for the FundingSource reference entity.
  */
 @Repository
-public class FundingSourceDao extends ReferenceAuditableCrudDao<FundingSource>
+public class FundingSourceDao extends AbstractReferenceAuditableCrudDao<FundingSource>
 		implements AuditableCrudDao<FundingSource> {
 
 	public FundingSourceDao() {

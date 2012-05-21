@@ -7,7 +7,11 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
+/**
+ * EducationGoal service
+ */
 public interface EducationGoalService extends
 		AuditableCrudService<EducationGoal> {
 
@@ -18,7 +22,8 @@ public interface EducationGoalService extends
 	EducationGoal get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	EducationGoal create(EducationGoal obj) throws ObjectNotFoundException;
+	EducationGoal create(EducationGoal obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	EducationGoal save(EducationGoal obj) throws ObjectNotFoundException;

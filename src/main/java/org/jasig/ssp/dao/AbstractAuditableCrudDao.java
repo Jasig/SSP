@@ -26,20 +26,14 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public PagingWrapper<T> getAll(final ObjectStatus status) {
-		final List<T> list = createCriteria(new SortingAndPaging(status))
-				.list();
-		return new PagingWrapper<T>(list);
+		return processCriteriaWithPaging(createCriteria(),
+				new SortingAndPaging(status));
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
-		final long totalRows = (Long) createCriteria().setProjection(
-				Projections.rowCount()).uniqueResult();
-
-		return new PagingWrapper<T>(totalRows, createCriteria(sAndP).list());
+		return processCriteriaWithPaging(createCriteria(), sAndP);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -113,21 +107,36 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	 */
 	protected PagingWrapper<T> processCriteriaWithPaging(
 			final Criteria query, final SortingAndPaging sAndP) {
-		// get the query results total count
-		final long totalRows = (Long) query.setProjection(
-				Projections.rowCount()).uniqueResult();
+		if (sAndP != null) {
+			sAndP.addStatusFilterToCriteria(query);
+		}
 
-		// clear the count projection from the query
-		query.setProjection(null);
+		// get the query results total count
+		Long totalRows = null; // NOPMD by jon on 5/20/12 4:42 PM
+
+		// Only query for total count if query is paged
+		if ((sAndP != null) && sAndP.isPaged()) {
+			totalRows = (Long) query.setProjection(
+					Projections.rowCount()).uniqueResult();
+
+			// clear the count projection from the query
+			query.setProjection(null);
+		}
 
 		// Add Sorting and Paging
 		if (sAndP != null) {
-			sAndP.addAll(query);
+			sAndP.addPagingToCriteria(query);
+			sAndP.addSortingToCriteria(query);
 		}
 
 		// Query results
 		@SuppressWarnings("unchecked")
 		final List<T> results = query.list();
+
+		// If there is no total yet, take it from the size of the results
+		if (null == totalRows) {
+			totalRows = Long.valueOf(results.size());
+		}
 
 		return new PagingWrapper<T>(totalRows, results);
 	}

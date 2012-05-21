@@ -1,10 +1,11 @@
-package org.jasig.ssp.web.api.reference;
+package org.jasig.ssp.web.api.reference; // NOPMD by jon.adams
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -68,7 +69,7 @@ public class EthnicityControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		EthnicityTO obj = controller.get(ETHNICITY_ID);
+		final EthnicityTO obj = controller.get(ETHNICITY_ID);
 
 		assertNotNull(
 				"Returned EthnicityTO from the controller should not have been null.",
@@ -91,7 +92,7 @@ public class EthnicityControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		EthnicityTO obj = controller.get(UUID.randomUUID());
+		final EthnicityTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned EthnicityTO from the controller should have been null.",
@@ -119,10 +120,8 @@ public class EthnicityControllerIntegrationTest {
 				testString2);
 		try {
 			obj = controller.create(obj);
-			assertTrue(
-					"Calling create with an object with an ID should have thrown a validation excpetion.",
-					false);
-		} catch (ValidationException exc) {
+			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
+		} catch (final ValidationException exc) {
 			/* expected */
 		}
 

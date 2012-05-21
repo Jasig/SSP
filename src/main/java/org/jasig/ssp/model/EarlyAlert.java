@@ -29,7 +29,7 @@ import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EarlyAlert extends Auditable implements Serializable {
+public class EarlyAlert extends Auditable implements Serializable { // NOPMD
 
 	private static final long serialVersionUID = 8141595549982881039L;
 
@@ -65,7 +65,7 @@ public class EarlyAlert extends Auditable implements Serializable {
 	private UUID closedById;
 
 	/**
-	 * Associated person. Changes to this Person are not persisted.
+	 * Associated person. Changes to this Person <i>are</i> persisted.
 	 */
 	@ManyToOne
 	@JoinColumn(name = "person_id", nullable = false)

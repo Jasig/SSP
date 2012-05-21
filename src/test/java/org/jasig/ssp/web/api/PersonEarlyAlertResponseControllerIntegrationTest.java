@@ -80,7 +80,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws Exception { // NOPMD
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -102,7 +102,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() throws Exception { // NOPMD
 		final Collection<EarlyAlertResponseTO> list = controller.getAll(
 				PERSON_ID,
 				ObjectStatus.ACTIVE,
@@ -121,9 +121,11 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test()
-	public void testControllerCreateAndDelete() throws Exception {
-		final EarlyAlertTO earlyAlert = earlyAlertController.create(PERSON_ID,
-				PersonEarlyAlertControllerIntegrationTest.createEarlyAlert());
+	public void testControllerCreateAndDelete() throws Exception { // NOPMD
+		final EarlyAlertTO earlyAlert = earlyAlertController.create(
+				PERSON_ID,
+				PersonEarlyAlertControllerIntegrationTest
+						.createEarlyAlert());
 
 		assertNotNull("Saved early alert should not have been null.",
 				earlyAlert);
@@ -178,7 +180,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 			assertNull(
 					"Instance should not be able to get loaded after it has been deleted.",
 					afterDeletion);
-		} catch (ObjectNotFoundException exc) { // NOPMD by jon.adams on 5/9/12
+		} catch (final ObjectNotFoundException exc) { // NOPMD by jon.adams
 			// expected
 		}
 	}

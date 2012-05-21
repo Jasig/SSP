@@ -9,7 +9,7 @@ import org.jasig.ssp.model.reference.EducationGoal;
  * Data access class for the EducationGoal reference entity.
  */
 @Repository
-public class EducationGoalDao extends ReferenceAuditableCrudDao<EducationGoal>
+public class EducationGoalDao extends AbstractReferenceAuditableCrudDao<EducationGoal>
 		implements AuditableCrudDao<EducationGoal> {
 
 	public EducationGoalDao() {

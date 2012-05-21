@@ -10,7 +10,7 @@ import org.jasig.ssp.model.reference.MessageTemplate;
  */
 @Repository
 public class MessageTemplateDao extends
-		ReferenceAuditableCrudDao<MessageTemplate>
+		AbstractReferenceAuditableCrudDao<MessageTemplate>
 		implements AuditableCrudDao<MessageTemplate> {
 
 	public MessageTemplateDao() {

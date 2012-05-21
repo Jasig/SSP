@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * VeteranStatus service
@@ -23,7 +24,8 @@ public interface VeteranStatusService extends
 	VeteranStatus get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	VeteranStatus create(VeteranStatus obj) throws ObjectNotFoundException;
+	VeteranStatus create(VeteranStatus obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	VeteranStatus save(VeteranStatus obj) throws ObjectNotFoundException;

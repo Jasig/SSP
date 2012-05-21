@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
@@ -141,7 +142,7 @@ public class PersonEarlyAlertController extends
 					"It is invalid to send with an ID to the create method. Did you mean to use the save method instead?");
 		}
 
-		if (studentId == null) {
+		if (StringUtils.isEmpty(studentId)) {
 			throw new IllegalArgumentException(
 					"Person identifier is required.");
 		}
@@ -151,7 +152,7 @@ public class PersonEarlyAlertController extends
 		// Figure out which type of PersonID was sent
 		try {
 			personId = UUID.fromString(studentId); // NOPMD by jon.adams
-		} catch (IllegalArgumentException exc) {
+		} catch (final IllegalArgumentException exc) {
 			final Person person = personService.getByStudentId(studentId);
 
 			if (person == null) {

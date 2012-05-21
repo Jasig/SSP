@@ -12,6 +12,8 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ChallengeCategory;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +38,12 @@ public class ChallengeCategoryDaoTest {
 	private transient ChallengeCategoryDao dao;
 
 	@Autowired
+	private transient ChallengeDao challengeDao;
+
+	@Autowired
+	private transient CategoryDao categoryDao;
+
+	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Before
@@ -48,7 +56,10 @@ public class ChallengeCategoryDaoTest {
 		UUID saved;
 
 		ChallengeCategory obj = new ChallengeCategory();
-		obj.setName("new name");
+		obj.setChallenge(challengeDao.getAll(ObjectStatus.ACTIVE).getRows()
+				.iterator().next());
+		obj.setCategory(categoryDao.get(UUID
+				.fromString("5d24743a-a11e-11e1-a9a6-0026b9e7ff4c")));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
@@ -60,7 +71,6 @@ public class ChallengeCategoryDaoTest {
 		obj = dao.get(saved);
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
-		assertNotNull(obj.getName());
 
 		final Collection<ChallengeCategory> all = dao.getAll(
 				ObjectStatus.ACTIVE)
@@ -87,12 +97,31 @@ public class ChallengeCategoryDaoTest {
 	}
 
 	@Test
-	public void uuidGeneration() {
+	public void uuidGeneration() throws ObjectNotFoundException {
 		final ChallengeCategory obj = new ChallengeCategory();
-		obj.setName("new name");
+		obj.setChallenge(challengeDao.getAll(ObjectStatus.ACTIVE).getRows()
+				.iterator().next());
+		obj.setCategory(categoryDao.get(UUID
+				.fromString("5d24743a-a11e-11e1-a9a6-0026b9e7ff4c")));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
 		dao.delete(obj);
+	}
+
+	@Test
+	public void getAllforCategory() {
+		final PagingWrapper<ChallengeCategory> wrapper = dao.getAllForCategory(
+				UUID.randomUUID(), new SortingAndPaging(ObjectStatus.ACTIVE));
+		assertList(wrapper.getRows());
+	}
+
+	@Test
+	public void getAllforChallengeAndCategory() {
+		final PagingWrapper<ChallengeCategory> wrapper = dao
+				.getAllForChallengeAndCategory(
+						UUID.randomUUID(), UUID.randomUUID(),
+						new SortingAndPaging(ObjectStatus.ACTIVE));
+		assertList(wrapper.getRows());
 	}
 }

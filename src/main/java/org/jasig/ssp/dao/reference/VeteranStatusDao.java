@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * Data access class for the VeteranStatus reference entity.
  */
 @Repository
-public class VeteranStatusDao extends ReferenceAuditableCrudDao<VeteranStatus>
+public class VeteranStatusDao extends AbstractReferenceAuditableCrudDao<VeteranStatus>
 		implements AuditableCrudDao<VeteranStatus> {
 
 	/**

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -13,7 +14,7 @@ import org.apache.commons.lang.StringUtils;
 @Entity
 public class MessageTemplate extends AbstractReference {
 
-	// :TODO match these to actual database values
+	// :TODO match MessageTemplate IDs to actual database values
 	// Message Templates
 	public static final UUID CUSTOM_ACTION_PLAN_TASK_ID = UUID
 			.fromString("31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0");
@@ -27,8 +28,24 @@ public class MessageTemplate extends AbstractReference {
 			.fromString("919F6FF5-8F22-4684-8729-D615206A2644");
 	public static final UUID NEW_STUDENT_INTAKE_TASK_EMAIL_ID = UUID
 			.fromString("9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0");
+
 	public static final UUID EMPTY_TEMPLATE_EMAIL_ID = UUID
 			.fromString("7c945020-86b0-11e1-849a-0026b9e7ff4c");
+
+	public static final UUID JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID = UUID
+			.fromString("B528C1AC-6104-435B-AE62-08EB4F7EE2F9");
+
+	public static final UUID EARLYALERT_MESSAGETOSTUDENT_ID = UUID
+			.fromString("b528c1ac-6104-435b-ae62-08eb4f8ef40e");
+
+	public static final UUID EARLYALERT_CONFIRMATIONTOADVISOR_ID = UUID
+			.fromString("b528c1ac-6104-435b-ae62-08eb4f7ee3fc");
+
+	public static final UUID EARLYALERT_CONFIRMATIONTOFACULTY_ID = UUID
+			.fromString("b528c1ac-6104-435b-ae62-09eb5f8ef55f");
+
+	public static final UUID EARLYALERT_RESPONSETOFACULTYFROMCOACH_ID = UUID
+			.fromString("b528c1ac-6104-435b-ae62-09fb5f9ef680");
 
 	@Column(name = "subject", nullable = false, length = 250)
 	private String subject;
@@ -55,7 +72,13 @@ public class MessageTemplate extends AbstractReference {
 		return subject;
 	}
 
-	public void setSubject(final String subject) {
+	/**
+	 * Sets the subject.
+	 * 
+	 * @param subject
+	 *            Maximum length of 250 characters.
+	 */
+	public void setSubject(@NotNull final String subject) {
 		this.subject = subject;
 	}
 
@@ -63,7 +86,7 @@ public class MessageTemplate extends AbstractReference {
 		return body;
 	}
 
-	public void setBody(final String body) {
+	public void setBody(@NotNull final String body) {
 		this.body = body;
 	}
 

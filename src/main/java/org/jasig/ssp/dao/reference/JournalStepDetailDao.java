@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class JournalStepDetailDao extends
-		ReferenceAuditableCrudDao<JournalStepDetail>
+		AbstractReferenceAuditableCrudDao<JournalStepDetail>
 		implements AuditableCrudDao<JournalStepDetail> {
 
 	public JournalStepDetailDao() {

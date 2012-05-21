@@ -14,6 +14,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class ChallengeDaoTest {
 	private static final UUID CONFIDENTIALITYLEVEL_ID = UUID
 			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
 
-	private static final String CONFIDENTIALITYLEVEL_NAME = "Test Confidentiality Level";
+	private static final String CONFIDENTIALITYLEVEL_NAME = "EVERYONE";
 
 	@Autowired
 	transient private ChallengeDao dao;
@@ -82,8 +83,7 @@ public class ChallengeDaoTest {
 
 		final Collection<Challenge> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
-		assertNotNull(all);
-		assertFalse(all.isEmpty());
+		assertFalse("GetAll() list should not be empty.", all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);
@@ -91,26 +91,26 @@ public class ChallengeDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Challenge challenge = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final Challenge challenge = dao.get(id);
 
 		assertNull(challenge);
 	}
 
 	private void assertList(final Collection<Challenge> objects) {
-		for (Challenge object : objects) {
+		for (final Challenge object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		Challenge obj = new Challenge();
+		final Challenge obj = new Challenge();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		Challenge obj2 = new Challenge();
+		final Challenge obj2 = new Challenge();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);
@@ -124,18 +124,17 @@ public class ChallengeDaoTest {
 
 	@Test
 	public void searchByQuery() {
-		String filter = "issue";
-
-		List<Challenge> challenges = dao.searchByQuery(filter);
+		final List<Challenge> challenges = dao.searchByQuery("issue");
 		assertList(challenges);
-		assertFalse(challenges.isEmpty());
+		assertFalse("Search list should have returned some items.",
+				challenges.isEmpty());
 
 		LOGGER.debug(Integer.toString(challenges.size()));
 	}
 
 	@Test
 	public void getAllInStudentIntake() {
-		List<Challenge> challenges = dao
+		final List<Challenge> challenges = dao
 				.getAllInStudentIntake(new SortingAndPaging(ObjectStatus.ACTIVE));
 		assertList(challenges);
 		assertFalse(challenges.isEmpty());
@@ -143,8 +142,15 @@ public class ChallengeDaoTest {
 
 	@Test
 	public void selectAffirmativeBySelfHelpGuideResponseId() {
-		List<Challenge> challenges = dao
+		final List<Challenge> challenges = dao
 				.selectAffirmativeBySelfHelpGuideResponseId(UUID.randomUUID());
 		assertList(challenges);
+	}
+
+	@Test
+	public void getAllForCategory() {
+		final PagingWrapper<Challenge> challenges = dao.getAllForCategory(
+				UUID.randomUUID(), new SortingAndPaging(ObjectStatus.ACTIVE));
+		assertList(challenges.getRows());
 	}
 }

@@ -1,4 +1,4 @@
-package org.jasig.ssp.model;
+package org.jasig.ssp.model; // NOPMD
 
 import java.io.Serializable;
 import java.util.Date;
@@ -36,7 +36,7 @@ import org.jasig.ssp.model.tool.PersonTool;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public final class Person extends Auditable implements Serializable {
+public final class Person extends Auditable implements Serializable { // NOPMD
 
 	private static final long serialVersionUID = 4122282021549627683L;
 

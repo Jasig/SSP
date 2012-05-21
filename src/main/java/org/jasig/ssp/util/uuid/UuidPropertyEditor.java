@@ -4,6 +4,8 @@ import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Property Editor for working with UUIDs
  * 
@@ -14,13 +16,21 @@ public class UuidPropertyEditor extends PropertyEditorSupport implements
 		PropertyEditor {
 
 	@Override
-	public void setAsText(String text) throws IllegalArgumentException {
-		setValue(UUID.fromString(text));
+	public void setAsText(final String text) throws IllegalArgumentException {
+		if (StringUtils.isEmpty(text)) {
+			setValue(null);
+		} else {
+			setValue(UUID.fromString(text));
+		}
 	}
 
 	@Override
 	public String getAsText() {
-		UUID value = (UUID) getValue();
-		return (value != null ? value.toString() : "");
+		if (getValue() == null) {
+			return null;
+		}
+
+		final UUID value = (UUID) getValue();
+		return (value == null ? null : value.toString());
 	}
 }

@@ -8,17 +8,18 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.stereotype.Repository;
 
 /**
  * Data access class for the Challenge reference entity.
  */
 @Repository
-public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
+public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		implements AuditableCrudDao<Challenge> {
 
 	/**
@@ -42,7 +43,6 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 	 *         specified SelfHelpGuideResponseId.
 	 */
 	@SuppressWarnings("unchecked")
-	// :TODO paging?
 	public List<Challenge> selectAffirmativeBySelfHelpGuideResponseId(
 			@NotNull final UUID selfHelpGuideResponseId) {
 		return sessionFactory
@@ -71,7 +71,6 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 	 * @return All Challenges that match the specified criteria.
 	 */
 	@SuppressWarnings("unchecked")
-	// :TODO paging?
 	public List<Challenge> searchByQuery(final String query) {
 		return sessionFactory
 				.getCurrentSession()
@@ -105,9 +104,20 @@ public class ChallengeDao extends ReferenceAuditableCrudDao<Challenge>
 	 *         the StudentIntake interface.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Challenge> getAllInStudentIntake(SortingAndPaging sAndP) {
+	public List<Challenge> getAllInStudentIntake(final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria(sAndP).add(
 				Restrictions.eq("showInStudentIntake", true));
 		return query.list();
+	}
+
+	public PagingWrapper<Challenge> getAllForCategory(
+			final UUID categoryId,
+			final SortingAndPaging sAndP) {
+		final Criteria query = createCriteria();
+		final Criteria subQuery = query.createCriteria("challengeCategories");
+		subQuery.add(Restrictions.eq("category.id", categoryId));
+		sAndP.addStatusFilterToCriteria(subQuery);
+
+		return processCriteriaWithPaging(query, sAndP);
 	}
 }

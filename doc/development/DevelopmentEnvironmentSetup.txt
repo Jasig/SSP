@@ -186,7 +186,7 @@ How to set up your development environment:
 				pointing to your Tomcat installation directory.
 			- use the sts server pane to start / debug / stop the application
 		OR
-		- Deploy straight to an app server.o
+		- Deploy straight to an app server.
 		
 	- Building should be fairly straightforward, at the command line, run: 
 		mvn package
@@ -211,4 +211,7 @@ How to set up your development environment:
 		mvn properties:read-project-properties liquibase:update
 		mvn properties:read-project-properties liquibase:rollback -Dliquibase.rollbackCount=1
 	
-	
+	- Cobertura:
+		- You can run cobertura from maven, but you will need to enable the cobertura
+			maven profile in order for the spring classes to be properly proxied.
+		mvn cobertura:cobertura -Dspring.profiles.active=cobertura	

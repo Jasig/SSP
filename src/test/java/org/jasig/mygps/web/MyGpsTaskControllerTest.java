@@ -37,16 +37,20 @@ import com.google.common.collect.Lists;
 
 public class MyGpsTaskControllerTest {
 
-	private MyGpsTaskController controller;
+	private transient MyGpsTaskController controller;
 
-	private TaskService service;
-	private ChallengeService challengeService;
-	private ChallengeReferralService challengeReferralService;
-	private PersonService personService;
-	private SecurityServiceInTestEnvironment securityService;
+	private transient TaskService service;
+
+	private transient ChallengeService challengeService;
+
+	private transient ChallengeReferralService challengeReferralService;
+
+	private transient PersonService personService;
+
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = createMock(TaskService.class);
 		challengeService = createMock(ChallengeService.class);
 		challengeReferralService = createMock(ChallengeReferralService.class);
@@ -59,12 +63,12 @@ public class MyGpsTaskControllerTest {
 	}
 
 	@Test
-	public void createTaskForStudent() throws Exception {
+	public void createTaskForStudent() throws Exception { // NOPMD
 		final Person student = new Person();
 		student.setUserId("student id");
 		final String name = "custom task";
 		final String description = "custom task desc";
-		final String session = "12345";
+		final String session = "123456";
 		final Task task = new Task();
 
 		expect(personService.personFromUserId(student.getUserId())).andReturn(
@@ -88,12 +92,12 @@ public class MyGpsTaskControllerTest {
 	}
 
 	@Test
-	public void createCustom() throws Exception {
+	public void createCustom() throws Exception { // NOPMD
 		final String name = "custom task";
 		final String description = "custom task desc";
 		final Task task = new Task();
 		final Person student = new Person();
-		final String session = "12345";
+		final String session = "1234";
 
 		securityService.setCurrent(student);
 		securityService.setSessionId(session);
@@ -104,14 +108,14 @@ public class MyGpsTaskControllerTest {
 
 		replay(service);
 
-		TaskTO result = controller.createCustom(name, description);
+		final TaskTO result = controller.createCustom(name, description);
 
 		verify(service);
 		assertNotNull(result);
 	}
 
 	@Test
-	public void createForChallengeReferral() throws Exception {
+	public void createForChallengeReferral() throws Exception { // NOPMD
 		final UUID challengeId = UUID.randomUUID();
 		final Challenge challenge = new Challenge(challengeId);
 		final UUID challengeReferralId = UUID.randomUUID();
@@ -135,7 +139,7 @@ public class MyGpsTaskControllerTest {
 		replay(challengeReferralService);
 
 		try {
-			TaskTO response = controller.createForChallengeReferral(
+			final TaskTO response = controller.createForChallengeReferral(
 					challengeId, challengeReferralId);
 
 			verify(service);
@@ -143,36 +147,36 @@ public class MyGpsTaskControllerTest {
 			verify(challengeReferralService);
 			assertEquals(task.getId(), response.getId());
 		} catch (Exception e) {
-			fail("controller error");
+			fail("Some controller error thrown: " + e.getMessage());
 		}
 	}
 
 	@Test
 	public void delete() {
-		UUID taskId = UUID.randomUUID();
+		final UUID taskId = UUID.randomUUID();
 
 		try {
 			service.delete(taskId);
 
 			replay(service);
 
-			Boolean response = controller.delete(taskId);
+			final Boolean response = controller.delete(taskId);
 
 			verify(service);
 			assertTrue(response);
 		} catch (Exception e) {
-			fail("controller error");
+			fail("A controller error was thrown: " + e.getMessage());
 		}
 	}
 
 	@Test
-	public void email() throws Exception {
+	public void email() throws Exception { // NOPMD
 		final Person student = new Person();
 		final String session = "12345";
-		String emailAddress = "asdf@a.com";
-		List<Task> tasks = Lists.newArrayList();
+		final String emailAddress = "asdf@a.com";
+		final List<Task> tasks = Lists.newArrayList();
 
-		List<String> emailAddresses = Lists.newArrayList();
+		final List<String> emailAddresses = Lists.newArrayList();
 		emailAddresses.add(emailAddress);
 
 		securityService.setCurrent(student);
@@ -186,7 +190,7 @@ public class MyGpsTaskControllerTest {
 		replay(service);
 
 		try {
-			Boolean response = controller.email(emailAddress);
+			final Boolean response = controller.email(emailAddress);
 
 			verify(service);
 			assertTrue(response);
@@ -199,7 +203,7 @@ public class MyGpsTaskControllerTest {
 	public void getAll() {
 		final Person student = new Person();
 		final String session = "12345";
-		PagingWrapper<Task> tasks = new PagingWrapper<Task>(
+		final PagingWrapper<Task> tasks = new PagingWrapper<Task>(
 				new ArrayList<Task>());
 
 		securityService.setCurrent(student);
@@ -212,7 +216,7 @@ public class MyGpsTaskControllerTest {
 		replay(service);
 
 		try {
-			List<TaskTO> response = controller.getAll();
+			final List<TaskTO> response = controller.getAll();
 
 			verify(service);
 			assertNotNull(response);
@@ -223,9 +227,9 @@ public class MyGpsTaskControllerTest {
 
 	@Test
 	public void mark() {
-		UUID taskId = UUID.randomUUID();
-		Boolean complete = false;
-		Task task = new Task();
+		final UUID taskId = UUID.randomUUID();
+		final Boolean complete = false;
+		final Task task = new Task();
 		task.setId(taskId);
 
 		try {
@@ -234,7 +238,7 @@ public class MyGpsTaskControllerTest {
 
 			replay(service);
 
-			TaskTO response = controller.mark(taskId, complete);
+			final TaskTO response = controller.mark(taskId, complete);
 
 			verify(service);
 			assertEquals(task.getId(), response.getId());

@@ -10,7 +10,7 @@ import org.jasig.ssp.model.reference.EducationLevel;
  */
 @Repository
 public class EducationLevelDao extends
-		ReferenceAuditableCrudDao<EducationLevel>
+		AbstractReferenceAuditableCrudDao<EducationLevel>
 		implements AuditableCrudDao<EducationLevel> {
 
 	public EducationLevelDao() {

@@ -7,6 +7,7 @@ import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -28,12 +29,12 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	protected abstract AuditableCrudDao<T> getDao();
 
 	@Override
-	public PagingWrapper<T> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
 		return getDao().getAll(sAndP);
 	}
 
 	@Override
-	public T get(UUID id) throws ObjectNotFoundException {
+	public T get(final UUID id) throws ObjectNotFoundException {
 		final T obj = getDao().get(id);
 		if (ObjectStatus.ACTIVE.equals(obj.getObjectStatus())) {
 			return obj;
@@ -43,7 +44,8 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	}
 
 	@Override
-	public T create(T obj) throws ObjectNotFoundException {
+	public T create(final T obj) throws ObjectNotFoundException,
+			ValidationException {
 		return getDao().save(obj);
 	}
 
@@ -54,8 +56,8 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	public abstract T save(T obj) throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException {
-		T current = getDao().get(id);
+	public void delete(final UUID id) throws ObjectNotFoundException {
+		final T current = getDao().get(id);
 
 		if (!ObjectStatus.DELETED.equals(current.getObjectStatus())) {
 			// Object found and is not already deleted, set it and save change.

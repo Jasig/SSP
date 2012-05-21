@@ -1,9 +1,11 @@
-package org.jasig.ssp.web.api;
+package org.jasig.ssp.web.api; // NOPMD
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Set;
@@ -11,16 +13,24 @@ import java.util.UUID;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jasig.ssp.dao.MessageDao;
+import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -38,13 +48,23 @@ import com.google.common.collect.Sets;
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration()
 @Transactional
-public class PersonEarlyAlertControllerIntegrationTest {
+public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 
 	@Autowired
 	private transient PersonEarlyAlertController controller;
 
 	@Autowired
 	protected transient SessionFactory sessionFactory;
+
+	@Autowired
+	protected transient CampusService campusService;
+
+	// Can't use service because it doesn't offer GetAll or similar methods
+	@Autowired
+	protected transient MessageDao messageDao;
+
+	@Autowired
+	protected transient PersonService personService;
 
 	private static final UUID PERSON_ID = UUID
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
@@ -58,6 +78,11 @@ public class PersonEarlyAlertControllerIntegrationTest {
 
 	private static final UUID EARLY_ALERT_SUGGESTION_DELETED_ID = UUID
 			.fromString("881DF3DD-1AA6-4CB8-8817-E95DAF49227A");
+
+	private static final UUID CAMPUS_ID = UUID
+			.fromString("901E104B-4DC7-43F5-A38E-581015E204E1");
+
+	private static final String COURSE_NAME = "Some Really Fancy Course Name";
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -78,7 +103,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws Exception { // NOPMD
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -99,7 +124,7 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() throws Exception { // NOPMD
 		final Collection<EarlyAlertTO> list = controller.getAll(PERSON_ID,
 				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
@@ -115,12 +140,13 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerDelete() throws Exception {
+	public void testControllerDelete() throws Exception { // NOPMD
 		final String testEmailCC = "some@email.address.com"; // NOPMD by jon
 
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		obj.setPersonId(PERSON_ID);
 		obj.setEmailCC(testEmailCC);
+		obj.setCampusId(CAMPUS_ID);
 		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
 				.newHashSet();
 		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
@@ -165,10 +191,9 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	@Transactional()
-	public void testControllerGetSetsWithOnlyActiveReference() throws Exception {
+	@Ignore("Auto-filtering is not yet enabled.")
+	public void testControllerGetSetsWithOnlyActiveReference() throws Exception { // NOPMD
 		final EarlyAlertTO obj = createEarlyAlert();
-
 		final EarlyAlertTO saved = controller.create(PERSON_ID,
 				obj);
 		final Session session = sessionFactory.getCurrentSession();
@@ -187,18 +212,17 @@ public class PersonEarlyAlertControllerIntegrationTest {
 		session.clear();
 
 		// Reload data to make sure it filters correctly
-		// final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
+		final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
 
 		// TODO: ObjectStatus filter isn't working right now
+		final Set<EarlyAlertSuggestionTO> suggestions = reloaded
+				.getEarlyAlertSuggestionIds();
 
-		// final Set<EarlyAlertSuggestionTO> suggestions =
-		// reloaded.getEarlyAlertSuggestionIds();
-
-		// assertEquals("Set returned all objects instead of active only.", 1,
-		// suggestions.size());
-		// assertEquals("Saved instance sets did not match.",
-		// EARLY_ALERT_SUGGESTION_NAME,
-		// suggestions.iterator().next().getName());
+		assertEquals("Set returned all objects instead of active only.", 1,
+				suggestions.size());
+		assertEquals("Saved instance sets did not match.",
+				EARLY_ALERT_SUGGESTION_NAME, suggestions.iterator().next()
+						.getName());
 
 		final ServiceResponse response = controller.delete(savedId,
 				PERSON_ID);
@@ -206,23 +230,26 @@ public class PersonEarlyAlertControllerIntegrationTest {
 				response.isSuccess());
 	}
 
-	public static EarlyAlertTO createEarlyAlert() {
+	@Test(expected = ValidationException.class)
+	public void testControllerCreateWithInvalidDataGetId() throws Exception { // NOPMD
 		final EarlyAlertTO obj = new EarlyAlertTO();
-		obj.setPersonId(PERSON_ID);
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setClosedById(PERSON_ID);
+		obj.setId(UUID.randomUUID());
+		controller.create(UUID.randomUUID(), obj);
+		fail("Create with invalid Person UUID should have thrown exception.");
+	}
 
-		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
-				.newHashSet();
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
-		final EarlyAlertSuggestionTO deletedSuggestion = new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_DELETED_ID,
-				"EARLY_ALERT_SUGGESTION_DELETED_NAME");
-		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
-		earlyAlertSuggestionIds.add(deletedSuggestion);
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
-		return obj;
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerCreateWithInvalidDataEmptyId() throws Exception { // NOPMD
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		controller.create("", obj);
+		fail("Create with empty student ID should have thrown exception.");
+	}
+
+	@Test(expected = ObjectNotFoundException.class)
+	public void testControllerCreateWithInvalidData() throws Exception { // NOPMD
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		controller.create("bad id", obj);
+		fail("Create with invalid person UUID should have thrown exception.");
 	}
 
 	/**
@@ -233,8 +260,9 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerCreateWithStudentId() throws Exception {
+	public void testControllerCreateWithStudentId() throws Exception { // NOPMD
 		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setCampusId(CAMPUS_ID);
 		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
 				obj);
 		assertNotNull("Saved instance should not have been null.", saved);
@@ -265,12 +293,125 @@ public class PersonEarlyAlertControllerIntegrationTest {
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerCreateWithInvalidStudentId() throws Exception {
+	public void testControllerCreateWithInvalidStudentId() throws Exception { // NOPMD
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		final EarlyAlertTO saved = controller.create("invalid id",
 				obj);
 		assertNull(
 				"Invalid StudentID should have thrown an ObjectNotFoundException.",
 				saved);
+	}
+
+	/**
+	 * Test that student->coach is set during EarlyAlert creation.
+	 * 
+	 * <p>
+	 * This test assumes that the default campus EA coordinator is the system
+	 * administrator account.
+	 * 
+	 * @throws Exception
+	 *             If any exceptions are thrown by the controller.
+	 */
+	@Test
+	public void testControllerCreateAndSetCoach() throws Exception { // NOPMD
+		final Session session = sessionFactory.getCurrentSession();
+		final EarlyAlertTO obj = createEarlyAlert();
+		final UUID studentId = obj.getPersonId();
+		final Person student = personService.get(studentId);
+		student.setCoach(null);
+		assertNull("Test data coach should have been null.", student.getCoach());
+		session.flush();
+		assertNull("Student coach should have been null.", student.getCoach());
+
+		// No that coach has been cleared, save EarlyAlert to ensure it is reset
+		final EarlyAlertTO saved = controller.create(studentId, obj);
+		assertNotNull("Saved Early Alert should not have been null.", saved);
+
+		session.flush();
+		assertNotNull("Student coach should not have been null.",
+				student.getCoach());
+		session.evict(student);
+
+		final Person reloadedPerson = personService.get(studentId);
+
+		assertEquals("Coach IDs did not match.",
+				Person.SYSTEM_ADMINISTRATOR_ID,
+				reloadedPerson.getCoach().getId());
+	}
+
+	public static EarlyAlertTO createEarlyAlert() {
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setPersonId(PERSON_ID);
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setClosedById(PERSON_ID);
+		obj.setCampusId(UUID.fromString("901E104B-4DC7-43F5-A38E-581015E204E1"));
+
+		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
+				.newHashSet();
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
+		final EarlyAlertSuggestionTO deletedSuggestion = new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_DELETED_ID,
+				"EARLY_ALERT_SUGGESTION_DELETED_NAME");
+		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
+		earlyAlertSuggestionIds.add(deletedSuggestion);
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		return obj;
+	}
+
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		logger.info("Test");
+		assertNotNull("logger should not have been null.", logger);
+		assertEquals("Logger name was not specific to the class.",
+				"org.jasig.ssp.web.api.PersonEarlyAlertController",
+				logger.getName());
+	}
+
+	/**
+	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
+	 * action and check that the appropriate {@link Message}s are created.
+	 * 
+	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
+	 */
+	@Test
+	public void testControllerCreateAndMessageResults() throws Exception { // NOPMD
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setCampusId(CAMPUS_ID);
+		obj.setCourseName(COURSE_NAME);
+		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
+				obj);
+
+		final UUID savedId = saved.getId();
+
+		sessionFactory.getCurrentSession().flush();
+
+		// Get messages
+		final PagingWrapper<Message> data = messageDao
+				.getAll(ObjectStatus.ACTIVE);
+		final Collection<Message> msgs = data.getRows();
+		assertFalse("Some messages should have been entered.", msgs.isEmpty());
+
+		boolean found = false; // NOPMD by jon.adams on 5/20/12 10:06 PM
+		for (final Message msg : msgs) {
+			final String body = msg.getBody();
+			if (body.contains("\nYour instructor for "
+					+ COURSE_NAME
+					+ " notified me that you are experiencing issues that might affect ")) {
+				controller.getLogger().debug(
+						"Applicable message found. Body: {}", body);
+				found = true;
+				break;
+			}
+		}
+
+		assertTrue("Some message for this early alert should have been found.",
+				found);
+
+		final ServiceResponse response = controller.delete(savedId, PERSON_ID);
+		assertTrue("Deletion did not return success.",
+				response.isSuccess());
 	}
 }

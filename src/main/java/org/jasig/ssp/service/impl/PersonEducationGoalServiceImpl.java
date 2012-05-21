@@ -14,40 +14,45 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * PersonEducationGoal service implementation
+ */
 @Service
 public class PersonEducationGoalServiceImpl implements
 		PersonEducationGoalService {
 
 	@Autowired
-	private PersonEducationGoalDao dao;
+	private transient PersonEducationGoalDao dao;
 
 	@Autowired
-	private EducationGoalService educationGoalService;
+	private transient EducationGoalService educationGoalService;
 
 	@Override
-	public PagingWrapper<PersonEducationGoal> getAll(SortingAndPaging sAndP) {
+	public PagingWrapper<PersonEducationGoal> getAll(
+			final SortingAndPaging sAndP) {
 		return dao.getAll(sAndP);
 	}
 
 	@Override
-	public PersonEducationGoal get(UUID id) throws ObjectNotFoundException {
+	public PersonEducationGoal get(final UUID id)
+			throws ObjectNotFoundException {
 		return dao.get(id);
 	}
 
 	@Override
-	public PersonEducationGoal forPerson(Person person) {
+	public PersonEducationGoal forPerson(final Person person) {
 		return dao.forPerson(person);
 	}
 
 	@Override
-	public PersonEducationGoal create(PersonEducationGoal obj) {
+	public PersonEducationGoal create(final PersonEducationGoal obj) {
 		return dao.save(obj);
 	}
 
 	@Override
-	public PersonEducationGoal save(PersonEducationGoal obj)
+	public PersonEducationGoal save(final PersonEducationGoal obj)
 			throws ObjectNotFoundException {
-		PersonEducationGoal current = get(obj.getId());
+		final PersonEducationGoal current = get(obj.getId());
 
 		current.setObjectStatus(obj.getObjectStatus());
 		current.setDescription(obj.getDescription());
@@ -64,8 +69,8 @@ public class PersonEducationGoalServiceImpl implements
 	}
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException {
-		PersonEducationGoal current = get(id);
+	public void delete(final UUID id) throws ObjectNotFoundException {
+		final PersonEducationGoal current = get(id);
 
 		if (null != current) {
 			current.setObjectStatus(ObjectStatus.DELETED);

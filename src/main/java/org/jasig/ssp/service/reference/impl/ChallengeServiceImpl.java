@@ -3,10 +3,13 @@ package org.jasig.ssp.service.reference.impl;
 import java.util.List;
 
 import org.jasig.ssp.dao.reference.ChallengeDao;
+import org.jasig.ssp.model.reference.Category;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +20,6 @@ import com.google.common.collect.Lists;
 @Transactional
 public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 		implements ChallengeService {
-
-	public ChallengeServiceImpl() {
-		super();
-	}
 
 	@Autowired
 	transient private ChallengeDao dao;
@@ -36,8 +35,8 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 		final List<Challenge> challenges = dao.searchByQuery(query);
 		final List<Challenge> results = Lists.newArrayList();
 
-		for (Challenge challenge : challenges) {
-			long count = challengeReferralService
+		for (final Challenge challenge : challenges) {
+			final long count = challengeReferralService
 					.countByChallengeIdNotOnActiveTaskList(challenge,
 							securityService.currentUser().getPerson(),
 							securityService.getSessionId());
@@ -47,6 +46,13 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 		}
 
 		return results;
+	}
+
+	@Override
+	public PagingWrapper<Challenge> getAllForCategory(
+			final Category category,
+			final SortingAndPaging sAndP) {
+		return dao.getAllForCategory(category.getId(), sAndP);
 	}
 
 	@Override

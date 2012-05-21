@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  * Data access class for the Config reference entity.
  */
 @Repository
-public class ConfigDao extends ReferenceAuditableCrudDao<Config>
+public class ConfigDao extends AbstractReferenceAuditableCrudDao<Config>
 		implements AuditableCrudDao<Config> {
 
 	/**

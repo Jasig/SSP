@@ -22,14 +22,6 @@ public class VeteranStatusServiceImpl extends
 	transient private VeteranStatusDao dao;
 
 	/**
-	 * Constructor that sets the specific class types to be used by base class
-	 * methods.
-	 */
-	public VeteranStatusServiceImpl() {
-		super();
-	}
-
-	/**
 	 * Set the DAO instance
 	 * 
 	 * @param dao

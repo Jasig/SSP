@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface ConfidentialityDisclosureAgreementService extends
 		AuditableCrudService<ConfidentialityDisclosureAgreement> {
@@ -22,7 +23,7 @@ public interface ConfidentialityDisclosureAgreementService extends
 	@Override
 	ConfidentialityDisclosureAgreement create(
 			ConfidentialityDisclosureAgreement obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	ConfidentialityDisclosureAgreement save(

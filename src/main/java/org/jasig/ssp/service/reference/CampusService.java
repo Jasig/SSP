@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * Campus service
@@ -23,7 +24,8 @@ public interface CampusService extends
 	Campus get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	Campus create(Campus obj) throws ObjectNotFoundException;
+	Campus create(Campus obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	Campus save(Campus obj) throws ObjectNotFoundException;

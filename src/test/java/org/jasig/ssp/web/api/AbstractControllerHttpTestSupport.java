@@ -119,7 +119,7 @@ public abstract class AbstractControllerHttpTestSupport<C extends BaseController
 	 * @throws Exception
 	 */
 	protected Object getHandler(final MockHttpServletRequest request)
-			throws Exception {
+			throws Exception { // NOPMD by jon.adams on 5/16/12 12:00 PM
 		HandlerExecutionChain chain = null; // NOPMD by jon.adams on 5/14/12
 
 		final Map<String, HandlerMapping> map = applicationContext

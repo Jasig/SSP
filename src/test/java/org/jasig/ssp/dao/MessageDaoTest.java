@@ -1,8 +1,10 @@
-package org.jasig.ssp.dao;
+package org.jasig.ssp.dao; // NOPMD by jon.adams on 5/16/12 9:59 PM
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -33,44 +35,48 @@ public class MessageDaoTest {
 			.getLogger(MessageDaoTest.class);
 
 	@Autowired
-	private MessageDao dao;
+	private transient MessageDao dao;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Autowired
-	private PersonDao personDao;
+	private transient PersonDao personDao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
+	/**
+	 * Test the {@link MessageDao#save(Message)} and
+	 * {@link MessageDao#delete(Message)} actions.
+	 */
 	@Test
-	public void testSaveNew() throws ObjectNotFoundException {
-		UUID saved;
+	public void testSaveNew() {
+		final Message saved = dao.save(createTestMessage());
 
-		Message obj = new Message();
-		obj.setSubject("test subject");
-		obj.setBody("test body");
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setSender(personDao.fromUsername("ken"));
-		obj.setRecipient(personDao.fromUsername("dmr"));
-		obj.setRecipientEmailAddress("a@b.com");
-		dao.save(obj);
+		assertNotNull("Id should have been automatically generated.",
+				saved.getId());
+		final UUID savedId = saved.getId();
 
-		assertNotNull(obj.getId());
-		saved = obj.getId();
+		LOGGER.debug(saved.toString());
 
-		LOGGER.debug(obj.toString());
+		Message obj = null; // NOPMD by jon.adams on 5/16/12 9:59 PM
+		try {
+			obj = dao.get(savedId);
+		} catch (final ObjectNotFoundException e) {
+			fail("Saved message could not be found to reload.");
+		}
 
-		obj = dao.get(saved);
-		assertNotNull(obj);
-		assertNotNull(obj.getId());
+		assertNotNull("Saved message could not reloaded.", obj);
+		assertEquals("Saved and reloaded IDs do not match.", savedId,
+				obj.getId());
 
-		Collection<Message> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
-		assertNotNull(all);
-		assertTrue(all.size() > 0);
+		final Collection<Message> all = dao.getAll(ObjectStatus.ACTIVE)
+				.getRows();
+		assertNotNull("GetAll list should not have been null.", all);
+		assertFalse("GetAll list should not have been empty.", all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);
@@ -78,48 +84,48 @@ public class MessageDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Message fundingSource = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final Message obj = dao.get(id);
 
-		assertNull(fundingSource);
+		assertNull("Random ID should not have loaded any object.", obj);
 	}
 
-	private void assertList(Collection<Message> objects) {
-		for (Message object : objects) {
-			assertNotNull(object.getId());
+	private void assertList(final Collection<Message> objects) {
+		for (final Message object : objects) {
+			assertNotNull("List should not have contained any null objects.",
+					object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		Message obj = new Message();
-		obj.setSubject("test subject");
-		obj.setBody("test body");
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setSender(personDao.fromUsername("ken"));
-		obj.setRecipient(personDao.fromUsername("dmr"));
-		obj.setRecipientEmailAddress("a@b.com");
-		dao.save(obj);
+		final Message obj = dao.save(createTestMessage());
+		final Message obj2 = dao.save(createTestMessage());
 
-		Message obj2 = new Message();
-		obj2.setSubject("test subject");
-		obj2.setBody("test body");
-		obj2.setObjectStatus(ObjectStatus.ACTIVE);
-		obj2.setSender(personDao.fromUsername("ken"));
-		obj2.setRecipient(personDao.fromUsername("dmr"));
-		obj2.setRecipientEmailAddress("a@b.com");
-		dao.save(obj2);
-
-		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
-				+ obj2.getId().toString());
+		assertNotNull("Generated ID should not have been null.", obj.getId());
+		assertNotNull("Generated ID should not have been null.", obj2.getId());
 
 		dao.delete(obj);
 		dao.delete(obj2);
 	}
 
+	/**
+	 * Test that the queued list does not return any null objects. (But can
+	 * return an empty set.)
+	 */
 	@Test
 	public void queued() {
 		assertList(dao.queued());
 	}
 
+	/**
+	 * Create a new sample message to use for testing.
+	 * 
+	 * @return a new sample message to use for testing
+	 */
+	private Message createTestMessage() {
+		return new Message("test subject", "test body",
+				personDao.fromUsername("ken"), personDao.fromUsername("dmr"),
+				"a@b.com");
+	}
 }

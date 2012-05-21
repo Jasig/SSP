@@ -10,7 +10,7 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
  */
 @Repository
 public class ConfidentialityLevelDao extends
-		ReferenceAuditableCrudDao<ConfidentialityLevel>
+		AbstractReferenceAuditableCrudDao<ConfidentialityLevel>
 		implements AuditableCrudDao<ConfidentialityLevel> {
 
 	public ConfidentialityLevelDao() {

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -13,6 +14,9 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +27,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Maps;
 
 /**
  * Tests for {@link EarlyAlertOutcomeDao}.
@@ -117,7 +123,7 @@ public class EarlyAlertOutcomeDaoTest {
 	private void assertList(final Collection<EarlyAlertOutcome> objects) {
 		assertFalse("List should not have been empty.", objects.isEmpty());
 
-		for (EarlyAlertOutcome object : objects) {
+		for (final EarlyAlertOutcome object : objects) {
 			assertNotNull("List item should not have a null id.",
 					object.getId());
 		}
@@ -136,5 +142,36 @@ public class EarlyAlertOutcomeDaoTest {
 
 		assertNotNull("Transient instance was not assigned a new identifier.",
 				obj.getId());
+	}
+
+	@Test
+	public void testSortingInGetAll() {
+		// default sort order ("sortOrder ASC")
+		final PagingWrapper<EarlyAlertOutcome> data = dao
+				.getAll(new SortingAndPaging(ObjectStatus.ALL));
+		assertNotNull("Outcome data should not be null.", data);
+		assertFalse("Outcome data should not be empty.", data.getRows()
+				.isEmpty());
+
+		final EarlyAlertOutcome obj = data.getRows().iterator().next();
+		assertEquals("Default sorting did not return the correct order.",
+				UUID.fromString("12a58804-45dc-40f2-b2f5-d7e4403acee1"),
+				obj.getId());
+
+		// custom sort order ("sortOrder DESC")
+		final Map<String, SortDirection> sortFields = Maps.newHashMap();
+		sortFields.put("sortOrder", SortDirection.DESC);
+		final PagingWrapper<EarlyAlertOutcome> data2 = dao
+				.getAll(new SortingAndPaging(ObjectStatus.ALL, null, null,
+						sortFields, null, null));
+		assertNotNull("Outcome data should not be null.", data2);
+		assertFalse("Outcome data should not be empty.", data2.getRows()
+				.isEmpty());
+
+		final EarlyAlertOutcome obj2 = data2.getRows().iterator().next();
+		assertEquals(
+				"Descending sortOrder sorting did not return the correct order.",
+				UUID.fromString("077a1d57-6c85-42f7-922b-7642be9f70eb"),
+				obj2.getId());
 	}
 }

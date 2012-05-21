@@ -10,7 +10,7 @@ import org.jasig.ssp.model.reference.ChildCareArrangement;
  */
 @Repository
 public class ChildCareArrangementDao extends
-		ReferenceAuditableCrudDao<ChildCareArrangement>
+		AbstractReferenceAuditableCrudDao<ChildCareArrangement>
 		implements AuditableCrudDao<ChildCareArrangement> {
 
 	public ChildCareArrangementDao() {
