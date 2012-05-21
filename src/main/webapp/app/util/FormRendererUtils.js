@@ -1,6 +1,8 @@
 Ext.define('Ssp.util.FormRendererUtils',{	
 	extend: 'Ext.Component',
-	
+	config: {
+		additionalFieldsKeySeparator: '_'
+	},
 	initComponent: function() {
 		return this.callParent(arguments);
     },
@@ -117,6 +119,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
      *    @additionalFieldsMap - a series of fields to provide for description related field items
      */
     createForm: function( args ){
+    	var me=this;
     	var mainComponentType = args.mainComponentType;
     	var formId = args.formId;
     	var fieldSetTitle = args.fieldSetTitle || null;
@@ -145,12 +148,38 @@ Ext.define('Ssp.util.FormRendererUtils',{
 				comp.boxLabel = item.name;
 				comp.name = item.name;
 				comp.inputValue = itemId;
+
+				// determine if the component is selected
+				for (var s=0; s<selectedItems.length; s++)
+				{
+					selectedItem = selectedItems[s]
+					selectedId = selectedItem[selectedIdFieldName];					
+					if (selectedId==item[idFieldName])
+					{
+						comp.checked = true;					
+						break;
+					}
+				}				
 				
-				// loop through additional fields map and add fields to the form
+				// loop through additional fields map and add description type fields to the form
 				var fieldsArr = [];
 				fieldsArr.push( comp );
 				
-				additionalFieldsArr = this.getMappedFields( itemId, additionalFieldsMap );
+				additionalFieldsArr = me.getMappedFields( itemId, additionalFieldsMap );
+				
+				// populate the fields with selected values
+				for(var z=0; z<additionalFieldsArr.length; z++)
+				{
+					var field = additionalFieldsArr[z];
+					var names = field.name.split( me.additionalFieldsKeySeparator );
+					var value;
+					if ( selectedItem != null )
+					{
+						value = selectedItem[names[1]];
+						field.value=value;
+						
+					}
+				}	
 				
 		    	// add a fieldset if additional fields exist for this item
 		    	if (additionalFieldsArr.length>0)
@@ -159,35 +188,6 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			    	Ext.Array.insert(fieldsArr, 1, additionalFieldsArr);
 			    	Ext.apply(fields, {items: fieldsArr});
 		    	}
-		    	
-				/*	
-			    if (item.name.toLowerCase()=='other')
-				{
-					otherId = item[idFieldName];
-					var fields = {xtype: 'fieldset', padding: 0, layout: { type: 'auto' },title: ''};
-					var otherField = { xtype: 'textfield', name: 'otherDescription', fieldLabel: 'Description' };
-					cb.anchor = '100%';
-					Ext.apply(fields, {items: [cb, otherField]});
-				}
-				
-				
-				
-				// set selected items in the form
-				for (var s=0; s<selectedItems.length; s++)
-				{
-					selectedItem = selectedItems[s]
-					selectedId = selectedItem[selectedIdFieldName];					
-					if (selectedId==item[idFieldName])
-					{
-						cb.checked = true;
-						if (selectedId == otherId)
-						{
-							otherField.value = selectedItem['description'];
-						}					
-						break;
-					}
-				}
-				*/
 				
 				// if a fieldset is not defined, then just return a checkbox
 				if (fieldsArr.length > 1)
@@ -196,7 +196,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 				}else{
 					formFields.push( comp );
 				}				
-			}, this);
+			}, me);
 			
 			form.removeAll();
 			Ext.apply(wrapper, {items: formFields});
@@ -226,31 +226,126 @@ Ext.define('Ssp.util.FormRendererUtils',{
     /**
      * returns a field based on the parameters
      * in the map.
-     * @map
+     * @param map object
      *  fieldType
      *  name
      *  parentId
      *  label
      *  labelWidth
+     *  
+     *  Example:
+     *  {parentId: '365e8c95-f356-4f1f-8d79-4771ae8b0291',
+	 *   parentName: "other",
+	 *   name: "otherDescription", 
+	 *   label: "Please Explain", 
+     *   fieldType: "textarea",
+     *   labelWidth: defaultLabelWidth}
+     * @returns a field created by it's xtype
      */
-    getFieldFromMap: function(map){
-    	var field = { xtype: map.fieldType, name: map.parentId+'_'+map.name, fieldLabel: map.label, labelWidth: map.labelWidth };
+    getFieldFromMap: function( map ){
+    	var field = { xtype: map.fieldType, name: map.parentId + this.additionalFieldsKeySeparator + map.name, fieldLabel: map.label, labelWidth: map.labelWidth };
     	field.anchor = '100%';
     	
     	return field;
     },
     
-    findPropByName: function(obj, propName){
-    	var result = "";
-    	Ext.iterate(obj, function(key, value) {
-    		if (key.toLowerCase()=='otherdescription')
-			{
-    			result = value;
-			}
-		},this);
-    	return result;
+    /**
+     * Determines if the string is using
+     * the additionalFields model based on
+     * a separator for the field.
+     */
+    isAdditionalFieldKey: function( key ){
+    	var isKey = (key.indexOf( this.additionalFieldsKeySeparator ) != -1);
+    	return isKey;
     },
-   
+    
+    /**
+     * @param obj - a values object from a form
+     * @returns array of additionalField objects with name/value pairs
+     */
+    getAdditionalFieldsArrayFromFormValues: function( obj ){
+    	var fields = [];
+    	Ext.iterate(obj, function(key, value) {
+			if ( this.isAdditionalFieldKey( key ) )
+			{
+				keys = key.split( this.additionalFieldsKeySeparator );
+				fields.push( {id: keys[0], name: keys[1], value: value} );
+			} 
+		},this);
+    	return fields;
+    },
+    
+    /**
+     * @param obj - a values object from a form
+     * @returns the object clean of any keys that the signature
+     *          of an additional form field. ie. a description field
+     *          for one of the items in the form.
+     */
+    dropAdditionalFieldsKeysFromFormValues: function( obj ){
+    	Ext.iterate(obj, function(key, value) {
+			if ( this.isAdditionalFieldKey( key ) )
+			{
+				delete obj[key];
+			} 
+		},this);
+    	return obj;
+    },
+    
+    /**
+     * Method to create a json transfer object from
+     * the selected values in a form.
+     * This method is specifically for use with the
+     * AdditionalFieldMappings related object type,
+     * for dynamic check and radio objects.
+     * @idKey = the supplied name of the key field in the transfer object
+     * @formValues = an object containing key value pairs from the form
+     * @personId = a related key value for the object
+     * 
+     * @returns = an array of transfer objects for the selected items in the form
+     */
+	createTransferObjectFromSelectedValues: function(idKey, formValues, personId){
+		var transferObjects = [];	
+		var formUtils = this.formUtils;
+		var additionalFieldArr = [];
+		
+		// Loop through all the values in the form
+		// find the objects with an '_' character and save them to a new array
+		additionalFieldsArr = this.getAdditionalFieldsArrayFromFormValues( formValues );
+
+		// delete keys that match an additional fields signature, since they will be used to determine mapped description fields
+		// and not actual selected items
+		// compare the values in each of the keys against the selected items to create 
+		// a series of personEducationLevel objects to save
+		
+		formValues = this.dropAdditionalFieldsKeysFromFormValues( formValues );
+		
+		// Loop through all the values in the form and create
+		// transfer objects for them with an id field name matching
+		// the supplied idKey. For each transfer object, loop over the
+		// the additionalFields and match the id's to determine
+		// additional fields that should be supplied as descriptions
+		// against the mapped fields
+		Ext.iterate(formValues, function(key, value) {
+			var tObj = new Object();
+			tObj[idKey]=value;
+			tObj['personId'] = personId;
+			Ext.Array.each( additionalFieldsArr, function(field, index){
+				if (value==field.id)
+					tObj[field.name]=field.value;
+			}, this);
+			transferObjects.push( tObj );
+		});
+		
+		return transferObjects;
+	},    
+    
+	/**
+	 * @params
+	 * @arrayToSort - the array to sort props on
+	 * @fieldName - the field name to sort on
+	 * 
+	 * @returns - returns the sorted array
+	 */
     alphaSortByField: function( arrayToSort, fieldName ){
     	return Ext.Array.sort(arrayToSort, function(a, b){
     		 var nameA=a[fieldName].toLowerCase(), nameB=b[fieldName].toLowerCase()
@@ -262,6 +357,13 @@ Ext.define('Ssp.util.FormRendererUtils',{
     		});
     },
     
+    /**
+     * @params
+     * @values - an object of name/value pairs
+     * @modelType - the model type to set and return
+     * 
+     * @returns - a typed model object
+     */
     getSelectedValuesAsTransferObject: function( values, modelType ){
 		var selectedItems = [];
 		for ( prop in values )

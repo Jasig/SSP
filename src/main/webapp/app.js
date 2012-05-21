@@ -82,6 +82,7 @@ Ext.require([
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
 	'Ssp.util.TreeRendererUtils',
+	'Ssp.util.Constants',
     'Ssp.store.Tasks',
     'Ssp.store.Goals',
     'Ssp.store.JournalNotes',

@@ -1,7 +1,7 @@
 Ext.define('Ssp.view.admin.forms.journal.JournalStepDetailAdmin', {
 	extend: 'Ext.container.Container',
 	alias : 'widget.journalstepdetailadmin',
-	title: 'Challenge Referral Admin',
+	title: 'Journal Step Detail Admin',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.journal.JournalStepDetailAdminViewController',
