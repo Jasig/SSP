@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -14,6 +14,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertReferral;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -28,7 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 
 /**
  * Tests for {@link EarlyAlertReferralDao}.
@@ -161,8 +162,10 @@ public class EarlyAlertReferralDaoTest {
 				obj.getId());
 
 		// custom sort order ("sortOrder DESC")
-		final Map<String, SortDirection> sortFields = Maps.newHashMap();
-		sortFields.put("sortOrder", SortDirection.DESC);
+		final List<Pair<String, SortDirection>> sortFields = Lists
+				.newArrayList();
+		sortFields.add(new Pair<String, SortDirection>("sortOrder",
+				SortDirection.DESC));
 		final PagingWrapper<EarlyAlertReferral> data2 = dao
 				.getAll(new SortingAndPaging(ObjectStatus.ALL, null, null,
 						sortFields, null, null));
