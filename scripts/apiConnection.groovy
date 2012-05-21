@@ -42,6 +42,10 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	return conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff")
 }
 
+String addChallengeToCategory(ApiConnection conn){
+	String form = "\"7c0e5b76-9933-484a-b265-58cb280305a5\""
+	return conn.post("api/1/reference/category/5d24743a-a11e-11e1-a9a6-0026b9e7ff4c/challenge", form)
+}
 
 
 String toJson(def form){
@@ -57,7 +61,8 @@ String toJson(def form){
 JsonSlurper jsonParser = new JsonSlurper()
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "student0", "student0", false)
 
-String output = getStudentIntakeForm(conn, jsonParser)
+//String output = getStudentIntakeForm(conn, jsonParser)
+String output = addChallengeToCategory(conn) 
 
 conn.formatAndPrintJson(output)
 
