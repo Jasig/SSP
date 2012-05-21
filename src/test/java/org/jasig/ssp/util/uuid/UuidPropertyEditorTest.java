@@ -44,4 +44,12 @@ public class UuidPropertyEditorTest {
 		assertEquals("AsText(null) output did not return null.", null,
 				editor.getAsText());
 	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testInvalidId() {
+		editor.setAsText("invalid UUID");
+
+		assertEquals("Invalid UUID should have returned null.", null,
+				editor.getAsText());
+	}
 }

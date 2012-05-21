@@ -9,7 +9,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Property Editor for working with UUIDs
  * 
- * @author daniel
+ * @author daniel.bower
  * 
  */
 public class UuidPropertyEditor extends PropertyEditorSupport implements
