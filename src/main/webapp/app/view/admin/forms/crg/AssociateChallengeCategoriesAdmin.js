@@ -13,6 +13,7 @@ Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeCategoriesAdmin', {
     initComponent: function(){
     	Ext.apply(this,
     			{
+    		     singleExpand: true,
     			 store: this.store,
     			 useArrows: true,
     			 rootVisible: false,
@@ -23,14 +24,24 @@ Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeCategoriesAdmin', {
 			            enableDrop: true
 			        }
 			     },
-    			 dockedItems: [
+    			 dockedItems: [/*
      		              {
      		               xtype: 'toolbar',
+     		               dock: 'bottom',
      		               items: [{
      	                      xtype: 'label',
-     	                       text: 'Associate by dragging a Challenge to a folder'
+     	                       text: 'Associate by dragging a Challenge to a Category folder'
      	                     }]
-     		           } ] 
+     		           },*/{
+     				        dock: 'top',
+     				        xtype: 'toolbar',
+     				        items: [{
+     				            tooltip: 'Delete selected association',
+     				            text: 'Delete Associations',
+     				            xtype: 'button',
+     				            itemId: 'deleteAssociationButton'
+     				        }]
+     		    	    } ] 
      		       	
     	});
     	

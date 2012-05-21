@@ -59,6 +59,7 @@ Ext.require([
     'Ssp.view.admin.forms.journal.EditStep',
     'Ssp.view.admin.forms.journal.EditStepDetail',
     
+    'Ssp.model.util.TreeRequest',
     'Ssp.model.Configuration',
 	'Ssp.model.Person',
 	'Ssp.model.PersonGoal',

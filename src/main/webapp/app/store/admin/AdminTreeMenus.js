@@ -197,7 +197,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 								},{
 									text: 'Tracks',
 									title: 'Tracks',
-									store: '',
+									store: 'journalTracks',
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 								}]

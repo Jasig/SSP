@@ -45,9 +45,12 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 	      }]);
      	     	
     	// load the categories
-    	this.treeUtils.getItems({url: this.categoryUrl, 
-                                 nodeType: 'category', 
-                                 isLeaf: false});
+    	var treeRequest = new Ssp.model.util.TreeRequest();
+    	treeRequest.set('url', this.categoryUrl);
+    	treeRequest.set('nodeType','category');
+    	treeRequest.set('isLeaf', false);
+    	treeRequest.set('enableCheckedItems', false);	
+    	this.treeUtils.getItems( treeRequest );
 
 		return this.callParent(arguments);
     },
@@ -57,13 +60,13 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	var url = "";
     	var nodeType = "";
     	var isLeaf = false;
-    	var nodeName =  this.treeUtils.getNameFromNodeId(node.data.id);
-    	var id = this.treeUtils.getIdFromNodeId(node.data.id);
+    	var nodeName =  this.treeUtils.getNameFromNodeId( node.data.id );
+    	var id = this.treeUtils.getIdFromNodeId( node.data.id );
  
     	switch ( nodeName )
     	{
     		case 'category':
-    			url = this.challengeUrl; // +id;
+    			url = this.categoryUrl + id + '/challenge/';
     			nodeType = 'challenge';
     			break;
     			
@@ -81,10 +84,13 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 
     	if (url != "")
     	{
-    		this.treeUtils.getItems({url: url, 
-    			                    nodeType: nodeType, 
-    			                    isLeaf: isLeaf, 
-    			                    nodeToAppendTo: node});
+        	var treeRequest = new Ssp.model.util.TreeRequest();
+        	treeRequest.set('url', url);
+        	treeRequest.set('nodeType', nodeType);
+        	treeRequest.set('isLeaf', isLeaf);
+        	treeRequest.set('nodeToAppendTo', node);
+        	treeRequest.set('enableCheckedItems',false);	
+    		this.treeUtils.getItems( treeRequest );
     	}
     },
     

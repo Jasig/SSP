@@ -24,7 +24,12 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
             listeners: {
                 beforedrop: 'onBeforeDrop'
             }
-        }    	
+        },
+        
+        'deleteAssociationButton': {
+            click: 'onDeleteAssociationClick'
+        }
+        	
     },
     
 	constructor: function( config ) {
@@ -43,23 +48,28 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     },
     
     getParentItems: function(){
-    	this.treeUtils.getItems({url: this.apiProperties.getItemUrl( this.getParentItemType() ), 
-            nodeType: this.getParentItemType(), 
-            isLeaf: false});
+    	var treeRequest = new Ssp.model.util.TreeRequest();
+    	treeRequest.set('url', this.apiProperties.getItemUrl( this.getParentItemType() ) );
+    	treeRequest.set('nodeType', this.getParentItemType() );
+    	treeRequest.set('isLeaf', false);
+    	this.treeUtils.getItems( treeRequest );
     },
 
     getAssociatedItems: function(node, id){
-    	// TODO: Use the id prop to pull only the items associated with
-    	// the expanded node
-    	this.treeUtils.getItems({url: this.apiProperties.getItemUrl( this.getAssociatedItemType() ), 
-            nodeType: this.getAssociatedItemType(), 
-            isLeaf: true, 
-            nodeToAppendTo: node});
+    	var parentUrl = this.apiProperties.getItemUrl( this.parentItemType );
+    	var url = parentUrl + id + '/' + this.getAssociatedItemType() + '/';
+    	var treeRequest = new Ssp.model.util.TreeRequest();
+    	treeRequest.set('url',url);
+    	treeRequest.set('nodeType', this.getAssociatedItemType);
+    	treeRequest.set('isLeaf', true);
+    	treeRequest.set('nodeToAppendTo', node);
+    	treeRequest.set('enableCheckedItems', true);
+    	this.treeUtils.getItems( treeRequest );
     },
 
     onBeforeDrop: function(node, data, overModel, dropPosition, dropHandler, eOpts) {
     	var me=this;
-    	var jsonData, url, parentId, associatedItemId, node;
+    	var url, parentId, associatedItemId, node;
     	
     	// ensure the drop handler waits for the drop
     	dropHandler.wait=true;
@@ -67,25 +77,15 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	// handle drop on a folder
         if (!overModel.isLeaf() && dropPosition == 'append')
         {
-        	//console.log('challengeId' + data.records[0].get('id'));
-        	//console.log('challengeCategoryId' + overModel.data.id);
-        	//console.log("Make a call to add the challenge to the category.");
         	node = overModel;
         	parentId = this.treeUtils.getIdFromNodeId(node.data.id);
         	associatedItemId = data.records[0].get('id')
-        	jsonData = new Object();
-        	jsonData[me.getParentIdAttribute()] = parentId;
-        	jsonData[me.getAssociatedItemIdAttribute()] = associatedItemId;
-        	parentUrl = this.apiProperties.getItemUrl( this.getParentItemType() ) + parentId +'/' + this.getAssociatedItemType(); 	
+        	parentUrl = this.apiProperties.getItemUrl( this.getParentItemType() ) + parentId + '/' + this.getAssociatedItemType() + '/'; 	
         	url = me.apiProperties.createUrl( parentUrl );
-        	console.log(jsonData);
-        	console.log(url);
-        	console.log
-
 			me.apiProperties.makeRequest({
 				url: url,
 				method: 'POST',
-				jsonData: jsonData,
+				jsonData: '"' + associatedItemId + '"',
 				successFunc: function(response, view) {
 					me.getAssociatedItems(node, parentId);
 				}
@@ -101,33 +101,35 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         return 1;
     },
     
-    deleteAssociation: function(){
+    deleteAssociation: function( parentId, associatedItemId ){
     	var me=this;
-    	var jsonData, url, parentId, associatedItemId, node;
-    	
-    	/*
-    	 * TODO: If you can perform the delete then call the delete method to remove
-    	 * the association.
-    	 */
-    	
-    	/*
-    	node = overModel;
-    	parentId = this.treeUtils.getIdFromNodeId(node.data.id);
-    	associatedItemId = data.records[0].get('id')
-    	jsonData = new Object();
-    	jsonData[me.getParentIdAttribute()] = parentId;
-    	jsonData[me.getAssociatedItemIdAttribute()] = associatedItemId;
-    	parentUrl = this.apiProperties.getItemUrl( this.getParentItemType() ) + parentId +'/' + this.getAssociatedItemType();
-    	url = me.apiProperties.createUrl( parentUrl );
-
-    	me.apiProperties.makeRequest({
-			url: ,
-			method: 'DELETE',
-			jsonData: jsonData,
-			successFunc: successFunc = function(response, view) {
-				me.getAssociatedItems(node, parentId);
-			}; 
-		});
-		*/
-    }
+    	var url, parentId, associatedItemId;
+    	if ( parentId != "" && associatedItemId != null)
+    	{
+        	parentUrl = this.apiProperties.getItemUrl( this.getParentItemType() ) + parentId + '/' + this.getAssociatedItemType() + '/'; 	
+	    	url = me.apiProperties.createUrl( parentUrl );
+	    	me.apiProperties.makeRequest({
+				url: url,
+				method: 'DELETE',
+				jsonData: '"' + associatedItemId + '"',
+				successFunc: successFunc = function(response, view) {
+					// me.getAssociatedItems(node, parentId);
+					// TODO: Refresh the items
+				} 
+			});
+    	}
+    },
+    
+    onDeleteAssociationClick: function(){
+    	var tree = this.getView();
+    	var treeUtils = this.treeUtils;
+    	var records = tree.getView().getChecked();
+    	var parentId = treeUtils.getIdFromNodeId( records[0].data.parentId );
+    	var parentNode = tree.getView().getNode(parentId);
+	    Ext.Array.each(records, function(rec){
+	        var associatedItemId = treeUtils.getIdFromNodeId( rec.data.id );
+	        console.log( associatedItemId );
+	        this.deleteAssociation( parentId, associatedItemId );
+	    },this);
+	}
 });

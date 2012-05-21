@@ -30,13 +30,22 @@ Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
 				        }
 				 },    			 
     		     dockedItems: [
-     		              {
+     		              /*{
      		               xtype: 'toolbar',
      		               items: [{
      		                         xtype: 'label',
      		                         text: 'Associate by dragging a Referral to a folder'
      		                       }]  
-     		           }]
+     		           }*/{
+     				        dock: 'top',
+     				        xtype: 'toolbar',
+     				        items: [{
+     				            tooltip: 'Delete selected association',
+     				            text: 'Delete Associations',
+     				            xtype: 'button',
+     				            itemId: 'deleteAssociationButton'
+     				        }]
+     		    	    }]
      		       	
     	});
     	
