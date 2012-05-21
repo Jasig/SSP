@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface MaritalStatusService extends
 		AuditableCrudService<MaritalStatus> {
@@ -18,7 +19,8 @@ public interface MaritalStatusService extends
 	MaritalStatus get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	MaritalStatus create(MaritalStatus obj) throws ObjectNotFoundException;
+	MaritalStatus create(MaritalStatus obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	MaritalStatus save(MaritalStatus obj) throws ObjectNotFoundException;

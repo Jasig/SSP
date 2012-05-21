@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface CitizenshipService extends AuditableCrudService<Citizenship> {
 
@@ -17,7 +18,8 @@ public interface CitizenshipService extends AuditableCrudService<Citizenship> {
 	Citizenship get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	Citizenship create(Citizenship obj) throws ObjectNotFoundException;
+	Citizenship create(Citizenship obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	Citizenship save(Citizenship obj) throws ObjectNotFoundException;

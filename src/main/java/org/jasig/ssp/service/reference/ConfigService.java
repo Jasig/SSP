@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * Config service
@@ -29,7 +30,8 @@ public interface ConfigService extends
 	String getByNameNull(String name);
 
 	@Override
-	Config create(Config obj) throws ObjectNotFoundException;
+	Config create(Config obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	Config save(Config obj) throws ObjectNotFoundException;

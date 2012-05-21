@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
+
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface TaskService
 		extends PersonAssocService<Task> {
@@ -140,10 +143,11 @@ public interface TaskService
 	 * @return Created task
 	 * @throws ObjectNotFoundException
 	 *             If referenced data does not exist
+	 * @throws ValidationException
 	 */
 	Task createForPersonWithChallengeReferral(Challenge challenge,
 			ChallengeReferral challengeReferral, Person person, String sessionId)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	/**
 	 * Create a custom task for a person
@@ -154,19 +158,24 @@ public interface TaskService
 	 * @param sessionId
 	 * @return Created task
 	 * @throws ObjectNotFoundException
+	 * @throws ValidationException
 	 */
 	Task createCustomTaskForPerson(String name, String description,
-			Person student, String sessionId) throws ObjectNotFoundException;
+			Person student, String sessionId) throws ObjectNotFoundException,
+			ValidationException;
 
 	/**
 	 * Send a notice to the student about the task using the messageTemplate
 	 * 
 	 * @param customTask
 	 * @param messageTemplateId
-	 * @throws Exception
+	 * @throws ObjectNotFoundException
+	 * @throws ValidationException
+	 * @throws SendFailedException
 	 */
 	void sendNoticeToStudentOnCustomTask(Task customTask,
-			UUID messageTemplateId) throws Exception;
+			UUID messageTemplateId) throws ObjectNotFoundException,
+			ValidationException, SendFailedException;
 
 	/**
 	 * Send a list of the given tasks to each emailAddress and each recipient.
@@ -175,11 +184,13 @@ public interface TaskService
 	 * @param student
 	 * @param emailAddresses
 	 * @param recipients
-	 * @throws Exception
+	 * @throws ObjectNotFoundException
+	 * @throws ValidationException
 	 */
 	void sendTasksForPersonToEmail(final List<Task> tasks,
 			final Person student, final List<String> emailAddresses,
-			final List<Person> recipients) throws Exception;
+			final List<Person> recipients) throws ObjectNotFoundException,
+			ValidationException;
 
 	/**
 	 * Get tasks from taskIds

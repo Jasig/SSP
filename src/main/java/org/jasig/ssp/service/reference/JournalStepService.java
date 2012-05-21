@@ -8,6 +8,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface JournalStepService extends
 		AuditableCrudService<JournalStep> {
@@ -19,7 +20,8 @@ public interface JournalStepService extends
 	JournalStep get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	JournalStep create(JournalStep obj) throws ObjectNotFoundException;
+	JournalStep create(JournalStep obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	JournalStep save(JournalStep obj) throws ObjectNotFoundException;

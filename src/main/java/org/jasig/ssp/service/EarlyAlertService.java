@@ -1,6 +1,7 @@
 package org.jasig.ssp.service;
 
 import org.jasig.ssp.model.EarlyAlert;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * EarlyAlert service
@@ -20,5 +21,6 @@ public interface EarlyAlertService
 	 * @return The updated data object instance.
 	 */
 	@Override
-	EarlyAlert create(EarlyAlert obj) throws ObjectNotFoundException;
+	EarlyAlert create(EarlyAlert obj) throws ObjectNotFoundException,
+			ValidationException;
 }

@@ -20,14 +20,21 @@ public class JournalTrack extends AbstractReference implements
 
 	private static final long serialVersionUID = 2719277716161933677L;
 
+	public static final UUID JOURNALTRACK_EARLYALERT_ID = UUID
+			.fromString("B2D07B38-5056-A51A-809D-81EA2F3B27BF");
+
 	private int sortOrder;
 
+	/**
+	 * Journal steps. Changes to this side of the relationship are not
+	 * persisted.
+	 */
 	@OneToMany(mappedBy = "journalTrack")
 	private Set<JournalTrackJournalStep> journalTrackJournalSteps = new HashSet<JournalTrackJournalStep>(
 			0);
 
 	/**
-	 * Constructor
+	 * Empty constructor
 	 */
 	public JournalTrack() {
 		super();
@@ -57,6 +64,11 @@ public class JournalTrack extends AbstractReference implements
 		super(id, name);
 	}
 
+	/**
+	 * Gets the sort order
+	 * 
+	 * @return the sort order
+	 */
 	public int getSortOrder() {
 		return sortOrder;
 	}
@@ -81,15 +93,7 @@ public class JournalTrack extends AbstractReference implements
 
 	@Override
 	final public int hashCode() {
-		int result = hashPrime();
-
-		// Auditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
-
-		result *= sortOrder > 0 ? sortOrder : hashPrime();
-
-		return result;
+		return hashPrime() * super.hashCode()
+				* (sortOrder > 0 ? sortOrder : hashPrime());
 	}
 }

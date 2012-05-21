@@ -9,7 +9,11 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
+/**
+ * Category service
+ */
 public interface CategoryService extends AuditableCrudService<Category> {
 
 	@Override
@@ -19,7 +23,8 @@ public interface CategoryService extends AuditableCrudService<Category> {
 	Category get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	Category create(Category obj) throws ObjectNotFoundException;
+	Category create(Category obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	Category save(Category obj) throws ObjectNotFoundException;

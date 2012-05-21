@@ -18,7 +18,13 @@ public class JournalSource extends AbstractReference implements
 	private static final long serialVersionUID = 1586445096161244662L;
 
 	/**
-	 * Constructor
+	 * JournalSource EarlyAlert identifier
+	 */
+	public static final UUID JOURNALSOURCE_EARLYALERT_ID = UUID
+			.fromString("b2d07a00-5056-a51a-80b5-f725f1c5c3e2");
+
+	/**
+	 * Empty constructor
 	 */
 	public JournalSource() {
 		super();

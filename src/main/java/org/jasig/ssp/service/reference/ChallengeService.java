@@ -9,6 +9,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface ChallengeService extends AuditableCrudService<Challenge> {
 
@@ -19,7 +20,8 @@ public interface ChallengeService extends AuditableCrudService<Challenge> {
 	Challenge get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	Challenge create(Challenge obj) throws ObjectNotFoundException;
+	Challenge create(Challenge obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	Challenge save(Challenge obj) throws ObjectNotFoundException;

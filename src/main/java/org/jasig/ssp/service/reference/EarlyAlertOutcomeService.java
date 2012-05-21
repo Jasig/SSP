@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * EarlyAlertOutcome service
@@ -33,7 +34,7 @@ public interface EarlyAlertOutcomeService extends
 
 	@Override
 	EarlyAlertOutcome create(EarlyAlertOutcome obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	EarlyAlertOutcome save(EarlyAlertOutcome obj)

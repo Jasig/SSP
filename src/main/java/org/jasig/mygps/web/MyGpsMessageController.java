@@ -51,11 +51,11 @@ public class MyGpsMessageController extends BaseController {
 			messageParams.put("subj", messageTO.getSubject());
 			messageParams.put("mesg", messageTO.getMessage());
 
-			messageService.createMessage(coach,
+			messageService.createMessage(coach, null,
 					MessageTemplate.EMPTY_TEMPLATE_EMAIL_ID, messageParams);
 
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.error("ERROR : contactCoach() : {}", e.getMessage(), e);
 			throw e;
 		}

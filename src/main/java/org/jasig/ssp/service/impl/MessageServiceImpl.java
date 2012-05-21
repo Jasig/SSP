@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.impl;
+package org.jasig.ssp.service.impl; // NOPMD
 
 import java.util.Date;
 import java.util.List;
@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 import javax.mail.internet.MimeMessage;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
@@ -22,6 +23,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,19 +128,36 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public void createMessage(final Person to,
-			final UUID messageTemplateId,
+	public Message createMessage(@NotNull final Person to,
+			final String emailCC, @NotNull final UUID messageTemplateId,
 			final Map<String, Object> templateParameters)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, SendFailedException,
+			ValidationException {
+		if (to == null) {
+			throw new ValidationException("Recipient missing.");
+		}
+
+		if (to.getPrimaryEmailAddress() == null) {
+			throw new ValidationException(
+					"Recipient primary e-mail address is missing.");
+		}
+
 		final Message message = createMessage(messageTemplateId,
 				templateParameters);
 		message.setRecipient(to);
-		messageDao.save(message);
+
+		if (StringUtils.isEmpty(emailCC)) {
+			return messageDao.save(message);
+		} else {
+			// An extra CC needs added, only API available is sendMessage()
+			sendMessage(message, emailCC);
+			return message;
+		}
 	}
 
 	@Override
-	public Message createMessage(final String to,
-			final UUID messageTemplateId,
+	public Message createMessage(@NotNull final String to,
+			@NotNull final UUID messageTemplateId,
 			final Map<String, Object> templateParameters)
 			throws ObjectNotFoundException {
 		final Message message = createMessage(messageTemplateId,
@@ -157,7 +176,7 @@ public class MessageServiceImpl implements MessageService {
 		final List<Message> messages = messageDao.queued();
 		for (final Message message : messages) {
 			try {
-				sendMessage(message);
+				sendMessage(message, null);
 			} catch (final ObjectNotFoundException e) {
 				LOGGER.error("Could not load current user or administrator.", e);
 			} catch (final SendFailedException e) {
@@ -181,10 +200,11 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public boolean sendMessage(final Message message)
+	public boolean sendMessage(@NotNull final Message message,
+			final String emailCC)
 			throws ObjectNotFoundException, SendFailedException {
 		LOGGER.info("BEGIN : sendMessage()");
-		LOGGER.info("Sending message: {}", message.getId().toString());
+		LOGGER.info("Sending message: {}", message.toString());
 
 		try {
 			final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -210,7 +230,9 @@ public class MessageServiceImpl implements MessageService {
 						+ message.getRecipientEmailAddress() + "' is invalid");
 			}
 
-			if (!StringUtils.isEmpty(getBcc())) {
+			if (!StringUtils.isEmpty(emailCC)) { // NOPMD
+				mimeMessageHelper.setBcc(emailCC);
+			} else if (!StringUtils.isEmpty(getBcc())) {
 				mimeMessageHelper.setBcc(getBcc());
 			}
 

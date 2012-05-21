@@ -1,19 +1,39 @@
 package org.jasig.ssp.util.sort;
 
-public enum SortDirection {
-	ASC, DESC;
+import java.io.Serializable;
 
-	public static SortDirection getSortDirection(String sortDirection) {
+/**
+ * Sort direction
+ */
+public enum SortDirection implements Serializable {
+	/**
+	 * Ascending sort
+	 */
+	ASC,
+
+	/**
+	 * Descending sort
+	 */
+	DESC;
+
+	/**
+	 * Parses a string to get the equivalent sort direction enum.
+	 * 
+	 * @param sortDirection
+	 *            Sort direction (must be either "ASC" or "DESC",
+	 *            case-insensitive)
+	 * @return An equivalent sort direction, or {@link #ASC} if null or invalid
+	 *         parameters were sent.
+	 */
+	public static SortDirection getSortDirection(final String sortDirection) {
 		if (sortDirection == null) {
 			return ASC;
 		} else {
-			SortDirection result;
 			try {
-				result = valueOf(sortDirection);
-			} catch (Exception e) {
-				result = ASC;
+				return valueOf(sortDirection.toUpperCase()); // NOPMD
+			} catch (final Exception e) {
+				return ASC;
 			}
-			return result;
 		}
 	}
 }

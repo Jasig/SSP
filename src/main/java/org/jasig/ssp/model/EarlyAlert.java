@@ -65,7 +65,7 @@ public class EarlyAlert extends Auditable implements Serializable { // NOPMD
 	private UUID closedById;
 
 	/**
-	 * Associated person. Changes to this Person are not persisted.
+	 * Associated person. Changes to this Person <i>are</i> persisted.
 	 */
 	@ManyToOne
 	@JoinColumn(name = "person_id", nullable = false)

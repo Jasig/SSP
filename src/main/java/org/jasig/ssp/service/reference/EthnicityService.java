@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface EthnicityService extends AuditableCrudService<Ethnicity> {
 
@@ -17,7 +18,8 @@ public interface EthnicityService extends AuditableCrudService<Ethnicity> {
 	Ethnicity get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	Ethnicity create(Ethnicity obj) throws ObjectNotFoundException;
+	Ethnicity create(Ethnicity obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	Ethnicity save(Ethnicity obj) throws ObjectNotFoundException;

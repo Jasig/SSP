@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * StudentStatus service
@@ -21,7 +22,8 @@ public interface StudentStatusService extends
 	StudentStatus get(UUID id) throws ObjectNotFoundException;
 
 	@Override
-	StudentStatus create(StudentStatus obj) throws ObjectNotFoundException;
+	StudentStatus create(StudentStatus obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	StudentStatus save(StudentStatus obj) throws ObjectNotFoundException;

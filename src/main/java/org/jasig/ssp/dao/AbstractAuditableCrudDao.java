@@ -112,7 +112,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		}
 
 		// get the query results total count
-		Long totalRows = null;
+		Long totalRows = null; // NOPMD by jon on 5/20/12 4:42 PM
 
 		// Only query for total count if query is paged
 		if ((sAndP != null) && sAndP.isPaged()) {

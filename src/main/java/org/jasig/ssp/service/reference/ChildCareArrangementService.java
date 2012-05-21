@@ -7,6 +7,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface ChildCareArrangementService extends
 		AuditableCrudService<ChildCareArrangement> {
@@ -19,7 +20,7 @@ public interface ChildCareArrangementService extends
 
 	@Override
 	ChildCareArrangement create(ChildCareArrangement obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	ChildCareArrangement save(ChildCareArrangement obj)

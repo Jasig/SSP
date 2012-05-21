@@ -7,6 +7,7 @@ import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -43,7 +44,8 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	}
 
 	@Override
-	public T create(final T obj) throws ObjectNotFoundException {
+	public T create(final T obj) throws ObjectNotFoundException,
+			ValidationException {
 		return getDao().save(obj);
 	}
 
