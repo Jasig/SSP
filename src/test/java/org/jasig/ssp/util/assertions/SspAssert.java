@@ -8,7 +8,7 @@ import org.junit.ComparisonFailure;
  * @author jon.adams
  * 
  */
-public class Assert extends org.junit.Assert { // NOPMD by jon.adams
+public class SspAssert extends org.junit.Assert { // NOPMD by jon.adams
 	/**
 	 * Asserts that two objects are not equal. If they are, an
 	 * {@link AssertionError} is thrown with the given message. If

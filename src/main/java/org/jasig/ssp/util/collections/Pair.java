@@ -69,21 +69,21 @@ public class Pair<T, U>
 	}
 
 	@Override
-	public boolean equals(final Object oth)
+	public boolean equals(final Object obj)
 	{
-		if (this == oth)
+		if (this == obj)
 		{
 			return true;
 		}
 
-		if (oth == null || !(getClass().isInstance(oth)))
-		{
+		if (!(Pair.class.isInstance(obj))
+				|| !(getClass().equals(obj.getClass()))) {
 			return false;
 		}
 
 		// class cast checked in preceding block
 		@SuppressWarnings("unchecked")
-		final Pair<T, U> other = getClass().cast(oth);
+		final Pair<T, U> other = getClass().cast(obj);
 
 		return (first == null ? other.first == null : first.equals(other.first))
 				&& (second == null ? other.second == null : second

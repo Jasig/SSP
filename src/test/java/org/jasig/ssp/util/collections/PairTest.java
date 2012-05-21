@@ -1,6 +1,6 @@
 package org.jasig.ssp.util.collections;
 
-import static org.jasig.ssp.util.assertions.Assert.assertNotEquals;
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
