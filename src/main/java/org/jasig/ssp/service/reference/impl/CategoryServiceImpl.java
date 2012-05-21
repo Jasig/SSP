@@ -79,7 +79,7 @@ public class CategoryServiceImpl extends AbstractReferenceService<Category>
 		if (challengeCategories.getResults() > 0) {
 			for (ChallengeCategory item : challengeCategories
 					.getRows()) {
-				item.setObjectStatus(ObjectStatus.ACTIVE);
+				item.setObjectStatus(ObjectStatus.DELETED);
 
 				// we'll just return the last one
 				challengeCategory = challengeCategoryDao.save(item);
