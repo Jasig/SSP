@@ -17,7 +17,7 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 				{
 		    		store: this.store,
 		    		border: 0,
-				    dockedItems: [{
+		    		dockedItems: [{
 				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{xtype: 'button', itemId: 'saveStudentIntakeButton', text:'Save', action: 'save' },

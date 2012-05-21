@@ -106,13 +106,12 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 
 		defaultLabelWidth = 150;
 
-		educationGoalsAdditionalFieldsMap = [{parentId: '78b54da7-fb19-4092-bb44-f60485678d6b', 
+		educationGoalsAdditionalFieldsMap = [{parentId: Ssp.util.Constants.EDUCATIONAL_GOAL_OTHER_ID, 
 			  parentName: "other",
 			  name: "otherDescription", 
 			  label: "Please Explain", 
 			  fieldType: "textfield",
 			  labelWidth: defaultLabelWidth}];
-		
 		
 		educationGoalFormProps = {
 				mainComponentType: 'radio',
@@ -126,43 +125,43 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
 		this.formUtils.createForm( educationGoalFormProps );	
 
-		educationLevelsAdditionalFieldsMap = [{parentId: '5d967ba0-e086-4426-85d5-29bc86da9295', 
+		educationLevelsAdditionalFieldsMap = [{parentId: Ssp.util.Constants.EDUCATION_LEVEL_NO_DIPLOMA_GED_ID, 
 			                                   parentName: "no diploma/no ged", 
 			                                   name: "lastYearAttended", 
 			                                   label: "Last Year Attended",
 			                                   fieldType: "textfield", 
 			                                   labelWidth: defaultLabelWidth},
-		                                      {parentId: '5d967ba0-e086-4426-85d5-29bc86da9295', 
+		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_NO_DIPLOMA_GED_ID, 
 			                                   parentName: "no diploma/no ged", 
 			                                   name: "highestGradeCompleted", 
 			                                   label: "Highest Grade Completed", 
 			                                   fieldType: "textfield", 
 			                                   labelWidth: defaultLabelWidth},
-		                                      {parentId: '710add1c-7b53-4cbe-86cb-8d7c5837d68b', 
+		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_GED_ID, 
 			                                   parentName: "ged", 
 			                                   name: "graduatedYear", 
 			                                   label: "Year of GED", 
 			                                   fieldType: "textfield",
 			                                   labelWidth: defaultLabelWidth},
-		                                      {parentId: 'f4780d23-fd8a-4758-b772-18606dca32f0', 
+		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_HIGH_SCHOOL_GRADUATION_ID, 
 			                                   parentName: "high school graduation", 
 			                                   name: "graduatedYear", 
 			                                   label: "Year Graduated", 
 			                                   fieldType: "textfield",
 			                                   labelWidth: defaultLabelWidth},
-		     		                        {parentId: 'f4780d23-fd8a-4758-b772-18606dca32f0', 
+		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_HIGH_SCHOOL_GRADUATION_ID, 
 			                                 parentName: "high school graduation", 
 			                                 name: "schoolName", 
 			                                 label: "High School Attended", 
 			                                 fieldType: "textfield",
 			                                 labelWidth: defaultLabelWidth},
-		     		                        {parentId: 'c5111182-9e2f-4252-bb61-d2cfa9700af7', 
+		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_SOME_COLLEGE_CREDITS_ID, 
 			                                 parentName: "some college credits", 
 			                                 name: "lastYearAttended", 
 			                                 label: "Last Year Attended", 
 			                                 fieldType: "textfield",
 			                                 labelWidth: defaultLabelWidth},
-		     		                        {parentId: '247165ae-3db4-4679-ac95-ca96488c3b27', 
+		     		                        {parentId: Ssp.util.EDUCATION_LEVEL_OTHER_ID, 
 			                                 parentName: "other", 
 			                                 name: "otherDescription", 
 			                                 label: "Please Explain", 
@@ -180,11 +179,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
                 additionalFieldsMap: educationLevelsAdditionalFieldsMap };
 		
 		this.formUtils.createForm( educationLevelFormProps );
-	
 
-		fundingSourcesAdditionalFieldsMap = [{parentId: '365e8c95-f356-4f1f-8d79-4771ae8b0291', 
+		fundingSourcesAdditionalFieldsMap = [{parentId: Ssp.util.Constants.FUNDING_SOURCE_OTHER_ID, 
 											  parentName: "other",
-											  name: "otherDescription", 
+											  name: "description", 
 											  label: "Please Explain", 
 											  fieldType: "textarea",
 											  labelWidth: defaultLabelWidth}];
@@ -201,9 +199,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
 		this.formUtils.createForm( fundingSourceFormProps );	
 		
-		challengesAdditionalFieldsMap = [{parentId: '365e8c95-f356-4f1f-8d79-4771ae8b0291',
+		challengesAdditionalFieldsMap = [{parentId: Ssp.util.Constants.CHALLENGE_OTHER_ID,
 			                              parentName: "other",
-			                              name: "otherDescription", 
+			                              name: "description", 
 			                              label: "Please Explain", 
 			                              fieldType: "textarea",
 			                              labelWidth: defaultLabelWidth}];
@@ -222,6 +220,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	},    
     
 	save: function( button ) {
+		var formUtils = this.formUtils;
 		var personalForm = Ext.getCmp('StudentIntakePersonal').getForm();
 		var demographicsForm = Ext.getCmp('StudentIntakeDemographics').getForm();
 		var educationPlansForm = Ext.getCmp('StudentIntakeEducationPlans').getForm();
@@ -234,12 +233,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var demographicsFormModel = null;
 		var educationPlansFormModel = null;
 		var educationGoalFormModel = null;
-		var educationLevelObj = null;
-		var otherEducationLevelDescription = "";
-		var fundingObj = null;
-		var otherFundingDescription = "";
-		var challengeObj = null;
-		var otherChallengeDescription = "";
+		var educationLevelFormValues = null;
+		var fundingFormValues = null;
+		var challengesFormValues = null;
 		
 		var studentIntakeFormModel = null;
 		var personId = "";
@@ -276,32 +272,16 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			intakeData.personEducationGoal.personId = personId;
 			intakeData.personEducationPlan.personId = personId;
 
-			// set selected education levels
-			educationLevelObj = educationLevelsForm.getValues();
-			otherEducationLevelDescription = this.formUtils.findPropByName(educationLevelObj, 'otherDescription');
-			// remove the other description key
-			var key = Ext.Object.getKey(educationLevelObj,otherEducationLevelDescription);
-			if (key != null);
-				delete educationLevelObj[key];
-			intakeData.personEducationLevels = this.getSelectedEducationLevels(educationLevelObj, personId, otherEducationLevelDescription);
+			educationLevelFormValues = educationLevelsForm.getValues();
+			intakeData.personEducationLevels = formUtils.createTransferObjectFromSelectedValues('educationLevelId', educationLevelFormValues, personId);	
+	
+			fundingFormValues = fundingForm.getValues();
+			intakeData.personFundingSources = formUtils.createTransferObjectFromSelectedValues('fundingSourceId', fundingFormValues, personId);	
 			
-			// set selected funding
-			fundingObj = fundingForm.getValues();
-			otherFundingDescription = this.formUtils.findPropByName(fundingObj, 'otherDescription');
-			// remove the other description key
-			var key = Ext.Object.getKey(fundingObj,otherFundingDescription);
-			if (key != null);
-				delete fundingObj[key];
-			intakeData.personFundingSources = this.getSelectedFunding(fundingObj, personId, otherFundingDescription);
-			
-			// set selected challenges
-			challengeObj = challengesForm.getValues();
-			otherChallengeDescription = this.formUtils.findPropByName(challengeObj, 'otherDescription');
-			// remove the other description key
-			var key = Ext.Object.getKey(challengeObj,otherChallengeDescription);
-			if (key != null);
-				delete challengeObj[key];
-			intakeData.personChallenges = this.getSelectedChallenges(challengeObj, personId, otherChallengeDescription);
+			challengesFormValues = challengesForm.getValues();
+			intakeData.personChallenges = formUtils.createTransferObjectFromSelectedValues('challengeId', challengesFormValues, personId);
+
+			console.log( intakeData );
 			
 			Ext.Ajax.request({
 				url: this.apiProperties.createUrl(this.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
@@ -320,51 +300,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			Ext.Msg.alert('Invalid Data','Please correct the errors in this Student Intake before saving the record.');
 		}
 		
-	},
-	
-	getSelectedFunding: function(formValues, personId, otherFieldValue){
-		var selectedItems = [];
-		Ext.iterate(formValues, function(key, value) {
-			var obj;
-			if (key.toLowerCase()=='other')
-			{
-				obj = {fundingSourceId: value, personId: personId, description: otherFieldValue};
-			}else{
-				obj = {fundingSourceId: value, personId: personId};
-			}
-			selectedItems.push( obj );
-		});
-		return selectedItems;
-	},
-
-	getSelectedChallenges: function(formValues, personId, otherFieldValue){
-		var selectedItems = [];
-		Ext.iterate(formValues, function(key, value) {
-			var obj;
-			if (key.toLowerCase()=='other')
-			{
-				obj = {challengeId: value, personId: personId, description: otherFieldValue};
-			}else{
-				obj = {challengeId: value, personId: personId};
-			}
-			selectedItems.push( obj );
-		});
-		return selectedItems;
-	},
-	
-	getSelectedEducationLevels: function(formValues, personId, otherFieldValue){
-		var selectedItems = [];
-		Ext.iterate(formValues, function(key, value) {
-			var obj;
-			if (key.toLowerCase()=='other')
-			{
-				obj = {educationLevelId: value, personId: personId, description: otherFieldValue};
-			}else{
-				obj = {educationLevelId: value, personId: personId};
-			}
-			selectedItems.push( obj );
-		});
-		return selectedItems;
 	},
 	
 	viewConfidentialityAgreement: function(button){
