@@ -112,7 +112,8 @@ public class CategoryController
 	@RequestMapping(value = "/{id}/challenge", method = RequestMethod.DELETE)
 	public @ResponseBody
 	ServiceResponse removeChallengeFromCategory(@PathVariable final UUID id,
-			@RequestBody final UUID challengeId) throws ObjectNotFoundException {
+			@RequestBody @NotNull final UUID challengeId)
+			throws ObjectNotFoundException {
 
 		final Challenge challenge = challengeService.get(challengeId);
 		final Category category = service.get(id);
