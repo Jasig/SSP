@@ -9,6 +9,7 @@ import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,12 @@ public class ChallengeReferralServiceImpl extends
 	public List<ChallengeReferral> getChallengeReferralsByChallengeId(
 			final Challenge challenge) {
 		return dao.byChallengeId(challenge.getId());
+	}
+
+	@Override
+	public PagingWrapper<ChallengeReferral> getAllForChallenge(
+			final Challenge challenge, final SortingAndPaging sAndP) {
+		return dao.getAllForChallenge(challenge.getId(), sAndP);
 	}
 
 	@Override

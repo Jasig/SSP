@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,8 @@ import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -96,7 +99,7 @@ public class ChallengeReferralDaoTest {
 		assertNull(challengeReferral);
 	}
 
-	private void assertList(List<ChallengeReferral> objects) {
+	private void assertList(Collection<ChallengeReferral> objects) {
 		for (ChallengeReferral object : objects) {
 			assertNotNull(object.getId());
 		}
@@ -146,6 +149,15 @@ public class ChallengeReferralDaoTest {
 		List<ChallengeReferral> crs = dao.byChallengeIdNotOnActiveTaskList(
 				testChallenge.getId(), testStudent, "testSessionId");
 		assertList(crs);
+	}
+
+	@Test
+	public void getAllForChallenge() {
+		final PagingWrapper<ChallengeReferral> challengeReferrals = dao
+				.getAllForChallenge(
+						UUID.randomUUID(), new SortingAndPaging(
+								ObjectStatus.ACTIVE));
+		assertList(challengeReferrals.getRows());
 	}
 
 }

@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.reference.Category;
 import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeChallengeReferral;
+import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -33,4 +35,10 @@ public interface ChallengeService extends AuditableCrudService<Challenge> {
 
 	PagingWrapper<Challenge> getAllForCategory(Category category,
 			SortingAndPaging sAndP);
+
+	ChallengeChallengeReferral addChallengeReferralToChallenge(
+			ChallengeReferral referral, Challenge challenge);
+
+	ChallengeChallengeReferral removeChallengeReferralFromChallenge(
+			ChallengeReferral referral, Challenge challenge);
 }
