@@ -155,7 +155,7 @@ public class EarlyAlertOutcomeDaoTest {
 
 		final EarlyAlertOutcome obj = data.getRows().iterator().next();
 		assertEquals("Default sorting did not return the correct order.",
-				UUID.fromString("c0a80092-3756-1826-8137-5659e6ba0000"),
+				UUID.fromString("12a58804-45dc-40f2-b2f5-d7e4403acee1"),
 				obj.getId());
 
 		// custom sort order ("sortOrder DESC")
