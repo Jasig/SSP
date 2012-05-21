@@ -83,21 +83,32 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     /*
      * @records - Array of records in json format.
      * @isLeaf - Determines if the returned nodes array contains branch or leaf elements
-     *             The default is to return branch elements.  
+     *             The default is to return branch elements.
+     * @nodeType - An optional description for the node type. Used to identify the type of node for drag
+     *             and drop functionality. For example with a nodeType set to 'challenge', the node will
+     *             be created with an id such as 12345_challenge.  
      */
-    createNodesFromJson: function(records, isLeaf, nodeType){
+    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection){
     	var nodeIdentifier = "";
+    	var enableCheckSelection = enableCheckSelection;
     	var nodes = [];
     	var nodeName = nodeType || "";
     	if (nodeName != "")
     		nodeIdentifier = '_' + nodeName;
+    	
     	Ext.each(records, function(name, index) {
-    		nodes.push({
-    	    	        text: records[index].name,
-    	    	        id: records[index].id + nodeIdentifier,
-    	    	        leaf: isLeaf || false
-    	    	      });
+    		var nodeData = {
+        	        text: records[index].name,
+        	        id: records[index].id + nodeIdentifier,
+        	        leaf: isLeaf || false
+        	      };
+        	
+        	if (enableCheckSelection && isLeaf==true)
+        		nodeData['checked']=false;
+        	
+    		nodes.push( nodeData );
     	});
+    	
     	return nodes;
     },   
  
@@ -107,15 +118,19 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 	 * @args.nodeType - An optional name to append to the id to determine the name of node
 	 * @args.isLeaf - Boolean, whether or not the items are branch or leaf nodes
 	 * @args.nodeToAppendTo = the rootNode to append the items
+	 * @args.enableCheckedItems = boolean to determine if a checkbox is created for leaf items in the tree
      */
-    getItems: function( args ){
+    getItems: function( treeRequest ){
     	var me=this;
-    	var destroyBeforeAppend = false;
-    	if (args.destroyBeforeAppend)
-    		destroyBeforeAppend = true;
-    	// retrieve categories
+    	var destroyBeforeAppend = treeRequest.get('destroyBeforeAppend');
+    	var url = treeRequest.get('url');
+    	var isLeaf = treeRequest.get('isLeaf');
+    	var enableCheckSelection = treeRequest.get('enableCheckedItems');
+    	var nodeToAppendTo = treeRequest.get('nodeToAppendTo');
+    	var nodeType = treeRequest.get('nodeType');
+    	// retrieve items
 		this.apiProperties.makeRequest({
-			url: this.apiProperties.createUrl(args.url),
+			url: this.apiProperties.createUrl( url ),
 			method: 'GET',
 			jsonData: '',
 			successFunc: function(response,view){
@@ -124,8 +139,8 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	var nodes = [];
 		    	if (records.length > 0)
 		    	{
-		    		nodes = me.createNodesFromJson(records, args.isLeaf, args.nodeType);
-		    		me.appendChildren( args.nodeToAppendTo, nodes);
+		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection);
+		    		me.appendChildren( nodeToAppendTo, nodes);
 		    	}
 			}
 		});
