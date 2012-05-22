@@ -1,4 +1,4 @@
-Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
+Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     extend: 'Deft.mvc.ViewController',	
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
@@ -7,35 +7,28 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'editjournal'
+    	formToDisplay: 'earlyalertresponse'
     },
     control: {
-    	'addButton': {
-			click: 'onAddClick'
-		},
-		
-		'editButton': {
-			click: 'onEditClick'
+    	'respondButton': {
+			click: 'onRespondClick'
 		},
 		
 		'viewHistoryButton': {
 			click: 'onViewHistoryClick'
 		}
 	},
+	
     constructor: function() {
     	this.store.load();
 		return this.callParent(arguments);
     },
     
-    onAddClick: function(button){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-    },
-    
-    onEditClick: function(button){
+    onRespondClick: function(button){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
     },
 
     onViewHistoryClick: function(button){
-	 console.log('JournalToolViewController->onViewHistoryClick');
+	 console.log('EarlyAlertToolViewController->onViewHistoryClick');
     }
 });

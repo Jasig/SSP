@@ -69,6 +69,11 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			comp.boxLabel = item.name;
 			comp.name = selectedIdFieldName;
 			comp.inputValue = item[idFieldName];
+			comp.listeners = {
+				change: function(comp, oldValue, newValue, eOpts){
+					comp.fireEvent('dynamicCompChange', newValue);
+				}	
+			};
 			
 			// loop through additional fields map and add fields to the form
 			var fieldsArr = [];
@@ -142,9 +147,9 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			this.createRadioButtonGroup(args);
 		}else{
 			Ext.each(itemsArr, function(item, index){
+				var itemId = item[idFieldName];
 				// create the items for the form
 				var comp = {xtype: mainComponentType};
-				var itemId = item[idFieldName];
 				comp.boxLabel = item.name;
 				comp.name = item.name;
 				comp.inputValue = itemId;
@@ -195,7 +200,8 @@ Ext.define('Ssp.util.FormRendererUtils',{
 					formFields.push(fields);
 				}else{
 					formFields.push( comp );
-				}				
+				}
+				
 			}, me);
 			
 			form.removeAll();
@@ -245,7 +251,6 @@ Ext.define('Ssp.util.FormRendererUtils',{
     getFieldFromMap: function( map ){
     	var field = { xtype: map.fieldType, name: map.parentId + this.additionalFieldsKeySeparator + map.name, fieldLabel: map.label, labelWidth: map.labelWidth };
     	field.anchor = '100%';
-    	
     	return field;
     },
     
@@ -339,6 +344,15 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		return transferObjects;
 	},    
     
+	/**
+	 * Allows an additional field to be hidden until
+	 * an item is selected that is associated with the 
+	 * hidden field.
+	 */
+    onMapFieldHidden: function( comp, eOpts){
+    	comp.setValue("");
+    },
+	
 	/**
 	 * @params
 	 * @arrayToSort - the array to sort props on

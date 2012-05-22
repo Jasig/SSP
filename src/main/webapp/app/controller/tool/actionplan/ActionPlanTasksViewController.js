@@ -8,7 +8,6 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
     	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
     	store: 'tasksStore'
-    	
     },
     
     config: {
@@ -60,7 +59,7 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanTasksViewController', {
 		
 		personId = this.person.get('id');
 		this.personTaskUrl = this.apiProperties.getItemUrl('personTask');
-		this.personTaskUrl=this.personTaskUrl.replace('{id}',personId);
+		this.personTaskUrl = this.personTaskUrl.replace('{id}',personId);
 		
 		this.personViewHistoryUrl = this.apiProperties.getItemUrl('personViewHistory');
 		this.personViewHistoryUrl = this.personViewHistoryUrl.replace('{id}',personId);

@@ -32,7 +32,10 @@ Ext.require([
     'Ssp.view.tools.studentintake.Funding',
     'Ssp.view.tools.studentintake.Personal',
     'Ssp.view.tools.Journal',
+    'Ssp.view.tools.journal.EditJournal',
+    'Ssp.view.tools.journal.TrackTree',
     'Ssp.view.tools.EarlyAlert',
+    'Ssp.view.tools.earlyalert.EarlyAlertResponse',
     'Ssp.view.admin.AdminForms',
     'Ssp.view.admin.forms.AbstractReferenceAdmin',
     'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
@@ -68,6 +71,8 @@ Ext.require([
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
 	'Ssp.model.tool.studentintake.PersonEducationPlan',
 	'Ssp.model.tool.actionplan.Task',
+	'Ssp.model.tool.earlyalert.PersonEarlyAlert',
+	'Ssp.model.tool.earlyalert.EarlyAlertResponse',
 	'Ssp.model.tool.journal.Note',
 	'Ssp.model.reference.AbstractReference',
     'Ssp.model.reference.Challenge',
@@ -87,6 +92,7 @@ Ext.require([
     'Ssp.store.Tasks',
     'Ssp.store.Goals',
     'Ssp.store.JournalNotes',
+    'Ssp.store.EarlyAlerts',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
 	'Ssp.store.reference.Campuses',
@@ -158,6 +164,7 @@ var apiUrls = [
   {name: 'personEarlyAlert', url: 'person/{id}/earlyAlert/'},
   {name: 'personEarlyAlertResponse', url: 'person/{id}/earlyAlert/{id}/earlyAlertResponse/'},
   {name: 'personGoal', url: 'person/{id}/goal/'},
+  {name: 'personJournal', url: 'person/{id}/journal/'},
   {name: 'personTask', url: 'person/{id}/task/'},
   {name: 'personViewHistory', url: 'person/{id}/history/print/'},
   {name: 'personPrintTask', url: 'person/{id}/task/print/'},
@@ -263,6 +270,18 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         },
+        currentJournalNote:{
+	        fn: function(){
+	            return new Ssp.model.tool.journal.Note({id:""});
+	    	},
+	        singleton: true
+        },
+        currentEarlyAlertResponse:{
+	        fn: function(){
+	            return new Ssp.model.tool.earlyalert.EarlyAlertResponse({id:""});
+	    	},
+	        singleton: true
+        },
         treeStore:{
 	        fn: function(){
 	            return Ext.create('Ext.data.TreeStore',{
@@ -274,10 +293,11 @@ Ext.onReady(function(){
 	            });
 	    	},
 	        singleton: true
-        },
+        }, 
 	    tasksStore: 'Ssp.store.Tasks',
 	    goalsStore: 'Ssp.store.Goals',
 	    journalNotesStore: 'Ssp.store.JournalNotes',
+	    earlyAlertsStore: 'Ssp.store.EarlyAlerts',
 		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 		campusesStore: 'Ssp.store.reference.Campuses',
