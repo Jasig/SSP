@@ -1,8 +1,13 @@
 package org.jasig.ssp.dao;
 
-import org.springframework.stereotype.Repository;
+import java.util.UUID;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.tool.PersonTool;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.stereotype.Repository;
 
 /**
  * CRUD methods for the PersonDemographics model.
@@ -16,4 +21,11 @@ public class PersonToolsDao extends
 		super(PersonTool.class);
 	}
 
+	public PagingWrapper<PersonTool> getAllForPersonId(
+			final UUID personId,
+			final SortingAndPaging sAndP) {
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("person.id", personId));
+		return processCriteriaWithPaging(query, sAndP);
+	}
 }
