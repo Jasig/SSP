@@ -37,4 +37,18 @@
 			<dropColumn tableName="challenge_category" columnName="category_id"/>
 		</rollback>
 	</changeSet>
+	
+	<changeSet author="daniel.bower" id="add person to goal">
+		<addColumn tableName="goal">
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="goal_person_id_person_id" 
+					references="person(id)" />
+			</column>
+		</addColumn>
+		
+		<rollback>
+			<dropColumn tableName="goal" columnName="person_id"/>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

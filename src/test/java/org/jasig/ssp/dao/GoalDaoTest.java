@@ -4,10 +4,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.ssp.dao.GoalDao;
 import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -28,7 +28,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("reference/dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class GoalDaoTest {
@@ -37,18 +37,18 @@ public class GoalDaoTest {
 			.getLogger(GoalDaoTest.class);
 
 	@Autowired
-	private GoalDao dao;
+	private transient GoalDao dao;
 
 	@Autowired
-	private ConfidentialityLevelService confidentialityLevelService;
+	private transient ConfidentialityLevelService confidentialityLevelService;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	private ConfidentialityLevel testConfidentialityLevel;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 		testConfidentialityLevel = confidentialityLevelService
 				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()
@@ -63,6 +63,7 @@ public class GoalDaoTest {
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setConfidentialityLevel(testConfidentialityLevel);
+		obj.setPerson(securityService.currentUser().getPerson());
 		dao.save(obj);
 
 		assertNotNull(obj.getId());
@@ -91,30 +92,16 @@ public class GoalDaoTest {
 		assertNull(goal);
 	}
 
-	private void assertList(final List<Goal> objects) {
+	private void assertList(final Collection<Goal> objects) {
 		for (Goal object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
-	public void uuidGeneration() {
-		Goal obj = new Goal();
-		obj.setName("new name");
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setConfidentialityLevel(testConfidentialityLevel);
-		dao.save(obj);
-
-		Goal obj2 = new Goal();
-		obj2.setName("new name");
-		obj2.setObjectStatus(ObjectStatus.ACTIVE);
-		obj2.setConfidentialityLevel(testConfidentialityLevel);
-		dao.save(obj2);
-
-		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
-				+ obj2.getId().toString());
-
-		dao.delete(obj);
-		dao.delete(obj2);
+	public void getAllForPersonId() {
+		assertList(dao.getAllForPersonId(UUID.randomUUID(),
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE)).getRows());
 	}
 }

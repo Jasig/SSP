@@ -1,31 +1,54 @@
 package org.jasig.ssp.transferobject;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.Goal;
-import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
+import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 
 import com.google.common.collect.Lists;
 
-public class GoalTO extends AbstractReferenceTO<Goal>
-		implements TransferObject<Goal> {
+public class GoalTO
+		extends AbstractAuditableTO<Goal>
+		implements TransferObject<Goal>, Serializable {
 
-	public UUID confidentialityLevelId;
+	private static final long serialVersionUID = 1L;
+
+	@NotNull
+	@NotEmpty
+	private String name;
+
+	private String description;
+
+	private UUID personId;
+
+	public ConfidentialityLevelLiteTO confidentialityLevel;
 
 	public GoalTO() {
 		super();
 	}
 
-	public GoalTO(final UUID id, final String name,
-			final String description) {
-		super(id, name, description);
-	}
-
 	public GoalTO(final Goal model) {
 		super();
 		from(model);
+	}
+
+	@Override
+	public final void from(final Goal model) {
+		super.from(model);
+
+		name = model.getName();
+		description = model.getDescription();
+		personId = model.getPerson() == null ? null
+				: model.getPerson().getId();
+		confidentialityLevel = ConfidentialityLevelLiteTO.fromModel(
+				model.getConfidentialityLevel());
+
 	}
 
 	public static List<GoalTO> toTOList(
@@ -37,20 +60,36 @@ public class GoalTO extends AbstractReferenceTO<Goal>
 		return tObjects;
 	}
 
-	public UUID getConfidentialityLevelId() {
-		return confidentialityLevelId;
+	public String getName() {
+		return name;
 	}
 
-	public void setConfidentialityLevelId(final UUID confidentialityLevelId) {
-		this.confidentialityLevelId = confidentialityLevelId;
+	public void setName(final String name) {
+		this.name = name;
 	}
 
-	@Override
-	public final void from(final Goal model) {
-		super.from(model);
+	public String getDescription() {
+		return description;
+	}
 
-		if (model.getConfidentialityLevel() != null) {
-			confidentialityLevelId = model.getConfidentialityLevel().getId();
-		}
+	public void setDescription(final String description) {
+		this.description = description;
+	}
+
+	public UUID getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(final UUID personId) {
+		this.personId = personId;
+	}
+
+	public ConfidentialityLevelLiteTO getConfidentialityLevel() {
+		return confidentialityLevel;
+	}
+
+	public void setConfidentialityLevel(
+			final ConfidentialityLevelLiteTO confidentialityLevel) {
+		this.confidentialityLevel = confidentialityLevel;
 	}
 }
