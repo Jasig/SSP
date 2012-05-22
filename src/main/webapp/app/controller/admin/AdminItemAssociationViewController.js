@@ -101,7 +101,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         return 1;
     },
     
-    deleteAssociation: function( parentId, associatedItemId ){
+    deleteAssociation: function( parentId, associatedItemId, node ){
     	var me=this;
     	var url, parentId, associatedItemId;
     	if ( parentId != "" && associatedItemId != null)
@@ -113,8 +113,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
 				method: 'DELETE',
 				jsonData: '"' + associatedItemId + '"',
 				successFunc: successFunc = function(response, view) {
-					// me.getAssociatedItems(node, parentId);
-					// TODO: Refresh the items
+					me.getAssociatedItems(node, parentId);
 				} 
 			});
     	}
@@ -125,11 +124,16 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	var treeUtils = this.treeUtils;
     	var records = tree.getView().getChecked();
     	var parentId = treeUtils.getIdFromNodeId( records[0].data.parentId );
-    	var parentNode = tree.getView().getNode(parentId);
-	    Ext.Array.each(records, function(rec){
+    	// To set the parentNode use the full parentId, while the previously set parentId attribute
+    	// used the treeUtils.getIdFromNodeId() method to trim the id of the category description
+    	// so the id from the database could be ascertained. The actual parentId attribute in the data
+    	// from the record is separated by a character like this: 'guid_category'
+    	var parentNode = tree.getView().getStore().findRecord('id', records[0].data.parentId ); 
+
+    	Ext.Array.each(records, function(rec){
 	        var associatedItemId = treeUtils.getIdFromNodeId( rec.data.id );
 	        console.log( associatedItemId );
-	        this.deleteAssociation( parentId, associatedItemId );
+	        this.deleteAssociation( parentId, associatedItemId, parentNode );
 	    },this);
 	}
 });
