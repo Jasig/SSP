@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 
 public class TaskTO
 		extends AbstractAuditableTO<Task>
@@ -19,8 +20,9 @@ public class TaskTO
 	private String name, description;
 	private boolean completed, deletable;
 	private Date dueDate, completedDate, reminderSentDate;
-	private UUID personId, challengeId, challengeReferralId,
-			confidentialityLevelId;
+	private UUID personId, challengeId, challengeReferralId;
+
+	private ConfidentialityLevelLiteTO confidentialityLevel;
 
 	public TaskTO() {
 		super();
@@ -36,26 +38,27 @@ public class TaskTO
 		super.from(task);
 
 		type = task.getType();
-		completed = (task.getCompletedDate() != null) ? true : false;
+		completed = (task.getCompletedDate() != null);
 		deletable = task.isDeletable();
 		dueDate = task.getDueDate();
+		completedDate = task.getCompletedDate();
+		reminderSentDate = task.getReminderSentDate();
 
 		if (task.getChallenge() != null) {
 			challengeId = task.getChallenge().getId();
 		}
 
-		if (task.getChallengeReferral() != null) {
+		if (task.getChallengeReferral() == null) {
+			name = task.getName();
+			description = task.getDescription();
+		} else {
 			challengeReferralId = task.getChallengeReferral().getId();
 			name = task.getChallengeReferral().getName();
 			description = task.getChallengeReferral().getPublicDescription();
-		} else {
-			name = task.getName();
-			description = task.getDescription();
 		}
 
-		if (task.getConfidentialityLevel() != null) {
-			confidentialityLevelId = task.getConfidentialityLevel().getId();
-		}
+		confidentialityLevel = ConfidentialityLevelLiteTO.fromModel(
+				task.getConfidentialityLevel());
 
 		if (description != null) {
 			description = description.replaceAll("\\<.*?>", "");
@@ -165,12 +168,12 @@ public class TaskTO
 		this.personId = personId;
 	}
 
-	public UUID getConfidentialityLevelId() {
-		return confidentialityLevelId;
+	public ConfidentialityLevelLiteTO getConfidentialityLevel() {
+		return confidentialityLevel;
 	}
 
-	public void setConfidentialityLevelId(
-			final UUID confidentialityLevel) {
-		this.confidentialityLevelId = confidentialityLevel;
+	public void setConfidentialityLevel(
+			final ConfidentialityLevelLiteTO confidentialityLevel) {
+		this.confidentialityLevel = confidentialityLevel;
 	}
 }
