@@ -77,7 +77,7 @@ public class JournalEntryTO
 			final Collection<JournalEntry> journalEntries) {
 		final List<JournalEntryTO> journalEntryTOs = new ArrayList<JournalEntryTO>();
 		if ((journalEntries != null) && !journalEntries.isEmpty()) {
-			for (final JournalEntry journalEntry : journalEntries) {
+			for (JournalEntry journalEntry : journalEntries) {
 				journalEntryTOs.add(new JournalEntryTO(journalEntry)); // NOPMD
 			}
 		}
