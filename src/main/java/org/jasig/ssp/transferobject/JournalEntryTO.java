@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.JournalEntry;
+import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 
 /**
  * JournalEntry transfer object
@@ -22,8 +23,9 @@ public class JournalEntryTO
 
 	private String comment;
 
-	private UUID personId, journalSourceId, journalTrackId,
-			confidentialityLevelId;
+	private UUID personId, journalSourceId, journalTrackId;
+
+	private ConfidentialityLevelLiteTO confidentialityLevel;
 
 	private List<JournalEntryJournalStepDetailTO> journalEntryJournalStepDetails;
 
@@ -51,8 +53,9 @@ public class JournalEntryTO
 				: journalEntry.getJournalSource().getId();
 		journalTrackId = journalEntry.getJournalTrack() == null ? null
 				: journalEntry.getJournalTrack().getId();
-		confidentialityLevelId = journalEntry.getConfidentialityLevel() == null ? null
-				: journalEntry.getConfidentialityLevel().getId();
+
+		confidentialityLevel = ConfidentialityLevelLiteTO.fromModel(
+				journalEntry.getConfidentialityLevel());
 
 		if ((journalEntry.getJournalEntryJournalStepDetails() != null)
 				&& (journalEntry.getJournalEntryJournalStepDetails().size() > 0)) {
@@ -63,7 +66,7 @@ public class JournalEntryTO
 	}
 
 	/**
-	 * Convert a collection of JournalEntry models to equivelent transfer
+	 * Convert a collection of JournalEntry models to equivalent transfer
 	 * objects.
 	 * 
 	 * @param journalEntries
@@ -134,12 +137,13 @@ public class JournalEntryTO
 		this.journalTrackId = journalTrackId;
 	}
 
-	public UUID getConfidentialityLevelId() {
-		return confidentialityLevelId;
+	public ConfidentialityLevelLiteTO getConfidentialityLevel() {
+		return confidentialityLevel;
 	}
 
-	public void setConfidentialityLevelId(final UUID confidentialityLevelId) {
-		this.confidentialityLevelId = confidentialityLevelId;
+	public void setConfidentialityLevel(
+			final ConfidentialityLevelLiteTO confidentialityLevel) {
+		this.confidentialityLevel = confidentialityLevel;
 	}
 
 	public List<JournalEntryJournalStepDetailTO> getJournalEntryJournalStepDetails() {
