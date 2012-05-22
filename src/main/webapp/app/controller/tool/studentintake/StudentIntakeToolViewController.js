@@ -32,13 +32,72 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	},
     
 	init: function() {
+
+    	// Create a custom validator for
+		// mapped field types
+		Ext.apply(Ext.form.field.VTypes, {
+            //  vtype validation function
+            mappedFieldValidator: function(val, field) {
+            	var valid = true;
+            	var exp = new RegExp(field.validationExpression);
+            	var check = Ext.ComponentQuery.query('#'+field.parentId)[0];
+            	console.log(exp);
+            	if (check != null)
+            	{
+            		if (check.getValue()==true)
+            		{
+                    	valid = exp.test(val);
+            		}
+            	}
+            	return valid;
+            }
+        });		
+		
+		// This enables mapped text fields and mapped text areas
+		// to be show or hidden upon selection from a parent object
+		// such as a dynamic check box.
+		this.appEventsController.getApplication().addListener('dynamicCompChange', function( comp ){
+			var tfArr = Ext.ComponentQuery.query('.mappedtextfield');
+			var taArr = Ext.ComponentQuery.query('.mappedtextarea');
+			
+			// show or hide mapped text fields
+			Ext.each(tfArr,function(item, index){
+				if (comp.id==item.parentId)
+				{
+					if(comp.checked)
+					{
+						item.show();
+						Ext.apply(item,{allowBlank:false});
+					}else{
+						item.hide();
+						Ext.apply(item,{allowBlank:true});
+					}
+				}	
+			},this);
+			
+			// show or hide mapped text area components
+			Ext.each(taArr,function(item, index){
+				if (comp.id==item.parentId)
+				{
+					if(comp.checked)
+					{
+						item.show();
+					}else{
+						item.hide();
+					}
+				}	
+			},this);
+		},this);
+		
+		
+		
 		// Load the Student Intake
 		Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
 		Form.load(this.currentPerson.getId(),{
 			success: this.loadStudentIntakeResult,
 			scope: this
-		});	
-				
+		});
+		
 		return this.callParent(arguments);
     },
     
@@ -129,43 +188,45 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			                                   parentName: "no diploma/no ged", 
 			                                   name: "lastYearAttended", 
 			                                   label: "Last Year Attended",
-			                                   fieldType: "textfield", 
-			                                   labelWidth: defaultLabelWidth},
+			                                   fieldType: "mappedtextfield", 
+			                                   labelWidth: defaultLabelWidth,},
 		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_NO_DIPLOMA_GED_ID, 
 			                                   parentName: "no diploma/no ged", 
 			                                   name: "highestGradeCompleted", 
 			                                   label: "Highest Grade Completed", 
-			                                   fieldType: "textfield", 
+			                                   fieldType: "mappedtextfield", 
 			                                   labelWidth: defaultLabelWidth},
 		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_GED_ID, 
 			                                   parentName: "ged", 
 			                                   name: "graduatedYear", 
 			                                   label: "Year of GED", 
-			                                   fieldType: "textfield",
+			                                   fieldType: "mappedtextfield",
 			                                   labelWidth: defaultLabelWidth},
 		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_HIGH_SCHOOL_GRADUATION_ID, 
 			                                   parentName: "high school graduation", 
 			                                   name: "graduatedYear", 
 			                                   label: "Year Graduated", 
-			                                   fieldType: "textfield",
-			                                   labelWidth: defaultLabelWidth},
+			                                   fieldType: "mappedtextfield",
+			                                   labelWidth: defaultLabelWidth,
+			                                   validationExpression: '^(19|20)\\d{2}$',
+			                                   validationErrorMessage: "This field requires a valid year."},
 		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_HIGH_SCHOOL_GRADUATION_ID, 
 			                                 parentName: "high school graduation", 
 			                                 name: "schoolName", 
 			                                 label: "High School Attended", 
-			                                 fieldType: "textfield",
+			                                 fieldType: "mappedtextfield",
 			                                 labelWidth: defaultLabelWidth},
 		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_SOME_COLLEGE_CREDITS_ID, 
 			                                 parentName: "some college credits", 
 			                                 name: "lastYearAttended", 
 			                                 label: "Last Year Attended", 
-			                                 fieldType: "textfield",
+			                                 fieldType: "mappedtextfield",
 			                                 labelWidth: defaultLabelWidth},
-		     		                        {parentId: Ssp.util.EDUCATION_LEVEL_OTHER_ID, 
+		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_OTHER_ID, 
 			                                 parentName: "other", 
 			                                 name: "otherDescription", 
 			                                 label: "Please Explain", 
-			                                 fieldType: "textarea",
+			                                 fieldType: "mappedtextarea",
 			                                 labelWidth: defaultLabelWidth}];		
 		
 		educationLevelFormProps = {
@@ -184,7 +245,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 											  parentName: "other",
 											  name: "description", 
 											  label: "Please Explain", 
-											  fieldType: "textarea",
+											  fieldType: "mappedtextarea",
 											  labelWidth: defaultLabelWidth}];
 		
 		fundingSourceFormProps = {
@@ -203,7 +264,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			                              parentName: "other",
 			                              name: "description", 
 			                              label: "Please Explain", 
-			                              fieldType: "textarea",
+			                              fieldType: "mappedtextarea",
 			                              labelWidth: defaultLabelWidth}];
 		
 		challengeFormProps = {

@@ -1,5 +1,9 @@
 Ext.define('Ssp.util.FormRendererUtils',{	
 	extend: 'Ext.Component',
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+        appEventsController: 'appEventsController'
+    },
 	config: {
 		additionalFieldsKeySeparator: '_'
 	},
@@ -69,11 +73,6 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			comp.boxLabel = item.name;
 			comp.name = selectedIdFieldName;
 			comp.inputValue = item[idFieldName];
-			comp.listeners = {
-				change: function(comp, oldValue, newValue, eOpts){
-					comp.fireEvent('dynamicCompChange', newValue);
-				}	
-			};
 			
 			// loop through additional fields map and add fields to the form
 			var fieldsArr = [];
@@ -142,6 +141,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		var wrapper = {xtype: 'fieldset', padding: 0, border: 0, layout: { type: 'auto' },title: fieldSetTitle};
 		var formFields = [];
 		var selectedItems = selectedItemsArr || [];
+		
 		if ( mainComponentType == 'radio' )
 		{
 			this.createRadioButtonGroup(args);
@@ -149,11 +149,24 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			Ext.each(itemsArr, function(item, index){
 				var itemId = item[idFieldName];
 				// create the items for the form
-				var comp = {xtype: mainComponentType};
+				var comp = {xtype: 'mappedcheckbox'};
+				comp.id = itemId;
+				comp.mapId = itemId;
 				comp.boxLabel = item.name;
 				comp.name = item.name;
 				comp.inputValue = itemId;
+				comp.listeners = {
+					change: function(comp, oldValue, newValue, eOpts){
+						me.appEventsController.getApplication().fireEvent('dynamicCompChange', comp);
+					}	
+				};
 
+				// loop through additional fields map and add description type fields to the form
+				var fieldsArr = [];
+				fieldsArr.push( comp );
+				
+				additionalFieldsArr = me.getMappedFields( itemId, additionalFieldsMap );				
+				
 				// determine if the component is selected
 				for (var s=0; s<selectedItems.length; s++)
 				{
@@ -162,29 +175,25 @@ Ext.define('Ssp.util.FormRendererUtils',{
 					if (selectedId==item[idFieldName])
 					{
 						comp.checked = true;					
+						
+						// populate the additional fields with selected values
+						for(var z=0; z<additionalFieldsArr.length; z++)
+						{
+							var field = additionalFieldsArr[z];
+							var names = field.name.split( me.additionalFieldsKeySeparator );
+							if ( field.parentId == selectedId )
+							{
+								field.setValue( selectedItem[names[1]] );
+							}else{
+								field.setValue("");
+							}
+						}							
+
 						break;
 					}
-				}				
+				}
 				
-				// loop through additional fields map and add description type fields to the form
-				var fieldsArr = [];
-				fieldsArr.push( comp );
-				
-				additionalFieldsArr = me.getMappedFields( itemId, additionalFieldsMap );
-				
-				// populate the fields with selected values
-				for(var z=0; z<additionalFieldsArr.length; z++)
-				{
-					var field = additionalFieldsArr[z];
-					var names = field.name.split( me.additionalFieldsKeySeparator );
-					var value;
-					if ( selectedItem != null )
-					{
-						value = selectedItem[names[1]];
-						field.value=value;
-						
-					}
-				}	
+				this.hideEmptyFields(additionalFieldsArr);
 				
 		    	// add a fieldset if additional fields exist for this item
 		    	if (additionalFieldsArr.length>0)
@@ -208,6 +217,22 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			Ext.apply(wrapper, {items: formFields});
 			form.insert(form.items.length, wrapper);
 		}
+    },
+    
+    /**
+     * Hides fields with no value set.
+     */
+    hideEmptyFields: function( arr ){
+    	Ext.each(arr, function(item, index){
+    		if (item.getValue()=="")
+    		{
+    			item.hide();
+    			Ext.apply(item,{allowBlank:true});
+    		}else{
+    			item.show();
+    			Ext.apply(item,{allowBlank:false});
+    		}
+    	});
     },
     
     /**
@@ -246,11 +271,38 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	 *   label: "Please Explain", 
      *   fieldType: "textarea",
      *   labelWidth: defaultLabelWidth}
+     * 
      * @returns a field created by it's xtype
      */
     getFieldFromMap: function( map ){
-    	var field = { xtype: map.fieldType, name: map.parentId + this.additionalFieldsKeySeparator + map.name, fieldLabel: map.label, labelWidth: map.labelWidth };
-    	field.anchor = '100%';
+    	var field = Ext.createWidget( map.fieldType.toLowerCase() );
+    	var valErrorText = 'Not a valid input.';
+    	var validationExpression=field.validationExpression;
+    	if (map.validationExpression != null)
+    		validationExpression=map.validationExpression;
+    	if (map.validationErrorMessage != null)
+    		valErrorText = map.validationErrorMessage;
+    	
+    	console.log(validationExpression);
+    	Ext.apply(field, {
+    		parentId: map.parentId, 
+    		name: map.parentId + this.additionalFieldsKeySeparator + map.name, 
+    		fieldLabel: map.label, 
+    		labelWidth: map.labelWidth,
+    		anchor: '100%',
+    		vtype: 'mappedFieldValidator',
+    		vtypeText: valErrorText,
+    		validationExpression: validationExpression
+    	});    	
+    	
+    	// This field get's hidden when it's parent
+    	// is not selected
+    	field.on("hide", 
+    		function(comp, eOpts){
+    			comp.setValue("");
+    	});
+    	
+
     	return field;
     },
     
