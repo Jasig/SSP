@@ -1,17 +1,36 @@
 package org.jasig.ssp.web.api.reference;
 
+import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.factory.reference.ChallengeReferralTOFactory;
+import org.jasig.ssp.factory.reference.ChallengeTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.service.AuditableCrudService;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.reference.ChallengeReferralService;
+import org.jasig.ssp.service.reference.ChallengeService;
+import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.jasig.ssp.factory.TOFactory;
-import org.jasig.ssp.factory.reference.ChallengeTOFactory;
-import org.jasig.ssp.model.reference.Challenge;
-import org.jasig.ssp.service.AuditableCrudService;
-import org.jasig.ssp.service.reference.ChallengeService;
-import org.jasig.ssp.transferobject.reference.ChallengeTO;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
@@ -23,6 +42,9 @@ public class ChallengeController
 	@Autowired
 	protected transient ChallengeService service;
 
+	@Autowired
+	protected transient ChallengeReferralService challengeReferralService;
+
 	@Override
 	protected AuditableCrudService<Challenge> getService() {
 		return service;
@@ -30,6 +52,9 @@ public class ChallengeController
 
 	@Autowired
 	protected transient ChallengeTOFactory factory;
+
+	@Autowired
+	protected transient ChallengeReferralTOFactory challengeReferralTOFactory;
 
 	@Override
 	protected TOFactory<ChallengeTO, Challenge> getFactory() {
@@ -46,5 +71,59 @@ public class ChallengeController
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
+	}
+
+	@RequestMapping(value = "/{id}/challengeReferral/", method = RequestMethod.GET)
+	public @ResponseBody
+	PagingTO<ChallengeReferralTO, ChallengeReferral> getChallengeReferralsForChallenge(
+			@PathVariable final UUID id,
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection)
+			throws ObjectNotFoundException {
+
+		final Challenge challenge = service.get(id);
+
+		final PagingWrapper<ChallengeReferral> data = challengeReferralService
+				.getAllForChallenge(challenge, SortingAndPaging
+						.createForSingleSort(status, start, limit, sort,
+								sortDirection, null));
+
+		return new PagingTO<ChallengeReferralTO, ChallengeReferral>(true,
+				data.getResults(),
+				challengeReferralTOFactory.asTOSet(data.getRows()));
+	}
+
+	@RequestMapping(value = "/{id}/challengeReferral", method = RequestMethod.POST)
+	public @ResponseBody
+	ServiceResponse addChallengeReferralToChallenge(
+			@PathVariable final UUID id,
+			@RequestBody @NotNull final UUID challengeReferralId)
+			throws ObjectNotFoundException {
+
+		final Challenge challenge = service.get(id);
+		final ChallengeReferral referral = challengeReferralService
+				.get(challengeReferralId);
+
+		service.addChallengeReferralToChallenge(referral, challenge);
+
+		return new ServiceResponse(true);
+	}
+
+	@RequestMapping(value = "/{id}/challenge", method = RequestMethod.DELETE)
+	public @ResponseBody
+	ServiceResponse removeChallengeReferralFromChallenge(
+			@PathVariable final UUID id,
+			@RequestBody @NotNull final UUID challengeReferralId)
+			throws ObjectNotFoundException {
+
+		final Challenge challenge = service.get(id);
+		final ChallengeReferral referral = challengeReferralService
+				.get(challengeReferralId);
+
+		service.removeChallengeReferralFromChallenge(referral, challenge);
+		return new ServiceResponse(true);
 	}
 }

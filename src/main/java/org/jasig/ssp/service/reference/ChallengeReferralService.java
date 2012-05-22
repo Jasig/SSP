@@ -38,6 +38,9 @@ public interface ChallengeReferralService extends
 	List<ChallengeReferral> getChallengeReferralsByChallengeId(
 			Challenge challenge);
 
+	PagingWrapper<ChallengeReferral> getAllForChallenge(Challenge challenge,
+			SortingAndPaging sAndP);
+
 	List<ChallengeReferral> challengeReferralSearch(Challenge challenge);
 
 	int getChallengeReferralCountByChallengeAndQuery(Challenge challenge,

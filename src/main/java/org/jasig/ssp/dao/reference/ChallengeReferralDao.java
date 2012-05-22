@@ -3,11 +3,15 @@ package org.jasig.ssp.dao.reference;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -120,5 +124,16 @@ public class ChallengeReferralDao extends
 				.setParameter("anonPersonId", SspUser.ANONYMOUS_PERSON_ID)
 				.setParameter("webSessionId", sessionId)
 				.setParameter("objectStatus", ObjectStatus.ACTIVE).list();
+	}
+
+	public PagingWrapper<ChallengeReferral> getAllForChallenge(
+			final UUID challengeId, final SortingAndPaging sAndP) {
+		final Criteria query = createCriteria();
+		final Criteria subQuery = query
+				.createCriteria("challengeChallengeReferrals");
+		subQuery.add(Restrictions.eq("challenge.id", challengeId));
+		sAndP.addStatusFilterToCriteria(subQuery);
+
+		return processCriteriaWithPaging(query, sAndP);
 	}
 }

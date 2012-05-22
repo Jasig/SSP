@@ -2,9 +2,13 @@ package org.jasig.ssp.service.reference.impl;
 
 import java.util.List;
 
+import org.jasig.ssp.dao.reference.ChallengeChallengeReferralDao;
 import org.jasig.ssp.dao.reference.ChallengeDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Category;
 import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeChallengeReferral;
+import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
@@ -26,6 +30,9 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 
 	@Autowired
 	private transient ChallengeReferralService challengeReferralService;
+
+	@Autowired
+	private transient ChallengeChallengeReferralDao challengeChallengeReferralDao;
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -62,5 +69,53 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 
 	protected void setDao(final ChallengeDao dao) {
 		this.dao = dao;
+	}
+
+	@Override
+	public ChallengeChallengeReferral addChallengeReferralToChallenge(
+			final ChallengeReferral referral, final Challenge challenge) {
+		// get current referrals for challenge
+		final PagingWrapper<ChallengeChallengeReferral> challengeReferralChallenges = challengeChallengeReferralDao
+				.getAllforChallengeReferralAndChallenge(referral.getId(),
+						challenge.getId(), new SortingAndPaging(
+								ObjectStatus.ACTIVE));
+
+		ChallengeChallengeReferral challengeReferral = null;
+		// if this challengeReferral is already there and ACTIVE, ignore
+		if (challengeReferralChallenges.getResults() < 1) {
+			challengeReferral = new ChallengeChallengeReferral();
+			challengeReferral.setChallenge(challenge);
+			challengeReferral.setChallengeReferral(referral);
+			challengeReferral.setObjectStatus(ObjectStatus.ACTIVE);
+
+			challengeReferral = challengeChallengeReferralDao
+					.save(challengeReferral);
+		}
+
+		return challengeReferral;
+	}
+
+	@Override
+	public ChallengeChallengeReferral removeChallengeReferralFromChallenge(
+			final ChallengeReferral referral, final Challenge challenge) {
+		// get current referrals for challenge
+		final PagingWrapper<ChallengeChallengeReferral> challengeReferralChallenges = challengeChallengeReferralDao
+				.getAllforChallengeReferralAndChallenge(referral.getId(),
+						challenge.getId(), new SortingAndPaging(
+								ObjectStatus.ACTIVE));
+
+		ChallengeChallengeReferral challengeReferral = null;
+		// if this challenge referral is already there and ACTIVE, delete
+		if (challengeReferralChallenges.getResults() > 0) {
+			for (ChallengeChallengeReferral item : challengeReferralChallenges
+					.getRows()) {
+				item.setObjectStatus(ObjectStatus.DELETED);
+
+				// we'll just return the last one
+				challengeReferral = challengeChallengeReferralDao.save(item);
+			}
+		}
+
+		return challengeReferral;
 	}
 }
