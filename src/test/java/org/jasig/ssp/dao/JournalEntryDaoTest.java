@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
+import org.jasig.ssp.dao.reference.JournalSourceDao;
+import org.jasig.ssp.dao.reference.JournalTrackDao;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -17,7 +19,6 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -39,10 +40,16 @@ public class JournalEntryDaoTest {
 	private static final UUID CONFIDENTIALITYLEVEL_ID = UUID
 			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
 
-	private static final String CONFIDENTIALITYLEVEL_NAME = "Test Confidentiality Level";
+	private static final String CONFIDENTIALITYLEVEL_NAME = "EVERYONE";
 
 	@Autowired
 	private transient JournalEntryDao dao;
+
+	@Autowired
+	private transient JournalSourceDao journalSourceDao;
+
+	@Autowired
+	private transient JournalTrackDao journalTrackDao;
 
 	@Autowired
 	private transient ConfidentialityLevelDao confidentialityLevelDao;
@@ -77,8 +84,6 @@ public class JournalEntryDaoTest {
 		}
 	}
 
-	// :TODO need test data before reenabling
-	@Ignore
 	@Test
 	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
@@ -90,6 +95,10 @@ public class JournalEntryDaoTest {
 		obj.setConfidentialityLevel(confidentialityLevelDao
 				.load(CONFIDENTIALITYLEVEL_ID));
 		obj.setEntryDate(new Date());
+		obj.setJournalSource(journalSourceDao.get(UUID
+				.fromString("b2d07973-5056-a51a-8073-1d3641ce507f")));
+		obj.setJournalTrack(journalTrackDao.get(UUID
+				.fromString("b2d07a7d-5056-a51a-80a8-96ae5188a188")));
 		dao.save(obj);
 
 		assertNotNull("obj.id should not have been null.", obj.getId());
