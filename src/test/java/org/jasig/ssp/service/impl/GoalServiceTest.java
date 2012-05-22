@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -14,10 +14,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.ssp.dao.reference.GoalDao;
+import org.jasig.ssp.dao.GoalDao;
+import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.reference.Goal;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.GoalServiceImpl;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;

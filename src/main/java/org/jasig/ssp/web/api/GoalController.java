@@ -1,4 +1,4 @@
-package org.jasig.ssp.web.api.reference;
+package org.jasig.ssp.web.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,12 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.jasig.ssp.factory.GoalTOFactory;
 import org.jasig.ssp.factory.TOFactory;
-import org.jasig.ssp.factory.reference.GoalTOFactory;
-import org.jasig.ssp.model.reference.Goal;
+import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.service.AuditableCrudService;
-import org.jasig.ssp.service.reference.GoalService;
-import org.jasig.ssp.transferobject.reference.GoalTO;
+import org.jasig.ssp.service.GoalService;
+import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.web.api.reference.AbstractAuditableReferenceController;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller

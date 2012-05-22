@@ -1,10 +1,8 @@
-package org.jasig.ssp.service.reference;
+package org.jasig.ssp.service;
 
 import java.util.UUID;
 
-import org.jasig.ssp.model.reference.Goal;
-import org.jasig.ssp.service.AuditableCrudService;
-import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;

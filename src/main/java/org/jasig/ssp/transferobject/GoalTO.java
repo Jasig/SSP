@@ -1,11 +1,11 @@
-package org.jasig.ssp.transferobject.reference;
+package org.jasig.ssp.transferobject;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.ssp.model.reference.Goal;
-import org.jasig.ssp.transferobject.TransferObject;
+import org.jasig.ssp.model.Goal;
+import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
 
 import com.google.common.collect.Lists;
 

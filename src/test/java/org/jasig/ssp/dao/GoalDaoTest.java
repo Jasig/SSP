@@ -1,4 +1,4 @@
-package org.jasig.ssp.dao.reference;
+package org.jasig.ssp.dao;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -7,10 +7,11 @@ import static org.junit.Assert.assertNull;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasig.ssp.dao.GoalDao;
+import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
-import org.jasig.ssp.model.reference.Goal;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;

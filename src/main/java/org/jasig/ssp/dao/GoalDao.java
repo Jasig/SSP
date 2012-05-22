@@ -1,9 +1,9 @@
-package org.jasig.ssp.dao.reference;
+package org.jasig.ssp.dao;
 
 import org.springframework.stereotype.Repository;
 
-import org.jasig.ssp.dao.AuditableCrudDao;
-import org.jasig.ssp.model.reference.Goal;
+import org.jasig.ssp.dao.reference.AbstractReferenceAuditableCrudDao;
+import org.jasig.ssp.model.Goal;
 
 /**
  * Data access class for the Goal reference entity.
