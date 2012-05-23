@@ -835,7 +835,7 @@ public class StudentIntakeFormManager {
 				.getPerson().getId());
 
 		/* Add intake form to student's record */
-		personToolService.addToolToStudent(student, Tools.INTAKE);
+		personToolService.addToolToPerson(student, Tools.INTAKE);
 
 		/* Confidentiality disclosure */
 
