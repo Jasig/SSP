@@ -104,8 +104,9 @@
 		class="java.lang.Thread" init-method="start" destroy-method="stop"> <constructor-arg 
 		ref="dumbster" /> </bean> -->
 
-	<bean id="testingMailServerConfig" class="org.jasig.ssp.util.config.TestingMailServerConfig">
+	<bean id="testingMailServerConfig" class="org.jasig.ssp.util.config.MailConfig">
 		<property name="port" value="#{configProperties.smtp_port}" />
+		<property name="sendMail" value="#{configProperties.send_mail}" />
 	</bean>
 
 	<beans profile="cobertura">

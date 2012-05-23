@@ -75,7 +75,8 @@ public class PersonEarlyAlertController extends
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	EarlyAlertTO get(final @PathVariable UUID id,
-			@PathVariable final UUID personId) throws Exception {
+			@PathVariable final UUID personId) throws ObjectNotFoundException,
+			ValidationException {
 		return super.get(id, personId);
 	}
 
@@ -84,7 +85,8 @@ public class PersonEarlyAlertController extends
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/", method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertTO create(@PathVariable final UUID personId,
-			@Valid @RequestBody final EarlyAlertTO obj) throws Exception {
+			@Valid @RequestBody final EarlyAlertTO obj)
+			throws ValidationException, ObjectNotFoundException {
 		return super.create(personId, obj);
 	}
 
@@ -95,7 +97,8 @@ public class PersonEarlyAlertController extends
 	EarlyAlertTO save(@PathVariable final UUID id,
 			@PathVariable final UUID personId,
 			@Valid @RequestBody final EarlyAlertTO obj)
-			throws Exception {
+			throws ObjectNotFoundException, ValidationException
+	{
 		return super.save(id, personId, obj);
 	}
 
@@ -104,7 +107,7 @@ public class PersonEarlyAlertController extends
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id,
-			@PathVariable final UUID personId) throws Exception {
+			@PathVariable final UUID personId) throws ObjectNotFoundException {
 		return super.delete(id, personId);
 	}
 
@@ -120,7 +123,8 @@ public class PersonEarlyAlertController extends
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
-			throws Exception {
+			throws ObjectNotFoundException
+	{
 
 		final Person person = personService.get(personId);
 		final PagingWrapper<EarlyAlert> data = getService().getAllForPerson(
@@ -136,7 +140,8 @@ public class PersonEarlyAlertController extends
 	@RequestMapping(value = "/1/person/earlyAlert/", method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertTO create(@RequestParam final String studentId,
-			@Valid @RequestBody final EarlyAlertTO obj) throws Exception {
+			@Valid @RequestBody final EarlyAlertTO obj)
+			throws ObjectNotFoundException, ValidationException {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send with an ID to the create method. Did you mean to use the save method instead?");

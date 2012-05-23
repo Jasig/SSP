@@ -8,6 +8,7 @@ import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAssocService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.AbstractAuditableTO;
@@ -103,8 +104,8 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 	 *            Sort direction (asc/desc)
 	 * @return All instances for the specified criteria, possibly paged based on
 	 *         start/limit filters.
-	 * @throws Exception
-	 *             If any exceptions were thrown.
+	 * @throws ObjectNotFoundException
+	 *             If specified person could not be found.
 	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -115,7 +116,8 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
-			throws Exception {
+			throws ObjectNotFoundException
+	{
 
 		final Person person = personService.get(personId);
 		final PagingWrapper<T> data = getService().getAllForPerson(person,
@@ -130,13 +132,28 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	TO get(final @PathVariable UUID id,
-			@PathVariable final UUID personId) throws Exception {
+			@PathVariable final UUID personId) throws ObjectNotFoundException,
+			ValidationException
+	{
 		final T model = getService().get(id);
 		if (model == null) {
 			return null;
 		}
 
-		final TO out = this.transferObjectClass.newInstance();
+		TO out = null; // NOPMD by jon.adams
+		try {
+			out = this.transferObjectClass.newInstance(); // NOPMD by jon.adams
+		} catch (final InstantiationException e) {
+			LOGGER.error("Could not instantiate new instance of "
+					+ this.transferObjectClass.getName(), e);
+			throw new ValidationException("Unexpected error.", e); // NOPMD
+		} catch (final IllegalAccessException e) {
+			LOGGER.error(
+					"Illegal access instantiating new instance of "
+							+ this.transferObjectClass.getName(), e);
+			throw new ValidationException("Unexpected error.", e);
+		}
+
 		out.from(model);
 		return out;
 	}
@@ -145,7 +162,8 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
 	TO create(@PathVariable final UUID personId,
-			@Valid @RequestBody final TO obj) throws Exception {
+			@Valid @RequestBody final TO obj) throws ValidationException,
+			ObjectNotFoundException {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send with an ID to the create method. Did you mean to use the save method instead?");
@@ -161,7 +179,20 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 		if (null != model) {
 			final T createdModel = getService().create(model);
 			if (null != createdModel) {
-				final TO out = this.transferObjectClass.newInstance();
+				TO out = null; // NOPMD by jon.adams
+				try {
+					out = this.transferObjectClass.newInstance(); // NOPMD
+				} catch (final InstantiationException e) {
+					LOGGER.error("Could not instantiate new instance of "
+							+ this.transferObjectClass.getName(), e);
+					throw new ValidationException("Unexpected error.", e);
+				} catch (final IllegalAccessException e) {
+					LOGGER.error(
+							"Illegal access instantiating new instance of "
+									+ this.transferObjectClass.getName(), e);
+					throw new ValidationException("Unexpected error.", e);
+				}
+
 				out.from(createdModel);
 				return out;
 			}
@@ -175,8 +206,9 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 	public @ResponseBody
 	TO save(@PathVariable final UUID id,
 			@PathVariable final UUID personId,
-			@Valid @RequestBody final TO obj)
-			throws Exception {
+			@Valid @RequestBody final TO obj) throws ObjectNotFoundException,
+			ValidationException
+	{
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted without an id to the save method.  Did you mean to create?");
@@ -187,7 +219,20 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 
 		final T savedT = getService().save(model);
 		if (null != savedT) {
-			final TO out = this.transferObjectClass.newInstance();
+			TO out = null; // NOPMD by jon.adams
+			try {
+				out = this.transferObjectClass.newInstance(); // NOPMD
+			} catch (final InstantiationException e) {
+				LOGGER.error("Could not instantiate new instance of "
+						+ this.transferObjectClass.getName(), e);
+				throw new ValidationException("Unexpected error.", e);
+			} catch (final IllegalAccessException e) {
+				LOGGER.error(
+						"Illegal access instantiating new instance of "
+								+ this.transferObjectClass.getName(), e);
+				throw new ValidationException("Unexpected error.", e);
+			}
+
 			out.from(savedT);
 			return out;
 		}
@@ -199,7 +244,7 @@ public abstract class AbstractPersonAssocController<T extends Auditable, TO exte
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id,
-			@PathVariable final UUID personId) throws Exception {
+			@PathVariable final UUID personId) throws ObjectNotFoundException {
 		getService().delete(id);
 		return new ServiceResponse(true);
 	}

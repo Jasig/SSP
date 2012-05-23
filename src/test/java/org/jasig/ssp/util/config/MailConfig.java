@@ -12,8 +12,25 @@ import com.dumbster.smtp.SimpleSmtpServer;
  * @author jon.adams
  * 
  */
-public class TestingMailServerConfig {
+public class MailConfig {
+	private boolean sendMail;
+
 	private int port;
+
+	/**
+	 * @return the sendMail
+	 */
+	public boolean isSendMail() {
+		return sendMail;
+	}
+
+	/**
+	 * @param sendMail
+	 *            the sendMail to set
+	 */
+	public void setSendMail(final boolean sendMail) {
+		this.sendMail = sendMail;
+	}
 
 	/**
 	 * @return the port
