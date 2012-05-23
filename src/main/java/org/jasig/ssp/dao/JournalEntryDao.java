@@ -10,9 +10,9 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class JournalEntryDao extends
-		AbstractAuditableCrudDao<JournalEntry> implements
-		AuditableCrudDao<JournalEntry> {
+public class JournalEntryDao
+		extends AbstractAuditableCrudDao<JournalEntry>
+		implements AuditableCrudDao<JournalEntry> {
 
 	protected JournalEntryDao() {
 		super(JournalEntry.class);

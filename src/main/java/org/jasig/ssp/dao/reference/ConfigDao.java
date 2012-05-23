@@ -41,6 +41,7 @@ public class ConfigDao extends AbstractReferenceAuditableCrudDao<Config>
 	}
 
 	public Config getByName(final String name) {
+		// TODO: (performance) Perfect example of data that should be cached
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("name", name));
 		return (Config) query.uniqueResult();

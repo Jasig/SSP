@@ -33,13 +33,13 @@ public class EthnicityDaoTest {
 			.getLogger(EthnicityDaoTest.class);
 
 	@Autowired
-	private EthnicityDao dao;
+	private transient EthnicityDao dao;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
@@ -72,13 +72,13 @@ public class EthnicityDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Ethnicity ethnicity = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final Ethnicity ethnicity = dao.get(id);
 
 		assertNull(ethnicity);
 	}
 
-	private void assertList(Collection<Ethnicity> objects) {
+	private void assertList(final Collection<Ethnicity> objects) {
 		for (Ethnicity object : objects) {
 			assertNotNull(object.getId());
 		}
@@ -86,12 +86,12 @@ public class EthnicityDaoTest {
 
 	@Test
 	public void uuidGeneration() {
-		Ethnicity obj = new Ethnicity();
+		final Ethnicity obj = new Ethnicity();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		Ethnicity obj2 = new Ethnicity();
+		final Ethnicity obj2 = new Ethnicity();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);

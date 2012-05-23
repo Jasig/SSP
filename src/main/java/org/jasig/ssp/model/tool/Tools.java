@@ -1,7 +1,6 @@
 package org.jasig.ssp.model.tool;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndProperty;
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
 
@@ -11,7 +10,7 @@ public enum Tools implements CodeAndProperty {
 
 	private String title;
 
-	private Tools(String title) {
+	private Tools(final String title) {
 		this.title = title;
 	}
 

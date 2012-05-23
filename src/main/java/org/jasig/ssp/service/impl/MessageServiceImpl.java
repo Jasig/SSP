@@ -23,6 +23,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.util.config.MailConfig;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +63,9 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private transient ConfigService configService;
 
+	@Autowired
+	private transient MailConfig mailConfig;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MessageServiceImpl.class);
 
@@ -78,12 +82,7 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public boolean shouldSendMail() {
-		final String shouldSendMail = configService.getByNameNull("send_mail");
-		if (shouldSendMail != null) {
-			return Boolean.valueOf(shouldSendMail);
-		}
-
-		return false;
+		return mailConfig.isSendMail();
 	}
 
 	/**
@@ -238,10 +237,13 @@ public class MessageServiceImpl implements MessageService {
 
 			mimeMessageHelper.setSubject(message.getSubject());
 			mimeMessageHelper.setText(message.getBody());
-			mimeMessage.setContent(message.getBody(), "text/html");
+			mimeMessage.setContent(message.getBody(), "text/plain");
 
 			if (shouldSendMail()) {
+				LOGGER.debug("_ : JavaMailSender.send()");
 				javaMailSender.send(mimeMessage);
+			} else {
+				LOGGER.warn("_ : JavaMailSender was not called; message was marked sent but was not actually sent");
 			}
 
 			message.setSentDate(new Date());

@@ -1,10 +1,11 @@
-package org.jasig.ssp.dao;
+package org.jasig.ssp.dao.tool;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -17,6 +18,8 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -24,13 +27,16 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("../reference/dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
-public class PersonToolsDaoTest {
+public class PersonToolDaoTest {
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonToolDaoTest.class);
 
 	@Autowired
-	private transient PersonToolsDao dao;
+	private transient PersonToolDao dao;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -41,44 +47,60 @@ public class PersonToolsDaoTest {
 	}
 
 	@Test
-	public void getAllForPersonId() {
-		assertList(dao.getAllForPersonId(UUID.randomUUID(),
-				new SortingAndPaging(
-						ObjectStatus.ACTIVE)).getRows());
+	public void testSaveNew() throws ObjectNotFoundException {
+		UUID saved;
+
+		PersonTool obj = new PersonTool();
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setTool(Tools.INTAKE);
+		obj.setPerson(securityService.currentUser().getPerson());
+		dao.save(obj);
+
+		assertNotNull(obj.getId());
+		saved = obj.getId();
+
+		LOGGER.debug(obj.toString());
+
+		obj = dao.get(saved);
+		assertNotNull(obj);
+		assertNotNull(obj.getId());
+		assertNotNull(obj.getTool());
+
+		List<PersonTool> all = (List<PersonTool>) dao.getAll(
+				ObjectStatus.ACTIVE).getRows();
+		assertNotNull(all);
+		assertFalse(all.isEmpty());
+		assertList(all);
+
+		dao.delete(obj);
 	}
 
-	protected void assertList(final Collection<PersonTool> objects) {
+	@Test(expected = ObjectNotFoundException.class)
+	public void testNull() throws ObjectNotFoundException {
+		final UUID id = UUID.randomUUID();
+		final PersonTool personTool = dao.get(id);
+
+		assertNull(personTool);
+	}
+
+	private void assertList(final Collection<PersonTool> objects) {
 		for (PersonTool object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
-	public void testSaveNew() throws ObjectNotFoundException {
-		UUID saved;
+	public void getAllForPersonId() {
+		assertList(dao.getAllForPersonId(UUID.randomUUID(),
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE)).getRows());
+	}
 
-		PersonTool obj = new PersonTool();
-		obj.setTool(Tools.INTAKE);
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setPerson(securityService.currentUser().getPerson());
-		dao.save(obj);
-
-		assertNotNull("obj.id should not have been null.", obj.getId());
-		saved = obj.getId();
-
-		// LOGGER.debug(obj.toString());
-
-		obj = dao.get(saved);
-		assertNotNull(obj);
-		assertNotNull(obj.getId());
-		assertEquals(Tools.INTAKE, obj.getTool());
-
-		final Collection<PersonTool> all = dao.getAll(ObjectStatus.ACTIVE)
-				.getRows();
-		assertNotNull(all);
-		assertFalse(all.isEmpty());
-		assertList(all);
-
-		dao.delete(obj);
+	@Test
+	public void getAllForPersonAndTool() {
+		assertList(dao.getAllForPersonAndTool(UUID.randomUUID(),
+				Tools.ACTION_PLAN,
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE)).getRows());
 	}
 }

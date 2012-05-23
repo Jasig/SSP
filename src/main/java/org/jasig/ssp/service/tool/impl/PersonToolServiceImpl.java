@@ -1,80 +1,87 @@
 package org.jasig.ssp.service.tool.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.google.common.collect.Lists;
-
-import org.jasig.ssp.dao.PersonDao;
-import org.jasig.ssp.dao.PersonToolsDao;
+import org.jasig.ssp.dao.tool.PersonToolDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.tool.PersonTool;
 import org.jasig.ssp.model.tool.Tools;
+import org.jasig.ssp.service.AbstractAuditableCrudService;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.tool.PersonToolService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
-public class PersonToolServiceImpl implements PersonToolService {
+public class PersonToolServiceImpl
+		extends AbstractAuditableCrudService<PersonTool>
+		implements PersonToolService {
 
 	@Autowired
-	private PersonToolsDao personToolsDao;
-
-	@Autowired
-	private PersonDao personDao;
+	private transient PersonToolDao personToolsDao;
 
 	@Override
-	public List<Tools> toolsForStudent(Person student, Tools onlyThisTool) {
-		boolean allTools = (null == onlyThisTool);
+	protected PersonToolDao getDao() {
+		return personToolsDao;
+	}
 
-		List<Tools> tools = Lists.newArrayList();
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonToolServiceImpl.class);
 
-		for (PersonTool personTool : student.getTools()) {
-			if (personTool.getObjectStatus().equals(
-					ObjectStatus.ACTIVE)) {
-				if (allTools) {
-					tools.add(personTool.getTool());
-				} else {
-					if (personTool.getTool().equals(onlyThisTool)) {
-						tools.add(onlyThisTool);
-					}
-				}
-			}
-		}
-
-		return tools;
+	@Override
+	public PagingWrapper<PersonTool> getAllForPerson(final Person person,
+			final SortingAndPaging sAndP) {
+		return getDao().getAllForPersonId(person.getId(), sAndP);
 	}
 
 	@Override
-	public PersonTool studentHasTool(Person student, Tools onlyThisTool) {
-		for (PersonTool personTool : student.getTools()) {
-			if (personTool.getTool().equals(onlyThisTool)) {
-				return personTool;
-			}
+	public PersonTool personHasTool(final Person student,
+			final Tools onlyThisTool) {
+
+		final PagingWrapper<PersonTool> wrapper = getDao()
+				.getAllForPersonAndTool(
+						student.getId(), onlyThisTool,
+						new SortingAndPaging(ObjectStatus.ACTIVE));
+
+		if (wrapper.getResults() == 1) {
+			return wrapper.getRows().iterator().next();
+		} else if (wrapper.getResults() > 1) {
+			LOGGER.error("A tool has been assigned to: "
+					+ student.getId().toString() + " multiple times");
+			return wrapper.getRows().iterator().next();
+		} else {
+			return null;
 		}
-		return null;
 	}
 
 	@Override
-	public void addToolToStudent(Person student, Tools tool) {
-		if ((studentHasTool(student, tool)) == null) {
-			PersonTool personTool = new PersonTool(student, tool);
+	public PersonTool addToolToPerson(final Person student,
+			final Tools tool) {
+		PersonTool personTool = personHasTool(student, tool);
+		if (personTool == null) {
+			personTool = new PersonTool(student, tool);
 			personToolsDao.save(personTool);
-			student.getTools().add(personTool);
-			personDao.save(student);
 		}
+		return personTool;
 	}
 
 	@Override
-	public void removeToolFromStudent(Person student, Tools tool) {
-		PersonTool personTool = studentHasTool(student, tool);
+	public PersonTool removeToolFromPerson(final Person student,
+			final Tools tool) {
+		final PersonTool personTool = personHasTool(student, tool);
 		if (personTool != null) {
 			personTool.setObjectStatus(ObjectStatus.DELETED);
 			personToolsDao.save(personTool);
-			student.getTools().remove(personTool);
-			personDao.save(student);
 		}
+		return personTool;
+	}
+
+	@Override
+	public PersonTool save(final PersonTool obj) throws ObjectNotFoundException {
+		return getDao().save(obj);
 	}
 
 }

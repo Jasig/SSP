@@ -9,7 +9,8 @@ import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class EthnicityTO extends AbstractReferenceTO<Ethnicity>
+public class EthnicityTO
+		extends AbstractReferenceTO<Ethnicity>
 		implements TransferObject<Ethnicity> {
 
 	public EthnicityTO() {

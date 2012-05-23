@@ -1,19 +1,15 @@
 package org.jasig.ssp.service.tool;
 
-import java.util.List;
-
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.tool.PersonTool;
 import org.jasig.ssp.model.tool.Tools;
+import org.jasig.ssp.service.PersonAssocService;
 
-public interface PersonToolService {
+public interface PersonToolService extends PersonAssocService<PersonTool> {
 
-	public List<Tools> toolsForStudent(Person student, Tools onlyThisTool);
+	PersonTool personHasTool(Person student, Tools onlyThisTool);
 
-	public PersonTool studentHasTool(Person student, Tools onlyThisTool);
+	PersonTool addToolToPerson(Person student, Tools tool);
 
-	public void addToolToStudent(Person student, Tools tool);
-
-	public void removeToolFromStudent(Person student, Tools tool);
-
+	PersonTool removeToolFromPerson(Person student, Tools tool);
 }
