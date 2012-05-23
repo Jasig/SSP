@@ -30,7 +30,7 @@ public class Ethnicity extends AbstractReference implements Serializable {
 	 *            Identifier; required
 	 */
 
-	public Ethnicity(UUID id) {
+	public Ethnicity(final UUID id) {
 		super(id);
 	}
 
@@ -43,7 +43,7 @@ public class Ethnicity extends AbstractReference implements Serializable {
 	 *            Name; required; max 100 characters
 	 */
 
-	public Ethnicity(UUID id, String name) {
+	public Ethnicity(final UUID id, final String name) {
 		super(id, name);
 	}
 
@@ -57,7 +57,7 @@ public class Ethnicity extends AbstractReference implements Serializable {
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public Ethnicity(UUID id, String name, String description) {
+	public Ethnicity(final UUID id, final String name, final String description) {
 		super(id, name, description);
 	}
 
