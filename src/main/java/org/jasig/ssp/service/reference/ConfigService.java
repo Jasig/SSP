@@ -10,7 +10,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
- * Config service
+ * Configuration (Config) service
  * 
  * @author daniel.bower
  */
@@ -23,10 +23,35 @@ public interface ConfigService extends
 	@Override
 	Config get(UUID id) throws ObjectNotFoundException;
 
+	/**
+	 * Gets the specified configuration value, or return empty if not found.
+	 * 
+	 * @param name
+	 *            Key for the specific configuration value to load
+	 * @return the specified configuration key, or empty if not found.
+	 */
 	String getByNameEmpty(String name);
 
+	/**
+	 * Gets the specified configuration value, or throw an exception if not
+	 * found.
+	 * 
+	 * @param name
+	 *            Key for the specific configuration value to load
+	 * @return the specified configuration key, or throws an exception if not
+	 *         found.
+	 * @throws ObjectNotFoundException
+	 *             If specified configuration key could not be found
+	 */
 	String getByNameException(String name) throws ObjectNotFoundException;
 
+	/**
+	 * Gets the specified configuration value, or return null if not found.
+	 * 
+	 * @param name
+	 *            Key for the specific configuration value to load
+	 * @return the specified configuration key, or null if not found.
+	 */
 	String getByNameNull(String name);
 
 	@Override

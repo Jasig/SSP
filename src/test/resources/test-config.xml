@@ -2,8 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-3.1.xsd
@@ -14,7 +13,7 @@
 
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties"
-		location="file:${SSP_TESTCONFIGDIR}/ssp-config.properties" />
+		location="file:${SSP_TESTCONFIGDIR}/ssp-test-config.properties" />
 
 	<tx:annotation-driven />
 
@@ -77,9 +76,16 @@
 
 	<!-- Mail Server Configuration -->
 	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="nonexistent" />
-		<property name="port" value="0000" />
+		<property name="host" value="#{configProperties.smtp_host}" />
+		<property name="port" value="#{configProperties.smtp_port}" />
 		<property name="protocol" value="smtp" />
+		<property name="username" value="#{configProperties.smtp_username}" />
+		<property name="password" value="#{configProperties.smtp_password}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.timeout">5</prop>
+			</props>
+		</property>
 	</bean>
 
 	<bean id="velocityEngine"
@@ -91,10 +97,19 @@
 			</value>
 		</property>
 	</bean>
-	
-	<!-- Allow proper instrumentation with cobertura -->
+
+	<!-- Faux mail server that doesn't send messages -->
+	<!-- <bean id="mailServer" class="com.dumbster.smtp.SimpleSmtpServer" lazy-init="false"> 
+		<constructor-arg value="#{configProperties.smtp_port}" /> </bean> <bean id="mailServerThread" 
+		class="java.lang.Thread" init-method="start" destroy-method="stop"> <constructor-arg 
+		ref="dumbster" /> </bean> -->
+
+	<bean id="testingMailServerConfig" class="org.jasig.ssp.util.config.TestingMailServerConfig">
+		<property name="port" value="#{configProperties.smtp_port}" />
+	</bean>
+
 	<beans profile="cobertura">
-		<aop:aspectj-autoproxy proxy-target-class="true"/>
+		<aop:aspectj-autoproxy proxy-target-class="true" />
 	</beans>
-	
+
 </beans>

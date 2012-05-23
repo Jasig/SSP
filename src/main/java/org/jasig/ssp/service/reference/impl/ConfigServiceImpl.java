@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Config service implementation
+ * Configuration (Config) service implementation
  * 
+ * @author daniel.bower
  */
 @Service
 @Transactional
@@ -46,6 +47,7 @@ public class ConfigServiceImpl extends
 		if ((config == null) || (config.getValue() == null)) {
 			return "";
 		}
+
 		return config.getValue();
 	}
 
@@ -63,6 +65,7 @@ public class ConfigServiceImpl extends
 					"Value not set for key: " + name, "Config");
 
 		}
+
 		return config.getValue();
 	}
 
@@ -72,6 +75,7 @@ public class ConfigServiceImpl extends
 		if ((config == null) || (config.getValue() == null)) {
 			return null;
 		}
+
 		return config.getValue();
 	}
 }

@@ -1,11 +1,11 @@
 package org.jasig.ssp.service.reference.impl;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.MessageTemplate;
@@ -53,8 +53,9 @@ public class MessageTemplateServiceIntegrationTest {
 	@Test
 	public void testVelocityEngineUsingMessageTemplates()
 			throws ObjectNotFoundException {
-		final String subjectText = "My subject"; // NOPMD
-		final String facultyMemberText = "Faculty Full Name"; // NOPMD
+		final String termToRepresentEarlyAlert = "termToRepresentEarlyAlert"; // NOPMD
+		final EarlyAlert earlyAlert = new EarlyAlert();
+		earlyAlert.setCourseName("CourseNameHere");
 
 		final MessageTemplate template = service
 				.get(MessageTemplate.JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID);
@@ -64,17 +65,18 @@ public class MessageTemplateServiceIntegrationTest {
 
 		// Try to process with the template engine
 		final Map<String, Object> templateParameters = Maps.newHashMap();
-		templateParameters.put("subj", subjectText);
-		templateParameters.put("FacultyMember", facultyMemberText);
+		templateParameters.put("termToRepresentEarlyAlert",
+				termToRepresentEarlyAlert);
+		templateParameters.put("earlyAlert", earlyAlert);
 		final Message message = messageService.createMessage(
 				"test@example.com",
 				MessageTemplate.JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID,
 				templateParameters);
 
 		assertNotNull("Generated message should not have been null.", message);
-		assertEquals("Templated subject did not match.", subjectText,
-				message.getSubject());
+		assertTrue("Templated subject did not match.", message.getSubject()
+				.contains("CourseNameHere"));
 		assertTrue("Templated body text did not match.", message.getBody()
-				.contains("Faculty Member: " + facultyMemberText));
+				.contains("CourseNameHere"));
 	}
 }
