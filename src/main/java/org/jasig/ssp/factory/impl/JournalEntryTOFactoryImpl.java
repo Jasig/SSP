@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-public class JournalEntryTOFactoryImpl extends
-		AbstractAuditableTOFactory<JournalEntryTO, JournalEntry>
+public class JournalEntryTOFactoryImpl
+		extends AbstractAuditableTOFactory<JournalEntryTO, JournalEntry>
 		implements JournalEntryTOFactory {
 
 	public JournalEntryTOFactoryImpl() {
