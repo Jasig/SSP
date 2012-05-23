@@ -10,7 +10,6 @@ Ext.define('Ssp.view.tools.Journal', {
     },
 	width: '100%',
 	height: '100%',
-	
 	initComponent: function() {	
     	var sm = Ext.create('Ext.selection.CheckboxModel');
 		
@@ -43,7 +42,7 @@ Ext.define('Ssp.view.tools.Journal', {
 	    		           ],
 				    
 				    dockedItems: [{
-				        dock: 'top',
+				        dock: 'bottom',
 				        xtype: 'toolbar',
 				        items: [{
 				            tooltip: 'Print the History for this student',
@@ -52,7 +51,7 @@ Ext.define('Ssp.view.tools.Journal', {
 				            itemId: 'viewHistoryButton'
 				        }]
 				    },{
-				        dock: 'bottom',
+				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
 				            tooltip: 'Add Journal Note',

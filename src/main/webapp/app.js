@@ -12,6 +12,10 @@ Ext.require([
     'Ssp.view.Main',
     'Ssp.view.Search',
     'Ssp.view.StudentRecord',
+    'Ssp.view.component.MappedTextField',
+    'Ssp.view.component.MappedTextArea',
+    'Ssp.view.component.MappedCheckBox',
+    'Ssp.view.component.MappedRadioButton',
     'Ssp.view.ToolsMenu',
     'Ssp.view.Tools',
     'Ssp.view.tools.Profile',
@@ -129,7 +133,9 @@ Ext.require([
 	'Ext.data.TreeStore',
 	'Ext.dd.DropTarget',
 	'Ext.data.Store',
-	'Ext.form.field.VTypes'
+	'Ext.form.field.VTypes',
+	'Ext.form.field.Text',
+	'Ext.form.field.TextArea'
 ]);
 
 var apiUrls = [

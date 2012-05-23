@@ -1,7 +1,7 @@
 Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.studentintakeeducationlevels',
-	id : 'StudentIntakeEducationLevels',  
+	id : 'StudentIntakeEducationLevels',
     width: '100%',
     height: '100%',
 	initComponent: function() {	

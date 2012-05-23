@@ -4,9 +4,19 @@ Ext.define('Ssp.model.tool.actionplan.Task', {
              {name:'description',type:'string'},
              {name:'dueDate', type:'date', dateFormat:'time'},
              {name:'reminderSentDate', type:'date', dateFormat:'time'},
-             {name:'confidentialityLevelId',type:'string'},
+             {name: 'confidentialityLevel',
+                 convert: function(value, record) {
+                	 var obj  = {id:'',name: ''}
+                	 if (value != null)
+                	 {
+                		 obj.id  = value.id;
+                		 obj.name = value.name;
+                	 }	
+   		            return obj;
+                 }
+   		      },
              {name:'deletable',type:'boolean'},
-             //{name:'closable',type:'boolean'},
+             //{name:'closableByStudent',type:'boolean'},
              {name:'completed',type:'boolean'},
              {name:'completedDate', type:'date', dateFormat:'time'},
              {name:'challengeId',type:'string'},

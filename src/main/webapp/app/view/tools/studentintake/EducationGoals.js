@@ -19,11 +19,12 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        labelAlign: 'right',
 				        labelWidth: 200
 				    },
-				    defaultType: "displayfield",
+				    defaultType: "radiogroup",
 				    items: [{
 				            xtype: "fieldset",
 				            border: 0,
-				            title: "Education Goals",
+				            title: "Education Goals Upper",
+				            id: 'StudentIntakeEducationGoalsFieldSet',
 				            defaultType: "textfield",
 				            defaults: {
 				                anchor: "100%"
@@ -33,22 +34,31 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				            id: 'StudentIntakeEducationGoalsRadioGroup',
 				            fieldLabel: "Education/Career Goal",
 				            columns: 1
-				        },
-				        {
-				            xtype: "radiogroup",
-				            fieldLabel: "How sure are you about your major?",
-				            columns: 1,
-				            items: [
-				                {boxLabel: "Very Unsure", name: "howSureAboutMajor", inputValue: "1"},
-				                {boxLabel: "", name: "howSureAboutMajor", inputValue: "2"},
-				                {boxLabel: "", name: "howSureAboutMajor", inputValue: "3"},
-				                {boxLabel: "", name: "howSureAboutMajor", inputValue: "4"},
-				                {boxLabel: "Very Sure", name: "howSureAboutMajor", inputValue: "5"}
-				        		]
-				        },{
+				        }]
+				    },{
+			            xtype: "fieldset",
+			            border: 0,
+			            title: '',
+			            defaultType: "textfield",
+			            defaults: {
+			                anchor: "100%"
+			            },
+			       items: [{
+			            xtype: "radiogroup",
+			            fieldLabel: "How sure are you about your major?",
+			            columns: 1,
+			            items: [
+			                {boxLabel: "Very Unsure", name: "howSureAboutMajor", inputValue: "1"},
+			                {boxLabel: "", name: "howSureAboutMajor", inputValue: "2"},
+			                {boxLabel: "", name: "howSureAboutMajor", inputValue: "3"},
+			                {boxLabel: "", name: "howSureAboutMajor", inputValue: "4"},
+			                {boxLabel: "Very Sure", name: "howSureAboutMajor", inputValue: "5"}
+			        		]
+			        },{
 				        fieldLabel: 'What is your planned occupation?',
 				        name: 'plannedOccupation'
 				    }]
+				    
 				    }]
 				});
 		
