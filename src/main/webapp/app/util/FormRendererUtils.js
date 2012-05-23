@@ -54,54 +54,66 @@ Ext.define('Ssp.util.FormRendererUtils',{
      *  @selectedIdFieldName
      */
     createRadioButtonGroup: function( args ){
+    	var me=this;
     	var formId = args.formId;
     	var radioGroupId = args.radioGroupId;
+    	var radioGroupFieldSetId = args.radioGroupFieldSetId;
     	var selectedItemId = args.selectedItemId;
     	var additionalFieldsMap = args.additionalFieldsMap;
     	var itemsArr = args.itemsArr;
     	var idFieldName = args.idFieldName;
     	var selectedIdFieldName = args.selectedIdFieldName;
-    	
+    	var selectedItem = args.selectedItemsArr[0];
     	var form = Ext.getCmp(formId);
     	var rbGroup = Ext.getCmp(radioGroupId);
 		var items = itemsArr;
 		var setSelectedItems = false;
-		for (i=0; i<items.length; i++)
-		{
-			var comp = {xtype:'radio'};
-			var item = items[i];
+		var additionalFieldArr = [];
+		var fieldSet = Ext.ComponentQuery.query('#'+radioGroupFieldSetId)[0];
+		// Define the radio buttons
+		Ext.each(items,function(item,index){
+			var itemId = item[idFieldName];
+			var comp = {xtype:'mappedradiobutton'};
+			comp.id = itemId;
 			comp.boxLabel = item.name;
 			comp.name = selectedIdFieldName;
 			comp.inputValue = item[idFieldName];
+			comp.listeners = {
+				change: function(comp, oldValue, newValue, eOpts){
+					me.appEventsController.getApplication().fireEvent('dynamicCompChange', comp);
+				}	
+			};
+
+			// retrieve the additional field maps
+			additionalFieldsArr = me.getMappedFields( itemId, additionalFieldsMap );		
+
+			// populate the additional fields with selected values
+			Ext.each(additionalFieldsArr,function(field,index){
+				var names = field.name.split( me.additionalFieldsKeySeparator );
+				if ( field.parentId == selectedItemId )
+				{
+					field.setValue( selectedItem[names[1]] );
+				}else{
+					field.setValue("");
+				}
+			},this);
+
+			// hide items that are not selected
+			me.hideEmptyFields( additionalFieldsArr );
 			
-			// loop through additional fields map and add fields to the form
-			var fieldsArr = [];
-			fieldsArr.push( comp );
+			// add the items to the form
+			fieldSet.add( additionalFieldsArr );			
 			
-			additionalFieldsArr = this.getMappedFields( selectedItemId, additionalFieldsMap );
-			
-	    	// add a fieldset if additional fields exist for this item
-	    	if (additionalFieldsArr.length>0)
-	    	{
-		    	var fields = {xtype: 'fieldset', padding: 0, border: 0, layout: { type: 'auto' },title: ''};
-		    	Ext.Array.insert(fieldsArr, 1, additionalFieldsArr);
-		    	Ext.apply(fields, {items: fieldsArr});
-	    	}
-	    	
+			// selected radio button
 			if (selectedItemId==item[idFieldName])
 			{
 				comp.checked = true;
 			}
 
-			// if a fieldset is not defined, then just return a checkbox
-			if (fieldsArr.length > 1)
-			{
-				rbGroup.add(fields);
-			}else{
-				rbGroup.add(comp);
-			}
-		}
-		form.doLayout();
+			// add radio button to the radiogroup
+			rbGroup.add(comp);
+			
+		}, this);
     },
     
     /**
@@ -112,8 +124,9 @@ Ext.define('Ssp.util.FormRendererUtils',{
      * @args
      *    @mainComponentType = the main component type for the form ('checkbox', 'radio') 
      *    @radioGroupId = the radiobuttongroup id value / optional if building a checkbox based form
+     *    @radioGroupFieldSetId = the fieldset in which the radiobutton group is located
      *    @selectedItemId - required value for the 'radio' select button id and optional for 'checkbox' mainComponentType  
-     *    @formId = the form to add the items into
+     *    @formId = the form to add the items into.
      *    @fieldSetTitle - Provides a fieldset title for the fields
      *    @itemsArr = the array of items to add to the form
      *    @selectedItemsArr = the array of items to select in the form
@@ -241,15 +254,10 @@ Ext.define('Ssp.util.FormRendererUtils',{
      */
     getMappedFields: function( itemId, maps ){
 		var additionalFieldsArr = [];
-    	for (var z=0; z<maps.length; z++)
-		{
-			var map = maps[z];
-			if ( itemId == map.parentId )
-			{
-				var field = this.getFieldFromMap( map );
-				additionalFieldsArr.push( field );
-			}
-		}
+		Ext.each(maps, function(map,index){
+			if (itemId==map.parentId)
+				additionalFieldsArr.push( this.getFieldFromMap( map ) );   		
+    	},this);
 
     	return additionalFieldsArr;
     },
@@ -282,8 +290,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
     		validationExpression=map.validationExpression;
     	if (map.validationErrorMessage != null)
     		valErrorText = map.validationErrorMessage;
-    	
-    	console.log(validationExpression);
+
     	Ext.apply(field, {
     		parentId: map.parentId, 
     		name: map.parentId + this.additionalFieldsKeySeparator + map.name, 
@@ -302,7 +309,6 @@ Ext.define('Ssp.util.FormRendererUtils',{
     			comp.setValue("");
     	});
     	
-
     	return field;
     },
     
@@ -315,6 +321,25 @@ Ext.define('Ssp.util.FormRendererUtils',{
     	var isKey = (key.indexOf( this.additionalFieldsKeySeparator ) != -1);
     	return isKey;
     },
+
+    /**
+     * @param obj - a values object from a form
+     * @returns the value of the associated item in the mapped field
+     */
+    getMappedFieldValueFromFormValuesByIdKey: function( obj, id ){
+    	var returnVal = "";
+    	Ext.iterate(obj, function(key, value) {
+			if ( this.isAdditionalFieldKey( key ) )
+			{
+				keys = key.split( this.additionalFieldsKeySeparator );
+				if ( keys[0]==id )
+				{
+					returnVal = value;
+				}
+			} 
+		},this);
+    	return returnVal;
+    },    
     
     /**
      * @param obj - a values object from a form
@@ -360,7 +385,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
      * 
      * @returns = an array of transfer objects for the selected items in the form
      */
-	createTransferObjectFromSelectedValues: function(idKey, formValues, personId){
+	createTransferObjectsFromSelectedValues: function(idKey, formValues, personId){
 		var transferObjects = [];	
 		var formUtils = this.formUtils;
 		var additionalFieldArr = [];
@@ -395,7 +420,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		
 		return transferObjects;
 	},    
-    
+	
 	/**
 	 * Allows an additional field to be hidden until
 	 * an item is selected that is associated with the 

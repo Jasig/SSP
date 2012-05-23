@@ -36,7 +36,7 @@ Ext.define('Ssp.view.tools.EarlyAlert', {
 	    		           ],
 				    
 				    dockedItems: [{
-				        dock: 'top',
+				        dock: 'bottom',
 				        xtype: 'toolbar',
 				        items: [{
 				            tooltip: 'Print the History for this student',
@@ -45,7 +45,7 @@ Ext.define('Ssp.view.tools.EarlyAlert', {
 				            itemId: 'viewHistoryButton'
 				        }]
 				    },{
-				        dock: 'bottom',
+				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
 				            tooltip: 'Respond to the selected Early Alert',

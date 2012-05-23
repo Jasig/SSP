@@ -3,5 +3,6 @@ Ext.define('Ssp.view.Tools', {
 	alias : 'widget.tools',
 	id: 'Tools',
 	width: '100%',
-	height: '100%'
+	height: '100%',
+	layout: 'fit'
 });

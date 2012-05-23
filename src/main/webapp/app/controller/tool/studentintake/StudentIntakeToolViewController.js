@@ -41,7 +41,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
             	var valid = true;
             	var exp = new RegExp(field.validationExpression);
             	var check = Ext.ComponentQuery.query('#'+field.parentId)[0];
-            	console.log(exp);
             	if (check != null)
             	{
             		if (check.getValue()==true)
@@ -88,8 +87,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 				}	
 			},this);
 		},this);
-		
-		
 		
 		// Load the Student Intake
 		Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
@@ -165,22 +162,44 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 
 		defaultLabelWidth = 150;
 
-		educationGoalsAdditionalFieldsMap = [{parentId: Ssp.util.Constants.EDUCATIONAL_GOAL_OTHER_ID, 
+		educationGoalsAdditionalFieldsMap = [
+		     {
+		      parentId: Ssp.util.Constants.EDUCATION_GOAL_BACHELORS_DEGREE_ID, 
+			  parentName: "bachelor",
+			  name: "description", 
+			  label: "Describe bachelor's goal", 
+			  fieldType: "mappedtextfield",
+			  labelWidth: 200
+			 },
+		     {
+			      parentId: Ssp.util.Constants.EDUCATION_GOAL_MILITARY_ID, 
+				  parentName: "military",
+				  name: "description", 
+				  label: "Describe military goal", 
+				  fieldType: "mappedtextfield",
+				  labelWidth: 200
+			 },
+			 {
+		      parentId: Ssp.util.Constants.EDUCATION_GOAL_OTHER_ID, 
 			  parentName: "other",
-			  name: "otherDescription", 
-			  label: "Please Explain", 
-			  fieldType: "textfield",
-			  labelWidth: defaultLabelWidth}];
+			  name: "description", 
+			  label: "Decribe your other goal", 
+			  fieldType: "mappedtextfield",
+			  labelWidth: 200
+			 }
+		];
 		
 		educationGoalFormProps = {
 				mainComponentType: 'radio',
 			    formId: 'StudentIntakeEducationGoals',
                 itemsArr: educationGoals,
                 selectedItemId: personEducationGoalId,
-                idFieldName: 'id', 
+                idFieldName: 'id',
+                selectedItemsArr: [ personEducationGoal.data ],
                 selectedIdFieldName: 'educationGoalId',
                 additionalFieldsMap: educationGoalsAdditionalFieldsMap,
-                radioGroupId: 'StudentIntakeEducationGoalsRadioGroup'};		
+                radioGroupId: 'StudentIntakeEducationGoalsRadioGroup',
+                radioGroupFieldSetId: 'StudentIntakeEducationGoalsFieldSet'};		
 		
 		this.formUtils.createForm( educationGoalFormProps );	
 
@@ -224,7 +243,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			                                 labelWidth: defaultLabelWidth},
 		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_OTHER_ID, 
 			                                 parentName: "other", 
-			                                 name: "otherDescription", 
+			                                 name: "description", 
 			                                 label: "Please Explain", 
 			                                 fieldType: "mappedtextarea",
 			                                 labelWidth: defaultLabelWidth}];		
@@ -294,6 +313,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var demographicsFormModel = null;
 		var educationPlansFormModel = null;
 		var educationGoalFormModel = null;
+		var educationGoalDescription = "";
+		var educationGoalFormValues = null;
 		var educationLevelFormValues = null;
 		var fundingFormValues = null;
 		var challengesFormValues = null;
@@ -333,17 +354,19 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			intakeData.personEducationGoal.personId = personId;
 			intakeData.personEducationPlan.personId = personId;
 
+			educationGoalFormValues = educationGoalForm.getValues();
+			educationGoalDescription = formUtils.getMappedFieldValueFromFormValuesByIdKey( educationGoalFormValues, educationGoalFormModel.data.educationGoalId );
+			intakeData.personEducationGoal.description = educationGoalDescription;
+			
 			educationLevelFormValues = educationLevelsForm.getValues();
-			intakeData.personEducationLevels = formUtils.createTransferObjectFromSelectedValues('educationLevelId', educationLevelFormValues, personId);	
+			intakeData.personEducationLevels = formUtils.createTransferObjectsFromSelectedValues('educationLevelId', educationLevelFormValues, personId);	
 	
 			fundingFormValues = fundingForm.getValues();
-			intakeData.personFundingSources = formUtils.createTransferObjectFromSelectedValues('fundingSourceId', fundingFormValues, personId);	
+			intakeData.personFundingSources = formUtils.createTransferObjectsFromSelectedValues('fundingSourceId', fundingFormValues, personId);	
 			
 			challengesFormValues = challengesForm.getValues();
-			intakeData.personChallenges = formUtils.createTransferObjectFromSelectedValues('challengeId', challengesFormValues, personId);
+			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);
 
-			console.log( intakeData );
-			
 			Ext.Ajax.request({
 				url: this.apiProperties.createUrl(this.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
 				method: 'PUT',
@@ -357,6 +380,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 				},
 				failure: this.apiProperties.handleError
 			}, this);
+
 		}else{
 			Ext.Msg.alert('Invalid Data','Please correct the errors in this Student Intake before saving the record.');
 		}
