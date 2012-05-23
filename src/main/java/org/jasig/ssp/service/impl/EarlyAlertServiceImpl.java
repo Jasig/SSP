@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.impl;
+package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
 import java.util.HashSet;
 import java.util.Map;
@@ -20,6 +20,7 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -47,6 +48,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Autowired
 	private transient EarlyAlertDao dao;
+
+	@Autowired
+	private transient ConfigService configService;
 
 	@Autowired
 	private transient MessageService messageService;
@@ -284,14 +288,6 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 		final Person person = earlyAlert.getPerson();
 		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlert);
-		templateParameters.put("InstitutionName", "// TODO: InstitutionName");
-		templateParameters.put("CoachTitle", "// TODO: CoachTitle");
-		templateParameters.put("CoachOfficeLocation",
-				"// TODO: CoachOfficeLocation");
-		templateParameters.put("CoachWorkPhone", person.getCoach()
-				.getWorkPhone());
-		templateParameters.put("CoachPrimaryEmailAddress", person.getCoach()
-				.getPrimaryEmailAddress());
 
 		// Create and queue the message
 		final Message message = messageService.createMessage(person, null,
@@ -324,7 +320,6 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 		final Person person = earlyAlert.getPerson();
 		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlert);
-		templateParameters.put("Comment", earlyAlert.getComment());
 
 		// Create and queue the message
 		final Message message = messageService.createMessage(person, null,
@@ -353,58 +348,33 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			throw new IllegalArgumentException("EarlyAlert.Campus is missing.");
 		}
 
-		final Person person = earlyAlert.getPerson();
-		final Person createdBy = earlyAlert.getCreatedBy();
-		final StringBuilder reasons = new StringBuilder();
-		final StringBuilder suggestions = new StringBuilder();
-
-		for (final EarlyAlertReason reason : earlyAlert
-				.getEarlyAlertReasonIds()) {
-			if (reasons.length() > 0) {
-				reasons.append(",");
+		// ensure earlyAlert.createdBy is populated
+		if (earlyAlert.getCreatedBy().getFirstName() == null
+				|| earlyAlert.getCreatedBy().getLastName() == null) {
+			if (earlyAlert.getCreatedBy().getId() == null) {
+				throw new IllegalArgumentException(
+						"EarlyAlert.CreatedBy.Id is missing.");
 			}
 
-			reasons.append(reason.getName());
-		}
-
-		for (final EarlyAlertSuggestion suggestion : earlyAlert
-				.getEarlyAlertSuggestionIds()) {
-			if (suggestions.length() > 0) {
-				suggestions.append(",");
+			try {
+				earlyAlert.setCreatedBy(personService.get(earlyAlert
+						.getCreatedBy().getId()));
+			} catch (final ObjectNotFoundException e) {
+				throw new IllegalArgumentException(
+						"EarlyAlert.CreatedBy.Id could not be loaded.", e);
 			}
-
-			suggestions.append(suggestion.getName());
 		}
 
 		final Map<String, Object> templateParameters = Maps.newHashMap();
-		templateParameters.put("TermForEarlyAlert",
-				"// TODO: TermForEarlyAlert");
-		templateParameters.put("FirstName", person.getFirstName());
-		templateParameters.put("LastName", person.getLastName());
-		templateParameters.put("SchoolId", person.getSchoolId());
-		templateParameters.put("HomePhone", person.getHomePhone());
-		templateParameters.put("PrimaryEmailAddress",
-				person.getPrimaryEmailAddress());
-		templateParameters.put("AddressLine1", person.getAddressLine1());
-		templateParameters.put("AddressLine2", person.getAddressLine2());
-		templateParameters.put("City", person.getCity());
-		templateParameters.put("State", person.getState());
-		templateParameters.put("ZipCode", person.getZipCode());
-		templateParameters.put("CourseName", earlyAlert.getCourseName());
-		templateParameters.put("CreatedByFirstName", createdBy.getFirstName());
-		templateParameters.put("CreatedByLastName", createdBy.getLastName());
-		templateParameters.put("CampusName", earlyAlert.getCampus().getName());
-		templateParameters.put("CreatedByOfficeLocation",
-				"// TODO: OfficeLocation");
-		templateParameters.put("CreatedByPrimaryEmailAddress",
-				createdBy.getPrimaryEmailAddress());
-		templateParameters.put("CreatedByWorkPhone", createdBy.getWorkPhone());
-		templateParameters.put("CoachFirstName", person.getCoach()
-				.getFirstName());
-		templateParameters
-				.put("CoachLastName", person.getCoach().getLastName());
-		templateParameters.put("Reasons", reasons.toString());
-		templateParameters.put("Suggestions", suggestions.toString());
+		templateParameters.put("earlyAlert", earlyAlert);
+		templateParameters.put("termToRepresentEarlyAlert",
+				configService.getByNameEmpty("term_to_represent_early_alert"));
+		templateParameters.put("linkToSSP",
+				configService.getByNameEmpty("serverExternalPath"));
+		templateParameters.put("applicationTitle",
+				configService.getByNameEmpty("app_title"));
+		templateParameters.put("institutionName",
+				configService.getByNameEmpty("institution_name"));
 
 		return templateParameters;
 	}

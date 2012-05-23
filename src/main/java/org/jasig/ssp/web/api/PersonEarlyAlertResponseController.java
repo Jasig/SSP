@@ -7,6 +7,7 @@ import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.EarlyAlertResponseService;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
 import org.jasig.ssp.transferobject.PagingTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -75,8 +76,8 @@ public class PersonEarlyAlertResponseController extends
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
-			throws Exception {
-
+			throws ObjectNotFoundException
+	{
 		final Person person = personService.get(personId);
 		final PagingWrapper<EarlyAlertResponse> data = getService()
 				.getAllForPerson(
