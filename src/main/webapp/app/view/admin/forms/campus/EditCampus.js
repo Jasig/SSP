@@ -1,21 +1,13 @@
-Ext.define('Ssp.view.tools.actionplan.AddGoalForm', {
+Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
 	extend: 'Ext.form.Panel',
-	alias: 'widget.addgoalform',
+	alias : 'widget.editcampus',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.actionplan.AddGoalFormViewController',
-    inject: {
-        store: 'confidentialityLevelsStore'
-    },
+    controller: 'Ssp.controller.admin.campus.EditCampusViewController',
+	title: 'Edit Campus',
 	initComponent: function() {
         Ext.applyIf(this, {
-        	title: 'Add Goal',
-            fieldDefaults: {
-                msgTarget: 'side',
-                labelAlign: 'right',
-                labelWidth: 150
-            },            
-        	items: [
+            items: [
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Name',
@@ -27,20 +19,7 @@ Ext.define('Ssp.view.tools.actionplan.AddGoalForm', {
                     fieldLabel: 'Description',
                     anchor: '100%',
                     name: 'description'
-                },{
-			        xtype: 'combobox',
-			        name: 'confidentialityLevelId',
-			        fieldLabel: 'Confidentiality Level',
-			        emptyText: 'Select One',
-			        store: this.store,
-			        valueField: 'id',
-			        displayField: 'acronym',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true
-				}],
+                }],
             
             dockedItems: [{
        		               xtype: 'toolbar',

@@ -23,7 +23,7 @@ Ext.require([
     'Ssp.view.tools.actionplan.Tasks',
     'Ssp.view.tools.actionplan.AddTask',
     'Ssp.view.tools.actionplan.AddTaskForm',
-    'Ssp.view.tools.actionplan.AddGoalForm',
+    'Ssp.view.tools.actionplan.EditGoalForm',
     'Ssp.view.tools.actionplan.ActionPlanTasks',
     'Ssp.view.tools.actionplan.ActionPlanGoals',
     'Ssp.view.tools.actionplan.TaskTree',
@@ -65,6 +65,11 @@ Ext.require([
     'Ssp.view.admin.forms.journal.DisplayStepsAdmin',
     'Ssp.view.admin.forms.journal.EditStep',
     'Ssp.view.admin.forms.journal.EditStepDetail',
+    
+    // CAMPUS ADMIN VIEWS
+    'Ssp.view.admin.forms.campus.CampusAdmin',
+    'Ssp.view.admin.forms.campus.DefineCampus',
+    'Ssp.view.admin.forms.campus.EditCampus',
     
     'Ssp.model.util.TreeRequest',
     'Ssp.model.Configuration',
@@ -285,6 +290,12 @@ Ext.onReady(function(){
         currentEarlyAlertResponse:{
 	        fn: function(){
 	            return new Ssp.model.tool.earlyalert.EarlyAlertResponse({id:""});
+	    	},
+	        singleton: true
+        },
+        currentCampus:{
+	        fn: function(){
+	            return new Ssp.model.reference.Campus({id:""});
 	    	},
 	        singleton: true
         },

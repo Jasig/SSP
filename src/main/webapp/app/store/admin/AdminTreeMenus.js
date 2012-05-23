@@ -110,12 +110,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     										leaf: true
     									}]
     						},{
-    							text: 'Self Help Guide',
-    							title: 'Self Help Guide',
-    							form: '',
-    							expanded: false,
-    							children: []
-    						},{
     							text: 'Security',
     							title: 'Security',
     							form: '',
@@ -132,8 +126,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     							expanded: false,
     							children: [{text: 'Campuses',
     										title: 'Campuses',
-    										store: 'campuses',
-    										form: 'AbstractReferenceAdmin',
+    										store: '',
+    										form: 'CampusAdmin',
     										leaf: true }]
     						},{
     							text: 'Early Alert',

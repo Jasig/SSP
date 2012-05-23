@@ -30,6 +30,27 @@ Ext.define('Ssp.view.Search', {
 		       			dock: 'bottom',
 		       		    displayInfo: true,
 		       		    pageSize: this.apiProperties.getPagingSize()
+		       		},{
+		       			xtype: 'toolbar',
+		       			dock: 'top',
+		       		    items: [
+		       		        {
+		       		        	xtype: 'label',
+		                        text: 'Search'
+		       		        },{
+		       		        	xtype: 'textfield'
+		       		        },{
+		       		        	xtype: 'button',
+		       		        	itemId: 'searchButton',
+		       		        	text: 'GO'
+		       		        },{
+		       		        	xtype: 'tbspacer',
+		       		        	flex: 1
+		       		        },{
+		       		        	xtype: 'checkbox',
+		       		        	boxLabel: 'All Students'
+		       		        }
+		       		    ]
 		       		}]
 		    	    });
     	

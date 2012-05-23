@@ -74,7 +74,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 				        xtype: 'toolbar',
 				        items: [{
 				            tooltip: 'Add a task',
-				            text: 'Add Task',
+				            text: 'Add',
 				            xtype: 'button',
 				            itemId: 'addTaskButton'
 				        }]

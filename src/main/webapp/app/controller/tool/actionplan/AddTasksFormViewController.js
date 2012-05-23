@@ -37,7 +37,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     		this.task.set('description', args.description || '');
     		this.task.set('challengeId', args.challengeId || '');
     		this.task.set('challengeReferralId', args.challengeReferralId || '')
-    		this.task.set('confidentialityLevelId', args.confidentialityLevelId || '');
+    		// this.task.set('confidentialityLevelId', args.confidentialityLevelId || '');
     		this.task.set('type','SSP');
     		this.task.set('personId', this.person.get('id') || '');
     		this.getView().getForm().loadRecord(this.task);		
@@ -53,9 +53,8 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	if ( form.isValid() )
     	{
     		form.updateRecord();
+    		this.task.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
     		url = this.apiProperties.createUrl( this.personTaskUrl );
-    		this.task.data.createdBy=null;
-    		this.task.data.modifiedBy=null;
     		this.apiProperties.makeRequest({
     			url: url,
     			method: 'POST',
@@ -63,7 +62,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     			successFunc: function(response ,view){
     				Ext.Msg.alert('The record was saved successfully');
     			}
-    		});    	
+    		});   	
     	}else{
     		Ext.Msg.alert('Error', 'Please correct the errors in your form before continuing.');
     	}
