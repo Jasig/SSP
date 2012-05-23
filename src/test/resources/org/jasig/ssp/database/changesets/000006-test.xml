@@ -25,5 +25,60 @@
 			</delete>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="test special service group" author="daniel.bower">
+		<insert tableName="special_service_group">
+			<column name="id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
+			<column name="name" value="Test Special Service Group" />
+			<column name="description" value="This is the description of the Test Special Service Group." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="special_service_group">
+				<where>id='f6201a04-bb31-4ca5-b606-609f3ad09f87'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="test service reason" author="daniel.bower">
+		<insert tableName="service_reason">
+			<column name="id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
+			<column name="name" value="Test Service Reason" />
+			<column name="description" value="This is the description of the Test Service Reason." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="service_reason">
+				<where>id='f6201a04-bb31-4ca5-b606-609f3ad09f87'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="test referral source" author="daniel.bower">
+		<insert tableName="referral_source">
+			<column name="id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
+			<column name="name" value="Test Referral Source" />
+			<column name="description" value="This is the description of the Test Referral Source." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="referral_source">
+				<where>id='f6201a04-bb31-4ca5-b606-609f3ad09f87'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 
 </databaseChangeLog>
