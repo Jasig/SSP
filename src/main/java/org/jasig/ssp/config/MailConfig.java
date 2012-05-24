@@ -1,7 +1,10 @@
 /**
  * 
  */
-package org.jasig.ssp.util.config;
+package org.jasig.ssp.config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.dumbster.smtp.SimpleSmtpServer;
 
@@ -12,24 +15,23 @@ import com.dumbster.smtp.SimpleSmtpServer;
  * @author jon.adams
  * 
  */
+@Service
 public class MailConfig {
-	private boolean sendMail;
 
-	private int port;
+	@Value("#{configProperties.send_mail}")
+	private transient boolean sendMail;
+
+	@Value("#{configProperties.smtp_port}")
+	private transient int port;
+
+	@Value("#{configProperties.enable_mock_mail_server}")
+	private transient boolean enableMockMailServer;
 
 	/**
-	 * @return the sendMail
+	 * @return sendMail
 	 */
 	public boolean isSendMail() {
 		return sendMail;
-	}
-
-	/**
-	 * @param sendMail
-	 *            the sendMail to set
-	 */
-	public void setSendMail(final boolean sendMail) {
-		this.sendMail = sendMail;
 	}
 
 	/**
@@ -37,14 +39,6 @@ public class MailConfig {
 	 */
 	public int getPort() {
 		return port;
-	}
-
-	/**
-	 * @param port
-	 *            the port to set
-	 */
-	public void setPort(final int port) {
-		this.port = port;
 	}
 
 	/**
@@ -56,6 +50,9 @@ public class MailConfig {
 	 *         testing.
 	 */
 	public SimpleSmtpServer spawn() {
-		return SimpleSmtpServer.start(port);
+		if (enableMockMailServer) {
+			return SimpleSmtpServer.start(port);
+		}
+		return null;
 	}
 }

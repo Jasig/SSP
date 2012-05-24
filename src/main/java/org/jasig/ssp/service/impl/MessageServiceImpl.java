@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
+import org.jasig.ssp.config.MailConfig;
 import org.jasig.ssp.dao.MessageDao;
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.Message;
@@ -23,7 +24,6 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfigService;
-import org.jasig.ssp.util.config.MailConfig;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

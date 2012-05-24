@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jasig.ssp.config.MailConfig;
 import org.jasig.ssp.dao.MessageDao;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
@@ -24,7 +25,6 @@ import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
-import org.jasig.ssp.util.config.MailConfig;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;

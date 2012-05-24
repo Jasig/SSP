@@ -13,7 +13,7 @@
 
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties"
-		location="file:${SSP_TESTCONFIGDIR}/ssp-test-config.properties" />
+		location="file:${SSP_TESTCONFIGDIR}/ssp-config.properties" />
 
 	<tx:annotation-driven />
 
@@ -96,12 +96,6 @@
 				string.resource.loader.class=org.apache.velocity.runtime.resource.loader.StringResourceLoader
 			</value>
 		</property>
-	</bean>
-
-	<!-- Testing-only mail server that doesn't send messages -->
-	<bean id="testingMailServerConfig" class="org.jasig.ssp.util.config.MailConfig">
-		<property name="port" value="#{configProperties.smtp_port}" />
-		<property name="sendMail" value="#{configProperties.send_mail}" />
 	</bean>
 
 	<!-- Allow proper instrumentation with cobertura -->
