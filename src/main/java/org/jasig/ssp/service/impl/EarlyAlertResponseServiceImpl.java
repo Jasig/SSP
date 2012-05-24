@@ -200,7 +200,7 @@ public class EarlyAlertResponseServiceImpl extends
 		templateParameters.put("applicationTitle",
 				configService.getByNameEmpty("app_title"));
 		templateParameters.put("institutionName",
-				configService.getByNameEmpty("institution_name"));
+				configService.getByNameEmpty("inst_name"));
 		final JournalEntry journalEntry = new JournalEntry();
 		final JournalStepDetail detail = new JournalStepDetail();
 		detail.setName("Early Alert Response Sent");

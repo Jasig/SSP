@@ -45,7 +45,7 @@ import com.google.common.collect.Sets;
 @ContextConfiguration("../service-testConfig.xml")
 @TransactionConfiguration()
 @Transactional
-public class PersonEarlyAlertServiceTest {
+public class EarlyAlertServiceTest {
 
 	private static final UUID PERSON_ID = UUID
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
@@ -73,7 +73,7 @@ public class PersonEarlyAlertServiceTest {
 	@Autowired
 	private transient MessageService messageService;
 
-	@Autowired()
+	@Autowired
 	private transient MailConfig smtpServerConfig;
 
 	@Autowired
