@@ -1,6 +1,5 @@
 package org.jasig.ssp.model;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -26,7 +25,9 @@ import org.jasig.ssp.model.reference.EarlyAlertReferral;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EarlyAlertResponse extends Auditable implements Serializable {
+public class EarlyAlertResponse
+		extends AbstractAuditable
+		implements Auditable {
 
 	private static final long serialVersionUID = 7109630326339706214L;
 
@@ -171,11 +172,11 @@ public class EarlyAlertResponse extends Auditable implements Serializable {
 				: earlyAlertOutcomeOtherDescription.hashCode();
 		result *= StringUtils.isEmpty(comment) ? "comment".hashCode() : comment
 				.hashCode();
-		result *= earlyAlert == null || earlyAlert.getId() == null ? "earlyAlert"
+		result *= (earlyAlert == null) || (earlyAlert.getId() == null) ? "earlyAlert"
 				.hashCode()
 				: earlyAlert.getId().hashCode();
-		result *= earlyAlertOutcome == null
-				|| earlyAlertOutcome.getId() == null ? "earlyAlertOutcome"
+		result *= (earlyAlertOutcome == null)
+				|| (earlyAlertOutcome.getId() == null) ? "earlyAlertOutcome"
 				.hashCode() : earlyAlertOutcome.getId().hashCode();
 		result *= earlyAlertOutreachIds == null ? "earlyAlertOutreachIds"
 				.hashCode() : earlyAlertOutreachIds.hashCode();

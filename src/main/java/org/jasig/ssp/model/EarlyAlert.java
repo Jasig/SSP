@@ -1,6 +1,5 @@
 package org.jasig.ssp.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -31,7 +30,9 @@ import com.google.common.collect.Sets;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EarlyAlert extends Auditable implements Serializable { // NOPMD
+public class EarlyAlert
+		extends AbstractAuditable
+		implements PersonAssocAuditable { // NOPMD
 
 	private static final long serialVersionUID = 8141595549982881039L;
 
@@ -208,10 +209,12 @@ public class EarlyAlert extends Auditable implements Serializable { // NOPMD
 		this.closedById = closedById;
 	}
 
+	@Override
 	public Person getPerson() {
 		return person;
 	}
 
+	@Override
 	public void setPerson(final Person person) {
 		this.person = person;
 	}
@@ -276,7 +279,7 @@ public class EarlyAlert extends Auditable implements Serializable { // NOPMD
 				: earlyAlertReasonOtherDescription.hashCode();
 		result *= StringUtils.isEmpty(comment) ? "comment".hashCode() : comment
 				.hashCode();
-		result *= person == null || person.getId() == null ? "person"
+		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= earlyAlertReasonIds == null ? "earlyAlertReasonIds"
 				.hashCode() : earlyAlertReasonIds.hashCode();

@@ -10,7 +10,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
  * 
  */
 public interface EarlyAlertService
-		extends PersonAssocService<EarlyAlert> {
+		extends AuditablePersonAssocService<EarlyAlert> {
 
 	/**
 	 * Create a new EarlyAlert, assign to the appropriate coordinator, e-mail
