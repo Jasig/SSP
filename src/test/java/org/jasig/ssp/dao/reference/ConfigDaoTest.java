@@ -63,6 +63,7 @@ public class ConfigDaoTest {
 		Config obj = new Config();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setDefaultValue("123");
 		obj = dao.save(obj);
 
 		savedId = obj.getId();

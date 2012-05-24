@@ -19,7 +19,7 @@ import com.google.common.collect.Lists;
 public class ConfigTO extends AbstractReferenceTO<Config>
 		implements TransferObject<Config> {
 
-	private String value, valueValidation;
+	private String value, valueValidation, defaultValue;
 	private short sortOrder; // NOPMD by jon on 5/4/12 11:16
 
 	/**
@@ -87,6 +87,7 @@ public class ConfigTO extends AbstractReferenceTO<Config>
 		super.from(model);
 		sortOrder = model.getSortOrder();
 		value = model.getValue();
+		defaultValue = model.getDefaultValue();
 	}
 
 	/**
@@ -124,6 +125,14 @@ public class ConfigTO extends AbstractReferenceTO<Config>
 
 	public void setValueValidation(final String valueValidation) {
 		this.valueValidation = valueValidation;
+	}
+
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(final String defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 
 	/**

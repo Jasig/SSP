@@ -13,7 +13,6 @@ import java.util.UUID;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.jasig.ssp.config.MailConfig;
 import org.jasig.ssp.dao.MessageDao;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
@@ -38,7 +37,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dumbster.smtp.SimpleSmtpServer;
 import com.google.common.collect.Sets;
 
 /**
@@ -60,9 +58,6 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 
 	@Autowired
 	protected transient CampusService campusService;
-
-	@Autowired()
-	private transient MailConfig smtpServerConfig;
 
 	// Can't use service because it doesn't offer GetAll or similar methods
 	@Autowired
@@ -146,56 +141,48 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 */
 	@Test(expected = ObjectNotFoundException.class)
 	public void testControllerDelete() throws Exception { // NOPMD
-		final SimpleSmtpServer smtpServer = smtpServerConfig.spawn();
-		try {
-			assertFalse("Faux mail server should be running but was not.",
-					smtpServer.isStopped());
+		final String testEmailCC = "some@email.address.com"; // NOPMD by jon
 
-			final String testEmailCC = "some@email.address.com"; // NOPMD by jon
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setPersonId(PERSON_ID);
+		obj.setEmailCC(testEmailCC);
+		obj.setCampusId(CAMPUS_ID);
+		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
+				.newHashSet();
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 
-			final EarlyAlertTO obj = new EarlyAlertTO();
-			obj.setPersonId(PERSON_ID);
-			obj.setEmailCC(testEmailCC);
-			obj.setCampusId(CAMPUS_ID);
-			final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
-					.newHashSet();
-			earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
-					EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
-			obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		final EarlyAlertTO saved = controller.create(PERSON_ID,
+				obj);
+		assertNotNull("Saved instance should not have been null.", saved);
 
-			final EarlyAlertTO saved = controller.create(PERSON_ID,
-					obj);
-			assertNotNull("Saved instance should not have been null.", saved);
+		final UUID savedId = saved.getId();
+		assertNotNull(
+				"Saved instance identifier should not have been null.",
+				savedId);
 
-			final UUID savedId = saved.getId();
-			assertNotNull(
-					"Saved instance identifier should not have been null.",
-					savedId);
+		assertEquals("Saved instance values did not match.", testEmailCC,
+				saved.getEmailCC());
+		assertEquals("Saved instance sets did not match.",
+				EARLY_ALERT_SUGGESTION_NAME,
+				saved.getEarlyAlertSuggestionIds().iterator().next()
+						.getName());
 
-			assertEquals("Saved instance values did not match.", testEmailCC,
-					saved.getEmailCC());
-			assertEquals("Saved instance sets did not match.",
-					EARLY_ALERT_SUGGESTION_NAME,
-					saved.getEarlyAlertSuggestionIds().iterator().next()
-							.getName());
+		final ServiceResponse response = controller.delete(savedId,
+				PERSON_ID);
 
-			final ServiceResponse response = controller.delete(savedId,
-					PERSON_ID);
+		assertNotNull("Deletion response should not have been null.",
+				response);
+		assertTrue("Deletion response did not return success.",
+				response.isSuccess());
 
-			assertNotNull("Deletion response should not have been null.",
-					response);
-			assertTrue("Deletion response did not return success.",
-					response.isSuccess());
-
-			final EarlyAlertTO afterDeletion = controller.get(savedId,
-					PERSON_ID);
-			// ObjectNotFoundException expected at this point
-			assertNull(
-					"Instance should not be able to get loaded after it has been deleted.",
-					afterDeletion);
-		} finally {
-			smtpServer.stop();
-		}
+		final EarlyAlertTO afterDeletion = controller.get(savedId,
+				PERSON_ID);
+		// ObjectNotFoundException expected at this point
+		assertNull(
+				"Instance should not be able to get loaded after it has been deleted.",
+				afterDeletion);
 	}
 
 	/**

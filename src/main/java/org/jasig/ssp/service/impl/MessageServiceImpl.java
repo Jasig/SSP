@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
-import org.jasig.ssp.config.MailConfig;
 import org.jasig.ssp.dao.MessageDao;
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.Message;
@@ -28,6 +27,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -63,11 +63,11 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private transient ConfigService configService;
 
-	@Autowired
-	private transient MailConfig mailConfig;
-
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MessageServiceImpl.class);
+
+	@Value("#{contextProperties.applicationMode}")
+	private transient String applicationMode;
 
 	/**
 	 * Gets the global BCC e-mail address from the application configuration
@@ -81,8 +81,20 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
+	/**
+	 * Always returns true in TEST applicationMode
+	 */
 	public boolean shouldSendMail() {
-		return mailConfig.isSendMail();
+		if ("TEST".equals(applicationMode)) {
+			return true;
+		}
+
+		final String shouldSendMail = configService.getByNameNull("send_mail");
+		if (shouldSendMail != null) {
+			return Boolean.valueOf(shouldSendMail);
+		}
+
+		return false;
 	}
 
 	/**

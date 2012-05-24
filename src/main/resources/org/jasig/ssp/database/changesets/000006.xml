@@ -182,4 +182,93 @@
 		</modifySql>
 
 	</changeSet>
+	
+	<changeSet id="Add defaultValue to Config" author="daniel.bower">
+		<addColumn tableName="config">
+			<column name="default_value" type="text">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<!-- add initial values here -->
+		<update tableName="config">
+			<column name="value" value="noone@test.com"/>
+			<column name="default_value" value="noone@test.com"/>
+			<where>id='59dbcf48-9be3-11e1-bded-0026b9e7ff4c'</where>
+		</update>
+		<update tableName="config">
+			<column name="value" value="3"/>
+			<column name="default_value" value="3"/>
+			<where>id='645d19ea-9be3-11e1-8ffe-0026b9e7ff4c'</where>
+		</update>
+		<update tableName="config">
+			<column name="default_value" value="SSP"/>
+			<where>id='67bd120e-9be1-11e1-ad1f-0026b9e7ff4c'</where>
+		</update>
+		<update tableName="config">
+			<column name="value" value="http://test.edu"/>
+			<column name="default_value" value="http://test.edu"/>
+			<where>id='8298fc28-9be1-11e1-933d-0026b9e7ff4c'</where>
+		</update>
+		<update tableName="config">
+			<column name="value" value="http://ssp.test.edu"/>
+			<column name="default_value" value="http://ssp.test.edu"/>
+			<where>id='e6c63bb0-9be2-11e1-a6cb-0026b9e7ff4c'</where>
+		</update>
+		<update tableName="config">
+			<column name="value" value="My Edu"/>
+			<column name="default_value" value="My Edu"/>
+			<where>id='e99ff3c7-6a59-4812-b3b1-285fa8764d3a'</where>
+		</update>
+		<update tableName="config">
+			<column name="default_value" value="Early Alert"/>
+			<where>id='80e51b59-3936-436a-93e2-9a116c1fd03c'</where>
+		</update>
+		
+		<addNotNullConstraint tableName="config" columnName="default_value"/>
+		
+		<rollback>
+			<dropColumn tableName="config" columnName="default_value"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Test mail server port" author="daniel.bower">
+		<insert tableName="config">
+			<column name="id" value="43bd3066-a5a8-11e1-8e16-0026b9e7ff4c" />
+			<column name="name" value="test_env_mock_mail_server_port" />
+			<column name="description"
+				value="The port to start the mock mail server on in the test environment" />
+			<column name="value">40025</column>
+			<column name="default_value">40025</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="3eb8d2ee-9baa-11e1-844c-0026b9e7ff4c" />
+			<column name="name" value="send_mail" />
+			<column name="description"
+				value="Whether the system should send out mails, or just log their generation" />
+			<column name="value">false</column>
+			<column name="default_value">false</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="config">
+				<where>id='43bd3066-a5a8-11e1-8e16-0026b9e7ff4c'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='3eb8d2ee-9baa-11e1-844c-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>
