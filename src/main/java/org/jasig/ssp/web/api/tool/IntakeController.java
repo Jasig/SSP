@@ -131,14 +131,16 @@ public class IntakeController extends BaseController {
 	 * creating it if necessary.
 	 * 
 	 * @param studentId
-	 *            Student identifier
-	 * @exception Exception
-	 *                Any errors will throw this generic exception.
+	 *            Student identifier Any errors will throw this generic
+	 *            exception.
 	 * @return Service response with success value, in the JSON format.
+	 * @throws ObjectNotFoundException
+	 *             If any reference data could not be loaded.
 	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
 	public @ResponseBody
-	IntakeFormTO load(final @PathVariable UUID studentId) throws Exception {
+	IntakeFormTO load(final @PathVariable UUID studentId)
+			throws ObjectNotFoundException {
 		final IntakeFormTO formTO = new IntakeFormTO(
 				service.loadForPerson(studentId));
 		formTO.setReferenceData(referenceData());
@@ -148,11 +150,9 @@ public class IntakeController extends BaseController {
 	/**
 	 * Return all the data that is necessary to complete an intake form.
 	 * 
-	 * @exception Exception
-	 *                Any errors will throw this generic exception.
 	 * @return Service response with success value, in the JSON format.
 	 */
-	public Map<String, Object> referenceData() throws Exception {
+	public Map<String, Object> referenceData() {
 		final Map<String, Object> refData = new HashMap<String, Object>();
 
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);

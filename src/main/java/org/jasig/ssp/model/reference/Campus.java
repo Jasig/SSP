@@ -95,7 +95,7 @@ public class Campus extends AbstractReference implements Auditable {
 	};
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		return hashPrime()
 				* super.hashCode()
 				* (earlyAlertCoordinatorId == null ? "earlyAlertCoordinatorId"

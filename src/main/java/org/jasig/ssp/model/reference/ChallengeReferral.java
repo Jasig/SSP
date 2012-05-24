@@ -121,13 +121,15 @@ public class ChallengeReferral
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime() * super.hashCode();
 
 		result *= StringUtils.isEmpty(publicDescription) ? "publicDescription"
 				.hashCode() : publicDescription.hashCode();
 		result *= showInSelfHelpGuide ? 5 : 11;
 		result *= showInStudentIntake ? 3 : 17;
+
+		// collections are not included here
 
 		return result;
 	}

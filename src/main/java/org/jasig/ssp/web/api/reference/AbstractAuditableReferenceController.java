@@ -8,6 +8,7 @@ import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.AbstractReference;
 import org.jasig.ssp.service.AuditableCrudService;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PagingTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
@@ -88,8 +89,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
-			final @RequestParam(required = false) String sortDirection)
-			throws Exception {
+			final @RequestParam(required = false) String sortDirection) {
 
 		final PagingWrapper<T> data = getService().getAll(
 				SortingAndPaging.createForSingleSort(status, start,
@@ -102,21 +102,21 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	TO get(final @PathVariable UUID id) throws Exception {
+	TO get(final @PathVariable UUID id) throws ObjectNotFoundException,
+			ValidationException {
 		final T model = getService().get(id);
 		if (model == null) {
 			return null;
 		}
 
-		final TO out = this.transferObjectClass.newInstance();
-		out.from(model);
-		return out;
+		return this.instantiateTO(model);
 	}
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
-	TO create(@Valid @RequestBody final TO obj) throws Exception {
+	TO create(@Valid @RequestBody final TO obj) throws ObjectNotFoundException,
+			ValidationException {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send a reference entity with an ID to the create method. Did you mean to use the save method instead?");
@@ -127,9 +127,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		if (null != model) {
 			final T createdModel = getService().create(model);
 			if (null != createdModel) {
-				final TO out = this.transferObjectClass.newInstance();
-				out.from(createdModel);
-				return out;
+				return this.instantiateTO(model);
 			}
 		}
 		return null;
@@ -139,7 +137,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	TO save(@PathVariable final UUID id, @Valid @RequestBody final TO obj)
-			throws Exception {
+			throws ValidationException, ObjectNotFoundException {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted without an id to the save method.  Did you mean to create?");
@@ -151,9 +149,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 
 		final T savedT = getService().save(model);
 		if (null != savedT) {
-			final TO out = this.transferObjectClass.newInstance();
-			out.from(savedT);
-			return out;
+			return this.instantiateTO(model);
 		}
 
 		return null;
@@ -162,8 +158,28 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
-	ServiceResponse delete(@PathVariable final UUID id) throws Exception {
+	ServiceResponse delete(@PathVariable final UUID id)
+			throws ObjectNotFoundException {
 		getService().delete(id);
 		return new ServiceResponse(true);
+	}
+
+	private TO instantiateTO(final T model) throws ValidationException {
+		TO out;
+		try {
+			out = this.transferObjectClass.newInstance();
+			out.from(model);
+			return out;
+		} catch (final InstantiationException e) {
+			LOGGER.error("Unable to instantiate this class", e);
+			throw new ValidationException("Unable to instantiate this class", e);
+		} catch (final IllegalAccessException e) {
+			LOGGER.error(
+					"Unable to instantiate this class because the Constructor is not visible",
+					e);
+			throw new ValidationException(
+					"Unable to instantiate this class because the Constructor is not visible",
+					e);
+		}
 	}
 }

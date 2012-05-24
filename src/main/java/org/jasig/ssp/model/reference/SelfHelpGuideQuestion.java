@@ -143,6 +143,8 @@ public class SelfHelpGuideQuestion
 		result *= selfHelpGuide == null ? "selfHelpGuide".hashCode()
 				: selfHelpGuide.getId().hashCode();
 
+		// collections are not included here
+
 		return result;
 	}
 }

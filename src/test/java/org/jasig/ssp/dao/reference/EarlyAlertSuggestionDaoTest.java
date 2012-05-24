@@ -1,5 +1,6 @@
-package org.jasig.ssp.dao.reference;
+package org.jasig.ssp.dao.reference; // NOPMD by jon.adams on 5/24/12 2:05 PM
 
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -176,5 +177,20 @@ public class EarlyAlertSuggestionDaoTest {
 				"Descending sortOrder sorting did not return the correct order.",
 				UUID.fromString("881df3dd-1aa6-4cb8-8817-e95daf49227a"),
 				obj2.getId());
+	}
+
+	@Test
+	public void testHashCode() throws ObjectNotFoundException {
+		final EarlyAlertSuggestion obj = new EarlyAlertSuggestion(
+				UUID.randomUUID(),
+				"Name", "description", (short) 34); // NOPMD by jon.adams
+
+		assertNotEquals("HashCodes should not have matched.", obj.hashCode(),
+				new EarlyAlertSuggestion().hashCode());
+		assertEquals("HashCodes should have matched.",
+				obj.hashCode(), obj.hashCode());
+		assertEquals("HashCodes should have matched.",
+				new EarlyAlertSuggestion().hashCode(),
+				new EarlyAlertSuggestion().hashCode());
 	}
 }

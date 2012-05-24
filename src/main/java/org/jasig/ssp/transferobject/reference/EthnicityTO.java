@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 
 public class EthnicityTO
 		extends AbstractReferenceTO<Ethnicity>
-		implements TransferObject<Ethnicity> {
+		implements TransferObject<Ethnicity> { // NOPMD by jon.adams
 
 	public EthnicityTO() {
 		super();
@@ -30,9 +30,10 @@ public class EthnicityTO
 	public static List<EthnicityTO> toTOList(
 			final Collection<Ethnicity> models) {
 		final List<EthnicityTO> tObjects = Lists.newArrayList();
-		for (Ethnicity model : models) {
-			tObjects.add(new EthnicityTO(model));
+		for (final Ethnicity model : models) {
+			tObjects.add(new EthnicityTO(model)); // NOPMD by jon.adams
 		}
+
 		return tObjects;
 	}
 }

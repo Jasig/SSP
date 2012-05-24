@@ -18,6 +18,12 @@
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}/ssp-config.properties"/>
 	
+	<util:properties id="contextProperties">
+		<prop key="applicationMode">RUN</prop>
+		<!-- applicationMode should be referenced almost never, please think 
+		thrice before using it. Values are:  RUN and TEST -->
+	</util:properties>
+
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
 	<context:component-scan base-package="org.jasig.ssp,org.jasig.mygps">
 		<context:exclude-filter type="regex" expression=".*Controller"/>
@@ -74,8 +80,6 @@
 			<bean class="org.hibernate.cfg.ImprovedNamingStrategy"/>
 		</property>
 	</bean>
-
-	
 	
 	<bean id="sspDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="#{configProperties.db_driver_class}" />

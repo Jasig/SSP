@@ -48,9 +48,10 @@ public class PersonEducationGoalTO
 	public static List<PersonEducationGoalTO> toTOList(
 			final Collection<PersonEducationGoal> models) {
 		final List<PersonEducationGoalTO> tos = Lists.newArrayList();
-		for (PersonEducationGoal model : models) {
-			tos.add(new PersonEducationGoalTO(model));
+		for (final PersonEducationGoal model : models) {
+			tos.add(new PersonEducationGoalTO(model)); // NOPMD
 		}
+
 		return tos;
 	}
 

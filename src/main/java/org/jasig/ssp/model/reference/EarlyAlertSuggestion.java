@@ -79,7 +79,8 @@ public class EarlyAlertSuggestion
 	 * @param sortOrder
 	 *            the sortOrder to set
 	 */
-	public void setSortOrder(short sortOrder) { // NOPMD by jon on 5/4/12 11:16
+	public void setSortOrder(final short sortOrder) { // NOPMD by jon on 5/4/12
+														// 11:16
 		this.sortOrder = sortOrder;
 	}
 
@@ -95,6 +96,6 @@ public class EarlyAlertSuggestion
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		return hashPrime() * super.hashCode()
-				* (sortOrder > 0 ? sortOrder : hashPrime());
+				* (sortOrder == 0 ? hashPrime() : sortOrder);
 	}
 }

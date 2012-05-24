@@ -120,7 +120,8 @@ public class SelfHelpGuideResponse
 				.hashCode() : person.getId().hashCode();
 		result *= selfHelpGuide == null ? "selfHelpGuide"
 				.hashCode() : selfHelpGuide.hashCode();
-		result *= selfHelpGuideQuestionResponses == null ? "selfHelpGuideQuestionResponses"
+		result *= selfHelpGuideQuestionResponses == null
+				|| selfHelpGuideQuestionResponses.isEmpty() ? "selfHelpGuideQuestionResponses"
 				.hashCode()
 				: selfHelpGuideQuestionResponses.hashCode();
 

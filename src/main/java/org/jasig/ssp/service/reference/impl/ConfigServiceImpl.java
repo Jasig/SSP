@@ -1,9 +1,13 @@
 package org.jasig.ssp.service.reference.impl;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.reference.ConfigDao;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.reference.ConfigException;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +25,9 @@ public class ConfigServiceImpl extends
 
 	@Autowired
 	transient private ConfigDao dao;
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ConfigServiceImpl.class);
 
 	/**
 	 * Set the DAO instance
@@ -77,5 +84,39 @@ public class ConfigServiceImpl extends
 		}
 
 		return config.getValue();
+	}
+
+	@Override
+	public String getByNameNullOrDefaultValue(final String name) {
+		final Config config = getByName(name);
+		if (config == null) {
+			return null;
+		}
+		if (StringUtils.isEmpty(config.getValue())) {
+			LOGGER.warn("Using default value for:" + name);
+			return config.getDefaultValue();
+		}
+
+		return config.getValue();
+	}
+
+	@Override
+	public int getByNameExceptionOrDefaultAsInt(final String name) {
+		final Config config = getByName(name);
+
+		if (config == null) {
+			throw new ConfigException(name);
+		}
+		if (StringUtils.isEmpty(config.getValue())
+				|| !StringUtils.isNumeric(config.getValue())) {
+			LOGGER.warn("Using default value for:" + name);
+			if (StringUtils.isNumeric(config.getDefaultValue())) {
+				return Integer.valueOf(config.getDefaultValue());
+			} else {
+				throw new ConfigException(name, "be numeric");
+			}
+		} else {
+			return Integer.valueOf(config.getValue());
+		}
 	}
 }

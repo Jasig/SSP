@@ -163,9 +163,8 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		if (null != model) {
 
 			// associate with person here.
-			final Person person = personService.get(personId);
 			if (model.getPerson() == null) {
-				model.setPerson(person);
+				model.setPerson(personService.get(personId));
 			}
 
 			final T createdModel = getService().create(model);
@@ -175,24 +174,6 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		}
 
 		return null;
-	}
-
-	private TO instantiateTO(final T model) throws ValidationException {
-		TO out;
-		try {
-			out = this.transferObjectClass.newInstance();
-			out.from(model);
-			return out;
-		} catch (InstantiationException e) {
-			LOGGER.error("Could not instantiate new instance of "
-					+ this.transferObjectClass.getName(), e);
-			throw new ValidationException("Unexpected error.", e);
-		} catch (IllegalAccessException e) {
-			LOGGER.error(
-					"Illegal access instantiating new instance of "
-							+ this.transferObjectClass.getName(), e);
-			throw new ValidationException("Unexpected error.", e);
-		}
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -225,5 +206,23 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 			@PathVariable final UUID personId) throws ObjectNotFoundException {
 		getService().delete(id);
 		return new ServiceResponse(true);
+	}
+
+	private TO instantiateTO(final T model) throws ValidationException {
+		TO out;
+		try {
+			out = this.transferObjectClass.newInstance();
+			out.from(model);
+			return out;
+		} catch (final InstantiationException e) {
+			LOGGER.error("Could not instantiate new instance of "
+					+ this.transferObjectClass.getName(), e);
+			throw new ValidationException("Unexpected error.", e);
+		} catch (final IllegalAccessException e) {
+			LOGGER.error(
+					"Illegal access instantiating new instance of "
+							+ this.transferObjectClass.getName(), e);
+			throw new ValidationException("Unexpected error.", e);
+		}
 	}
 }

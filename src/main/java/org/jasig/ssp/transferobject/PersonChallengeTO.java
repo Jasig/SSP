@@ -48,9 +48,10 @@ public class PersonChallengeTO
 	public static List<PersonChallengeTO> toTOList(
 			final Collection<PersonChallenge> models) {
 		final List<PersonChallengeTO> tos = Lists.newArrayList();
-		for (PersonChallenge model : models) {
-			tos.add(new PersonChallengeTO(model));
+		for (final PersonChallenge model : models) {
+			tos.add(new PersonChallengeTO(model)); // NOPMD
 		}
+
 		return tos;
 	}
 

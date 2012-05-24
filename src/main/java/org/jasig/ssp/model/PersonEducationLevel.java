@@ -24,7 +24,7 @@ import org.jasig.ssp.model.reference.EducationLevel;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonEducationLevel
+public class PersonEducationLevel // NOPMD by jon.adams on 5/24/12 1:34 PM
 		extends AbstractAuditable
 		implements PersonAssocAuditable {
 

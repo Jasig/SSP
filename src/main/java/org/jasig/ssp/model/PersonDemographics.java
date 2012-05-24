@@ -1,4 +1,4 @@
-package org.jasig.ssp.model;
+package org.jasig.ssp.model; // NOPMD by jon.adams on 5/24/12 1:34 PM
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +34,7 @@ import org.jasig.ssp.model.reference.VeteranStatus;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonDemographics
+public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		extends AbstractAuditable
 		implements Auditable {
 
@@ -323,31 +323,31 @@ public class PersonDemographics
 			final Citizenship citizenship, final VeteranStatus veterenStatus,
 			final Person coach,
 			final ChildCareArrangement childCareArrangement) {
-		this.setAbilityToBenefit(source.isAbilityToBenefit());
-		this.setAnticipatedStartTerm(source.getAnticipatedStartTerm());
-		this.setAnticipatedStartYear(source.getAnticipatedStartYear());
-		this.setLocal(source.isLocal());
-		this.setCountryOfResidence(source.getCountryOfResidence());
-		this.setPaymentStatus(source.getPaymentStatus());
-		this.setEthnicity(source.getEthnicity());
-		this.setGender(source.getGender());
-		this.setCitizenship(source.getCitizenship());
-		this.setCountryOfCitizenship(source.getCountryOfCitizenship());
-		this.setPrimaryCaregiver(source.isPrimaryCaregiver());
-		this.setNumberOfChildren(source.getNumberOfChildren());
-		this.setChildAges(source.getChildAges());
-		this.setChildCareNeeded(source.isChildCareNeeded());
-		this.setEmployed(source.isEmployed());
-		this.setPlaceOfEmployment(source.getPlaceOfEmployment());
-		this.setShift(source.getShift());
-		this.setWage(source.getWage());
-		this.setTotalHoursWorkedPerWeek(source.getTotalHoursWorkedPerWeek());
+		setAbilityToBenefit(source.isAbilityToBenefit());
+		setAnticipatedStartTerm(source.getAnticipatedStartTerm());
+		setAnticipatedStartYear(source.getAnticipatedStartYear());
+		setLocal(source.isLocal());
+		setCountryOfResidence(source.getCountryOfResidence());
+		setPaymentStatus(source.getPaymentStatus());
+		setEthnicity(source.getEthnicity());
+		setGender(source.getGender());
+		setCitizenship(source.getCitizenship());
+		setCountryOfCitizenship(source.getCountryOfCitizenship());
+		setPrimaryCaregiver(source.isPrimaryCaregiver());
+		setNumberOfChildren(source.getNumberOfChildren());
+		setChildAges(source.getChildAges());
+		setChildCareNeeded(source.isChildCareNeeded());
+		setEmployed(source.isEmployed());
+		setPlaceOfEmployment(source.getPlaceOfEmployment());
+		setShift(source.getShift());
+		setWage(source.getWage());
+		setTotalHoursWorkedPerWeek(source.getTotalHoursWorkedPerWeek());
 
-		this.setMaritalStatus(maritalStatus);
-		this.setEthnicity(ethnicity);
-		this.setCitizenship(citizenship);
-		this.setVeteranStatus(veterenStatus);
-		this.setChildCareArrangement(childCareArrangement);
+		setMaritalStatus(maritalStatus);
+		setEthnicity(ethnicity);
+		setCitizenship(citizenship);
+		setVeteranStatus(veterenStatus);
+		setChildCareArrangement(childCareArrangement);
 	}
 
 	@Override

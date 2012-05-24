@@ -25,7 +25,7 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Task
+public class Task // NOPMD by jon.adams
 		extends AbstractAuditable
 		implements Restricted, PersonAssocAuditable {
 
@@ -85,7 +85,8 @@ public class Task
 	private ConfidentialityLevel confidentialityLevel;
 
 	/**
-	 * Constructor that only calls {@link AbstractAuditable#Auditable()}.
+	 * Constructor that only calls {@link AbstractAuditable#AbstractAuditable()}
+	 * .
 	 */
 	public Task() {
 		super();
@@ -119,7 +120,7 @@ public class Task
 	}
 
 	public String getGroup() {
-		if (challenge != null) {
+		if (challenge != null) { // NOPMD by jon.adams on 5/24/12 3:40 PM
 			return challenge.getName();
 		} else if (getType().equals(CUSTOM_ACTION_PLAN_TASK)) {
 			return CUSTOM_GROUP_NAME;

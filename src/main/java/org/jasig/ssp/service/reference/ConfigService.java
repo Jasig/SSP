@@ -63,4 +63,24 @@ public interface ConfigService extends
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;
+
+	/**
+	 * Get a String Config Value by name.
+	 * 
+	 * @param name
+	 *            of the config value
+	 * @return the default if the value is empty, or null if it is not found
+	 */
+	String getByNameNullOrDefaultValue(String name);
+
+	/**
+	 * Get an int Config Value by name.
+	 * 
+	 * @param name
+	 *            of the config value
+	 * @return value or default value if not an integer
+	 * @throws ConfigException
+	 *             A runtimeException if the value is not found
+	 */
+	int getByNameExceptionOrDefaultAsInt(String name);
 }

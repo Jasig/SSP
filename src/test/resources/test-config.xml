@@ -15,6 +15,12 @@
 	<util:properties id="configProperties"
 		location="file:${SSP_TESTCONFIGDIR}/ssp-config.properties" />
 
+	<util:properties id="contextProperties">
+		<prop key="applicationMode">TEST</prop>
+		<!-- applicationMode should be referenced almost never, please think 
+		thrice before using it. Values are:  RUN and TEST -->
+	</util:properties>
+	
 	<tx:annotation-driven />
 
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
@@ -74,20 +80,6 @@
 		<property name="maxWait" value="10000" />
 	</bean>
 
-	<!-- Mail Server Configuration -->
-	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="#{configProperties.smtp_host}" />
-		<property name="port" value="#{configProperties.smtp_port}" />
-		<property name="protocol" value="smtp" />
-		<property name="username" value="#{configProperties.smtp_username}" />
-		<property name="password" value="#{configProperties.smtp_password}" />
-		<property name="javaMailProperties">
-			<props>
-				<prop key="mail.smtp.timeout">5</prop>
-			</props>
-		</property>
-	</bean>
-
 	<bean id="velocityEngine"
 		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
@@ -97,6 +89,11 @@
 			</value>
 		</property>
 	</bean>
+	
+	
+	<!-- Don't setup a javaMailSender in here, as the MessageService will 
+	override the send_mail config value - setting it to true, and send mail 
+	to the Mock SMTP server using the MockMailService-->
 
 	<!-- Allow proper instrumentation with cobertura -->
 	<beans profile="cobertura">

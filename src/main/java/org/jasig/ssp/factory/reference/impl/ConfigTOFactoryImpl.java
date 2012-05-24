@@ -48,6 +48,7 @@ public class ConfigTOFactoryImpl extends
 		model.setSortOrder(tObject.getSortOrder());
 		model.setValue(tObject.getValue());
 		model.setValueValidation(tObject.getValueValidation());
+		// don't allow default value to be set
 
 		return model;
 	}

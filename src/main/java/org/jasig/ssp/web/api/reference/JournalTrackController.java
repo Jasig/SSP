@@ -9,6 +9,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalTrack;
 import org.jasig.ssp.service.AuditableCrudService;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepService;
 import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.transferobject.PagingTO;
@@ -77,7 +78,7 @@ public class JournalTrackController
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
-			throws Exception {
+			throws ObjectNotFoundException {
 
 		final JournalTrack journalTrack = getService()
 				.get(journalTrackId);

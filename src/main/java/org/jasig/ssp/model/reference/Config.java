@@ -25,6 +25,9 @@ public class Config
 	@Column(nullable = true)
 	private String value;
 
+	@Column(nullable = false)
+	private String defaultValue;
+
 	/**
 	 * A regular expression for validation the value
 	 */
@@ -106,6 +109,14 @@ public class Config
 		this.valueValidation = valueValidation;
 	}
 
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(final String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
 	/**
 	 * Unique (amongst all Models in the system) prime for use by
 	 * {@link #hashCode()}
@@ -116,12 +127,15 @@ public class Config
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		return hashPrime()
 				* super.hashCode()
-				* (sortOrder > 0 ? sortOrder : hashPrime())
+				* (sortOrder == 0 ? hashPrime() : sortOrder)
 				* (StringUtils.isEmpty(value) ? "value".hashCode() :
 						value.hashCode())
+				* (StringUtils.isEmpty(defaultValue) ? "defaultValue"
+						.hashCode() :
+						defaultValue.hashCode())
 				* (StringUtils.isEmpty(valueValidation) ? "valueValidation"
 						.hashCode() : valueValidation.hashCode());
 	}
