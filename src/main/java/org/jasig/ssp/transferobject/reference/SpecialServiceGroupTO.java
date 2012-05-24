@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 
 public class SpecialServiceGroupTO
 		extends AbstractReferenceTO<SpecialServiceGroup>
-		implements TransferObject<SpecialServiceGroup> {
+		implements TransferObject<SpecialServiceGroup> { // NOPMD
 
 	public SpecialServiceGroupTO() {
 		super();
@@ -30,9 +30,10 @@ public class SpecialServiceGroupTO
 	public static List<SpecialServiceGroupTO> toTOList(
 			final Collection<SpecialServiceGroup> models) {
 		final List<SpecialServiceGroupTO> tObjects = Lists.newArrayList();
-		for (SpecialServiceGroup model : models) {
-			tObjects.add(new SpecialServiceGroupTO(model));
+		for (final SpecialServiceGroup model : models) {
+			tObjects.add(new SpecialServiceGroupTO(model));// NOPMD
 		}
+
 		return tObjects;
 	}
 }

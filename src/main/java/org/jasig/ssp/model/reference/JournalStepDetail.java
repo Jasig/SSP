@@ -97,7 +97,7 @@ public class JournalStepDetail
 	}
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime();
 
 		// AbstractAuditable properties
@@ -105,7 +105,7 @@ public class JournalStepDetail
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();
 
-		result *= sortOrder != 0 ? sortOrder : hashPrime();
+		result *= sortOrder == 0 ? hashPrime() : sortOrder;
 
 		return result;
 	}

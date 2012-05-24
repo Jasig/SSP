@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 
 public class ReferralSourceTO
 		extends AbstractReferenceTO<ReferralSource>
-		implements TransferObject<ReferralSource> {
+		implements TransferObject<ReferralSource> { // NOPMD
 
 	public ReferralSourceTO() {
 		super();
@@ -30,9 +30,10 @@ public class ReferralSourceTO
 	public static List<ReferralSourceTO> toTOList(
 			final Collection<ReferralSource> models) {
 		final List<ReferralSourceTO> tObjects = Lists.newArrayList();
-		for (ReferralSource model : models) {
-			tObjects.add(new ReferralSourceTO(model));
+		for (final ReferralSource model : models) {
+			tObjects.add(new ReferralSourceTO(model)); // NOPMD
 		}
+
 		return tObjects;
 	}
 }

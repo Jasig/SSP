@@ -83,7 +83,7 @@ public class Category extends AbstractReference implements Auditable {
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		// This code is not much different than the base class version, but we
 		// are being explicit here so it isn't forgotten if any properties are
 		// added later.

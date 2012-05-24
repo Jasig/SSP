@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 
 public class ServiceReasonTO
 		extends AbstractReferenceTO<ServiceReason>
-		implements TransferObject<ServiceReason> {
+		implements TransferObject<ServiceReason> { // NOPMD
 
 	public ServiceReasonTO() {
 		super();
@@ -30,9 +30,10 @@ public class ServiceReasonTO
 	public static List<ServiceReasonTO> toTOList(
 			final Collection<ServiceReason> models) {
 		final List<ServiceReasonTO> tObjects = Lists.newArrayList();
-		for (ServiceReason model : models) {
-			tObjects.add(new ServiceReasonTO(model));
+		for (final ServiceReason model : models) {
+			tObjects.add(new ServiceReasonTO(model)); // NOPMD
 		}
+
 		return tObjects;
 	}
 }

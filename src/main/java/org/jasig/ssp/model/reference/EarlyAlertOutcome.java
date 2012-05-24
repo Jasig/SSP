@@ -79,8 +79,7 @@ public class EarlyAlertOutcome
 	 * @param sortOrder
 	 *            the sortOrder to set
 	 */
-	public void setSortOrder(final short sortOrder) { // NOPMD by jon on 5/4/12
-														// 11:16
+	public void setSortOrder(final short sortOrder) { // NOPMD by jon.adams
 		this.sortOrder = sortOrder;
 	}
 

@@ -1,9 +1,10 @@
-package org.jasig.ssp.service.tool;
+package org.jasig.ssp.service.tool; // NOPMD because it's an integration test
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Set;
 import java.util.UUID;
@@ -55,6 +56,18 @@ public class IntakeServiceIntegrationTest {
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
+	private static final String LASTNAME = "last";
+
+	private static final String TEST_STRING1 = "testString1";
+
+	private static final String TEST_STRING2 = "testString2";
+
+	private static final String TEST_STRING3 = "testString3";
+
+	private static final String EDUCATIONLEVEL_NAME = "Test Education Level";
+
+	private static final String CHALLENGE_NAME = "Test Challenge";
+
 	@Before
 	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
@@ -99,25 +112,16 @@ public class IntakeServiceIntegrationTest {
 	 *             found in the database.
 	 */
 	@Test
-	public void testIntakeServiceForNewUser() throws ObjectNotFoundException {
-		// test data
-		final String lastName = "last";
-		final String testString1 = "testString1";
-		final String testString2 = "testString2";
-		final String testString3 = "testString3";
+	public void testIntakeServiceForNewUser() throws ObjectNotFoundException { // NOPMD
 		// From test database, see the test liquibase XML
 		final UUID testEducationLevelId = UUID
 				.fromString("841652e8-7b80-41e7-9ef2-ce456d2606ca");
-		final String testEducationLevelName = "Test Education Level";
 		final UUID testChallengeId = UUID
 				.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
-		final String testChallengeName = "Test Challenge";
-
 		// Setup - create a new blank Person
-		UUID id = null;
 		Person person = new Person();
 		person.setFirstName("first");
-		person.setLastName(lastName);
+		person.setLastName(LASTNAME);
 		person.setPrimaryEmailAddress("email");
 		person.setAddressLine1("address line 1");
 		person.setCellPhone("867-5309");
@@ -126,7 +130,7 @@ public class IntakeServiceIntegrationTest {
 
 		person = personService.create(person);
 
-		id = person.getId();
+		final UUID id = person.getId();
 
 		// reload person from database to make sure create() worked
 		person = personService.get(id);
@@ -146,35 +150,35 @@ public class IntakeServiceIntegrationTest {
 		// Setup - fill the IntakeForm with test data
 
 		final PersonDemographics pd1 = new PersonDemographics();
-		pd1.setChildAges(testString1);
+		pd1.setChildAges(TEST_STRING1);
 		person.setCoach(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
 		person.setDemographics(pd1);
 
 		final PersonEducationGoal peg1 = new PersonEducationGoal();
-		peg1.setDescription(testString1);
+		peg1.setDescription(TEST_STRING1);
 		person.setEducationGoal(peg1);
 
 		final PersonEducationPlan pep1 = new PersonEducationPlan();
 		pep1.setObjectStatus(ObjectStatus.INACTIVE);
 		final StudentStatus ss1 = new StudentStatus();
-		ss1.setName(testString1);
-		ss1.setDescription(testString2);
+		ss1.setName(TEST_STRING1);
+		ss1.setDescription(TEST_STRING2);
 		pep1.setStudentStatus(ss1);
 		person.setEducationPlan(pep1);
 
-		PersonEducationLevel pel1 = new PersonEducationLevel();
+		final PersonEducationLevel pel1 = new PersonEducationLevel();
 		pel1.setEducationLevel(new EducationLevel(testEducationLevelId));
-		pel1.setDescription(testString1);
+		pel1.setDescription(TEST_STRING1);
 		person.getEducationLevels().add(pel1);
 
-		PersonFundingSource pfs1 = new PersonFundingSource();
+		final PersonFundingSource pfs1 = new PersonFundingSource();
 		pfs1.setFundingSource(new FundingSource());
-		pfs1.setDescription(testString3);
+		pfs1.setDescription(TEST_STRING3);
 		person.getFundingSources().add(pfs1);
 
-		PersonChallenge pc1 = new PersonChallenge();
+		final PersonChallenge pc1 = new PersonChallenge();
 		pc1.setChallenge(new Challenge(testChallengeId));
-		pc1.setDescription(testString1);
+		pc1.setDescription(TEST_STRING1);
 		person.getChallenges().add(pc1);
 
 		// Run
@@ -193,7 +197,7 @@ public class IntakeServiceIntegrationTest {
 		// Check that all the persisted values match
 		assertNotNull("Demographic data did not exist.",
 				person.getDemographics());
-		assertEquals("Demographic.ChildAges did not match.", testString1, form
+		assertEquals("Demographic.ChildAges did not match.", TEST_STRING1, form
 				.getPerson().getDemographics().getChildAges());
 		assertNotNull("Demographic.Coach data did not exist.", person
 				.getCoach());
@@ -203,7 +207,7 @@ public class IntakeServiceIntegrationTest {
 		// Assert Education Goal data
 		assertNotNull("Education Goal data did not exist.",
 				person.getEducationGoal());
-		assertEquals("EducationGoal.Description did not match.", testString1,
+		assertEquals("EducationGoal.Description did not match.", TEST_STRING1,
 				person.getEducationGoal().getDescription());
 
 		// Assert Education Plan
@@ -230,16 +234,14 @@ public class IntakeServiceIntegrationTest {
 		assertEquals(
 				"Education Level data did not contain the expected 1 element.",
 				1, testLevels.size());
-		for (PersonEducationLevel thisOne : testLevels) {
-			pel1 = thisOne;
-		}
-		assertNotNull("Education Level (1) data did not exist.", pel1);
+		final PersonEducationLevel pel3 = testLevels.iterator().next();
+		assertNotNull("Education Level (1) data did not exist.", pel3);
 		assertNotNull("Education Level (1) EducationLevel did not exist.",
-				pel1.getEducationLevel());
+				pel3.getEducationLevel());
 		assertEquals("Education level (1) ID that was loaded did not match.",
-				testEducationLevelId, pel1.getEducationLevel().getId());
+				testEducationLevelId, pel3.getEducationLevel().getId());
 		assertEquals("Education level (1) name that was loaded did not match.",
-				testEducationLevelName, pel1.getEducationLevel().getName());
+				EDUCATIONLEVEL_NAME, pel3.getEducationLevel().getName());
 
 		// Assert FundingSource data
 		final Set<PersonFundingSource> testSources = person.getFundingSources();
@@ -247,38 +249,35 @@ public class IntakeServiceIntegrationTest {
 		assertEquals(
 				"FundingSource data did not contain the expected 1 element.",
 				1, testSources.size());
-		for (PersonFundingSource thisOne : testSources) {
-			pfs1 = thisOne;
-		}
-		assertNotNull("FundingSource (1) data did not exist.", pfs1);
+		final PersonFundingSource pfs3 = testSources.iterator().next();
+		assertNotNull("FundingSource (1) data did not exist.", pfs3);
 		assertEquals("FundingSource (1) Description did not match.",
-				testString3, pfs1.getDescription());
+				TEST_STRING3, pfs3.getDescription());
 
 		// Assert Challenge data
 		final Set<PersonChallenge> testChallenges = person.getChallenges();
 		assertNotNull("Challenge data did not exist.", testChallenges);
 		assertEquals("Challenge data did not contain the expected 1 element.",
 				1, testChallenges.size());
-		for (PersonChallenge thisOne : testChallenges) {
-			pc1 = thisOne;
-		}
-		assertNotNull("Challenge (1) data did not exist.", pc1);
-		assertEquals("Challenge (1) Description did not match.", testString1,
-				pc1.getDescription());
+		final PersonChallenge pc3 = testChallenges.iterator().next();
+		assertNotNull("Challenge (1) data did not exist.", pc3);
+		assertEquals("Challenge (1) Description did not match.", TEST_STRING1,
+				pc3.getDescription());
 		assertEquals("Challenge (1) ID that was loaded did not match.",
-				testChallengeId, pc1.getChallenge().getId());
+				testChallengeId, pc3.getChallenge().getId());
 		assertEquals("Challenge (1) name that was loaded did not match.",
-				testChallengeName, pc1.getChallenge().getName());
+				CHALLENGE_NAME, pc3.getChallenge().getName());
 
 		// Remove Person completely (not just mark deleted) which should
-		// delete
-		// all child objects created by the IntakeFormService
+		// delete all child objects created by the IntakeFormService
 		personDao.delete(person);
 
 		try {
-			person = personService.get(id);
-			assertNull("Person was not deleted correctly.", person);
-		} catch (ObjectNotFoundException exc) {
+			personService.get(id);
+			fail("Person was not deleted correctly."); // NOPMD because we don't
+			// want a possible earlier ObjectNotFoundException to be assumed
+			// as test success
+		} catch (final ObjectNotFoundException exc) { // NOPMD
 			/* expected */
 		}
 	}

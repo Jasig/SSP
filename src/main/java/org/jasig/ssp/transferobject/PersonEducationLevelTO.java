@@ -58,9 +58,10 @@ public class PersonEducationLevelTO
 	public static List<PersonEducationLevelTO> toTOList(
 			final Collection<PersonEducationLevel> models) {
 		final List<PersonEducationLevelTO> tos = Lists.newArrayList();
-		for (PersonEducationLevel model : models) {
-			tos.add(new PersonEducationLevelTO(model));
+		for (final PersonEducationLevel model : models) {
+			tos.add(new PersonEducationLevelTO(model)); // NOPMD
 		}
+
 		return tos;
 	}
 
@@ -119,5 +120,4 @@ public class PersonEducationLevelTO
 	public void setSchoolName(final String schoolName) {
 		this.schoolName = schoolName;
 	}
-
 }

@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -8,7 +8,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,8 @@ public class CategoryServiceTest {
 
 		final List<Category> all = (List<Category>) service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertTrue(all.size() > 0);
+		assertFalse("GetAll() should not have return an empty set.",
+				all.isEmpty());
 		verify(dao);
 	}
 
@@ -67,7 +68,7 @@ public class CategoryServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.get(id));
+		assertNotNull("Lookup should not have returned null.", service.get(id));
 		verify(dao);
 	}
 
@@ -80,7 +81,8 @@ public class CategoryServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		assertNotNull("Saved instance should not have been null.",
+				service.save(daoOne));
 		verify(dao);
 	}
 
@@ -98,15 +100,12 @@ public class CategoryServiceTest {
 
 		service.delete(id);
 
-		boolean found = true;
 		try {
 			service.get(id);
-		} catch (ObjectNotFoundException e) {
-			found = false;
+			fail("Deleted item should not have been found.");
+		} catch (final ObjectNotFoundException e) {
+			verify(dao);
 		}
-
-		assertFalse(found);
-		verify(dao);
 	}
 
 	@Test
@@ -129,7 +128,8 @@ public class CategoryServiceTest {
 
 		replay(challengeCategoryDao);
 
-		assertNotNull(service.addChallengeToCategory(challenge, category));
+		assertNotNull("AddChallengeToCategory should not have returned null.",
+				service.addChallengeToCategory(challenge, category));
 
 		verify(challengeCategoryDao);
 	}
@@ -155,7 +155,9 @@ public class CategoryServiceTest {
 
 		replay(challengeCategoryDao);
 
-		assertNotNull(service.removeChallengeFromCategory(challenge, category));
+		assertNotNull(
+				"RemoveChallengeFromCategory should not have returned null.",
+				service.removeChallengeFromCategory(challenge, category));
 
 		verify(challengeCategoryDao);
 	}

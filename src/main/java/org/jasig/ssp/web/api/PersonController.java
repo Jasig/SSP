@@ -56,7 +56,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
 
-		PagingWrapper<Person> people = service.getAll(SortingAndPaging
+		final PagingWrapper<Person> people = service.getAll(SortingAndPaging
 				.createForSingleSort(status, start, limit, sort, sortDirection,
 						null));
 

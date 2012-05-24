@@ -68,10 +68,11 @@ public class TaskTO
 	public static List<TaskTO> toTOList(final Collection<Task> tasks) {
 		final List<TaskTO> taskTOs = new ArrayList<TaskTO>();
 		if ((tasks != null) && !tasks.isEmpty()) {
-			for (Task task : tasks) {
-				taskTOs.add(new TaskTO(task));
+			for (final Task task : tasks) {
+				taskTOs.add(new TaskTO(task)); // NOPMD
 			}
 		}
+
 		return taskTOs;
 	}
 

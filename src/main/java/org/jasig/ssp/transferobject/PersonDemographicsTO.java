@@ -1,4 +1,4 @@
-package org.jasig.ssp.transferobject;
+package org.jasig.ssp.transferobject; // NOPMD
 
 import java.util.Collection;
 import java.util.List;
@@ -42,18 +42,23 @@ public class PersonDemographicsTO
 		if (model.getMaritalStatus() != null) {
 			maritalStatusId = model.getMaritalStatus().getId();
 		}
+
 		if (model.getEthnicity() != null) {
 			ethnicityId = model.getEthnicity().getId();
 		}
+
 		if (model.getCitizenship() != null) {
 			citizenshipId = model.getCitizenship().getId();
 		}
+
 		if (model.getVeteranStatus() != null) {
 			veteranStatusId = model.getVeteranStatus().getId();
 		}
+
 		if (model.getChildCareArrangement() != null) {
 			childCareArrangementId = model.getChildCareArrangement().getId();
 		}
+
 		abilityToBenefit = model.isAbilityToBenefit();
 		local = model.isLocal();
 		primaryCaregiver = model.isPrimaryCaregiver();
@@ -67,12 +72,14 @@ public class PersonDemographicsTO
 		if (model.getGender() != null) {
 			gender = model.getGender().getCode();
 		}
+
 		countryOfCitizenship = model.getCountryOfCitizenship();
 		childAges = model.getChildAges();
 		placeOfEmployment = model.getPlaceOfEmployment();
 		if (model.getShift() != null) {
 			shift = model.getShift().getCode();
 		}
+
 		wage = model.getWage();
 		totalHoursWorkedPerWeek = model.getTotalHoursWorkedPerWeek();
 	}
@@ -80,7 +87,7 @@ public class PersonDemographicsTO
 	public static List<PersonDemographicsTO> toTOList(
 			final Collection<PersonDemographics> models) {
 		final List<PersonDemographicsTO> tos = Lists.newArrayList();
-		for (PersonDemographics model : models) {
+		for (final PersonDemographics model : models) {
 			tos.add(new PersonDemographicsTO(model)); // NOPMD by jon.adams
 		}
 		return tos;
@@ -277,5 +284,4 @@ public class PersonDemographicsTO
 	public void setNumberOfChildren(final int numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
 	}
-
 }

@@ -67,7 +67,7 @@ public class PersonTool
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime();
 
 		// AbstractAuditable properties
