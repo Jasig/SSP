@@ -77,7 +77,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			throws ObjectNotFoundException, ValidationException {
 		// Validate objects
 		if (earlyAlert == null) {
-			throw new ValidationException("EarlyAlert must be provided.");
+			throw new IllegalArgumentException("EarlyAlert must be provided.");
 		}
 
 		if (earlyAlert.getPerson() == null) {
@@ -374,7 +374,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		templateParameters.put("applicationTitle",
 				configService.getByNameEmpty("app_title"));
 		templateParameters.put("institutionName",
-				configService.getByNameEmpty("institution_name"));
+				configService.getByNameEmpty("inst_name"));
 
 		return templateParameters;
 	}

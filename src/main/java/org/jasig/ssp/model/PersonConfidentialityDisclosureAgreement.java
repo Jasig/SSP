@@ -79,7 +79,7 @@ public class PersonConfidentialityDisclosureAgreement
 	};
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/24/12 1:34 PM
 		int result = hashPrime();
 
 		// AbstractAuditable properties

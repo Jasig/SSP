@@ -134,7 +134,7 @@ public class EarlyAlertOutcomeServiceTest {
 			assertNull(
 					"Recently deleted object should not have been able to be reloaded.",
 					daoTwo);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			// expected exception
 			assertNotNull(
 					"Recently deleted object should not have been found when attempting to reload.",

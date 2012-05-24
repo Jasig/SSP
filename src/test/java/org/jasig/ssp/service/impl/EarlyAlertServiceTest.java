@@ -1,10 +1,9 @@
-/**
- * 
- */
-package org.jasig.ssp.service.impl;
+package org.jasig.ssp.service.impl; // NOPMD by jon.adams on 5/24/12 2:17 PM
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Set;
 import java.util.UUID;
@@ -44,7 +43,7 @@ import com.google.common.collect.Sets;
 @ContextConfiguration("../service-testConfig.xml")
 @TransactionConfiguration()
 @Transactional
-public class PersonEarlyAlertServiceTest {
+public class EarlyAlertServiceTest {
 
 	private static final UUID PERSON_ID = UUID
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
@@ -93,9 +92,9 @@ public class PersonEarlyAlertServiceTest {
 	}
 
 	/**
-	 * Test method for
+	 * Test that method
 	 * {@link org.jasig.ssp.service.impl.EarlyAlertServiceImpl#create(org.jasig.ssp.model.EarlyAlert)}
-	 * .
+	 * generates the expected messages.
 	 * 
 	 * @throws ValidationException
 	 *             Thrown if any data objects are not valid.
@@ -107,32 +106,15 @@ public class PersonEarlyAlertServiceTest {
 	@Test
 	public void testCreateEarlyAlert() throws ObjectNotFoundException,
 			ValidationException, SendFailedException {
+
 		final SimpleSmtpServer smtpServer = mockMailService.getSmtpServer();
+		assertFalse("Faux mail server should be running but was not.",
+				smtpServer.isStopped());
 
 		// arrange
-		final EarlyAlert obj = new EarlyAlert();
-		obj.setPerson(personService.get(PERSON_ID));
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setClosedById(PERSON_ID);
-		obj.setCourseName(EARLY_ALERT_COURSE_NAME);
-		obj.setCampus(campusService.get(UUID
-				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
-
-		final Set<EarlyAlertSuggestion> earlyAlertSuggestionIds = Sets
-				.newHashSet();
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestion(
-				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME,
-				"description", (short) 0)); // NOPMD by jon.adams on 5/21/12
-		final EarlyAlertSuggestion deletedSuggestion = new EarlyAlertSuggestion(
-				EARLY_ALERT_SUGGESTION_DELETED_ID,
-				"EARLY_ALERT_SUGGESTION_DELETED_NAME", "description",
-				(short) 0); // NOPMD
-		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
-		earlyAlertSuggestionIds.add(deletedSuggestion);
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		final EarlyAlert obj = arrangeEarlyAlert();
 
 		// act
-
 		earlyAlertService.create(obj);
 		sessionFactory.getCurrentSession().flush();
 
@@ -154,5 +136,59 @@ public class PersonEarlyAlertServiceTest {
 				message.getBody().contains(PERSON_CREATEDBY_FULLNAME) &&
 						message.getBody().contains(PERSON_FULLNAME) &&
 						message.getBody().contains(EARLY_ALERT_COURSE_NAME));
+	}
+
+	/**
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	private EarlyAlert arrangeEarlyAlert() throws ObjectNotFoundException {
+		final EarlyAlert obj = new EarlyAlert();
+		obj.setPerson(personService.get(PERSON_ID));
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setClosedById(PERSON_ID);
+		obj.setCourseName(EARLY_ALERT_COURSE_NAME);
+		obj.setCampus(campusService.get(UUID
+				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
+
+		final Set<EarlyAlertSuggestion> earlyAlertSuggestionIds = Sets
+				.newHashSet();
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestion(
+				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME,
+				"description", (short) 0)); // NOPMD by jon.adams on 5/21/12
+		final EarlyAlertSuggestion deletedSuggestion = new EarlyAlertSuggestion(
+				EARLY_ALERT_SUGGESTION_DELETED_ID,
+				"EARLY_ALERT_SUGGESTION_DELETED_NAME", "description",
+				(short) 0); // NOPMD
+		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
+		earlyAlertSuggestionIds.add(deletedSuggestion);
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		return obj;
+	}
+
+	@Test(expected = ValidationException.class)
+	public void testCreateEarlyAlertInvalidPerson()
+			throws ObjectNotFoundException,
+			ValidationException, SendFailedException {
+		// arrange
+		final EarlyAlert obj = arrangeEarlyAlert();
+		obj.setPerson(null);
+
+		// act
+		earlyAlertService.create(obj);
+
+		// assert
+		fail("Should have thrown a ValidationException.");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateEarlyAlertInvalidEarlyAlert()
+			throws ObjectNotFoundException,
+			ValidationException, SendFailedException {
+		// act
+		earlyAlertService.create(null);
+
+		// assert
+		fail("Should have thrown a ValidationException.");
 	}
 }

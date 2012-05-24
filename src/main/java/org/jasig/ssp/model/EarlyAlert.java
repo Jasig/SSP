@@ -30,7 +30,7 @@ import com.google.common.collect.Sets;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EarlyAlert
+public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 		extends AbstractAuditable
 		implements PersonAssocAuditable { // NOPMD
 
@@ -281,10 +281,13 @@ public class EarlyAlert
 				.hashCode();
 		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
-		result *= earlyAlertReasonIds == null ? "earlyAlertReasonIds"
-				.hashCode() : earlyAlertReasonIds.hashCode();
-		result *= earlyAlertSuggestionIds == null ? "earlyAlertSuggestionIds"
-				.hashCode() : earlyAlertSuggestionIds.hashCode();
+		result *= earlyAlertReasonIds == null || earlyAlertReasonIds.isEmpty() ? "earlyAlertReasonIds"
+				.hashCode()
+				: earlyAlertReasonIds.hashCode();
+		result *= earlyAlertSuggestionIds == null
+				|| earlyAlertSuggestionIds.isEmpty() ? "earlyAlertSuggestionIds"
+				.hashCode()
+				: earlyAlertSuggestionIds.hashCode();
 		result *= closedDate == null ? "closedDate".hashCode() : closedDate
 				.hashCode();
 		result *= closedById == null ? "closedById".hashCode() : closedById

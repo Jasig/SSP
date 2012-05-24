@@ -178,9 +178,11 @@ public class EarlyAlertResponse
 		result *= (earlyAlertOutcome == null)
 				|| (earlyAlertOutcome.getId() == null) ? "earlyAlertOutcome"
 				.hashCode() : earlyAlertOutcome.getId().hashCode();
-		result *= earlyAlertOutreachIds == null ? "earlyAlertOutreachIds"
+		result *= earlyAlertOutreachIds == null
+				|| earlyAlertOutreachIds.isEmpty() ? "earlyAlertOutreachIds"
 				.hashCode() : earlyAlertOutreachIds.hashCode();
-		result *= earlyAlertReferralIds == null ? "earlyAlertReferralIds"
+		result *= earlyAlertReferralIds == null
+				|| earlyAlertReferralIds.isEmpty() ? "earlyAlertReferralIds"
 				.hashCode() : earlyAlertReferralIds.hashCode();
 
 		return result;

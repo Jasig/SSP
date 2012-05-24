@@ -88,7 +88,8 @@ public class EarlyAlertReferral
 	 * @param sortOrder
 	 *            the sortOrder to set
 	 */
-	public void setSortOrder(short sortOrder) { // NOPMD by jon on 5/4/12 11:16
+	public void setSortOrder(final short sortOrder) { // NOPMD by jon on 5/4/12
+														// 11:16
 		this.sortOrder = sortOrder;
 	}
 
@@ -123,7 +124,7 @@ public class EarlyAlertReferral
 		// AbstractAuditable properties
 		result *= super.hashCode();
 
-		result *= sortOrder > 0 ? sortOrder : hashPrime();
+		result *= sortOrder == 0 ? hashPrime() : sortOrder;
 		result *= StringUtils.isEmpty(acronym) ? "acronym".hashCode() : acronym
 				.hashCode();
 
