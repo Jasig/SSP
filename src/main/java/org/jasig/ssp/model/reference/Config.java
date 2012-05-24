@@ -119,7 +119,7 @@ public class Config
 	public int hashCode() {
 		return hashPrime()
 				* super.hashCode()
-				* (sortOrder > 0 ? sortOrder : hashPrime())
+				* (sortOrder == 0 ? hashPrime() : sortOrder)
 				* (StringUtils.isEmpty(value) ? "value".hashCode() :
 						value.hashCode())
 				* (StringUtils.isEmpty(valueValidation) ? "valueValidation"

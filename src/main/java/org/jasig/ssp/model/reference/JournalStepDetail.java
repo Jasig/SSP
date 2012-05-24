@@ -105,7 +105,7 @@ public class JournalStepDetail
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();
 
-		result *= sortOrder > 0 ? sortOrder : hashPrime();
+		result *= sortOrder != 0 ? sortOrder : hashPrime();
 
 		return result;
 	}

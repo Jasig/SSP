@@ -68,11 +68,6 @@ public class Category extends AbstractReference implements Auditable {
 		super(id, name, description);
 	}
 
-	@Override
-	protected int hashPrime() {
-		return 43;
-	}
-
 	public Set<ChallengeCategory> getChallengeCategories() {
 		return challengeCategories;
 	}
@@ -81,4 +76,20 @@ public class Category extends AbstractReference implements Auditable {
 			final Set<ChallengeCategory> challengeCategories) {
 		this.challengeCategories = challengeCategories;
 	};
+
+	@Override
+	protected int hashPrime() {
+		return 43;
+	}
+
+	@Override
+	public int hashCode() {
+		// This code is not much different than the base class version, but we
+		// are being explicit here so it isn't forgotten if any properties are
+		// added later.
+
+		// collections are not included here
+
+		return hashPrime() * super.hashCode();
+	}
 }

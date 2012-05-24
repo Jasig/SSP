@@ -96,6 +96,6 @@ public class JournalTrack
 	@Override
 	final public int hashCode() {
 		return hashPrime() * super.hashCode()
-				* (sortOrder > 0 ? sortOrder : hashPrime());
+				* (sortOrder != 0 ? sortOrder : hashPrime());
 	}
 }

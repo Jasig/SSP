@@ -129,6 +129,8 @@ public class ChallengeReferral
 		result *= showInSelfHelpGuide ? 5 : 11;
 		result *= showInStudentIntake ? 3 : 17;
 
+		// collections are not included here
+
 		return result;
 	}
 }

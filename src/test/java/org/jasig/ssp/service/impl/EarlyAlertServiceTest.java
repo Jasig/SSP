@@ -1,11 +1,9 @@
-/**
- * 
- */
-package org.jasig.ssp.service.impl;
+package org.jasig.ssp.service.impl; // NOPMD by jon.adams on 5/24/12 2:17 PM
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Set;
 import java.util.UUID;
@@ -169,5 +167,31 @@ public class EarlyAlertServiceTest {
 		earlyAlertSuggestionIds.add(deletedSuggestion);
 		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 		return obj;
+	}
+
+	@Test(expected = ValidationException.class)
+	public void testCreateEarlyAlertInvalidPerson()
+			throws ObjectNotFoundException,
+			ValidationException, SendFailedException {
+		// arrange
+		final EarlyAlert obj = arrangeEarlyAlert();
+		obj.setPerson(null);
+
+		// act
+		earlyAlertService.create(obj);
+
+		// assert
+		fail("Should have thrown a ValidationException.");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateEarlyAlertInvalidEarlyAlert()
+			throws ObjectNotFoundException,
+			ValidationException, SendFailedException {
+		// act
+		earlyAlertService.create(null);
+
+		// assert
+		fail("Should have thrown a ValidationException.");
 	}
 }

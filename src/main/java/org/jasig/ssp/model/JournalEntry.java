@@ -146,7 +146,8 @@ public class JournalEntry
 		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
 
+		// collections are not included in these calculations
+
 		return result;
 	}
-
 }

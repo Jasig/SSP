@@ -181,6 +181,8 @@ public class SelfHelpGuide
 				: summaryTextThreshold.hashCode();
 		result *= authenticationRequired ? 3 : 5;
 
+		// collections are not included here
+
 		return result;
 	}
 }

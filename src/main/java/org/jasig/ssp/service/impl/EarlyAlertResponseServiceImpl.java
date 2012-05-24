@@ -111,10 +111,26 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 	@Override
 	public EarlyAlertResponse create(
-			@NotNull final EarlyAlertResponse earlyAlert)
+			@NotNull final EarlyAlertResponse earlyAlertResponse)
 			throws ObjectNotFoundException, ValidationException {
+		// Validate objects
+		if (earlyAlertResponse == null) {
+			throw new IllegalArgumentException(
+					"EarlyAlertResponse must be provided.");
+		}
+
+		if (earlyAlertResponse.getEarlyAlert() == null) {
+			throw new ValidationException(
+					"EarlyAlert data must be provided.");
+		}
+
+		if (earlyAlertResponse.getEarlyAlert().getPerson() == null) {
+			throw new ValidationException(
+					"EarlyAlert Student data must be provided.");
+		}
+
 		// Create alert response
-		final EarlyAlertResponse saved = getDao().save(earlyAlert);
+		final EarlyAlertResponse saved = getDao().save(earlyAlertResponse);
 
 		// Send message response to Faculty from Coach
 		try {
