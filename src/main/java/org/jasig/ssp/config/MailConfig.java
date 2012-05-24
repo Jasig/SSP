@@ -53,6 +53,7 @@ public class MailConfig {
 		if (enableMockMailServer) {
 			return SimpleSmtpServer.start(port);
 		}
+
 		return null;
 	}
 }

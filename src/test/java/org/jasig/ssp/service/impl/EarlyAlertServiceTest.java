@@ -94,9 +94,9 @@ public class EarlyAlertServiceTest {
 	}
 
 	/**
-	 * Test method for
+	 * Test that method
 	 * {@link org.jasig.ssp.service.impl.EarlyAlertServiceImpl#create(org.jasig.ssp.model.EarlyAlert)}
-	 * .
+	 * generates the expected messages.
 	 * 
 	 * @throws ValidationException
 	 *             Thrown if any data objects are not valid.
@@ -114,29 +114,9 @@ public class EarlyAlertServiceTest {
 					smtpServer.isStopped());
 
 			// arrange
-			final EarlyAlert obj = new EarlyAlert();
-			obj.setPerson(personService.get(PERSON_ID));
-			obj.setObjectStatus(ObjectStatus.ACTIVE);
-			obj.setClosedById(PERSON_ID);
-			obj.setCourseName(EARLY_ALERT_COURSE_NAME);
-			obj.setCampus(campusService.get(UUID
-					.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
-
-			final Set<EarlyAlertSuggestion> earlyAlertSuggestionIds = Sets
-					.newHashSet();
-			earlyAlertSuggestionIds.add(new EarlyAlertSuggestion(
-					EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME,
-					"description", (short) 0)); // NOPMD by jon.adams on 5/21/12
-			final EarlyAlertSuggestion deletedSuggestion = new EarlyAlertSuggestion(
-					EARLY_ALERT_SUGGESTION_DELETED_ID,
-					"EARLY_ALERT_SUGGESTION_DELETED_NAME", "description",
-					(short) 0); // NOPMD
-			deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
-			earlyAlertSuggestionIds.add(deletedSuggestion);
-			obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+			final EarlyAlert obj = arrangeEarlyAlert();
 
 			// act
-
 			earlyAlertService.create(obj);
 			sessionFactory.getCurrentSession().flush();
 
@@ -161,5 +141,33 @@ public class EarlyAlertServiceTest {
 		} finally {
 			smtpServer.stop();
 		}
+	}
+
+	/**
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	private EarlyAlert arrangeEarlyAlert() throws ObjectNotFoundException {
+		final EarlyAlert obj = new EarlyAlert();
+		obj.setPerson(personService.get(PERSON_ID));
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setClosedById(PERSON_ID);
+		obj.setCourseName(EARLY_ALERT_COURSE_NAME);
+		obj.setCampus(campusService.get(UUID
+				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
+
+		final Set<EarlyAlertSuggestion> earlyAlertSuggestionIds = Sets
+				.newHashSet();
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestion(
+				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME,
+				"description", (short) 0)); // NOPMD by jon.adams on 5/21/12
+		final EarlyAlertSuggestion deletedSuggestion = new EarlyAlertSuggestion(
+				EARLY_ALERT_SUGGESTION_DELETED_ID,
+				"EARLY_ALERT_SUGGESTION_DELETED_NAME", "description",
+				(short) 0); // NOPMD
+		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
+		earlyAlertSuggestionIds.add(deletedSuggestion);
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		return obj;
 	}
 }

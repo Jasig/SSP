@@ -85,7 +85,8 @@ public class Task
 	private ConfidentialityLevel confidentialityLevel;
 
 	/**
-	 * Constructor that only calls {@link AbstractAuditable#Auditable()}.
+	 * Constructor that only calls {@link AbstractAuditable#AbstractAuditable()}
+	 * .
 	 */
 	public Task() {
 		super();

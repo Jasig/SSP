@@ -14,6 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
@@ -132,7 +133,8 @@ public class JournalEntry
 
 		result *= entryDate == null ? "entryDate".hashCode()
 				: entryDate.hashCode();
-		result *= comment == null ? "comment".hashCode() : comment.hashCode();
+		result *= StringUtils.isEmpty(comment) ? "comment".hashCode() : comment
+				.hashCode();
 		result *= confidentialityLevel == null ? "confidentialityLevel"
 				.hashCode() : confidentialityLevel.hashCode();
 		result *= (journalSource == null) || (journalSource.getId() == null) ? "journalSource"
