@@ -98,12 +98,7 @@
 		</property>
 	</bean>
 
-	<!-- Faux mail server that doesn't send messages -->
-	<!-- <bean id="mailServer" class="com.dumbster.smtp.SimpleSmtpServer" lazy-init="false"> 
-		<constructor-arg value="#{configProperties.smtp_port}" /> </bean> <bean id="mailServerThread" 
-		class="java.lang.Thread" init-method="start" destroy-method="stop"> <constructor-arg 
-		ref="dumbster" /> </bean> -->
-
+	<!-- Testing-only mail server that doesn't send messages -->
 	<bean id="testingMailServerConfig" class="org.jasig.ssp.util.config.MailConfig">
 		<property name="port" value="#{configProperties.smtp_port}" />
 		<property name="sendMail" value="#{configProperties.send_mail}" />

@@ -25,4 +25,10 @@
 		<property name="password" value="#{configProperties.smtp_password}" />
 	</bean>
 
+	<!-- Testing-only mail server that doesn't send messages -->
+	<bean id="testingMailServerConfig" class="org.jasig.ssp.util.config.MailConfig">
+		<property name="port" value="#{configProperties.smtp_port}" />
+		<property name="sendMail" value="#{configProperties.send_mail}" />
+	</bean>
+
 </beans>
