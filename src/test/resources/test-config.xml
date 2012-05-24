@@ -108,6 +108,7 @@
 		<property name="port" value="#{configProperties.smtp_port}" />
 	</bean>
 
+	<!-- Allow proper instrumentation with cobertura -->
 	<beans profile="cobertura">
 		<aop:aspectj-autoproxy proxy-target-class="true" />
 	</beans>
