@@ -104,8 +104,8 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	 *            Sort direction (asc/desc)
 	 * @return All instances for the specified criteria, possibly paged based on
 	 *         start/limit filters.
-	 * @throws Exception
-	 *             If any exceptions were thrown.
+	 * @throws ObjectNotFoundException
+	 *             If specified person could not be found.
 	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -131,7 +131,9 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	TO get(final @PathVariable UUID id,
-			@PathVariable final UUID personId) throws ObjectNotFoundException {
+			@PathVariable final UUID personId) throws ObjectNotFoundException,
+			ValidationException
+	{
 		final T model = getService().get(id);
 		if (model == null) {
 			return null;
@@ -175,20 +177,22 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		return null;
 	}
 
-	private TO instantiateTO(final T model) {
+	private TO instantiateTO(final T model) throws ValidationException {
 		TO out;
 		try {
 			out = this.transferObjectClass.newInstance();
 			out.from(model);
 			return out;
 		} catch (InstantiationException e) {
-			LOGGER.error("Unable to instantiate this class", e);
+			LOGGER.error("Could not instantiate new instance of "
+					+ this.transferObjectClass.getName(), e);
+			throw new ValidationException("Unexpected error.", e);
 		} catch (IllegalAccessException e) {
 			LOGGER.error(
-					"Unable to instantiate this class because the Constructor is not visible",
-					e);
+					"Illegal access instantiating new instance of "
+							+ this.transferObjectClass.getName(), e);
+			throw new ValidationException("Unexpected error.", e);
 		}
-		return null;
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")

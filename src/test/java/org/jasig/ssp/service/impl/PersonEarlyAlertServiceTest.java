@@ -22,7 +22,7 @@ import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.CampusService;
-import org.jasig.ssp.util.config.TestingMailServerConfig;
+import org.jasig.ssp.util.config.MailConfig;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,7 +74,7 @@ public class PersonEarlyAlertServiceTest {
 	private transient MessageService messageService;
 
 	@Autowired()
-	private transient TestingMailServerConfig smtpServerConfig;
+	private transient MailConfig smtpServerConfig;
 
 	@Autowired
 	private transient PersonService personService;

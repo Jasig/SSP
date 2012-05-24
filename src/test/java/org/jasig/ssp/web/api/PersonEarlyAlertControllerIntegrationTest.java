@@ -24,7 +24,7 @@ import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
-import org.jasig.ssp.util.config.TestingMailServerConfig;
+import org.jasig.ssp.util.config.MailConfig;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
@@ -62,7 +62,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	protected transient CampusService campusService;
 
 	@Autowired()
-	private transient TestingMailServerConfig smtpServerConfig;
+	private transient MailConfig smtpServerConfig;
 
 	// Can't use service because it doesn't offer GetAll or similar methods
 	@Autowired
