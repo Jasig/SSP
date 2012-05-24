@@ -29,6 +29,7 @@ Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
                     name: 'description'
                 },{
 			        xtype: 'combobox',
+			        itemId: 'confidentialityLevel',
 			        name: 'confidentialityLevelId',
 			        fieldLabel: 'Confidentiality Level',
 			        emptyText: 'Select One',

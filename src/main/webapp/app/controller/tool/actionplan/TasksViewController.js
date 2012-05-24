@@ -5,12 +5,15 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
     	formUtils: 'formRendererUtils',
+    	model: 'currentTask',
     	person: 'currentPerson',
-    	tasksStore: 'tasksStore' 
+    	store: 'tasksStore' 
     },
     
     config: {
-    	personTaskUrl: ''
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'addtask',
+    	url: ''
     },
     
     control: {
@@ -24,52 +27,55 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
 	},
 	
 	init: function() {
-		this.personTaskUrl = this.apiProperties.getItemUrl('personTask');
-		this.personTaskUrl=this.personTaskUrl.replace('{id}',this.person.get('id'));
+		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personTask') );
+		this.url = this.url.replace('{id}',this.person.get('id'));
 
 		return this.callParent(arguments);
     },
 
     onViewReady: function(comp, obj){
-    	this.appEventsController.getApplication().addListener('editTask', function(args){
+    	this.appEventsController.getApplication().addListener('editTask', function(){
  			this.editTask();
 		},this);
 
-    	this.appEventsController.getApplication().addListener('closeTask', function(args){
- 			this.closeTask(args);
+    	this.appEventsController.getApplication().addListener('closeTask', function(){
+ 			this.closeTask();
 		},this);
     	
-    	this.appEventsController.getApplication().addListener('deleteTask', function(args){
- 			this.deleteTask(args);
+    	this.appEventsController.getApplication().addListener('deleteTask', function(){
+ 			this.deleteConfirmation();
 		},this);
     },    
  
     onAddTaskClick: function(button) {
-		var comp = this.formUtils.loadDisplay('tools','addtask', true, {});
+    	var task = new Ssp.model.tool.actionplan.Task();
+    	this.model.data = task.data;
+    	this.loadEditor();
     },
     
     editTask: function(){
  	   console.log('TaskViewController->editTask');
+ 	   Ext.Msg.alert("NOTIFICATION","This functionality is disabled until I can figure out why the tree component renders it's init method twice on edit from the grid.")
+ 	   // this.loadEditor();
     },
     
-    closeTask: function(args) {
+    closeTask: function() {
 	   console.log('TaskViewController->closeTask');
-       var url, store, id;
-       var record = args.record;
-       var id = record.get('id');
-	   store = this.tasksStore;
-       url = this.apiProperties.createUrl( this.personTaskUrl );
+       var store, id, model;
+       model = this.model;
+       id = model.get('id');
+	   store = this.store;
        if (id != "") 
        {
-           record.set('completed',true);
+           model.set('completed',true);
+           delete model.data.group;
 		   this.apiProperties.makeRequest({
-			   url: url+id,
+			   url: this.url+id,
 			   method: 'PUT',
-			   jsonData: record.data,
+			   jsonData: model.data,
 			   successFunc: function(response,responseText){
-				   var r = Ext.decode(response.responseText);
-				   // record.commit();
-				   //store.sync();
+				   model.commit();
+				   store.sync();
 			   },
 			   scope: this
 		   });
@@ -78,30 +84,45 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
        }
     },    
     
-    /*
-     * @args - an object containing the record to delete
-     * 
-     */
-    deleteTask: function(args) {
-       var url, store, id;
-       var record = args.record;
-       var id = record.get('id');
-       var type = record.get('type');
-	   store = this.tasksStore;
-       url = this.apiProperties.createUrl( this.personTaskUrl );
-       if (id != "" && type.toLowerCase() == 'ssp') 
-       {
-           this.apiProperties.makeRequest({
-			   url: url+id,
-			   method: 'DELETE',
-			   successFunc: function(response,responseText){
-				   var r = Ext.decode(response.responseText);
-				   store.remove( record );
-			   },
-			   scope: this
-		   });
-       }else{
-    	   Ext.Msg.alert('SSP Error', 'Unable to delete. No id was specified or this is not a deletable task.'); 
-       }
-    }
+    deleteConfirmation: function() {
+        var message = 'You are about to delete the task: "'+ this.model.get('name') + '". Would you like to continue?';
+    	var model = this.model;
+        if (model.get('id') != "") 
+        {
+    		// test if this is a student task
+     	   if ( model.get('createdBy').id == this.person.get('id') )
+     	   {
+     		   message = "WARNING: You are about to delete a task created by this student. Would you like to continue?"; 
+     	   }
+     	   
+           Ext.Msg.confirm({
+   		     title:'Delete Task?',
+   		     msg: message,
+   		     buttons: Ext.Msg.YESNO,
+   		     fn: this.deleteTask,
+   		     scope: this
+   		   });
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Unable to delete task.'); 
+        }
+     },
+     
+     deleteTask: function( btnId ){
+     	var store = this.store;
+     	var id = this.model.get('id');
+     	if (btnId=="yes")
+     	{
+         	this.apiProperties.makeRequest({
+      		   url: this.url+id,
+      		   method: 'DELETE',
+      		   successFunc: function(response,responseText){
+      			   store.remove( store.getById( id ) );
+      		   }
+      	    });    		
+     	}
+     },
+     
+     loadEditor: function(){
+     	var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+     }
 });

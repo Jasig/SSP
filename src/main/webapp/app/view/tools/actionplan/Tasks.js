@@ -7,6 +7,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     inject: {
     	appEventsController: 'appEventsController',
     	columnRendererUtils: 'columnRendererUtils',
+    	model: 'currentTask',
         store: 'tasksStore',
     },
 	width: '100%',
@@ -21,9 +22,9 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     	    		selModel: sm,
     	    		features: [{
 		    	        id: 'group',
-		    	        ftype: 'groupingsummary',
+		    	        ftype: 'grouping',
 		    	        groupHeaderTpl: '{name}',
-		    	        hideGroupedHeader: true,
+		    	        hideGroupedHeader: false,
 		    	        enableGroupingMenu: false
 		    	    }],
 		
@@ -42,28 +43,35 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	    },{
 		    	        xtype:'actioncolumn',
 		    	        width:65,
+		    	        header: 'Action',
 		    	        items: [{
 		    	            icon: 'images/edit-icon.jpg',
-		    	            tooltip: 'Edit',
+		    	            tooltip: 'Edit Task',
 		    	            handler: function(grid, rowIndex, colIndex) {
 		    	            	var rec = grid.getStore().getAt(rowIndex);
-		    	                grid.up('panel').appEventsController.getApplication().fireEvent('editTask', { record: rec });
+		    	            	var panel = grid.up('panel');
+		    	                panel.model.data=rec.data;
+		    	            	panel.appEventsController.getApplication().fireEvent('editTask');
 		    	            },
 		    	            scope: this
 		    	        },{
 		    	            icon: 'images/close-icon.jpg',
-		    	            tooltip: 'Close',
+		    	            tooltip: 'Close Task',
 		    	            handler: function(grid, rowIndex, colIndex) {
 		    	            	var rec = grid.getStore().getAt(rowIndex);
-		    	                grid.up('panel').appEventsController.getApplication().fireEvent('closeTask', { record: rec });
+		    	            	var panel = grid.up('panel');
+		    	                panel.model.data=rec.data;
+		    	            	panel.appEventsController.getApplication().fireEvent('closeTask');
 		    	            },
 		    	            scope: this
 		    	        },{
 		    	            icon: 'images/delete-icon.png',
-		    	            tooltip: 'Delete',
+		    	            tooltip: 'Delete Task',
 		    	            handler: function(grid, rowIndex, colIndex) {
 		    	            	var rec = grid.getStore().getAt(rowIndex);
-		    	                grid.up('panel').appEventsController.getApplication().fireEvent('deleteTask', { record: rec });
+		    	            	var panel = grid.up('panel');
+		    	                panel.model.data=rec.data;
+		    	            	panel.appEventsController.getApplication().fireEvent('deleteTask');
 		    	            },
 		    	            scope: this
 		    	        }]
@@ -73,7 +81,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
-				            tooltip: 'Add a task',
+				            tooltip: 'Add a Task',
 				            text: 'Add',
 				            xtype: 'button',
 				            itemId: 'addTaskButton'

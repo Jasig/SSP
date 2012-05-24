@@ -1,9 +1,9 @@
-Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
+Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
 	extend: 'Ext.panel.Panel',
-	alias : 'widget.actionplantasks',
+	alias : 'widget.displayactionplan',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.actionplan.ActionPlanTasksViewController',
+    controller: 'Ssp.controller.tool.actionplan.DisplayActionPlanViewController',
     inject: {
     	person: 'currentPerson'
     },
@@ -12,8 +12,9 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
-		            autoScroll: true,
 		            title: 'Action Plan',
+		            autoScroll: true,
+		            padding: 0,
 					items: [
 						Ext.createWidget('tabpanel', {
 						    width: '100%',
@@ -37,20 +38,8 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
 						    		  items: [{xtype: 'tasks'}]
 						    		}]
 						})
-						,{xtype: 'actionplangoals', flex: 1}
-						,{
-					        xtype:'form',
-					        title: 'Strengths',
-					        layout:'anchor',
-					        items :[{
-					            xtype: 'textarea',
-					            anchor: '100%',
-					            height: 50,
-					            fieldLabel: 'Strengths',
-					            name: 'strengths',
-					            value: this.person.get('strengths')
-					        }]
-						}
+						,{xtype: 'displayactionplangoals', flex: 1}
+						,{xtype: 'displaystrengths'}
 				    ],
 				    
 				    dockedItems: [{
@@ -58,19 +47,19 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
 				        xtype: 'toolbar',
 				        items: [{
 				            xtype: 'checkbox',
-				            boxLabel: 'Display only items that I created',
+				            boxLabel: 'Display only tasks that I created',
 				            itemId: 'filterTasksBySelfCheck'
 				           }]
 				    },{
 				        dock: 'bottom',
 				        xtype: 'toolbar',
 				        items: [{
-				            tooltip: 'Email selected tasks',
+				            tooltip: 'Email Action Plan',
 				            text: 'Email',
 				            xtype: 'button',
 				            itemId: 'emailTasksButton'
 				        },{
-				            tooltip: 'Print selected tasks',
+				            tooltip: 'Print Action Plan',
 				            text: 'Print',
 				            xtype: 'button',
 				            itemId: 'printTasksButton'
@@ -78,7 +67,7 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
 				        	xtype: 'tbspacer',
 				        	flex: 1
 				        },{
-				            tooltip: 'Print the History for this student',
+				            tooltip: 'View Student History',
 				            text: 'View History',
 				            xtype: 'button',
 				            itemId: 'viewHistoryButton'

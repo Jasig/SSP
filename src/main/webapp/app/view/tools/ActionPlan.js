@@ -8,7 +8,7 @@ Ext.define('Ssp.view.tools.ActionPlan', {
 	height: '100%',   
 	layout: 'fit',
 	initComponent: function() {	
-		Ext.apply(this,{items: [{xtype: 'actionplantasks'}]});
+		Ext.apply(this,{items: [{xtype: 'displayactionplan'}]});
 
 		return this.callParent(arguments);
 	}
