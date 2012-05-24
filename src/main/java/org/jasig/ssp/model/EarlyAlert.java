@@ -24,6 +24,8 @@ import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 
+import com.google.common.collect.Sets;
+
 /**
  * EarlyAlert
  */
@@ -75,13 +77,14 @@ public class EarlyAlert extends Auditable implements Serializable { // NOPMD
 	@JoinTable(name = "early_alert_early_alert_reason",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_reason_id"))
-	private Set<EarlyAlertReason> earlyAlertReasonIds;
+	private Set<EarlyAlertReason> earlyAlertReasonIds = Sets.newHashSet();
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "early_alert_early_alert_suggestion",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_suggestion_id"))
-	private Set<EarlyAlertSuggestion> earlyAlertSuggestionIds;
+	private Set<EarlyAlertSuggestion> earlyAlertSuggestionIds = Sets
+			.newHashSet();
 
 	/**
 	 * @return the courseName

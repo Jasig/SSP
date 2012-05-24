@@ -238,10 +238,13 @@ public class MessageServiceImpl implements MessageService {
 
 			mimeMessageHelper.setSubject(message.getSubject());
 			mimeMessageHelper.setText(message.getBody());
-			mimeMessage.setContent(message.getBody(), "text/html");
+			mimeMessage.setContent(message.getBody(), "text/plain");
 
 			if (shouldSendMail()) {
+				LOGGER.debug("_ : JavaMailSender.send()");
 				javaMailSender.send(mimeMessage);
+			} else {
+				LOGGER.warn("_ : JavaMailSender was not called; message was marked sent but was not actually sent");
 			}
 
 			message.setSentDate(new Date());
