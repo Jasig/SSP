@@ -7,7 +7,7 @@ import com.google.common.collect.Sets
 
 class AuditableTest {
 
-	class AuditableSubClass extends Auditable{
+	class AuditableSubClass extends AbstractAuditable{
 		protected int hashPrime(){
 			return 197
 		};
@@ -17,7 +17,7 @@ class AuditableTest {
 		}
 	}
 
-	class AuditableSubClass2 extends Auditable{
+	class AuditableSubClass2 extends AbstractAuditable{
 		protected int hashPrime(){
 			return 193
 		};

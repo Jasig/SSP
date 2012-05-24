@@ -6,9 +6,10 @@ import org.jasig.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
 
 @JsonSerialize(using = CodeAndPropertySerializer.class)
 public enum EmploymentShifts implements CodeAndProperty {
+
 	FIRST("1st"), SECOND("2nd"), THIRD("3rd"), NOT_APPLICABLE("Not Applicable");
 
-	public static EmploymentShifts getEnumByValue(String value) {
+	public static EmploymentShifts getEnumByValue(final String value) {
 		if ("1st".equals(value)) {
 			return FIRST;
 		} else if ("2nd".equals(value)) {
@@ -24,7 +25,7 @@ public enum EmploymentShifts implements CodeAndProperty {
 
 	private String title;
 
-	private EmploymentShifts(String title) {
+	private EmploymentShifts(final String title) {
 		this.title = title;
 	}
 

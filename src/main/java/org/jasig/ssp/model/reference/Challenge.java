@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -18,13 +17,14 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.jasig.ssp.model.Auditable;
 
 /**
  * Challenge reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Challenge extends AbstractReference implements Serializable {
+public class Challenge extends AbstractReference implements Auditable {
 
 	private static final long serialVersionUID = 5610544634433661561L;
 
@@ -203,7 +203,7 @@ public class Challenge extends AbstractReference implements Serializable {
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= super.hashCode();
 
 		result *= StringUtils.isEmpty(selfHelpGuideQuestion) ? "selfHelpGuideQuestion"

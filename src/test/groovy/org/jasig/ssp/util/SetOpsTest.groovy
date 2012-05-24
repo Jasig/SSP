@@ -4,7 +4,7 @@ import static org.junit.Assert.*
 
 import org.junit.Before
 import org.junit.Test
-import org.jasig.ssp.model.Auditable
+import org.jasig.ssp.model.AbstractAuditable
 import org.jasig.ssp.model.ObjectStatus
 
 import com.google.common.collect.Sets
@@ -12,7 +12,7 @@ import com.google.common.collect.Sets
 
 class SetOpsTest {
 
-	class AuditableSubClass extends Auditable{
+	class AuditableSubClass extends AbstractAuditable{
 		public AuditableSubClass(){
 			setObjectStatus(ObjectStatus.ACTIVE)
 		}
@@ -27,7 +27,7 @@ class SetOpsTest {
 		public int hashCode() {
 			int result = hashPrime();
 
-			// Auditable properties
+			// AbstractAuditable properties
 			result *= getId() == null ? "id".hashCode() : getId().hashCode();
 			result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 					.hashCode();

@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -9,12 +8,16 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
+import org.jasig.ssp.model.Auditable;
+
 /**
  * VeteranStatus reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class VeteranStatus extends AbstractReference implements Serializable {
+public class VeteranStatus
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = -8572858642333315262L;
 
@@ -84,7 +87,7 @@ public class VeteranStatus extends AbstractReference implements Serializable {
 	@Override
 	protected int hashPrime() {
 		return 149;
-	};
+	}
 
 	@Override
 	public int hashCode() {

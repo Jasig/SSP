@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,13 +9,16 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.Auditable;
 
 /**
  * EducationGoal reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EducationGoal extends AbstractReference implements Serializable {
+public class EducationGoal
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -72,7 +74,7 @@ public class EducationGoal extends AbstractReference implements Serializable {
 	@Override
 	protected int hashPrime() {
 		return 83;
-	};
+	}
 
 	@Override
 	public int hashCode() {

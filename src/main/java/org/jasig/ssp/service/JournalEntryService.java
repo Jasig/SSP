@@ -6,7 +6,7 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public interface JournalEntryService
-		extends PersonAssocService<JournalEntry> {
+		extends AuditablePersonAssocService<JournalEntry> {
 
 	/**
 	 * Get all journal entries for the Person

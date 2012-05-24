@@ -1,6 +1,5 @@
 package org.jasig.ssp.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +17,9 @@ import org.jasig.ssp.model.reference.SelfHelpGuide;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class SelfHelpGuideResponse extends Auditable implements Serializable {
+public class SelfHelpGuideResponse
+		extends AbstractAuditable
+		implements PersonAssocAuditable {
 
 	private static final long serialVersionUID = -1245736694871363293L;
 
@@ -70,10 +71,12 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 		this.earlyAlertSent = earlyAlertSent;
 	}
 
+	@Override
 	public Person getPerson() {
 		return person;
 	}
 
+	@Override
 	public void setPerson(final Person person) {
 		this.person = person;
 	}
@@ -104,7 +107,7 @@ public class SelfHelpGuideResponse extends Auditable implements Serializable {
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:25 PM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

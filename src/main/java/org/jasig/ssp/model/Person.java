@@ -1,6 +1,5 @@
 package org.jasig.ssp.model; // NOPMD
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +35,7 @@ import org.jasig.ssp.model.tool.PersonTool;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public final class Person extends Auditable implements Serializable { // NOPMD
+public final class Person extends AbstractAuditable implements Auditable { // NOPMD
 
 	private static final long serialVersionUID = 4122282021549627683L;
 
@@ -641,7 +640,7 @@ public final class Person extends Auditable implements Serializable { // NOPMD
 	public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:25 PM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

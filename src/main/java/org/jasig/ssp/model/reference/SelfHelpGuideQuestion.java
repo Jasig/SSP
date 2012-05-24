@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -13,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
 
 /**
@@ -21,8 +21,9 @@ import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 // :TODO rename to SelfHelpGuideChallenge
-public class SelfHelpGuideQuestion extends AbstractReference implements
-		Serializable {
+public class SelfHelpGuideQuestion
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = -3535904390712079266L;
 
@@ -128,7 +129,7 @@ public class SelfHelpGuideQuestion extends AbstractReference implements
 	@Override
 	protected int hashPrime() {
 		return 137;
-	};
+	}
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:20 PM

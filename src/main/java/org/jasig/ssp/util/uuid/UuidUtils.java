@@ -7,7 +7,14 @@ import java.util.UUID;
  * 
  * @author daniel.bower
  */
-public class UuidUtils {
+public final class UuidUtils {
+
+	/**
+	 * This class is only called statically
+	 */
+	private UuidUtils() {
+		super();
+	}
 
 	/**
 	 * Check if the parameter is a valid UUID.
@@ -16,7 +23,7 @@ public class UuidUtils {
 	 *            String representation of the UUID.
 	 * @return True if the parameter can be parsed into a valid UUID.
 	 */
-	public static boolean isUUID(String str) {
+	public static boolean isUUID(final String str) {
 
 		if (str == null) {
 			return false;
@@ -40,11 +47,11 @@ public class UuidUtils {
 	 *            UUID to convert to a String.
 	 * @return String representation of the passed UUID.
 	 */
-	public static String uuidToString(UUID val) {
-		if (null != val) {
-			return val.toString();
-		} else {
+	public static String uuidToString(final UUID val) {
+		if (null == val) {
 			return "No UUID assigned";
+		} else {
+			return val.toString();
 		}
 	}
 }

@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -10,6 +9,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
+import org.jasig.ssp.model.Auditable;
+
 /**
  * JournalStep reference object.
  * 
@@ -17,8 +18,9 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class JournalStep extends AbstractReference implements
-		Serializable {
+public class JournalStep
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -113,7 +115,7 @@ public class JournalStep extends AbstractReference implements
 	final public int hashCode() {
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -10,13 +9,16 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
+import org.jasig.ssp.model.Auditable;
+
 /**
  * JournalTrack reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class JournalTrack extends AbstractReference implements
-		Serializable {
+public class JournalTrack
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = 2719277716161933677L;
 

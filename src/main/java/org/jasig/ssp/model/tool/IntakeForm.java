@@ -1,13 +1,14 @@
 package org.jasig.ssp.model.tool;
 
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonAssoc;
 
 /**
  * The model for the Intake Form tool.
  * 
  * Currently only a simple wrapper around a fully-normalized {@link Person}.
  */
-public class IntakeForm {
+public class IntakeForm implements PersonAssoc {
 
 	/**
 	 * Person with the full tree of data, down to only using identifiers
@@ -22,6 +23,7 @@ public class IntakeForm {
 	 * 
 	 * @return the full Person instance
 	 */
+	@Override
 	public Person getPerson() {
 		return person;
 	}
@@ -32,7 +34,8 @@ public class IntakeForm {
 	 * @param person
 	 *            Person instance
 	 */
-	public void setPerson(Person person) {
+	@Override
+	public void setPerson(final Person person) {
 		this.person = person;
 	}
 }

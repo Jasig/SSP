@@ -1,18 +1,21 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import org.jasig.ssp.model.Auditable;
+
 /**
  * FundingSource reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class FundingSource extends AbstractReference implements Serializable {
+public class FundingSource
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +33,7 @@ public class FundingSource extends AbstractReference implements Serializable {
 	 *            Identifier; required
 	 */
 
-	public FundingSource(UUID id) {
+	public FundingSource(final UUID id) {
 		super(id);
 	}
 
@@ -43,7 +46,7 @@ public class FundingSource extends AbstractReference implements Serializable {
 	 *            Name; required; max 100 characters
 	 */
 
-	public FundingSource(UUID id, String name) {
+	public FundingSource(final UUID id, final String name) {
 		super(id, name);
 	}
 
@@ -57,12 +60,13 @@ public class FundingSource extends AbstractReference implements Serializable {
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public FundingSource(UUID id, String name, String description) {
+	public FundingSource(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
 	@Override
 	protected int hashPrime() {
 		return 103;
-	};
+	}
 }

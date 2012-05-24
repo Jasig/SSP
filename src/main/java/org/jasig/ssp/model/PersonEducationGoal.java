@@ -1,7 +1,5 @@
 package org.jasig.ssp.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,7 +26,9 @@ import org.jasig.ssp.model.reference.EducationGoal;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonEducationGoal extends Auditable implements Serializable {
+public class PersonEducationGoal
+		extends AbstractAuditable
+		implements Auditable {
 
 	private static final long serialVersionUID = -5687416606848336981L;
 
@@ -111,7 +111,7 @@ public class PersonEducationGoal extends Auditable implements Serializable {
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:17 PM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

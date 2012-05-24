@@ -1,7 +1,5 @@
 package org.jasig.ssp.model.tool;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,16 +8,18 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.AbstractAuditable;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonAssoc;
+import org.jasig.ssp.model.PersonAssocAuditable;
 
 /**
  * PersonTool model
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonTool extends Auditable implements PersonAssoc, Serializable {
+public class PersonTool
+		extends AbstractAuditable
+		implements PersonAssocAuditable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -70,7 +70,7 @@ public class PersonTool extends Auditable implements PersonAssoc, Serializable {
 	final public int hashCode() {
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

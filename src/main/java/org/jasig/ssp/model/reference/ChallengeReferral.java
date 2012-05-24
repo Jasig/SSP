@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -13,14 +12,16 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.Auditable;
 
 /**
  * ChallengeReferral reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class ChallengeReferral extends AbstractReference implements
-		Serializable {
+public class ChallengeReferral
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -117,7 +118,7 @@ public class ChallengeReferral extends AbstractReference implements
 	@Override
 	protected int hashPrime() {
 		return 61;
-	};
+	}
 
 	@Override
 	public int hashCode() {

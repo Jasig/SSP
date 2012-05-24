@@ -1,19 +1,21 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import org.jasig.ssp.model.Auditable;
+
 /**
  * SpecialServiceGroup reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class SpecialServiceGroup extends AbstractReference implements
-		Serializable {
+public class SpecialServiceGroup
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -66,5 +68,5 @@ public class SpecialServiceGroup extends AbstractReference implements
 	@Override
 	protected int hashPrime() {
 		return 269;
-	};
+	}
 }

@@ -4,7 +4,15 @@ package org.jasig.ssp.util;
  * A few simple helper methods to convert from value types to Strings and vice
  * versa, according to the interfaces in which SSP serializes data.
  */
-public class SspStringUtils {
+public final class SspStringUtils {
+
+	/**
+	 * This class is only called statically
+	 */
+	private SspStringUtils() {
+		super();
+	}
+
 	/**
 	 * Convert an integer year to a String.
 	 * 
@@ -13,7 +21,7 @@ public class SspStringUtils {
 	 * @return String representation of the year, or empty string if the value
 	 *         was 0 or negative.
 	 */
-	public static String stringFromYear(int year) {
+	public static String stringFromYear(final int year) {
 		return 0 >= year ? "" : String.valueOf(year);
 	}
 
@@ -24,7 +32,7 @@ public class SspStringUtils {
 	 *            Required value to convert from boolean
 	 * @return "true", or empty string if the value was false.
 	 */
-	public static String stringFromBoolean(boolean value) {
+	public static String stringFromBoolean(final boolean value) {
 		return value ? "true" : "";
 	}
 
@@ -44,7 +52,7 @@ public class SspStringUtils {
 	 *            Required value to convert to boolean
 	 * @return True if value could be parsed as a true value; false otherwise.
 	 */
-	public static boolean booleanFromString(String value) {
+	public static boolean booleanFromString(final String value) {
 		if ("TRUE".equalsIgnoreCase(value) || "T".equalsIgnoreCase(value)
 				|| "YES".equalsIgnoreCase(value) || "Y".equalsIgnoreCase(value)
 				|| "1".equalsIgnoreCase(value)) {

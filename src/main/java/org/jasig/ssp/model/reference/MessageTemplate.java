@@ -7,12 +7,17 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.Auditable;
 
 /*
  * Allows e-mails and other messaging to be customized using the Velocity Framework
  */
 @Entity
-public class MessageTemplate extends AbstractReference {
+public class MessageTemplate
+		extends AbstractReference
+		implements Auditable {
+
+	private static final long serialVersionUID = 1L;
 
 	// :TODO match MessageTemplate IDs to actual database values
 	// Message Templates
@@ -111,13 +116,13 @@ public class MessageTemplate extends AbstractReference {
 	@Override
 	protected int hashPrime() {
 		return 113;
-	};
+	}
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= super.hashCode();
 
 		result *= StringUtils.isEmpty(subject) ? "subject".hashCode() : subject

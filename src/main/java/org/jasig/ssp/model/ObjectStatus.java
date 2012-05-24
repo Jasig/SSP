@@ -44,14 +44,14 @@ public enum ObjectStatus {
 	 * Filter a collection to return only those that have the specified status.
 	 * 
 	 * @param list
-	 *            List of {@link Auditable}
+	 *            List of {@link AbstractAuditable}
 	 * @param status
 	 *            Only return instances that match this status
 	 * @return A list of instances that match this status
 	 */
 	public static <T extends Auditable> List<T> filterForStatus(
-			Collection<T> list, ObjectStatus status) {
-		List<T> inStatus = Lists.newArrayList();
+			final Collection<T> list, final ObjectStatus status) {
+		final List<T> inStatus = Lists.newArrayList();
 
 		for (T t : list) {
 			if (status.equals(ObjectStatus.ALL)

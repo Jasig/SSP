@@ -1,12 +1,12 @@
 package org.jasig.ssp.service;
 
-import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonAssocAuditable;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
-public interface PersonAssocService<T extends Auditable> extends
-		AuditableCrudService<T> {
+public interface AuditablePersonAssocService<T extends PersonAssocAuditable>
+		extends AuditableCrudService<T> {
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
 	 * 

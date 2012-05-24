@@ -1,19 +1,21 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import org.jasig.ssp.model.Auditable;
+
 /**
  * SelfHelpGuideGroup reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class SelfHelpGuideGroup extends AbstractReference implements
-		Serializable {
+public class SelfHelpGuideGroup
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +33,7 @@ public class SelfHelpGuideGroup extends AbstractReference implements
 	 *            Identifier; required
 	 */
 
-	public SelfHelpGuideGroup(UUID id) {
+	public SelfHelpGuideGroup(final UUID id) {
 		super(id);
 	}
 
@@ -44,7 +46,7 @@ public class SelfHelpGuideGroup extends AbstractReference implements
 	 *            Name; required; max 100 characters
 	 */
 
-	public SelfHelpGuideGroup(UUID id, String name) {
+	public SelfHelpGuideGroup(final UUID id, final String name) {
 		super(id, name);
 	}
 
@@ -58,12 +60,13 @@ public class SelfHelpGuideGroup extends AbstractReference implements
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public SelfHelpGuideGroup(UUID id, String name, String description) {
+	public SelfHelpGuideGroup(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
 	@Override
 	protected int hashPrime() {
 		return 131;
-	};
+	}
 }

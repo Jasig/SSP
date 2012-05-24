@@ -1,7 +1,5 @@
 package org.jasig.ssp.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,8 +12,10 @@ import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class SelfHelpGuideQuestionResponse extends Auditable implements
-		Serializable {
+public class SelfHelpGuideQuestionResponse
+		extends AbstractAuditable
+		implements Auditable {
+
 	private static final long serialVersionUID = -6385278568384602029L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -75,7 +75,7 @@ public class SelfHelpGuideQuestionResponse extends Auditable implements
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:15 PM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

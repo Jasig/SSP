@@ -1,6 +1,5 @@
 package org.jasig.ssp.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -23,8 +22,9 @@ import org.jasig.ssp.model.reference.JournalTrack;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class JournalEntry extends Auditable implements PersonAssoc, Restricted,
-		Serializable {
+public class JournalEntry
+		extends AbstractAuditable
+		implements PersonAssocAuditable, Restricted {
 
 	private static final long serialVersionUID = 1477217415946557983L;
 
@@ -125,7 +125,7 @@ public class JournalEntry extends Auditable implements PersonAssoc, Restricted,
 	final public int hashCode() { // NOPMD by jon.adams on 5/14/12 1:49 PM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

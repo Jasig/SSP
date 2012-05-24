@@ -10,7 +10,14 @@ import org.jasig.ssp.model.ObjectStatus;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-public class SetOps {
+public final class SetOps {
+
+	/**
+	 * This class is only called statically
+	 */
+	private SetOps() {
+		super();
+	}
 
 	/**
 	 * Soft delete ones in existing that are not in replacingWith <br />

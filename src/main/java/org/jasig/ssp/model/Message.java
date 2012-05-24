@@ -19,7 +19,11 @@ import org.apache.commons.lang.StringUtils;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-final public class Message extends Auditable {
+final public class Message
+		extends AbstractAuditable
+		implements Auditable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Column(nullable = false, length = 250)
 	private String subject;
@@ -152,7 +156,7 @@ final public class Message extends Auditable {
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:46 AM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();
@@ -162,10 +166,11 @@ final public class Message extends Auditable {
 				.hashCode();
 		result *= StringUtils.isEmpty(body) ? "body".hashCode() : body
 				.hashCode();
-		result *= sender == null || sender.getId() == null ? "sender"
+		result *= (sender == null) || (sender.getId() == null) ? "sender"
 				.hashCode() : sender.getId().hashCode();
-		result *= recipient == null || recipient.getId() == null ? "recipient"
-				.hashCode() : recipient.getId().hashCode();
+		result *= (recipient == null) || (recipient.getId() == null) ? "recipient"
+				.hashCode()
+				: recipient.getId().hashCode();
 		result *= StringUtils.isEmpty(recipientEmailAddress) ? "recipientEmailAddress"
 				.hashCode()
 				: recipientEmailAddress.hashCode();

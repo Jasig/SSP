@@ -5,20 +5,20 @@ import java.util.Date;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Service;
-import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.AbstractAuditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.SecurityService;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Service;
 
 /**
  * Intercepts Hibernate writes to automatically fill the created and modified
  * author and time stamp fields of any model that derives from the
- * {@link org.jasig.ssp.model.Auditable} class.
+ * {@link org.jasig.ssp.model.AbstractAuditable} class.
  */
 @Service
 public class AuditableEntityInterceptor extends EmptyInterceptor implements
@@ -47,10 +47,12 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 *            Types
 	 */
 	@Override
-	public boolean onFlushDirty(Object entity, Serializable id,
-			Object[] currentState, Object[] previousState,
-			String[] propertyNames, Type[] types) {
-		boolean modified = addAuditingProps(entity, currentState, propertyNames);
+	public boolean onFlushDirty(final Object entity, final Serializable id,
+			final Object[] currentState, final Object[] previousState,
+			final String[] propertyNames, final Type[] types) {
+
+		final boolean modified = addAuditingProps(entity, currentState,
+				propertyNames);
 		super.onFlushDirty(entity, id, currentState, previousState,
 				propertyNames, types);
 		return modified;
@@ -74,15 +76,17 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 *         Hibernate
 	 */
 	@Override
-	public boolean onSave(Object entity, Serializable id, Object[] state,
-			String[] propertyNames, Type[] types) {
-		boolean modified = addAuditingProps(entity, state, propertyNames);
+	public boolean onSave(final Object entity, final Serializable id,
+			final Object[] state, final String[] propertyNames,
+			final Type[] types) {
+		final boolean modified = addAuditingProps(entity, state, propertyNames);
 		super.onSave(entity, id, state, propertyNames, types);
 		return modified;
 	}
 
 	/**
-	 * If the entity parameter is an instance of an {@link Auditable}, then fill
+	 * If the entity parameter is an instance of an {@link AbstractAuditable},
+	 * then fill
 	 * in any missing created fields, object status (defaults to
 	 * {@link ObjectStatus#ACTIVE}, and always updates the modified fields with
 	 * the currently authenticated user and the current time stamp.
@@ -97,17 +101,17 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 * @return If state was modified any, will return true to indicate this to
 	 *         Hibernate
 	 */
-	private boolean addAuditingProps(Object entity, Object[] state,
-			String[] propertyNames) {
-		if (!(entity instanceof Auditable)) {
-			// Not Auditable, so no changes are necessary.
+	private boolean addAuditingProps(final Object entity,
+			final Object[] state, final String[] propertyNames) {
+		if (!(entity instanceof AbstractAuditable)) {
+			// Not AbstractAuditable, so no changes are necessary.
 			return false;
 		}
 
-		Person current = currentUser();
+		final Person current = currentUser();
 
 		for (int i = 0; i < propertyNames.length; i++) {
-			String property = propertyNames[i];
+			final String property = propertyNames[i];
 			if ("createdDate".equals(property) && (state[i] == null)) {
 				state[i] = new Date();
 				continue;
@@ -134,7 +138,8 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 			}
 		}
 
-		// Since it was Auditable (didn't short circuit in test at the top of
+		// Since it was AbstractAuditable (didn't short circuit in test at the
+		// top of
 		// this method), then last modified stamps always change, so return true
 		// to indicate to Hibernate that the state has changed.
 		return true;
@@ -147,7 +152,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 * @return The currently authenticated user
 	 */
 	public Person currentUser() {
-		SspUser user = getSecurityService().currentUser();
+		final SspUser user = getSecurityService().currentUser();
 		return user.getPerson();
 	}
 
@@ -156,7 +161,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 * SecurityService for use by {@link #currentUser()}.
 	 */
 	@Override
-	public void setApplicationContext(ApplicationContext arg0)
+	public void setApplicationContext(final ApplicationContext arg0)
 			throws BeansException {
 		context = arg0;
 	}

@@ -1,7 +1,5 @@
 package org.jasig.ssp.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -14,8 +12,9 @@ import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PersonConfidentialityDisclosureAgreement extends Auditable
-		implements Serializable {
+public class PersonConfidentialityDisclosureAgreement
+		extends AbstractAuditable
+		implements PersonAssocAuditable {
 
 	private static final long serialVersionUID = 27277225191519712L;
 
@@ -36,18 +35,20 @@ public class PersonConfidentialityDisclosureAgreement extends Auditable
 	}
 
 	public PersonConfidentialityDisclosureAgreement(
-			Person person,
-			ConfidentialityDisclosureAgreement confidentialityDisclosureAgreement) {
+			final Person person,
+			final ConfidentialityDisclosureAgreement confidentialityDisclosureAgreement) {
 		super();
 		this.person = person;
 		this.confidentialityDisclosureAgreement = confidentialityDisclosureAgreement;
 	}
 
+	@Override
 	public Person getPerson() {
 		return person;
 	}
 
-	public void setPerson(Person person) {
+	@Override
+	public void setPerson(final Person person) {
 		this.person = person;
 	}
 
@@ -56,7 +57,7 @@ public class PersonConfidentialityDisclosureAgreement extends Auditable
 	}
 
 	public void setConfidentialityDisclosureAgreement(
-			ConfidentialityDisclosureAgreement confidentialityDisclosureAgreement) {
+			final ConfidentialityDisclosureAgreement confidentialityDisclosureAgreement) {
 		this.confidentialityDisclosureAgreement = confidentialityDisclosureAgreement;
 	}
 
@@ -66,7 +67,7 @@ public class PersonConfidentialityDisclosureAgreement extends Auditable
 	 * @param source
 	 *            Source to use for overwrites.
 	 */
-	public void overwrite(PersonConfidentialityDisclosureAgreement source) {
+	public void overwrite(final PersonConfidentialityDisclosureAgreement source) {
 		person = source.getPerson();
 		confidentialityDisclosureAgreement = source
 				.getConfidentialityDisclosureAgreement();
@@ -81,13 +82,13 @@ public class PersonConfidentialityDisclosureAgreement extends Auditable
 	final public int hashCode() {
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();
 
 		// PersonConfidentialityDisclosureAgreement
-		result *= person == null || person.getId() == null ? "person"
+		result *= (person == null) || (person.getId() == null) ? "person"
 				.hashCode() : person.getId().hashCode();
 		result *= confidentialityDisclosureAgreement == null ? "confidentialityDisclosureAgreement"
 				.hashCode()

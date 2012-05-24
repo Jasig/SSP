@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,6 +9,7 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
+import org.jasig.ssp.model.Auditable;
 
 /**
  * Campus reference object.
@@ -18,7 +18,7 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Campus extends AbstractReference implements Serializable {
+public class Campus extends AbstractReference implements Auditable {
 
 	private static final long serialVersionUID = -6346942820506585713L;
 

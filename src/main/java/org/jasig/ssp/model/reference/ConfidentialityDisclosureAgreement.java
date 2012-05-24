@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,14 +9,16 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.Auditable;
 
 /**
  * ConfidentialityDisclosureAgreement reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class ConfidentialityDisclosureAgreement extends AbstractReference
-		implements Serializable {
+public class ConfidentialityDisclosureAgreement
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = -2992853251827812441L;
 
@@ -72,7 +73,7 @@ public class ConfidentialityDisclosureAgreement extends AbstractReference
 	@Override
 	protected int hashPrime() {
 		return 73;
-	};
+	}
 
 	@Override
 	public int hashCode() {

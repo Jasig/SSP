@@ -8,7 +8,7 @@ import org.junit.Test
 
 
 class PersonTest {
-	class AuditableSubClass extends Auditable{
+	class AuditableSubClass extends AbstractAuditable{
 		protected int hashPrime(){
 			return 199
 		};

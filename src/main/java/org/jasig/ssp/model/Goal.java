@@ -1,7 +1,5 @@
 package org.jasig.ssp.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -22,8 +20,8 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Goal extends Auditable implements
-		PersonAssoc, Restricted, Serializable {
+public class Goal extends AbstractAuditable implements
+		PersonAssocAuditable, Restricted {
 
 	/**
 	 * Name
@@ -101,7 +99,7 @@ public class Goal extends Auditable implements
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

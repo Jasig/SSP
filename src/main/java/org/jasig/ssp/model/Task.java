@@ -1,6 +1,5 @@
 package org.jasig.ssp.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.annotation.Nullable;
@@ -26,7 +25,9 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Task extends Auditable implements Restricted, Serializable {
+public class Task
+		extends AbstractAuditable
+		implements Restricted, PersonAssocAuditable {
 
 	private static final long serialVersionUID = 1477217415946557983L;
 
@@ -84,7 +85,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 	private ConfidentialityLevel confidentialityLevel;
 
 	/**
-	 * Constructor that only calls {@link Auditable#Auditable()}.
+	 * Constructor that only calls {@link AbstractAuditable#Auditable()}.
 	 */
 	public Task() {
 		super();
@@ -176,10 +177,12 @@ public class Task extends Auditable implements Restricted, Serializable {
 		this.sessionId = sessionId;
 	}
 
+	@Override
 	public Person getPerson() {
 		return person;
 	}
 
+	@Override
 	public void setPerson(final Person person) {
 		this.person = person;
 	}
@@ -236,7 +239,7 @@ public class Task extends Auditable implements Restricted, Serializable {
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:06 PM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

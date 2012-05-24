@@ -1,18 +1,21 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import org.jasig.ssp.model.Auditable;
+
 /**
  * Education Level reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EducationLevel extends AbstractReference implements Serializable {
+public class EducationLevel
+		extends AbstractReference
+		implements Auditable {
 
 	public static final UUID NO_DIPLOMA_NO_GED_ID = UUID
 			.fromString("5d967ba0-e086-4426-85d5-29bc86da9295");
@@ -43,7 +46,7 @@ public class EducationLevel extends AbstractReference implements Serializable {
 	 *            Identifier; required
 	 */
 
-	public EducationLevel(UUID id) {
+	public EducationLevel(final UUID id) {
 		super(id);
 	}
 
@@ -55,7 +58,7 @@ public class EducationLevel extends AbstractReference implements Serializable {
 	 * @param name
 	 *            Name; required; max 100 characters
 	 */
-	public EducationLevel(UUID id, String name) {
+	public EducationLevel(final UUID id, final String name) {
 		super(id, name);
 	}
 
@@ -69,12 +72,13 @@ public class EducationLevel extends AbstractReference implements Serializable {
 	 * @param description
 	 *            Description; max 150 characters
 	 */
-	public EducationLevel(UUID id, String name, String description) {
+	public EducationLevel(final UUID id, final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
 	@Override
 	protected int hashPrime() {
 		return 97;
-	};
+	}
 }

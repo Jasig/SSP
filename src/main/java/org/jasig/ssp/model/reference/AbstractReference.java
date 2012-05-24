@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jasig.ssp.model.AbstractAuditable;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 
@@ -16,8 +17,11 @@ import org.jasig.ssp.model.ObjectStatus;
  * Reference entities must all share this abstract class, so they inherit the
  * identifier, name, and description properties.
  */
+@SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractReference extends Auditable {
+public abstract class AbstractReference
+		extends AbstractAuditable
+		implements Auditable {
 
 	/**
 	 * Name
@@ -135,7 +139,7 @@ public abstract class AbstractReference extends Auditable {
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

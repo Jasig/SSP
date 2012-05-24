@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,13 +18,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.Auditable;
 
 /**
  * SelfHelpGuide reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class SelfHelpGuide extends AbstractReference implements Serializable {
+public class SelfHelpGuide
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = -1522006854468084935L;
 
@@ -157,13 +159,13 @@ public class SelfHelpGuide extends AbstractReference implements Serializable {
 	@Override
 	protected int hashPrime() {
 		return 127;
-	};
+	}
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= super.hashCode();
 
 		result *= threshold > 0 ? threshold : hashPrime();

@@ -47,6 +47,12 @@ String addChallengeToCategory(ApiConnection conn){
 	return conn.post("api/1/reference/category/5d24743a-a11e-11e1-a9a6-0026b9e7ff4c/challenge", form)
 }
 
+String addGoalToPerson(ApiConnection conn){
+	String form = '{"id":"","createdDate":null,"name":"Get a 2.0 GPA","personId":"58ba5ee3-734e-4ae9-b9c5-943774b4de41","description":"Get a 2.0 GPA","createdBy":{"id":"","firstName":"","lastName":""},"modifiedBy":{"id":"","firstName":"","lastName":""},"confidentialityLevel":{"id":"afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c","name":null}}'
+	return conn.post("api/1/person/58ba5ee3-734e-4ae9-b9c5-943774b4de41/goal/", form)
+	
+}
+
 
 String toJson(def form){
 	def builder = new JsonBuilder()
@@ -62,7 +68,8 @@ JsonSlurper jsonParser = new JsonSlurper()
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "student0", "student0", false)
 
 //String output = getStudentIntakeForm(conn, jsonParser)
-String output = addChallengeToCategory(conn) 
+//String output = addChallengeToCategory(conn) 
+String output = addGoalToPerson(conn) 
 
 conn.formatAndPrintJson(output)
 

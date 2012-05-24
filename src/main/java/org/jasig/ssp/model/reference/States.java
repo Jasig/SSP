@@ -1,12 +1,12 @@
 package org.jasig.ssp.model.reference;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndProperty;
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
 
 @JsonSerialize(using = CodeAndPropertySerializer.class)
 public enum States implements CodeAndProperty {
+
 	AL("Alabama"), AK("Alaska"), AS("American Samoa"), AZ("Arizona"), AR(
 			"Arkansas"), CA("California"), CO("Colorado"), CT("Connecticut"), DE(
 			"Delaware"), DC("Dist. of Columbia"), FL("Florida"), GA("Georgia"), GU(
@@ -25,7 +25,7 @@ public enum States implements CodeAndProperty {
 
 	private String title;
 
-	private States(String title) {
+	private States(final String title) {
 		this.title = title;
 	}
 

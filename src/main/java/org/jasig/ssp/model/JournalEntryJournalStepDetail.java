@@ -1,7 +1,5 @@
 package org.jasig.ssp.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -16,8 +14,9 @@ import org.jasig.ssp.model.reference.JournalStepDetail;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class JournalEntryJournalStepDetail extends Auditable implements
-		Serializable {
+public class JournalEntryJournalStepDetail
+		extends AbstractAuditable
+		implements Auditable {
 
 	private static final long serialVersionUID = -1482715931640054820L;
 
@@ -78,7 +77,7 @@ public class JournalEntryJournalStepDetail extends Auditable implements
 	public int hashCode() { // NOPMD by jon.adams on 5/18/12 12:56 PM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= getId() == null ? "id".hashCode() : getId().hashCode();
 		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
 				.hashCode();

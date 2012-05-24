@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -8,12 +7,16 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
+import org.jasig.ssp.model.Auditable;
+
 /**
  * Citizenship reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Citizenship extends AbstractReference implements Serializable {
+public class Citizenship
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = 1098149686013321936L;
 
@@ -31,7 +34,7 @@ public class Citizenship extends AbstractReference implements Serializable {
 	 *            Identifier; required
 	 */
 
-	public Citizenship(@NotNull UUID id) {
+	public Citizenship(@NotNull final UUID id) {
 		super(id);
 	}
 
@@ -44,7 +47,7 @@ public class Citizenship extends AbstractReference implements Serializable {
 	 *            Name; required; max 80 characters
 	 */
 
-	public Citizenship(@NotNull UUID id, @NotNull String name) {
+	public Citizenship(@NotNull final UUID id, @NotNull final String name) {
 		super(id, name);
 	}
 
@@ -58,13 +61,13 @@ public class Citizenship extends AbstractReference implements Serializable {
 	 * @param description
 	 *            Description; max 64000 characters
 	 */
-	public Citizenship(@NotNull UUID id, @NotNull String name,
-			String description) {
+	public Citizenship(@NotNull final UUID id, @NotNull final String name,
+			final String description) {
 		super(id, name, description);
 	}
 
 	@Override
 	protected int hashPrime() {
 		return 67;
-	};
+	}
 }

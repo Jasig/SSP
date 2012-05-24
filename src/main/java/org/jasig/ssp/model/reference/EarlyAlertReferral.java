@@ -1,6 +1,5 @@
 package org.jasig.ssp.model.reference;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,6 +9,7 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.Auditable;
 
 /**
  * EarlyAlertReferral reference object.
@@ -18,8 +18,9 @@ import org.apache.commons.lang.StringUtils;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EarlyAlertReferral extends AbstractReference implements
-		Serializable {
+public class EarlyAlertReferral
+		extends AbstractReference
+		implements Auditable {
 
 	private static final long serialVersionUID = -1740796259941040664L;
 
@@ -113,13 +114,13 @@ public class EarlyAlertReferral extends AbstractReference implements
 	@Override
 	protected int hashPrime() {
 		return 157;
-	};
+	}
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime();
 
-		// Auditable properties
+		// AbstractAuditable properties
 		result *= super.hashCode();
 
 		result *= sortOrder > 0 ? sortOrder : hashPrime();

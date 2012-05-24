@@ -73,7 +73,8 @@ class Templater{
 	 * Set some paths to access the files
 	 */
 	List<String> appPath = ["org", "jasig", "ssp"]
-	String basePath = "D:/java/projects/ssp/"
+	String basePath = "/code/infinum/javaWorkspace/ssp/"
+	//String basePath = "D:/java/projects/ssp/"
 
 	private String javaMainPath = basePath + "src/main/java/"
 	private String javaTestPath = basePath + "src/test/java/"
@@ -267,9 +268,9 @@ class Templater{
 
 
 class ReferenceDataTemplater {
-	String templateModel = "VeteranStatus"
+	String templateModel = "Ethnicity"
 	List<String> subpackage = ["reference"]
-	List<String> referenceDataModels = ["Campus"]
+	List<String> referenceDataModels = ["SpecialServiceGroup", "ServiceReason", "ReferralSource"]
 
 	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
 		Templater templater = new Templater(create, overwrite, writeLiquibaseScript, dryRun, displayFileContents)
@@ -280,4 +281,4 @@ class ReferenceDataTemplater {
 }
 
 
-new ReferenceDataTemplater().run(true, true, false, false, false)
+new ReferenceDataTemplater().run(true, true, true, false, false)
