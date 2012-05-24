@@ -42,9 +42,19 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanGoals', {
 			        xtype: 'toolbar',
 			        items: [{
 			            tooltip: 'Add a Goal',
-			            text: 'Add Goal',
+			            text: 'Add',
 			            xtype: 'button',
 			            itemId: 'addGoalButton'
+			        },{
+			            tooltip: 'Edit a Goal',
+			            text: 'Edit',
+			            xtype: 'button',
+			            itemId: 'editGoalButton'
+			        },{
+			            tooltip: 'Delete a Goal',
+			            text: 'Delete',
+			            xtype: 'button',
+			            itemId: 'deleteGoalButton'
 			        }]
 	    	    }]
 		});

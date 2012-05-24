@@ -8,8 +8,7 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
     	person: 'currentPerson'
     },
     width: '100%',
-	height: '100%',   
-	
+	height: '100%',
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
@@ -38,7 +37,7 @@ Ext.define('Ssp.view.tools.actionplan.ActionPlanTasks', {
 						    		  items: [{xtype: 'tasks'}]
 						    		}]
 						})
-						,{xtype: 'actionplangoals'}
+						,{xtype: 'actionplangoals', flex: 1}
 						,{
 					        xtype:'form',
 					        title: 'Strengths',

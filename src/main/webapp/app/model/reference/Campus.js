@@ -1,4 +1,4 @@
 Ext.define('Ssp.model.reference.Campus', {
     extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+    fields: [{name:'earlyAlertCoordinatorId', type: 'string'}]
 });

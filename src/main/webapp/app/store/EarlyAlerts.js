@@ -9,5 +9,5 @@ Ext.define('Ssp.store.EarlyAlerts', {
 		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personEarlyAlert') ),
 						  autoLoad: false });
 		return this.callParent(arguments);
-	},
+	}
 });

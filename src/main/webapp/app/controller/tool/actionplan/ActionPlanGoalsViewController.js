@@ -10,12 +10,20 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanGoalsViewController', {
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'addgoalform',
+    	formToDisplay: 'editgoalform',
     	personGoalUrl: ''
     },
     control: {
 		'addGoalButton': {
 			click: 'onAddGoalClick'
+		},
+		
+		'editGoalButton': {
+			click: 'onEditGoalClick'
+		},
+		
+		'deleteGoalButton': {
+			click: 'onDeleteGoalClick'
 		}
     },
     
@@ -36,6 +44,19 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanGoalsViewController', {
     
     onAddGoalClick: function( button ){
     	console.log("ActionPlanGoalsViewController->onAddGoalClick");
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+		this.goal = new Ssp.model.PersonGoal();
+    	var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    },
+
+    onEditGoalClick: function( button ){
+    	console.log("ActionPlanGoalsViewController->onEditGoalClick");
+		// load the record from the grid
+    	//var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    },
+
+    onDeleteGoalClick: function( button ){
+    	console.log("ActionPlanGoalsViewController->onDeleteGoalClick");
+		// load the record from the grid
+    	//var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
     }
 });
