@@ -23,6 +23,10 @@ class SetOpsTest {
 			return 11
 		}
 
+		public void setOther(String other){
+			this.other = other;
+		}
+
 		@Override
 		public int hashCode() {
 			int result = hashPrime();
