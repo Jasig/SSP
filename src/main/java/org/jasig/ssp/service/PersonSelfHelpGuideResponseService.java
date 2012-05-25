@@ -8,7 +8,7 @@ import org.jasig.ssp.transferobject.SelfHelpGuideResponseTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public interface PersonSelfHelpGuideResponseService
-		extends AuditablePersonAssocService<SelfHelpGuideResponse> {
+		extends PersonAssocAuditableService<SelfHelpGuideResponse> {
 
 	SelfHelpGuideResponse initiateSelfHelpGuideResponse(
 			SelfHelpGuide selfHelpGuide,

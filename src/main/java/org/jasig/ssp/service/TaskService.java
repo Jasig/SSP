@@ -15,7 +15,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface TaskService
-		extends AuditablePersonAssocService<Task> {
+		extends PersonAssocAuditableService<Task> {
 
 	/**
 	 * Get all tasks for the Person
