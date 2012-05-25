@@ -85,7 +85,7 @@ public final class SetOps {
 	public static <T extends Auditable> void softDeleteSetItems(
 			final Set<T> items) {
 		for (T item : items) {
-			if (item.getObjectStatus() != ObjectStatus.DELETED) {
+			if (!item.getObjectStatus().equals(ObjectStatus.DELETED)) {
 				item.setObjectStatus(ObjectStatus.DELETED);
 			}
 		}
