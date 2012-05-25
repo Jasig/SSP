@@ -69,7 +69,6 @@ public class PersonEarlyAlertController extends
 
 	// Overriding to specify full request path since we needed a custom create
 	// method
-
 	@Override
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.GET)

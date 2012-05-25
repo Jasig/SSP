@@ -33,8 +33,24 @@ public class ChallengeCategory
 		return 53;
 	}
 
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(final Category category) {
+		this.category = category;
+	}
+
+	public Challenge getChallenge() {
+		return challenge;
+	}
+
+	public void setChallenge(final Challenge challenge) {
+		this.challenge = challenge;
+	}
+
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime();
 
 		// AbstractAuditable properties
@@ -50,21 +66,5 @@ public class ChallengeCategory
 				.hashCode();
 
 		return result;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(final Category category) {
-		this.category = category;
-	}
-
-	public Challenge getChallenge() {
-		return challenge;
-	}
-
-	public void setChallenge(final Challenge challenge) {
-		this.challenge = challenge;
 	}
 }

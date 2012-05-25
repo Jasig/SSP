@@ -161,5 +161,4 @@ public class PersonEarlyAlertResponseController extends
 		service.delete(id);
 		return new ServiceResponse(true);
 	}
-
 }

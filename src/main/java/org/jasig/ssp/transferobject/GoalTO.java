@@ -54,9 +54,10 @@ public class GoalTO
 	public static List<GoalTO> toTOList(
 			final Collection<Goal> models) {
 		final List<GoalTO> tObjects = Lists.newArrayList();
-		for (Goal model : models) {
-			tObjects.add(new GoalTO(model));
+		for (final Goal model : models) {
+			tObjects.add(new GoalTO(model)); // NOPMD
 		}
+
 		return tObjects;
 	}
 

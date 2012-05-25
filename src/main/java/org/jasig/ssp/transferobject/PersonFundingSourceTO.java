@@ -51,9 +51,10 @@ public class PersonFundingSourceTO
 	public static List<PersonFundingSourceTO> toTOList(
 			final Collection<PersonFundingSource> models) {
 		final List<PersonFundingSourceTO> tos = Lists.newArrayList();
-		for (PersonFundingSource model : models) {
-			tos.add(new PersonFundingSourceTO(model));
+		for (final PersonFundingSource model : models) {
+			tos.add(new PersonFundingSourceTO(model)); // NOPMD
 		}
+
 		return tos;
 	}
 

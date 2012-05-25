@@ -33,6 +33,7 @@ public class MockMailService implements JavaMailSender {
 	private transient ConfigService configService;
 
 	private transient JavaMailSenderImpl internal;
+
 	private transient SimpleSmtpServer smtpServer;
 
 	@PostConstruct
@@ -45,10 +46,10 @@ public class MockMailService implements JavaMailSender {
 		internal.setJavaMailProperties(props);
 	}
 
-	@PreDestroy
 	/**
 	 * Shuts down the Service when Spring Shuts Down.
 	 */
+	@PreDestroy
 	public void close() {
 		if ((smtpServer != null) && !smtpServer.isStopped()) {
 			smtpServer.stop();
@@ -62,9 +63,10 @@ public class MockMailService implements JavaMailSender {
 
 	/**
 	 * To use the MockSmtpServer for a test, you will need to call this method
-	 * at
-	 * the start of every test. That will reinitialize the server so that you
+	 * at the start of every test. That will reinitialize the server so that you
 	 * can use its verification methods.
+	 * 
+	 * @return An instance of the mock SMTP server for testing.
 	 */
 	public SimpleSmtpServer getSmtpServer() {
 

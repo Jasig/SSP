@@ -31,8 +31,8 @@ public class SelfHelpGuideResponseTO
 	public final void from(final SelfHelpGuideResponse model) {
 		super.from(model);
 
-		summaryText = (model.getSelfHelpGuide() == null) ? null : model
-				.getSelfHelpGuide().getSummaryText();
+		summaryText = (model.getSelfHelpGuide() == null ? null : model
+				.getSelfHelpGuide().getSummaryText());
 		earlyAlertSent = model.isEarlyAlertSent();
 
 		if ((model.getPerson() != null)
@@ -44,7 +44,7 @@ public class SelfHelpGuideResponseTO
 	public static List<SelfHelpGuideResponseTO> toTOList(
 			final Collection<SelfHelpGuideResponse> models) {
 		final List<SelfHelpGuideResponseTO> tos = Lists.newArrayList();
-		for (SelfHelpGuideResponse model : models) {
+		for (final SelfHelpGuideResponse model : models) {
 			tos.add(new SelfHelpGuideResponseTO(model)); // NOPMD by jon.adams
 		}
 		return tos;

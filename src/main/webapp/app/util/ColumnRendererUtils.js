@@ -19,7 +19,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
     
 	renderTaskName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
-        strHtml += '<h1>' + record.get('name').toUpperCase() + '</h1>';
+        strHtml += '<p>' + record.get('name').toUpperCase() + '</p>';
 		strHtml += '<p>' + record.get('description') + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
@@ -27,10 +27,25 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 
 	renderTaskDueDate: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
-        strHtml += '<h1>' + Ext.util.Format.date( record.get('dueDate') ,'m/d/Y') + '</h1>';
-		strHtml += '<p>' + record.get('confidentialityLevelId') + '<br/>' + record.getCreatedByPersonName() + '</p>';
+        strHtml += '<p>' + Ext.util.Format.date( record.get('dueDate') ,'m/d/Y') + '</p>';
+		strHtml += '<p>' + record.get('confidentialityLevel').name.toUpperCase() + '<br/>' + record.getCreatedByPersonName() + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
+	},	
+	
+	renderGoalName: function(val, metaData, record) {
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + record.get('name').toUpperCase() + '</p>';
+		strHtml += '<p>' + record.get('description') + '</p>';
+		strHtml += '</div>';
+	    return strHtml;	
+	},	
+	
+	renderConfidentialityLevelName: function(val, metaData, record) {
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + record.get('confidentialityLevel').name.toUpperCase() + '</p>';
+		strHtml += '</div>';
+	    return strHtml;		
 	},
     
 	renderPhotoIcon: function(val) {

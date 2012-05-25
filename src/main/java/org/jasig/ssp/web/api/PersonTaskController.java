@@ -17,6 +17,7 @@ import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +106,7 @@ public class PersonTaskController extends
 						SortingAndPaging.createForSingleSort(status, start,
 								limit, sort, sortDirection, null));
 
-		for (Entry<String, List<Task>> tasksWithTaskGroup : tasksWithTaskGroups
+		for (final Entry<String, List<Task>> tasksWithTaskGroup : tasksWithTaskGroups
 				.entrySet()) {
 			taskTOsWithTaskGroups.put(tasksWithTaskGroup.getKey(),
 					TaskTO.toTOList(tasksWithTaskGroup.getValue()));
@@ -167,15 +168,17 @@ public class PersonTaskController extends
 	 * @param emailForm
 	 *            e-mail form data
 	 * @return True if action was successful
-	 * @throws Exception
-	 *             If there were any exceptions.
+	 * @throws ValidationException
+	 *             If any data is invalid.
+	 * @throws ObjectNotFoundException
+	 *             If any reference data could not be found.
 	 */
 	@RequestMapping(value = "/email/", method = RequestMethod.POST)
 	public @ResponseBody
 	boolean email(
 			final @PathVariable UUID personId,
 			final @RequestBody @Valid EmailPersonTasksForm emailForm)
-			throws Exception {
+			throws ObjectNotFoundException, ValidationException {
 
 		final Person student = personService.get(personId);
 
@@ -184,11 +187,9 @@ public class PersonTaskController extends
 				securityService.getSessionId(),
 				new SortingAndPaging(ObjectStatus.ACTIVE));
 
-		final List<Person> recipients;
+		List<Person> recipients = null; // NOPMD because passing null as allowed
 
-		if (emailForm.getRecipientIds() == null) {
-			recipients = null;
-		} else {
+		if (emailForm.getRecipientIds() != null) {
 			// get a list of recipients from a list of recipientIds
 			recipients = personService.peopleFromListOfIds(
 					emailForm.getRecipientIds(),

@@ -1,16 +1,24 @@
 Ext.define('Ssp.view.tools.actionplan.AddTask', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.addtask',
-	id: 'AddTask',
+	mixins: [ 'Deft.mixin.Injectable'],
+	inject: {
+    	model: 'currentTask'
+    },
 	width: '100%',
     height: '100%',
 	autoScroll: true,
     defaults: {
         anchor: '100%'
     },    
-	initComponent: function() {
+	
+    initComponent: function() {
+		var editorState = "Edit";
+		if (this.model.id=="")
+			editorState = "Add";
+		console.log(editorState);
 		Ext.apply(this,{
-						title: 'Add Action Plan Tasks',
+						title: editorState + ' Action Plan Tasks',
 						items: [{ xtype: 'tasktree', flex:1 },
 						        { xtype: 'addtaskform', flex:1 }]
 		});

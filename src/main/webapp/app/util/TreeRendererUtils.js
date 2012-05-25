@@ -7,7 +7,6 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     },
 
 	initComponent: function() {
-    	
 		return this.callParent(arguments);
     },
  
@@ -23,8 +22,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
      * Clears the treeStore instance, so new folders can be assigned.
      */
     clearRootCategories: function(){
-		// clear tree
-		// clear tree
+    	// clear tree
     	this.treeStore.setRootNode({
 	        text: 'root',
 	        expanded: true,

@@ -146,8 +146,8 @@ public class ConfigTO extends AbstractReferenceTO<Config>
 	public static List<ConfigTO> toTOList(
 			@NotNull final Collection<Config> models) {
 		final List<ConfigTO> tObjects = Lists.newArrayList();
-		for (Config model : models) {
-			tObjects.add(new ConfigTO(model));
+		for (final Config model : models) {
+			tObjects.add(new ConfigTO(model)); // NOPMD by jon.adams
 		}
 
 		return tObjects;
