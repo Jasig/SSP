@@ -10,7 +10,7 @@
 	<changeSet author='daniel.bower' id='Implement ChallengeCategory'>
 		<dropColumn tableName="challenge_category" columnName="name" />
 		<dropColumn tableName="challenge_category" columnName="description" />
-		
+
 		<addColumn tableName="challenge_category">
 			<column name="challenge_id" type="uuid">
 				<constraints nullable="false"
@@ -33,25 +33,24 @@
 					<constraints nullable="true" />
 				</column>
 			</addColumn>
-			<dropColumn tableName="challenge_category" columnName="challenge_id"/>
-			<dropColumn tableName="challenge_category" columnName="category_id"/>
+			<dropColumn tableName="challenge_category" columnName="challenge_id" />
+			<dropColumn tableName="challenge_category" columnName="category_id" />
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet author="daniel.bower" id="add person to goal">
 		<addColumn tableName="goal">
 			<column name="person_id" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="goal_person_id_person_id" 
+				<constraints nullable="false" foreignKeyName="goal_person_id_person_id"
 					references="person(id)" />
 			</column>
 		</addColumn>
-		
+
 		<rollback>
-			<dropColumn tableName="goal" columnName="person_id"/>
+			<dropColumn tableName="goal" columnName="person_id" />
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet author='daniel.bower' id='Add special_service_group table'>
 		<createTable tableName="special_service_group">
 			<column name="id" type="uuid">
@@ -182,56 +181,57 @@
 		</modifySql>
 
 	</changeSet>
-	
+
 	<changeSet id="Add defaultValue to Config" author="daniel.bower">
 		<addColumn tableName="config">
 			<column name="default_value" type="text">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
-		
+
 		<!-- add initial values here -->
 		<update tableName="config">
-			<column name="value" value="noone@test.com"/>
-			<column name="default_value" value="noone@test.com"/>
+			<column name="value" value="noone@test.com" />
+			<column name="default_value" value="noone@test.com" />
 			<where>id='59dbcf48-9be3-11e1-bded-0026b9e7ff4c'</where>
 		</update>
 		<update tableName="config">
-			<column name="value" value="3"/>
-			<column name="default_value" value="3"/>
+			<column name="value" value="3" />
+			<column name="default_value" value="3" />
 			<where>id='645d19ea-9be3-11e1-8ffe-0026b9e7ff4c'</where>
 		</update>
 		<update tableName="config">
-			<column name="default_value" value="SSP"/>
+			<column name="default_value" value="SSP" />
 			<where>id='67bd120e-9be1-11e1-ad1f-0026b9e7ff4c'</where>
 		</update>
 		<update tableName="config">
-			<column name="value" value="http://test.edu"/>
-			<column name="default_value" value="http://test.edu"/>
+			<column name="value" value="http://test.edu" />
+			<column name="default_value" value="http://test.edu" />
 			<where>id='8298fc28-9be1-11e1-933d-0026b9e7ff4c'</where>
 		</update>
 		<update tableName="config">
-			<column name="value" value="http://ssp.test.edu"/>
-			<column name="default_value" value="http://ssp.test.edu"/>
+			<column name="value" value="http://ssp.test.edu" />
+			<column name="default_value" value="http://ssp.test.edu" />
 			<where>id='e6c63bb0-9be2-11e1-a6cb-0026b9e7ff4c'</where>
 		</update>
 		<update tableName="config">
-			<column name="value" value="My Edu"/>
-			<column name="default_value" value="My Edu"/>
+			<column name="value" value="My Edu" />
+			<column name="default_value" value="My Edu" />
 			<where>id='e99ff3c7-6a59-4812-b3b1-285fa8764d3a'</where>
 		</update>
 		<update tableName="config">
-			<column name="default_value" value="Early Alert"/>
+			<column name="default_value" value="Early Alert" />
 			<where>id='80e51b59-3936-436a-93e2-9a116c1fd03c'</where>
 		</update>
-		
-		<addNotNullConstraint tableName="config" columnName="default_value"/>
-		
+
+		<addNotNullConstraint tableName="config"
+			columnName="default_value" />
+
 		<rollback>
-			<dropColumn tableName="config" columnName="default_value"/>
+			<dropColumn tableName="config" columnName="default_value" />
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="Test mail server port" author="daniel.bower">
 		<insert tableName="config">
 			<column name="id" value="43bd3066-a5a8-11e1-8e16-0026b9e7ff4c" />
@@ -261,7 +261,7 @@
 			<column name="object_status" value="1" />
 			<column name="sort_order" value="100" />
 		</insert>
-		
+
 		<rollback>
 			<delete tableName="config">
 				<where>id='43bd3066-a5a8-11e1-8e16-0026b9e7ff4c'</where>
@@ -271,4 +271,59 @@
 			</delete>
 		</rollback>
 	</changeSet>
+
+	<changeSet author='jon.adams' id='Add early_alert_routing table'>
+		<createTable tableName="early_alert_routing">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_routing_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_routing_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="campus_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="early_alert_routing_campus_id"
+					references="campus(id)" />
+			</column>
+			<column name="early_alert_reason_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_routing_early_alert_reason_id"
+					references="early_alert_reason(id)" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="early_alert_routing_person_id"
+					references="person(id)" />
+			</column>
+			<column name="group_name" type="character varying(255)" />
+			<column name="group_email" type="character varying(255)" />
+		</createTable>
+
+		<sql>grant all on early_alert_routing to ssp</sql>
+		<rollback>
+			<dropTable tableName="early_alert_routing" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
 </databaseChangeLog>

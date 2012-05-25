@@ -27,9 +27,8 @@ public class JsonDeserialisationTest {
 	 */
 	@Test
 	public void sspClassesUsedByOurControllersShouldBeDeserialisableByJackson() {
-
 		@SuppressWarnings("rawtypes")
-		List<Class> classes = Lists.newArrayList();
+		final List<Class> classes = Lists.newArrayList();
 		classes.addAll(ClassDiscovery
 				.getClasses("org.jasig.mygps.model.transferobject"));
 		classes.addAll(ClassDiscovery
@@ -38,10 +37,9 @@ public class JsonDeserialisationTest {
 		assertTrue("Not discovering classes for JsonSerializationTest",
 				classes.size() > 10);
 
-		for (Class<?> clazz : classes) {
+		for (final Class<?> clazz : classes) {
 			assertCanBeMapped(clazz);
 		}
-
 	}
 
 	private void assertCanBeMapped(final Class<?> classToTest) {

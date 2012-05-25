@@ -1,5 +1,6 @@
 package org.jasig.ssp.dao;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -10,13 +11,13 @@ import java.util.UUID;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.jasig.ssp.model.Goal;
+import org.jasig.ssp.model.EarlyAlertRouting;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.service.reference.CampusService;
+import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,30 +31,41 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Tests for the {@link GoalDao} class.
+ * Tests for the {@link EarlyAlertRoutingDao} class.
+ * 
+ * @author jon.adams
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
-public class GoalDaoTest {
+public class EarlyAlertRoutingDaoTest {
+
+	public static final UUID CAMPUS_ID = UUID
+			.fromString("901e104b-4dc7-43f5-a38e-581015e204e1");
+
+	public static final UUID EARLY_ALERT_REASON_ID = UUID
+			.fromString("b2d11335-5056-a51a-80ea-074f8fef94ea");
+
+	public static final String EARLY_ALERT_REASON_NAME = "Other";
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(GoalDaoTest.class);
+			.getLogger(EarlyAlertRoutingDaoTest.class);
 
 	@Autowired
-	private transient GoalDao dao;
-
-	@Autowired
-	private transient ConfidentialityLevelService confidentialityLevelService;
+	private transient EarlyAlertRoutingDao dao;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Autowired
-	private transient SessionFactory sessionFactory;
+	private transient CampusService campusService;
 
-	private transient ConfidentialityLevel testConfidentialityLevel;
+	@Autowired
+	private transient EarlyAlertReasonService earlyAlertReasonService;
+
+	@Autowired
+	private transient SessionFactory sessionFactory;
 
 	/**
 	 * Initialize security and test data.
@@ -61,14 +73,13 @@ public class GoalDaoTest {
 	@Before
 	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
-		testConfidentialityLevel = confidentialityLevelService
-				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()
-				.iterator().next();
 	}
 
 	/**
-	 * Test {@link GoalDao#save(Goal)}, {@link GoalDao#get(UUID)},
-	 * {@link GoalDao#getAll(ObjectStatus)}, and {@link GoalDao#delete(Goal)}.
+	 * Test {@link EarlyAlertRoutingDao#save(EarlyAlertRouting)},
+	 * {@link EarlyAlertRoutingDao#get(UUID)},
+	 * {@link EarlyAlertRoutingDao#getAll(ObjectStatus)}, and
+	 * {@link EarlyAlertRoutingDao#delete(EarlyAlertRouting)}.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             If saved instance could not be reloaded.
@@ -77,10 +88,12 @@ public class GoalDaoTest {
 	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
 
-		Goal obj = new Goal();
-		obj.setName("new name");
+		EarlyAlertRouting obj = new EarlyAlertRouting();
+		obj.setGroupName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setConfidentialityLevel(testConfidentialityLevel);
+		obj.setCampus(campusService.get(CAMPUS_ID));
+		obj.setEarlyAlertReason(earlyAlertReasonService
+				.get(EARLY_ALERT_REASON_ID));
 		obj.setPerson(securityService.currentUser().getPerson());
 		obj = dao.save(obj);
 
@@ -96,9 +109,13 @@ public class GoalDaoTest {
 		LOGGER.debug("testSaveNew(): Saved " + obj.toString());
 		assertNotNull("Reloaded object should not have been null.", obj);
 		assertNotNull("Reloaded ID should not have been null.", obj.getId());
-		assertNotNull("Reloaded name should not have been null.", obj.getName());
+		assertNotNull("Reloaded name should not have been null.",
+				obj.getGroupName());
+		assertEquals("EarlyAlertReason names do not match.",
+				EARLY_ALERT_REASON_NAME, obj.getEarlyAlertReason().getName());
 
-		final List<Goal> all = (List<Goal>) dao.getAll(ObjectStatus.ACTIVE)
+		final List<EarlyAlertRouting> all = (List<EarlyAlertRouting>) dao
+				.getAll(ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull("GetAll list should not have been null.", all);
 		assertFalse("GetAll list should not have been empty.", all.isEmpty());
@@ -108,8 +125,8 @@ public class GoalDaoTest {
 	}
 
 	/**
-	 * Test that invalid identifiers to {@link GoalDao#get(UUID)} correctly
-	 * throw ObjectNotFound exception.
+	 * Test that invalid identifiers to {@link EarlyAlertRoutingDao#get(UUID)}
+	 * correctly throw ObjectNotFound exception.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             Expected to be thrown
@@ -124,14 +141,14 @@ public class GoalDaoTest {
 	 * Test that all results from getAll are not null
 	 */
 	@Test
-	public void getAllForPersonId() {
-		assertList(dao.getAllForPersonId(UUID.randomUUID(),
+	public void getAllForCampusId() {
+		assertList(dao.getAllForCampusId(UUID.randomUUID(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows());
 	}
 
-	private void assertList(final Collection<Goal> objects) {
-		for (final Goal object : objects) {
+	private void assertList(final Collection<EarlyAlertRouting> objects) {
+		for (final EarlyAlertRouting object : objects) {
 			assertNotNull("Object in the list should not have been null.",
 					object.getId());
 		}
