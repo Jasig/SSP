@@ -121,7 +121,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		final Person person = personService.get(personId);
 		final PagingWrapper<T> data = getService().getAllForPerson(person,
 				SortingAndPaging.createForSingleSort(status, start,
-						limit, sort, sortDirection, "name"));
+						limit, sort, sortDirection, null));
 
 		return new PagingTO<TO, T>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));
