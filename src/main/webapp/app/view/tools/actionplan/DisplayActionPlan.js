@@ -9,6 +9,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
     },
     width: '100%',
 	height: '100%',
+	padding: 0,
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
@@ -49,29 +50,25 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
 				            xtype: 'checkbox',
 				            boxLabel: 'Display only tasks that I created',
 				            itemId: 'filterTasksBySelfCheck'
-				           }]
-				    },{
-				        dock: 'bottom',
-				        xtype: 'toolbar',
-				        items: [{
-				            tooltip: 'Email Action Plan',
-				            text: 'Email',
-				            xtype: 'button',
-				            itemId: 'emailTasksButton'
-				        },{
-				            tooltip: 'Print Action Plan',
-				            text: 'Print',
-				            xtype: 'button',
-				            itemId: 'printTasksButton'
-				        },{ 
-				        	xtype: 'tbspacer',
-				        	flex: 1
-				        },{
-				            tooltip: 'View Student History',
-				            text: 'View History',
-				            xtype: 'button',
-				            itemId: 'viewHistoryButton'
-				        }]
+				           },{ 
+					        	xtype: 'tbspacer',
+					        	flex: 1
+					        },{
+					            tooltip: 'Email Action Plan',
+					            text: 'Email',
+					            xtype: 'button',
+					            itemId: 'emailTasksButton'
+					        },{
+					            tooltip: 'Print Action Plan',
+					            text: 'Print',
+					            xtype: 'button',
+					            itemId: 'printTasksButton'
+					        },{
+					            tooltip: 'View Student History',
+					            text: 'View History',
+					            xtype: 'button',
+					            itemId: 'viewHistoryButton'
+					        }]
 				    }]
 				});
 	

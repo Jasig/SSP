@@ -49,7 +49,8 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     }, 
     
     onAddGoalClick: function( button ){
-		this.model = new Ssp.model.PersonGoal();
+		var goal = new Ssp.model.PersonGoal();
+		this.model.data = goal.data;
 		this.loadEditor();
     },
  

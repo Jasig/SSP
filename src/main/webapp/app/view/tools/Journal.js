@@ -6,7 +6,7 @@ Ext.define('Ssp.view.tools.Journal', {
     controller: 'Ssp.controller.tool.journal.JournalToolViewController',
     inject: {
     	columnRendererUtils: 'columnRendererUtils',
-        store: 'journalNotesStore'
+        store: 'journalEntriesStore'
     },
 	width: '100%',
 	height: '100%',
@@ -19,25 +19,19 @@ Ext.define('Ssp.view.tools.Journal', {
 		            title: 'Journal',
 
 	    		      columns: [
-	    		                { header: 'Name',  
-	    		                  dataIndex: 'name',
-	    		                  field: {
-	    		                      xtype: 'textfield'
-	    		                  },
-	    		                  flex: 50 },
-	    		                { header: 'Description',
-	    		                  dataIndex: 'description', 
-	    		                  flex: 50,
-	    		                  field: {
-	    		                      xtype: 'textfield'
-	    		                  },
-	    		                  flex: 50 },
-	      		                { header: 'Acronym',
-	      		                  dataIndex: 'acronym', 
-	      		                  flex: 50,
-	      		                  field: {
-	      		                      xtype: 'textfield'
-	      		                  }
+	    		                { header: 'Entered By',  
+	    		                  dataIndex: 'createdBy',
+	    		                  flex: 1,
+	    		                  renderer: this.columnRendererUtils.renderConfidentialityLevelName
+	    		                },
+	      		                { header: 'Journal Source',
+	      		                  dataIndex: 'journalSourceId', 
+	      		                  flex: 1,
+	    		                },
+	      		                { header: 'Confidentiality',
+	      		                  dataIndex: 'confidentialityLevel', 
+	      		                  flex: 1,
+	      		                  renderer: this.columnRendererUtils.renderConfidentialityLevelName
 	    		                }
 	    		           ],
 				    

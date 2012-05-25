@@ -83,7 +83,7 @@ Ext.require([
 	'Ssp.model.tool.actionplan.Task',
 	'Ssp.model.tool.earlyalert.PersonEarlyAlert',
 	'Ssp.model.tool.earlyalert.EarlyAlertResponse',
-	'Ssp.model.tool.journal.Note',
+	'Ssp.model.tool.journal.JournalEntry',
 	'Ssp.model.reference.AbstractReference',
     'Ssp.model.reference.Challenge',
     'Ssp.model.reference.ChallengeCategory',
@@ -101,7 +101,7 @@ Ext.require([
 	'Ssp.util.Constants',
     'Ssp.store.Tasks',
     'Ssp.store.Goals',
-    'Ssp.store.JournalNotes',
+    'Ssp.store.JournalEntries',
     'Ssp.store.EarlyAlerts',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
@@ -176,7 +176,7 @@ var apiUrls = [
   {name: 'personEarlyAlert', url: 'person/{id}/earlyAlert/'},
   {name: 'personEarlyAlertResponse', url: 'person/{id}/earlyAlert/{id}/earlyAlertResponse/'},
   {name: 'personGoal', url: 'person/{id}/goal/'},
-  {name: 'personJournal', url: 'person/{id}/journal/'},
+  {name: 'personJournalEntry', url: 'person/{id}/journalEntry/'},
   {name: 'personTask', url: 'person/{id}/task/'},
   {name: 'personTaskGroup', url: 'person/{id}/task/group/'},
   {name: 'personEmailTask', url: 'person/{id}/task/email/'},
@@ -284,9 +284,9 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         },
-        currentJournalNote:{
+        currentJournalEntry:{
 	        fn: function(){
-	            return new Ssp.model.tool.journal.Note({id:""});
+	            return new Ssp.model.tool.journal.JournalEntry({id:""});
 	    	},
 	        singleton: true
         },
@@ -314,10 +314,6 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         }, 
-	    tasksStore: 'Ssp.store.Tasks',
-	    goalsStore: 'Ssp.store.Goals',
-	    journalNotesStore: 'Ssp.store.JournalNotes',
-	    earlyAlertsStore: 'Ssp.store.EarlyAlerts',
 		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 		campusesStore: 'Ssp.store.reference.Campuses',
@@ -332,6 +328,7 @@ Ext.onReady(function(){
 		earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
 		earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
 		earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
+	    earlyAlertsStore: 'Ssp.store.EarlyAlerts',
 		earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
 	    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
     	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
@@ -339,7 +336,9 @@ Ext.onReady(function(){
     	ethnicitiesStore: 'Ssp.store.reference.Ethnicities',
     	fundingSourcesStore: 'Ssp.store.reference.FundingSources',
     	gendersStore: 'Ssp.store.reference.Genders',
-        journalSourcesStore: 'Ssp.store.reference.JournalSources',
+	    goalsStore: 'Ssp.store.Goals',
+    	journalEntriesStore: 'Ssp.store.JournalEntries',
+    	journalSourcesStore: 'Ssp.store.reference.JournalSources',
         journalStepsStore: 'Ssp.store.reference.JournalSteps',
         journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
         journalTracksStore: 'Ssp.store.reference.JournalTracks',
@@ -347,6 +346,7 @@ Ext.onReady(function(){
 	    statesStore: 'Ssp.store.reference.States',
 	    studentsStore: 'Ssp.store.Students',
 	    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
+	    tasksStore: 'Ssp.store.Tasks',
 	    toolsStore: 'Ssp.store.Tools',
     	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
         yesNoStore: 'Ssp.store.reference.YesNo' 
@@ -357,10 +357,14 @@ Ext.onReady(function(){
 	    appFolder: 'app',
 		autoCreateViewport: true,
 	    launch: function( app ) {
-	    	//console.log('Application->Launch');
+	    	console.log('Application->Launch');
 	    	//console.log(Deft);
 	    	Deft.Injector.providers.appEventsController.value.config.app=this;
 	    	Deft.Injector.providers.appEventsController.value.app=this;
+	    	
+	    	Ext.apply(this,{
+	    		items: [{xtype:'sspview',flex:1}]
+	    	});
 	    	// Display the application
 	        //this.getController('MainViewController').displayApplication();
 	   }

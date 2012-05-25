@@ -2,12 +2,18 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     extend: 'Deft.mvc.ViewController',	
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
+    	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
-        store: 'confidentialityLevelsStore'
+    	person: 'currentPerson',
+        journalEntriesStore: 'journalEntriesStore',
+        journalSourcesStore: 'journalSourcesStore',
+    	journalTracksStore: 'journalTracksStore',
+        confidentialityLevelsStore: 'confidentialityLevelsStore'
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'editjournal'
+    	formToDisplay: 'editjournal',
+    	personJournalUrl: ''
     },
     control: {
     	'addButton': {
@@ -22,8 +28,30 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 			click: 'onViewHistoryClick'
 		}
 	},
-    constructor: function() {
-    	this.store.load();
+    init: function() {
+		var me = this;
+		var personId = this.person.get('id');
+		var successFunc = function(response,view){
+	    	var r = Ext.decode(response.responseText);
+	    	if (r.rows.length > 0)
+	    	{
+	    		me.journalEntriesStore.loadData(r.rows);
+	    	}
+		};
+
+    	this.confidentialityLevelsStore.load();
+		this.journalSourcesStore.load();
+		this.journalTracksStore.load();
+		
+		this.personJournalUrl = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personJournalEntry') );
+		this.personJournalUrl = this.personJournalUrl.replace('{id}',personId);		
+		console.log(this.personJournalUrl);
+		this.apiProperties.makeRequest({
+			url: this.personJournalUrl,
+			method: 'GET',
+			successFunc: successFunc
+		});
+    	
 		return this.callParent(arguments);
     },
     

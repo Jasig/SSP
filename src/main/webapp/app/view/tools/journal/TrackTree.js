@@ -11,22 +11,13 @@ Ext.define('Ssp.view.tools.journal.TrackTree', {
 	width: '100%',
 	
     initComponent: function(){
-
     	Ext.apply(this,
     			{
-    		     singleExpand: true,
-    			 store: this.store,
-    			 useArrows: true,
-    			 rootVisible: false,
-    			 dockedItems: [
-     		              {xtype: 'toolbar',
-     		               items: [{
-     	                      xtype: 'textfield',
-     	                      fieldLabel: 'Search'
-     	                     }] 
-     		              }]
-     		       	
-    	});
+   		     singleExpand: true,
+			 store: this.store,
+			 useArrows: true,
+			 rootVisible: false       	
+	        });
 
     	return this.callParent(arguments);
     }

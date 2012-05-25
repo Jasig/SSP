@@ -51,7 +51,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     	var task = new Ssp.model.tool.actionplan.Task();
     	this.model.data = task.data;
     	this.loadEditor();
-    },
+    },    
     
     editTask: function(){
  	   console.log('TaskViewController->editTask');

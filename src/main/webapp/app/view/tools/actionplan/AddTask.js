@@ -13,12 +13,8 @@ Ext.define('Ssp.view.tools.actionplan.AddTask', {
     },    
 	
     initComponent: function() {
-		var editorState = "Edit";
-		if (this.model.id=="")
-			editorState = "Add";
-		console.log(editorState);
 		Ext.apply(this,{
-						title: editorState + ' Action Plan Tasks',
+						title: 'Add Action Plan Tasks',
 						items: [{ xtype: 'tasktree', flex:1 },
 						        { xtype: 'addtaskform', flex:1 }]
 		});

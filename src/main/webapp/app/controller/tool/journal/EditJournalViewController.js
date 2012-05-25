@@ -5,7 +5,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
     	person: 'currentPerson',
-    	model: 'currentJournalNote'
+    	model: 'currentJournalEntry'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	init: function() {
 		this.getView().getForm().loadRecord(this.model);
 		
-		this.url = this.apiProperties.getItemUrl('personJournal');
+		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personJournalEntry') );
 		this.url = this.url.replace('{id}',this.person.get('id'));
 		
 		return this.callParent(arguments);
@@ -34,34 +34,47 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
+		var form = this.getView().getForm();
+		var values = form.getValues();
 		url = this.url;
-		this.getView().getForm().updateRecord();
 		record = this.model;
 		id = record.get('id');
-		jsonData = record.data;
+		
 		successFunc = function(response, view) {
 			me.displayMain();
 		};
-		
-		if (id.length > 0)
+		if (form.isValid())
 		{
-			// editing
-			this.apiProperties.makeRequest({
-				url: url+id,
-				method: 'PUT',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});
+			form.updateRecord();
+    		record.set('personId', this.person.get('id') );    		
+    		record.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
+    		
+			jsonData = record.data;
+			
+			if (id.length > 0)
+			{
+				// editing
+				this.apiProperties.makeRequest({
+					url: url+id,
+					method: 'PUT',
+					jsonData: jsonData,
+					successFunc: successFunc 
+				});
+				
+			}else{
+				// adding
+				this.apiProperties.makeRequest({
+					url: url,
+					method: 'POST',
+					jsonData: jsonData,
+					successFunc: successFunc 
+				});		
+			}
 			
 		}else{
-			// adding
-			this.apiProperties.makeRequest({
-				url: url,
-				method: 'POST',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});		
+			Ext.Msg.alert('Error','Please correct the errors in your Journal Entry.');
 		}
+
 	},
 	
 	onCancelClick: function(button){
