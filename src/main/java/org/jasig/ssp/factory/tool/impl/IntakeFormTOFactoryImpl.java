@@ -151,7 +151,7 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 	private <T extends PersonAssoc> void associateWithPerson(
 			final Set<T> personAssocs, final Person person) {
 		for (PersonAssoc pa : personAssocs) {
-			if (!pa.getPerson().getId().equals(person.getId())) {
+			if (!(pa.getPerson().getId()).equals(person.getId())) {
 				pa.setPerson(person);
 			}
 		}

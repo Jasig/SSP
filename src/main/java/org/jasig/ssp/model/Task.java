@@ -67,7 +67,7 @@ public class Task // NOPMD by jon.adams
 	 * Associated person. Changes to this Person are not persisted.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "person_id", nullable = false)
+	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
 	@ManyToOne

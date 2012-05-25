@@ -40,12 +40,12 @@ public class PersonFundingSource
 	 */
 	@ManyToOne
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "person_id")
+	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
 	@ManyToOne
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "funding_source_id", nullable = false)
+	@JoinColumn(name = "funding_source_id", updatable = false, nullable = false)
 	private FundingSource fundingSource;
 
 	public String getDescription() {

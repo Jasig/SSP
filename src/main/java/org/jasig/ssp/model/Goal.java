@@ -23,6 +23,8 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
 public class Goal extends AbstractAuditable implements
 		PersonAssocAuditable, Restricted {
 
+	private static final long serialVersionUID = -3663032831416423811L;
+
 	/**
 	 * Name
 	 * 
@@ -44,7 +46,7 @@ public class Goal extends AbstractAuditable implements
 	private String description;
 
 	@ManyToOne
-	@JoinColumn(name = "person_id", nullable = false)
+	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
 	@ManyToOne()
@@ -52,16 +54,30 @@ public class Goal extends AbstractAuditable implements
 	@JoinColumn(name = "confidentiality_level_id", unique = true, nullable = false)
 	private ConfidentialityLevel confidentialityLevel;
 
-	private static final long serialVersionUID = 1L;
-
+	/**
+	 * Gets the name
+	 * 
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Sets the name.
+	 * 
+	 * @param name
+	 *            the name; required; max 80 characters
+	 */
 	public void setName(final String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Gets the description
+	 * 
+	 * @return the description
+	 */
 	public String getDescription() {
 		return description;
 	}

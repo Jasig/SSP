@@ -27,7 +27,7 @@ public class PersonTool
 	 * Associated person. Changes to this Person are not persisted.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "person_id")
+	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
 	@Enumerated(EnumType.STRING)

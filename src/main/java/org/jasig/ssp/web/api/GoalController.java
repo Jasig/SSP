@@ -12,12 +12,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Goal controller
+ */
 @PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/person/{personId}/goal")
 public class GoalController
 		extends AbstractPersonAssocController<Goal, GoalTO> {
 
+	/**
+	 * Construct an instance with specific classes for use by the super class
+	 * methods.
+	 */
 	protected GoalController() {
 		super(Goal.class, GoalTO.class);
 	}
