@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Task;
-import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -16,25 +14,12 @@ import org.springframework.stereotype.Repository;
  * Task DAO
  */
 @Repository
-public class TaskDao extends
-		AbstractAuditableCrudDao<Task> implements AuditableCrudDao<Task> {
+public class TaskDao
+		extends AbstractPersonAssocAuditableCrudDao<Task>
+		implements PersonAssocAuditableCrudDao<Task> {
 
 	protected TaskDao() {
 		super(Task.class);
-	}
-
-	@SuppressWarnings("unchecked")
-	public PagingWrapper<Task> getAllForPersonId(final UUID personId,
-			final SortingAndPaging sAndP) {
-		final long totalRows = (Long) createCriteria()
-				.add(Restrictions.eq("person.id", personId))
-				.setProjection(Projections.rowCount())
-				.uniqueResult();
-
-		return new PagingWrapper<Task>(totalRows,
-				createCriteria(sAndP)
-						.add(Restrictions.eq("person.id", personId))
-						.list());
 	}
 
 	@SuppressWarnings("unchecked")

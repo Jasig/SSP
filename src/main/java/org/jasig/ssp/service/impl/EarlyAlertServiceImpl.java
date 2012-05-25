@@ -15,7 +15,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.model.reference.MessageTemplate;
-import org.jasig.ssp.service.AbstractAuditableCrudService;
+import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -43,7 +43,7 @@ import com.google.common.collect.Maps;
 @Service
 @Transactional
 public class EarlyAlertServiceImpl extends // NOPMD
-		AbstractAuditableCrudService<EarlyAlert>
+		AbstractPersonAssocAuditableService<EarlyAlert>
 		implements EarlyAlertService {
 
 	@Autowired
@@ -95,7 +95,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 							+ student.getId());
 		}
 
-		if (student.getCoach() == null
+		if ((student.getCoach() == null)
 				|| student.getCoach().getId().equals(assignedAdvisor)) {
 			student.setCoach(personService.get(assignedAdvisor));
 		}
@@ -210,8 +210,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	private UUID getEarlyAlertAdvisor(final EarlyAlert earlyAlert)
 			throws ValidationException {
 		// Check for student already assigned to an advisor (a.k.a. coach)
-		if (earlyAlert.getPerson().getCoach() != null &&
-				earlyAlert.getPerson().getCoach().getId() != null) {
+		if ((earlyAlert.getPerson().getCoach() != null) &&
+				(earlyAlert.getPerson().getCoach().getId() != null)) {
 			return earlyAlert.getPerson().getCoach().getId();
 		}
 
@@ -349,8 +349,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 
 		// ensure earlyAlert.createdBy is populated
-		if (earlyAlert.getCreatedBy().getFirstName() == null
-				|| earlyAlert.getCreatedBy().getLastName() == null) {
+		if ((earlyAlert.getCreatedBy().getFirstName() == null)
+				|| (earlyAlert.getCreatedBy().getLastName() == null)) {
 			if (earlyAlert.getCreatedBy().getId() == null) {
 				throw new IllegalArgumentException(
 						"EarlyAlert.CreatedBy.Id is missing.");

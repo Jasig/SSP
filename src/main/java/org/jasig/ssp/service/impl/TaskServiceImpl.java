@@ -20,7 +20,7 @@ import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.security.SspUser;
-import org.jasig.ssp.service.AbstractAuditableCrudService;
+import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.TaskService;
@@ -40,7 +40,8 @@ import com.google.common.collect.Maps;
 
 @Service
 @Transactional
-public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
+public class TaskServiceImpl
+		extends AbstractPersonAssocAuditableService<Task>
 		implements TaskService {
 
 	@Autowired
@@ -78,12 +79,6 @@ public class TaskServiceImpl extends AbstractAuditableCrudService<Task>
 	@Override
 	public Task save(final Task obj) throws ObjectNotFoundException {
 		return getDao().save(obj);
-	}
-
-	@Override
-	public PagingWrapper<Task> getAllForPerson(final Person person,
-			final SortingAndPaging sAndP) {
-		return getDao().getAllForPersonId(person.getId(), sAndP);
 	}
 
 	@Override

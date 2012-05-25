@@ -63,14 +63,14 @@ public class PersonEducationLevelDaoTest {
 		Person person = personService.get(UUID
 				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
 
-		List<PersonEducationLevel> modelsBefore = dao.forPerson(person);
+		List<PersonEducationLevel> modelsBefore = dao.getAllForPerson(person);
 
 		// save a new challenge for a person
 		PersonEducationLevel model = new PersonEducationLevel(person,
 				testEducationLevel);
 		dao.save(model);
 
-		List<PersonEducationLevel> modelsAfter = dao.forPerson(person);
+		List<PersonEducationLevel> modelsAfter = dao.getAllForPerson(person);
 
 		// we should see more than before
 		assertTrue(modelsBefore.size() < modelsAfter.size());
@@ -113,7 +113,8 @@ public class PersonEducationLevelDaoTest {
 		}
 		assertNull(model);
 
-		List<PersonEducationLevel> modelsAfter = dao.forPerson(new Person(id));
+		List<PersonEducationLevel> modelsAfter = dao
+				.getAllForPerson(new Person(id));
 		assertEquals(0, modelsAfter.size());
 	}
 

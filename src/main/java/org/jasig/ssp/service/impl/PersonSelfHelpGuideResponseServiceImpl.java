@@ -12,7 +12,7 @@ import org.jasig.ssp.model.SelfHelpGuideResponse;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
-import org.jasig.ssp.service.AbstractAuditableCrudService;
+import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonSelfHelpGuideResponseService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class PersonSelfHelpGuideResponseServiceImpl
-		extends AbstractAuditableCrudService<SelfHelpGuideResponse>
+		extends AbstractPersonAssocAuditableService<SelfHelpGuideResponse>
 		implements PersonSelfHelpGuideResponseService {
 
 	@Autowired

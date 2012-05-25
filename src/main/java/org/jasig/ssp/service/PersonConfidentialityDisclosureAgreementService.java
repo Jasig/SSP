@@ -4,7 +4,9 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
 import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
 
-public interface PersonConfidentialityDisclosureAgreementService {
+public interface PersonConfidentialityDisclosureAgreementService
+		extends
+		PersonAssocAuditableService<PersonConfidentialityDisclosureAgreement> {
 
 	/**
 	 * Has the student agreed to the most recent

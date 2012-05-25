@@ -8,7 +8,7 @@ import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonAssocAuditable;
-import org.jasig.ssp.service.AuditablePersonAssocService;
+import org.jasig.ssp.service.PersonAssocAuditableService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.AbstractAuditableTO;
@@ -51,7 +51,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	/**
 	 * Service that handles the business logic for the implementing type for T.
 	 */
-	protected abstract AuditablePersonAssocService<T> getService();
+	protected abstract PersonAssocAuditableService<T> getService();
 
 	/**
 	 * Transfer object factory to create new instances of the specific TO for

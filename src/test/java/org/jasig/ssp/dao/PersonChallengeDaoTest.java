@@ -63,13 +63,13 @@ public class PersonChallengeDaoTest {
 		Person person = personService.get(UUID
 				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
 
-		List<PersonChallenge> modelsBefore = dao.forPerson(person);
+		List<PersonChallenge> modelsBefore = dao.getAllForPerson(person);
 
 		// save a new challenge for a person
 		PersonChallenge model = new PersonChallenge(person, testChallenge);
 		dao.save(model);
 
-		List<PersonChallenge> modelsAfter = dao.forPerson(person);
+		List<PersonChallenge> modelsAfter = dao.getAllForPerson(person);
 
 		// we should see more than before
 		assertTrue(modelsBefore.size() < modelsAfter.size());
@@ -112,7 +112,7 @@ public class PersonChallengeDaoTest {
 		}
 		assertNull(model);
 
-		List<PersonChallenge> modelsAfter = dao.forPerson(new Person(id));
+		List<PersonChallenge> modelsAfter = dao.getAllForPerson(new Person(id));
 		assertEquals(0, modelsAfter.size());
 	}
 

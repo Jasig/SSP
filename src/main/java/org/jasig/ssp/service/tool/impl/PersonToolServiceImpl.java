@@ -5,7 +5,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.tool.PersonTool;
 import org.jasig.ssp.model.tool.Tools;
-import org.jasig.ssp.service.AbstractAuditableCrudService;
+import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.tool.PersonToolService;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PersonToolServiceImpl
-		extends AbstractAuditableCrudService<PersonTool>
+		extends AbstractPersonAssocAuditableService<PersonTool>
 		implements PersonToolService {
 
 	@Autowired

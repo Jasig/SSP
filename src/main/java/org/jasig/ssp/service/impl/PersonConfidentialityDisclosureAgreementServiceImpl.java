@@ -11,6 +11,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
 import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
+import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonConfidentialityDisclosureAgreementService;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -22,14 +23,21 @@ import com.google.common.collect.Sets;
 
 @Service
 @Transactional(readOnly = true)
-public class PersonConfidentialityDisclosureAgreementServiceImpl implements
-		PersonConfidentialityDisclosureAgreementService {
+public class PersonConfidentialityDisclosureAgreementServiceImpl
+		extends
+		AbstractPersonAssocAuditableService<PersonConfidentialityDisclosureAgreement>
+		implements PersonConfidentialityDisclosureAgreementService {
 
 	@Autowired
 	private transient PersonConfidentialityDisclosureAgreementDao dao;
 
 	@Autowired
 	private transient ConfidentialityDisclosureAgreementDao cdaDao;
+
+	@Override
+	protected PersonConfidentialityDisclosureAgreementDao getDao() {
+		return dao;
+	}
 
 	@Override
 	public PersonConfidentialityDisclosureAgreement hasStudentAgreedToLatest(

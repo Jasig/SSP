@@ -5,18 +5,18 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
 import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
+import org.springframework.stereotype.Repository;
 
 @Repository
-public class PersonConfidentialityDisclosureAgreementDao extends
-		AbstractAuditableCrudDao<PersonConfidentialityDisclosureAgreement>
+public class PersonConfidentialityDisclosureAgreementDao
+		extends
+		AbstractPersonAssocAuditableCrudDao<PersonConfidentialityDisclosureAgreement>
 		implements
-		AuditableCrudDao<PersonConfidentialityDisclosureAgreement> {
+		PersonAssocAuditableCrudDao<PersonConfidentialityDisclosureAgreement> {
 
 	public PersonConfidentialityDisclosureAgreementDao() {
 		super(PersonConfidentialityDisclosureAgreement.class);
@@ -24,8 +24,8 @@ public class PersonConfidentialityDisclosureAgreementDao extends
 
 	@SuppressWarnings("unchecked")
 	public List<PersonConfidentialityDisclosureAgreement> forStudent(
-			Person student) {
-		Criteria query = sessionFactory.getCurrentSession()
+			final Person student) {
+		final Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(PersonConfidentialityDisclosureAgreement.class)
 				.add(Restrictions.eq("person", student))
 				.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE))
@@ -34,8 +34,9 @@ public class PersonConfidentialityDisclosureAgreementDao extends
 	}
 
 	public PersonConfidentialityDisclosureAgreement forStudentAndAgreement(
-			Person student, ConfidentialityDisclosureAgreement agreement) {
-		Criteria query = sessionFactory
+			final Person student,
+			final ConfidentialityDisclosureAgreement agreement) {
+		final Criteria query = sessionFactory
 				.getCurrentSession()
 				.createCriteria(PersonConfidentialityDisclosureAgreement.class)
 				.add(Restrictions.eq("person", student))
