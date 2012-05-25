@@ -9,7 +9,6 @@ Ext.define('Ssp.view.Search', {
     	columnRendererUtils: 'columnRendererUtils',
         store: 'studentsStore'
     },
-
     initComponent: function(){
     	Ext.apply(this,
     			   {
