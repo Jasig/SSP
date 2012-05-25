@@ -14,7 +14,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	model: 'currentTask',
     	url: ''
     },    
-    control: {    	
+    control: {  
     	'addButton': {
 			click: 'onAddClick'
 		},
@@ -24,18 +24,14 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		}
 	},
  
-	init: function() {		
-		return this.callParent(arguments);
-    },	
-	
-	constructor: function(){
+	init: function(){
 		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personTask') );
 		this.url = this.url.replace('{id}',this.person.get('id'));
 		
 		this.appEventsController.getApplication().addListener('loadTask', function(){
     		this.initForm();		
 		},this);
-    	
+		
 		return this.callParent(arguments);
 	},
 	

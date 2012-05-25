@@ -8,10 +8,9 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
 	height: '100%',
 	initComponent: function() {	
 		Ext.applyIf(this,{
-			
+	        title: 'Strengths',
 			items:[{
 		        xtype:'form',
-		        title: 'Strengths',
 		        layout:'anchor',
 		        items :[{
 		            xtype: 'textarea',
