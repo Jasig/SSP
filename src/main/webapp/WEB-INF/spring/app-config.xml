@@ -29,6 +29,7 @@
 		<context:exclude-filter type="regex" expression=".*Controller"/>
 	</context:component-scan>
 	
+	<!-- Mail and Other Templates -->
 	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
 			<value>
@@ -39,10 +40,13 @@
 	</bean>	
 
 	<!-- Task Scheduling -->
-	<task:scheduler id="sspScheduler" pool-size="3" />
+	<task:scheduler id="sspScheduler" pool-size="3"/>
+	<task:annotation-driven scheduler="sspScheduler"/>
 	
+	<!-- Transactions -->
 	<tx:annotation-driven />
 	
+	<!-- Database Versioning -->
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
 			<property name="dataSource">
 			<bean class="org.springframework.jdbc.datasource.SimpleDriverDataSource">

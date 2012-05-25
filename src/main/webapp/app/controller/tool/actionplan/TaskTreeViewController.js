@@ -5,6 +5,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
         person: 'currentPerson',
+        task: 'currentTask',
     	treeUtils: 'treeRendererUtils'
     },
     config: {
@@ -16,7 +17,8 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     control: {
     	view: {
     		itemexpand: 'onItemExpand',
-    		itemClick: 'onItemClick'
+    		itemClick: 'onItemClick',
+    		viewready: 'onViewReady'
     	},
    	
     	'searchButton': {
@@ -24,7 +26,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 		}   	
     },
     
-	init: function() {
+	onViewReady: function() {
 		var rootNode = null;
 		
 		this.categoryUrl = this.apiProperties.getItemUrl('category');
@@ -51,8 +53,6 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	treeRequest.set('isLeaf', false);
     	treeRequest.set('enableCheckedItems', false);	
     	this.treeUtils.getItems( treeRequest );
-
-		return this.callParent(arguments);
     },
     
     onItemExpand: function(nodeInt, obj){
@@ -105,21 +105,18 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	var id = this.treeUtils.getIdFromNodeId( record.data.id );
     	var challengeId = this.treeUtils.getIdFromNodeId( record.data.parentId );
     	var confidentialityLevelId = "afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c";
-    	// load the referral
     	if (name=='referral')
     	{
 	    	successFunc = function(response,view){
 		    	var r = Ext.decode(response.responseText);
 		    	if (r)
 		    	{
-		    		var args = new Object();
-		    		args.name = r.name;
-		    		args.description = r.description || '';
-		    		args.challengeReferralId = r.id;
-		    		args.challengeId = challengeId;
-		    		args.confidentialityLevelId = confidentialityLevelId;
-		    		console.log(r);
-		    		me.appEventsController.getApplication().fireEvent('loadTask', args);
+		    		me.task.set('name', r.name);
+		    		me.task.set('description', r.description);
+		    		me.task.set('challengeReferralId', r.id);
+		    		me.task.set('challengeId', challengeId);
+		    		me.task.set('confidentialityLevel', {id: confidentialityLevelId});
+		    		me.appEventsController.getApplication().fireEvent('loadTask');
 		    	}		
 			};
 	    	

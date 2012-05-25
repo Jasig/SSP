@@ -10,6 +10,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 	width: '100%',
     height: '100%',
 	autoScroll: true,
+	padding: 0,
     defaults: {
         anchor: '100%'
     },
@@ -40,6 +41,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        allowBlank:false
 				    },{
 				        xtype: 'combobox',
+				        itemId: 'confidentialityLevel',
 				        name: 'confidentialityLevelId',
 				        fieldLabel: 'Confidentiality Level',
 				        emptyText: 'Select One',

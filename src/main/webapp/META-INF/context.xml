@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context>
+<Context crossContext="true">
 	<Parameter name="SSP_CONFIGDIR" value="/usr/local/etc/ssp" />
 </Context>

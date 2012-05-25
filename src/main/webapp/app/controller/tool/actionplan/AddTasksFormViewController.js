@@ -3,7 +3,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	task: 'currentTask',
+    	model: 'currentTask',
     	person: 'currentPerson',
     	formUtils: 'formRendererUtils',
     	appEventsController: 'appEventsController'
@@ -11,9 +11,10 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     config: {
     	containerToLoadInto: 'tools',
     	formToDisplay: 'actionplan',
-    	personTaskUrl: ''
+    	model: 'currentTask',
+    	url: ''
     },    
-    control: {
+    control: {    	
     	'addButton': {
 			click: 'onAddClick'
 		},
@@ -22,53 +23,73 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 			click: 'onCloseClick'
 		}
 	},
-    
+ 
+	init: function() {		
+		return this.callParent(arguments);
+    },	
+	
 	constructor: function(){
-		this.personTaskUrl = this.apiProperties.getItemUrl('personTask');
-		this.personTaskUrl = this.personTaskUrl.replace('{id}',this.person.get('id'));
-    	
-		console.log(this.personTaskUrl);
+		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personTask') );
+		this.url = this.url.replace('{id}',this.person.get('id'));
 		
-		// TODO: ensure the appropriate confidentialityLevel, etc. are set
-		this.appEventsController.getApplication().addListener('loadTask', function(args){
-    		var model = new Ssp.model.tool.actionplan.Task();
-    		this.task.data = model.data;
-    		this.task.set('name',args.name || '');
-    		this.task.set('description', args.description || '');
-    		this.task.set('challengeId', args.challengeId || '');
-    		this.task.set('challengeReferralId', args.challengeReferralId || '')
-    		// this.task.set('confidentialityLevelId', args.confidentialityLevelId || '');
-    		this.task.set('type','SSP');
-    		this.task.set('personId', this.person.get('id') || '');
-    		this.getView().getForm().loadRecord(this.task);		
+		this.appEventsController.getApplication().addListener('loadTask', function(){
+    		this.initForm();		
 		},this);
     	
 		return this.callParent(arguments);
 	},
+	
+	initForm: function(){
+		this.getView().getForm().reset();
+		this.getView().getForm().loadRecord( this.model );
+		Ext.ComponentQuery.query('#confidentialityLevel')[0].setValue( this.model.get('confidentialityLevel').id );
+	},
     
     onAddClick: function(button){
-    	console.log('AddTasksFormViewController->onAddClick');
-    	var form, url;
-    	form = this.getView().getForm();
+    	var me=this;
+    	var form = this.getView().getForm();
     	if ( form.isValid() )
     	{
     		form.updateRecord();
-    		this.task.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
-    		url = this.apiProperties.createUrl( this.personTaskUrl );
+        	var model = this.model;
+    		model.set('type','SSP');
+    		model.set('personId', this.person.get('id') );    		
+    		model.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
     		this.apiProperties.makeRequest({
-    			url: url,
+    			url: me.url,
     			method: 'POST',
-    			jsonData: this.task.data,
+    			jsonData: model.data,
     			successFunc: function(response ,view){
-    				Ext.Msg.alert('The record was saved successfully');
+    		    	   Ext.Msg.confirm({
+    		    		     title:'Success',
+    		    		     msg: 'The task was added successfully. Would you like to create another task?',
+    		    		     buttons: Ext.Msg.YESNO,
+    		    		     fn: me.createTaskConfirmResult,
+    		    		     scope: me
+    		    		});
     			}
     		});   	
     	}else{
     		Ext.Msg.alert('Error', 'Please correct the errors in your form before continuing.');
     	}
     },
+
+    createTaskConfirmResult: function( btnId ){
+    	if (btnId=="yes")
+    	{
+    		var task = new Ssp.model.tool.actionplan.Task();
+    		this.model.data = task.data;
+    		this.initForm();
+    	}else{
+    		this.loadDisplay();
+    	}
+    },    
     
     onCloseClick: function(button){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-    }    
+    	this.loadDisplay();
+    },
+    
+    loadDisplay: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    }
 });

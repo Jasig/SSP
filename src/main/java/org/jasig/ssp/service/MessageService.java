@@ -83,8 +83,7 @@ public interface MessageService {
 	 *             loaded.
 	 */
 	@Transactional(readOnly = false)
-	void sendQueuedMessages() throws ObjectNotFoundException,
-			SendFailedException;
+	void sendQueuedMessages();
 
 	/**
 	 * Send a specific e-mail message immediately instead of relying on a
