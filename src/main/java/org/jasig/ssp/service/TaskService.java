@@ -10,18 +10,11 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
-import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface TaskService
 		extends PersonAssocAuditableService<Task> {
-
-	/**
-	 * Get all tasks for the Person
-	 */
-	@Override
-	PagingWrapper<Task> getAllForPerson(Person person, SortingAndPaging sAndP);
 
 	/**
 	 * Get all tasks for the Person in the given completion state

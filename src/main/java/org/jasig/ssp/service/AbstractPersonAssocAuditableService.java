@@ -1,5 +1,7 @@
 package org.jasig.ssp.service;
 
+import java.util.List;
+
 import org.jasig.ssp.dao.PersonAssocAuditableCrudDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonAssocAuditable;
@@ -17,6 +19,11 @@ public abstract class AbstractPersonAssocAuditableService<T extends PersonAssocA
 	public PagingWrapper<T> getAllForPerson(final Person person,
 			final SortingAndPaging sAndP) {
 		return getDao().getAllForPersonId(person.getId(), sAndP);
+	}
+
+	@Override
+	public List<T> getAllForPerson(final Person person) {
+		return getDao().getAllForPerson(person);
 	}
 
 	@Override
