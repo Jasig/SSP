@@ -1,7 +1,6 @@
 Ext.define('Ssp.view.Viewport',{
 	extend: 'Ext.container.Container',
 	requires: ['Ext.EventManager'],
-    renderTo: 'sspApp',
     layout: 'fit',
     id: 'sspView',
     alias: 'widget.sspview',
