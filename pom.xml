@@ -152,9 +152,19 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-    		<groupId>org.jasig.portlet.utils</groupId>
-    		<artifactId>portal-rest-api</artifactId>
-    		<version>1.0.0-M2</version>
+			<groupId>org.jasig.portlet.utils</groupId>
+			<artifactId>portal-rest-api</artifactId>
+			<version>1.0.0-M2</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Spring dependencies -->
