@@ -52,7 +52,7 @@ public class JournalEntry
 	private Set<JournalEntryJournalStepDetail> journalEntryJournalStepDetails;
 
 	@ManyToOne
-	@JoinColumn(name = "person_id", nullable = false)
+	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
 	@Override

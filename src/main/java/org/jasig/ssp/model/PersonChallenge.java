@@ -38,11 +38,11 @@ public class PersonChallenge
 	 * Associated person. Changes to this Person are not persisted.
 	 */
 	@ManyToOne()
-	@JoinColumn(name = "person_id")
+	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "challenge_id", insertable = false, nullable = false, updatable = false)
+	@JoinColumn(name = "challenge_id", updatable = false, nullable = false)
 	private Challenge challenge;
 
 	public PersonChallenge() {

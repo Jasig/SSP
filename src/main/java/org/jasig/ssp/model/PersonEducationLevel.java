@@ -48,11 +48,11 @@ public class PersonEducationLevel // NOPMD by jon.adams on 5/24/12 1:34 PM
 	 * Associated person. Changes to this Person are not persisted.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "person_id")
+	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "education_level_id")
+	@JoinColumn(name = "education_level_id", updatable = false, nullable = false)
 	private EducationLevel educationLevel;
 
 	public PersonEducationLevel() {

@@ -22,12 +22,12 @@ public class PersonConfidentialityDisclosureAgreement
 	 * Associated person. Changes to this Person are not persisted.
 	 */
 	@ManyToOne()
-	@JoinColumn(name = "person_id")
+	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
 	@ManyToOne()
 	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
-	@JoinColumn(name = "confidentiality_disclosure_agreement_id")
+	@JoinColumn(name = "confidentiality_disclosure_agreement_id", updatable = false, nullable = false)
 	private ConfidentialityDisclosureAgreement confidentialityDisclosureAgreement;
 
 	public PersonConfidentialityDisclosureAgreement() {
