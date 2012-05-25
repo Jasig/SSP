@@ -46,7 +46,7 @@ public class Goal extends AbstractAuditable implements
 	private String description;
 
 	@ManyToOne
-	@JoinColumn(name = "person_id", nullable = false)
+	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
 	@ManyToOne()
