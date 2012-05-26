@@ -1,5 +1,6 @@
-package org.jasig.ssp.dao;
+package org.jasig.ssp.dao; // NOPMD by jon.adams
 
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -39,10 +40,10 @@ public class PersonDaoTest {
 			.getLogger(PersonDaoTest.class);
 
 	@Autowired
-	private PersonDao dao;
+	private transient PersonDao dao;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	/**
 	 * Setup the security service with the administrator user for use by
@@ -50,13 +51,13 @@ public class PersonDaoTest {
 	 * properties are correctly filled.
 	 */
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
 	@Test
 	public void testGetAll() {
-		Collection<Person> list = dao.getAll(ObjectStatus.ALL).getRows();
+		final Collection<Person> list = dao.getAll(ObjectStatus.ALL).getRows();
 		assertNotNull(list);
 		assertTrue("List should have included multiple entities.",
 				list.size() > 1);
@@ -64,8 +65,9 @@ public class PersonDaoTest {
 
 	@Test
 	public void testGetAllWithRowFilter() {
-		Collection<Person> listAll = dao.getAll(ObjectStatus.ALL).getRows();
-		Collection<Person> listFiltered = dao.getAll(
+		final Collection<Person> listAll = dao.getAll(ObjectStatus.ALL)
+				.getRows();
+		final Collection<Person> listFiltered = dao.getAll(
 				new SortingAndPaging(ObjectStatus.ALL, 1, 2, null, "lastName",
 						SortDirection.ASC)).getRows();
 
@@ -79,9 +81,9 @@ public class PersonDaoTest {
 		assertEquals("List should have included exactly 2 entities.", 2,
 				listFiltered.size());
 
-		assertTrue(
+		assertNotEquals(
 				"The filtered list should have included a different number of entities then the unfiltered list.",
-				listFiltered.size() != listAll.size());
+				listFiltered.size(), listAll.size());
 	}
 
 	@Test
@@ -113,7 +115,8 @@ public class PersonDaoTest {
 		assertEquals("Strengths property did not match.", "strengths",
 				obj.getStrengths());
 
-		Collection<Person> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
+		final Collection<Person> all = dao.getAll(ObjectStatus.ACTIVE)
+				.getRows();
 		assertNotNull(all);
 		assertFalse(all.isEmpty());
 		assertList(all);
@@ -123,8 +126,8 @@ public class PersonDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Person person = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final Person person = dao.get(id);
 
 		assertNull(person);
 	}
@@ -137,7 +140,7 @@ public class PersonDaoTest {
 
 	@Test
 	public void getPeopleInList() {
-		List<UUID> personIds = Lists.newArrayList();
+		final List<UUID> personIds = Lists.newArrayList();
 		personIds.add(UUID.randomUUID());
 		personIds.add(UUID.randomUUID());
 		personIds.add(UUID.randomUUID());
@@ -145,8 +148,8 @@ public class PersonDaoTest {
 				ObjectStatus.ACTIVE)));
 	}
 
-	private void assertList(Collection<Person> objects) {
-		for (Person object : objects) {
+	private void assertList(final Collection<Person> objects) {
+		for (final Person object : objects) {
 			assertNotNull(object.getId());
 		}
 	}

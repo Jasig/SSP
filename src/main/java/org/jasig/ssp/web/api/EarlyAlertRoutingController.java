@@ -98,6 +98,7 @@ public class EarlyAlertRoutingController
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
+		service.checkCampusIds(campusId, null);
 
 		final PagingWrapper<EarlyAlertRouting> list = service
 				.getAllForCampus(campusService.get(campusId), SortingAndPaging
@@ -132,9 +133,7 @@ public class EarlyAlertRoutingController
 			throw new ObjectNotFoundException(id, "EarlyAlertRouting");
 		}
 
-		if (!model.getCampus().getId().equals(campusId)) {
-			throw new ObjectNotFoundException(campusId, "Campus");
-		}
+		service.checkCampusIds(campusId, model);
 
 		return new EarlyAlertRoutingTO(model);
 	}
@@ -168,6 +167,8 @@ public class EarlyAlertRoutingController
 		final EarlyAlertRouting model = factory.from(obj);
 
 		if (null != model) {
+			service.checkCampusIds(campusId, model);
+
 			final EarlyAlertRouting createdModel = service.create(model);
 			if (null != createdModel) {
 				return new EarlyAlertRoutingTO(createdModel);
@@ -208,13 +209,10 @@ public class EarlyAlertRoutingController
 					"EarlyAlertRouting data is required.");
 		}
 
-		if (!obj.getCampusId().equals(campusId)) {
-			throw new ValidationException(
-					"The Campus identifiers did not match.");
-		}
-
 		final EarlyAlertRouting model = factory.from(obj);
 		model.setId(id);
+
+		service.checkCampusIds(campusId, model);
 
 		final EarlyAlertRouting savedEarlyAlertRouting = service.save(model);
 		if (null == savedEarlyAlertRouting) {
@@ -241,6 +239,8 @@ public class EarlyAlertRoutingController
 	ServiceResponse delete(final @PathVariable UUID campusId,
 			final @PathVariable UUID id)
 			throws ObjectNotFoundException {
+		service.checkCampusIds(campusId, service.get(id));
+
 		service.delete(id);
 		return new ServiceResponse(true);
 	}
