@@ -10,10 +10,10 @@ import java.util.UUID;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.jasig.ssp.dao.reference.SpecialServiceGroupDao;
+import org.jasig.ssp.dao.reference.ReferralSourceDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.PersonReferralSource;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -29,22 +29,22 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Tests for the {@link PersonSpecialServiceGroupDao} class.
+ * Tests for the {@link PersonReferralSourceDao} class.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
-public class PersonSpecialServiceGroupDaoTest {
+public class PersonReferralSourceDaoTest {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PersonSpecialServiceGroupDaoTest.class);
+			.getLogger(PersonReferralSourceDaoTest.class);
 
 	@Autowired
-	private transient PersonSpecialServiceGroupDao dao;
+	private transient PersonReferralSourceDao dao;
 
 	@Autowired
-	private transient SpecialServiceGroupDao specialServiceGroupDao;
+	private transient ReferralSourceDao referralSourceDao;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -61,10 +61,10 @@ public class PersonSpecialServiceGroupDaoTest {
 	}
 
 	/**
-	 * Test {@link PersonSpecialServiceGroupDao#save(PersonSpecialServiceGroup)}
-	 * , {@link PersonSpecialServiceGroupDao#get(UUID)},
-	 * {@link PersonSpecialServiceGroupDao#getAll(ObjectStatus)}, and
-	 * {@link PersonSpecialServiceGroupDao#delete(PersonSpecialServiceGroup)}.
+	 * Test {@link PersonReferralSourceDao#save(PersonReferralSource)} ,
+	 * {@link PersonReferralSourceDao#get(UUID)},
+	 * {@link PersonReferralSourceDao#getAll(ObjectStatus)}, and
+	 * {@link PersonReferralSourceDao#delete(PersonReferralSource)}.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             If saved instance could not be reloaded.
@@ -73,10 +73,10 @@ public class PersonSpecialServiceGroupDaoTest {
 	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
 
-		PersonSpecialServiceGroup obj = new PersonSpecialServiceGroup();
+		PersonReferralSource obj = new PersonReferralSource();
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setPerson(securityService.currentUser().getPerson());
-		obj.setSpecialServiceGroup(specialServiceGroupDao.get(UUID
+		obj.setReferralSource(referralSourceDao.get(UUID
 				.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87")));
 		obj = dao.save(obj);
 
@@ -93,7 +93,7 @@ public class PersonSpecialServiceGroupDaoTest {
 		assertNotNull("Reloaded object should not have been null.", obj);
 		assertNotNull("Reloaded ID should not have been null.", obj.getId());
 
-		final List<PersonSpecialServiceGroup> all = (List<PersonSpecialServiceGroup>) dao
+		final List<PersonReferralSource> all = (List<PersonReferralSource>) dao
 				.getAll(ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull("GetAll list should not have been null.", all);
@@ -105,7 +105,7 @@ public class PersonSpecialServiceGroupDaoTest {
 
 	/**
 	 * Test that invalid identifiers to
-	 * {@link PersonSpecialServiceGroupDao#get(UUID)} correctly
+	 * {@link PersonReferralSourceDao#get(UUID)} correctly
 	 * throw ObjectNotFound exception.
 	 * 
 	 * @throws ObjectNotFoundException
@@ -127,8 +127,8 @@ public class PersonSpecialServiceGroupDaoTest {
 						ObjectStatus.ACTIVE)).getRows());
 	}
 
-	private void assertList(final Collection<PersonSpecialServiceGroup> objects) {
-		for (final PersonSpecialServiceGroup object : objects) {
+	private void assertList(final Collection<PersonReferralSource> objects) {
+		for (final PersonReferralSource object : objects) {
 			assertNotNull("Object in the list should not have been null.",
 					object.getId());
 		}
