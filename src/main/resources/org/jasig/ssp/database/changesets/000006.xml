@@ -472,4 +472,19 @@
 		</modifySql>
 
 	</changeSet>
+	
+	<changeSet id="add properties to Person" author="daniel.bower">
+		<addColumn tableName="person">
+			<column name="ability_to_benefit" type="boolean">
+				<constraints nullable="true" />
+			</column>
+			<column name="anticipated_start_term" type="character varying(20)">
+				<constraints nullable="true" />
+			</column>
+			<column name="anticipated_start_year" type="int">
+				<constraints nullable="true" />
+			</column>
+			
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>

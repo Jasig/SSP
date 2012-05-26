@@ -5,7 +5,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.jasig.ssp.model.Person;
 
@@ -39,6 +43,18 @@ public class PersonTO
 	private UUID coachId;
 
 	private String strengths;
+
+	@Nullable
+	private Boolean abilityToBenefit;
+
+	@Nullable
+	@Size(max = 20)
+	private String anticipatedStartTerm;
+
+	@Nullable
+	@Max(2100)
+	@Min(2000)
+	private Integer anticipatedStartYear;
 
 	/**
 	 * Empty constructor
@@ -83,6 +99,9 @@ public class PersonTO
 		enabled = model.isEnabled();
 		coachId = model.getCoach() == null ? null : model.getCoach().getId();
 		strengths = model.getStrengths();
+		abilityToBenefit = model.isAbilityToBenefit();
+		anticipatedStartTerm = model.getAnticipatedStartTerm();
+		anticipatedStartYear = model.getAnticipatedStartYear();
 	}
 
 	/**
@@ -289,4 +308,29 @@ public class PersonTO
 	public void setStrengths(final String strengths) {
 		this.strengths = strengths;
 	}
+
+	public Boolean getAbilityToBenefit() {
+		return abilityToBenefit;
+	}
+
+	public void setAbilityToBenefit(final Boolean abilityToBenefit) {
+		this.abilityToBenefit = abilityToBenefit;
+	}
+
+	public String getAnticipatedStartTerm() {
+		return anticipatedStartTerm;
+	}
+
+	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
+		this.anticipatedStartTerm = anticipatedStartTerm;
+	}
+
+	public Integer getAnticipatedStartYear() {
+		return anticipatedStartYear;
+	}
+
+	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
+		this.anticipatedStartYear = anticipatedStartYear;
+	}
+
 }

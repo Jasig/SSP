@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
@@ -220,15 +222,28 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Usually only marked false for former administrators, counselors, and
 	 * non-students who no longer use the system anymore.
 	 */
-	@Nullable()
-	private boolean enabled;
+	@Nullable
+	private Boolean enabled;
+
+	@Nullable
+	private Boolean abilityToBenefit;
+
+	@Nullable
+	@Column(length = 20)
+	@Size(max = 20)
+	private String anticipatedStartTerm;
+
+	@Nullable
+	@Max(2100)
+	@Min(2000)
+	private Integer anticipatedStartYear;
 
 	/**
 	 * Demographics about a student.
 	 * 
 	 * Should be null for non-student users.
 	 */
-	@Nullable()
+	@Nullable
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_demographics_id", unique = true, nullable = true)
@@ -239,7 +254,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Should be null for non-student users.
 	 */
-	@Nullable()
+	@Nullable
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_goal_id", unique = true, nullable = true)
@@ -250,7 +265,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Should be null for non-student users.
 	 */
-	@Nullable()
+	@Nullable
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_plan_id", unique = true, nullable = true)
@@ -261,7 +276,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Should be null for non-student users.
 	 */
-	@Nullable()
+	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
@@ -272,7 +287,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Should be null for non-student users.
 	 */
-	@Nullable()
+	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private Set<PersonFundingSource> fundingSources;
@@ -282,24 +297,24 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Should be null for non-student users.
 	 */
-	@Nullable()
+	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private Set<PersonChallenge> challenges;
 
-	@Nullable()
+	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
 	private Set<PersonTool> tools;
 
-	@Nullable()
+	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
 	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
 
-	@Nullable()
+	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
@@ -318,6 +333,24 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "coach_id", nullable = true)
 	private Person coach;
+
+	@Nullable
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
+	private Set<PersonServiceReason> serviceReasons;
+
+	@Nullable
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
+	private Set<PersonSpecialServiceGroup> specialServiceGroups;
+
+	@Nullable
+	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
+	private Set<PersonReferralSource> referralSources;
 
 	/**
 	 * Initialize a Person.
@@ -514,11 +547,11 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.schoolId = schoolId;
 	}
 
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(final boolean enabled) {
+	public void setEnabled(final Boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -632,6 +665,56 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.coach = coach;
 	}
 
+	public Set<PersonServiceReason> getServiceReasons() {
+		return serviceReasons;
+	}
+
+	public void setServiceReasons(final Set<PersonServiceReason> serviceReasons) {
+		this.serviceReasons = serviceReasons;
+	}
+
+	public Set<PersonSpecialServiceGroup> getSpecialServiceGroups() {
+		return specialServiceGroups;
+	}
+
+	public void setSpecialServiceGroups(
+			final Set<PersonSpecialServiceGroup> specialServiceGroups) {
+		this.specialServiceGroups = specialServiceGroups;
+	}
+
+	public Set<PersonReferralSource> getReferralSources() {
+		return referralSources;
+	}
+
+	public void setReferralSources(
+			final Set<PersonReferralSource> referralSources) {
+		this.referralSources = referralSources;
+	}
+
+	public boolean isAbilityToBenefit() {
+		return abilityToBenefit;
+	}
+
+	public void setAbilityToBenefit(final boolean abilityToBenefit) {
+		this.abilityToBenefit = abilityToBenefit;
+	}
+
+	public String getAnticipatedStartTerm() {
+		return anticipatedStartTerm;
+	}
+
+	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
+		this.anticipatedStartTerm = anticipatedStartTerm;
+	}
+
+	public Integer getAnticipatedStartYear() {
+		return anticipatedStartYear;
+	}
+
+	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
+		this.anticipatedStartYear = anticipatedStartYear;
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 3;
@@ -688,6 +771,15 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		result *= StringUtils.isEmpty(strengths) ? "strengths".hashCode()
 				: strengths.hashCode();
 		result *= coach == null ? "coach".hashCode() : coach.getId().hashCode();
+		result *= StringUtils.isEmpty(anticipatedStartTerm) ? "anticipatedStartTerm"
+				.hashCode()
+				: anticipatedStartTerm.hashCode();
+		result *= (anticipatedStartYear == null) ? "anticipatedStartYear"
+				.hashCode() : anticipatedStartYear;
+		result *= (enabled == null) ? "enabled".hashCode() : (enabled ? 3 : 2);
+		result *= (abilityToBenefit == null) ? "abilityToBenefit".hashCode()
+				: (abilityToBenefit ? 3 : 2);
+
 		// not all fields included. only the business or non-expensive set
 		// fields are included in the hashCode
 
