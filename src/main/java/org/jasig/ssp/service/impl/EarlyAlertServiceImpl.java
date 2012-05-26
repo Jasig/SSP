@@ -8,14 +8,18 @@ import java.util.UUID;
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.EarlyAlertDao;
 import org.jasig.ssp.model.EarlyAlert;
+import org.jasig.ssp.model.EarlyAlertRouting;
 import org.jasig.ssp.model.Message;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
+import org.jasig.ssp.service.EarlyAlertRoutingService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -51,6 +55,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Autowired
 	private transient ConfigService configService;
+
+	@Autowired
+	private transient EarlyAlertRoutingService earlyAlertRoutingService;
 
 	@Autowired
 	private transient MessageService messageService;
@@ -139,8 +146,6 @@ public class EarlyAlertServiceImpl extends // NOPMD
 					e);
 		}
 
-		// TODO Send e-mail to any applicable routing/notification rule entry
-		// email addresses
 		return saved;
 	}
 
@@ -264,6 +269,59 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				templateParameters);
 
 		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
+
+		// Send same message to all applicable Campus Early Alert routing
+		// entries
+		final PagingWrapper<EarlyAlertRouting> routes = earlyAlertRoutingService
+				.getAllForCampus(earlyAlert.getCampus(), new SortingAndPaging(
+						ObjectStatus.ACTIVE));
+		if (routes.getResults() > 0) {
+			for (final EarlyAlertRouting route : routes.getRows()) {
+				// Check that route applies
+				if (route.getEarlyAlertReason() == null) {
+					throw new ObjectNotFoundException(
+							"EarlyAlertRouting missing EarlyAlertReason.",
+							"EarlyAlertReason");
+				}
+
+				// Only routes that are for any of the Reasons in this
+				// EarlyAlert should be applied.
+				if (earlyAlert.getEarlyAlertReasonIds() == null
+						|| !earlyAlert.getEarlyAlertReasonIds().contains(
+								route.getEarlyAlertReason())) {
+					continue;
+				}
+
+				// Send e-mail to specific person
+				final Person to = route.getPerson();
+				if (to != null
+						&& !StringUtils.isEmpty(to.getPrimaryEmailAddress())) {
+					messageService
+							.createMessage(
+									to,
+									null,
+									MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
+									templateParameters);
+					LOGGER.info(
+							"Message {} for EarlyAlert {} also routed to {}",
+							new Object[] { message, earlyAlert, to }); // NOPMD
+				}
+
+				// Send e-mail to a group
+				if (!StringUtils.isEmpty(route.getGroupName())
+						&& !StringUtils.isEmpty(route.getGroupEmail())) {
+					messageService
+							.createMessage(
+									route.getGroupEmail(),
+									MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
+									templateParameters);
+					LOGGER.info(
+							"Message {} for EarlyAlert {} also routed to {}",
+							new Object[] { message, earlyAlert, // NOPMD
+									route.getGroupEmail() });
+				}
+			}
+		}
 	}
 
 	/**

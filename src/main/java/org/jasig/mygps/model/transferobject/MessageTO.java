@@ -2,6 +2,9 @@ package org.jasig.mygps.model.transferobject;
 
 import java.io.Serializable;
 
+/**
+ * Message transfer object
+ */
 public class MessageTO implements Serializable {
 
 	private static final long serialVersionUID = 1454568554970597597L;
@@ -14,7 +17,7 @@ public class MessageTO implements Serializable {
 		return subject;
 	}
 
-	public void setSubject(String subject) {
+	public void setSubject(final String subject) {
 		this.subject = subject;
 	}
 
@@ -22,8 +25,7 @@ public class MessageTO implements Serializable {
 		return message;
 	}
 
-	public void setMessage(String message) {
+	public void setMessage(final String message) {
 		this.message = message;
 	}
-
 }

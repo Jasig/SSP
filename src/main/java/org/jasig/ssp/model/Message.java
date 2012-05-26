@@ -34,7 +34,7 @@ final public class Message
 	private Person sender;
 
 	@ManyToOne()
-	@JoinColumn(name = "recipient_id", nullable = false)
+	@JoinColumn(name = "recipient_id", nullable = true)
 	private Person recipient;
 
 	@Column(length = 100, nullable = false)
@@ -108,9 +108,11 @@ final public class Message
 		return recipient;
 	}
 
-	public void setRecipient(@NotNull final Person recipient) {
+	public void setRecipient(final Person recipient) {
 		this.recipient = recipient;
-		recipientEmailAddress = recipient.getPrimaryEmailAddress();
+		if (recipient != null) {
+			recipientEmailAddress = recipient.getPrimaryEmailAddress();
+		}
 	}
 
 	public String getRecipientEmailAddress() {

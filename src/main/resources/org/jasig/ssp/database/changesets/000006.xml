@@ -374,7 +374,7 @@
 		</modifySql>
 
 	</changeSet>
-	
+
 	<changeSet author='daniel.bower' id='Add person_service_reason table'>
 		<createTable tableName="person_service_reason">
 			<column name="id" type="uuid">
@@ -472,7 +472,7 @@
 		</modifySql>
 
 	</changeSet>
-	
+
 	<changeSet id="add properties to Person" author="daniel.bower">
 		<addColumn tableName="person">
 			<column name="ability_to_benefit" type="boolean">
@@ -488,19 +488,42 @@
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
-		
+
 		<rollback>
-			<dropColumn tableName="person" columnName="ability_to_benefit"/>
-			<dropColumn tableName="person" columnName="anticipated_start_year"/>
-			<dropColumn tableName="person" columnName="anticipated_start_term"/>
-			<dropColumn tableName="person" columnName="student_intake_request_date"/>
+			<dropColumn tableName="person" columnName="ability_to_benefit" />
+			<dropColumn tableName="person" columnName="anticipated_start_year" />
+			<dropColumn tableName="person" columnName="anticipated_start_term" />
+			<dropColumn tableName="person" columnName="student_intake_request_date" />
 		</rollback>
-		
+
 		<!-- Theres a different assumption in the liquibase handling of timezones 
 			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
 			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
-		
+
 	</changeSet>
+
+	<changeSet author='jon.adams' id='Fix early_alert_routing person nullable'>
+		<dropColumn tableName="early_alert_routing" columnName="person_id" />
+		<addColumn tableName="early_alert_routing">
+			<column name="person_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="early_alert_routing_person_id"
+					references="person(id)" />
+			</column>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+
+	<changeSet author='jon.adams' id='Set message.recipient to be nullable'>
+		<dropColumn tableName="message" columnName="recipient_id" />
+		<addColumn tableName="message">
+			<column name="recipient_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="message_recipient_id_person_id"
+					references="person(id)" />
+			</column>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+
 </databaseChangeLog>

@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl; // NOPMD by jon.adams
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
