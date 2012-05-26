@@ -8,9 +8,6 @@ Ext.define('Ssp.view.Main', {
     initComponent: function(){
     	Ext.apply(this,
 		    			{
-		    	    title: 'Student Success Plan',
-		    	    width: '100%',
-		    	    height: '100%',
 		    	    layout: {
 		    	    	type: 'hbox',
 		    	    	align: 'stretch'

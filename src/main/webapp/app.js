@@ -133,7 +133,7 @@ Ext.require([
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
     'Ssp.controller.ApplicationEventsController',
-	'Ext.tab.*',
+    'Ext.tab.*',
 	'Ext.ux.CheckColumn',
 	'Ext.util.Filter',
 	'Ext.data.TreeStore',
@@ -349,7 +349,7 @@ Ext.onReady(function(){
 	    tasksStore: 'Ssp.store.Tasks',
 	    toolsStore: 'Ssp.store.Tools',
     	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
-        yesNoStore: 'Ssp.store.reference.YesNo' 
+        yesNoStore: 'Ssp.store.reference.YesNo'
 	});
 
 	Ext.application({
@@ -363,7 +363,7 @@ Ext.onReady(function(){
 	    	Deft.Injector.providers.appEventsController.value.app=this;
 	    	
 	    	Ext.apply(this,{
-	    		items: [{xtype:'sspview',flex:1}]
+	    		items: [{xtype:'sspview'}]
 	    	});
 	    	// Display the application
 	        //this.getController('MainViewController').displayApplication();

@@ -45,7 +45,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		
 		this.personJournalUrl = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personJournalEntry') );
 		this.personJournalUrl = this.personJournalUrl.replace('{id}',personId);		
-		console.log(this.personJournalUrl);
+
 		this.apiProperties.makeRequest({
 			url: this.personJournalUrl,
 			method: 'GET',
