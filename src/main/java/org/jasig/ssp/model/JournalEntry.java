@@ -14,7 +14,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
@@ -127,24 +126,15 @@ public class JournalEntry
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
-		result *= entryDate == null ? "entryDate".hashCode()
-				: entryDate.hashCode();
-		result *= StringUtils.isEmpty(comment) ? "comment".hashCode() : comment
-				.hashCode();
-		result *= confidentialityLevel == null ? "confidentialityLevel"
-				.hashCode() : confidentialityLevel.hashCode();
-		result *= (journalSource == null) || (journalSource.getId() == null) ? "journalSource"
-				.hashCode()
-				: journalSource.getId().hashCode();
-		result *= (journalTrack == null) || (journalTrack.getId() == null) ? "journalTrack"
-				.hashCode()
-				: journalTrack.getId().hashCode();
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
+		result *= hashField("entryDate", entryDate);
+		result *= hashField("comment", comment);
+		result *= hashField("confidentialityLevel", confidentialityLevel);
+		result *= hashField("journalSource", journalSource);
+		result *= hashField("journalTrack", journalTrack);
+		result *= hashField("person", person);
 
 		// collections are not included in these calculations
 

@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.FundingSource;
@@ -81,7 +80,7 @@ public class PersonFundingSource
 	 *            Source to use for overwrites.
 	 */
 	public void overwrite(final PersonFundingSource source) {
-		this.setDescription(source.getDescription());
+		setDescription(source.getDescription());
 	}
 
 	@Override
@@ -94,18 +93,12 @@ public class PersonFundingSource
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
-		// PersonFundingSource
-		result *= StringUtils.isEmpty(description) ? "description".hashCode()
-				: description.hashCode();
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
-		result *= fundingSource == null ? "fundingSource".hashCode()
-				: fundingSource
-						.hashCode();
+		result *= hashField("description", description);
+		result *= hashField("person", person);
+		result *= hashField("fundingSource", fundingSource);
 
 		return result;
 	}

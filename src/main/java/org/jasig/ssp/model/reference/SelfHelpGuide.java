@@ -17,7 +17,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -168,17 +167,11 @@ public class SelfHelpGuide
 		// AbstractAuditable properties
 		result *= super.hashCode();
 
-		result *= threshold > 0 ? threshold : hashPrime();
-		result *= StringUtils.isEmpty(introductoryText) ? "introductoryText"
-				.hashCode() : introductoryText.hashCode();
-		result *= StringUtils.isEmpty(summaryText) ? "summaryText".hashCode()
-				: summaryText.hashCode();
-		result *= StringUtils.isEmpty(summaryTextEarlyAlert) ? "summaryTextEarlyAlert"
-				.hashCode()
-				: summaryTextEarlyAlert.hashCode();
-		result *= StringUtils.isEmpty(summaryTextThreshold) ? "summaryTextThreshold"
-				.hashCode()
-				: summaryTextThreshold.hashCode();
+		result *= hashField("threshold", threshold);
+		result *= hashField("introductoryText", introductoryText);
+		result *= hashField("summaryText", summaryText);
+		result *= hashField("summaryTextEarlyAlert", summaryTextEarlyAlert);
+		result *= hashField("summaryTextThreshold", summaryTextThreshold);
 		result *= authenticationRequired ? 3 : 5;
 
 		// collections are not included here

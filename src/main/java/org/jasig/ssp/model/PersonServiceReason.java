@@ -67,21 +67,17 @@ public class PersonServiceReason
 	}
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// PersonServiceReason
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
-		result *= serviceReason == null ? "serviceReason"
-				.hashCode() : serviceReason.hashCode();
+		result *= hashField("person", person);
+		result *= hashField("serviceReason", serviceReason);
 
 		return result;
 	}
-
 }

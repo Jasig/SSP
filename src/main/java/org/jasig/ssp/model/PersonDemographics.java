@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.ChildCareArrangement;
@@ -360,52 +359,32 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// PersonDemographics
 		result *= abilityToBenefit ? 7 : 11;
-		result *= StringUtils.isEmpty(anticipatedStartTerm) ? "anticipatedStartTerm"
-				.hashCode()
-				: anticipatedStartTerm.hashCode();
-		result *= StringUtils.isEmpty(anticipatedStartYear) ? "anticipatedStartYear"
-				.hashCode()
-				: anticipatedStartYear.hashCode();
+		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
+		result *= hashField("anticipatedStartYear", anticipatedStartYear);
 		result *= local ? 3 : 5;
-		result *= StringUtils.isEmpty(countryOfResidence) ? "countryOfResidence"
-				.hashCode()
-				: countryOfResidence.hashCode();
-		result *= StringUtils.isEmpty(paymentStatus) ? "paymentStatus"
-				.hashCode() : paymentStatus.hashCode();
-		result *= maritalStatus == null ? "maritalStatus".hashCode()
-				: maritalStatus.hashCode();
-		result *= ethnicity == null ? "ethnicity".hashCode() : ethnicity
-				.hashCode();
+		result *= hashField("countryOfResidence", countryOfResidence);
+		result *= hashField("paymentStatus", paymentStatus);
+		result *= hashField("maritalStatus", maritalStatus);
+		result *= hashField("ethnicity", ethnicity);
 		result *= gender == null ? "gender".hashCode() : gender.hashCode();
-		result *= citizenship == null ? "citizenship".hashCode() : citizenship
-				.hashCode();
-		result *= StringUtils.isEmpty(countryOfCitizenship) ? "countryOfCitizenship"
-				.hashCode()
-				: countryOfCitizenship.hashCode();
-		result *= veteranStatus == null ? "veteranStatus".hashCode()
-				: veteranStatus.hashCode();
+		result *= hashField("citizenship", citizenship);
+		result *= hashField("countryOfCitizenship", countryOfCitizenship);
+		result *= hashField("veteranStatus", veteranStatus);
 		result *= primaryCaregiver ? 13 : 17;
-		result *= numberOfChildren;
-		result *= childCareArrangement == null ? "childCareArrangement"
-				.hashCode() : childCareArrangement.hashCode();
-		result *= StringUtils.isEmpty(childAges) ? "childAges".hashCode()
-				: childAges.hashCode();
+		result *= hashField("numberOfChildren", numberOfChildren);
+		result *= hashField("childCareArrangement", childCareArrangement);
+		result *= hashField("childAges", childAges);
 		result *= childCareNeeded ? 19 : 23;
 		result *= employed ? 29 : 31;
-		result *= StringUtils.isEmpty(placeOfEmployment) ? "placeOfEmployment"
-				.hashCode() : placeOfEmployment.hashCode();
+		result *= hashField("placeOfEmployment", placeOfEmployment);
 		result *= shift == null ? "shift".hashCode() : shift.hashCode();
-		result *= StringUtils.isEmpty(wage) ? "wage".hashCode() : wage
-				.hashCode();
-		result *= StringUtils.isEmpty(totalHoursWorkedPerWeek) ? "totalHoursWorkedPerWeek"
-				.hashCode()
-				: totalHoursWorkedPerWeek.hashCode();
+		result *= hashField("wage", wage);
+		result *= hashField("totalHoursWorkedPerWeek", totalHoursWorkedPerWeek);
 
 		return result;
 	}

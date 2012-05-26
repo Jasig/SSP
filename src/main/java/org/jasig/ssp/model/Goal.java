@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -116,20 +115,14 @@ public class Goal extends AbstractAuditable implements
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
-		// AbstractReference
-		result *= StringUtils.isEmpty(name) ? "name".hashCode() : name
-				.hashCode();
-		result *= StringUtils.isEmpty(description) ? "description".hashCode()
-				: description.hashCode();
-
-		result *= confidentialityLevel == null ? "confidentialityLevel"
-				.hashCode() : confidentialityLevel.getId().hashCode();
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
+		// Goal
+		result *= hashField("name", name);
+		result *= hashField("description", description);
+		result *= hashField("confidentialityLevel", confidentialityLevel);
+		result *= hashField("person", person);
 
 		return result;
 	}

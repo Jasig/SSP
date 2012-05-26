@@ -4,6 +4,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndProperty;
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
 
+/**
+ * Enumeration of the States in the USA
+ */
 @JsonSerialize(using = CodeAndPropertySerializer.class)
 public enum States implements CodeAndProperty {
 
@@ -38,5 +41,4 @@ public enum States implements CodeAndProperty {
 	public String getCode() {
 		return name();
 	}
-
 }

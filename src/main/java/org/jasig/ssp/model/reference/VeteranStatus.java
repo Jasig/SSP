@@ -90,8 +90,8 @@ public class VeteranStatus
 	}
 
 	@Override
-	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
+	public int hashCode() { // NOPMD by jon.adams
 		return hashPrime() * super.hashCode()
-				* (sortOrder == 0 ? hashPrime() : sortOrder);
+				* hashField("sortOrder", sortOrder);
 	}
 }

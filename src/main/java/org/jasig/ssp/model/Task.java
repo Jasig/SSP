@@ -13,7 +13,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.Challenge;
@@ -241,31 +240,21 @@ public class Task // NOPMD by jon.adams
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// Task
-		result *= StringUtils.isEmpty(name) ? "name".hashCode() : name
-				.hashCode();
-		result *= StringUtils.isEmpty(description) ? "description".hashCode()
-				: description.hashCode();
-		result *= dueDate == null ? "dueDate".hashCode() : dueDate.hashCode();
-		result *= completedDate == null ? "completedDate".hashCode()
-				: completedDate.hashCode();
-		result *= reminderSentDate == null ? "reminderSentDate".hashCode()
-				: reminderSentDate.hashCode();
-		result *= StringUtils.isEmpty(sessionId) ? "sessionId".hashCode()
-				: sessionId.hashCode();
+		result *= hashField("name", name);
+		result *= hashField("description", description);
+		result *= hashField("dueDate", dueDate);
+		result *= hashField("completedDate", completedDate);
+		result *= hashField("reminderSentDate", reminderSentDate);
+		result *= hashField("sessionId", sessionId);
 		result *= deletable ? 3 : 5;
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
-		result *= challenge == null ? "challenge".hashCode() : challenge
-				.hashCode();
-		result *= challengeReferral == null ? "challengeReferral".hashCode()
-				: challengeReferral.hashCode();
-		result *= confidentialityLevel == null ? "confidentialityLevel"
-				.hashCode() : confidentialityLevel.hashCode();
+		result *= hashField("person", person);
+		result *= hashField("challenge", challenge);
+		result *= hashField("challengeReferral", challengeReferral);
+		result *= hashField("confidentialityLevel", confidentialityLevel);
 
 		return result;
 	}

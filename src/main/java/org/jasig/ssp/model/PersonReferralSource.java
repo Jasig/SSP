@@ -67,21 +67,17 @@ public class PersonReferralSource
 	}
 
 	@Override
-	final public int hashCode() {
+	final public int hashCode() { // NOPMD
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// PersonReferralSource
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
-		result *= referralSource == null ? "referralSource"
-				.hashCode() : referralSource.hashCode();
+		result *= hashField("person", person.getId());
+		result *= hashField("referralSource", referralSource);
 
 		return result;
 	}
-
 }

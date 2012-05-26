@@ -60,4 +60,6 @@ public class JournalSource
 	protected int hashPrime() {
 		return 211;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

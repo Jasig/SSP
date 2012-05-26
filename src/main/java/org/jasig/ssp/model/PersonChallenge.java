@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.Challenge;
 
 /**
@@ -88,7 +87,7 @@ public class PersonChallenge
 	 *            Source to use for overwrites.
 	 */
 	public void overwrite(final PersonChallenge source) {
-		this.setDescription(source.getDescription());
+		setDescription(source.getDescription());
 	}
 
 	@Override
@@ -101,17 +100,13 @@ public class PersonChallenge
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// PersonChallenge
-		result *= StringUtils.isEmpty(description) ? "description".hashCode()
-				: description.hashCode();
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
-		result *= challenge == null ? "challenge".hashCode() : challenge
-				.hashCode();
+		result *= hashField("description", description);
+		result *= hashField("person", person);
+		result *= hashField("challenge", challenge);
 
 		return result;
 	}

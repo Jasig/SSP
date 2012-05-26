@@ -101,11 +101,10 @@ public class JournalStepDetail
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
-		result *= sortOrder == 0 ? hashPrime() : sortOrder;
+		result *= hashField("sortOrder", sortOrder);
 
 		return result;
 	}

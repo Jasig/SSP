@@ -8,7 +8,6 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 
@@ -160,23 +159,14 @@ public class EarlyAlertRouting extends AbstractAuditable implements
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
-		// AbstractReference
-		result *= StringUtils.isEmpty(groupName) ? "groupName".hashCode()
-				: groupName.hashCode();
-		result *= StringUtils.isEmpty(groupEmail) ? "groupEmail".hashCode()
-				: groupEmail.hashCode();
-
-		result *= (campus == null) || (campus.getId() == null) ? "campus"
-				.hashCode() : campus.getId().hashCode();
-		result *= (earlyAlertReason == null)
-				|| (earlyAlertReason.getId() == null) ? "earlyAlertReason"
-				.hashCode() : earlyAlertReason.getId().hashCode();
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
+		result *= hashField("groupName", groupName);
+		result *= hashField("groupEmail", groupEmail);
+		result *= hashField("campus", campus);
+		result *= hashField("earlyAlertReason", earlyAlertReason);
+		result *= hashField("person", person);
 
 		return result;
 	}

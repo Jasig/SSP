@@ -17,7 +17,7 @@ public class Ethnicity
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2076285639616178551L;
 
 	/**
 	 * Constructor
@@ -68,4 +68,6 @@ public class Ethnicity
 	protected int hashPrime() {
 		return 101;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

@@ -8,7 +8,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -20,7 +19,7 @@ public class EducationGoal
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -306887708908281830L;
 
 	@Column(length = 255)
 	@Size(max = 255)
@@ -78,11 +77,7 @@ public class EducationGoal
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
-		int result = hashPrime() * super.hashCode();
-
-		result *= StringUtils.isEmpty(otherDescription) ? "otherDescription"
-				.hashCode() : otherDescription.hashCode();
-
-		return result;
+		return hashPrime() * super.hashCode()
+				* hashField("otherDescription", otherDescription);
 	}
 }

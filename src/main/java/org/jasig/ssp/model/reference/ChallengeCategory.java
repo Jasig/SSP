@@ -18,7 +18,7 @@ public class ChallengeCategory
 		extends AbstractAuditable
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3188076003383011289L;
 
 	@ManyToOne()
 	@JoinColumn(name = "challenge_id", nullable = false)
@@ -54,16 +54,11 @@ public class ChallengeCategory
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
-		result *= (challenge == null) || (null == challenge.getId()) ? "challenge"
-				.hashCode()
-				: challenge.getId().hashCode();
-		result *= (category == null) || (null == category.getId()) ? "category"
-				.hashCode() : category.getId()
-				.hashCode();
+		result *= hashField("challenge", challenge);
+		result *= hashField("category", category);
 
 		return result;
 	}

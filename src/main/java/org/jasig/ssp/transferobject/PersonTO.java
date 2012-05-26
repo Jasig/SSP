@@ -1,4 +1,4 @@
-package org.jasig.ssp.transferobject;
+package org.jasig.ssp.transferobject; // NOPMD
 
 import java.util.Collection;
 import java.util.Date;
@@ -117,7 +117,7 @@ public class PersonTO
 	public static List<PersonTO> toTOList(
 			@NotNull final Collection<Person> models) {
 		final List<PersonTO> tos = Lists.newArrayList();
-		for (Person model : models) {
+		for (final Person model : models) {
 			tos.add(new PersonTO(model)); // NOPMD by jon.adams on 5/13/12
 		}
 
@@ -337,11 +337,12 @@ public class PersonTO
 	}
 
 	public Date getStudentIntakeRequestDate() {
-		return studentIntakeRequestDate;
+		return studentIntakeRequestDate == null ? null : new Date(
+				studentIntakeRequestDate.getTime());
 	}
 
 	public void setStudentIntakeRequestDate(final Date studentIntakeRequestDate) {
-		this.studentIntakeRequestDate = studentIntakeRequestDate;
+		this.studentIntakeRequestDate = studentIntakeRequestDate == null ? null
+				: new Date(studentIntakeRequestDate.getTime());
 	}
-
 }

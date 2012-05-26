@@ -17,7 +17,7 @@ public class ChildCareArrangement
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 661411791848585109L;
 
 	/**
 	 * Constructor
@@ -69,4 +69,6 @@ public class ChildCareArrangement
 	protected int hashPrime() {
 		return 71;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.EducationLevel;
 
 /**
@@ -134,25 +133,17 @@ public class PersonEducationLevel // NOPMD by jon.adams on 5/24/12 1:34 PM
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// PersonEducationLevel
-		result *= StringUtils.isEmpty(description) ? "description".hashCode()
-				: description.hashCode();
-		result *= lastYearAttended == null ? "lastYearAttended".hashCode()
-				: lastYearAttended.hashCode();
-		result *= highestGradeCompleted == null ? "highestGradeCompleted"
-				.hashCode() : highestGradeCompleted.hashCode();
-		result *= graduatedYear == null ? "graduatedYear".hashCode()
-				: graduatedYear.hashCode();
-		result *= StringUtils.isEmpty(schoolName) ? "schoolName".hashCode()
-				: schoolName.hashCode();
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
-		result *= educationLevel == null ? "educationLevel".hashCode()
-				: educationLevel.hashCode();
+		result *= hashField("description", description);
+		result *= hashField("lastYearAttended", lastYearAttended);
+		result *= hashField("highestGradeCompleted", highestGradeCompleted);
+		result *= hashField("graduatedYear", graduatedYear);
+		result *= hashField("schoolName", schoolName);
+		result *= hashField("person", person);
+		result *= hashField("educationLevel", educationLevel);
 
 		return result;
 	}

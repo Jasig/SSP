@@ -51,15 +51,12 @@ public class ChallengeChallengeReferral
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// ChallengeChallengeReferral
-		result *= challenge == null ? "challenge".hashCode() : challenge
-				.getId().hashCode();
-		result *= challengeReferral == null ? "challengeReferral".hashCode()
-				: challengeReferral.getId().hashCode();
+		result *= hashField("challenge", challenge);
+		result *= hashField("challengeReferral", challengeReferral);
 
 		return result;
 	}

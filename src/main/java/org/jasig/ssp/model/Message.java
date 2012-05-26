@@ -12,8 +12,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * Email (Message) model
  */
@@ -23,7 +21,7 @@ final public class Message
 		extends AbstractAuditable
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7643811408668209143L;
 
 	@Column(nullable = false, length = 250)
 	private String subject;
@@ -157,25 +155,16 @@ final public class Message
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// Message
-		result *= StringUtils.isEmpty(subject) ? "subject".hashCode() : subject
-				.hashCode();
-		result *= StringUtils.isEmpty(body) ? "body".hashCode() : body
-				.hashCode();
-		result *= (sender == null) || (sender.getId() == null) ? "sender"
-				.hashCode() : sender.getId().hashCode();
-		result *= (recipient == null) || (recipient.getId() == null) ? "recipient"
-				.hashCode()
-				: recipient.getId().hashCode();
-		result *= StringUtils.isEmpty(recipientEmailAddress) ? "recipientEmailAddress"
-				.hashCode()
-				: recipientEmailAddress.hashCode();
-		result *= sentDate == null ? "sentDate".hashCode() : sentDate
-				.hashCode();
+		result *= hashField("subject", subject);
+		result *= hashField("body", body);
+		result *= hashField("sender", sender);
+		result *= hashField("recipient", recipient);
+		result *= hashField("recipientEmailAddress", recipientEmailAddress);
+		result *= hashField("sentDate", sentDate);
 
 		return result;
 	}

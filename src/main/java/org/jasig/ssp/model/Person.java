@@ -22,7 +22,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -720,11 +719,13 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	}
 
 	public Date getStudentIntakeRequestDate() {
-		return studentIntakeRequestDate;
+		return studentIntakeRequestDate == null ? null : new Date(
+				studentIntakeRequestDate.getTime());
 	}
 
 	public void setStudentIntakeRequestDate(final Date studentIntakeRequestDate) {
-		this.studentIntakeRequestDate = studentIntakeRequestDate;
+		this.studentIntakeRequestDate = studentIntakeRequestDate == null ? null
+				: new Date(studentIntakeRequestDate.getTime());
 	}
 
 	@Override
@@ -737,63 +738,38 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// Person
-		result *= StringUtils.isEmpty(firstName) ? "firstName".hashCode()
-				: firstName.hashCode();
-		result *= StringUtils.isEmpty(middleInitial) ? "middleInitial"
-				.hashCode() : middleInitial.hashCode();
-		result *= StringUtils.isEmpty(lastName) ? "middleInitial".hashCode()
-				: lastName.hashCode();
-		result *= birthDate == null ? "birthDate".hashCode() : birthDate
-				.hashCode();
-		result *= StringUtils.isEmpty(primaryEmailAddress) ? "primaryEmailAddress"
-				.hashCode()
-				: primaryEmailAddress.hashCode();
-		result *= StringUtils.isEmpty(secondaryEmailAddress) ? "secondaryEmailAddress"
-				.hashCode()
-				: secondaryEmailAddress.hashCode();
-		result *= StringUtils.isEmpty(username) ? "primaryEmailAddress"
-				.hashCode() : primaryEmailAddress.hashCode();
-		result *= StringUtils.isEmpty(userId) ? "userId".hashCode() : userId
-				.hashCode();
-		result *= StringUtils.isEmpty(homePhone) ? "homePhone".hashCode()
-				: homePhone.hashCode();
-		result *= StringUtils.isEmpty(workPhone) ? "workPhone".hashCode()
-				: workPhone.hashCode();
-		result *= StringUtils.isEmpty(cellPhone) ? "cellPhone".hashCode()
-				: cellPhone.hashCode();
-		result *= StringUtils.isEmpty(addressLine1) ? "addressLine1".hashCode()
-				: addressLine1.hashCode();
-		result *= StringUtils.isEmpty(addressLine2) ? "addressLine2".hashCode()
-				: addressLine2.hashCode();
-		result *= StringUtils.isEmpty(city) ? "city".hashCode() : city
-				.hashCode();
-		result *= StringUtils.isEmpty(state) ? "state".hashCode() : state
-				.hashCode();
-		result *= StringUtils.isEmpty(zipCode) ? "zipCode".hashCode() : zipCode
-				.hashCode();
-		result *= StringUtils.isEmpty(photoUrl) ? "photoUrl".hashCode()
-				: photoUrl.hashCode();
-		result *= StringUtils.isEmpty(schoolId) ? "schoolId".hashCode()
-				: schoolId.hashCode();
-		result *= StringUtils.isEmpty(strengths) ? "strengths".hashCode()
-				: strengths.hashCode();
-		result *= coach == null ? "coach".hashCode() : coach.getId().hashCode();
-		result *= StringUtils.isEmpty(anticipatedStartTerm) ? "anticipatedStartTerm"
-				.hashCode()
-				: anticipatedStartTerm.hashCode();
-		result *= (anticipatedStartYear == null) ? "anticipatedStartYear"
-				.hashCode() : anticipatedStartYear;
-		result *= (enabled == null) ? "enabled".hashCode() : (enabled ? 3 : 2);
-		result *= (abilityToBenefit == null) ? "abilityToBenefit".hashCode()
+		result *= hashField("firstName", firstName);
+		result *= hashField("middleInitial", middleInitial);
+		result *= hashField("middleInitial", lastName);
+		result *= hashField("birthDate", birthDate);
+		result *= hashField("primaryEmailAddress", primaryEmailAddress);
+		result *= hashField("secondaryEmailAddress", secondaryEmailAddress);
+		result *= hashField("primaryEmailAddress", primaryEmailAddress);
+		result *= hashField("userId", userId);
+		result *= hashField("homePhone", homePhone);
+		result *= hashField("workPhone", workPhone);
+		result *= hashField("cellPhone", cellPhone);
+		result *= hashField("addressLine1", addressLine1);
+		result *= hashField("addressLine2", addressLine2);
+		result *= hashField("city", city);
+		result *= hashField("state", state);
+		result *= hashField("zipCode", zipCode);
+		result *= hashField("photoUrl", photoUrl);
+		result *= hashField("schoolId", schoolId);
+		result *= hashField("strengths", strengths);
+		result *= hashField("coach", coach);
+		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
+		result *= hashField("anticipatedStartYear", anticipatedStartYear);
+		result *= enabled == null ? "enabled".hashCode() : (enabled ? 3 : 2);
+		result *= abilityToBenefit == null ? "abilityToBenefit".hashCode()
 				: (abilityToBenefit ? 3 : 2);
-		result *= studentIntakeRequestDate == null ? "studentIntakeRequestDate"
-				.hashCode() : studentIntakeRequestDate
-				.hashCode();
+		result *= hashField("studentIntakeRequestDate",
+				studentIntakeRequestDate);
+
 		// not all fields included. only the business or non-expensive set
 		// fields are included in the hashCode
 

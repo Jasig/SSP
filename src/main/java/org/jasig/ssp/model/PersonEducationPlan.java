@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.StudentStatus;
 
 /**
@@ -123,20 +122,16 @@ public class PersonEducationPlan
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// PersonEducationLevel
-		result *= studentStatus == null ? "studentStatus".hashCode()
-				: studentStatus.hashCode();
+		result *= hashField("studentStatus", studentStatus);
 		result *= newOrientationComplete ? 3 : 5;
 		result *= registeredForClasses ? 7 : 11;
 		result *= collegeDegreeForParents ? 13 : 17;
 		result *= specialNeeds ? 19 : 23;
-		result *= StringUtils.isEmpty(gradeTypicallyEarned) ? "gradeTypicallyEarned"
-				.hashCode()
-				: gradeTypicallyEarned.hashCode();
+		result *= hashField("gradeTypicallyEarned", gradeTypicallyEarned);
 
 		return result;
 	}

@@ -76,16 +76,12 @@ public class SelfHelpGuideQuestionResponse
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// SelfHelpGuideQuestionResponse
-		result *= selfHelpGuideResponse == null ? "selfHelpGuideResponse"
-				.hashCode()
-				: selfHelpGuideResponse.hashCode();
-		result *= selfHelpGuideQuestion == null ? "selfHelpGuideQuestion"
-				.hashCode() : selfHelpGuideQuestion.hashCode();
+		result *= hashField("selfHelpGuideResponse", selfHelpGuideResponse);
+		result *= hashField("selfHelpGuideQuestion", selfHelpGuideQuestion);
 		result *= response ? 3 : 5;
 		result *= earlyAlertSent ? 7 : 11;
 

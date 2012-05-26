@@ -8,7 +8,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -124,9 +123,8 @@ public class EarlyAlertReferral
 		// AbstractAuditable properties
 		result *= super.hashCode();
 
-		result *= sortOrder == 0 ? hashPrime() : sortOrder;
-		result *= StringUtils.isEmpty(acronym) ? "acronym".hashCode() : acronym
-				.hashCode();
+		result *= hashField("sortOrder", sortOrder);
+		result *= hashField("acronym", acronym);
 
 		return result;
 	}
