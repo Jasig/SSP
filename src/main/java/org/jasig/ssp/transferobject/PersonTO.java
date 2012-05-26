@@ -56,6 +56,8 @@ public class PersonTO
 	@Min(2000)
 	private Integer anticipatedStartYear;
 
+	private Date studentIntakeRequestDate;
+
 	/**
 	 * Empty constructor
 	 */
@@ -96,12 +98,13 @@ public class PersonTO
 		zipCode = model.getZipCode();
 		photoUrl = model.getPhotoUrl();
 		schoolId = model.getSchoolId();
-		enabled = model.isEnabled();
+		enabled = model.getEnabled();
 		coachId = model.getCoach() == null ? null : model.getCoach().getId();
 		strengths = model.getStrengths();
-		abilityToBenefit = model.isAbilityToBenefit();
+		abilityToBenefit = model.getAbilityToBenefit();
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
 		anticipatedStartYear = model.getAnticipatedStartYear();
+		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
 	}
 
 	/**
@@ -331,6 +334,14 @@ public class PersonTO
 
 	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
 		this.anticipatedStartYear = anticipatedStartYear;
+	}
+
+	public Date getStudentIntakeRequestDate() {
+		return studentIntakeRequestDate;
+	}
+
+	public void setStudentIntakeRequestDate(final Date studentIntakeRequestDate) {
+		this.studentIntakeRequestDate = studentIntakeRequestDate;
 	}
 
 }

@@ -238,6 +238,10 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Min(2000)
 	private Integer anticipatedStartYear;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, updatable = false)
+	private Date studentIntakeRequestDate;
+
 	/**
 	 * Demographics about a student.
 	 * 
@@ -547,7 +551,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.schoolId = schoolId;
 	}
 
-	public Boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
@@ -691,11 +695,11 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.referralSources = referralSources;
 	}
 
-	public boolean isAbilityToBenefit() {
+	public Boolean getAbilityToBenefit() {
 		return abilityToBenefit;
 	}
 
-	public void setAbilityToBenefit(final boolean abilityToBenefit) {
+	public void setAbilityToBenefit(final Boolean abilityToBenefit) {
 		this.abilityToBenefit = abilityToBenefit;
 	}
 
@@ -713,6 +717,14 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
 		this.anticipatedStartYear = anticipatedStartYear;
+	}
+
+	public Date getStudentIntakeRequestDate() {
+		return studentIntakeRequestDate;
+	}
+
+	public void setStudentIntakeRequestDate(final Date studentIntakeRequestDate) {
+		this.studentIntakeRequestDate = studentIntakeRequestDate;
 	}
 
 	@Override
@@ -779,7 +791,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		result *= (enabled == null) ? "enabled".hashCode() : (enabled ? 3 : 2);
 		result *= (abilityToBenefit == null) ? "abilityToBenefit".hashCode()
 				: (abilityToBenefit ? 3 : 2);
-
+		result *= studentIntakeRequestDate == null ? "studentIntakeRequestDate"
+				.hashCode() : studentIntakeRequestDate
+				.hashCode();
 		// not all fields included. only the business or non-expensive set
 		// fields are included in the hashCode
 

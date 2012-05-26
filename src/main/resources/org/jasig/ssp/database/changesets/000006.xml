@@ -484,7 +484,23 @@
 			<column name="anticipated_start_year" type="int">
 				<constraints nullable="true" />
 			</column>
-			
+			<column name="student_intake_request_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
 		</addColumn>
+		
+		<rollback>
+			<dropColumn tableName="person" columnName="ability_to_benefit"/>
+			<dropColumn tableName="person" columnName="anticipated_start_year"/>
+			<dropColumn tableName="person" columnName="anticipated_start_term"/>
+			<dropColumn tableName="person" columnName="student_intake_request_date"/>
+		</rollback>
+		
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+		
 	</changeSet>
 </databaseChangeLog>

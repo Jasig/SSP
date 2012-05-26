@@ -60,6 +60,7 @@ public class PersonTOFactoryImpl extends
 		model.setAbilityToBenefit(tObject.getAbilityToBenefit());
 		model.setAnticipatedStartTerm(tObject.getAnticipatedStartTerm());
 		model.setAnticipatedStartYear(tObject.getAnticipatedStartYear());
+		model.setStudentIntakeRequestDate(tObject.getStudentIntakeRequestDate());
 
 		model.setCoach((tObject.getCoachId() == null) ? null : personService
 				.get(tObject.getCoachId()));
