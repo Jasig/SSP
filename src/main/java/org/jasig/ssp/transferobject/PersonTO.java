@@ -38,6 +38,8 @@ public class PersonTO
 
 	private UUID coachId;
 
+	private String strengths;
+
 	/**
 	 * Empty constructor
 	 */
@@ -80,6 +82,7 @@ public class PersonTO
 		schoolId = model.getSchoolId();
 		enabled = model.isEnabled();
 		coachId = model.getCoach() == null ? null : model.getCoach().getId();
+		strengths = model.getStrengths();
 	}
 
 	/**
@@ -277,5 +280,13 @@ public class PersonTO
 	 */
 	public void setCoachId(final UUID coachId) {
 		this.coachId = coachId;
+	}
+
+	public String getStrengths() {
+		return strengths;
+	}
+
+	public void setStrengths(final String strengths) {
+		this.strengths = strengths;
 	}
 }

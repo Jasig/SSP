@@ -56,6 +56,7 @@ public class PersonTOFactoryImpl extends
 		model.setPhotoUrl(tObject.getPhotoUrl());
 		model.setSchoolId(tObject.getSchoolId());
 		model.setEnabled(tObject.isEnabled());
+		model.setStrengths(tObject.getStrengths());
 
 		model.setCoach((tObject.getCoachId() == null) ? null : personService
 				.get(tObject.getCoachId()));

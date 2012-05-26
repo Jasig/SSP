@@ -304,6 +304,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
 	private Set<Task> tasks;
+
 	/**
 	 * Strengths
 	 * 
