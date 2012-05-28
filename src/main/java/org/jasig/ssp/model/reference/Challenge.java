@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.Auditable;
@@ -206,19 +205,14 @@ public class Challenge extends AbstractReference implements Auditable {
 		// AbstractAuditable properties
 		result *= super.hashCode();
 
-		result *= StringUtils.isEmpty(selfHelpGuideQuestion) ? "selfHelpGuideQuestion"
-				.hashCode()
-				: selfHelpGuideQuestion.hashCode();
-		result *= StringUtils.isEmpty(selfHelpGuideDescription) ? "selfHelpGuideDescription"
-				.hashCode()
-				: selfHelpGuideDescription.hashCode();
+		result *= hashField("selfHelpGuideQuestion", selfHelpGuideQuestion);
+		result *= hashField("selfHelpGuideDescription",
+				selfHelpGuideDescription);
 		result *= showInStudentIntake ? 3 : 5;
 		result *= showInSelfHelpSearch ? 7 : 11;
-		result *= StringUtils.isEmpty(tags) ? "tags".hashCode() : tags
-				.hashCode();
-		result *= defaultConfidentialityLevel == null ? "defaultConfidentialityLevel"
-				.hashCode()
-				: defaultConfidentialityLevel.getId().hashCode();
+		result *= hashField("tags", tags);
+		result *= hashField("defaultConfidentialityLevel",
+				defaultConfidentialityLevel);
 
 		return result;
 	}

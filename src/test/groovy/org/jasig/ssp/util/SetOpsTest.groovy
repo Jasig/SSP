@@ -13,6 +13,9 @@ import com.google.common.collect.Sets
 class SetOpsTest {
 
 	class AuditableSubClass extends AbstractAuditable{
+
+		private static final long serialVersionUID = -112482021549127611L;
+
 		public AuditableSubClass(){
 			setObjectStatus(ObjectStatus.ACTIVE)
 		}

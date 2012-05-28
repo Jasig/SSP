@@ -58,7 +58,8 @@ public class EarlyAlertRoutingTOFactoryImpl
 		model.setGroupName(tObject.getGroupName());
 		model.setGroupEmail(tObject.getGroupEmail());
 		model.setCampus(campusService.get(tObject.getCampusId()));
-		model.setPerson(personService.get(tObject.getPersonId()));
+		model.setPerson(tObject.getPerson() == null ? null : personService
+				.get(tObject.getPerson().getId()));
 		model.setEarlyAlertReason(earlyAlertReasonService.get(tObject
 				.getEarlyAlertReasonId()));
 

@@ -17,7 +17,7 @@ public class SpecialServiceGroup
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2402639633738538488L;
 
 	/**
 	 * Constructor
@@ -69,4 +69,6 @@ public class SpecialServiceGroup
 	protected int hashPrime() {
 		return 269;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

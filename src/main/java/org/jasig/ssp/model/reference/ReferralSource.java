@@ -17,7 +17,7 @@ public class ReferralSource
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7328556853410789637L;
 
 	/**
 	 * Constructor
@@ -69,4 +69,6 @@ public class ReferralSource
 	protected int hashPrime() {
 		return 277;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

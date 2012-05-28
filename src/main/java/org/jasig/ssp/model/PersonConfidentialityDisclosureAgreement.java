@@ -83,16 +83,13 @@ public class PersonConfidentialityDisclosureAgreement
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// PersonConfidentialityDisclosureAgreement
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
-		result *= confidentialityDisclosureAgreement == null ? "confidentialityDisclosureAgreement"
-				.hashCode()
-				: confidentialityDisclosureAgreement.hashCode();
+		result *= hashField("person", person);
+		result *= hashField("confidentialityDisclosureAgreement",
+				confidentialityDisclosureAgreement);
 
 		return result;
 	}

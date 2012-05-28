@@ -1,11 +1,15 @@
-package org.jasig.ssp.transferobject;
+package org.jasig.ssp.transferobject; // NOPMD
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.jasig.ssp.model.Person;
 
@@ -37,6 +41,22 @@ public class PersonTO
 	private boolean enabled;
 
 	private UUID coachId;
+
+	private String strengths;
+
+	@Nullable
+	private Boolean abilityToBenefit;
+
+	@Nullable
+	@Size(max = 20)
+	private String anticipatedStartTerm;
+
+	@Nullable
+	@Max(2100)
+	@Min(2000)
+	private Integer anticipatedStartYear;
+
+	private Date studentIntakeRequestDate;
 
 	/**
 	 * Empty constructor
@@ -78,8 +98,13 @@ public class PersonTO
 		zipCode = model.getZipCode();
 		photoUrl = model.getPhotoUrl();
 		schoolId = model.getSchoolId();
-		enabled = model.isEnabled();
+		enabled = model.getEnabled();
 		coachId = model.getCoach() == null ? null : model.getCoach().getId();
+		strengths = model.getStrengths();
+		abilityToBenefit = model.getAbilityToBenefit();
+		anticipatedStartTerm = model.getAnticipatedStartTerm();
+		anticipatedStartYear = model.getAnticipatedStartYear();
+		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
 	}
 
 	/**
@@ -92,7 +117,7 @@ public class PersonTO
 	public static List<PersonTO> toTOList(
 			@NotNull final Collection<Person> models) {
 		final List<PersonTO> tos = Lists.newArrayList();
-		for (Person model : models) {
+		for (final Person model : models) {
 			tos.add(new PersonTO(model)); // NOPMD by jon.adams on 5/13/12
 		}
 
@@ -277,5 +302,47 @@ public class PersonTO
 	 */
 	public void setCoachId(final UUID coachId) {
 		this.coachId = coachId;
+	}
+
+	public String getStrengths() {
+		return strengths;
+	}
+
+	public void setStrengths(final String strengths) {
+		this.strengths = strengths;
+	}
+
+	public Boolean getAbilityToBenefit() {
+		return abilityToBenefit;
+	}
+
+	public void setAbilityToBenefit(final Boolean abilityToBenefit) {
+		this.abilityToBenefit = abilityToBenefit;
+	}
+
+	public String getAnticipatedStartTerm() {
+		return anticipatedStartTerm;
+	}
+
+	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
+		this.anticipatedStartTerm = anticipatedStartTerm;
+	}
+
+	public Integer getAnticipatedStartYear() {
+		return anticipatedStartYear;
+	}
+
+	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
+		this.anticipatedStartYear = anticipatedStartYear;
+	}
+
+	public Date getStudentIntakeRequestDate() {
+		return studentIntakeRequestDate == null ? null : new Date(
+				studentIntakeRequestDate.getTime());
+	}
+
+	public void setStudentIntakeRequestDate(final Date studentIntakeRequestDate) {
+		this.studentIntakeRequestDate = studentIntakeRequestDate == null ? null
+				: new Date(studentIntakeRequestDate.getTime());
 	}
 }

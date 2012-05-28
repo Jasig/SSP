@@ -3,6 +3,8 @@ Ext.define('Ssp.view.admin.AdminMain', {
     alias: 'widget.adminmain',
     id: 'AdminMain',
     title: 'Admin Main',
+    height: '100%',
+    width: '100%',
 	initComponent: function() {	
 		Ext.apply(this, 
 				{

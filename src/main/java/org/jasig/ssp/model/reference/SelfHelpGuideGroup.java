@@ -17,7 +17,7 @@ public class SelfHelpGuideGroup
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6666296660964528402L;
 
 	/**
 	 * Constructor
@@ -69,4 +69,6 @@ public class SelfHelpGuideGroup
 	protected int hashPrime() {
 		return 131;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

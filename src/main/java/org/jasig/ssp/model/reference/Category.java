@@ -21,8 +21,8 @@ public class Category extends AbstractReference implements Auditable {
 	private static final long serialVersionUID = 4274075255831698154L;
 
 	@OneToMany(mappedBy = "category")
-	private Set<ChallengeCategory> challengeCategories =
-			new HashSet<ChallengeCategory>(0);
+	private Set<ChallengeCategory> challengeCategories = new HashSet<ChallengeCategory>(
+			0);
 
 	/**
 	 * Constructor

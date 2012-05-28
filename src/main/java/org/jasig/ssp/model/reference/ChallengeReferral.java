@@ -11,7 +11,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -23,7 +22,7 @@ public class ChallengeReferral
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5543482960025703474L;
 
 	/**
 	 * Public Description
@@ -124,8 +123,7 @@ public class ChallengeReferral
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime() * super.hashCode();
 
-		result *= StringUtils.isEmpty(publicDescription) ? "publicDescription"
-				.hashCode() : publicDescription.hashCode();
+		result *= hashField("publicDescription", publicDescription);
 		result *= showInSelfHelpGuide ? 5 : 11;
 		result *= showInStudentIntake ? 3 : 17;
 

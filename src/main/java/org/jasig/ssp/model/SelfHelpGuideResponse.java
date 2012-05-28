@@ -98,36 +98,6 @@ public class SelfHelpGuideResponse
 		this.selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponses;
 	}
 
-	@Override
-	protected int hashPrime() {
-		return 31;
-	};
-
-	@Override
-	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:25 PM
-		int result = hashPrime();
-
-		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
-
-		// SelfHelpGuideResponse
-		result *= completed ? 3 : 5;
-		result *= cancelled ? 7 : 11;
-		result *= earlyAlertSent ? 13 : 17;
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
-		result *= selfHelpGuide == null ? "selfHelpGuide"
-				.hashCode() : selfHelpGuide.hashCode();
-		result *= selfHelpGuideQuestionResponses == null
-				|| selfHelpGuideQuestionResponses.isEmpty() ? "selfHelpGuideQuestionResponses"
-				.hashCode()
-				: selfHelpGuideQuestionResponses.hashCode();
-
-		return result;
-	}
-
 	public static SelfHelpGuideResponse createDefaultForSelfHelpGuideAndPerson(
 			final SelfHelpGuide guide, final Person person) {
 
@@ -140,5 +110,30 @@ public class SelfHelpGuideResponse
 		response.setSelfHelpGuide(guide);
 
 		return response;
+	}
+
+	@Override
+	protected int hashPrime() {
+		return 31;
+	};
+
+	@Override
+	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:25 PM
+		int result = hashPrime();
+
+		// AbstractAuditable properties
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
+
+		// SelfHelpGuideResponse
+		result *= completed ? 3 : 5;
+		result *= cancelled ? 7 : 11;
+		result *= earlyAlertSent ? 13 : 17;
+		result *= hashField("person", person);
+		result *= hashField("selfHelpGuide", selfHelpGuide);
+
+		// collections are not included here
+
+		return result;
 	}
 }

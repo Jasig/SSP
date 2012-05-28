@@ -17,7 +17,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Type;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
@@ -266,32 +265,16 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 				.hashCode();
 
 		// EarlyAlert
-		result *= StringUtils.isEmpty(courseName) ? "courseName".hashCode()
-				: courseName.hashCode();
-		result *= StringUtils.isEmpty(courseTitle) ? "courseTitle".hashCode()
-				: courseTitle.hashCode();
-		result *= StringUtils.isEmpty(emailCC) ? "emailCC".hashCode() : emailCC
-				.hashCode();
-		result *= campus == null ? "campus".hashCode() : campus.getId()
-				.hashCode();
-		result *= StringUtils.isEmpty(earlyAlertReasonOtherDescription) ? "earlyAlertSuggestionOtherDescription"
-				.hashCode()
-				: earlyAlertReasonOtherDescription.hashCode();
-		result *= StringUtils.isEmpty(comment) ? "comment".hashCode() : comment
-				.hashCode();
-		result *= (person == null) || (person.getId() == null) ? "person"
-				.hashCode() : person.getId().hashCode();
-		result *= earlyAlertReasonIds == null || earlyAlertReasonIds.isEmpty() ? "earlyAlertReasonIds"
-				.hashCode()
-				: earlyAlertReasonIds.hashCode();
-		result *= earlyAlertSuggestionIds == null
-				|| earlyAlertSuggestionIds.isEmpty() ? "earlyAlertSuggestionIds"
-				.hashCode()
-				: earlyAlertSuggestionIds.hashCode();
-		result *= closedDate == null ? "closedDate".hashCode() : closedDate
-				.hashCode();
-		result *= closedById == null ? "closedById".hashCode() : closedById
-				.hashCode();
+		result *= hashField("courseName", courseName);
+		result *= hashField("courseTitle", courseTitle);
+		result *= hashField("emailCC", emailCC);
+		result *= hashField("campus", campus);
+		result *= hashField("earlyAlertSuggestionOtherDescription",
+				earlyAlertReasonOtherDescription);
+		result *= hashField("comment", comment);
+		result *= hashField("person", person);
+		result *= hashField("closedDate", closedDate);
+		result *= hashField("closedById", closedById);
 
 		return result;
 	}

@@ -17,6 +17,8 @@ public class EducationLevel
 		extends AbstractReference
 		implements Auditable {
 
+	private static final long serialVersionUID = 2382076420560584469L;
+
 	public static final UUID NO_DIPLOMA_NO_GED_ID = UUID
 			.fromString("5d967ba0-e086-4426-85d5-29bc86da9295");
 	public static final UUID GED_ID = UUID
@@ -29,8 +31,6 @@ public class EducationLevel
 			.fromString("247165ae-3db4-4679-ac95-ca96488c3b27");
 
 	// More Education Levels exist in the database that are not included above
-
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Empty constructor
@@ -81,4 +81,6 @@ public class EducationLevel
 	protected int hashPrime() {
 		return 97;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

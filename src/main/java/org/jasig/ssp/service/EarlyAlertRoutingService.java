@@ -1,5 +1,7 @@
 package org.jasig.ssp.service;
 
+import java.util.UUID;
+
 import org.jasig.ssp.model.EarlyAlertRouting;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -23,4 +25,18 @@ public interface EarlyAlertRoutingService extends
 	 */
 	PagingWrapper<EarlyAlertRouting> getAllForCampus(Campus campus,
 			SortingAndPaging sAndP);
+
+	/**
+	 * Ensure the campusId matches the embedded campusId in the specified
+	 * {@link EarlyAlertRouting} model.
+	 * 
+	 * @param campusId
+	 *            Campus identifier
+	 * @param obj
+	 *            EarlyAlertRouting model with embedded Campus data
+	 * @throws ObjectNotFoundException
+	 *             If Campus could not be found
+	 */
+	void checkCampusIds(final UUID campusId, final EarlyAlertRouting obj)
+			throws ObjectNotFoundException;
 }
