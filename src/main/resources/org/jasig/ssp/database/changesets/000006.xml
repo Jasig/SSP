@@ -526,4 +526,236 @@
 		<rollback></rollback>
 	</changeSet>
 
+	<changeSet author='jon.adams' id='Add program_status_change_reason table'>
+		<createTable tableName="program_status_change_reason">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="program_status_change_reason_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="program_status_change_reason_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on program_status_change_reason to ssp</sql>
+		<rollback>
+			<dropTable tableName="program_status_change_reason" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+    <changeSet id="create reference data - program_status_change_reason" author="jon.adams">
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D1271B-5056-A51A-8018F5ED8477B481" />
+                <column name="name" value="Financially unable to purchase books" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D12798-5056-A51A-8072DA587A14081F" />
+                <column name="name" value="Financially unable to pay for tuition" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D127B7-5056-A51A-8084E0468053CC30" />
+                <column name="name" value="Childcare issues" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D127D7-5056-A51A-802D3717C4316D29" />
+                <column name="name" value="Transportation issues" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D12844-5056-A51A-80C77059B24CCBCE" />
+                <column name="name" value="Personal issues" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D12863-5056-A51A-808A1241D680A42F" />
+                <column name="name" value="Medical issues" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D12873-5056-A51A-805C99222DEFC6D5" />
+                <column name="name" value="Transferred to another school" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D12883-5056-A51A-80A8BB4616AF9BD0" />
+                <column name="name" value="Services not needed" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D128F0-5056-A51A-803F8CEF57177AEA" />
+                <column name="name" value="Moving" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D1290F-5056-A51A-80943B321A901899" />
+                <column name="name" value="Unknown/unable to contact" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D1295D-5056-A51A-80BB3094BAB8F9C4" />
+                <column name="name" value="Military Service" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D1299C-5056-A51A-80527E123C180661" />
+                <column name="name" value="Death" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D129BB-5056-A51A-80825E6613AD6F5D" />
+                <column name="name" value="Employment interferes with school" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <insert tableName="program_status_change_reason">
+                <column name="id" value="B2D129CB-5056-A51A-8035FF5834C72153" />
+                <column name="name" value="Poor academic performance (Dropout)" />
+                <column name="description" value="Default description" />
+                <column name="created_date" valueDate="2012-28-18T14:00:00" />
+                <column name="modified_date" valueDate="2012-28-18T14:00:00" />
+                <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+                <column name="object_status" value="1" />
+            </insert>
+        <rollback>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D1271B-5056-A51A-8018F5ED8477B481'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D12798-5056-A51A-8072DA587A14081F'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D127B7-5056-A51A-8084E0468053CC30'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D127D7-5056-A51A-802D3717C4316D29'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D12844-5056-A51A-80C77059B24CCBCE'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D12863-5056-A51A-808A1241D680A42F'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D12873-5056-A51A-805C99222DEFC6D5'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D12883-5056-A51A-80A8BB4616AF9BD0'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D128F0-5056-A51A-803F8CEF57177AEA'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D1290F-5056-A51A-80943B321A901899'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D1295D-5056-A51A-80BB3094BAB8F9C4'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D1299C-5056-A51A-80527E123C180661'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D129BB-5056-A51A-80825E6613AD6F5D'</where>
+                    </delete>
+            <delete tableName="program_status_change_reason">
+                        <where>id='B2D129CB-5056-A51A-8035FF5834C72153'</where>
+                    </delete>
+        </rollback>
+    </changeSet>
+    
 </databaseChangeLog>
