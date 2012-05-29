@@ -69,7 +69,7 @@ public class JournalTrackController
 		return LOGGER;
 	}
 
-	@RequestMapping(value = "/{id}/journalSteps/", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}/journalStep/", method = RequestMethod.GET)
 	public @ResponseBody
 	PagingTO<JournalStepTO, JournalStep> getAllForJournalTrack(
 			final @PathVariable UUID journalTrackId,
