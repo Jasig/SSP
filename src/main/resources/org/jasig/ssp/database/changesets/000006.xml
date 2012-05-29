@@ -856,4 +856,16 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="Add student type to person" author="daniel.bower">
+		<addColumn tableName="person">
+			<column name="student_type_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_student_type_id_student_type_id"
+					references="student_type(id)" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person" columnName="student_type"/>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

@@ -40,7 +40,7 @@ public class PersonTO
 
 	private boolean enabled;
 
-	private UUID coachId;
+	private UUID coachId, studentTypeId;
 
 	private String strengths;
 
@@ -105,6 +105,8 @@ public class PersonTO
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
 		anticipatedStartYear = model.getAnticipatedStartYear();
 		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
+		studentTypeId = (model.getStudentType() == null) ? null : model
+				.getStudentType().getId();
 	}
 
 	/**
@@ -344,5 +346,13 @@ public class PersonTO
 	public void setStudentIntakeRequestDate(final Date studentIntakeRequestDate) {
 		this.studentIntakeRequestDate = studentIntakeRequestDate == null ? null
 				: new Date(studentIntakeRequestDate.getTime());
+	}
+
+	public UUID getStudentTypeId() {
+		return studentTypeId;
+	}
+
+	public void setStudentTypeId(final UUID studentTypeId) {
+		this.studentTypeId = studentTypeId;
 	}
 }

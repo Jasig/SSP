@@ -6,6 +6,7 @@ import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class PersonTOFactoryImpl extends
 
 	@Autowired
 	private transient PersonService personService;
+
+	@Autowired
+	private transient StudentTypeService studentTypeService;
 
 	@Override
 	protected PersonDao getDao() {
@@ -61,6 +65,8 @@ public class PersonTOFactoryImpl extends
 		model.setAnticipatedStartTerm(tObject.getAnticipatedStartTerm());
 		model.setAnticipatedStartYear(tObject.getAnticipatedStartYear());
 		model.setStudentIntakeRequestDate(tObject.getStudentIntakeRequestDate());
+		model.setStudentType((tObject.getStudentTypeId() == null) ? null
+				: studentTypeService.get(tObject.getStudentTypeId()));
 
 		model.setCoach((tObject.getCoachId() == null) ? null : personService
 				.get(tObject.getCoachId()));

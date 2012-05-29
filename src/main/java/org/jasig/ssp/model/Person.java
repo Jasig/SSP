@@ -25,6 +25,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
 
 /**
@@ -354,6 +355,11 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
 	private Set<PersonReferralSource> referralSources;
+
+	@Nullable
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "student_type_id", updatable = false, nullable = true)
+	private StudentType studentType;
 
 	/**
 	 * Initialize a Person.
@@ -728,6 +734,14 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 				: new Date(studentIntakeRequestDate.getTime());
 	}
 
+	public StudentType getStudentType() {
+		return studentType;
+	}
+
+	public void setStudentType(final StudentType studentType) {
+		this.studentType = studentType;
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 3;
@@ -762,6 +776,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		result *= hashField("schoolId", schoolId);
 		result *= hashField("strengths", strengths);
 		result *= hashField("coach", coach);
+		result *= hashField("studentType", studentType);
 		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
 		result *= hashField("anticipatedStartYear", anticipatedStartYear);
 		result *= enabled == null ? "enabled".hashCode() : (enabled ? 3 : 2);
