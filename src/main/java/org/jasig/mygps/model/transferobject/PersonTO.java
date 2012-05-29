@@ -31,15 +31,16 @@ public class PersonTO implements Serializable {
 	 * Empty constructor
 	 */
 	public PersonTO() {
+		/* empty constructor */
 	}
 
-	public PersonTO(String id) {
+	public PersonTO(final String id) {
 		this.id = id;
 	}
 
 	private static final int DEPTH_LIMIT = 1;
 
-	public PersonTO(Person person, int depth) {
+	public PersonTO(final Person person, final int depth) {
 		id = person.getId().toString();
 		firstName = person.getFirstName();
 		lastName = person.getLastName();
@@ -51,8 +52,6 @@ public class PersonTO implements Serializable {
 				&& (person.getId() != person.getCoach()
 						.getId()) && (depth < DEPTH_LIMIT)) {
 			coach = new PersonTO(person.getCoach(), depth + 1);
-		} else {
-			coach = null;
 		}
 
 		strengths = person.getStrengths();
@@ -62,7 +61,7 @@ public class PersonTO implements Serializable {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -70,7 +69,7 @@ public class PersonTO implements Serializable {
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -78,7 +77,7 @@ public class PersonTO implements Serializable {
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -86,7 +85,7 @@ public class PersonTO implements Serializable {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
+	public void setPhoneNumber(final String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
@@ -94,7 +93,7 @@ public class PersonTO implements Serializable {
 		return emailAddress;
 	}
 
-	public void setEmailAddress(String emailAddress) {
+	public void setEmailAddress(final String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
 
@@ -102,7 +101,7 @@ public class PersonTO implements Serializable {
 		return photoUrl;
 	}
 
-	public void setPhotoUrl(String photoUrl) {
+	public void setPhotoUrl(final String photoUrl) {
 		this.photoUrl = photoUrl;
 	}
 
@@ -110,7 +109,7 @@ public class PersonTO implements Serializable {
 		return coach;
 	}
 
-	public void setCoach(PersonTO coach) {
+	public void setCoach(final PersonTO coach) {
 		this.coach = coach;
 	}
 
@@ -125,7 +124,7 @@ public class PersonTO implements Serializable {
 	 * @param strengths
 	 *            the strengths to set
 	 */
-	public void setStrengths(String strengths) {
+	public void setStrengths(final String strengths) {
 		this.strengths = strengths;
 	}
 }

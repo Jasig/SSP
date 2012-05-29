@@ -15,7 +15,7 @@ public class JournalTrackJournalStep
 		extends AbstractAuditable
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2773118996940870207L;
 
 	@ManyToOne
 	@JoinColumn(name = "journal_track_id", nullable = false)
@@ -51,17 +51,12 @@ public class JournalTrackJournalStep
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
-		result *= journalTrack == null ? "journalTrack".hashCode()
-				: journalTrack
-						.hashCode();
-		result *= journalStep == null ? "journalStep".hashCode()
-				: journalStep.hashCode();
+		result *= hashField("journalTrack", journalTrack);
+		result *= hashField("journalStep", journalStep);
 
 		return result;
 	}
-
 }

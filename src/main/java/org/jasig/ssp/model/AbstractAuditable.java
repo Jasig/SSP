@@ -15,6 +15,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
@@ -41,7 +42,7 @@ import org.hibernate.annotations.Type;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractAuditable implements Auditable {
+public abstract class AbstractAuditable implements Auditable { // NOPMD
 	@Id
 	@Type(type = "pg-uuid")
 	@GeneratedValue(generator = "uuid")
@@ -102,6 +103,44 @@ public abstract class AbstractAuditable implements Auditable {
 
 	@Override
 	public abstract int hashCode();
+
+	// Helper hashing methods to keep from providing 0 to any hashCode() result
+
+	protected int hashField(final String name, final UUID value) {
+		return (value == null ? name.hashCode() : value.hashCode());
+	}
+
+	protected int hashField(final String name, final ObjectStatus value) {
+		return (value == null ? name.hashCode() : value.hashCode());
+	}
+
+	protected int hashField(final String name, final String value) {
+		return (StringUtils.isEmpty(value) ? name.hashCode() : value.hashCode());
+	}
+
+	protected int hashField(final String name, final int value) {
+		return (value == 0 ? name.hashCode() : value);
+	}
+
+	// full Integer class version is for nullable ints
+	protected int hashField(final String name, final Integer value) {
+		return (value == null || value == 0 ? name.hashCode() : value);
+	}
+
+	protected int hashField(final String name, final Date value) {
+		return (value == null || value.getTime() == 0 ? name.hashCode() : value
+				.hashCode());
+	}
+
+	protected int hashField(final String name, final Auditable value) {
+		return (value == null || value.getId() == null ? name.hashCode()
+				: value.getId().hashCode());
+	}
+
+	// No hashField for Object type to make sure consumers explicitly pick one
+
+	// No boolean because any non-hand-coded prime code could be duplicated if
+	// more than one field is boolean for the class
 
 	@Override
 	final public boolean equals(final Object obj) {

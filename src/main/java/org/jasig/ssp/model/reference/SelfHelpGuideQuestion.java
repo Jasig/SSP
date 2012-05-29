@@ -135,13 +135,11 @@ public class SelfHelpGuideQuestion
 	public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:20 PM
 		int result = hashPrime() * super.hashCode();
 
-		result *= questionNumber > 0 ? questionNumber : hashPrime();
+		result *= hashField("questionNumber", questionNumber);
 		result *= critical ? 3 : 5;
 		result *= mandatory ? 7 : 11;
-		result *= challenge == null ? "challenge".hashCode() : challenge
-				.getId().hashCode();
-		result *= selfHelpGuide == null ? "selfHelpGuide".hashCode()
-				: selfHelpGuide.getId().hashCode();
+		result *= hashField("challenge", challenge);
+		result *= hashField("selfHelpGuide", selfHelpGuide);
 
 		// collections are not included here
 

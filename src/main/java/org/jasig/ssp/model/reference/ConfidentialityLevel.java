@@ -9,7 +9,6 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.Auditable;
 
@@ -80,8 +79,7 @@ public class ConfidentialityLevel
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		int result = hashPrime() * super.hashCode();
 
-		result *= StringUtils.isEmpty(acronym) ? "acronym".hashCode() : acronym
-				.hashCode();
+		result *= hashField("acronym", acronym);
 
 		return result;
 	}

@@ -326,4 +326,546 @@
 
 	</changeSet>
 
+	<changeSet author='daniel.bower' id='Add person_special_service_group table'>
+		<createTable tableName="person_special_service_group">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_special_service_group_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_special_service_group_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_special_service_group_person_id_person_id"
+					references="person(id)" />
+			</column>
+			<column name="special_service_group_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_special_service_group_special_service_group_id_special_service_group_id"
+					references="special_service_group(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on person_special_service_group to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_special_service_group" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='daniel.bower' id='Add person_service_reason table'>
+		<createTable tableName="person_service_reason">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_service_reason_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_service_reason_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_service_reason_person_id_person_id"
+					references="person(id)" />
+			</column>
+			<column name="service_reason_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_service_reason_service_reason_id_service_reason_id"
+					references="service_reason(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on person_service_reason to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_service_reason" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='daniel.bower' id='Add person_referral_source table'>
+		<createTable tableName="person_referral_source">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_referral_source_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_referral_source_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_referral_source_person_id_person_id"
+					references="person(id)" />
+			</column>
+			<column name="referral_source_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_referral_source_referral_source_id_referral_source_id"
+					references="referral_source(id)" />
+			</column>
+		</createTable>
+
+		<sql>grant all on person_referral_source to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_referral_source" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet id="add properties to Person" author="daniel.bower">
+		<addColumn tableName="person">
+			<column name="ability_to_benefit" type="boolean">
+				<constraints nullable="true" />
+			</column>
+			<column name="anticipated_start_term" type="character varying(20)">
+				<constraints nullable="true" />
+			</column>
+			<column name="anticipated_start_year" type="int">
+				<constraints nullable="true" />
+			</column>
+			<column name="student_intake_request_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="person" columnName="ability_to_benefit" />
+			<dropColumn tableName="person" columnName="anticipated_start_year" />
+			<dropColumn tableName="person" columnName="anticipated_start_term" />
+			<dropColumn tableName="person" columnName="student_intake_request_date" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='jon.adams' id='Fix early_alert_routing person nullable'>
+		<dropColumn tableName="early_alert_routing" columnName="person_id" />
+		<addColumn tableName="early_alert_routing">
+			<column name="person_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="early_alert_routing_person_id"
+					references="person(id)" />
+			</column>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+
+	<changeSet author='jon.adams' id='Set message.recipient to be nullable'>
+		<dropColumn tableName="message" columnName="recipient_id" />
+		<addColumn tableName="message">
+			<column name="recipient_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="message_recipient_id_person_id"
+					references="person(id)" />
+			</column>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+
+	<changeSet author='jon.adams' id='Add program_status_change_reason table'>
+		<createTable tableName="program_status_change_reason">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="program_status_change_reason_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="program_status_change_reason_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on program_status_change_reason to ssp</sql>
+		<rollback>
+			<dropTable tableName="program_status_change_reason" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet id="create reference data - program_status_change_reason"
+		author="jon.adams">
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D1271B-5056-A51A-8018F5ED8477B481" />
+			<column name="name" value="Financially unable to purchase books" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D12798-5056-A51A-8072DA587A14081F" />
+			<column name="name" value="Financially unable to pay for tuition" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D127B7-5056-A51A-8084E0468053CC30" />
+			<column name="name" value="Childcare issues" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D127D7-5056-A51A-802D3717C4316D29" />
+			<column name="name" value="Transportation issues" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D12844-5056-A51A-80C77059B24CCBCE" />
+			<column name="name" value="Personal issues" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D12863-5056-A51A-808A1241D680A42F" />
+			<column name="name" value="Medical issues" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D12873-5056-A51A-805C99222DEFC6D5" />
+			<column name="name" value="Transferred to another school" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D12883-5056-A51A-80A8BB4616AF9BD0" />
+			<column name="name" value="Services not needed" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D128F0-5056-A51A-803F8CEF57177AEA" />
+			<column name="name" value="Moving" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D1290F-5056-A51A-80943B321A901899" />
+			<column name="name" value="Unknown/unable to contact" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D1295D-5056-A51A-80BB3094BAB8F9C4" />
+			<column name="name" value="Military Service" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D1299C-5056-A51A-80527E123C180661" />
+			<column name="name" value="Death" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D129BB-5056-A51A-80825E6613AD6F5D" />
+			<column name="name" value="Employment interferes with school" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="program_status_change_reason">
+			<column name="id" value="B2D129CB-5056-A51A-8035FF5834C72153" />
+			<column name="name" value="Poor academic performance (Dropout)" />
+			<column name="description" value="Default description" />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D1271B-5056-A51A-8018F5ED8477B481'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D12798-5056-A51A-8072DA587A14081F'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D127B7-5056-A51A-8084E0468053CC30'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D127D7-5056-A51A-802D3717C4316D29'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D12844-5056-A51A-80C77059B24CCBCE'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D12863-5056-A51A-808A1241D680A42F'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D12873-5056-A51A-805C99222DEFC6D5'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D12883-5056-A51A-80A8BB4616AF9BD0'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D128F0-5056-A51A-803F8CEF57177AEA'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D1290F-5056-A51A-80943B321A901899'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D1295D-5056-A51A-80BB3094BAB8F9C4'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D1299C-5056-A51A-80527E123C180661'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D129BB-5056-A51A-80825E6613AD6F5D'</where>
+			</delete>
+			<delete tableName="program_status_change_reason">
+				<where>id='B2D129CB-5056-A51A-8035FF5834C72153'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet author='jon.adams' id='Add student_type table'>
+		<createTable tableName="student_type">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="program_status_change_reason_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="program_status_change_reason_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="require_initial_appointment" type="boolean"
+				defaultValueBoolean="false">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on student_type to ssp</sql>
+		<rollback>
+			<dropTable tableName="student_type" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet id="create reference data - student_type" author="jon.adams">
+		<insert tableName="student_type">
+			<column name="id" value="B2D058EB-5056-A51A-80A78A20C30D1E91" />
+			<column name="name" value="ILP" />
+			<column name="description" value="A new student." />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="require_initial_appointment" value="1" />
+		</insert>
+		<insert tableName="student_type">
+			<column name="id" value="B2D05919-5056-A51A-80BD03E5288DE771" />
+			<column name="name" value="CAP" />
+			<column name="description"
+				value="A returning student with more than 1 credit hour at the institution." />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="require_initial_appointment" value="1" />
+		</insert>
+		<insert tableName="student_type">
+			<column name="id" value="B2D05939-5056-A51A-8004D803265D2645" />
+			<column name="name" value="EAL" />
+			<column name="description" value="An Early Alert student." />
+			<column name="created_date" valueDate="2012-28-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-28-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="require_initial_appointment" value="0" />
+		</insert>
+		<rollback>
+			<delete tableName="student_type">
+				<where>id='B2D058EB-5056-A51A-80A78A20C30D1E91'</where>
+			</delete>
+			<delete tableName="student_type">
+				<where>id='B2D05919-5056-A51A-80BD03E5288DE771'</where>
+			</delete>
+			<delete tableName="student_type">
+				<where>id='B2D05939-5056-A51A-8004D803265D2645'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Add student type to person" author="daniel.bower">
+		<addColumn tableName="person">
+			<column name="student_type_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_student_type_id_student_type_id"
+					references="student_type(id)" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person" columnName="student_type"/>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

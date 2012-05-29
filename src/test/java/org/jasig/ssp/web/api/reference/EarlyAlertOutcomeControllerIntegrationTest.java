@@ -1,4 +1,4 @@
-package org.jasig.ssp.web.api.reference;
+package org.jasig.ssp.web.api.reference; // NOPMD by jon.adams
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -53,6 +53,10 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	private static final UUID EARLYALERT_OUTCOME_FIRST_ID = UUID
 			.fromString("12A58804-45DC-40F2-B2F5-D7E4403ACEE1");
 
+	private static final String TESTSTRING1 = "testString1";
+
+	private static final String TESTSTRING2 = "testString1";
+
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
@@ -69,11 +73,14 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	/**
 	 * Test the {@link EarlyAlertOutcomeController#get(UUID)} action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -92,11 +99,14 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	 * Test that the {@link EarlyAlertOutcomeServiceImpl#get(UUID)} method does
 	 * not return deleted items.
 	 * 
-	 * @throws Exception
-	 *             If any unexpected exceptions were thrown by the controller.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetDeleted() throws Exception {
+	public void testControllerGetDeleted() throws ObjectNotFoundException,
+			ValidationException {
 		final EarlyAlertOutcomeTO obj = controller
 				.get(EARLY_ALERT_OUTCOME_DELETED_ID);
 
@@ -109,11 +119,14 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	 * Test that the {@link EarlyAlertOutcomeController#get(UUID)} action
 	 * returns the correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -129,17 +142,17 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	 * Test the {@link EarlyAlertOutcomeController#create(EarlyAlertOutcomeTO)}
 	 * and {@link EarlyAlertOutcomeController#delete(UUID)} actions.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
 	@Test
-	public void testControllerCreateAndDelete() throws Exception {
+	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
-
-		final String testString1 = "testString1";
-		final String testString2 = "testString1";
 
 		// Check validation of 'no ID for create()'
 		try {
@@ -147,12 +160,12 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 					.create(new EarlyAlertOutcomeTO(
 							UUID
 									.randomUUID(),
-							testString1, testString2, (short) 1)); // NOPMD by
+							TESTSTRING1, TESTSTRING2, (short) 1)); // NOPMD by
 																	// jon.adams
 			assertNull(
 					"Calling create with an object with an ID should have thrown a validation excpetion.",
 					obj);
-		} catch (ValidationException exc) {
+		} catch (final ValidationException exc) {
 			assertNotNull("ValidatedException was expected to be thrown.", exc);
 		}
 
@@ -160,8 +173,8 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 		final EarlyAlertOutcomeTO valid = controller
 				.create(new EarlyAlertOutcomeTO(
 						null,
-						testString1,
-						testString2, (short) 1)); // NOPMD
+						TESTSTRING1,
+						TESTSTRING2, (short) 1)); // NOPMD
 
 		assertNotNull(
 				"Returned EarlyAlertOutcomeTO from the controller should not have been null.",
@@ -171,7 +184,7 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 				valid.getId());
 		assertEquals(
 				"Returned EarlyAlertOutcomeTO.Name from the controller did not match.",
-				testString1, valid.getName());
+				TESTSTRING1, valid.getName());
 		assertEquals(
 				"Returned EarlyAlertOutcomeTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
 				Person.SYSTEM_ADMINISTRATOR_ID, valid.getCreatedBy().getId());
@@ -184,12 +197,9 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	 * Test the
 	 * {@link EarlyAlertOutcomeController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<EarlyAlertOutcomeTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
@@ -202,12 +212,9 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	 * Test the
 	 * {@link EarlyAlertOutcomeController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action results.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerGetAllResults() throws Exception {
+	public void testControllerGetAllResults() {
 		final PagingTO<EarlyAlertOutcomeTO, EarlyAlertOutcome> results = controller
 				.getAll(ObjectStatus.ACTIVE, 0, 4, null, null);
 

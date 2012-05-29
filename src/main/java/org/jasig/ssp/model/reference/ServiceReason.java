@@ -17,7 +17,7 @@ public class ServiceReason
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6619051266700627225L;
 
 	/**
 	 * Constructor
@@ -69,4 +69,6 @@ public class ServiceReason
 	protected int hashPrime() {
 		return 271;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

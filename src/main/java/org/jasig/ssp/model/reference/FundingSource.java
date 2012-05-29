@@ -17,7 +17,7 @@ public class FundingSource
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 8440145982570942245L;
 
 	/**
 	 * Constructor
@@ -69,4 +69,6 @@ public class FundingSource
 	protected int hashPrime() {
 		return 103;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

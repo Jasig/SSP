@@ -13,7 +13,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.model.reference.EarlyAlertReferral;
@@ -161,29 +160,18 @@ public class EarlyAlertResponse
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 3:17 PM
 		int result = hashPrime();
 
-		// Auditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		// AbstractAuditable properties
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// EarlyAlertResponse
-		result *= StringUtils.isEmpty(earlyAlertOutcomeOtherDescription) ? "earlyAlertOutcomeOtherDescription"
-				.hashCode()
-				: earlyAlertOutcomeOtherDescription.hashCode();
-		result *= StringUtils.isEmpty(comment) ? "comment".hashCode() : comment
-				.hashCode();
-		result *= (earlyAlert == null) || (earlyAlert.getId() == null) ? "earlyAlert"
-				.hashCode()
-				: earlyAlert.getId().hashCode();
-		result *= (earlyAlertOutcome == null)
-				|| (earlyAlertOutcome.getId() == null) ? "earlyAlertOutcome"
-				.hashCode() : earlyAlertOutcome.getId().hashCode();
-		result *= earlyAlertOutreachIds == null
-				|| earlyAlertOutreachIds.isEmpty() ? "earlyAlertOutreachIds"
-				.hashCode() : earlyAlertOutreachIds.hashCode();
-		result *= earlyAlertReferralIds == null
-				|| earlyAlertReferralIds.isEmpty() ? "earlyAlertReferralIds"
-				.hashCode() : earlyAlertReferralIds.hashCode();
+		result *= hashField("earlyAlertOutcomeOtherDescription",
+				earlyAlertOutcomeOtherDescription);
+		result *= hashField("comment", comment);
+		result *= hashField("earlyAlert", earlyAlert);
+		result *= hashField("earlyAlertOutcome", earlyAlertOutcome);
+
+		// collections are not included here
 
 		return result;
 	}

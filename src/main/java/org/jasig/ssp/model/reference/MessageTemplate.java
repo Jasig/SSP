@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Auditable;
 
 /*
@@ -125,10 +124,8 @@ public class MessageTemplate
 		// AbstractAuditable properties
 		result *= super.hashCode();
 
-		result *= StringUtils.isEmpty(subject) ? "subject".hashCode() : subject
-				.hashCode();
-		result *= StringUtils.isEmpty(body) ? "body".hashCode() : body
-				.hashCode();
+		result *= hashField("subject", subject);
+		result *= hashField("body", body);
 
 		return result;
 	}

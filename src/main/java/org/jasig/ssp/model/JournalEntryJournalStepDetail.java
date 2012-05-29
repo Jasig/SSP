@@ -78,14 +78,11 @@ public class JournalEntryJournalStepDetail
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
-		result *= journalEntry == null ? "journalEntry".hashCode()
-				: journalEntry.hashCode();
-		result *= journalStepDetail == null ? "journalStepDetail".hashCode()
-				: journalStepDetail.hashCode();
+		result *= hashField("journalEntry", journalEntry);
+		result *= hashField("journalStepDetail", journalStepDetail);
 
 		return result;
 	}

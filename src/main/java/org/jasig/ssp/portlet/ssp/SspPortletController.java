@@ -1,4 +1,4 @@
-package org.jasig.ssp.portlet;
+package org.jasig.ssp.portlet.ssp;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 @Controller
 @RequestMapping("VIEW")
-public class SSPIndexPortletController extends AbstractSSPController {
+public class SspPortletController {
 
 	@RenderMapping
 	public String show() {

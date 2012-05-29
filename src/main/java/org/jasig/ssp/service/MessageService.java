@@ -75,12 +75,6 @@ public interface MessageService {
 	/**
 	 * Send any queued messages. Should be set to run regularly via some kind of
 	 * scheduling system.
-	 * 
-	 * @throws SendFailedException
-	 *             If the e-mail (message) could not be sent.
-	 * @throws ObjectNotFoundException
-	 *             If current user or the administrator info could not be
-	 *             loaded.
 	 */
 	@Transactional(readOnly = false)
 	void sendQueuedMessages();

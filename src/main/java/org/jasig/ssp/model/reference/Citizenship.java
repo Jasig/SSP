@@ -70,4 +70,6 @@ public class Citizenship
 	protected int hashPrime() {
 		return 67;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

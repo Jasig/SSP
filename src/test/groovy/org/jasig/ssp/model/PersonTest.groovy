@@ -9,6 +9,9 @@ import org.junit.Test
 
 class PersonTest {
 	class AuditableSubClass extends AbstractAuditable{
+
+		private static final long serialVersionUID = 312482021529627624L;
+
 		protected int hashPrime(){
 			return 199
 		};

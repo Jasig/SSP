@@ -46,11 +46,10 @@ public class EarlyAlertManager {
 		final List<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = selfHelpGuideQuestionResponseDao
 				.criticalResponsesForEarlyAlert();
 
-		for (SelfHelpGuideQuestionResponse selfHelpGuideQuestionResponse : selfHelpGuideQuestionResponses) {
+		for (final SelfHelpGuideQuestionResponse selfHelpGuideQuestionResponse : selfHelpGuideQuestionResponses) {
 
-			final RestTemplate restTemplate = new RestTemplate();
-
-			final Map<String, Object> params = new HashMap<String, Object>();
+			final RestTemplate restTemplate = new RestTemplate(); // NOPMD
+			final Map<String, Object> params = new HashMap<String, Object>(); // NOPMD
 
 			params.put("studentId", selfHelpGuideQuestionResponse
 					.getSelfHelpGuideResponse().getPerson().getUserId());
@@ -61,7 +60,7 @@ public class EarlyAlertManager {
 					EARLY_ALERT_REFERRAL_REASON_SELF_HELP_GUIDE_CRITICAL_QUESTION);
 			params.put(
 					"facultySuggestions",
-					new String[] { EARLY_ALERT_FACULTY_SUGGESTION_SEE_ADVISOR_OR_COACH });
+					new String[] { EARLY_ALERT_FACULTY_SUGGESTION_SEE_ADVISOR_OR_COACH }); // NOPMD
 			params.put("comment",
 					"The following critical question was answered affirmatively: "
 							+ selfHelpGuideQuestionResponse
@@ -93,7 +92,7 @@ public class EarlyAlertManager {
 									+ selfHelpGuideQuestionResponse.getId());
 				}
 
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				LOGGER.error("ERROR : generateCriticalAlerts() : {}",
 						e.getMessage(), e);
 			}
@@ -110,11 +109,10 @@ public class EarlyAlertManager {
 		final List<SelfHelpGuideResponse> selfHelpGuideResponses = selfHelpGuideResponseDao
 				.forEarlyAlert();
 
-		for (SelfHelpGuideResponse selfHelpGuideResponse : selfHelpGuideResponses) {
+		for (final SelfHelpGuideResponse selfHelpGuideResponse : selfHelpGuideResponses) {
 
-			final RestTemplate restTemplate = new RestTemplate();
-
-			final Map<String, Object> params = new HashMap<String, Object>();
+			final RestTemplate restTemplate = new RestTemplate(); // NOPMD
+			final Map<String, Object> params = new HashMap<String, Object>(); // NOPMD
 
 			params.put("studentId", selfHelpGuideResponse.getPerson()
 					.getUserId());
@@ -124,7 +122,7 @@ public class EarlyAlertManager {
 					EARLY_ALERT_REFERRAL_REASON_SELF_HELP_GUIDE_THRESHOLD_EXCEEDED);
 			params.put(
 					"facultySuggestions",
-					new String[] { EARLY_ALERT_FACULTY_SUGGESTION_SEE_ADVISOR_OR_COACH });
+					new String[] { EARLY_ALERT_FACULTY_SUGGESTION_SEE_ADVISOR_OR_COACH }); // NOPMD
 			params.put("comment", "The threshold for the self help guide "
 					+ selfHelpGuideResponse.getSelfHelpGuide().getName()
 					+ " was exceeded.");
@@ -152,7 +150,7 @@ public class EarlyAlertManager {
 									+ selfHelpGuideResponse.getId());
 				}
 
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				LOGGER.error("ERROR : generateThresholdAlerts() : {}",
 						e.getMessage(), e);
 			}

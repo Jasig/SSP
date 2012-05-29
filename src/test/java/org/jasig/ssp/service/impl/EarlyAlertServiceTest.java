@@ -13,9 +13,12 @@ import javax.mail.SendFailedException;
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.config.MockMailService;
 import org.jasig.ssp.model.EarlyAlert;
+import org.jasig.ssp.model.EarlyAlertRouting;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.service.EarlyAlertRoutingService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -62,11 +65,17 @@ public class EarlyAlertServiceTest {
 	private static final UUID EARLY_ALERT_SUGGESTION_DELETED_ID = UUID
 			.fromString("881DF3DD-1AA6-4CB8-8817-E95DAF49227A");
 
+	private static final UUID EARLY_ALERT_REASON_ID = UUID
+			.fromString("b2d11335-5056-a51a-80ea-074f8fef94ea");
+
 	@Autowired
 	private transient CampusService campusService;
 
 	@Autowired
 	private transient EarlyAlertService earlyAlertService;
+
+	@Autowired
+	private transient EarlyAlertRoutingService earlyAlertRoutingService;
 
 	@Autowired
 	private transient MessageService messageService;
@@ -138,6 +147,88 @@ public class EarlyAlertServiceTest {
 						message.getBody().contains(EARLY_ALERT_COURSE_NAME));
 	}
 
+	@Test(expected = ValidationException.class)
+	public void testCreateEarlyAlertInvalidPerson()
+			throws ObjectNotFoundException,
+			ValidationException, SendFailedException {
+		// arrange
+		final EarlyAlert obj = arrangeEarlyAlert();
+		obj.setPerson(null);
+
+		// act
+		earlyAlertService.create(obj);
+
+		// assert
+		fail("Should have thrown a ValidationException.");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateEarlyAlertInvalidEarlyAlert()
+			throws ObjectNotFoundException,
+			ValidationException, SendFailedException {
+		// act
+		earlyAlertService.create(null);
+
+		// assert
+		fail("Should have thrown a ValidationException.");
+	}
+
+	@Test
+	public void testCreateEarlyAlertRoutings() throws ObjectNotFoundException,
+			ValidationException, SendFailedException {
+
+		final SimpleSmtpServer smtpServer = mockMailService.getSmtpServer();
+		assertFalse("Faux mail server should be running but was not.",
+				smtpServer.isStopped());
+
+		// arrange
+		final EarlyAlertRouting route1 = arrangeEarlyAlertRouting();
+		route1.setPerson(personService.get(PERSON_ID));
+		route1.setGroupName(PERSON_FULLNAME);
+		route1.setGroupEmail("test@example.com");
+
+		final EarlyAlert obj = arrangeEarlyAlert();
+
+		// act
+		earlyAlertRoutingService.create(route1);
+		earlyAlertService.create(obj);
+		sessionFactory.getCurrentSession().flush();
+
+		// Try to send all messages to the fake server.
+		messageService.sendQueuedMessages();
+
+		// assert
+		assertEquals(
+				"Sent message count should have contained the 3 main ones plus 2 routed messages.",
+				5, smtpServer.getReceivedEmailSize());
+	}
+
+	@Test
+	public void testCreateEarlyAlertEmptyRoute()
+			throws ObjectNotFoundException, ValidationException {
+
+		final SimpleSmtpServer smtpServer = mockMailService.getSmtpServer();
+		assertFalse("Faux mail server should be running but was not.",
+				smtpServer.isStopped());
+
+		// arrange
+		final EarlyAlertRouting route1 = arrangeEarlyAlertRouting();
+		final EarlyAlert obj = arrangeEarlyAlert();
+
+		// act
+		earlyAlertRoutingService.create(route1);
+		earlyAlertService.create(obj);
+		sessionFactory.getCurrentSession().flush();
+
+		// Send all messages to the fake server.
+		messageService.sendQueuedMessages();
+
+		// assert
+		assertEquals(
+				"Sent message count should have only been the 3 main ones, and no extra routes.",
+				3, smtpServer.getReceivedEmailSize());
+	}
+
 	/**
 	 * @return
 	 * @throws ObjectNotFoundException
@@ -163,32 +254,29 @@ public class EarlyAlertServiceTest {
 		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
 		earlyAlertSuggestionIds.add(deletedSuggestion);
 		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+
+		final Set<EarlyAlertReason> earlyAlertReasonIds = Sets
+				.newHashSet();
+		earlyAlertReasonIds.add(new EarlyAlertReason(EARLY_ALERT_REASON_ID,
+				"name", "description", (short) 0)); // NOPMD by jon.adams
+		obj.setEarlyAlertReasonIds(earlyAlertReasonIds);
+
 		return obj;
 	}
 
-	@Test(expected = ValidationException.class)
-	public void testCreateEarlyAlertInvalidPerson()
-			throws ObjectNotFoundException,
-			ValidationException, SendFailedException {
-		// arrange
-		final EarlyAlert obj = arrangeEarlyAlert();
-		obj.setPerson(null);
-
-		// act
-		earlyAlertService.create(obj);
-
-		// assert
-		fail("Should have thrown a ValidationException.");
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testCreateEarlyAlertInvalidEarlyAlert()
-			throws ObjectNotFoundException,
-			ValidationException, SendFailedException {
-		// act
-		earlyAlertService.create(null);
-
-		// assert
-		fail("Should have thrown a ValidationException.");
+	/**
+	 * @return An EarlyAlertRouting with Campus and EarlyAlertReason, but no
+	 *         Person or group information set (left null).
+	 * @throws ObjectNotFoundException
+	 */
+	private EarlyAlertRouting arrangeEarlyAlertRouting()
+			throws ObjectNotFoundException {
+		final EarlyAlertRouting obj = new EarlyAlertRouting();
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setCampus(campusService.get(UUID
+				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
+		obj.setEarlyAlertReason(new EarlyAlertReason(EARLY_ALERT_REASON_ID,
+				"name", "description", (short) 0)); // NOPMD by jon.adams
+		return obj;
 	}
 }

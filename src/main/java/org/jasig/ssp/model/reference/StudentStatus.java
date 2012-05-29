@@ -17,7 +17,7 @@ public class StudentStatus
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1346706944860206184L;
 
 	/**
 	 * Constructor
@@ -69,4 +69,6 @@ public class StudentStatus
 	protected int hashPrime() {
 		return 139;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

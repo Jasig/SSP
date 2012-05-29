@@ -30,7 +30,7 @@ public class EarlyAlertRoutingTO
 
 	private UUID earlyAlertReasonId;
 
-	private UUID personId;
+	private PersonLiteTO person;
 
 	/**
 	 * Empty constructor
@@ -59,7 +59,8 @@ public class EarlyAlertRoutingTO
 		campusId = model.getCampus() == null ? null : model.getCampus().getId();
 		earlyAlertReasonId = model.getEarlyAlertReason() == null ? null : model
 				.getEarlyAlertReason().getId();
-		personId = model.getPerson() == null ? null : model.getPerson().getId();
+		person = model.getPerson() == null ? null : new PersonLiteTO(
+				model.getPerson());
 	}
 
 	/**
@@ -156,21 +157,21 @@ public class EarlyAlertRoutingTO
 	}
 
 	/**
-	 * Gets the associated Person identifier
+	 * Gets the associated Person
 	 * 
-	 * @return the PersonId
+	 * @return the person
 	 */
-	public UUID getPersonId() {
-		return personId;
+	public PersonLiteTO getPerson() {
+		return person;
 	}
 
 	/**
-	 * Sets the associated Person by identifier
+	 * Sets the associated Person
 	 * 
-	 * @param personId
-	 *            person id
+	 * @param person
+	 *            the person
 	 */
-	public void setPersonId(final UUID personId) {
-		this.personId = personId;
+	public void setPerson(final PersonLiteTO person) {
+		this.person = person;
 	}
 }

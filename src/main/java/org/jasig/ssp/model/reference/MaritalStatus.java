@@ -17,7 +17,7 @@ public class MaritalStatus
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 396414772434702589L;
 
 	/**
 	 * Constructor
@@ -69,4 +69,6 @@ public class MaritalStatus
 	protected int hashPrime() {
 		return 109;
 	}
+
+	// default hashCode okay if no extra fields are added
 }

@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.EducationGoal;
@@ -112,21 +111,16 @@ public class PersonEducationGoal
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
 		// PersonEducationGoal
-		result *= educationGoal == null ? "educationGoal".hashCode()
-				: educationGoal.hashCode();
-		result *= StringUtils.isEmpty(description) ? "description".hashCode()
-				: description.hashCode();
-		result *= StringUtils.isEmpty(plannedOccupation) ? "plannedOccupation"
-				.hashCode() : plannedOccupation.hashCode();
-		result *= StringUtils.isEmpty(militaryBranchDescription) ? "militaryBranchDescription"
-				.hashCode()
-				: militaryBranchDescription.hashCode();
-		result *= howSureAboutMajor;
+		result *= hashField("educationGoal", educationGoal);
+		result *= hashField("description", description);
+		result *= hashField("plannedOccupation", plannedOccupation);
+		result *= hashField("militaryBranchDescription",
+				militaryBranchDescription);
+		result *= hashField("howSureAboutMajor", howSureAboutMajor);
 
 		return result;
 	}

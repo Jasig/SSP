@@ -8,6 +8,9 @@ import com.google.common.collect.Sets
 class AuditableTest {
 
 	class AuditableSubClass extends AbstractAuditable{
+
+		private static final long serialVersionUID = 51248202154962763L;
+
 		protected int hashPrime(){
 			return 197
 		};
@@ -18,6 +21,9 @@ class AuditableTest {
 	}
 
 	class AuditableSubClass2 extends AbstractAuditable{
+
+		private static final long serialVersionUID = 612482021549627685L;
+
 		protected int hashPrime(){
 			return 193
 		};

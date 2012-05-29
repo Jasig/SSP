@@ -22,7 +22,7 @@ public class JournalStep
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5753546327427577229L;
 
 	private int sortOrder;
 
@@ -116,11 +116,10 @@ public class JournalStep
 		int result = hashPrime();
 
 		// AbstractAuditable properties
-		result *= getId() == null ? "id".hashCode() : getId().hashCode();
-		result *= getObjectStatus() == null ? hashPrime() : getObjectStatus()
-				.hashCode();
+		result *= hashField("id", getId());
+		result *= hashField("objectStatus", getObjectStatus());
 
-		result *= sortOrder == 0 ? hashPrime() : sortOrder;
+		result *= hashField("sortOrder", sortOrder);
 
 		return result;
 	}

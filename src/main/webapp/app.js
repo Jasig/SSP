@@ -1,7 +1,8 @@
 Ext.Loader.setConfig({
 	enabled: true,
 	paths: {
-		'Ssp': './app'
+		'Ssp': '/ssp/app',
+		'ContextName': 'ssp'
 	}
 });
 
@@ -367,7 +368,7 @@ Ext.onReady(function(){
 
 	Ext.application({
 	    name: 'Ssp',
-	    appFolder: 'app',
+	    appFolder: Ext.Loader.getPath('Ssp'),
 		autoCreateViewport: true,
 	    launch: function( app ) {
 	    	console.log('Application->Launch');

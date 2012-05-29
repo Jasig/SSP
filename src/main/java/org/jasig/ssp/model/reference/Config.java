@@ -8,7 +8,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -130,13 +129,9 @@ public class Config
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM
 		return hashPrime()
 				* super.hashCode()
-				* (sortOrder == 0 ? hashPrime() : sortOrder)
-				* (StringUtils.isEmpty(value) ? "value".hashCode() :
-						value.hashCode())
-				* (StringUtils.isEmpty(defaultValue) ? "defaultValue"
-						.hashCode() :
-						defaultValue.hashCode())
-				* (StringUtils.isEmpty(valueValidation) ? "valueValidation"
-						.hashCode() : valueValidation.hashCode());
+				* hashField("sortOrder", sortOrder)
+				* hashField("value", value)
+				* hashField("defaultValue", defaultValue)
+				* hashField("valueValidation", valueValidation);
 	}
 }
