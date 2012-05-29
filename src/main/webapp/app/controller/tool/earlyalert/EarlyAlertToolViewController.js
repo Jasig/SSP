@@ -3,6 +3,9 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	formUtils: 'formRendererUtils',
+        outcomesStore: 'earlyAlertOutcomesStore',
+        outreachesStore: 'earlyAlertOutreachesStore',
+        referralsStore: 'earlyAlertReferralsStore',
         store: 'confidentialityLevelsStore'
     },
     config: {
@@ -21,6 +24,9 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
 	
     constructor: function() {
     	this.store.load();
+    	this.outcomesStore.load();
+    	this.outreachesStore.load();
+    	this.referralsStore.load();
 		return this.callParent(arguments);
     },
     

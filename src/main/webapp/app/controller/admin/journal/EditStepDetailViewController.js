@@ -5,7 +5,7 @@ Ext.define('Ssp.controller.admin.journal.EditStepDetailViewController', {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
     	model: 'currentJournalStepDetail',
-    	store: 'journalStepDetailsStore'
+    	store: 'journalDetailsStore'
     },
     config: {
     	containerToLoadInto: 'adminforms',

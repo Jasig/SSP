@@ -31,14 +31,29 @@ License details: http://www.gnu.org/licenses/lgpl.html
     <!-- DEFT Lib -->
     <script type="text/javascript" src="js/libs/deft/deft-debug-0.6.3.js"></script>    
     
+    <script type="text/javascript">
+	    var sspParentDivId = "sspApp";
+	    // setting renderSSPFullScreen to true will render the app 
+	    // in the full Viewport size.
+	    // This option will exclude any divs and render the SSP App
+	    // to the body of element of the page.
+	    // If renderSSPFullScreen is set to false
+	    // then the sspParentDivId will allow you to set a div
+	    // in which to render the SSP App.
+	    var renderSSPFullScreen = true;
+    </script>
+
     <!-- SSP Application -->
     <script type="text/javascript" src="app.js"></script>
-    
+   
     <title id="page-title">Student Success Plan</title>
 
 </head>
 <body>
-<div id="sspApp"></div>
+<div id="portalPageHeader" style="height:5%">header</div>
+<div id="portalPageNavigation" style="height:5%">navigation</div>
+<div id="sspApp" style="height:75%;overflow:hidden"></div>
+<div id="portalPageFooter" style="height:10%">footer</div>
 </body>
 </html>
 <!-- eof -->

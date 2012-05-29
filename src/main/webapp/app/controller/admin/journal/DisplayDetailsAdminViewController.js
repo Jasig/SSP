@@ -3,7 +3,7 @@ Ext.define('Ssp.controller.admin.journal.DisplayDetailsAdminViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'journalStepsStore',
+    	store: 'journalDetailsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentJournalStepDetail'
     },

@@ -142,7 +142,8 @@ Ext.require([
 	'Ext.data.Store',
 	'Ext.form.field.VTypes',
 	'Ext.form.field.Text',
-	'Ext.form.field.TextArea'
+	'Ext.form.field.TextArea',
+	'Ext.ux.form.MultiSelect'
 ]);
 
 var apiUrls = [
@@ -188,6 +189,12 @@ var apiUrls = [
 
 Ext.onReady(function(){
 	Deft.Injector.configure({
+		sspParentDivId: {
+	        value: sspParentDivId
+	    },
+	    renderSSPFullScreen: {
+	        value: renderSSPFullScreen
+	    },
 		apiUrlStore: {
 			fn: function(){
 				var urlStore = Ext.create('Ext.data.Store', {
@@ -288,6 +295,12 @@ Ext.onReady(function(){
         currentJournalEntry:{
 	        fn: function(){
 	            return new Ssp.model.tool.journal.JournalEntry({id:""});
+	    	},
+	        singleton: true
+        },
+        currentEarlyAlert:{
+	        fn: function(){
+	            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:"",name:'DEV-065-TC - Developmental Reading'});
 	    	},
 	        singleton: true
         },
