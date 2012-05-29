@@ -23,13 +23,17 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Ethnicity service test
+ */
 public class EthnicityServiceTest {
 
-	private EthnicityServiceImpl service;
-	private EthnicityDao dao;
+	private transient EthnicityServiceImpl service;
+
+	private transient EthnicityDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new EthnicityServiceImpl();
 		dao = createMock(EthnicityDao.class);
 
@@ -38,7 +42,7 @@ public class EthnicityServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<Ethnicity> daoAll = new ArrayList<Ethnicity>();
+		final List<Ethnicity> daoAll = new ArrayList<Ethnicity>();
 		daoAll.add(new Ethnicity());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,7 +50,7 @@ public class EthnicityServiceTest {
 
 		replay(dao);
 
-		Collection<Ethnicity> all = service.getAll(
+		final Collection<Ethnicity> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertTrue(all.size() > 0);
 		verify(dao);
@@ -54,8 +58,8 @@ public class EthnicityServiceTest {
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Ethnicity daoOne = new Ethnicity(id);
+		final UUID id = UUID.randomUUID();
+		final Ethnicity daoOne = new Ethnicity(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -67,21 +71,22 @@ public class EthnicityServiceTest {
 
 	@Test
 	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Ethnicity daoOne = new Ethnicity(id);
+		final UUID id = UUID.randomUUID();
+		final Ethnicity daoOne = new Ethnicity(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		assertNotNull("Save result should not have been null.",
+				service.save(daoOne));
 		verify(dao);
 	}
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Ethnicity daoOne = new Ethnicity(id);
+		final UUID id = UUID.randomUUID();
+		final Ethnicity daoOne = new Ethnicity(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -95,12 +100,11 @@ public class EthnicityServiceTest {
 		boolean found = true;
 		try {
 			service.get(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			found = false;
 		}
 
-		assertFalse(found);
+		assertFalse("Deleted object should not have been found.", found);
 		verify(dao);
 	}
-
 }

@@ -13,50 +13,50 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.ssp.dao.reference.ProgramStatusChangeReasonDao;
+import org.jasig.ssp.dao.reference.StudentTypeDao;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.reference.ProgramStatusChangeReason;
+import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.reference.ProgramStatusChangeReasonService;
+import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * ProgramStatusChangeReason service test
+ * StudentType service test
  * 
  * @author jon.adams
  * 
  */
-public class ProgramStatusChangeReasonServiceTest {
+public class StudentTypeServiceTest {
 
-	private transient ProgramStatusChangeReasonServiceImpl service;
+	private transient StudentTypeServiceImpl service;
 
-	private transient ProgramStatusChangeReasonDao dao;
+	private transient StudentTypeDao dao;
 
 	@Before
 	public void setUp() {
-		service = new ProgramStatusChangeReasonServiceImpl();
-		dao = createMock(ProgramStatusChangeReasonDao.class);
+		service = new StudentTypeServiceImpl();
+		dao = createMock(StudentTypeDao.class);
 
 		service.setDao(dao);
 	}
 
 	/**
-	 * Test {@link ProgramStatusChangeReasonService#getAll(SortingAndPaging)}
+	 * Test {@link StudentTypeService#getAll(SortingAndPaging)}
 	 */
 	@Test
 	public void testGetAll() {
-		final List<ProgramStatusChangeReason> daoAll = new ArrayList<ProgramStatusChangeReason>();
-		daoAll.add(new ProgramStatusChangeReason());
+		final List<StudentType> daoAll = new ArrayList<StudentType>();
+		daoAll.add(new StudentType());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
-				new PagingWrapper<ProgramStatusChangeReason>(daoAll));
+				new PagingWrapper<StudentType>(daoAll));
 
 		replay(dao);
 
-		final Collection<ProgramStatusChangeReason> all = service.getAll(
+		final Collection<StudentType> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertFalse("GetAll() result should not have been empty.",
 				all.isEmpty());
@@ -64,7 +64,7 @@ public class ProgramStatusChangeReasonServiceTest {
 	}
 
 	/**
-	 * Test {@link ProgramStatusChangeReasonService#get(UUID)}
+	 * Test {@link StudentTypeService#get(UUID)}
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             If the object could not be found.
@@ -72,7 +72,7 @@ public class ProgramStatusChangeReasonServiceTest {
 	@Test
 	public void testGet() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
-		final ProgramStatusChangeReason daoOne = new ProgramStatusChangeReason(
+		final StudentType daoOne = new StudentType(
 				id);
 
 		expect(dao.get(id)).andReturn(daoOne);
@@ -87,7 +87,7 @@ public class ProgramStatusChangeReasonServiceTest {
 	@Test
 	public void testSave() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
-		final ProgramStatusChangeReason daoOne = new ProgramStatusChangeReason(
+		final StudentType daoOne = new StudentType(
 				id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -102,13 +102,13 @@ public class ProgramStatusChangeReasonServiceTest {
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
-		final ProgramStatusChangeReason daoOne = new ProgramStatusChangeReason(
+		final StudentType daoOne = new StudentType(
 				id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
 		expect(dao.get(id)).andThrow(
-				new ObjectNotFoundException(id, "ProgramStatusChangeReason"));
+				new ObjectNotFoundException(id, "StudentType"));
 
 		replay(dao);
 

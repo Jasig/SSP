@@ -14,7 +14,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.reference.ProgramStatusChangeReasonTO;
+import org.jasig.ssp.transferobject.reference.StudentTypeTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * ProgramStatusChangeReason controller tests
+ * StudentType controller tests
  * 
  * @author jon.adams
  */
@@ -34,19 +34,19 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration("../../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration
 @Transactional
-public class ProgramStatusChangeReasonControllerIntegrationTest {
+public class StudentTypeControllerIntegrationTest {
 
 	private static final String TESTSTRING1 = "testString1";
 
 	private static final String TESTSTRING2 = "testString1";
 
-	private static final UUID PROGRAM_STATUS_CHANGE_REASON_ID = UUID
-			.fromString("b2d1271b-5056-a51a-8018-f5ed8477b481");
+	private static final UUID STUDENT_TYPE_ID = UUID
+			.fromString("b2d058eb-5056-a51a-80a7-8a20c30d1e91");
 
-	private static final String PROGRAM_STATUS_CHANGE_REASON_NAME = "Financially unable to purchase books";
+	private static final String STUDENT_TYPE_NAME = "ILP";
 
 	@Autowired
-	private transient ProgramStatusChangeReasonController controller;
+	private transient StudentTypeController controller;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -62,7 +62,7 @@ public class ProgramStatusChangeReasonControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link ProgramStatusChangeReasonController#get(UUID)} action.
+	 * Test the {@link StudentTypeController#get(UUID)} action.
 	 * 
 	 * @throws ValidationException
 	 *             If validation error occurred.
@@ -76,21 +76,21 @@ public class ProgramStatusChangeReasonControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ProgramStatusChangeReasonTO obj = controller
-				.get(PROGRAM_STATUS_CHANGE_REASON_ID);
+		final StudentTypeTO obj = controller
+				.get(STUDENT_TYPE_ID);
 
 		assertNotNull(
-				"Returned ProgramStatusChangeReasonTO from the controller should not have been null.",
+				"Returned StudentTypeTO from the controller should not have been null.",
 				obj);
 
-		assertEquals("Returned ProgramStatusChangeReason.Name did not match.",
-				PROGRAM_STATUS_CHANGE_REASON_NAME,
+		assertEquals("Returned StudentType.Name did not match.",
+				STUDENT_TYPE_NAME,
 				obj.getName());
 	}
 
 	/**
-	 * Test that the {@link ProgramStatusChangeReasonController#get(UUID)}
-	 * action returns the correct validation errors when an invalid ID is sent.
+	 * Test that the {@link StudentTypeController#get(UUID)} action returns the
+	 * correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws ValidationException
 	 *             If validation error occurred.
@@ -104,18 +104,17 @@ public class ProgramStatusChangeReasonControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ProgramStatusChangeReasonTO obj = controller.get(UUID
+		final StudentTypeTO obj = controller.get(UUID
 				.randomUUID());
 
 		assertNull(
-				"Returned ProgramStatusChangeReasonTO from the controller should have been null.",
+				"Returned StudentTypeTO from the controller should have been null.",
 				obj);
 	}
 
 	/**
-	 * Test the
-	 * {@link ProgramStatusChangeReasonController#create(ProgramStatusChangeReasonTO)}
-	 * and {@link ProgramStatusChangeReasonController#delete(UUID)} actions.
+	 * Test the {@link StudentTypeController#create(StudentTypeTO)} and
+	 * {@link StudentTypeController#delete(UUID)} actions.
 	 * 
 	 * @throws ValidationException
 	 *             If validation error occurred.
@@ -130,7 +129,7 @@ public class ProgramStatusChangeReasonControllerIntegrationTest {
 				controller);
 
 		// Check validation of 'no ID for create()'
-		ProgramStatusChangeReasonTO obj = new ProgramStatusChangeReasonTO( // NOPMD
+		StudentTypeTO obj = new StudentTypeTO( // NOPMD
 				UUID.randomUUID(), TESTSTRING1,
 				TESTSTRING2);
 		try {
@@ -140,21 +139,21 @@ public class ProgramStatusChangeReasonControllerIntegrationTest {
 			/* expected */
 		}
 
-		// Now create a valid ProgramStatusChangeReason
-		obj = new ProgramStatusChangeReasonTO(null, TESTSTRING1, TESTSTRING2); // NOPMD
+		// Now create a valid StudentType
+		obj = new StudentTypeTO(null, TESTSTRING1, TESTSTRING2); // NOPMD
 		obj = controller.create(obj);
 
 		assertNotNull(
-				"Returned ProgramStatusChangeReasonTO from the controller should not have been null.",
+				"Returned StudentTypeTO from the controller should not have been null.",
 				obj);
 		assertNotNull(
-				"Returned ProgramStatusChangeReasonTO.ID from the controller should not have been null.",
+				"Returned StudentTypeTO.ID from the controller should not have been null.",
 				obj.getId());
 		assertEquals(
-				"Returned ProgramStatusChangeReasonTO.Name from the controller did not match.",
+				"Returned StudentTypeTO.Name from the controller did not match.",
 				TESTSTRING1, obj.getName());
 		assertEquals(
-				"Returned ProgramStatusChangeReasonTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
+				"Returned StudentTypeTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
 				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
@@ -163,12 +162,12 @@ public class ProgramStatusChangeReasonControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link ProgramStatusChangeReasonController#getAll(ObjectStatus, Integer, Integer, String, String)}
+	 * {@link StudentTypeController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 */
 	@Test
 	public void testControllerAll() {
-		final Collection<ProgramStatusChangeReasonTO> list = controller.getAll(
+		final Collection<StudentTypeTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
