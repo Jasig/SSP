@@ -1,56 +1,14 @@
 Ext.define('Ssp.view.Viewport',{
 	extend: 'Ext.container.Container',
 	requires: ['Ext.EventManager'],
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	parentDivId: 'sspParentDivId',
+    	renderFullScreen: 'renderSSPFullScreen'
+    },
     layout: 'fit',
     id: 'sspView',
     alias: 'widget.sspview',
-
-    // Privatize config options which, if used, would interfere with the
-    // correct operation of the Viewport as the sole manager of the
-    // layout of the document body.
-
-    /**
-     * @cfg {String/HTMLElement/Ext.Element} applyTo
-     * @private
-     */
-
-    /**
-     * @cfg {Boolean} allowDomMove
-     * @private
-     */
-
-    /**
-     * @cfg {Boolean} hideParent
-     * @private
-     */
-
-    /**
-     * @cfg {String/HTMLElement/Ext.Element} renderTo
-     * Always renders to document body.
-     * @private
-     */
-
-    /**
-     * @cfg {Number} height
-     * Sets itself to viewport width.
-     * @private
-     */
-
-    /**
-     * @cfg {Number} width
-     * Sets itself to viewport height.
-     * @private
-     */
-
-    /**
-     * @cfg {Boolean} deferHeight
-     * @private
-     */
-
-    /**
-     * @cfg {Boolean} monitorResize
-     * @private
-     */
 
     preserveElOnDestroy: true,
 
@@ -59,6 +17,7 @@ Ext.define('Ssp.view.Viewport',{
             html = document.body.parentNode,
             el;
 
+        // Init the Main Shell for the application
         Ext.applyIf(this, {items: [{xtype:'Main'}]});
         
         // Get the DOM disruption over with before the Viewport renders and begins a layout
@@ -73,7 +32,12 @@ Ext.define('Ssp.view.Viewport',{
             delete me.autoScroll;
             Ext.fly(html).setStyle('overflow', 'auto');
         }
-        me.el = el = Ext.getElementById('sspApp');
+        if (this.renderFullScreen==true)
+        {
+        	me.el = el = Ext.getBody();
+        }else{
+        	me.el = el = Ext.getElementById( this.parentDivId );
+        }
         //el.setHeight = Ext.emptyFn;
         //el.setWidth = Ext.emptyFn;
         //el.setSize = Ext.emptyFn;
@@ -88,10 +52,15 @@ Ext.define('Ssp.view.Viewport',{
 
         // Important to start life as the proper size (to avoid extra layouts)
         // But after render so that the size is not stamped into the body
-        me.width = Ext.Element.getViewportWidth();
-        me.height = Ext.Element.getViewportHeight();
-        //me.width = me.el.width;
-        //me.height = me.el.height;
+
+        if (this.renderFullScreen==true)
+        {
+            me.width = Ext.Element.getViewportWidth();
+            me.height = Ext.Element.getViewportHeight();
+        }else{
+        	me.width = me.el.getViewSize().width;
+            me.height = me.el.getViewSize().height;
+        }
     },
 
     afterFirstLayout: function() {
@@ -106,8 +75,23 @@ Ext.define('Ssp.view.Viewport',{
     fireResize : function(width, height){
         // In IE we can get resize events that have our current size, so we ignore them
         // to avoid the useless layout...
-        if (width != this.width || height != this.height) {
-            this.setSize(width, height);
-        }
+    	var me = this;
+    	// if renderFullScreen is configured then size to the viewport
+    	// otherwise
+    	// resize the container width and leave the height alone
+    	// this will maintain the container size to the height as
+    	// originally drawn on the page, but the width will be flexible
+    	if (this.renderFullScreen==true)
+    	{
+    		newWidth = Ext.Element.getViewportWidth();
+    		newHeight = Ext.Element.getViewportHeight();
+    	}else{
+    		newWidth = me.width+(width-me.el.getWidth());
+    		newHeight = me.height;
+    	}
+    		
+    	if (width != me.width || height != me.height) {
+	        me.setSize( newWidth, newHeight);
+    	}
     }
 });
