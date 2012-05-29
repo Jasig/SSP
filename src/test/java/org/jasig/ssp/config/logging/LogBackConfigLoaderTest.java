@@ -14,12 +14,14 @@ public final class LogBackConfigLoaderTest {
 
 	@Test
 	public void test() {
+		String location = System.getenv("SSP_TESTCONFIGDIR")
+				+ System.getProperty("file.separator")
+				+ "logback.xml";
+		System.out.println("Attempting to load Logback Configuration from " // NOPMD
+				+ location);
 		try {
 			assertNotNull("Failed to load file",
-					new LogBackConfigLoader(
-							System.getenv("SSP_TESTCONFIGDIR")
-									+ System.getProperty("file.separator")
-									+ "logback.xml"));
+					new LogBackConfigLoader(location));
 		} catch (Exception e) {
 			LOGGER.error("Failed to load file", e);
 			fail("Failed to load file");
