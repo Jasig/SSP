@@ -82,7 +82,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         	associatedItemId = data.records[0].get('id')
         	parentUrl = this.apiProperties.getItemUrl( this.getParentItemType() ) + parentId + '/' + this.getAssociatedItemType() + '/'; 	
         	url = me.apiProperties.createUrl( parentUrl );
-			me.apiProperties.makeRequest({
+        	me.apiProperties.makeRequest({
 				url: url,
 				method: 'POST',
 				jsonData: '"' + associatedItemId + '"',

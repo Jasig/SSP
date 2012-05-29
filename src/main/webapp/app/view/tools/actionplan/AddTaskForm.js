@@ -47,7 +47,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        emptyText: 'Select One',
 				        store: this.store,
 				        valueField: 'id',
-				        displayField: 'acronym',
+				        displayField: 'name',
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
@@ -66,7 +66,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        xtype: 'toolbar',
 				        items: [{xtype: 'button', 
 				        	     itemId: 'addButton', 
-				        	     text:'Add', 
+				        	     text:'Save', 
 				        	     action: 'add' },
 				        	     {
 				            	   xtype: 'button',

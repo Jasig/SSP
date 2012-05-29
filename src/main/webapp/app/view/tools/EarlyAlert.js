@@ -21,7 +21,7 @@ Ext.define('Ssp.view.tools.EarlyAlert', {
 
 	    		      columns: [
 	    		                { header: 'Name',  
-	    		                  dataIndex: 'name',
+	    		                  dataIndex: 'courseTitle',
 	    		                  field: {
 	    		                      xtype: 'textfield'
 	    		                  },

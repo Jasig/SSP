@@ -41,7 +41,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	// load student intake challenges
      	this.treeUtils.appendChildren(null,[{
 	        text: 'Student Intake Challenges',
-	        id: '0'+'_studentIntakeChallenges',
+	        id: '0'+'_studentIntakeChallenge',
 	        leaf: false,
 	        destroyBeforeAppend: false
 	      }]);
@@ -76,7 +76,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
      			break;
 
     		case 'challenge':
-    			url = this.challengeReferralUrl; // +id;
+    			url = this.challengeReferralUrl;
     			nodeType = 'referral';
     			isLeaf = true;
     			break;

@@ -13,7 +13,8 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 		        }
 			 },
 			 {name:'journalSourceId', type:'string'},
-			 {name:'journalTrackId', type:'string'}],
+			 {name:'journalTrackId', type:'string'}]/*,
 			 
-	 hasMany: {model: 'reference.JournalStepDetail', name: 'journalStepDetails'},
+	 hasMany: {model: 'reference.JournalStepDetail', name: 'journalStepDetails'}
+	 */
 });

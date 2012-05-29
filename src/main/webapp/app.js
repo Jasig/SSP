@@ -300,7 +300,7 @@ Ext.onReady(function(){
         },
         currentEarlyAlert:{
 	        fn: function(){
-	            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:"",name:'DEV-065-TC - Developmental Reading'});
+	            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:"",courseTitle:'DEV-065-TC - Developmental Reading'});
 	    	},
 	        singleton: true
         },
