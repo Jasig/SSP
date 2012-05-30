@@ -80,19 +80,19 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 		}
 
 		if ((model.getPerson().getEducationLevels() != null)
-				&& (model.getPerson().getEducationLevels().size() > 0)) {
+				&& !(model.getPerson().getEducationLevels().isEmpty())) {
 			personEducationLevels = PersonEducationLevelTO
 					.toTOList(model.getPerson().getEducationLevels());
 		}
 
 		if ((model.getPerson().getFundingSources() != null)
-				&& (model.getPerson().getFundingSources().size() > 0)) {
+				&& !(model.getPerson().getFundingSources().isEmpty())) {
 			personFundingSources = PersonFundingSourceTO.toTOList(model
 					.getPerson().getFundingSources());
 		}
 
 		if ((model.getPerson().getChallenges() != null)
-				&& (model.getPerson().getChallenges().size() > 0)) {
+				&& !(model.getPerson().getChallenges().isEmpty())) {
 			personChallenges = PersonChallengeTO.toTOList(model
 					.getPerson().getChallenges());
 		}
