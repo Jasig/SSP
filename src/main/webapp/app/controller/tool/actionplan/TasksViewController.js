@@ -34,6 +34,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     },
 
     onViewReady: function(comp, obj){
+    	/*
     	this.appEventsController.getApplication().addListener('editTask', function(){
  			this.editTask();
 		},this);
@@ -45,8 +46,21 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     	this.appEventsController.getApplication().addListener('deleteTask', function(){
  			this.deleteConfirmation();
 		},this);
+		*/
+    	
+    	this.appEventsController.assignEvent({eventName: 'editTask', callBackFunc: this.editTask, scope: this});
+    	this.appEventsController.assignEvent({eventName: 'closeTask', callBackFunc: this.closeTask, scope: this});
+    	this.appEventsController.assignEvent({eventName: 'deleteTask', callBackFunc: this.deleteConfirmation, scope: this});
     },    
  
+    destroy: function() {
+    	this.appEventsController.removeEvent({eventName: 'editTask', callBackFunc: this.editTask, scope: this});
+    	this.appEventsController.removeEvent({eventName: 'closeTask', callBackFunc: this.closeTask, scope: this});
+    	this.appEventsController.removeEvent({eventName: 'deleteTask', callBackFunc: this.deleteConfirmation, scope: this});
+
+        return this.callParent( arguments );
+    },
+    
     onAddTaskClick: function(button) {
     	var task = new Ssp.model.tool.actionplan.Task();
     	this.model.data = task.data;
@@ -55,8 +69,8 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     
     editTask: function(){
  	   console.log('TaskViewController->editTask');
- 	   Ext.Msg.alert("NOTIFICATION","This functionality is disabled until I can figure out why the tree component renders it's init method twice on edit from the grid.")
- 	   // this.loadEditor();
+ 	   //Ext.Msg.alert("NOTIFICATION","This functionality is disabled until I can figure out why the tree component renders it's init method twice on edit from the grid.")
+ 	   this.loadEditor();
     },
     
     closeTask: function() {

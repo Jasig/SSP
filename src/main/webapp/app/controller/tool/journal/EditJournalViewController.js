@@ -13,6 +13,10 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     	url: ''
     },
     control: {
+    	'journalTrackCombo': {
+    		change: 'onJournalTrackComboChange'
+    	},
+    	
     	'saveButton': {
 			click: 'onSaveClick'
 		},
@@ -48,8 +52,22 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 			form.updateRecord();
     		record.set('personId', this.person.get('id') );    		
     		record.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
+			
+    		jsonData = {"id" : "",
+    			 "createdDate" : null,
+    			 "createdBy" : null,
+    			 "modifiedDate" : null,
+    			 "modifiedBy" : null,
+    			 "entryDate" : null,
+    			 "comment" : "Testing",
+    			 "confidentialityLevel" :
+    			    {"id" : "afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c",
+    			     "name" : "EVERYONE"},
+    			 "journalSourceId" : "b2d07973-5056-a51a-8073-1d3641ce507f",
+    			 "journalTrackId" : "b2d07a7d-5056-a51a-80a8-96ae5188a188"
+    			};  		
     		
-			jsonData = record.data;
+    		//jsonData = record.data;
 			
 			if (id.length > 0)
 			{
@@ -79,6 +97,10 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	
 	onCancelClick: function(button){
 		this.displayMain();
+	},
+	
+	onJournalTrackComboChange: function(comp, newValue, oldValue, eOpts){
+		console.log('EditJournalViewController->onJournalTrackChange');
 	},
 	
 	displayMain: function(){

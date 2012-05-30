@@ -13,6 +13,17 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	url: ''
     },
     control: {
+    	outcomeCombo: {
+            selector: '#outcomeCombo',
+            listeners: {
+                change: 'onOutcomeComboChange'
+            }
+        },
+
+    	otherOutcomeDescriptionText: {
+            selector: '#otherOutcomeDescriptionText'
+        },
+        
     	'saveButton': {
 			click: 'onSaveClick'
 		},
@@ -25,10 +36,25 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 	init: function() {
 		this.getView().getForm().loadRecord(this.model);
 		
+		this.showHideOtherOutcomeDescription();
+		
 		this.url = this.apiProperties.getItemUrl('personEarlyAlert');
 		this.url = this.url.replace('{id}',this.person.get('id'));
 		
 		return this.callParent(arguments);
+    },
+    
+    onOutcomeComboChange: function(comp, newValue, oldValue, eOpts){
+    	this.showHideOtherOutcomeDescription();
+    },
+    
+    showHideOtherOutcomeDescription: function(){
+    	if (this.getOutcomeCombo().getValue()==Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID)
+    	{
+    		this.getOtherOutcomeDescriptionText().show();
+    	}else{
+    		this.getOtherOutcomeDescriptionText().hide();
+    	}
     },
     
 	onSaveClick: function(button) {
@@ -43,6 +69,9 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 			me.displayMain();
 		};
 		
+		console.log(jsonData);
+		
+		/*
 		if (id.length > 0)
 		{
 			// editing
@@ -62,6 +91,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 				successFunc: successFunc 
 			});		
 		}
+		*/
 	},
 	
 	onCancelClick: function(button){

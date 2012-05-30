@@ -18,18 +18,19 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
         	items: [
                 {
 			        xtype: 'combobox',
-			        itemId: 'confidentialityLevel',
+			        itemId: 'confidentialityLevelCombo',
 			        name: 'confidentialityLevelId',
 			        fieldLabel: 'Confidentiality Level',
 			        emptyText: 'Select One',
 			        store: this.confidentialityLevelsStore,
 			        valueField: 'id',
-			        displayField: 'acronym',
+			        displayField: 'name',
 			        mode: 'local',
 			        typeAhead: true,
 			        queryMode: 'local',
 			        allowBlank: false,
-			        forceSelection: true
+			        forceSelection: true,
+			        anchor: '95%'
 				},{
 			        xtype: 'combobox',
 			        itemId: 'journalSource',
@@ -43,10 +44,11 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        typeAhead: true,
 			        queryMode: 'local',
 			        allowBlank: false,
-			        forceSelection: true
+			        forceSelection: true,
+			        anchor: '95%'
 				},{
 			        xtype: 'combobox',
-			        itemId: 'journalTrack',
+			        itemId: 'journalTrackCombo',
 			        name: 'journalTrackId',
 			        fieldLabel: 'Journal Track',
 			        emptyText: 'Select One',
@@ -57,17 +59,26 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        typeAhead: true,
 			        queryMode: 'local',
 			        allowBlank: false,
-			        forceSelection: true
+			        forceSelection: true,
+			        anchor: '95%'
 				},{
                 	xtype: 'label',
-                	text: 'Select the details for this entry:'
+                	text: 'Add/Edit details for this entry:'
                 },
-                { xtype: 'journaltracktree', flex:1 }
+                /*{ xtype: 'journaltracktree', flex:1 }*/
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Details',
+                    anchor: '100%',
+                    name: 'details',
+                    anchor: '95%'
+                }
                 ,{
                     xtype: 'textareafield',
                     fieldLabel: 'Comment',
                     anchor: '100%',
-                    name: 'comment'
+                    name: 'comment',
+                    anchor: '95%'
                 }],
             
             dockedItems: [{
