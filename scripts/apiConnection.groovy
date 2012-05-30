@@ -37,9 +37,9 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	
 	//return toJson(result)
 	//return conn.put("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff", intakeForm)
-	conn.put("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff", toJson(result))
+	return conn.put("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff", toJson(result))
 	
-	return conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff")
+	//return conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff")
 }
 
 String addChallengeToCategory(ApiConnection conn){
@@ -50,9 +50,13 @@ String addChallengeToCategory(ApiConnection conn){
 String addGoalToPerson(ApiConnection conn){
 	String form = '{"id":"","createdDate":null,"name":"Get a 2.0 GPA","personId":"58ba5ee3-734e-4ae9-b9c5-943774b4de41","description":"Get a 2.0 GPA","createdBy":{"id":"","firstName":"","lastName":""},"modifiedBy":{"id":"","firstName":"","lastName":""},"confidentialityLevel":{"id":"afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c","name":null}}'
 	return conn.post("api/1/person/58ba5ee3-734e-4ae9-b9c5-943774b4de41/goal/", form)
-	
 }
 
+
+String getAllJournalEntriesForPerson(ApiConnection conn){
+	//"/1/person/{personId}/journalEntry"
+	return conn.get("api/1/person/58ba5ee3-734e-4ae9-b9c5-943774b4de41/journalEntry/")
+}
 
 String toJson(def form){
 	def builder = new JsonBuilder()
@@ -69,9 +73,12 @@ ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "student0",
 
 //String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
-String output = addGoalToPerson(conn) 
+//String output = addGoalToPerson(conn) 
+
+String output = getAllJournalEntriesForPerson(conn);
 
 conn.formatAndPrintJson(output)
+//println (output);
 
 
 
