@@ -24,20 +24,20 @@
 	</listener>
 
 	<filter>
-		<filter-name>SSP Security Filter</filter-name>
-		<filter-class>org.jasig.ssp.security.SspSecurityFilter</filter-class>
-	</filter>
-	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
-	<filter-mapping>
+	<filter>
 		<filter-name>SSP Security Filter</filter-name>
-		<url-pattern>/api/*</url-pattern>
-	</filter-mapping>
+		<filter-class>org.jasig.ssp.security.SspSecurityFilter</filter-class>
+	</filter>
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>SSP Security Filter</filter-name>
+		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
 
 	<servlet>
