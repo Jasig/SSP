@@ -401,6 +401,11 @@
 				<version>2.1.1</version>
 				<configuration>
 					<warName>ssp</warName>
+                    <archive>
+             			<manifestEntries>
+                 			<version>${project.version}</version>
+		             	</manifestEntries>
+		         	</archive>
 				</configuration>
 			</plugin>
 			<plugin>
