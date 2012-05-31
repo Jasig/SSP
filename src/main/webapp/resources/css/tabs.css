@@ -15,6 +15,6 @@ pre {
 	height: 700px;
 }
 
-.sspOuter div {
+.sspOuter > div {
 	height: 100%;
 }
