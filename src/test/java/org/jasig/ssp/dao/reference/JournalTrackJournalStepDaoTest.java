@@ -59,7 +59,7 @@ public class JournalTrackJournalStepDaoTest {
 		obj.setJournalStep(journalStepDao.getAll(ObjectStatus.ACTIVE).getRows()
 				.iterator().next());
 		obj.setJournalTrack(journalTrackDao.get(UUID
-				.fromString("5d24743a-a11e-11e1-a9a6-0026b9e7ff4c")));
+				.fromString("b2d07b38-5056-a51a-809d-81ea2f3b27bf")));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
@@ -102,7 +102,7 @@ public class JournalTrackJournalStepDaoTest {
 		obj.setJournalStep(journalStepDao.getAll(ObjectStatus.ACTIVE).getRows()
 				.iterator().next());
 		obj.setJournalTrack(journalTrackDao.get(UUID
-				.fromString("5d24743a-a11e-11e1-a9a6-0026b9e7ff4c")));
+				.fromString("b2d07b38-5056-a51a-809d-81ea2f3b27bf")));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 

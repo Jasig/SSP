@@ -60,7 +60,7 @@ public class JournalStepJournalStepDetailDaoTest {
 				.getAll(ObjectStatus.ACTIVE).getRows()
 				.iterator().next());
 		obj.setJournalStep(journalStepDao.get(UUID
-				.fromString("5d24743a-a11e-11e1-a9a6-0026b9e7ff4c")));
+				.fromString("aba1440c-ab5b-11e1-ba73-0026b9e7ff4c")));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
@@ -106,7 +106,7 @@ public class JournalStepJournalStepDetailDaoTest {
 				.getAll(ObjectStatus.ACTIVE).getRows()
 				.iterator().next());
 		obj.setJournalStep(journalStepDao.get(UUID
-				.fromString("5d24743a-a11e-11e1-a9a6-0026b9e7ff4c")));
+				.fromString("aba1440c-ab5b-11e1-ba73-0026b9e7ff4c")));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 

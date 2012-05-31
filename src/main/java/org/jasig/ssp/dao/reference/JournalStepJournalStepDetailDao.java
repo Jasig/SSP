@@ -8,7 +8,9 @@ import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class JournalStepJournalStepDetailDao extends
 		AbstractReferenceAuditableCrudDao<JournalStepJournalStepDetail>
 		implements AuditableCrudDao<JournalStepJournalStepDetail> {
