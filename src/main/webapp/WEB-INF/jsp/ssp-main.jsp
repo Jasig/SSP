@@ -30,5 +30,6 @@
 <!-- SSP Application -->
 <script type="text/javascript" src="<c:url value="/app.js" />"></script>
 
-
-<div id="${n}ssp"></div>
+<div class="sspOuter">
+	<div id="${n}ssp"></div>
+</div>

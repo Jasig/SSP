@@ -127,8 +127,8 @@ public final class SspSecurityFilter implements RenderFilter, Filter {
 
 			if (token != null) {
 
-				LOGGER.trace("Found authentication token for user '{}'",
-						token.getPrincipal());
+				LOGGER.debug("Found authentication token for user '{}' invoking URI:  {}",
+									token.getPrincipal(), httpr.getRequestURI());
 				
 				final SecurityContext ctx = SecurityContextHolder.getContext();
 				ctx.setAuthentication(token);
