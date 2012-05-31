@@ -31,6 +31,12 @@ public class ReferenceLiteTO<T extends AbstractReference> implements
 		this.name = name;
 	}
 
+	public ReferenceLiteTO(final AbstractReference reference) {
+		super();
+		this.id = reference.getId();
+		this.name = reference.getName();
+	}
+
 	public static <T extends AbstractReference> ReferenceLiteTO<T> fromModel(
 			final T model) {
 		if (model == null) {

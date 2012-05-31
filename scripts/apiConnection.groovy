@@ -75,7 +75,7 @@ String addGoalToPerson(ApiConnection conn){
 
 String getAllJournalEntriesForPerson(ApiConnection conn){
 	//"/1/person/{personId}/journalEntry"
-	return conn.get("api/1/person/58ba5ee3-734e-4ae9-b9c5-943774b4de41/journalEntry/")
+	return conn.get("api/1/person/f549ecab-5110-4cc1-b2bb-369cac854dea/journalEntry/")
 }
 
 String toJson(def form){
@@ -91,15 +91,11 @@ String toJson(def form){
 JsonSlurper jsonParser = new JsonSlurper()
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "student0", "student0", false)
 
-String output = getStudentIntakeForm(conn, jsonParser)
+//String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
 //String output = addGoalToPerson(conn) 
 
-//String output = getAllJournalEntriesForPerson(conn);
+String output = getAllJournalEntriesForPerson(conn);
 
 conn.formatAndPrintJson(output)
 //println (output);
-
-
-
-
