@@ -153,4 +153,12 @@ public class ChallengeDaoTest {
 				UUID.randomUUID(), new SortingAndPaging(ObjectStatus.ACTIVE));
 		assertList(challenges.getRows());
 	}
+
+	@Test
+	public void getAllForPerson() {
+		final PagingWrapper<Challenge> challenges = dao.getAllForPerson(
+				UUID.fromString("252de4a0-7c06-4254-b7d8-4ffc02fe81ff"),
+				new SortingAndPaging(ObjectStatus.ACTIVE));
+		assertList(challenges.getRows());
+	}
 }
