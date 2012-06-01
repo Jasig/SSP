@@ -1750,13 +1750,18 @@
 	</changeSet>
 
 	<changeSet id="add Confidentiality Level data" author="jon.adams">
-		<update tableName="confidentiality_level">
+		<insert tableName="confidentiality_level">
+			<column name="id" value="B3D077A7-4055-0510-79674A09F93A0357" />
 			<column name="name" value="EVERYONE" />
 			<column name="description"
 				value="Not Confidential. Records may be viewed by all users." />
 			<column name="acronym" value="EVERYONE" />
-			<where>id = 'afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c'</where>
-		</update>
+			<column name="created_date" valueDate="2012-05-17T19:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T19:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
 		<insert tableName="confidentiality_level">
 			<column name="id" value="B2D077A7-4055-0510-79574A09F93A0346" />
 			<column name="name" value="Academic Resource Center" />

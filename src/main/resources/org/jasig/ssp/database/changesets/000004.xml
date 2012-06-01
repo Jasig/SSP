@@ -308,6 +308,18 @@
 
 	<changeSet id="create reference data - self help guide"
 		author="jon.adams">
+		<insert tableName="challenge">
+			<column name="id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
+			<column name="name" value="Other" />
+			<column name="description" value="Other, unspecified challenge." />
+			<column name="self_help_guide_description" value="Test self-help guide description." />
+			<column name="self_help_guide_question" value="Test self-help guide question?" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
 		<insert tableName="self_help_guide">
 			<column name="id" value="4FD534DF-E7FE-E555-7C71-0042593B1990" />
 			<column name="name" value="Student Success Course" />
@@ -439,7 +451,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -499,7 +511,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -649,7 +661,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="3A6352C9-E7FE-E555-7F69-0124A5E5FE71" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -694,7 +706,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="3A6352C9-E7FE-E555-7F69-0124A5E5FE71" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -724,7 +736,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -739,7 +751,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -829,7 +841,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="3A6352C9-E7FE-E555-7F69-0124A5E5FE71" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -844,7 +856,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="894073E7-E7FE-E555-7C05-FF79555478E7" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -859,7 +871,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -904,7 +916,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -919,7 +931,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="3A6352C9-E7FE-E555-7F69-0124A5E5FE71" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -934,7 +946,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -949,7 +961,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -964,7 +976,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="6DCE9C28-E7FE-E555-762E-F82EA0C75580" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -1009,7 +1021,7 @@
 			<column name="critical" value="0" />
 			<column name="mandatory" value="0" />
 			<column name="self_help_guide_id" value="5B7BDB2A-E7FE-E555-7599-02C9E3CACFA5" />
-			<column name="challenge_id" value="f5bb0a62-1756-4ea2-857d-5821ee44a1d0" />
+			<column name="challenge_id" value="f6bb0a62-1756-4ea2-857d-5821ee44a1da" />
 			<column name="object_status" value="1" />
 			<column name="name" value="" />
 			<column name="description" value="" />
@@ -1019,6 +1031,9 @@
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 		</insert>
 		<rollback>
+			<delete tableName="challenge">
+				<where>id='f6bb0a62-1756-4ea2-857d-5821ee44a1da'</where>
+			</delete>
 			<delete tableName="self_help_guide">
 				<where>id='4FD534DF-E7FE-E555-7C71-0042593B1990'</where>
 			</delete>
@@ -1185,11 +1200,6 @@
 			<where>id = 'f067c6ca-50ad-447a-ad12-f47dffdce42e'</where>
 		</update>
 		<update tableName="challenge">
-			<column name="self_help_guide_description" value="Test self-help guide description." />
-			<column name="self_help_guide_question" value="Test self-help guide question?" />
-			<where>id = 'f5bb0a62-1756-4ea2-857d-5821ee44a1d0'</where>
-		</update>
-		<update tableName="challenge">
 			<column name="self_help_guide_description"
 				value="Educational and social support is provided through the office of ESL/Enrollment Services.  Students who speak English as a second language are encouraged to seek assistance from the ESL coordinator." />
 			<column name="self_help_guide_question"
@@ -1212,11 +1222,6 @@
 				<column name="self_help_guide_description" value="" />
 				<column name="self_help_guide_question" value="" />
 				<where>id = 'f067c6ca-50ad-447a-ad12-f47dffdce42e'</where>
-			</update>
-			<update tableName="challenge">
-				<column name="self_help_guide_description" value="" />
-				<column name="self_help_guide_question" value="" />
-				<where>id = 'f5bb0a62-1756-4ea2-857d-5821ee44a1d0'</where>
 			</update>
 			<update tableName="challenge">
 				<column name="self_help_guide_description" value="" />
