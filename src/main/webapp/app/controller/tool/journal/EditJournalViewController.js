@@ -11,8 +11,10 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     config: {
     	containerToLoadInto: 'tools',
     	formToDisplay: 'journal',
-    	url: ''
+    	url: '',
+    	inited: false
     },
+
     control: {
     	'journalTrackCombo': {
     		change: 'onJournalTrackComboChange'
@@ -46,6 +48,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 			Ext.ComponentQuery.query('#journalSourceCombo')[0].setValue( this.model.get('journalSource').id );
 			Ext.ComponentQuery.query('#journalTrackCombo')[0].setValue( this.model.get('journalTrack').id );			
 		}
+		this.inited=true;
 	},    
     
 	onSaveClick: function(button) {
@@ -67,40 +70,33 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     		record.set('journalSource',{id: form.getValues().journalSourceId});
     		record.set('journalTrack',{id: form.getValues().journalTrackId});
     		
-    		var jsdata = 
-    				 [{"journalStep" :
-    		          	{"id" : "0a080114-3799-156f-8137-99220ac10000",
-    					 "name" : "Two"},
-    		           "journalStepDetails" :
-    		          [{"id" : "0a080114-3799-156f-8137-9926abc30003",
-    		            "name" : "Action Plan Developed"}]
-    				 }];
-    		record.set('journalEntryDetails', jsdata);
-    		
-    		jsonData = record.data;
-			
-    		console.log(jsonData);
-    		/*
-			if (id.length > 0)
-			{
-				// editing
-				this.apiProperties.makeRequest({
-					url: url+id,
-					method: 'PUT',
-					jsonData: jsonData,
-					successFunc: successFunc 
-				});
-				
-			}else{
-				// adding
-				this.apiProperties.makeRequest({
-					url: url,
-					method: 'POST',
-					jsonData: jsonData,
-					successFunc: successFunc 
-				});		
-			}
-			*/
+    		// if a journal track is selected then validate that the details are set
+    		if (record.get('journalTrack').id != "" && record.get('journalEntryDetails').length > 0)
+    		{
+        		jsonData = record.data;
+    			
+    			if (id.length > 0)
+    			{
+    				// editing
+    				this.apiProperties.makeRequest({
+    					url: url+id,
+    					method: 'PUT',
+    					jsonData: jsonData,
+    					successFunc: successFunc 
+    				});
+    				
+    			}else{
+    				// adding
+    				this.apiProperties.makeRequest({
+    					url: url,
+    					method: 'POST',
+    					jsonData: jsonData,
+    					successFunc: successFunc 
+    				});		
+    			}   			
+    		}else{
+    			Ext.Msg.alert('Error','You have a Journal Track set in your entry. Please check the associated details for this Journal Entry.');    			
+    		}
 		}else{
 			Ext.Msg.alert('Error','Please correct the errors in your Journal Entry.');
 		}
@@ -112,12 +108,20 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	},
 	
 	onJournalTrackComboChange: function(comp, newValue, oldValue, eOpts){
-		console.log('EditJournalViewController->onJournalTrackChange');
-    	if (newValue != "")
+    	if (newValue.length > 2)
     	{
     		this.model.set('journalTrack',{id: newValue});
-    		//this.appEventsController.getApplication().fireEvent('setJournalTrack');	    		
-    	}
+    		
+    		// the inited property prevents the
+    		// tree from being populated twice
+    		// once when the viewcontroller loads
+    		// and another time when the journal track combo
+    		// is first populated
+    		if (this.inited==true)
+    		{
+    	   		this.appEventsController.getApplication().fireEvent('setJournalTrack');    			
+    		}
+     	}
 	},
 	
 	displayMain: function(){

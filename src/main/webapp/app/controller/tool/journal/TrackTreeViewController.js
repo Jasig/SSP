@@ -24,10 +24,10 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 		var rootNode = null;
 		this.journalTrackUrl = this.apiProperties.getItemUrl('journalTrack');
 		this.journalStepUrl = this.apiProperties.getItemUrl('journalStep');
-		this.journalStepDetailUrl = this.apiProperties.getItemUrl('journalStepDetail');
+		this.journalStepDetailUrl = this.apiProperties.getItemUrl('journalStep');
 
 		this.loadSteps();
-
+		
     	this.appEventsController.assignEvent({eventName: 'setJournalTrack', callBackFunc: this.loadSteps, scope: this});		
 		
 		return this.callParent(arguments);
@@ -36,6 +36,9 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     destroy: function() {
     	this.appEventsController.removeEvent({eventName: 'setJournalTrack', callBackFunc: this.loadSteps, scope: this});
 
+    	// clear the categories
+		this.treeUtils.clearRootCategories();
+    	
         return this.callParent( arguments );
     },    
     
@@ -49,69 +52,87 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 		if (journalTrackId != null && journalTrackId != "")
 		{
 			var treeRequest = new Ssp.model.util.TreeRequest();
-	    	treeRequest.set('url', this.journalStepUrl);
+	    	treeRequest.set('url', this.journalTrackUrl+journalTrackId+'/journalStep/');
 	    	treeRequest.set('nodeType','journalStep');
 	    	treeRequest.set('isLeaf', false);
-	    	treeRequest.set('enableCheckedItems', false);	
+	    	treeRequest.set('enableCheckedItems', false);
+	    	treeRequest.set('expanded',false);
+	    	treeRequest.set('callbackFunc',this.afterJournalStepsLoaded);
+	    	treeRequest.set('callbackScope',this);
 	    	this.treeUtils.getItems( treeRequest );			
 		}
+    },
+    
+    afterJournalStepsLoaded: function( scope ){
+    	// after the journal steps load expand them to
+    	// display the details under each step
+    	scope.getView().getView().getTreeStore().getRootNode().expandChildren();
     },
     
     onItemExpand: function(nodeInt, obj){
     	var node = nodeInt;
     	var url = this.journalStepDetailUrl;
-    	var nodeType = "";
-    	var isLeaf = true;
-    	var nodeName =  this.treeUtils.getNameFromNodeId( node.data.id );
     	var id = this.treeUtils.getIdFromNodeId( node.data.id );
     	if (url != "")
     	{
         	var treeRequest = new Ssp.model.util.TreeRequest();
-        	treeRequest.set('url', url);
-        	treeRequest.set('nodeType', nodeType);
-        	treeRequest.set('isLeaf', isLeaf);
+        	treeRequest.set('url', url + id + '/journalStepDetail/');
+        	treeRequest.set('nodeType', 'journalDetail');
+        	treeRequest.set('isLeaf', true);
         	treeRequest.set('nodeToAppendTo', node);
-        	treeRequest.set('enableCheckedItems',true);	
+        	treeRequest.set('enableCheckedItems',true);
+	    	treeRequest.set('callbackFunc',this.afterJournalDetailsLoaded);
+	    	treeRequest.set('callbackScope',this);
     		this.treeUtils.getItems( treeRequest );
     	}
     },
-    
-    onItemClick: function(view, record, item, index, e, eOpts){
-    	/*
-    	var me=this;
-    	var successFunc;
 
-    	var name = this.treeUtils.getNameFromNodeId( record.data.id );
-    	var id = this.treeUtils.getIdFromNodeId( record.data.id );
-    	var challengeId = this.treeUtils.getIdFromNodeId( record.data.parentId );
-    	var confidentialityLevelId = "afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c";
-    	// load the referral
-    	if (name=='referral')
+    afterJournalDetailsLoaded: function( scope ){
+    	// after the journal details load select each detail
+    	// that is selected in the journal
+    	var journalEntryDetails = scope.journalEntry.get("journalEntryDetails");
+    	if (journalEntryDetails != "" && journalEntryDetails != null)
     	{
-	    	successFunc = function(response,view){
-		    	var r = Ext.decode(response.responseText);
-		    	if (r)
-		    	{
-		    		var args = new Object();
-		    		args.name = r.name;
-		    		args.description = r.description || '';
-		    		args.challengeReferralId = r.id;
-		    		args.challengeId = challengeId;
-		    		args.confidentialityLevelId = confidentialityLevelId;
-		    		console.log(r);
-		    		me.appEventsController.getApplication().fireEvent('loadTask', args);
-		    	}		
-			};
-	    	
-	    	this.apiProperties.makeRequest({
-				url: this.apiProperties.createUrl( this.challengeReferralUrl+id ),
-				method: 'GET',
-				jsonData: '',
-				successFunc: successFunc 
-			});
-    	
+			Ext.Array.each(journalEntryDetails,function(item,index){
+				var journalStepDetails = item.journalStepDetails;
+				Ext.Array.each(journalStepDetails,function(innerItem,innerIndex){
+					var id = innerItem.id;
+					var detailNode = scope.getView().getView().getTreeStore().getNodeById(id+'_journalDetail');				
+					if (detailNode != null)
+					{
+						detailNode.set('checked',true);
+					}
+				});				
+			});    		
     	}
- 		*/
+    },    
+   
+
+    onItemClick: function(view, record, item, index, e, eOpts){
+    	var me=this;
+    	var journalEntry = me.journalEntry;
+    	var name = this.treeUtils.getNameFromNodeId( record.data.id );
+    	var checked = !record.data.checked;
+    	var id = this.treeUtils.getIdFromNodeId( record.data.id );
+    	var childText = record.data.text;
+    	var parentId = this.treeUtils.getIdFromNodeId( record.data.parentId );
+    	var parentText = record.parentNode.data.text;
+    	var step = null;
+    	var detail = null;
+    	// add/remove the detail from the Journal Entry
+    	if (name=='journalDetail')
+    	{
+    		step = {"id":parentId,"name":parentText};
+    		detail = {"id":id,"name":childText};
+    		if ( checked==true )
+        	{
+    			// add journal detail
+    			journalEntry.addJournalDetail( step, detail );
+        	}else{
+        		// remove journal detail
+        		journalEntry.removeJournalDetail( step, detail );
+        	}
+    	}
     }
 
 });

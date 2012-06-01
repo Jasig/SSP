@@ -58,8 +58,8 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        mode: 'local',
 			        typeAhead: true,
 			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true,
+			        allowBlank: true,
+			        forceSelection: false,
 			        anchor: '95%'
 				},{
                 	xtype: 'label',

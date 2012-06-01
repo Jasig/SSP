@@ -84,21 +84,23 @@ Ext.define('Ssp.util.TreeRendererUtils',{
      *             The default is to return branch elements.
      * @nodeType - An optional description for the node type. Used to identify the type of node for drag
      *             and drop functionality. For example with a nodeType set to 'challenge', the node will
-     *             be created with an id such as 12345_challenge.  
+     *             be created with an id such as 12345_challenge.
+     * @expanded - whether or not a branch should load expanded   
      */
-    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection){
+    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable){
     	var nodeIdentifier = "";
     	var enableCheckSelection = enableCheckSelection;
     	var nodes = [];
     	var nodeName = nodeType || "";
     	if (nodeName != "")
     		nodeIdentifier = '_' + nodeName;
-    	
     	Ext.each(records, function(name, index) {
     		var nodeData = {
         	        text: records[index].name,
         	        id: records[index].id + nodeIdentifier,
-        	        leaf: isLeaf || false
+        	        leaf: isLeaf || false,
+        	        expanded: expanded,
+        	        expandable: expandable
         	      };
         	
         	if (enableCheckSelection && isLeaf==true)
@@ -117,6 +119,9 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 	 * @args.isLeaf - Boolean, whether or not the items are branch or leaf nodes
 	 * @args.nodeToAppendTo = the rootNode to append the items
 	 * @args.enableCheckedItems = boolean to determine if a checkbox is created for leaf items in the tree
+     * @args.expanded - boolean to determine whether a branch should appear as expanded
+     * @args.expandable - boolean to determine whether or not the branch can be expanded or collapsed
+     * @args.
      */
     getItems: function( treeRequest ){
     	var me=this;
@@ -126,6 +131,10 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var enableCheckSelection = treeRequest.get('enableCheckedItems');
     	var nodeToAppendTo = treeRequest.get('nodeToAppendTo');
     	var nodeType = treeRequest.get('nodeType');
+    	var expanded = treeRequest.get('expanded');
+    	var expandable = treeRequest.get('expandable');
+    	var callbackFunc = treeRequest.get('callbackFunc');
+    	var callbackScope = treeRequest.get('callbackScope');
     	// retrieve items
 		this.apiProperties.makeRequest({
 			url: this.apiProperties.createUrl( url ),
@@ -137,8 +146,10 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	var nodes = [];
 		    	if (records.length > 0)
 		    	{
-		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection);
+		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable);
 		    		me.appendChildren( nodeToAppendTo, nodes);
+		    		if (callbackFunc != null && callbackFunc != "")
+		    			callbackFunc( callbackScope );
 		    	}
 			}
 		});

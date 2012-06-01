@@ -30,11 +30,6 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		
 		this.initForm();
 		
-		/*
-		this.appEventsController.getApplication().addListener('loadTask', function(){
-    		this.initForm();		
-		},this);
-		*/
     	this.appEventsController.assignEvent({eventName: 'loadTask', callBackFunc: this.initForm, scope: this});
 		
 		return this.callParent(arguments);

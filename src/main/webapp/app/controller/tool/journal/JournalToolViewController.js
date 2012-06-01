@@ -104,8 +104,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     },
 
     onViewHistoryClick: function(button){
-	 console.log('JournalToolViewController->onViewHistoryClick');
-	 this.appEventsController.fireEvent("viewHistory");
+	 this.appEventsController.getApplication().fireEvent("viewHistory");
     },
  
     deleteConfirmation: function() {
@@ -130,13 +129,13 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
      	var id = this.model.get('id');
      	if (btnId=="yes")
      	{
-         	this.apiProperties.makeRequest({
+     		this.apiProperties.makeRequest({
       		   url: this.personJournalUrl+id,
       		   method: 'DELETE',
       		   successFunc: function(response,responseText){
       			   store.remove( store.getById( id ) );
       		   }
-      	    });    		
+      	    });   		
      	}
      },    
     

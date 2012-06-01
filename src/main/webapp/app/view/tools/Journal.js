@@ -63,15 +63,6 @@ Ext.define('Ssp.view.tools.Journal', {
 	    		                }],
 				    
 				    dockedItems: [{
-				        dock: 'bottom',
-				        xtype: 'toolbar',
-				        items: [{
-				            tooltip: 'Print the History for this student',
-				            text: 'View History',
-				            xtype: 'button',
-				            itemId: 'viewHistoryButton'
-				        }]
-				    },{
 				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
@@ -79,6 +70,14 @@ Ext.define('Ssp.view.tools.Journal', {
 				            text: 'Add',
 				            xtype: 'button',
 				            itemId: 'addButton'
+				        },{ 
+				        	xtype: 'tbspacer',
+				        	flex: 1
+				        },{
+				            tooltip: 'Print the History for this student',
+				            text: 'View History',
+				            xtype: 'button',
+				            itemId: 'viewHistoryButton'
 				        }]
 				    }]
 				});
