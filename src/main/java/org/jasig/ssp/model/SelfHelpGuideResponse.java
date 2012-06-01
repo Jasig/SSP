@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 
 @Entity
@@ -44,6 +45,7 @@ public class SelfHelpGuideResponse
 	private SelfHelpGuide selfHelpGuide;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "selfHelpGuideResponse")
+	@Where(clause = "object_status <> 3")
 	private Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = new HashSet<SelfHelpGuideQuestionResponse>(
 			0);
 

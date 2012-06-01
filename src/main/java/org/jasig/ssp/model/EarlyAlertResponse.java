@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.model.reference.EarlyAlertReferral;
@@ -57,12 +58,14 @@ public class EarlyAlertResponse
 	@JoinTable(name = "early_alert_response_early_alert_outreach",
 			joinColumns = @JoinColumn(name = "early_alert_response_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_outreach_id"))
+	@Where(clause = "object_status <> 3")
 	private Set<EarlyAlertOutreach> earlyAlertOutreachIds;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "early_alert_response_early_alert_referral",
 			joinColumns = @JoinColumn(name = "early_alert_response_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_referral_id"))
+	@Where(clause = "object_status <> 3")
 	private Set<EarlyAlertReferral> earlyAlertReferralIds;
 
 	/**
