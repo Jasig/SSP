@@ -2,6 +2,8 @@ package org.jasig.ssp.web.api.reference;
 
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.JournalStepTOFactory;
 import org.jasig.ssp.factory.reference.JournalTrackTOFactory;
@@ -13,6 +15,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepService;
 import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
 import org.jasig.ssp.transferobject.reference.JournalTrackTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -23,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -91,5 +95,34 @@ public class JournalTrackController
 		return new PagingTO<JournalStepTO, JournalStep>(true,
 				data.getResults(), journalStepFactory
 						.asTOList(data.getRows()));
+	}
+
+	@RequestMapping(value = "/{id}/journalStep", method = RequestMethod.POST)
+	public @ResponseBody
+	ServiceResponse addJournalStepToJournalTrack(@PathVariable final UUID id,
+			@RequestBody @NotNull final UUID journalStepId)
+			throws ObjectNotFoundException {
+
+		final JournalStep journalStep = journalStepService.get(journalStepId);
+		final JournalTrack journalTrack = service.get(id);
+
+		service.addJournalStepToJournalTrack(journalStep, journalTrack);
+
+		return new ServiceResponse(true);
+	}
+
+	@RequestMapping(value = "/{id}/journalStep", method = RequestMethod.DELETE)
+	public @ResponseBody
+	ServiceResponse removeJournalStepFromJournalTrack(
+			@PathVariable final UUID id,
+			@RequestBody @NotNull final UUID journalStepId)
+			throws ObjectNotFoundException {
+
+		final JournalStep journalStep = journalStepService.get(journalStepId);
+		final JournalTrack journalTrack = service.get(id);
+
+		service.removeJournalStepFromJournalTrack(journalStep, journalTrack);
+
+		return new ServiceResponse(true);
 	}
 }

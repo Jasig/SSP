@@ -80,5 +80,42 @@
 		</rollback>
 	</changeSet>
 
-
+	<changeSet id="test JournalStep" author="daniel.bower">
+		<insert tableName="journal_step">
+			<column name="id" value="aba1440c-ab5b-11e1-ba73-0026b9e7ff4c" />
+			<column name="name" value="Test Journal Step" />
+			<column name="description" value="This is the description of the Test Journal Step." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_step">
+				<where>id='aba1440c-ab5b-11e1-ba73-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="test journalStepDetail" author="daniel.bower">
+		<insert tableName="journal_step_detail">
+			<column name="id" value="471afc02-ab5c-11e1-a997-0026b9e7ff4c" />
+			<column name="name" value="Test Journal Step Detail" />
+			<column name="description" value="This is the description of the Test Journal Step Detail." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_step_detail">
+				<where>id='471afc02-ab5c-11e1-a997-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
 </databaseChangeLog>
