@@ -48,13 +48,11 @@ public class TaskTO
 			challengeId = task.getChallenge().getId();
 		}
 
-		if (task.getChallengeReferral() == null) {
-			name = task.getName();
-			description = task.getDescription();
-		} else {
+		name = task.getName();
+		description = task.getDescription();
+
+		if (task.getChallengeReferral() != null) {
 			challengeReferralId = task.getChallengeReferral().getId();
-			name = task.getChallengeReferral().getName();
-			description = task.getChallengeReferral().getPublicDescription();
 		}
 
 		confidentialityLevel = ConfidentialityLevelLiteTO.fromModel(
