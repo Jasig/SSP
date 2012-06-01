@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
+import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -50,11 +51,13 @@ public class SelfHelpGuide
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "selfHelpGuide")
 	@OrderBy("questionNumber")
+	@Where(clause = "object_status <> 3")
 	private List<SelfHelpGuideQuestion> selfHelpGuideQuestions = new ArrayList<SelfHelpGuideQuestion>(
 			0);
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "self_help_guide_self_help_guide_group", joinColumns = { @JoinColumn(name = "self_help_guide_id", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "self_help_guide_group_id", nullable = false, updatable = false) })
+	@Where(clause = "object_status <> 3")
 	private Set<SelfHelpGuideGroup> selfHelpGuideGroups = new HashSet<SelfHelpGuideGroup>(
 			0);
 

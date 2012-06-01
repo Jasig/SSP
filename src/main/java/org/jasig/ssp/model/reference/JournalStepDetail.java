@@ -9,6 +9,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -25,6 +26,7 @@ public class JournalStepDetail
 	private int sortOrder;
 
 	@OneToMany(mappedBy = "journalStepDetail")
+	@Where(clause = "object_status <> 3")
 	private Set<JournalStepJournalStepDetail> journalStepJournalStepDetails = new HashSet<JournalStepJournalStepDetail>(
 			0);
 

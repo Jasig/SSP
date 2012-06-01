@@ -11,6 +11,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -40,6 +41,7 @@ public class ChallengeReferral
 	private boolean showInStudentIntake;
 
 	@OneToMany(mappedBy = "challengeReferral")
+	@Where(clause = "object_status <> 3")
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals =
 			new HashSet<ChallengeChallengeReferral>(0);
 

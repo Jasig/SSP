@@ -124,16 +124,17 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 
 	// full Integer class version is for nullable ints
 	protected int hashField(final String name, final Integer value) {
-		return (value == null || value == 0 ? name.hashCode() : value);
+		return ((value == null) || (value == 0) ? name.hashCode() : value);
 	}
 
 	protected int hashField(final String name, final Date value) {
-		return (value == null || value.getTime() == 0 ? name.hashCode() : value
-				.hashCode());
+		return ((value == null) || (value.getTime() == 0) ? name.hashCode()
+				: value
+						.hashCode());
 	}
 
 	protected int hashField(final String name, final Auditable value) {
-		return (value == null || value.getId() == null ? name.hashCode()
+		return ((value == null) || (value.getId() == null) ? name.hashCode()
 				: value.getId().hashCode());
 	}
 

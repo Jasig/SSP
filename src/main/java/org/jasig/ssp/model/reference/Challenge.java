@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.PersonChallenge;
 
@@ -39,6 +40,7 @@ public class Challenge extends AbstractReference implements Auditable {
 	 * as selfHelpQuideChallenges
 	 */
 	@OneToMany(mappedBy = "challenge")
+	@Where(clause = "object_status <> 3")
 	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
 			0);
 
@@ -58,14 +60,17 @@ public class Challenge extends AbstractReference implements Auditable {
 	private boolean showInSelfHelpSearch;
 
 	@OneToMany(mappedBy = "challenge")
+	@Where(clause = "object_status <> 3")
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals = new HashSet<ChallengeChallengeReferral>(
 			0);
 
 	@OneToMany(mappedBy = "challenge")
+	@Where(clause = "object_status <> 3")
 	private Set<ChallengeCategory> challengeCategories = new HashSet<ChallengeCategory>(
 			0);
 
 	@OneToMany(mappedBy = "challenge")
+	@Where(clause = "object_status <> 3")
 	private Set<PersonChallenge> peopleWithChallenge;
 
 	@Column(length = 255)
