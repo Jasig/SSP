@@ -7,40 +7,6 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet author='daniel.bower' id='Add auditing to person table'>
-		<addColumn tableName="person">
-			<column name="created_date" type="datetime" valueDate="2012-03-09">
-				<constraints nullable="true" />
-			</column>
-			<column name="modified_date" type="datetime" valueDate="2012-03-09">
-				<constraints nullable="true" />
-			</column>
-			<column name="created_by" type="uuid"
-				value="58ba5ee3-734e-4ae9-b9c5-943774b4de41">
-				<constraints nullable="true" foreignKeyName="person_created_by_person_id"
-					references="person(id)" />
-			</column>
-			<column name="modified_by" type="uuid"
-				value="58ba5ee3-734e-4ae9-b9c5-943774b4de41">
-				<constraints nullable="true" foreignKeyName="person_modified_by_person_id"
-					references="person(id)" />
-			</column>
-			<column name="object_status" type="int" value="1">
-				<constraints nullable="true" />
-			</column>
-		</addColumn>
-		<addNotNullConstraint tableName="person"
-			columnName="created_date" columnDataType="datetime"/>
-		<addNotNullConstraint tableName="person"
-			columnName="modified_date" columnDataType="datetime"/>
-		<addNotNullConstraint tableName="person"
-			columnName="created_by" columnDataType="uuid"/>
-		<addNotNullConstraint tableName="person"
-			columnName="modified_by" columnDataType="uuid"/>
-		<addNotNullConstraint tableName="person"
-			columnName="object_status" columnDataType="int"/>
-	</changeSet>
-
 	<changeSet author='daniel.bower' id='Add person_demographics table'>
 		<createTable tableName="person_demographics">
 			<column name="id" type="uuid">

@@ -89,7 +89,7 @@ public class StudentType
 	}
 
 	@Override
-	public int hashCode() { // NOPMD
+	public int hashCode() { // NOPMD by jon.adams
 		return hashPrime() * super.hashCode()
 				* (requireInitialAppointment ? 3 : 5);
 	}

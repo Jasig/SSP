@@ -39,7 +39,7 @@ public class ChallengeDaoTest {
 	private static final UUID CONFIDENTIALITYLEVEL_ID = UUID
 			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
 
-	private static final String CONFIDENTIALITYLEVEL_NAME = "EVERYONE";
+	private static final String CONFIDENTIALITYLEVEL_NAME = "Test Confidentiality Level";
 
 	@Autowired
 	transient private ChallengeDao dao;
@@ -74,9 +74,9 @@ public class ChallengeDaoTest {
 		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
-		assertNotNull(obj);
-		assertNotNull(obj.getId());
-		assertNotNull(obj.getName());
+		assertNotNull("Saved should not have been null.", obj);
+		assertNotNull("Saved ID should not have been null.", obj.getId());
+		assertNotNull("Saved name should not have been null.", obj.getName());
 		assertEquals("Confidentiality level name did not match.",
 				CONFIDENTIALITYLEVEL_NAME, obj.getDefaultConfidentialityLevel()
 						.getName());
@@ -94,12 +94,13 @@ public class ChallengeDaoTest {
 		final UUID id = UUID.randomUUID();
 		final Challenge challenge = dao.get(id);
 
-		assertNull(challenge);
+		assertNull("Challenge should not have been null.", challenge);
 	}
 
 	private void assertList(final Collection<Challenge> objects) {
 		for (final Challenge object : objects) {
-			assertNotNull(object.getId());
+			assertNotNull("List item should not have been null.",
+					object.getId());
 		}
 	}
 
@@ -115,8 +116,8 @@ public class ChallengeDaoTest {
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);
 
-		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
-				+ obj2.getId().toString());
+		assertNotNull("obj1 should not have been null.", obj);
+		assertNotNull("obj2 should not have been null.", obj);
 
 		dao.delete(obj);
 		dao.delete(obj2);
@@ -137,7 +138,8 @@ public class ChallengeDaoTest {
 		final List<Challenge> challenges = dao
 				.getAllInStudentIntake(new SortingAndPaging(ObjectStatus.ACTIVE));
 		assertList(challenges);
-		assertFalse(challenges.isEmpty());
+		assertFalse("GetAll() result should not have been empty.",
+				challenges.isEmpty());
 	}
 
 	@Test
