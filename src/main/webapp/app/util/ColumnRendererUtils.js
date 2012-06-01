@@ -43,7 +43,14 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
         strHtml += '</div>';
 	    return strHtml;		
 	},
-    
+ 
+	renderJournalSourceName: function(val, metaData, record) {
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + record.get('journalSource').name.toUpperCase() + '</p>';
+         strHtml += '</div>';
+	    return strHtml;		
+	},	
+	
 	renderPhotoIcon: function(val) {
 	    return '<img src="' + val + '">';
 	}    	

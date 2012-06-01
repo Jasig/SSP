@@ -33,7 +33,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        anchor: '95%'
 				},{
 			        xtype: 'combobox',
-			        itemId: 'journalSource',
+			        itemId: 'journalSourceCombo',
 			        name: 'journalSourceId',
 			        fieldLabel: 'Source',
 			        emptyText: 'Select One',
@@ -63,16 +63,9 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        anchor: '95%'
 				},{
                 	xtype: 'label',
-                	text: 'Add/Edit details for this entry:'
+                	text: 'Select the details for this session'
                 },
-                /*{ xtype: 'journaltracktree', flex:1 }*/
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'Details',
-                    anchor: '100%',
-                    name: 'details',
-                    anchor: '95%'
-                }
+                { xtype: 'journaltracktree', fieldLabel: 'testing a label' }
                 ,{
                     xtype: 'textareafield',
                     fieldLabel: 'Comment',

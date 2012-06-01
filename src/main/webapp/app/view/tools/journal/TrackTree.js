@@ -13,7 +13,7 @@ Ext.define('Ssp.view.tools.journal.TrackTree', {
     initComponent: function(){
     	Ext.apply(this,
     			{
-   		     singleExpand: true,
+   		     singleExpand: false,
 			 store: this.store,
 			 useArrows: true,
 			 rootVisible: false       	

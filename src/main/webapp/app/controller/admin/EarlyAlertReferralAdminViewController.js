@@ -43,12 +43,13 @@ Ext.define('Ssp.controller.admin.EarlyAlertReferralAdminViewController', {
 		var item = new Ssp.model.reference.EarlyAlertReferral();
        	var grid = button.up('grid');
        	item.set('name','default');
+       	item.set('acronym','default');
 
 		Ext.Ajax.request({
 			url: grid.getStore().getProxy().url,
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			jsonData: {"id":"","name":"default","description":""},
+			jsonData: item.data,
 			success: function(response, view) {
 				var r = Ext.decode(response.responseText);
 				item.populateFromGenericObject(r);

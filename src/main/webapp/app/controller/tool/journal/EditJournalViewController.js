@@ -3,6 +3,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
+        appEventsController: 'appEventsController',
     	formUtils: 'formRendererUtils',
     	person: 'currentPerson',
     	model: 'currentJournalEntry'
@@ -27,13 +28,25 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     },
     
 	init: function() {
-		this.getView().getForm().loadRecord(this.model);
-		
 		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personJournalEntry') );
 		this.url = this.url.replace('{id}',this.person.get('id'));
 		
+		this.initForm();
+		
 		return this.callParent(arguments);
     },
+ 
+	initForm: function(){
+		var id = this.model.get("id");
+		this.getView().getForm().reset();
+		this.getView().getForm().loadRecord( this.model );
+		if (id != null && id != "")
+		{
+			Ext.ComponentQuery.query('#confidentialityLevelCombo')[0].setValue( this.model.get('confidentialityLevel').id );
+			Ext.ComponentQuery.query('#journalSourceCombo')[0].setValue( this.model.get('journalSource').id );
+			Ext.ComponentQuery.query('#journalTrackCombo')[0].setValue( this.model.get('journalTrack').id );			
+		}
+	},    
     
 	onSaveClick: function(button) {
 		var me = this;
@@ -49,26 +62,25 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		};
 		if (form.isValid())
 		{
-			form.updateRecord();
-    		record.set('personId', this.person.get('id') );    		
+			form.updateRecord();    		
     		record.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
-			
-    		jsonData = {"id" : "",
-    			 "createdDate" : null,
-    			 "createdBy" : null,
-    			 "modifiedDate" : null,
-    			 "modifiedBy" : null,
-    			 "entryDate" : null,
-    			 "comment" : "Testing",
-    			 "confidentialityLevel" :
-    			    {"id" : "afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c",
-    			     "name" : "EVERYONE"},
-    			 "journalSourceId" : "b2d07973-5056-a51a-8073-1d3641ce507f",
-    			 "journalTrackId" : "b2d07a7d-5056-a51a-80a8-96ae5188a188"
-    			};  		
+    		record.set('journalSource',{id: form.getValues().journalSourceId});
+    		record.set('journalTrack',{id: form.getValues().journalTrackId});
     		
-    		//jsonData = record.data;
+    		var jsdata = 
+    				 [{"journalStep" :
+    		          	{"id" : "0a080114-3799-156f-8137-99220ac10000",
+    					 "name" : "Two"},
+    		           "journalStepDetails" :
+    		          [{"id" : "0a080114-3799-156f-8137-9926abc30003",
+    		            "name" : "Action Plan Developed"}]
+    				 }];
+    		record.set('journalEntryDetails', jsdata);
+    		
+    		jsonData = record.data;
 			
+    		console.log(jsonData);
+    		/*
 			if (id.length > 0)
 			{
 				// editing
@@ -88,7 +100,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 					successFunc: successFunc 
 				});		
 			}
-			
+			*/
 		}else{
 			Ext.Msg.alert('Error','Please correct the errors in your Journal Entry.');
 		}
@@ -101,6 +113,11 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	
 	onJournalTrackComboChange: function(comp, newValue, oldValue, eOpts){
 		console.log('EditJournalViewController->onJournalTrackChange');
+    	if (newValue != "")
+    	{
+    		this.model.set('journalTrack',{id: newValue});
+    		//this.appEventsController.getApplication().fireEvent('setJournalTrack');	    		
+    	}
 	},
 	
 	displayMain: function(){

@@ -132,6 +132,8 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     
     onViewHistoryClick: function(button) {
 		Ext.Msg.alert('Attention','ActionPlanTasksViewController->onViewHistoryClick. This item is completed in the ui. Uncomment to display the History Report when it is complete.');
+		this.appEventsController.fireEvent("viewHistory");
+		/*
 		var url = this.apiProperties.createUrl( this.personViewHistoryUrl );
         this.apiProperties.makeRequest({
 			url: url,
@@ -141,6 +143,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 				// handle response here
 			}
 		});
+		*/
     },
 
     onEmailTasksClick: function(button) {

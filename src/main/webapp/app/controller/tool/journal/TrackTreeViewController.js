@@ -4,6 +4,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     inject: {
     	apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
+        journalEntry: 'currentJournalEntry',
         person: 'currentPerson',
     	treeUtils: 'treeRendererUtils'
     },
@@ -22,29 +23,45 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 	init: function() {
 		var rootNode = null;
 		this.journalTrackUrl = this.apiProperties.getItemUrl('journalTrack');
-		this.journalStepUrl = this.apiProperties.getItemUrl('journalStepUrl');
-		this.journalStepDetailUrl = this.apiProperties.getItemUrl('journalStepDetailUrl');
+		this.journalStepUrl = this.apiProperties.getItemUrl('journalStep');
+		this.journalStepDetailUrl = this.apiProperties.getItemUrl('journalStepDetail');
 
-		// clear the categories
-		this.treeUtils.clearRootCategories();
+		this.loadSteps();
 
-    	// load the steps
-    	var treeRequest = new Ssp.model.util.TreeRequest();
-    	treeRequest.set('url', this.journalTrackUrl);
-    	treeRequest.set('nodeType','journalTrack');
-    	treeRequest.set('isLeaf', false);
-    	treeRequest.set('enableCheckedItems', false);	
-    	this.treeUtils.getItems( treeRequest );
-
+    	this.appEventsController.assignEvent({eventName: 'setJournalTrack', callBackFunc: this.loadSteps, scope: this});		
+		
 		return this.callParent(arguments);
     },
     
+    destroy: function() {
+    	this.appEventsController.removeEvent({eventName: 'setJournalTrack', callBackFunc: this.loadSteps, scope: this});
+
+        return this.callParent( arguments );
+    },    
+    
+    loadSteps: function(){
+		// clear the categories
+		this.treeUtils.clearRootCategories();
+		
+		var journalTrackId = this.journalEntry.get('journalTrack').id;
+		
+    	// load the steps
+		if (journalTrackId != null && journalTrackId != "")
+		{
+			var treeRequest = new Ssp.model.util.TreeRequest();
+	    	treeRequest.set('url', this.journalStepUrl);
+	    	treeRequest.set('nodeType','journalStep');
+	    	treeRequest.set('isLeaf', false);
+	    	treeRequest.set('enableCheckedItems', false);	
+	    	this.treeUtils.getItems( treeRequest );			
+		}
+    },
+    
     onItemExpand: function(nodeInt, obj){
-    	/*
     	var node = nodeInt;
-    	var url = this.journalStepUrl;
+    	var url = this.journalStepDetailUrl;
     	var nodeType = "";
-    	var isLeaf = false;
+    	var isLeaf = true;
     	var nodeName =  this.treeUtils.getNameFromNodeId( node.data.id );
     	var id = this.treeUtils.getIdFromNodeId( node.data.id );
     	if (url != "")
@@ -57,7 +74,6 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         	treeRequest.set('enableCheckedItems',true);	
     		this.treeUtils.getItems( treeRequest );
     	}
-    	*/
     },
     
     onItemClick: function(view, record, item, index, e, eOpts){
