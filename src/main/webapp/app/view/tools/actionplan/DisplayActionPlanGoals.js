@@ -13,6 +13,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
     width: '100%',
 	height: '100%',   
     layout: 'anchor',
+    itemId: 'goalsPanel',
     defaults: {
         anchor: '100%'
     },	

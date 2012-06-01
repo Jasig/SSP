@@ -2,6 +2,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     extend: 'Deft.mvc.ViewController',	
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
+    	appEventsController: 'appEventsController',
     	formUtils: 'formRendererUtils',
         outcomesStore: 'earlyAlertOutcomesStore',
         outreachesStore: 'earlyAlertOutreachesStore',
@@ -35,6 +36,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     },
 
     onViewHistoryClick: function(button){
-	 console.log('EarlyAlertToolViewController->onViewHistoryClick');
+	 this.appEventsController.getApplication().fireEvent('viewHistory');
     }
 });

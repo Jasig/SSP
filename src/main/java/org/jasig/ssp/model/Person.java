@@ -24,6 +24,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
@@ -284,6 +285,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
+	@Where(clause = "object_status <> 3")
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
@@ -294,6 +296,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@Where(clause = "object_status <> 3")
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
@@ -304,24 +307,28 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@Where(clause = "object_status <> 3")
 	private Set<PersonChallenge> challenges;
 
 	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
+	@Where(clause = "object_status <> 3")
 	private Set<PersonTool> tools;
 
 	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
+	@Where(clause = "object_status <> 3")
 	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
 
 	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
+	@Where(clause = "object_status <> 3")
 	private Set<Task> tasks;
 
 	/**
@@ -342,18 +349,21 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
+	@Where(clause = "object_status <> 3")
 	private Set<PersonServiceReason> serviceReasons;
 
 	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
+	@Where(clause = "object_status <> 3")
 	private Set<PersonSpecialServiceGroup> specialServiceGroups;
 
 	@Nullable
 	@OneToMany(mappedBy = "person", orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
+	@Where(clause = "object_status <> 3")
 	private Set<PersonReferralSource> referralSources;
 
 	@Nullable

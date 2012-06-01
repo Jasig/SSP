@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.JournalEntry;
+import org.jasig.ssp.model.reference.JournalSource;
+import org.jasig.ssp.model.reference.JournalTrack;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
+import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 /**
  * JournalEntry transfer object
@@ -23,7 +26,11 @@ public class JournalEntryTO
 
 	private String comment;
 
-	private UUID personId, journalSourceId, journalTrackId;
+	private UUID personId;
+
+	private ReferenceLiteTO<JournalSource> journalSource;
+
+	private ReferenceLiteTO<JournalTrack> journalTrack;
 
 	private ConfidentialityLevelLiteTO confidentialityLevel;
 
@@ -49,10 +56,12 @@ public class JournalEntryTO
 		comment = journalEntry.getComment();
 		personId = journalEntry.getPerson() == null ? null
 				: journalEntry.getPerson().getId();
-		journalSourceId = journalEntry.getJournalSource() == null ? null
-				: journalEntry.getJournalSource().getId();
-		journalTrackId = journalEntry.getJournalTrack() == null ? null
-				: journalEntry.getJournalTrack().getId();
+		journalSource = journalEntry.getJournalSource() == null ? null
+				: new ReferenceLiteTO<JournalSource>(
+						journalEntry.getJournalSource());
+		journalTrack = journalEntry.getJournalTrack() == null ? null
+				: new ReferenceLiteTO<JournalTrack>(
+						journalEntry.getJournalTrack());
 
 		confidentialityLevel = ConfidentialityLevelLiteTO.fromModel(
 				journalEntry.getConfidentialityLevel());
@@ -121,20 +130,22 @@ public class JournalEntryTO
 		this.personId = personId;
 	}
 
-	public UUID getJournalSourceId() {
-		return journalSourceId;
+	public ReferenceLiteTO<JournalSource> getJournalSource() {
+		return journalSource;
 	}
 
-	public void setJournalSourceId(final UUID journalSourceId) {
-		this.journalSourceId = journalSourceId;
+	public void setJournalSource(
+			final ReferenceLiteTO<JournalSource> journalSource) {
+		this.journalSource = journalSource;
 	}
 
-	public UUID getJournalTrackId() {
-		return journalTrackId;
+	public ReferenceLiteTO<JournalTrack> getJournalTrack() {
+		return journalTrack;
 	}
 
-	public void setJournalTrackId(final UUID journalTrackId) {
-		this.journalTrackId = journalTrackId;
+	public void setJournalTrack(
+			final ReferenceLiteTO<JournalTrack> journalTrack) {
+		this.journalTrack = journalTrack;
 	}
 
 	public ConfidentialityLevelLiteTO getConfidentialityLevel() {

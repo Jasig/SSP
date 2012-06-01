@@ -12,6 +12,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
     },
     initComponent: function() {
 		Ext.applyIf(this, {
+			autoScroll: true,
         	title: 'Early Alert Response',
         	defaults:{
         		labelWidth: 200
@@ -20,23 +21,12 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
                 {
                 	xtype: 'displayfield',
                 	fieldLabel: 'Early Alert Response',
-                	value: this.earlyAlert.get('name'),
+                	value: this.earlyAlert.get('courseTitle'),
                 	anchor: '95%'
                 },{
-		            xtype: 'multiselect',
-		            name: 'outreach',
-		            fieldLabel: 'Outreach',
-		            store: this.outreachesStore,
-		            displayField: 'name',
-		            valueField: 'id',
-		            allowBlank: false,
-		            minSelections: 1,
-		            // maxSelections: 3,
-		            anchor: '95%'
-		        },{
 			        xtype: 'combobox',
-			        itemId: 'outcomesCombo',
-			        name: 'outcomeId',
+			        itemId: 'outcomeCombo',
+			        name: 'earlyAlertOutcomeId',
 			        fieldLabel: 'Outcome',
 			        emptyText: 'Select One',
 			        store: this.outcomesStore,
@@ -49,15 +39,30 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
 			        forceSelection: true,
 			        anchor: '95%'
 				},{
+					xtype: 'textfield',
+					itemId: 'otherOutcomeDescriptionText',
+					name: 'earlyAlertOutcomeOtherDescription',
+					fieldLabel: 'Other Outcome Description',
+					anchor: '95%'
+				},{
 		            xtype: 'multiselect',
-		            name: 'referrals',
+		            name: 'earlyAlertOutreachIds',
+		            fieldLabel: 'Outreach',
+		            store: this.outreachesStore,
+		            displayField: 'name',
+		            valueField: 'id',
+		            allowBlank: false,
+		            minSelections: 0,
+		            anchor: '95%'
+		        },{
+		            xtype: 'multiselect',
+		            name: 'earlyAlertReferralIds',
 		            fieldLabel: 'Department and Service Referrals',
 		            store: this.referralsStore,
 		            displayField: 'name',
 		            valueField: 'id',
 		            allowBlank: true,
 		            minSelections: 0,
-		            // maxSelections: 3,
 		            anchor: '95%'
 		        },
                 {

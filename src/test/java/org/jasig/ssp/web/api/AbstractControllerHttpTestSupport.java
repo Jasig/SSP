@@ -19,6 +19,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerMapping;
@@ -128,7 +129,13 @@ public abstract class AbstractControllerHttpTestSupport<C extends BaseController
 
 		while (itt.hasNext()) {
 			final HandlerMapping mapping = itt.next();
-			chain = mapping.getHandler(request);
+
+			try {
+				chain = mapping.getHandler(request);
+			} catch (HttpRequestMethodNotSupportedException e) {
+				// ignore and try next
+			}
+
 			if (chain != null) {
 				break;
 			}

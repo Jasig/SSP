@@ -12,6 +12,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonReferralSource;
+import org.jasig.ssp.model.PersonServiceReason;
+import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.reference.ReferralSource;
+import org.jasig.ssp.model.reference.ServiceReason;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 import com.google.common.collect.Lists;
 
@@ -57,6 +64,12 @@ public class PersonTO
 	private Integer anticipatedStartYear;
 
 	private Date studentIntakeRequestDate;
+
+	private List<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroups;
+
+	private List<ReferenceLiteTO<ReferralSource>> referralSources;
+
+	private List<ReferenceLiteTO<ServiceReason>> serviceReasons;
 
 	/**
 	 * Empty constructor
@@ -107,6 +120,41 @@ public class PersonTO
 		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
 		studentTypeId = (model.getStudentType() == null) ? null : model
 				.getStudentType().getId();
+
+		if ((null != model.getSpecialServiceGroups())
+				&& !(model.getSpecialServiceGroups().isEmpty())) {
+			final List<SpecialServiceGroup> specialServiceGroupsFromModel = Lists
+					.newArrayList();
+			for (PersonSpecialServiceGroup pssg : model
+					.getSpecialServiceGroups()) {
+				specialServiceGroupsFromModel
+						.add(pssg.getSpecialServiceGroup());
+			}
+			specialServiceGroups = ReferenceLiteTO
+					.toTOList(specialServiceGroupsFromModel);
+		}
+
+		if ((null != model.getReferralSources())
+				&& !(model.getSpecialServiceGroups().isEmpty())) {
+			final List<ReferralSource> referralSourcesFromModel = Lists
+					.newArrayList();
+			for (PersonReferralSource prs : model.getReferralSources()) {
+				referralSourcesFromModel.add(prs.getReferralSource());
+			}
+			referralSources = ReferenceLiteTO
+					.toTOList(referralSourcesFromModel);
+		}
+
+		if ((null != model.getServiceReasons())
+				&& !(model.getServiceReasons().isEmpty())) {
+			final List<ServiceReason> serviceReasonsFromModel = Lists
+					.newArrayList();
+			for (PersonServiceReason psr : model.getServiceReasons()) {
+				serviceReasonsFromModel.add(psr.getServiceReason());
+			}
+			serviceReasons = ReferenceLiteTO.toTOList(serviceReasonsFromModel);
+		}
+
 	}
 
 	/**
@@ -355,4 +403,32 @@ public class PersonTO
 	public void setStudentTypeId(final UUID studentTypeId) {
 		this.studentTypeId = studentTypeId;
 	}
+
+	public List<ReferenceLiteTO<SpecialServiceGroup>> getSpecialServiceGroups() {
+		return specialServiceGroups;
+	}
+
+	public void setSpecialServiceGroups(
+			final List<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroups) {
+		this.specialServiceGroups = specialServiceGroups;
+	}
+
+	public List<ReferenceLiteTO<ReferralSource>> getReferralSources() {
+		return referralSources;
+	}
+
+	public void setReferralSources(
+			final List<ReferenceLiteTO<ReferralSource>> referralSources) {
+		this.referralSources = referralSources;
+	}
+
+	public List<ReferenceLiteTO<ServiceReason>> getServiceReasons() {
+		return serviceReasons;
+	}
+
+	public void setServiceReasons(
+			final List<ReferenceLiteTO<ServiceReason>> serviceReasons) {
+		this.serviceReasons = serviceReasons;
+	}
+
 }

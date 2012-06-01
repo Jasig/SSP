@@ -16,7 +16,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.PersonChallenge;
 
 /**
  * Challenge reference object.
@@ -38,6 +40,7 @@ public class Challenge extends AbstractReference implements Auditable {
 	 * as selfHelpQuideChallenges
 	 */
 	@OneToMany(mappedBy = "challenge")
+	@Where(clause = "object_status <> 3")
 	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
 			0);
 
@@ -57,12 +60,18 @@ public class Challenge extends AbstractReference implements Auditable {
 	private boolean showInSelfHelpSearch;
 
 	@OneToMany(mappedBy = "challenge")
+	@Where(clause = "object_status <> 3")
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals = new HashSet<ChallengeChallengeReferral>(
 			0);
 
 	@OneToMany(mappedBy = "challenge")
+	@Where(clause = "object_status <> 3")
 	private Set<ChallengeCategory> challengeCategories = new HashSet<ChallengeCategory>(
 			0);
+
+	@OneToMany(mappedBy = "challenge")
+	@Where(clause = "object_status <> 3")
+	private Set<PersonChallenge> peopleWithChallenge;
 
 	@Column(length = 255)
 	private String tags;
@@ -191,6 +200,15 @@ public class Challenge extends AbstractReference implements Auditable {
 	public void setChallengeCategories(
 			final Set<ChallengeCategory> challengeCategories) {
 		this.challengeCategories = challengeCategories;
+	}
+
+	public Set<PersonChallenge> getPeopleWithChallenge() {
+		return peopleWithChallenge;
+	}
+
+	public void setPeopleWithChallenge(
+			final Set<PersonChallenge> peopleWithChallenge) {
+		this.peopleWithChallenge = peopleWithChallenge;
 	}
 
 	@Override

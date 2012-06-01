@@ -17,7 +17,10 @@ Ext.define('Ssp.util.Constants',{
         FUNDING_SOURCE_OTHER_ID: '365e8c95-f356-4f1f-8d79-4771ae8b0291',
         
         // CHALLENGES
-        CHALLENGE_OTHER_ID: '365e8c95-f356-4f1f-8d79-4771ae8b0291'
+        CHALLENGE_OTHER_ID: '365e8c95-f356-4f1f-8d79-4771ae8b0291',
+    
+        // EARLY ALERT OUTCOME
+        OTHER_EARLY_ALERT_OUTCOME_ID: '0a080114-3799-1bf5-8137-9a778e200004'    
     },
 
 	initComponent: function() {

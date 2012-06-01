@@ -16,12 +16,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     	personTaskUrl: '',
     	personTaskGroupUrl: '',
     	personEmailTaskUrl: '',
-    	personViewHistoryUrl: '',
     	personPrintTaskUrl: ''
     },
     
-    control: {
-    	
+    control: {    	
     	'taskStatusTabs': {
     		tabchange: 'onTaskStatusTabChange'
     	},
@@ -74,8 +72,6 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		this.personTaskGroupUrl = this.personTaskGroupUrl.replace('{id}',personId);
 		this.personEmailTaskUrl = this.apiProperties.getItemUrl('personEmailTask');
 		this.personEmailTaskUrl = this.personEmailTaskUrl.replace('{id}',personId);	
-		this.personViewHistoryUrl = this.apiProperties.getItemUrl('personViewHistory');
-		this.personViewHistoryUrl = this.personViewHistoryUrl.replace('{id}',personId);
 		this.personPrintTaskUrl = this.apiProperties.getItemUrl('personPrintTask');
 		this.personPrintTaskUrl = this.personPrintTaskUrl.replace('{id}',personId);
 		
@@ -131,21 +127,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     },
     
     onViewHistoryClick: function(button) {
-		Ext.Msg.alert('Attention','ActionPlanTasksViewController->onViewHistoryClick. This item is completed in the ui. Uncomment to display the History Report when it is complete.');
-		var url = this.apiProperties.createUrl( this.personViewHistoryUrl );
-        this.apiProperties.makeRequest({
-			url: url,
-			method: 'GET',
-			jsonData: jsonData,
-			successFunc: function(){
-				// handle response here
-			}
-		});
+		this.appEventsController.getApplication().fireEvent("viewHistory");
     },
 
     onEmailTasksClick: function(button) {
-		Ext.Msg.alert('Attention','ActionPlanTasksViewController->onEmailTasksClick. This item is completed in the ui. Uncomment to email tasks when the API is complete.'); 	
-		/*
     	var me=this;
 		Ext.create('Ext.window.Window', {
 		    title: 'To whom would you like to send this Action Plan',
@@ -183,7 +168,6 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		        }]
     	    }]
 		}).show();
-		*/
     },
     
     emailTaskList: function( button ){
@@ -220,6 +204,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 
 		    if (valid==true)
 		    {
+		    	/*
 		    	if (jsonData.taskIds.length > 0){
 			    	// email the task list
 		    		url = this.apiProperties.createUrl( this.personEmailTaskUrl );
@@ -235,6 +220,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		    	}else{
 			    	Ext.Msg.alert('Error','Please select the tasks you would like to send before initiating an email.');		    		
 		    	}
+		    	*/
 		    }else{
 		    	Ext.Msg.alert('Error','1 or more of the addresses you entered are invalid. Please correct the form and try again.');		    	
 		    }	
@@ -249,33 +235,35 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     },
     
     onPrintTasksClick: function(button) {
-		Ext.Msg.alert('Attention','ActionPlanTasksViewController->onPrintTasksClick. This item is completed in the ui. Uncomment to display the printed task report when it is complete.'); 	
-    	/*
     	var grid, url, jsonData;	
-		var grid = button.up('panel').down('grid');
-	    var jsonData = this.getSelectedIdsArray( grid.getView().getSelectionModel().getSelection() );
-	    if (jsonData.length > 0)
+		var tasksGrid = button.up('panel').down('grid');
+		var goals = Ext.ComponentQuery.query('#goalsPanel');
+		var jsonData = {
+	    				"taskIds": this.getSelectedIdsArray( tasksGrid.getView().getSelectionModel().getSelection() ),
+	    		        "goalIds": this.getSelectedIdsArray( tasksGrid.getView().getSelectionModel().getSelection() )
+	    		        };
+	    if (jsonData.taskIds.length > 0)
 	    {
-			url = this.apiProperties.createUrl( this.personPrintTaskUrl );
-	        this.apiProperties.makeRequest({
+	    	url = this.apiProperties.createUrl( this.personPrintTaskUrl );
+	        /*
+			this.apiProperties.makeRequest({
 				url: url,
 				method: 'GET',
 				jsonData: jsonData,
 				successFunc: function(){
 					// handle response here
 				}
-			});	    	
+			});
+			*/	    	
 	    }else{
-	    	Ext.Msg.alert('Please select the tasks you would like to print.');
+	    	Ext.Msg.alert('Please select the tasks and goals you would like to print.');
 	    }
-	    */
     },
     
     getSelectedIdsArray: function(arr){
 		var selectedIds = [];
 		Ext.each(arr, function(item, index) {
-			var obj = {id: item.get('id')};
-			selectedIds.push( obj );
+			selectedIds.push( item.id );
 		});
 		
 		return selectedIds;

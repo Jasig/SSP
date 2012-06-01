@@ -1,6 +1,9 @@
+import java.util.List;
+
 import org.jasig.ssp.*
-import org.jasig.ssp.transferobject.PersonChallengeTO
-import org.jasig.ssp.transferobject.PersonFundingSourceTO
+import org.jasig.ssp.model.reference.*
+import org.jasig.ssp.transferobject.*
+import org.jasig.ssp.transferobject.reference.*;
 
 import com.google.common.collect.Lists
 
@@ -21,25 +24,42 @@ String submitChildCareArrangement(ApiConnection conn, JsonSlurper jsonParser){
 }
 
 String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
+	
+	//retrieve the intake form
 	String intakeForm = conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff")
+	
+	//lets manipulate it a bit
 	def result = jsonParser.parseText(intakeForm)
+	
+	//remove the referenceData
 	result.referenceData = null
 	
+	//add a challenge
 	List<PersonChallengeTO> challenges = Lists.newArrayList();
 	challenges << new PersonChallengeTO(challengeId: UUID.fromString("07b5c3ac-3bdf-4d12-b65d-94cb55167998"), personId: UUID.fromString(result.person.id), description:"Childcare")
-	
 	result.personChallenges = challenges
 	
+	//add a funding source
 	List<PersonFundingSourceTO> fundings = Lists.newArrayList();
 	fundings << new PersonFundingSourceTO(fundingSourceId:UUID.fromString("365e8c95-f356-4f1f-8d79-4771ae8b0291"), personId: UUID.fromString(result.person.id), description:"Other")
-	
 	result.personFundingSources = fundings
 	
-	//return toJson(result)
-	//return conn.put("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff", intakeForm)
+	//add a serviceReason
+	List<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroups = Lists.newArrayList();
+	specialServiceGroups << new ReferenceLiteTO(id: UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"))
+	result.person.specialServiceGroups = specialServiceGroups;
+	
+	//subit the manipulated form
 	conn.put("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff", toJson(result))
 	
-	return conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff")
+	//Retrieve the form once more
+	result = jsonParser.parseText( conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff"))
+	
+	//we're not interested in the reference data
+	result.referenceData = null
+	
+	//retrun the resulting json
+	return toJson(result)	
 }
 
 String addChallengeToCategory(ApiConnection conn){
@@ -50,9 +70,13 @@ String addChallengeToCategory(ApiConnection conn){
 String addGoalToPerson(ApiConnection conn){
 	String form = '{"id":"","createdDate":null,"name":"Get a 2.0 GPA","personId":"58ba5ee3-734e-4ae9-b9c5-943774b4de41","description":"Get a 2.0 GPA","createdBy":{"id":"","firstName":"","lastName":""},"modifiedBy":{"id":"","firstName":"","lastName":""},"confidentialityLevel":{"id":"afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c","name":null}}'
 	return conn.post("api/1/person/58ba5ee3-734e-4ae9-b9c5-943774b4de41/goal/", form)
-	
 }
 
+
+String getAllJournalEntriesForPerson(ApiConnection conn){
+	//"/1/person/{personId}/journalEntry"
+	return conn.get("api/1/person/f549ecab-5110-4cc1-b2bb-369cac854dea/journalEntry/")
+}
 
 String toJson(def form){
 	def builder = new JsonBuilder()
@@ -69,10 +93,9 @@ ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "student0",
 
 //String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
-String output = addGoalToPerson(conn) 
+//String output = addGoalToPerson(conn) 
+
+String output = getAllJournalEntriesForPerson(conn);
 
 conn.formatAndPrintJson(output)
-
-
-
-
+//println (output);

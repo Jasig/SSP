@@ -10,3 +10,11 @@
 pre {
     font-size: 11px; 
 }
+
+.sspOuter {
+	height: 700px;
+}
+
+.sspOuter > div {
+	height: 100%;
+}

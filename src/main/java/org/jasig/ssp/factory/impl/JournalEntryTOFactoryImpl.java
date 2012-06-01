@@ -53,14 +53,16 @@ public class JournalEntryTOFactoryImpl
 		model.setComment(tObject.getComment());
 		model.setEntryDate(tObject.getEntryDate());
 
-		if (tObject.getJournalSourceId() != null) {
+		if ((tObject.getJournalSource() != null)
+				&& (tObject.getJournalSource().getId() != null)) {
 			model.setJournalSource(journalSourceService.get(tObject
-					.getJournalSourceId()));
+					.getJournalSource().getId()));
 		}
 
-		if (tObject.getJournalTrackId() != null) {
+		if ((tObject.getJournalTrack() != null)
+				&& (tObject.getJournalTrack().getId() != null)) {
 			model.setJournalTrack(journalTrackService.get(tObject
-					.getJournalTrackId()));
+					.getJournalTrack().getId()));
 		}
 
 		if ((tObject.getConfidentialityLevel() == null)

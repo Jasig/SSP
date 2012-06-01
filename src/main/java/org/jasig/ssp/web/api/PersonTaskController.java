@@ -7,15 +7,19 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.jasig.ssp.factory.GoalTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
+import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.service.GoalService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -55,6 +59,12 @@ public class PersonTaskController extends
 
 	@Autowired
 	private transient TaskTOFactory factory;
+
+	@Autowired
+	private transient GoalService goalService;
+
+	@Autowired
+	private transient GoalTOFactory goalTOFactory;
 
 	@Override
 	protected TaskTOFactory getFactory() {
@@ -139,18 +149,28 @@ public class PersonTaskController extends
 	 */
 	@RequestMapping(value = "/print/", method = RequestMethod.POST)
 	public @ResponseBody
-	List<TaskTO> print(
+	Map<String, Object> print(
 			final @PathVariable UUID personId,
 			final @RequestBody List<UUID> taskIds)
 			throws ObjectNotFoundException {
 
+		final Map<String, Object> tasksAndGoals = Maps.newHashMap();
+
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 
-		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
-				taskIds, personService.get(personId),
-				securityService.getSessionId(), sAndP);
+		final Person person = personService.get(personId);
 
-		return TaskTO.toTOList(tasks);
+		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
+				taskIds, person, securityService.getSessionId(), sAndP);
+
+		tasksAndGoals.put("tasks", TaskTO.toTOList(tasks));
+
+		final PagingWrapper<Goal> goals = goalService.getAllForPerson(person,
+				sAndP);
+
+		tasksAndGoals.put("goals", goalTOFactory.asTOList(goals.getRows()));
+
+		return tasksAndGoals;
 	}
 
 	/**

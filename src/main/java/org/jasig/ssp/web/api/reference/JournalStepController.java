@@ -2,6 +2,8 @@ package org.jasig.ssp.web.api.reference;
 
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.JournalStepDetailTOFactory;
 import org.jasig.ssp.factory.reference.JournalStepTOFactory;
@@ -12,6 +14,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.service.reference.JournalStepService;
 import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -22,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -90,5 +94,39 @@ public class JournalStepController
 		return new PagingTO<JournalStepDetailTO, JournalStepDetail>(true,
 				data.getResults(), journalStepDetailTOFactory
 						.asTOList(data.getRows()));
+	}
+
+	@RequestMapping(value = "/{id}/journalStepDetail", method = RequestMethod.POST)
+	public @ResponseBody
+	ServiceResponse addJournalStepDetailToJournalStep(
+			@PathVariable final UUID id,
+			@RequestBody @NotNull final UUID journalStepDetailId)
+			throws ObjectNotFoundException {
+
+		final JournalStepDetail journalStepDetail = journalStepDetailService
+				.get(journalStepDetailId);
+		final JournalStep journalStep = service.get(id);
+
+		service.addJournalStepDetailToJournalStep(journalStepDetail,
+				journalStep);
+
+		return new ServiceResponse(true);
+	}
+
+	@RequestMapping(value = "/{id}/journalStepDetail", method = RequestMethod.DELETE)
+	public @ResponseBody
+	ServiceResponse removeJournalStepDetailFromJournalStep(
+			@PathVariable final UUID id,
+			@RequestBody @NotNull final UUID journalStepDetailId)
+			throws ObjectNotFoundException {
+
+		final JournalStepDetail journalStepDetail = journalStepDetailService
+				.get(journalStepDetailId);
+		final JournalStep journalStep = service.get(id);
+
+		service.removeJournalStepDetailFromJournalStep(journalStepDetail,
+				journalStep);
+
+		return new ServiceResponse(true);
 	}
 }

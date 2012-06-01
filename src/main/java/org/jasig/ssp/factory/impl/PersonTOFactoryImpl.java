@@ -2,6 +2,9 @@ package org.jasig.ssp.factory.impl;
 
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.PersonReferralSourceTOFactory;
+import org.jasig.ssp.factory.PersonServiceReasonTOFactory;
+import org.jasig.ssp.factory.PersonSpecialServiceGroupTOFactory;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -30,6 +33,15 @@ public class PersonTOFactoryImpl extends
 
 	@Autowired
 	private transient StudentTypeService studentTypeService;
+
+	@Autowired
+	private transient PersonSpecialServiceGroupTOFactory personSpecialServiceGroupTOFactory;
+
+	@Autowired
+	private transient PersonReferralSourceTOFactory personReferralSourceTOFactory;
+
+	@Autowired
+	private transient PersonServiceReasonTOFactory personServiceReasonTOFactory;
 
 	@Override
 	protected PersonDao getDao() {
@@ -70,6 +82,17 @@ public class PersonTOFactoryImpl extends
 
 		model.setCoach((tObject.getCoachId() == null) ? null : personService
 				.get(tObject.getCoachId()));
+
+		personSpecialServiceGroupTOFactory.updateSetFromLites(
+				model.getSpecialServiceGroups(),
+				tObject.getSpecialServiceGroups(), model);
+
+		personReferralSourceTOFactory
+				.updateSetFromLites(model.getReferralSources(),
+						tObject.getReferralSources(), model);
+
+		personServiceReasonTOFactory.updateSetFromLites(
+				model.getServiceReasons(), tObject.getServiceReasons(), model);
 
 		return model;
 	}

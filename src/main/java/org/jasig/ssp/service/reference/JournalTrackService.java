@@ -2,7 +2,9 @@ package org.jasig.ssp.service.reference;
 
 import java.util.UUID;
 
+import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.model.reference.JournalTrackJournalStep;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -11,9 +13,6 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * JournalTrackService
- * 
- * @author daniel.bower
- * 
  */
 public interface JournalTrackService extends
 		AuditableCrudService<JournalTrack> {
@@ -33,4 +32,12 @@ public interface JournalTrackService extends
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;
+
+	JournalTrackJournalStep addJournalStepToJournalTrack(
+			JournalStep journalStep,
+			JournalTrack journalTrack);
+
+	JournalTrackJournalStep removeJournalStepFromJournalTrack(
+			JournalStep journalStep,
+			JournalTrack journalTrack);
 }

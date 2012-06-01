@@ -5,6 +5,7 @@ import java.util.List;
 import org.jasig.ssp.dao.reference.ChallengeChallengeReferralDao;
 import org.jasig.ssp.dao.reference.ChallengeDao;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Category;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeChallengeReferral;
@@ -60,6 +61,13 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 			final Category category,
 			final SortingAndPaging sAndP) {
 		return dao.getAllForCategory(category.getId(), sAndP);
+	}
+
+	@Override
+	public PagingWrapper<Challenge> getAllForPerson(
+			final Person person,
+			final SortingAndPaging sAndP) {
+		return dao.getAllForPerson(person.getId(), sAndP);
 	}
 
 	@Override

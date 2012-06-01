@@ -9,6 +9,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -21,6 +22,7 @@ public class Category extends AbstractReference implements Auditable {
 	private static final long serialVersionUID = 4274075255831698154L;
 
 	@OneToMany(mappedBy = "category")
+	@Where(clause = "object_status <> 3")
 	private Set<ChallengeCategory> challengeCategories = new HashSet<ChallengeCategory>(
 			0);
 
