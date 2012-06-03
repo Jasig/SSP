@@ -47,7 +47,7 @@ public class TaskDaoTest {
 	private static final UUID CONFIDENTIALITYLEVEL_ID = UUID
 			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
 
-	private static final String CONFIDENTIALITYLEVEL_NAME = "EVERYONE";
+	private static final String CONFIDENTIALITYLEVEL_NAME = "Test Confidentiality Level";
 
 	@Autowired
 	private transient TaskDao dao;
