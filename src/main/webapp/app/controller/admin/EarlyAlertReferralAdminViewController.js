@@ -42,8 +42,10 @@ Ext.define('Ssp.controller.admin.EarlyAlertReferralAdminViewController', {
 	addRecord: function(button){
 		var item = new Ssp.model.reference.EarlyAlertReferral();
        	var grid = button.up('grid');
+       	var store = grid.getStore();
        	item.set('name','default');
        	item.set('acronym','default');
+       	item.set('sortOrder',store.getTotalCount()+1)
 
 		Ext.Ajax.request({
 			url: grid.getStore().getProxy().url,

@@ -9,6 +9,52 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     	        expanded: true,
     	        children: [
     						{
+    							text: 'Beta',
+    							title: 'Beta',
+    							form: '',
+    							expanded: false,
+    							children: [
+    									{
+    										text: 'Program Status Change Reasons',
+    										title: 'Program Status Change Reasons',
+    										store: 'programStatusChangeReasons',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    								    },{
+    										text: 'Referral Sources',
+    										title: 'Referral Sources',
+    										store: 'referralSources',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    								    },{
+    										text: 'Special Service Groups',
+    										title: 'Special Service Groups',
+    										store: 'specialServiceGroups',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    									},
+    									{
+    										text: 'Service Reasons',
+    										title: 'Service Reasons',
+    										store: 'serviceReasons',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    								    },
+    									{
+    										text: 'Student Types',
+    										title: 'Student Types',
+    										store: 'studentTypes',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    								    },{
+    								    	text: 'Campuses',
+    										title: 'Campuses',
+    										store: '',
+    										form: 'CampusAdmin',
+    										leaf: true
+    									}
+    							]
+    						},{
     							text: 'Student Intake',
     							title: 'Student Intake',
     							form: '',
@@ -118,16 +164,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     										title: 'Confidentiality Levels',
     										store: 'confidentialityLevels',
     										form: 'ConfidentialityLevelAdmin',
-    										leaf: true }]
-    						},{
-    							text: 'Campus',
-    							title: 'Campus',
-    							form: '',
-    							expanded: false,
-    							children: [{text: 'Campuses',
-    										title: 'Campuses',
-    										store: '',
-    										form: 'CampusAdmin',
     										leaf: true }]
     						},{
     							text: 'Early Alert',

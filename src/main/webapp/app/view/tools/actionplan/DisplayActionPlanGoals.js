@@ -26,7 +26,6 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 				title: 'Goals',
 				store: this.store,
 				selModel: sm,
-				
 			    columns: [{
 	    	        header: 'Name',
 	    	        flex: 1,

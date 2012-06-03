@@ -25,8 +25,13 @@ Ext.define('Ssp.controller.AdminViewController', {
         journalStepsStore: 'journalStepsStore',
         journalTracksStore: 'journalTracksStore',
     	maritalStatusesStore: 'maritalStatusesStore',
+    	programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
+    	referralSourcesStore: 'referralSourcesStore',
+    	serviceReasonsStore: 'serviceReasonsStore',
+    	specialServiceGroupsStore: 'specialServiceGroupsStore',
         statesStore: 'statesStore',
         studentStatusesStore: 'studentStatusesStore',
+        studentTypesStore: 'studentTypesStore',
     	veteranStatusesStore: 'veteranStatusesStore'
     },
 

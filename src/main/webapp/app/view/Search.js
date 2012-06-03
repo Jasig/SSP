@@ -7,7 +7,8 @@ Ext.define('Ssp.view.Search', {
     inject: {
     	apiProperties: 'apiProperties',
     	columnRendererUtils: 'columnRendererUtils',
-        store: 'studentsStore'
+        store: 'studentsStore',
+        programStatusesStore: 'programStatusesStore'
     },
     initComponent: function(){
     	Ext.apply(this,
@@ -32,12 +33,13 @@ Ext.define('Ssp.view.Search', {
 		       		},{
 		       			xtype: 'toolbar',
 		       			dock: 'top',
+		       			defaults: {
+		       				labelWidth: 100
+		       			},
 		       		    items: [
 		       		        {
-		       		        	xtype: 'label',
-		                        text: 'Search'
-		       		        },{
-		       		        	xtype: 'textfield'
+		       		        	xtype: 'textfield',
+		       		        	fieldLabel: 'Search'
 		       		        },{
 		       		        	xtype: 'button',
 		       		        	itemId: 'searchButton',
@@ -46,11 +48,37 @@ Ext.define('Ssp.view.Search', {
 		       		        	xtype: 'tbspacer',
 		       		        	flex: 1
 		       		        },{
+		       		        	tooltip: 'Search records in your caseload',
 		       		        	xtype: 'checkbox',
-		       		        	boxLabel: 'All Students'
+		       		        	boxLabel: 'Against Caseload'
 		       		        }
 		       		    ]
-		       		}]
+		       		}/*,{
+		       			xtype: 'toolbar',
+		       			dock: 'top',
+		       		    items: [
+		       		        {
+		    			        xtype: 'combobox',
+		    			        itemId: 'caseloadStatusCombo',
+		    			        name: 'programStatusId',
+		    			        fieldLabel: 'Caseload Status',
+		    			        emptyText: 'Select One',
+		    			        store: this.programStatusesStore,
+		    			        valueField: 'id',
+		    			        displayField: 'name',
+		    			        mode: 'local',
+		    			        typeAhead: true,
+		    			        queryMode: 'local',
+		    			        allowBlank: true,
+		    			        forceSelection: false,
+		    			        labelWidth: 100
+		    				},{
+		       		        	xtype: 'tbspacer',
+		       		        	flex: 1
+		       		        }
+		       		    ]
+		       		    
+		       		}*/]
 		    	    });
     	
     	return this.callParent(arguments);

@@ -2,16 +2,24 @@ Ext.define('Ssp.controller.tool.ProfileToolViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-        currentPerson: 'currentPerson',
+        person: 'currentPerson',
         sspConfig: 'sspConfig'
-    }, 
-
+    },
+    control: {
+    	nameField: '#studentName',
+    	studentIdField: '#studentId',
+    	birthDateField: '#birthDate'
+    },
 	init: function() {
 		var studentIdAlias = this.sspConfig.get('studentIdAlias');
-		studentId = Ext.ComponentQuery.query('#studentId')[0];
-		studentId.setFieldLabel(studentIdAlias);
+
+		// load general student record
+		this.getView().loadRecord( this.person );
 		
-		this.getView().loadRecord(this.currentPerson);
+		// load additional values
+		this.getStudentIdField().setFieldLabel( studentIdAlias );
+		this.getNameField().setValue( this.person.getFullName() );
+		this.getBirthDateField().setValue( this.person.getFormattedBirthDate() );
 		
 		return this.callParent(arguments);
     }

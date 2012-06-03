@@ -42,6 +42,11 @@ Ext.require([
     'Ssp.view.tools.journal.TrackTree',
     'Ssp.view.tools.EarlyAlert',
     'Ssp.view.tools.earlyalert.EarlyAlertResponse',
+    'Ssp.view.tools.StudentDocuments',
+    'Ssp.view.tools.CounselingServices',
+    'Ssp.view.tools.DisabilityServices',
+    'Ssp.view.tools.DisplacedWorker',
+    'Ssp.view.tools.StudentSuccess',
     'Ssp.view.admin.AdminForms',
     'Ssp.view.admin.forms.AbstractReferenceAdmin',
     'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
@@ -107,6 +112,7 @@ Ext.require([
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
 	'Ssp.store.reference.Campuses',
+	'Ssp.store.reference.CampusEarlyAlertRoutings',
 	'Ssp.store.reference.Challenges',
 	'Ssp.store.reference.ChallengeCategories',
 	'Ssp.store.reference.ChallengeReferrals',
@@ -127,9 +133,15 @@ Ext.require([
     'Ssp.store.reference.JournalSteps',
     'Ssp.store.reference.JournalTracks',
     'Ssp.store.reference.MaritalStatuses',
+    'Ssp.store.reference.ProgramStatuses',
+    'Ssp.store.reference.ProgramStatusChangeReasons',
+    'Ssp.store.reference.ReferralSources',
+    'Ssp.store.reference.ServiceReasons',
+    'Ssp.store.reference.SpecialServiceGroups',
     'Ssp.store.reference.States', 
     'Ssp.store.Students',
     'Ssp.store.reference.StudentStatuses',
+    'Ssp.store.reference.StudentTypes',
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
@@ -148,6 +160,7 @@ Ext.require([
 
 var apiUrls = [
   {name: 'campus', url: 'reference/campus/'},
+  {name: 'campusEarlyAlertRouting', url: 'reference/campus/{id}/earlyAlertRouting/'},
   {name: 'category', url: 'reference/category/'},
   {name: 'challenge', url: 'reference/challenge/'},
   {name: 'challengeReferral', url: 'reference/challengeReferral/'},
@@ -184,7 +197,13 @@ var apiUrls = [
   {name: 'personEmailTask', url: 'person/{id}/task/email/'},
   {name: 'personViewHistory', url: 'person/{id}/history/print/'},
   {name: 'personPrintTask', url: 'person/{id}/task/print/'},
-  {name: 'studentIntakeTool', url: 'tool/studentIntake/'}                   
+  {name: 'programStatus', url: 'reference/programStatus/'},
+  {name: 'programStatusChangeReason', url: 'reference/programStatusChangeReason/'},
+  {name: 'referralSource', url: 'reference/referralSource/'},
+  {name: 'serviceReasons', url: 'reference/serviceReason/'},
+  {name: 'specialServiceGroup', url: 'reference/specialServiceGroup/'},
+  {name: 'studentIntakeTool', url: 'tool/studentIntake/'},
+  {name: 'studentType', url: 'reference/studentType/'}
 ];
 
 Ext.onReady(function(){
@@ -331,6 +350,7 @@ Ext.onReady(function(){
 		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 		campusesStore: 'Ssp.store.reference.Campuses',
+		campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
 	    challengesStore: 'Ssp.store.reference.Challenges',
 		challengeCategoriesStore: 'Ssp.store.reference.ChallengeCategories',
 		challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
@@ -357,9 +377,15 @@ Ext.onReady(function(){
         journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
         journalTracksStore: 'Ssp.store.reference.JournalTracks',
     	maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
-	    statesStore: 'Ssp.store.reference.States',
+    	programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
+    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
+	    referralSourcesStore: 'Ssp.store.reference.ReferralSources',
+	    serviceReasonsStore: 'Ssp.store.reference.ServiceReasons',
+	    specialServiceGroupsStore: 'Ssp.store.reference.SpecialServiceGroups',
+    	statesStore: 'Ssp.store.reference.States',
 	    studentsStore: 'Ssp.store.Students',
 	    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
+	    studentTypesStore: 'Ssp.store.reference.StudentTypes',
 	    tasksStore: 'Ssp.store.Tasks',
 	    toolsStore: 'Ssp.store.Tools',
     	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
@@ -375,6 +401,20 @@ Ext.onReady(function(){
 	    	//console.log(Deft);
 	    	Deft.Injector.providers.appEventsController.value.config.app=this;
 	    	Deft.Injector.providers.appEventsController.value.app=this;
+	    	
+	    	// Global error handling for Ajax calls 
+	    	Ext.override(Ext.data.proxy.Server, {
+	            constructor: function(config)
+	            {
+	                this.callOverridden([config]);
+	                this.addListener("exception",  function (proxy, response, operation) {
+	                    if (response.responseText != null)
+	                    {
+	                        Ext.Msg.alert('Error', response.responseText);
+	                    }
+	                });
+	            }
+	        });	    	
 	    	
 	    	Ext.apply(this,{
 	    		items: [{xtype:'sspview'}]

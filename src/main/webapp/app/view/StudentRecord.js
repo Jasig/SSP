@@ -12,7 +12,7 @@ Ext.define('Ssp.view.StudentRecord', {
     		layout: {
     	    	type: 'hbox',
     	    	align: 'stretch'
-    	    }    		
+    	    }
     	});
     	return this.callParent(arguments);
     }

@@ -7,7 +7,7 @@ Ext.define('Ssp.model.util.TreeRequest', {
              {name: 'destroyBeforeAppend', type: 'boolean', defaultValue: false},
              {name: 'enableCheckedItems', type: 'boolean', defaultValue: true},
              {name: 'expanded', type:'boolean',defaultValue: false},
-             {name: 'expandable', type:'boolean', deafultValue: true},
+             {name: 'expandable', type:'boolean', defaultValue: true},
              {name: 'callbackFunc',type:'auto'},
              {name: 'callbackScope', type: 'auto'}]
 });

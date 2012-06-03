@@ -13,9 +13,19 @@ Ext.define('Ssp.view.ToolsMenu', {
 		    		width: '100%',
 		    		height: '100%',
     				store: this.store,
+
+    	    		features: [{
+		    	        id: 'group',
+		    	        ftype: 'grouping',
+		    	        groupHeaderTpl: '{name}',
+		    	        hideGroupedHeader: false,
+		    	        enableGroupingMenu: false
+		    	    }],
+		    	    
     				columns:[{
     				           header: "Assigned Tools", 
-    				           dataIndex: "name", 
+    				           dataIndex: "name",
+    				           sortable: true,
     				           flex:1 }]
 		    	    });
     	
