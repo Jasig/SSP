@@ -38,7 +38,7 @@ public class LiquibaseDropFirstTest {
 		try {
 			sl.afterPropertiesSet();
 		} catch (LiquibaseException e) {
-			fail("Failed to run Test changesets");
+			fail("Failed to run Prod changesets");
 		}
 
 		// now run the test master changelog
