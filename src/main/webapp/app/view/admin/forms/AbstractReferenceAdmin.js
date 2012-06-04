@@ -2,7 +2,6 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	extend: 'Ext.grid.Panel',
 	alias : 'widget.abstractreferenceadmin',
 	title: 'Admin',
-	id: 'AbstractReferenceAdmin',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.AbstractReferenceAdminViewController',

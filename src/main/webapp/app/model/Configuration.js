@@ -7,7 +7,7 @@ Ext.define('Ssp.model.Configuration', {
              {
     	      name: 'studentIdAlias', 
     	      type: 'string', 
-    	      defaultValue: 'Ivy Tech ID'
+    	      defaultValue: 'Tartan ID'
     	     },
     	     {name: 'studentIdMinValidationLength', 
     	      type: 'number', 

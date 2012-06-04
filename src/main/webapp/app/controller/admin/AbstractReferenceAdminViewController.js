@@ -42,19 +42,36 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 	},
 	
 	addRecord: function(button){
-		var item = new Ssp.model.reference.AbstractReference();
-       	var grid = button.up('grid');
-       	item.set('name','default');
+		var grid = button.up('grid');
+		var store = grid.getStore();
+		var item = Ext.create( store.model.modelName, {}); // new Ssp.model.reference.AbstractReference();
+		
+		// default the name property
+		item.set('name','default');
+		//additional required columns defined in the Admin Tree Menus Store
+		Ext.Array.each(grid.columns,function(col,index){
+       		if (col.required==true)
+       			item.set(col.dataIndex,'default');
+       	});
+		
+		// If the object type has a sort order prop
+		// then set the sort order to the next available
+		// item in the database
+		if (item.sortOrder != null)
+		{
+			item.set('sortOrder',store.getTotalCount()+1);
+		}
 
+		// Save the item
 		Ext.Ajax.request({
 			url: grid.getStore().getProxy().url,
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			jsonData: {"id":"","name":"default","description":""},
+			jsonData: item.data,
 			success: function(response, view) {
 				var r = Ext.decode(response.responseText);
 				item.populateFromGenericObject(r);
-				grid.getStore().insert(0, item );
+				store.insert(0, item );
 		       	grid.plugins[0].startEdit(0, 0);
 			},
 			failure: this.apiProperties.handleError

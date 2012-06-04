@@ -27,5 +27,16 @@ Ext.define('Ssp.model.Person', {
     		 //'paymentStatus',
     		 //'cumGPA',
     		 //'academicPrograms'
-    		 ]
+    		 ],
+    		 
+    getFullName: function(){ 
+    	var firstName = this.get('firstName') || "";
+    	var middleInitial = this.get('middleInitial') || "";
+    	var lastName = this.get('lastName') || "";
+    	return firstName + " " + middleInitial + " " + lastName;
+    },
+    
+    getFormattedBirthDate: function(){
+    	return Ext.util.Format.date( this.get('birthDate'),'m/d/Y');
+    }
 });

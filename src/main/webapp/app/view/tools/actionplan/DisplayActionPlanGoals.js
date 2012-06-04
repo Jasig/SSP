@@ -26,7 +26,6 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 				title: 'Goals',
 				store: this.store,
 				selModel: sm,
-				
 			    columns: [{
 	    	        header: 'Name',
 	    	        flex: 1,
@@ -41,7 +40,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 	    	        width:65,
 	    	        header: 'Action',
 	    	        items: [{
-	    	            icon: 'images/edit-icon.jpg',
+	    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
 	    	            tooltip: 'Edit Goal',
 	    	            handler: function(grid, rowIndex, colIndex) {
 	    	            	var rec = grid.getStore().getAt(rowIndex);
@@ -51,7 +50,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 	    	            },
 	    	            scope: this
 	    	        },{
-	    	            icon: 'images/delete-icon.png',
+	    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
 	    	            tooltip: 'Delete Goal',
 	    	            handler: function(grid, rowIndex, colIndex) {
 	    	            	var rec = grid.getStore().getAt(rowIndex);

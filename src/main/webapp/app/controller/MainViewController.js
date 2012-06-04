@@ -40,14 +40,10 @@ Ext.define('Ssp.controller.MainViewController', {
 		}
 		
 		arrViewItems = [{xtype:'search',flex: 2},
-					    {xtype: 'studentrecord',
-						 flex: 4,
-			 			 items: [{xtype:'toolsmenu',flex:1},
-			 			         {xtype: 'tools', flex:4}]
-			 		  	}];
+					    {xtype: 'studentrecord', flex: 4}];
 		
 		mainView.add( arrViewItems );
-    },    
+    },
     
     displayAdminView: function() { 
     	var mainView = Ext.getCmp('MainView');

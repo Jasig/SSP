@@ -6,15 +6,12 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-	
+
 	<changeSet author="daniel.bower" id="spring-security persistent logins">
-		<!-- generated from this sql in the spring security guide 
-		create table persistent_logins (
-				username varchar(64) not null,
-				series varchar(64) primary key,
-				token varchar(64) not null,
-				last_used timestamp not null) -->
-		
+		<!-- generated from this sql in the spring security guide create table 
+			persistent_logins ( username varchar(64) not null, series varchar(64) primary 
+			key, token varchar(64) not null, last_used timestamp not null) -->
+
 		<createTable tableName="persistent_logins">
 			<column name="username" type="character varying(64)">
 				<constraints nullable="false" />
@@ -29,16 +26,16 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on persistent_logins to ssp</sql>
 		<rollback>
-			<dropTable tableName="persistent_logins"/>
+			<dropTable tableName="persistent_logins" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 	</changeSet>
 
@@ -98,14 +95,14 @@
 			<column name="school_id" type="character varying(50)">
 				<constraints nullable="true" />
 			</column>
-			<column name="enabled" type="boolean" defaultValueBoolean="false"/>
+			<column name="enabled" type="boolean" defaultValueBoolean="false" />
 		</createTable>
-		
+
 		<sql>grant all on person to ssp</sql>
 		<rollback>
-			<dropTable tableName="person"/>
+			<dropTable tableName="person" />
 		</rollback>
-		
+
 	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add reference tables'>
@@ -120,32 +117,31 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="challenge_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false" foreignKeyName="challenge_created_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true" foreignKeyName="challenge_modified_by_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on challenge to ssp</sql>
 		<rollback>
-			<dropTable tableName="challenge"/>
+			<dropTable tableName="challenge" />
 		</rollback>
-		
+
 		<modifySql dbms="postgresql">
-			<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<!-- Theres a different assumption in the liquibase handling of timezones 
+				on postgres. Specifying "Without" timezone -->
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 	</changeSet>
 
@@ -166,7 +162,7 @@
 			<column name="photo_url" value="" />
 			<column name="school_id" value="system" />
 		</insert>
-		
+
 		<rollback>
 			<delete tableName="person">
 				<where>id='58ba5ee3-734e-4ae9-b9c5-943774b4de41'</where>
@@ -186,35 +182,36 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
+				<constraints nullable="false"
 					foreignKeyName="child_care_arrangement_created_by_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="child_care_arrangement_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="child_care_arrangement_modified_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on child_care_arrangement to ssp</sql>
 		<rollback>
-			<dropTable tableName="child_care_arrangement"/>
+			<dropTable tableName="child_care_arrangement" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add citizenship table'>
 		<createTable tableName="citizenship">
@@ -228,35 +225,34 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="citizenship_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false" foreignKeyName="citizenship_created_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="citizenship_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="citizenship_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on citizenship to ssp</sql>
 		<rollback>
-			<dropTable tableName="citizenship"/>
+			<dropTable tableName="citizenship" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add education_goal table'>
 		<createTable tableName="education_goal">
@@ -270,35 +266,34 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="education_goal_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="education_goal_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="education_goal_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="education_goal_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on education_goal to ssp</sql>
 		<rollback>
-			<dropTable tableName="education_goal"/>
+			<dropTable tableName="education_goal" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add education_level table'>
 		<createTable tableName="education_level">
@@ -312,35 +307,34 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="education_level_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="education_level_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="education_level_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="education_level_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on education_level to ssp</sql>
 		<rollback>
-			<dropTable tableName="education_level"/>
+			<dropTable tableName="education_level" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add ethnicity table'>
 		<createTable tableName="ethnicity">
@@ -354,35 +348,34 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="ethnicity_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false" foreignKeyName="ethnicity_created_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true" foreignKeyName="ethnicity_modified_by_person_id"
-					references="person(id)"/>
+					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on ethnicity to ssp</sql>
 		<rollback>
-			<dropTable tableName="ethnicity"/>
+			<dropTable tableName="ethnicity" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add funding_source table'>
 		<createTable tableName="funding_source">
@@ -396,35 +389,34 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="funding_source_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="funding_source_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="funding_source_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="funding_source_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on funding_source to ssp</sql>
 		<rollback>
-			<dropTable tableName="funding_source"/>
+			<dropTable tableName="funding_source" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add marital_status table'>
 		<createTable tableName="marital_status">
@@ -438,35 +430,34 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="marital_status_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="marital_status_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="marital_status_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="marital_status_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on marital_status to ssp</sql>
 		<rollback>
-			<dropTable tableName="marital_status"/>
+			<dropTable tableName="marital_status" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add student_status table'>
 		<createTable tableName="student_status">
@@ -480,35 +471,34 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="student_status_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="student_status_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="student_status_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="student_status_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on student_status to ssp</sql>
 		<rollback>
-			<dropTable tableName="student_status"/>
+			<dropTable tableName="student_status" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 
-	</changeSet> 
+	</changeSet>
 
 	<changeSet author='daniel.bower' id='Add veteran_status table'>
 		<createTable tableName="veteran_status">
@@ -522,34 +512,66 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
-				<constraints nullable="false"/>
+				<constraints nullable="false" />
 			</column>
-			<column name="modified_date" type="datetime"/>
+			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" 
-					foreignKeyName="veteran_status_created_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="false"
+					foreignKeyName="veteran_status_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="veteran_status_modified_by_person_id"
-					references="person(id)"/>
+				<constraints nullable="true"
+					foreignKeyName="veteran_status_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+
 		<sql>grant all on veteran_status to ssp</sql>
 		<rollback>
-			<dropTable tableName="veteran_status"/>
+			<dropTable tableName="veteran_status" />
 		</rollback>
-		
-		<!-- Theres a different assumption in the liquibase handling of timezones on postgres.
-		Specifying "Without" timezone-->
-		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
-		</modifySql>
 
-	</changeSet> 
-	
- </databaseChangeLog>
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet author='daniel.bower' id='Add auditing to person table'>
+		<addColumn tableName="person">
+			<column name="created_date" type="datetime" valueDate="2012-03-09">
+				<constraints nullable="true" />
+			</column>
+			<column name="modified_date" type="datetime" valueDate="2012-03-09">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_by" type="uuid"
+				value="58ba5ee3-734e-4ae9-b9c5-943774b4de41">
+				<constraints nullable="true" foreignKeyName="person_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid"
+				value="58ba5ee3-734e-4ae9-b9c5-943774b4de41">
+				<constraints nullable="true" foreignKeyName="person_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int" value="1">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<addNotNullConstraint tableName="person"
+			columnName="created_date" columnDataType="datetime" />
+		<addNotNullConstraint tableName="person"
+			columnName="modified_date" columnDataType="datetime" />
+		<addNotNullConstraint tableName="person"
+			columnName="created_by" columnDataType="uuid" />
+		<addNotNullConstraint tableName="person"
+			columnName="modified_by" columnDataType="uuid" />
+		<addNotNullConstraint tableName="person"
+			columnName="object_status" columnDataType="int" />
+	</changeSet>
+
+</databaseChangeLog>

@@ -40,7 +40,7 @@ public class JournalEntryDaoTest {
 	private static final UUID CONFIDENTIALITYLEVEL_ID = UUID
 			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
 
-	private static final String CONFIDENTIALITYLEVEL_NAME = "EVERYONE";
+	private static final String CONFIDENTIALITYLEVEL_NAME = "Test Confidentiality Level";
 
 	@Autowired
 	private transient JournalEntryDao dao;
@@ -66,7 +66,7 @@ public class JournalEntryDaoTest {
 	public void setUp() throws ObjectNotFoundException {
 		try {
 			ken = personService.personFromUsername("ken");
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			LOGGER.error("can't find one of either sysadmin or ken");
 		}
 		securityService.setCurrent(ken);
@@ -79,8 +79,9 @@ public class JournalEntryDaoTest {
 	}
 
 	protected void assertList(final Collection<JournalEntry> objects) {
-		for (JournalEntry object : objects) {
-			assertNotNull(object.getId());
+		for (final JournalEntry object : objects) {
+			assertNotNull("List item should not have been null.",
+					object.getId());
 		}
 	}
 
@@ -107,17 +108,19 @@ public class JournalEntryDaoTest {
 		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
-		assertNotNull(obj);
-		assertNotNull(obj.getId());
-		assertNotNull(obj.getComment());
+		assertNotNull("Saved object should not have been null.", obj);
+		assertNotNull("Saved ID should not have been null.", obj.getId());
+		assertNotNull("Saved comment should not have been null.",
+				obj.getComment());
 		assertEquals("Confidentiality level name did not match.",
 				CONFIDENTIALITYLEVEL_NAME, obj.getConfidentialityLevel()
 						.getName());
 
 		final Collection<JournalEntry> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
-		assertNotNull(all);
-		assertFalse(all.isEmpty());
+		assertNotNull("GetAll() result should not have been null.", all);
+		assertFalse("GetAll() result should not have been empty.",
+				all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);

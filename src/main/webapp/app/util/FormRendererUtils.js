@@ -482,7 +482,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			view.removeAll();
 
 		// create the new widget
-		comp =  Ext.createWidget(compAlias.toLowerCase());	
+		comp =  Ext.widget(compAlias.toLowerCase(), args);	
 		
 		// add to the container
 		view.add( comp );

@@ -66,14 +66,17 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		if (form.isValid())
 		{
 			form.updateRecord();    		
-    		record.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
-    		record.set('journalSource',{id: form.getValues().journalSourceId});
-    		record.set('journalTrack',{id: form.getValues().journalTrackId});
-    		
+    		record.set('confidentialityLevel',{"id": form.getValues().confidentialityLevelId});
+    		record.set('journalSource',{"id": form.getValues().journalSourceId});
+    		record.set('journalTrack',{"id": form.getValues().journalTrackId});
+    		console.log( record.data.journalTrack.id != undefined );
+    		console.log( record.data.journalEntryDetails.length == 0 );
     		// if a journal track is selected then validate that the details are set
-    		if (record.get('journalTrack').id != "" && record.get('journalEntryDetails').length > 0)
+    		if (record.data.journalTrack.id != undefined && record.data.journalEntryDetails.length == 0)
     		{
-        		jsonData = record.data;
+    			Ext.Msg.alert('Error','You have a Journal Track set in your entry. Please check the associated details for this Journal Entry.');  			
+    		}else{
+    			jsonData = record.data;
     			
     			if (id.length > 0)
     			{
@@ -83,8 +86,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     					method: 'PUT',
     					jsonData: jsonData,
     					successFunc: successFunc 
-    				});
-    				
+    				});		
     			}else{
     				// adding
     				this.apiProperties.makeRequest({
@@ -93,10 +95,10 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     					jsonData: jsonData,
     					successFunc: successFunc 
     				});		
-    			}   			
-    		}else{
-    			Ext.Msg.alert('Error','You have a Journal Track set in your entry. Please check the associated details for this Journal Entry.');    			
+    			} 
     		}
+
+		
 		}else{
 			Ext.Msg.alert('Error','Please correct the errors in your Journal Entry.');
 		}

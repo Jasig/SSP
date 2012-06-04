@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog
-	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
@@ -25,6 +23,11 @@
 			<column name="zip_code" value="01010" />
 			<column name="photo_url" value="" />
 			<column name="school_id" value="turing.1" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="person">
 			<column name="id" value="7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194" />
@@ -42,6 +45,11 @@
 			<column name="zip_code" value="07922" />
 			<column name="photo_url" value="" />
 			<column name="school_id" value="dmr.1" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="person">
 			<column name="id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
@@ -59,6 +67,11 @@
 			<column name="zip_code" value="07974" />
 			<column name="photo_url" value="" />
 			<column name="school_id" value="ken.1" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="person">
 			<column name="id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
@@ -76,8 +89,13 @@
 			<column name="zip_code" value="94102" />
 			<column name="photo_url" value="" />
 			<column name="school_id" value="student0" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
 		</insert>
-		
+
 		<rollback>
 			<delete tableName="person">
 				<where>id='252de4a0-7c06-4254-b7d8-4ffc02fe81ff'</where>

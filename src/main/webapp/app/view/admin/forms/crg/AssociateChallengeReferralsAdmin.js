@@ -22,6 +22,7 @@ Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
     			 store: this.store,
     			 useArrows: true,
     			 rootVisible: false,
+    			 singleExpand: true,
 			     viewConfig: {
 				        plugins: {
 				            ptype: 'treeviewdragdrop',

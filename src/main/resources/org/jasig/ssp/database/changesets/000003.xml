@@ -1712,9 +1712,13 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="show_in_student_intake" type="boolean"
-				valueBoolean="true" />
+				defaultValueBoolean="true">
+				<constraints nullable="false" />
+			</column>
 			<column name="show_in_self_help_search" type="boolean"
-				valueBoolean="true" />
+				defaultValueBoolean="true">
+				<constraints nullable="false" />
+			</column>
 		</addColumn>
 
 		<rollback>
@@ -3917,8 +3921,7 @@
 		</rollback>
 	</changeSet>
 
-	<changeSet
-		id="Fix FK on person_confidentiality_disclosure_agreement"
+	<changeSet id="Fix FK on person_confidentiality_disclosure_agreement"
 		author="jon.adams">
 		<dropColumn tableName="person_confidentiality_disclosure_agreement"
 			columnName="confidentiality_disclosure_agreement_id" />

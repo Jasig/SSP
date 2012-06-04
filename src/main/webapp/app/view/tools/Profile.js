@@ -33,14 +33,16 @@ Ext.define('Ssp.view.tools.Profile', {
 				       items: 
 				       [{
 					        fieldLabel: 'Student',
-					        name: 'name'
+					        name: 'name',
+					        itemId: 'studentName'
 					    }, {
 					        fieldLabel: 'Student Id',
 					        itemId: 'studentId',
 					        name: 'schoolId'
 					    }, {
 					        fieldLabel: 'Birth Date',
-					        name: 'birthDate'
+					        name: 'birthDate',
+					        itemId: 'birthDate'
 					    }, {
 					        fieldLabel: 'Home Phone',
 					        name: 'homePhone'

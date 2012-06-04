@@ -171,7 +171,8 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     },
     
     emailTaskList: function( button ){
-    	var grid = this.getView().down('grid');
+    	var tasksGrid = this.getView().down('grid');
+    	var goalsGrid = Ext.ComponentQuery.query('.displayactionplangoals')[0];
 	    var valid = false;
 	    var jsonData;
 	    var emailTestArr;
@@ -197,15 +198,16 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 
 		    // define data to email
 			jsonData = {
-					taskIds: this.getSelectedIdsArray( grid.getView().getSelectionModel().getSelection() ),
-					recipientIds: [],
-					recipientEmailAddresses: arrRecipientEmailAddresses
+	    			"taskIds": this.getSelectedIdsArray( tasksGrid.getView().getSelectionModel().getSelection() ),
+	    		    "goalIds": this.getSelectedIdsArray( goalsGrid.getView().getSelectionModel().getSelection() ),
+	    		    "recipientIds": [],
+					"recipientEmailAddresses": arrRecipientEmailAddresses
 			};
 
 		    if (valid==true)
 		    {
 		    	/*
-		    	if (jsonData.taskIds.length > 0){
+		    	if (jsonData.taskIds.length > 0 && jsonData.goalIds.length > 0){
 			    	// email the task list
 		    		url = this.apiProperties.createUrl( this.personEmailTaskUrl );
 			    	this.apiProperties.makeRequest({
@@ -218,7 +220,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 						}
 					});		    		
 		    	}else{
-			    	Ext.Msg.alert('Error','Please select the tasks you would like to send before initiating an email.');		    		
+			    	Ext.Msg.alert('Error','Please select the tasks and goals you would like to send before initiating an email.');		    		
 		    	}
 		    	*/
 		    }else{
@@ -237,12 +239,13 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     onPrintTasksClick: function(button) {
     	var grid, url, jsonData;	
 		var tasksGrid = button.up('panel').down('grid');
-		var goals = Ext.ComponentQuery.query('#goalsPanel');
+		var goalsGrid = Ext.ComponentQuery.query('.displayactionplangoals')[0];
 		var jsonData = {
 	    				"taskIds": this.getSelectedIdsArray( tasksGrid.getView().getSelectionModel().getSelection() ),
-	    		        "goalIds": this.getSelectedIdsArray( tasksGrid.getView().getSelectionModel().getSelection() )
+	    		        "goalIds": this.getSelectedIdsArray( goalsGrid.getView().getSelectionModel().getSelection() )
 	    		        };
-	    if (jsonData.taskIds.length > 0)
+		
+		if (jsonData.taskIds.length > 0 && jsonData.goalIds.length > 0)
 	    {
 	    	url = this.apiProperties.createUrl( this.personPrintTaskUrl );
 	        /*
@@ -256,14 +259,14 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 			});
 			*/	    	
 	    }else{
-	    	Ext.Msg.alert('Please select the tasks and goals you would like to print.');
+	    	Ext.Msg.alert('Error','Please select the tasks and goals you would like to print.');
 	    }
     },
     
     getSelectedIdsArray: function(arr){
 		var selectedIds = [];
 		Ext.each(arr, function(item, index) {
-			selectedIds.push( item.id );
+			selectedIds.push( item.get('id') );
 		});
 		
 		return selectedIds;

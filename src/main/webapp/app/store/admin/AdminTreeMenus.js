@@ -9,6 +9,52 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     	        expanded: true,
     	        children: [
     						{
+    							text: 'Beta',
+    							title: 'Beta',
+    							form: '',
+    							expanded: false,
+    							children: [
+    									{
+    										text: 'Program Status Change Reasons',
+    										title: 'Program Status Change Reasons',
+    										store: 'programStatusChangeReasons',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    								    },{
+    										text: 'Referral Sources',
+    										title: 'Referral Sources',
+    										store: 'referralSources',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    								    },{
+    										text: 'Special Service Groups',
+    										title: 'Special Service Groups',
+    										store: 'specialServiceGroups',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    									},
+    									{
+    										text: 'Service Reasons',
+    										title: 'Service Reasons',
+    										store: 'serviceReasons',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    								    },
+    									{
+    										text: 'Student Types',
+    										title: 'Student Types',
+    										store: 'studentTypes',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    								    },{
+    								    	text: 'Campuses',
+    										title: 'Campuses',
+    										store: '',
+    										form: 'CampusAdmin',
+    										leaf: true
+    									}
+    							]
+    						},{
     							text: 'Student Intake',
     							title: 'Student Intake',
     							form: '',
@@ -117,18 +163,31 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     							children: [{text: 'Confidentiality Levels',
     										title: 'Confidentiality Levels',
     										store: 'confidentialityLevels',
-    										form: 'ConfidentialityLevelAdmin',
-    										leaf: true }]
-    						},{
-    							text: 'Campus',
-    							title: 'Campus',
-    							form: '',
-    							expanded: false,
-    							children: [{text: 'Campuses',
-    										title: 'Campuses',
-    										store: '',
-    										form: 'CampusAdmin',
-    										leaf: true }]
+    										form: 'AbstractReferenceAdmin',
+    										leaf: true,
+    										columns: [{ header: 'Name',  
+    						    		                  dataIndex: 'name',
+    						    		                  required: true,
+    						    		                  field: {
+    						    		                      xtype: 'textfield'
+    						    		                  },
+    						    		                  flex: 50 },
+    						    		                { header: 'Description',
+    						    		                  dataIndex: 'description', 
+    						    		                  flex: 50,
+    						    		                  field: {
+    						    		                      xtype: 'textfield'
+    						    		                  },
+    						    		                  flex: 50 },
+    						      		                { header: 'Acronym',
+    						      		                  dataIndex: 'acronym',
+    						      		                  required: true,
+    						      		                  flex: 50,
+    						      		                  field: {
+    						      		                      xtype: 'textfield'
+    						      		                  }
+    						    		                }]
+    									}]
     						},{
     							text: 'Early Alert',
     							title: 'Early Alert',
@@ -156,8 +215,33 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 									text: 'Referrals',
 									title: 'Referrals',
 									store: 'earlyAlertReferrals',
-							        form: 'EarlyAlertReferralAdmin',
-									leaf: true
+							        form: 'AbstractReferenceAdmin',
+									leaf: true,
+									columns: [
+					    		                { header: 'Name',  
+					    		                  dataIndex: 'name',
+					    		                  required: true,
+					    		                  field: {
+					    		                      xtype: 'textfield'
+					    		                  },
+					    		                  flex: 50 },
+					    		                { header: 'Description',
+					    		                  required: false,
+					    		                  dataIndex: 'description', 
+					    		                  flex: 50,
+					    		                  field: {
+					    		                      xtype: 'textfield'
+					    		                  },
+					    		                  flex: 50 },
+					      		                { header: 'Acronym',
+					    		                  required: true,
+					      		                  dataIndex: 'acronym', 
+					      		                  flex: 50,
+					      		                  field: {
+					      		                      xtype: 'textfield'
+					      		                  }
+					    		                }
+					    		           ]
 								},{
 									text: 'Suggestions',
 									title: 'Suggestions',

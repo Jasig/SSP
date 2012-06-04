@@ -39,7 +39,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
 						    		  items: [{xtype: 'tasks'}]
 						    		}]
 						})
-						,{xtype: 'displayactionplangoals', flex: 1, itemId: "goalsPanel"}
+						,{xtype: 'displayactionplangoals', flex: 1}
 						,{xtype: 'displaystrengths'}
 				    ],
 				    

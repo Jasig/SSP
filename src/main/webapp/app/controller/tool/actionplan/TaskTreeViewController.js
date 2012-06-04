@@ -109,7 +109,8 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     },
     
     onSearchClick: function(){
-    	console.log('TaskTreeViewController->onSearchClick');    	
+    	console.log('TaskTreeViewController->onSearchClick');
+    	Ext.Msg.alert('Attention', 'This is a beta item. Awaiting API methods to utilize for search.'); 
     },
     
     onItemClick: function(view, record, item, index, e, eOpts){
