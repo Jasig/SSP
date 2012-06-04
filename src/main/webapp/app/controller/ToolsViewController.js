@@ -27,16 +27,8 @@ Ext.define('Ssp.controller.ToolsViewController', {
     	this.personViewHistoryUrl = this.apiProperties.getItemUrl('personViewHistory');
 		this.personViewHistoryUrl = this.personViewHistoryUrl.replace('{id}',personId);
  
-    	this.appEventsController.assignEvent({eventName: 'viewHistory', callBackFunc: this.onViewHistory, scope: this});
-		
+    	this.appEventsController.assignEvent({eventName: 'viewHistory', callBackFunc: this.onViewHistory, scope: this});		
     	this.appEventsController.assignEvent({eventName: 'loadPerson', callBackFunc: this.onLoadPerson, scope: this});
-		/*
-    	this.appEventsController.getApplication().addListener('loadPerson', function(){
-			// this.person.get('tools') );
-			this.getView().getSelectionModel().select(0);
-			this.loadTool('profile');
-		},this);
-		*/
     },
 
     destroy: function() {

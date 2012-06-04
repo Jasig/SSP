@@ -3,6 +3,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
         appEventsController: 'appEventsController',
+        formUtils: 'formRendererUtils',
         person: 'currentPerson',
         programStatusesStore: 'programStatusesStore',
         studentsStore: 'studentsStore',
@@ -12,6 +13,10 @@ Ext.define('Ssp.controller.SearchViewController', {
     	view: {
     		selectionchange: 'onSelectionChange',
 			viewready: 'onViewReady'
+    	},
+    	
+    	'addButton': {
+    		click: 'onAddClick'
     	}
     },
     
@@ -42,6 +47,30 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 
 	onViewReady: function(comp, eobj){
+	   	this.appEventsController.assignEvent({eventName: 'editPerson', callBackFunc: this.onEditPerson, scope: this});
+		
 		comp.getSelectionModel().select(0);
-	}
+	},
+
+    destroy: function() {
+	   	this.appEventsController.removeEvent({eventName: 'editPerson', callBackFunc: this.onEditPerson, scope: this});
+
+        return this.callParent( arguments );
+    },	
+	
+	onAddClick: function(button){
+		console.log('SearchViewController->onAddClick');
+    	var model = new Ssp.model.Person();
+    	this.person.data = model.data;
+		this.loadCaseloadAssignment();
+	},
+	
+	onEditPerson: function(){
+		console.log('SearchViewController->onEditPerson');
+		this.loadCaseloadAssignment();
+	},
+	
+    loadCaseloadAssignment: function(){
+    	var comp = this.formUtils.loadDisplay('studentrecord', 'caseloadassignment', true, {flex:1});    	
+    }
 });

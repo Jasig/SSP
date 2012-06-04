@@ -13,6 +13,13 @@ Ext.require([
     'Ssp.view.Main',
     'Ssp.view.Search',
     'Ssp.view.StudentRecord',
+    'Ssp.view.person.CaseloadAssignment',
+    'Ssp.view.person.EditPerson',
+    'Ssp.view.person.Appointment',
+    'Ssp.view.person.SpecialServiceGroups',
+    'Ssp.view.person.ReferralSources',
+    'Ssp.view.person.ServiceReasons',
+    'Ssp.view.person.AnticipatedStartDate',    
     'Ssp.view.component.MappedTextField',
     'Ssp.view.component.MappedTextArea',
     'Ssp.view.component.MappedCheckBox',
@@ -50,8 +57,6 @@ Ext.require([
     'Ssp.view.admin.AdminForms',
     'Ssp.view.admin.forms.AbstractReferenceAdmin',
     'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
-    'Ssp.view.admin.forms.ConfidentialityLevelAdmin',
-    'Ssp.view.admin.forms.EarlyAlertReferralAdmin',
     
     // COUNSELING REFERENCE GUIDE ADMIN VIEWS
     'Ssp.view.admin.forms.crg.ChallengeAdmin',
@@ -155,7 +160,8 @@ Ext.require([
 	'Ext.form.field.VTypes',
 	'Ext.form.field.Text',
 	'Ext.form.field.TextArea',
-	'Ext.ux.form.MultiSelect'
+	'Ext.ux.form.MultiSelect',
+	'Ext.ux.form.ItemSelector'
 ]);
 
 var apiUrls = [
@@ -397,8 +403,7 @@ Ext.onReady(function(){
 	    appFolder: Ext.Loader.getPath('Ssp'),
 		autoCreateViewport: true,
 	    launch: function( app ) {
-	    	console.log('Application->Launch');
-	    	//console.log(Deft);
+	    	console.log('launch application');
 	    	Deft.Injector.providers.appEventsController.value.config.app=this;
 	    	Deft.Injector.providers.appEventsController.value.app=this;
 	    	

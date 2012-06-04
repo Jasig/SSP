@@ -20,7 +20,11 @@ Ext.define('Ssp.util.Constants',{
         CHALLENGE_OTHER_ID: '365e8c95-f356-4f1f-8d79-4771ae8b0291',
     
         // EARLY ALERT OUTCOME
-        OTHER_EARLY_ALERT_OUTCOME_ID: '0a080114-3799-1bf5-8137-9a778e200004'    
+        OTHER_EARLY_ALERT_OUTCOME_ID: '0a080114-3799-1bf5-8137-9a778e200004',
+        
+        GRID_ITEM_DELETE_ICON_PATH: 'images/delete-icon.png',
+        GRID_ITEM_EDIT_ICON_PATH: 'images/edit-icon.jpg',
+        GRID_ITEM_CLOSE_ICON_PATH: 'images/close-icon.jpg'
     },
 
 	initComponent: function() {

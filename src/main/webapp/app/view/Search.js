@@ -5,8 +5,10 @@ Ext.define('Ssp.view.Search', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.SearchViewController',
     inject: {
+    	appEventsController: 'appEventsController',
     	apiProperties: 'apiProperties',
     	columnRendererUtils: 'columnRendererUtils',
+    	person: 'currentPerson',
         store: 'studentsStore',
         programStatusesStore: 'programStatusesStore'
     },
@@ -21,8 +23,30 @@ Ext.define('Ssp.view.Search', {
     	        	height: '100%',
 		    	    columns: [
 		    	              { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 },		        
-		    	              { text: 'Name', xtype:'templatecolumn', tpl:'{firstName} {middleInitial} {lastName}', flex: 50}
-		    	          ],
+		    	              { text: 'Name', xtype:'templatecolumn', tpl:'{firstName} {middleInitial} {lastName}', flex: 50},
+		    	              {
+	    			    	        xtype:'actioncolumn',
+	    			    	        width:65,
+	    			    	        header: 'Action',
+	    			    	        items: [{
+	    			    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
+	    			    	            tooltip: 'Edit Student',
+	    			    	            handler: function(grid, rowIndex, colIndex) {
+	    			    	            	var rec = grid.getStore().getAt(rowIndex);
+	    			    	            	var panel = grid.up('panel');
+	    			    	                panel.person.data=rec.data;
+	    			    	                panel.appEventsController.getApplication().fireEvent('editPerson');
+	    			    	            },
+	    			    	            scope: this
+	    			    	        },{
+	    			    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
+	    			    	            tooltip: 'Delete Student',
+	    			    	            handler: function(grid, rowIndex, colIndex) {
+	    			    	    			Ext.Msg.alert('Attention','This feature is not available yet.');	    			    	            	
+	    			    	            },
+	    			    	            scope: this
+	    			    	        }]
+	    		                }],
     	          
 		    	    dockedItems: [{
 		       			xtype: 'pagingtoolbar',
@@ -34,7 +58,7 @@ Ext.define('Ssp.view.Search', {
 		       			xtype: 'toolbar',
 		       			dock: 'top',
 		       			defaults: {
-		       				labelWidth: 100
+		       				labelWidth: 50
 		       			},
 		       		    items: [
 		       		        {
@@ -53,7 +77,16 @@ Ext.define('Ssp.view.Search', {
 		       		        	boxLabel: 'Against Caseload'
 		       		        }
 		       		    ]
-		       		}/*,{
+		       		},{
+				        dock: 'top',
+				        xtype: 'toolbar',
+				        items: [{
+				            tooltip: 'Add Student',
+				            text: 'Add Student',
+				            xtype: 'button',
+				            itemId: 'addButton'
+				        }]
+				    }/*,{
 		       			xtype: 'toolbar',
 		       			dock: 'top',
 		       		    items: [

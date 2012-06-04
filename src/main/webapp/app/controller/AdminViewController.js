@@ -51,6 +51,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 	 */
 	onItemClick: function(view,record,item,index,eventObj) {
 		var storeName = "";
+		var columns = null;
 		if (record.raw != undefined )
 		{
 			if ( record.raw.form != "")
@@ -59,12 +60,16 @@ Ext.define('Ssp.controller.AdminViewController', {
 				{
 					storeName = record.raw.store;
 				}
-				this.loadAdmin( record.raw.title, record.raw.form, storeName );         
+				if (record.raw.columns != null)
+				{
+					columns = record.raw.columns;
+				}
+				this.loadAdmin( record.raw.title, record.raw.form, storeName, columns );         
 			}
 		}
 	},
 
-	loadAdmin: function( title ,form, storeName ) {
+	loadAdmin: function( title ,form, storeName, columns ) {
 		var comp = this.formUtils.loadDisplay('adminforms',form, true, {});
 		var store = null;
 		
@@ -76,7 +81,15 @@ Ext.define('Ssp.controller.AdminViewController', {
 			// the component to use the store
 			if (store != null)
 			{
-				comp.reconfigure(store); // ,columns
+				
+				// pass the columns for editing
+				if (columns != null)
+				{
+					comp.reconfigure(store, columns); // ,columns
+				}else{
+					comp.reconfigure(store);
+				}
+				
 				comp.getStore().load();
 			}
 		}
