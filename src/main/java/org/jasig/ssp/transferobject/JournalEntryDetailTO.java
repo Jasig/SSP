@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.JournalEntryDetail;
+import org.jasig.ssp.model.reference.JournalStep;
+import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
-import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
-import org.jasig.ssp.transferobject.reference.JournalStepTO;
+import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 /**
  * JournalEntryDetail transfer object
@@ -22,9 +23,9 @@ public class JournalEntryDetailTO extends
 
 	private UUID journalEntryId;
 
-	private JournalStepTO journalStep;
+	private ReferenceLiteTO<JournalStep> journalStep;
 
-	private JournalStepDetailTO journalStepDetail;
+	private ReferenceLiteTO<JournalStepDetail> journalStepDetail;
 
 	public JournalEntryDetailTO() {
 		super();
@@ -50,9 +51,11 @@ public class JournalEntryDetailTO extends
 			journalStepDetail = null;
 		} else {
 			journalStep = jsJsDetail.getJournalStep() == null ? null
-					: new JournalStepTO(jsJsDetail.getJournalStep());
+					: new ReferenceLiteTO<JournalStep>(
+							jsJsDetail.getJournalStep());
 			journalStepDetail = jsJsDetail.getJournalStepDetail() == null ? null
-					: new JournalStepDetailTO(jsJsDetail.getJournalStepDetail());
+					: new ReferenceLiteTO<JournalStepDetail>(
+							jsJsDetail.getJournalStepDetail());
 		}
 	}
 
@@ -76,19 +79,20 @@ public class JournalEntryDetailTO extends
 		this.journalEntryId = journalEntryId;
 	}
 
-	public JournalStepTO getJournalStep() {
+	public ReferenceLiteTO<JournalStep> getJournalStep() {
 		return journalStep;
 	}
 
-	public void setJournalStep(final JournalStepTO journalStep) {
+	public void setJournalStep(final ReferenceLiteTO<JournalStep> journalStep) {
 		this.journalStep = journalStep;
 	}
 
-	public JournalStepDetailTO getJournalStepDetail() {
+	public ReferenceLiteTO<JournalStepDetail> getJournalStepDetail() {
 		return journalStepDetail;
 	}
 
-	public void setJournalStepDetail(final JournalStepDetailTO journalStepDetail) {
+	public void setJournalStepDetail(
+			final ReferenceLiteTO<JournalStepDetail> journalStepDetail) {
 		this.journalStepDetail = journalStepDetail;
 	}
 
