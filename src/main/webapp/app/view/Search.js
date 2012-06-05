@@ -71,10 +71,6 @@ Ext.define('Ssp.view.Search', {
 		       		        },{
 		       		        	xtype: 'tbspacer',
 		       		        	flex: 1
-		       		        },{
-		       		        	tooltip: 'Search records in your caseload',
-		       		        	xtype: 'checkbox',
-		       		        	boxLabel: 'Against Caseload'
 		       		        }
 		       		    ]
 		       		},{
