@@ -2,7 +2,7 @@ package org.jasig.ssp.factory.impl;
 
 import org.jasig.ssp.dao.JournalEntryDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
-import org.jasig.ssp.factory.JournalEntryJournalStepDetailTOFactory;
+import org.jasig.ssp.factory.JournalEntryDetailTOFactory;
 import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -38,7 +38,7 @@ public class JournalEntryTOFactoryImpl
 	private transient ConfidentialityLevelService confidentialityLevelService;
 
 	@Autowired
-	private transient JournalEntryJournalStepDetailTOFactory journalEntryJournalStepDetailTOFactory;
+	private transient JournalEntryDetailTOFactory journalEntryDetailTOFactory;
 
 	@Override
 	protected JournalEntryDao getDao() {
@@ -73,13 +73,13 @@ public class JournalEntryTOFactoryImpl
 					.get(tObject.getConfidentialityLevel().getId()));
 		}
 
-		if ((tObject.getJournalEntryJournalStepDetails() == null)
-				|| tObject.getJournalEntryJournalStepDetails().isEmpty()) {
-			SetOps.softDeleteSetItems(model.getJournalEntryJournalStepDetails());
+		if ((tObject.getJournalEntryDetails() == null)
+				|| tObject.getJournalEntryDetails().isEmpty()) {
+			SetOps.softDeleteSetItems(model.getJournalEntryDetails());
 		} else {
-			SetOps.updateSet(model.getJournalEntryJournalStepDetails(),
-					journalEntryJournalStepDetailTOFactory.asSet(tObject
-							.getJournalEntryJournalStepDetails()));
+			SetOps.updateSet(model.getJournalEntryDetails(),
+					journalEntryDetailTOFactory.asSet(tObject
+							.getJournalEntryDetails()));
 		}
 
 		return model;
