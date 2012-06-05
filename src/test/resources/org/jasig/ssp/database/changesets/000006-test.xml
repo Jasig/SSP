@@ -118,4 +118,62 @@
 		</rollback>
 	</changeSet>
 	
+	<changeSet id="test journalStepJournalStepDetail" author="daniel.bower">
+		<insert tableName="journal_step_journal_step_detail">
+			<column name="id" value="1311c59c-af37-11e1-8624-0026b9e7ff4c" />
+			<column name="journal_step_id" value="aba1440c-ab5b-11e1-ba73-0026b9e7ff4c" />
+			<column name="journal_step_detail_id" value="471afc02-ab5c-11e1-a997-0026b9e7ff4c" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_step_detail">
+				<where>id='1311c59c-af37-11e1-8624-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="test Journal entry" author="daniel.bower">
+		<insert tableName="journal_entry">
+			<column name="id" value="86ffcd52-af44-11e1-98f9-0026b9e7ff4c" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="entry_date" valueDate="2012-03-20T00:00:00" />
+			<column name="comment" value="Test Comment" />
+			<column name="confidentiality_level_id" value="afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c" />
+			<column name="journal_source_id" value="b2d07973-5056-a51a-8073-1d3641ce507f" />
+			<column name="journal_track_id" value="b2d07a7d-5056-a51a-80a8-96ae5188a188" />
+			<column name="person_id" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_entry">
+				<where>id='86ffcd52-af44-11e1-98f9-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="test JournalEntryDetail" author="daniel.bower">
+		<insert tableName="journal_entry_detail">
+			<column name="id" value="d8df3d54-af46-11e1-9742-0026b9e7ff4c" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="journal_entry_id" value="86ffcd52-af44-11e1-98f9-0026b9e7ff4c" />
+			<column name="journal_step_journal_step_detail_id" value="1311c59c-af37-11e1-8624-0026b9e7ff4c" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_step_detail">
+				<where>id='d8df3d54-af46-11e1-9742-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>
