@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.model.reference.JournalTrack;
@@ -22,16 +24,20 @@ public class JournalEntryTO
 
 	private static final long serialVersionUID = -2188963893970704753L;
 
+	@NotNull
 	private Date entryDate;
 
 	private String comment;
 
 	private UUID personId;
 
+	@NotNull
 	private ReferenceLiteTO<JournalSource> journalSource;
 
+	@NotNull
 	private ReferenceLiteTO<JournalTrack> journalTrack;
 
+	@NotNull
 	private ConfidentialityLevelLiteTO confidentialityLevel;
 
 	private List<JournalEntryDetailTO> journalEntryDetails;
