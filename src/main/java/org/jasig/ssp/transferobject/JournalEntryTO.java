@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.model.reference.JournalTrack;
@@ -22,19 +24,23 @@ public class JournalEntryTO
 
 	private static final long serialVersionUID = -2188963893970704753L;
 
+	@NotNull
 	private Date entryDate;
 
 	private String comment;
 
 	private UUID personId;
 
+	@NotNull
 	private ReferenceLiteTO<JournalSource> journalSource;
 
+	@NotNull
 	private ReferenceLiteTO<JournalTrack> journalTrack;
 
+	@NotNull
 	private ConfidentialityLevelLiteTO confidentialityLevel;
 
-	private List<JournalEntryJournalStepDetailTO> journalEntryJournalStepDetails;
+	private List<JournalEntryDetailTO> journalEntryDetails;
 
 	/**
 	 * Empty constructor
@@ -66,10 +72,10 @@ public class JournalEntryTO
 		confidentialityLevel = ConfidentialityLevelLiteTO.fromModel(
 				journalEntry.getConfidentialityLevel());
 
-		if ((journalEntry.getJournalEntryJournalStepDetails() != null)
-				&& (journalEntry.getJournalEntryJournalStepDetails().size() > 0)) {
-			journalEntryJournalStepDetails = JournalEntryJournalStepDetailTO
-					.toTOList(journalEntry.getJournalEntryJournalStepDetails());
+		if ((journalEntry.getJournalEntryDetails() != null)
+				&& (journalEntry.getJournalEntryDetails().size() > 0)) {
+			journalEntryDetails = JournalEntryDetailTO
+					.toTOList(journalEntry.getJournalEntryDetails());
 		}
 
 	}
@@ -157,12 +163,12 @@ public class JournalEntryTO
 		this.confidentialityLevel = confidentialityLevel;
 	}
 
-	public List<JournalEntryJournalStepDetailTO> getJournalEntryJournalStepDetails() {
-		return journalEntryJournalStepDetails;
+	public List<JournalEntryDetailTO> getJournalEntryDetails() {
+		return journalEntryDetails;
 	}
 
-	public void setJournalEntryJournalStepDetails(
-			final List<JournalEntryJournalStepDetailTO> journalEntryJournalStepDetails) {
-		this.journalEntryJournalStepDetails = journalEntryJournalStepDetails;
+	public void setJournalEntryDetails(
+			final List<JournalEntryDetailTO> journalEntryDetails) {
+		this.journalEntryDetails = journalEntryDetails;
 	}
 }

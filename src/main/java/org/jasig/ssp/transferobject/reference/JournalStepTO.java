@@ -1,5 +1,6 @@
 package org.jasig.ssp.transferobject.reference;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +11,9 @@ import org.jasig.ssp.transferobject.TransferObject;
 import com.google.common.collect.Lists;
 
 public class JournalStepTO extends AbstractReferenceTO<JournalStep>
-		implements TransferObject<JournalStep> {
+		implements TransferObject<JournalStep>, Serializable {
+
+	private static final long serialVersionUID = 918093582949321351L;
 
 	private int sortOrder;
 
@@ -47,7 +50,7 @@ public class JournalStepTO extends AbstractReferenceTO<JournalStep>
 		return sortOrder;
 	}
 
-	public void setSortOrder(int sortOrder) {
+	public void setSortOrder(final int sortOrder) {
 		this.sortOrder = sortOrder;
 	}
 }

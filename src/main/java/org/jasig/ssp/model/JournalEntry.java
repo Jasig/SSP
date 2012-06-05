@@ -50,7 +50,7 @@ public class JournalEntry
 
 	@OneToMany(mappedBy = "journalEntry")
 	@Where(clause = "object_status <> 3")
-	private Set<JournalEntryJournalStepDetail> journalEntryJournalStepDetails;
+	private Set<JournalEntryDetail> journalEntryDetails;
 
 	@ManyToOne
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
@@ -99,13 +99,13 @@ public class JournalEntry
 		this.journalTrack = journalTrack;
 	}
 
-	public Set<JournalEntryJournalStepDetail> getJournalEntryJournalStepDetails() {
-		return journalEntryJournalStepDetails;
+	public Set<JournalEntryDetail> getJournalEntryDetails() {
+		return journalEntryDetails;
 	}
 
-	public void setJournalEntryJournalStepDetails(
-			final Set<JournalEntryJournalStepDetail> journalEntryJournalStepDetails) {
-		this.journalEntryJournalStepDetails = journalEntryJournalStepDetails;
+	public void setJournalEntryDetails(
+			final Set<JournalEntryDetail> journalEntryDetails) {
+		this.journalEntryDetails = journalEntryDetails;
 	}
 
 	@Override
