@@ -68,9 +68,6 @@ Ext.define('Ssp.view.Search', {
 		       		        	xtype: 'button',
 		       		        	itemId: 'searchButton',
 		       		        	text: 'GO'
-		       		        },{
-		       		        	xtype: 'tbspacer',
-		       		        	flex: 1
 		       		        }
 		       		    ]
 		       		},{
