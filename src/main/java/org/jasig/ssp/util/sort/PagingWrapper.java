@@ -2,6 +2,7 @@ package org.jasig.ssp.util.sort;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.jasig.ssp.model.Auditable;
 
@@ -14,7 +15,8 @@ import org.jasig.ssp.model.Auditable;
  * @param <T>
  *            Model type that must inherit from Auditable
  */
-public class PagingWrapper<T extends Auditable> implements Serializable {
+public class PagingWrapper<T extends Auditable> implements Serializable,
+		Iterable<T> {
 
 	private static final long serialVersionUID = -6028264862839080192L;
 
@@ -91,5 +93,10 @@ public class PagingWrapper<T extends Auditable> implements Serializable {
 	 */
 	public void setRows(final Collection<T> rows) {
 		this.rows = rows;
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return getRows().iterator();
 	}
 }
