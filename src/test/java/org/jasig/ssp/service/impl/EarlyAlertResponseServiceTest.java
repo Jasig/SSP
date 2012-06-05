@@ -2,6 +2,7 @@ package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -211,19 +212,21 @@ public class EarlyAlertResponseServiceTest {
 		final PagingWrapper<JournalEntry> entries = journalEntryService
 				.getAllForPerson(obj.getEarlyAlert().getPerson().getCoach(),
 						new SortingAndPaging(ObjectStatus.ACTIVE));
-		assertEquals("Journal Entry count did not match.", 1L,
-				entries.getResults());
 
-		final JournalEntry journalEntry = entries.getRows()
-				.iterator().next();
+		JournalEntry journalEntry = null;
+
+		for (JournalEntry entry : entries) {
+			if (entry.getJournalSource().getId() == JournalSource.JOURNALSOURCE_EARLYALERT_ID) {
+				journalEntry = entry;
+			}
+		}
+		assertNotNull(journalEntry);
+
 		assertEquals(
 				"Entry Confidentiality Level did not match.",
 				ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE,
 				journalEntry
 						.getConfidentialityLevel().getId());
-		assertEquals("JournalEntry Source did not match.",
-				JournalSource.JOURNALSOURCE_EARLYALERT_ID,
-				journalEntry.getJournalSource().getId());
 		assertEquals("JournalEntry Track did not match.",
 				JournalTrack.JOURNALTRACK_EARLYALERT_ID,
 				journalEntry.getJournalTrack().getId());
