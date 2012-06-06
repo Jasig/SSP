@@ -192,7 +192,8 @@ public class TaskServiceImpl
 		task.setChallengeReferral(challengeReferral);
 		task.setPerson(person);
 		task.setSessionId(sessionId);
-		task.setDescription("");
+		task.setDescription(challengeReferral.getPublicDescription());
+		task.setName(challengeReferral.getName());
 
 		create(task);
 
