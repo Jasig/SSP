@@ -13,6 +13,12 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
+		    	    layout: {
+		    	        type: 'accordion',
+		    	        titleCollapse: true,
+		    	        animate: true,
+		    	        activeOnTop: true
+		    	    },
 		            title: 'Action Plan',
 		            autoScroll: true,
 		            padding: 0,
@@ -21,6 +27,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
 						    width: '100%',
 						    height: '100%',
 						    activeTab: 0,
+						    title: 'Tasks',
 						    itemId: 'taskStatusTabs',
 						    items: [{ 
 						    	      title: 'Active',

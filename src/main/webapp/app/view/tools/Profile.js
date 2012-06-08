@@ -8,6 +8,7 @@ Ext.define('Ssp.view.tools.Profile', {
     initComponent: function() {	
 		Ext.apply(this, 
 				{
+					title: 'Profile',
 			        border: 0,		
 			        width: '100%',
 		    		height: '100%',
@@ -25,7 +26,7 @@ Ext.define('Ssp.view.tools.Profile', {
 				    items: [{
 				            xtype: 'fieldset',
 				            border: 0,
-				            title: 'Student Profile',
+				            title: '',
 				            defaultType: 'displayfield',
 				            defaults: {
 				                anchor: '100%'
@@ -86,6 +87,17 @@ Ext.define('Ssp.view.tools.Profile', {
 					        fieldLabel: 'Academic Programs',
 					        name: 'academicPrograms'
 					    }]
+					    }],
+					    
+					    dockedItems: [{
+					        dock: 'top',
+					        xtype: 'toolbar',
+					        items: [{
+					            tooltip: 'Print the History for this student',
+					            text: 'View History',
+					            xtype: 'button',
+					            itemId: 'viewHistoryButton'
+					        }]
 					    }]
 				});
 		

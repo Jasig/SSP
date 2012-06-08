@@ -109,7 +109,6 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
    
 
     onItemClick: function(view, record, item, index, e, eOpts){
-    	var me=this;
     	var journalEntry = me.journalEntry;
     	var name = this.treeUtils.getNameFromNodeId( record.data.id );
     	var checked = !record.data.checked;

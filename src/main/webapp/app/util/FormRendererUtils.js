@@ -514,6 +514,5 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			field.hide();
 		}
     }    
-    
 });
 
