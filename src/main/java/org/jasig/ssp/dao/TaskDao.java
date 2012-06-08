@@ -29,9 +29,9 @@ public class TaskDao
 		criteria.add(Restrictions.eq("person.id", personId));
 
 		if (complete) {
-			criteria.add(Restrictions.isNull("completedDate"));
-		} else {
 			criteria.add(Restrictions.isNotNull("completedDate"));
+		} else {
+			criteria.add(Restrictions.isNull("completedDate"));
 		}
 
 		return criteria.list();
@@ -52,9 +52,9 @@ public class TaskDao
 		criteria.add(Restrictions.eq("sessionId", sessionId));
 
 		if (complete) {
-			criteria.add(Restrictions.isNull("completedDate"));
-		} else {
 			criteria.add(Restrictions.isNotNull("completedDate"));
+		} else {
+			criteria.add(Restrictions.isNull("completedDate"));
 		}
 
 		return criteria.list();
@@ -81,9 +81,9 @@ public class TaskDao
 				challengeReferralId));
 
 		if (complete) {
-			criteria.add(Restrictions.isNull("completedDate"));
-		} else {
 			criteria.add(Restrictions.isNotNull("completedDate"));
+		} else {
+			criteria.add(Restrictions.isNull("completedDate"));
 		}
 
 		return criteria.list();
@@ -99,9 +99,9 @@ public class TaskDao
 				challengeReferralId));
 
 		if (complete) {
-			criteria.add(Restrictions.isNull("completedDate"));
-		} else {
 			criteria.add(Restrictions.isNotNull("completedDate"));
+		} else {
+			criteria.add(Restrictions.isNull("completedDate"));
 		}
 
 		return criteria.list();
