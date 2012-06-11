@@ -4,19 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.reference.ConfigTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,27 +40,17 @@ public class ConfigControllerIntegrationTest {
 
 	private static final String CONFIG_NAME = "app_title";
 
-	@Autowired
-	private transient SecurityServiceInTestEnvironment securityService;
-
-	/**
-	 * Setup the security service with the admin user for use by
-	 * {@link #testControllerCreateAndDelete()} that checks that the Auditable
-	 * auto-fill properties are correctly filled.
-	 */
-	@Before
-	public void setUp() {
-		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
-	}
-
 	/**
 	 * Test the {@link ConfigController#get(UUID)} action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -83,11 +69,14 @@ public class ConfigControllerIntegrationTest {
 	 * Test that the {@link ConfigController#get(UUID)} action returns the
 	 * correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -103,59 +92,28 @@ public class ConfigControllerIntegrationTest {
 	 * Test the {@link ConfigController#create(ConfigTO)} and
 	 * {@link ConfigController#delete(UUID)} actions.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
-	@Test
-	public void testControllerCreateAndDelete() throws Exception {
-		assertNotNull(
-				"Controller under test was not initialized by the container correctly.",
-				controller);
+	@Test(expected = UnsupportedOperationException.class)
+	public void testControllerCreateThrowsInvalidOperation()
+			throws ObjectNotFoundException, ValidationException {
 
-		final String testString1 = "testString1";
-		final String testString2 = "testString1";
-
-		// Check validation of 'no ID for create()'
-		ConfigTO obj = new ConfigTO(UUID.randomUUID(), testString1,
-				testString2, (short) 5); // NOPMD
-		try {
-			obj = controller.create(obj);
-			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
-		} catch (final ValidationException exc) {
-			/* expected */
-		}
-
-		// Now create a valid Config
-		obj = new ConfigTO(null, testString1, testString2, (short) 5); // NOPMD
-		obj = controller.create(obj);
-
-		assertNotNull(
-				"Returned ConfigTO from the controller should not have been null.",
-				obj);
-		assertNotNull(
-				"Returned ConfigTO.ID from the controller should not have been null.",
-				obj.getId());
-		assertEquals(
-				"Returned ConfigTO.Name from the controller did not match.",
-				testString1, obj.getName());
-		assertEquals(
-				"Returned ConfigTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
-
-		assertTrue("Delete action did not return success.",
-				controller.delete(obj.getId()).isSuccess());
+		// Create a valid Config
+		final ConfigTO obj = new ConfigTO(null, "", "", (short) 5); // NOPMD
+		controller.create(obj);
+		fail("Config instances can not be created, so an exception should have been thrown.");
 	}
 
 	/**
 	 * Test the
 	 * {@link ConfigController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<ConfigTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 

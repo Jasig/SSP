@@ -23,7 +23,8 @@ public interface FundingSourceService extends
 			ValidationException;
 
 	@Override
-	FundingSource save(FundingSource obj) throws ObjectNotFoundException;
+	FundingSource save(FundingSource obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

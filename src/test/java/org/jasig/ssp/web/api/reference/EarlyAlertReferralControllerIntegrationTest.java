@@ -5,19 +5,20 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.EarlyAlertOutcome;
+import org.jasig.ssp.model.reference.EarlyAlertReferral;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.service.reference.impl.EarlyAlertOutcomeServiceImpl;
 import org.jasig.ssp.transferobject.PagingTO;
-import org.jasig.ssp.transferobject.reference.EarlyAlertOutcomeTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertReferralTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * {@link EarlyAlertOutcomeController} tests
+ * {@link EarlyAlertReferralController} tests
  * 
  * @author jon.adams
  */
@@ -37,21 +38,21 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration("../../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration
 @Transactional
-public class EarlyAlertOutcomeControllerIntegrationTest {
+public class EarlyAlertReferralControllerIntegrationTest {
 
 	@Autowired
-	private transient EarlyAlertOutcomeController controller;
+	private transient EarlyAlertReferralController controller;
 
-	private static final UUID EARLYALERT_OUTCOME_ID = UUID
-			.fromString("D944D62E-0974-4058-85C7-E6B3D6159D73");
+	@Autowired
+	private transient SessionFactory sessionFactory;
 
-	private static final String EARLYALERT_OUTCOME_NAME = "Duplicate Early Alert Notice";
+	private static final UUID EARLYALERT_REFERRAL_ID = UUID
+			.fromString("b2d11335-5056-a51a-80ea-074f8fef94ea");
 
-	private static final UUID EARLY_ALERT_OUTCOME_DELETED_ID = UUID
-			.fromString("077A1D57-6C85-42F7-922B-7642BE9F70EB");
+	private static final String EARLYALERT_REFERRAL_NAME = "Other";
 
-	private static final UUID EARLYALERT_OUTCOME_FIRST_ID = UUID
-			.fromString("12A58804-45DC-40F2-B2F5-D7E4403ACEE1");
+	private static final UUID EARLYALERT_REFERRAL_FIRST_ID = UUID
+			.fromString("b2d112a9-5056-a51a-8010-b510525ea3a8");
 
 	private static final String TESTSTRING1 = "testString1";
 
@@ -71,7 +72,7 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link EarlyAlertOutcomeController#get(UUID)} action.
+	 * Test the {@link EarlyAlertReferralController#get(UUID)} action.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             If lookup data can not be found.
@@ -85,38 +86,18 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EarlyAlertOutcomeTO obj = controller.get(EARLYALERT_OUTCOME_ID);
+		final EarlyAlertReferralTO obj = controller.get(EARLYALERT_REFERRAL_ID);
 
 		assertNotNull(
-				"Returned EarlyAlertOutcomeTO from the controller should not have been null.",
+				"Returned EarlyAlertReferralTO from the controller should not have been null.",
 				obj);
 
-		assertEquals("Returned EarlyAlertOutcome.Name did not match.",
-				EARLYALERT_OUTCOME_NAME, obj.getName());
+		assertEquals("Returned EarlyAlertReferral.Name did not match.",
+				EARLYALERT_REFERRAL_NAME, obj.getName());
 	}
 
 	/**
-	 * Test that the {@link EarlyAlertOutcomeServiceImpl#get(UUID)} method does
-	 * not return deleted items.
-	 * 
-	 * @throws ObjectNotFoundException
-	 *             If lookup data can not be found.
-	 * @throws ValidationException
-	 *             If there are any validation errors.
-	 */
-	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetDeleted() throws ObjectNotFoundException,
-			ValidationException {
-		final EarlyAlertOutcomeTO obj = controller
-				.get(EARLY_ALERT_OUTCOME_DELETED_ID);
-
-		assertNull(
-				"Controller should not have returned a deleted item.",
-				obj);
-	}
-
-	/**
-	 * Test that the {@link EarlyAlertOutcomeController#get(UUID)} action
+	 * Test that the {@link EarlyAlertReferralController#get(UUID)} action
 	 * returns the correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws ObjectNotFoundException
@@ -131,16 +112,17 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EarlyAlertOutcomeTO obj = controller.get(UUID.randomUUID());
+		final EarlyAlertReferralTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
-				"Returned EarlyAlertOutcomeTO from the controller should have been null.",
+				"Returned EarlyAlertReferralTO from the controller should have been null.",
 				obj);
 	}
 
 	/**
-	 * Test the {@link EarlyAlertOutcomeController#create(EarlyAlertOutcomeTO)}
-	 * and {@link EarlyAlertOutcomeController#delete(UUID)} actions.
+	 * Test the
+	 * {@link EarlyAlertReferralController#create(EarlyAlertReferralTO)} and
+	 * {@link EarlyAlertReferralController#delete(UUID)} actions.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             If lookup data can not be found.
@@ -156,11 +138,9 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 
 		// Check validation of 'no ID for create()'
 		try {
-			final EarlyAlertOutcomeTO obj = controller
-					.create(new EarlyAlertOutcomeTO(
-							UUID
-									.randomUUID(),
-							TESTSTRING1, TESTSTRING2, (short) 1)); // NOPMD
+			final EarlyAlertReferralTO obj = controller
+					.create(new EarlyAlertReferralTO(UUID.randomUUID(),
+							TESTSTRING1, TESTSTRING2, (short) 1, "ABC")); // NOPMD
 			assertNull(
 					"Calling create with an object with an ID should have thrown a validation excpetion.",
 					obj);
@@ -168,24 +148,24 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 			assertNotNull("ValidatedException was expected to be thrown.", exc);
 		}
 
-		// Now create a valid EarlyAlertOutcome
-		final EarlyAlertOutcomeTO valid = controller
-				.create(new EarlyAlertOutcomeTO(
+		// Create a valid EarlyAlertReferral
+		final EarlyAlertReferralTO valid = controller
+				.create(new EarlyAlertReferralTO(
 						null,
 						TESTSTRING1,
-						TESTSTRING2, (short) 1)); // NOPMD
+						TESTSTRING2, (short) 1, "ABC")); // NOPMD
 
 		assertNotNull(
-				"Returned EarlyAlertOutcomeTO from the controller should not have been null.",
+				"Returned EarlyAlertReferralTO from the controller should not have been null.",
 				valid);
 		assertNotNull(
-				"Returned EarlyAlertOutcomeTO.ID from the controller should not have been null.",
+				"Returned EarlyAlertReferralTO.ID from the controller should not have been null.",
 				valid.getId());
 		assertEquals(
-				"Returned EarlyAlertOutcomeTO.Name from the controller did not match.",
+				"Returned EarlyAlertReferralTO.Name from the controller did not match.",
 				TESTSTRING1, valid.getName());
 		assertEquals(
-				"Returned EarlyAlertOutcomeTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
+				"Returned EarlyAlertReferralTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
 				Person.SYSTEM_ADMINISTRATOR_ID, valid.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
@@ -194,12 +174,33 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link EarlyAlertOutcomeController#getAll(ObjectStatus, Integer, Integer, String, String)}
+	 * {@link EarlyAlertReferralController#create(EarlyAlertReferralTO)}.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
+	 */
+	@Test(expected = ValidationException.class)
+	public void testControllerCreateInvalid() throws ObjectNotFoundException,
+			ValidationException {
+		// Create an invalid EarlyAlertReferral
+		controller.create(new EarlyAlertReferralTO(null, TESTSTRING1,
+				TESTSTRING2, (short) 1, null)); // NOPMD
+
+		sessionFactory.getCurrentSession().flush();
+
+		fail("Exception should have been thrown by this point.");
+	}
+
+	/**
+	 * Test the
+	 * {@link EarlyAlertReferralController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 */
 	@Test
 	public void testControllerAll() {
-		final Collection<EarlyAlertOutcomeTO> list = controller.getAll(
+		final Collection<EarlyAlertReferralTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
@@ -209,15 +210,15 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link EarlyAlertOutcomeController#getAll(ObjectStatus, Integer, Integer, String, String)}
+	 * {@link EarlyAlertReferralController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action results.
 	 */
 	@Test
 	public void testControllerGetAllResults() {
-		final PagingTO<EarlyAlertOutcomeTO, EarlyAlertOutcome> results = controller
+		final PagingTO<EarlyAlertReferralTO, EarlyAlertReferral> results = controller
 				.getAll(ObjectStatus.ACTIVE, 0, 4, null, null);
 
-		final Collection<EarlyAlertOutcomeTO> list = results.getRows();
+		final Collection<EarlyAlertReferralTO> list = results.getRows();
 
 		assertNotNull("The list should not have been null.", list);
 		assertFalse("There should have been some results.", list.isEmpty());
@@ -226,20 +227,20 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 				+ results.getResults() + ") in the database.",
 				results.getResults() > list.size());
 
-		final Iterator<EarlyAlertOutcomeTO> iter = list.iterator();
+		final Iterator<EarlyAlertReferralTO> iter = list.iterator();
 
-		EarlyAlertOutcomeTO earlyAlertOutcome = iter.next();
+		EarlyAlertReferralTO earlyAlertReferral = iter.next();
 		assertEquals("First ID did not match.",
-				EARLYALERT_OUTCOME_FIRST_ID, earlyAlertOutcome.getId());
+				EARLYALERT_REFERRAL_FIRST_ID, earlyAlertReferral.getId());
 		assertFalse("ModifiedBy id should not have been empty.",
-				earlyAlertOutcome
+				earlyAlertReferral
 						.getModifiedBy().getId().equals(UUID.randomUUID()));
 
-		earlyAlertOutcome = iter.next();
-		assertTrue("Description should have been longer than 0 characters.",
-				earlyAlertOutcome.getDescription().length() > 0);
+		earlyAlertReferral = iter.next();
+		assertTrue("Acronym should have been longer than 0 characters.",
+				earlyAlertReferral.getAcronym().length() > 0);
 		assertFalse("CreatedBy id should not have been empty.",
-				earlyAlertOutcome
+				earlyAlertReferral
 						.getCreatedBy().getId().equals(UUID.randomUUID()));
 	}
 }

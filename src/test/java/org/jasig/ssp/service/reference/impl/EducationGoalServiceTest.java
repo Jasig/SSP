@@ -20,6 +20,7 @@ import org.jasig.ssp.model.reference.EducationGoal;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public class EducationGoalServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<EducationGoal> daoAll = new ArrayList<EducationGoal>();
+		final List<EducationGoal> daoAll = new ArrayList<EducationGoal>();
 		daoAll.add(new EducationGoal());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,7 +47,7 @@ public class EducationGoalServiceTest {
 
 		replay(dao);
 
-		Collection<EducationGoal> all = service.getAll(
+		final Collection<EducationGoal> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertTrue(all.size() > 0);
 		verify(dao);
@@ -54,8 +55,8 @@ public class EducationGoalServiceTest {
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		EducationGoal daoOne = new EducationGoal(id);
+		final UUID id = UUID.randomUUID();
+		final EducationGoal daoOne = new EducationGoal(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -66,9 +67,9 @@ public class EducationGoalServiceTest {
 	}
 
 	@Test
-	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		EducationGoal daoOne = new EducationGoal(id);
+	public void testSave() throws ObjectNotFoundException, ValidationException {
+		final UUID id = UUID.randomUUID();
+		final EducationGoal daoOne = new EducationGoal(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
@@ -80,8 +81,8 @@ public class EducationGoalServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		EducationGoal daoOne = new EducationGoal(id);
+		final UUID id = UUID.randomUUID();
+		final EducationGoal daoOne = new EducationGoal(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -95,7 +96,7 @@ public class EducationGoalServiceTest {
 		boolean found = true;
 		try {
 			service.get(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			found = false;
 		}
 

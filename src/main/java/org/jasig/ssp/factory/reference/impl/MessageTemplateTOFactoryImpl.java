@@ -1,14 +1,18 @@
 package org.jasig.ssp.factory.reference.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.MessageTemplateTOFactory;
 import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reference.MessageTemplateTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * MessageTemplate transfer object factory implementation
+ */
 @Service
 @Transactional(readOnly = true)
 public class MessageTemplateTOFactoryImpl extends
@@ -27,4 +31,14 @@ public class MessageTemplateTOFactoryImpl extends
 		return dao;
 	}
 
+	@Override
+	public MessageTemplate from(final MessageTemplateTO tObject)
+			throws ObjectNotFoundException {
+		final MessageTemplate model = super.from(tObject);
+
+		model.setSubject(tObject.getSubject());
+		model.setBody(tObject.getBody());
+
+		return model;
+	}
 }

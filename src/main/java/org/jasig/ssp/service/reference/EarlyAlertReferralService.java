@@ -38,7 +38,7 @@ public interface EarlyAlertReferralService extends
 
 	@Override
 	EarlyAlertReferral save(EarlyAlertReferral obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

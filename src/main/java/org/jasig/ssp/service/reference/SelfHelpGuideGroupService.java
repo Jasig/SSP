@@ -24,7 +24,7 @@ public interface SelfHelpGuideGroupService extends
 
 	@Override
 	SelfHelpGuideGroup save(SelfHelpGuideGroup obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

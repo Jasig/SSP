@@ -37,7 +37,8 @@ public interface EarlyAlertReasonService extends
 			throws ObjectNotFoundException, ValidationException;
 
 	@Override
-	EarlyAlertReason save(EarlyAlertReason obj) throws ObjectNotFoundException;
+	EarlyAlertReason save(EarlyAlertReason obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

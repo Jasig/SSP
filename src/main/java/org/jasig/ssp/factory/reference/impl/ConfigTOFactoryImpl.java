@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Config transfer object factory implementation class for converting
- * back and forth from Config models.
+ * Config transfer object factory implementation class for converting back and
+ * forth from Config models.
  * 
  * @author daniel.bower
  */
@@ -48,7 +48,26 @@ public class ConfigTOFactoryImpl extends
 		model.setSortOrder(tObject.getSortOrder());
 		model.setValue(tObject.getValue());
 		model.setValueValidation(tObject.getValueValidation());
-		// don't allow default value to be set
+
+		/*
+		 * Don't allow default value to be set with NEW data, so copy from
+		 * previous value. Yes, this will fail for new objects. Do not use this
+		 * implementation for creating new configuration values — it should be
+		 * done in the liquibase scripts instead.
+		 */
+		try {
+			final Config previous = dao.get(model.getId());
+			model.setDefaultValue(previous.getDefaultValue());
+		} catch (final ObjectNotFoundException exc) {
+			// Provide more accurate error message;
+			throw new ObjectNotFoundException(
+					model.getId(),
+					"Config",
+					"Existing configuration value \""
+							+ model.getName()
+							+ "\" could not be found. New values can only be created via database scripts.",
+					exc);
+		}
 
 		return model;
 	}

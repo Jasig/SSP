@@ -38,7 +38,7 @@ public interface EarlyAlertOutcomeService extends
 
 	@Override
 	EarlyAlertOutcome save(EarlyAlertOutcome obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

@@ -15,16 +15,6 @@ import java.util.Set;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.mygps.model.transferobject.FormSectionTO;
 import org.jasig.mygps.model.transferobject.FormTO;
 import org.jasig.mygps.web.MyGpsChallengeController;
@@ -40,6 +30,16 @@ import org.jasig.ssp.model.reference.EmploymentShifts;
 import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * {@link MyGpsChallengeController} tests
@@ -361,7 +361,7 @@ public class StudentIntakeFormManagerTest {
 		assertTrue("Special Needs option does not match.",
 				educationPlan.isSpecialNeeds());
 
-		assertEquals("Typical grade option does not match.", "A-B",
+		assertEquals("Typical grade option does not match.", "2",
 				educationPlan.getGradeTypicallyEarned());
 
 		// Assertions for Education Goal

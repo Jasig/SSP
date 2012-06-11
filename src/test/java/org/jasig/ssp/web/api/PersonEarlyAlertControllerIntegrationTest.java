@@ -217,7 +217,6 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		// Reload data to make sure it filters correctly
 		final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
 
-		// TODO: ObjectStatus filter isn't working right now
 		final Set<EarlyAlertSuggestionTO> suggestions = reloaded
 				.getEarlyAlertSuggestionIds();
 
