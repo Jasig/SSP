@@ -423,7 +423,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		boolean found = false; // NOPMD by jon.adams on 5/20/12 10:06 PM
 		for (final Message msg : msgs) {
 			final String body = msg.getBody();
-			if (body.contains("\nYour instructor for "
+			if (body.contains("Your instructor for "
 					+ COURSE_NAME
 					+ " notified me that you are experiencing issues that might affect ")) {
 				controller.getLogger().debug(
