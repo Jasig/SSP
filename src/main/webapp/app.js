@@ -50,8 +50,18 @@ Ext.require([
     'Ssp.view.tools.EarlyAlert',
     'Ssp.view.tools.earlyalert.EarlyAlertResponse',
     'Ssp.view.tools.StudentDocuments',
-    'Ssp.view.tools.CounselingServices',
+    'Ssp.view.tools.document.EditDocument',
+    'Ssp.view.tools.StudentInformationSystem',
+    'Ssp.view.tools.sis.Registration',
+    'Ssp.view.tools.sis.Assessment',
+    'Ssp.view.tools.sis.Transcript',
+    'Ssp.view.tools.sis.Act',
     'Ssp.view.tools.DisabilityServices',
+    'Ssp.view.tools.disability.General',
+    'Ssp.view.tools.disability.AgencyContacts',
+    'Ssp.view.tools.disability.DisabilityCodes',
+    'Ssp.view.tools.disability.Disposition',
+    'Ssp.view.tools.disability.Accommodations',
     'Ssp.view.tools.DisplacedWorker',
     'Ssp.view.tools.StudentSuccess',
     'Ssp.view.admin.AdminForms',
@@ -87,6 +97,7 @@ Ext.require([
     'Ssp.model.Configuration',
 	'Ssp.model.Person',
 	'Ssp.model.PersonGoal',
+	'Ssp.model.PersonDocument',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -114,6 +125,7 @@ Ext.require([
     'Ssp.store.Goals',
     'Ssp.store.JournalEntries',
     'Ssp.store.EarlyAlerts',
+    'Ssp.store.Documents',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
 	'Ssp.store.reference.Campuses',
@@ -161,7 +173,8 @@ Ext.require([
 	'Ext.form.field.Text',
 	'Ext.form.field.TextArea',
 	'Ext.ux.form.MultiSelect',
-	'Ext.ux.form.ItemSelector'
+	'Ext.ux.form.ItemSelector',
+	'Ext.form.FieldSet'
 ]);
 
 var apiUrls = [
@@ -335,6 +348,12 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         },
+        currentDocument:{
+	        fn: function(){
+	            return new Ssp.model.PersonDocument({id:""});
+	    	},
+	        singleton: true
+        },
         currentCampus:{
 	        fn: function(){
 	            return new Ssp.model.reference.Campus({id:""});
@@ -364,7 +383,8 @@ Ext.onReady(function(){
 	    citizenshipsStore: 'Ssp.store.reference.Citizenships',
     	confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',		
 	    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
-		earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
+	    documentsStore: 'Ssp.store.Documents',
+	    earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
 		earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
 		earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
 		earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
@@ -419,7 +439,17 @@ Ext.onReady(function(){
 	                    }
 	                });
 	            }
-	        });	    	
+	        });
+	    	
+	    	/*
+	    	 * Provide global asterisks next to required fields
+	    	 */
+	    	Ext.Function.interceptAfter(Ext.form.Field.prototype,'initComponent', function(){
+	    		var fl=this.fieldLabel, ab=this.allowBlank;
+	    		if (ab===false && fl){
+	    			this.fieldLabel += '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>';
+	    		}
+	    	});	    	
 	    	
 	    	Ext.apply(this,{
 	    		items: [{xtype:'sspview'}]

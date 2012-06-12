@@ -23,7 +23,8 @@ public interface JournalSourceService extends
 			ValidationException;
 
 	@Override
-	JournalSource save(JournalSource obj) throws ObjectNotFoundException;
+	JournalSource save(JournalSource obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

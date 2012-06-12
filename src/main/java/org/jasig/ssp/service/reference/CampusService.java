@@ -28,7 +28,7 @@ public interface CampusService extends
 			ValidationException;
 
 	@Override
-	Campus save(Campus obj) throws ObjectNotFoundException;
+	Campus save(Campus obj) throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

@@ -20,6 +20,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -92,7 +93,7 @@ public class SelfHelpGuideServiceTest {
 	}
 
 	@Test
-	public void testSave() throws ObjectNotFoundException {
+	public void testSave() throws ObjectNotFoundException, ValidationException {
 		final UUID id = UUID.randomUUID();
 		final SelfHelpGuide daoOne = new SelfHelpGuide(id);
 
@@ -121,7 +122,7 @@ public class SelfHelpGuideServiceTest {
 		boolean found = true;
 		try {
 			service.get(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			found = false;
 		}
 

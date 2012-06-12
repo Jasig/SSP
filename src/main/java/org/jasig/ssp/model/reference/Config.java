@@ -24,6 +24,7 @@ public class Config
 	@Column(nullable = true)
 	private String value;
 
+	@NotNull
 	@Column(nullable = false)
 	private String defaultValue;
 
@@ -112,7 +113,7 @@ public class Config
 		return defaultValue;
 	}
 
-	public void setDefaultValue(final String defaultValue) {
+	public void setDefaultValue(@NotNull final String defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 

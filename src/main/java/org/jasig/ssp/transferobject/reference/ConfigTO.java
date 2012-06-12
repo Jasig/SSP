@@ -131,7 +131,7 @@ public class ConfigTO extends AbstractReferenceTO<Config>
 		return defaultValue;
 	}
 
-	public void setDefaultValue(final String defaultValue) {
+	public void setDefaultValue(@NotNull final String defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 

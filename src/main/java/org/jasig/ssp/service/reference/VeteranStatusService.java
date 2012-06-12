@@ -28,7 +28,8 @@ public interface VeteranStatusService extends
 			ValidationException;
 
 	@Override
-	VeteranStatus save(VeteranStatus obj) throws ObjectNotFoundException;
+	VeteranStatus save(VeteranStatus obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

@@ -26,7 +26,8 @@ public interface EducationLevelService extends
 			ValidationException;
 
 	@Override
-	EducationLevel save(EducationLevel obj) throws ObjectNotFoundException;
+	EducationLevel save(EducationLevel obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

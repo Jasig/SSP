@@ -26,7 +26,8 @@ public interface JournalStepService extends
 			ValidationException;
 
 	@Override
-	JournalStep save(JournalStep obj) throws ObjectNotFoundException;
+	JournalStep save(JournalStep obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

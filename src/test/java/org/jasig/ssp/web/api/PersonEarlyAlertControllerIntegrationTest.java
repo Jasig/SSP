@@ -99,11 +99,14 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 * Test that the {@link PersonEarlyAlertController#get(UUID, UUID)} action
 	 * returns the correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception { // NOPMD
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -120,11 +123,11 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 * {@link PersonEarlyAlertController#getAll(UUID, ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerAll() throws Exception { // NOPMD
+	public void testControllerAll() throws ObjectNotFoundException {
 		final Collection<EarlyAlertTO> list = controller.getAll(PERSON_ID,
 				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
@@ -136,11 +139,14 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
 	 * and {@link PersonEarlyAlertController#delete(UUID, UUID)} actions.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerDelete() throws Exception { // NOPMD
+	public void testControllerDelete() throws ValidationException,
+			ObjectNotFoundException {
 		final String testEmailCC = "some@email.address.com"; // NOPMD by jon
 
 		final EarlyAlertTO obj = new EarlyAlertTO();
@@ -190,12 +196,15 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 * only returns sets with only {@link ObjectStatus#ACTIVE} reference data
 	 * objects.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
 	@Ignore("Auto-filtering is not yet enabled.")
-	public void testControllerGetSetsWithOnlyActiveReference() throws Exception { // NOPMD
+	public void testControllerGetSetsWithOnlyActiveReference()
+			throws ValidationException, ObjectNotFoundException {
 		final EarlyAlertTO obj = createEarlyAlert();
 		final EarlyAlertTO saved = controller.create(PERSON_ID,
 				obj);
@@ -217,7 +226,6 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		// Reload data to make sure it filters correctly
 		final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
 
-		// TODO: ObjectStatus filter isn't working right now
 		final Set<EarlyAlertSuggestionTO> suggestions = reloaded
 				.getEarlyAlertSuggestionIds();
 
@@ -234,7 +242,8 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	}
 
 	@Test(expected = ValidationException.class)
-	public void testControllerCreateWithInvalidDataGetId() throws Exception { // NOPMD
+	public void testControllerCreateWithInvalidDataGetId()
+			throws ValidationException, ObjectNotFoundException {
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		obj.setId(UUID.randomUUID());
 		controller.create(UUID.randomUUID(), obj);
@@ -242,14 +251,16 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testControllerCreateWithInvalidDataEmptyId() throws Exception { // NOPMD
+	public void testControllerCreateWithInvalidDataEmptyId()
+			throws ObjectNotFoundException, ValidationException {
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		controller.create("", obj);
 		fail("Create with empty student ID should have thrown exception.");
 	}
 
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerCreateWithInvalidData() throws Exception { // NOPMD
+	public void testControllerCreateWithInvalidData()
+			throws ObjectNotFoundException, ValidationException {
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		controller.create("bad id", obj);
 		fail("Create with invalid person UUID should have thrown exception.");
@@ -259,11 +270,14 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
 	 * action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerCreateWithStudentId() throws Exception { // NOPMD
+	public void testControllerCreateWithStudentId()
+			throws ObjectNotFoundException, ValidationException {
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		obj.setCampusId(CAMPUS_ID);
 		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
@@ -292,11 +306,14 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
 	 * action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerCreateWithInvalidStudentId() throws Exception { // NOPMD
+	public void testControllerCreateWithInvalidStudentId()
+			throws ObjectNotFoundException, ValidationException {
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		final EarlyAlertTO saved = controller.create("invalid id",
 				obj);
@@ -312,11 +329,14 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 * This test assumes that the default campus EA coordinator is the system
 	 * administrator account.
 	 * 
-	 * @throws Exception
-	 *             If any exceptions are thrown by the controller.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerCreateAndSetCoach() throws Exception { // NOPMD
+	public void testControllerCreateAndSetCoach()
+			throws ObjectNotFoundException, ValidationException {
 		final Session session = sessionFactory.getCurrentSession();
 		final EarlyAlertTO obj = createEarlyAlert();
 		final UUID studentId = obj.getPersonId();
@@ -376,11 +396,14 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
 	 * action and check that the appropriate {@link Message}s are created.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerCreateAndMessageResults() throws Exception { // NOPMD
+	public void testControllerCreateAndMessageResults()
+			throws ObjectNotFoundException, ValidationException {
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		obj.setCampusId(CAMPUS_ID);
 		obj.setCourseName(COURSE_NAME);

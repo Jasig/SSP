@@ -27,7 +27,8 @@ public interface ChallengeService extends AuditableCrudService<Challenge> {
 			ValidationException;
 
 	@Override
-	Challenge save(Challenge obj) throws ObjectNotFoundException;
+	Challenge save(Challenge obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

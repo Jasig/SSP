@@ -51,9 +51,11 @@ public class MessageTemplate
 	public static final UUID NEW_STUDENT_INTAKE_TASK_EMAIL_ID = UUID
 			.fromString("9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0");
 
+	@NotNull
 	@Column(name = "subject", nullable = false, length = 250)
 	private String subject;
 
+	@NotNull
 	@Column(name = "body", nullable = false, columnDefinition = "text")
 	private String body;
 

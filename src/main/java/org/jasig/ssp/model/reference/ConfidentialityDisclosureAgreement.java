@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jasig.ssp.model.Auditable;
@@ -24,7 +25,7 @@ public class ConfidentialityDisclosureAgreement
 	/**
 	 * text of the agreement
 	 * 
-	 * Optional, null allowed, max length 64000 characters.
+	 * Optional, but null not allowed, max length 64000 characters.
 	 */
 	@Column(nullable = false, length = 64000)
 	@Size(max = 64000)
@@ -57,7 +58,8 @@ public class ConfidentialityDisclosureAgreement
 	 *            Name; required; max 100 characters
 	 */
 
-	public ConfidentialityDisclosureAgreement(final UUID id, final String name) {
+	public ConfidentialityDisclosureAgreement(final UUID id,
+			@NotNull final String name) {
 		super(id, name);
 	}
 
@@ -65,7 +67,7 @@ public class ConfidentialityDisclosureAgreement
 		return text;
 	}
 
-	public void setText(final String text) {
+	public void setText(@NotNull final String text) {
 		this.text = text;
 	}
 

@@ -47,8 +47,12 @@ public class ConfidentialityDisclosureAgreementControllerIntegrationTest {
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
+	private static final String TEST_STRING1 = "testString1";
+
+	private static final String TEST_STRING2 = "testString1";
+
 	/**
-	 * Setup the security service with the admin user for use by
+	 * Setup the security service with the administrator for use by
 	 * {@link #testControllerCreateAndDelete()} that checks that the Auditable
 	 * auto-fill properties are correctly filled.
 	 */
@@ -61,11 +65,14 @@ public class ConfidentialityDisclosureAgreementControllerIntegrationTest {
 	 * Test the {@link ConfidentialityDisclosureAgreementController#get(UUID)}
 	 * action.
 	 * 
-	 * @throws Exception
+	 * @throws ValidationException
 	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If test data was not found.
 	 */
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -86,14 +93,16 @@ public class ConfidentialityDisclosureAgreementControllerIntegrationTest {
 	/**
 	 * Test that the
 	 * {@link ConfidentialityDisclosureAgreementController#get(UUID)} action
-	 * returns the
-	 * correct validation errors when an invalid ID is sent.
+	 * returns the correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
+	 * @throws ValidationException
 	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If test data was not found.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -112,61 +121,59 @@ public class ConfidentialityDisclosureAgreementControllerIntegrationTest {
 	 * and {@link ConfidentialityDisclosureAgreementController#delete(UUID)}
 	 * actions.
 	 * 
-	 * @throws Exception
+	 * @throws ValidationException
 	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If test data was not found.
 	 */
 	@Test
-	public void testControllerCreateAndDelete() throws Exception {
+	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final String testString1 = "testString1";
-		final String testString2 = "testString1";
-
 		// Check validation of 'no ID for create()'
-		ConfidentialityDisclosureAgreementTO obj = new ConfidentialityDisclosureAgreementTO(
-				UUID.randomUUID(), testString1,
-				testString2);
+		final ConfidentialityDisclosureAgreementTO invalid = new ConfidentialityDisclosureAgreementTO(
+				UUID.randomUUID(), TEST_STRING1, TEST_STRING2, "");
 		try {
-			obj = controller.create(obj);
-			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
-		} catch (final ValidationException exc) {
+			controller.create(invalid);
+			fail("Calling create with an object with an ID should have thrown a validation excpetion."); // NOPMD
+		} catch (final ValidationException exc) { // NOPMD
 			/* expected */
 		}
 
 		// Now create a valid ConfidentialityDisclosureAgreement
-		obj = new ConfidentialityDisclosureAgreementTO(null, testString1,
-				testString2);
-		obj = controller.create(obj);
+		final ConfidentialityDisclosureAgreementTO obj = new ConfidentialityDisclosureAgreementTO(
+				null, TEST_STRING1,
+				TEST_STRING2, "some text");
+		final ConfidentialityDisclosureAgreementTO saved = controller
+				.create(obj);
 
 		assertNotNull(
 				"Returned ConfidentialityDisclosureAgreementTO from the controller should not have been null.",
-				obj);
+				saved);
 		assertNotNull(
 				"Returned ConfidentialityDisclosureAgreementTO.ID from the controller should not have been null.",
-				obj.getId());
+				saved.getId());
 		assertEquals(
 				"Returned ConfidentialityDisclosureAgreementTO.Name from the controller did not match.",
-				testString1, obj.getName());
+				TEST_STRING1, saved.getName());
 		assertEquals(
 				"Returned ConfidentialityDisclosureAgreementTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
+				Person.SYSTEM_ADMINISTRATOR_ID, saved.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
-				controller.delete(obj.getId()).isSuccess());
+				controller.delete(saved.getId()).isSuccess());
 	}
 
 	/**
 	 * Test the
 	 * {@link ConfidentialityDisclosureAgreementController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<ConfidentialityDisclosureAgreementTO> list = controller
 				.getAll(
 						ObjectStatus.ACTIVE, null, null, null, null).getRows();

@@ -64,7 +64,7 @@ public class EarlyAlertReferralTO extends
 	public EarlyAlertReferralTO(@NotNull final UUID id,
 			@NotNull final String name,
 			final String description, final short sortOrder, // NOPMD by jon
-			final String acronym) {
+			@NotNull final String acronym) {
 		super(id, name, description);
 		this.sortOrder = sortOrder;
 		this.acronym = acronym;
@@ -144,8 +144,8 @@ public class EarlyAlertReferralTO extends
 	public static List<EarlyAlertReferralTO> toTOList(
 			@NotNull final Collection<EarlyAlertReferral> models) {
 		final List<EarlyAlertReferralTO> tObjects = Lists.newArrayList();
-		for (EarlyAlertReferral model : models) {
-			tObjects.add(new EarlyAlertReferralTO(model));
+		for (final EarlyAlertReferral model : models) {
+			tObjects.add(new EarlyAlertReferralTO(model)); // NOPMD
 		}
 
 		return tObjects;

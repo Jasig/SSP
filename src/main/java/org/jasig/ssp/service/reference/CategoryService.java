@@ -27,7 +27,8 @@ public interface CategoryService extends AuditableCrudService<Category> {
 			ValidationException;
 
 	@Override
-	Category save(Category obj) throws ObjectNotFoundException;
+	Category save(Category obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

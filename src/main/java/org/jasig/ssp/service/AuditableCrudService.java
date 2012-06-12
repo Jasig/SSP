@@ -65,8 +65,10 @@ public interface AuditableCrudService<T extends Auditable> {
 	 * @exception ObjectNotFoundException
 	 *                If the specified ID does not already exist, or if any
 	 *                foreign key lookups were not found.
+	 * @exception ValidationException
+	 *                If any validation errors occurred.
 	 */
-	T save(T obj) throws ObjectNotFoundException;
+	T save(T obj) throws ObjectNotFoundException, ValidationException;
 
 	/**
 	 * Mark the specific instance as {@link ObjectStatus#DELETED}.

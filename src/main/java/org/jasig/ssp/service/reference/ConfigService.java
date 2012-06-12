@@ -59,7 +59,7 @@ public interface ConfigService extends
 			ValidationException;
 
 	@Override
-	Config save(Config obj) throws ObjectNotFoundException;
+	Config save(Config obj) throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

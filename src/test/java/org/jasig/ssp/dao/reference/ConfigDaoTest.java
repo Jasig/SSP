@@ -90,8 +90,8 @@ public class ConfigDaoTest {
 	}
 
 	/**
-	 * Test that {@link ConfigDao#get(UUID)} returns null if identifier
-	 * is not found.
+	 * Test that {@link ConfigDao#get(UUID)} returns null if identifier is not
+	 * found.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             expected
@@ -115,7 +115,7 @@ public class ConfigDaoTest {
 	private void assertList(final Collection<Config> objects) {
 		assertFalse("List should not have been empty.", objects.isEmpty());
 
-		for (Config object : objects) {
+		for (final Config object : objects) {
 			assertNotNull("List item should not have a null id.",
 					object.getId());
 		}
@@ -129,6 +129,7 @@ public class ConfigDaoTest {
 		final Config obj = new Config();
 		obj.setName("A name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setDefaultValue("");
 		dao.save(obj);
 
 		assertNotNull("Transient instance was not assigned a new identifier.",

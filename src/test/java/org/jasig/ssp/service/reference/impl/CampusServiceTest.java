@@ -20,6 +20,7 @@ import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,9 +92,11 @@ public class CampusServiceTest {
 	 * @throws ObjectNotFoundException
 	 *             Should not be thrown in this test since it uses mocked
 	 *             objects.
+	 * @throws ValidationException
+	 *             If there were any validation errors.
 	 */
 	@Test
-	public void testSave() throws ObjectNotFoundException {
+	public void testSave() throws ObjectNotFoundException, ValidationException {
 		final UUID id = UUID.randomUUID();
 		final Campus daoOne = new Campus(id);
 

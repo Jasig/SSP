@@ -73,8 +73,7 @@ public class PersonChallengeController extends
 	}
 
 	/**
-	 * Get PersonChallenges for a person, returns a shallow object
-	 * At path /all
+	 * Get PersonChallenges for a person, returns a shallow object At path /all
 	 */
 	@Override
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -102,6 +101,22 @@ public class PersonChallengeController extends
 
 	/**
 	 * Get Challenges for a person, returns a deeper object graph than /all
+	 * 
+	 * @param personId
+	 *            person
+	 * @param status
+	 *            status
+	 * @param start
+	 *            starting row (0-based)
+	 * @param limit
+	 *            row limit
+	 * @param sort
+	 *            sort field
+	 * @param sortDirection
+	 *            sort direction
+	 * @return Challenges for a person
+	 * @throws ObjectNotFoundException
+	 *             if object could not be found
 	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)

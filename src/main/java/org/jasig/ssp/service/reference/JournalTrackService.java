@@ -28,7 +28,8 @@ public interface JournalTrackService extends
 			ValidationException;
 
 	@Override
-	JournalTrack save(JournalTrack obj) throws ObjectNotFoundException;
+	JournalTrack save(JournalTrack obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

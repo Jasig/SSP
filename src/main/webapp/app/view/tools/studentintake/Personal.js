@@ -12,7 +12,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
     height: '100%',
 	autoScroll: true,
     defaults: {
-        anchor: '100%'
+        anchor: '100%'      
     },
     fieldDefaults: {
         msgTarget: 'side',
@@ -25,7 +25,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    items: [{
 				            xtype: 'fieldset',
 				            border: 0,
-				            title: 'Personal Details',
+				            title: '',
 				            defaultType: 'textfield',
 				            defaults: {
 				                anchor: '100%'

@@ -30,7 +30,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				    items: [{
 				            xtype: 'fieldset',
 							border: 0,
-				            title: 'Education Plans',
+				            title: '',
 				            defaultType: 'textfield',
 				            defaults: {
 				                anchor: '100%'
@@ -46,7 +46,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: false
 					},{
 				        xtype: 'checkboxgroup',
 				        fieldLabel: 'Check all that you have completed',

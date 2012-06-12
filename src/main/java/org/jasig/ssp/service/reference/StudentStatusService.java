@@ -26,7 +26,8 @@ public interface StudentStatusService extends
 			ValidationException;
 
 	@Override
-	StudentStatus save(StudentStatus obj) throws ObjectNotFoundException;
+	StudentStatus save(StudentStatus obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

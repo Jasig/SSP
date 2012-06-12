@@ -1,6 +1,9 @@
 Ext.define('Ssp.view.StudentRecord', {
 	extend: 'Ext.panel.Panel',
     alias: 'widget.studentrecord',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.StudentRecordViewController',
     width: '100%',
     height: '100%',
     initComponent: function(){

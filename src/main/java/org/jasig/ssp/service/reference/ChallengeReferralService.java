@@ -30,7 +30,7 @@ public interface ChallengeReferralService extends
 
 	@Override
 	ChallengeReferral save(ChallengeReferral obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

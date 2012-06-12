@@ -28,7 +28,7 @@ public interface JournalStepDetailService extends
 
 	@Override
 	JournalStepDetail save(JournalStepDetail obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

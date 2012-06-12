@@ -26,7 +26,8 @@ public interface MessageTemplateService extends
 			ValidationException;
 
 	@Override
-	MessageTemplate save(MessageTemplate obj) throws ObjectNotFoundException;
+	MessageTemplate save(MessageTemplate obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

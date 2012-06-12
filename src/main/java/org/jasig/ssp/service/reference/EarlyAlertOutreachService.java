@@ -38,7 +38,7 @@ public interface EarlyAlertOutreachService extends
 
 	@Override
 	EarlyAlertOutreach save(EarlyAlertOutreach obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

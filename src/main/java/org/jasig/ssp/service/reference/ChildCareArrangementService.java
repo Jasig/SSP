@@ -24,7 +24,7 @@ public interface ChildCareArrangementService extends
 
 	@Override
 	ChildCareArrangement save(ChildCareArrangement obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

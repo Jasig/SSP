@@ -34,20 +34,6 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     },
 
     onViewReady: function(comp, obj){
-    	/*
-    	this.appEventsController.getApplication().addListener('editTask', function(){
- 			this.editTask();
-		},this);
-
-    	this.appEventsController.getApplication().addListener('closeTask', function(){
- 			this.closeTask();
-		},this);
-    	
-    	this.appEventsController.getApplication().addListener('deleteTask', function(){
- 			this.deleteConfirmation();
-		},this);
-		*/
-    	
     	this.appEventsController.assignEvent({eventName: 'editTask', callBackFunc: this.editTask, scope: this});
     	this.appEventsController.assignEvent({eventName: 'closeTask', callBackFunc: this.closeTask, scope: this});
     	this.appEventsController.assignEvent({eventName: 'deleteTask', callBackFunc: this.deleteConfirmation, scope: this});

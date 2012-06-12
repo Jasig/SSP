@@ -32,7 +32,11 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
 		lastName = Ext.ComponentQuery.query('#lastName')[0].setDisabled(disabled);
 		studentId = Ext.ComponentQuery.query('#studentId')[0];
 		studentId.setDisabled(disabled);
-		studentId.setFieldLabel(studentIdAlias);
+		// set the field label and supply an asterisk for required
+		// since the required asterisk is overridden to the initComponent
+		// method. See app.js -> application launch method for additional
+		// detail on required fields
+		studentId.setFieldLabel(studentIdAlias+'<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>');
 		Ext.apply(studentId, {
 			                  minLength: minStudentIdLen,
 			                  minLengthText: '',
