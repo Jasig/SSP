@@ -57,6 +57,8 @@ public interface MessageService {
 	 * 
 	 * @param to
 	 *            Email address to send this message
+	 * @param emailCC
+	 * 
 	 * @param messageTemplateId
 	 *            Message template
 	 * @param templateParameters
@@ -68,7 +70,29 @@ public interface MessageService {
 	 * @throws ObjectNotFoundException
 	 *             If the current user or administrator could not be loaded.
 	 */
-	Message createMessage(@NotNull String to, @NotNull UUID messageTemplateId,
+	Message createMessage(@NotNull String to, String emailCC,
+			@NotNull UUID messageTemplateId,
+			Map<String, Object> templateParameters)
+			throws ObjectNotFoundException;
+
+	/**
+	 * Create and save an email message to the queue to send.
+	 * 
+	 * @param to
+	 *            Email address to send this message
+	 * @param messageTemplateId
+	 *            Message template
+	 * @param templateParameters
+	 *            Template parameters to use to fill the template
+	 * @return Generated message.
+	 * 
+	 *         <p>
+	 *         Already saved to queue, does not need further processing.)
+	 * @throws ObjectNotFoundException
+	 *             If the current user or administrator could not be loaded.
+	 */
+	Message createMessage(@NotNull String to,
+			@NotNull UUID messageTemplateId,
 			Map<String, Object> templateParameters)
 			throws ObjectNotFoundException;
 
@@ -100,7 +124,6 @@ public interface MessageService {
 	 *             If current user or the administrator info could not be
 	 *             loaded.
 	 */
-	boolean sendMessage(Message message,
-			final String emailCC) throws SendFailedException,
+	boolean sendMessage(Message message) throws SendFailedException,
 			ObjectNotFoundException;
 }

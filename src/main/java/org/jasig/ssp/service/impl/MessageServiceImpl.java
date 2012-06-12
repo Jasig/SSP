@@ -144,6 +144,7 @@ public class MessageServiceImpl implements MessageService {
 			final Map<String, Object> templateParameters)
 			throws ObjectNotFoundException, SendFailedException,
 			ValidationException {
+
 		if (to == null) {
 			throw new ValidationException("Recipient missing.");
 		}
@@ -155,15 +156,26 @@ public class MessageServiceImpl implements MessageService {
 
 		final Message message = createMessage(messageTemplateId,
 				templateParameters);
-		message.setRecipient(to);
 
-		if (StringUtils.isEmpty(emailCC)) {
-			return messageDao.save(message);
-		} else {
-			// An extra CC needs added, only API available is sendMessage()
-			sendMessage(message, emailCC);
-			return message;
-		}
+		message.setRecipient(to);
+		message.setCarbonCopy(emailCC);
+
+		return messageDao.save(message);
+	}
+
+	@Override
+	public Message createMessage(@NotNull final String to,
+			final String emailCC, @NotNull final UUID messageTemplateId,
+			final Map<String, Object> templateParameters)
+			throws ObjectNotFoundException {
+
+		final Message message = createMessage(messageTemplateId,
+				templateParameters);
+
+		message.setRecipientEmailAddress(to);
+		message.setCarbonCopy(emailCC);
+
+		return messageDao.save(message);
 	}
 
 	@Override
@@ -171,10 +183,8 @@ public class MessageServiceImpl implements MessageService {
 			@NotNull final UUID messageTemplateId,
 			final Map<String, Object> templateParameters)
 			throws ObjectNotFoundException {
-		final Message message = createMessage(messageTemplateId,
-				templateParameters);
-		message.setRecipientEmailAddress(to);
-		return messageDao.save(message);
+
+		return createMessage(to, null, messageTemplateId, templateParameters);
 	}
 
 	@Override
@@ -187,7 +197,7 @@ public class MessageServiceImpl implements MessageService {
 		final List<Message> messages = messageDao.queued();
 		for (final Message message : messages) {
 			try {
-				sendMessage(message, null);
+				sendMessage(message);
 			} catch (final ObjectNotFoundException e) {
 				LOGGER.error("Could not load current user or administrator.", e);
 			} catch (final SendFailedException e) {
@@ -211,9 +221,9 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public boolean sendMessage(@NotNull final Message message,
-			final String emailCC)
+	public boolean sendMessage(@NotNull final Message message)
 			throws ObjectNotFoundException, SendFailedException {
+
 		LOGGER.info("BEGIN : sendMessage()");
 		LOGGER.info("Sending message: {}", message.toString());
 
@@ -241,21 +251,21 @@ public class MessageServiceImpl implements MessageService {
 						+ message.getRecipientEmailAddress() + "' is invalid");
 			}
 
-			if (!StringUtils.isEmpty(emailCC)) { // NOPMD
-				mimeMessageHelper.setBcc(emailCC);
+			if (!StringUtils.isEmpty(message.getCarbonCopy())) { // NOPMD
+				mimeMessageHelper.setCc(message.getCarbonCopy());
 			} else if (!StringUtils.isEmpty(getBcc())) {
 				mimeMessageHelper.setBcc(getBcc());
 			}
 
 			mimeMessageHelper.setSubject(message.getSubject());
 			mimeMessageHelper.setText(message.getBody());
-			mimeMessage.setContent(message.getBody(), "text/plain");
+			mimeMessage.setContent(message.getBody(), "text/html");
 
 			if (shouldSendMail()) {
 				LOGGER.debug("_ : JavaMailSender.send()");
 				javaMailSender.send(mimeMessage);
 			} else {
-				LOGGER.warn("_ : JavaMailSender was not called; message was marked sent but was not actually sent");
+				LOGGER.warn("_ : JavaMailSender was not called; message was marked sent but was not actually sent.  To enable mail, update the configuration of the app.");
 			}
 
 			message.setSentDate(new Date());

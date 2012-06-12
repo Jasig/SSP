@@ -40,6 +40,9 @@ final public class Message
 	@Column(length = 100, nullable = false)
 	private String recipientEmailAddress;
 
+	@Column(length = 512, nullable = true)
+	private String carbonCopy;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = true)
 	private Date sentDate;
@@ -147,6 +150,14 @@ final public class Message
 		this.sentDate = sentDate == null ? null : new Date(sentDate.getTime());
 	}
 
+	public String getCarbonCopy() {
+		return carbonCopy;
+	}
+
+	public void setCarbonCopy(final String carbonCopy) {
+		this.carbonCopy = carbonCopy;
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 181;
@@ -167,6 +178,7 @@ final public class Message
 		result *= hashField("recipient", recipient);
 		result *= hashField("recipientEmailAddress", recipientEmailAddress);
 		result *= hashField("sentDate", sentDate);
+		result *= hashField("carbonCopy", carbonCopy);
 
 		return result;
 	}
