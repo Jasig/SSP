@@ -1324,6 +1324,15 @@ where id = 'b528c1ac-6104-435b-ae62-09fb5f9ef680';
 		</rollback>
 	</changeSet>
 	
+	<changeSet id="Remove unused message template" author="daniel.bower">
+		<delete tableName="message_template">
+			<where>id = '7c945020-86b0-11e1-849a-0026b9e7ff4c'</where>
+		</delete>
+		<rollback>
+			<comment>Not restoring unused message template</comment>
+		</rollback>
+	</changeSet>
+	
 	<!-- changeSet id="Additional Legacy MessageTemplates 2" author="daniel.bower">
 		<insert tableName="message_template">
 			<column name="id" value="919F6FF5-8F22-4684-8729-D615206A2644" />
