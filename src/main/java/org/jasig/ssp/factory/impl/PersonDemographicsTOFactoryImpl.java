@@ -70,19 +70,19 @@ public class PersonDemographicsTOFactoryImpl extends
 
 		final PersonDemographics model = super.from(tObject);
 
-		model.setMaritalStatus((tObject.getMaritalStatusId() == null) ? null :
+		model.setMaritalStatus(tObject.getMaritalStatusId() == null ? null :
 				maritalStatusService.get(tObject.getMaritalStatusId()));
 
-		model.setEthnicity((tObject.getEthnicityId() == null) ? null :
+		model.setEthnicity(tObject.getEthnicityId() == null ? null :
 				ethnicityService.get(tObject.getEthnicityId()));
 
-		model.setCitizenship((tObject.getCitizenshipId() == null) ? null :
+		model.setCitizenship(tObject.getCitizenshipId() == null ? null :
 				citizenshipService.get(tObject.getCitizenshipId()));
 
-		model.setVeteranStatus((tObject.getVeteranStatusId() == null) ? null :
+		model.setVeteranStatus(tObject.getVeteranStatusId() == null ? null :
 				veteranStatusService.get(tObject.getVeteranStatusId()));
 
-		model.setChildCareArrangement((tObject.getChildCareArrangementId() == null) ? null
+		model.setChildCareArrangement(tObject.getChildCareArrangementId() == null ? null
 				: childCareArrangementService.get(tObject
 						.getChildCareArrangementId()));
 
