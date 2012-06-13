@@ -61,42 +61,42 @@
 				<text><![CDATA[Report Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="1" y="10" width="100" height="13"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="10" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Home Department:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="3a5dca54-1006-4f21-a054-1f544849639d" x="1" y="20" width="100" height="13"/>
+				<reportElement uuid="3a5dca54-1006-4f21-a054-1f544849639d" x="0" y="20" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Counselor/Coach:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="1" y="30" width="100" height="13"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="0" y="30" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Program Status:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ee5ff91f-b35b-4038-a2cd-af59f35d6937" x="1" y="40" width="100" height="13"/>
+				<reportElement uuid="ee5ff91f-b35b-4038-a2cd-af59f35d6937" x="0" y="40" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Cohort Group:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" x="1" y="50" width="100" height="13"/>
+				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" x="0" y="50" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Student Count:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="1" y="60" width="123" height="13"/>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="60" width="123" height="13"/>
 				<textElement/>
 				<text><![CDATA[Special Service Groups:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5f1b46f5-a916-4f4a-b0a1-6bdd2cf265a9" x="1" y="70" width="123" height="13"/>
+				<reportElement uuid="5f1b46f5-a916-4f4a-b0a1-6bdd2cf265a9" x="0" y="70" width="123" height="13"/>
 				<textElement/>
 				<text><![CDATA[Referral Source:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="35a90ac4-143c-4738-8928-2d864348c7ae" x="1" y="80" width="123" height="13"/>
+				<reportElement uuid="35a90ac4-143c-4738-8928-2d864348c7ae" x="0" y="80" width="123" height="13"/>
 				<textElement/>
 				<text><![CDATA[Counseling Variables:]]></text>
 			</staticText>
@@ -119,14 +119,14 @@
 	<columnHeader>
 		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="6963974f-bd33-4663-be62-4efc95e33d07" stretchType="RelativeToBandHeight" x="2" y="2" width="50" height="20"/>
+				<reportElement uuid="6963974f-bd33-4663-be62-4efc95e33d07" stretchType="RelativeToBandHeight" x="2" y="2" width="60" height="20"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[FIRST]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="70" y="2" width="50" height="20"/>
+				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="70" y="2" width="60" height="20"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
@@ -201,11 +201,11 @@
 		<band height="35" splitType="Stretch">
 			<rectangle>
 				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" x="0" y="2" width="750" height="30" backcolor="#E4E4E4">
-					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) > 0))]]></printWhenExpression>
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 			</rectangle>
 			<textField>
-				<reportElement uuid="26f7be38-ce84-4162-9fe0-4843db2fe8b9" stretchType="RelativeToBandHeight" x="2" y="2" width="50" height="16"/>
+				<reportElement uuid="26f7be38-ce84-4162-9fe0-4843db2fe8b9" stretchType="RelativeToBandHeight" x="2" y="2" width="60" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
@@ -219,7 +219,7 @@
 				<textFieldExpression><![CDATA[( $F{middleInitial} == "null" ? "" : $F{middleInitial} )]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" stretchType="RelativeToBandHeight" x="70" y="2" width="50" height="16"/>
+				<reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" stretchType="RelativeToBandHeight" x="70" y="2" width="60" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
