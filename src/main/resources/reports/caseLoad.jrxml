@@ -44,6 +44,38 @@
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
 	</variable>
+	<variable name="totalStudentSum" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{totalStudentSum}.intValue() + $F{totalStudentsServed})]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalAnnualCaseloadSum" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{totalAnnualCaseloadSum}.intValue() + $F{totalAnnualCaseload})]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="currentTotalCaseloadSum" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{currentTotalCaseloadSum}.intValue() + $F{currentTotalCaseload})]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="studentsByStatusASum" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{studentsByStatusASum}.intValue() + $F{studentsByStatusA})]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="studentsByStatusIASum" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{studentsByStatusIASum}.intValue() + $F{studentsByStatusIA})]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="studentsByStatusTSum" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{studentsByStatusTSum}.intValue() + $F{studentsByStatusT})]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="studentsByStatusNPSum" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{studentsByStatusNPSum}.intValue() + $F{studentsByStatusNP})]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="studentsByStatusNSSum" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{studentsByStatusNSSum}.intValue() + $F{studentsByStatusNS})]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -241,6 +273,55 @@
 		<band height="54" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement uuid="207e1b68-2b4b-4a8b-9011-61023bcdaaef" x="227" y="11" width="99" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{totalStudentSum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cb8dad2e-0d83-407e-8d03-58f0ffe91b57" x="327" y="11" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{totalAnnualCaseloadSum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="86885de3-b342-44ab-ae9b-d62239cdd651" x="430" y="11" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{currentTotalCaseloadSum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="018d7a5c-e4ee-4008-87ae-efbc7fabb301" x="20" y="11" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Totals:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="db27643c-8ae2-44e4-b9e5-fa701887a2f8" x="547" y="11" width="25" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{studentsByStatusASum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a5a7c335-cc37-4009-af82-bc240ab54fb1" x="575" y="11" width="25" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{studentsByStatusIASum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4e81c63c-c500-4998-9264-bdd84ac57eba" x="603" y="11" width="25" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{studentsByStatusTSum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="507b4c35-7df2-448b-88a4-bacee973f867" x="631" y="11" width="25" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{studentsByStatusNPSum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7676aaf5-718d-401a-b2ea-eb57a9ffca28" x="659" y="11" width="25" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{studentsByStatusNSSum}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="d81fa98a-b996-49fb-8070-f4e12fda97c3" x="21" y="6" width="700" height="1"/>
+			</line>
+		</band>
 	</summary>
 </jasperReport>
