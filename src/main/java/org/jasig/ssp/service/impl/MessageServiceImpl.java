@@ -67,7 +67,11 @@ public class MessageServiceImpl implements MessageService {
 	 *         information
 	 */
 	public String getBcc() {
-		return configService.getByNameEmpty("bcc_email_address");
+		final String bcc = configService.getByNameEmpty("bcc_email_address");
+		if (!bcc.isEmpty() && !bcc.equalsIgnoreCase("noone@test.com")) {
+			return bcc;
+		}
+		return null;
 	}
 
 	@Override
@@ -155,7 +159,7 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	@Transactional(readOnly = false)
-	@Scheduled(fixedDelay = 300000)
+	@Scheduled(fixedDelay = 30000)
 	// run 5 minutes after the end of the last invocation
 	public void sendQueuedMessages() {
 		LOGGER.info("BEGIN : sendQueuedMessages()");
