@@ -80,6 +80,13 @@ final public class Message
 		this.recipientEmailAddress = recipientEmailAddress;
 	}
 
+	public Message(final SubjectAndBody subjAndMessage) {
+		super();
+		setObjectStatus(ObjectStatus.ACTIVE);
+		this.subject = subjAndMessage.getSubject();
+		this.body = subjAndMessage.getBody();
+	}
+
 	/**
 	 * Gets the subject
 	 * 

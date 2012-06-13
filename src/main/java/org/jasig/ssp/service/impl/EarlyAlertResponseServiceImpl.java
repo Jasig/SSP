@@ -9,12 +9,12 @@ import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.EarlyAlertResponseDao;
-import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.model.reference.EarlyAlertReferral;
@@ -36,6 +36,7 @@ import org.jasig.ssp.service.reference.EarlyAlertOutreachService;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.JournalTrackService;
+import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -96,7 +97,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	private transient PersonService personService;
 
 	@Autowired
-	private transient MessageTemplateDao messageTemplateDao;
+	private transient MessageTemplateService messageTemplateService;
 
 	@Autowired
 	private transient VelocityTemplateService velocityTemplateService;
@@ -232,12 +233,12 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		}
 
 		final Person person = earlyAlertResponse.getEarlyAlert().getPerson();
-		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlertResponse);
+		final SubjectAndBody subjAndBody = messageTemplateService
+				.createAdvisorConfirmationForEarlyAlertMessage(fillTemplateParameters(earlyAlertResponse));
 
 		// Create and queue the message
 		final Message message = messageService.createMessage(person, null,
-				MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
-				templateParameters);
+				subjAndBody);
 
 		LOGGER.info("Message {} created for EarlyAlertResponse {}", message,
 				earlyAlertResponse);
@@ -258,7 +259,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 			final EarlyAlertResponse earlyAlertResponse)
 			throws ObjectNotFoundException, ValidationException {
 		final EarlyAlert earlyAlert = earlyAlertResponse.getEarlyAlert();
-		final MessageTemplate messageTemplate = messageTemplateDao
+		final MessageTemplate messageTemplate = messageTemplateService
 				.get(MessageTemplate.JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID);
 
 		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlertResponse);
@@ -309,8 +310,8 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		}
 
 		// ensure earlyAlert.createdBy is populated
-		if (earlyAlert.getCreatedBy().getFirstName() == null
-				|| earlyAlert.getCreatedBy().getLastName() == null) {
+		if ((earlyAlert.getCreatedBy().getFirstName() == null)
+				|| (earlyAlert.getCreatedBy().getLastName() == null)) {
 			if (earlyAlert.getCreatedBy().getId() == null) {
 				throw new IllegalArgumentException(
 						"EarlyAlert.CreatedBy.Id is missing.");

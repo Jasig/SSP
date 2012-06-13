@@ -158,17 +158,16 @@ public interface TaskService
 			ValidationException;
 
 	/**
-	 * Send a notice to the student about the task using the messageTemplate
+	 * Send a notice to the student about the task
 	 * 
 	 * @param customTask
-	 * @param messageTemplateId
 	 * @throws ObjectNotFoundException
 	 * @throws ValidationException
 	 * @throws SendFailedException
 	 */
-	void sendNoticeToStudentOnCustomTask(Task customTask,
-			UUID messageTemplateId) throws ObjectNotFoundException,
-			ValidationException, SendFailedException;
+	void sendNoticeToStudentOnCustomTask(Task customTask
+			) throws ObjectNotFoundException,
+					ValidationException, SendFailedException;
 
 	/**
 	 * Send a list of the given tasks to each emailAddress and each recipient.

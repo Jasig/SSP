@@ -130,7 +130,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<rollback>
-			<delete tableName="journal_step_detail">
+			<delete tableName="journal_step_journal_step_detail">
 				<where>id='1311c59c-af37-11e1-8624-0026b9e7ff4c'</where>
 			</delete>
 		</rollback>
@@ -170,8 +170,50 @@
 			<column name="journal_step_journal_step_detail_id" value="1311c59c-af37-11e1-8624-0026b9e7ff4c" />
 		</insert>
 		<rollback>
-			<delete tableName="journal_step_detail">
+			<delete tableName="journal_entry_detail">
 				<where>id='d8df3d54-af46-11e1-9742-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="test tasks" author="daniel.bower">
+		<insert tableName="task">
+			<column name="id" value="f42f4970-b566-11e1-a224-0026b9e7ff4c" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="description" value="Test Task Description" />
+			<column name="due_date" valueDate="2016-03-20T00:00:00" />
+			<column name="session_id" value="ABCDEFG" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="name" value="Test Task Name" />
+			<column name="confidentiality_level_id" value="b3d077a7-4055-0510-7967-4a09f93a0357" />
+		</insert>
+		<insert tableName="task">
+			<column name="id" value="4a24c8c2-b568-11e1-b82e-0026b9e7ff4c" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="description" value="Test Task Description" />
+			<column name="due_date" valueDate="2016-03-21T00:00:00" />
+			<column name="session_id" value="ABCDEFG" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="challenge_id" value="af7e472c-3b7c-4d00-a667-04f52f560940" />
+			<column name="challenge_referral_id" value="19fbec43-8c0b-478b-9d5f-00ec6ec57511" />
+			<column name="name" value="Test Task Name 2" />
+			<column name="confidentiality_level_id" value="b3d077a7-4055-0510-7967-4a09f93a0357" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="task">
+				<where>id='f42f4970-b566-11e1-a224-0026b9e7ff4c'</where>
+			</delete>
+			<delete tableName="task">
+				<where>id='4a24c8c2-b568-11e1-b82e-0026b9e7ff4c'</where>
 			</delete>
 		</rollback>
 	</changeSet>
