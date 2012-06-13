@@ -42,9 +42,9 @@ public interface MessageTemplateService extends
 	SubjectAndBody createContactCoachMessage(String body, String subject,
 			Person student);
 
-	SubjectAndBody createActionPlanStepMessage();
+	SubjectAndBody createActionPlanStepMessage(final Task task);
 
-	SubjectAndBody createCustomActionPlanTaskMessage();
+	SubjectAndBody createCustomActionPlanTaskMessage(final Task task);
 
 	SubjectAndBody createActionPlanMessage(Person student, List<TaskTO> taskTOs);
 

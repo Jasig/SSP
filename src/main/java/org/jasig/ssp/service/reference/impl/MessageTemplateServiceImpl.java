@@ -1,6 +1,7 @@
 package org.jasig.ssp.service.reference.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -62,22 +63,18 @@ public class MessageTemplateServiceImpl extends
 		return configService.getByNameNull("serverExternalPath");
 	}
 
-	private SubjectAndBody generate(final UUID id,
-			final Map<String, Object> messageParams) {
-		try {
-			return populateFromTemplate(id, messageParams);
-		} catch (ObjectNotFoundException e) {
-			throw new ConfigException(id, ConfigException.TEMPLATE_TYPE, e);
-		}
-	}
-
 	private SubjectAndBody populateFromTemplate(
 			final UUID messageTemplateId,
-			final Map<String, Object> templateParameters)
-			throws ObjectNotFoundException {
+			final Map<String, Object> templateParameters) {
 
-		final MessageTemplate messageTemplate = dao
-				.get(messageTemplateId);
+		MessageTemplate messageTemplate;
+
+		try {
+			messageTemplate = dao.get(messageTemplateId);
+		} catch (ObjectNotFoundException e) {
+			throw new ConfigException(messageTemplateId,
+					ConfigException.TEMPLATE_TYPE, e);
+		}
 
 		final String subject = velocityTemplateService
 				.generateContentFromTemplate(messageTemplate.getSubject(),
@@ -90,28 +87,44 @@ public class MessageTemplateServiceImpl extends
 		return new SubjectAndBody(subject, body);
 	}
 
+	private String formatDate(final Date date) {
+		final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy",
+				Locale.getDefault());
+		return format.format(date);
+	}
+
 	@Override
 	public SubjectAndBody createContactCoachMessage(final String body,
 			final String subject, final Person student) {
 
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("subject", subject);
-		messageParams.put("body", body);
+		messageParams.put("message", body);
 		messageParams.put("student", student);
+		messageParams.put("fullName", student.getFullName());
 
-		return generate(MessageTemplate.CONTACT_COACH_ID, messageParams);
+		return populateFromTemplate(MessageTemplate.CONTACT_COACH_ID,
+				messageParams);
 	}
 
 	@Override
-	public SubjectAndBody createActionPlanStepMessage() {
-		return generate(MessageTemplate.ACTION_PLAN_STEP_ID,
-				new HashMap<String, Object>());
+	public SubjectAndBody createActionPlanStepMessage(final Task task) {
+		final Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("task", task);
+		messageParams.put("dueDateFormatted", formatDate(task.getDueDate()));
+
+		return populateFromTemplate(MessageTemplate.ACTION_PLAN_STEP_ID,
+				messageParams);
 	}
 
 	@Override
-	public SubjectAndBody createCustomActionPlanTaskMessage() {
-		return generate(MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID,
-				new HashMap<String, Object>());
+	public SubjectAndBody createCustomActionPlanTaskMessage(final Task task) {
+		final Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("task", task);
+		messageParams.put("dueDateFormatted", formatDate(task.getDueDate()));
+
+		return populateFromTemplate(MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID,
+				messageParams);
 	}
 
 	@Override
@@ -121,8 +134,10 @@ public class MessageTemplateServiceImpl extends
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("taskTOs", taskTOs);
 		messageParams.put("student", student);
+		messageParams.put("fullName", student.getFullName());
 
-		return generate(MessageTemplate.ACTION_PLAN_EMAIL_ID, messageParams);
+		return populateFromTemplate(MessageTemplate.ACTION_PLAN_EMAIL_ID,
+				messageParams);
 	}
 
 	@Override
@@ -131,6 +146,7 @@ public class MessageTemplateServiceImpl extends
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("taskName", task.getName());
 		messageParams.put("student", task.getPerson());
+		messageParams.put("fullName", task.getPerson().getFullName());
 
 		// fix links in description
 		final String linkedDescription = task.getDescription()
@@ -141,12 +157,10 @@ public class MessageTemplateServiceImpl extends
 								+ "/");
 		messageParams.put("description", linkedDescription);
 
-		final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy",
-				Locale.getDefault());
-		messageParams.put("dueDate",
-				format.format(task.getDueDate()));
+		messageParams.put("dueDateFormatted", formatDate(task.getDueDate()));
 
-		return generate(MessageTemplate.NEW_STUDENT_INTAKE_TASK_EMAIL_ID,
+		return populateFromTemplate(
+				MessageTemplate.NEW_STUDENT_INTAKE_TASK_EMAIL_ID,
 				messageParams);
 	}
 
@@ -159,7 +173,7 @@ public class MessageTemplateServiceImpl extends
 				termToRepresentEarlyAlert);
 		messageParams.put("earlyAlert", earlyAlert);
 
-		return generate(
+		return populateFromTemplate(
 				MessageTemplate.JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID,
 				messageParams);
 	}
@@ -167,28 +181,32 @@ public class MessageTemplateServiceImpl extends
 	@Override
 	public SubjectAndBody createAdvisorConfirmationForEarlyAlertMessage(
 			final Map<String, Object> messageParams) {
-		return generate(MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
+		return populateFromTemplate(
+				MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
 				messageParams);
 	}
 
 	@Override
 	public SubjectAndBody createEarlyAlertToStudentMessage(
 			final Map<String, Object> messageParams) {
-		return generate(MessageTemplate.EARLYALERT_MESSAGETOSTUDENT_ID,
+		return populateFromTemplate(
+				MessageTemplate.EARLYALERT_MESSAGETOSTUDENT_ID,
 				messageParams);
 	}
 
 	@Override
 	public SubjectAndBody createEarlyAlertFacultyConfirmationMessage(
 			final Map<String, Object> messageParams) {
-		return generate(MessageTemplate.EARLYALERT_CONFIRMATIONTOFACULTY_ID,
+		return populateFromTemplate(
+				MessageTemplate.EARLYALERT_CONFIRMATIONTOFACULTY_ID,
 				messageParams);
 	}
 
 	@Override
 	public SubjectAndBody createEarlyAlertAdvisorConfirmationMessage(
 			final Map<String, Object> messageParams) {
-		return generate(MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
+		return populateFromTemplate(
+				MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
 				messageParams);
 	}
 }

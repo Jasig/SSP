@@ -318,10 +318,10 @@ public class TaskServiceImpl
 					SubjectAndBody subjAndBody;
 					if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
 						subjAndBody = messageTemplateService
-								.createCustomActionPlanTaskMessage();
+								.createCustomActionPlanTaskMessage(task);
 					} else {
 						subjAndBody = messageTemplateService
-								.createActionPlanStepMessage();
+								.createActionPlanStepMessage(task);
 					}
 
 					messageService.createMessage(task.getPerson(), null,
