@@ -1,10 +1,8 @@
 package org.jasig.ssp.service.impl; // NOPMD
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,16 +13,17 @@ import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.TaskDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
-import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -51,9 +50,10 @@ public class TaskServiceImpl
 	private transient MessageService messageService;
 
 	@Autowired
-	private transient ConfigService configService;
+	private transient MessageTemplateService messageTemplateService;
 
-	private static final String STUDENTUIPATH = "MyGPS";
+	@Autowired
+	private transient ConfigService configService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TaskServiceImpl.class);
@@ -70,10 +70,6 @@ public class TaskServiceImpl
 			return Integer.valueOf(numVal);
 		}
 		return 14;
-	}
-
-	private String getServerExternalPath() {
-		return configService.getByNameNull("serverExternalPath");
 	}
 
 	@Override
@@ -216,39 +212,14 @@ public class TaskServiceImpl
 	}
 
 	@Override
-	public void sendNoticeToStudentOnCustomTask(final Task customTask,
-			final UUID messageTemplateId) throws ObjectNotFoundException,
+	public void sendNoticeToStudentOnCustomTask(final Task customTask)
+			throws ObjectNotFoundException,
 			SendFailedException, ValidationException {
 
-		if (!messageTemplateId
-				.equals(MessageTemplate.TASK_AUTO_CREATED_EMAIL_ID)
-				&& !messageTemplateId
-						.equals(MessageTemplate.NEW_STUDENT_INTAKE_TASK_EMAIL_ID)) {
-			// exit without sending message
-			return;
-		}
+		final SubjectAndBody subjAndBody = messageTemplateService
+				.createStudentIntakeTaskMessage(customTask);
 
-		// Template parameters
-		final Map<String, Object> templateParameters = new HashMap<String, Object>();
-		templateParameters
-				.put("fullName", customTask.getPerson().getFullName());
-		templateParameters.put("name", customTask.getName());
-
-		// fix links in description
-		final String linkedDescription = customTask.getDescription()
-				.replaceAll(
-						"href=\"/" + STUDENTUIPATH + "/",
-						"href=\"" + getServerExternalPath() + "/"
-								+ STUDENTUIPATH
-								+ "/");
-		templateParameters.put("description", linkedDescription);
-
-		final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-		templateParameters.put("dueDate",
-				format.format(customTask.getDueDate()));
-
-		messageService.createMessage(customTask.getPerson(), null,
-				messageTemplateId, templateParameters);
+		messageService.createMessage(customTask.getPerson(), null, subjAndBody);
 	}
 
 	/**
@@ -268,15 +239,12 @@ public class TaskServiceImpl
 
 		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
 
-		final Map<String, Object> templateParameters = Maps.newHashMap();
-		templateParameters.put("fullName", student.getFullName());
-		templateParameters.put("taskTOs", taskTOs);
+		final SubjectAndBody subjAndBody = messageTemplateService
+				.createActionPlanMessage(student, taskTOs);
 
 		if (emailAddresses != null) {
 			for (final String address : emailAddresses) {
-				messageService.createMessage(address,
-						MessageTemplate.ACTION_PLAN_EMAIL_ID,
-						templateParameters);
+				messageService.createMessage(address, null, subjAndBody);
 			}
 		}
 
@@ -284,8 +252,7 @@ public class TaskServiceImpl
 			for (final Person recipient : recipients) {
 				messageService.createMessage(
 						recipient.getPrimaryEmailAddress(),
-						MessageTemplate.ACTION_PLAN_EMAIL_ID,
-						templateParameters);
+						null, subjAndBody);
 			}
 		}
 	}
@@ -348,15 +315,17 @@ public class TaskServiceImpl
 				if (now.after(startDateCalendar)
 						&& (now.before(dueDateCalendar))) {
 
-					UUID templateId;
+					SubjectAndBody subjAndBody;
 					if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
-						templateId = MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID;
+						subjAndBody = messageTemplateService
+								.createCustomActionPlanTaskMessage();
 					} else {
-						templateId = MessageTemplate.ACTION_PLAN_STEP_ID;
+						subjAndBody = messageTemplateService
+								.createActionPlanStepMessage();
 					}
 
 					messageService.createMessage(task.getPerson(), null,
-							templateId, new HashMap<String, Object>()); // NOPMD
+							subjAndBody);
 
 					setReminderSentDateToToday(task);
 				}

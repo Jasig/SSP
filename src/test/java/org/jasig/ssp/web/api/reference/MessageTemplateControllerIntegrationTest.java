@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.reference.MessageTemplateTO;
@@ -38,10 +39,9 @@ public class MessageTemplateControllerIntegrationTest {
 	@Autowired
 	private transient MessageTemplateController controller;
 
-	private static final UUID MESSAGETEMPLATE_ID = UUID
-			.fromString("7c945020-86b0-11e1-849a-0026b9e7ff4c");
+	private static final UUID MESSAGETEMPLATE_ID = MessageTemplate.CONTACT_COACH_ID;
 
-	private static final String MESSAGETEMPLATE_NAME = "empty_template";
+	private static final String MESSAGETEMPLATE_NAME = "Contact Coach Email";
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;

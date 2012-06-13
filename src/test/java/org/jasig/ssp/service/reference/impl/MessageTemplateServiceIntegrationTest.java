@@ -3,13 +3,10 @@ package org.jasig.ssp.service.reference.impl;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Map;
-
 import org.jasig.ssp.model.EarlyAlert;
-import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.reference.MessageTemplate;
-import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.MessageTemplateService;
@@ -22,8 +19,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Maps;
-
 /**
  * MessageTemplate service tests
  */
@@ -35,9 +30,6 @@ public class MessageTemplateServiceIntegrationTest {
 
 	@Autowired
 	private transient MessageTemplateService service;
-
-	@Autowired
-	private transient MessageService messageService;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -64,19 +56,15 @@ public class MessageTemplateServiceIntegrationTest {
 				template);
 
 		// Try to process with the template engine
-		final Map<String, Object> templateParameters = Maps.newHashMap();
-		templateParameters.put("termToRepresentEarlyAlert",
-				termToRepresentEarlyAlert);
-		templateParameters.put("earlyAlert", earlyAlert);
-		final Message message = messageService.createMessage(
-				"test@example.com",
-				MessageTemplate.JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID,
-				templateParameters);
+		final SubjectAndBody subjAndBody = service
+				.createJournalNoteForEarlyAlertResponseMessage(
+						termToRepresentEarlyAlert, earlyAlert);
 
-		assertNotNull("Generated message should not have been null.", message);
-		assertTrue("Templated subject did not match.", message.getSubject()
+		assertNotNull("Generated message should not have been null.",
+				subjAndBody);
+		assertTrue("Templated subject did not match.", subjAndBody.getSubject()
 				.contains("CourseNameHere"));
-		assertTrue("Templated body text did not match.", message.getBody()
+		assertTrue("Templated body text did not match.", subjAndBody.getBody()
 				.contains("CourseNameHere"));
 	}
 }

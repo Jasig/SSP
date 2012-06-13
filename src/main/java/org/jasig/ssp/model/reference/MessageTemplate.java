@@ -47,9 +47,6 @@ public class MessageTemplate
 	public static final UUID ACTION_PLAN_EMAIL_ID = UUID
 			.fromString("5D183F35-023D-40EA-B8D9-66FBE190FFFB");
 
-	public static final UUID TASK_AUTO_CREATED_EMAIL_ID = UUID
-			.fromString("919F6FF5-8F22-4684-8729-D615206A2644");
-
 	public static final UUID NEW_STUDENT_INTAKE_TASK_EMAIL_ID = UUID
 			.fromString("9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0");
 

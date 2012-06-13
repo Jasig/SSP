@@ -20,7 +20,6 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
-import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
@@ -77,15 +76,13 @@ public class MyGpsTaskControllerTest {
 		expect(
 				service.createCustomTaskForPerson(name, description, student,
 						session)).andReturn(task);
-		service.sendNoticeToStudentOnCustomTask(task,
-				MessageTemplate.ACTION_PLAN_EMAIL_ID);
+		service.sendNoticeToStudentOnCustomTask(task);
 
 		replay(personService);
 		replay(service);
 
 		assertTrue(controller.createTaskForStudent(name, description,
-				student.getUserId(), new Date(),
-				MessageTemplate.ACTION_PLAN_EMAIL_ID));
+				student.getUserId(), new Date()));
 
 		verify(personService);
 		verify(service);
