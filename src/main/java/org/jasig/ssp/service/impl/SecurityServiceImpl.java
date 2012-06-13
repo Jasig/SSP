@@ -2,6 +2,12 @@ package org.jasig.ssp.service.impl;
 
 import java.util.ArrayList;
 
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.reference.ConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +15,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
-import org.jasig.ssp.security.SspUser;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
 
 @Transactional(readOnly = true)
 public class SecurityServiceImpl implements SecurityService {
@@ -48,9 +50,30 @@ public class SecurityServiceImpl implements SecurityService {
 		return user;
 	}
 
+	public SspUser noAuthAdminUser() {
+		final SspUser user = new SspUser("no auth admin user", "", false,
+				false, false, false, new ArrayList<GrantedAuthority>(0));
+
+		try {
+			user.setPerson(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
+		} catch (ObjectNotFoundException e) {
+			throw new ConfigException(
+					"System Administrator not defined for Person Service", e);
+		}
+
+		return user;
+	}
+
 	@Override
 	public SspUser currentUser() {
 		SspUser sspUser = null;
+
+		// assumption: SecurityContext only returns null for Authentication when
+		// there is no actual web context
+
+		if (null == SecurityContextHolder.getContext().getAuthentication()) {
+			return noAuthAdminUser();
+		}
 
 		if (SecurityContextHolder.getContext().getAuthentication()
 				.isAuthenticated()) {

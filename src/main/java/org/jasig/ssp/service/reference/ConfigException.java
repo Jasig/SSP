@@ -30,4 +30,8 @@ public class ConfigException extends RuntimeException {
 		super("Unable to find " + configExceptionType + " with id: "
 				+ propertyId.toString(), t);
 	}
+
+	public ConfigException(final String message, final Throwable t) {
+		super(message, t);
+	}
 }
