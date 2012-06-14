@@ -12,7 +12,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
  * Required interface for all the basic CRUD methods for the DAO layer.
  * 
  * @param <T>
- *            Any Auditable model class
+ *            Any {@link Auditable} model class
  */
 public interface AuditableCrudDao<T extends Auditable> {
 
