@@ -218,4 +218,28 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="Promote Alan Turing to Advisor" author="daniel.bower">
+		<update tableName="person">
+			<column name="username">advisor0</column>
+			<where>username='amt'</where>
+		</update>
+		<rollback>
+			<update tableName="person">
+				<column name="username">amt</column>
+				<where>username='advisor0'</where>
+			</update>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Enable all users" author="daniel.bower">
+		<update tableName="person">
+			<column name="enabled">true</column>
+		</update>
+		<rollback>
+			<update tableName="person">
+				<column name="enabled">false</column>
+			</update>
+		</rollback>
+	</changeSet>
+	
 </databaseChangeLog>

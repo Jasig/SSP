@@ -28,16 +28,13 @@
 		http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
-		<authentication-manager>
+		<authentication-manager alias="authenticationManager">
 			<authentication-provider ref="sspPreAuthenticatedAuthenticationProvider" />
 		</authentication-manager>
 
 		<beans:bean id="sspPreAuthenticatedAuthenticationProvider"
 			class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
-			<beans:property name="preAuthenticatedUserDetailsService">
-				<beans:bean
-					class="org.springframework.security.web.authentication.preauth.PreAuthenticatedGrantedAuthoritiesUserDetailsService" />
-			</beans:property>
+			<beans:property name="preAuthenticatedUserDetailsService" ref="userDetailsService"/>
 		</beans:bean>
 	</beans:beans>
 

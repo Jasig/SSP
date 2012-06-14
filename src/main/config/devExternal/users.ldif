@@ -1,29 +1,75 @@
-dn: cn=student0,dc=springframework,dc=org
+# root is dc=springframework,dc=org
+
+
+####
+# major ou sections:
+####
+dn: ou=users,dc=springframework,dc=org
+objectClass: extensibleObject
+objectClass: organizationalUnit
+objectClass: top
+ou: users
+
+dn: ou=groups,dc=springframework,dc=org
+objectClass: extensibleObject
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+
+####
+# Users:
+####
+dn: cn=student0,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top
 objectClass: organizationalPerson
 uid: student0
 userPassword: student0
-cn: student
-sn: jones
+cn: student0
+sn: student0
 
-dn: cn=student1,dc=springframework,dc=org
+dn: cn=student1,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top
 objectClass: organizationalPerson
 uid: student1
 userPassword: student1
-cn: student
-sn: jones
+cn: student1
+sn: student1
 
-dn: cn=advisor1,dc=springframework,dc=org
+dn: cn=advisor0,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top
 objectClass: organizationalPerson
-uid: advisor1
-userPassword: advisor1
-cn: advisor
-sn: jones
+uid: advisor0
+userPassword: advisor0
+cn: advisor0
+sn: advisor0
+
+
+####
+# Groups:
+####
+dn: cn=USER,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: USER
+uniqueMember: cn=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=REFERENCE_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: REFERENCE_READ
+uniqueMember: cn=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: cn=student0,ou=users,dc=springframework,dc=org
+uniqueMember: cn=student1,ou=users,dc=springframework,dc=org
+
+dn: cn=REFERENCE_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: REFERENCE_WRITE
+uniqueMember: cn=advisor0,ou=users,dc=springframework,dc=org
