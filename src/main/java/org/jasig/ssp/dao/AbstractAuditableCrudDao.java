@@ -14,6 +14,13 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Basic CRUD (create, read, update, delete) methods for {@link Auditable}
+ * models.
+ * 
+ * @param <T>
+ *            Any model class that extends {@link Auditable}
+ */
 public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		AuditableCrudDao<T> {
 
@@ -68,7 +75,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 			return obj;
 		}
 
-		return (T) sessionFactory.getCurrentSession().merge(obj);
+		return (T) session.merge(obj);
 	}
 
 	@Override
