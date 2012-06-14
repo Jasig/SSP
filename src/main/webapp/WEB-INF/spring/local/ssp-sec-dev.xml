@@ -39,4 +39,6 @@ It allows ssp to be run outside in absence of uportal.
 		</ldap-authentication-provider>
 	</authentication-manager>
 
+	<beans:bean id="directoryDataService" 
+			class="org.jasig.ssp.security.LdapDirectoryDataService"/>
 </beans:beans>

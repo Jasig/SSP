@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.exception.EmailNotFoundException;
+import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.security.exception.UserNotEnabledException;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -32,11 +33,30 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDetailsService implements AuthenticationUserDetailsService,
 		UserDetailsContextMapper {
 
+	@Autowired
+	private transient DirectoryDataService directoryDataService;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserDetailsService.class);
 
+	public static final String PERMISSION_TO_CREATE_ACCOUNT = "ROLE_CAN_CREATE";
+
 	@Autowired
 	private transient PersonService personService;
+
+	private boolean hasAccountCreationPermission(
+			final Collection<GrantedAuthority> authorities) {
+		boolean permission = false;
+
+		for (GrantedAuthority auth : authorities) {
+			if (auth.getAuthority().equals(PERMISSION_TO_CREATE_ACCOUNT)) {
+				permission = true;
+				break;
+			}
+		}
+
+		return permission;
+	}
 
 	private UserDetails loadUserDetails(final String username,
 			final Collection<GrantedAuthority> authorities) {
@@ -49,17 +69,28 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 					"Unable to load {}'s record., creating user in ssp",
 					username);
 
-			// At this point, we should already have authentication through ldap
-			// or uportal go ahead and create the user.
-			person = new Person();
-			person.setEnabled(true);
-			person.setSchoolId(username);
-			person.setUsername(username);
-			person.setFirstName("New");
-			person.setLastName("User");
-			// :TODO Set additional user attributes
+			if (hasAccountCreationPermission(authorities)) {
+				// At this point, we should already have authentication through
+				// ldap or uportal go ahead and create the user.
+				person = new Person();
+				person.setEnabled(true);
+				person.setUsername(username);
+				person.setSchoolId(directoryDataService.getProperty("schoolId",
+						username));
+				person.setFirstName(directoryDataService.getProperty(
+						"firstName", username));
+				person.setLastName(directoryDataService.getProperty("lastName",
+						username));
+				// :TODO Set additional user attributes
 
-			personService.create(person);
+				personService.create(person);
+
+			} else {
+				throw new UnableToCreateAccountException( // NOPMD already know
+															// the account was
+															// not found
+						"Insufficient Permissions to create Account");
+			}
 		}
 
 		final boolean enabled = person.getEnabled();

@@ -36,6 +36,9 @@
 			class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
 			<beans:property name="preAuthenticatedUserDetailsService" ref="userDetailsService"/>
 		</beans:bean>
+		
+		<beans:bean id="directoryDataService" 
+				class="org.jasig.ssp.security.uportal.UPortalDirectoryDataService" />
 	</beans:beans>
 
 </beans:beans>

@@ -1,6 +1,8 @@
 package org.jasig.ssp.security.exception;
 
-public class UPortalSecurityException extends RuntimeException {
+import org.springframework.security.core.AuthenticationException;
+
+public class UPortalSecurityException extends AuthenticationException {
 
 	private static final long serialVersionUID = -99479L;
 
