@@ -1,10 +1,9 @@
-/**
- * 
- */
-package org.jasig.ssp.util.sort;
+package org.jasig.ssp.util.sort; // NOPMD tests may have lots of imports
 
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -83,8 +82,8 @@ public class SortingAndPagingTests {
 	public void testIsPaged() {
 		assertTrue("Use of paging filters should have been flagged as Paged",
 				testObjFull.isPaged());
-		assertFalse(
-				"Use of ObjectStatus only should not have been flagged as Paged",
+		assertTrue(
+				"Use of ObjectStatus only should not been flagged as Paged because of defaults.",
 				testObjAll.isPaged());
 	}
 
@@ -116,5 +115,28 @@ public class SortingAndPagingTests {
 		assertFalse(
 				"Use of ObjectStatus only should not have been flagged as DefaultSorted",
 				testObjAll.isDefaultSorted());
+	}
+
+	@Test
+	public void testMaxResultDefaults() {
+		final SortingAndPaging defaults = new SortingAndPaging(null);
+		assertNotNull("Default max should not have been null.",
+				defaults.getMaxResults());
+		assertEquals("Default max not set.",
+				SortingAndPaging.DEFAULT_MAXIMUM_RESULTS,
+				defaults.getMaxResults());
+	}
+
+	@Test
+	public void testMaxAllowableValues() {
+		final SortingAndPaging maxLimit = new SortingAndPaging(null, -1,
+				SortingAndPaging.MAXIMUM_ALLOWABLE_RESULTS + 5, null, null,
+				null);
+		assertNotEquals("Default max should have been limited.",
+				SortingAndPaging.MAXIMUM_ALLOWABLE_RESULTS,
+				maxLimit.getMaxResults());
+		assertEquals("First result should have been sanitized to 0.",
+				Integer.valueOf(0),
+				maxLimit.getFirstResult());
 	}
 }

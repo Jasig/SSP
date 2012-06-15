@@ -20,6 +20,7 @@ import org.jasig.ssp.model.reference.FundingSource;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,10 +56,10 @@ public class FundingSourceServiceTest {
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		FundingSource obj = new FundingSource(id);
+		final UUID id = UUID.randomUUID();
+		final FundingSource obj = new FundingSource(id);
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		FundingSource daoOne = obj;
+		final FundingSource daoOne = obj;
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -69,9 +70,9 @@ public class FundingSourceServiceTest {
 	}
 
 	@Test
-	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		FundingSource daoOne = new FundingSource(id);
+	public void testSave() throws ObjectNotFoundException, ValidationException {
+		final UUID id = UUID.randomUUID();
+		final FundingSource daoOne = new FundingSource(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
@@ -83,8 +84,8 @@ public class FundingSourceServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		FundingSource daoOne = new FundingSource(id);
+		final UUID id = UUID.randomUUID();
+		final FundingSource daoOne = new FundingSource(id);
 		daoOne.setObjectStatus(ObjectStatus.ACTIVE);
 
 		expect(dao.get(id)).andReturn(daoOne);
@@ -99,7 +100,7 @@ public class FundingSourceServiceTest {
 		boolean found = true;
 		try {
 			service.get(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			found = false;
 		}
 

@@ -20,6 +20,7 @@ import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -94,9 +95,11 @@ public class EarlyAlertSuggestionServiceTest {
 	 * @throws ObjectNotFoundException
 	 *             Should not be thrown in this test since it uses mocked
 	 *             objects.
+	 * @throws ValidationException
+	 *             If there were any validation errors.
 	 */
 	@Test
-	public void testSave() throws ObjectNotFoundException {
+	public void testSave() throws ObjectNotFoundException, ValidationException {
 		final UUID id = UUID.randomUUID();
 		final EarlyAlertSuggestion daoOne = new EarlyAlertSuggestion(id);
 
@@ -135,7 +138,7 @@ public class EarlyAlertSuggestionServiceTest {
 			assertNull(
 					"Recently deleted object should not have been able to be reloaded.",
 					daoTwo);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			// expected exception
 			assertNotNull(
 					"Recently deleted object should not have been found when attempting to reload.",

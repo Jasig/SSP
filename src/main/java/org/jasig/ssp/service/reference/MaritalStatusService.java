@@ -23,7 +23,8 @@ public interface MaritalStatusService extends
 			ValidationException;
 
 	@Override
-	MaritalStatus save(MaritalStatus obj) throws ObjectNotFoundException;
+	MaritalStatus save(MaritalStatus obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

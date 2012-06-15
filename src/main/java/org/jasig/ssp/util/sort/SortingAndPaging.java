@@ -15,8 +15,24 @@ import com.google.common.collect.Lists;
 /**
  * Encapsulate common filtering options for the DAO layer including
  * {@link ObjectStatus}, paging, and sorting.
+ * 
+ * <p>
+ * Never allows more than {@link #MAXIMUM_ALLOWABLE_RESULTS} results in one
+ * query. Use multiple requests with different firstResult settings to see more
+ * results beyond the {@link #MAXIMUM_ALLOWABLE_RESULTS} setting.
  */
-public class SortingAndPaging { // NOPMD by jon.adams
+public final class SortingAndPaging {
+
+	/**
+	 * The default maximum results if an upper limit was not placed when
+	 * creating the instance.
+	 */
+	final public static Integer DEFAULT_MAXIMUM_RESULTS = 100;
+
+	/**
+	 * The maximum allowable results
+	 */
+	final public static Integer MAXIMUM_ALLOWABLE_RESULTS = 1000;
 
 	final transient private ObjectStatus status;
 
@@ -31,58 +47,20 @@ public class SortingAndPaging { // NOPMD by jon.adams
 	private transient List<Pair<String, SortDirection>> sortFields;
 
 	/**
-	 * Append a sort field to the end of the current sort order list.
-	 * 
-	 * @param fieldname
-	 *            Field (property) name
-	 * @param direction
-	 *            Sort direction
-	 */
-	public void appendSortField(final String fieldname,
-			final SortDirection direction) {
-		if (sortFields == null) {
-			sortFields = new ArrayList<Pair<String, SortDirection>>();
-		}
-
-		sortFields.add(new Pair<String, SortDirection>(fieldname, direction));
-	}
-
-	/**
-	 * Prepend (insert) a sort field to the beginning of the current sort order
-	 * list.
-	 * 
-	 * @param fieldname
-	 *            Field (property) name
-	 * @param direction
-	 *            Sort direction
-	 */
-	public void prependSortField(final String fieldname,
-			final SortDirection direction) {
-		if (sortFields == null) {
-			sortFields = new ArrayList<Pair<String, SortDirection>>();
-			sortFields
-					.add(new Pair<String, SortDirection>(fieldname, direction));
-		} else {
-			final List<Pair<String, SortDirection>> newOrdering = Lists
-					.newArrayList();
-			newOrdering.add(new Pair<String, SortDirection>(fieldname,
-					direction));
-			newOrdering.addAll(sortFields);
-			sortFields = newOrdering;
-		}
-	}
-
-	/**
 	 * Construct a basic instance with only an {@link ObjectStatus} filter but
 	 * not paging or sorting filters.
+	 * 
+	 * <p>
+	 * Will automatically use {@link #DEFAULT_MAXIMUM_RESULTS} for the maximum
+	 * result setting.
 	 * 
 	 * @param status
 	 *            Object status filter
 	 */
 	public SortingAndPaging(final ObjectStatus status) {
 		this.status = status;
-		firstResult = null;
-		maxResults = null;
+		firstResult = 0;
+		maxResults = DEFAULT_MAXIMUM_RESULTS;
 		defaultSortProperty = null;
 		defaultSortDirection = null;
 	}
@@ -96,7 +74,11 @@ public class SortingAndPaging { // NOPMD by jon.adams
 	 * @param firstResult
 	 *            First result to return (0-based)
 	 * @param maxResults
-	 *            Maximum total results to return
+	 *            Maximum total results to return.
+	 * 
+	 *            <p>
+	 *            Will use {@link #DEFAULT_MAXIMUM_RESULTS} if not specified
+	 *            here. Can not exceed {@link #MAXIMUM_ALLOWABLE_RESULTS}.
 	 * @param sortFields
 	 *            Ordered list of sort fields and directions
 	 * @param defaultSortProperty
@@ -110,8 +92,12 @@ public class SortingAndPaging { // NOPMD by jon.adams
 			final String defaultSortProperty,
 			final SortDirection defaultSortDirection) {
 		this.status = status;
-		this.firstResult = firstResult;
-		this.maxResults = maxResults;
+		this.firstResult = firstResult == null
+				|| firstResult < Integer.valueOf(0) ? Integer.valueOf(0)
+				: firstResult;
+		this.maxResults = maxResults == null
+				|| maxResults > MAXIMUM_ALLOWABLE_RESULTS ? Integer.valueOf(0)
+				: maxResults;
 		this.sortFields = sortFields;
 		this.defaultSortProperty = defaultSortProperty;
 		this.defaultSortDirection = defaultSortDirection;
@@ -126,10 +112,20 @@ public class SortingAndPaging { // NOPMD by jon.adams
 		return status;
 	}
 
+	/**
+	 * Gets the first result filter setting. 0-based index
+	 * 
+	 * @return the first result filter setting
+	 */
 	public Integer getFirstResult() {
 		return firstResult;
 	}
 
+	/**
+	 * Gets the maximum results filter setting
+	 * 
+	 * @return the maximum results filter setting
+	 */
 	public Integer getMaxResults() {
 		return maxResults;
 	}
@@ -213,52 +209,6 @@ public class SortingAndPaging { // NOPMD by jon.adams
 	}
 
 	/**
-	 * Construct a full instance of these settings with a single field sort.
-	 * 
-	 * @param status
-	 *            Object status
-	 * @param firstResult
-	 *            First result to return (0-based)
-	 * @param maxResults
-	 *            Maximum total results to return
-	 * @param sort
-	 *            Sort field (property)
-	 * @param sortDirection
-	 *            Sort direction
-	 * @param defaultSortProperty
-	 *            A default sort property if the sort parameter is null.
-	 * @return An instance with the specified filters.
-	 */
-	public static SortingAndPaging createForSingleSort(
-			final ObjectStatus status,
-			final Integer firstResult, final Integer maxResults,
-			final String sort, final String sortDirection,
-			final String defaultSortProperty) {
-
-		List<Pair<String, SortDirection>> sortFields;
-		SortDirection defaultSortDirection;
-
-		// use sort parameter if available, otherwise use the default
-		if (sort == null) {
-			sortFields = null; // NOPMD
-			defaultSortDirection = SortDirection
-					.getSortDirection(sortDirection);
-		} else {
-			sortFields = Lists.newArrayList();
-			sortFields.add(new Pair<String, SortDirection>(sort, SortDirection
-					.getSortDirection(sortDirection)));
-			defaultSortDirection = null; // NOPMD
-		}
-
-		final SortingAndPaging sAndP = new SortingAndPaging(
-				status == null ? ObjectStatus.ACTIVE : status,
-				firstResult, maxResults, sortFields, defaultSortProperty,
-				defaultSortDirection);
-
-		return sAndP;
-	}
-
-	/**
 	 * Add the current object status filter to the specified criteria.
 	 * 
 	 * @param criteria
@@ -299,9 +249,6 @@ public class SortingAndPaging { // NOPMD by jon.adams
 			// sort by the default property
 			addSortToCriteria(criteria, defaultSortProperty,
 					defaultSortDirection);
-		} else {
-			// no sorting done, don't continue
-			return;
 		}
 	}
 
@@ -324,5 +271,97 @@ public class SortingAndPaging { // NOPMD by jon.adams
 		} else {
 			criteria.addOrder(Order.desc(sort));
 		}
+	}
+
+	/**
+	 * Append a sort field to the end of the current sort order list.
+	 * 
+	 * @param fieldname
+	 *            Field (property) name
+	 * @param direction
+	 *            Sort direction
+	 */
+	public void appendSortField(final String fieldname,
+			final SortDirection direction) {
+		if (sortFields == null) {
+			sortFields = new ArrayList<Pair<String, SortDirection>>();
+		}
+
+		sortFields.add(new Pair<String, SortDirection>(fieldname, direction));
+	}
+
+	/**
+	 * Prepend (insert) a sort field to the beginning of the current sort order
+	 * list.
+	 * 
+	 * @param fieldname
+	 *            Field (property) name
+	 * @param direction
+	 *            Sort direction
+	 */
+	public void prependSortField(final String fieldname,
+			final SortDirection direction) {
+		if (sortFields == null) {
+			sortFields = new ArrayList<Pair<String, SortDirection>>();
+			sortFields
+					.add(new Pair<String, SortDirection>(fieldname, direction));
+		} else {
+			final List<Pair<String, SortDirection>> newOrdering = Lists
+					.newArrayList();
+			newOrdering.add(new Pair<String, SortDirection>(fieldname,
+					direction));
+			newOrdering.addAll(sortFields);
+			sortFields = newOrdering;
+		}
+	}
+
+	/**
+	 * Construct a full instance of these settings with a single field sort.
+	 * 
+	 * @param status
+	 *            Object status
+	 * @param firstResult
+	 *            First result to return (0-based)
+	 * @param maxResults
+	 *            Maximum total results to return.
+	 * 
+	 *            <p>
+	 *            Will use {@link #DEFAULT_MAXIMUM_RESULTS} if not specified
+	 *            here. Can not exceed {@link #MAXIMUM_ALLOWABLE_RESULTS}.
+	 * @param sort
+	 *            Sort field (property)
+	 * @param sortDirection
+	 *            Sort direction
+	 * @param defaultSortProperty
+	 *            A default sort property if the sort parameter is null.
+	 * @return An instance with the specified filters.
+	 */
+	public static SortingAndPaging createForSingleSort(
+			final ObjectStatus status,
+			final Integer firstResult, final Integer maxResults,
+			final String sort, final String sortDirection,
+			final String defaultSortProperty) {
+
+		List<Pair<String, SortDirection>> sortFields;
+		SortDirection defaultSortDirection;
+
+		// use sort parameter if available, otherwise use the default
+		if (sort == null) {
+			sortFields = null; // NOPMD
+			defaultSortDirection = SortDirection
+					.getSortDirection(sortDirection);
+		} else {
+			sortFields = Lists.newArrayList();
+			sortFields.add(new Pair<String, SortDirection>(sort, SortDirection
+					.getSortDirection(sortDirection)));
+			defaultSortDirection = null; // NOPMD
+		}
+
+		final SortingAndPaging sAndP = new SortingAndPaging(
+				status == null ? ObjectStatus.ACTIVE : status,
+				firstResult, maxResults, sortFields, defaultSortProperty,
+				defaultSortDirection);
+
+		return sAndP;
 	}
 }

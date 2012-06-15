@@ -28,7 +28,7 @@ public interface ConfidentialityDisclosureAgreementService extends
 	@Override
 	ConfidentialityDisclosureAgreement save(
 			ConfidentialityDisclosureAgreement obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

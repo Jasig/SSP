@@ -2,8 +2,6 @@ package org.jasig.ssp.service.impl; // NOPMD
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
@@ -13,15 +11,13 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.jasig.ssp.dao.MessageDao;
-import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -55,12 +51,6 @@ public class MessageServiceImpl implements MessageService {
 	private transient SecurityService securityService;
 
 	@Autowired
-	private transient VelocityTemplateService velocityTemplateService;
-
-	@Autowired
-	private transient MessageTemplateDao messageTemplateDao;
-
-	@Autowired
 	private transient ConfigService configService;
 
 	private static final Logger LOGGER = LoggerFactory
@@ -77,7 +67,11 @@ public class MessageServiceImpl implements MessageService {
 	 *         information
 	 */
 	public String getBcc() {
-		return configService.getByNameEmpty("bcc_email_address");
+		final String bcc = configService.getByNameEmpty("bcc_email_address");
+		if (!bcc.isEmpty() && !bcc.equalsIgnoreCase("noone@test.com")) {
+			return bcc;
+		}
+		return null;
 	}
 
 	@Override
@@ -100,30 +94,18 @@ public class MessageServiceImpl implements MessageService {
 	/**
 	 * Create a new message.
 	 * 
-	 * @param messageTemplateId
-	 *            Message template
-	 * @param templateParameters
-	 * @return A new message for the specified template
+	 * @param subjAndBody
+	 *            SubjectAndBody subjAndBody
+	 * @return A new message for the specified SubjectAndBody
 	 * @throws ObjectNotFoundException
 	 *             If the current user or administrator could not be loaded.
 	 */
 	private Message createMessage(
-			final UUID messageTemplateId,
-			final Map<String, Object> templateParameters)
+			final SubjectAndBody subjAndBody)
 			throws ObjectNotFoundException {
 
-		final MessageTemplate messageTemplate = messageTemplateDao
-				.get(messageTemplateId);
+		final Message message = new Message(subjAndBody);
 
-		final String subject = velocityTemplateService
-				.generateContentFromTemplate(messageTemplate.getSubject(),
-						messageTemplate.subjectTemplateId(), templateParameters);
-
-		final String body = velocityTemplateService
-				.generateContentFromTemplate(messageTemplate.getBody(),
-						messageTemplate.bodyTemplateId(), templateParameters);
-
-		final Message message = new Message(subject, body, null, null, null);
 		Person person = null; // NOPMD by jon.adams on 5/17/12 9:42 AM
 		if (securityService.isAuthenticated()) {
 			person = securityService.currentUser().getPerson();
@@ -140,10 +122,10 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	@Transactional(readOnly = false)
 	public Message createMessage(@NotNull final Person to,
-			final String emailCC, @NotNull final UUID messageTemplateId,
-			final Map<String, Object> templateParameters)
+			final String emailCC, final SubjectAndBody subjAndBody)
 			throws ObjectNotFoundException, SendFailedException,
 			ValidationException {
+
 		if (to == null) {
 			throw new ValidationException("Recipient missing.");
 		}
@@ -153,33 +135,31 @@ public class MessageServiceImpl implements MessageService {
 					"Recipient primary e-mail address is missing.");
 		}
 
-		final Message message = createMessage(messageTemplateId,
-				templateParameters);
-		message.setRecipient(to);
+		final Message message = createMessage(subjAndBody);
 
-		if (StringUtils.isEmpty(emailCC)) {
-			return messageDao.save(message);
-		} else {
-			// An extra CC needs added, only API available is sendMessage()
-			sendMessage(message, emailCC);
-			return message;
-		}
+		message.setRecipient(to);
+		message.setCarbonCopy(emailCC);
+
+		return messageDao.save(message);
 	}
 
 	@Override
 	public Message createMessage(@NotNull final String to,
-			@NotNull final UUID messageTemplateId,
-			final Map<String, Object> templateParameters)
+			final String emailCC,
+			@NotNull final SubjectAndBody subjAndBody)
 			throws ObjectNotFoundException {
-		final Message message = createMessage(messageTemplateId,
-				templateParameters);
+
+		final Message message = createMessage(subjAndBody);
+
 		message.setRecipientEmailAddress(to);
+		message.setCarbonCopy(emailCC);
+
 		return messageDao.save(message);
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	@Scheduled(fixedDelay = 300000)
+	@Scheduled(fixedDelay = 30000)
 	// run 5 minutes after the end of the last invocation
 	public void sendQueuedMessages() {
 		LOGGER.info("BEGIN : sendQueuedMessages()");
@@ -187,7 +167,7 @@ public class MessageServiceImpl implements MessageService {
 		final List<Message> messages = messageDao.queued();
 		for (final Message message : messages) {
 			try {
-				sendMessage(message, null);
+				sendMessage(message);
 			} catch (final ObjectNotFoundException e) {
 				LOGGER.error("Could not load current user or administrator.", e);
 			} catch (final SendFailedException e) {
@@ -211,9 +191,9 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public boolean sendMessage(@NotNull final Message message,
-			final String emailCC)
+	public boolean sendMessage(@NotNull final Message message)
 			throws ObjectNotFoundException, SendFailedException {
+
 		LOGGER.info("BEGIN : sendMessage()");
 		LOGGER.info("Sending message: {}", message.toString());
 
@@ -241,21 +221,21 @@ public class MessageServiceImpl implements MessageService {
 						+ message.getRecipientEmailAddress() + "' is invalid");
 			}
 
-			if (!StringUtils.isEmpty(emailCC)) { // NOPMD
-				mimeMessageHelper.setBcc(emailCC);
+			if (!StringUtils.isEmpty(message.getCarbonCopy())) { // NOPMD
+				mimeMessageHelper.setCc(message.getCarbonCopy());
 			} else if (!StringUtils.isEmpty(getBcc())) {
 				mimeMessageHelper.setBcc(getBcc());
 			}
 
 			mimeMessageHelper.setSubject(message.getSubject());
 			mimeMessageHelper.setText(message.getBody());
-			mimeMessage.setContent(message.getBody(), "text/plain");
+			mimeMessage.setContent(message.getBody(), "text/html");
 
 			if (shouldSendMail()) {
 				LOGGER.debug("_ : JavaMailSender.send()");
 				javaMailSender.send(mimeMessage);
 			} else {
-				LOGGER.warn("_ : JavaMailSender was not called; message was marked sent but was not actually sent");
+				LOGGER.warn("_ : JavaMailSender was not called; message was marked sent but was not actually sent.  To enable mail, update the configuration of the app.");
 			}
 
 			message.setSentDate(new Date());

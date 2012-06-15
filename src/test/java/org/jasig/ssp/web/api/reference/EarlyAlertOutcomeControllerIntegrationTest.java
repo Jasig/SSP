@@ -160,8 +160,7 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 					.create(new EarlyAlertOutcomeTO(
 							UUID
 									.randomUUID(),
-							TESTSTRING1, TESTSTRING2, (short) 1)); // NOPMD by
-																	// jon.adams
+							TESTSTRING1, TESTSTRING2, (short) 1)); // NOPMD
 			assertNull(
 					"Calling create with an object with an ID should have thrown a validation excpetion.",
 					obj);

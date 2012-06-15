@@ -27,7 +27,7 @@ public interface ConfidentialityLevelService extends
 
 	@Override
 	ConfidentialityLevel save(ConfidentialityLevel obj)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

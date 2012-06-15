@@ -966,4 +966,426 @@
 		</modifySql>
 
 	</changeSet>
+	
+	<changeSet id="Add Legacy MessageTemplates" author="daniel.bower">
+		<insert tableName="message_template">
+			<column name="id" value="0B7E484D-44E4-4F0D-8DB5-3518D015B495" />
+			<column name="name" value="Contact Coach Email" />
+			<column name="description" value="Contact Coach Email" />
+			<column name="subject" value="A Message from Your Advisee" />
+			<column name="body" value="EMPTY" />
+			<column name="created_date" valueDate="2012-05-17T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="message_template">
+			<column name="id" value="5D183F35-023D-40EA-B8D9-66FBE190FFFB" />
+			<column name="name" value="Action Plan Email" />
+			<column name="description" value="Action Plan Email" />
+			<column name="subject" value="Action plan for $(fullName)" />
+			<column name="body" value="EMPTY" />
+			<column name="created_date" valueDate="2012-05-17T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="message_template">
+			<column name="id" value="9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0" />
+			<column name="name" value="New Student Intake Task Email" />
+			<column name="description" value="New Student Intake Task Email" />
+			<column name="subject" value="Student Intake Form Request" />
+			<column name="body" value="EMPTY" />
+			<column name="created_date" valueDate="2012-05-17T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<sql>
+<![CDATA[
+update message_template
+set body = 'From: ${fullName} <br/> Subject: ${subject} <br/><br/>${message}'
+where id = '0B7E484D-44E4-4F0D-8DB5-3518D015B495';
+
+update message_template
+set body = '<html><body>Dear ${fullName},<br/><br/>As a result of completing the self help guide questionnaire(s) you have identified the following resource information as being imperative to your success.&nbsp;&nbsp;Below you will find the solutions you felt offered the best path to your success.<br/><br/><br/>#foreach($taskTO in $taskTOs)<b>Resource:</b>&nbsp;${taskTO.name}<br/><b>Description:</b>&nbsp;${taskTO.description}<br/><br/>#end <br/>Should you have any questions concerning the resource information listed please contact the resource in question or the counseling staff at your institution.<br/><br/>Thank you.</body></html>'
+where id = '5D183F35-023D-40EA-B8D9-66FBE190FFFB';
+
+update message_template
+set body = '<html><body><p>Hello ${fullName}!</p><p>Your Coach or Advisor has asked that you complete a Task online, the Student Intake form.  ${description}  The form is a series of questions that should only take a few minutes to complete.  The information collected will assist us in providing you with the best services and advice that we can.</p> <p>Please login with your college username and password at the following URL:  <a href="https://resources.sinclair.edu">https://resources.sinclair.edu</a></p><p>The Student Intake link will appear in the Task list on the right side of the screen.</p><p>Please complete this task by ${dueDate}</p><p>Thank you for your time and cooperation.  We look forward to providing you great service!</p><p>-Sinclair Team</p><p>If you have questions, please contact your Coach or Advisor directly. This is an automated message, please do not use the reply option.</p></body></html>'
+where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
+]]>
+		</sql>
+		
+		<rollback>
+			<delete tableName="message_template">
+				<where>id = '0B7E484D-44E4-4F0D-8DB5-3518D015B495'</where>
+			</delete>
+			
+			<delete tableName="message_template">
+				<where>id = '5D183F35-023D-40EA-B8D9-66FBE190FFFB'</where>
+			</delete>
+			
+			<delete tableName="message_template">
+				<where>id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Additional Legacy MessageTemplates" author="daniel.bower">
+			<insert tableName="message_template">
+			<column name="id" value="AEC07252-1FF0-479D-A2EF-C0E017E1C05D" />
+			<column name="name" value="Action Plan Step Email" />
+			<column name="description" value="Action Plan Step Email" />
+			<column name="subject" value="An Action Item is Due for Review" />
+			<column name="body" value="EMPTY" />
+			<column name="created_date" valueDate="2012-05-17T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="message_template">
+			<column name="id" value="31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0" />
+			<column name="name" value="Custom Action Plan Task Email" />
+			<column name="description" value="Custom Action Plan Task Email" />
+			<column name="subject" value="An Action Item is Due for Review" />
+			<column name="body" value="EMPTY" />
+			<column name="created_date" valueDate="2012-05-17T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<sql>
+<![CDATA[
+update message_template
+set body = '${task.person.firstName},<br/>An Action Item identified through the Sinclair Community College Resources application needs your attention.  Please login to your account at https://resources.sinclair.edu to review and complete the assigned item.<br/><br/>The following item is due for review:<br/>Challenge: ${task.challengeName}<br/>Referral: ${task.challengeReferralName}<br/>Due Date: ${task.dueDateFormatted}'
+where id = 'AEC07252-1FF0-479D-A2EF-C0E017E1C05D';
+
+update message_template
+set body = '${task.person.firstName},<br/>An Action Item identified through the Sinclair Community College Resources application needs your attention.  Please login to your account at https://resources.sinclair.edu to review and complete the assigned item.<br/><br/>The following item is due for review:<br/>Name: ${task.name}<br/>Description: ${task.description}<br/>Due Date: ${task.dueDateFormatted}'
+where id = '31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0';
+]]>
+		</sql>
+		
+		<rollback>
+			<delete tableName="message_template">
+				<where>id = 'AEC07252-1FF0-479D-A2EF-C0E017E1C05D'</where>
+			</delete>
+			
+			<delete tableName="message_template">
+				<where>id = '31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Add CC to Message" author="daniel.bower">
+		<addColumn tableName="message">
+			<column name="carbon_copy" type="character varying(512)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="message" columnName="carbon_copy"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Convert Early Alert Templates to HTML" author="daniel.bower">
+		<sql>
+			<![CDATA[
+			update message_template
+			set body = '<html><body>
+<p><b>$!termToRepresentEarlyAlert DETAILS</b></p>
+
+<table>
+<tr><th>Faculty Member</th><td>$earlyAlert.createdBy.fullName</td></tr>
+<tr><th>Faculty Office Location</th><td>$!earlyAlert.createdBy.officeLocation</td></tr>
+<tr><th>Faculty Phone Number</th><td>$!earlyAlert.createdBy.workPhone</td></tr>
+<tr><th>Course</th><td>$!earlyAlert.courseName</td></tr>
+<tr><th>Title</th><td>$!earlyAlert.courseTitle</td></tr>
+</table>
+
+<p><b>Referral Reasons:</b></p>
+<ul>
+#foreach( $earlyAlertReferral in $earlyAlertResponse.earlyAlertReferralIds )
+<li> $earlyAlertReferral.name </li>
+#end
+</ul>
+
+<p><b>Faculty suggestions:</b></p>
+<ul>
+#foreach( $earlyAlertSuggestion in $earlyAlert.earlyAlertSuggestionIds )
+<li> $earlyAlertSuggestion.name </li>
+#end
+</ul>
+
+#if( $earlyAlert.comment )
+<p>******************* INSTRUCTOR COMMENTS *******************
+<br />
+$earlyAlert.comment
+<br />
+******************* INSTRUCTOR COMMENTS *******************
+</p>
+#end
+
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-08eb4f7ee2f9';
+
+update message_template
+set body = '<html><body>
+<p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+
+<table>
+<tr><th>Student Name</th><td>$earlyAlert.person.firstName $earlyAlert.person.lastName</td></tr>
+<tr><th>Student ID</th><td>$!earlyAlert.person.schoolId</td></tr>
+<tr><th>Student Phone</th><td>$!earlyAlert.person.homePhone</td></tr>
+<tr><th>Student Email</th><td>$earlyAlert.person.primaryEmailAddress</td></tr>
+<tr><th>Address</th><td>#if( $earlyAlert.person.addressLine1 )$earlyAlert.person.addressLine1, #end#if( $earlyAlert.person.addressLine2 )$earlyAlert.person.addressLine2, #end#if( $earlyAlert.person.city )$earlyAlert.person.city, #end#if( $earlyAlert.person.state )$earlyAlert.person.state, #end$!earlyAlert.person.zipCode</td></tr>
+<tr><th>In the class</th><td>$!earlyAlert.courseName</td></tr>
+<tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName</td></tr>
+<tr><th>Campus</th><td>$earlyAlert.campus.name</td></tr>
+<tr><th>Instructor Office Location</th><td>$!earlyAlert.createdBy.officeLocation</td></tr>
+<tr><th>Instructor Email</th><td>$earlyAlert.createdBy.primaryEmailAddress</td></tr>
+<tr><th>Instructor Phone</th><td>$!earlyAlert.createdBy.workPhone</td></tr>
+<tr><th>Advisor</th><td>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName</td></tr>
+</table>
+
+<p><b>Student has been identified by his/her instructor for the following reason:</b></p>
+<ul>
+#foreach( $earlyAlertReason in $earlyAlert.earlyAlertReasonIds )
+<li>$earlyAlertReason.name</li>
+#end
+</ul>
+
+<p><b>The faculty suggestions are:</b></p>
+<ul>
+#foreach( $earlyAlertSuggestion in $earlyAlert.earlyAlertSuggestionIds )
+<li>$earlyAlertSuggestion.name</li>
+#end
+</ul>
+
+#if( $earlyAlert.comment )
+<p>
+******************* INSTRUCTOR COMMENTS *******************
+<br />
+$earlyAlert.comment
+<br />
+******************* INSTRUCTOR COMMENTS *******************
+<p>
+#end
+
+<p>To access additional information or respond to this alert, log-in#if( $applicationTitle ) to $applicationTitle#end#if( $termForEarlyAlert ) and view the student&apos;s $termForEarlyAlert Tool#end.  $!linkToSSP </p>
+
+<p>Email generated by $!applicationTitle $!termForEarlyAlert</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-08eb4f7ee3fc';
+
+update message_template
+set body = '<html><body>
+<p>Dear $earlyAlert.person.firstName $earlyAlert.person.lastName</p>
+
+<p>Your instructor for #if( $earlyAlert.courseName )$earlyAlert.courseName#else<COURSE NAME UNAVAILABLE>#end notified me that you are experiencing issues that might affect your success#if( $institutionName ) at $institutionName#end.  An academic advisor, counselor or coach will contact you soon to discuss your situation. In the meantime, here are a few resources which may help you find academic success.</p>
+
+<table><tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName#if( $earlyAlert.createdBy.workPhone )</td><tr>
+<tr><th>Phone</th><td>$earlyAlert.createdBy.workPhone#end</td><tr>
+<tr><th>Email</th><td>$earlyAlert.createdBy.primaryEmailAddress</td><tr>
+</table>
+
+<p>The Tutoring and Learning Center (Library: 512-4506) provides professional tutoring in the subject areas of English grammar and writing, basic math and study skills. The Center also provides additional quiet computer areas for students, online resources, and supplemental learning materials. Walk-ins are available during open hours. Call for schedule.</p>
+
+<p>Tutorial Services (Library: 512-2792) provides free educational assistance for students who are enrolled in most 100 level courses (including DEV and some 200 level classes). Student tutors provide individual tutoring sessions by appointment.</p>
+
+<p>The Writing Center (Library: 512-5106) provides a comfortable learning environment for classroom instruction and tutorial assistance for writing.</p>
+
+<p>The Math Lab (Building 1, Room 315: 512-2286) provides tutoring and homework help for students in MAT classes. Walk-ins are available during open hours.</p>
+
+<p>COPE is a unique series of workshops designed to help students Conquer some of the Obstacles that can Prevent the achievement of their Educational goals. A schedule of topics is available in 10-424 or online at http://www.sinclair.edu/stservices/cnsl/Cope/ Contact Anthony Webb at 512-2752 for handouts of past or future workshops.</p>
+
+<p>Information on Dropping: Before withdrawing from any or all classes, consult an academic advisor. If you are using financial aid to pay for your tuition or books, contact the Financial Aid & Scholarships Office: Building 10, 3rd Floor, (937) 512-3000.</p>
+
+<p>We value you as a student #if( $institutionName ) at $institutionName#end and want to support your success. If you have not been contacted by someone within a week, please feel free to speak with me.</p>
+
+<p>Sincerely,</p>
+
+<p>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName
+<br />$earlyAlert.person.coach.title#if( $earlyAlert.person.coach.officeLocation )
+<br />$earlyAlert.person.coach.officeLocation#end#if( $earlyAlert.person.coach.workPhone )
+<br />$earlyAlert.person.coach.workPhone#end
+<br />$earlyAlert.person.coach.primaryEmailAddress</p>
+
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+
+<p>This is a system generated email. Please do not reply to this confirmation.</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-08eb4f8ef40e';
+
+update message_template
+set body = '<html><body>
+<p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+<table>
+<tr><th>Student Name</th><td>$earlyAlert.person.firstName $earlyAlert.person.lastName</td></tr>
+<tr><th>Student ID</th><td>$!earlyAlert.person.schoolId</td></tr>
+<tr><th>Student Phone</th><td>$!earlyAlert.person.homePhone</td></tr>
+<tr><th>Student Email</th><td>$earlyAlert.person.primaryEmailAddress</td></tr>
+<tr><th>Address</th><td>#if( $earlyAlert.person.addressLine1 )$earlyAlert.person.addressLine1, #end#if( $earlyAlert.person.addressLine2 )$earlyAlert.person.addressLine2, #end#if( $earlyAlert.person.city )$earlyAlert.person.city, #end#if( $earlyAlert.person.state )$earlyAlert.person.state, #end$!earlyAlert.person.zipCode</td></tr>
+<tr><th>In the class</th><td>$!earlyAlert.courseName</td></tr>
+<tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName</td></tr>
+<tr><th>Campus</th><td>$!earlyAlert.campus.name</td></tr>
+<tr><th>Instructor Office Location</th><td>$!earlyAlert.createdBy.officeLocation</td></tr>
+<tr><th>Instructor Email</th><td>$earlyAlert.createdBy.primaryEmailAddress</td></tr>
+<tr><th>Instructor Phone</th><td>$!earlyAlert.createdBy.workPhone</td></tr>
+<tr><th>Advisor</th><td>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName</td></tr>
+</table>
+<p>Student has been identified by his/her instructor for the following reason:</ul>
+
+<ul>
+#foreach( $earlyAlertReason in $earlyAlert.earlyAlertReasonIds )
+<li>$earlyAlertReason.name</li>
+#end
+</ul>
+
+<p><b>The faculty suggestions are</b></p>
+<ul>
+#foreach( $earlyAlertSuggestion in $earlyAlert.earlyAlertSuggestionIds )
+<li>$earlyAlertSuggestion.name</li>
+#end
+</ul>
+
+#if( $earlyAlert.comment )
+<p>
+******************* INSTRUCTOR COMMENTS *******************
+<br />
+$earlyAlert.comment
+<br />
+******************* INSTRUCTOR COMMENTS *******************
+</p>
+#end
+
+
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+
+<p>This is a system generated email. Please do not reply to this confirmation.</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-09eb5f8ef55f';
+
+update message_template
+set body = '<html><body>
+<p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+
+<p>This email is in response to an early alert notice initiated on $earlyAlert.createdDate for the following student:</p>
+
+<table>
+<tr><th>Student Name</th><td>$earlyAlert.person.firstName $earlyAlert.person.lastName</td></tr>
+<tr><th>Student ID</th><td>$!earlyAlert.person.schoolId</td></tr>
+<tr><th>In the class</th><td>$!earlyAlert.courseName</td></tr>
+<tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName</td></tr>
+<tr><th>Advisor(s)</th><td>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName</td></tr>
+</table>
+
+<p>This incident was addressed and CLOSED on $earlyAlertResponse.closedDate.  The final outcome for this incident was:</p>
+
+<p>$!earlyAlertResponse.earlyAlertOutcome.name</p>
+
+#if( $earlyAlertResponse.earlyAlertOutcomeOtherDescription )
+<p>$earlyAlertResponse.earlyAlertOutcomeOtherDescription</p>
+#end
+
+<p>The student has been referred by his/her counselor to the following departments or services based upon early alert status:</p>
+<ul>
+#foreach( $earlyAlertReferral in $earlyAlertResponse.earlyAlertReferralIds )
+<li>$earlyAlertReferral.name</li>
+#end
+</ul>
+
+#if( $earlyAlertResponse.comment )
+<p>******************* INSTRUCTOR COMMENTS *******************
+<br />
+$earlyAlertResponse.comment
+<br />
+******************* INSTRUCTOR COMMENTS *******************</p>
+#end
+
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-09fb5f9ef680';
+
+			]]>
+		</sql>
+		<rollback>
+			<comment>Not rolling back to plain text</comment>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Remove unused message template" author="daniel.bower">
+		<delete tableName="message_template">
+			<where>id = '7c945020-86b0-11e1-849a-0026b9e7ff4c'</where>
+		</delete>
+		<rollback>
+			<comment>Not restoring unused message template</comment>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="correct message template errors" author="daniel.bower">
+		<sql>
+<![CDATA[
+update message_template
+set body = '${task.person.firstName},<br/>An Action Item identified through the Sinclair Community College Resources application needs your attention.  Please login to your account at https://resources.sinclair.edu to review and complete the assigned item.<br/><br/>The following item is due for review:<br/>Challenge: ${task.challenge.name}<br/>Referral: ${task.challengeReferral.name}<br/>Due Date: ${dueDateFormatted}'
+where id = 'AEC07252-1FF0-479D-A2EF-C0E017E1C05D';
+
+update message_template
+set body = '${task.person.firstName},<br/>An Action Item identified through the Sinclair Community College Resources application needs your attention.  Please login to your account at https://resources.sinclair.edu to review and complete the assigned item.<br/><br/>The following item is due for review:<br/>Name: ${task.name}<br/>Description: ${task.description}<br/>Due Date: ${dueDateFormatted}'
+where id = '31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0';
+
+update message_template
+set subject = 'Action plan for ${fullName}'
+where id = '5D183F35-023D-40EA-B8D9-66FBE190FFFB';
+
+update message_template
+set body = '<html><body><p>Hello ${fullName}!</p><p>Your Coach or Advisor has asked that you complete a Task online, the Student Intake form.  ${description}  The form is a series of questions that should only take a few minutes to complete.  The information collected will assist us in providing you with the best services and advice that we can.</p> <p>Please login with your college username and password at the following URL:  <a href="https://resources.sinclair.edu">https://resources.sinclair.edu</a></p><p>The Student Intake link will appear in the Task list on the right side of the screen.</p><p>Please complete this task by ${dueDateFormatted}</p><p>Thank you for your time and cooperation.  We look forward to providing you great service!</p><p>-Sinclair Team</p><p>If you have questions, please contact your Coach or Advisor directly. This is an automated message, please do not use the reply option.</p></body></html>'
+where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
+]]>
+		</sql>
+		
+		<rollback >
+			<comment>Ignore rollback - fixes typos</comment>
+		</rollback>
+	</changeSet>
+	
+	
+	<!-- changeSet id="Additional Legacy MessageTemplates 2" author="daniel.bower">
+		<insert tableName="message_template">
+			<column name="id" value="919F6FF5-8F22-4684-8729-D615206A2644" />
+			<column name="name" value="Task Auto Created Email" />
+			<column name="description" value="Task Auto Created Email" />
+			<column name="subject" value="" />
+			<column name="body" value="EMPTY" />
+			<column name="created_date" valueDate="2012-05-17T10:00:00" />
+			<column name="modified_date" valueDate="2012-05-17T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<sql>
+<![CDATA[
+update message_template
+set body = ''
+where id = '919F6FF5-8F22-4684-8729-D615206A2644';
+]]>
+		</sql>
+		
+		<rollback>
+			<delete tableName="message_template">
+				<where>id = '919F6FF5-8F22-4684-8729-D615206A2644'</where>
+			</delete>
+		</rollback>
+	</changeSet -->
 </databaseChangeLog>

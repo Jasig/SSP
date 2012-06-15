@@ -32,7 +32,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * {@link JournalEntryController} tests
+ * {@link PersonJournalEntryController} tests
  * 
  * @author jon.adams
  */
@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration()
 @Transactional
-public class JournalEntryControllerIntegrationTest {
+public class PersonJournalEntryControllerIntegrationTest {
 
 	private static final UUID PERSON_ID = UUID
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
@@ -69,9 +69,8 @@ public class JournalEntryControllerIntegrationTest {
 	}
 
 	/**
-	 * Test that the {@link JournalEntryController#get(UUID, UUID)} action
-	 * returns the
-	 * correct validation errors when an invalid ID is sent.
+	 * Test that the {@link PersonJournalEntryController#get(UUID, UUID)} action
+	 * returns the correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
@@ -92,7 +91,7 @@ public class JournalEntryControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link JournalEntryController#getAll(UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * {@link PersonJournalEntryController#getAll(UUID, ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws Exception
@@ -109,8 +108,9 @@ public class JournalEntryControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link JournalEntryController#create(UUID, JournalEntryTO)} and
-	 * {@link JournalEntryController#delete(UUID, UUID)} actions.
+	 * Test the
+	 * {@link PersonJournalEntryController#create(UUID, JournalEntryTO)} and
+	 * {@link PersonJournalEntryController#delete(UUID, UUID)} actions.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.

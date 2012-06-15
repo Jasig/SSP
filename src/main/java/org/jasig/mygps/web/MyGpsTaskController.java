@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
+
 import org.jasig.mygps.model.transferobject.TaskReportTO;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -21,6 +23,7 @@ import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,9 +90,9 @@ public class MyGpsTaskController extends BaseController {
 	boolean createTaskForStudent(@RequestParam("name") final String name,
 			@RequestParam("description") final String description,
 			@RequestParam("studentId") final String studentId,
-			@RequestParam("dueDate") final Date dueDate,
-			@RequestParam("messageTemplate") final UUID messageTemplateId)
-			throws Exception {
+			@RequestParam("dueDate") final Date dueDate)
+			throws ObjectNotFoundException, ValidationException,
+			SendFailedException {
 
 		final Person student = personService.personFromUserId(studentId);
 		if (student == null) {
@@ -102,7 +105,7 @@ public class MyGpsTaskController extends BaseController {
 		final Task task = taskService.createCustomTaskForPerson(name,
 				description, student, session);
 
-		taskService.sendNoticeToStudentOnCustomTask(task, messageTemplateId);
+		taskService.sendNoticeToStudentOnCustomTask(task);
 
 		return true;
 	}

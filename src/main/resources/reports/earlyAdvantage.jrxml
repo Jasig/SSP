@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="json">
+		<![CDATA[]]>
+	</queryString>
+	<field name="firstName" class="java.lang.String">
+		<fieldDescription><![CDATA[firstName]]></fieldDescription>
+	</field>
+	<field name="lastName" class="java.lang.String">
+		<fieldDescription><![CDATA[lastName]]></fieldDescription>
+	</field>
+	<field name="department" class="java.lang.String">
+		<fieldDescription><![CDATA[department]]></fieldDescription>
+	</field>
+	<field name="totalStudentsServed" class="java.lang.Integer">
+		<fieldDescription><![CDATA[totalStudentsServed]]></fieldDescription>
+	</field>
+	<field name="totalAnnualCaseload" class="java.lang.Integer">
+		<fieldDescription><![CDATA[totalAnnualCaseload]]></fieldDescription>
+	</field>
+	<field name="currentTotalCaseload" class="java.lang.Integer">
+		<fieldDescription><![CDATA[currentTotalCaseload]]></fieldDescription>
+	</field>
+	<field name="studentsByStatusA" class="java.lang.Integer">
+		<fieldDescription><![CDATA[studentsByStatusA]]></fieldDescription>
+	</field>
+	<field name="studentsByStatusIA" class="java.lang.Integer">
+		<fieldDescription><![CDATA[studentsByStatusIA]]></fieldDescription>
+	</field>
+	<field name="studentsByStatusT" class="java.lang.Integer">
+		<fieldDescription><![CDATA[studentsByStatusT]]></fieldDescription>
+	</field>
+	<field name="studentsByStatusNP" class="java.lang.Integer">
+		<fieldDescription><![CDATA[studentsByStatusNP]]></fieldDescription>
+	</field>
+	<field name="studentsByStatusNS" class="java.lang.Integer">
+		<fieldDescription><![CDATA[studentsByStatusNS]]></fieldDescription>
+	</field>
+	<variable name="rowIndex" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="10" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Date Range:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3a5dca54-1006-4f21-a054-1f544849639d" x="0" y="20" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Home Department]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="0" y="30" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Student Type]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="1" y="1" width="751" height="34" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="326" y="7" width="116" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Early Advantage]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6963974f-bd33-4663-be62-4efc95e33d07" stretchType="RelativeToBandHeight" x="53" y="3" width="56" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STUDENT FIRST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="116" y="3" width="56" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STUDENT LAST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="987d0ef8-f3be-429d-92e3-7fd1fc2ac5d7" x="179" y="3" width="44" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STUDENT ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="07c2f968-e98a-4673-b614-1def0cb9c4dd" x="230" y="3" width="56" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FACULTY LAST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f9a07bba-d299-4b7d-9d82-ec1e4c8e3329" x="293" y="3" width="56" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FACULTY FIRST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="56b81aec-c74e-4f01-ab16-5a839da3d4bd" x="356" y="3" width="42" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COURSE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="56b81aec-c74e-4f01-ab16-5a839da3d4bd" x="405" y="3" width="39" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SECTION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="56b81aec-c74e-4f01-ab16-5a839da3d4bd" x="451" y="3" width="48" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REFERRAL REASON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="56b81aec-c74e-4f01-ab16-5a839da3d4bd" x="506" y="3" width="62" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FACULTY SUGGESTION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="56b81aec-c74e-4f01-ab16-5a839da3d4bd" x="575" y="3" width="43" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ADVISOR NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="56b81aec-c74e-4f01-ab16-5a839da3d4bd" x="625" y="3" width="62" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CASE ASSIGNED TO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="56b81aec-c74e-4f01-ab16-5a839da3d4bd" x="705" y="4" width="45" height="25"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CASE CLOSED DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6963974f-bd33-4663-be62-4efc95e33d07" stretchType="RelativeToBandHeight" x="1" y="3" width="45" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EA RECEIVED]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" x="0" y="2" width="750" height="30" backcolor="#E4E4E4">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="52" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<line>
+				<reportElement uuid="d81fa98a-b996-49fb-8070-f4e12fda97c3" x="21" y="6" width="700" height="1"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

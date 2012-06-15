@@ -82,7 +82,8 @@ public class EarlyAlertTOFactoryImpl extends
 
 		model.setEarlyAlertReasonIds(new HashSet<EarlyAlertReason>());
 		if (tObject.getEarlyAlertReasonIds() != null) {
-			for (EarlyAlertReasonTO obj : tObject.getEarlyAlertReasonIds()) {
+			for (final EarlyAlertReasonTO obj : tObject
+					.getEarlyAlertReasonIds()) {
 				model.getEarlyAlertReasonIds().add(
 						earlyAlertReasonService.load(obj.getId()));
 			}
@@ -90,7 +91,7 @@ public class EarlyAlertTOFactoryImpl extends
 
 		model.setEarlyAlertSuggestionIds(new HashSet<EarlyAlertSuggestion>());
 		if (tObject.getEarlyAlertSuggestionIds() != null) {
-			for (EarlyAlertSuggestionTO obj : tObject
+			for (final EarlyAlertSuggestionTO obj : tObject
 					.getEarlyAlertSuggestionIds()) {
 				model.getEarlyAlertSuggestionIds().add(
 						earlyAlertSuggestionService.load(obj.getId()));

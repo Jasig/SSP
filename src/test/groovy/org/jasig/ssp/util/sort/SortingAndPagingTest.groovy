@@ -24,14 +24,14 @@ class SortingAndPagingTest {
 	@Test
 	public void testStatusOnlyConstructor(){
 		sAndP = new SortingAndPaging(ObjectStatus.ACTIVE)
-		assertNull(sAndP.getFirstResult())
-		assertNull(sAndP.getMaxResults())
+		assertNotNull(sAndP.getFirstResult())
+		assertNotNull(sAndP.getMaxResults())
 		assertNull(sAndP.getDefaultSortProperty())
 		assertNull(sAndP.getDefaultSortDirection())
 		assertNull(sAndP.getSortFields())
 
 		assertTrue(sAndP.isFilteredByStatus())
-		assertFalse(sAndP.isPaged())
+		assertTrue(sAndP.isPaged())
 		assertFalse(sAndP.isSorted())
 		assertFalse(sAndP.isDefaultSorted())
 

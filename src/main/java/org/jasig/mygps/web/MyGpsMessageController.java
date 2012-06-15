@@ -1,16 +1,16 @@
 package org.jasig.mygps.web;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
+import javax.mail.SendFailedException;
 
 import org.jasig.mygps.model.transferobject.MessageTO;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.service.MessageService;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,35 +30,33 @@ public class MyGpsMessageController extends BaseController {
 	@Autowired
 	private transient MessageService messageService;
 
+	@Autowired
+	private transient MessageTemplateService messageTemplateService;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsMessageController.class);
 
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
-	Boolean contactCoach(@RequestBody final MessageTO messageTO,
-			final HttpServletResponse response) throws Exception {
+	Boolean contactCoach(@RequestBody final MessageTO messageTO)
+			throws ObjectNotFoundException,
+			SendFailedException, ValidationException {
 
-		try {
-			if ((securityService.currentUser().getPerson() == null)
-					|| (securityService.currentUser().getPerson().getCoach() == null)) {
-				return false;
-			}
+		final Person student = securityService.currentUser().getPerson();
 
-			final Person coach = securityService.currentUser().getPerson()
-					.getCoach();
-
-			final Map<String, Object> messageParams = new HashMap<String, Object>();
-			messageParams.put("subj", messageTO.getSubject());
-			messageParams.put("mesg", messageTO.getMessage());
-
-			messageService.createMessage(coach, null,
-					MessageTemplate.EMPTY_TEMPLATE_EMAIL_ID, messageParams);
-
-			return true;
-		} catch (final Exception e) {
-			LOGGER.error("ERROR : contactCoach() : {}", e.getMessage(), e);
-			throw e;
+		if ((student == null) || (student.getCoach() == null)) {
+			return false;
 		}
+
+		final Person coach = student.getCoach();
+
+		final SubjectAndBody subjAndBody = messageTemplateService
+				.createContactCoachMessage(
+						messageTO.getMessage(), messageTO.getSubject(), student);
+
+		messageService.createMessage(coach, null, subjAndBody);
+
+		return true;
 	}
 
 	@Override
@@ -66,4 +64,16 @@ public class MyGpsMessageController extends BaseController {
 		return LOGGER;
 	}
 
+	public MyGpsMessageController() {
+		super();
+	}
+
+	public MyGpsMessageController(final MessageService messageService,
+			final MessageTemplateService messageTemplateService,
+			final SecurityService securityService) {
+		super();
+		this.messageService = messageService;
+		this.messageTemplateService = messageTemplateService;
+		this.securityService = securityService;
+	}
 }

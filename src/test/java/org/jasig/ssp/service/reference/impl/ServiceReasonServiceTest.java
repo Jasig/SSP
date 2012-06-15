@@ -20,6 +20,7 @@ import org.jasig.ssp.model.reference.ServiceReason;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public class ServiceReasonServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<ServiceReason> daoAll = new ArrayList<ServiceReason>();
+		final List<ServiceReason> daoAll = new ArrayList<ServiceReason>();
 		daoAll.add(new ServiceReason());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -46,7 +47,7 @@ public class ServiceReasonServiceTest {
 
 		replay(dao);
 
-		Collection<ServiceReason> all = service.getAll(
+		final Collection<ServiceReason> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertTrue(all.size() > 0);
 		verify(dao);
@@ -54,8 +55,8 @@ public class ServiceReasonServiceTest {
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ServiceReason daoOne = new ServiceReason(id);
+		final UUID id = UUID.randomUUID();
+		final ServiceReason daoOne = new ServiceReason(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -66,9 +67,9 @@ public class ServiceReasonServiceTest {
 	}
 
 	@Test
-	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ServiceReason daoOne = new ServiceReason(id);
+	public void testSave() throws ObjectNotFoundException, ValidationException {
+		final UUID id = UUID.randomUUID();
+		final ServiceReason daoOne = new ServiceReason(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
@@ -80,8 +81,8 @@ public class ServiceReasonServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ServiceReason daoOne = new ServiceReason(id);
+		final UUID id = UUID.randomUUID();
+		final ServiceReason daoOne = new ServiceReason(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -95,7 +96,7 @@ public class ServiceReasonServiceTest {
 		boolean found = true;
 		try {
 			service.get(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			found = false;
 		}
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.jasig.ssp.model.Auditable;
@@ -13,6 +14,13 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Basic CRUD (create, read, update, delete) methods for {@link Auditable}
+ * models.
+ * 
+ * @param <T>
+ *            Any model class that extends {@link Auditable}
+ */
 public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		AuditableCrudDao<T> {
 
@@ -60,12 +68,14 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public T save(final T obj) {
+		final Session session = sessionFactory.getCurrentSession();
 		if (obj.getId() == null) {
-			sessionFactory.getCurrentSession().saveOrUpdate(obj);
+			session.saveOrUpdate(obj);
+			session.flush(); // make sure constraint violations are checked now
 			return obj;
 		}
 
-		return (T) sessionFactory.getCurrentSession().merge(obj);
+		return (T) session.merge(obj);
 	}
 
 	@Override

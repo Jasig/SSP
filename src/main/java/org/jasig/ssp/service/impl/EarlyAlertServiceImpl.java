@@ -15,9 +15,9 @@ import org.jasig.ssp.model.EarlyAlertRouting;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
-import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.EarlyAlertRoutingService;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -27,6 +27,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
+import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -61,6 +62,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Autowired
 	private transient MessageService messageService;
+
+	@Autowired
+	private transient MessageTemplateService messageTemplateService;
 
 	@Autowired
 	private transient EarlyAlertReasonService earlyAlertReasonService;
@@ -261,12 +265,12 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 
 		final Person person = earlyAlert.getPerson();
-		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlert);
+		final SubjectAndBody subjAndBody = messageTemplateService
+				.createEarlyAlertAdvisorConfirmationMessage(fillTemplateParameters(earlyAlert));
 
 		// Create and queue the message
 		final Message message = messageService.createMessage(person, emailCC,
-				MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
-				templateParameters);
+				subjAndBody);
 
 		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
 
@@ -286,7 +290,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 				// Only routes that are for any of the Reasons in this
 				// EarlyAlert should be applied.
-				if (earlyAlert.getEarlyAlertReasonIds() == null
+				if ((earlyAlert.getEarlyAlertReasonIds() == null)
 						|| !earlyAlert.getEarlyAlertReasonIds().contains(
 								route.getEarlyAlertReason())) {
 					continue;
@@ -294,14 +298,10 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 				// Send e-mail to specific person
 				final Person to = route.getPerson();
-				if (to != null
+				if ((to != null)
 						&& !StringUtils.isEmpty(to.getPrimaryEmailAddress())) {
 					messageService
-							.createMessage(
-									to,
-									null,
-									MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
-									templateParameters);
+							.createMessage(to, null, subjAndBody);
 					LOGGER.info(
 							"Message {} for EarlyAlert {} also routed to {}",
 							new Object[] { message, earlyAlert, to }); // NOPMD
@@ -311,10 +311,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				if (!StringUtils.isEmpty(route.getGroupName())
 						&& !StringUtils.isEmpty(route.getGroupEmail())) {
 					messageService
-							.createMessage(
-									route.getGroupEmail(),
-									MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
-									templateParameters);
+							.createMessage(route.getGroupEmail(), null,
+									subjAndBody);
 					LOGGER.info(
 							"Message {} for EarlyAlert {} also routed to {}",
 							new Object[] { message, earlyAlert, // NOPMD
@@ -345,12 +343,12 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 
 		final Person person = earlyAlert.getPerson();
-		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlert);
+		final SubjectAndBody subjAndBody = messageTemplateService
+				.createEarlyAlertToStudentMessage(fillTemplateParameters(earlyAlert));
 
 		// Create and queue the message
 		final Message message = messageService.createMessage(person, null,
-				MessageTemplate.EARLYALERT_MESSAGETOSTUDENT_ID,
-				templateParameters);
+				subjAndBody);
 
 		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
 	}
@@ -377,12 +375,12 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 
 		final Person person = earlyAlert.getPerson();
-		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlert);
+		final SubjectAndBody subjAndBody = messageTemplateService
+				.createEarlyAlertFacultyConfirmationMessage(fillTemplateParameters(earlyAlert));
 
 		// Create and queue the message
 		final Message message = messageService.createMessage(person, null,
-				MessageTemplate.EARLYALERT_CONFIRMATIONTOFACULTY_ID,
-				templateParameters);
+				subjAndBody);
 
 		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
 	}

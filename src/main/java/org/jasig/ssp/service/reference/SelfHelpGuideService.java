@@ -28,7 +28,8 @@ public interface SelfHelpGuideService extends
 			ValidationException;
 
 	@Override
-	SelfHelpGuide save(SelfHelpGuide obj) throws ObjectNotFoundException;
+	SelfHelpGuide save(SelfHelpGuide obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

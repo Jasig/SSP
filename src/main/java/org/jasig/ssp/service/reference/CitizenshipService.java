@@ -22,7 +22,8 @@ public interface CitizenshipService extends AuditableCrudService<Citizenship> {
 			ValidationException;
 
 	@Override
-	Citizenship save(Citizenship obj) throws ObjectNotFoundException;
+	Citizenship save(Citizenship obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

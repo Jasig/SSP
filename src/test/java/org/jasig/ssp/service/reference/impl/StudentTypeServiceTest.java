@@ -20,6 +20,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -85,7 +86,7 @@ public class StudentTypeServiceTest {
 	}
 
 	@Test
-	public void testSave() throws ObjectNotFoundException {
+	public void testSave() throws ObjectNotFoundException, ValidationException {
 		final UUID id = UUID.randomUUID();
 		final StudentType daoOne = new StudentType(
 				id);

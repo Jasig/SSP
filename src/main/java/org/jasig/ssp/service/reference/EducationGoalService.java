@@ -26,7 +26,8 @@ public interface EducationGoalService extends
 			ValidationException;
 
 	@Override
-	EducationGoal save(EducationGoal obj) throws ObjectNotFoundException;
+	EducationGoal save(EducationGoal obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

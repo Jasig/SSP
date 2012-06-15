@@ -103,13 +103,13 @@ class Templater{
 			new ExampleFile(javaMainPath, appPath, ["model"]+ subpackage, modelName, ".java"),
 			new ExampleFile(javaMainPath, appPath, ["service"]+ subpackage, modelName, "Service.java"),
 			new ExampleFile(javaMainPath, appPath, ["service"]+ subpackage + ["impl"], modelName, "ServiceImpl.java"),
-			new ExampleFile(javaMainPath, appPath, ["web", "api"]+ subpackage, modelName, "Controller.java"),
+			//new ExampleFile(javaMainPath, appPath, ["web", "api"]+ subpackage, modelName, "Controller.java"),
 			new ExampleFile(javaMainPath, appPath, ["factory"]+ subpackage, modelName, "TOFactory.java"),
 			new ExampleFile(javaMainPath, appPath, ["factory"]+ subpackage + ["impl"], modelName, "TOFactoryImpl.java"),
 			new ExampleFile(javaMainPath, appPath, ["transferobject"]+ subpackage, modelName, "TO.java"),
 			new ExampleFile(javaTestPath, appPath, ["dao"]+ subpackage, modelName, "DaoTest.java"),
-			new ExampleFile(javaTestPath, appPath, ["web", "api"]+ subpackage, modelName, "ControllerIntegrationTest.java"),
-			new ExampleFile(javaTestPath, appPath, ["service"]+ subpackage + ["impl"], modelName, "ServiceTest.java")
+			//new ExampleFile(javaTestPath, appPath, ["web", "api"]+ subpackage, modelName, "ControllerIntegrationTest.java"),
+			//new ExampleFile(javaTestPath, appPath, ["service"]+ subpackage + ["impl"], modelName, "ServiceTest.java")
 			//new ExampleFile(javaTestPath, appPath, ["factory"] + subpackage + ["impl"], modelName, "TOFactoryTest.java")
 		]
 
@@ -214,17 +214,15 @@ class Templater{
 		}
 
 		//add the table
+		
+		int start = "person_".size()
+		int end = tableName.size()-1
+		
 		newChangeLog.append """
 	<changeSet author='daniel.bower' id='Add ${tableName} table'>
 		<createTable tableName="${tableName}">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
-			</column>
-			<column name="name" type="character varying(80)">
-				<constraints nullable="false" />
-			</column>
-			<column name="description" type="text">
-				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
 				<constraints nullable="false"/>
@@ -243,6 +241,16 @@ class Templater{
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" 
+					foreignKeyName="${tableName}_person_id_person_id"
+					references="person(id)"/>
+			</column>
+			<column name="${tableName[start..end]}_id" type="uuid">
+				<constraints nullable="false" 
+					foreignKeyName="${tableName}_${tableName[start..end]}_id_${tableName[start..end]}_id"
+					references="${tableName[start..end]}(id)"/>
 			</column>
 		</createTable>
 		
@@ -268,9 +276,9 @@ class Templater{
 
 
 class ReferenceDataTemplater {
-	String templateModel = "Ethnicity"
-	List<String> subpackage = ["reference"]
-	List<String> referenceDataModels = ["SpecialServiceGroup", "ServiceReason", "ReferralSource"]
+	String templateModel = "PersonSpecialServiceGroup"
+	List<String> subpackage = []
+	List<String> referenceDataModels = ["PersonServiceReason", "PersonReferralSource"]
 
 	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
 		Templater templater = new Templater(create, overwrite, writeLiquibaseScript, dryRun, displayFileContents)
