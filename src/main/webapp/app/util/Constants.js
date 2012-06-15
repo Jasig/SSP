@@ -22,9 +22,9 @@ Ext.define('Ssp.util.Constants',{
         // EARLY ALERT OUTCOME
         OTHER_EARLY_ALERT_OUTCOME_ID: '0a080114-3799-1bf5-8137-9a778e200004',
         
-        GRID_ITEM_DELETE_ICON_PATH: 'images/delete-icon.png',
-        GRID_ITEM_EDIT_ICON_PATH: 'images/edit-icon.jpg',
-        GRID_ITEM_CLOSE_ICON_PATH: 'images/close-icon.jpg'
+        GRID_ITEM_DELETE_ICON_PATH: '/ssp/images/delete-icon.png',
+        GRID_ITEM_EDIT_ICON_PATH: '/ssp/images/edit-icon.jpg',
+        GRID_ITEM_CLOSE_ICON_PATH: '/ssp/images/close-icon.jpg'
     },
 
 	initComponent: function() {

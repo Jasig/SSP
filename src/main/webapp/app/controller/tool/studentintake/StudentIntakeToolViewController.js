@@ -371,8 +371,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			intakeData.personFundingSources = formUtils.createTransferObjectsFromSelectedValues('fundingSourceId', fundingFormValues, personId);	
 			
 			challengesFormValues = challengesForm.getValues();
-			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);
-
+			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);		
+				
 			Ext.Ajax.request({
 				url: this.apiProperties.createUrl(this.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
 				method: 'PUT',
@@ -394,7 +394,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	},
 	
 	viewConfidentialityAgreement: function(button){
-		Ext.Msg.alert("Alert", "Don't forget to print the confidentiality agreement");
+		Ext.Msg.alert("Attention", "Print the confidentiality Agreement after the report is available.");
 	}
     
 });

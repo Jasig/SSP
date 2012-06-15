@@ -10,6 +10,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     	model: 'currentTask',
         store: 'tasksStore',
     },
+    layout: 'auto',
 	width: '100%',
     height: '100%',
     initComponent: function(){

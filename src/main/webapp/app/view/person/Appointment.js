@@ -88,6 +88,10 @@ Ext.define('Ssp.view.person.Appointment', {
 				        items: [
 				            {boxLabel: '', name: 'sendStudentIntakeRequest'},
 				        ]
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Last Student Intake Request Date',
+				        name: 'studentIntakeRequestDate'
 				    }]
 			    }]
 			});

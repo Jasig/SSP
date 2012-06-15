@@ -52,6 +52,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
      *  @selectedItemId
      *  @idFieldName
      *  @selectedIdFieldName
+     *  @required
      */
     createRadioButtonGroup: function( args ){
     	var me=this;

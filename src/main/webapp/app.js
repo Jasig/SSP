@@ -27,6 +27,9 @@ Ext.require([
     'Ssp.view.ToolsMenu',
     'Ssp.view.Tools',
     'Ssp.view.tools.Profile',
+    'Ssp.view.tools.profile.Person',
+    'Ssp.view.tools.profile.SpecialServiceGroups',
+    'Ssp.view.tools.profile.ReferralSources',
     'Ssp.view.tools.ActionPlan',
     'Ssp.view.tools.actionplan.Tasks',
     'Ssp.view.tools.actionplan.AddTask',
@@ -216,6 +219,7 @@ var apiUrls = [
   {name: 'personEmailTask', url: 'person/{id}/task/email/'},
   {name: 'personViewHistory', url: 'person/{id}/history/print/'},
   {name: 'personPrintTask', url: 'person/{id}/task/print/'},
+  {name: 'personSearch', url: 'person/search/'},
   {name: 'programStatus', url: 'reference/programStatus/'},
   {name: 'programStatusChangeReason', url: 'reference/programStatusChangeReason/'},
   {name: 'referralSource', url: 'reference/referralSource/'},
@@ -371,7 +375,23 @@ Ext.onReady(function(){
 	            });
 	    	},
 	        singleton: true
-        }, 
+        },
+        profileSpecialServiceGroupsStore:{
+	        fn: function(){
+	            return Ext.create('Ext.data.Store',{
+	            	model: 'Ssp.model.reference.SpecialServiceGroup'
+	            });
+	    	},
+	        singleton: true
+        },
+        profileReferralSourcesStore:{
+	        fn: function(){
+	            return Ext.create('Ext.data.Store',{
+	            	model: 'Ssp.model.reference.ReferralSource'
+	            });
+	    	},
+	        singleton: true
+        },
 		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 		campusesStore: 'Ssp.store.reference.Campuses',

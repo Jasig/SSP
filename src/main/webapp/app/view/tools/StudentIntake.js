@@ -37,37 +37,31 @@ Ext.define('Ssp.view.tools.StudentIntake', {
 						        activeTab: 0,
 								border: 0,
 						        items: [ { title: 'Personal',
-						        	       autoScroll: true,
+						        		   autoScroll: true,
 						        		   items: [{xtype: 'studentintakepersonal'}]
 						        		},{
 						            		title: 'Demographics',
 						            		autoScroll: true,
-						            		border: 0,
 						            		items: [{xtype: 'studentintakedemographics'}]
 						        		},{
 						            		title: 'EduPlan',
 						            		autoScroll: true,
-						            		border: 0,
 						            		items: [{xtype: 'studentintakeeducationplans'}]
 						        		},{
 						            		title: 'EduLevel',
 						            		autoScroll: true,
-						            		border: 0,
 						            		items: [{xtype: 'studentintakeeducationlevels'}]
 						        		},{
 						            		title: 'EduGoal',
 						            		autoScroll: true,
-						            		border: 0,
 						            		items: [{xtype: 'studentintakeeducationgoals'}]
 						        		},{
 						            		title: 'Funding',
 						            		autoScroll: true,
-						            		border: 0,
 						            		items: [{xtype: 'studentintakefunding'}]
 						        		},{
 						            		title: 'Challenges',
 						            		autoScroll: true,
-						            		border: 0,
 						            		items: [{xtype: 'studentintakechallenges'}]
 						        		}]
 						    })

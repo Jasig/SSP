@@ -35,7 +35,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        fieldLabel: 'Student ID',
 			        name: 'schoolId',
 			        minLength: 0,
-			        maxLength: 3,
+			        maxLength: 7,
 			        itemId: 'studentId',
 			        allowBlank:false
 			    },{

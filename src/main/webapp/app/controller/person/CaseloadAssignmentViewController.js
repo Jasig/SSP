@@ -21,15 +21,37 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     },
     
 	init: function() {
+		var me=this;
 		var personal = Ext.ComponentQuery.query('.editperson')[0];
-		personal.loadRecord( this.person );
 		
-		this.specialServiceGroupsStore.load();
-		this.referralSourcesStore.load();
-		this.serviceReasonsStore.load();
-		this.studentTypesStore.load();
+		var serviceReasonsSuccessFunc = function(records,operation,success){
+			if (records.length > 0)
+	    	{
+	    		var items = [];
+				Ext.Array.each(records,function(item,index){
+	    			items.push(item.raw);
+	    		});
+				var serviceReasonsFormProps = {
+	    				mainComponentType: 'checkbox',
+	    				formId: 'personservicereasons', 
+	                    fieldSetTitle: 'Select all that apply:',
+	                    itemsArr: items, 
+	                    selectedItemsArr: [], 
+	                    idFieldName: 'id', 
+	                    selectedIdFieldName: 'serviceReasonId',
+	                    additionalFieldsMap: [] };
+	    		
+	    		me.formUtils.createForm( serviceReasonsFormProps );	    		
+	    	}
+		};		
 		
-		return this.callParent(arguments);
+		personal.loadRecord( me.person );
+		me.specialServiceGroupsStore.load();
+		me.referralSourcesStore.load();
+		me.serviceReasonsStore.load({scope: me, callback: serviceReasonsSuccessFunc});
+		me.studentTypesStore.load();
+		
+		return me.callParent(arguments);
     },
     
     onSaveClick: function(button){
@@ -41,6 +63,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     },
     
     loadStudentToolsView: function(){
+    	// Display the Student Record
     	var comp = this.formUtils.loadDisplay('studentrecord', 'toolsmenu', true, {flex:1});    	
     	comp = this.formUtils.loadDisplay('studentrecord', 'tools', false, {flex:4});
     }
