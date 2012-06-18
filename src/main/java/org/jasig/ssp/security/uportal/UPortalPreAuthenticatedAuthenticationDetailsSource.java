@@ -17,7 +17,10 @@ import org.springframework.security.web.authentication.preauth.j2ee.AbstractPreA
 import com.google.common.collect.Lists;
 
 /**
- * This class may not be necessary
+ * This class may not be necessary. As near as I can tell it is not being used,
+ * but I will leave it in place a little longer until I am sure the security
+ * implementation is working (This class is currently not "wired in" to
+ * anything)
  * 
  */
 public class UPortalPreAuthenticatedAuthenticationDetailsSource extends
@@ -50,14 +53,14 @@ public class UPortalPreAuthenticatedAuthenticationDetailsSource extends
 			final HttpServletRequest request = (HttpServletRequest) context;
 			final HttpSession session = request.getSession();
 			token = (Authentication) session
-					.getAttribute(SspSecurityFilter.AUTHENTICATION_TOKEN_KEY);
+					.getAttribute(UPortalSecurityFilter.AUTHENTICATION_TOKEN_KEY);
 
 		} else if (context instanceof PortletRequest) {
 
 			final PortletRequest request = (PortletRequest) context;
 			final PortletSession session = request.getPortletSession();
 			token = (Authentication) session
-					.getAttribute(SspSecurityFilter.AUTHENTICATION_TOKEN_KEY);
+					.getAttribute(UPortalSecurityFilter.AUTHENTICATION_TOKEN_KEY);
 
 		} else {
 			LOGGER.error("Unsupported Context Type");

@@ -90,7 +90,10 @@
 		</property>
 	</bean>
 	
-	
+	<!-- External Data Access Mechanism -->
+	<bean id="directoryDataService" 
+			class="org.jasig.ssp.security.LdapDirectoryDataService"/>
+			
 	<!-- Don't setup a javaMailSender in here, as the MessageService will 
 	override the send_mail config value - setting it to true, and send mail 
 	to the Mock SMTP server using the MockMailService-->

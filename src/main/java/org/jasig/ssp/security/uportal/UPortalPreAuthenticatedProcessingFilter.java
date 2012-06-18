@@ -28,7 +28,7 @@ public class UPortalPreAuthenticatedProcessingFilter extends
 
 		final Authentication token =
 				(Authentication) session
-						.getAttribute(SspSecurityFilter.AUTHENTICATION_TOKEN_KEY);
+						.getAttribute(UPortalSecurityFilter.AUTHENTICATION_TOKEN_KEY);
 
 		if (token == null) {
 			LOGGER.debug("No Uportal AUTHENTICATION_TOKEN_KEY attribute found in http session");

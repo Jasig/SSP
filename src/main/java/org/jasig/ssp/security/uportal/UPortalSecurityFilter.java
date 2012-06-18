@@ -12,7 +12,6 @@ import javax.portlet.RenderResponse;
 import javax.portlet.filter.FilterChain;
 import javax.portlet.filter.FilterConfig;
 import javax.portlet.filter.RenderFilter;
-import javax.servlet.Filter;
 
 import org.jasig.ssp.security.permissions.AccessType;
 import org.jasig.ssp.security.permissions.Role;
@@ -23,17 +22,18 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 /**
- * This Security Filter, for use with Spring Security, implements both
- * {@link RenderFilter} (from the Portlet world) and {@link Filter} (from the
- * Servlet world). One instance each will be defined in web.xml and portlet.xml.
+ * This Security Filter, for use with Spring Security, implements
+ * {@link RenderFilter} When SSP is used with uportal, this class populates the
+ * session with the user's username and authorities for consumption by the http
+ * servlet api.
  */
-public final class SspSecurityFilter implements RenderFilter {
+public final class UPortalSecurityFilter implements RenderFilter {
 
 	public static final String AUTHENTICATION_TOKEN_KEY =
-			SspSecurityFilter.class.getName() + ".GRANTED_AUTHORITIES_KEY";
+			UPortalSecurityFilter.class.getName() + ".GRANTED_AUTHORITIES_KEY";
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(SspSecurityFilter.class);
+			.getLogger(UPortalSecurityFilter.class);
 
 	@Override
 	public void doFilter(final RenderRequest req, final RenderResponse res,

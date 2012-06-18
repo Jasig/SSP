@@ -220,7 +220,7 @@
 
 	<filter>
 		<filter-name>SspSecurityFilter</filter-name>
-		<filter-class>org.jasig.ssp.security.uportal.SspSecurityFilter</filter-class> 
+		<filter-class>org.jasig.ssp.security.uportal.UPortalSecurityFilter</filter-class> 
 		<lifecycle>RENDER_PHASE</lifecycle>
 	</filter> 
 

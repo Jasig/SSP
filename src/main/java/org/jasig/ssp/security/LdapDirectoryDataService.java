@@ -12,7 +12,17 @@ public class LdapDirectoryDataService implements DirectoryDataService {
 
 	@Override
 	public String getProperty(final String propertyName, final String userId) {
-		throw new NotImplementedException();
+		if ("schoolId".equals(propertyName)) {
+			return userId;
+		} else if ("firstName".equals(propertyName)) {
+			return "Gen";
+		} else if ("lastName".equals(propertyName)) {
+			return "Temporary";
+		} else if ("primaryEmailAddress".equals(propertyName)) {
+			return "unknown@test.com";
+		} else {
+			return "unknown property";
+		}
 	}
 
 }

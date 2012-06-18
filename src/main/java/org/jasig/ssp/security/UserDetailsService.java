@@ -39,6 +39,7 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserDetailsService.class);
 
+	public static final boolean ALL_AUTHENTICATED_USERS_CAN_CREATE_ACCOUNT = true;
 	public static final String PERMISSION_TO_CREATE_ACCOUNT = "ROLE_CAN_CREATE";
 
 	@Autowired
@@ -46,7 +47,12 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 
 	private boolean hasAccountCreationPermission(
 			final Collection<GrantedAuthority> authorities) {
-		boolean permission = false;
+		boolean permission = ALL_AUTHENTICATED_USERS_CAN_CREATE_ACCOUNT;
+
+		// if already true, skip permission check
+		if (permission) {
+			return true;
+		}
 
 		for (GrantedAuthority auth : authorities) {
 			if (auth.getAuthority().equals(PERMISSION_TO_CREATE_ACCOUNT)) {
@@ -81,9 +87,11 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 						"firstName", username));
 				person.setLastName(directoryDataService.getProperty("lastName",
 						username));
+				person.setPrimaryEmailAddress(directoryDataService.getProperty(
+						"primaryEmailAddress", username));
 				// :TODO Set additional user attributes
 
-				personService.create(person);
+				person = personService.create(person);
 
 			} else {
 				throw new UnableToCreateAccountException( // NOPMD already know
