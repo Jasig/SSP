@@ -20,14 +20,22 @@ Ext.define('Ssp.model.Person', {
              {name: 'userId', type: 'string'},
     		 {name: 'enabled', type: 'boolean'},
              {name: 'coachId', type: 'string'},
-    		 {name: 'strengths', type: 'string', defaultValue: 'default strengths'}
-    		 //'studentType',
+    		 {name: 'strengths', type: 'string'},
+    		 {name: 'studentTypeId',type:'string'},
+    		 {name: 'abilityToBenefit', type: 'boolean'},
+    		 {name: 'anticipatedStartTerm', type: 'string'},
+    		 {name: 'anticipatedStartYear', type: 'string'},
+    		 {name: 'studentIntakeRequestDate', type: 'time'},
+    		 {name: 'specialServiceGroups', type: 'auto'},
+    		 {name: 'referralSources', type: 'auto'},
+    		 {name: 'serviceReasons', type: 'auto'}],
+    
     		 //'programStatus',
     		 //'registrationStatus',
     		 //'paymentStatus',
     		 //'cumGPA',
     		 //'academicPrograms'
-    		 ],
+    		 
     		 
     getFullName: function(){ 
     	var firstName = this.get('firstName') || "";

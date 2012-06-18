@@ -27,6 +27,9 @@ Ext.require([
     'Ssp.view.ToolsMenu',
     'Ssp.view.Tools',
     'Ssp.view.tools.Profile',
+    'Ssp.view.tools.profile.Person',
+    'Ssp.view.tools.profile.SpecialServiceGroups',
+    'Ssp.view.tools.profile.ReferralSources',
     'Ssp.view.tools.ActionPlan',
     'Ssp.view.tools.actionplan.Tasks',
     'Ssp.view.tools.actionplan.AddTask',
@@ -121,6 +124,7 @@ Ext.require([
 	'Ssp.util.ColumnRendererUtils',
 	'Ssp.util.TreeRendererUtils',
 	'Ssp.util.Constants',
+	'Ssp.store.Coaches',
     'Ssp.store.Tasks',
     'Ssp.store.Goals',
     'Ssp.store.JournalEntries',
@@ -128,6 +132,8 @@ Ext.require([
     'Ssp.store.Documents',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
+	'Ssp.store.reference.AnticipatedStartTerms',
+	'Ssp.store.reference.AnticipatedStartYears',
 	'Ssp.store.reference.Campuses',
 	'Ssp.store.reference.CampusEarlyAlertRoutings',
 	'Ssp.store.reference.Challenges',
@@ -216,6 +222,7 @@ var apiUrls = [
   {name: 'personEmailTask', url: 'person/{id}/task/email/'},
   {name: 'personViewHistory', url: 'person/{id}/history/print/'},
   {name: 'personPrintTask', url: 'person/{id}/task/print/'},
+  {name: 'personSearch', url: 'person/search/'},
   {name: 'programStatus', url: 'reference/programStatus/'},
   {name: 'programStatusChangeReason', url: 'reference/programStatusChangeReason/'},
   {name: 'referralSource', url: 'reference/referralSource/'},
@@ -371,9 +378,27 @@ Ext.onReady(function(){
 	            });
 	    	},
 	        singleton: true
-        }, 
+        },
+        profileSpecialServiceGroupsStore:{
+	        fn: function(){
+	            return Ext.create('Ext.data.Store',{
+	            	model: 'Ssp.model.reference.SpecialServiceGroup'
+	            });
+	    	},
+	        singleton: true
+        },
+        profileReferralSourcesStore:{
+	        fn: function(){
+	            return Ext.create('Ext.data.Store',{
+	            	model: 'Ssp.model.reference.ReferralSource'
+	            });
+	    	},
+	        singleton: true
+        },
 		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
+	    anticipatedStartTermsStore: 'Ssp.store.reference.AnticipatedStartTerms',
+	    anticipatedStartYearsStore: 'Ssp.store.reference.AnticipatedStartYears',
 		campusesStore: 'Ssp.store.reference.Campuses',
 		campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
 	    challengesStore: 'Ssp.store.reference.Challenges',
@@ -381,7 +406,8 @@ Ext.onReady(function(){
 		challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
 	    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
 	    citizenshipsStore: 'Ssp.store.reference.Citizenships',
-    	confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',		
+    	coachesStore: 'Ssp.store.Coaches',
+	    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',		
 	    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
 	    documentsStore: 'Ssp.store.Documents',
 	    earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',

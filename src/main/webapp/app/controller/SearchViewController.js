@@ -2,6 +2,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
+    	apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
         formUtils: 'formRendererUtils',
         person: 'currentPerson',
@@ -21,6 +22,8 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
     
 	init: function() {
+		var me=this;
+
 		var tempProgramStatuses = [{
 			"id":"1",
 			"name":"Active"
@@ -32,16 +35,35 @@ Ext.define('Ssp.controller.SearchViewController', {
 			"id":"3",
 		    "name":"Transitioned"
 		}];
-		// load students
-    	this.studentsStore.load();
-    	// load program status 
-    	this.programStatusesStore.loadData( tempProgramStatuses );
 
- 		return this.callParent(arguments);
+		/*
+		var successFunc = function(response,view){
+	    	var r = Ext.decode(response.responseText);
+	    	if (r.rows.length > 0)
+	    	{
+	    		me.studentsStore.loadData(r.rows);
+	    	}
+		};
+
+		me.personSearchUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personSearch') );
+		
+		me.apiProperties.makeRequest({
+			url: me.personSearchUrl,
+			method: 'GET',
+			successFunc: successFunc
+		});
+		*/
+		
+		// load students
+    	me.studentsStore.load();
+    	
+    	// load program status 
+    	me.programStatusesStore.loadData( tempProgramStatuses );
+
+ 		return me.callParent(arguments);
     },
     
 	onSelectionChange: function(selModel,records,eOpts){ 
-		// select the person
 		this.person.data = records[0].data;
 		this.appEventsController.getApplication().fireEvent('loadPerson');
 	},

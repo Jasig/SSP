@@ -17,7 +17,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 
     control: {
     	'journalTrackCombo': {
-    		change: 'onJournalTrackComboChange'
+    		select: 'onJournalTrackComboSelect'
     	},
     	
     	'saveButton': {
@@ -69,12 +69,11 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     		record.set('confidentialityLevel',{"id": form.getValues().confidentialityLevelId});
     		record.set('journalSource',{"id": form.getValues().journalSourceId});
     		record.set('journalTrack',{"id": form.getValues().journalTrackId});
-    		console.log( record.data.journalTrack.id != undefined );
-    		console.log( record.data.journalEntryDetails.length == 0 );
+
     		// if a journal track is selected then validate that the details are set
-    		if (record.data.journalTrack.id != undefined && record.data.journalEntryDetails.length == 0)
+    		if (record.data.journalTrack.id != null && record.data.journalEntryDetails.length == 0)
     		{
-    			Ext.Msg.alert('Error','You have a Journal Track set in your entry. Please check the associated details for this Journal Entry.');  			
+    			Ext.Msg.alert('Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
     		}else{
     			jsonData = record.data;
     			
@@ -97,7 +96,6 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     				});		
     			} 
     		}
-
 		
 		}else{
 			Ext.Msg.alert('Error','Please correct the errors in your Journal Entry.');
@@ -109,10 +107,10 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		this.displayMain();
 	},
 	
-	onJournalTrackComboChange: function(comp, newValue, oldValue, eOpts){
-    	if (newValue.length > 2)
+	onJournalTrackComboSelect: function(comp, records, eOpts){
+    	if (records.length > 0)
     	{
-    		this.model.set('journalTrack',{id: newValue});
+    		this.model.set('journalTrack',{id: records[0].get('id')});
     		
     		// the inited property prevents the
     		// tree from being populated twice

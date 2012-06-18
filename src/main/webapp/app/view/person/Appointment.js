@@ -1,9 +1,11 @@
 Ext.define('Ssp.view.person.Appointment', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.personappointment',
-    mixins: [ 'Deft.mixin.Injectable'],
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.AppointmentViewController',
     inject: {
-    	//coachesStore: 'coachesStore',
+    	coachesStore: 'coachesStore',
     	studentTypesStore: 'studentTypesStore'
     },
 	initComponent: function() {	
@@ -26,26 +28,35 @@ Ext.define('Ssp.view.person.Appointment', {
 			       items: [{
 				        xtype: 'combobox',
 				        name: 'coachId',
+				        itemId: 'coachCombo',
 				        fieldLabel: 'Assigned Coach',
 				        emptyText: 'Select One',
-				        //store: this.coachesStore,
-				        valueField: 'id',
-				        displayField: 'name',
+				        store: this.coachesStore,
+				        valueField: 'coachId',
+				        displayField: 'fullName',
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: false
 					},{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Office',
+				        itemId: 'officeField',
 				        name: 'coachOffice'
 				    },{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Phone',
+				        itemId: 'phoneField',
 				        name: 'coachPhone'
 				    },{
 				    	xtype: 'displayfield',
+				        fieldLabel: 'Email',
+				        itemId: 'emailAddressField',
+				        name: 'coachEmail'
+				    },{
+				    	xtype: 'displayfield',
 				        fieldLabel: 'Department',
+				        itemId: 'departmentField',
 				        name: 'coachDepartment'
 				    },{
 				        xtype: 'combobox',
@@ -58,7 +69,7 @@ Ext.define('Ssp.view.person.Appointment', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: false
 					},{
 				    	xtype: 'datefield',
 				    	fieldLabel: 'Appointment Date',
@@ -72,6 +83,7 @@ Ext.define('Ssp.view.person.Appointment', {
 				        minValue: '8:00 AM',
 				        maxValue: '7:00 PM',
 				        increment: 30,
+				        allowBlank: false,
 				        anchor: '100%'
 				    },{
 				        xtype: 'timefield',
@@ -79,6 +91,7 @@ Ext.define('Ssp.view.person.Appointment', {
 				        fieldLabel: 'End Time',
 				        minValue: '8:00 AM',
 				        maxValue: '7:00 PM',
+				        allowBlank: false,
 				        increment: 30,
 				        anchor: '100%'
 				    },{
@@ -88,6 +101,10 @@ Ext.define('Ssp.view.person.Appointment', {
 				        items: [
 				            {boxLabel: '', name: 'sendStudentIntakeRequest'},
 				        ]
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Last Student Intake Request Date',
+				        name: 'studentIntakeRequestDate'
 				    }]
 			    }]
 			});

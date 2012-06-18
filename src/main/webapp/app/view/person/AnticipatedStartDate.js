@@ -1,6 +1,13 @@
 Ext.define('Ssp.view.person.AnticipatedStartDate', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.personanticipatedstartdate',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.AnticipatedStartDateViewController',
+    inject: {
+    	anticipatedStartTermsStore: 'anticipatedStartTermsStore',
+    	anticipatedStartYearsStore: 'anticipatedStartYearsStore'
+    },
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
@@ -17,7 +24,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        name: 'anticipatedStartTerm',
 		        fieldLabel: 'Anticipated Start Term',
 		        emptyText: 'Select One',
-		        // store: this.coachesStore,
+		        store: this.anticipatedStartTermsStore,
 		        valueField: 'id',
 		        displayField: 'name',
 		        mode: 'local',
@@ -29,7 +36,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        name: 'anticipatedStartYear',
 		        fieldLabel: 'Anticipated Start Year',
 		        emptyText: 'Select One',
-		        // store: this.coachesStore,
+		        store: this.anticipatedStartYearsStore,
 		        valueField: 'id',
 		        displayField: 'name',
 		        mode: 'local',

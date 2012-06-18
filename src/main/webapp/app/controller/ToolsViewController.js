@@ -3,7 +3,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-        person: 'currentPerson',
+    	person: 'currentPerson',
         formUtils: 'formRendererUtils',
         appEventsController: 'appEventsController'
     },

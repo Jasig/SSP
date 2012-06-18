@@ -16,7 +16,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	outcomeCombo: {
             selector: '#outcomeCombo',
             listeners: {
-                change: 'onOutcomeComboChange'
+                select: 'onOutcomeComboSelect'
             }
         },
 
@@ -44,7 +44,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		return this.callParent(arguments);
     },
     
-    onOutcomeComboChange: function(comp, newValue, oldValue, eOpts){
+    onOutcomeComboSelect: function(comp, records, eOpts){
     	this.showHideOtherOutcomeDescription();
     },
     
