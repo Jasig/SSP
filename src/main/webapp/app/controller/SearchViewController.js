@@ -64,7 +64,6 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
     
 	onSelectionChange: function(selModel,records,eOpts){ 
-		// select the person
 		this.person.data = records[0].data;
 		this.appEventsController.getApplication().fireEvent('loadPerson');
 	},

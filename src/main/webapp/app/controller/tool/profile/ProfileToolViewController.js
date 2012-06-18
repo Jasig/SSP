@@ -1,4 +1,4 @@
-Ext.define('Ssp.controller.tool.ProfileToolViewController', {
+Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {

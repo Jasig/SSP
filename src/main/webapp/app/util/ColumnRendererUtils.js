@@ -53,5 +53,5 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	
 	renderPhotoIcon: function(val) {
 	    return '<img src="' + val + '">';
-	}    	
+	} 
 });

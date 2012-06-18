@@ -372,7 +372,19 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			
 			challengesFormValues = challengesForm.getValues();
 			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);		
-				
+
+			// TODO: Temp fix since additional data was added to the Person
+			// Model for the Caseload Assignment Screen. Those data
+			// values do not save correctly on the intake, yet.
+			var person = new Object();
+			Ext.iterate(personalForm.getValues(),function(key,value){
+				person[key]=value;
+			});
+			person.photoUrl=intakeData.person.photoUrl;
+			person.birthDate=intakeData.person.birthDate;
+			person.id = personId;
+			intakeData.person = person;
+			
 			Ext.Ajax.request({
 				url: this.apiProperties.createUrl(this.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
 				method: 'PUT',

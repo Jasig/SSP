@@ -4,7 +4,7 @@ Ext.define('Ssp.view.tools.Profile', {
 	id: 'Profile',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.ProfileToolViewController',
+    controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
     width: '100%',
 	height: '100%',
     initComponent: function() {	
@@ -22,7 +22,7 @@ Ext.define('Ssp.view.tools.Profile', {
 						    activeTab: 0,
 						    itemId: 'profileTabs',
 						    items: [{ 
-						    	      title: 'Student',
+						    	      title: 'Personal',
 						    	      autoScroll: true,
 						    		  items: [{xtype: 'profileperson'}]
 						    		},{ 

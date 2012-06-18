@@ -2,13 +2,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	appEventsController: 'appEventsController',
-    	formUtils: 'formRendererUtils',
-        person: 'currentPerson',
-        specialServiceGroupsStore: 'specialServiceGroupsStore',
-        referralSourcesStore: 'referralSourcesStore',
-        serviceReasonsStore: 'serviceReasonsStore',
-        studentTypesStore: 'studentTypesStore'
+     	formUtils: 'formRendererUtils',
+        person: 'currentPerson'
     },
     control: {
     	'saveButton':{
@@ -21,37 +16,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     },
     
 	init: function() {
-		var me=this;
-		var personal = Ext.ComponentQuery.query('.editperson')[0];
-		
-		var serviceReasonsSuccessFunc = function(records,operation,success){
-			if (records.length > 0)
-	    	{
-	    		var items = [];
-				Ext.Array.each(records,function(item,index){
-	    			items.push(item.raw);
-	    		});
-				var serviceReasonsFormProps = {
-	    				mainComponentType: 'checkbox',
-	    				formId: 'personservicereasons', 
-	                    fieldSetTitle: 'Select all that apply:',
-	                    itemsArr: items, 
-	                    selectedItemsArr: [], 
-	                    idFieldName: 'id', 
-	                    selectedIdFieldName: 'serviceReasonId',
-	                    additionalFieldsMap: [] };
-	    		
-	    		me.formUtils.createForm( serviceReasonsFormProps );	    		
-	    	}
-		};		
-		
-		personal.loadRecord( me.person );
-		me.specialServiceGroupsStore.load();
-		me.referralSourcesStore.load();
-		me.serviceReasonsStore.load({scope: me, callback: serviceReasonsSuccessFunc});
-		me.studentTypesStore.load();
-		
-		return me.callParent(arguments);
+		return this.callParent(arguments);
     },
     
     onSaveClick: function(button){

@@ -1,7 +1,9 @@
 Ext.define('Ssp.view.person.ReferralSources', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.personreferralsources',
-    mixins: [ 'Deft.mixin.Injectable'],
+	mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.ReferralSourcesViewController',
     inject: {
     	store: 'referralSourcesStore'
     },

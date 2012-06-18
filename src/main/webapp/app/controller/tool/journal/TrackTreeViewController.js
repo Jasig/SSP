@@ -109,12 +109,13 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
    
 
     onItemClick: function(view, record, item, index, e, eOpts){
+    	var me=this;
     	var journalEntry = me.journalEntry;
-    	var name = this.treeUtils.getNameFromNodeId( record.data.id );
+    	var name = me.treeUtils.getNameFromNodeId( record.data.id );
     	var checked = !record.data.checked;
-    	var id = this.treeUtils.getIdFromNodeId( record.data.id );
+    	var id = me.treeUtils.getIdFromNodeId( record.data.id );
     	var childText = record.data.text;
-    	var parentId = this.treeUtils.getIdFromNodeId( record.data.parentId );
+    	var parentId = me.treeUtils.getIdFromNodeId( record.data.parentId );
     	var parentText = record.parentNode.data.text;
     	var step = null;
     	var detail = null;

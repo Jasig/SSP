@@ -39,14 +39,37 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     										store: 'serviceReasons',
     								        form: 'AbstractReferenceAdmin',
     										leaf: true
-    								    },
-    									{
+    								    },{
     										text: 'Student Types',
     										title: 'Student Types',
     										store: 'studentTypes',
     								        form: 'AbstractReferenceAdmin',
-    										leaf: true
-    								    },{
+    										leaf: true,
+    										columns: [
+    						    		                { header: 'Name',  
+    						    		                  dataIndex: 'name',
+    						    		                  required: true,
+    						    		                  field: {
+    						    		                      xtype: 'textfield'
+    						    		                  },
+    						    		                  flex: .25 },
+    						    		                { header: 'Description',
+    						    		                  required: false,
+    						    		                  dataIndex: 'description',
+    						    		                  field: {
+    						    		                      xtype: 'textfield'
+    						    		                  },
+    						    		                  flex: 1},
+    						      		                { header: 'Require Initial Appointment',
+    						    		                  required: true,
+    						      		                  dataIndex: 'requireInitialAppointment', 
+    						      		                  flex: .25,
+    						      		                  field: {
+    						      		                      xtype: 'checkbox'
+    						      		                  }
+    						    		                }
+    						    		           ]
+    									},{
     								    	text: 'Campuses',
     										title: 'Campuses',
     										store: '',

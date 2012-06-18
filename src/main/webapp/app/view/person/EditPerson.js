@@ -1,6 +1,9 @@
 Ext.define('Ssp.view.person.EditPerson', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.editperson',
+	mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.EditPersonViewController',
 	initComponent: function() {	
 		Ext.apply(this, 
 				{

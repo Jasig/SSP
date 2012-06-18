@@ -46,11 +46,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		me.getView().loadRecord( me.person );
     		
     		// load additional values
-    		studentIdField.setFieldLabel(studentIdAlias+'<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>');
     		nameField.setValue( fullName );
     		birthDateField.setValue( me.person.getFormattedBirthDate() );
     		studentRecordComp.setTitle('Student Record - ' + fullName)
 		};
+
+		// Set defined configured label for the studentId field
+		studentIdField.setFieldLabel(studentIdAlias+'<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>');		
 		
 		// load the person record
 		me.apiProperties.makeRequest({
