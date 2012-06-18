@@ -44,9 +44,10 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	fundings << new PersonFundingSourceTO(fundingSourceId:UUID.fromString("365e8c95-f356-4f1f-8d79-4771ae8b0291"), personId: UUID.fromString(result.person.id), description:"Other")
 	result.personFundingSources = fundings
 	
-	//add a serviceReason
+	//add a specialServiceGroup
 	List<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroups = Lists.newArrayList();
 	specialServiceGroups << new ReferenceLiteTO(id: UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"))
+	//def specialServiceGroups = null;
 	result.person.specialServiceGroups = specialServiceGroups;
 	
 	//subit the manipulated form
@@ -89,13 +90,13 @@ String toJson(def form){
  */
 
 JsonSlurper jsonParser = new JsonSlurper()
-ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "student0", "student0", false)
+ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0", "advisor0", false)
 
-//String output = getStudentIntakeForm(conn, jsonParser)
+String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
 //String output = addGoalToPerson(conn) 
 
-String output = getAllJournalEntriesForPerson(conn);
+//String output = getAllJournalEntriesForPerson(conn);
 
 conn.formatAndPrintJson(output)
 //println (output);
