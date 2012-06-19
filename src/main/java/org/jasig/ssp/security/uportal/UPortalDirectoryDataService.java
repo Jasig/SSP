@@ -13,17 +13,27 @@ public class UPortalDirectoryDataService implements DirectoryDataService {
 
 	@Override
 	public String getProperty(final String propertyName, final String userId) {
-		if ("schoolId".equals(propertyName)) {
-			return userId;
-		} else if ("firstName".equals(propertyName)) {
-			return "Gen";
-		} else if ("lastName".equals(propertyName)) {
-			return "Temporary";
-		} else if ("primaryEmailAddress".equals(propertyName)) {
-			return "unknown@test.com";
-		} else {
-			return "unknown property";
-		}
+		return "unknown property";
+	}
+
+	@Override
+	public String getFirstNameForUserId(final String userId) {
+		return "Gen";
+	}
+
+	@Override
+	public String getLastNameForUserId(final String userId) {
+		return "Temporary";
+	}
+
+	@Override
+	public String getPrimaryEmailAddressForUserId(final String userId) {
+		return "unknown@test.com";
+	}
+
+	@Override
+	public String getPhoneForUserId(final String userId) {
+		return "111 867-5309";
 	}
 
 }

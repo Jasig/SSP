@@ -8,4 +8,11 @@ public interface DirectoryDataService {
 
 	String getProperty(String propertyName, String userId);
 
+	String getFirstNameForUserId(String userId);
+
+	String getLastNameForUserId(String userId);
+
+	String getPrimaryEmailAddressForUserId(String userId);
+
+	String getPhoneForUserId(String userId);
 }

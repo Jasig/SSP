@@ -81,14 +81,12 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 				person = new Person();
 				person.setEnabled(true);
 				person.setUsername(username);
-				person.setSchoolId(directoryDataService.getProperty("schoolId",
+				person.setFirstName(directoryDataService.getFirstNameForUserId(
 						username));
-				person.setFirstName(directoryDataService.getProperty(
-						"firstName", username));
-				person.setLastName(directoryDataService.getProperty("lastName",
+				person.setLastName(directoryDataService.getLastNameForUserId(
 						username));
-				person.setPrimaryEmailAddress(directoryDataService.getProperty(
-						"primaryEmailAddress", username));
+				person.setPrimaryEmailAddress(directoryDataService
+						.getPrimaryEmailAddressForUserId(username));
 				// :TODO Set additional user attributes
 
 				person = personService.create(person);

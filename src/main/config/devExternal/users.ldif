@@ -20,35 +20,41 @@ ou: groups
 ####
 # Users:
 ####
-dn: cn=student0,ou=users,dc=springframework,dc=org
+dn: uid=student0,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top
 objectClass: organizationalPerson
 uid: student0
 userPassword: student0
-cn: student0
-sn: student0
+cn: James
+sn: Gosling
+mail: test@sinclair.edu
+telephonenumber: 111 867-5309
 
-dn: cn=student1,ou=users,dc=springframework,dc=org
+dn: uid=student1,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top
 objectClass: organizationalPerson
 uid: student1
 userPassword: student1
-cn: student1
-sn: student1
+cn: Ken
+sn: Thompson
+mail: test@sinclair.edu
+telephonenumber: 111 867-5309
 
-dn: cn=advisor0,ou=users,dc=springframework,dc=org
+dn: uid=advisor0,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top
 objectClass: organizationalPerson
 uid: advisor0
 userPassword: advisor0
-cn: advisor0
-sn: advisor0
+cn: Alan
+sn: Turing
+mail: test@sinclair.edu
+telephonenumber: 111 867-5309
 
 
 ####
@@ -58,18 +64,18 @@ dn: cn=USER,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: USER
-uniqueMember: cn=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
 
 dn: cn=REFERENCE_READ,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: REFERENCE_READ
-uniqueMember: cn=advisor0,ou=users,dc=springframework,dc=org
-uniqueMember: cn=student0,ou=users,dc=springframework,dc=org
-uniqueMember: cn=student1,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=student0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=student1,ou=users,dc=springframework,dc=org
 
 dn: cn=REFERENCE_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: REFERENCE_WRITE
-uniqueMember: cn=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org

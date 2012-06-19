@@ -25,11 +25,13 @@ It allows ssp to be run outside in absence of uportal.
 		<beans:constructor-arg value="${SSP_CONFIGDIR}" /> 
 	</beans:bean>
 
-	<ldap-server ldif="file:#{configDir}/users.ldif" root="dc=springframework,dc=org"/>
+	<ldap-server ldif="file:#{configDir}/users.ldif" 
+			root="dc=springframework,dc=org"
+			port="33389"/>
 
 	<authentication-manager alias="authenticationManager">
 		<ldap-authentication-provider
-			user-search-filter="(cn={0})" 
+			user-search-filter="(uid={0})" 
 			user-search-base="ou=users"
 			group-search-filter="(uniqueMember={0})" 
 			group-search-base="ou=groups"
@@ -38,6 +40,15 @@ It allows ssp to be run outside in absence of uportal.
 			user-context-mapper-ref="userDetailsService">
 		</ldap-authentication-provider>
 	</authentication-manager>
+
+	<beans:bean id="ldapContextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<beans:property name="url" value="ldap://localhost:33389" />
+		<beans:property name="base" value="dc=springframework,dc=org" />
+	</beans:bean>
+
+	<beans:bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<beans:constructor-arg ref="ldapContextSource" />
+	</beans:bean>
 
 	<beans:bean id="directoryDataService" 
 			class="org.jasig.ssp.security.LdapDirectoryDataService"/>
