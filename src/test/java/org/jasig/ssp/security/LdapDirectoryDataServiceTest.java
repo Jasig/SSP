@@ -2,6 +2,7 @@ package org.jasig.ssp.security;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ public class LdapDirectoryDataServiceTest {
 	@Autowired
 	private transient LdapDirectoryDataService ldapDirectoryDataService;
 
+	@Ignore
 	@Test
 	public void test() {
 		assertTrue(
