@@ -1,5 +1,6 @@
 package org.jasig.ssp.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,6 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @author codynet
+ *
+ */
+/**
+ * @author codynet
+ *
+ */
 @Service
 @Transactional
 public class PersonServiceImpl implements PersonService {
@@ -113,4 +122,44 @@ public class PersonServiceImpl implements PersonService {
 			final SortingAndPaging sAndP) {
 		return dao.getPeopleInList(personIds, sAndP);
 	}
+	
+	
+
+    /**
+     * Used for Specific Report "Address Labels"
+     */
+	public List<Person> peopleFromCriteria(Date intakeDatefrom, 
+			Date intakeDateTo,
+			String homeDepartment,
+			String coachId,
+			String programStatus,
+			String specialServiceGroupId,
+			String referralSourcesId,
+			String anticipatedStartTerm,
+			Integer anticipatedStartYear,
+			String studentTypeId,
+			Date registrationTerm,
+			Date registrationYear,						
+			final SortingAndPaging sAndP) throws ObjectNotFoundException{
+		
+		//TODO: use a TO here
+		return dao.getPeopleByCriteria(
+				intakeDatefrom, 
+				intakeDateTo, 
+				homeDepartment, 
+				coachId, 
+				programStatus, 
+				specialServiceGroupId, 
+				referralSourcesId, 
+				anticipatedStartTerm, 
+				anticipatedStartYear, 
+				studentTypeId, 
+				registrationTerm, 
+				registrationYear, 
+				sAndP);	
+	}
+	
+	
+	
+	
 }
