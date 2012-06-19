@@ -21,7 +21,7 @@ public class EmailNotFoundException extends AuthenticationException {
 	 * @param msg
 	 *            the detail message.
 	 */
-	public EmailNotFoundException(String msg) {
+	public EmailNotFoundException(final String msg) {
 		super(msg);
 	}
 

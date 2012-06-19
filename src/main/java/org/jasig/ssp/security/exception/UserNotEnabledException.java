@@ -20,7 +20,7 @@ public class UserNotEnabledException extends AuthenticationException {
 	 * @param msg
 	 *            the detail message.
 	 */
-	public UserNotEnabledException(String msg) {
+	public UserNotEnabledException(final String msg) {
 		super(msg);
 	}
 

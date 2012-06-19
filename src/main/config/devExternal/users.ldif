@@ -1,29 +1,81 @@
-dn: cn=student0,dc=springframework,dc=org
+# root is dc=springframework,dc=org
+
+
+####
+# major ou sections:
+####
+dn: ou=users,dc=springframework,dc=org
+objectClass: extensibleObject
+objectClass: organizationalUnit
+objectClass: top
+ou: users
+
+dn: ou=groups,dc=springframework,dc=org
+objectClass: extensibleObject
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+
+####
+# Users:
+####
+dn: uid=student0,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top
 objectClass: organizationalPerson
 uid: student0
 userPassword: student0
-cn: student
-sn: jones
+cn: James
+sn: Gosling
+mail: test@sinclair.edu
+telephonenumber: 111 867-5309
 
-dn: cn=student1,dc=springframework,dc=org
+dn: uid=student1,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top
 objectClass: organizationalPerson
 uid: student1
 userPassword: student1
-cn: student
-sn: jones
+cn: Ken
+sn: Thompson
+mail: test@sinclair.edu
+telephonenumber: 111 867-5309
 
-dn: cn=advisor1,dc=springframework,dc=org
+dn: uid=advisor0,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top
 objectClass: organizationalPerson
-uid: advisor1
-userPassword: advisor1
-cn: advisor
-sn: jones
+uid: advisor0
+userPassword: advisor0
+cn: Alan
+sn: Turing
+mail: test@sinclair.edu
+telephonenumber: 111 867-5309
+
+
+####
+# Groups:
+####
+dn: cn=USER,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: USER
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=REFERENCE_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: REFERENCE_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=student0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=student1,ou=users,dc=springframework,dc=org
+
+dn: cn=REFERENCE_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: REFERENCE_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org

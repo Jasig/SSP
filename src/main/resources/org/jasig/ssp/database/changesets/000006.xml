@@ -1359,6 +1359,12 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 		</rollback>
 	</changeSet>
 	
+
+	<changeSet id="usernames must be unique" author="daniel.bower">
+		<addUniqueConstraint tableName="person" columnNames="username"/>
+		<!-- has autorollback support -->
+	</changeSet>
+	
 	
 	<!-- changeSet id="Additional Legacy MessageTemplates 2" author="daniel.bower">
 		<insert tableName="message_template">

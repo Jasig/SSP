@@ -1,0 +1,41 @@
+# root is dc=springframework,dc=org
+
+
+####
+# major ou sections:
+####
+dn: ou=users,dc=springframework,dc=org
+objectClass: extensibleObject
+objectClass: organizationalUnit
+objectClass: top
+ou: users
+
+dn: ou=groups,dc=springframework,dc=org
+objectClass: extensibleObject
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+
+####
+# Users:
+####
+dn: uid=testuser,ou=users,dc=springframework,dc=org
+objectClass: uidObject
+objectClass: person
+objectClass: top
+objectClass: organizationalPerson
+uid: testuser
+userPassword: testuser
+cn: testuser
+sn: testuser
+telephonenumber: 111 867-5309
+
+####
+# Groups:
+####
+dn: cn=USER,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: USER
+uniqueMember: cn=advisor0,ou=users,dc=springframework,dc=org

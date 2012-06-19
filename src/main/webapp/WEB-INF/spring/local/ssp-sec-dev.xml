@@ -24,38 +24,32 @@ It allows ssp to be run outside in absence of uportal.
 	<beans:bean id="configDir" class="org.springframework.util.SystemPropertyUtils" factory-method="resolvePlaceholders">
 		<beans:constructor-arg value="${SSP_CONFIGDIR}" /> 
 	</beans:bean>
-	
-	<authentication-manager>
-		<authentication-provider ref="localLdapAuthenticationProvider" />
+
+	<ldap-server ldif="file:#{configDir}/users.ldif" 
+			root="dc=springframework,dc=org"
+			port="33389"/>
+
+	<authentication-manager alias="authenticationManager">
+		<ldap-authentication-provider
+			user-search-filter="(uid={0})" 
+			user-search-base="ou=users"
+			group-search-filter="(uniqueMember={0})" 
+			group-search-base="ou=groups"
+			group-role-attribute="cn" 
+			role-prefix="ROLE_" 
+			user-context-mapper-ref="userDetailsService">
+		</ldap-authentication-provider>
 	</authentication-manager>
 
-	<ldap-server ldif="file:#{configDir}/users.ldif" />
-
-	<beans:bean id="localSpringSecurityContextSource"
-		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
-		<beans:constructor-arg
-			value="ldap://127.0.0.1:33389/dc=springframework,dc=org" />
+	<beans:bean id="ldapContextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<beans:property name="url" value="ldap://localhost:33389" />
+		<beans:property name="base" value="dc=springframework,dc=org" />
 	</beans:bean>
 
-	<beans:bean id="localLdapAuthenticationProvider"
-		class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
-		<beans:constructor-arg>
-			<beans:bean
-				class="org.springframework.security.ldap.authentication.BindAuthenticator">
-				<beans:constructor-arg ref="localSpringSecurityContextSource" />
-				<beans:property name="userDnPatterns">
-					<beans:list>
-						<beans:value>cn={0}</beans:value>
-					</beans:list>
-				</beans:property>
-			</beans:bean>
-		</beans:constructor-arg>
-		<beans:constructor-arg>
-			<beans:bean class="org.jasig.ssp.security.SspLdapAuthoritiesPopulator">
-				<beans:constructor-arg ref="sspUserDetailsService" />
-			</beans:bean>
-		</beans:constructor-arg>
-		<beans:property name="userDetailsContextMapper" ref="sspUserDetailsContextMapper" />
+	<beans:bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<beans:constructor-arg ref="ldapContextSource" />
 	</beans:bean>
 
+	<beans:bean id="directoryDataService" 
+			class="org.jasig.ssp.security.LdapDirectoryDataService"/>
 </beans:beans>

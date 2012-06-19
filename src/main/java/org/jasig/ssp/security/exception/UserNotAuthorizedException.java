@@ -22,7 +22,7 @@ public class UserNotAuthorizedException extends AuthenticationException {
 	 * @param msg
 	 *            the detail message.
 	 */
-	public UserNotAuthorizedException(String msg) {
+	public UserNotAuthorizedException(final String msg) {
 		super(msg);
 	}
 

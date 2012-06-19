@@ -1,4 +1,4 @@
-package org.jasig.ssp.security;
+package org.jasig.ssp.security.permissions;
 
 public interface SspPermission {
 	

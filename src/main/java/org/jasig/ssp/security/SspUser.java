@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.UUID;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jasig.ssp.model.Person;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.jasig.ssp.model.Person;
 
 public class SspUser extends User implements Serializable {
 
@@ -28,9 +28,11 @@ public class SspUser extends User implements Serializable {
 	 */
 	private transient Person person;
 
-	public SspUser(String username, String password, boolean enabled,
-			boolean accountNonExpired, boolean credentialsNonExpired,
-			boolean accountNonLocked, Collection<GrantedAuthority> authorities) {
+	public SspUser(final String username, final String password,
+			final boolean enabled, final boolean accountNonExpired,
+			final boolean credentialsNonExpired,
+			final boolean accountNonLocked,
+			final Collection<GrantedAuthority> authorities) {
 		super(username, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, authorities);
 	}
@@ -39,7 +41,7 @@ public class SspUser extends User implements Serializable {
 		return emailAddress;
 	}
 
-	public void setEmailAddress(String emailAddress) {
+	public void setEmailAddress(final String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
 
@@ -47,13 +49,12 @@ public class SspUser extends User implements Serializable {
 		return person;
 	}
 
-	public void setPerson(Person person) {
+	public void setPerson(final Person person) {
 		this.person = person;
 	}
 
 	@Override
-	public boolean equals(Object aThat) {
-		boolean res = false;
+	public boolean equals(final Object aThat) {
 		if (aThat == null) {
 			return false;
 		}
@@ -64,7 +65,7 @@ public class SspUser extends User implements Serializable {
 
 		if (aThat.getClass() == this.getClass()) {
 			// cast to native object is now safe
-			SspUser that = (SspUser) aThat;
+			final SspUser that = (SspUser) aThat;
 
 			// now a proper field-by-field evaluation can be made
 			return (emailAddress == null ? (that.getEmailAddress() == null)
@@ -72,7 +73,7 @@ public class SspUser extends User implements Serializable {
 					&& (person == null ? that.getPerson() == null : person
 							.equals(that.getPerson()));
 		}
-		return res;
+		return false;
 	}
 
 	@Override
