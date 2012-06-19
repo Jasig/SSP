@@ -24,10 +24,6 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     	
     	'addButton': {
 			click: 'onAddClick'
-		},
-		
-		'viewHistoryButton': {
-			click: 'onViewHistoryClick'
 		}
 	},
     init: function() {
@@ -101,10 +97,6 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     
     editJournalEntry: function(){
     	this.loadEditor();
-    },
-
-    onViewHistoryClick: function(button){
-	 this.appEventsController.getApplication().fireEvent("viewHistory");
     },
  
     deleteConfirmation: function() {

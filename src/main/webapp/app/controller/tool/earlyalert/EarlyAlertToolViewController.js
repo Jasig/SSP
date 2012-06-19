@@ -16,10 +16,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     control: {
     	'respondButton': {
 			click: 'onRespondClick'
-		},
-		
-		'viewHistoryButton': {
-			click: 'onViewHistoryClick'
 		}
 	},
 	
@@ -33,9 +29,5 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     
     onRespondClick: function(button){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-    },
-
-    onViewHistoryClick: function(button){
-	 this.appEventsController.getApplication().fireEvent('viewHistory');
     }
 });

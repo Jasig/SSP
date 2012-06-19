@@ -19,18 +19,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     	personPrintTaskUrl: ''
     },
     
-    control: {    	
+    control: {
     	'taskStatusTabs': {
     		tabchange: 'onTaskStatusTabChange'
     	},
-    	
-		'filterTasksBySelfCheck': {
-			change: 'onFilterTasksBySelfChange'
-		},
-
-		'viewHistoryButton': {
-			click: 'onViewHistoryClick'
-		},
 		
 		'emailTasksButton': {
 			click: 'onEmailTasksClick'
@@ -38,6 +30,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 
 		'printTasksButton': {
 			click: 'onPrintTasksClick'
+		},
+		
+		'filterTasksBySelfCheck': {
+			change: 'onFilterTasksBySelfChange'
 		}
 	},
 	
@@ -80,17 +76,27 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 			method: 'GET',
 			successFunc: successFunc 
 		});
+	
+    	this.appEventsController.assignEvent({eventName: 'filterTasks', callBackFunc: this.onFilterTasks, scope: this});		
 		
 		return this.callParent(arguments);
     },
+
+    destroy: function(){
+    	this.appEventsController.removeEvent({eventName: 'filterTasks', callBackFunc: this.onFilterTasks, scope: this});    	
+    },
+    
+    onFilterTasks: function(){
+    	this.filterTasks();
+    },
+    
+    onFilterTasksBySelfChange: function(comp, newComp, oldComp, eOpts){
+		this.filterAuthenticated=!this.filterAuthenticated;
+		this.filterTasks();
+	},
     
     onTaskStatusTabChange: function(panel, newComp, oldComp, eOpts) {
 		this.filteredTaskStatus = newComp.action.toUpperCase();
-		this.filterTasks();
-    },
-
-    onFilterTasksBySelfChange: function(comp) {
-		this.filterAuthenticated=comp.checked;
 		this.filterTasks();
     },
     
@@ -124,10 +130,6 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		
 		// apply new filters
 		this.store.filter(filtersArr);
-    },
-    
-    onViewHistoryClick: function(button) {
-		this.appEventsController.getApplication().fireEvent("viewHistory");
     },
 
     onEmailTasksClick: function(button) {

@@ -48,7 +48,11 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     		nodeToAppendTo.removeAll();
     	}
     	
-    	nodeToAppendTo.appendChild( children );
+    	// only append if their are children
+    	if (children.length > 0)
+    	{
+    		nodeToAppendTo.appendChild( children );
+    	}
     },
     
     getNameFromNodeId: function( value ) {
@@ -148,9 +152,12 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	{
 		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable);
 		    		me.appendChildren( nodeToAppendTo, nodes);
-		    		if (callbackFunc != null && callbackFunc != "")
-		    			callbackFunc( callbackScope );
+		    	}else{
+		    		me.appendChildren( nodeToAppendTo, []);
 		    	}
+		    	
+	    		if (callbackFunc != null && callbackFunc != "")
+	    			callbackFunc( callbackScope );
 			}
 		});
     },    

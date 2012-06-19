@@ -54,27 +54,28 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
 				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
-				            xtype: 'checkbox',
-				            boxLabel: 'Display only tasks that I created',
-				            itemId: 'filterTasksBySelfCheck'
-				           },{ 
-					        	xtype: 'tbspacer',
-					        	flex: 1
-					        },{
 					            tooltip: 'Email Action Plan',
-					            text: 'Email',
+					            text: '',
+					            width: 30,
+					            height: 30,
+					            cls: 'emailIcon',
 					            xtype: 'button',
 					            itemId: 'emailTasksButton'
 					        },{
 					            tooltip: 'Print Action Plan',
-					            text: 'Print',
+					            text: '',
+					            width: 30,
+					            height: 30,
+					            cls: 'printIcon',
 					            xtype: 'button',
 					            itemId: 'printTasksButton'
+					        },{ 
+					        	xtype: 'tbspacer',
+					        	flex: 1
 					        },{
-					            tooltip: 'View Student History',
-					            text: 'View History',
-					            xtype: 'button',
-					            itemId: 'viewHistoryButton'
+					            xtype: 'checkbox',
+					            boxLabel: 'Display only tasks that I created',
+					            itemId: 'filterTasksBySelfCheck'
 					        }]
 				    }]
 				});

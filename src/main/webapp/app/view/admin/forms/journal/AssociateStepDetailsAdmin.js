@@ -30,8 +30,14 @@ Ext.define('Ssp.view.admin.forms.journal.AssociateStepDetailsAdmin', {
 				            enableDrop: true
 				        }
 				 },    			 
-    		     dockedItems: [
-     		              {
+    		     dockedItems: [{
+		               xtype: 'toolbar',
+  		               dock: 'top',
+  		               items: [{
+  		                         xtype: 'label',
+  		                         text: 'Associate items by dragging a Detail onto a Step folder'
+  		                       }]  
+  		               },{
      				        dock: 'top',
      				        xtype: 'toolbar',
      				        items: [{
