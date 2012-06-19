@@ -20,7 +20,7 @@ ou: groups
 ####
 # Users:
 ####
-dn: cn=testuser,ou=users,dc=springframework,dc=org
+dn: uid=testuser,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top

@@ -20,7 +20,7 @@ public class LdapDirectoryDataServiceTest {
 		assertTrue(
 				"Unable to access telephonenumber property in ldap for testuser",
 				ldapDirectoryDataService.propertyForDn(
-						"telephonenumber", "cn=testuser,ou=users").contains(
+						"telephonenumber", "uid=testuser,ou=users").contains(
 						"111 867-5309"));
 	}
 
