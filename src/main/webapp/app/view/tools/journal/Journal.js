@@ -1,4 +1,4 @@
-Ext.define('Ssp.view.tools.Journal', {
+Ext.define('Ssp.view.tools.journal.Journal', {
 	extend: 'Ext.grid.Panel',
 	alias : 'widget.journal',
     mixins: [ 'Deft.mixin.Injectable',
@@ -21,12 +21,17 @@ Ext.define('Ssp.view.tools.Journal', {
 		            title: 'Journal',
 		            store: this.store,
 	    		      columns: [
+	    		                { header: 'Date',  
+		    		                  dataIndex: 'createdBy',
+		    		                  flex: 1,
+		    		                  renderer: this.columnRendererUtils.renderCreatedByDate
+	    		                },
 	    		                { header: 'Entered By',  
 	    		                  dataIndex: 'createdBy',
 	    		                  flex: 1,
-	    		                  renderer: this.columnRendererUtils.renderCreatedByDateAndName
+	    		                  renderer: this.columnRendererUtils.renderCreatedBy
 	    		                },
-	      		                { header: 'Journal Source',
+	      		                { header: 'Source',
 	      		                  dataIndex: 'journalSource', 
 	      		                  flex: 1,
 	      		                  renderer: this.columnRendererUtils.renderJournalSourceName
@@ -70,14 +75,6 @@ Ext.define('Ssp.view.tools.Journal', {
 				            text: 'Add',
 				            xtype: 'button',
 				            itemId: 'addButton'
-				        },{ 
-				        	xtype: 'tbspacer',
-				        	flex: 1
-				        },{
-				            tooltip: 'Print the History for this student',
-				            text: 'View History',
-				            xtype: 'button',
-				            itemId: 'viewHistoryButton'
 				        }]
 				    }]
 				});

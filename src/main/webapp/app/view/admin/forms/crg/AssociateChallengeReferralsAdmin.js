@@ -31,13 +31,14 @@ Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
 				        }
 				 },    			 
     		     dockedItems: [
-     		              /*{
+     		              {
      		               xtype: 'toolbar',
+     		              dock: 'top',
      		               items: [{
      		                         xtype: 'label',
-     		                         text: 'Associate by dragging a Referral to a folder'
+     		                         text: 'Associate items by dragging a Referral onto a Challenge folder'
      		                       }]  
-     		           }*/{
+     		           },{
      				        dock: 'top',
      				        xtype: 'toolbar',
      				        items: [{

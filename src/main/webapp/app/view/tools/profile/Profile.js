@@ -1,7 +1,6 @@
-Ext.define('Ssp.view.tools.Profile', {
+Ext.define('Ssp.view.tools.profile.Profile', {
 	extend: 'Ext.form.Panel',
 	alias : 'widget.profile',
-	id: 'Profile',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
@@ -33,7 +32,11 @@ Ext.define('Ssp.view.tools.Profile', {
 						    		  title: 'Referral Sources',
 						    		  autoScroll: true,
 						    		  items: [{xtype: 'profilereferralsources'}]
-						    		}]
+						    		},{ 
+							    		  title: 'Services Provided History',
+							    		  autoScroll: true,
+							    		  items: [{xtype: 'profileservicesprovided'}]
+							    	}]
 						})
 				    ],
 				    
@@ -41,8 +44,19 @@ Ext.define('Ssp.view.tools.Profile', {
 				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
+				            tooltip: 'Transition Student',
+				            text: '',
+				            width: 35,
+				            height: 35,
+				            cls: 'studentTransitionIcon',
+				            xtype: 'button',
+				            itemId: 'studentTransitionButton'
+				        },{
 					            tooltip: 'View Student History',
-					            text: 'View History',
+					            text: '',
+					            width: 35,
+					            height: 35,
+					            cls: 'studentHistoryIcon',
 					            xtype: 'button',
 					            itemId: 'viewHistoryButton'
 					        }]

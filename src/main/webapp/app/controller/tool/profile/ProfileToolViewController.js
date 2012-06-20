@@ -8,6 +8,10 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     control: {
     	'viewHistoryButton': {
 			click: 'onViewHistoryClick'
+		},
+		
+		'studentTransitionButton': {
+			click: 'onStudentTransitionClick'
 		}
     },
 	init: function() {
@@ -16,5 +20,9 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     
     onViewHistoryClick: function(button){
    	 this.appEventsController.getApplication().fireEvent("viewHistory");
+    },
+
+    onStudentTransitionClick: function(button){
+      	 Ext.Msg.alert('Attention','This feature is not yet active.');
     },
 });

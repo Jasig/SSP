@@ -1,4 +1,4 @@
-Ext.define('Ssp.view.tools.StudentInformationSystem', {
+Ext.define('Ssp.view.tools.sis.StudentInformationSystem', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.studentinformationsystem',
 	title: 'Student Information System',	

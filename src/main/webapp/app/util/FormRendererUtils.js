@@ -514,6 +514,40 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		}else{
 			field.hide();
 		}
-    }    
+    },
+	
+    /**
+     * Method to allow a gridPanel to be reconfigured to display
+     * a new set of columns or a new store of data.
+     */
+    reconfigureGridPanel: function(gridPanel, store, columns) {
+        console.log(store);
+    	console.log(columns);
+        
+    	var me = gridPanel,
+            headerCt = me.headerCt;
+
+        if (me.lockable) {
+            me.reconfigureLockable(store, columns);
+        } else {
+            if (columns) {
+                headerCt.suspendLayout = true;
+                headerCt.removeAll();
+                headerCt.add(columns);
+            }
+            if (store) {
+                store = Ext.StoreManager.lookup(store);
+                me.down('pagingtoolbar').bindStore(store);
+                me.bindStore(store);        
+            } else {
+                me.getView().refresh();
+            }
+            if (columns) {
+                headerCt.suspendLayout = false;
+                me.forceComponentLayout();
+            }
+        }
+        me.fireEvent('reconfigure', me);
+    }	
 });
 

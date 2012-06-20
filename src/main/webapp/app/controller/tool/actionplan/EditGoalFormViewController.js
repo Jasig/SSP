@@ -58,7 +58,7 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
     		if (id == "")
     		{
     			// add
-	    		this.apiProperties.makeRequest({
+    			this.apiProperties.makeRequest({
 	    			url: this.url,
 	    			method: 'POST',
 	    			jsonData: model.data,
