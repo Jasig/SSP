@@ -16,7 +16,8 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     
     control: {
     	view: {
-    		itemexpand: 'onItemExpand'
+    		itemexpand: 'onItemExpand',
+    		itemcollapse: 'onItemCollapse'
     	},
     	
         treeView: {
@@ -42,6 +43,17 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	var id = this.treeUtils.getIdFromNodeId(node.data.id);
     	this.getAssociatedItems(node,id);
     },
+
+    onItemCollapse: function( node, obj ){
+    	var tree = this.getView();
+    	var records = tree.getView().getChecked();
+    	if (records.length > 0)
+    	{
+        	Ext.Array.each(records, function(rec){
+    	        rec.data.checked=false;
+    	    },this);    		
+    	}
+    },    
     
     clear: function(){
     	this.treeUtils.clearRootCategories();
@@ -134,7 +146,6 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
 
         	Ext.Array.each(records, function(rec){
     	        var associatedItemId = treeUtils.getIdFromNodeId( rec.data.id );
-    	        console.log( associatedItemId );
     	        this.deleteAssociation( parentId, associatedItemId, parentNode );
     	    },this);   		
     	}else{
