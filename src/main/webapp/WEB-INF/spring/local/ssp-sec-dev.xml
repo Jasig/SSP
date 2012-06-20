@@ -50,5 +50,5 @@ It allows ssp to be run outside in absence of uportal.
 		<beans:constructor-arg ref="ldapContextSource" />
 	</beans:bean>
 
-	<beans:bean id="uPortalPersonAttributesService" class="org.jasig.ssp.service.impl.LdapPersonAttributesService" />
+	<beans:bean id="ldapPersonAttributesService" class="org.jasig.ssp.service.impl.LdapPersonAttributesService" />
 </beans:beans>

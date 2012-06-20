@@ -82,8 +82,6 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 			LOGGER.info(
 					"Unable to load {}'s record., creating user in ssp",
 					username);
-
-			System.out.println("1");
 			
 			if (hasAccountCreationPermission(authorities)) {
 				// At this point, we should already have authentication through
@@ -91,9 +89,6 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 				person = new Person();
 				person.setEnabled(true);
 				person.setUsername(username);
-
-				System.out.println("2");
-				System.out.println(" ## personAttributesService="+personAttributesService.getClass().getName());
 				
 				try {
 					Map<String, List<String>> attr = personAttributesService
@@ -115,7 +110,6 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 				} catch (ObjectNotFoundException onfe) {
 					throw new RuntimeException(onfe);
 				} catch (Exception e1) {
-					e1.printStackTrace(System.out);
 					throw new RuntimeException(e1);
 				}
 
