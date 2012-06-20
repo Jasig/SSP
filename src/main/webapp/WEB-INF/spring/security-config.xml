@@ -41,6 +41,8 @@
 		<logout logout-success-url="/login.jsp" />
 	</http>
 	
+	<beans:bean name="uPortalRequestContextFilter" class="org.jasig.ssp.security.uportal.UPortalRequestContextFilter" />
+
 	<beans:bean name="uPortalFilter" class="org.jasig.ssp.security.uportal.UPortalPreAuthenticatedProcessingFilter">
 		<beans:property name="authenticationManager" ref="authenticationManager"></beans:property> 
 	</beans:bean>

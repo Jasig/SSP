@@ -18,4 +18,7 @@ public interface PersonAttributesService {
 			HttpServletResponse res, String username) 
 					throws ObjectNotFoundException;
 
+	Map<String,List<String>> getAttributes(String username) 
+			throws ObjectNotFoundException;
+
 }
