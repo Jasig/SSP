@@ -13,11 +13,10 @@ import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 
 /**
- * I respectfully sugest that you don't need any of this DirectoryDataService 
- * infrastructure.  I set up {@link PersonAttributesService} on 5/24, and I 
- * provided a nice writeup here:  
- * https://wiki.jasig.org/display/SSP/Person+Attributes.  I also sent an email 
- * on 5/24 to alert everyone about the available code and the writeup.
+ * I respectfully suggest that you don't need any of this DirectoryDataService 
+ * infrastructure.  I put out {@link PersonAttributesService} on 5/24 as well as 
+ * a wiki page (https://wiki.jasig.org/display/SSP/Person+Attributes) and an 
+ * email.  This class can fill this need.
  * 
  * I am happy to rethink/refactor the {@link PersonAttributesService} as our 
  * needs become clearer and evolve.  Please get me on email, on IM, or on 

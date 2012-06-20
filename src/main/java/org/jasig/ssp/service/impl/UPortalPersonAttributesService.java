@@ -18,9 +18,7 @@ import org.jasig.ssp.service.PersonAttributesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class UPortalPersonAttributesService implements PersonAttributesService {
 
 	private static final String PARAM_USERNAME = "username";
