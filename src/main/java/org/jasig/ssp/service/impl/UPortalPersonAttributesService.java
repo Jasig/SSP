@@ -12,9 +12,9 @@ import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
 import org.jasig.portlet.utils.rest.SimpleCrossContextRestApiInvoker;
 import org.jasig.ssp.security.exception.UPortalSecurityException;
+import org.jasig.ssp.security.uportal.UPortalRequestContextFilter;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
-import org.jasig.ssp.util.RequestScopedWebObjectsHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 			.getLogger(UPortalPersonAttributesService.class);
 	
 	@Autowired
-	private RequestScopedWebObjectsHelper webObjectsHelper;
+	private UPortalRequestContextFilter uPortalRequestContextFilter;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -84,15 +84,11 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 	@Override
 	public Map<String, List<String>> getAttributes(String username)
 			throws ObjectNotFoundException {
-
-		if (!webObjectsHelper.isServletRequest()) {
-			// Not clear that there's a need for this 
-			// side of it at the present time...
-			throw new UnsupportedOperationException();
-		}
 		
-		final HttpServletRequest req = webObjectsHelper.getServletRequest();
-		final HttpServletResponse res = webObjectsHelper.getServletResponse();
+		final HttpServletRequest req = uPortalRequestContextFilter
+										.getHttpServletRequest();
+		final HttpServletResponse res = uPortalRequestContextFilter
+										.getHttpServletResponse();
 		
 		return getAttributes(req, res, username);
 		
