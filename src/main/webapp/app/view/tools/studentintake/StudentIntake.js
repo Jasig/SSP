@@ -1,7 +1,6 @@
-Ext.define('Ssp.view.tools.StudentIntake', {
+Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.studentintake',
-	id: 'StudentIntake',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.studentintake.StudentIntakeToolViewController',

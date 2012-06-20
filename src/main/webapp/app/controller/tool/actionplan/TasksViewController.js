@@ -11,6 +11,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     },
     
     config: {
+    	appEventsController: 'appEventsController',
     	containerToLoadInto: 'tools',
     	formToDisplay: 'addtask',
     	url: ''
@@ -61,23 +62,34 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     
     closeTask: function() {
 	   console.log('TaskViewController->closeTask');
-       var store, id, model;
-       model = this.model;
+       var me=this;
+	   var store, id, model, groupName;
+       model = me.model;
        id = model.get('id');
-	   store = this.store;
+	   store = me.store;
        if (id != "") 
        {
            model.set('completed',true);
+           // remove group property before save, since
+           // the group property was added dynamically for
+           // sorting and will invalidate the model on the
+           // server side.
+           groupName = model.data.group;
            delete model.data.group;
 		   this.apiProperties.makeRequest({
 			   url: this.url+id,
 			   method: 'PUT',
 			   jsonData: model.data,
 			   successFunc: function(response,responseText){
+				   // reset the group for sorting purposes
+				   model.set('group',groupName);
 				   model.commit();
 				   store.sync();
+				   // filter the tasks, so the completed task is no longer
+				   // listed
+				   me.appEventsController.getApplication().fireEvent('filterTasks');
 			   },
-			   scope: this
+			   scope: me
 		   });
        }else{
     	   Ext.Msg.alert('SSP Error', 'Unable to delete. No id was specified to delete.'); 
@@ -120,7 +132,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
       		   }
       	    });    		
      	}
-     },
+     },    
      
      loadEditor: function(){
      	var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	

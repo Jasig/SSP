@@ -8,8 +8,8 @@ import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonAssocAuditable;
-import org.jasig.ssp.service.PersonAssocAuditableService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonAssocAuditableService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.AbstractAuditableTO;
 import org.jasig.ssp.transferobject.PagingTO;
@@ -176,6 +176,21 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		return null;
 	}
 
+	/**
+	 * Save changes to the specified ID and object, for the specified person.
+	 * 
+	 * @param id
+	 *            the instance to update
+	 * @param personId
+	 *            the person
+	 * @param obj
+	 *            the full instance data to update
+	 * @return the updated instance
+	 * @throws ObjectNotFoundException
+	 *             If the specified ID could not be found.
+	 * @throws ValidationException
+	 *             If the updated data was not valid.
+	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody

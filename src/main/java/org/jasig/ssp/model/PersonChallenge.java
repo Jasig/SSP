@@ -93,7 +93,7 @@ public class PersonChallenge
 	@Override
 	protected int hashPrime() {
 		return 5;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:15 PM

@@ -391,7 +391,22 @@
 			<artifactId>properties-maven-plugin</artifactId>
 			<version>1.0-alpha-2</version>
 		</dependency>
+		
+		<!-- Reporting Dependencies -->
+		<dependency>
+		      <groupId>net.sf.jasperreports</groupId>
+		      <artifactId>jasperreports</artifactId>
+		      <version>4.6.0</version>
+                </dependency>
+		
+		
 	</dependencies>
+
+
+
+
+
+
 
 	<build>
 		<plugins>

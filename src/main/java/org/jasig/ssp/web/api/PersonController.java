@@ -1,5 +1,6 @@
 package org.jasig.ssp.web.api;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -140,4 +141,5 @@ public class PersonController extends RestController<PersonTO, Person> {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+	
 }

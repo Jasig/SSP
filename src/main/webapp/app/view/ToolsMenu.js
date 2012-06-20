@@ -5,6 +5,8 @@ Ext.define('Ssp.view.ToolsMenu', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.ToolsViewController',
     inject: {
+    	appEventsController: 'appEventsController',
+    	columnRendererUtils: 'columnRendererUtils',
         store: 'toolsStore'
     },
     initComponent: function(){
@@ -23,10 +25,28 @@ Ext.define('Ssp.view.ToolsMenu', {
 		    	    }],
 		    	    
     				columns:[{
-    				           header: "Assigned Tools", 
+    				           header: "Tools", 
     				           dataIndex: "name",
-    				           sortable: true,
-    				           flex:1 }]
+    				           sortable: false,
+    				           menuDisabled: true,
+    				           flex:1 },{
+	    			    	        xtype:'actioncolumn',
+	    			    	        width:18,
+	    			    	        header: '',
+	    			    	        items: [{
+	    			    	            tooltip: 'Add Tool',
+	    			    	            // icon: Ssp.util.Constants.ADD_TOOL_ICON_PATH,
+	    			    	            getClass: this.columnRendererUtils.renderAddToolIcon,
+	    			    	            handler: function(grid, rowIndex, colIndex) {
+	    			    	            	var rec = grid.getStore().getAt(rowIndex);
+	    			    	            	var panel = grid.up('panel');
+	    			    	                //panel.toolId.data=rec.data.toolId;
+	    			    	                panel.appEventsController.getApplication().fireEvent('addTool');
+	    			    	                Ext.Msg.alert('Attention','This feature is not yet active');
+	    			    	            },
+	    			    	            scope: this
+	    			    	        }]
+	    		                }]
 		    	    });
     	
     	return this.callParent(arguments);

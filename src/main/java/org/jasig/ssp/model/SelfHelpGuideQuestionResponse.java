@@ -69,7 +69,7 @@ public class SelfHelpGuideQuestionResponse
 	@Override
 	protected int hashPrime() {
 		return 29;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:15 PM

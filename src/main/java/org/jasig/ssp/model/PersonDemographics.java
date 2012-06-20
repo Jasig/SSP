@@ -352,7 +352,7 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Override
 	protected int hashPrime() {
 		return 11;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:13 PM

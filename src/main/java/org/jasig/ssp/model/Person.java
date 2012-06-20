@@ -755,7 +755,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Override
 	protected int hashPrime() {
 		return 3;
-	};
+	}
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:25 PM

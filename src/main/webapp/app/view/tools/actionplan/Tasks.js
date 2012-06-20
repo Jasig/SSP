@@ -30,7 +30,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	    }],
 		
 		    	    columns: [{
-		    	        text: 'Task Description',
+		    	        text: 'Description',
 		    	        flex: 1,
 		    	        tdCls: 'task',
 		    	        sortable: true,

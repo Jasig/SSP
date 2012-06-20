@@ -1,4 +1,4 @@
-Ext.define('Ssp.view.tools.EarlyAlert', {
+Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 	extend: 'Ext.grid.Panel',
 	alias : 'widget.earlyalert',
     mixins: [ 'Deft.mixin.Injectable',
@@ -67,14 +67,6 @@ Ext.define('Ssp.view.tools.EarlyAlert', {
 				            text: 'Respond',
 				            xtype: 'button',
 				            itemId: 'respondButton'
-				        },{ 
-				        	xtype: 'tbspacer',
-				        	flex: 1
-				        },{
-				            tooltip: 'Print the History for this student',
-				            text: 'View History',
-				            xtype: 'button',
-				            itemId: 'viewHistoryButton'
 				        }]
 				    }]
 				});

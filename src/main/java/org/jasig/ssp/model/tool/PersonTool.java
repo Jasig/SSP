@@ -64,7 +64,7 @@ public class PersonTool
 	@Override
 	protected int hashPrime() {
 		return 41;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM

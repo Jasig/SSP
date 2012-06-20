@@ -256,7 +256,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	@Override
 	protected int hashPrime() {
 		return 179;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 1:50 PM

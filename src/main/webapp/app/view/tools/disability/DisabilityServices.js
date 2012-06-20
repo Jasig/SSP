@@ -1,4 +1,4 @@
-Ext.define('Ssp.view.tools.DisabilityServices', {
+Ext.define('Ssp.view.tools.disability.DisabilityServices', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.disabilityservices',
 	title: 'Disability Services',	
