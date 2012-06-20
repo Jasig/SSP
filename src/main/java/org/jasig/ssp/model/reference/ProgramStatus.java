@@ -17,7 +17,7 @@ import org.jasig.ssp.model.Auditable;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ProgramStatus extends AbstractReference implements Auditable {
 
-	private static final long serialVersionUID = 9135609062624771448L;
+	private static final long serialVersionUID = -6549195550826087907L;
 
 	@Column(nullable = false)
 	@NotNull
@@ -88,7 +88,7 @@ public class ProgramStatus extends AbstractReference implements Auditable {
 	 */
 	@Override
 	protected int hashPrime() {
-		return 317;
+		return 331;
 	}
 
 	@Override

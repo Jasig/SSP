@@ -126,7 +126,7 @@ public class PersonEducationLevel // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Override
 	protected int hashPrime() {
 		return 17;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:10 PM

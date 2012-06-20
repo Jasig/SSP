@@ -1520,4 +1520,63 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 		</rollback>
 	</changeSet>
 
+	<changeSet author='jon.adams' id='Add person_program_status table'>
+		<createTable tableName="person_program_status">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_routing_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_routing_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="program_status_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_program_status_program_status_id"
+					references="program_status(id)" />
+			</column>
+			<column name="program_status_change_reason_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_program_status_change_reason_program_status_id"
+					references="program_status_change_reason(id)" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="person_program_status_person_id"
+					references="person(id)" />
+			</column>
+			<column name="effective_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="expiration_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on person_program_status to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_program_status" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
 </databaseChangeLog>
