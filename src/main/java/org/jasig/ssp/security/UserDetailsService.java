@@ -1,6 +1,8 @@
 package org.jasig.ssp.security;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.model.Person;
@@ -8,6 +10,7 @@ import org.jasig.ssp.security.exception.EmailNotFoundException;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.security.exception.UserNotEnabledException;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +37,7 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 		UserDetailsContextMapper {
 
 	@Autowired
-	private transient DirectoryDataService directoryDataService;
+	private transient PersonAttributesService personAttributesService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserDetailsService.class);
@@ -42,6 +45,11 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 	public static final boolean ALL_AUTHENTICATED_USERS_CAN_CREATE_ACCOUNT = true;
 	public static final String PERMISSION_TO_CREATE_ACCOUNT = "ROLE_CAN_CREATE";
 
+	private static final String ATTRIBUTE_SCHOOLID = "schoolId";
+	private static final String ATTRIBUTE_FIRSTNAME = "firstName";
+	private static final String ATTRIBUTE_LASTNAME = "lastName";
+	private static final String ATTRIBUTE_PRIMARYEMAILADDRESS = "primaryEmailAddress";
+	
 	@Autowired
 	private transient PersonService personService;
 
@@ -75,19 +83,41 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 					"Unable to load {}'s record., creating user in ssp",
 					username);
 
+			System.out.println("1");
+			
 			if (hasAccountCreationPermission(authorities)) {
 				// At this point, we should already have authentication through
 				// ldap or uportal go ahead and create the user.
 				person = new Person();
 				person.setEnabled(true);
 				person.setUsername(username);
-				person.setFirstName(directoryDataService.getFirstNameForUserId(
-						username));
-				person.setLastName(directoryDataService.getLastNameForUserId(
-						username));
-				person.setPrimaryEmailAddress(directoryDataService
-						.getPrimaryEmailAddressForUserId(username));
-				// :TODO Set additional user attributes
+
+				System.out.println("2");
+				System.out.println(" ## personAttributesService="+personAttributesService.getClass().getName());
+				
+				try {
+					Map<String, List<String>> attr = personAttributesService
+														.getAttributes(username);
+										
+					if (attr.containsKey(ATTRIBUTE_SCHOOLID)) {
+						person.setSchoolId(attr.get(ATTRIBUTE_SCHOOLID).get(0));
+					}
+					if (attr.containsKey(ATTRIBUTE_FIRSTNAME)) {
+						person.setSchoolId(attr.get(ATTRIBUTE_FIRSTNAME).get(0));
+					}
+					if (attr.containsKey(ATTRIBUTE_LASTNAME)) {
+						person.setSchoolId(attr.get(ATTRIBUTE_LASTNAME).get(0));
+					}
+					if (attr.containsKey(ATTRIBUTE_PRIMARYEMAILADDRESS)) {
+						person.setSchoolId(attr.get(ATTRIBUTE_PRIMARYEMAILADDRESS).get(0));
+					}
+					// :TODO Set additional user attributes
+				} catch (ObjectNotFoundException onfe) {
+					throw new RuntimeException(onfe);
+				} catch (Exception e1) {
+					e1.printStackTrace(System.out);
+					throw new RuntimeException(e1);
+				}
 
 				person = personService.create(person);
 
