@@ -193,6 +193,21 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		return null;
 	}
 
+	/**
+	 * Save changes to the specified ID and object, for the specified person.
+	 * 
+	 * @param id
+	 *            the instance to update
+	 * @param personId
+	 *            the person
+	 * @param obj
+	 *            the full instance data to update
+	 * @return the updated instance
+	 * @throws ObjectNotFoundException
+	 *             If the specified ID could not be found.
+	 * @throws ValidationException
+	 *             If the updated data was not valid.
+	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	TO save(@PathVariable final UUID id,

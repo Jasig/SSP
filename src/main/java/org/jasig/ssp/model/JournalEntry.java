@@ -121,7 +121,7 @@ public class JournalEntry
 	@Override
 	protected int hashPrime() {
 		return 241;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/14/12 1:49 PM

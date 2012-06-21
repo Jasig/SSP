@@ -76,7 +76,7 @@ public class PersonConfidentialityDisclosureAgreement
 	@Override
 	protected int hashPrime() {
 		return 7;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/24/12 1:34 PM

@@ -115,7 +115,7 @@ public class PersonEducationPlan
 	@Override
 	protected int hashPrime() {
 		return 19;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:14 PM

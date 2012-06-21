@@ -860,17 +860,17 @@
 		<addColumn tableName="person">
 			<column name="student_type_id" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="person_student_type_id_student_type_id"
-					references="student_type(id)" />
+					foreignKeyName="person_student_type_id_student_type_id" references="student_type(id)" />
 			</column>
 		</addColumn>
 		<rollback>
-			<dropColumn tableName="person" columnName="student_type"/>
+			<dropColumn tableName="person" columnName="student_type" />
 		</rollback>
 	</changeSet>
-	
-	<changeSet id="drop JournalEntryJournalStepDetail table" author="daniel.bower">
-		<dropTable tableName="journal_entry_journal_step_detail"/>
+
+	<changeSet id="drop JournalEntryJournalStepDetail table"
+		author="daniel.bower">
+		<dropTable tableName="journal_entry_journal_step_detail" />
 		<rollback>
 			<createTable tableName="journal_entry_journal_step_detail">
 				<column name="id" type="uuid">
@@ -909,15 +909,15 @@
 
 			<sql>grant all on journal_entry_journal_step_detail to ssp</sql>
 		</rollback>
-		
-		
+
+
 		<!-- Theres a different assumption in the liquibase handling of timezones 
 			on postgres. Specifying "Without" timezone -->
 		<modifySql dbms="postgresql">
 			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 	</changeSet>
-	
+
 	<changeSet id="add JouralEntryDetail table" author="daniel.bower">
 		<createTable tableName="journal_entry_detail">
 			<column name="id" type="uuid">
@@ -953,7 +953,7 @@
 					references="journal_step_journal_step_detail(id)" />
 			</column>
 		</createTable>
-			
+
 		<sql>grant all on journal_entry_detail to ssp</sql>
 		<rollback>
 			<dropTable tableName="journal_entry_detail" />
@@ -966,7 +966,7 @@
 		</modifySql>
 
 	</changeSet>
-	
+
 	<changeSet id="Add Legacy MessageTemplates" author="daniel.bower">
 		<insert tableName="message_template">
 			<column name="id" value="0B7E484D-44E4-4F0D-8DB5-3518D015B495" />
@@ -980,7 +980,7 @@
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
 		</insert>
-		
+
 		<insert tableName="message_template">
 			<column name="id" value="5D183F35-023D-40EA-B8D9-66FBE190FFFB" />
 			<column name="name" value="Action Plan Email" />
@@ -1005,7 +1005,7 @@
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
 		</insert>
-		
+
 		<sql>
 <![CDATA[
 update message_template
@@ -1021,24 +1021,24 @@ set body = '<html><body><p>Hello ${fullName}!</p><p>Your Coach or Advisor has as
 where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 ]]>
 		</sql>
-		
+
 		<rollback>
 			<delete tableName="message_template">
 				<where>id = '0B7E484D-44E4-4F0D-8DB5-3518D015B495'</where>
 			</delete>
-			
+
 			<delete tableName="message_template">
 				<where>id = '5D183F35-023D-40EA-B8D9-66FBE190FFFB'</where>
 			</delete>
-			
+
 			<delete tableName="message_template">
 				<where>id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0'</where>
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="Additional Legacy MessageTemplates" author="daniel.bower">
-			<insert tableName="message_template">
+		<insert tableName="message_template">
 			<column name="id" value="AEC07252-1FF0-479D-A2EF-C0E017E1C05D" />
 			<column name="name" value="Action Plan Step Email" />
 			<column name="description" value="Action Plan Step Email" />
@@ -1062,7 +1062,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
 		</insert>
-		
+
 		<sql>
 <![CDATA[
 update message_template
@@ -1074,18 +1074,18 @@ set body = '${task.person.firstName},<br/>An Action Item identified through the 
 where id = '31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0';
 ]]>
 		</sql>
-		
+
 		<rollback>
 			<delete tableName="message_template">
 				<where>id = 'AEC07252-1FF0-479D-A2EF-C0E017E1C05D'</where>
 			</delete>
-			
+
 			<delete tableName="message_template">
 				<where>id = '31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0'</where>
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="Add CC to Message" author="daniel.bower">
 		<addColumn tableName="message">
 			<column name="carbon_copy" type="character varying(512)">
@@ -1093,10 +1093,10 @@ where id = '31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0';
 			</column>
 		</addColumn>
 		<rollback>
-			<dropColumn tableName="message" columnName="carbon_copy"/>
+			<dropColumn tableName="message" columnName="carbon_copy" />
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="Convert Early Alert Templates to HTML" author="daniel.bower">
 		<sql>
 			<![CDATA[
@@ -1323,7 +1323,7 @@ where id = 'b528c1ac-6104-435b-ae62-09fb5f9ef680';
 			<comment>Not rolling back to plain text</comment>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="Remove unused message template" author="daniel.bower">
 		<delete tableName="message_template">
 			<where>id = '7c945020-86b0-11e1-849a-0026b9e7ff4c'</where>
@@ -1332,7 +1332,7 @@ where id = 'b528c1ac-6104-435b-ae62-09fb5f9ef680';
 			<comment>Not restoring unused message template</comment>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="correct message template errors" author="daniel.bower">
 		<sql>
 <![CDATA[
@@ -1353,45 +1353,230 @@ set body = '<html><body><p>Hello ${fullName}!</p><p>Your Coach or Advisor has as
 where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 ]]>
 		</sql>
-		
-		<rollback >
+
+		<rollback>
 			<comment>Ignore rollback - fixes typos</comment>
 		</rollback>
 	</changeSet>
-	
+
 
 	<changeSet id="usernames must be unique" author="daniel.bower">
-		<addUniqueConstraint tableName="person" columnNames="username"/>
+		<addUniqueConstraint tableName="person"
+			columnNames="username" />
 		<!-- has autorollback support -->
 	</changeSet>
-	
-	
-	<!-- changeSet id="Additional Legacy MessageTemplates 2" author="daniel.bower">
-		<insert tableName="message_template">
-			<column name="id" value="919F6FF5-8F22-4684-8729-D615206A2644" />
-			<column name="name" value="Task Auto Created Email" />
-			<column name="description" value="Task Auto Created Email" />
-			<column name="subject" value="" />
-			<column name="body" value="EMPTY" />
-			<column name="created_date" valueDate="2012-05-17T10:00:00" />
-			<column name="modified_date" valueDate="2012-05-17T10:00:00" />
+
+
+	<!-- changeSet id="Additional Legacy MessageTemplates 2" author="daniel.bower"> 
+		<insert tableName="message_template"> <column name="id" value="919F6FF5-8F22-4684-8729-D615206A2644" 
+		/> <column name="name" value="Task Auto Created Email" /> <column name="description" 
+		value="Task Auto Created Email" /> <column name="subject" value="" /> <column 
+		name="body" value="EMPTY" /> <column name="created_date" valueDate="2012-05-17T10:00:00" 
+		/> <column name="modified_date" valueDate="2012-05-17T10:00:00" /> <column 
+		name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" /> <column 
+		name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" /> <column 
+		name="object_status" value="1" /> </insert> <sql> <![CDATA[ update message_template 
+		set body = '' where id = '919F6FF5-8F22-4684-8729-D615206A2644'; ]]> </sql> 
+		<rollback> <delete tableName="message_template"> <where>id = '919F6FF5-8F22-4684-8729-D615206A2644'</where> 
+		</delete> </rollback> </changeSet -->
+
+
+	<changeSet author='jon.adams' id='Add program_status table'>
+		<createTable tableName="program_status">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="character varying(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="special_service_group_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="special_service_group_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="program_status_change_reason_required" type="boolean"
+				defaultValueBoolean="false">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on program_status to ssp</sql>
+		<rollback>
+			<dropTable tableName="program_status" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet id="create reference data - program_status"
+		author="jon.adams">
+		<insert tableName="program_status">
+			<column name="id" value="B2D12527-5056-A51A-8054113116BAAB88" />
+			<column name="name" value="Active" />
+			<column name="description" value="Student is active in SSP" />
+			<column name="created_date" valueDate="2012-05-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T14:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
+			<column name="program_status_change_reason_required" value="0" />
 		</insert>
-		
-		<sql>
-<![CDATA[
-update message_template
-set body = ''
-where id = '919F6FF5-8F22-4684-8729-D615206A2644';
-]]>
-		</sql>
-		
+		<insert tableName="program_status">
+			<column name="id" value="B2D125A4-5056-A51A-8042D50B8EFF0DF1" />
+			<column name="name" value="Inactive" />
+			<column name="description" value="Student is inactive in SSP" />
+			<column name="created_date" valueDate="2012-05-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_change_reason_required" value="0" />
+		</insert>
+		<insert tableName="program_status">
+			<column name="id" value="B2D125C3-5056-A51A-8004F1DBABDE80C2" />
+			<column name="name" value="Non-participating" />
+			<column name="description" value="Student is not participating in ILP program" />
+			<column name="created_date" valueDate="2012-05-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_change_reason_required" value="0" />
+		</insert>
+		<insert tableName="program_status">
+			<column name="id" value="B2D125E3-5056-A51A-800F6891BC7D1DDC" />
+			<column name="name" value="Transitioned" />
+			<column name="description" value="Student has completed the ILP Program." />
+			<column name="created_date" valueDate="2012-05-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_change_reason_required" value="0" />
+		</insert>
+		<insert tableName="program_status">
+			<column name="id" value="B2D125F2-5056-A51A-80615E041339311D" />
+			<column name="name" value="Completed" />
+			<column name="description" value="Student has completed CAP assessment." />
+			<column name="created_date" valueDate="2012-05-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_change_reason_required" value="0" />
+		</insert>
+		<insert tableName="program_status">
+			<column name="id" value="B2D12640-5056-A51A-80CC91264965731A" />
+			<column name="name" value="No-Show" />
+			<column name="description" value="Student did not show up for an appointment" />
+			<column name="created_date" valueDate="2012-05-18T14:00:00" />
+			<column name="modified_date" valueDate="2012-05-18T14:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_change_reason_required" value="0" />
+		</insert>
 		<rollback>
-			<delete tableName="message_template">
-				<where>id = '919F6FF5-8F22-4684-8729-D615206A2644'</where>
+			<delete tableName="program_status">
+				<where>id='B2D12527-5056-A51A-8054113116BAAB88'</where>
+			</delete>
+			<delete tableName="program_status">
+				<where>id='B2D125A4-5056-A51A-8042D50B8EFF0DF1'</where>
+			</delete>
+			<delete tableName="program_status">
+				<where>id='B2D125C3-5056-A51A-8004F1DBABDE80C2'</where>
+			</delete>
+			<delete tableName="program_status">
+				<where>id='B2D125E3-5056-A51A-800F6891BC7D1DDC'</where>
+			</delete>
+			<delete tableName="program_status">
+				<where>id='B2D125F2-5056-A51A-80615E041339311D'</where>
+			</delete>
+			<delete tableName="program_status">
+				<where>id='B2D12640-5056-A51A-80CC91264965731A'</where>
 			</delete>
 		</rollback>
-	</changeSet -->
+	</changeSet>
+
+	<changeSet author='jon.adams' id='Add person_program_status table'>
+		<createTable tableName="person_program_status">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_routing_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="early_alert_routing_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="program_status_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_program_status_program_status_id"
+					references="program_status(id)" />
+			</column>
+			<column name="program_status_change_reason_id" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_program_status_change_reason_program_status_id"
+					references="program_status_change_reason(id)" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="person_program_status_person_id"
+					references="person(id)" />
+			</column>
+			<column name="effective_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="expiration_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on person_program_status to ssp</sql>
+		<rollback>
+			<dropTable tableName="person_program_status" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
 </databaseChangeLog>

@@ -37,8 +37,7 @@
 			<beans:property name="preAuthenticatedUserDetailsService" ref="userDetailsService"/>
 		</beans:bean>
 		
-		<beans:bean id="directoryDataService" 
-				class="org.jasig.ssp.security.uportal.UPortalDirectoryDataService" />
+		<beans:bean id="uPortalPersonAttributesService" class="org.jasig.ssp.service.impl.UPortalPersonAttributesService" />
 	</beans:beans>
 
 </beans:beans>

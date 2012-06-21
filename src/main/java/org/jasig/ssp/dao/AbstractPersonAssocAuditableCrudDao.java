@@ -10,6 +10,12 @@ import org.jasig.ssp.model.PersonAssocAuditable;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * Abstract CRUD DAO class for models with an associated Person reference
+ * 
+ * @param <T>
+ *            Auditable model
+ */
 public abstract class AbstractPersonAssocAuditableCrudDao<T extends PersonAssocAuditable>
 		extends AbstractAuditableCrudDao<T>
 		implements PersonAssocAuditableCrudDao<T> {
@@ -33,6 +39,5 @@ public abstract class AbstractPersonAssocAuditableCrudDao<T extends PersonAssocA
 		final Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("person", person));
 		return criteria.list();
-
 	}
 }

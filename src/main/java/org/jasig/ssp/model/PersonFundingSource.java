@@ -86,7 +86,7 @@ public class PersonFundingSource
 	@Override
 	protected int hashPrime() {
 		return 23;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:16 PM

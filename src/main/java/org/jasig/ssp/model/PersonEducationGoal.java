@@ -104,7 +104,7 @@ public class PersonEducationGoal
 	@Override
 	protected int hashPrime() {
 		return 13;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:17 PM

@@ -214,7 +214,7 @@ public class Challenge extends AbstractReference implements Auditable {
 	@Override
 	protected int hashPrime() {
 		return 47;
-	};
+	}
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:48 AM

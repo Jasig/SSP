@@ -12,13 +12,13 @@ import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
 import org.jasig.portlet.utils.rest.SimpleCrossContextRestApiInvoker;
 import org.jasig.ssp.security.exception.UPortalSecurityException;
+import org.jasig.ssp.security.uportal.UPortalRequestContextFilter;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Service
 public class UPortalPersonAttributesService implements PersonAttributesService {
 
 	private static final String PARAM_USERNAME = "username";
@@ -29,6 +29,9 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UPortalPersonAttributesService.class);
+	
+	@Autowired
+	private UPortalRequestContextFilter uPortalRequestContextFilter;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -74,6 +77,19 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 
 		return rslt;
 
+	}
+
+	@Override
+	public Map<String, List<String>> getAttributes(String username)
+			throws ObjectNotFoundException {
+		
+		final HttpServletRequest req = uPortalRequestContextFilter
+										.getHttpServletRequest();
+		final HttpServletResponse res = uPortalRequestContextFilter
+										.getHttpServletResponse();
+		
+		return getAttributes(req, res, username);
+		
 	}
 
 }
