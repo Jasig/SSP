@@ -7,6 +7,9 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
 	<changeSet author='daniel.bower' id='Add person_demographics table'>
 		<createTable tableName="person_demographics">
 			<column name="id" type="uuid">
@@ -37,40 +40,40 @@
 			<column name="child_care_needed" type="boolean"
 				defaultValueBoolean="false" />
 			<column name="employed" type="boolean" defaultValueBoolean="false" />
-			<column name="anticipated_start_term" type="character varying(25)">
+			<column name="anticipated_start_term" type="${nvarchar.type}(25)">
 				<constraints nullable="true" />
 			</column>
-			<column name="anticipated_start_year" type="character varying(4)">
+			<column name="anticipated_start_year" type="${nvarchar.type}(4)">
 				<constraints nullable="true" />
 			</column>
-			<column name="country_of_residence" type="character varying(50)">
+			<column name="country_of_residence" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
-			<column name="payment_status" type="character varying(25)">
+			<column name="payment_status" type="${nvarchar.type}(25)">
 				<constraints nullable="true" />
 			</column>
-			<column name="country_of_citizenship" type="character varying(50)">
+			<column name="country_of_citizenship" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
 			<column name="number_of_children" type="int">
 				<constraints nullable="true" />
 			</column>
-			<column name="child_ages" type="character varying(50)">
+			<column name="child_ages" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
-			<column name="place_of_employment" type="character varying(50)">
+			<column name="place_of_employment" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
-			<column name="wage" type="character varying(50)">
+			<column name="wage" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
-			<column name="total_hours_worked_per_week" type="character varying(3)">
+			<column name="total_hours_worked_per_week" type="${nvarchar.type}(3)">
 				<constraints nullable="true" />
 			</column>
-			<column name="shift" type="character varying(12)">
+			<column name="shift" type="${nvarchar.type}(12)">
 				<constraints nullable="true" />
 			</column>
-			<column name="gender" type="character varying(12)">
+			<column name="gender" type="${nvarchar.type}(12)">
 				<constraints nullable="true" />
 			</column>
 			<column name="marital_status_id" type="uuid">
@@ -93,10 +96,7 @@
 					foreignKeyName="person_demographics_veteran_status_id_veteran_status_id"
 					references="veteran_status(id)" />
 			</column>
-			<column name="coach_id" type="uuid">
-				<constraints nullable="true"
-					foreignKeyName="person_demographics_coach_id_person_id" references="person(id)" />
-			</column>
+			<column name="coach_id" type="uuid" />
 		</createTable>
 
 		<sql>grant all on person_demographics to ssp</sql>
@@ -122,20 +122,22 @@
 			</column>
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" foreignKeyName="person_education_goal_created_by_person_id"
+				<constraints nullable="false"
+					foreignKeyName="person_education_goal_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="person_education_goal_modified_by_person_id" references="person(id)" />
+					foreignKeyName="person_education_goal_modified_by_person_id"
+					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(50)">
+			<column name="description" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
-			<column name="planned_occupation" type="character varying(50)">
+			<column name="planned_occupation" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
 			<column name="how_sure_about_major" type="int">
@@ -187,7 +189,7 @@
 			<column name="registered_for_classes" type="boolean" />
 			<column name="college_degree_for_parents" type="boolean" />
 			<column name="special_needs" type="boolean" />
-			<column name="grade_typically_earned" type="character varying(2)">
+			<column name="grade_typically_earned" type="${nvarchar.type}(2)">
 				<constraints nullable="true" />
 			</column>
 			<column name="student_status_id" type="uuid">
@@ -235,7 +237,7 @@
 				<constraints nullable="false"
 					foreignKeyName="person_challenge_person_id_person_id" references="person(id)" />
 			</column>
-			<column name="description" type="character varying(255)">
+			<column name="description" type="${nvarchar.type}(255)">
 				<constraints nullable="true" />
 			</column>
 			<column name="challenge_id" type="uuid">
@@ -285,7 +287,7 @@
 					foreignKeyName="person_education_level_person_id_person_id"
 					references="person(id)" />
 			</column>
-			<column name="description" type="character varying(255)">
+			<column name="description" type="${nvarchar.type}(255)">
 				<constraints nullable="true" />
 			</column>
 			<column name="education_level_id" type="uuid">
@@ -334,7 +336,7 @@
 				<constraints nullable="false"
 					foreignKeyName="person_funding_source_person_person_id" references="person(id)" />
 			</column>
-			<column name="description" type="character varying(255)">
+			<column name="description" type="${nvarchar.type}(255)">
 				<constraints nullable="true" />
 			</column>
 			<column name="funding_source_id" type="uuid">
