@@ -1,16 +1,9 @@
 package org.jasig.ssp.transferobject.reports;
 
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
-
-import org.jasig.ssp.model.EarlyAlert;
-import org.jasig.ssp.transferobject.AbstractAuditableTO;
-import org.jasig.ssp.transferobject.TransferObject;
-
 
 /**
  * Early Alert transfer object
@@ -21,8 +14,6 @@ import org.jasig.ssp.transferobject.TransferObject;
 public class AddressLabelSearchTO
 		implements Serializable {
 
- 
- 
 	/**
 	 * 
 	 */
@@ -37,7 +28,7 @@ public class AddressLabelSearchTO
 	private Integer anticipatedStartYear;
 	private UUID studentTypeId;
 	private Date registrationTerm;
-	private Date registrationYear;		
+	private Date registrationYear;
 
 	/**
 	 * Empty constructor
@@ -152,10 +143,5 @@ public class AddressLabelSearchTO
 	public void setRegistrationYear(Date registrationYear) {
 		this.registrationYear = registrationYear;
 	}
-
-
-	
-	
-	
 
 }

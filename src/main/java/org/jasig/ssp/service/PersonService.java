@@ -1,14 +1,11 @@
 package org.jasig.ssp.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.tool.IntakeService;
-import org.jasig.ssp.transferobject.PagingTO;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -88,23 +85,19 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return The specified Person instance.
 	 */
 	Person getByStudentId(String studentId) throws ObjectNotFoundException;
-	
-	
-	
-	
 
-    /**
-     * Retrieve a list of person objects based on specific criteria	
-     * @param addressLabelSearchTO
-     * @param sAndP
-     * @return
-     * @throws ObjectNotFoundException
-     */
-	//TODO: change params to use a TO
-	List<Person> peopleFromCriteria(AddressLabelSearchTO addressLabelSearchTO,					
+	/**
+	 * Retrieve a list of person objects based on specific criteria
+	 * 
+	 * @param addressLabelSearchTO
+	 * @param sAndP
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	// TODO: change params to use a TO
+	List<Person> peopleFromCriteria(AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException;
 
-	
 	/**
 	 * 
 	 * @param specialServiceGroupIDs
@@ -114,7 +107,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 */
 	List<Person> peopleFromSpecialServiceGroups(
 			List<String> specialServiceGroupIDs,
-			SortingAndPaging createForSingleSort) throws ObjectNotFoundException;
-			
-			
+			SortingAndPaging createForSingleSort)
+			throws ObjectNotFoundException;
+
 }

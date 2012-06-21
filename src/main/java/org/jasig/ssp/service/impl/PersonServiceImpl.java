@@ -1,6 +1,5 @@
 package org.jasig.ssp.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,14 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * @author codynet
- *
- */
-/**
- * @author codynet
- *
- */
 @Service
 @Transactional
 public class PersonServiceImpl implements PersonService {
@@ -123,30 +114,27 @@ public class PersonServiceImpl implements PersonService {
 			final SortingAndPaging sAndP) {
 		return dao.getPeopleInList(personIds, sAndP);
 	}
-	
-	
 
-    /**
-     * Used for Specific Report "Address Labels"
-     */
-	public List<Person> peopleFromCriteria(AddressLabelSearchTO addressLabelSearchTO,				
-			final SortingAndPaging sAndP) throws ObjectNotFoundException{
-		
-		//TODO: use a TO here
+	/**
+	 * Used for Specific Report "Address Labels"
+	 */
+	@Override
+	public List<Person> peopleFromCriteria(
+			AddressLabelSearchTO addressLabelSearchTO,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException {
+
+		// TODO: use a TO here
 		return dao.getPeopleByCriteria(addressLabelSearchTO,
-				sAndP);	
+				sAndP);
 	}
- 
+
 	@Override
 	public List<Person> peopleFromSpecialServiceGroups(
 			List<String> specialServiceGroupIDs,
-			SortingAndPaging sAndP) throws ObjectNotFoundException{
-		//TODO: use a TO here
+			SortingAndPaging sAndP) throws ObjectNotFoundException {
+		// TODO: use a TO here
 		return dao.getPeopleBySpecialServices(specialServiceGroupIDs,
-				sAndP);	
+				sAndP);
 	}
-	
-	
-	
-	
+
 }
