@@ -10,7 +10,9 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -133,63 +135,84 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Person> getPeopleByCriteria(
-			Date intakeDatefrom, 
-    		Date intakeDateTo,
-			String homeDepartment,
-			String coachId,
-			String programStatus,
-			String specialServiceGroupId,
-			String referralSourcesId,
-			String anticipatedStartTerm,
-			Integer anticipatedStartYear,
-			String studentTypeId,
-			Date registrationTerm,
-			Date registrationYear,						
+			AddressLabelSearchTO addressLabelSearchTO,					
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 				
 		final Criteria criteria = createCriteria(sAndP);
 		
 		//TODO: Implement Search Critera
-		if(intakeDatefrom != null){
+		if(addressLabelSearchTO.getIntakeDateTo() != null){
 		//	criteria.add(Restrictions.gt("studentIntakeRequestDate",intakeDatefrom));
 		}
-		if(intakeDatefrom != null){
+		if(addressLabelSearchTO.getIntakeDateTo() != null){
 		//	criteria.add(Restrictions.lt("studentIntakeRequestDate",intakeDateTo));
 		}		
-		if(homeDepartment != null){
+		if(addressLabelSearchTO.getHomeDepartment() != null){
 		//	criteria.add(Restrictions.eq("homeDepartment",homeDepartment));
 		}
-		if(coachId != null){
+		if(addressLabelSearchTO.getCoachId() != null){
 			//criteria.add(Restrictions.eq("coachId",coachId));	
 		}
-		if(programStatus != null){
+		if(addressLabelSearchTO.getProgramStatus() != null){
 			//criteria.add(Restrictions.eq("programStatus",programStatus));	
 		}
-		if(specialServiceGroupId != null){
+		if(addressLabelSearchTO.getSpecialServiceGroupId() != null){
 			//criteria.add(Restrictions.eq("specialServiceGroupId",specialServiceGroupId));
 		}
-		if(referralSourcesId != null){
+		if(addressLabelSearchTO.getReferralSourcesId() != null){
 			//criteria.add(Restrictions.eq("referralSourcesId",referralSourcesId));
 		}
-		if(anticipatedStartTerm != null){
+		if(addressLabelSearchTO.getAnticipatedStartTerm() != null){
 			//criteria.add(Restrictions.eq("anticipatedStartTerm",anticipatedStartTerm));
 		}
-		if(anticipatedStartYear != null){
+		if(addressLabelSearchTO.getAnticipatedStartYear() != null){
 			//criteria.add(Restrictions.eq("anticipatedStartYear",anticipatedStartYear));
 		}
-		if(studentTypeId != null){
+		if(addressLabelSearchTO.getStudentTypeId() != null){
 			//criteria.add(Restrictions.eq("studentTypeId",studentTypeId));
 		}
-		if(registrationTerm != null){
+		if(addressLabelSearchTO.getRegistrationTerm() != null){
 			//criteria.add(Restrictions.eq("registrationTerm",registrationTerm));
 		}
-		if(registrationYear != null){
+		if(addressLabelSearchTO.getRegistrationYear() != null){
 			//criteria.add(Restrictions.eq("registrationYear",registrationYear));
 		}
 		
-
-		return criteria.list();
+		return criteria.list();		
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * Retrieves a List of People, likely used by the Address Labels Report
+	 * @param intakeDatefrom
+	 * @param intakeDateTo
+	 * @param homeDepartment
+	 * @param coachId
+	 * @param programStatus
+	 * @param specialServiceGroupId
+	 * @param referralSourcesId
+	 * @param anticipatedStartTerm
+	 * @param anticipatedStartYear
+	 * @param studentTypeId
+	 * @param registrationTerm
+	 * @param registrationYear
+	 * @param sAndP
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Person> getPeopleBySpecialServices(
+			List<String> SpecialServiceGroups,					
+			final SortingAndPaging sAndP) throws ObjectNotFoundException {
+				
+		final Criteria criteria = createCriteria(sAndP);
 		
+		
+		return criteria.list();		
 	}
 	
 	

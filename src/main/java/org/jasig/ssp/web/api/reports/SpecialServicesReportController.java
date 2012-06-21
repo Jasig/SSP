@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -69,11 +68,11 @@ import com.sun.mail.iap.Response;
 
 //TODO: Add PreAuthorize
 @Controller
-@RequestMapping("/1/report/AddressLabels")
-public class AddressLabelsReportController extends BaseController {
+@RequestMapping("/1/report/SpecialServices")
+public class SpecialServicesReportController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AddressLabelsReportController.class);
+			.getLogger(SpecialServicesReportController.class);
 	
 	@Autowired
 	private transient PersonService service;
@@ -84,50 +83,30 @@ public class AddressLabelsReportController extends BaseController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	void getAddressLabels(HttpServletResponse response,
-			final @RequestParam(required = false) ObjectStatus status,	
-			
-			final @RequestParam(required = false) Date intakeDatefrom, 
-			final @RequestParam(required = false) Date intakeDateTo,
-			final @RequestParam(required = false) UUID homeDepartment,
-			final @RequestParam(required = false) UUID coachId,
-			final @RequestParam(required = false) UUID programStatus,
-			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
-			final @RequestParam(required = false) UUID referralSourcesId,
-			final @RequestParam(required = false) String anticipatedStartTerm,
-			final @RequestParam(required = false) Integer anticipatedStartYear,
-			final @RequestParam(required = false) UUID studentTypeId,
-			final @RequestParam(required = false) Date registrationTerm,
-			final @RequestParam(required = false) Date registrationYear,
-			
-			
+	void getSpecialServices(HttpServletResponse response,
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) List<String> specialServiceGroupIDs,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) throws ObjectNotFoundException, JRException, IOException{
 
-		 
+		//List<String> specialServiceGroupIDs;
 		
-		
-		AddressLabelSearchTO searchForm = new AddressLabelSearchTO(intakeDateTo, homeDepartment,
-			coachId, programStatus, specialServiceGroupIds,
-			referralSourcesId, anticipatedStartTerm,
-			anticipatedStartYear, studentTypeId,
-			registrationTerm, registrationYear);
-		
-		
-		final List<Person> people = service.peopleFromCriteria(
-				searchForm,		
+		final List<Person> people = service.peopleFromSpecialServiceGroups(
+				specialServiceGroupIDs,// addressLabelSearchTO,				
 				SortingAndPaging
 			.createForSingleSort(status, start, limit, sort, sortDirection,
 					null));			
 		
+		//LOGGER.debug("Student TypeID: " + addressLabelSearchTO.getStudentTypeId());
+		
 			Map parameters = new HashMap();
-			parameters.put("ReportTitle", "Address Report");
+			parameters.put("ReportTitle", "Special Service Groups Report");
 			parameters.put("DataFile", "Person.java - Bean Array");			
 			
 			JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(people.toArray());
-			InputStream is = getClass().getResourceAsStream("/reports/addressLabels.jasper");			
+			InputStream is = getClass().getResourceAsStream("/reports/specialServiceGroups.jasper");			
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
 			InputStream decodedInput=new ByteArrayInputStream(os.toByteArray());
