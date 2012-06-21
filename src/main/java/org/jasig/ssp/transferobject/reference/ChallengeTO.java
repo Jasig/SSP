@@ -67,17 +67,34 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		from(model);
 	}
 
+	public ChallengeTO(final Challenge model,
+			final boolean skipReferrals) {
+		super();
+		from(model, skipReferrals);
+	}
+
 	public static List<ChallengeTO> toTOList(
 			final Collection<Challenge> models) {
+		return toTOList(models, false);
+	}
+
+	public static List<ChallengeTO> toTOList(
+			final Collection<Challenge> models,
+			final boolean skipReferrals) {
 		final List<ChallengeTO> tObjects = Lists.newArrayList();
 		for (Challenge model : models) {
-			tObjects.add(new ChallengeTO(model));
+			tObjects.add(new ChallengeTO(model, skipReferrals));
 		}
 		return tObjects;
 	}
 
 	@Override
 	public final void from(@NotNull final Challenge model) {
+		from(model, false);
+	}
+
+	private final void from(@NotNull final Challenge model,
+			final boolean skipReferrals) {
 		super.from(model);
 
 		selfHelpGuideQuestion = model.getSelfHelpGuideQuestion();
@@ -102,7 +119,8 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 					.getId();
 		}
 
-		if ((model.getChallengeChallengeReferrals() == null)
+		if (skipReferrals
+				|| (model.getChallengeChallengeReferrals() == null)
 				|| model.getChallengeChallengeReferrals().isEmpty()) {
 			challengeChallengeReferrals = new ArrayList<ChallengeReferralTO>();
 		} else {
