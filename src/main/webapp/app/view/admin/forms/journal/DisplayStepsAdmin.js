@@ -62,7 +62,14 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
      		                   action: 'delete',
      		                   itemId: 'deleteButton'
      		               }]
-     		           }]    	
+     		           },{
+    		               xtype: 'toolbar',
+      		               dock: 'top',
+      		               items: [{
+      		                         xtype: 'label',
+      		                         text: 'Associate items by dragging a Step onto a Track folder'
+      		                       }]  
+      		            }]    	
     	});
     	
     	return this.callParent(arguments);

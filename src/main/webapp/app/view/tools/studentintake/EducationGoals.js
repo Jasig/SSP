@@ -3,16 +3,16 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 	alias: 'widget.studentintakeeducationgoals',
 	id : "StudentIntakeEducationGoals",   
     width: "100%",
-    height: "100%",
-    
+    height: "100%", 
     initComponent: function() {	
 		Ext.apply(this, 
 				{
 					autoScroll: true,
 				    bodyPadding: 5,
-				    layout: "anchor",
+				    border: 0,
+				    layout: 'anchor',
 				    defaults: {
-				        anchor: "100%"
+				        anchor: '100%'
 				    },
 				    fieldDefaults: {
 				        msgTarget: 'side',

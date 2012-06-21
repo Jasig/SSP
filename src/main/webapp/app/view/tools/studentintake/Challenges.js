@@ -4,10 +4,11 @@ Ext.define('Ssp.view.tools.studentintake.Challenges', {
 	id : 'StudentIntakeChallenges',
     width: '100%',
     height: '100%',
-    autoScroll: true,
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
+		    	    autoScroll: true,
+					border: 0,	
 				    bodyPadding: 5,
 				    layout: 'anchor',
 				    defaults: {

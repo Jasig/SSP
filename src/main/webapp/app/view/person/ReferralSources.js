@@ -5,7 +5,7 @@ Ext.define('Ssp.view.person.ReferralSources', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.ReferralSourcesViewController',
     inject: {
-    	store: 'referralSourcesStore'
+    	store: 'referralSourcesBindStore'
     },
 	width: '100%',
     height: '100%',
@@ -20,6 +20,7 @@ Ext.define('Ssp.view.person.ReferralSources', {
 			            name: 'referralSourceIds',
 			            itemId: 'referralSourcesItemSelector',
 			            anchor: '100%',
+			            height: 200,
 			            fieldLabel: 'Referral Sources',
 			            store: this.store,
 			            displayField: 'name',

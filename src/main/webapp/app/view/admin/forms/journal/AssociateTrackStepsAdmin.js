@@ -25,13 +25,6 @@ Ext.define('Ssp.view.admin.forms.journal.AssociateTrackStepsAdmin', {
 			        }
 			     },
     			 dockedItems: [{
-		               xtype: 'toolbar',
-  		               dock: 'top',
-  		               items: [{
-  		                         xtype: 'label',
-  		                         text: 'Associate items by dragging a Step onto a Track folder'
-  		                       }]  
-  		               },{
      				        dock: 'top',
      				        xtype: 'toolbar',
      				        items: [{
@@ -40,7 +33,7 @@ Ext.define('Ssp.view.admin.forms.journal.AssociateTrackStepsAdmin', {
      				            xtype: 'button',
      				            itemId: 'deleteAssociationButton'
      				        }]
-     		    	    } ] 
+     		    	    }] 
      		       	
     	});
     	

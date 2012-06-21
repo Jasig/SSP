@@ -8,6 +8,7 @@ Ext.define('Ssp.view.tools.studentintake.Funding', {
 		Ext.apply(this, 
 				{
 					autoScroll: true,
+					border: 0,
 				    bodyPadding: 5,
 				    layout: 'anchor',
 				    defaults: {

@@ -62,6 +62,13 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
      		                   action: 'delete',
      		                   itemId: 'deleteButton'
      		               }]
+     		           },{
+     		               xtype: 'toolbar',
+     		               dock: 'top',
+     		               items: [{
+     	                      xtype: 'label',
+     	                       text: 'Associate items by dragging a Challenge onto a Category folder'
+     	                     }]
      		           }]    	
     	});
     	

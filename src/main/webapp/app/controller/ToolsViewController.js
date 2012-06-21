@@ -19,6 +19,9 @@ Ext.define('Ssp.controller.ToolsViewController', {
 	},
 	
 	init: function() {
+		// Retrieve the tools available to the current person
+		// this.person.get('tools') );
+
 		return this.callParent(arguments);
     }, 
     
@@ -29,6 +32,11 @@ Ext.define('Ssp.controller.ToolsViewController', {
  
     	this.appEventsController.assignEvent({eventName: 'viewHistory', callBackFunc: this.onViewHistory, scope: this});		
     	this.appEventsController.assignEvent({eventName: 'loadPerson', callBackFunc: this.onLoadPerson, scope: this});
+    
+    	if (this.person.get('id') != "")
+    	{
+    		this.loadPerson();
+    	}
     },
 
     destroy: function() {
@@ -39,9 +47,12 @@ Ext.define('Ssp.controller.ToolsViewController', {
     },
     
     onLoadPerson: function(){
-		// this.person.get('tools') );
+    	this.loadPerson();
+    },
+    
+    loadPerson: function(){
 		this.getView().getSelectionModel().select(0);
-		this.loadTool('profile');    	
+		this.loadTool('profile');  
     },
     
 	onItemClick: function(grid,record,item,index){ 

@@ -16,7 +16,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				{
 					autoScroll: true,
 					bodyPadding: 5,
-				    
+					border: 0,
 				    layout: 'anchor',
 				    defaults: {
 				        anchor: '100%'
