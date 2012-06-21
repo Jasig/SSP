@@ -13,7 +13,7 @@ import org.jasig.portlet.utils.rest.RestResponse;
 import org.jasig.portlet.utils.rest.SimpleCrossContextRestApiInvoker;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UPortalSecurityException;
-import org.jasig.ssp.security.uportal.UPortalRequestContextFilter;
+import org.jasig.ssp.security.uportal.RequestAndResponseAccessFilter;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 			.getLogger(UPortalPersonAttributesService.class);
 
 	@Autowired
-	private transient UPortalRequestContextFilter uPortalRequestContextFilter;
+	private transient RequestAndResponseAccessFilter requestAndResponseAccessFilter;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -111,12 +111,17 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 	public PersonAttributesResult getAttributes(final String username)
 			throws ObjectNotFoundException {
 
-		final HttpServletRequest req = uPortalRequestContextFilter
+		final HttpServletRequest req = requestAndResponseAccessFilter
 				.getHttpServletRequest();
-		final HttpServletResponse res = uPortalRequestContextFilter
+		final HttpServletResponse res = requestAndResponseAccessFilter
 				.getHttpServletResponse();
 
-		return getAttributes(req, res, username);
+		if ((req == null) || (res == null)) {
+			throw new UnsupportedOperationException(
+					"Uportal attributes may only be fetched when a HttpServletRequest and HttpServletResponse are available");
+		} else {
+			return getAttributes(req, res, username);
+		}
 
 	}
 
