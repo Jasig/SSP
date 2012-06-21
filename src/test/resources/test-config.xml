@@ -101,8 +101,9 @@
 		<constructor-arg ref="ldapContextSource" />
 	</bean>
 	
-	<bean id="directoryDataService" 
-			class="org.jasig.ssp.security.LdapDirectoryDataService"/>
+	<bean id="ldapPersonAttributesService" 
+			class="org.jasig.ssp.service.impl.LdapPersonAttributesService"/>
+
 	
 			
 	<!-- Don't setup a javaMailSender in here, as the MessageService will 
