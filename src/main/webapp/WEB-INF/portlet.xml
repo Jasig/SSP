@@ -121,7 +121,8 @@
 		</security-role-ref>
 	</portlet>
 	
-
+	
+	
     <portlet>
         <portlet-name>SSP</portlet-name>
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
@@ -216,6 +217,108 @@
 			<role-link>Anonymous</role-link>
 		</security-role-ref>
     </portlet>
+    
+    
+    
+    <!-- MY TEST -->
+    <portlet>
+		<portlet-name>SSP Reports</portlet-name>
+		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/spring/portlet/SSP-Reports-portlet.xml</value>
+		</init-param>
+		<!-- This value is to 0 in dev, can set to cache at a positive value in seconds 
+			for caching, or -1 to never expire cache -->
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>SSP Reports</title>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>AccessType_ARC</role-name>
+			<role-link>Academic Resource Center</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>AccessType_CNSL</role-name>
+			<role-link>Counseling Services</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>AccessType_DIS</role-name>
+			<role-link>Disability</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>AccessType_DSW</role-name>
+			<role-link>Displaced Workers</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>AccessType_EAL</role-name>
+			<role-link>Early Alert</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>AccessType_ESL</role-name>
+			<role-link>English as a Second Language</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>AccessType_FFC</role-name>
+			<role-link>Fast Forward</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>AccessType_ILP</role-name>
+			<role-link>Individualized Learning Plan</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>AccessType_MGR</role-name>
+			<role-link>Manager</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>AccessType_STAFF</role-name>
+			<role-link>Staff</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Academic_Counselor_Advisor</role-name>
+			<role-link>Academic Counselor or Advisor</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Counselor</role-name>
+			<role-link>Counselor</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Developer</role-name>
+			<role-link>Developer</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Faculty</role-name>
+			<role-link>Faculty</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Management</role-name>
+			<role-link>Management</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Student</role-name>
+			<role-link>Student</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Super_User</role-name>
+			<role-link>Super User</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Support_Staff</role-name>
+			<role-link>Support Staff</role-link>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>Role_Anonymous</role-name>
+			<role-link>Anonymous</role-link>
+		</security-role-ref>
+	</portlet>
+    
+    
+    
+    
     
 
 	<filter>

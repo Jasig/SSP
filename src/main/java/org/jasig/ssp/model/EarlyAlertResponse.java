@@ -157,7 +157,7 @@ public class EarlyAlertResponse
 	@Override
 	protected int hashPrime() {
 		return 233;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 3:17 PM

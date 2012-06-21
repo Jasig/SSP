@@ -69,7 +69,11 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 	 */
 	@Before
 	public void setUp() {
-		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
+				"ROLE_PERSON_EARLY_ALERT_WRITE",
+				"ROLE_PERSON_EARLY_ALERT_RESPONSE_READ",
+				"ROLE_PERSON_EARLY_ALERT_RESPONSE_WRITE",
+				"ROLE_PERSON_EARLY_ALERT_RESPONSE_DELETE");
 	}
 
 	/**

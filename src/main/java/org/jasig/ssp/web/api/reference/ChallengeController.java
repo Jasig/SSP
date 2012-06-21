@@ -10,6 +10,7 @@ import org.jasig.ssp.factory.reference.ChallengeTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
@@ -32,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/reference/challenge")
 public class ChallengeController
@@ -74,6 +74,7 @@ public class ChallengeController
 	}
 
 	@RequestMapping(value = "/{id}/challengeReferral/", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagingTO<ChallengeReferralTO, ChallengeReferral> getChallengeReferralsForChallenge(
 			@PathVariable final UUID id,

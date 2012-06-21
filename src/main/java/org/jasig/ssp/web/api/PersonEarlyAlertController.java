@@ -20,7 +20,6 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * <p>
  * Mapped to URI path <code>/1/person/{personId}/earlyAlert</code>
  */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 public class PersonEarlyAlertController extends
 		AbstractPersonAssocController<EarlyAlert, EarlyAlertTO> {
@@ -70,7 +68,6 @@ public class PersonEarlyAlertController extends
 	// Overriding to specify full request path since we needed a custom create
 	// method
 	@Override
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	EarlyAlertTO get(final @PathVariable UUID id,
@@ -80,7 +77,6 @@ public class PersonEarlyAlertController extends
 	}
 
 	@Override
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/", method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertTO create(@PathVariable final UUID personId,
@@ -90,19 +86,16 @@ public class PersonEarlyAlertController extends
 	}
 
 	@Override
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	EarlyAlertTO save(@PathVariable final UUID id,
 			@PathVariable final UUID personId,
 			@Valid @RequestBody final EarlyAlertTO obj)
-			throws ObjectNotFoundException, ValidationException
-	{
+			throws ObjectNotFoundException, ValidationException {
 		return super.save(id, personId, obj);
 	}
 
 	@Override
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id,
@@ -112,7 +105,6 @@ public class PersonEarlyAlertController extends
 
 	// Overriding because the default sort column needs to be unique
 	@Override
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/", method = RequestMethod.GET)
 	public @ResponseBody
 	PagingTO<EarlyAlertTO, EarlyAlert> getAll(
@@ -122,8 +114,9 @@ public class PersonEarlyAlertController extends
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
-			throws ObjectNotFoundException
-	{
+			throws ObjectNotFoundException {
+
+		checkPermissionForOp("READ");
 
 		final Person person = personService.get(personId);
 		final PagingWrapper<EarlyAlert> data = getService().getAllForPerson(
@@ -135,12 +128,14 @@ public class PersonEarlyAlertController extends
 				getFactory().asTOList(data.getRows()));
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/1/person/earlyAlert/", method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertTO create(@RequestParam final String studentId,
 			@Valid @RequestBody final EarlyAlertTO obj)
 			throws ObjectNotFoundException, ValidationException {
+
+		checkPermissionForOp("wRITE");
+
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send with an ID to the create method. Did you mean to use the save method instead?");
@@ -176,5 +171,10 @@ public class PersonEarlyAlertController extends
 		obj.setPersonId(personId);
 
 		return super.create(personId, obj);
+	}
+
+	@Override
+	public String permissionBaseName() {
+		return "EARLY_ALERT";
 	}
 }

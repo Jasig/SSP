@@ -62,7 +62,10 @@ public class PersonEarlyAlertControllerHttpIntegrationTest
 	@Before
 	public void setUp() {
 		super.setUp();
-		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
+				"ROLE_PERSON_EARLY_ALERT_READ",
+				"ROLE_PERSON_EARLY_ALERT_WRITE",
+				"ROLE_PERSON_EARLY_ALERT_DELETE");
 	}
 
 	/**

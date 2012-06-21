@@ -1,6 +1,5 @@
 package org.jasig.ssp.dao;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -106,15 +106,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 				.add(Restrictions.eq("schoolId", studentId))
 				.uniqueResult();
 	}
-	
-	
-	
-	
-	
-	
-	//TODO: Implement with a TO
+
+	// TODO: Implement with a TO
 	/**
 	 * Retrieves a List of People, likely used by the Address Labels Report
+	 * 
 	 * @param intakeDatefrom
 	 * @param intakeDateTo
 	 * @param homeDepartment
@@ -133,66 +129,79 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Person> getPeopleByCriteria(
-			Date intakeDatefrom, 
-    		Date intakeDateTo,
-			String homeDepartment,
-			String coachId,
-			String programStatus,
-			String specialServiceGroupId,
-			String referralSourcesId,
-			String anticipatedStartTerm,
-			Integer anticipatedStartYear,
-			String studentTypeId,
-			Date registrationTerm,
-			Date registrationYear,						
+			AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-				
+
 		final Criteria criteria = createCriteria(sAndP);
-		
-		//TODO: Implement Search Critera
-		if(intakeDatefrom != null){
-		//	criteria.add(Restrictions.gt("studentIntakeRequestDate",intakeDatefrom));
+
+		// TODO: Implement Search Critera
+		if (addressLabelSearchTO.getIntakeDateTo() != null) {
+			// criteria.add(Restrictions.gt("studentIntakeRequestDate",intakeDatefrom));
 		}
-		if(intakeDatefrom != null){
-		//	criteria.add(Restrictions.lt("studentIntakeRequestDate",intakeDateTo));
-		}		
-		if(homeDepartment != null){
-		//	criteria.add(Restrictions.eq("homeDepartment",homeDepartment));
+		if (addressLabelSearchTO.getIntakeDateTo() != null) {
+			// criteria.add(Restrictions.lt("studentIntakeRequestDate",intakeDateTo));
 		}
-		if(coachId != null){
-			//criteria.add(Restrictions.eq("coachId",coachId));	
+		if (addressLabelSearchTO.getHomeDepartment() != null) {
+			// criteria.add(Restrictions.eq("homeDepartment",homeDepartment));
 		}
-		if(programStatus != null){
-			//criteria.add(Restrictions.eq("programStatus",programStatus));	
+		if (addressLabelSearchTO.getCoachId() != null) {
+			// criteria.add(Restrictions.eq("coachId",coachId));
 		}
-		if(specialServiceGroupId != null){
-			//criteria.add(Restrictions.eq("specialServiceGroupId",specialServiceGroupId));
+		if (addressLabelSearchTO.getProgramStatus() != null) {
+			// criteria.add(Restrictions.eq("programStatus",programStatus));
 		}
-		if(referralSourcesId != null){
-			//criteria.add(Restrictions.eq("referralSourcesId",referralSourcesId));
+		if (addressLabelSearchTO.getSpecialServiceGroupId() != null) {
+			// criteria.add(Restrictions.eq("specialServiceGroupId",specialServiceGroupId));
 		}
-		if(anticipatedStartTerm != null){
-			//criteria.add(Restrictions.eq("anticipatedStartTerm",anticipatedStartTerm));
+		if (addressLabelSearchTO.getReferralSourcesId() != null) {
+			// criteria.add(Restrictions.eq("referralSourcesId",referralSourcesId));
 		}
-		if(anticipatedStartYear != null){
-			//criteria.add(Restrictions.eq("anticipatedStartYear",anticipatedStartYear));
+		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
+			// criteria.add(Restrictions.eq("anticipatedStartTerm",anticipatedStartTerm));
 		}
-		if(studentTypeId != null){
-			//criteria.add(Restrictions.eq("studentTypeId",studentTypeId));
+		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
+			// criteria.add(Restrictions.eq("anticipatedStartYear",anticipatedStartYear));
 		}
-		if(registrationTerm != null){
-			//criteria.add(Restrictions.eq("registrationTerm",registrationTerm));
+		if (addressLabelSearchTO.getStudentTypeId() != null) {
+			// criteria.add(Restrictions.eq("studentTypeId",studentTypeId));
 		}
-		if(registrationYear != null){
-			//criteria.add(Restrictions.eq("registrationYear",registrationYear));
+		if (addressLabelSearchTO.getRegistrationTerm() != null) {
+			// criteria.add(Restrictions.eq("registrationTerm",registrationTerm));
 		}
-		
+		if (addressLabelSearchTO.getRegistrationYear() != null) {
+			// criteria.add(Restrictions.eq("registrationYear",registrationYear));
+		}
 
 		return criteria.list();
-		
 	}
-	
-	
-	
-	
+
+	/**
+	 * Retrieves a List of People, likely used by the Address Labels Report
+	 * 
+	 * @param intakeDatefrom
+	 * @param intakeDateTo
+	 * @param homeDepartment
+	 * @param coachId
+	 * @param programStatus
+	 * @param specialServiceGroupId
+	 * @param referralSourcesId
+	 * @param anticipatedStartTerm
+	 * @param anticipatedStartYear
+	 * @param studentTypeId
+	 * @param registrationTerm
+	 * @param registrationYear
+	 * @param sAndP
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Person> getPeopleBySpecialServices(
+			List<String> SpecialServiceGroups,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException {
+
+		final Criteria criteria = createCriteria(sAndP);
+
+		return criteria.list();
+	}
+
 }

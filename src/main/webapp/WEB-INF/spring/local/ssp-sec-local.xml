@@ -20,6 +20,9 @@
 
 	<beans:import resource="ssp-sec-dev.xml" />
 
+	<!-- Provides access to the HttpRequest and HttpResponse for Api's that require them -->
+	<beans:bean name="requestAndResponseAccessFilter" class="org.jasig.ssp.security.uportal.RequestAndResponseAccessFilter" />
+
 	<beans:beans profile="uportal"
 		xmlns="http://www.springframework.org/schema/security" xmlns:beans="http://www.springframework.org/schema/beans"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -37,8 +40,8 @@
 			<beans:property name="preAuthenticatedUserDetailsService" ref="userDetailsService"/>
 		</beans:bean>
 		
-		<beans:bean id="directoryDataService" 
-				class="org.jasig.ssp.security.uportal.UPortalDirectoryDataService" />
+		<beans:bean id="uPortalPersonAttributesService" class="org.jasig.ssp.service.impl.UPortalPersonAttributesService" />
+		
 	</beans:beans>
 
 </beans:beans>

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.AbstractReference;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PagingTO;
@@ -18,6 +19,7 @@ import org.jasig.ssp.web.api.RestController;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @param <TO>
  *            Transfer object type that handles the model type T.
  */
+@PreAuthorize(Permission.SECURITY_REFERENCE_WRITE)
 public abstract class AbstractAuditableReferenceController<T extends AbstractReference, TO extends AbstractReferenceTO<T>>
 		extends RestController<TO, T> {
 
@@ -83,6 +86,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagingTO<TO, T> getAll(
 			final @RequestParam(required = false) ObjectStatus status,
@@ -101,6 +105,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	TO get(final @PathVariable UUID id) throws ObjectNotFoundException,
 			ValidationException {

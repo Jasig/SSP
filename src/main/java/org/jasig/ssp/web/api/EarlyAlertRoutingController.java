@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.jasig.ssp.factory.EarlyAlertRoutingTOFactory;
 import org.jasig.ssp.model.EarlyAlertRouting;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertRoutingService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.CampusService;
@@ -31,8 +32,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * EarlyAlertRouting controller
  */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
+@PreAuthorize(Permission.SECURITY_REFERENCE_WRITE)
 @RequestMapping("/1/reference/campus/{id}/earlyAlertRouting")
 public class EarlyAlertRoutingController
 		extends BaseController {
@@ -89,6 +90,7 @@ public class EarlyAlertRoutingController
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagingTO<EarlyAlertRoutingTO, EarlyAlertRouting> getAll(
 			final @PathVariable UUID campusId,
@@ -123,6 +125,7 @@ public class EarlyAlertRoutingController
 	 *             If specified data could not be found.
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	EarlyAlertRoutingTO get(
 			final @PathVariable UUID campusId,

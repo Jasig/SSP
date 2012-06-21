@@ -53,4 +53,6 @@ public interface SecurityService {
 	 * @return The anonymous user
 	 */
 	SspUser anonymousUser();
+
+	boolean hasAuthority(String authority);
 }

@@ -60,12 +60,6 @@ telephonenumber: 111 867-5309
 ####
 # Groups:
 ####
-dn: cn=USER,ou=groups,dc=springframework,dc=org
-objectClass: groupOfUniqueNames
-objectClass: top
-cn: USER
-uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
-
 dn: cn=REFERENCE_READ,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
@@ -78,4 +72,208 @@ dn: cn=REFERENCE_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: REFERENCE_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_APPOINTMENT_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_APPOINTMENT_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_APPOINTMENT_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_APPOINTMENT_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_APPOINTMENT_DELETE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_APPOINTMENT_DELETE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_CASELOAD_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_CASELOAD_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_CHALLENGE_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_CHALLENGE_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_CHALLENGE_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_CHALLENGE_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_CHALLENGE_DELETE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_CHALLENGE_DELETE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_DOCUMENT_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_DOCUMENT_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_DOCUMENT_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_DOCUMENT_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_DOCUMENT_DELETE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_DOCUMENT_DELETE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_EARLY_ALERT_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_EARLY_ALERT_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_EARLY_ALERT_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_EARLY_ALERT_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_EARLY_ALERT_DELETE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_EARLY_ALERT_DELETE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_EARLY_ALERT_RESPONSE_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_EARLY_ALERT_RESPONSE_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_EARLY_ALERT_RESPONSE_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_EARLY_ALERT_RESPONSE_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_EARLY_ALERT_RESPONSE_DELETE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_EARLY_ALERT_RESPONSE_DELETE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_GOAL_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_GOAL_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_GOAL_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_GOAL_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_GOAL_DELETE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_GOAL_DELETE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_JOURNAL_ENTRY_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_JOURNAL_ENTRY_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_JOURNAL_ENTRY_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_JOURNAL_ENTRY_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_JOURNAL_ENTRY_DELETE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_JOURNAL_ENTRY_DELETE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_DELETE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_DELETE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_SEARCH_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_SEARCH_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_PROGRAM_STATUS_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_PROGRAM_STATUS_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_PROGRAM_STATUS_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_PROGRAM_STATUS_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_PROGRAM_STATUS_DELETE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_PROGRAM_STATUS_DELETE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_TASK_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_TASK_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_TASK_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_TASK_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=PERSON_TASK_DELETE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_TASK_DELETE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=STUDENT_INTAKE_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: STUDENT_INTAKE_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=STUDENT_INTAKE_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: STUDENT_INTAKE_WRITE
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org

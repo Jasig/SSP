@@ -19,7 +19,6 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * <p>
  * Mapped to URI path <code>/1/person/{personId}/challenge</code>
  */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/person/{personId}/challenge")
 public class PersonChallengeController extends
@@ -76,7 +74,6 @@ public class PersonChallengeController extends
 	 * Get PersonChallenges for a person, returns a shallow object At path /all
 	 */
 	@Override
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public @ResponseBody
 	PagingTO<PersonChallengeTO, PersonChallenge> getAll(
@@ -87,6 +84,8 @@ public class PersonChallengeController extends
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
+
+		checkPermissionForOp("READ");
 
 		final Person person = personService.get(personId);
 		final PagingWrapper<PersonChallenge> data = getService()
@@ -118,7 +117,6 @@ public class PersonChallengeController extends
 	 * @throws ObjectNotFoundException
 	 *             if object could not be found
 	 */
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
 	PagingTO<ChallengeTO, Challenge> getChallengesForPerson(
@@ -130,6 +128,8 @@ public class PersonChallengeController extends
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
 
+		checkPermissionForOp("READ");
+
 		final Person person = personService.get(personId);
 		final PagingWrapper<Challenge> data = challengeService.getAllForPerson(
 				person,
@@ -138,5 +138,10 @@ public class PersonChallengeController extends
 
 		return new PagingTO<ChallengeTO, Challenge>(true, data.getResults(),
 				challengeTOFactory.asTOList(data.getRows()));
+	}
+
+	@Override
+	public String permissionBaseName() {
+		return "CHALLENGE";
 	}
 }

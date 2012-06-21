@@ -233,7 +233,7 @@ public class Task // NOPMD by jon.adams
 	@Override
 	protected int hashPrime() {
 		return 37;
-	};
+	}
 
 	@Override
 	final public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:06 PM

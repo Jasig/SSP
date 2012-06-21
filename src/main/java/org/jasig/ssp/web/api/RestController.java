@@ -4,9 +4,11 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PagingTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TransferObject;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * All the Methods a Reference Controller needs to be useful.
@@ -17,8 +19,7 @@ import org.jasig.ssp.transferobject.TransferObject;
  *            The model that the TO type T works with.
  */
 public abstract class RestController<TO extends TransferObject<T>, T extends Auditable>
-		extends
-		BaseController {
+		extends BaseController {
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -46,12 +47,10 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 *            Ascending/descending keyword. If null or empty string, the
 	 *            default sort will be used. Must be <code>ASC</code> or
 	 *            <code>DESC</code>.
-	 * @exception Exception
-	 *                Generic exception thrown if there were any errors.
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	public abstract PagingTO<TO, T> getAll(ObjectStatus status, Integer start,
-			Integer limit, String sort, String sortDirection) throws Exception;
+			Integer limit, String sort, String sortDirection);
 
 	/**
 	 * Retrieves the specified instance from persistent storage.
@@ -59,10 +58,9 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @param id
 	 *            The specific id to use to lookup the associated data.
 	 * @return The specified instance if found.
-	 * @throws Exception
-	 *             If there were any unexpected exceptions thrown.
 	 */
-	public abstract TO get(UUID id) throws Exception;
+	public abstract TO get(UUID id) throws ObjectNotFoundException,
+			ValidationException;
 
 	/**
 	 * Persist a new instance of the specified object.
@@ -74,10 +72,9 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @return Original instance plus the generated id.
 	 * @throws org.jasig.ssp.web.api.validation.ValidationException
 	 *             If the obj contains an id (since it shouldn't).
-	 * @throws Exception
-	 *             If there were any unexpected exceptions thrown.
 	 */
-	public abstract TO create(TO obj) throws Exception;
+	public abstract TO create(TO obj) throws ObjectNotFoundException,
+			ValidationException;
 
 	/**
 	 * Persist any changes to the specified instance.
@@ -89,10 +86,9 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @return The update data object instance.
 	 * @throws org.jasig.ssp.web.api.validation.ValidationException
 	 *             If the specified id is null.
-	 * @throws Exception
-	 *             If there were any unexpected exceptions thrown.
 	 */
-	public abstract TO save(UUID id, TO obj) throws Exception;
+	public abstract TO save(UUID id, TO obj) throws ValidationException,
+			ObjectNotFoundException;
 
 	/**
 	 * Marks the specified data instance with a status of
@@ -101,8 +97,7 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @param id
 	 *            The id of the data instance to mark deleted.
 	 * @return Success boolean.
-	 * @throws Exception
-	 *             If there were any unexpected exceptions thrown.
 	 */
-	public abstract ServiceResponse delete(UUID id) throws Exception;
+	public abstract ServiceResponse delete(UUID id)
+			throws ObjectNotFoundException;
 }

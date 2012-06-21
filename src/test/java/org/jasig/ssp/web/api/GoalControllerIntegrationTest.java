@@ -61,7 +61,9 @@ public class GoalControllerIntegrationTest {
 	 */
 	@Before
 	public void setUp() {
-		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
+				"ROLE_PERSON_GOAL_READ", "ROLE_PERSON_GOAL_WRITE",
+				"ROLE_PERSON_GOAL_DELETE");
 	}
 
 	/**

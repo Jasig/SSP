@@ -77,7 +77,7 @@ public class Category extends AbstractReference implements Auditable {
 	public void setChallengeCategories(
 			final Set<ChallengeCategory> challengeCategories) {
 		this.challengeCategories = challengeCategories;
-	};
+	}
 
 	@Override
 	protected int hashPrime() {

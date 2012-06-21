@@ -46,4 +46,6 @@ public interface ChallengeService extends AuditableCrudService<Challenge> {
 
 	ChallengeChallengeReferral removeChallengeReferralFromChallenge(
 			ChallengeReferral referral, Challenge challenge);
+
+	PagingWrapper<Challenge> getAllForIntake(SortingAndPaging sAndP);
 }

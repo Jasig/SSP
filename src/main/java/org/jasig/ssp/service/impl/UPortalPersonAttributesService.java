@@ -11,14 +11,15 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
 import org.jasig.portlet.utils.rest.SimpleCrossContextRestApiInvoker;
+import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UPortalSecurityException;
+import org.jasig.ssp.security.uportal.RequestAndResponseAccessFilter;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Service
 public class UPortalPersonAttributesService implements PersonAttributesService {
 
 	private static final String PARAM_USERNAME = "username";
@@ -27,12 +28,21 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 	private static final String PERSON_KEY = "person";
 	private static final String ATTRIBUTES_KEY = "attributes";
 
+	//
+	private static final String ATTRIBUTE_SCHOOLID = "schoolId";
+	private static final String ATTRIBUTE_FIRSTNAME = "firstName";
+	private static final String ATTRIBUTE_LASTNAME = "lastName";
+	private static final String ATTRIBUTE_PRIMARYEMAILADDRESS = "primaryEmailAddress";
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UPortalPersonAttributesService.class);
 
+	@Autowired
+	private transient RequestAndResponseAccessFilter requestAndResponseAccessFilter;
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, List<String>> getAttributes(
+	public PersonAttributesResult getAttributes(
 			final HttpServletRequest req,
 			final HttpServletResponse res, final String username)
 			throws ObjectNotFoundException {
@@ -72,7 +82,46 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 		LOGGER.debug("Retrieved the following attributes for user {}:  {}",
 				username, rslt.toString());
 
-		return rslt;
+		return convertAttributes(rslt);
+	}
+
+	private PersonAttributesResult convertAttributes(
+			final Map<String, List<String>> attr) {
+
+		final PersonAttributesResult person = new PersonAttributesResult();
+
+		if (attr.containsKey(ATTRIBUTE_SCHOOLID)) {
+			person.setSchoolId(attr.get(ATTRIBUTE_SCHOOLID).get(0));
+		}
+		if (attr.containsKey(ATTRIBUTE_FIRSTNAME)) {
+			person.setFirstName(attr.get(ATTRIBUTE_FIRSTNAME).get(0));
+		}
+		if (attr.containsKey(ATTRIBUTE_LASTNAME)) {
+			person.setLastName(attr.get(ATTRIBUTE_LASTNAME).get(0));
+		}
+		if (attr.containsKey(ATTRIBUTE_PRIMARYEMAILADDRESS)) {
+			person.setPrimaryEmailAddress(attr.get(
+					ATTRIBUTE_PRIMARYEMAILADDRESS).get(0));
+		}
+
+		return person;
+	}
+
+	@Override
+	public PersonAttributesResult getAttributes(final String username)
+			throws ObjectNotFoundException {
+
+		final HttpServletRequest req = requestAndResponseAccessFilter
+				.getHttpServletRequest();
+		final HttpServletResponse res = requestAndResponseAccessFilter
+				.getHttpServletResponse();
+
+		if ((req == null) || (res == null)) {
+			throw new UnsupportedOperationException(
+					"Uportal attributes may only be fetched when a HttpServletRequest and HttpServletResponse are available");
+		} else {
+			return getAttributes(req, res, username);
+		}
 
 	}
 

@@ -26,9 +26,9 @@
 		<intercept-url pattern="/accessDenied.htm" access="permitAll"/>
 		<intercept-url pattern="/invalidSession.htm" access="permitAll"/>
 		<intercept-url pattern="/secTest.jsp" access="permitAll"/>
-		<intercept-url pattern="/api/example" access="hasAnyRole('ROLE_USER')"/>
+		<intercept-url pattern="/api/example" access="isAuthenticated()"/>
 		
-		<intercept-url pattern="/index.html" access="hasAnyRole('ROLE_USER')" />
+		<intercept-url pattern="/index.html" access="isAuthenticated()" />
 		
 		<form-login login-page="/login.jsp" 
 			default-target-url="/index.html"
@@ -40,7 +40,7 @@
 
 		<logout logout-success-url="/login.jsp" />
 	</http>
-	
+
 	<beans:bean name="uPortalFilter" class="org.jasig.ssp.security.uportal.UPortalPreAuthenticatedProcessingFilter">
 		<beans:property name="authenticationManager" ref="authenticationManager"></beans:property> 
 	</beans:bean>

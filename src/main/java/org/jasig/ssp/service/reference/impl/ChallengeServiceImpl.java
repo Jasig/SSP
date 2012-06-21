@@ -71,6 +71,11 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 	}
 
 	@Override
+	public PagingWrapper<Challenge> getAllForIntake(final SortingAndPaging sAndP) {
+		return dao.getAllInStudentIntake(sAndP);
+	}
+
+	@Override
 	protected ChallengeDao getDao() {
 		return dao;
 	}

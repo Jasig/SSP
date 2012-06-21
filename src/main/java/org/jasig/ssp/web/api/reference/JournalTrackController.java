@@ -10,6 +10,7 @@ import org.jasig.ssp.factory.reference.JournalTrackTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepService;
@@ -32,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/reference/journalTrack")
 public class JournalTrackController
@@ -74,6 +74,7 @@ public class JournalTrackController
 	}
 
 	@RequestMapping(value = "/{journalTrackId}/journalStep/", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagingTO<JournalStepTO, JournalStep> getAllForJournalTrack(
 			final @PathVariable UUID journalTrackId,

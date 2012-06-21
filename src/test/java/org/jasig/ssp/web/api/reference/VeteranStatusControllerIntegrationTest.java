@@ -1,4 +1,4 @@
-package org.jasig.ssp.web.api.reference;
+package org.jasig.ssp.web.api.reference; // NOPMD
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -49,6 +49,10 @@ public class VeteranStatusControllerIntegrationTest {
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
+	private static final String TEST_STRING1 = "testString1";
+
+	private static final String TEST_STRING2 = "testString2";
+
 	/**
 	 * Setup the security service with the administrator user for use by
 	 * {@link #testControllerCreateAndDelete()} that checks that the Auditable
@@ -62,11 +66,14 @@ public class VeteranStatusControllerIntegrationTest {
 	/**
 	 * Test the {@link VeteranStatusController#get(UUID)} action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -85,11 +92,14 @@ public class VeteranStatusControllerIntegrationTest {
 	 * Test that the {@link VeteranStatusController#get(UUID)} action returns
 	 * the correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -105,36 +115,36 @@ public class VeteranStatusControllerIntegrationTest {
 	 * Test the {@link VeteranStatusController#create(VeteranStatusTO)} and
 	 * {@link VeteranStatusController#delete(UUID)} actions.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerCreateAndDelete() throws Exception {
+	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
-
-		final String testString1 = "testString1";
-		final String testString2 = "testString1";
 
 		// Check validation of 'no ID for create()'
 		try {
 			final VeteranStatusTO obj = controller.create(new VeteranStatusTO(
 					UUID
 							.randomUUID(),
-					testString1, testString2, (short) 1)); // NOPMD by jon.adams
+					TEST_STRING1, TEST_STRING2, (short) 1)); // NOPMD
 			assertNull(
 					"Calling create with an object with an ID should have thrown a validation excpetion.",
 					obj);
-		} catch (ValidationException exc) {
+		} catch (final ValidationException exc) {
 			assertNotNull("ValidatedException was expected to be thrown.", exc);
 		}
 
 		// Now create a valid VeteranStatus
 		final VeteranStatusTO valid = controller.create(new VeteranStatusTO(
 				null,
-				testString1,
-				testString2, (short) 1)); // NOPMD
+				TEST_STRING1,
+				TEST_STRING2, (short) 1)); // NOPMD
 
 		assertNotNull(
 				"Returned VeteranStatusTO from the controller should not have been null.",
@@ -144,7 +154,7 @@ public class VeteranStatusControllerIntegrationTest {
 				valid.getId());
 		assertEquals(
 				"Returned VeteranStatusTO.Name from the controller did not match.",
-				testString1, valid.getName());
+				TEST_STRING1, valid.getName());
 		assertEquals(
 				"Returned VeteranStatusTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
 				Person.SYSTEM_ADMINISTRATOR_ID, valid.getCreatedBy().getId());
@@ -157,12 +167,9 @@ public class VeteranStatusControllerIntegrationTest {
 	 * Test the
 	 * {@link VeteranStatusController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<VeteranStatusTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
@@ -175,12 +182,9 @@ public class VeteranStatusControllerIntegrationTest {
 	 * Test the
 	 * {@link VeteranStatusController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action results.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerGetAllResults() throws Exception {
+	public void testControllerGetAllResults() {
 		final PagingTO<VeteranStatusTO, VeteranStatus> results = controller
 				.getAll(ObjectStatus.ACTIVE, 0, 4, null, null);
 

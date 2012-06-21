@@ -83,8 +83,8 @@ final public class Message
 	public Message(final SubjectAndBody subjAndMessage) {
 		super();
 		setObjectStatus(ObjectStatus.ACTIVE);
-		this.subject = subjAndMessage.getSubject();
-		this.body = subjAndMessage.getBody();
+		subject = subjAndMessage.getSubject();
+		body = subjAndMessage.getBody();
 	}
 
 	/**
@@ -168,7 +168,7 @@ final public class Message
 	@Override
 	protected int hashPrime() {
 		return 181;
-	};
+	}
 
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/3/12 11:46 AM

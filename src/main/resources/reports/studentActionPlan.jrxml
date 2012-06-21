@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="studentActionPlan" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aac79acd-053b-4b36-bb85-9b85200e4ec8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/codynet/workspace/ssd/SSP-Open-Source-Project/src/main/resources/reports/"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="json">
+		<![CDATA[]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3a5dca54-1006-4f21-a054-1f544849639d" x="10" y="30" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Initial Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="40" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Review Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="10" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Student:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="10" y="20" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Student ID:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="443" y="43" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Follow-up Date:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="106" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="93bf8f38-92a2-4aa4-afa6-03f692c1da5c" x="33" y="22" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Goal(s)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="530ba4bc-13a8-4e35-9998-8f22bf0747d9" x="33" y="56" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Short Term:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5a8dcc3c-719c-4c05-ab59-2ac6a68646a1" x="33" y="76" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Long Term:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="3f413d04-9936-495d-9ee0-e48d32a27ddb" x="0" y="24" width="572" height="24" backcolor="#DFDFDF"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="19f089d6-00fb-46ae-bc54-ef0012f8f77f" x="0" y="4" width="572" height="20" backcolor="#AFAAAA"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="97c5210e-6cd2-4b77-b581-cd9cbb0afd91" x="35" y="8" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Challenge:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0e07cc95-0c66-4ac7-b835-43437cd87c70" x="35" y="28" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Completed]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bfd5eaa1-6125-4568-b50f-05d99ebe2ddb" x="240" y="28" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Action Steps]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9a161e3c-553f-4a16-8780-14af67dddbfc" x="443" y="28" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Target Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="28e389f0-d564-4828-8efa-4d5d91ee40e9" x="140" y="8" width="403" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="7347cb60-62d9-4805-be2e-2748e7f09cb6" x="0" y="48" width="572" height="67"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "studentActionPlan_Detail.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="104" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5de57e4e-9f2d-4ba1-b72f-5c6d4dff5997" x="14" y="23" width="361" height="20"/>
+				<textElement/>
+				<text><![CDATA[I realize that agreeing to these goals and reaching them is my choice.]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="b9f98719-4103-46c6-bed7-c2989788c097" x="14" y="65" width="250" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="e0efa49e-6a02-43aa-a281-622e7230738c" x="313" y="65" width="250" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="5dc4e5b1-2719-482e-9079-c97517ebee26" x="14" y="66" width="175" height="20"/>
+				<textElement/>
+				<text><![CDATA[Student Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="31c85540-0ffd-493d-99a5-902fb2391e3e" x="313" y="66" width="175" height="20"/>
+				<textElement/>
+				<text><![CDATA[Counselor/Coach Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ea9e3cd5-fc3a-4dbf-beac-8b57baeb68ae" x="189" y="65" width="95" height="20"/>
+				<textElement/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="916edbb8-4171-4461-89d9-b638d78ffc5e" x="488" y="66" width="75" height="20"/>
+				<textElement/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

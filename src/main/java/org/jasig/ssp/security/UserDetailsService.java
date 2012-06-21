@@ -8,6 +8,7 @@ import org.jasig.ssp.security.exception.EmailNotFoundException;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.security.exception.UserNotEnabledException;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 		UserDetailsContextMapper {
 
 	@Autowired
-	private transient DirectoryDataService directoryDataService;
+	private transient PersonAttributesService personAttributesService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserDetailsService.class);
@@ -81,15 +82,22 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 				person = new Person();
 				person.setEnabled(true);
 				person.setUsername(username);
-				person.setFirstName(directoryDataService.getFirstNameForUserId(
-						username));
-				person.setLastName(directoryDataService.getLastNameForUserId(
-						username));
-				person.setPrimaryEmailAddress(directoryDataService
-						.getPrimaryEmailAddressForUserId(username));
-				// :TODO Set additional user attributes
 
-				person = personService.create(person);
+				try {
+					final PersonAttributesResult attr = personAttributesService
+							.getAttributes(username);
+					person.setSchoolId(attr.getSchoolId());
+					person.setFirstName(attr.getFirstName());
+					person.setLastName(attr.getLastName());
+					person.setPrimaryEmailAddress(attr.getPrimaryEmailAddress());
+					// :TODO Set additional user attributes
+					person = personService.create(person);
+				} catch (ObjectNotFoundException onfe) {
+					throw new UnableToCreateAccountException( // NOPMD - stack
+																// passed to new
+																// exception
+							"Unable to pull required attributes", onfe);
+				}
 
 			} else {
 				throw new UnableToCreateAccountException( // NOPMD already know

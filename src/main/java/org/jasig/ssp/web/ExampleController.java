@@ -19,16 +19,16 @@ public class ExampleController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
-	Map<String, String> defaultMethod() throws Exception {
+	Map<String, String> defaultMethod() {
 		return get();
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody
-	Map<String, String> get() throws Exception {
+	Map<String, String> get() {
 		LOGGER.info("get called");
 
-		Map<String, String> val = new HashMap<String, String>();
+		final Map<String, String> val = new HashMap<String, String>();
 		val.put("firstName", "Shawn");
 		val.put("middleInitial", "E");
 		val.put("lastName", "Gormley");

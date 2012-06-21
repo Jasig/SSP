@@ -26,7 +26,6 @@ import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.ServiceResponse;
-import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.transferobject.reference.ChildCareArrangementTO;
 import org.jasig.ssp.transferobject.reference.CitizenshipTO;
@@ -52,14 +51,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.collect.Lists;
-
 /**
  * Student Intake tool services
  * <p>
  * Mapped to URI path <code>/1/tool/studentIntake</code>
  */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/tool/studentIntake")
 public class IntakeController extends BaseController {
@@ -116,6 +112,7 @@ public class IntakeController extends BaseController {
 	 * @throws ObjectNotFoundException
 	 *             If any reference look up data couldn't be loaded.
 	 */
+	@PreAuthorize("hasRole('ROLE_STUDENT_INTAKE_WRITE')")
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.PUT)
 	public @ResponseBody
 	ServiceResponse save(final @PathVariable UUID studentId,
@@ -138,6 +135,7 @@ public class IntakeController extends BaseController {
 	 *             If any reference data could not be loaded.
 	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ROLE_STUDENT_INTAKE_READ')")
 	public @ResponseBody
 	IntakeFormTO load(final @PathVariable UUID studentId)
 			throws ObjectNotFoundException {
@@ -158,20 +156,8 @@ public class IntakeController extends BaseController {
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 
 		final List<ChallengeTO> challenges = ChallengeTO
-				.toTOList(challengeService
-						.getAll(sAndP).getRows());
-		// Filter out !ChallengeReferrals.ShowInStudentIntake
-		for (final ChallengeTO challenge : challenges) {
-			final List<ChallengeReferralTO> referrals = Lists.newArrayList();
-			for (final ChallengeReferralTO referral : challenge
-					.getChallengeChallengeReferrals()) {
-				if (referral.isShowInStudentIntake()) {
-					referrals.add(referral);
-				}
-			}
-
-			challenge.setChallengeChallengeReferrals(referrals);
-		}
+				.toTOList(challengeService.getAllForIntake(sAndP).getRows(),
+						true);
 
 		refData.put("challenges", challenges);
 

@@ -9,7 +9,6 @@ import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 
  * @author jon.adams
  */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/reference/earlyAlertSuggestion")
 public class EarlyAlertSuggestionController

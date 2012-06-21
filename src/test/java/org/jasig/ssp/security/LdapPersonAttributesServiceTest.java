@@ -1,7 +1,8 @@
 package org.jasig.ssp.security;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
+import org.jasig.ssp.service.impl.LdapPersonAttributesService;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,19 +12,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("security-testConfig.xml")
-public class LdapDirectoryDataServiceTest {
+public class LdapPersonAttributesServiceTest {
 
 	@Autowired
-	private transient LdapDirectoryDataService ldapDirectoryDataService;
+	private transient LdapPersonAttributesService ldapPersonAttributesService;
 
 	@Ignore
 	@Test
 	public void test() {
-		assertTrue(
+		assertEquals(
 				"Unable to access telephonenumber property in ldap for testuser",
-				ldapDirectoryDataService.propertyForDn(
-						"telephonenumber", "uid=testuser,ou=users").contains(
-						"111 867-5309"));
+				"111 867-5309",
+				ldapPersonAttributesService.getAttributes("testuser")
+						.getPhone());
 	}
 
 }
