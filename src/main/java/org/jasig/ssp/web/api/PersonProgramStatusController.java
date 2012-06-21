@@ -7,7 +7,6 @@ import org.jasig.ssp.transferobject.PersonProgramStatusTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * <p>
  * Mapped to URI path <code>/1/person/{personId}/programStatus</code>
  */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/person/{personId}/programStatus")
 public class PersonProgramStatusController
@@ -49,5 +47,10 @@ public class PersonProgramStatusController
 	@Override
 	protected PersonProgramStatusService getService() {
 		return service;
+	}
+
+	@Override
+	public String permissionBaseName() {
+		return "PROGRAM_STATUS";
 	}
 }
