@@ -3,11 +3,14 @@ package org.jasig.ssp.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.MockUser;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.SecurityService;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+
+import com.google.common.collect.Lists;
 
 /**
  * A Security Service for use in a test environment. Allows an integration test
@@ -16,7 +19,7 @@ import org.jasig.ssp.service.SecurityService;
  */
 public class SecurityServiceInTestEnvironment implements SecurityService {
 
-	private SspUser current;
+	private transient SspUser current;
 
 	private String sessionId;
 
@@ -33,10 +36,9 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 
 	@Override
 	public SspUser anonymousUser() {
-		SspUser user = new SspUser(SspUser.ANONYMOUS_PERSON_USERNAME,
+		return new SspUser(SspUser.ANONYMOUS_PERSON_USERNAME,
 				"", true, true, true, true,
 				new ArrayList<GrantedAuthority>(0));
-		return user;
 	}
 
 	/**
@@ -45,7 +47,7 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 	 * @param current
 	 *            Current user
 	 */
-	public void setCurrent(SspUser current) {
+	public void setCurrent(final SspUser current) {
 		this.current = current;
 	}
 
@@ -56,7 +58,7 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 	 * @param current
 	 *            Current user
 	 */
-	public void setCurrent(Person current) {
+	public void setCurrent(final Person current) {
 		if (current.getUsername() == null) {
 			current.setUsername("testUser");
 		}
@@ -74,12 +76,23 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 	 * @param authorities
 	 *            List of authorities
 	 */
-	public void setCurrent(Person current, List<GrantedAuthority> authorities) {
+	public void setCurrent(final Person current,
+			final List<GrantedAuthority> authorities) {
 		if (current.getUsername() == null) {
 			current.setUsername("testUser");
 		}
 
 		this.current = new MockUser(current, current.getUsername(), authorities);
+	}
+
+	public void setCurrent(final Person current, final String... authorities) {
+		final List<GrantedAuthority> grantedAuthorities = Lists.newArrayList();
+
+		for (String authority : authorities) {
+			grantedAuthorities.add(new GrantedAuthorityImpl(authority));
+		}
+
+		setCurrent(current, grantedAuthorities);
 	}
 
 	@Override
@@ -92,7 +105,17 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 		return sessionId == null ? "test session id" : sessionId;
 	}
 
-	public void setSessionId(String sessionId) {
+	public void setSessionId(final String sessionId) {
 		this.sessionId = sessionId;
+	}
+
+	@Override
+	public boolean hasAuthority(final String authority) {
+		for (GrantedAuthority auth : currentUser().getAuthorities()) {
+			if (auth.getAuthority().equalsIgnoreCase(authority)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

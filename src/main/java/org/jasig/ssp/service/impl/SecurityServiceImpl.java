@@ -120,6 +120,16 @@ public class SecurityServiceImpl implements SecurityService {
 	}
 
 	@Override
+	public boolean hasAuthority(final String authority) {
+		for (GrantedAuthority auth : currentUser().getAuthorities()) {
+			if (auth.getAuthority().equalsIgnoreCase(authority)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
 	public String getSessionId() {
 		return RequestContextHolder.currentRequestAttributes().getSessionId();
 	}
