@@ -1,24 +1,23 @@
 package org.jasig.ssp.service;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jasig.ssp.security.PersonAttributesResult;
+
 /**
- * Allows SSP to access attributes for people in the community that may come 
- * from other systems on campus. 
+ * Allows SSP to access attributes for people in the community that may come
+ * from other systems on campus.
  * 
  * @author awills
  */
 public interface PersonAttributesService {
-	
-	Map<String,List<String>> getAttributes(HttpServletRequest req, 
-			HttpServletResponse res, String username) 
-					throws ObjectNotFoundException;
 
-	Map<String,List<String>> getAttributes(String username) 
+	PersonAttributesResult getAttributes(HttpServletRequest req,
+			HttpServletResponse res, String username)
+			throws ObjectNotFoundException;
+
+	PersonAttributesResult getAttributes(String username)
 			throws ObjectNotFoundException;
 
 }

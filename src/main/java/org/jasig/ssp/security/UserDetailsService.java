@@ -1,8 +1,6 @@
 package org.jasig.ssp.security;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.model.Person;
@@ -45,11 +43,6 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 	public static final boolean ALL_AUTHENTICATED_USERS_CAN_CREATE_ACCOUNT = true;
 	public static final String PERMISSION_TO_CREATE_ACCOUNT = "ROLE_CAN_CREATE";
 
-	private static final String ATTRIBUTE_SCHOOLID = "schoolId";
-	private static final String ATTRIBUTE_FIRSTNAME = "firstName";
-	private static final String ATTRIBUTE_LASTNAME = "lastName";
-	private static final String ATTRIBUTE_PRIMARYEMAILADDRESS = "primaryEmailAddress";
-	
 	@Autowired
 	private transient PersonService personService;
 
@@ -82,38 +75,29 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 			LOGGER.info(
 					"Unable to load {}'s record., creating user in ssp",
 					username);
-			
+
 			if (hasAccountCreationPermission(authorities)) {
 				// At this point, we should already have authentication through
 				// ldap or uportal go ahead and create the user.
 				person = new Person();
 				person.setEnabled(true);
 				person.setUsername(username);
-				
-				try {
-					Map<String, List<String>> attr = personAttributesService
-														.getAttributes(username);
-										
-					if (attr.containsKey(ATTRIBUTE_SCHOOLID)) {
-						person.setSchoolId(attr.get(ATTRIBUTE_SCHOOLID).get(0));
-					}
-					if (attr.containsKey(ATTRIBUTE_FIRSTNAME)) {
-						person.setSchoolId(attr.get(ATTRIBUTE_FIRSTNAME).get(0));
-					}
-					if (attr.containsKey(ATTRIBUTE_LASTNAME)) {
-						person.setSchoolId(attr.get(ATTRIBUTE_LASTNAME).get(0));
-					}
-					if (attr.containsKey(ATTRIBUTE_PRIMARYEMAILADDRESS)) {
-						person.setSchoolId(attr.get(ATTRIBUTE_PRIMARYEMAILADDRESS).get(0));
-					}
-					// :TODO Set additional user attributes
-				} catch (ObjectNotFoundException onfe) {
-					throw new RuntimeException(onfe);
-				} catch (Exception e1) {
-					throw new RuntimeException(e1);
-				}
 
-				person = personService.create(person);
+				try {
+					final PersonAttributesResult attr = personAttributesService
+							.getAttributes(username);
+					person.setSchoolId(attr.getSchoolId());
+					person.setFirstName(attr.getFirstName());
+					person.setLastName(attr.getLastName());
+					person.setPrimaryEmailAddress(attr.getPrimaryEmailAddress());
+					// :TODO Set additional user attributes
+					person = personService.create(person);
+				} catch (ObjectNotFoundException onfe) {
+					throw new UnableToCreateAccountException( // NOPMD - stack
+																// passed to new
+																// exception
+							"Unable to pull required attributes", onfe);
+				}
 
 			} else {
 				throw new UnableToCreateAccountException( // NOPMD already know

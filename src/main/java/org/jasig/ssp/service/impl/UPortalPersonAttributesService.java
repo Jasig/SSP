@@ -11,6 +11,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
 import org.jasig.portlet.utils.rest.SimpleCrossContextRestApiInvoker;
+import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UPortalSecurityException;
 import org.jasig.ssp.security.uportal.UPortalRequestContextFilter;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -27,15 +28,21 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 	private static final String PERSON_KEY = "person";
 	private static final String ATTRIBUTES_KEY = "attributes";
 
+	//
+	private static final String ATTRIBUTE_SCHOOLID = "schoolId";
+	private static final String ATTRIBUTE_FIRSTNAME = "firstName";
+	private static final String ATTRIBUTE_LASTNAME = "lastName";
+	private static final String ATTRIBUTE_PRIMARYEMAILADDRESS = "primaryEmailAddress";
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UPortalPersonAttributesService.class);
-	
+
 	@Autowired
-	private UPortalRequestContextFilter uPortalRequestContextFilter;
+	private transient UPortalRequestContextFilter uPortalRequestContextFilter;
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, List<String>> getAttributes(
+	public PersonAttributesResult getAttributes(
 			final HttpServletRequest req,
 			final HttpServletResponse res, final String username)
 			throws ObjectNotFoundException {
@@ -75,21 +82,42 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 		LOGGER.debug("Retrieved the following attributes for user {}:  {}",
 				username, rslt.toString());
 
-		return rslt;
+		return convertAttributes(rslt);
+	}
 
+	private PersonAttributesResult convertAttributes(
+			final Map<String, List<String>> attr) {
+
+		final PersonAttributesResult person = new PersonAttributesResult();
+
+		if (attr.containsKey(ATTRIBUTE_SCHOOLID)) {
+			person.setSchoolId(attr.get(ATTRIBUTE_SCHOOLID).get(0));
+		}
+		if (attr.containsKey(ATTRIBUTE_FIRSTNAME)) {
+			person.setFirstName(attr.get(ATTRIBUTE_FIRSTNAME).get(0));
+		}
+		if (attr.containsKey(ATTRIBUTE_LASTNAME)) {
+			person.setLastName(attr.get(ATTRIBUTE_LASTNAME).get(0));
+		}
+		if (attr.containsKey(ATTRIBUTE_PRIMARYEMAILADDRESS)) {
+			person.setPrimaryEmailAddress(attr.get(
+					ATTRIBUTE_PRIMARYEMAILADDRESS).get(0));
+		}
+
+		return person;
 	}
 
 	@Override
-	public Map<String, List<String>> getAttributes(String username)
+	public PersonAttributesResult getAttributes(final String username)
 			throws ObjectNotFoundException {
-		
+
 		final HttpServletRequest req = uPortalRequestContextFilter
-										.getHttpServletRequest();
+				.getHttpServletRequest();
 		final HttpServletResponse res = uPortalRequestContextFilter
-										.getHttpServletResponse();
-		
+				.getHttpServletResponse();
+
 		return getAttributes(req, res, username);
-		
+
 	}
 
 }
