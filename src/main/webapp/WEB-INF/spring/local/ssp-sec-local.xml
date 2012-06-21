@@ -5,12 +5,15 @@
 	for integration into systems like ldap. -->
 
 <beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-3.0.xsd
+		http://www.springframework.org/schema/aop		
+		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 		http://www.springframework.org/schema/util		
 		http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
@@ -38,6 +41,13 @@
 		</beans:bean>
 		
 		<beans:bean id="uPortalPersonAttributesService" class="org.jasig.ssp.service.impl.UPortalPersonAttributesService" />
+		
+		<beans:bean id="webObjectsHelper" class="org.jasig.ssp.util.RequestScopedWebObjectsHelper" scope="request" init-method="init">
+			<aop:scoped-proxy/>
+		</beans:bean>
+	
+		<beans:bean name="uPortalRequestContextFilter" class="org.jasig.ssp.security.uportal.UPortalRequestContextFilter" />
+		
 	</beans:beans>
 
 </beans:beans>
