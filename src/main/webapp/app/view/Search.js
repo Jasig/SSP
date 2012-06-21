@@ -18,13 +18,12 @@ Ext.define('Ssp.view.Search', {
     				title: 'Students',
     	            collapsible: true,
     	            collapseDirection: 'left',
-    	            store: this.store,
     	        	width: '100%',
     	        	height: '100%',
 		    	    columns: [
 		    	              { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 },		        
-		    	              { text: 'Name', xtype:'templatecolumn', tpl:'{firstName} {middleInitial} {lastName}', flex: 50},
-		    	              {
+		    	              { text: 'Name', dataIndex: 'lastName', renderer: this.columnRendererUtils.renderStudentDetails, flex: 50},
+		    	              /*{
 	    			    	        xtype:'actioncolumn',
 	    			    	        width:65,
 	    			    	        header: 'Action',
@@ -46,7 +45,7 @@ Ext.define('Ssp.view.Search', {
 	    			    	            },
 	    			    	            scope: this
 	    			    	        }]
-	    		                }],
+	    		                }*/],
     	          
 		    	    dockedItems: [{
 		       			xtype: 'pagingtoolbar',
@@ -63,23 +62,60 @@ Ext.define('Ssp.view.Search', {
 		       		    items: [
 		       		        {
 		       		        	xtype: 'textfield',
-		       		        	fieldLabel: 'Search'
+		       		        	itemId: 'searchText'
 		       		        },{
 		       		        	xtype: 'button',
+		       		        	tooltip: 'Find a student',
 		       		        	itemId: 'searchButton',
-		       		        	text: 'GO'
-		       		        }
+					            width: 30,
+					            height: 23,
+					            cls: 'searchIcon'
+		       		        },{
+		       		        	xtype: 'tbspacer',
+		       		        	flex: 1
+		       		        },{
+					            tooltip: 'Add Student',
+					            text: '',
+					            width: 25,
+					            height: 25,
+					            cls: 'addPersonIcon',
+					            xtype: 'button',
+					            itemId: 'addButton'
+					        },{
+					            tooltip: 'Edit Student',
+					            text: '',
+					            width: 25,
+					            height: 25,
+					            cls: 'editPersonIcon',
+					            xtype: 'button',
+					            itemId: 'editButton'
+					        },{
+					            tooltip: 'Delete Student',
+					            text: '',
+					            width: 25,
+					            height: 25,
+					            cls: 'deletePersonIcon',
+					            xtype: 'button',
+					            itemId: 'deleteButton'
+					        },{
+					            tooltip: 'Display with photo',
+					            text: '',
+					            width: 20,
+					            height: 20,
+					            cls: 'displayPhotoListIcon',
+					            xtype: 'button',
+					            itemId: 'displayPhotoButton'				        	
+					        },{
+					            tooltip: 'Display without photo',
+					            text: '',
+					            width: 20,
+					            height: 20,
+					            cls: 'displayListIcon',
+					            xtype: 'button',
+					            itemId: 'displayListButton'				        	
+					        }
 		       		    ]
-		       		},{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [{
-				            tooltip: 'Add Student',
-				            text: 'Add Student',
-				            xtype: 'button',
-				            itemId: 'addButton'
-				        }]
-				    }/*,{
+		       		}/*,{
 		       			xtype: 'toolbar',
 		       			dock: 'top',
 		       		    items: [

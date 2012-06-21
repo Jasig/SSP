@@ -1,4 +1,4 @@
-Ext.define('Ssp.view.tools.StudentDocuments', {
+Ext.define('Ssp.view.tools.document.StudentDocuments', {
 	extend: 'Ext.grid.Panel',
 	alias : 'widget.studentdocuments',
     mixins: [ 'Deft.mixin.Injectable',

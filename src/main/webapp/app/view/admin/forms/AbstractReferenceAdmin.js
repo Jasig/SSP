@@ -44,6 +44,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     		       		},
     		              {
     		               xtype: 'toolbar',
+    		               dock: 'top',
     		               items: [{
     		                   text: 'Add',
     		                   iconCls: 'icon-add',
@@ -57,6 +58,13 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     		                   action: 'delete',
     		                   itemId: 'deleteButton'
     		               }]
+    		           },{
+    		               xtype: 'toolbar',
+    		               dock: 'top',
+    		               items: [{
+    	                      xtype: 'label',
+    	                       text: 'Double-click to edit an item.'
+    	                     }]
     		           }]    	
     	});
     	

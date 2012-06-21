@@ -25,15 +25,15 @@ Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeCategoriesAdmin', {
 			            enableDrop: true
 			        }
 			     },
-    			 dockedItems: [/*
+    			 dockedItems: [
      		              {
      		               xtype: 'toolbar',
-     		               dock: 'bottom',
+     		               dock: 'top',
      		               items: [{
      	                      xtype: 'label',
-     	                       text: 'Associate by dragging a Challenge to a Category folder'
+     	                       text: 'Associate items by dragging a Challenge onto a Category folder'
      	                     }]
-     		           },*/{
+     		           },{
      				        dock: 'top',
      				        xtype: 'toolbar',
      				        items: [{

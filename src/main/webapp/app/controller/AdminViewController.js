@@ -81,7 +81,6 @@ Ext.define('Ssp.controller.AdminViewController', {
 			// the component to use the store
 			if (store != null)
 			{
-				
 				// pass the columns for editing
 				if (columns != null)
 				{

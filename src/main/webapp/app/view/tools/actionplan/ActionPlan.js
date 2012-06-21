@@ -1,4 +1,4 @@
-Ext.define('Ssp.view.tools.ActionPlan', {
+Ext.define('Ssp.view.tools.actionplan.ActionPlan', {
 	extend: 'Ext.container.Container',
 	alias : 'widget.actionplan',
     mixins: [ 'Deft.mixin.Injectable',

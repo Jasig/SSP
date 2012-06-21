@@ -1,11 +1,14 @@
 package org.jasig.ssp.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.tool.IntakeService;
+import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -84,4 +87,43 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return The specified Person instance.
 	 */
 	Person getByStudentId(String studentId) throws ObjectNotFoundException;
+	
+	
+	
+	
+
+    /**
+     * Retrieve a list of person objects based on specific criteria	
+     * @param intakeDatefrom
+     * @param intakeDateTo
+     * @param homeDepartment
+     * @param coachId
+     * @param programStatus
+     * @param specialServiceGroupId
+     * @param referralSourcesId
+     * @param anticipatedStartTerm
+     * @param anticipatedStartYear
+     * @param studentTypeId
+     * @param registrationTerm
+     * @param registrationYear
+     * @param sAndP
+     * @return
+     * @throws ObjectNotFoundException
+     */
+	//TODO: change params to use a TO
+	List<Person> peopleFromCriteria(Date intakeDatefrom, 
+			Date intakeDateTo,
+			String homeDepartment,
+			String coachId,
+			String programStatus,
+			String specialServiceGroupId,
+			String referralSourcesId,
+			String anticipatedStartTerm,
+			Integer anticipatedStartYear,
+			String studentTypeId,
+			Date registrationTerm,
+			Date registrationYear,						
+			final SortingAndPaging sAndP) throws ObjectNotFoundException;
+			
+			
 }

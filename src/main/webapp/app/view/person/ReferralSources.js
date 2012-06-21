@@ -18,14 +18,16 @@ Ext.define('Ssp.view.person.ReferralSources', {
 				    items:[{
 			            xtype: 'itemselectorfield',
 			            name: 'referralSourceIds',
+			            itemId: 'referralSourcesItemSelector',
 			            anchor: '100%',
 			            fieldLabel: 'Referral Sources',
 			            store: this.store,
 			            displayField: 'name',
 			            valueField: 'id',
-			            allowBlank: true
+			            allowBlank: true,
+			            flex: 1
 			        }]
-				});
+				});	
 		
 		return this.callParent(arguments);
 	}

@@ -1,7 +1,7 @@
-Ext.define('Ssp.view.tools.StudentSuccess', {
+Ext.define('Ssp.view.tools.displacedworker.DisplacedWorker', {
 	extend: 'Ext.panel.Panel',
-	alias : 'widget.studentsuccess',
-	title: 'Student Success',	
+	alias : 'widget.displacedworker',
+	title: 'Displaced Workers',	
 	width: '100%',
 	height: '100%',   
 	autoScroll: true,

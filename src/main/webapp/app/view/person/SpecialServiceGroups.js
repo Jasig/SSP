@@ -17,6 +17,7 @@ Ext.define('Ssp.view.person.SpecialServiceGroups', {
 				    layout: 'anchor',
 				    items:[{
 			            xtype: 'itemselectorfield',
+			            itemId: 'specialServiceGroupsItemSelector',
 			            name: 'specialServiceGroupIds',
 			            anchor: '100%',
 			            fieldLabel: 'Service Groups',
