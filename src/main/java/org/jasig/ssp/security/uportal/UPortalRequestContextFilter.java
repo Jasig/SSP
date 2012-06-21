@@ -12,25 +12,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Provides ThreadLocal-based access to the {@link HttpServletRequest} and 
- * {@link HttpServletResponse} for APIs that need them.  
+ * Provides ThreadLocal-based access to the {@link HttpServletRequest} and
+ * {@link HttpServletResponse} for APIs that need them.
  * 
  * @author awills
  */
 public class UPortalRequestContextFilter implements Filter {
-	
+
 	private final ThreadLocal<HttpServletRequest> requests = new ThreadLocal<HttpServletRequest>();
 	private final ThreadLocal<HttpServletResponse> responses = new ThreadLocal<HttpServletResponse>();
-	
-	@Override
-	public void init(FilterConfig config) {}
 
 	@Override
-	public void destroy() {}
+	public void init(final FilterConfig config) {
+		// nothing to do
+	}
 
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse res,
-			FilterChain chain) throws IOException, ServletException {
+	public void destroy() {
+		// nothing to do
+	}
+
+	@Override
+	public void doFilter(final ServletRequest req, final ServletResponse res,
+			final FilterChain chain) throws IOException, ServletException {
 
 		requests.set((HttpServletRequest) req);
 		responses.set((HttpServletResponse) res);
@@ -41,13 +45,13 @@ public class UPortalRequestContextFilter implements Filter {
 		responses.remove();
 
 	}
-	
+
 	public HttpServletRequest getHttpServletRequest() {
-        return requests.get();
-    }
+		return requests.get();
+	}
 
 	public HttpServletResponse getHttpServletResponse() {
-        return responses.get();
-    }
+		return responses.get();
+	}
 
 }
