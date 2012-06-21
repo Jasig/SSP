@@ -92,7 +92,10 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 */
 	@Before
 	public void setUp() {
-		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
+				"ROLE_PERSON_EARLY_ALERT_READ",
+				"ROLE_PERSON_EARLY_ALERT_WRITE",
+				"ROLE_PERSON_EARLY_ALERT_DELETE");
 	}
 
 	/**

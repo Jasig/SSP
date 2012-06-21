@@ -59,7 +59,6 @@ import com.google.common.collect.Lists;
  * <p>
  * Mapped to URI path <code>/1/tool/studentIntake</code>
  */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/tool/studentIntake")
 public class IntakeController extends BaseController {
@@ -116,6 +115,7 @@ public class IntakeController extends BaseController {
 	 * @throws ObjectNotFoundException
 	 *             If any reference look up data couldn't be loaded.
 	 */
+	@PreAuthorize("hasRole('ROLE_STUDENT_INTAKE_WRITE')")
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.PUT)
 	public @ResponseBody
 	ServiceResponse save(final @PathVariable UUID studentId,
@@ -138,6 +138,7 @@ public class IntakeController extends BaseController {
 	 *             If any reference data could not be loaded.
 	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ROLE_STUDENT_INTAKE_READ')")
 	public @ResponseBody
 	IntakeFormTO load(final @PathVariable UUID studentId)
 			throws ObjectNotFoundException {

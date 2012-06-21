@@ -1,5 +1,6 @@
 package org.jasig.ssp.web.api;
 
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.slf4j.Logger;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 public abstract class BaseController {
 
+	private static final String ERROR_PREFIX = "Error: ";
+
 	/**
 	 * Log and return an appropriate message for a page not found (HTTP 404,
 	 * {@link HttpStatus#NOT_FOUND}).
@@ -25,12 +28,12 @@ public abstract class BaseController {
 	 *            Original exception
 	 * @return An appropriate service response message to send to the client.
 	 */
-	@PreAuthorize("permitAll")
+	@PreAuthorize(Permission.PERMIT_ALL)
 	@ExceptionHandler(ObjectNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public @ResponseBody
 	ServiceResponse handleNotFound(final ObjectNotFoundException e) {
-		getLogger().error("Error: ", e);
+		getLogger().error(ERROR_PREFIX, e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 
@@ -42,13 +45,13 @@ public abstract class BaseController {
 	 *            Original exception
 	 * @return An appropriate service response message to send to the client.
 	 */
-	@PreAuthorize("permitAll")
+	@PreAuthorize(Permission.PERMIT_ALL)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public @ResponseBody
 	ServiceResponse handleValidationError(
 			final MethodArgumentNotValidException e) {
-		getLogger().error("Error: ", e);
+		getLogger().error(ERROR_PREFIX, e);
 		return new ServiceResponse(false, e);
 	}
 
@@ -60,12 +63,12 @@ public abstract class BaseController {
 	 *            Original exception
 	 * @return An appropriate service response message to send to the client.
 	 */
-	@PreAuthorize("permitAll")
+	@PreAuthorize(Permission.PERMIT_ALL)
 	@ExceptionHandler(AccessDeniedException.class)
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public @ResponseBody
 	ServiceResponse handleAccessDenied(final AccessDeniedException e) {
-		getLogger().error("Error: ", e);
+		getLogger().error(ERROR_PREFIX, e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 
@@ -77,12 +80,12 @@ public abstract class BaseController {
 	 *            Original exception
 	 * @return An appropriate service response message to send to the client.
 	 */
-	@PreAuthorize("permitAll")
+	@PreAuthorize(Permission.PERMIT_ALL)
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public @ResponseBody
 	ServiceResponse handle(final Exception e) {
-		getLogger().error("Error: ", e);
+		getLogger().error(ERROR_PREFIX, e);
 		return new ServiceResponse(false, e.getMessage());
 	}
 

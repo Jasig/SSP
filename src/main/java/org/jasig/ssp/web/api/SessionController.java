@@ -1,16 +1,23 @@
 package org.jasig.ssp.web.api;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import java.util.List;
+import java.util.Map;
+
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * Allows the logged in user to get their profile.
@@ -26,6 +33,28 @@ public class SessionController extends BaseController {
 
 	@Autowired
 	private transient SecurityService service;
+
+	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
+	public @ResponseBody
+	Map<String, Object> getMyServicePermissions() {
+
+		final Map<String, Object> model = Maps.newHashMap();
+
+		final List<String> permissions = Lists.newArrayList();
+
+		final SspUser user = service.currentlyAuthenticatedUser();
+
+		if (user != null) {
+			for (GrantedAuthority auth : user.getAuthorities()) {
+				permissions.add(auth.getAuthority());
+			}
+		}
+
+		model.put("success", true);
+		model.put("permissions", permissions);
+
+		return model;
+	}
 
 	/**
 	 * Gets the currently authenticated user.

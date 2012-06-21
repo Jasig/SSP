@@ -25,7 +25,6 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +40,6 @@ import com.google.common.collect.Maps;
  * <p>
  * Mapped to URI path <code>/1/person/{personId}/task</code>
  */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/person/{personId}/task")
 public class PersonTaskController extends
@@ -107,6 +105,8 @@ public class PersonTaskController extends
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
 
+		checkPermissionForOp("READ");
+
 		final Map<String, List<TaskTO>> taskTOsWithTaskGroups = Maps
 				.newTreeMap();
 
@@ -154,6 +154,8 @@ public class PersonTaskController extends
 			final @RequestBody List<UUID> taskIds)
 			throws ObjectNotFoundException {
 
+		checkPermissionForOp("READ");
+
 		final Map<String, Object> tasksAndGoals = Maps.newHashMap();
 
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
@@ -200,6 +202,8 @@ public class PersonTaskController extends
 			final @RequestBody @Valid EmailPersonTasksForm emailForm)
 			throws ObjectNotFoundException, ValidationException {
 
+		checkPermissionForOp("READ");
+
 		final Person student = personService.get(personId);
 
 		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
@@ -230,5 +234,10 @@ public class PersonTaskController extends
 	@Override
 	protected TaskService getService() {
 		return service;
+	}
+
+	@Override
+	public String permissionBaseName() {
+		return "TASK";
 	}
 }

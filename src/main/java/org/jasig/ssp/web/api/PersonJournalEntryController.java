@@ -7,14 +7,12 @@ import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Person JournalEntry controller
  */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/person/{personId}/journalEntry")
 public class PersonJournalEntryController extends
@@ -50,5 +48,10 @@ public class PersonJournalEntryController extends
 	@Override
 	protected JournalEntryService getService() {
 		return service;
+	}
+
+	@Override
+	public String permissionBaseName() {
+		return "JOURNAL_ENTRY";
 	}
 }

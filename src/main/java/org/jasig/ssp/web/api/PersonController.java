@@ -4,11 +4,14 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.PagingTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
@@ -32,7 +35,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * <p>
  * Mapped to URI path <code>/1/person</code>
  */
-@PreAuthorize("hasRole('ROLE_USER')")
 @Controller
 @RequestMapping("/1/person")
 public class PersonController extends RestController<PersonTO, Person> {
@@ -46,8 +48,12 @@ public class PersonController extends RestController<PersonTO, Person> {
 	@Autowired
 	private transient PersonTOFactory factory;
 
+	@Autowired
+	protected transient SecurityService securityService;
+
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	PagingTO<PersonTO, Person> getAll(
 			final @RequestParam(required = false) ObjectStatus status,
@@ -66,6 +72,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	PersonTO get(final @PathVariable UUID id) throws ObjectNotFoundException {
 		final Person model = service.get(id);
@@ -78,6 +85,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 
 	@Override
 	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
 	public @ResponseBody
 	PersonTO create(final @Valid @RequestBody PersonTO obj)
 			throws ObjectNotFoundException, ValidationException {
@@ -99,6 +107,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
 	public @ResponseBody
 	PersonTO save(final @PathVariable UUID id,
 			final @Valid @RequestBody PersonTO obj)
@@ -120,6 +129,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@PreAuthorize(Permission.SECURITY_PERSON_DELETE)
 	public @ResponseBody
 	ServiceResponse delete(final @PathVariable UUID id)
 			throws ObjectNotFoundException {
@@ -128,12 +138,13 @@ public class PersonController extends RestController<PersonTO, Person> {
 	}
 
 	@RequestMapping(value = "/{id}/history/print", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	PersonTO historyPrint(final @PathVariable UUID id)
 			throws ObjectNotFoundException {
 		// final Person model = service.get(id);
 		// :TODO historyPrint on PersonController
-		throw new UnsupportedOperationException("Not yet implemented");
+		throw new NotImplementedException();
 	}
 
 	@Override
