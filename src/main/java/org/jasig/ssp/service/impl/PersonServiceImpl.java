@@ -10,6 +10,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.tool.IntakeService;
+import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,34 +129,20 @@ public class PersonServiceImpl implements PersonService {
     /**
      * Used for Specific Report "Address Labels"
      */
-	public List<Person> peopleFromCriteria(Date intakeDatefrom, 
-			Date intakeDateTo,
-			String homeDepartment,
-			String coachId,
-			String programStatus,
-			String specialServiceGroupId,
-			String referralSourcesId,
-			String anticipatedStartTerm,
-			Integer anticipatedStartYear,
-			String studentTypeId,
-			Date registrationTerm,
-			Date registrationYear,						
+	public List<Person> peopleFromCriteria(AddressLabelSearchTO addressLabelSearchTO,				
 			final SortingAndPaging sAndP) throws ObjectNotFoundException{
 		
 		//TODO: use a TO here
-		return dao.getPeopleByCriteria(
-				intakeDatefrom, 
-				intakeDateTo, 
-				homeDepartment, 
-				coachId, 
-				programStatus, 
-				specialServiceGroupId, 
-				referralSourcesId, 
-				anticipatedStartTerm, 
-				anticipatedStartYear, 
-				studentTypeId, 
-				registrationTerm, 
-				registrationYear, 
+		return dao.getPeopleByCriteria(addressLabelSearchTO,
+				sAndP);	
+	}
+ 
+	@Override
+	public List<Person> peopleFromSpecialServiceGroups(
+			List<String> specialServiceGroupIDs,
+			SortingAndPaging sAndP) throws ObjectNotFoundException{
+		//TODO: use a TO here
+		return dao.getPeopleBySpecialServices(specialServiceGroupIDs,
 				sAndP);	
 	}
 	
