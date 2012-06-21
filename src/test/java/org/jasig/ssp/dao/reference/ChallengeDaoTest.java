@@ -135,8 +135,9 @@ public class ChallengeDaoTest {
 
 	@Test
 	public void getAllInStudentIntake() {
-		final List<Challenge> challenges = dao
-				.getAllInStudentIntake(new SortingAndPaging(ObjectStatus.ACTIVE));
+		final Collection<Challenge> challenges = dao
+				.getAllInStudentIntake(
+						new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertList(challenges);
 		assertFalse("GetAll() result should not have been empty.",
 				challenges.isEmpty());

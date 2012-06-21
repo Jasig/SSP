@@ -156,8 +156,8 @@ public class IntakeController extends BaseController {
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 
 		final List<ChallengeTO> challenges = ChallengeTO
-				.toTOList(challengeService
-						.getAll(sAndP).getRows(), true);
+				.toTOList(challengeService.getAllForIntake(sAndP).getRows(),
+						true);
 
 		refData.put("challenges", challenges);
 
