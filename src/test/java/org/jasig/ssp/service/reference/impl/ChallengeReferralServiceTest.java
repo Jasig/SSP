@@ -107,7 +107,7 @@ public class ChallengeReferralServiceTest {
 
 		final ChallengeReferral saved = service.save(daoOne);
 		assertNotNull("Saved instance should not have returned null.", saved);
-		assertTrue("Saved values did not match.", saved.isShowInSelfHelpGuide());
+		assertTrue("Saved values did not match.", saved.getShowInSelfHelpGuide());
 		verify(dao);
 	}
 

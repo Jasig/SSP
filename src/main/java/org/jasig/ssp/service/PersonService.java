@@ -109,5 +109,4 @@ public interface PersonService extends AuditableCrudService<Person> {
 			List<String> specialServiceGroupIDs,
 			SortingAndPaging createForSingleSort)
 			throws ObjectNotFoundException;
-
 }

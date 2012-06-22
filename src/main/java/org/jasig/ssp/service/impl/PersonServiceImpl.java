@@ -120,7 +120,7 @@ public class PersonServiceImpl implements PersonService {
 	 */
 	@Override
 	public List<Person> peopleFromCriteria(
-			AddressLabelSearchTO addressLabelSearchTO,
+			final AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		// TODO: use a TO here
@@ -130,11 +130,10 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public List<Person> peopleFromSpecialServiceGroups(
-			List<String> specialServiceGroupIDs,
-			SortingAndPaging sAndP) throws ObjectNotFoundException {
+			final List<String> specialServiceGroupIDs,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		// TODO: use a TO here
 		return dao.getPeopleBySpecialServices(specialServiceGroupIDs,
 				sAndP);
 	}
-
 }

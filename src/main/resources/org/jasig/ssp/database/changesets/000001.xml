@@ -7,19 +7,37 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="associate ssp user if not already" author="jon.adams"
+		dbms="mssql">
+		<comment>Ensure that the ssp user is connected with rights on this particular database, for use in the GRANT SQL statements below. Though this check/helper script is not necessary if users follow documentation correctly.</comment>
+		<sql>IF NOT EXISTS (SELECT name FROM sys.database_principals WHERE
+			name = 'ssp')
+			BEGIN
+			CREATE USER [ssp] FOR LOGIN [ssp]
+			EXEC
+			sp_addrolemember N'db_datawriter', N'ssp'
+			EXEC sp_addrolemember
+			N'db_datareader', N'ssp'
+			END
+		</sql>
+	</changeSet>
+
 	<changeSet author="daniel.bower" id="spring-security persistent logins">
 		<!-- generated from this sql in the spring security guide create table 
 			persistent_logins ( username varchar(64) not null, series varchar(64) primary 
 			key, token varchar(64) not null, last_used timestamp not null) -->
 
 		<createTable tableName="persistent_logins">
-			<column name="username" type="character varying(64)">
+			<column name="username" type="${nvarchar.type}(64)">
 				<constraints nullable="false" />
 			</column>
-			<column name="series" type="character varying(64)">
+			<column name="series" type="${nvarchar.type}(64)">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="token" type="character varying(64)">
+			<column name="token" type="${nvarchar.type}(64)">
 				<constraints nullable="false" />
 			</column>
 			<column name="last_used" type="datetime">
@@ -44,43 +62,43 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="first_name" type="character varying(50)">
+			<column name="first_name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="middle_initial" type="char(1)">
 				<constraints nullable="true" />
 			</column>
-			<column name="last_name" type="character varying(50)">
+			<column name="last_name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
 			<column name="birth_date" type="datetime">
 				<constraints nullable="true" />
 			</column>
-			<column name="primary_email_address" type="character varying(100)">
+			<column name="primary_email_address" type="${nvarchar.type}(100)">
 				<constraints nullable="false" />
 			</column>
-			<column name="secondary_email_address" type="character varying(100)">
+			<column name="secondary_email_address" type="${nvarchar.type}(100)">
 				<constraints nullable="true" />
 			</column>
-			<column name="username" type="character varying(25)">
+			<column name="username" type="${nvarchar.type}(25)">
 				<constraints nullable="true" />
 			</column>
-			<column name="home_phone" type="character varying(25)">
+			<column name="home_phone" type="${nvarchar.type}(25)">
 				<constraints nullable="true" />
 			</column>
-			<column name="work_phone" type="character varying(25)">
+			<column name="work_phone" type="${nvarchar.type}(25)">
 				<constraints nullable="true" />
 			</column>
-			<column name="cell_phone" type="character varying(25)">
+			<column name="cell_phone" type="${nvarchar.type}(25)">
 				<constraints nullable="true" />
 			</column>
-			<column name="address_line_1" type="character varying(50)">
+			<column name="address_line_1" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
-			<column name="address_line_2" type="character varying(50)">
+			<column name="address_line_2" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
-			<column name="city" type="character varying(50)">
+			<column name="city" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
 			<column name="state" type="char(2)">
@@ -89,10 +107,10 @@
 			<column name="zip_code" type="char(10)">
 				<constraints nullable="true" />
 			</column>
-			<column name="photo_url" type="character varying(100)">
+			<column name="photo_url" type="${nvarchar.type}(100)">
 				<constraints nullable="true" />
 			</column>
-			<column name="school_id" type="character varying(50)">
+			<column name="school_id" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
 			<column name="enabled" type="boolean" defaultValueBoolean="false" />
@@ -110,10 +128,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -175,10 +193,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -218,10 +236,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -259,10 +277,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -300,10 +318,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -341,10 +359,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -382,10 +400,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -423,10 +441,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -464,10 +482,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -505,10 +523,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">

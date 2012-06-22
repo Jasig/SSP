@@ -7,6 +7,9 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
 	<changeSet id="remove duplicate referral table" author="daniel.bower">
 		<dropTable tableName="referral" />
 
@@ -15,7 +18,7 @@
 				<column name="id" type="uuid">
 					<constraints primaryKey="true" nullable="false" />
 				</column>
-				<column name="name" type="character varying(80)">
+				<column name="name" type="${nvarchar.type}(80)">
 					<constraints nullable="false" />
 				</column>
 				<column name="description" type="text">
@@ -74,7 +77,7 @@
 
 	<changeSet id="" author="daniel.bower">
 		<addColumn tableName="confidentiality_level">
-			<column name="acronym" type="character varying(10)">
+			<column name="acronym" type="${nvarchar.type}(10)">
 				<constraints nullable="false" />
 			</column>
 		</addColumn>
@@ -88,7 +91,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -135,7 +138,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -214,7 +217,7 @@
 				<column name="id" type="uuid">
 					<constraints primaryKey="true" nullable="false" />
 				</column>
-				<column name="name" type="character varying(80)">
+				<column name="name" type="${nvarchar.type}(80)">
 					<constraints nullable="false" />
 				</column>
 				<column name="description" type="text">
@@ -263,22 +266,22 @@
 
 	<changeSet id="merge task and custom task" author="daniel.bower">
 		<addColumn tableName="task">
-			<column name="name" type="character varying(100)">
+			<column name="name" type="${nvarchar.type}(100)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
 		<dropTable tableName="custom_task" />
 		<dropNotNullConstraint tableName="task"
-			columnName="challenge_id" />
+			columnName="challenge_id" columnDataType="uuid" />
 		<dropNotNullConstraint tableName="task"
-			columnName="challenge_referral_id" />
+			columnName="challenge_referral_id" columnDataType="uuid" />
 		<rollback>
 			<dropColumn tableName="task" columnName="name" />
 			<!-- Could Add table custom_task here -->
 			<addNotNullConstraint tableName="task"
-				columnName="challenge_id" />
+				columnName="challenge_id" columnDataType="uuid" />
 			<addNotNullConstraint tableName="task"
-				columnName="challenge_referral_id" />
+				columnName="challenge_referral_id" columnDataType="uuid" />
 
 		</rollback>
 	</changeSet>
@@ -1236,7 +1239,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -1279,7 +1282,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -1325,7 +1328,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -1371,7 +1374,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
