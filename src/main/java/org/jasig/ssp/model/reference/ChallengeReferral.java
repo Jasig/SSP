@@ -93,7 +93,7 @@ public class ChallengeReferral
 		this.challengeChallengeReferrals = challengeChallengeReferrals;
 	}
 
-	public Boolean isShowInSelfHelpGuide() {
+	public Boolean getShowInSelfHelpGuide() {
 		return showInSelfHelpGuide;
 	}
 
@@ -104,7 +104,7 @@ public class ChallengeReferral
 	/**
 	 * @return the showInStudentIntake
 	 */
-	public Boolean isShowInStudentIntake() {
+	public Boolean getShowInStudentIntake() {
 		return showInStudentIntake;
 	}
 
@@ -126,8 +126,8 @@ public class ChallengeReferral
 		int result = hashPrime() * super.hashCode();
 
 		result *= hashField("publicDescription", publicDescription);
-		result *= showInSelfHelpGuide == null && showInSelfHelpGuide ? 5 : 11;
-		result *= showInStudentIntake == null && showInStudentIntake ? 3 : 17;
+		result *= showInSelfHelpGuide != null && showInSelfHelpGuide ? 5 : 11;
+		result *= showInStudentIntake != null && showInStudentIntake ? 3 : 17;
 
 		// collections are not included here
 

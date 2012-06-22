@@ -1,6 +1,5 @@
 package org.jasig.ssp.util.sort; // NOPMD tests may have lots of imports
 
-import static org.jasig.ssp.util.assertions.SspAssert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -132,7 +131,7 @@ public class SortingAndPagingTests {
 		final SortingAndPaging maxLimit = new SortingAndPaging(null, -1,
 				SortingAndPaging.MAXIMUM_ALLOWABLE_RESULTS + 5, null, null,
 				null);
-		assertNotEquals("Default max should have been limited.",
+		assertEquals("Default max should have been limited.",
 				SortingAndPaging.MAXIMUM_ALLOWABLE_RESULTS,
 				maxLimit.getMaxResults());
 		assertEquals("First result should have been sanitized to 0.",

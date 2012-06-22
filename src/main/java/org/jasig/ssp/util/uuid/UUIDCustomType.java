@@ -42,7 +42,7 @@ public final class UUIDCustomType extends
 
 	private static final long serialVersionUID = 6899061246976147229L;
 
-	private static SqlTypeDescriptor sqlDescription = VarcharTypeDescriptor.INSTANCE;
+	private static SqlTypeDescriptor sqlDescription;
 
 	/**
 	 * Initialize the configured dialect. Must be called before Hibernate is
@@ -56,6 +56,7 @@ public final class UUIDCustomType extends
 	 *            <ul>
 	 *            <li><code>org.hibernate.dialect.PostgreSQLDialect</code></li>
 	 *            <li><code>org.hibernate.dialect.SQLServerDialect</code></li>
+	 *            <li><code>org.hibernate.dialect.SQLServer2008Dialect</code></li>
 	 *            </ul>
 	 * @throws UnsupportedOperationException
 	 *             If the dialect is not in the supported list.
@@ -68,7 +69,9 @@ public final class UUIDCustomType extends
 		if ("org.hibernate.dialect.PostgreSQLDialect".equalsIgnoreCase(dialect)) {
 			sqlDescription = PostgresUUIDType.PostgresUUIDSqlTypeDescriptor.INSTANCE;
 		} else if ("org.hibernate.dialect.SQLServerDialect"
-				.equalsIgnoreCase(dialect)) {
+				.equalsIgnoreCase(dialect)
+				|| "org.hibernate.dialect.SQLServer2008Dialect"
+						.equalsIgnoreCase(dialect)) {
 			sqlDescription = VarcharTypeDescriptor.INSTANCE;
 		} else {
 			throw new UnsupportedOperationException("Unsupported database!");
@@ -77,8 +80,8 @@ public final class UUIDCustomType extends
 
 	public UUIDCustomType() {
 		super(sqlDescription, UUIDTypeDescriptor.INSTANCE);
-		// LOGGER.info("UUIDCustomType initialized with SQL description: " +
-		// sqlDescription);
+		LOGGER.trace("UUIDCustomType initialized with SQL description: "
+				+ sqlDescription);
 	}
 
 	@Override

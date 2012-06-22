@@ -43,8 +43,8 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	public final void from(final ChallengeReferral model) {
 		super.from(model);
 		publicDescription = model.getPublicDescription();
-		showInSelfHelpGuide = model.isShowInSelfHelpGuide();
-		showInStudentIntake = model.isShowInStudentIntake();
+		showInSelfHelpGuide = model.getShowInSelfHelpGuide();
+		showInStudentIntake = model.getShowInStudentIntake();
 	}
 
 	public String getPublicDescription() {

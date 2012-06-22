@@ -58,6 +58,10 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @param id
 	 *            The specific id to use to lookup the associated data.
 	 * @return The specified instance if found.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If that specified data is not invalid.
 	 */
 	public abstract TO get(UUID id) throws ObjectNotFoundException,
 			ValidationException;
@@ -70,8 +74,10 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @param obj
 	 *            New instance to persist.
 	 * @return Original instance plus the generated id.
-	 * @throws org.jasig.ssp.web.api.validation.ValidationException
-	 *             If the obj contains an id (since it shouldn't).
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If the specified data contains an id (since it shouldn't).
 	 */
 	public abstract TO create(TO obj) throws ObjectNotFoundException,
 			ValidationException;
@@ -84,7 +90,9 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @param obj
 	 *            Full instance to persist.
 	 * @return The update data object instance.
-	 * @throws org.jasig.ssp.web.api.validation.ValidationException
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
 	 *             If the specified id is null.
 	 */
 	public abstract TO save(UUID id, TO obj) throws ValidationException,
@@ -97,6 +105,8 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @param id
 	 *            The id of the data instance to mark deleted.
 	 * @return Success boolean.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
 	 */
 	public abstract ServiceResponse delete(UUID id)
 			throws ObjectNotFoundException;
