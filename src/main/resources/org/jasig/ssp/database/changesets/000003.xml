@@ -7,6 +7,9 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
 	<changeSet id="create reference data - ethnicity" author="daniel.bower">
 		<insert tableName="ethnicity">
 			<column name="id" value="9f73e1f0-66aa-47f6-a7bc-2daecb915207" />
@@ -1206,10 +1209,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="${nvarchar.type}(25)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -1251,10 +1254,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="${nvarchar.type}(25)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -1296,10 +1299,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(25)">
+			<column name="name" type="${nvarchar.type}(25)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -1340,7 +1343,7 @@
 	<changeSet id="add public_description column to challenge_referral"
 		author="daniel.bower">
 		<addColumn tableName="challenge_referral">
-			<column name="public_description" type="character varying(150)">
+			<column name="public_description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
@@ -1351,10 +1354,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(100)">
+			<column name="name" type="${nvarchar.type}(100)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -1397,10 +1400,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(100)">
+			<column name="name" type="${nvarchar.type}(100)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -1442,13 +1445,13 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(100)">
+			<column name="name" type="${nvarchar.type}(100)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
-			<column name="subject" type="character varying(250)">
+			<column name="subject" type="${nvarchar.type}(250)">
 				<constraints nullable="false" />
 			</column>
 			<column name="body" type="text">
@@ -1510,7 +1513,7 @@
 				<constraints nullable="false" foreignKeyName="person_tool_person_id_person_id"
 					references="person(id)" />
 			</column>
-			<column name="tool" type="character varying(255)">
+			<column name="tool" type="${nvarchar.type}(255)">
 				<constraints nullable="true" />
 			</column>
 		</createTable>
@@ -1558,8 +1561,8 @@
 			</column>
 			<column name="confidentiality_disclosure_agreement" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="person_confidentiality_disclosure_agreement_confidentiality_disclosure_agreement_id_confidentiality_disclosure_agreement_id"
-					references="person(id)" />
+					foreignKeyName="person_confidentiality_disclosure_agreement_agreement_id"
+					references="confidentiality_disclosure_agreement(id)" />
 			</column>
 		</createTable>
 
@@ -1582,10 +1585,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(100)">
+			<column name="name" type="${nvarchar.type}(100)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -1643,10 +1646,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(100)">
+			<column name="name" type="${nvarchar.type}(100)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -1735,7 +1738,7 @@
 			<column name="last_year_attended" type="int" />
 			<column name="highest_grade_completed" type="int" />
 			<column name="graduated_year" type="int" />
-			<column name="school_name" type="character varying(255)" />
+			<column name="school_name" type="${nvarchar.type}(255)" />
 		</addColumn>
 		<rollback>
 			<dropColumn tableName="person_education_level" columnName="last_year_attended" />
@@ -1748,7 +1751,7 @@
 	<changeSet id="add militaryBranchDescription to studentEducationGoal"
 		author="daniel.bower">
 		<addColumn tableName="person_education_goal">
-			<column name="military_branch_description" type="character varying(128)">
+			<column name="military_branch_description" type="${nvarchar.type}(128)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
@@ -1759,7 +1762,7 @@
 
 	<changeSet id="add userId field to person" author="daniel.bower">
 		<addColumn tableName="person">
-			<column name="user_id" type="character varying(25)"></column>
+			<column name="user_id" type="${nvarchar.type}(25)"></column>
 		</addColumn>
 		<rollback>
 			<dropColumn tableName="person" columnName="user_id" />
@@ -1782,7 +1785,7 @@
 	<changeSet id="add other_description to education_goal"
 		author="daniel.bower">
 		<addColumn tableName="education_goal">
-			<column name="other_description" type="character varying(255)">
+			<column name="other_description" type="${nvarchar.type}(255)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
@@ -1793,19 +1796,19 @@
 
 	<changeSet id="fix name column size from 25 to 100" author="daniel.bower">
 		<modifyDataType tableName="challenge_category"
-			columnName="name" newDataType="character varying(100)" />
+			columnName="name" newDataType="${nvarchar.type}(100)" />
 		<modifyDataType tableName="challenge_referral"
-			columnName="name" newDataType="character varying(100)" />
+			columnName="name" newDataType="${nvarchar.type}(100)" />
 		<modifyDataType tableName="confidentiality_level"
-			columnName="name" newDataType="character varying(100)" />
+			columnName="name" newDataType="${nvarchar.type}(100)" />
 
 		<rollback>
 			<modifyDataType tableName="challenge_category"
-				columnName="name" newDataType="character varying(25)" />
+				columnName="name" newDataType="${nvarchar.type}(25)" />
 			<modifyDataType tableName="challenge_referral"
-				columnName="name" newDataType="character varying(25)" />
+				columnName="name" newDataType="${nvarchar.type}(25)" />
 			<modifyDataType tableName="confidentiality_level"
-				columnName="name" newDataType="character varying(25)" />
+				columnName="name" newDataType="${nvarchar.type}(25)" />
 		</rollback>
 	</changeSet>
 
@@ -1852,7 +1855,7 @@
 
 	<changeSet id="add tags to challenge" author="daniel.bower">
 		<addColumn tableName="challenge">
-			<column name="tags" type="character varying(255)">
+			<column name="tags" type="${nvarchar.type}(255)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
@@ -1907,119 +1910,119 @@
 			columnName="public_description" newDataType="text" />
 
 		<modifyDataType tableName="challenge" columnName="name"
-			newDataType="character varying(80)" />
+			newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="challenge_category"
-			columnName="name" newDataType="character varying(80)" />
+			columnName="name" newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="challenge_referral"
-			columnName="name" newDataType="character varying(80)" />
+			columnName="name" newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="child_care_arrangement"
-			columnName="name" newDataType="character varying(80)" />
+			columnName="name" newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="citizenship" columnName="name"
-			newDataType="character varying(80)" />
+			newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="confidentiality_disclosure_agreement"
-			columnName="name" newDataType="character varying(80)" />
+			columnName="name" newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="confidentiality_level"
-			columnName="name" newDataType="character varying(80)" />
+			columnName="name" newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="education_goal" columnName="name"
-			newDataType="character varying(80)" />
+			newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="education_level" columnName="name"
-			newDataType="character varying(80)" />
+			newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="ethnicity" columnName="name"
-			newDataType="character varying(80)" />
+			newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="funding_source" columnName="name"
-			newDataType="character varying(80)" />
+			newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="marital_status" columnName="name"
-			newDataType="character varying(80)" />
+			newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="message_template"
-			columnName="name" newDataType="character varying(80)" />
+			columnName="name" newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="self_help_guide" columnName="name"
-			newDataType="character varying(80)" />
+			newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="self_help_guide_group"
-			columnName="name" newDataType="character varying(80)" />
+			columnName="name" newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="self_help_guide_question"
-			columnName="name" newDataType="character varying(80)" />
+			columnName="name" newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="student_status" columnName="name"
-			newDataType="character varying(80)" />
+			newDataType="${nvarchar.type}(80)" />
 		<modifyDataType tableName="veteran_status" columnName="name"
-			newDataType="character varying(80)" />
+			newDataType="${nvarchar.type}(80)" />
 
 		<rollback>
 			<modifyDataType tableName="challenge" columnName="description"
-				newDataType="character varying(150)" />
+				newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="challenge_category"
-				columnName="description" newDataType="character varying(150)" />
+				columnName="description" newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="challenge_referral"
-				columnName="description" newDataType="character varying(150)" />
+				columnName="description" newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="child_care_arrangement"
-				columnName="description" newDataType="character varying(150)" />
+				columnName="description" newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="citizenship" columnName="description"
-				newDataType="character varying(150)" />
+				newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="confidentiality_disclosure_agreement"
-				columnName="description" newDataType="character varying(150)" />
+				columnName="description" newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="confidentiality_level"
-				columnName="description" newDataType="character varying(150)" />
+				columnName="description" newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="education_goal" columnName="description"
-				newDataType="character varying(150)" />
+				newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="education_level"
-				columnName="description" newDataType="character varying(150)" />
+				columnName="description" newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="ethnicity" columnName="description"
-				newDataType="character varying(150)" />
+				newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="funding_source" columnName="description"
-				newDataType="character varying(150)" />
+				newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="marital_status" columnName="description"
-				newDataType="character varying(150)" />
+				newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="message_template"
-				columnName="description" newDataType="character varying(150)" />
+				columnName="description" newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="self_help_guide"
-				columnName="description" newDataType="character varying(150)" />
+				columnName="description" newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="self_help_guide_group"
-				columnName="description" newDataType="character varying(150)" />
+				columnName="description" newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="self_help_guide_question"
-				columnName="description" newDataType="character varying(150)" />
+				columnName="description" newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="student_status" columnName="description"
-				newDataType="character varying(150)" />
+				newDataType="${nvarchar.type}(150)" />
 			<modifyDataType tableName="veteran_status" columnName="description"
-				newDataType="character varying(150)" />
+				newDataType="${nvarchar.type}(150)" />
 
 			<modifyDataType tableName="challenge_referral"
-				columnName="public_description" newDataType="character varying(150)" />
+				columnName="public_description" newDataType="${nvarchar.type}(150)" />
 
 			<modifyDataType tableName="challenge" columnName="name"
-				newDataType="character varying(50)" />
+				newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="challenge_category"
-				columnName="name" newDataType="character varying(50)" />
+				columnName="name" newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="challenge_referral"
-				columnName="name" newDataType="character varying(50)" />
+				columnName="name" newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="child_care_arrangement"
-				columnName="name" newDataType="character varying(50)" />
+				columnName="name" newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="citizenship" columnName="name"
-				newDataType="character varying(50)" />
+				newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="confidentiality_disclosure_agreement"
-				columnName="name" newDataType="character varying(50)" />
+				columnName="name" newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="confidentiality_level"
-				columnName="name" newDataType="character varying(50)" />
+				columnName="name" newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="education_goal" columnName="name"
-				newDataType="character varying(50)" />
+				newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="education_level"
-				columnName="name" newDataType="character varying(50)" />
+				columnName="name" newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="ethnicity" columnName="name"
-				newDataType="character varying(50)" />
+				newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="funding_source" columnName="name"
-				newDataType="character varying(50)" />
+				newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="marital_status" columnName="name"
-				newDataType="character varying(50)" />
+				newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="message_template"
-				columnName="name" newDataType="character varying(50)" />
+				columnName="name" newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="self_help_guide"
-				columnName="name" newDataType="character varying(50)" />
+				columnName="name" newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="self_help_guide_group"
-				columnName="name" newDataType="character varying(50)" />
+				columnName="name" newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="self_help_guide_question"
-				columnName="name" newDataType="character varying(50)" />
+				columnName="name" newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="student_status" columnName="name"
-				newDataType="character varying(50)" />
+				newDataType="${nvarchar.type}(50)" />
 			<modifyDataType tableName="veteran_status" columnName="name"
-				newDataType="character varying(50)" />
+				newDataType="${nvarchar.type}(50)" />
 
 		</rollback>
 	</changeSet>
@@ -3425,10 +3428,10 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -3601,7 +3604,7 @@
 			<column name="reminder_sent_date" type="datetime">
 				<constraints nullable="true" />
 			</column>
-			<column name="session_id" type="character varying(32)">
+			<column name="session_id" type="${nvarchar.type}(32)">
 				<constraints nullable="true" />
 			</column>
 			<column name="person_id" type="uuid">
@@ -3662,14 +3665,14 @@
 			<column name="reminder_sent_date" type="datetime">
 				<constraints nullable="true" />
 			</column>
-			<column name="session_id" type="character varying(32)">
+			<column name="session_id" type="${nvarchar.type}(32)">
 				<constraints nullable="true" />
 			</column>
 			<column name="person_id" type="uuid">
 				<constraints nullable="false" foreignKeyName="custom_task_person_person_id"
 					references="person(id)" />
 			</column>
-			<column name="name" type="character varying(100)">
+			<column name="name" type="${nvarchar.type}(100)">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -3714,13 +3717,13 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(50)">
+			<column name="name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
-			<column name="description" type="character varying(150)">
+			<column name="description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
-			<column name="public_description" type="character varying(150)">
+			<column name="public_description" type="${nvarchar.type}(150)">
 				<constraints nullable="true" />
 			</column>
 			<column name="created_date" type="datetime">
@@ -3773,7 +3776,7 @@
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
-			<column name="subject" type="character varying(250)">
+			<column name="subject" type="${nvarchar.type}(250)">
 				<constraints nullable="false" />
 			</column>
 			<column name="body" type="text">
@@ -3784,10 +3787,10 @@
 					references="person(id)" />
 			</column>
 			<column name="recipient_id" type="uuid">
-				<constraints nullable="false" foreignKeyName="message_recipient_id_person_id"
+				<constraints nullable="true" foreignKeyName="message_recipient_id_person_id"
 					references="person(id)" />
 			</column>
-			<column name="recipient_email_address" type="character varying(100)">
+			<column name="recipient_email_address" type="${nvarchar.type}(100)">
 				<constraints nullable="false" />
 			</column>
 			<column name="sent_date" type="datetime">
@@ -3919,20 +3922,6 @@
 		<rollback>
 			<dropColumn tableName="person" columnName="strengths" />
 		</rollback>
-	</changeSet>
-
-	<changeSet id="Fix FK on person_confidentiality_disclosure_agreement"
-		author="jon.adams">
-		<dropColumn tableName="person_confidentiality_disclosure_agreement"
-			columnName="confidentiality_disclosure_agreement_id" />
-		<addColumn tableName="person_confidentiality_disclosure_agreement">
-			<column name="confidentiality_disclosure_agreement_id" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="person_confidentiality_disclosure_agreement_agreement_id"
-					references="confidentiality_disclosure_agreement(id)" />
-			</column>
-		</addColumn>
-		<rollback></rollback>
 	</changeSet>
 
 </databaseChangeLog>

@@ -114,7 +114,7 @@ public class VeteranStatusDaoTest {
 	private void assertList(final Collection<VeteranStatus> objects) {
 		assertFalse("List should not have been empty.", objects.isEmpty());
 
-		for (VeteranStatus object : objects) {
+		for (final VeteranStatus object : objects) {
 			assertNotNull("List item should not have a null id.",
 					object.getId());
 		}

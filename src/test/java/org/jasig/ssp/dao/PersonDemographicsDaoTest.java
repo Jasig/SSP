@@ -31,23 +31,23 @@ public class PersonDemographicsDaoTest {
 	// LoggerFactory.getLogger(PersonDemographicsDaoTest.class);
 
 	@Autowired
-	private PersonDao daoPerson;
+	private transient PersonDao daoPerson;
 
 	@Autowired
-	private PersonDemographicsDao dao;
+	private transient PersonDemographicsDao dao;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
 		// test student = ken thompson; test wage = "some wage"
-		String testWage = "some wage";
+		final String testWage = "some wage";
 		Person person = daoPerson.get(UUID
 				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
 
@@ -74,10 +74,10 @@ public class PersonDemographicsDaoTest {
 		assertEquals("Demographics wage values did not match.", testWage,
 				pd.getWage());
 
-		PersonDemographics byId = dao.get(pd.getId());
+		final PersonDemographics byId = dao.get(pd.getId());
 		assertEquals(byId.getId(), pd.getId());
 
-		UUID oldId = pd.getId();
+		final UUID oldId = pd.getId();
 		person.setDemographics(null);
 		daoPerson.save(person);
 		dao.delete(pd);
@@ -85,15 +85,15 @@ public class PersonDemographicsDaoTest {
 		try {
 			assertNull("Demographic information was not correctly deleted.",
 					dao.get(oldId));
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			// expected
 		}
 	}
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		PersonDemographics pd = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final PersonDemographics pd = dao.get(id);
 		assertNull(pd);
 
 		assertNull(new Person(id).getDemographics());

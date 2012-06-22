@@ -16,9 +16,9 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 
 	private String publicDescription;
 
-	private boolean showInSelfHelpGuide;
+	private Boolean showInSelfHelpGuide;
 
-	private boolean showInStudentIntake;
+	private Boolean showInStudentIntake;
 
 	public ChallengeReferralTO() {
 		super();
@@ -32,7 +32,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	public static List<ChallengeReferralTO> toTOList(
 			final Collection<ChallengeReferral> models) {
 		final List<ChallengeReferralTO> tObjects = Lists.newArrayList();
-		for (ChallengeReferral model : models) {
+		for (final ChallengeReferral model : models) {
 			tObjects.add(new ChallengeReferralTO(model)); // NOPMD by jon.adams
 		}
 
@@ -43,8 +43,8 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	public final void from(final ChallengeReferral model) {
 		super.from(model);
 		publicDescription = model.getPublicDescription();
-		showInSelfHelpGuide = model.isShowInSelfHelpGuide();
-		showInStudentIntake = model.isShowInStudentIntake();
+		showInSelfHelpGuide = model.getShowInSelfHelpGuide();
+		showInStudentIntake = model.getShowInStudentIntake();
 	}
 
 	public String getPublicDescription() {
@@ -58,7 +58,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	/**
 	 * @return the showInSelfHelpGuide
 	 */
-	public boolean isShowInSelfHelpGuide() {
+	public Boolean isShowInSelfHelpGuide() {
 		return showInSelfHelpGuide;
 	}
 
@@ -66,14 +66,14 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	 * @param showInSelfHelpGuide
 	 *            the showInSelfHelpGuide to set
 	 */
-	public void setShowInSelfHelpGuide(final boolean showInSelfHelpGuide) {
+	public void setShowInSelfHelpGuide(final Boolean showInSelfHelpGuide) {
 		this.showInSelfHelpGuide = showInSelfHelpGuide;
 	}
 
 	/**
 	 * @return the showInStudentIntake
 	 */
-	public boolean isShowInStudentIntake() {
+	public Boolean isShowInStudentIntake() {
 		return showInStudentIntake;
 	}
 
@@ -81,7 +81,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	 * @param showInStudentIntake
 	 *            the showInStudentIntake to set
 	 */
-	public void setShowInStudentIntake(final boolean showInStudentIntake) {
+	public void setShowInStudentIntake(final Boolean showInStudentIntake) {
 		this.showInStudentIntake = showInStudentIntake;
 	}
 }
