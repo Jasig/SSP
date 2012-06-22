@@ -36,8 +36,8 @@ public class AddressLabelSearchTO
 	private String anticipatedStartTerm;
 	private Integer anticipatedStartYear;
 	private UUID studentTypeId;
-	private Date registrationTerm;
-	private Date registrationYear;		
+	private String registrationTerm;
+	private Integer registrationYear;		
 
 	/**
 	 * Empty constructor
@@ -50,7 +50,7 @@ public class AddressLabelSearchTO
 			UUID coachId, UUID programStatus, List<UUID> specialServiceGroupId,
 			UUID referralSourcesId, String anticipatedStartTerm,
 			Integer anticipatedStartYear, UUID studentTypeId,
-			Date registrationTerm, Date registrationYear) {
+			String registrationTerm, Integer registrationYear) {
 		super();
 		this.intakeDateTo = intakeDateTo;
 		this.homeDepartment = homeDepartment;
@@ -137,19 +137,19 @@ public class AddressLabelSearchTO
 		this.studentTypeId = studentTypeId;
 	}
 
-	public Date getRegistrationTerm() {
+	public String getRegistrationTerm() {
 		return registrationTerm;
 	}
 
-	public void setRegistrationTerm(Date registrationTerm) {
+	public void setRegistrationTerm(String registrationTerm) {
 		this.registrationTerm = registrationTerm;
 	}
 
-	public Date getRegistrationYear() {
+	public Integer getRegistrationYear() {
 		return registrationYear;
 	}
 
-	public void setRegistrationYear(Date registrationYear) {
+	public void setRegistrationYear(Integer registrationYear) {
 		this.registrationYear = registrationYear;
 	}
 
