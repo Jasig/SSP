@@ -35,10 +35,10 @@ public class ChallengeReferral
 	private String publicDescription;
 
 	@Column(nullable = false)
-	private boolean showInSelfHelpGuide;
+	private Boolean showInSelfHelpGuide;
 
 	@Column(nullable = false)
-	private boolean showInStudentIntake;
+	private Boolean showInStudentIntake;
 
 	@OneToMany(mappedBy = "challengeReferral")
 	@Where(clause = "object_status <> 3")
@@ -93,26 +93,26 @@ public class ChallengeReferral
 		this.challengeChallengeReferrals = challengeChallengeReferrals;
 	}
 
-	public boolean isShowInSelfHelpGuide() {
+	public Boolean isShowInSelfHelpGuide() {
 		return showInSelfHelpGuide;
 	}
 
-	public void setShowInSelfHelpGuide(final boolean showInSelfHelpGuide) {
+	public void setShowInSelfHelpGuide(final Boolean showInSelfHelpGuide) {
 		this.showInSelfHelpGuide = showInSelfHelpGuide;
 	}
 
 	/**
 	 * @return the showInStudentIntake
 	 */
-	public boolean isShowInStudentIntake() {
+	public Boolean isShowInStudentIntake() {
 		return showInStudentIntake;
 	}
 
 	/**
 	 * @param showInStudentIntake
-	 *            the showInStudentIntake to set
+	 *            the showInStudentIntake to set, can be null
 	 */
-	public void setShowInStudentIntake(final boolean showInStudentIntake) {
+	public void setShowInStudentIntake(final Boolean showInStudentIntake) {
 		this.showInStudentIntake = showInStudentIntake;
 	}
 
@@ -126,8 +126,8 @@ public class ChallengeReferral
 		int result = hashPrime() * super.hashCode();
 
 		result *= hashField("publicDescription", publicDescription);
-		result *= showInSelfHelpGuide ? 5 : 11;
-		result *= showInStudentIntake ? 3 : 17;
+		result *= showInSelfHelpGuide == null && showInSelfHelpGuide ? 5 : 11;
+		result *= showInStudentIntake == null && showInStudentIntake ? 3 : 17;
 
 		// collections are not included here
 

@@ -166,7 +166,8 @@ public class IntakeController extends BaseController {
 			final List<ChallengeReferralTO> referrals = Lists.newArrayList();
 			for (final ChallengeReferralTO referral : challenge
 					.getChallengeChallengeReferrals()) {
-				if (referral.isShowInStudentIntake()) {
+				if (referral.isShowInStudentIntake() != null
+						&& referral.isShowInStudentIntake()) {
 					referrals.add(referral);
 				}
 			}

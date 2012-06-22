@@ -18,11 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author codynet
- *
- */
-/**
- * @author codynet
- *
+ * 
  */
 @Service
 @Transactional
@@ -122,44 +118,39 @@ public class PersonServiceImpl implements PersonService {
 			final SortingAndPaging sAndP) {
 		return dao.getPeopleInList(personIds, sAndP);
 	}
-	
-	
 
-    /**
-     * Used for Specific Report "Address Labels"
-     */
-	public List<Person> peopleFromCriteria(Date intakeDatefrom, 
-			Date intakeDateTo,
-			String homeDepartment,
-			String coachId,
-			String programStatus,
-			String specialServiceGroupId,
-			String referralSourcesId,
-			String anticipatedStartTerm,
-			Integer anticipatedStartYear,
-			String studentTypeId,
-			Date registrationTerm,
-			Date registrationYear,						
-			final SortingAndPaging sAndP) throws ObjectNotFoundException{
-		
-		//TODO: use a TO here
+	/**
+	 * Used for Specific Report "Address Labels"
+	 */
+	@Override
+	public List<Person> peopleFromCriteria(final Date intakeDatefrom,
+			final Date intakeDateTo,
+			final String homeDepartment,
+			final String coachId,
+			final String programStatus,
+			final String specialServiceGroupId,
+			final String referralSourcesId,
+			final String anticipatedStartTerm,
+			final Integer anticipatedStartYear,
+			final String studentTypeId,
+			final Date registrationTerm,
+			final Date registrationYear,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException {
+
+		// TODO: use a TO here
 		return dao.getPeopleByCriteria(
-				intakeDatefrom, 
-				intakeDateTo, 
-				homeDepartment, 
-				coachId, 
-				programStatus, 
-				specialServiceGroupId, 
-				referralSourcesId, 
-				anticipatedStartTerm, 
-				anticipatedStartYear, 
-				studentTypeId, 
-				registrationTerm, 
-				registrationYear, 
-				sAndP);	
+				intakeDatefrom,
+				intakeDateTo,
+				homeDepartment,
+				coachId,
+				programStatus,
+				specialServiceGroupId,
+				referralSourcesId,
+				anticipatedStartTerm,
+				anticipatedStartYear,
+				studentTypeId,
+				registrationTerm,
+				registrationYear,
+				sAndP);
 	}
-	
-	
-	
-	
 }
