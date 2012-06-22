@@ -19,6 +19,8 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.jasig.ssp.util.uuid.UUIDCustomType;
 
 /**
  * <p>
@@ -42,9 +44,10 @@ import org.hibernate.annotations.Type;
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
+@TypeDef(name = "uuid-custom", typeClass = UUIDCustomType.class)
 public abstract class AbstractAuditable implements Auditable { // NOPMD
 	@Id
-	@Type(type = "pg-uuid")
+	@Type(type = "uuid-custom")
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2", parameters = { @Parameter(name = "uuid_gen_strategy_class", value = "org.hibernate.id.uuid.CustomVersionOneStrategy") })
 	private UUID id;

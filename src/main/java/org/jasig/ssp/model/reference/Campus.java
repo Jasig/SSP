@@ -9,7 +9,9 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.util.uuid.UUIDCustomType;
 
 /**
  * Campus reference object.
@@ -18,12 +20,13 @@ import org.jasig.ssp.model.Auditable;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@TypeDef(name = "uuid-custom", typeClass = UUIDCustomType.class)
 public class Campus extends AbstractReference implements Auditable {
 
 	private static final long serialVersionUID = -6346942820506585713L;
 
 	@Column(nullable = false)
-	@Type(type = "pg-uuid")
+	@Type(type = "uuid-custom")
 	@NotNull
 	private UUID earlyAlertCoordinatorId;
 
