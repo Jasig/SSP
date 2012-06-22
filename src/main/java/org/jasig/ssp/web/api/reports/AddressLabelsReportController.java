@@ -87,18 +87,18 @@ public class AddressLabelsReportController extends BaseController {
 	void getAddressLabels(HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,	
 			
-			final @RequestParam(required = false) Date intakeDatefrom, 
-			final @RequestParam(required = false) Date intakeDateTo,
-			final @RequestParam(required = false) UUID homeDepartment,
-			final @RequestParam(required = false) UUID coachId,
-			final @RequestParam(required = false) UUID programStatus,
-			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
-			final @RequestParam(required = false) UUID referralSourcesId,
-			final @RequestParam(required = false) String anticipatedStartTerm,
-			final @RequestParam(required = false) Integer anticipatedStartYear,
-			final @RequestParam(required = false) UUID studentTypeId,
-			final @RequestParam(required = false) Date registrationTerm,
-			final @RequestParam(required = false) Date registrationYear,
+			final @RequestParam(required = false) String tintakeDatefrom, 
+			final @RequestParam(required = false) String tintakeDateTo,
+			final @RequestParam(required = false) String thomeDepartment,
+			final @RequestParam(required = false) String tcoachId,
+			final @RequestParam(required = false) String tprogramStatus,
+			final @RequestParam(required = false) List<String> tspecialServiceGroupIds,
+			final @RequestParam(required = false) String treferralSourcesId,
+			final @RequestParam(required = false) String tanticipatedStartTerm,
+			final @RequestParam(required = false) Integer tanticipatedStartYear,
+			final @RequestParam(required = false) String tstudentTypeId,
+			final @RequestParam(required = false) String tregistrationTerm,
+			final @RequestParam(required = false) String tregistrationYear,
 			
 			
 			final @RequestParam(required = false) Integer start,
@@ -107,6 +107,21 @@ public class AddressLabelsReportController extends BaseController {
 			final @RequestParam(required = false) String sortDirection) throws ObjectNotFoundException, JRException, IOException{
 
 		 
+		//LOGGER.debug(tintakeDatefrom.toGMTString());
+		
+		final Date intakeDatefrom = null;
+		final Date intakeDateTo= null;
+		final UUID homeDepartment= null;
+		final UUID coachId= null;
+		final UUID programStatus= null;
+		final List<UUID> specialServiceGroupIds= null;
+		final UUID referralSourcesId= null;
+		final String anticipatedStartTerm= null;
+		final Integer anticipatedStartYear= null;
+		final UUID studentTypeId= null;
+		final String registrationTerm= null;
+		final Integer registrationYear= null;	
+		
 		
 		
 		AddressLabelSearchTO searchForm = new AddressLabelSearchTO(intakeDateTo, homeDepartment,
