@@ -13,7 +13,8 @@ import javax.portlet.filter.FilterChain;
 import javax.portlet.filter.FilterConfig;
 import javax.portlet.filter.RenderFilter;
 
-import org.jasig.ssp.security.permissions.Permissions;
+import org.jasig.ssp.security.permissions.DataPermissions;
+import org.jasig.ssp.security.permissions.ServicePermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -62,8 +63,15 @@ public final class UPortalSecurityFilter implements RenderFilter {
 		// But the user's access has not yet been established...
 		final Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
-		// Check for Permissions
-		for (Permissions p : Permissions.values()) {
+		// Check for DataPermissions
+		for (DataPermissions p : DataPermissions.values()) {
+			if (req.isUserInRole(p.name())) {
+				authorities.add(new GrantedAuthorityImpl(p.name()));
+			}
+		}
+
+		// Check for ServicePermissions
+		for (ServicePermissions p : ServicePermissions.values()) {
 			if (req.isUserInRole(p.name())) {
 				authorities.add(new GrantedAuthorityImpl(p.name()));
 			}

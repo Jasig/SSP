@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -17,12 +18,15 @@ import java.util.UUID;
 import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.security.permissions.DataPermissions;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.collect.Lists;
 
 public class ConfidentialityLevelServiceTest {
 
@@ -101,6 +105,28 @@ public class ConfidentialityLevelServiceTest {
 		}
 
 		assertFalse(found);
+		verify(dao);
+	}
+
+	@Test
+	public void filterConfidentialityLevelsFromAuthorities() {
+		final List<ConfidentialityLevel> daoAll = new ArrayList<ConfidentialityLevel>();
+		daoAll.add(new ConfidentialityLevel(UUID.randomUUID(), "TEST 1", "T1",
+				DataPermissions.DATA_MY_RECORD_ONLY));
+		daoAll.add(new ConfidentialityLevel(UUID.randomUUID(), "TEST 2", "T2",
+				DataPermissions.DATA_COUNSELING_SERVICES));
+
+		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
+				new PagingWrapper<ConfidentialityLevel>(daoAll));
+
+		replay(dao);
+
+		final List<String> authorities = Lists.newArrayList();
+		authorities.add("ROLE_DATA_MY_RECORD_ONLY");
+
+		final Collection<ConfidentialityLevel> all = service
+				.filterConfidentialityLevelsFromAuthorities(authorities);
+		assertEquals(1, all.size());
 		verify(dao);
 	}
 
