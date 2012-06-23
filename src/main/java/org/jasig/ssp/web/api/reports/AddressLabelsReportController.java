@@ -21,6 +21,8 @@ import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 //import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
@@ -64,12 +66,12 @@ public class AddressLabelsReportController extends BaseController {
 			final @RequestParam(required = false) String tintakeDateTo,
 			final @RequestParam(required = false) String thomeDepartment,
 			final @RequestParam(required = false) String tcoachId,
-			final @RequestParam(required = false) String tprogramStatus,
-			final @RequestParam(required = false) List<String> specialServiceGroupIds,
-			final @RequestParam(required = false) String treferralSourcesId,
+			final @RequestParam(required = false) String programStatus,
+			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
+			final @RequestParam(required = false) List<UUID> referralSourcesIds,
 			final @RequestParam(required = false) String tanticipatedStartTerm,
 			final @RequestParam(required = false) Integer tanticipatedStartYear,
-			final @RequestParam(required = false) String tstudentTypeId,
+			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) String tregistrationTerm,
 			final @RequestParam(required = false) String tregistrationYear,
 			
@@ -79,23 +81,24 @@ public class AddressLabelsReportController extends BaseController {
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) throws ObjectNotFoundException, JRException, IOException{
 
+		
+		
+		LOGGER.debug("PROGRAMSTATUS: " + programStatus);
 		 
-		Iterator<String> myiter = specialServiceGroupIds.iterator();
-		while(myiter.hasNext())
-		{
-			LOGGER.debug("This is an iterator " + myiter.next());
-		}		
+		//Iterator<UUID> myiter = specialServiceGroupIds.iterator();
+		//while(myiter.hasNext())
+		//{
+		//	LOGGER.debug("This is an iterator " + myiter.next());
+		//}		
 		
 		final Date intakeDatefrom = null;
 		final Date intakeDateTo= null;
 		final UUID homeDepartment= null;
 		final UUID coachId= null;
-		final UUID programStatus= null;
-		//final List<UUID> specialServiceGroupIds= null;
-		final UUID referralSourcesId= null;
+
 		final String anticipatedStartTerm= null;
 		final Integer anticipatedStartYear= null;
-		final UUID studentTypeId= null;
+		
 		final String registrationTerm= null;
 		final Integer registrationYear= null;	
 		
@@ -103,8 +106,8 @@ public class AddressLabelsReportController extends BaseController {
 		
 		AddressLabelSearchTO searchForm = new AddressLabelSearchTO(intakeDateTo, homeDepartment,
 			coachId, programStatus, specialServiceGroupIds,
-			referralSourcesId, anticipatedStartTerm,
-			anticipatedStartYear, studentTypeId,
+			referralSourcesIds, anticipatedStartTerm,
+			anticipatedStartYear, studentTypeIds,
 			registrationTerm, registrationYear);
 		
 		
@@ -114,6 +117,21 @@ public class AddressLabelsReportController extends BaseController {
 						.createForSingleSort(status, start, limit, sort,
 								sortDirection,
 								null));
+		
+		LOGGER.debug("Before Person Iter: " + people.size());
+		Iterator<Person> personIter = people.iterator();
+		while(personIter.hasNext())
+		{
+			Person p = personIter.next();
+			LOGGER.debug("This is an iterator " + p.getSpecialServiceGroups().toString());
+			Iterator<PersonSpecialServiceGroup> sgiter = p.getSpecialServiceGroups().iterator();
+			while(sgiter.hasNext()){
+				//sgiter.next().getSpecialServiceGroup().getName();
+				PersonSpecialServiceGroup pssg = sgiter.next();
+				LOGGER.debug("\t\t" + pssg.getSpecialServiceGroup().getName());
+			}			
+		}
+		LOGGER.debug("After Person Iter");
 
 		Map parameters = new HashMap();
 		parameters.put("ReportTitle", "Address Report");

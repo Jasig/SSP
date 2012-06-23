@@ -48,7 +48,7 @@ function populateSpecialServices()
 {
 	$.getJSON("/ssp/api/1/reference/specialServiceGroup/",
 	  	function(data) {
-		var container = $("#specialServiceGroupIds");
+		var container = $("#SpecialServiceGroupIds");
 
 
 	$.each(data.rows, function(i,row){
@@ -110,6 +110,28 @@ function populateReferralSource()
 }
 
 
+function populateStudentType()
+{
+	$.getJSON("/ssp/api/1/reference/studentType/",
+	  	function(data) {
+		var container = $("#StudentTypeIds");
+
+
+	$.each(data.rows, function(i,row){
+	      addSelectItem(row.id,row.name,container);      
+	    });
+
+
+
+	 	 }
+	)
+	.error(function(jqXHR, textStatus, errorThrown) { 
+		alert(jqXHR +" "+ textStatus+" "+ errorThrown); 
+	      }
+	      );
+}
+
+
 function addSelectItem(uid,name,container) {
    var inputs = container.find('input');
    var id = inputs.length+1;
@@ -121,6 +143,7 @@ function addSelectItem(uid,name,container) {
 populateSpecialServices();
 populateProgramStatus();
 populateReferralSource();
+populateStudentType();
 
 
 </script>
@@ -131,10 +154,6 @@ populateReferralSource();
 
 
 
-
-<p>
-Hello Steveo
-</p>
 
 <div class="formList">
 <ul>
@@ -153,32 +172,28 @@ Hello Steveo
                            <select id="standard-dropdown" name="standard-dropdown" class="custom-class1 custom-class2" style="width: 200px;">
 		    		<option value="1" class="test-class-1">Item 1</option>
 		    	   </select>
-</br>
+<br/>
                        <label><span>Assigned Counselor/Coach</span></label>
                            <select id="standard-dropdown" name="standard-dropdown" class="custom-class1 custom-class2" style="width: 200px;">
 		    		<option value="1" class="test-class-1">Item 1</option>
-		    	   </select></br>
+		    	   </select><br/>
                        <label><span>Program Status</span></label>
-		                   <select id="ProgramStatusGroup" name="standard-dropdown" class="custom-class1 custom-class2" style="width: 200px;">
-			    	   </select>
-                       </br>
+		                   <select id="ProgramStatusGroup" name="programStatus" class="custom-class1 custom-class2" style="width: 200px;"></select>
+                       <br/>
+                       
+                       <label><span>Student Type</span></label>
+			    	<select id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+                       <br/>                       
+                       
                        <label><span>Special Service Groups</span></label>
-			    	<select id="specialServiceGroupIds" name="specialServiceGroupIds" multiple="multiple">
-			    	</select>
-                       </br>
+			    	<select id="SpecialServiceGroupIds" name="specialServiceGroupIds" multiple="multiple"></select>
+                       <br/>
                        <label><span>Referral Source</span></label>
-			    	<select id="ReferralSourceGroup" name="multi-select-control" multiple="multiple">
-			    	</select>
-                       </br>
+			    	<select id="ReferralSourceGroup" name="referralSourcesIds" multiple="multiple"/></select>
+                       <br/>
                        <label><span>Counseling Variable Type</span></label>
-			    	<select id="multi-select-control" name="multi-select-control" multiple="multiple">
-			    		<option value="1" selected="selected">Item 1</option>
-			    		<option value="2">Item 2</option>
-			    		<option value="3">Item 3</option>
-			    		<option value="4">Item 4</option>
-			    		<option value="5" disabled="disabled">Item 5 (disabled)</option>
-			    	</select>
-                       </br>
+			    	<select id="multi-select-control" name="multi-select-control" multiple="multiple"/></select>
+                       <br/>
                        <label><span>Registration Term</span></label><input type="text" class="input_text" name="registrationTerm" id="registrationTerm"/>  <br/>            
                        <label><span>Registration Year</span></label><input type="text" class="input_text" name="registrationYear" id="registrationYear"/><br/>
                        <label><span>Anticipated Start Term</span></label><input type="text" class="input_text" name="anticipatedStartTerm" id="anticipatedStartTerm"/><br/>              
@@ -189,7 +204,6 @@ Hello Steveo
          </div>
 	
 </div>
-
 
 
 
