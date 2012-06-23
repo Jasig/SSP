@@ -8,6 +8,12 @@
 
 
 <style>
+
+
+
+
+
+
 label{
 float: left;
 width: 120px;
@@ -37,6 +43,11 @@ width: 90px;
 br{
 clear: left;
 }
+
+#container{width:100%; margin:0 auto; background:#fff;}
+#leftbar{ float:left; width:35%; background:#fff;}
+#rightbar{ margin:0 0 0 45%; background:#E6E6E6}
+
 </style>
 
 
@@ -154,14 +165,18 @@ populateStudentType();
 
 
 
-
-<div class="formList">
+<div id="container">
+<div id="leftbar">
 <ul>
+<li>Address labels</li>
+<li>Address labels</li>
+<li>Address labels</li>
+<li>Address labels</li>
 <li>Address labels</li>
 </ul> 
 </div>
 
-<div class="right_block_box">
+<div id="rightbar">
 	<div class="AddressLabelForm">
 <h1>Address labels</h1>
 		<form action="/ssp/api/1/report/AddressLabels/" method="get" target="_blank">
@@ -204,7 +219,9 @@ populateStudentType();
          </div>
 	
 </div>
+<br style="clear:both;"/>
 
+</div>
 
 
 
