@@ -1,8 +1,9 @@
 package org.jasig.ssp.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Set;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonFundingSource;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,65 +33,66 @@ public class PersonFundingSourcesDaoTest {
 	// LoggerFactory.getLogger(PersonDemographicsDaoTest.class);
 
 	@Autowired
-	private PersonDao daoPerson;
+	private transient PersonDao daoPerson;
 
 	@Autowired
-	private PersonFundingSourceDao dao;
+	private transient PersonFundingSourceDao dao;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
+
+	private static final String TEST_DESCRIPTION = "some description";
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		// test student = ken thompson; test description = "some description"
-		String testDescription = "some description";
 		Person person = daoPerson.get(UUID
 				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
 
-		assertTrue(
+		assertNotNull(
 				"Sample data should have allowed the user Ken Thompson to be loaded for UUID f549ecab-5110-4cc1-b2bb-369cac854dea",
-				person != null);
+				person);
 
 		Set<PersonFundingSource> pfss = person.getFundingSources();
-		PersonFundingSource pfs = null;
+		PersonFundingSource pfs = new PersonFundingSource();
 
-		if (pfss.size() == 0) {
+		if (pfss.isEmpty()) {
 			pfs = new PersonFundingSource();
-			pfs.setDescription(testDescription + "2");
+			pfs.setDescription(TEST_DESCRIPTION + "2");
 			pfs.setPerson(person);
 			dao.save(pfs);
 
 			pfs = new PersonFundingSource();
-			pfs.setDescription(testDescription);
+			pfs.setDescription(TEST_DESCRIPTION);
 			pfs.setPerson(person);
 			dao.save(pfs);
 
 			// reload to check that save worked
 			person = daoPerson.get(person.getId());
 			pfss = person.getFundingSources();
-			for (PersonFundingSource tmp : pfss) {
+			for (final PersonFundingSource tmp : pfss) {
 				pfs = tmp;
 			}
 		} else {
-			for (PersonFundingSource tmp : pfss) {
+			for (final PersonFundingSource tmp : pfss) {
 				pfs = tmp;
-				pfs.setDescription(testDescription);
+				pfs.setDescription(TEST_DESCRIPTION);
 			}
 			daoPerson.save(person);
 		}
 
-		assertEquals("Description values did not match.", testDescription,
+		assertNotNull("A PersonFundingSource should have been found.", pfs);
+		assertEquals("Description values did not match.", TEST_DESCRIPTION,
 				pfs.getDescription());
 
-		PersonFundingSource byId = dao.get(pfs.getId());
-		assertEquals(byId.getId(), pfs.getId());
+		final PersonFundingSource byId = dao.get(pfs.getId());
+		assertEquals("Ids did not match.", byId.getId(), pfs.getId());
 
-		UUID oldId = pfs.getId();
+		final UUID oldId = pfs.getId();
 		pfss.clear();
 		daoPerson.save(person);
 		dao.delete(pfs);
@@ -97,14 +100,16 @@ public class PersonFundingSourcesDaoTest {
 			assertNull(
 					"Person-funding source information was not correctly deleted.",
 					dao.get(oldId));
-		} catch (ObjectNotFoundException e) {
+			fail("ObjectNotFoundException should have been thrown."); // NOPMD
+		} catch (final ObjectNotFoundException e) { // NOPMD
 			// expected
 		}
 	}
 
 	@Test
 	public void testGetAll() {
-		dao.getAll(ObjectStatus.ALL);
+		final PagingWrapper<PersonFundingSource> list = dao
+				.getAll(ObjectStatus.ALL);
+		assertNotNull("List should not have been null.", list);
 	}
-
 }

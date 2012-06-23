@@ -49,7 +49,10 @@ public class GoalTOFactoryImpl
 
 		model.setName(tObject.getName());
 		model.setDescription(tObject.getDescription());
-		model.setPerson(personService.get(tObject.getPersonId()));
+
+		if (tObject.getPersonId() != null) {
+			model.setPerson(personService.get(tObject.getPersonId()));
+		}
 
 		if ((tObject.getConfidentialityLevel() == null)
 				|| (tObject.getConfidentialityLevel().getId() == null)) {
