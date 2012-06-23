@@ -262,10 +262,6 @@
 	</changeSet>
 	
 	
-	
-	
-	
-	
 	<changeSet id="Add Special Service to Person" author="Steve.Cody">
 		<insert tableName="person_special_service_group">
 			<column name="id" value="092b2680-bca8-11e1-a32c-634df1c33503" />
@@ -300,7 +296,7 @@
 		<insert tableName="person_special_service_group">
 			<column name="id" value="094698a6-bca9-11e1-bd29-1b0d3186f2ab" />
 			<column name="special_service_group_id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
-			<column name="person_id" value=""f549ecab-5110-4cc1-b2bb-369cac854dea"" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
 			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -322,6 +318,10 @@
 			</delete>									
 		</rollback>
 	</changeSet>
+	
+	
+	
+	
 	
 	
 	
