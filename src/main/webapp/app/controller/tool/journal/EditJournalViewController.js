@@ -10,7 +10,8 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'journal',
+    	mainFormToDisplay: 'journal',
+    	sessionDetailsEditorDisplay: 'journaltracktree',
     	url: '',
     	inited: false
     },
@@ -20,13 +21,29 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     		select: 'onJournalTrackComboSelect'
     	},
     	
+    	'confidentialityLevelCombo': {
+    		select: 'onConfidentialityLevelComboSelect'
+    	},
+    	
+    	'journalSourceCombo': {
+    		select: 'onJournalSourceComboSelect'
+    	},
+    	
+    	'commentText': {
+    		change: 'onCommentChange'
+    	},
+    	
     	'saveButton': {
 			click: 'onSaveClick'
 		},
 		
 		'cancelButton': {
 			click: 'onCancelClick'
-		}   	
+		},
+		
+		'addSessionDetailsButton': {
+			click: 'onAddSessionDetailsClick'
+		}
     },
     
 	init: function() {
@@ -42,12 +59,10 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		var id = this.model.get("id");
 		this.getView().getForm().reset();
 		this.getView().getForm().loadRecord( this.model );
-		if (id != null && id != "")
-		{
-			Ext.ComponentQuery.query('#confidentialityLevelCombo')[0].setValue( this.model.get('confidentialityLevel').id );
-			Ext.ComponentQuery.query('#journalSourceCombo')[0].setValue( this.model.get('journalSource').id );
-			Ext.ComponentQuery.query('#journalTrackCombo')[0].setValue( this.model.get('journalTrack').id );			
-		}
+		Ext.ComponentQuery.query('#confidentialityLevelCombo')[0].setValue( this.model.getConfidentialityLevelId() );
+		Ext.ComponentQuery.query('#journalSourceCombo')[0].setValue( this.model.get('journalSource').id );
+		Ext.ComponentQuery.query('#journalTrackCombo')[0].setValue( this.model.get('journalTrack').id );			
+
 		this.inited=true;
 	},    
     
@@ -65,11 +80,13 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		};
 		if (form.isValid())
 		{
+			/*
 			form.updateRecord();    		
     		record.set('confidentialityLevel',{"id": form.getValues().confidentialityLevelId});
     		record.set('journalSource',{"id": form.getValues().journalSourceId});
     		record.set('journalTrack',{"id": form.getValues().journalTrackId});
-
+			*/
+			
     		// if a journal track is selected then validate that the details are set
     		if (record.data.journalTrack.id != null && record.data.journalEntryDetails.length == 0)
     		{
@@ -106,6 +123,20 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	onCancelClick: function(button){
 		this.displayMain();
 	},
+
+	onConfidentialityLevelComboSelect: function(comp, records, eOpts){
+    	if (records.length > 0)
+    	{
+    		this.model.set('confidentialityLevel',{id: records[0].get('id')});
+     	}
+	},	
+	
+	onJournalSourceComboSelect: function(comp, records, eOpts){
+    	if (records.length > 0)
+    	{
+    		this.model.set('journalSource',{id: records[0].get('id')});
+     	}
+	},	
 	
 	onJournalTrackComboSelect: function(comp, records, eOpts){
     	if (records.length > 0)
@@ -113,18 +144,36 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     		this.model.set('journalTrack',{id: records[0].get('id')});
     		
     		// the inited property prevents the
-    		// tree from being populated twice
-    		// once when the viewcontroller loads
-    		// and another time when the journal track combo
-    		// is first populated
+    		// Journal Entry Details from clearing
+    		// when the ViewController loads, so the details only 
+    		// clear when a new journal track is selected
+    		// because the init for the view sets the combo
     		if (this.inited==true)
     		{
-    	   		this.appEventsController.getApplication().fireEvent('setJournalTrack');    			
+    	   		this.model.removeAllJournalEntryDetails();
+    			this.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
     		}
      	}
 	},
 	
+	onCommentChange: function(comp, newValue, oldValue, eOpts){
+		this.model.set('comment',newValue);
+	},
+	
+	onAddSessionDetailsClick: function( button ){
+		if( this.model.get('journalTrack') != null && this.model.get('journalTrack') != "")
+		{
+			this.displaySessionDetails();
+		}else{
+			Ext.Msg.alert('Error', 'A Journal Track is required before selecting details.')
+		}
+	},
+	
 	displayMain: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getMainFormToDisplay(), true, {});
+	},
+	
+	displaySessionDetails: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getSessionDetailsEditorDisplay(), true, {});
 	}
 });

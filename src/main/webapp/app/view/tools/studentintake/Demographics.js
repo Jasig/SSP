@@ -24,6 +24,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				{
 					autoScroll: true,
 				    layout: 'anchor',
+				    border: 0,
 				    defaults: {
 				        anchor: '100%'
 				    },

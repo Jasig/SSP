@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  * 
  * @author awills
  */
-public class UPortalRequestContextFilter implements Filter {
+public class RequestAndResponseAccessFilter implements Filter {
 
 	private final ThreadLocal<HttpServletRequest> requests = new ThreadLocal<HttpServletRequest>();
 	private final ThreadLocal<HttpServletResponse> responses = new ThreadLocal<HttpServletResponse>();

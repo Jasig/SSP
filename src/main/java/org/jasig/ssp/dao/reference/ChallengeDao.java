@@ -103,11 +103,11 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 	 * @return List of all Challenges that are marked to be able to be shown in
 	 *         the StudentIntake interface.
 	 */
-	@SuppressWarnings("unchecked")
-	public List<Challenge> getAllInStudentIntake(final SortingAndPaging sAndP) {
-		final Criteria query = createCriteria(sAndP).add(
-				Restrictions.eq("showInStudentIntake", true));
-		return query.list();
+	public PagingWrapper<Challenge> getAllInStudentIntake(
+			final SortingAndPaging sAndP) {
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("showInStudentIntake", true));
+		return processCriteriaWithPaging(query, sAndP);
 	}
 
 	public PagingWrapper<Challenge> getAllForCategory(

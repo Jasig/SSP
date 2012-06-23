@@ -61,7 +61,14 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
      		                   action: 'delete',
      		                   itemId: 'deleteButton'
      		               }]
-     		           }]    	
+     		           },{
+     		               xtype: 'toolbar',
+      		              dock: 'top',
+      		               items: [{
+      		                         xtype: 'label',
+      		                         text: 'Associate items by dragging a Referral onto a Challenge folder'
+      		                       }]  
+      		           }]    	
     	});
     	
     	return this.callParent(arguments);

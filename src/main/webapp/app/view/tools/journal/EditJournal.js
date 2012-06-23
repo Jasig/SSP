@@ -7,13 +7,16 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
     inject: {
         confidentialityLevelsStore: 'confidentialityLevelsStore',
         journalSourcesStore: 'journalSourcesStore',
-        journalTracksStore: 'journalTracksStore'
+        journalTracksStore: 'journalTracksStore',
+        model: 'currentJournalEntry'
     },	
     initComponent: function() {
-		Ext.applyIf(this, {
-        	title: 'Edit Journal',
-            defaults: {
-            	labelWidth: 150
+    	Ext.applyIf(this, {
+        	title: ((this.model.get('id') == "") ? "Add Journal" : "Edit Journal"),
+        	autoScroll: true,
+        	defaults: {
+            	labelWidth: 150,
+            	padding: 5
             },
         	items: [
                 {
@@ -30,7 +33,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        queryMode: 'local',
 			        allowBlank: false,
 			        forceSelection: true,
-			        anchor: '95%'
+			        anchor: '100%'
 				},{
 			        xtype: 'combobox',
 			        itemId: 'journalSourceCombo',
@@ -45,7 +48,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        queryMode: 'local',
 			        allowBlank: false,
 			        forceSelection: true,
-			        anchor: '95%'
+			        anchor: '100%'
 				},{
 			        xtype: 'combobox',
 			        itemId: 'journalTrackCombo',
@@ -60,18 +63,27 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        queryMode: 'local',
 			        allowBlank: true,
 			        forceSelection: false,
-			        anchor: '95%'
+			        anchor: '100%'
 				},{
-                	xtype: 'label',
-                	text: 'Select the details for this session'
-                },
-                { xtype: 'journaltracktree', fieldLabel: 'testing a label' }
-                ,{
+		        	xtype: 'label',
+		        	text: 'Session Details (Critical Components)'
+				},{
+					xtype: 'tbspacer',
+					flex: 1
+				},{
+		            tooltip: 'Add Journal Session Details',
+		            text: 'Add/Edit Session Details',
+		            xtype: 'button',
+		            itemId: 'addSessionDetailsButton'
+	    	    },
+                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'100% 50%' }
+				,{
                     xtype: 'textareafield',
                     fieldLabel: 'Comment',
+                    itemId: 'commentText',
                     anchor: '100%',
                     name: 'comment',
-                    anchor: '95%'
+                    anchor: '100%'
                 }],
             
             dockedItems: [{

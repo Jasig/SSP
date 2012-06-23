@@ -5,6 +5,10 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 			 {name:'journalSource', type:'auto'},
 			 {name:'journalTrack', type:'auto'},
 			 {name:'journalEntryDetails',type:'auto',defaultValue:[]}],
+	
+	getConfidentialityLevelId: function(){
+		return this.get('confidentialityLevel').id;
+	},
 			 
 	addJournalDetail: function( step, detail){
 		var stepExists = false;
@@ -12,7 +16,7 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 			if (item.journalStep.id == step.id){
 				// step exists. add the journal detail
 				stepExists=true;
-				item.journalStepDetails.push(detail);
+				item.journalStepDetail.push(detail);
 			}
 		});
 		if (stepExists==false){
@@ -23,15 +27,15 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 	removeJournalDetail: function( step, detail ){
 		Ext.Array.each(this.get("journalEntryDetails"),function(item,index){
 			if (item.journalStep.id == step.id){
-				Ext.Array.each( item.journalStepDetails, function(innerItem, innerIndex){
+				Ext.Array.each( item.journalStepDetail, function(innerItem, innerIndex){
 					// remove the detail
 					if ( innerItem.id == detail.id ){
-						Ext.Array.remove(item.journalStepDetails,innerItem);
+						Ext.Array.remove(item.journalStepDetail,innerItem);
 					}
 				},this);
 								
 				// no details remain, so remove the step
-				if (item.journalStepDetails.length<1)
+				if (item.journalStepDetail.length<1)
 				{
 					this.removeJournalStep( step );
 				}
@@ -40,7 +44,7 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 	},
 	
 	addJournalStep: function( step, detail ){
-		this.get("journalEntryDetails").push( {"journalStep":step, "journalStepDetails":[detail] } );
+		this.get("journalEntryDetails").push( {"journalStep":step, "journalStepDetail": [detail] } );
 	},
 	
 	removeJournalStep: function( step ){
@@ -50,6 +54,9 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 				Ext.Array.remove(journalEntryDetails,item);
 			}
 		});
+	},
+	
+	removeAllJournalEntryDetails: function(){
+		this.set('journalEntryDetails',[]);
 	}
-
 });

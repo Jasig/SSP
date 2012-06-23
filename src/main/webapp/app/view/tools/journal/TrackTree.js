@@ -16,9 +16,33 @@ Ext.define('Ssp.view.tools.journal.TrackTree', {
    		     singleExpand: false,
 			 store: this.store,
 			 useArrows: true,
-			 rootVisible: false       	
-	        });
+			 rootVisible: false ,
+			 hideCollapseTool: true,
 
+			 dockedItems: [{
+		               xtype: 'toolbar',
+		               items: [{
+     		                   text: 'Save Details',
+     		                   xtype: 'button',
+     		                   action: 'save',
+     		                   itemId: 'saveButton'
+     		               }, '-', {
+     		                   text: 'Cancel',
+     		                   xtype: 'button',
+     		                   action: 'cancel',
+     		                   itemId: 'cancelButton'
+     		               }]
+		           },{
+ 		               xtype: 'toolbar',
+  		               dock: 'top',
+  		               items: [{
+  		                         xtype: 'label',
+  		                         text: 'Select the details for this Journal Session'
+  		                       }]  
+  		            }]			 
+			 
+    });   	
+    	
     	return this.callParent(arguments);
     }
 });

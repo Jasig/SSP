@@ -10,26 +10,13 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 	title: 'Student Intake',	
 	width: '100%',
 	height: '100%',   
-	autoScroll: true,
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
 		    		store: this.store,
+		    		layout: 'fit',
+		    		padding: 0,
 		    		border: 0,
-		    		dockedItems: [{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [{xtype: 'button', itemId: 'saveStudentIntakeButton', text:'Save', action: 'save' },
-				                { 
-				        	     xtype: 'tbspacer',
-				        	     flex: 1
-				               },{
-				            	   xtype: 'button',
-				            	   itemId: 'viewConfidentialityAgreementButton',
-				            	   text: 'View Confidentiality Agreement',
-				            	   action: 'viewConfidentialityAgreement'}]
-				    }],
-				    
 		    		items: [ Ext.createWidget('tabpanel', {
 						        width: '100%',
 						        height: '100%',
@@ -65,7 +52,22 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 						        		}]
 						    })
 					    
-						]
+						],
+						
+			    		dockedItems: [{
+					        dock: 'top',
+					        xtype: 'toolbar',
+					        items: [{xtype: 'button', itemId: 'saveStudentIntakeButton', text:'Save', action: 'save' },
+					                { 
+					        	     xtype: 'tbspacer',
+					        	     flex: 1
+					               },{
+					            	   xtype: 'button',
+					            	   itemId: 'viewConfidentialityAgreementButton',
+					            	   text: 'View Confidentiality Agreement',
+					            	   action: 'viewConfidentialityAgreement'}]
+					    }]
+
 			});
 						
 		return this.callParent(arguments);

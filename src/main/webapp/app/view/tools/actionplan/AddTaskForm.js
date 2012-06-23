@@ -11,9 +11,6 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
     height: '100%',
 	autoScroll: true,
 	padding: 0,
-    defaults: {
-        anchor: '100%'
-    },
     fieldDefaults: {
         msgTarget: 'side',
         labelAlign: 'right',

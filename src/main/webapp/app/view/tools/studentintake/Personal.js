@@ -9,19 +9,22 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
         statesStore: 'statesStore'
     },
 	width: '100%',
-    height: '100%',
-	autoScroll: true,
-    defaults: {
-        anchor: '100%'      
-    },
-    fieldDefaults: {
-        msgTarget: 'side',
-        labelAlign: 'right',
-        labelWidth: 150
-    },    
+    height: '100%',    
 	initComponent: function() {
 		Ext.apply(this, 
 				{
+					autoScroll: true,
+    		        border: 0,	
+				    bodyPadding: 5,				    
+					layout: 'anchor',
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    fieldDefaults: {
+				        msgTarget: 'side',
+				        labelAlign: 'right',
+				        labelWidth: 150
+				    },
 				    items: [{
 				            xtype: 'fieldset',
 				            border: 0,

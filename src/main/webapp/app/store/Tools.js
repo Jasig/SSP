@@ -10,7 +10,7 @@ Ext.define('Ssp.store.Tools', {
            { group:'alpha', name: "Action Plan", toolType: "ActionPlan", active: true },
            { group:'alpha', name: "Journal", toolType: "Journal", active: true },
            { group:'beta', name: "Early Alert", toolType: "EarlyAlert", active: true },
-           { group:'beta', name: "SIS", toolType: "StudentInformationSystem", active: false },
+           { group:'beta', name: "SIS", toolType: "StudentInformationSystem", active: true },
            { group:'rc1', name: "Documents", toolType: "StudentDocuments", active: false },
            { group:'rc1', name: "Disability Services", toolType: "DisabilityServices", active: false },
            { group:'rc1', name: "Displaced Workers", toolType: "DisplacedWorker", active: false },

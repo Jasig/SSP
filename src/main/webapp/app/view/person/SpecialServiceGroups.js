@@ -5,7 +5,7 @@ Ext.define('Ssp.view.person.SpecialServiceGroups', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.SpecialServiceGroupsViewController',
     inject: {
-    	store: 'specialServiceGroupsStore'
+    	store: 'specialServiceGroupsBindStore'
     },
 	width: '100%',
     height: '100%',
@@ -20,6 +20,7 @@ Ext.define('Ssp.view.person.SpecialServiceGroups', {
 			            itemId: 'specialServiceGroupsItemSelector',
 			            name: 'specialServiceGroupIds',
 			            anchor: '100%',
+			            height: 200,
 			            fieldLabel: 'Service Groups',
 			            store: this.store,
 			            displayField: 'name',

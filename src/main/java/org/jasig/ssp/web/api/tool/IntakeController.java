@@ -26,7 +26,6 @@ import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.ServiceResponse;
-import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.transferobject.reference.ChildCareArrangementTO;
 import org.jasig.ssp.transferobject.reference.CitizenshipTO;
@@ -51,8 +50,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.google.common.collect.Lists;
 
 /**
  * Student Intake tool services
@@ -159,20 +156,8 @@ public class IntakeController extends BaseController {
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 
 		final List<ChallengeTO> challenges = ChallengeTO
-				.toTOList(challengeService
-						.getAll(sAndP).getRows());
-		// Filter out !ChallengeReferrals.ShowInStudentIntake
-		for (final ChallengeTO challenge : challenges) {
-			final List<ChallengeReferralTO> referrals = Lists.newArrayList();
-			for (final ChallengeReferralTO referral : challenge
-					.getChallengeChallengeReferrals()) {
-				if (referral.isShowInStudentIntake()) {
-					referrals.add(referral);
-				}
-			}
-
-			challenge.setChallengeChallengeReferrals(referrals);
-		}
+				.toTOList(challengeService.getAllForIntake(sAndP).getRows(),
+						true);
 
 		refData.put("challenges", challenges);
 

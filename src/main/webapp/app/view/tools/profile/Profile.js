@@ -10,7 +10,7 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 		var me=this;
     	Ext.apply(me, 
 				{
-		    	    layout: 'anchor',
+		    	    layout: 'fit',
 		            title: 'Profile',
 		            padding: 0,
 		            border: 0,

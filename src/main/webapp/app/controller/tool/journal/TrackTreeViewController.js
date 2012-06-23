@@ -3,12 +3,14 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-        appEventsController: 'appEventsController',
+        formUtils: 'formRendererUtils',
         journalEntry: 'currentJournalEntry',
         person: 'currentPerson',
     	treeUtils: 'treeRendererUtils'
     },
     config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'editjournal',
     	journalTrackUrl: '',
     	journalStepUrl: '',
     	journalStepDetailUrl: ''
@@ -17,7 +19,15 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     	view: {
     		itemexpand: 'onItemExpand',
     		itemClick: 'onItemClick'
-    	} 	
+    	},
+    	
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+    	'cancelButton': {
+			click: 'onCancelClick'
+		}
     },
     
 	init: function() {
@@ -28,14 +38,10 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 
 		this.loadSteps();
 		
-    	this.appEventsController.assignEvent({eventName: 'setJournalTrack', callBackFunc: this.loadSteps, scope: this});		
-		
 		return this.callParent(arguments);
     },
     
     destroy: function() {
-    	this.appEventsController.removeEvent({eventName: 'setJournalTrack', callBackFunc: this.loadSteps, scope: this});
-
     	// clear the categories
 		this.treeUtils.clearRootCategories();
     	
@@ -94,7 +100,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     	if (journalEntryDetails != "" && journalEntryDetails != null)
     	{
 			Ext.Array.each(journalEntryDetails,function(item,index){
-				var journalStepDetails = item.journalStepDetails;
+				var journalStepDetails = item.journalStepDetail;
 				Ext.Array.each(journalStepDetails,function(innerItem,innerIndex){
 					var id = innerItem.id;
 					var detailNode = scope.getView().getView().getTreeStore().getNodeById(id+'_journalDetail');				
@@ -109,6 +115,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
    
 
     onItemClick: function(view, record, item, index, e, eOpts){
+    	/*
     	var me=this;
     	var journalEntry = me.journalEntry;
     	var name = me.treeUtils.getNameFromNodeId( record.data.id );
@@ -133,6 +140,42 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         		journalEntry.removeJournalDetail( step, detail );
         	}
     	}
-    }
+    	*/
+    },
+    
+    onSaveClick: function( button ){
+    	var me=this;
+    	var journalEntry = me.journalEntry;
+    	var tree = me.getView();
+    	var treeUtils = me.treeUtils;
+    	var records = tree.getView().getChecked();
+    	
+    	journalEntry.removeAllJournalEntryDetails();
+    	
+    	// add/remove the detail from the Journal Entry
+    	Ext.Array.each(records,function(record,index){
+        	var id = me.treeUtils.getIdFromNodeId( record.data.id );
+        	var childText = record.data.text;
+        	var parentId = me.treeUtils.getIdFromNodeId( record.data.parentId );
+        	var parentText = record.parentNode.data.text;
+        	var step = null;
+        	var detail = null;
 
+    		step = {"id":parentId,"name":parentText};
+    		detail = {"id":id,"name":childText};
+    		// add journal detail
+    		journalEntry.addJournalDetail( step, detail );
+    	},this);
+    	// load the editor
+    	this.displayJournalEditor();
+    },
+    
+    onCancelClick: function( button ){
+    	this.displayJournalEditor();
+    },
+
+    displayJournalEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+    } 
+    
 });
