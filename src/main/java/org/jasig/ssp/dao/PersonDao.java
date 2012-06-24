@@ -198,7 +198,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Person> getPeopleBySpecialServices(
-			List<String> SpecialServiceGroups,
+			List<UUID> SpecialServiceGroups,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);

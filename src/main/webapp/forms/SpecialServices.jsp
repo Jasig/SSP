@@ -137,9 +137,9 @@ function addSelectItem(uid,name,container) {
 }
 
 populateSpecialServices();
-populateProgramStatus();
-populateReferralSource();
-populateStudentType();
+//populateProgramStatus();
+//populateReferralSource();
+//populateStudentType();
 
 
 </script>
@@ -149,40 +149,15 @@ populateStudentType();
 
 	<div class="AddressLabelForm">
 <h1>Special Services</h1>
-		<form action="/ssp/api/1/report/AddressLabels/" method="get">
+		<form action="/ssp/api/1/report/SpecialServices/" method="get">
 	           <div class="box">             
-                       <p>Address Label Report Criteria:</p>    
-		       <p>required fields are denoted by an asterisc</p>         
-                       <label><span>Home Department</span></label>
-                           <select id="standard-dropdown" name="standard-dropdown" class="custom-class1 custom-class2" style="width: 200px;">
-		    		<option value="1" class="test-class-1">Item 1</option>
-		    	   </select> 
-<br/>
-                       <label><span>Assigned Counselor/Coach</span></label>
-                           <select id="standard-dropdown" name="standard-dropdown" class="custom-class1 custom-class2" style="width: 200px;">
-		    		<option value="1" class="test-class-1">Item 1</option>
-		    	   </select><br/>
-                       <label><span>Program Status</span></label>
-		                   <select id="ProgramStatusGroup" name="programStatus" class="custom-class1 custom-class2" style="width: 200px;"></select>
-                       <br/>
-                       
-                       <label><span>Student Type</span></label>
-			    	<select id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
-                       <br/>                       
+                       <p>Special Services Groups Report Criteria:</p>    
+		       
+                      
                        
                        <label><span>Special Service Groups</span></label>
 			    	<select id="SpecialServiceGroupIds" name="specialServiceGroupIds" multiple="multiple"></select>
-                       <br/>
-                       <label><span>Referral Source</span></label>
-			    	<select id="ReferralSourceGroup" name="referralSourcesIds" multiple="multiple"/></select>
-                       <br/>
-                       <label><span>Counseling Variable Type</span></label>
-			    	<select id="multi-select-control" name="multi-select-control" multiple="multiple"/></select>
-                       <br/>
-                       <label><span>Registration Term</span></label><input type="text" class="input_text" name="registrationTerm" id="registrationTerm"/>  <br/>            
-                       <label><span>Registration Year</span></label><input type="text" class="input_text" name="registrationYear" id="registrationYear"/><br/>
-                       <label><span>Anticipated Start Term</span></label><input type="text" class="input_text" name="anticipatedStartTerm" id="anticipatedStartTerm"/><br/>              
-                       <label><span>Anticipated Start Year</span></label><input type="text" class="input_text" name="anticipatedStartYear" id="anticipatedStartYear"/><br/>
+                       <br/>                      
 	<input type="submit"/>
                     </div> 
                 </form>
