@@ -5,7 +5,25 @@
 <head>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 
+<script>
 
+function populateAddress()
+{
+	clearFormDiv();
+	$('#rightbar').load('/ssp/forms/AddressLabel.jsp');
+}
+
+function populateSS()
+{
+	clearFormDiv();
+	$('#rightbar').load('/ssp/forms/SpecialServices.jsp');
+}
+
+function clearFormDiv()
+{
+jQuery('#rightbar').html('');
+}
+</script>
 
 <style>
 
@@ -46,183 +64,26 @@ clear: left;
 
 #container{width:100%; margin:0 auto; background:#fff;}
 #leftbar{ float:left; width:35%; background:#fff;}
-#rightbar{ margin:0 0 0 45%; background:#E6E6E6}
+#rightbar{ margin:0 0 0 45%; background:#E6E6E6; padding-bottom: 2em; padding-left: 2em;  height:500}
 
 </style>
 
 
-
-
-<script>
-
-function populateSpecialServices()
-{
-	$.getJSON("/ssp/api/1/reference/specialServiceGroup/",
-	  	function(data) {
-		var container = $("#SpecialServiceGroupIds");
-
-
-	$.each(data.rows, function(i,row){
-	      addSelectItem(row.id,row.name,container);      
-	    });
-
-
-
-	 	 }
-	)
-	.error(function(jqXHR, textStatus, errorThrown) { 
-		alert(jqXHR +" "+ textStatus+" "+ errorThrown); 
-	      }
-	      );
-}
-
-
-function populateProgramStatus()
-{
-	$.getJSON("/ssp/api/1/reference/programStatus/",
-	  	function(data) {
-		var container = $("#ProgramStatusGroup");
-
-
-	$.each(data.rows, function(i,row){
-	      addSelectItem(row.id,row.name,container);      
-	    });
-
-
-
-	 	 }
-	)
-	.error(function(jqXHR, textStatus, errorThrown) { 
-		alert(jqXHR +" "+ textStatus+" "+ errorThrown); 
-	      }
-	      );
-}
-
-
-function populateReferralSource()
-{
-	$.getJSON("/ssp/api/1/reference/referralSource/",
-	  	function(data) {
-		var container = $("#ReferralSourceGroup");
-
-
-	$.each(data.rows, function(i,row){
-	      addSelectItem(row.id,row.name,container);      
-	    });
-
-
-
-	 	 }
-	)
-	.error(function(jqXHR, textStatus, errorThrown) { 
-		alert(jqXHR +" "+ textStatus+" "+ errorThrown); 
-	      }
-	      );
-}
-
-
-function populateStudentType()
-{
-	$.getJSON("/ssp/api/1/reference/studentType/",
-	  	function(data) {
-		var container = $("#StudentTypeIds");
-
-
-	$.each(data.rows, function(i,row){
-	      addSelectItem(row.id,row.name,container);      
-	    });
-
-
-
-	 	 }
-	)
-	.error(function(jqXHR, textStatus, errorThrown) { 
-		alert(jqXHR +" "+ textStatus+" "+ errorThrown); 
-	      }
-	      );
-}
-
-
-function addSelectItem(uid,name,container) {
-   var inputs = container.find('input');
-   var id = inputs.length+1;
-
-   var html = '<option value="'+ uid +'">' + name + '</option>';
-   container.append($(html));
-}
-
-populateSpecialServices();
-populateProgramStatus();
-populateReferralSource();
-populateStudentType();
-
-
-</script>
-
 </head>
 
-
-
-
-
-<div id="container">
-<div id="leftbar">
+<div id="container" style="height:100%;">
+<div id="leftbar" style="height:100%;">
 <ul>
-<li>Address labels</li>
-<li>Address labels</li>
-<li>Address labels</li>
-<li>Address labels</li>
-<li>Address labels</li>
+<li><a onclick="populateAddress();" >Address labels</a></li>
+<li><a onclick="populateSS();" >Special Services labels</a></li>
+<li><a onclick="clearFormDiv();" >Clear Form</a></li>
 </ul> 
 </div>
 
-<div id="rightbar">
-	<div class="AddressLabelForm">
-<h1>Address labels</h1>
-		<form action="/ssp/api/1/report/AddressLabels/" method="get" target="_blank">
-	           <div class="box">             
-                       <p>Address Label Report Criteria:</p>    
-		       <p>required fields are denoted by an asterisc</p>         
-                       <label><span>Home Department</span></label>
-                           <select id="standard-dropdown" name="standard-dropdown" class="custom-class1 custom-class2" style="width: 200px;">
-		    		<option value="1" class="test-class-1">Item 1</option>
-		    	   </select>
-<br/>
-                       <label><span>Assigned Counselor/Coach</span></label>
-                           <select id="standard-dropdown" name="standard-dropdown" class="custom-class1 custom-class2" style="width: 200px;">
-		    		<option value="1" class="test-class-1">Item 1</option>
-		    	   </select><br/>
-                       <label><span>Program Status</span></label>
-		                   <select id="ProgramStatusGroup" name="programStatus" class="custom-class1 custom-class2" style="width: 200px;"></select>
-                       <br/>
-                       
-                       <label><span>Student Type</span></label>
-			    	<select id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
-                       <br/>                       
-                       
-                       <label><span>Special Service Groups</span></label>
-			    	<select id="SpecialServiceGroupIds" name="specialServiceGroupIds" multiple="multiple"></select>
-                       <br/>
-                       <label><span>Referral Source</span></label>
-			    	<select id="ReferralSourceGroup" name="referralSourcesIds" multiple="multiple"/></select>
-                       <br/>
-                       <label><span>Counseling Variable Type</span></label>
-			    	<select id="multi-select-control" name="multi-select-control" multiple="multiple"/></select>
-                       <br/>
-                       <label><span>Registration Term</span></label><input type="text" class="input_text" name="registrationTerm" id="registrationTerm"/>  <br/>            
-                       <label><span>Registration Year</span></label><input type="text" class="input_text" name="registrationYear" id="registrationYear"/><br/>
-                       <label><span>Anticipated Start Term</span></label><input type="text" class="input_text" name="anticipatedStartTerm" id="anticipatedStartTerm"/><br/>              
-                       <label><span>Anticipated Start Year</span></label><input type="text" class="input_text" name="anticipatedStartYear" id="anticipatedStartYear"/><br/>
-	<input type="submit"/>
-                    </div> 
-                </form>
-         </div>
-	
-</div>
+<div id="rightbar" style="height:1000;" ></div>
 <br style="clear:both;"/>
 
 </div>
-
 
 
 
