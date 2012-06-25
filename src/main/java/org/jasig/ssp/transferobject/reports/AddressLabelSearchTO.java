@@ -6,18 +6,13 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Early Alert transfer object
- * 
- * @author jon.adams
- * 
+ * AddressLabelSearch transfer object
  */
 public class AddressLabelSearchTO
 		implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
 	private Date intakeDateTo;
 	private UUID homeDepartment;
 	private UUID coachId;
@@ -27,17 +22,18 @@ public class AddressLabelSearchTO
 	private String anticipatedStartTerm;
 	private Integer anticipatedStartYear;
 	private List<UUID> studentTypeIds;
+
 	public List<UUID> getStudentTypeIds() {
 		return studentTypeIds;
 	}
 
-	public void setStudentTypeIds(List<UUID> studentTypeIds) {
+	public void setStudentTypeIds(final List<UUID> studentTypeIds) {
 		this.studentTypeIds = studentTypeIds;
 	}
 
 	private String registrationTerm;
-	private Integer registrationYear;		
 
+	private Integer registrationYear;
 
 	/**
 	 * Empty constructor
@@ -46,13 +42,18 @@ public class AddressLabelSearchTO
 		super();
 	}
 
-	public AddressLabelSearchTO(Date intakeDateTo, UUID homeDepartment,
-			UUID coachId, String programStatus, List<UUID> specialServiceGroupId,
-			List<UUID> referralSourcesId, String anticipatedStartTerm,
-			Integer anticipatedStartYear, List<UUID> studentTypeIds,
-			String registrationTerm, Integer registrationYear) {
+	public AddressLabelSearchTO(final Date intakeDateTo,
+			final UUID homeDepartment,
+			final UUID coachId, final String programStatus,
+			final List<UUID> specialServiceGroupId,
+			final List<UUID> referralSourcesId,
+			final String anticipatedStartTerm,
+			final Integer anticipatedStartYear,
+			final List<UUID> studentTypeIds,
+			final String registrationTerm, final Integer registrationYear) {
 		super();
-		this.intakeDateTo = intakeDateTo;
+		this.intakeDateTo = intakeDateTo == null ? null : new Date(
+				intakeDateTo.getTime());
 		this.homeDepartment = homeDepartment;
 		this.coachId = coachId;
 		this.programStatus = programStatus;
@@ -66,18 +67,19 @@ public class AddressLabelSearchTO
 	}
 
 	public Date getIntakeDateTo() {
-		return intakeDateTo;
+		return intakeDateTo == null ? null : new Date(intakeDateTo.getTime());
 	}
 
-	public void setIntakeDateTo(Date intakeDateTo) {
-		this.intakeDateTo = intakeDateTo;
+	public void setIntakeDateTo(final Date intakeDateTo) {
+		this.intakeDateTo = intakeDateTo == null ? null : new Date(
+				intakeDateTo.getTime());
 	}
 
 	public UUID getHomeDepartment() {
 		return homeDepartment;
 	}
 
-	public void setHomeDepartment(UUID homeDepartment) {
+	public void setHomeDepartment(final UUID homeDepartment) {
 		this.homeDepartment = homeDepartment;
 	}
 
@@ -85,7 +87,7 @@ public class AddressLabelSearchTO
 		return coachId;
 	}
 
-	public void setCoachId(UUID coachId) {
+	public void setCoachId(final UUID coachId) {
 		this.coachId = coachId;
 	}
 
@@ -93,7 +95,7 @@ public class AddressLabelSearchTO
 		return programStatus;
 	}
 
-	public void setProgramStatus(String programStatus) {
+	public void setProgramStatus(final String programStatus) {
 		this.programStatus = programStatus;
 	}
 
@@ -101,7 +103,7 @@ public class AddressLabelSearchTO
 		return specialServiceGroupId;
 	}
 
-	public void setSpecialServiceGroupIds(List<UUID> specialServiceGroupId) {
+	public void setSpecialServiceGroupIds(final List<UUID> specialServiceGroupId) {
 		this.specialServiceGroupId = specialServiceGroupId;
 	}
 
@@ -109,7 +111,7 @@ public class AddressLabelSearchTO
 		return referralSourcesId;
 	}
 
-	public void setReferralSourcesIds(List<UUID> referralSourcesId) {
+	public void setReferralSourcesIds(final List<UUID> referralSourcesId) {
 		this.referralSourcesId = referralSourcesId;
 	}
 
@@ -117,7 +119,7 @@ public class AddressLabelSearchTO
 		return anticipatedStartTerm;
 	}
 
-	public void setAnticipatedStartTerm(String anticipatedStartTerm) {
+	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
 		this.anticipatedStartTerm = anticipatedStartTerm;
 	}
 
@@ -125,7 +127,7 @@ public class AddressLabelSearchTO
 		return anticipatedStartYear;
 	}
 
-	public void setAnticipatedStartYear(Integer anticipatedStartYear) {
+	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
@@ -133,7 +135,7 @@ public class AddressLabelSearchTO
 		return registrationTerm;
 	}
 
-	public void setRegistrationTerm(String registrationTerm) {
+	public void setRegistrationTerm(final String registrationTerm) {
 		this.registrationTerm = registrationTerm;
 	}
 
@@ -141,8 +143,7 @@ public class AddressLabelSearchTO
 		return registrationYear;
 	}
 
-	public void setRegistrationYear(Integer registrationYear) {
+	public void setRegistrationYear(final Integer registrationYear) {
 		this.registrationYear = registrationYear;
 	}
-
 }
