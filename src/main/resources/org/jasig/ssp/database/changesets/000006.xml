@@ -7,6 +7,9 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
 	<changeSet author='daniel.bower' id='Implement ChallengeCategory'>
 		<dropColumn tableName="challenge_category" columnName="name" />
 		<dropColumn tableName="challenge_category" columnName="description" />
@@ -26,7 +29,7 @@
 
 		<rollback>
 			<addColumn tableName="challenge_category">
-				<column name="name" type="character varying(80)" value="default">
+				<column name="name" type="${nvarchar.type}(80)" value="default">
 					<constraints nullable="false" />
 				</column>
 				<column name="description" type="text">
@@ -56,7 +59,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -101,7 +104,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -144,7 +147,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -225,7 +228,7 @@
 		</update>
 
 		<addNotNullConstraint tableName="config"
-			columnName="default_value" />
+			columnName="default_value" columnDataType="text" />
 
 		<rollback>
 			<dropColumn tableName="config" columnName="default_value" />
@@ -306,11 +309,11 @@
 					references="early_alert_reason(id)" />
 			</column>
 			<column name="person_id" type="uuid">
-				<constraints nullable="false" foreignKeyName="early_alert_routing_person_id"
+				<constraints nullable="true" foreignKeyName="early_alert_routing_person_id"
 					references="person(id)" />
 			</column>
-			<column name="group_name" type="character varying(255)" />
-			<column name="group_email" type="character varying(255)" />
+			<column name="group_name" type="${nvarchar.type}(255)" />
+			<column name="group_email" type="${nvarchar.type}(255)" />
 		</createTable>
 
 		<sql>grant all on early_alert_routing to ssp</sql>
@@ -478,7 +481,7 @@
 			<column name="ability_to_benefit" type="boolean">
 				<constraints nullable="true" />
 			</column>
-			<column name="anticipated_start_term" type="character varying(20)">
+			<column name="anticipated_start_term" type="${nvarchar.type}(20)">
 				<constraints nullable="true" />
 			</column>
 			<column name="anticipated_start_year" type="int">
@@ -504,34 +507,12 @@
 
 	</changeSet>
 
-	<changeSet author='jon.adams' id='Fix early_alert_routing person nullable'>
-		<dropColumn tableName="early_alert_routing" columnName="person_id" />
-		<addColumn tableName="early_alert_routing">
-			<column name="person_id" type="uuid">
-				<constraints nullable="true" foreignKeyName="early_alert_routing_person_id"
-					references="person(id)" />
-			</column>
-		</addColumn>
-		<rollback></rollback>
-	</changeSet>
-
-	<changeSet author='jon.adams' id='Set message.recipient to be nullable'>
-		<dropColumn tableName="message" columnName="recipient_id" />
-		<addColumn tableName="message">
-			<column name="recipient_id" type="uuid">
-				<constraints nullable="true" foreignKeyName="message_recipient_id_person_id"
-					references="person(id)" />
-			</column>
-		</addColumn>
-		<rollback></rollback>
-	</changeSet>
-
 	<changeSet author='jon.adams' id='Add program_status_change_reason table'>
 		<createTable tableName="program_status_change_reason">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -574,7 +555,7 @@
 	<changeSet id="create reference data - program_status_change_reason"
 		author="jon.adams">
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D1271B-5056-A51A-8018F5ED8477B481" />
+			<column name="id" value="B2D1271B-5056-A51A-8018-F5ED8477B481" />
 			<column name="name" value="Financially unable to purchase books" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -584,7 +565,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D12798-5056-A51A-8072DA587A14081F" />
+			<column name="id" value="B2D12798-5056-A51A-8072-DA587A14081F" />
 			<column name="name" value="Financially unable to pay for tuition" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -594,7 +575,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D127B7-5056-A51A-8084E0468053CC30" />
+			<column name="id" value="B2D127B7-5056-A51A-8084-E0468053CC30" />
 			<column name="name" value="Childcare issues" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -604,7 +585,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D127D7-5056-A51A-802D3717C4316D29" />
+			<column name="id" value="B2D127D7-5056-A51A-802D-3717C4316D29" />
 			<column name="name" value="Transportation issues" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -614,7 +595,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D12844-5056-A51A-80C77059B24CCBCE" />
+			<column name="id" value="B2D12844-5056-A51A-80C7-7059B24CCBCE" />
 			<column name="name" value="Personal issues" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -624,7 +605,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D12863-5056-A51A-808A1241D680A42F" />
+			<column name="id" value="B2D12863-5056-A51A-808A-1241D680A42F" />
 			<column name="name" value="Medical issues" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -634,7 +615,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D12873-5056-A51A-805C99222DEFC6D5" />
+			<column name="id" value="B2D12873-5056-A51A-805C-99222DEFC6D5" />
 			<column name="name" value="Transferred to another school" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -644,7 +625,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D12883-5056-A51A-80A8BB4616AF9BD0" />
+			<column name="id" value="B2D12883-5056-A51A-80A8-BB4616AF9BD0" />
 			<column name="name" value="Services not needed" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -654,7 +635,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D128F0-5056-A51A-803F8CEF57177AEA" />
+			<column name="id" value="B2D128F0-5056-A51A-803F-8CEF57177AEA" />
 			<column name="name" value="Moving" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -664,7 +645,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D1290F-5056-A51A-80943B321A901899" />
+			<column name="id" value="B2D1290F-5056-A51A-8094-3B321A901899" />
 			<column name="name" value="Unknown/unable to contact" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -674,7 +655,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D1295D-5056-A51A-80BB3094BAB8F9C4" />
+			<column name="id" value="B2D1295D-5056-A51A-80BB-3094BAB8F9C4" />
 			<column name="name" value="Military Service" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -684,7 +665,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D1299C-5056-A51A-80527E123C180661" />
+			<column name="id" value="B2D1299C-5056-A51A-8052-7E123C180661" />
 			<column name="name" value="Death" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -694,7 +675,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D129BB-5056-A51A-80825E6613AD6F5D" />
+			<column name="id" value="B2D129BB-5056-A51A-8082-5E6613AD6F5D" />
 			<column name="name" value="Employment interferes with school" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -704,7 +685,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="program_status_change_reason">
-			<column name="id" value="B2D129CB-5056-A51A-8035FF5834C72153" />
+			<column name="id" value="B2D129CB-5056-A51A-8035-FF5834C72153" />
 			<column name="name" value="Poor academic performance (Dropout)" />
 			<column name="description" value="Default description" />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -715,46 +696,46 @@
 		</insert>
 		<rollback>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D1271B-5056-A51A-8018F5ED8477B481'</where>
+				<where>id='B2D1271B-5056-A51A-8018-F5ED8477B481'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D12798-5056-A51A-8072DA587A14081F'</where>
+				<where>id='B2D12798-5056-A51A-8072-DA587A14081F'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D127B7-5056-A51A-8084E0468053CC30'</where>
+				<where>id='B2D127B7-5056-A51A-8084-E0468053CC30'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D127D7-5056-A51A-802D3717C4316D29'</where>
+				<where>id='B2D127D7-5056-A51A-802D-3717C4316D29'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D12844-5056-A51A-80C77059B24CCBCE'</where>
+				<where>id='B2D12844-5056-A51A-80C7-7059B24CCBCE'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D12863-5056-A51A-808A1241D680A42F'</where>
+				<where>id='B2D12863-5056-A51A-808A-1241D680A42F'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D12873-5056-A51A-805C99222DEFC6D5'</where>
+				<where>id='B2D12873-5056-A51A-805C-99222DEFC6D5'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D12883-5056-A51A-80A8BB4616AF9BD0'</where>
+				<where>id='B2D12883-5056-A51A-80A8-BB4616AF9BD0'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D128F0-5056-A51A-803F8CEF57177AEA'</where>
+				<where>id='B2D128F0-5056-A51A-803F-8CEF57177AEA'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D1290F-5056-A51A-80943B321A901899'</where>
+				<where>id='B2D1290F-5056-A51A-8094-3B321A901899'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D1295D-5056-A51A-80BB3094BAB8F9C4'</where>
+				<where>id='B2D1295D-5056-A51A-80BB-3094BAB8F9C4'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D1299C-5056-A51A-80527E123C180661'</where>
+				<where>id='B2D1299C-5056-A51A-8052-7E123C180661'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D129BB-5056-A51A-80825E6613AD6F5D'</where>
+				<where>id='B2D129BB-5056-A51A-8082-5E6613AD6F5D'</where>
 			</delete>
 			<delete tableName="program_status_change_reason">
-				<where>id='B2D129CB-5056-A51A-8035FF5834C72153'</where>
+				<where>id='B2D129CB-5056-A51A-8035-FF5834C72153'</where>
 			</delete>
 		</rollback>
 	</changeSet>
@@ -764,7 +745,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -778,13 +759,11 @@
 			</column>
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="program_status_change_reason_created_by_person_id"
-					references="person(id)" />
+					foreignKeyName="student_type_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="program_status_change_reason_modified_by_person_id"
-					references="person(id)" />
+					foreignKeyName="student_type_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
@@ -810,7 +789,7 @@
 
 	<changeSet id="create reference data - student_type" author="jon.adams">
 		<insert tableName="student_type">
-			<column name="id" value="B2D058EB-5056-A51A-80A78A20C30D1E91" />
+			<column name="id" value="B2D058EB-5056-A51A-80A7-8A20C30D1E91" />
 			<column name="name" value="ILP" />
 			<column name="description" value="A new student." />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -821,7 +800,7 @@
 			<column name="require_initial_appointment" value="1" />
 		</insert>
 		<insert tableName="student_type">
-			<column name="id" value="B2D05919-5056-A51A-80BD03E5288DE771" />
+			<column name="id" value="B2D05919-5056-A51A-80BD-03E5288DE771" />
 			<column name="name" value="CAP" />
 			<column name="description"
 				value="A returning student with more than 1 credit hour at the institution." />
@@ -833,7 +812,7 @@
 			<column name="require_initial_appointment" value="1" />
 		</insert>
 		<insert tableName="student_type">
-			<column name="id" value="B2D05939-5056-A51A-8004D803265D2645" />
+			<column name="id" value="B2D05939-5056-A51A-8004-D803265D2645" />
 			<column name="name" value="EAL" />
 			<column name="description" value="An Early Alert student." />
 			<column name="created_date" valueDate="2012-28-18T14:00:00" />
@@ -845,13 +824,13 @@
 		</insert>
 		<rollback>
 			<delete tableName="student_type">
-				<where>id='B2D058EB-5056-A51A-80A78A20C30D1E91'</where>
+				<where>id='B2D058EB-5056-A51A-80A7-8A20C30D1E91'</where>
 			</delete>
 			<delete tableName="student_type">
-				<where>id='B2D05919-5056-A51A-80BD03E5288DE771'</where>
+				<where>id='B2D05919-5056-A51A-80BD-03E5288DE771'</where>
 			</delete>
 			<delete tableName="student_type">
-				<where>id='B2D05939-5056-A51A-8004D803265D2645'</where>
+				<where>id='B2D05939-5056-A51A-8004-D803265D2645'</where>
 			</delete>
 		</rollback>
 	</changeSet>
@@ -1088,7 +1067,7 @@ where id = '31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0';
 
 	<changeSet id="Add CC to Message" author="daniel.bower">
 		<addColumn tableName="message">
-			<column name="carbon_copy" type="character varying(512)">
+			<column name="carbon_copy" type="${nvarchar.type}(512)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
@@ -1386,7 +1365,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -1400,13 +1379,11 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			</column>
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="special_service_group_created_by_person_id"
-					references="person(id)" />
+					foreignKeyName="program_status_created_by_person_id" references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="special_service_group_modified_by_person_id"
-					references="person(id)" />
+					foreignKeyName="program_status_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
@@ -1433,7 +1410,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 	<changeSet id="create reference data - program_status"
 		author="jon.adams">
 		<insert tableName="program_status">
-			<column name="id" value="B2D12527-5056-A51A-8054113116BAAB88" />
+			<column name="id" value="B2D12527-5056-A51A-8054-113116BAAB88" />
 			<column name="name" value="Active" />
 			<column name="description" value="Student is active in SSP" />
 			<column name="created_date" valueDate="2012-05-18T14:00:00" />
@@ -1444,7 +1421,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			<column name="program_status_change_reason_required" value="0" />
 		</insert>
 		<insert tableName="program_status">
-			<column name="id" value="B2D125A4-5056-A51A-8042D50B8EFF0DF1" />
+			<column name="id" value="B2D125A4-5056-A51A-8042-D50B8EFF0DF1" />
 			<column name="name" value="Inactive" />
 			<column name="description" value="Student is inactive in SSP" />
 			<column name="created_date" valueDate="2012-05-18T14:00:00" />
@@ -1455,7 +1432,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			<column name="program_status_change_reason_required" value="0" />
 		</insert>
 		<insert tableName="program_status">
-			<column name="id" value="B2D125C3-5056-A51A-8004F1DBABDE80C2" />
+			<column name="id" value="B2D125C3-5056-A51A-8004-F1DBABDE80C2" />
 			<column name="name" value="Non-participating" />
 			<column name="description" value="Student is not participating in ILP program" />
 			<column name="created_date" valueDate="2012-05-18T14:00:00" />
@@ -1466,7 +1443,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			<column name="program_status_change_reason_required" value="0" />
 		</insert>
 		<insert tableName="program_status">
-			<column name="id" value="B2D125E3-5056-A51A-800F6891BC7D1DDC" />
+			<column name="id" value="B2D125E3-5056-A51A-800F-6891BC7D1DDC" />
 			<column name="name" value="Transitioned" />
 			<column name="description" value="Student has completed the ILP Program." />
 			<column name="created_date" valueDate="2012-05-18T14:00:00" />
@@ -1477,7 +1454,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			<column name="program_status_change_reason_required" value="0" />
 		</insert>
 		<insert tableName="program_status">
-			<column name="id" value="B2D125F2-5056-A51A-80615E041339311D" />
+			<column name="id" value="B2D125F2-5056-A51A-8061-5E041339311D" />
 			<column name="name" value="Completed" />
 			<column name="description" value="Student has completed CAP assessment." />
 			<column name="created_date" valueDate="2012-05-18T14:00:00" />
@@ -1488,7 +1465,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			<column name="program_status_change_reason_required" value="0" />
 		</insert>
 		<insert tableName="program_status">
-			<column name="id" value="B2D12640-5056-A51A-80CC91264965731A" />
+			<column name="id" value="B2D12640-5056-A51A-80CC-91264965731A" />
 			<column name="name" value="No-Show" />
 			<column name="description" value="Student did not show up for an appointment" />
 			<column name="created_date" valueDate="2012-05-18T14:00:00" />
@@ -1500,22 +1477,22 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 		</insert>
 		<rollback>
 			<delete tableName="program_status">
-				<where>id='B2D12527-5056-A51A-8054113116BAAB88'</where>
+				<where>id='B2D12527-5056-A51A-8054-113116BAAB88'</where>
 			</delete>
 			<delete tableName="program_status">
-				<where>id='B2D125A4-5056-A51A-8042D50B8EFF0DF1'</where>
+				<where>id='B2D125A4-5056-A51A-8042-D50B8EFF0DF1'</where>
 			</delete>
 			<delete tableName="program_status">
-				<where>id='B2D125C3-5056-A51A-8004F1DBABDE80C2'</where>
+				<where>id='B2D125C3-5056-A51A-8004-F1DBABDE80C2'</where>
 			</delete>
 			<delete tableName="program_status">
-				<where>id='B2D125E3-5056-A51A-800F6891BC7D1DDC'</where>
+				<where>id='B2D125E3-5056-A51A-800F-6891BC7D1DDC'</where>
 			</delete>
 			<delete tableName="program_status">
-				<where>id='B2D125F2-5056-A51A-80615E041339311D'</where>
+				<where>id='B2D125F2-5056-A51A-8061-5E041339311D'</where>
 			</delete>
 			<delete tableName="program_status">
-				<where>id='B2D12640-5056-A51A-80CC91264965731A'</where>
+				<where>id='B2D12640-5056-A51A-80CC-91264965731A'</where>
 			</delete>
 		</rollback>
 	</changeSet>
@@ -1533,12 +1510,12 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			</column>
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="early_alert_routing_created_by_person_id"
+					foreignKeyName="person_program_status_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="early_alert_routing_modified_by_person_id"
+					foreignKeyName="person_program_status_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">

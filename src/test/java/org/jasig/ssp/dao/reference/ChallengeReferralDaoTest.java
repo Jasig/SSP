@@ -1,5 +1,6 @@
 package org.jasig.ssp.dao.reference;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -51,7 +52,7 @@ public class ChallengeReferralDaoTest {
 	private transient Person testStudent;
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Before
 	public void setUp() {
@@ -71,21 +72,22 @@ public class ChallengeReferralDaoTest {
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		assertNotNull(obj.getId());
+		assertNotNull("Saved object should not have been null.", obj.getId());
 		saved = obj.getId();
 
 		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
-		assertNotNull(obj);
-		assertNotNull(obj.getId());
-		assertNotNull(obj.getName());
+		assertNotNull("Saved object should not have been null.", obj);
+		assertNotNull("Saved object ID should not have been null.", obj.getId());
+		assertNotNull("Saved object Name should not have been null.",
+				obj.getName());
 
 		final List<ChallengeReferral> all = (List<ChallengeReferral>) dao
 				.getAll(
 						ObjectStatus.ACTIVE).getRows();
-		assertNotNull(all);
-		assertTrue(all.size() > 0);
+		assertNotNull("GetAll result should not have been null.", all);
+		assertFalse("GetAll list should not have been empty.", all.isEmpty());
 		assertList(all);
 
 		dao.delete(obj);
@@ -96,12 +98,13 @@ public class ChallengeReferralDaoTest {
 		final UUID id = UUID.randomUUID();
 		final ChallengeReferral challengeReferral = dao.get(id);
 
-		assertNull(challengeReferral);
+		assertNull("Get result should not have been null.", challengeReferral);
 	}
 
-	private void assertList(Collection<ChallengeReferral> objects) {
-		for (ChallengeReferral object : objects) {
-			assertNotNull(object.getId());
+	private void assertList(final Collection<ChallengeReferral> objects) {
+		for (final ChallengeReferral object : objects) {
+			assertNotNull("List object should not have been null.",
+					object.getId());
 		}
 	}
 
@@ -112,13 +115,16 @@ public class ChallengeReferralDaoTest {
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
+		assertNotNull("Transient instance was not assigned a new identifier.",
+				obj.getId());
+
 		final ChallengeReferral obj2 = new ChallengeReferral();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);
 
-		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
-				+ obj2.getId().toString());
+		assertNotNull("Transient instance was not assigned a new identifier.",
+				obj2.getId());
 
 		dao.delete(obj);
 		dao.delete(obj2);
@@ -126,28 +132,30 @@ public class ChallengeReferralDaoTest {
 
 	@Test
 	public void byChallengeId() {
-		List<ChallengeReferral> crs = dao.byChallengeId(testChallenge.getId());
+		final List<ChallengeReferral> crs = dao.byChallengeId(testChallenge
+				.getId());
 		assertList(crs);
 	}
 
 	@Test
 	public void byChallengeIdAndQuery() {
-		List<ChallengeReferral> crs = dao.byChallengeIdAndQuery(
+		final List<ChallengeReferral> crs = dao.byChallengeIdAndQuery(
 				testChallenge.getId(), "issue");
 		assertList(crs);
 	}
 
 	@Test
 	public void countByChallengeIdNotOnActiveTaskList() {
-		long count = dao.countByChallengeIdNotOnActiveTaskList(
+		final long count = dao.countByChallengeIdNotOnActiveTaskList(
 				testChallenge.getId(), testStudent, "testSessionId");
-		assertTrue(count > -1);
+		assertTrue("Ensure count result is non-negative.", count > -1);
 	}
 
 	@Test
 	public void byChallengeIdNotOnActiveTaskList() {
-		List<ChallengeReferral> crs = dao.byChallengeIdNotOnActiveTaskList(
-				testChallenge.getId(), testStudent, "testSessionId");
+		final List<ChallengeReferral> crs = dao
+				.byChallengeIdNotOnActiveTaskList(
+						testChallenge.getId(), testStudent, "testSessionId");
 		assertList(crs);
 	}
 

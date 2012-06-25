@@ -18,10 +18,12 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.util.uuid.UUIDCustomType;
 
 import com.google.common.collect.Sets;
 
@@ -30,6 +32,7 @@ import com.google.common.collect.Sets;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@TypeDef(name = "uuid-custom", typeClass = UUIDCustomType.class)
 public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 		extends AbstractAuditable
 		implements PersonAssocAuditable { // NOPMD
@@ -64,7 +67,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	private Date closedDate;
 
 	@Column(nullable = true)
-	@Type(type = "pg-uuid")
+	@Type(type = "uuid-custom")
 	private UUID closedById;
 
 	/**

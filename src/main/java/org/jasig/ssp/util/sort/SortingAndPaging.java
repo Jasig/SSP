@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
  * query. Use multiple requests with different firstResult settings to see more
  * results beyond the {@link #MAXIMUM_ALLOWABLE_RESULTS} setting.
  */
-public final class SortingAndPaging {
+public final class SortingAndPaging { // NOPMD
 
 	/**
 	 * The default maximum results if an upper limit was not placed when
@@ -96,8 +96,10 @@ public final class SortingAndPaging {
 				|| firstResult < Integer.valueOf(0) ? Integer.valueOf(0)
 				: firstResult;
 		this.maxResults = maxResults == null
-				|| maxResults > MAXIMUM_ALLOWABLE_RESULTS ? Integer.valueOf(0)
-				: maxResults;
+				? DEFAULT_MAXIMUM_RESULTS
+				: (maxResults > MAXIMUM_ALLOWABLE_RESULTS ? MAXIMUM_ALLOWABLE_RESULTS
+						: (maxResults < Integer.valueOf(1) ? DEFAULT_MAXIMUM_RESULTS
+								: maxResults));
 		this.sortFields = sortFields;
 		this.defaultSortProperty = defaultSortProperty;
 		this.defaultSortDirection = defaultSortDirection;

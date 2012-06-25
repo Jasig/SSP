@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:task="http://www.springframework.org/schema/task"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
@@ -11,44 +9,48 @@
 		http://www.springframework.org/schema/task		http://www.springframework.org/schema/task/spring-task-3.1.xsd
 		http://www.springframework.org/schema/tx		http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
 		http://www.springframework.org/schema/util		http://www.springframework.org/schema/util/spring-util-3.1.xsd">
-	
+
 	<!-- Xml resource for configuring additional beans for the app locally -->
-	<import resource="local/ssp-local.xml"/>
-	
+	<import resource="local/ssp-local.xml" />
+
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties" location="file:${SSP_CONFIGDIR}/ssp-config.properties"/>
-	
+	<util:properties id="configProperties"
+		location="file:${SSP_CONFIGDIR}/ssp-config.properties" />
+
 	<util:properties id="contextProperties">
 		<prop key="applicationMode">RUN</prop>
-		<!-- applicationMode should be referenced almost never, please think 
-		thrice before using it. Values are:  RUN and TEST -->
+		<!-- applicationMode should be referenced almost never, please think thrice 
+			before using it. Values are: RUN and TEST -->
 	</util:properties>
 
-	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
+	<!-- Scans within the base package of the application for @Components, @Service 
+		& @Repository to configure as beans -->
 	<context:component-scan base-package="org.jasig.ssp,org.jasig.mygps">
-		<context:exclude-filter type="regex" expression=".*Controller"/>
+		<context:exclude-filter type="regex"
+			expression=".*Controller" />
 	</context:component-scan>
-	
+
 	<!-- Mail and Other Templates -->
-	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+	<bean id="velocityEngine"
+		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
 			<value>
 				resource.loader=string
 				string.resource.loader.class=org.apache.velocity.runtime.resource.loader.StringResourceLoader
 			</value>
 		</property>
-	</bean>	
+	</bean>
 
 	<!-- Task Scheduling -->
-	<task:scheduler id="sspScheduler" pool-size="3"/>
-	<task:annotation-driven scheduler="sspScheduler"/>
-	
+	<task:scheduler id="sspScheduler" pool-size="3" />
+	<task:annotation-driven scheduler="sspScheduler" />
+
 	<!-- Transactions -->
 	<tx:annotation-driven />
-	
+
 	<!-- Database Versioning -->
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
-			<property name="dataSource">
+		<property name="dataSource">
 			<bean class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 				<property name="driverClass" value="#{configProperties.db_driver_class}" />
 				<property name="url" value="#{configProperties.db_url}" />
@@ -56,23 +58,29 @@
 				<property name="password" value="#{configProperties.db_admin_password}" />
 			</bean>
 		</property>
-			<property name="changeLog" value="classpath:org/jasig/ssp/database/masterChangeLog.xml" />
+		<property name="changeLog"
+			value="classpath:org/jasig/ssp/database/masterChangeLog.xml" />
 	</bean>
-	
+
 	<!-- Hibernate -->
-	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
-	<bean id="securityService" class="org.jasig.ssp.service.impl.SecurityServiceImpl"/>
-	
+
+	<bean id="securityService" class="org.jasig.ssp.service.impl.SecurityServiceImpl" />
+
+	<bean id="uuidCustomType" class="org.jasig.ssp.util.uuid.UUIDCustomTypeSetup"
+		init-method="initSettings" />
+
 	<!-- Hibernate Session Factory -->
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
-		depends-on="liquibase">
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		depends-on="liquibase,uuidCustomType">
 		<property name="dataSource" ref="sspDataSource" />
-		<property name="packagesToScan" value="org.jasig.ssp.model"/>
+		<property name="packagesToScan" value="org.jasig.ssp.model" />
 		<property name="entityInterceptor">
-			<bean class="org.jasig.ssp.dao.AuditableEntityInterceptor"/>
+			<bean class="org.jasig.ssp.dao.AuditableEntityInterceptor" />
 		</property>
 		<property name="hibernateProperties">
 			<value>
@@ -81,11 +89,12 @@
 			</value>
 		</property>
 		<property name="namingStrategy">
-			<bean class="org.hibernate.cfg.ImprovedNamingStrategy"/>
+			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
 		</property>
 	</bean>
-	
-	<bean id="sspDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+
+	<bean id="sspDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
 		<property name="driverClassName" value="#{configProperties.db_driver_class}" />
 		<property name="url" value="#{configProperties.db_url}" />
 		<property name="username" value="#{configProperties.db_username}" />
@@ -93,7 +102,7 @@
 		<property name="validationQuery" value="select 1" />
 		<property name="maxActive" value="10" />
 		<property name="maxIdle" value="5" />
-		<property name="maxWait" value="10000" /> 
+		<property name="maxWait" value="10000" />
 	</bean>
-	
+
 </beans>

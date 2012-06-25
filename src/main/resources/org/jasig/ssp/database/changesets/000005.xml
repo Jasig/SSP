@@ -7,12 +7,15 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
 	<changeSet author='jon.adams' id='Add early_alert_suggestion table'>
 		<createTable tableName="early_alert_suggestion">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -55,7 +58,7 @@
 	<changeSet id="create reference data - early_alert_suggestion"
 		author="jon.adams">
 		<insert tableName="early_alert_suggestion">
-			<column name="id" value="B2D11160-5056-A51A-807D9897C14BDD44" />
+			<column name="id" value="B2D11160-5056-A51A-807D-9897C14BDD44" />
 			<column name="name" value="Counseling Services" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -66,7 +69,7 @@
 			<column name="sort_order" value="3" />
 		</insert>
 		<insert tableName="early_alert_suggestion">
-			<column name="id" value="B2D111FD-5056-A51A-80FE6F3344174DBE" />
+			<column name="id" value="B2D111FD-5056-A51A-80FE-6F3344174DBE" />
 			<column name="name" value="DEV Professional Tutoring" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -77,7 +80,7 @@
 			<column name="sort_order" value="9" />
 		</insert>
 		<insert tableName="early_alert_suggestion">
-			<column name="id" value="B2D111DD-5056-A51A-8034909BD6AF80D5" />
+			<column name="id" value="B2D111DD-5056-A51A-8034-909BD6AF80D5" />
 			<column name="name" value="Disability Service Intervention" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -88,7 +91,7 @@
 			<column name="sort_order" value="7" />
 		</insert>
 		<insert tableName="early_alert_suggestion">
-			<column name="id" value="B2D1120C-5056-A51A-80EAC779A3109F8F" />
+			<column name="id" value="B2D1120C-5056-A51A-80EA-C779A3109F8F" />
 			<column name="name" value="Other" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -99,7 +102,7 @@
 			<column name="sort_order" value="10" />
 		</insert>
 		<insert tableName="early_alert_suggestion">
-			<column name="id" value="B2D11151-5056-A51A-80513ACDF99FEF84" />
+			<column name="id" value="B2D11151-5056-A51A-8051-3ACDF99FEF84" />
 			<column name="name" value="See Advisor or Coach" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -110,7 +113,7 @@
 			<column name="sort_order" value="2" />
 		</insert>
 		<insert tableName="early_alert_suggestion">
-			<column name="id" value="B2D11141-5056-A51A-80C1C1250BA820F8" />
+			<column name="id" value="B2D11141-5056-A51A-80C1-C1250BA820F8" />
 			<column name="name" value="See Instructor" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -121,7 +124,7 @@
 			<column name="sort_order" value="1" />
 		</insert>
 		<insert tableName="early_alert_suggestion">
-			<column name="id" value="B2D11170-5056-A51A-8002B5CE9F25E2BC" />
+			<column name="id" value="B2D11170-5056-A51A-8002-B5CE9F25E2BC" />
 			<column name="name" value="The Tutoring/Learning Center" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -132,7 +135,7 @@
 			<column name="sort_order" value="4" />
 		</insert>
 		<insert tableName="early_alert_suggestion">
-			<column name="id" value="B2D111CE-5056-A51A-8017676C4D8C4F1D" />
+			<column name="id" value="B2D111CE-5056-A51A-8017-676C4D8C4F1D" />
 			<column name="name" value="Tutoring Svcs (Bldg 10)" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -143,7 +146,7 @@
 			<column name="sort_order" value="6" />
 		</insert>
 		<insert tableName="early_alert_suggestion">
-			<column name="id" value="B2D111ED-5056-A51A-80465291453E8720" />
+			<column name="id" value="B2D111ED-5056-A51A-8046-5291453E8720" />
 			<column name="name" value="Withdraw" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -154,7 +157,7 @@
 			<column name="sort_order" value="8" />
 		</insert>
 		<insert tableName="early_alert_suggestion">
-			<column name="id" value="B2D111BE-5056-A51A-8075C5A65DA17079" />
+			<column name="id" value="B2D111BE-5056-A51A-8075-C5A65DA17079" />
 			<column name="name" value="Writing Center" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -166,34 +169,34 @@
 		</insert>
 		<rollback>
 			<delete tableName="early_alert_suggestion">
-				<where>id='B2D11160-5056-A51A-807D9897C14BDD44'</where>
+				<where>id='B2D11160-5056-A51A-807D-9897C14BDD44'</where>
 			</delete>
 			<delete tableName="early_alert_suggestion">
-				<where>id='B2D111FD-5056-A51A-80FE6F3344174DBE'</where>
+				<where>id='B2D111FD-5056-A51A-80FE-6F3344174DBE'</where>
 			</delete>
 			<delete tableName="early_alert_suggestion">
-				<where>id='B2D111DD-5056-A51A-8034909BD6AF80D5'</where>
+				<where>id='B2D111DD-5056-A51A-8034-909BD6AF80D5'</where>
 			</delete>
 			<delete tableName="early_alert_suggestion">
-				<where>id='B2D1120C-5056-A51A-80EAC779A3109F8F'</where>
+				<where>id='B2D1120C-5056-A51A-80EA-C779A3109F8F'</where>
 			</delete>
 			<delete tableName="early_alert_suggestion">
-				<where>id='B2D11151-5056-A51A-80513ACDF99FEF84'</where>
+				<where>id='B2D11151-5056-A51A-8051-3ACDF99FEF84'</where>
 			</delete>
 			<delete tableName="early_alert_suggestion">
-				<where>id='B2D11141-5056-A51A-80C1C1250BA820F8'</where>
+				<where>id='B2D11141-5056-A51A-80C1-C1250BA820F8'</where>
 			</delete>
 			<delete tableName="early_alert_suggestion">
-				<where>id='B2D11170-5056-A51A-8002B5CE9F25E2BC'</where>
+				<where>id='B2D11170-5056-A51A-8002-B5CE9F25E2BC'</where>
 			</delete>
 			<delete tableName="early_alert_suggestion">
-				<where>id='B2D111CE-5056-A51A-8017676C4D8C4F1D'</where>
+				<where>id='B2D111CE-5056-A51A-8017-676C4D8C4F1D'</where>
 			</delete>
 			<delete tableName="early_alert_suggestion">
-				<where>id='B2D111ED-5056-A51A-80465291453E8720'</where>
+				<where>id='B2D111ED-5056-A51A-8046-5291453E8720'</where>
 			</delete>
 			<delete tableName="early_alert_suggestion">
-				<where>id='B2D111BE-5056-A51A-8075C5A65DA17079'</where>
+				<where>id='B2D111BE-5056-A51A-8075-C5A65DA17079'</where>
 			</delete>
 		</rollback>
 	</changeSet>
@@ -203,7 +206,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -229,7 +232,7 @@
 			<column name="sort_order" type="smallint" defaultValue="0">
 				<constraints nullable="false" />
 			</column>
-			<column name="acronym" type="character varying(80)">
+			<column name="acronym" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -274,7 +277,7 @@
 			<column name="sort_order" value="10" />
 		</insert>
 		<insert tableName="early_alert_referral">
-			<column name="id" value="B2D112A9-5056-A51A-8010B510525EA3A8" />
+			<column name="id" value="B2D112A9-5056-A51A-8010-B510525EA3A8" />
 			<column name="name" value="Academic Concern" />
 			<column name="description" value="" />
 			<column name="acronym" value="AC" />
@@ -286,7 +289,7 @@
 			<column name="sort_order" value="1" />
 		</insert>
 		<insert tableName="early_alert_referral">
-			<column name="id" value="B2D112B8-5056-A51A-80671FDA2849C3E5" />
+			<column name="id" value="B2D112B8-5056-A51A-8067-1FDA2849C3E5" />
 			<column name="name" value="Excessive Absences" />
 			<column name="description" value="" />
 			<column name="acronym" value="EA" />
@@ -298,7 +301,7 @@
 			<column name="sort_order" value="2" />
 		</insert>
 		<insert tableName="early_alert_referral">
-			<column name="id" value="B2D112C8-5056-A51A-80D5BEEC7D48CB5D" />
+			<column name="id" value="B2D112C8-5056-A51A-80D5-BEEC7D48CB5D" />
 			<column name="name" value="Low Homework/Quizzes" />
 			<column name="description" value="" />
 			<column name="acronym" value="HQ" />
@@ -310,7 +313,7 @@
 			<column name="sort_order" value="3" />
 		</insert>
 		<insert tableName="early_alert_referral">
-			<column name="id" value="B2D112D7-5056-A51A-80AA795E56155AF5" />
+			<column name="id" value="B2D112D7-5056-A51A-80AA-795E56155AF5" />
 			<column name="name" value="Low Test Scores" />
 			<column name="description" value="" />
 			<column name="acronym" value="TS" />
@@ -322,7 +325,7 @@
 			<column name="sort_order" value="4" />
 		</insert>
 		<insert tableName="early_alert_referral">
-			<column name="id" value="B2D112E7-5056-A51A-80E8A30645C463E4" />
+			<column name="id" value="B2D112E7-5056-A51A-80E8-A30645C463E4" />
 			<column name="name" value="Never Attended" />
 			<column name="description" value="" />
 			<column name="acronym" value="NS" />
@@ -334,7 +337,7 @@
 			<column name="sort_order" value="5" />
 		</insert>
 		<insert tableName="early_alert_referral">
-			<column name="id" value="B2D11316-5056-A51A-80F979421BDF08BF" />
+			<column name="id" value="B2D11316-5056-A51A-80F9-79421BDF08BF" />
 			<column name="name" value="Personal Concern" />
 			<column name="description" value="" />
 			<column name="acronym" value="PE" />
@@ -346,7 +349,7 @@
 			<column name="sort_order" value="6" />
 		</insert>
 		<insert tableName="early_alert_referral">
-			<column name="id" value="B2D11326-5056-A51A-806C79F352D0C2B2" />
+			<column name="id" value="B2D11326-5056-A51A-806C-79F352D0C2B2" />
 			<column name="name" value="Tardiness" />
 			<column name="description" value="" />
 			<column name="acronym" value="TA" />
@@ -358,7 +361,7 @@
 			<column name="sort_order" value="7" />
 		</insert>
 		<insert tableName="early_alert_referral">
-			<column name="id" value="B2D11335-5056-A51A-80EA074F8FEF94EA" />
+			<column name="id" value="B2D11335-5056-A51A-80EA-074F8FEF94EA" />
 			<column name="name" value="Other" />
 			<column name="description" value="" />
 			<column name="acronym" value="OT" />
@@ -377,28 +380,28 @@
 				<where>id='300D68EF-38C2-4B7D-AD46-7874AA5D34AC'</where>
 			</delete>
 			<delete tableName="early_alert_referral">
-				<where>id='B2D112A9-5056-A51A-8010B510525EA3A8'</where>
+				<where>id='B2D112A9-5056-A51A-8010-B510525EA3A8'</where>
 			</delete>
 			<delete tableName="early_alert_referral">
-				<where>id='B2D112B8-5056-A51A-80671FDA2849C3E5'</where>
+				<where>id='B2D112B8-5056-A51A-8067-1FDA2849C3E5'</where>
 			</delete>
 			<delete tableName="early_alert_referral">
-				<where>id='B2D112C8-5056-A51A-80D5BEEC7D48CB5D'</where>
+				<where>id='B2D112C8-5056-A51A-80D5-BEEC7D48CB5D'</where>
 			</delete>
 			<delete tableName="early_alert_referral">
-				<where>id='B2D112D7-5056-A51A-80AA795E56155AF5'</where>
+				<where>id='B2D112D7-5056-A51A-80AA-795E56155AF5'</where>
 			</delete>
 			<delete tableName="early_alert_referral">
-				<where>id='B2D112E7-5056-A51A-80E8A30645C463E4'</where>
+				<where>id='B2D112E7-5056-A51A-80E8-A30645C463E4'</where>
 			</delete>
 			<delete tableName="early_alert_referral">
-				<where>id='B2D11316-5056-A51A-80F979421BDF08BF'</where>
+				<where>id='B2D11316-5056-A51A-80F9-79421BDF08BF'</where>
 			</delete>
 			<delete tableName="early_alert_referral">
-				<where>id='B2D11326-5056-A51A-806C79F352D0C2B2'</where>
+				<where>id='B2D11326-5056-A51A-806C-79F352D0C2B2'</where>
 			</delete>
 			<delete tableName="early_alert_referral">
-				<where>id='B2D11335-5056-A51A-80EA074F8FEF94EA'</where>
+				<where>id='B2D11335-5056-A51A-80EA-074F8FEF94EA'</where>
 			</delete>
 		</rollback>
 	</changeSet>
@@ -408,7 +411,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -475,7 +478,7 @@
 			<column name="sort_order" value="10" />
 		</insert>
 		<insert tableName="early_alert_reason">
-			<column name="id" value="B2D112A9-5056-A51A-8010B510525EA3A8" />
+			<column name="id" value="B2D112A9-5056-A51A-8010-B510525EA3A8" />
 			<column name="name" value="Academic Concern" />
 			<column name="description" value="Academic Concern" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -486,7 +489,7 @@
 			<column name="sort_order" value="1" />
 		</insert>
 		<insert tableName="early_alert_reason">
-			<column name="id" value="B2D112B8-5056-A51A-80671FDA2849C3E5" />
+			<column name="id" value="B2D112B8-5056-A51A-8067-1FDA2849C3E5" />
 			<column name="name" value="Excessive Absences" />
 			<column name="description" value="Excessive Absences" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -497,7 +500,7 @@
 			<column name="sort_order" value="2" />
 		</insert>
 		<insert tableName="early_alert_reason">
-			<column name="id" value="B2D112C8-5056-A51A-80D5BEEC7D48CB5D" />
+			<column name="id" value="B2D112C8-5056-A51A-80D5-BEEC7D48CB5D" />
 			<column name="name" value="Low Homework/Quizzes" />
 			<column name="description" value="Low Homework/Quizzes" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -508,7 +511,7 @@
 			<column name="sort_order" value="3" />
 		</insert>
 		<insert tableName="early_alert_reason">
-			<column name="id" value="B2D112D7-5056-A51A-80AA795E56155AF5" />
+			<column name="id" value="B2D112D7-5056-A51A-80AA-795E56155AF5" />
 			<column name="name" value="Low Test Scores" />
 			<column name="description" value="Low Test Scores" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -519,7 +522,7 @@
 			<column name="sort_order" value="4" />
 		</insert>
 		<insert tableName="early_alert_reason">
-			<column name="id" value="B2D112E7-5056-A51A-80E8A30645C463E4" />
+			<column name="id" value="B2D112E7-5056-A51A-80E8-A30645C463E4" />
 			<column name="name" value="Never Attended" />
 			<column name="description" value="Never Attended" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -530,7 +533,7 @@
 			<column name="sort_order" value="5" />
 		</insert>
 		<insert tableName="early_alert_reason">
-			<column name="id" value="B2D11316-5056-A51A-80F979421BDF08BF" />
+			<column name="id" value="B2D11316-5056-A51A-80F9-79421BDF08BF" />
 			<column name="name" value="Personal Concern" />
 			<column name="description" value="Personal Concern" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -541,7 +544,7 @@
 			<column name="sort_order" value="6" />
 		</insert>
 		<insert tableName="early_alert_reason">
-			<column name="id" value="B2D11326-5056-A51A-806C79F352D0C2B2" />
+			<column name="id" value="B2D11326-5056-A51A-806C-79F352D0C2B2" />
 			<column name="name" value="Tardiness" />
 			<column name="description" value="Tardiness" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -552,7 +555,7 @@
 			<column name="sort_order" value="7" />
 		</insert>
 		<insert tableName="early_alert_reason">
-			<column name="id" value="B2D11335-5056-A51A-80EA074F8FEF94EA" />
+			<column name="id" value="B2D11335-5056-A51A-80EA-074F8FEF94EA" />
 			<column name="name" value="Other" />
 			<column name="description" value="Other" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -570,28 +573,28 @@
 				<where>id='300D68EF-38C2-4B7D-AD46-7874AA5D34AC'</where>
 			</delete>
 			<delete tableName="early_alert_reason">
-				<where>id='B2D112A9-5056-A51A-8010B510525EA3A8'</where>
+				<where>id='B2D112A9-5056-A51A-8010-B510525EA3A8'</where>
 			</delete>
 			<delete tableName="early_alert_reason">
-				<where>id='B2D112B8-5056-A51A-80671FDA2849C3E5'</where>
+				<where>id='B2D112B8-5056-A51A-8067-1FDA2849C3E5'</where>
 			</delete>
 			<delete tableName="early_alert_reason">
-				<where>id='B2D112C8-5056-A51A-80D5BEEC7D48CB5D'</where>
+				<where>id='B2D112C8-5056-A51A-80D5-BEEC7D48CB5D'</where>
 			</delete>
 			<delete tableName="early_alert_reason">
-				<where>id='B2D112D7-5056-A51A-80AA795E56155AF5'</where>
+				<where>id='B2D112D7-5056-A51A-80AA-795E56155AF5'</where>
 			</delete>
 			<delete tableName="early_alert_reason">
-				<where>id='B2D112E7-5056-A51A-80E8A30645C463E4'</where>
+				<where>id='B2D112E7-5056-A51A-80E8-A30645C463E4'</where>
 			</delete>
 			<delete tableName="early_alert_reason">
-				<where>id='B2D11316-5056-A51A-80F979421BDF08BF'</where>
+				<where>id='B2D11316-5056-A51A-80F9-79421BDF08BF'</where>
 			</delete>
 			<delete tableName="early_alert_reason">
-				<where>id='B2D11326-5056-A51A-806C79F352D0C2B2'</where>
+				<where>id='B2D11326-5056-A51A-806C-79F352D0C2B2'</where>
 			</delete>
 			<delete tableName="early_alert_reason">
-				<where>id='B2D11335-5056-A51A-80EA074F8FEF94EA'</where>
+				<where>id='B2D11335-5056-A51A-80EA-074F8FEF94EA'</where>
 			</delete>
 		</rollback>
 	</changeSet>
@@ -601,7 +604,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -722,7 +725,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -765,7 +768,7 @@
 	<changeSet id="create reference data - early_alert_outcome"
 		author="jon.adams">
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D10FCA-5056-A51A-80888103AC163F13" />
+			<column name="id" value="B2D10FCA-5056-A51A-8088-8103AC163F13" />
 			<column name="name" value="Appointment Scheduled" />
 			<column name="description" value="AS" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -776,7 +779,7 @@
 			<column name="sort_order" value="1" />
 		</insert>
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D10FE9-5056-A51A-80456B36326A6463" />
+			<column name="id" value="B2D10FE9-5056-A51A-8045-6B36326A6463" />
 			<column name="name"
 				value="Assistance Declined: Declines all or any assistance" />
 			<column name="description" value="ASD" />
@@ -788,7 +791,7 @@
 			<column name="sort_order" value="2" />
 		</insert>
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D10FF9-5056-A51A-80BEED3F1F11C9A9" />
+			<column name="id" value="B2D10FF9-5056-A51A-80BE-ED3F1F11C9A9" />
 			<column name="name"
 				value="Considering Future Services: May attend workshops" />
 			<column name="description" value="CFS" />
@@ -800,7 +803,7 @@
 			<column name="sort_order" value="3" />
 		</insert>
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D11009-5056-A51A-8072ED4EBFA88DA5" />
+			<column name="id" value="B2D11009-5056-A51A-8072-ED4EBFA88DA5" />
 			<column name="name" value="Letter Sent" />
 			<column name="description" value="LS" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -811,7 +814,7 @@
 			<column name="sort_order" value="4" />
 		</insert>
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D11018-5056-A51A-801FBEF6DC4AC7EF" />
+			<column name="id" value="B2D11018-5056-A51A-801F-BEF6DC4AC7EF" />
 			<column name="name" value="Not Attending Sinclair Community College" />
 			<column name="description" value="NAS" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -822,7 +825,7 @@
 			<column name="sort_order" value="5" />
 		</insert>
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D11028-5056-A51A-80E9E86DEA9498D8" />
+			<column name="id" value="B2D11028-5056-A51A-80E9-E86DEA9498D8" />
 			<column name="name"
 				value="No Response to Letter Sent or Phone or Email Messages" />
 			<column name="description" value="NR" />
@@ -834,7 +837,7 @@
 			<column name="sort_order" value="6" />
 		</insert>
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D11076-5056-A51A-80C1F5813762FF0B" />
+			<column name="id" value="B2D11076-5056-A51A-80C1-F5813762FF0B" />
 			<column name="name" value="Other" />
 			<column name="description" value="OTH" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -845,7 +848,7 @@
 			<column name="sort_order" value="7" />
 		</insert>
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D11086-5056-A51A-8034893608D7A6C7" />
+			<column name="id" value="B2D11086-5056-A51A-8034-893608D7A6C7" />
 			<column name="name" value="Problem Addressed" />
 			<column name="description" value="PA" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -856,7 +859,7 @@
 			<column name="sort_order" value="8" />
 		</insert>
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D11095-5056-A51A-80A8F6F9B7975595" />
+			<column name="id" value="B2D11095-5056-A51A-80A8-F6F9B7975595" />
 			<column name="name"
 				value="Problem Addressed by Referral to Sinclair Department" />
 			<column name="description" value="PARSD" />
@@ -868,7 +871,7 @@
 			<column name="sort_order" value="9" />
 		</insert>
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D110A5-5056-A51A-808BF40B80601A46" />
+			<column name="id" value="B2D110A5-5056-A51A-808B-F40B80601A46" />
 			<column name="name" value="Unable to Reach: Disconnect busy number changed" />
 			<column name="description" value="UTR" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -879,7 +882,7 @@
 			<column name="sort_order" value="10" />
 		</insert>
 		<insert tableName="early_alert_outcome">
-			<column name="id" value="B2D110B4-5056-A51A-809B35E8C9C4DE86" />
+			<column name="id" value="B2D110B4-5056-A51A-809B-35E8C9C4DE86" />
 			<column name="name" value="Pending" />
 			<column name="description" value="P" />
 			<column name="created_date" valueDate="2012-05-03T00:00:00" />
@@ -891,37 +894,37 @@
 		</insert>
 		<rollback>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D10FCA-5056-A51A-80888103AC163F13'</where>
+				<where>id='B2D10FCA-5056-A51A-8088-8103AC163F13'</where>
 			</delete>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D10FE9-5056-A51A-80456B36326A6463'</where>
+				<where>id='B2D10FE9-5056-A51A-8045-6B36326A6463'</where>
 			</delete>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D10FF9-5056-A51A-80BEED3F1F11C9A9'</where>
+				<where>id='B2D10FF9-5056-A51A-80BE-ED3F1F11C9A9'</where>
 			</delete>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D11009-5056-A51A-8072ED4EBFA88DA5'</where>
+				<where>id='B2D11009-5056-A51A-8072-ED4EBFA88DA5'</where>
 			</delete>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D11018-5056-A51A-801FBEF6DC4AC7EF'</where>
+				<where>id='B2D11018-5056-A51A-801F-BEF6DC4AC7EF'</where>
 			</delete>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D11028-5056-A51A-80E9E86DEA9498D8'</where>
+				<where>id='B2D11028-5056-A51A-80E9-E86DEA9498D8'</where>
 			</delete>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D11076-5056-A51A-80C1F5813762FF0B'</where>
+				<where>id='B2D11076-5056-A51A-80C1-F5813762FF0B'</where>
 			</delete>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D11086-5056-A51A-8034893608D7A6C7'</where>
+				<where>id='B2D11086-5056-A51A-8034-893608D7A6C7'</where>
 			</delete>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D11095-5056-A51A-80A8F6F9B7975595'</where>
+				<where>id='B2D11095-5056-A51A-80A8-F6F9B7975595'</where>
 			</delete>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D110A5-5056-A51A-808BF40B80601A46'</where>
+				<where>id='B2D110A5-5056-A51A-808B-F40B80601A46'</where>
 			</delete>
 			<delete tableName="early_alert_outcome">
-				<where>id='B2D110B4-5056-A51A-809B35E8C9C4DE86'</where>
+				<where>id='B2D110B4-5056-A51A-809B-35E8C9C4DE86'</where>
 			</delete>
 		</rollback>
 	</changeSet>
@@ -936,25 +939,23 @@
 			</column>
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="early_alert_suggestion_created_by_person_id"
+				<constraints nullable="false" foreignKeyName="early_alert_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="early_alert_suggestion_modified_by_person_id"
-					references="person(id)" />
+					foreignKeyName="early_alert_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
 			</column>
-			<column name="course_name" type="character varying(80)">
+			<column name="course_name" type="${nvarchar.type}(80)">
 				<constraints nullable="true" />
 			</column>
-			<column name="course_title" type="character varying(255)">
+			<column name="course_title" type="${nvarchar.type}(255)">
 				<constraints nullable="true" />
 			</column>
-			<column name="email_cc" type="character varying(255)">
+			<column name="email_cc" type="${nvarchar.type}(255)">
 				<constraints nullable="true" />
 			</column>
 			<column name="person_id" type="uuid">
@@ -995,12 +996,12 @@
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="early_alert_suggestion_created_by_person_id"
+					foreignKeyName="early_alert_early_alert_reason_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="early_alert_suggestion_modified_by_person_id"
+					foreignKeyName="early_alert_early_alert_reason_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -1041,12 +1042,12 @@
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="early_alert_suggestion_created_by_person_id"
+					foreignKeyName="early_alert_early_alert_suggestion_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="early_alert_suggestion_modified_by_person_id"
+					foreignKeyName="early_alert_early_alert_suggestion_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -1054,7 +1055,8 @@
 			</column>
 			<column name="early_alert_id" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="early_alert_suggestion_early_alert_id" references="early_alert(id)" />
+					foreignKeyName="early_alert_early_alert_suggestion_early_alert_id"
+					references="early_alert(id)" />
 			</column>
 			<column name="early_alert_suggestion_id" type="uuid">
 				<constraints nullable="false"
@@ -1286,7 +1288,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -1297,13 +1299,11 @@
 			</column>
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false"
-					foreignKeyName="early_alert_suggestion_created_by_person_id"
+				<constraints nullable="false" foreignKeyName="campus_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true"
-					foreignKeyName="early_alert_suggestion_modified_by_person_id"
+				<constraints nullable="true" foreignKeyName="campus_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -1351,12 +1351,12 @@
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="early_alert_suggestion_created_by_person_id"
+					foreignKeyName="early_alert_response_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="early_alert_suggestion_modified_by_person_id"
+					foreignKeyName="early_alert_response_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -1452,7 +1452,7 @@
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="character varying(80)">
+			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
 			</column>
 			<column name="description" type="text">
@@ -1607,37 +1607,37 @@
 	<changeSet id="clean up early_alert_outcome sample data"
 		author="jon.adams">
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D10FCA-5056-A51A-80888103AC163F13'</where>
+			<where>id='B2D10FCA-5056-A51A-8088-8103AC163F13'</where>
 		</delete>
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D10FE9-5056-A51A-80456B36326A6463'</where>
+			<where>id='B2D10FE9-5056-A51A-8045-6B36326A6463'</where>
 		</delete>
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D10FF9-5056-A51A-80BEED3F1F11C9A9'</where>
+			<where>id='B2D10FF9-5056-A51A-80BE-ED3F1F11C9A9'</where>
 		</delete>
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D11009-5056-A51A-8072ED4EBFA88DA5'</where>
+			<where>id='B2D11009-5056-A51A-8072-ED4EBFA88DA5'</where>
 		</delete>
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D11018-5056-A51A-801FBEF6DC4AC7EF'</where>
+			<where>id='B2D11018-5056-A51A-801F-BEF6DC4AC7EF'</where>
 		</delete>
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D11028-5056-A51A-80E9E86DEA9498D8'</where>
+			<where>id='B2D11028-5056-A51A-80E9-E86DEA9498D8'</where>
 		</delete>
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D11076-5056-A51A-80C1F5813762FF0B'</where>
+			<where>id='B2D11076-5056-A51A-80C1-F5813762FF0B'</where>
 		</delete>
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D11086-5056-A51A-8034893608D7A6C7'</where>
+			<where>id='B2D11086-5056-A51A-8034-893608D7A6C7'</where>
 		</delete>
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D11095-5056-A51A-80A8F6F9B7975595'</where>
+			<where>id='B2D11095-5056-A51A-80A8-F6F9B7975595'</where>
 		</delete>
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D110A5-5056-A51A-808BF40B80601A46'</where>
+			<where>id='B2D110A5-5056-A51A-808B-F40B80601A46'</where>
 		</delete>
 		<delete tableName="early_alert_outcome">
-			<where>id='B2D110B4-5056-A51A-809B35E8C9C4DE86'</where>
+			<where>id='B2D110B4-5056-A51A-809B-35E8C9C4DE86'</where>
 		</delete>
 		<insert tableName="early_alert_outcome">
 			<column name="id" value="12A58804-45DC-40F2-B2F5-D7E4403ACEE1" />
@@ -1751,7 +1751,7 @@
 
 	<changeSet id="add Confidentiality Level data" author="jon.adams">
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B3D077A7-4055-0510-79674A09F93A0357" />
+			<column name="id" value="B3D077A7-4055-0510-7967-4A09F93A0357" />
 			<column name="name" value="EVERYONE" />
 			<column name="description"
 				value="Not Confidential. Records may be viewed by all users." />
@@ -1763,7 +1763,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B2D077A7-4055-0510-79574A09F93A0346" />
+			<column name="id" value="B2D077A7-4055-0510-7957-4A09F93A0346" />
 			<column name="name" value="Academic Resource Center" />
 			<column name="description" value="" />
 			<column name="acronym" value="ARC" />
@@ -1774,7 +1774,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B2D078B8-5056-A51A-80574A09F93A0347" />
+			<column name="id" value="B2D078B8-5056-A51A-8057-4A09F93A0347" />
 			<column name="name" value="Staff" />
 			<column name="description" value="" />
 			<column name="acronym" value="STAFF" />
@@ -1785,7 +1785,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B2D07906-5056-A51A-80FD9D19F636E501" />
+			<column name="id" value="B2D07906-5056-A51A-80FD-9D19F636E501" />
 			<column name="name" value="Manager" />
 			<column name="description" value="" />
 			<column name="acronym" value="MGR" />
@@ -1796,7 +1796,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B2D07915-5056-A51A-80CE334ECA0E0A10" />
+			<column name="id" value="B2D07915-5056-A51A-80CE-334ECA0E0A10" />
 			<column name="name" value="Disability" />
 			<column name="description" value="" />
 			<column name="acronym" value="DIS" />
@@ -1807,7 +1807,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B2D07935-5056-A51A-80DBCAA0DADD3F2E" />
+			<column name="id" value="B2D07935-5056-A51A-80DB-CAA0DADD3F2E" />
 			<column name="name" value="Counseling Services" />
 			<column name="description" value="" />
 			<column name="acronym" value="CNSL" />
@@ -1818,7 +1818,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B2D07944-5056-A51A-8047654512D4D083" />
+			<column name="id" value="B2D07944-5056-A51A-8047-654512D4D083" />
 			<column name="name" value="Individualized Learning Plan " />
 			<column name="description" value="" />
 			<column name="acronym" value="ILP" />
@@ -1829,7 +1829,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B2D07964-5056-A51A-800AA95D3BB3C4D1" />
+			<column name="id" value="B2D07964-5056-A51A-800A-A95D3BB3C4D1" />
 			<column name="name" value="English as a Second Language" />
 			<column name="description" value="" />
 			<column name="acronym" value="ESL" />
@@ -1840,7 +1840,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B2D07964-5157-A51A-800AA95D3BB3C4E3" />
+			<column name="id" value="B2D07964-5157-A51A-800A-A95D3BB3C4E3" />
 			<column name="name" value="Displaced Workers" />
 			<column name="description" value="" />
 			<column name="acronym" value="DSW" />
@@ -1851,7 +1851,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B2D07964-5157-A51A-800AA95D3BB3C4F4" />
+			<column name="id" value="B2D07964-5157-A51A-800A-A95D3BB3C4F4" />
 			<column name="name" value="Early Alert " />
 			<column name="description" value="" />
 			<column name="acronym" value="EAL" />
@@ -1862,7 +1862,7 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="confidentiality_level">
-			<column name="id" value="B2D07964-5157-A51A-800AA95D3BB3C505" />
+			<column name="id" value="B2D07964-5157-A51A-800A-A95D3BB3C505" />
 			<column name="name" value="Fast Forward" />
 			<column name="description" value="" />
 			<column name="acronym" value="FFC" />
@@ -1874,34 +1874,34 @@
 		</insert>
 		<rollback>
 			<delete tableName="confidentiality_level">
-				<where>id = 'B2D077A7-4055-0510-79574A09F93A0346'</where>
+				<where>id = 'B2D077A7-4055-0510-7957-4A09F93A0346'</where>
 			</delete>
 			<delete tableName="confidentiality_level">
-				<where>id = 'B2D078B8-5056-A51A-80574A09F93A0347'</where>
+				<where>id = 'B2D078B8-5056-A51A-8057-4A09F93A0347'</where>
 			</delete>
 			<delete tableName="confidentiality_level">
-				<where>id = 'B2D07906-5056-A51A-80FD9D19F636E501'</where>
+				<where>id = 'B2D07906-5056-A51A-80FD-9D19F636E501'</where>
 			</delete>
 			<delete tableName="confidentiality_level">
-				<where>id = 'B2D07915-5056-A51A-80CE334ECA0E0A10'</where>
+				<where>id = 'B2D07915-5056-A51A-80CE-334ECA0E0A10'</where>
 			</delete>
 			<delete tableName="confidentiality_level">
-				<where>id = 'B2D07935-5056-A51A-80DBCAA0DADD3F2E'</where>
+				<where>id = 'B2D07935-5056-A51A-80DB-CAA0DADD3F2E'</where>
 			</delete>
 			<delete tableName="confidentiality_level">
-				<where>id = 'B2D07944-5056-A51A-8047654512D4D083'</where>
+				<where>id = 'B2D07944-5056-A51A-8047-654512D4D083'</where>
 			</delete>
 			<delete tableName="confidentiality_level">
-				<where>id = 'B2D07964-5056-A51A-800AA95D3BB3C4D1'</where>
+				<where>id = 'B2D07964-5056-A51A-800A-A95D3BB3C4D1'</where>
 			</delete>
 			<delete tableName="confidentiality_level">
-				<where>id = 'B2D07964-5157-A51A-800AA95D3BB3C4E3'</where>
+				<where>id = 'B2D07964-5157-A51A-800A-A95D3BB3C4E3'</where>
 			</delete>
 			<delete tableName="confidentiality_level">
-				<where>id = 'B2D07964-5157-A51A-800AA95D3BB3C4F4'</where>
+				<where>id = 'B2D07964-5157-A51A-800A-A95D3BB3C4F4'</where>
 			</delete>
 			<delete tableName="confidentiality_level">
-				<where>id = 'B2D07964-5157-A51A-800AA95D3BB3C505'</where>
+				<where>id = 'B2D07964-5157-A51A-800A-A95D3BB3C505'</where>
 			</delete>
 			<delete tableName="confidentiality_level">
 				<where>id = ''</where>
@@ -1946,7 +1946,7 @@ Faculty Comments: $FacultyComments" />
 	<changeSet id="create reference data - journal_source"
 		author="jon.adams">
 		<insert tableName="journal_source">
-			<column name="id" value="B2D07973-5056-A51A-80731D3641CE507F" />
+			<column name="id" value="B2D07973-5056-A51A-8073-1D3641CE507F" />
 			<column name="name" value="Appointment" />
 			<column name="description" value="Default Description" />
 			<column name="created_date" valueDate="2012-05-18T12:00:00" />
@@ -1956,7 +1956,7 @@ Faculty Comments: $FacultyComments" />
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="journal_source">
-			<column name="id" value="B2D07983-5056-A51A-80D03FBCF39FA253" />
+			<column name="id" value="B2D07983-5056-A51A-80D0-3FBCF39FA253" />
 			<column name="name" value="CAP Transitioned" />
 			<column name="description" value="Default Description" />
 			<column name="created_date" valueDate="2012-05-18T12:00:00" />
@@ -1966,7 +1966,7 @@ Faculty Comments: $FacultyComments" />
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="journal_source">
-			<column name="id" value="B2D07993-5056-A51A-8076D6513A772D80" />
+			<column name="id" value="B2D07993-5056-A51A-8076-D6513A772D80" />
 			<column name="name" value="Case Management" />
 			<column name="description" value="Default Description" />
 			<column name="created_date" valueDate="2012-05-18T12:00:00" />
@@ -1976,7 +1976,7 @@ Faculty Comments: $FacultyComments" />
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="journal_source">
-			<column name="id" value="B2D079A2-5056-A51A-8075328971518FF0" />
+			<column name="id" value="B2D079A2-5056-A51A-8075-328971518FF0" />
 			<column name="name" value="Email" />
 			<column name="description" value="Default Description" />
 			<column name="created_date" valueDate="2012-05-18T12:00:00" />
@@ -1986,7 +1986,7 @@ Faculty Comments: $FacultyComments" />
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="journal_source">
-			<column name="id" value="B2D079B2-5056-A51A-80C8753B509BC90B" />
+			<column name="id" value="B2D079B2-5056-A51A-80C8-753B509BC90B" />
 			<column name="name" value="ILP Transitioned" />
 			<column name="description" value="Default Description" />
 			<column name="created_date" valueDate="2012-05-18T12:00:00" />
@@ -1996,7 +1996,7 @@ Faculty Comments: $FacultyComments" />
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="journal_source">
-			<column name="id" value="B2D079C1-5056-A51A-80E1C40F1E56AF00" />
+			<column name="id" value="B2D079C1-5056-A51A-80E1-C40F1E56AF00" />
 			<column name="name" value="Phone Call" />
 			<column name="description" value="Default Description" />
 			<column name="created_date" valueDate="2012-05-18T12:00:00" />
@@ -2006,7 +2006,7 @@ Faculty Comments: $FacultyComments" />
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="journal_source">
-			<column name="id" value="B2D079F0-5056-A51A-8013B982C069AFB7" />
+			<column name="id" value="B2D079F0-5056-A51A-8013-B982C069AFB7" />
 			<column name="name" value="Referral" />
 			<column name="description" value="Default Description" />
 			<column name="created_date" valueDate="2012-05-18T12:00:00" />
@@ -2016,7 +2016,7 @@ Faculty Comments: $FacultyComments" />
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="journal_source">
-			<column name="id" value="B2D07A00-5056-A51A-80B5F725F1C5C3E2" />
+			<column name="id" value="B2D07A00-5056-A51A-80B5-F725F1C5C3E2" />
 			<column name="name" value="Early Alert Response" />
 			<column name="description" value="Default Description" />
 			<column name="created_date" valueDate="2012-05-18T12:00:00" />
@@ -2026,7 +2026,7 @@ Faculty Comments: $FacultyComments" />
 			<column name="object_status" value="1" />
 		</insert>
 		<insert tableName="journal_source">
-			<column name="id" value="B2D07A10-5056-A51A-80C22DBB2A81AAE6" />
+			<column name="id" value="B2D07A10-5056-A51A-80C2-2DBB2A81AAE6" />
 			<column name="name" value="Completed Action Steps" />
 			<column name="description" value="Default Description" />
 			<column name="created_date" valueDate="2012-05-18T12:00:00" />
@@ -2037,38 +2037,38 @@ Faculty Comments: $FacultyComments" />
 		</insert>
 		<rollback>
 			<delete tableName="journal_source">
-				<where>id='B2D07973-5056-A51A-80731D3641CE507F'</where>
+				<where>id='B2D07973-5056-A51A-8073-1D3641CE507F'</where>
 			</delete>
 			<delete tableName="journal_source">
-				<where>id='B2D07983-5056-A51A-80D03FBCF39FA253'</where>
+				<where>id='B2D07983-5056-A51A-80D0-3FBCF39FA253'</where>
 			</delete>
 			<delete tableName="journal_source">
-				<where>id='B2D07993-5056-A51A-8076D6513A772D80'</where>
+				<where>id='B2D07993-5056-A51A-8076-D6513A772D80'</where>
 			</delete>
 			<delete tableName="journal_source">
-				<where>id='B2D079A2-5056-A51A-8075328971518FF0'</where>
+				<where>id='B2D079A2-5056-A51A-8075-328971518FF0'</where>
 			</delete>
 			<delete tableName="journal_source">
-				<where>id='B2D079B2-5056-A51A-80C8753B509BC90B'</where>
+				<where>id='B2D079B2-5056-A51A-80C8-753B509BC90B'</where>
 			</delete>
 			<delete tableName="journal_source">
-				<where>id='B2D079C1-5056-A51A-80E1C40F1E56AF00'</where>
+				<where>id='B2D079C1-5056-A51A-80E1-C40F1E56AF00'</where>
 			</delete>
 			<delete tableName="journal_source">
-				<where>id='B2D079F0-5056-A51A-8013B982C069AFB7'</where>
+				<where>id='B2D079F0-5056-A51A-8013-B982C069AFB7'</where>
 			</delete>
 			<delete tableName="journal_source">
-				<where>id='B2D07A00-5056-A51A-80B5F725F1C5C3E2'</where>
+				<where>id='B2D07A00-5056-A51A-80B5-F725F1C5C3E2'</where>
 			</delete>
 			<delete tableName="journal_source">
-				<where>id='B2D07A10-5056-A51A-80C22DBB2A81AAE6'</where>
+				<where>id='B2D07A10-5056-A51A-80C2-2DBB2A81AAE6'</where>
 			</delete>
 		</rollback>
 	</changeSet>
 
 	<changeSet id="create reference data - journal_track" author="jon.adams">
 		<insert tableName="journal_track">
-			<column name="id" value="B2D07A7D-5056-A51A-80A896AE5188A188" />
+			<column name="id" value="B2D07A7D-5056-A51A-80A8-96AE5188A188" />
 			<column name="name" value="ILP" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-18T14:00:00" />
@@ -2079,7 +2079,7 @@ Faculty Comments: $FacultyComments" />
 			<column name="sort_order" value="1" />
 		</insert>
 		<insert tableName="journal_track">
-			<column name="id" value="B2D07ABB-5056-A51A-8065991DD0F74782" />
+			<column name="id" value="B2D07ABB-5056-A51A-8065-991DD0F74782" />
 			<column name="name" value="CAP" />
 			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-05-18T14:00:00" />
@@ -2090,7 +2090,7 @@ Faculty Comments: $FacultyComments" />
 			<column name="sort_order" value="2" />
 		</insert>
 		<insert tableName="journal_track">
-			<column name="id" value="B2D07B38-5056-A51A-809D81EA2F3B27BF" />
+			<column name="id" value="B2D07B38-5056-A51A-809D-81EA2F3B27BF" />
 			<column name="name" value="EAL" />
 			<column name="description" value="Early Alert" />
 			<column name="created_date" valueDate="2012-05-18T14:00:00" />
@@ -2102,13 +2102,13 @@ Faculty Comments: $FacultyComments" />
 		</insert>
 		<rollback>
 			<delete tableName="journal_track">
-				<where>id='B2D07A7D-5056-A51A-80A896AE5188A188'</where>
+				<where>id='B2D07A7D-5056-A51A-80A8-96AE5188A188'</where>
 			</delete>
 			<delete tableName="journal_track">
-				<where>id='B2D07ABB-5056-A51A-8065991DD0F74782'</where>
+				<where>id='B2D07ABB-5056-A51A-8065-991DD0F74782'</where>
 			</delete>
 			<delete tableName="journal_track">
-				<where>id='B2D07B38-5056-A51A-809D81EA2F3B27BF'</where>
+				<where>id='B2D07B38-5056-A51A-809D-81EA2F3B27BF'</where>
 			</delete>
 		</rollback>
 	</changeSet>

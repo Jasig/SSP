@@ -42,13 +42,16 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
+	<bean id="uuidCustomType" class="org.jasig.ssp.util.uuid.UUIDCustomTypeSetup"
+		init-method="initSettings" />
+
 	<bean id="securityService"
 		class="org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment" />
 
 	<!-- Hibernate Session Factory -->
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
-		depends-on="liquibase">
+		depends-on="liquibase,uuidCustomType">
 		<property name="dataSource" ref="sspDataSource" />
 		<property name="packagesToScan" value="org.jasig.ssp.model" />
 		<property name="entityInterceptor">
