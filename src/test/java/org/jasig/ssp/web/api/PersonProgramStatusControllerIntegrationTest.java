@@ -191,8 +191,8 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by
 
 		final UUID savedId = saved.getId();
 
-		assertEquals("Saved instance values did not match.", now,
-				saved.getEffectiveDate());
+		assertEquals("Saved instance values did not match.", now.getTime(),
+				saved.getEffectiveDate().getTime());
 		assertEquals("Saved instance sets did not match.",
 				PROGRAM_STATUS_CHANGE_REASON_ID,
 				saved.getProgramStatusChangeReasonId());
