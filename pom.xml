@@ -254,12 +254,12 @@
 			<version>8.4-701.jdbc4</version>
 		</dependency>
 
-		<dependency>
+		<!--dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>sqlserver-jdbc4</artifactId>
 			<version>3.0</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency-->
 
 		<dependency>
 			<groupId>org.liquibase</groupId>

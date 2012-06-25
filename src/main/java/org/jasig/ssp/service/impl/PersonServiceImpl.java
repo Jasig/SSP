@@ -130,7 +130,7 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public List<Person> peopleFromSpecialServiceGroups(
-			final List<String> specialServiceGroupIDs,
+			final List<UUID> specialServiceGroupIDs,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		// TODO: use a TO here
 		return dao.getPeopleBySpecialServices(specialServiceGroupIDs,

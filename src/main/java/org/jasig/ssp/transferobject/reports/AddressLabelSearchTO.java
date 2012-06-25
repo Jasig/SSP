@@ -21,14 +21,23 @@ public class AddressLabelSearchTO
 	private Date intakeDateTo;
 	private UUID homeDepartment;
 	private UUID coachId;
-	private UUID programStatus;
+	private String programStatus;
 	private List<UUID> specialServiceGroupId;
-	private UUID referralSourcesId;
+	private List<UUID> referralSourcesId;
 	private String anticipatedStartTerm;
 	private Integer anticipatedStartYear;
-	private UUID studentTypeId;
-	private Date registrationTerm;
-	private Date registrationYear;
+	private List<UUID> studentTypeIds;
+	public List<UUID> getStudentTypeIds() {
+		return studentTypeIds;
+	}
+
+	public void setStudentTypeIds(List<UUID> studentTypeIds) {
+		this.studentTypeIds = studentTypeIds;
+	}
+
+	private String registrationTerm;
+	private Integer registrationYear;		
+
 
 	/**
 	 * Empty constructor
@@ -38,10 +47,10 @@ public class AddressLabelSearchTO
 	}
 
 	public AddressLabelSearchTO(Date intakeDateTo, UUID homeDepartment,
-			UUID coachId, UUID programStatus, List<UUID> specialServiceGroupId,
-			UUID referralSourcesId, String anticipatedStartTerm,
-			Integer anticipatedStartYear, UUID studentTypeId,
-			Date registrationTerm, Date registrationYear) {
+			UUID coachId, String programStatus, List<UUID> specialServiceGroupId,
+			List<UUID> referralSourcesId, String anticipatedStartTerm,
+			Integer anticipatedStartYear, List<UUID> studentTypeIds,
+			String registrationTerm, Integer registrationYear) {
 		super();
 		this.intakeDateTo = intakeDateTo;
 		this.homeDepartment = homeDepartment;
@@ -51,7 +60,7 @@ public class AddressLabelSearchTO
 		this.referralSourcesId = referralSourcesId;
 		this.anticipatedStartTerm = anticipatedStartTerm;
 		this.anticipatedStartYear = anticipatedStartYear;
-		this.studentTypeId = studentTypeId;
+		this.studentTypeIds = studentTypeIds;
 		this.registrationTerm = registrationTerm;
 		this.registrationYear = registrationYear;
 	}
@@ -80,27 +89,27 @@ public class AddressLabelSearchTO
 		this.coachId = coachId;
 	}
 
-	public UUID getProgramStatus() {
+	public String getProgramStatus() {
 		return programStatus;
 	}
 
-	public void setProgramStatus(UUID programStatus) {
+	public void setProgramStatus(String programStatus) {
 		this.programStatus = programStatus;
 	}
 
-	public List<UUID> getSpecialServiceGroupId() {
+	public List<UUID> getSpecialServiceGroupIds() {
 		return specialServiceGroupId;
 	}
 
-	public void setSpecialServiceGroupId(List<UUID> specialServiceGroupId) {
+	public void setSpecialServiceGroupIds(List<UUID> specialServiceGroupId) {
 		this.specialServiceGroupId = specialServiceGroupId;
 	}
 
-	public UUID getReferralSourcesId() {
+	public List<UUID> getReferralSourcesIds() {
 		return referralSourcesId;
 	}
 
-	public void setReferralSourcesId(UUID referralSourcesId) {
+	public void setReferralSourcesIds(List<UUID> referralSourcesId) {
 		this.referralSourcesId = referralSourcesId;
 	}
 
@@ -120,27 +129,19 @@ public class AddressLabelSearchTO
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
-	public UUID getStudentTypeId() {
-		return studentTypeId;
-	}
-
-	public void setStudentTypeId(UUID studentTypeId) {
-		this.studentTypeId = studentTypeId;
-	}
-
-	public Date getRegistrationTerm() {
+	public String getRegistrationTerm() {
 		return registrationTerm;
 	}
 
-	public void setRegistrationTerm(Date registrationTerm) {
+	public void setRegistrationTerm(String registrationTerm) {
 		this.registrationTerm = registrationTerm;
 	}
 
-	public Date getRegistrationYear() {
+	public Integer getRegistrationYear() {
 		return registrationYear;
 	}
 
-	public void setRegistrationYear(Date registrationYear) {
+	public void setRegistrationYear(Integer registrationYear) {
 		this.registrationYear = registrationYear;
 	}
 

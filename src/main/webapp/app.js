@@ -456,9 +456,10 @@ Ext.onReady(function(){
 	    appFolder: Ext.Loader.getPath('Ssp'),
 		autoCreateViewport: true,
 	    launch: function( app ) {
+	    	var me=this;
 	    	console.log('launch application');
-	    	Deft.Injector.providers.appEventsController.value.config.app=this;
-	    	Deft.Injector.providers.appEventsController.value.app=this;
+	    	Deft.Injector.providers.appEventsController.value.config.app=me;
+	    	Deft.Injector.providers.appEventsController.value.app=me;
 	    	
 	    	// Global error handling for Ajax calls 
 	    	Ext.override(Ext.data.proxy.Server, {
@@ -482,13 +483,12 @@ Ext.onReady(function(){
 	    		if (ab===false && fl){
 	    			this.fieldLabel += '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>';
 	    		}
-	    	});	    	
-	    	
-	    	Ext.apply(this,{
+	    	});		
+
+    		// load the main view
+    		Ext.apply(me,{
 	    		items: [{xtype:'sspview'}]
-	    	});
-	    	// Display the application
-	        //this.getController('MainViewController').displayApplication();
+	    	});			
 	   }
 	});	
 });

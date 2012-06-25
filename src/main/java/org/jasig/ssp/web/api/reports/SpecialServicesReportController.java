@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -56,7 +57,7 @@ public class SpecialServicesReportController extends BaseController {
 	void getSpecialServices(
 			HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
-			final @RequestParam(required = false) List<String> specialServiceGroupIDs,
+			final @RequestParam(required = false) List<UUID> specialServiceGroupIDs,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
@@ -72,7 +73,7 @@ public class SpecialServicesReportController extends BaseController {
 								sortDirection,
 								null));
 
-		// LOGGER.debug("Student TypeID: " +
+		// LOGGER.debug("Student TypeID: " + 
 		// addressLabelSearchTO.getStudentTypeId());
 
 		Map parameters = new HashMap();

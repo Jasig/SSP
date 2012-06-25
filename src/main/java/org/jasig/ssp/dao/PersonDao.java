@@ -147,14 +147,16 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if (addressLabelSearchTO.getCoachId() != null) {
 			// criteria.add(Restrictions.eq("coachId",coachId));
 		}
-		if (addressLabelSearchTO.getProgramStatus() != null) {
-			// criteria.add(Restrictions.eq("programStatus",programStatus));
+		if (addressLabelSearchTO.getProgramStatus() != null) {			
+			//criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
 		}
-		if (addressLabelSearchTO.getSpecialServiceGroupId() != null) {
-			// criteria.add(Restrictions.eq("specialServiceGroupId",specialServiceGroupId));
+		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
+			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups")            			        
+			    .add( Restrictions.in("personSpecialServiceGroups.specialServiceGroup.id", addressLabelSearchTO.getSpecialServiceGroupIds()));			        
 		}
-		if (addressLabelSearchTO.getReferralSourcesId() != null) {
-			// criteria.add(Restrictions.eq("referralSourcesId",referralSourcesId));
+		if (addressLabelSearchTO.getReferralSourcesIds() != null) {
+			criteria.createAlias("referralSources", "personReferralSources")            			        
+	        	.add( Restrictions.in("personReferralSources.referralSource.id", addressLabelSearchTO.getReferralSourcesIds()));	
 		}
 		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
 			// criteria.add(Restrictions.eq("anticipatedStartTerm",anticipatedStartTerm));
@@ -162,8 +164,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
 			// criteria.add(Restrictions.eq("anticipatedStartYear",anticipatedStartYear));
 		}
-		if (addressLabelSearchTO.getStudentTypeId() != null) {
-			// criteria.add(Restrictions.eq("studentTypeId",studentTypeId));
+		if (addressLabelSearchTO.getStudentTypeIds() != null) {
+			criteria.add( Restrictions.in("studentType.id", addressLabelSearchTO.getStudentTypeIds()));	
 		}
 		if (addressLabelSearchTO.getRegistrationTerm() != null) {
 			// criteria.add(Restrictions.eq("registrationTerm",registrationTerm));
@@ -196,7 +198,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Person> getPeopleBySpecialServices(
-			List<String> SpecialServiceGroups,
+			List<UUID> SpecialServiceGroups,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
