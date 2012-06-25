@@ -66,7 +66,7 @@ public final class UPortalSecurityFilter implements RenderFilter {
 		// Check for DataPermissions
 		for (DataPermissions p : DataPermissions.values()) {
 			if (req.isUserInRole(p.name())) {
-				authorities.add(new GrantedAuthorityImpl(p.name()));
+				authorities.add(new GrantedAuthorityImpl("ROLE_" + p.name()));
 			}
 		}
 
