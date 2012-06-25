@@ -61,73 +61,6 @@ function populateSpecialServices()
 	      );
 }
 
-
-function populateProgramStatus()
-{
-	$.getJSON("/ssp/api/1/reference/programStatus/",
-	  	function(data) {
-		var container = $("#ProgramStatusGroup");
-
-
-	$.each(data.rows, function(i,row){
-	      addSelectItem(row.id,row.name,container);      
-	    });
-
-
-
-	 	 }
-	)
-	.error(function(jqXHR, textStatus, errorThrown) { 
-		alert(jqXHR +" "+ textStatus+" "+ errorThrown); 
-	      }
-	      );
-}
-
-
-function populateReferralSource()
-{
-	$.getJSON("/ssp/api/1/reference/referralSource/",
-	  	function(data) {
-		var container = $("#ReferralSourceGroup");
-
-
-	$.each(data.rows, function(i,row){
-	      addSelectItem(row.id,row.name,container);      
-	    });
-
-
-
-	 	 }
-	)
-	.error(function(jqXHR, textStatus, errorThrown) { 
-		alert(jqXHR +" "+ textStatus+" "+ errorThrown); 
-	      }
-	      );
-}
-
-
-function populateStudentType()
-{
-	$.getJSON("/ssp/api/1/reference/studentType/",
-	  	function(data) {
-		var container = $("#StudentTypeIds");
-
-
-	$.each(data.rows, function(i,row){
-	      addSelectItem(row.id,row.name,container);      
-	    });
-
-
-
-	 	 }
-	)
-	.error(function(jqXHR, textStatus, errorThrown) { 
-		alert(jqXHR +" "+ textStatus+" "+ errorThrown); 
-	      }
-	      );
-}
-
-
 function addSelectItem(uid,name,container) {
    var inputs = container.find('input');
    var id = inputs.length+1;
@@ -137,11 +70,6 @@ function addSelectItem(uid,name,container) {
 }
 
 populateSpecialServices();
-//populateProgramStatus();
-//populateReferralSource();
-//populateStudentType();
-
-
 </script>
 
 </head>
@@ -163,7 +91,6 @@ populateSpecialServices();
                 </form>
          </div>
 	
-
 
 
 

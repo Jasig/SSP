@@ -7,21 +7,39 @@
 
 <script>
 
-function populateAddress()
+function populateForm(url)
 {
-	clearFormDiv();
-	$('#rightbar').load('/ssp/forms/AddressLabel.jsp');
+	$('#stagingDiv').html('');
+	$('#stagingDiv').load(url, function (responseText, textStatus, XMLHttpRequest) {
+	    if (textStatus == "success") {
+         	var newHTML = $('#stagingDiv').html();		
+			swapOut(newHTML);
+    	}
+    	if (textStatus == "error") {
+		 	swapOut("There is an error with this form");
+    	}
+	});		
 }
 
-function populateSS()
-{
-	clearFormDiv();
-	$('#rightbar').load('/ssp/forms/SpecialServices.jsp');
+function swapOut(newHTML){
+	$('#rightbar').html(newHTML);
 }
 
-function clearFormDiv()
-{
-jQuery('#rightbar').html('');
+function populateSS(){	
+	populateForm('/ssp/forms/SpecialServices.jsp');
+}
+
+
+
+function populateAddress(){
+	populateForm('/ssp/forms/AddressLabel.jsp');
+}
+
+
+
+
+function clearFormDiv(){
+     jQuery('#rightbar').html('');
 }
 </script>
 
@@ -74,8 +92,8 @@ clear: left;
 <div id="container" style="height:100%;">
 <div id="leftbar" style="height:100%;">
 <ul>
-<li><a onclick="populateAddress();" >Address labels</a></li>
-<li><a onclick="populateSS();" >Special Services labels</a></li>
+<li><a onclick="populateAddress();">Address labels</a></li>
+<li><a onclick="populateSS();">Special Services labels</a></li>
 <li><a onclick="clearFormDiv();" >Clear Form</a></li>
 </ul> 
 </div>
@@ -85,6 +103,7 @@ clear: left;
 
 </div>
 
+<div id="stagingDiv" style="display:none" ></div>
 
 
 
