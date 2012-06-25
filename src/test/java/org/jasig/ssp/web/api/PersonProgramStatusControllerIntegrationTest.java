@@ -40,8 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration()
 @Transactional
-public class PersonProgramStatusControllerIntegrationTest { // NOPMD by
-															// jon.adams
+public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 
 	@Autowired
 	private transient PersonProgramStatusController controller;

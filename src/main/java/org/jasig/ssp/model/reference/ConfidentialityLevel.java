@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
@@ -11,6 +13,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.security.permissions.DataPermissions;
 
 /**
  * ConfidentialityLevel reference object.
@@ -31,6 +34,11 @@ public class ConfidentialityLevel
 	@NotEmpty
 	@Size(max = 10)
 	private String acronym;
+
+	@Column(nullable = false, unique = true)
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private DataPermissions permission;
 
 	/**
 	 * Constructor
@@ -62,12 +70,29 @@ public class ConfidentialityLevel
 		super(id, name);
 	}
 
+	public ConfidentialityLevel(@NotNull final UUID id,
+			@NotNull final String name,
+			@NotNull final String acronym,
+			@NotNull final DataPermissions roleId) {
+		super(id, name);
+		this.acronym = acronym;
+		this.permission = roleId;
+	}
+
 	public String getAcronym() {
 		return acronym;
 	}
 
 	public void setAcronym(final String acronym) {
 		this.acronym = acronym;
+	}
+
+	public DataPermissions getPermission() {
+		return permission;
+	}
+
+	public void setPermission(final DataPermissions permission) {
+		this.permission = permission;
 	}
 
 	@Override
@@ -80,6 +105,8 @@ public class ConfidentialityLevel
 		int result = hashPrime() * super.hashCode();
 
 		result *= hashField("acronym", acronym);
+		result *= permission == null ? "permission".hashCode() : permission
+				.hashCode();
 
 		return result;
 	}
