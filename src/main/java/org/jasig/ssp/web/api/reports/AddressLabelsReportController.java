@@ -62,76 +62,26 @@ public class AddressLabelsReportController extends BaseController {
 	void getAddressLabels(HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,	
 		
-			final @RequestParam(required = false) String tintakeDatefrom, 
-			final @RequestParam(required = false) String tintakeDateTo,
-			final @RequestParam(required = false) String thomeDepartment,
-			final @RequestParam(required = false) String tcoachId,
 			final @RequestParam(required = false) String programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
-			final @RequestParam(required = false) String tanticipatedStartTerm,
-			final @RequestParam(required = false) Integer tanticipatedStartYear,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
-			final @RequestParam(required = false) String tregistrationTerm,
-			final @RequestParam(required = false) String tregistrationYear,
-			
-			
-			final @RequestParam(required = false) Integer start,
-			final @RequestParam(required = false) Integer limit,
-			final @RequestParam(required = false) String sort,
-			final @RequestParam(required = false) String sortDirection) throws ObjectNotFoundException, JRException, IOException{
+			final @RequestParam(required = false) String anticipatedStartYear,
+			final @RequestParam(required = false) String anticipatedStartTerm) throws ObjectNotFoundException, JRException, IOException{
 
-		
-		
-		LOGGER.debug("PROGRAMSTATUS: " + programStatus);
-		 
-		//Iterator<UUID> myiter = specialServiceGroupIds.iterator();
-		//while(myiter.hasNext())
-		//{
-		//	LOGGER.debug("This is an iterator " + myiter.next());
-		//}		
-		
-		final Date intakeDatefrom = null;
-		final Date intakeDateTo= null;
-		final UUID homeDepartment= null;
-		final UUID coachId= null;
 
-		final String anticipatedStartTerm= null;
-		final Integer anticipatedStartYear= null;
-		
-		final String registrationTerm= null;
-		final Integer registrationYear= null;	
-		
-		
-		
-		AddressLabelSearchTO searchForm = new AddressLabelSearchTO(intakeDateTo, homeDepartment,
-			coachId, programStatus, specialServiceGroupIds,
+		AddressLabelSearchTO searchForm = new AddressLabelSearchTO(programStatus, specialServiceGroupIds,
 			referralSourcesIds, anticipatedStartTerm,
-			anticipatedStartYear, studentTypeIds,
-			registrationTerm, registrationYear);
-		
-		
+			anticipatedStartYear, studentTypeIds);  
+
+
 		final List<Person> people = service.peopleFromCriteria(
 				searchForm,
 				SortingAndPaging
-						.createForSingleSort(status, start, limit, sort,
-								sortDirection,
+						.createForSingleSort(status, null, null, null,
+								null,
 								null));
-		
-		LOGGER.debug("Before Person Iter: " + people.size());
-		Iterator<Person> personIter = people.iterator();
-		while(personIter.hasNext())
-		{
-			Person p = personIter.next();
-			LOGGER.debug("This is an iterator " + p.getSpecialServiceGroups().toString());
-			Iterator<PersonSpecialServiceGroup> sgiter = p.getSpecialServiceGroups().iterator();
-			while(sgiter.hasNext()){
-				//sgiter.next().getSpecialServiceGroup().getName();
-				PersonSpecialServiceGroup pssg = sgiter.next();
-				LOGGER.debug("\t\t" + pssg.getSpecialServiceGroup().getName());
-			}			
-		}
-		LOGGER.debug("After Person Iter");
+
 
 		Map parameters = new HashMap();
 		parameters.put("ReportTitle", "Address Report");

@@ -79,7 +79,12 @@ public class SpecialServicesReportController extends BaseController {
 		Map parameters = new HashMap();
 		parameters.put("ReportTitle", "Special Service Groups Report");
 		parameters.put("DataFile", "Person.java - Bean Array");
+		
 
+		//i'm sure there is a better way to do this, under some time constraints here, i'm just going to brute force it
+		
+		//for()
+		
 		JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
 				people.toArray());
 		InputStream is = getClass().getResourceAsStream(
@@ -99,5 +104,7 @@ public class SpecialServicesReportController extends BaseController {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
+
+
+
