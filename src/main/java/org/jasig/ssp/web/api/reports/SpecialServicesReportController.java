@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Maps;
+
 /**
  * Service methods for manipulating data about people in the system.
  * <p>
@@ -55,7 +57,7 @@ public class SpecialServicesReportController extends BaseController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
 	void getSpecialServices(
-			HttpServletResponse response,
+			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIDs,
 			final @RequestParam(required = false) Integer start,
@@ -73,25 +75,21 @@ public class SpecialServicesReportController extends BaseController {
 								sortDirection,
 								null));
 
-		// LOGGER.debug("Student TypeID: " + 
+		// LOGGER.debug("Student TypeID: " +
 		// addressLabelSearchTO.getStudentTypeId());
 
-		Map parameters = new HashMap();
+		final Map<String, Object> parameters = Maps.newHashMap();
 		parameters.put("ReportTitle", "Special Service Groups Report");
 		parameters.put("DataFile", "Person.java - Bean Array");
-		
 
-		//i'm sure there is a better way to do this, under some time constraints here, i'm just going to brute force it
-		
-		//for()
-		
-		JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
+		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
 				people.toArray());
-		InputStream is = getClass().getResourceAsStream(
+		final InputStream is = getClass().getResourceAsStream(
 				"/reports/specialServiceGroups.jasper");
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		final ByteArrayOutputStream os = new ByteArrayOutputStream();
 		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
-		InputStream decodedInput = new ByteArrayInputStream(os.toByteArray());
+		final InputStream decodedInput = new ByteArrayInputStream(
+				os.toByteArray());
 		JasperExportManager.exportReportToPdfStream(decodedInput,
 				response.getOutputStream());
 		response.flushBuffer();
@@ -101,10 +99,7 @@ public class SpecialServicesReportController extends BaseController {
 
 	@Override
 	protected Logger getLogger() {
-		// TODO Auto-generated method stub
-		return null;
+		return LOGGER;
 	}
+
 }
-
-
-

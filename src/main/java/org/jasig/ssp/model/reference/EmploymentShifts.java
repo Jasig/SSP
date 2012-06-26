@@ -1,15 +1,45 @@
 package org.jasig.ssp.model.reference;
 
+import javax.validation.constraints.NotNull;
+
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndProperty;
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
 
+/**
+ * Employment Shifts
+ */
 @JsonSerialize(using = CodeAndPropertySerializer.class)
 public enum EmploymentShifts implements CodeAndProperty {
 
-	FIRST("1st"), SECOND("2nd"), THIRD("3rd"), NOT_APPLICABLE("Not Applicable");
+	/**
+	 * First shift ("1st")
+	 */
+	FIRST("1st"),
 
-	public static EmploymentShifts getEnumByValue(final String value) {
+	/**
+	 * Second shift ("2nd")
+	 */
+	SECOND("2nd"),
+
+	/**
+	 * Third shift ("3rd")
+	 */
+	THIRD("3rd"),
+
+	/**
+	 * Shift not applicable ("Not Applicable")
+	 */
+	NOT_APPLICABLE("Not Applicable");
+
+	/**
+	 * Gets the specified enum
+	 * 
+	 * @param value
+	 *            the value
+	 * @return the specified enum, or null if not found
+	 */
+	public static EmploymentShifts getEnumByValue(@NotNull final String value) {
 		if ("1st".equals(value)) {
 			return FIRST;
 		} else if ("2nd".equals(value)) {

@@ -1,16 +1,18 @@
 package org.jasig.ssp.transferobject;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.PersonProgramStatus;
 
-import com.google.common.collect.Lists;
-
+/**
+ * PersonProgramStatus transfer object
+ * 
+ * @author jon.adams
+ * 
+ */
 public class PersonProgramStatusTO
 		extends AbstractAuditableTO<PersonProgramStatus>
 		implements TransferObject<PersonProgramStatus> {
@@ -28,44 +30,22 @@ public class PersonProgramStatusTO
 
 	private Date expirationDate;
 
+	/**
+	 * Empty constructor
+	 */
 	public PersonProgramStatusTO() {
 		super();
 	}
 
+	/**
+	 * Construct a transfer object from the specified model
+	 * 
+	 * @param model
+	 *            Copy this model to an equivalent transfer object
+	 */
 	public PersonProgramStatusTO(final PersonProgramStatus model) {
 		super();
 		from(model);
-	}
-
-	@Override
-	public final void from(final PersonProgramStatus model) {
-		super.from(model);
-
-		if (model.getPerson() != null) {
-			setPersonId(model.getPerson().getId());
-		}
-
-		if (model.getProgramStatus() != null) {
-			setProgramStatusId(model.getProgramStatus().getId());
-		}
-
-		if (model.getProgramStatusChangeReason() != null) {
-			setProgramStatusChangeReasonId(model.getProgramStatusChangeReason()
-					.getId());
-		}
-
-		setEffectiveDate(model.getEffectiveDate());
-		setExpirationDate(model.getExpirationDate());
-	}
-
-	public static List<PersonProgramStatusTO> toTOList(
-			final Collection<PersonProgramStatus> models) {
-		final List<PersonProgramStatusTO> tos = Lists.newArrayList();
-		for (final PersonProgramStatus model : models) {
-			tos.add(new PersonProgramStatusTO(model)); // NOPMD
-		}
-
-		return tos;
 	}
 
 	public UUID getPersonId() {
@@ -111,5 +91,26 @@ public class PersonProgramStatusTO
 	public final void setExpirationDate(final Date expirationDate) {
 		this.expirationDate = expirationDate == null ? null : new Date(
 				expirationDate.getTime());
+	}
+
+	@Override
+	public final void from(final PersonProgramStatus model) {
+		super.from(model);
+
+		if (model.getPerson() != null) {
+			setPersonId(model.getPerson().getId());
+		}
+
+		if (model.getProgramStatus() != null) {
+			setProgramStatusId(model.getProgramStatus().getId());
+		}
+
+		if (model.getProgramStatusChangeReason() != null) {
+			setProgramStatusChangeReasonId(model.getProgramStatusChangeReason()
+					.getId());
+		}
+
+		setEffectiveDate(model.getEffectiveDate());
+		setExpirationDate(model.getExpirationDate());
 	}
 }

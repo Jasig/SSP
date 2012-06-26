@@ -1,16 +1,9 @@
 package org.jasig.ssp.security.permissions;
 
-/**
- * These are the individual permissions in SSP. 
- * 
- * @author awills
- */
-public enum Permissions {
-	
-	/*
-	 * Service permissions
-	 */
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
 
+public enum ServicePermissions {
 	PERSON_APPOINTMENT_READ,
 	PERSON_APPOINTMENT_WRITE,
 	PERSON_APPOINTMENT_DELETE,
@@ -48,31 +41,13 @@ public enum Permissions {
 	REFERENCE_WRITE,
 
 	STUDENT_INTAKE_READ,
-	STUDENT_INTAKE_WRITE,
+	STUDENT_INTAKE_WRITE;
 
-	/*
-	 * Data permissions
-	 */
+	public String asPermissionString() {
+		return "ROLE_" + this;
+	}
 
-	DATA_MY_RECORD_ONLY,
-	DATA_EVERYONE,
-	DATA_ACADEMIC_RESOURCE_CENTER,
-	DATA_COUNSELING_SERVICES,
-	DATA_DISABILITY,
-	DATA_DISPLACED_WORKERS,
-	DATA_EARLY_ALERT,
-	DATA_ENGLISH_SECOND_LANGAGE,
-	DATA_FAST_FORWARD,
-	DATA_INDIVIDUALIZED_LEARNING_PLAN,
-	DATA_MANAGER,
-	DATA_STAFF
-	
-	/*
-	 * Report permissions (TBD)
-	 */
-
-//	REPORT_REPORTNAME1_VIEW
-//	REPORT_REPORTNAME2_VIEW
-//	REPORT_REPORTNAME3_VIEW
-
+	public GrantedAuthority asGrantedAuthority() {
+		return new GrantedAuthorityImpl(asPermissionString());
+	}
 }

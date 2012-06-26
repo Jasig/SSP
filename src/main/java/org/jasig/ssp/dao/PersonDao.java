@@ -129,20 +129,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
-
-		// TODO: Implement Search Critera
-		if (addressLabelSearchTO.getIntakeDateTo() != null) {
-			// criteria.add(Restrictions.gt("studentIntakeRequestDate",intakeDatefrom));
-		}
-		if (addressLabelSearchTO.getIntakeDateTo() != null) {
-			// criteria.add(Restrictions.lt("studentIntakeRequestDate",intakeDateTo));
-		}
-		if (addressLabelSearchTO.getHomeDepartment() != null) {
-			// criteria.add(Restrictions.eq("homeDepartment",homeDepartment));
-		}
-		if (addressLabelSearchTO.getCoachId() != null) {
-			// criteria.add(Restrictions.eq("coachId",coachId));
-		}
+		
 		if (addressLabelSearchTO.getProgramStatus() != null) {
 			// criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
 		}
@@ -169,13 +156,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if (addressLabelSearchTO.getStudentTypeIds() != null) {
 			criteria.add(Restrictions.in("studentType.id",
 					addressLabelSearchTO.getStudentTypeIds()));
-		}
-		if (addressLabelSearchTO.getRegistrationTerm() != null) {
-			// criteria.add(Restrictions.eq("registrationTerm",registrationTerm));
-		}
-		if (addressLabelSearchTO.getRegistrationYear() != null) {
-			// criteria.add(Restrictions.eq("registrationYear",registrationYear));
-		}
+		}		
 
 		return criteria.list();
 	}

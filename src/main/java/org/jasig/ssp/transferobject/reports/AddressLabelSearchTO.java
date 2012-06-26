@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Early Alert transfer object
- * 
- * @author jon.adams
- * 
+ * AddressLabelSearch transfer object
  */
 public class AddressLabelSearchTO
 		implements Serializable {
@@ -26,6 +23,14 @@ public class AddressLabelSearchTO
 	private List<UUID> studentTypeIds;
 	
 	
+	public List<UUID> getStudentTypeIds() {
+		return studentTypeIds;
+	}
+
+	public void setStudentTypeIds(List<UUID> studentTypeIds) {
+		this.studentTypeIds = studentTypeIds;
+	}
+
 	public String getProgramStatus() {
 		return programStatus;
 	}
@@ -66,22 +71,7 @@ public class AddressLabelSearchTO
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
-	public List<UUID> getStudentTypeIds() {
-		return studentTypeIds;
-	}
 
-	public void setStudentTypeIds(List<UUID> studentTypeIds) {
-		this.studentTypeIds = studentTypeIds;
-	}
-
-
-
-	/**
-	 * Empty constructor
-	 */
-	public AddressLabelSearchTO() {
-		super();
-	}
 
 	public AddressLabelSearchTO(String programStatus, List<UUID> specialServiceGroupId,
 			List<UUID> referralSourcesId, String anticipatedStartTerm,
@@ -94,7 +84,5 @@ public class AddressLabelSearchTO
 		this.anticipatedStartYear = anticipatedStartYear;
 		this.studentTypeIds = studentTypeIds;
 	}
-
-	
 
 }

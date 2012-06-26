@@ -7,6 +7,9 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
 
+/**
+ * Serialization helper for model enums.
+ */
 public class CodeAndPropertySerializer extends JsonSerializer<CodeAndProperty> {
 
 	@Override
@@ -20,5 +23,4 @@ public class CodeAndPropertySerializer extends JsonSerializer<CodeAndProperty> {
 		generator.writeString(value.getTitle());
 		generator.writeEndObject();
 	}
-
 }

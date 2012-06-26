@@ -37,6 +37,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Maps;
+
 /**
  * Service methods for manipulating data about people in the system.
  * <p>
@@ -65,10 +67,26 @@ public class AddressLabelsReportController extends BaseController {
 			final @RequestParam(required = false) String programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
+			final @RequestParam(required = false) String tanticipatedStartTerm,
+			final @RequestParam(required = false) Integer tanticipatedStartYear,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) String anticipatedStartYear,
 			final @RequestParam(required = false) String anticipatedStartTerm) throws ObjectNotFoundException, JRException, IOException{
 
+		
+		
+		LOGGER.debug("PROGRAMSTATUS: " + programStatus);
+		 
+		//Iterator<UUID> myiter = specialServiceGroupIds.iterator();
+		//while(myiter.hasNext())
+		//{
+		//	LOGGER.debug("This is an iterator " + myiter.next());
+		//}		
+		
+		final Date intakeDatefrom = null;
+		final Date intakeDateTo= null;
+		final UUID homeDepartment= null;
+		final UUID coachId= null;
 
 		AddressLabelSearchTO searchForm = new AddressLabelSearchTO(programStatus, specialServiceGroupIds,
 			referralSourcesIds, anticipatedStartTerm,
@@ -83,17 +101,18 @@ public class AddressLabelsReportController extends BaseController {
 								null));
 
 
-		Map parameters = new HashMap();
+		final Map<String, Object> parameters = Maps.newHashMap();
 		parameters.put("ReportTitle", "Address Report");
 		parameters.put("DataFile", "Person.java - Bean Array");
 
-		JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
+		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
 				people.toArray());
-		InputStream is = getClass().getResourceAsStream(
+		final InputStream is = getClass().getResourceAsStream(
 				"/reports/addressLabels.jasper");
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		final ByteArrayOutputStream os = new ByteArrayOutputStream();
 		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
-		InputStream decodedInput = new ByteArrayInputStream(os.toByteArray());
+		final InputStream decodedInput = new ByteArrayInputStream(
+				os.toByteArray());
 		JasperExportManager.exportReportToPdfStream(decodedInput,
 				response.getOutputStream());
 		response.flushBuffer();
@@ -111,8 +130,7 @@ public class AddressLabelsReportController extends BaseController {
 
 	@Override
 	protected Logger getLogger() {
-		// TODO Auto-generated method stub
-		return null;
+		return LOGGER;
 	}
 
 }

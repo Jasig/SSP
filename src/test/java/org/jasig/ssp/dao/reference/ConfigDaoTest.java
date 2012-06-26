@@ -13,6 +13,8 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -134,5 +136,18 @@ public class ConfigDaoTest {
 
 		assertNotNull("Transient instance was not assigned a new identifier.",
 				obj.getId());
+	}
+
+	/**
+	 * Tests the {@link ConfigDao#getAll(ObjectStatus)} method. Assumes the test
+	 * data includes at least one entry.
+	 */
+	@Test
+	public void testGetAll() {
+		final PagingWrapper<Config> data = dao.getAll(new SortingAndPaging(
+				ObjectStatus.ALL));
+		assertNotNull("Config data should not be null.", data);
+		assertFalse("Config data should not be empty.", data.getRows()
+				.isEmpty());
 	}
 }
