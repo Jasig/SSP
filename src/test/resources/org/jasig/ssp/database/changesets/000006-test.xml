@@ -242,4 +242,176 @@
 		</rollback>
 	</changeSet>
 	
+	
+	<changeSet id="test special service group 2" author="Steve.Cody">
+		<insert tableName="special_service_group">
+			<column name="id" value="40b6b8aa-bca1-11e1-9344-037cb4088c72" />
+			<column name="name" value="Another Test Special Service Group" />
+			<column name="description" value="This is the description of the OTHER Test Special Service Group." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="special_service_group">
+				<where>id='40b6b8aa-bca1-11e1-9344-037cb4088c72'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	
+	<changeSet id="Add Special Service to Person" author="Steve.Cody">
+		<insert tableName="person_special_service_group">
+			<column name="id" value="092b2680-bca8-11e1-a32c-634df1c33503" />
+			<column name="special_service_group_id" value="40b6b8aa-bca1-11e1-9344-037cb4088c72" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person_special_service_group">
+			<column name="id" value="766c5b06-bca8-11e1-b0ca-c30701c4f7e7" />
+			<column name="special_service_group_id" value="40b6b8aa-bca1-11e1-9344-037cb4088c72" />
+			<column name="person_id" value="7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>		
+		<insert tableName="person_special_service_group">
+			<column name="id" value="0007d6ce-bca9-11e1-871c-9b24515cfd60" />
+			<column name="special_service_group_id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person_special_service_group">
+			<column name="id" value="094698a6-bca9-11e1-bd29-1b0d3186f2ab" />
+			<column name="special_service_group_id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>			
+		<rollback>
+			<delete tableName="special_service_group">
+				<where>id='092b2680-bca8-11e1-a32c-634df1c33503'</where>
+			</delete>
+			<delete tableName="special_service_group">
+				<where>id='766c5b06-bca8-11e1-b0ca-c30701c4f7e7'</where>
+			</delete>
+			<delete tableName="special_service_group">
+				<where>id='0007d6ce-bca9-11e1-871c-9b24515cfd60'</where>
+			</delete>
+			<delete tableName="special_service_group">
+				<where>id='094698a6-bca9-11e1-bd29-1b0d3186f2ab'</where>
+			</delete>									
+		</rollback>
+	</changeSet>
+	
+	
+	
+<changeSet id="Add Person Referral Source" author="Steve.Cody">
+        <insert tableName="referral_source">
+			<column name="id" value="ccadd634-bd7a-11e1-8d28-3368721922dc" />
+			<column name="name" value="Test Referral Source 2." />
+			<column name="description" value="This is the description of the 2nd Test Referral Source." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="referral_source">
+			<column name="id" value="c54aa656-bd7a-11e1-9ced-5b723f71da43" />
+			<column name="name" value="Test Referral Source 3." />
+			<column name="description" value="This is the description of the 3rd Test Referral Source." />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>		
+
+
+
+		<insert tableName="person_referral_source">
+			<column name="id" value="3a2f2894-bd7a-11e1-a480-bf286ff5250b" />
+			<column name="referral_source_id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person_referral_source">
+			<column name="id" value="44f59c86-bd7a-11e1-a5bd-1b5b1e956de5" />
+			<column name="referral_source_id" value="ccadd634-bd7a-11e1-8d28-3368721922dc" />
+			<column name="person_id" value="7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>		
+		<insert tableName="person_referral_source">
+			<column name="id" value="4bb31800-bd7a-11e1-aa28-c750156cf81e" />
+			<column name="referral_source_id" value="c54aa656-bd7a-11e1-9ced-5b723f71da43" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person_referral_source">
+			<column name="id" value="53966fa4-bd7a-11e1-91d8-5fc3f348c857" />
+			<column name="referral_source_id" value="c54aa656-bd7a-11e1-9ced-5b723f71da43" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>			
+		<rollback>
+			<delete tableName="person_referral_source">
+				<where>id='3a2f2894-bd7a-11e1-a480-bf286ff5250b'</where>
+			</delete>
+			<delete tableName="person_referral_source">
+				<where>id='44f59c86-bd7a-11e1-a5bd-1b5b1e956de5'</where>
+			</delete>
+			<delete tableName="person_referral_source">
+				<where>id='4bb31800-bd7a-11e1-aa28-c750156cf81e'</where>
+			</delete>
+			<delete tableName="person_referral_source">
+				<where>id='53966fa4-bd7a-11e1-91d8-5fc3f348c857'</where>
+			</delete>	
+			<delete tableName="referral_source">
+				<where>id='ccadd634-bd7a-11e1-8d28-3368721922dc'</where>
+			</delete>		
+			<delete tableName="referral_source">
+				<where>id='c54aa656-bd7a-11e1-9ced-5b723f71da43'</where>
+			</delete>	
+		</rollback>
+	</changeSet>	
+	
+	
+	
+	
+	
+	
+	
+	
 </databaseChangeLog>

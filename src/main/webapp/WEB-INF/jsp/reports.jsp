@@ -2,44 +2,109 @@
 
 <c:set var="n"><portlet:namespace/></c:set>
 
+<head>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 
-		
+<script>
+
+function populateForm(url)
+{
+	$('#stagingDiv').html('');
+	$('#stagingDiv').load(url, function (responseText, textStatus, XMLHttpRequest) {
+	    if (textStatus == "success") {
+         	var newHTML = $('#stagingDiv').html();		
+			swapOut(newHTML);
+    	}
+    	if (textStatus == "error") {
+		 	swapOut("There is an error with this form");
+    	}
+	});		
+}
+
+function swapOut(newHTML){
+	$('#rightbar').html(newHTML);
+}
 
 
 
 
 
-<p>
-Hello Steveo
-</p>
+function clearFormDiv(){
+     jQuery('#rightbar').html('');
+}
+</script>
 
-<div class="formList">
+<style>
+
+
+
+
+
+
+label{
+float: left;
+width: 120px;
+font-weight: bold;
+}
+
+input, textarea{
+width: 180px;
+margin-bottom: 5px;
+}
+
+textarea{
+width: 250px;
+height: 150px;
+}
+
+.boxes{
+width: 1em;
+}
+
+#submitbutton{
+margin-left: 120px;
+margin-top: 5px;
+width: 90px;
+}
+
+br{
+clear: left;
+}
+
+#container{width:100%; margin:0 auto; background:#fff;}
+#leftbar{ float:left; width:35%; background:#fff;}
+#rightbar{ margin:0 0 0 45%; background:#E6E6E6; padding-bottom: 2em; padding-left: 2em;  height:500}
+
+</style>
+
+
+</head>
+
+<div id="container" style="height:100%;">
+<div id="leftbar" style="height:100%;">
 <ul>
-<li>Address labels</li>
-<li>Milk</li>
+<li><a onclick="populateForm('/ssp/forms/AddressLabel.jsp');">Address labels</a></li>
+<li><a onclick="populateForm('/ssp/forms/SpecialServices.jsp');">Special Services labels</a></li>
+<li><a onclick="clearFormDiv();" >Clear Form</a></li>
 </ul> 
 </div>
 
-<div class="right_block_box">
-	<div class="AddressLabelForm">
+<div id="rightbar" style="height:1000;" ></div>
+<br style="clear:both;"/>
 
-		<form>
-	           <div class="box">             
-                       <h1>Address Label Report:</h1>             
-                       <label><span>Intake Date</span><input type="text" class="input_text" name="intakeDateTo" id="intakeDateTo"/></label><br/>              
-                       <label><span>Home Department</span><input type="text" class="input_text" name="homeDepartment" id="homeDepartment"/></label><br/>
-                       <label><span>Coach</span><input type="text" class="input_text" name="coachId" id="coachId"/></label><br/>
-                       <label><span>Program Status</span><input type="text" class="input_text" name="programStatus" id="programStatus"/></label>  <br/>            
-                       <label><span>Special Service Groups</span><input type="text" class="input_text" name="specialServiceGroupId" id="specialServiceGroupId"/></label><br/>
-                       <label><span>Referral Source</span><input type="text" class="input_text" name="referralSourcesId" id="referralSourcesId"/></label><br/>
-                       <label><span>Anticipated Start Term</span><input type="text" class="input_text" name="anticipatedStartTerm" id="anticipatedStartTerm"/></label><br/>              
-                       <label><span>Anticipated Start Year</span><input type="text" class="input_text" name="anticipatedStartYear" id="anticipatedStartYear"/></label><br/>
-                       <label><span>Student Type</span><input type="text" class="input_text" name="studentTypeId" id="studentTypeId"/></label><br/>
-                       <label><span>Registration Term</span><input type="text" class="input_text" name="registrationTerm" id="registrationTerm"/></label>  <br/>            
-                       <label><span>Registration Year</span><input type="text" class="input_text" name="registrationYear" id="registrationYear"/></label><br/>
-                       <label><input type="button" class="button" value="Submit Form" /></label>  
-                    </div> 
-                </form>
-         </div>
-	
 </div>
+
+<div id="stagingDiv" style="display:none" ></div>
+
+
+
+
+
+
+
+
+
+
+
+
+

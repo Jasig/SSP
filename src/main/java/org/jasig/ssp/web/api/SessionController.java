@@ -1,11 +1,14 @@
 package org.jasig.ssp.web.api;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,9 @@ public class SessionController extends BaseController {
 	@Autowired
 	private transient SecurityService service;
 
+	@Autowired
+	private transient ConfidentialityLevelService confidentialityLevelService;
+
 	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
 	public @ResponseBody
 	Map<String, Object> getMyServicePermissions() {
@@ -52,6 +58,33 @@ public class SessionController extends BaseController {
 
 		model.put("success", true);
 		model.put("permissions", permissions);
+
+		return model;
+	}
+
+	@RequestMapping(value = "/confidentialityLevels", method = RequestMethod.GET)
+	public @ResponseBody
+	Map<String, Object> getMyConfidentialityLevels() {
+
+		final Map<String, Object> model = Maps.newHashMap();
+
+		final List<String> permissions = Lists.newArrayList();
+
+		Collection<ConfidentialityLevel> levels = null;
+
+		final SspUser user = service.currentlyAuthenticatedUser();
+
+		if (user != null) {
+			for (GrantedAuthority auth : user.getAuthorities()) {
+				permissions.add(auth.getAuthority());
+			}
+
+			levels = confidentialityLevelService
+					.filterConfidentialityLevelsFromAuthorities(permissions);
+		}
+
+		model.put("success", true);
+		model.put("levels", levels);
 
 		return model;
 	}

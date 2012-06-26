@@ -1,5 +1,6 @@
 package org.jasig.ssp.service.reference;
 
+import java.util.Collection;
 import java.util.UUID;
 
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
@@ -8,6 +9,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * ConfidentialityLevel service
@@ -31,4 +33,11 @@ public interface ConfidentialityLevelService extends
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;
+
+	Collection<String> confidentialityLevelsAsPermissions();
+
+	Collection<GrantedAuthority> confidentialityLevelsAsGrantedAuthorities();
+
+	Collection<ConfidentialityLevel> filterConfidentialityLevelsFromAuthorities(
+			Collection<String> authorities);
 }
