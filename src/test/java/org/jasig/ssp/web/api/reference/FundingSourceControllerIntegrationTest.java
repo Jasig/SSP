@@ -121,7 +121,8 @@ public class FundingSourceControllerIntegrationTest {
 		try {
 			obj = controller.create(obj);
 			fail("Calling create with an object with an ID should have thrown a validation excpetion."); // NOPMD
-		} catch (ValidationException exc) { // NOPMD by jon.adams on 5/14/12
+		} catch (final ValidationException exc) { // NOPMD by jon.adams on
+													// 5/14/12
 			/* expected */
 		}
 
@@ -150,17 +151,23 @@ public class FundingSourceControllerIntegrationTest {
 	 * Test the
 	 * {@link FundingSourceController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<FundingSourceTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
 				list.isEmpty());
+	}
+
+	/**
+	 * Test that the getAll action rejects a filter of
+	 * {@link ObjectStatus#DELETED}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerGetAllRejectsDeletedFilter() {
+		controller.getAll(ObjectStatus.DELETED, null, null, null, null);
 	}
 }

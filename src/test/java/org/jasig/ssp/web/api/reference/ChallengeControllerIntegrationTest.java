@@ -70,7 +70,7 @@ public class ChallengeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		ChallengeTO obj = controller.get(CHALLENGE_ID);
+		final ChallengeTO obj = controller.get(CHALLENGE_ID);
 
 		assertNotNull(
 				"Returned ChallengeTO from the controller should not have been null.",
@@ -93,7 +93,7 @@ public class ChallengeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		ChallengeTO obj = controller.get(UUID.randomUUID());
+		final ChallengeTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned ChallengeTO from the controller should have been null.",
@@ -122,7 +122,7 @@ public class ChallengeControllerIntegrationTest {
 		try {
 			obj = controller.create(obj);
 			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
-		} catch (ValidationException exc) {
+		} catch (final ValidationException exc) {
 			/* expected */
 		}
 
@@ -170,12 +170,9 @@ public class ChallengeControllerIntegrationTest {
 	 * Test the
 	 * {@link ChallengeController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action results.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerGetAllResults() throws Exception {
+	public void testControllerGetAllResults() {
 		final Collection<ChallengeTO> list = controller.getAll(
 				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
@@ -197,5 +194,14 @@ public class ChallengeControllerIntegrationTest {
 				.getCreatedBy().getId().equals(UUID.randomUUID()));
 		assertTrue("ShowInSelfHelpSearch should have been true.",
 				challenge.isShowInSelfHelpSearch());
+	}
+
+	/**
+	 * Test that the getAll action rejects a filter of
+	 * {@link ObjectStatus#DELETED}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerGetAllRejectsDeletedFilter() {
+		controller.getAll(ObjectStatus.DELETED, null, null, null, null);
 	}
 }

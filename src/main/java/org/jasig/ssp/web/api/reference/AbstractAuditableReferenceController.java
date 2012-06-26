@@ -94,11 +94,19 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
+		// Validate parameters
+		if (status != null && ObjectStatus.DELETED.equals(status)) {
+			throw new IllegalArgumentException(
+					"You can not request deleted data.");
+		}
 
+		// Run getAll
 		final PagingWrapper<T> data = getService().getAll(
-				SortingAndPaging.createForSingleSort(status, start,
+				SortingAndPaging.createForSingleSort(
+						status == null ? ObjectStatus.ALL : status, start,
 						limit, sort, sortDirection, "name"));
 
+		// Return paged view
 		return new PagingTO<TO, T>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));
 	}
@@ -112,6 +120,11 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		final T model = getService().get(id);
 		if (model == null) {
 			return null;
+		}
+
+		if (ObjectStatus.DELETED.equals(model.getObjectStatus())) {
+			// Do not return deleted items via the API.
+			throw new ObjectNotFoundException(id, persistentClass.getName());
 		}
 
 		return this.instantiateTO(model);

@@ -87,14 +87,15 @@ public interface PersonService extends AuditableCrudService<Person> {
 	Person getByStudentId(String studentId) throws ObjectNotFoundException;
 
 	/**
-	 * Retrieve a list of person objects based on specific criteria
+	 * Retrieve a list of person objects based on specified criteria
 	 * 
 	 * @param addressLabelSearchTO
+	 *            criteria
 	 * @param sAndP
-	 * @return
+	 *            Sorting and paging parameters
+	 * @return List of person objects based on specified criteria
 	 * @throws ObjectNotFoundException
 	 */
-	// TODO: change params to use a TO
 	List<Person> peopleFromCriteria(AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException;
 

@@ -83,8 +83,7 @@ public class ChildCareArrangementControllerIntegrationTest {
 
 	/**
 	 * Test that the {@link ChildCareArrangementController#get(UUID)} action
-	 * returns the
-	 * correct validation errors when an invalid ID is sent.
+	 * returns the correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
@@ -155,17 +154,23 @@ public class ChildCareArrangementControllerIntegrationTest {
 	 * Test the
 	 * {@link ChildCareArrangementController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<ChildCareArrangementTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
 				list.isEmpty());
+	}
+
+	/**
+	 * Test that the getAll action rejects a filter of
+	 * {@link ObjectStatus#DELETED}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerGetAllRejectsDeletedFilter() {
+		controller.getAll(ObjectStatus.DELETED, null, null, null, null);
 	}
 }

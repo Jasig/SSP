@@ -1,4 +1,4 @@
-package org.jasig.ssp.web.api;
+package org.jasig.ssp.web.api; // NOPMD
 
 import java.util.List;
 import java.util.Map;

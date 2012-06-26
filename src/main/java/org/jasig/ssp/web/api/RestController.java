@@ -26,6 +26,10 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * 
 	 * @param status
 	 *            Filter by this status.
+	 * 
+	 *            <p>
+	 *            {@link ObjectStatus#DELETED} is not allowed and will be
+	 *            rejected throwing an IllegalArgumentException.
 	 * @param start
 	 *            First result (0-based index) to return. Parameter must be a
 	 *            positive, non-zero integer. Often comes from client as a
@@ -59,7 +63,8 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 *            The specific id to use to lookup the associated data.
 	 * @return The specified instance if found.
 	 * @throws ObjectNotFoundException
-	 *             If specified object could not be found.
+	 *             If specified object could not be found or has been
+	 *             {@link ObjectStatus#DELETED}.
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */

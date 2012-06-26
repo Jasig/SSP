@@ -174,4 +174,13 @@ public class StudentTypeControllerIntegrationTest {
 		assertFalse("List action should have returned some objects.",
 				list.isEmpty());
 	}
+
+	/**
+	 * Test that the getAll action rejects a filter of
+	 * {@link ObjectStatus#DELETED}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerGetAllRejectsDeletedFilter() {
+		controller.getAll(ObjectStatus.DELETED, null, null, null, null);
+	}
 }

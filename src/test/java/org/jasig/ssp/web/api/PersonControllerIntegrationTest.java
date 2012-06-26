@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +19,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.PersonTO;
 
 /**
  * {@link PersonController} tests
@@ -57,7 +57,7 @@ public class PersonControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		PersonTO obj = controller.get(PERSON_ID);
+		final PersonTO obj = controller.get(PERSON_ID);
 
 		assertNotNull(
 				"Returned PersonTO from the controller should not have been null.",
@@ -82,7 +82,7 @@ public class PersonControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		PersonTO obj = controller.get(UUID.randomUUID());
+		final PersonTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned PersonTO from the controller should have been null.",
@@ -99,7 +99,8 @@ public class PersonControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() throws Exception {
-		Collection<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE,
+		final Collection<PersonTO> list = controller.getAll(
+				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
@@ -120,9 +121,10 @@ public class PersonControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAllWithPaging() throws Exception {
-		Collection<PersonTO> listAll = controller.getAll(ObjectStatus.ACTIVE,
+		final Collection<PersonTO> listAll = controller.getAll(
+				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
-		Collection<PersonTO> listFiltered = controller.getAll(
+		final Collection<PersonTO> listFiltered = controller.getAll(
 				ObjectStatus.ACTIVE, 1, 2, null, null).getRows();
 
 		assertNotNull("ListAll should not have been null.", listAll);
@@ -144,18 +146,16 @@ public class PersonControllerIntegrationTest {
 	 * 
 	 * This test assumes that there are at least 3 valid, active Persons in the
 	 * test database.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAllWithSorting() throws Exception {
-		Collection<PersonTO> list = controller.getAll(ObjectStatus.ACTIVE, 0,
+	public void testControllerAllWithSorting() {
+		final Collection<PersonTO> list = controller.getAll(
+				ObjectStatus.ACTIVE, 0,
 				200, "firstName", "ASC").getRows();
 
 		assertNotNull("The list should not have been null.", list);
 
-		Iterator<PersonTO> iter = list.iterator();
+		final Iterator<PersonTO> iter = list.iterator();
 
 		PersonTO person = iter.next();
 		assertNotNull("List[0] should not have been null.", person);
@@ -164,5 +164,14 @@ public class PersonControllerIntegrationTest {
 		person = iter.next();
 		person = iter.next();
 		assertEquals(PERSON_SORTEDBY_FIRSTNAME_3, person.getFirstName());
+	}
+
+	/**
+	 * Test that the getAll action rejects a filter of
+	 * {@link ObjectStatus#DELETED}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerGetAllRejectsDeletedFilter() {
+		controller.getAll(ObjectStatus.DELETED, null, null, null, null);
 	}
 }

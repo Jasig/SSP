@@ -1,4 +1,4 @@
-package org.jasig.mygps.web;
+package org.jasig.mygps.web; // NOPMD
 
 import java.util.Date;
 import java.util.HashMap;
@@ -114,7 +114,8 @@ public class MyGpsTaskController extends BaseController {
 	public @ResponseBody
 	TaskTO createCustom(@RequestParam("name") final String name,
 			@RequestParam("description") final String description)
-			throws Exception {
+			throws ObjectNotFoundException, ValidationException
+	{
 
 		final Person student = securityService.currentUser().getPerson();
 		final String session = securityService.getSessionId();
@@ -131,7 +132,8 @@ public class MyGpsTaskController extends BaseController {
 	TaskTO createForChallengeReferral(
 			@RequestParam("challengeId") final UUID challengeId,
 			@RequestParam("challengeReferralId") final UUID challengeReferralId)
-			throws Exception {
+			throws ObjectNotFoundException, ValidationException
+	{
 
 		final Challenge challenge = challengeService.get(challengeId);
 		final ChallengeReferral challengeReferral = challengeReferralService
@@ -150,7 +152,8 @@ public class MyGpsTaskController extends BaseController {
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public @ResponseBody
-	boolean delete(@RequestParam("taskId") final UUID taskId) throws Exception {
+	boolean delete(@RequestParam("taskId") final UUID taskId)
+			throws ObjectNotFoundException {
 		taskService.delete(taskId);
 		return true;
 	}
@@ -158,7 +161,8 @@ public class MyGpsTaskController extends BaseController {
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
 	public @ResponseBody
 	boolean email(@RequestParam("emailAddress") final String emailAddress)
-			throws Exception {
+			throws ObjectNotFoundException, ValidationException
+	{
 
 		final SortingAndPaging sAndP = new SortingAndPaging(
 				ObjectStatus.ACTIVE);
@@ -185,7 +189,7 @@ public class MyGpsTaskController extends BaseController {
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public @ResponseBody
-	List<TaskTO> getAll() throws Exception {
+	List<TaskTO> getAll() {
 
 		final SortingAndPaging sAndP = new SortingAndPaging(
 				ObjectStatus.ACTIVE);
@@ -207,7 +211,8 @@ public class MyGpsTaskController extends BaseController {
 	@RequestMapping(value = "/mark", method = RequestMethod.GET)
 	public @ResponseBody
 	TaskTO mark(@RequestParam("taskId") final UUID taskId,
-			@RequestParam("complete") final Boolean complete) throws Exception {
+			@RequestParam("complete") final Boolean complete)
+			throws ObjectNotFoundException {
 
 		final Task task = taskService.get(taskId);
 		taskService.markTaskCompletion(task, complete);
@@ -215,7 +220,7 @@ public class MyGpsTaskController extends BaseController {
 	}
 
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
-	public ModelAndView print() throws Exception {
+	public ModelAndView print() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		final SortingAndPaging sAndP = new SortingAndPaging(
 				ObjectStatus.ACTIVE);

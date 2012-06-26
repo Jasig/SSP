@@ -11,6 +11,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.reference.CampusTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,11 +50,14 @@ public class CampusControllerIntegrationTest {
 	 * Test that the {@link CampusController#get(UUID)} action returns the
 	 * correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -69,15 +73,21 @@ public class CampusControllerIntegrationTest {
 	 * Test the
 	 * {@link CampusController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<CampusTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
+	}
+
+	/**
+	 * Test that the getAll action rejects a filter of
+	 * {@link ObjectStatus#DELETED}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerGetAllRejectsDeletedFilter() {
+		controller.getAll(ObjectStatus.DELETED, null, null, null, null);
 	}
 }

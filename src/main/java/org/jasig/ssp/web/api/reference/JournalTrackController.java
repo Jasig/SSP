@@ -1,4 +1,4 @@
-package org.jasig.ssp.web.api.reference;
+package org.jasig.ssp.web.api.reference; // NOPMD
 
 import java.util.UUID;
 

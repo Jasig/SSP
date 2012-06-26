@@ -100,8 +100,15 @@ public class EarlyAlertRoutingController
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
+		// Validate parameters
+		if (status != null && ObjectStatus.DELETED.equals(status)) {
+			throw new IllegalArgumentException(
+					"You can not request deleted data.");
+		}
+
 		service.checkCampusIds(campusId, null);
 
+		// Run getAll for the specified Campus
 		final PagingWrapper<EarlyAlertRouting> list = service
 				.getAllForCampus(campusService.get(campusId), SortingAndPaging
 						.createForSingleSort(status, start, limit, sort,
@@ -132,7 +139,8 @@ public class EarlyAlertRoutingController
 			final @PathVariable UUID id)
 			throws ObjectNotFoundException {
 		final EarlyAlertRouting model = service.get(id);
-		if (model == null) {
+		if (model == null
+				|| ObjectStatus.DELETED.equals(model.getObjectStatus())) {
 			throw new ObjectNotFoundException(id, "EarlyAlertRouting");
 		}
 

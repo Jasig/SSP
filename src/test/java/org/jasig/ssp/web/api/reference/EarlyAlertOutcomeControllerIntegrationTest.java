@@ -242,4 +242,14 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 				earlyAlertOutcome
 						.getCreatedBy().getId().equals(UUID.randomUUID()));
 	}
+
+	/**
+	 * Test that the
+	 * {@link EarlyAlertOutcomeController#getAll(ObjectStatus, Integer, Integer, String, String)}
+	 * action rejects a filter of {@link ObjectStatus#DELETED}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerGetAllRejectsDeletedFilter() {
+		controller.getAll(ObjectStatus.DELETED, null, null, null, null);
+	}
 }

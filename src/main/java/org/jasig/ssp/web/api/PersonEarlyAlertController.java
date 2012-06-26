@@ -115,9 +115,16 @@ public class PersonEarlyAlertController extends
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
-
+		// Check permissions
 		checkPermissionForOp("READ");
 
+		// Validate parameters
+		if (status != null && ObjectStatus.DELETED.equals(status)) {
+			throw new IllegalArgumentException(
+					"You can not request deleted data.");
+		}
+
+		// Run getAll for the specified person
 		final Person person = personService.get(personId);
 		final PagingWrapper<EarlyAlert> data = getService().getAllForPerson(
 				person,
