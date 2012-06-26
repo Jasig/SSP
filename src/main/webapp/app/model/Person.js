@@ -46,5 +46,9 @@ Ext.define('Ssp.model.Person', {
     
     getFormattedBirthDate: function(){
     	return Ext.util.Format.date( this.get('birthDate'),'m/d/Y');
+    },
+    
+    getFormattedStudentIntakeRequestDate: function(){
+    	return Ext.util.Format.date( this.get('studentIntakeRequestDate'),'m/d/Y');   	
     }
 });

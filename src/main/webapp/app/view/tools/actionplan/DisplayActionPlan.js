@@ -44,7 +44,18 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
 						    		  autoScroll: true,
 						    		  action: 'all',
 						    		  items: [{xtype: 'tasks'}]
-						    		}]
+						    		}],
+						    	    
+						    	    dockedItems: [{
+								        dock: 'top',
+								        xtype: 'toolbar',
+								        items: [{
+								            tooltip: 'Add a Task',
+								            text: 'Add',
+								            xtype: 'button',
+								            itemId: 'addTaskButton'
+								        }]
+						    	    }]
 						})
 						,{xtype: 'displayactionplangoals', flex: 1}
 						,{xtype: 'displaystrengths'}

@@ -15,6 +15,7 @@ Ext.require([
     'Ssp.view.StudentRecord',
     'Ssp.view.person.CaseloadAssignment',
     'Ssp.view.person.EditPerson',
+    'Ssp.view.person.Coach',
     'Ssp.view.person.Appointment',
     'Ssp.view.person.SpecialServiceGroups',
     'Ssp.view.person.ReferralSources',
@@ -101,6 +102,8 @@ Ext.require([
     'Ssp.model.util.TreeRequest',
     'Ssp.model.Configuration',
 	'Ssp.model.Person',
+	'Ssp.model.PersonAppointment',
+	'Ssp.model.Appointment',
 	'Ssp.model.PersonGoal',
 	'Ssp.model.PersonDocument',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
@@ -215,6 +218,7 @@ var apiUrls = [
   {name: 'studentStatus', url: 'reference/studentStatus/'},
   {name: 'veteranStatus', url: 'reference/veteranStatus/'},
   {name: 'person', url: 'person/'},
+  {name: 'personAppointment', url: '/ssp/api/1/person/{id}/appointment/'},
   {name: 'personChallenge', url: 'person/{id}/challenge/'},
   {name: 'personDocument', url: 'person/{id}/document/'},
   {name: 'personEarlyAlert', url: 'person/{id}/earlyAlert/'},
@@ -305,6 +309,12 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         },
+		currentAppointment: {
+	        fn: function(){
+	            return new Ssp.model.Appointment({id:""});
+	        },
+	        singleton: true
+	    },
         currentChallenge:{
 	        fn: function(){
 	            return new Ssp.model.reference.Challenge({id:""});

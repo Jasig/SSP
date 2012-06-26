@@ -34,6 +34,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		
 		'filterTasksBySelfCheck': {
 			change: 'onFilterTasksBySelfChange'
+		},
+    	
+		'addTaskButton': {
+			click: 'onAddTaskClick'
 		}
 	},
 	
@@ -272,5 +276,9 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		});
 		
 		return selectedIds;
-    }
+    },
+    
+    onAddTaskClick: function(button) {
+    	this.appEventsController.getApplication().fireEvent('addTask');
+    },  
 });

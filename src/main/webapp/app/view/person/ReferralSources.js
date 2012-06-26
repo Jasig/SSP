@@ -4,32 +4,17 @@ Ext.define('Ssp.view.person.ReferralSources', {
 	mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.ReferralSourcesViewController',
-    inject: {
-    	store: 'referralSourcesBindStore'
-    },
 	width: '100%',
     height: '100%',
     autoScroll: true,
 	initComponent: function() {	
+		var me=this;
 		Ext.apply(this, 
 				{
 				    bodyPadding: 5,
-				    layout: 'anchor',
-				    items:[{
-			            xtype: 'itemselectorfield',
-			            name: 'referralSourceIds',
-			            itemId: 'referralSourcesItemSelector',
-			            anchor: '100%',
-			            height: 200,
-			            fieldLabel: 'Referral Sources',
-			            store: this.store,
-			            displayField: 'name',
-			            valueField: 'id',
-			            allowBlank: true,
-			            flex: 1
-			        }]
-				});	
+				    layout: 'anchor'
+				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

@@ -3,23 +3,38 @@ Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
+    	columnRendererUtils: 'columnRendererUtils',
+    	person: 'currentPerson',
         store: 'referralSourcesBindStore'
     },
-    control: {
-    	itemSelector: '#referralSourcesItemSelector'
-    },
-    
 	init: function() {
 		var me=this;
 		var url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('referralSource') );
 		var successFunc = function(response,view){
 	    	var r = Ext.decode(response.responseText);
-	    	var is = me.getItemSelector();
-	    	console.log(r);
+	    	var items;
+	    	var view = me.getView();
+	    	var selectedReferralSources = me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('referralSources') );
 	    	if (r.rows.length > 0)
 	    	{
 	    		me.store.loadData(r.rows);
-	    		is.bindStore(me.store);
+	    		
+	    		items = [{
+		            xtype: 'itemselectorfield',
+		            itemId: 'referralSourcesItemSelector',
+		            name: 'referralSources',
+		            anchor: '100%',
+		            height: 250,
+		            fieldLabel: 'Referral Sources',
+		            store: me.store,
+		            displayField: 'name',
+		            valueField: 'id',
+		            value: ((selectedReferralSources.length>0) ? selectedReferralSources : [] ),
+		            allowBlank: true,
+		            buttons: ["add", "remove"]
+		        }];
+	    		
+	    		view.add(items);
 	    	}
 		};
 				
@@ -30,15 +45,5 @@ Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
 		});
 		
 		return this.callParent(arguments);
-    },
-    
-    destroy: function(){
-    	var is = this.getItemSelector();
-    	var store = this.store;
-        is.clearValue();
-        
-        if(store.getCount()>0){
-            is.fromField.store.removeAll();
-        }
     }
 });

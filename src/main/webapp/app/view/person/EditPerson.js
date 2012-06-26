@@ -37,7 +37,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			    },{
 			        fieldLabel: 'Student ID',
 			        name: 'schoolId',
-			        minLength: 0,
+			        minLength: 7,
 			        maxLength: 7,
 			        itemId: 'studentId',
 			        allowBlank:false
@@ -66,7 +66,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        name: 'primaryEmailAddress',
 			        vtype:'email',
 			        maxLength: 100,
-			        allowBlank:true,
+			        allowBlank:false,
 			        itemId: 'primaryEmailAddress'
 			    },{
 			        fieldLabel: 'Home Email',

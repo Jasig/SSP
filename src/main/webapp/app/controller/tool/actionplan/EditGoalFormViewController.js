@@ -52,7 +52,7 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
     		model.set('confidentialityLevel',{id: values.confidentialityLevelId});
     		
     		successFunc = function(response ,view){
-				me.loadDisplay();
+    			me.loadDisplay();
 			};
 			
     		if (id == "")

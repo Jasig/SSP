@@ -22,9 +22,9 @@ Ext.define('Ssp.controller.person.ServiceReasonsViewController', {
 	    				formId: 'personservicereasons', 
 	                    fieldSetTitle: 'Select all that apply:',
 	                    itemsArr: items, 
-	                    selectedItemsArr: [], 
+	                    selectedItemsArr: me.person.get('serviceReasons'), 
 	                    idFieldName: 'id', 
-	                    selectedIdFieldName: 'serviceReasonId',
+	                    selectedIdFieldName: 'id',
 	                    additionalFieldsMap: [] };
 	    		
 	    		me.formUtils.createForm( serviceReasonsFormProps );	    		

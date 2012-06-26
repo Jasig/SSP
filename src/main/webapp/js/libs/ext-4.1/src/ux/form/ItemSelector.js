@@ -82,7 +82,7 @@ Ext.define('Ext.ux.form.ItemSelector', {
 
         me.fromField = me.createList();
         me.toField = me.createList();
-
+        
         return {
             layout: {
                 type: 'hbox',
