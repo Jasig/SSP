@@ -15,11 +15,11 @@ public class AddressLabelSearchTO
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String programStatus;
+	private UUID programStatus;
 	private List<UUID> specialServiceGroupIds;
 	private List<UUID> referralSourcesIds;
 	private String anticipatedStartTerm;
-	private String anticipatedStartYear;
+	private Integer anticipatedStartYear;
 	private List<UUID> studentTypeIds;
 	
 	
@@ -31,11 +31,11 @@ public class AddressLabelSearchTO
 		this.studentTypeIds = studentTypeIds;
 	}
 
-	public String getProgramStatus() {
+	public UUID getProgramStatus() {
 		return programStatus;
 	}
 
-	public void setProgramStatus(String programStatus) {
+	public void setProgramStatus(UUID programStatus) {
 		this.programStatus = programStatus;
 	}
 
@@ -63,19 +63,19 @@ public class AddressLabelSearchTO
 		this.anticipatedStartTerm = anticipatedStartTerm;
 	}
 
-	public String getAnticipatedStartYear() {
+	public Integer getAnticipatedStartYear() {
 		return anticipatedStartYear;
 	}
 
-	public void setAnticipatedStartYear(String anticipatedStartYear) {
+	public void setAnticipatedStartYear(Integer anticipatedStartYear) {
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
 
 
-	public AddressLabelSearchTO(String programStatus, List<UUID> specialServiceGroupId,
+	public AddressLabelSearchTO(UUID programStatus, List<UUID> specialServiceGroupId,
 			List<UUID> referralSourcesId, String anticipatedStartTerm,
-			String anticipatedStartYear, List<UUID> studentTypeIds) {
+			Integer anticipatedStartYear, List<UUID> studentTypeIds) {
 		super();
 		this.programStatus = programStatus;
 		this.specialServiceGroupIds = specialServiceGroupId;

@@ -25,15 +25,6 @@ function swapOut(newHTML){
 	$('#rightbar').html(newHTML);
 }
 
-function populateSS(){	
-	populateForm('/ssp/forms/SpecialServices.jsp');
-}
-
-
-
-function populateAddress(){
-	populateForm('/ssp/forms/AddressLabel.jsp');
-}
 
 
 
@@ -92,8 +83,8 @@ clear: left;
 <div id="container" style="height:100%;">
 <div id="leftbar" style="height:100%;">
 <ul>
-<li><a onclick="populateAddress();">Address labels</a></li>
-<li><a onclick="populateSS();">Special Services labels</a></li>
+<li><a onclick="populateForm('/ssp/forms/AddressLabel.jsp');">Address labels</a></li>
+<li><a onclick="populateForm('/ssp/forms/SpecialServices.jsp');">Special Services labels</a></li>
 <li><a onclick="clearFormDiv();" >Clear Form</a></li>
 </ul> 
 </div>
@@ -104,7 +95,6 @@ clear: left;
 </div>
 
 <div id="stagingDiv" style="display:none" ></div>
-
 
 
 

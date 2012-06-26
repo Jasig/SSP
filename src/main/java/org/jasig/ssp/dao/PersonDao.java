@@ -148,10 +148,10 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							addressLabelSearchTO.getReferralSourcesIds()));
 		}
 		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
-			// criteria.add(Restrictions.eq("anticipatedStartTerm",anticipatedStartTerm));
+			criteria.add(Restrictions.eq("anticipatedStartTerm",addressLabelSearchTO.getAnticipatedStartTerm()).ignoreCase());
 		}
 		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
-			// criteria.add(Restrictions.eq("anticipatedStartYear",anticipatedStartYear));
+			criteria.add(Restrictions.eq("anticipatedStartYear",addressLabelSearchTO.getAnticipatedStartYear()));
 		}
 		if (addressLabelSearchTO.getStudentTypeIds() != null) {
 			criteria.add(Restrictions.in("studentType.id",

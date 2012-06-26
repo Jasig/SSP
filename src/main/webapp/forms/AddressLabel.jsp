@@ -2,6 +2,7 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 
 
+
 <style>
 label {
 	float: left;
@@ -98,10 +99,16 @@ br {
 		container.append($(html));
 	}
 
-	populateSpecialServices();
-	populateProgramStatus();
-	populateReferralSource();
-	populateStudentType();
+	
+	
+	
+	$(document).ready(function() {
+		populateSpecialServices();
+		populateProgramStatus();
+		populateReferralSource();
+		populateStudentType();
+	});	
+	
 </script>
 
 </head>
@@ -115,7 +122,9 @@ br {
 			<p>required fields are denoted by an asterisc</p>
 			<label><span>Program Status</span></label> <select
 				id="ProgramStatusGroup" name="programStatus"
-				class="custom-class1 custom-class2" style="width: 200px;"></select>
+				class="custom-class1 custom-class2" style="width: 200px;">
+				<option value=""></option>
+				</select>
 			<br /> <label><span>Student Type</span></label> <select
 				id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
 			<br /> <label><span>Special Service Groups</span></label> <select
@@ -123,21 +132,21 @@ br {
 				multiple="multiple"></select> <br /> <label><span>Referral
 					Source</span></label> <select id="ReferralSourceGroup" name="referralSourcesIds"
 				multiple="multiple" /></select> <br />
-			<!--label><span>Registration Term</span></label><input type="text" class="input_text" name="registrationTerm" id="registrationTerm"/>  <br/>            
-                       <label><span>Registration Year</span></label><input type="text" class="input_text" name="registrationYear" id="registrationYear"/><br/-->
 			<label><span>Date Student Added From</span></label><input
 				type="textbox" name="test1" id="dateAddedFrom" /><br /> <label><span>Date
 					Student Added To</span></label><input type="textbox" name="test2" id="dateAddedTo" /><br />
 			<label><span>Anticipated Start Term</span></label> <select
 				id="anticipatedStartTerm" name="anticipatedStartTerm"
 				class="custom-class1 custom-class2" style="width: 200px;">
+				<option value=""></option>
 				<option value="Fall" class="test-class-1">Fall</option>
-				<option value="Fall" class="test-class-1">Winter</option>
-				<option value="Fall" class="test-class-1">Spring</option>
-				<option value="Fall" class="test-class-1">Summer</option>
+				<option value="Winter" class="test-class-1">Winter</option>
+				<option value="Spring" class="test-class-1">Spring</option>
+				<option value="Summer" class="test-class-1">Summer</option>
 			</select><br /> <label><span>Anticipated Start Year</span></label> <select
 				id="anticipatedStartYear" name="anticipatedStartYear"
 				class="custom-class1 custom-class2" style="width: 200px;">
+                                <option value=""></option> 
 				<option value="2010" class="test-class-1">2010</option>
 				<option value="2011" class="test-class-1">2011</option>
 				<option value="2012" class="test-class-1">2012</option>
@@ -153,15 +162,6 @@ br {
 		</div>
 	</form>
 </div>
-
-
-
-<script>
-	$(document).ready(function() {
-		//	$("#dateAddedFrom").datepicker({ showOn: 'button', buttonImageOnly: true, buttonImage: '/ssp/images/add-tool-icon.png' });
-	});
-</script>
-
 
 
 
