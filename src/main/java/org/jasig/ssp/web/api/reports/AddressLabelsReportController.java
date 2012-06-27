@@ -91,7 +91,8 @@ public class AddressLabelsReportController extends BaseController {
 
 		// Get the actual names of the UUIDs for the special groups
 		List<String> specialGroupsNames = new ArrayList<String>();
-		if (specialServiceGroupIds != null && specialServiceGroupIds.size() > 0) {
+		if ((specialServiceGroupIds != null)
+				&& (specialServiceGroupIds.size() > 0)) {
 			Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
 			while (ssgIter.hasNext()) {
 				specialGroupsNames
@@ -101,7 +102,7 @@ public class AddressLabelsReportController extends BaseController {
 
 		// Get the actual names of the UUIDs for the referralSources
 		List<String> referralSourcesNames = new ArrayList<String>();
-		if (referralSourcesIds != null && referralSourcesIds.size() > 0) {
+		if ((referralSourcesIds != null) && (referralSourcesIds.size() > 0)) {
 			Iterator<UUID> referralSourceIter = referralSourcesIds.iterator();
 			while (referralSourceIter.hasNext()) {
 				referralSourcesNames.add(referralSourcesService.get(
@@ -123,7 +124,7 @@ public class AddressLabelsReportController extends BaseController {
 		parameters.put("referralSourceNames", referralSourcesNames);
 		parameters.put("studentTypeIds", studentTypeIds);
 		parameters.put("reportDate", new Date());
-		parameters.put("studentCount", new Integer(people.size()));
+		parameters.put("studentCount", Integer.valueOf(people.size()));
 
 		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
 				people.toArray());
