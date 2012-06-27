@@ -23,29 +23,7 @@ Ext.define('Ssp.view.Search', {
 		    	    columns: [
 		    	              { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 },		        
 		    	              { text: 'Name', dataIndex: 'lastName', renderer: this.columnRendererUtils.renderStudentDetails, flex: 50},
-		    	              /*{
-	    			    	        xtype:'actioncolumn',
-	    			    	        width:65,
-	    			    	        header: 'Action',
-	    			    	        items: [{
-	    			    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-	    			    	            tooltip: 'Edit Student',
-	    			    	            handler: function(grid, rowIndex, colIndex) {
-	    			    	            	var rec = grid.getStore().getAt(rowIndex);
-	    			    	            	var panel = grid.up('panel');
-	    			    	                panel.person.data=rec.data;
-	    			    	                panel.appEventsController.getApplication().fireEvent('editPerson');
-	    			    	            },
-	    			    	            scope: this
-	    			    	        },{
-	    			    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-	    			    	            tooltip: 'Delete Student',
-	    			    	            handler: function(grid, rowIndex, colIndex) {
-	    			    	    			Ext.Msg.alert('Attention','This feature is not available yet.');	    			    	            	
-	    			    	            },
-	    			    	            scope: this
-	    			    	        }]
-	    		                }*/],
+		    	              ],
     	          
 		    	    dockedItems: [{
 		       			xtype: 'pagingtoolbar',
@@ -74,30 +52,6 @@ Ext.define('Ssp.view.Search', {
 		       		        	xtype: 'tbspacer',
 		       		        	flex: 1
 		       		        },{
-					            tooltip: 'Add Student',
-					            text: '',
-					            width: 25,
-					            height: 25,
-					            cls: 'addPersonIcon',
-					            xtype: 'button',
-					            itemId: 'addButton'
-					        },{
-					            tooltip: 'Edit Student',
-					            text: '',
-					            width: 25,
-					            height: 25,
-					            cls: 'editPersonIcon',
-					            xtype: 'button',
-					            itemId: 'editButton'
-					        },{
-					            tooltip: 'Delete Student',
-					            text: '',
-					            width: 25,
-					            height: 25,
-					            cls: 'deletePersonIcon',
-					            xtype: 'button',
-					            itemId: 'deleteButton'
-					        },{
 					            tooltip: 'Display with photo',
 					            text: '',
 					            width: 20,

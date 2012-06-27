@@ -1,6 +1,6 @@
 Ext.define('Ssp.model.reference.ConfidentialityDisclosureAgreement', {
     extend: 'Ssp.model.reference.AbstractReference',
-    fields: [],
+    fields: [{name:'text',type:'string'}],
 	autoLoad: false,
  	proxy: {
 		type: 'rest',

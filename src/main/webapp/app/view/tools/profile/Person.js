@@ -69,28 +69,22 @@ Ext.define('Ssp.view.tools.profile.Person', {
 					        name: 'secondaryEmailAddress'
 					    }, {
 					        fieldLabel: 'Student Type',
-					        name: 'studentType',
-					        value: 'ILP'
+					        name: 'studentType'
 					    }, {
 					        fieldLabel: 'SSP Program Status',
-					        name: 'programStatus',
-					        value: 'Active'
+					        name: 'programStatus'
 					    }, {
 					        fieldLabel: 'Registration Status',
-					        name: 'registrationStatus',
-					        value: 'Registered'
+					        name: 'registrationStatus'
 					    }, {
 					        fieldLabel: 'Payment Status',
-					        name: 'paymentStatus',
-					        value: 'No Balance'
+					        name: 'paymentStatus'
 					    }, {
 					        fieldLabel: 'CUM GPA',
-					        name: 'cumGPA',
-					        value: '2.9'
+					        name: 'cumGPA'
 					    }, {
 					        fieldLabel: 'Academic Program',
-					        name: 'academicPrograms',
-					        value: 'Nursing'
+					        name: 'academicPrograms'
 					    }]
 					    }],
 				});

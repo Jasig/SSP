@@ -1,44 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="specialServiceGroupNames" class="java.util.List"/>
+	<parameter name="reportDate" class="java.util.Date"/>
 	<queryString language="json">
-		<![CDATA[]]>
+		<![CDATA[rows]]>
 	</queryString>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
+	<field name="middleInitial" class="java.lang.String">
+		<fieldDescription><![CDATA[middleInitial]]></fieldDescription>
+	</field>
 	<field name="lastName" class="java.lang.String">
 		<fieldDescription><![CDATA[lastName]]></fieldDescription>
 	</field>
-	<field name="department" class="java.lang.String">
-		<fieldDescription><![CDATA[department]]></fieldDescription>
+	<field name="specialServices" class="java.util.List">
+		<fieldDescription><![CDATA[specialServices]]></fieldDescription>
 	</field>
-	<field name="totalStudentsServed" class="java.lang.Integer">
-		<fieldDescription><![CDATA[totalStudentsServed]]></fieldDescription>
+	<field name="userId" class="java.lang.String">
+		<fieldDescription><![CDATA[userId]]></fieldDescription>
 	</field>
-	<field name="totalAnnualCaseload" class="java.lang.Integer">
-		<fieldDescription><![CDATA[totalAnnualCaseload]]></fieldDescription>
-	</field>
-	<field name="currentTotalCaseload" class="java.lang.Integer">
-		<fieldDescription><![CDATA[currentTotalCaseload]]></fieldDescription>
-	</field>
-	<field name="studentsByStatusA" class="java.lang.Integer">
-		<fieldDescription><![CDATA[studentsByStatusA]]></fieldDescription>
-	</field>
-	<field name="studentsByStatusIA" class="java.lang.Integer">
-		<fieldDescription><![CDATA[studentsByStatusIA]]></fieldDescription>
-	</field>
-	<field name="studentsByStatusT" class="java.lang.Integer">
-		<fieldDescription><![CDATA[studentsByStatusT]]></fieldDescription>
-	</field>
-	<field name="studentsByStatusNP" class="java.lang.Integer">
-		<fieldDescription><![CDATA[studentsByStatusNP]]></fieldDescription>
-	</field>
-	<field name="studentsByStatusNS" class="java.lang.Integer">
-		<fieldDescription><![CDATA[studentsByStatusNS]]></fieldDescription>
+	<field name="studentType" class="java.lang.String">
+		<fieldDescription><![CDATA[studentType]]></fieldDescription>
 	</field>
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
@@ -55,15 +42,20 @@
 				<text><![CDATA[Report Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="10" width="100" height="13"/>
-				<textElement/>
-				<text><![CDATA[Registration Term:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="3a5dca54-1006-4f21-a054-1f544849639d" x="0" y="20" width="125" height="13"/>
+				<reportElement uuid="3a5dca54-1006-4f21-a054-1f544849639d" x="0" y="13" width="125" height="13"/>
 				<textElement/>
 				<text><![CDATA[Special Service Groups:]]></text>
 			</staticText>
+			<textField>
+				<reportElement uuid="2bd0b0c4-c354-40a4-8131-9c0f91358ffa" x="142" y="0" width="100" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b6d2a5e6-e868-4229-834f-391bc3a81f59" x="142" y="13" width="608" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[""+$P{specialServiceGroupNames}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -83,69 +75,80 @@
 	<columnHeader>
 		<band height="35" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="6963974f-bd33-4663-be62-4efc95e33d07" stretchType="RelativeToBandHeight" x="125" y="3" width="75" height="26"/>
-				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[STUDENT FIRST]]></text>
+				<reportElement uuid="4d03dc84-97ee-4f56-b388-b80ca1bdaf28" x="103" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[First Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="221" y="3" width="72" height="26"/>
-				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[STUDENT LAST]]></text>
+				<reportElement uuid="41e49ee4-6c5a-405c-96ef-f27913ec2d3c" x="304" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Last Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="987d0ef8-f3be-429d-92e3-7fd1fc2ac5d7" x="25" y="3" width="44" height="26"/>
-				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[STUDENT ID]]></text>
+				<reportElement uuid="30c39301-6947-4293-83d0-75ccc86772aa" x="407" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Student Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="07c2f968-e98a-4673-b614-1def0cb9c4dd" x="349" y="3" width="56" height="26"/>
-				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Type]]></text>
+				<reportElement uuid="bd80bde0-56f7-44dc-ad07-43ce4d3eb6af" x="5" y="3" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Student ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f9a07bba-d299-4b7d-9d82-ec1e4c8e3329" x="461" y="3" width="83" height="26"/>
-				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Program Status]]></text>
+				<reportElement uuid="64fe9859-8248-41b1-9f33-b6777c98b182" x="208" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Middle Initial]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="56b81aec-c74e-4f01-ab16-5a839da3d4bd" x="604" y="3" width="99" height="26"/>
-				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Counselor Coach]]></text>
+				<reportElement uuid="89c526dd-df29-4208-8b49-5761bb61cc80" x="507" y="2" width="155" height="20"/>
+				<textElement/>
+				<text><![CDATA[specialServices]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="35" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<rectangle>
 				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" x="0" y="2" width="750" height="30" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 			</rectangle>
+			<textField>
+				<reportElement uuid="5a2c2c08-ec91-452c-a91c-4936c28b9ef3" x="101" y="1" width="102" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fa8296f4-fe2b-445f-97b4-034fe2ff05da" x="302" y="1" width="102" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d819ba88-7a04-430f-9fa0-0c90e5293930" x="405" y="1" width="102" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{studentType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2477acef-4a84-48bc-877d-244b77fde610" x="3" y="1" width="102" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{userId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f9d7ac8e-8e8d-4fc0-ac55-44439a70f823" x="206" y="1" width="102" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{middleInitial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ce9d2cd4-2571-4b65-b981-a04d2f862fee" x="507" y="1" width="243" height="31"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[""+$F{specialServices}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="52" splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch">
-			<line>
-				<reportElement uuid="d81fa98a-b996-49fb-8070-f4e12fda97c3" x="21" y="6" width="700" height="1"/>
-			</line>
-		</band>
+		<band height="42" splitType="Stretch"/>
 	</summary>
 </jasperReport>

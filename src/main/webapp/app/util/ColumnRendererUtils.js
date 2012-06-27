@@ -76,4 +76,23 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	                'addToolIcon':
 	                'hideAddToolIcon';
 	},
+	
+	/**
+	 * This method is used to return an object with id values
+	 * an array format expected by the ExtJS multiSelect or itemSelect
+	 * components.
+	 * 
+	 * Translates: 
+	 * [{"id":"1"},{"id":"2"},{"id":"3"}]
+	 * 
+	 * Into:
+	 * ["1","2","3"]
+	 */
+	getSelectedIdsForMultiSelect: function( arr ){
+		var selectedIds = [];
+		Ext.each(arr,function(item,index){
+			selectedIds.push(item["id"]);
+		});
+		return selectedIds;
+	}
 });

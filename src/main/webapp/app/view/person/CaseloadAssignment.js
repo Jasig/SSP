@@ -4,11 +4,15 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 	mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.CaseloadAssignmentViewController',
-	width: '100%',
+    inject: {
+    	model: 'currentPerson'
+    },
+    width: '100%',
 	height: '100%',   
-	initComponent: function() {	
+	initComponent: function() {
 		Ext.apply(this, 
 				{
+			        title: "Caseload Assignment",
 		    		autoScroll: true,
 		    	    defaults: {
 		    	        bodyStyle: 'padding:15px'
@@ -25,41 +29,35 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 				        xtype: 'toolbar',
 				        items: [{xtype: 'button', 
 				        	     itemId: 'saveButton', 
-				        	     text:'Save', 
-				        	     action: 'save' 
+				        	     text:'Save'
 				        	    },
 				                 {
 				            	   xtype: 'button',
 				            	   itemId: 'cancelButton',
 				            	   text: 'Cancel',
-				            	   action: 'cancel'
+				                 },{ 
+						        	xtype: 'tbspacer',
+						        	flex: 1
+						         },
+				                 {
+				            	   xtype: 'button',
+				            	   itemId: 'printButton',
+				            	   tooltip: 'Print Appointment Form',
+				            	   width: 30,
+						           height: 30,
+						           cls: 'printIcon'
+				                 },
+				                 {
+				            	   xtype: 'button',
+				            	   itemId: 'emailButton',
+				            	   tooltip: 'Email Appointment Form',
+				            	   width: 30,
+						           height: 30,
+						           cls: 'emailIcon'
 				                 }]
 				    }],
 				    
-		    		items: [ { title: 'Personal',
-			        	       autoScroll: true,
-			        		   items: [{xtype: 'editperson'}]
-			        		},{
-			            		title: 'Appointment',
-			            		autoScroll: true,
-			            		items: [{xtype: 'personappointment'}]
-			        		},{
-			            		title: 'Special Service Groups',
-			            		autoScroll: true,
-			            		items: [{xtype: 'personspecialservicegroups'}]
-			        		},{
-			            		title: 'Referral Sources',
-			            		autoScroll: true,
-			            		items: [{xtype: 'personreferralsources'}]
-			        		},{
-			            		title: 'Reasons for Service',
-			            		autoScroll: true,
-			            		items: [{xtype: 'personservicereasons'}]
-			        		},{
-			            		title: 'Ability to Benefit/Anticipated Start Date',
-			            		autoScroll: true,
-			            		items: [{xtype: 'personanticipatedstartdate'}]
-			        		}]
+				    items: [ ]
 			});
 	
 		return this.callParent(arguments);

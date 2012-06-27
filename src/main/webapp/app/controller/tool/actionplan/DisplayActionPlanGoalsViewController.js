@@ -39,14 +39,16 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     },
 
     onViewReady: function(comp, obj){
-    	this.appEventsController.getApplication().addListener('editGoal', function(){
- 			this.editGoal();
-		},this);
-    	
-    	this.appEventsController.getApplication().addListener('deleteGoal', function(){
- 			this.deleteConfirmation();
-		},this);
+    	this.appEventsController.assignEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});
+    	this.appEventsController.assignEvent({eventName: 'deleteGoal', callBackFunc: this.deleteConfirmation, scope: this});
     }, 
+    
+    destroy: function() {
+    	this.appEventsController.removeEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});
+    	this.appEventsController.removeEvent({eventName: 'deleteGoal', callBackFunc: this.deleteConfirmation, scope: this});
+
+        return this.callParent( arguments );
+    },
     
     onAddGoalClick: function( button ){
 		var goal = new Ssp.model.PersonGoal();

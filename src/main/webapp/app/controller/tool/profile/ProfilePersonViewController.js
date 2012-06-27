@@ -22,24 +22,32 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var studentIdField = me.getStudentIdField();
 		var nameField = me.getNameField();
 		var birthDateField = me.getBirthDateField();
-		var id=me.person.get('id');
+		var id= me.person.get('id');
 		var personUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');			
 		var successFunc = function(response,view){
 	    	var r = Ext.decode(response.responseText);
-    		var fullName = me.person.getFullName() ;
-	    	me.person.populateFromGenericObject(r);
+    		var fullName;
+	    	
+    		// load the person data
+    		me.person.populateFromGenericObject(r);
+    		
+	    	fullName = me.person.getFullName();
     		
     		// load special service groups
     		if (r.specialServiceGroups != null)
     		{
-    			me.profileSpecialServiceGroupsStore.loadData(r.specialServiceGroups);
+    			me.profileSpecialServiceGroupsStore.loadData( me.person.get('specialServiceGroups') );
+    		}else{
+    			me.profileSpecialServiceGroupsStore.removeAll();
     		}
     		
     		// load referral sources
     		if (r.referralSources != null)
     		{
-    			me.profileReferralSourcesStore.loadData(r.referralSources);
+    			me.profileReferralSourcesStore.loadData( me.person.get('referralSources') );
+    		}else{
+    			me.profileReferralSourcesStore.removeAll();    			
     		}
     		
     		// load general student record
@@ -52,7 +60,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		};
 
 		// Set defined configured label for the studentId field
-		studentIdField.setFieldLabel(studentIdAlias+'<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>');		
+		studentIdField.setFieldLabel(studentIdAlias);		
 		
 		// load the person record
 		me.apiProperties.makeRequest({

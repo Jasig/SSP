@@ -53,7 +53,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         });		
 		
 		// This enables mapped text fields and mapped text areas
-		// to be show or hidden upon selection from a parent object
+		// to be shown or hidden upon selection from a parent object
 		// such as a dynamic check box.
 		this.appEventsController.getApplication().addListener('dynamicCompChange', function( comp ){
 			var tfArr = Ext.ComponentQuery.query('.mappedtextfield');
@@ -97,6 +97,12 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
 		return this.callParent(arguments);
     },
+
+    destroy: function() {
+    	//this.appEventsController.removeEvent({eventName: 'dynamicCompChange', callBackFunc: this.onDynamicCompChange, scope: this});
+
+        return this.callParent( arguments );
+    },     
     
     loadStudentIntakeResult: function( formData ){
     	// PERSON RECORD
@@ -373,17 +379,23 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			challengesFormValues = challengesForm.getValues();
 			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);		
 
-			// TODO: Temp fix since additional data was added to the Person
-			// Model for the Caseload Assignment Screen. Those data
-			// values do not save correctly on the intake, yet.
-			var person = new Object();
-			Ext.iterate(personalForm.getValues(),function(key,value){
-				person[key]=value;
-			});
-			person.photoUrl=intakeData.person.photoUrl;
-			person.birthDate=intakeData.person.birthDate;
-			person.id = personId;
-			intakeData.person = person;
+			// ensure array id fields are sent as null rather
+			// than an empty string
+			
+			if (intakeData.person.specialServiceGroups=="")
+			{
+				intakeData.person.specialServiceGroups=null;
+			}
+
+			if (intakeData.person.referralSources=="")
+			{
+				intakeData.person.referralSources=null;
+			}
+			
+			if (intakeData.person.serviceReasons=="")
+			{
+				intakeData.person.serviceReasons=null;
+			}
 			
 			Ext.Ajax.request({
 				url: this.apiProperties.createUrl(this.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),

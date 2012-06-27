@@ -5,10 +5,10 @@ Ext.define('Ssp.view.person.Appointment', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.AppointmentViewController',
     inject: {
-    	coachesStore: 'coachesStore',
-    	studentTypesStore: 'studentTypesStore'
+    	person: 'currentPerson'
     },
 	initComponent: function() {	
+		var me=this;
 		Ext.apply(this, 
 				{
 			    fieldDefaults: {
@@ -17,6 +17,7 @@ Ext.define('Ssp.view.person.Appointment', {
 			        labelWidth: 200
 			    },	
 			    border: 0,
+			    padding: 0,
 				items: [{
 			            xtype: 'fieldset',
 			            border: 0,
@@ -26,59 +27,14 @@ Ext.define('Ssp.view.person.Appointment', {
 			                anchor: '100%'
 			            },
 			       items: [{
-				        xtype: 'combobox',
-				        name: 'coachId',
-				        itemId: 'coachCombo',
-				        fieldLabel: 'Assigned Coach',
-				        emptyText: 'Select One',
-				        store: this.coachesStore,
-				        valueField: 'coachId',
-				        displayField: 'fullName',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: false
-					},{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Office',
-				        itemId: 'officeField',
-				        name: 'coachOffice'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Phone',
-				        itemId: 'phoneField',
-				        name: 'coachPhone'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Email',
-				        itemId: 'emailAddressField',
-				        name: 'coachEmail'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Department',
-				        itemId: 'departmentField',
-				        name: 'coachDepartment'
-				    },{
-				        xtype: 'combobox',
-				        name: 'studentTypeId',
-				        fieldLabel: 'Student Type',
-				        emptyText: 'Select One',
-				        store: this.studentTypesStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: false
-					},{
 				    	xtype: 'datefield',
 				    	fieldLabel: 'Appointment Date',
 				    	itemId: 'appointmentDate',
 				        name: 'appointmentDate',
-				        allowBlank:false
+				        allowBlank: false
 				    },{
 				        xtype: 'timefield',
-				        name: 'appointmentStartTime',
+				        name: 'startTime',
 				        fieldLabel: 'Start Time',
 				        minValue: '8:00 AM',
 				        maxValue: '7:00 PM',
@@ -87,7 +43,7 @@ Ext.define('Ssp.view.person.Appointment', {
 				        anchor: '100%'
 				    },{
 				        xtype: 'timefield',
-				        name: 'appointmentEndTime',
+				        name: 'endTime',
 				        fieldLabel: 'End Time',
 				        minValue: '8:00 AM',
 				        maxValue: '7:00 PM',
@@ -104,11 +60,12 @@ Ext.define('Ssp.view.person.Appointment', {
 				    },{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Last Student Intake Request Date',
-				        name: 'studentIntakeRequestDate'
+				        name: 'lastStudentIntakeRequestDate',
+				        value: ((me.person.getFormattedStudentIntakeRequestDate().length > 0) ? me.person.getFormattedStudentIntakeRequestDate() : 'No requests have been sent')
 				    }]
 			    }]
 			});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

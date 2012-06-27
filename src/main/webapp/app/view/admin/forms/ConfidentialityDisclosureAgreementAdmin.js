@@ -38,13 +38,17 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
 					        xtype: 'textfield',
 					        name: 'name'
 					    },{
+					        fieldLabel: 'Description',
+					        xtype: 'textfield',
+					        name: 'description'
+					    },{
 		    		          xtype: 'htmleditor',
-		    		          fieldLabel: 'Description',
+		    		          fieldLabel: 'Disclosure Agreement',
 		    		          enableColors: false,
 		    		          enableAlignments: false,
 		    		          height: '100%',
 		    		          width: '100%',
-		    		          name: 'description'
+		    		          name: 'text'
 		    		      }]
 					    }],
 					    

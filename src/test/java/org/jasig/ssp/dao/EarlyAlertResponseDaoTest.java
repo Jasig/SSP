@@ -110,25 +110,25 @@ public class EarlyAlertResponseDaoTest {
 
 		LOGGER.debug(saved.toString());
 
-		EarlyAlertResponse obj = null; // NOPMD by jon.adams on 5/16/12 9:59 PM
 		try {
-			obj = dao.get(savedId);
+			final EarlyAlertResponse obj = dao.get(savedId);
+
+			assertNotNull("Saved message could not reloaded.", obj);
+			assertEquals("Saved and reloaded IDs do not match.", savedId,
+					obj.getId());
+
+			final Collection<EarlyAlertResponse> all = dao.getAll(
+					ObjectStatus.ACTIVE)
+					.getRows();
+			assertNotNull("GetAll list should not have been null.", all);
+			assertFalse("GetAll list should not have been empty.",
+					all.isEmpty());
+			assertList(all);
+
+			dao.delete(obj);
 		} catch (final ObjectNotFoundException e) {
 			fail("Saved message could not be found to reload.");
 		}
-
-		assertNotNull("Saved message could not reloaded.", obj);
-		assertEquals("Saved and reloaded IDs do not match.", savedId,
-				obj.getId());
-
-		final Collection<EarlyAlertResponse> all = dao.getAll(
-				ObjectStatus.ACTIVE)
-				.getRows();
-		assertNotNull("GetAll list should not have been null.", all);
-		assertFalse("GetAll list should not have been empty.", all.isEmpty());
-		assertList(all);
-
-		dao.delete(obj);
 	}
 
 	@Test(expected = ObjectNotFoundException.class)

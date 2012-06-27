@@ -7,8 +7,12 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
 	<changeSet id="Add unique constraint to permission" author="daniel.bower">
-		<addUniqueConstraint tableName="confidentiality_level" columnNames="permission"/>
+		<addUniqueConstraint tableName="confidentiality_level"
+			columnNames="permission" />
 	</changeSet>
 	
 	<changeSet id="Require ConfLevel On Task" author="daniel.bower">

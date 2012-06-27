@@ -76,17 +76,6 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	            },
 		    	            scope: this
 		    	        }]
-		    	    }],
-		    	    
-		    	    dockedItems: [{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [{
-				            tooltip: 'Add a Task',
-				            text: 'Add',
-				            xtype: 'button',
-				            itemId: 'addTaskButton'
-				        }]
 		    	    }]
     	
 

@@ -12,6 +12,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
 
     config: {
+    	personUrl: null,
     	personSearchUrl: null
     },
     
@@ -21,18 +22,6 @@ Ext.define('Ssp.controller.SearchViewController', {
     	view: {
     		selectionchange: 'onSelectionChange',
 			viewready: 'onViewReady'
-    	},
-    	
-    	'addButton': {
-    		click: 'onAddClick'
-    	},
-    	
-    	'editButton': {
-    		click: 'onEditClick'
-    	},
-    	
-    	'deleteButton': {
-    		click: 'onDeleteClick'
     	},
     	
     	'searchButton': {
@@ -45,13 +34,12 @@ Ext.define('Ssp.controller.SearchViewController', {
     	
     	'displayListButton': {
     		click: 'onDisplayListClick'
-    	}
-    		
+    	}	
     },
     
 	init: function() {
 		var me=this;
-		
+		me.personUrl =  me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );		
 		me.personSearchUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personSearch') );		
 		
 		// load students
@@ -69,9 +57,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 
 	onViewReady: function(comp, eobj){
-	   	this.appEventsController.assignEvent({eventName: 'addPerson', callBackFunc: this.onAddPerson, scope: this});
+		this.appEventsController.assignEvent({eventName: 'addPerson', callBackFunc: this.onAddPerson, scope: this});
 		this.appEventsController.assignEvent({eventName: 'editPerson', callBackFunc: this.onEditPerson, scope: this});
-		this.appEventsController.assignEvent({eventName: 'deletePerson', callBackFunc: this.onDeletePerson, scope: this});
+		this.appEventsController.assignEvent({eventName: 'deletePerson', callBackFunc: this.deleteConfirmation, scope: this});
+
 		this.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: this.onCollapseStudentRecord, scope: this});
 	   	this.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: this.onExpandStudentRecord, scope: this});
 	   	
@@ -79,10 +68,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 
     destroy: function() {
-	   	this.appEventsController.removeEvent({eventName: 'addPerson', callBackFunc: this.onAddPerson, scope: this});
+		this.appEventsController.removeEvent({eventName: 'addPerson', callBackFunc: this.onAddPerson, scope: this});
 		this.appEventsController.removeEvent({eventName: 'editPerson', callBackFunc: this.onEditPerson, scope: this});
-		this.appEventsController.removeEvent({eventName: 'deletePerson', callBackFunc: this.onDeletePerson, scope: this});
-		this.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: this.onCollapseStudentRecord, scope: this});
+		this.appEventsController.removeEvent({eventName: 'deletePerson', callBackFunc: this.deleteConfirmation, scope: this});
+
+    	this.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: this.onCollapseStudentRecord, scope: this});
 	   	this.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: this.onExpandStudentRecord, scope: this});
 
         return this.callParent( arguments );
@@ -123,28 +113,68 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              ];		
 		}
 		
-		this.formUtils.reconfigureGridPanel(grid, store, columns);
-	    grid.getStore().load();		
+		this.formUtils.reconfigureGridPanel(grid, store, columns);		
 	},
     
-	onAddClick: function( button ){
+	onAddPerson: function(){
     	var model = new Ssp.model.Person();
     	this.person.data = model.data;
 		this.loadCaseloadAssignment();
 	},
 	
-	onEditClick: function( button ){
+	onEditPerson: function(){
 	    var records = this.getView().getSelectionModel().getSelection();
 		if (records.length>0)
 		{
 		   this.person.data=records[0].data;
 		   this.loadCaseloadAssignment();
-		   
+		}else{
+			Ext.Msg.alert('Error','Please select a student to edit.');
 		}
 	},
+
+	onDeletePerson: function(){
+	    var records = this.getView().getSelectionModel().getSelection();
+		if (records.length>0)
+		{
+			this.person.data=records[0].data;
+			this.deleteConfirmation();
+		}else{
+			Ext.Msg.alert('Error','Please select a student to delete.');
+		}
+	},	
 	
-	onDeleteClick: function( button ){
-		Ext.Msg.alert('Attention','This feature is not available yet.');
+    deleteConfirmation: function() {
+    	var message = 'You are about to delete the student: "'+ this.person.getFullName() + '". Would you like to continue?';
+    	var model = this.person;
+        if (model.get('id') != "") 
+        {  
+           Ext.Msg.confirm({
+   		     title:'Delete Student?',
+   		     msg: message,
+   		     buttons: Ext.Msg.YESNO,
+   		     fn: this.deletePerson,
+   		     scope: this
+   		   });
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Unable to delete student.'); 
+        }
+     },	
+	
+	deletePerson: function( btnId  ){
+     	var me=this;
+		var store = me.studentsStore;
+     	var id = me.person.get('id');
+     	if (btnId=="yes")
+     	{
+         	me.apiProperties.makeRequest({
+      		   url: me.personUrl+id,
+      		   method: 'DELETE',
+      		   successFunc: function(response,responseText){
+      			   store.remove( store.getById( id ) );
+      		   }
+      	    });    		
+     	}	
 	},
 	
 	onSearchClick: function(button){
@@ -171,6 +201,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 	
     loadCaseloadAssignment: function(){
-    	var comp = this.formUtils.loadDisplay('studentrecord', 'caseloadassignment', true, {flex:1});    	
+    	var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});    	
     }
 });

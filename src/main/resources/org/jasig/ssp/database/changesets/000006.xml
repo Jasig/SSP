@@ -1558,7 +1558,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 	
 	<changeSet id="Add role to ConfidentialityLevel" author="daniel.bower">
 		<addColumn tableName="confidentiality_level">
-			<column name="permission" type="character varying(36)" >
+			<column name="permission" type="${nvarchar.type}(36)" >
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
@@ -1623,7 +1623,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			<where>permission is NULL</where>
 		</update>
 		
-		<addNotNullConstraint tableName="confidentiality_level" columnName="permission"/>
+		<addNotNullConstraint tableName="confidentiality_level" columnName="permission" columnDataType="${nvarchar.type}(36)" />
 		
 		<rollback>
 			<dropColumn tableName="confidentiality_level" columnName="permission"/>

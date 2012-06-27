@@ -57,8 +57,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 		Criteria criteria = createCriteria();
 		final long totalRows = (Long) criteria.setProjection(
-				Projections.rowCount())
-				.uniqueResult();
+				Projections.rowCount()).uniqueResult();
 
 		criteria = createCriteria(sAndP);
 
@@ -67,8 +66,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 	public Person fromUsername(final String username) {
 		final Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(
-						Person.class);
+				.createCriteria(Person.class);
 		query.add(Restrictions.eq("username", username)).setFlushMode(
 				FlushMode.COMMIT);
 		return (Person) query.uniqueResult();
@@ -76,8 +74,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 	public Person fromUserId(final String userId) {
 		final Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(
-						Person.class);
+				.createCriteria(Person.class);
 		query.add(Restrictions.eq("userId", userId));
 		return (Person) query.uniqueResult();
 	}
@@ -102,9 +99,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	public Person getByStudentId(final String studentId)
 			throws ObjectNotFoundException {
-		return (Person) createCriteria()
-				.add(Restrictions.eq("schoolId", studentId))
-				.uniqueResult();
+		return (Person) createCriteria().add(
+				Restrictions.eq("schoolId", studentId)).uniqueResult();
 	}
 
 	// TODO: Implement with a TO
@@ -133,46 +129,34 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
-
-		// TODO: Implement Search Critera
-		if (addressLabelSearchTO.getIntakeDateTo() != null) {
-			// criteria.add(Restrictions.gt("studentIntakeRequestDate",intakeDatefrom));
-		}
-		if (addressLabelSearchTO.getIntakeDateTo() != null) {
-			// criteria.add(Restrictions.lt("studentIntakeRequestDate",intakeDateTo));
-		}
-		if (addressLabelSearchTO.getHomeDepartment() != null) {
-			// criteria.add(Restrictions.eq("homeDepartment",homeDepartment));
-		}
-		if (addressLabelSearchTO.getCoachId() != null) {
-			// criteria.add(Restrictions.eq("coachId",coachId));
-		}
-		if (addressLabelSearchTO.getProgramStatus() != null) {			
-			//criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
+		
+		if (addressLabelSearchTO.getProgramStatus() != null) {
+			// criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
 		}
 		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
-			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups")            			        
-			    .add( Restrictions.in("personSpecialServiceGroups.specialServiceGroup.id", addressLabelSearchTO.getSpecialServiceGroupIds()));			        
+			criteria.createAlias("specialServiceGroups",
+					"personSpecialServiceGroups")
+					.add(Restrictions
+							.in("personSpecialServiceGroups.specialServiceGroup.id",
+									addressLabelSearchTO
+											.getSpecialServiceGroupIds()));
 		}
 		if (addressLabelSearchTO.getReferralSourcesIds() != null) {
-			criteria.createAlias("referralSources", "personReferralSources")            			        
-	        	.add( Restrictions.in("personReferralSources.referralSource.id", addressLabelSearchTO.getReferralSourcesIds()));	
+			criteria.createAlias("referralSources", "personReferralSources")
+					.add(Restrictions.in(
+							"personReferralSources.referralSource.id",
+							addressLabelSearchTO.getReferralSourcesIds()));
 		}
 		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
-			// criteria.add(Restrictions.eq("anticipatedStartTerm",anticipatedStartTerm));
+			criteria.add(Restrictions.eq("anticipatedStartTerm",addressLabelSearchTO.getAnticipatedStartTerm()).ignoreCase());
 		}
 		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
-			// criteria.add(Restrictions.eq("anticipatedStartYear",anticipatedStartYear));
+			criteria.add(Restrictions.eq("anticipatedStartYear",addressLabelSearchTO.getAnticipatedStartYear()));
 		}
 		if (addressLabelSearchTO.getStudentTypeIds() != null) {
-			criteria.add( Restrictions.in("studentType.id", addressLabelSearchTO.getStudentTypeIds()));	
-		}
-		if (addressLabelSearchTO.getRegistrationTerm() != null) {
-			// criteria.add(Restrictions.eq("registrationTerm",registrationTerm));
-		}
-		if (addressLabelSearchTO.getRegistrationYear() != null) {
-			// criteria.add(Restrictions.eq("registrationYear",registrationYear));
-		}
+			criteria.add(Restrictions.in("studentType.id",
+					addressLabelSearchTO.getStudentTypeIds()));
+		}		
 
 		return criteria.list();
 	}
@@ -198,11 +182,19 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Person> getPeopleBySpecialServices(
-			List<UUID> SpecialServiceGroups,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException {
+			List<UUID> specialServiceGroups, final SortingAndPaging sAndP)
+			throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
 
+		if (specialServiceGroups != null) {
+			criteria.createAlias("specialServiceGroups",
+					"personSpecialServiceGroups")
+					.add(Restrictions
+							.in("personSpecialServiceGroups.specialServiceGroup.id",
+									specialServiceGroups));
+		}		
+		
 		return criteria.list();
 	}
 

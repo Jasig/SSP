@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -16,11 +18,12 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 
-import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.SpecialServiceGroupService;
+import org.jasig.ssp.transferobject.reports.SpecialServicesReportingTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.BaseController;
 import org.slf4j.Logger;
@@ -31,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.collect.Maps;
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -47,46 +52,51 @@ public class SpecialServicesReportController extends BaseController {
 			.getLogger(SpecialServicesReportController.class);
 
 	@Autowired
-	private transient PersonService service;
-
+	private transient PersonService personService;
 	@Autowired
-	private transient PersonTOFactory factory;
+	private transient SpecialServiceGroupService ssgService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
 	void getSpecialServices(
-			HttpServletResponse response,
+			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
-			final @RequestParam(required = false) List<UUID> specialServiceGroupIDs,
-			final @RequestParam(required = false) Integer start,
-			final @RequestParam(required = false) Integer limit,
-			final @RequestParam(required = false) String sort,
-			final @RequestParam(required = false) String sortDirection)
+			final @RequestParam(required = false) List<UUID> specialServiceGroupIds)
 			throws ObjectNotFoundException, JRException, IOException {
 
 		// List<String> specialServiceGroupIDs;
 
-		final List<Person> people = service.peopleFromSpecialServiceGroups(
-				specialServiceGroupIDs,// addressLabelSearchTO,
-				SortingAndPaging
-						.createForSingleSort(status, start, limit, sort,
-								sortDirection,
-								null));
+		final List<Person> people = personService
+				.peopleFromSpecialServiceGroups(specialServiceGroupIds,
+						SortingAndPaging.createForSingleSort(status, null,
+								null, null, null, null));
 
-		// LOGGER.debug("Student TypeID: " + 
-		// addressLabelSearchTO.getStudentTypeId());
+		// Get the actual names of the UUIDs for the special groups
+		List<String> specialGroupsNames = new ArrayList<String>();
+		if (specialServiceGroupIds != null && specialServiceGroupIds.size() > 0) {
+			Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
+			while (ssgIter.hasNext()) {
+				specialGroupsNames
+						.add(ssgService.get(ssgIter.next()).getName());
+			}
+		}
 
-		Map parameters = new HashMap();
+		final Map<String, Object> parameters = Maps.newHashMap();
 		parameters.put("ReportTitle", "Special Service Groups Report");
-		parameters.put("DataFile", "Person.java - Bean Array");
+		parameters.put("DataFile",
+				"SpecialServicesReportingTO.java - Bean Array");
+		parameters.put("specialServiceGroupNames", specialGroupsNames);
+		parameters.put("reportDate", new Date());
 
-		JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
-				people.toArray());
-		InputStream is = getClass().getResourceAsStream(
+		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
+				getReportablePersons(people).toArray());
+
+		final InputStream is = getClass().getResourceAsStream(
 				"/reports/specialServiceGroups.jasper");
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		final ByteArrayOutputStream os = new ByteArrayOutputStream();
 		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
-		InputStream decodedInput = new ByteArrayInputStream(os.toByteArray());
+		final InputStream decodedInput = new ByteArrayInputStream(
+				os.toByteArray());
 		JasperExportManager.exportReportToPdfStream(decodedInput,
 				response.getOutputStream());
 		response.flushBuffer();
@@ -96,8 +106,17 @@ public class SpecialServicesReportController extends BaseController {
 
 	@Override
 	protected Logger getLogger() {
-		// TODO Auto-generated method stub
-		return null;
+		return LOGGER;
+	}
+
+	List<SpecialServicesReportingTO> getReportablePersons(List<Person> people) {
+		List<SpecialServicesReportingTO> retVal = new ArrayList<SpecialServicesReportingTO>();
+		Iterator<Person> personIter = people.iterator();
+		while (personIter.hasNext()) {
+			retVal.add(new SpecialServicesReportingTO(personIter.next()));
+		}
+
+		return retVal;
 	}
 
 }

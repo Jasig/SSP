@@ -40,8 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration()
 @Transactional
-public class PersonProgramStatusControllerIntegrationTest { // NOPMD by
-															// jon.adams
+public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 
 	@Autowired
 	private transient PersonProgramStatusController controller;
@@ -191,9 +190,9 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by
 
 		final UUID savedId = saved.getId();
 
-		assertEquals("Saved instance values did not match.", now.getTime(),
-				saved.getEffectiveDate().getTime());
-		assertEquals("Saved instance sets did not match.",
+		assertEquals("Saved effective date does not match.", now,
+				saved.getEffectiveDate());
+		assertEquals("Saved instance sets does not match.",
 				PROGRAM_STATUS_CHANGE_REASON_ID,
 				saved.getProgramStatusChangeReasonId());
 
@@ -212,6 +211,9 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by
 		assertNotNull(
 				"Original instance should have been auto-expired when new one added.",
 				autoExpired.getExpirationDate());
+		assertNotNull(
+				"Original instance should have had an effective date.",
+				autoExpired.getEffectiveDate());
 	}
 
 	/**
@@ -266,6 +268,7 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by
 			throws ValidationException, ObjectNotFoundException {
 		final PersonProgramStatusTO obj = new PersonProgramStatusTO();
 		obj.setId(UUID.randomUUID());
+		obj.setEffectiveDate(null);
 		controller.create(UUID.randomUUID(), obj);
 		fail("Create with invalid Person UUID should have thrown exception.");
 	}

@@ -465,6 +465,21 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		}
 		return selectedItems;
     },
+ 
+    /**
+     * @params
+     * @values - an object of name/value pairs
+     * 
+     * @returns - an array of selected ids
+     */
+    getSelectedIdsAsArray: function( values ){
+		var selectedIds = [];
+		for ( prop in values )
+		{
+			selectedIds.push( {id: values[prop]} );
+		}
+		return selectedIds;
+    },    
     
  	/**
 	 * load a display into a container in the interface.

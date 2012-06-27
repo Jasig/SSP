@@ -33,6 +33,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 	    	var r = Ext.decode(response.responseText);
 	    	if (r.rows.length > 0)
 	    	{
+	    		
 	    		var tempEntry = r.rows[0];
 	    		var journalEntryDetails = tempEntry.journalEntryDetails;
 	    		var tempArr = [];

@@ -223,12 +223,13 @@ public class EarlyAlertResponseServiceTest {
 
 		JournalEntry journalEntry = null;
 
-		for (JournalEntry entry : entries) {
+		for (final JournalEntry entry : entries) {
 			if (entry.getJournalSource().getId() == JournalSource.JOURNALSOURCE_EARLYALERT_ID) {
 				journalEntry = entry;
 			}
 		}
-		assertNotNull(journalEntry);
+
+		assertNotNull("JournalEntry should not have been null.", journalEntry);
 
 		assertEquals(
 				"Entry Confidentiality Level did not match.",
