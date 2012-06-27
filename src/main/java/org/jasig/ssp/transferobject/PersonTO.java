@@ -47,7 +47,9 @@ public class PersonTO
 
 	private boolean enabled;
 
-	private UUID coachId, studentTypeId;
+	private UUID studentTypeId;
+
+	private PersonLiteTO coach;
 
 	private String strengths;
 
@@ -112,7 +114,16 @@ public class PersonTO
 		photoUrl = model.getPhotoUrl();
 		schoolId = model.getSchoolId();
 		enabled = model.getEnabled();
-		coachId = model.getCoach() == null ? null : model.getCoach().getId();
+
+		final Person coachPerson = model.getCoach();
+		if (coachPerson == null) {
+			coach = null;
+		} else {
+			coach = new PersonLiteTO(coachPerson.getId(),
+					coachPerson.getFirstName(),
+					coachPerson.getLastName());
+		}
+
 		strengths = model.getStrengths();
 		abilityToBenefit = model.getAbilityToBenefit();
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
@@ -339,21 +350,6 @@ public class PersonTO
 		this.enabled = enabled;
 	}
 
-	/**
-	 * @return the coachId
-	 */
-	public UUID getCoachId() {
-		return coachId;
-	}
-
-	/**
-	 * @param coachId
-	 *            the coachId to set
-	 */
-	public void setCoachId(final UUID coachId) {
-		this.coachId = coachId;
-	}
-
 	public String getStrengths() {
 		return strengths;
 	}
@@ -429,6 +425,27 @@ public class PersonTO
 	public void setServiceReasons(
 			final List<ReferenceLiteTO<ServiceReason>> serviceReasons) {
 		this.serviceReasons = serviceReasons;
+	}
+
+	public PersonLiteTO getCoach() {
+		return coach;
+	}
+
+	public void setCoach(final PersonLiteTO coach) {
+		this.coach = coach;
+	}
+
+	public UUID getCoachId() {
+		if (coach == null) {
+			return null;
+		} else {
+			return coach.getId();
+		}
+	}
+
+	public void setCoachId(final UUID coachId) {
+		coach = new PersonLiteTO();
+		coach.setId(coachId);
 	}
 
 }
