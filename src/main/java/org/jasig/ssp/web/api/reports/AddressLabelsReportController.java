@@ -68,7 +68,7 @@ public class AddressLabelsReportController extends BaseController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
 	void getAddressLabels(
-			HttpServletResponse response,
+			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 
 			final @RequestParam(required = false) UUID programStatus,
@@ -79,7 +79,7 @@ public class AddressLabelsReportController extends BaseController {
 			final @RequestParam(required = false) String anticipatedStartTerm)
 			throws ObjectNotFoundException, JRException, IOException {
 
-		AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
+		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
 				programStatus, specialServiceGroupIds, referralSourcesIds,
 				(anticipatedStartTerm.length() <= 0 ? null
 						: anticipatedStartTerm), anticipatedStartYear,
@@ -90,9 +90,9 @@ public class AddressLabelsReportController extends BaseController {
 						null, null, null, null));
 
 		// Get the actual names of the UUIDs for the special groups
-		List<String> specialGroupsNames = new ArrayList<String>();
+		final List<String> specialGroupsNames = new ArrayList<String>();
 		if (specialServiceGroupIds != null && specialServiceGroupIds.size() > 0) {
-			Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
+			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
 			while (ssgIter.hasNext()) {
 				specialGroupsNames
 						.add(ssgService.get(ssgIter.next()).getName());
@@ -100,9 +100,10 @@ public class AddressLabelsReportController extends BaseController {
 		}
 
 		// Get the actual names of the UUIDs for the referralSources
-		List<String> referralSourcesNames = new ArrayList<String>();
+		final List<String> referralSourcesNames = new ArrayList<String>();
 		if (referralSourcesIds != null && referralSourcesIds.size() > 0) {
-			Iterator<UUID> referralSourceIter = referralSourcesIds.iterator();
+			final Iterator<UUID> referralSourceIter = referralSourcesIds
+					.iterator();
 			while (referralSourceIter.hasNext()) {
 				referralSourcesNames.add(referralSourcesService.get(
 						referralSourceIter.next()).getName());
@@ -110,7 +111,7 @@ public class AddressLabelsReportController extends BaseController {
 		}
 
 		// Get the actual name of the UUID for the programStatus
-		String programStatusName = (programStatus == null ? ""
+		final String programStatusName = (programStatus == null ? ""
 				: programStatusService.get(programStatus).getName());
 
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -123,7 +124,7 @@ public class AddressLabelsReportController extends BaseController {
 		parameters.put("referralSourceNames", referralSourcesNames);
 		parameters.put("studentTypeIds", studentTypeIds);
 		parameters.put("reportDate", new Date());
-		parameters.put("studentCount", new Integer(people.size()));
+		parameters.put("studentCount", people.size());
 
 		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
 				people.toArray());
