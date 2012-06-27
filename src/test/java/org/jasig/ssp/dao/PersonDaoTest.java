@@ -94,26 +94,28 @@ public class PersonDaoTest {
 
 	@Test
 	public void testSaveNew() throws ObjectNotFoundException {
-		UUID saved;
-
-		Person obj = new Person();
+		// arrange
+		final Person obj = new Person();
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setFirstName("System");
 		obj.setLastName("User");
+		obj.setUsername("username");
 		obj.setPrimaryEmailAddress("user@sinclair.edu");
 		obj.setStrengths("strengths");
-		dao.save(obj);
 
-		assertNotNull(obj.getId());
-		saved = obj.getId();
+		// act
+		final Person saved = dao.save(obj);
+
+		// assert
+		assertNotNull("", obj.getId());
 
 		LOGGER.debug(obj.toString());
 
-		obj = dao.get(saved);
-		assertNotNull(obj);
-		assertNotNull(obj.getId());
+		final Person loaded = dao.get(saved.getId());
+		assertNotNull(loaded);
+		assertNotNull(loaded.getId());
 		assertEquals("Strengths property did not match.", "strengths",
-				obj.getStrengths());
+				loaded.getStrengths());
 
 		final Collection<Person> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
@@ -121,7 +123,7 @@ public class PersonDaoTest {
 		assertFalse(all.isEmpty());
 		assertList(all);
 
-		dao.delete(obj);
+		dao.delete(loaded);
 	}
 
 	@Test(expected = ObjectNotFoundException.class)

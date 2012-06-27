@@ -42,6 +42,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	private static final long serialVersionUID = 4122282021549627683L;
 
+	private static final String DATABASE_TABLE_NAME = "person";
+
 	/**
 	 * Static, super administrator account identifier. Only used by IT and
 	 * support staff, never by students or users of the system.
@@ -113,6 +115,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Maximum length of 25.
 	 */
+	@NotNull
+	@NotEmpty
 	@Column(length = 25)
 	@Size(max = 25)
 	private String username;
@@ -244,6 +248,15 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private Date studentIntakeRequestDate;
 
 	/**
+	 * Strengths
+	 * 
+	 * Maximum length of 4000.
+	 */
+	@Column(length = 4000)
+	@Size(max = 4000)
+	private String strengths;
+
+	/**
 	 * Demographics about a student.
 	 * 
 	 * Should be null for non-student users.
@@ -252,6 +265,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_demographics_id", unique = true, nullable = true)
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private PersonDemographics demographics;
 
 	/**
@@ -263,6 +277,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_goal_id", unique = true, nullable = true)
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private PersonEducationGoal educationGoal;
 
 	/**
@@ -274,6 +289,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_plan_id", unique = true, nullable = true)
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private PersonEducationPlan educationPlan;
 
 	/**
@@ -282,10 +298,10 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
@@ -294,9 +310,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
@@ -305,70 +321,64 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonChallenge> challenges;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonTool> tools;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<Task> tasks;
 
-	/**
-	 * Strengths
-	 * 
-	 * Maximum length of 4000.
-	 */
-	@Column(length = 4000)
-	@Size(max = 4000)
-	private String strengths;
-
+	@Nullable
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "coach_id", nullable = true)
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Person coach;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonServiceReason> serviceReasons;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonSpecialServiceGroup> specialServiceGroups;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonReferralSource> referralSources;
 
 	@Nullable
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_type_id", updatable = false, nullable = true)
+	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private StudentType studentType;
 
 	/**
@@ -470,7 +480,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		return username;
 	}
 
-	public void setUsername(final String username) {
+	public void setUsername(@NotNull @NotEmpty final String username) {
 		this.username = username;
 	}
 

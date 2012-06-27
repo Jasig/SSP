@@ -81,7 +81,7 @@
 				<constraints nullable="true" />
 			</column>
 			<column name="username" type="${nvarchar.type}(25)">
-				<constraints nullable="true" />
+				<constraints nullable="false" />
 			</column>
 			<column name="home_phone" type="${nvarchar.type}(25)">
 				<constraints nullable="true" />

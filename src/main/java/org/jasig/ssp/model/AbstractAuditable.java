@@ -46,6 +46,12 @@ import org.jasig.ssp.util.uuid.UUIDCustomType;
 @MappedSuperclass
 @TypeDef(name = "uuid-custom", typeClass = UUIDCustomType.class)
 public abstract class AbstractAuditable implements Auditable { // NOPMD
+	/**
+	 * Used in Hibernate \@Where filter annotations to remove
+	 * {@link ObjectStatus#DELETED} data from query results.
+	 */
+	public static final String DELETED_FILTER_FOR_HIBERNATE_ANNOTATION = "object_status <> 3";
+
 	@Id
 	@Type(type = "uuid-custom")
 	@GeneratedValue(generator = "uuid")
