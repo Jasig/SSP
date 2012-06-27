@@ -12,5 +12,4 @@ public class ReportsPortletController {
 	public String show() {
 		return "reports";
 	}
-
 }
