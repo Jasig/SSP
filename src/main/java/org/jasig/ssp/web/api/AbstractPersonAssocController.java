@@ -79,9 +79,11 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	public abstract String permissionBaseName();
 
 	public void checkPermissionForOp(final String op) {
+
 		if (!securityService.hasAuthority("ROLE_PERSON_"
 				+ permissionBaseName() + "_" + op)) {
-			throw new AccessDeniedException("Access is denied.");
+
+			throw new AccessDeniedException("Access is denied for Operation.");
 		}
 	}
 
@@ -237,14 +239,12 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id,
 			@PathVariable final UUID personId) throws ObjectNotFoundException {
-
 		checkPermissionForOp("DELETE");
-
 		getService().delete(id);
 		return new ServiceResponse(true);
 	}
 
-	private TO instantiateTO(final T model) throws ValidationException {
+	protected TO instantiateTO(final T model) throws ValidationException {
 		TO out;
 		try {
 			out = this.transferObjectClass.newInstance();

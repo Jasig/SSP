@@ -181,6 +181,7 @@ public class MyGpsTaskControllerTest {
 
 		expect(
 				service.getAllForPerson(eq(student), eq(false),
+						eq(securityService.currentUser()),
 						isA(SortingAndPaging.class))).andReturn(tasks);
 		service.sendTasksForPersonToEmail(tasks, student, emailAddresses, null);
 
@@ -208,6 +209,7 @@ public class MyGpsTaskControllerTest {
 
 		expect(
 				service.getAllForPerson(eq(student),
+						eq(securityService.currentUser()),
 						isA(SortingAndPaging.class))).andReturn(tasks);
 
 		replay(service);

@@ -71,8 +71,9 @@ public class ChallengeReferralServiceImpl extends
 				final Person student = securityService.currentUser()
 						.getPerson();
 				isEmpty = taskService.getAllForPersonAndChallengeReferral(
-						student,
-						false, challengeReferral, sAndP).isEmpty();
+						student, false, challengeReferral,
+						securityService.currentUser(),
+						sAndP).isEmpty();
 			} else {
 				isEmpty = taskService.getAllForSessionIdAndChallengeReferral(
 						securityService.getSessionId(), false,

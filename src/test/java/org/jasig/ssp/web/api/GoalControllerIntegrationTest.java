@@ -15,6 +15,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
@@ -56,14 +57,20 @@ public class GoalControllerIntegrationTest {
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
+	@Autowired
+	private transient ConfidentialityLevelService confidentialityLevelService;
+
 	/**
 	 * Setup the security service with the administrator user.
 	 */
 	@Before
 	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
+				confidentialityLevelService
+						.confidentialityLevelsAsGrantedAuthorities(),
 				"ROLE_PERSON_GOAL_READ", "ROLE_PERSON_GOAL_WRITE",
 				"ROLE_PERSON_GOAL_DELETE");
+
 	}
 
 	/**

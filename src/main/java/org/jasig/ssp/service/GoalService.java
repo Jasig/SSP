@@ -5,5 +5,6 @@ import org.jasig.ssp.model.Goal;
 /**
  * Goal service
  */
-public interface GoalService extends PersonAssocAuditableService<Goal> {
+public interface GoalService extends
+		RestrictedPersonAssocAuditableService<Goal> {
 }

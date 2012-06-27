@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -63,14 +63,18 @@ public class PersonEducationLevelDaoTest {
 		Person person = personService.get(UUID
 				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
 
-		List<PersonEducationLevel> modelsBefore = dao.getAllForPerson(person);
+		Collection<PersonEducationLevel> modelsBefore = dao
+				.getAllForPersonId(person.getId(),
+						new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 
 		// save a new challenge for a person
 		PersonEducationLevel model = new PersonEducationLevel(person,
 				testEducationLevel);
 		dao.save(model);
 
-		List<PersonEducationLevel> modelsAfter = dao.getAllForPerson(person);
+		Collection<PersonEducationLevel> modelsAfter = dao
+				.getAllForPersonId(person.getId(),
+						new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 
 		// we should see more than before
 		assertTrue(modelsBefore.size() < modelsAfter.size());
@@ -113,8 +117,9 @@ public class PersonEducationLevelDaoTest {
 		}
 		assertNull(model);
 
-		List<PersonEducationLevel> modelsAfter = dao
-				.getAllForPerson(new Person(id));
+		Collection<PersonEducationLevel> modelsAfter = dao
+				.getAllForPersonId(id,
+						new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertEquals(0, modelsAfter.size());
 	}
 

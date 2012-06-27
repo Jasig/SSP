@@ -407,7 +407,26 @@
 		</rollback>
 	</changeSet>	
 	
-	
+	<changeSet id="add test goal" author="daniel.bower">
+		<insert tableName="goal">
+			<column name="id" value="1b18bf52-bfc7-11e1-9cb8-0026b9e7ff4c" />
+			<column name="name" value="Test Goal Name" />
+			<column name="description" value="Test Goal Description" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="modified_by" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="object_status" value="1" />
+			<column name="confidentiality_level_id" value="b3d077a7-4055-0510-7967-4a09f93a0357" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="goal">
+				<where>id='1b18bf52-bfc7-11e1-9cb8-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>	
 	
 	
 	

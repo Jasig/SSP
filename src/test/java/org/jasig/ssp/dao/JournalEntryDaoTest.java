@@ -3,12 +3,12 @@ package org.jasig.ssp.dao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
-import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
 import org.jasig.ssp.dao.reference.JournalSourceDao;
 import org.jasig.ssp.dao.reference.JournalTrackDao;
 import org.jasig.ssp.model.JournalEntry;
@@ -17,6 +17,8 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +54,7 @@ public class JournalEntryDaoTest {
 	private transient JournalTrackDao journalTrackDao;
 
 	@Autowired
-	private transient ConfidentialityLevelDao confidentialityLevelDao;
+	private transient ConfidentialityLevelService confidentialityLevelService;
 
 	@Autowired
 	protected transient PersonService personService;
@@ -69,13 +71,30 @@ public class JournalEntryDaoTest {
 		} catch (final ObjectNotFoundException e) {
 			LOGGER.error("can't find one of either sysadmin or ken");
 		}
-		securityService.setCurrent(ken);
+		securityService.setCurrent(ken,
+				confidentialityLevelService
+						.confidentialityLevelsAsGrantedAuthorities());
 	}
 
+	@Test(expected = UnsupportedOperationException.class)
+	public void getAllForPersonIdWithoutRequestor() {
+		assertList(dao.getAllForPersonId(UUID.randomUUID(),
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE)).getRows());
+	}
+
+	/**
+	 * A user with all confidentiality levels accessing the goal
+	 */
 	@Test
-	public void getAllForPersonId() {
-		assertList(dao.getAllForPersonId(ken.getId(), new SortingAndPaging(
-				ObjectStatus.ACTIVE)).getRows());
+	public void getAllForPersonIdAllLevels() throws ObjectNotFoundException {
+		final PagingWrapper<JournalEntry> entries = dao.getAllForPersonId(
+				Person.SYSTEM_ADMINISTRATOR_ID,
+				securityService.currentUser(),
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE));
+		assertList(entries.getRows());
+		assertTrue(entries.getResults() > 0);
 	}
 
 	protected void assertList(final Collection<JournalEntry> objects) {
@@ -93,8 +112,8 @@ public class JournalEntryDaoTest {
 		obj.setComment("new comment");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setPerson(securityService.currentUser().getPerson());
-		obj.setConfidentialityLevel(confidentialityLevelDao
-				.load(CONFIDENTIALITYLEVEL_ID));
+		obj.setConfidentialityLevel(confidentialityLevelService
+				.get(CONFIDENTIALITYLEVEL_ID));
 		obj.setEntryDate(new Date());
 		obj.setJournalSource(journalSourceDao.get(UUID
 				.fromString("b2d07973-5056-a51a-8073-1d3641ce507f")));

@@ -1,6 +1,7 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.jasig.ssp.model.Person;
@@ -59,12 +60,7 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 	 *            Current user
 	 */
 	public void setCurrent(final Person current) {
-		if (current.getUsername() == null) {
-			current.setUsername("testUser");
-		}
-
-		this.current = new MockUser(current, current.getUsername(),
-				new ArrayList<GrantedAuthority>());
+		setCurrent(current, new ArrayList<GrantedAuthority>());
 	}
 
 	/**
@@ -77,7 +73,7 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 	 *            List of authorities
 	 */
 	public void setCurrent(final Person current,
-			final List<GrantedAuthority> authorities) {
+			final Collection<GrantedAuthority> authorities) {
 		if (current.getUsername() == null) {
 			current.setUsername("testUser");
 		}
@@ -85,8 +81,20 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 		this.current = new MockUser(current, current.getUsername(), authorities);
 	}
 
-	public void setCurrent(final Person current, final String... authorities) {
+	public void setCurrent(final Person current,
+			final String... authorities) {
+		setCurrent(current, null, authorities);
+	}
+
+	public void setCurrent(final Person current,
+			final Collection<GrantedAuthority> authoritiesCollection,
+			final String... authorities) {
+
 		final List<GrantedAuthority> grantedAuthorities = Lists.newArrayList();
+
+		if (authoritiesCollection != null) {
+			grantedAuthorities.addAll(authoritiesCollection);
+		}
 
 		for (String authority : authorities) {
 			grantedAuthorities.add(new GrantedAuthorityImpl(authority));

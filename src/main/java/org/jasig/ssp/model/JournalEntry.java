@@ -25,7 +25,7 @@ import org.jasig.ssp.model.reference.JournalTrack;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class JournalEntry
 		extends AbstractAuditable
-		implements PersonAssocAuditable, Restricted {
+		implements RestrictedPersonAssocAuditable {
 
 	private static final long serialVersionUID = 1477217415946557983L;
 

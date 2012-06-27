@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class GoalDao
-		extends AbstractPersonAssocAuditableCrudDao<Goal>
-		implements PersonAssocAuditableCrudDao<Goal> {
+		extends AbstractRestrictedPersonAssocAuditableCrudDao<Goal>
+		implements RestrictedPersonAssocAuditableDao<Goal> {
 
 	/**
 	 * Construct an instance with the specified specific class for use by base

@@ -3,5 +3,5 @@ package org.jasig.ssp.service;
 import org.jasig.ssp.model.JournalEntry;
 
 public interface JournalEntryService
-		extends PersonAssocAuditableService<JournalEntry> {
+		extends RestrictedPersonAssocAuditableService<JournalEntry> {
 }

@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
  * @author awills
  */
 public enum DataPermissions {
-	DATA_MY_RECORD_ONLY,
 	DATA_EVERYONE,
 	DATA_ACADEMIC_RESOURCE_CENTER,
 	DATA_COUNSELING_SERVICES,

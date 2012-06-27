@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/1/person/{personId}/goal")
 public class GoalController
-		extends AbstractPersonAssocController<Goal, GoalTO> {
+		extends AbstractRestrictedPersonAssocController<Goal, GoalTO> {
 
 	/**
 	 * Construct an instance with specific classes for use by the super class

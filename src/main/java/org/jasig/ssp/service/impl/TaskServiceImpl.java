@@ -17,11 +17,13 @@ import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.security.SspUser;
-import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
+import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.TaskTO;
@@ -40,7 +42,7 @@ import com.google.common.collect.Maps;
 @Service
 @Transactional
 public class TaskServiceImpl
-		extends AbstractPersonAssocAuditableService<Task>
+		extends AbstractRestrictedPersonAssocAuditableService<Task>
 		implements TaskService {
 
 	@Autowired
@@ -51,6 +53,9 @@ public class TaskServiceImpl
 
 	@Autowired
 	private transient MessageTemplateService messageTemplateService;
+
+	@Autowired
+	private transient ConfidentialityLevelService confidentialityLevelService;
 
 	@Autowired
 	private transient ConfigService configService;
@@ -80,8 +85,10 @@ public class TaskServiceImpl
 	@Override
 	public List<Task> getAllForPerson(final Person person,
 			final boolean complete,
+			final SspUser requestor,
 			final SortingAndPaging sAndP) {
-		return getDao().getAllForPersonId(person.getId(), complete, sAndP);
+		return getDao().getAllForPersonId(person.getId(), complete,
+				requestor, sAndP);
 	}
 
 	@Override
@@ -104,8 +111,10 @@ public class TaskServiceImpl
 
 	@Override
 	public List<Task> getTasksInList(final List<UUID> taskIds,
+			final SspUser requestor,
 			final SortingAndPaging sAndP) {
-		return getDao().getTasksInList(taskIds, sAndP);
+		return getDao().getTasksInList(taskIds, requestor,
+				sAndP);
 	}
 
 	@Override
@@ -138,9 +147,11 @@ public class TaskServiceImpl
 	@Override
 	public List<Task> getAllForPersonAndChallengeReferral(final Person person,
 			final boolean complete, final ChallengeReferral challengeReferral,
+			final SspUser requestor,
 			final SortingAndPaging sAndP) {
 		return dao.getAllForPersonIdAndChallengeReferralId(person.getId(),
-				complete, challengeReferral.getId(), sAndP);
+				complete, challengeReferral.getId(),
+				requestor, sAndP);
 	}
 
 	@Override
@@ -155,10 +166,14 @@ public class TaskServiceImpl
 	@Override
 	public Map<String, List<Task>> getAllGroupedByTaskGroup(
 			final Person person,
+			final SspUser requestor,
 			final SortingAndPaging sAndP) {
+
 		final Map<String, List<Task>> grouped = Maps.newTreeMap();
 		final PagingWrapper<Task> tasksForPerson = dao
-				.getAllForPersonId(person.getId(), sAndP);
+				.getAllForPersonId(person.getId(), requestor,
+						sAndP);
+
 		for (final Task task : tasksForPerson.getRows()) {
 			final String group = task.getGroup();
 			final List<Task> tasksForGroup;
@@ -190,6 +205,7 @@ public class TaskServiceImpl
 		task.setSessionId(sessionId);
 		task.setDescription(challengeReferral.getPublicDescription());
 		task.setName(challengeReferral.getName());
+		task.setConfidentialityLevel(challenge.getDefaultConfidentialityLevel());
 
 		create(task);
 
@@ -199,12 +215,15 @@ public class TaskServiceImpl
 	@Override
 	public Task createCustomTaskForPerson(final String name,
 			final String description,
-			final Person student, final String sessionId)
+			final Person student,
+			final String sessionId)
 			throws ObjectNotFoundException, ValidationException {
 		final Task customTask = new Task();
 		customTask.setDescription(description);
 		customTask.setPerson(student);
 		customTask.setName(name);
+		customTask.setConfidentialityLevel(confidentialityLevelService
+				.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
 
 		create(customTask);
 
@@ -264,16 +283,20 @@ public class TaskServiceImpl
 	@Override
 	public List<Task> getTasksForPersonIfNoneSelected(
 			final List<UUID> selectedIds, final Person person,
+			final SspUser requestor,
 			final String sessionId, final SortingAndPaging sAndP) {
-		final List<Task> tasks;
+
+		List<Task> tasks;
 
 		if ((selectedIds != null) && (selectedIds.isEmpty())) {
-			tasks = getTasksInList(selectedIds, sAndP);
+			tasks = getTasksInList(selectedIds, requestor,
+					sAndP);
 		} else {
 			if (person.getId() == SspUser.ANONYMOUS_PERSON_ID) {
 				tasks = getAllForSessionId(sessionId, sAndP);
 			} else {
-				tasks = (List<Task>) getAllForPerson(person, sAndP).getRows();
+				tasks = (List<Task>) getAllForPerson(person,
+						requestor, sAndP).getRows();
 			}
 		}
 

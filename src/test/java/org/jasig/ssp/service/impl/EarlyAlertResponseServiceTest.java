@@ -30,6 +30,7 @@ import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.CampusService;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -112,6 +113,9 @@ public class EarlyAlertResponseServiceTest {
 	private transient MockMailService mockMailService;
 
 	@Autowired
+	private transient ConfidentialityLevelService confidentialityLevelService;
+
+	@Autowired
 	private transient PersonService personService;
 
 	@Autowired
@@ -125,7 +129,9 @@ public class EarlyAlertResponseServiceTest {
 	 */
 	@Before
 	public void setUp() {
-		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
+				confidentialityLevelService
+						.confidentialityLevelsAsGrantedAuthorities());
 	}
 
 	/**
@@ -204,6 +210,7 @@ public class EarlyAlertResponseServiceTest {
 		// journal entries not attached to student but the coach (advisor)
 		final PagingWrapper<JournalEntry> entriesForStudent = journalEntryService
 				.getAllForPerson(obj.getEarlyAlert().getPerson(),
+						securityService.currentlyAuthenticatedUser(),
 						new SortingAndPaging(ObjectStatus.ACTIVE));
 		assertEquals("Journal Entry count did not match.", 0,
 				entriesForStudent.getResults());
@@ -211,6 +218,7 @@ public class EarlyAlertResponseServiceTest {
 		// load all journal entries for the coach (advisor)
 		final PagingWrapper<JournalEntry> entries = journalEntryService
 				.getAllForPerson(obj.getEarlyAlert().getPerson().getCoach(),
+						securityService.currentlyAuthenticatedUser(),
 						new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		JournalEntry journalEntry = null;

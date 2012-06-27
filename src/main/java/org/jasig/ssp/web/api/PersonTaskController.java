@@ -13,6 +13,7 @@ import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.GoalService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
@@ -43,7 +44,7 @@ import com.google.common.collect.Maps;
 @Controller
 @RequestMapping("/1/person/{personId}/task")
 public class PersonTaskController extends
-		AbstractPersonAssocController<Task, TaskTO> {
+		AbstractRestrictedPersonAssocController<Task, TaskTO> {
 
 	protected PersonTaskController() {
 		super(Task.class, TaskTO.class);
@@ -113,6 +114,7 @@ public class PersonTaskController extends
 		final Map<String, List<Task>> tasksWithTaskGroups = service
 				.getAllGroupedByTaskGroup(
 						personService.get(personId),
+						securityService.currentUser(),
 						SortingAndPaging.createForSingleSort(status, start,
 								limit, sort, sortDirection, null));
 
@@ -156,6 +158,8 @@ public class PersonTaskController extends
 
 		checkPermissionForOp("READ");
 
+		final SspUser requestor = securityService.currentUser();
+
 		final Map<String, Object> tasksAndGoals = Maps.newHashMap();
 
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
@@ -163,12 +167,13 @@ public class PersonTaskController extends
 		final Person person = personService.get(personId);
 
 		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
-				taskIds, person, securityService.getSessionId(), sAndP);
+				taskIds, person, requestor, securityService.getSessionId(),
+				sAndP);
 
 		tasksAndGoals.put("tasks", TaskTO.toTOList(tasks));
 
 		final PagingWrapper<Goal> goals = goalService.getAllForPerson(person,
-				sAndP);
+				requestor, sAndP);
 
 		tasksAndGoals.put("goals", goalTOFactory.asTOList(goals.getRows()));
 
@@ -207,7 +212,7 @@ public class PersonTaskController extends
 		final Person student = personService.get(personId);
 
 		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
-				emailForm.getTaskIds(), student,
+				emailForm.getTaskIds(), student, securityService.currentUser(),
 				securityService.getSessionId(),
 				new SortingAndPaging(ObjectStatus.ACTIVE));
 

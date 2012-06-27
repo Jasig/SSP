@@ -10,5 +10,14 @@
 	<changeSet id="Add unique constraint to permission" author="daniel.bower">
 		<addUniqueConstraint tableName="confidentiality_level" columnNames="permission"/>
 	</changeSet>
+	
+	<changeSet id="Require ConfLevel On Task" author="daniel.bower">
+		<update tableName="task">
+			<column name="confidentiality_level_id">b3d077a7-4055-0510-7967-4a09f93a0357</column>
+			<where>confidentiality_level_id is null</where>
+		</update>
+		<addNotNullConstraint tableName="task" columnName="confidentiality_level_id"/>
+		<!-- Auto rollback support -->
+	</changeSet>
 
 </databaseChangeLog>

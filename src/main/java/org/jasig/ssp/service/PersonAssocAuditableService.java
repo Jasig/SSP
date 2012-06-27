@@ -1,7 +1,5 @@
 package org.jasig.ssp.service;
 
-import java.util.List;
-
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonAssocAuditable;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -19,5 +17,4 @@ public interface PersonAssocAuditableService<T extends PersonAssocAuditable>
 	 */
 	PagingWrapper<T> getAllForPerson(Person person, SortingAndPaging sAndP);
 
-	List<T> getAllForPerson(final Person person);
 }

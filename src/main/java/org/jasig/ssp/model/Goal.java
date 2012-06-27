@@ -20,7 +20,7 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Goal extends AbstractAuditable implements
-		PersonAssocAuditable, Restricted {
+		RestrictedPersonAssocAuditable {
 
 	private static final long serialVersionUID = -3663032831416423811L;
 
@@ -50,7 +50,7 @@ public class Goal extends AbstractAuditable implements
 
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "confidentiality_level_id", unique = true, nullable = false)
+	@JoinColumn(name = "confidentiality_level_id", nullable = false)
 	private ConfidentialityLevel confidentialityLevel;
 
 	/**

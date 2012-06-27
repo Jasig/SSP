@@ -2,6 +2,7 @@ package org.jasig.ssp.dao;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
@@ -17,6 +18,7 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,12 +57,18 @@ public class GoalDaoTest {
 
 	private transient ConfidentialityLevel testConfidentialityLevel;
 
+	private static final UUID KEN = UUID
+			.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea");
+
 	/**
 	 * Initialize security and test data.
 	 */
 	@Before
 	public void setUp() {
-		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
+				confidentialityLevelService
+						.confidentialityLevelsAsGrantedAuthorities());
+
 		testConfidentialityLevel = confidentialityLevelService
 				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()
 				.iterator().next();
@@ -120,14 +128,40 @@ public class GoalDaoTest {
 		fail("Result of invalid get() should have thrown an exception.");
 	}
 
-	/**
-	 * Test that all results from getAll are not null
-	 */
-	@Test
-	public void getAllForPersonId() {
+	@Test(expected = UnsupportedOperationException.class)
+	public void getAllForPersonIdWithoutRequestor() {
 		assertList(dao.getAllForPersonId(UUID.randomUUID(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows());
+	}
+
+	/**
+	 * A user with all confidentiality levels accessing the goal
+	 */
+	@Test
+	public void getAllForPersonIdAllLevels() throws ObjectNotFoundException {
+		final PagingWrapper<Goal> goals = dao.getAllForPersonId(
+				KEN,
+				securityService.currentUser(),
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE));
+		assertList(goals.getRows());
+		assertTrue(goals.getResults() > 0);
+	}
+
+	/**
+	 * A user with only the create attribute (no conf levels) accessing the goal
+	 */
+	@Test
+	public void getAllForPersonIdNoLevels() throws ObjectNotFoundException {
+		securityService.setCurrent(new Person(KEN));
+		final PagingWrapper<Goal> goals = dao.getAllForPersonId(
+				KEN,
+				securityService.currentUser(),
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE));
+		assertList(goals.getRows());
+		assertTrue(goals.getResults() > 0);
 	}
 
 	private void assertList(final Collection<Goal> objects) {

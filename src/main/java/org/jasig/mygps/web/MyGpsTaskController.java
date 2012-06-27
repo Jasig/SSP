@@ -14,6 +14,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
@@ -114,14 +115,13 @@ public class MyGpsTaskController extends BaseController {
 	public @ResponseBody
 	TaskTO createCustom(@RequestParam("name") final String name,
 			@RequestParam("description") final String description)
-			throws Exception {
+			throws ObjectNotFoundException, ValidationException {
 
 		final Person student = securityService.currentUser().getPerson();
 		final String session = securityService.getSessionId();
 
 		final Task task = taskService.createCustomTaskForPerson(name,
-				description,
-				student, session);
+				description, student, session);
 
 		return new TaskTO(task);
 	}
@@ -131,7 +131,7 @@ public class MyGpsTaskController extends BaseController {
 	TaskTO createForChallengeReferral(
 			@RequestParam("challengeId") final UUID challengeId,
 			@RequestParam("challengeReferralId") final UUID challengeReferralId)
-			throws Exception {
+			throws ObjectNotFoundException, ValidationException {
 
 		final Challenge challenge = challengeService.get(challengeId);
 		final ChallengeReferral challengeReferral = challengeReferralService
@@ -150,7 +150,8 @@ public class MyGpsTaskController extends BaseController {
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public @ResponseBody
-	boolean delete(@RequestParam("taskId") final UUID taskId) throws Exception {
+	boolean delete(@RequestParam("taskId") final UUID taskId)
+			throws ObjectNotFoundException {
 		taskService.delete(taskId);
 		return true;
 	}
@@ -158,16 +159,19 @@ public class MyGpsTaskController extends BaseController {
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
 	public @ResponseBody
 	boolean email(@RequestParam("emailAddress") final String emailAddress)
-			throws Exception {
+			throws ObjectNotFoundException, ValidationException {
 
 		final SortingAndPaging sAndP = new SortingAndPaging(
 				ObjectStatus.ACTIVE);
 
-		List<Task> tasks = null;
-		Person student = null;
+		final SspUser requestor = securityService.currentUser();
+
+		List<Task> tasks;
+		Person student;
 		if (securityService.isAuthenticated()) {
 			student = securityService.currentUser().getPerson();
-			tasks = taskService.getAllForPerson(student, false, sAndP);
+			tasks = taskService.getAllForPerson(student, false, requestor,
+					sAndP);
 		} else {
 			student = securityService.anonymousUser().getPerson();
 			tasks = taskService.getAllForSessionId(
@@ -185,16 +189,17 @@ public class MyGpsTaskController extends BaseController {
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public @ResponseBody
-	List<TaskTO> getAll() throws Exception {
+	List<TaskTO> getAll() {
 
 		final SortingAndPaging sAndP = new SortingAndPaging(
 				ObjectStatus.ACTIVE);
 
-		List<Task> tasks = null;
+		List<Task> tasks;
 
 		if (securityService.isAuthenticated()) {
 			final Person student = securityService.currentUser().getPerson();
-			tasks = (List<Task>) taskService.getAllForPerson(student, sAndP)
+			tasks = (List<Task>) taskService.getAllForPerson(student,
+					securityService.currentUser(), sAndP)
 					.getRows();
 		} else {
 			final String sessionId = securityService.getSessionId();
@@ -207,7 +212,8 @@ public class MyGpsTaskController extends BaseController {
 	@RequestMapping(value = "/mark", method = RequestMethod.GET)
 	public @ResponseBody
 	TaskTO mark(@RequestParam("taskId") final UUID taskId,
-			@RequestParam("complete") final Boolean complete) throws Exception {
+			@RequestParam("complete") final Boolean complete)
+			throws ObjectNotFoundException {
 
 		final Task task = taskService.get(taskId);
 		taskService.markTaskCompletion(task, complete);
@@ -215,16 +221,18 @@ public class MyGpsTaskController extends BaseController {
 	}
 
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
-	public ModelAndView print() throws Exception {
+	public ModelAndView print() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		final SortingAndPaging sAndP = new SortingAndPaging(
 				ObjectStatus.ACTIVE);
 
-		List<Task> tasks = null;
+		List<Task> tasks;
 
 		if (securityService.isAuthenticated()) {
+			final SspUser requestor = securityService.currentUser();
 			final Person student = securityService.currentUser().getPerson();
-			tasks = taskService.getAllForPerson(student, false, sAndP);
+			tasks = taskService.getAllForPerson(student, false, requestor,
+					sAndP);
 			model.put("studentName",
 					student.getFirstName() + " " + student.getLastName());
 		} else {

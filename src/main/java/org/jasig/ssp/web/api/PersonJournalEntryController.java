@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/1/person/{personId}/journalEntry")
 public class PersonJournalEntryController extends
-		AbstractPersonAssocController<JournalEntry, JournalEntryTO> {
+		AbstractRestrictedPersonAssocController<JournalEntry, JournalEntryTO> {
 
 	/**
 	 * Construct a controller instance with the specific class types used by the
