@@ -82,8 +82,7 @@ public class JournalStepDetailControllerIntegrationTest {
 
 	/**
 	 * Test that the {@link JournalStepDetailController#get(UUID)} action
-	 * returns the
-	 * correct validation errors when an invalid ID is sent.
+	 * returns the correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
@@ -153,12 +152,9 @@ public class JournalStepDetailControllerIntegrationTest {
 	 * Test the
 	 * {@link JournalStepDetailController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<JournalStepDetailTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 

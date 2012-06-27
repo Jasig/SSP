@@ -1,11 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog 
-	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
-		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">	
-	
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="add test person_challenge associations"
+		author="jon.adams">
+		<insert tableName="challenge">
+			<column name="id" value="01bb0a62-1756-4ea2-857d-5821ee54a1b9" />
+			<column name="name" value="Deleted Test Challenge" />
+			<column name="description" value="This is a test challenge that has been deleted." />
+			<column name="created_date" valueDate="2012-06-27T00:00:00" />
+			<column name="modified_date" valueDate="2012-06-27T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="2" />
+		</insert>
+		<insert tableName="person_challenge">
+			<column name="id" value="0010E4A0-1001-0110-1011-3FFC02FE81F0" />
+			<column name="description" value="Active, valid" />
+			<column name="person_id" value="1010E4A0-1001-0110-1011-4FFC02FE81FF" />
+			<column name="challenge_id" value="72DE7C95-EAB3-46B2-93CF-108397BEFCBB" />
+			<column name="created_date" valueDate="2012-06-27T00:00:00" />
+			<column name="modified_date" valueDate="2012-06-27T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<insert tableName="person_challenge">
+			<column name="id" value="1010E4A0-1001-0110-1011-3FFC02FE81F1" />
+			<column name="description" value="Deleted person_challenge" />
+			<column name="person_id" value="1010E4A0-1001-0110-1011-4FFC02FE81FF" />
+			<column name="challenge_id" value="43719C57-EC92-4E4A-9FB6-25208936FD18" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="2" />
+		</insert>
+
+		<insert tableName="person_challenge">
+			<column name="id" value="2010E4A0-1001-0110-1011-3FFC02FE81F2" />
+			<column name="description"
+				value="Active person_challenge, but points to a deleted challenge" />
+			<column name="person_id" value="1010E4A0-1001-0110-1011-4FFC02FE81FF" />
+			<column name="challenge_id" value="01bb0a62-1756-4ea2-857d-5821ee54a1b9" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="challenge">
+				<where>id='01bb0a62-1756-4ea2-857d-5821ee54a1b9'</where>
+			</delete>
+			<delete tableName="person_challenge">
+				<where>id='0010E4A0-1001-0110-1011-3FFC02FE81F0'</where>
+			</delete>
+			<delete tableName="person_challenge">
+				<where>id='1010E4A0-1001-0110-1011-3FFC02FE81F1'</where>
+			</delete>
+			<delete tableName="person_challenge">
+				<where>id='2010E4A0-1001-0110-1011-3FFC02FE81F2'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

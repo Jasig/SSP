@@ -71,7 +71,7 @@ public interface AuditableCrudService<T extends Auditable> {
 	T save(T obj) throws ObjectNotFoundException, ValidationException;
 
 	/**
-	 * Mark the specific instance as {@link ObjectStatus#DELETED}.
+	 * Mark the specific instance as {@link ObjectStatus#INACTIVE}.
 	 * 
 	 * @param id
 	 *            Instance identifier

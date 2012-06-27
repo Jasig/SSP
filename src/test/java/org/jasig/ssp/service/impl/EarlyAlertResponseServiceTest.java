@@ -230,27 +230,28 @@ public class EarlyAlertResponseServiceTest {
 		}
 
 		assertNotNull("JournalEntry should not have been null.", journalEntry);
+		if (journalEntry != null) {
+			assertEquals(
+					"Entry Confidentiality Level did not match.",
+					ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE,
+					journalEntry
+							.getConfidentialityLevel().getId());
+			assertEquals("JournalEntry Track did not match.",
+					JournalTrack.JOURNALTRACK_EARLYALERT_ID,
+					journalEntry.getJournalTrack().getId());
 
-		assertEquals(
-				"Entry Confidentiality Level did not match.",
-				ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE,
-				journalEntry
-						.getConfidentialityLevel().getId());
-		assertEquals("JournalEntry Track did not match.",
-				JournalTrack.JOURNALTRACK_EARLYALERT_ID,
-				journalEntry.getJournalTrack().getId());
+			final String generatedText = journalEntry.getComment();
 
-		final String generatedText = journalEntry.getComment();
-
-		assertTrue(
-				"Entry comment did not match. Was: " + generatedText,
-				generatedText.contains(PERSON_CREATEDBY_FULLNAME)
-						&& generatedText.contains(
-								EARLY_ALERT_SUGGESTION_NAME)
-						&& generatedText.contains(
-								EARLY_ALERT_COURSE_NAME)
-						&& generatedText.contains(configService
-								.getByNameException("term_to_represent_early_alert")));
+			assertTrue(
+					"Entry comment did not match. Was: " + generatedText,
+					generatedText.contains(PERSON_CREATEDBY_FULLNAME)
+							&& generatedText.contains(
+									EARLY_ALERT_SUGGESTION_NAME)
+							&& generatedText.contains(
+									EARLY_ALERT_COURSE_NAME)
+							&& generatedText.contains(configService
+									.getByNameException("term_to_represent_early_alert")));
+		}
 	}
 
 	/**
@@ -276,7 +277,7 @@ public class EarlyAlertResponseServiceTest {
 				EARLY_ALERT_SUGGESTION_DELETED_ID,
 				"EARLY_ALERT_SUGGESTION_DELETED_NAME", "description",
 				(short) 0); // NOPMD
-		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
+		deletedSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
 		earlyAlertSuggestionIds.add(deletedSuggestion);
 		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 

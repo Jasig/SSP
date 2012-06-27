@@ -1,4 +1,4 @@
-package org.jasig.mygps.business;
+package org.jasig.mygps.business; // NOPMD
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -111,9 +111,6 @@ public class StudentIntakeFormManagerTest {
 	public void testSaveInMemory() throws ObjectNotFoundException {
 		// Setup
 		final FormTO form = formManager.create();
-
-		assertNotNull("FormTO should not have been null.", form);
-
 		final FormSectionTO section = form
 				.getFormSectionById(StudentIntakeFormManager.SECTION_CONFIDENTIALITY_ID);
 
@@ -129,10 +126,6 @@ public class StudentIntakeFormManagerTest {
 		final Person person = formManager.save(form);
 
 		// Assert
-		assertNotNull(
-				"StudentIntakeFormManager.Save should have returned an updated Person instance.",
-				person);
-
 		final Set<PersonConfidentialityDisclosureAgreement> agreements = person
 				.getConfidentialityDisclosureAgreements();
 		assertNotNull("Person agreements should not have been null.",
@@ -466,8 +459,9 @@ public class StudentIntakeFormManagerTest {
 	private FormTO loadJson(final String file) throws JsonParseException,
 			JsonMappingException, IOException {
 		// Load file
-		BufferedReader in = new BufferedReader(new InputStreamReader(getClass()
-				.getResourceAsStream(file)));
+		final BufferedReader in = new BufferedReader(new InputStreamReader(
+				getClass()
+						.getResourceAsStream(file)));
 
 		final String json = in.readLine();
 		LOGGER.warn(json);
@@ -477,8 +471,6 @@ public class StudentIntakeFormManagerTest {
 		if (in != null) {
 			in.close();
 		}
-
-		in = null;
 
 		assertNotNull("File data could not be parsed: " + file, form);
 

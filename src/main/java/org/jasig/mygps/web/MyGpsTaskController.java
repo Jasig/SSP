@@ -1,4 +1,4 @@
-package org.jasig.mygps.web;
+package org.jasig.mygps.web; // NOPMD
 
 import java.util.Date;
 import java.util.HashMap;

@@ -100,7 +100,7 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 
 	/**
 	 * Marks the specified data instance with a status of
-	 * {@link ObjectStatus#DELETED}.
+	 * {@link ObjectStatus#INACTIVE}.
 	 * 
 	 * @param id
 	 *            The id of the data instance to mark deleted.

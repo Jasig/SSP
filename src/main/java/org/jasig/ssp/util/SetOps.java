@@ -35,7 +35,7 @@ public final class SetOps {
 
 		// Pull ids and verify existingIds are indeed persisted (have ids)
 		final Map<UUID, T> existingIds = Maps.newHashMap();
-		for (T t : existing) {
+		for (final T t : existing) {
 			if (t.getId() == null) {
 				throw new IllegalArgumentException(
 						"Every object in the existing list must have a non-null id");
@@ -47,7 +47,7 @@ public final class SetOps {
 		// Also, pull ids
 		final Map<UUID, T> replacingWithIds = Maps.newHashMap();
 		final Set<T> newItems = Sets.newHashSet();
-		for (T t : replacingWith) {
+		for (final T t : replacingWith) {
 			if (t.getId() == null) {
 				newItems.add(t);
 			} else {
@@ -67,7 +67,7 @@ public final class SetOps {
 		idsToSoftDelete.removeAll(replacingWithIds.keySet());
 
 		final Set<T> toRemove = Sets.newHashSet();
-		for (UUID id : idsToSoftDelete) {
+		for (final UUID id : idsToSoftDelete) {
 			toRemove.add(existingIds.get(id));
 		}
 
@@ -77,10 +77,10 @@ public final class SetOps {
 	}
 
 	/**
-	 * Mark each item as deleted by setting its ObjectStatus to deleted
+	 * Mark each item {@link ObjectStatus#INACTIVE}.
 	 * 
 	 * @param items
-	 *            Items to be marked as deleted
+	 *            Items to be marked as {@link ObjectStatus#INACTIVE}
 	 */
 	public static <T extends Auditable> void softDeleteSetItems(
 			final Set<T> items) {
@@ -89,9 +89,9 @@ public final class SetOps {
 			return;
 		}
 
-		for (T item : items) {
-			if (!item.getObjectStatus().equals(ObjectStatus.DELETED)) {
-				item.setObjectStatus(ObjectStatus.DELETED);
+		for (final T item : items) {
+			if (!item.getObjectStatus().equals(ObjectStatus.INACTIVE)) {
+				item.setObjectStatus(ObjectStatus.INACTIVE);
 			}
 		}
 	}

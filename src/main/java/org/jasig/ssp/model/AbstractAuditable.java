@@ -95,8 +95,8 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	/**
 	 * Entity status.
 	 * 
-	 * Most commonly {@link ObjectStatus#ACTIVE} or {@link ObjectStatus#DELETED}
-	 * , but other enum values possible.
+	 * Most commonly {@link ObjectStatus#ACTIVE} or
+	 * {@link ObjectStatus#INACTIVE}, but other enum values possible.
 	 */
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)

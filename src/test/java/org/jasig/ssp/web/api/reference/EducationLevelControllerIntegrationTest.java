@@ -82,8 +82,7 @@ public class EducationLevelControllerIntegrationTest {
 
 	/**
 	 * Test that the {@link EducationLevelController#get(UUID)} action returns
-	 * the
-	 * correct validation errors when an invalid ID is sent.
+	 * the correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
@@ -153,12 +152,9 @@ public class EducationLevelControllerIntegrationTest {
 	 * Test the
 	 * {@link EducationLevelController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<EducationLevelTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
