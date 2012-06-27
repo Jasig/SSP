@@ -9,8 +9,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Where;
-import org.jasig.ssp.model.AbstractAuditable;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -23,7 +21,6 @@ public class Category extends AbstractReference implements Auditable {
 	private static final long serialVersionUID = 4274075255831698154L;
 
 	@OneToMany(mappedBy = "category")
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<ChallengeCategory> challengeCategories = new HashSet<ChallengeCategory>(
 			0);
 

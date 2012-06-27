@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.model.reference.JournalTrack;
@@ -49,7 +48,6 @@ public class JournalEntry
 	private JournalTrack journalTrack;
 
 	@OneToMany(mappedBy = "journalEntry")
-	@Where(clause = "object_status <> 3")
 	private Set<JournalEntryDetail> journalEntryDetails;
 
 	@ManyToOne

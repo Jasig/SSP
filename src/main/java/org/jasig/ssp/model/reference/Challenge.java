@@ -16,7 +16,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.PersonChallenge;
 
@@ -29,6 +28,8 @@ public class Challenge extends AbstractReference implements Auditable {
 
 	private static final long serialVersionUID = 5610544634433661561L;
 
+	private static final String DATABASE_TABLE_NAME = "challenge";
+
 	/**
 	 * This is the text that will be used in a selfHelpGuideQuestion.
 	 */
@@ -39,8 +40,7 @@ public class Challenge extends AbstractReference implements Auditable {
 	 * Just a reference to the questions that reference this Challenge. Think of
 	 * as selfHelpQuideChallenges
 	 */
-	@OneToMany(mappedBy = "challenge")
-	@Where(clause = "object_status <> 3")
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME)
 	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
 			0);
 
@@ -59,20 +59,18 @@ public class Challenge extends AbstractReference implements Auditable {
 	@Column(nullable = false)
 	private boolean showInSelfHelpSearch;
 
-	@OneToMany(mappedBy = "challenge")
-	@Where(clause = "object_status <> 3")
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME)
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals = new HashSet<ChallengeChallengeReferral>(
 			0);
 
-	@OneToMany(mappedBy = "challenge")
-	@Where(clause = "object_status <> 3")
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME)
 	private Set<ChallengeCategory> challengeCategories = new HashSet<ChallengeCategory>(
 			0);
 
-	@OneToMany(mappedBy = "challenge")
-	@Where(clause = "object_status <> 3")
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME)
 	private Set<PersonChallenge> peopleWithChallenge;
 
+	@Nullable
 	@Column(length = 255)
 	private String tags;
 
@@ -81,8 +79,8 @@ public class Challenge extends AbstractReference implements Auditable {
 	 * 
 	 * Should be null for non-student users.
 	 */
-	@Nullable()
-	@ManyToOne()
+	@Nullable
+	@ManyToOne
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "confidentiality_level_id", nullable = true)
 	private ConfidentialityLevel defaultConfidentialityLevel;

@@ -195,13 +195,4 @@ public class ChallengeControllerIntegrationTest {
 		assertTrue("ShowInSelfHelpSearch should have been true.",
 				challenge.isShowInSelfHelpSearch());
 	}
-
-	/**
-	 * Test that the getAll action rejects a filter of
-	 * {@link ObjectStatus#DELETED}.
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testControllerGetAllRejectsDeletedFilter() {
-		controller.getAll(ObjectStatus.DELETED, null, null, null, null);
-	}
 }

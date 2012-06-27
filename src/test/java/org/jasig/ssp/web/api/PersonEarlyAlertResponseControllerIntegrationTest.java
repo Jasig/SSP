@@ -188,17 +188,4 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 			// expected
 		}
 	}
-
-	/**
-	 * Test that the getAll action rejects a filter of
-	 * {@link ObjectStatus#DELETED}.
-	 * 
-	 * @throws ObjectNotFoundException
-	 *             Should not be thrown for this test.
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testControllerGetAllRejectsDeletedFilter()
-			throws ObjectNotFoundException {
-		controller.getAll(null, ObjectStatus.DELETED, null, null, null, null);
-	}
 }

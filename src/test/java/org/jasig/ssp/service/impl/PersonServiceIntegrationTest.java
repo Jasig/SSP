@@ -9,13 +9,10 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonChallenge;
-import org.jasig.ssp.model.PersonDemographics;
-import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ChallengeService;
@@ -28,12 +25,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-
-import com.google.common.collect.Sets;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../service-testConfig.xml")
 @TransactionConfiguration
+@Transactional
 public class PersonServiceIntegrationTest {
 
 	@Autowired
@@ -47,6 +44,9 @@ public class PersonServiceIntegrationTest {
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
+
+	private static final UUID PERSON_ID = UUID
+			.fromString("1010E4A0-1001-0110-1011-4FFC02FE81FF");
 
 	private static final UUID CHALLENGE_ID = UUID
 			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
@@ -88,44 +88,26 @@ public class PersonServiceIntegrationTest {
 				listFiltered.size(), listAll.size());
 	}
 
+	/**
+	 * Test relies on test data inserted in 000007-test.xml
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             If student could not be found. Should not be thrown in this
+	 *             test.
+	 * @throws ValidationException
+	 *             If data is not valid. Should not be thrown in this test.
+	 */
 	@Test
-	public void testGetDoesntIncludeDeletedChildren()
+	public void testGetIncludesInactiveChildren()
 			throws ObjectNotFoundException, ValidationException {
 		// arrange
-		final Session session = sessionFactory.openSession();
-
-		final Person person = new Person();
-		person.setFirstName("first name");
-		person.setLastName("last name");
-		person.setPrimaryEmailAddress("email");
-		person.setUsername("username");
-
-		final Challenge challengeDeleted = new Challenge(UUID.randomUUID(),
-				"deletedChallenge");
-		challengeDeleted.setObjectStatus(ObjectStatus.DELETED);
-		final Challenge savedChallenge = challengeService
-				.create(challengeDeleted);
-
-		session.flush();
-
-		final Set<PersonChallenge> challenges = Sets.newHashSet();
-		challenges.add(new PersonChallenge(person, challengeService
-				.get(CHALLENGE_ID)));
-		challenges.add(new PersonChallenge(person, savedChallenge));
-		person.setChallenges(challenges);
-
-		final PersonDemographics demographics = new PersonDemographics();
-		demographics.setObjectStatus(ObjectStatus.DELETED);
-		person.setDemographics(demographics);
-
-		final Person saved = service.create(person);
 
 		// act
-		final Person loaded = service.get(saved.getId());
+		final Person person = service.get(PERSON_ID);
 
 		// assert
-		final Set<PersonChallenge> loadedChallenges = loaded.getChallenges();
-		assertEquals("Active challenge count did not match expected.", 1,
-				loadedChallenges);
+		final Set<PersonChallenge> loadedChallenges = person.getChallenges();
+		assertEquals("Challenge associations count did not match expected.", 3,
+				loadedChallenges.size());
 	}
 }

@@ -133,12 +133,6 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		// Check permissions
 		checkPermissionForOp("READ");
 
-		// Validate parameters
-		if (status != null && ObjectStatus.DELETED.equals(status)) {
-			throw new IllegalArgumentException(
-					"You can not request deleted data.");
-		}
-
 		// Run getAll for the specified person
 		final Person person = personService.get(personId);
 		final PagingWrapper<T> data = getService().getAllForPerson(person,
@@ -160,11 +154,6 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		final T model = getService().get(id);
 		if (model == null) {
 			return null;
-		}
-
-		if (ObjectStatus.DELETED.equals(model.getObjectStatus())) {
-			// Do not return deleted items via the API.
-			throw new ObjectNotFoundException(id, persistentClass.getName());
 		}
 
 		return instantiateTO(model);

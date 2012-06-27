@@ -24,7 +24,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
@@ -265,7 +264,6 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_demographics_id", unique = true, nullable = true)
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private PersonDemographics demographics;
 
 	/**
@@ -277,7 +275,6 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_goal_id", unique = true, nullable = true)
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private PersonEducationGoal educationGoal;
 
 	/**
@@ -289,7 +286,6 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_plan_id", unique = true, nullable = true)
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private PersonEducationPlan educationPlan;
 
 	/**
@@ -301,7 +297,6 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
@@ -312,7 +307,6 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
@@ -323,62 +317,53 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonChallenge> challenges;
 
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonTool> tools;
 
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
 
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<Task> tasks;
 
 	@Nullable
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "coach_id", nullable = true)
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Person coach;
 
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonServiceReason> serviceReasons;
 
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonSpecialServiceGroup> specialServiceGroups;
 
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private Set<PersonReferralSource> referralSources;
 
 	@Nullable
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_type_id", updatable = false, nullable = true)
-	@Where(clause = AbstractAuditable.DELETED_FILTER_FOR_HIBERNATE_ANNOTATION)
 	private StudentType studentType;
 
 	/**

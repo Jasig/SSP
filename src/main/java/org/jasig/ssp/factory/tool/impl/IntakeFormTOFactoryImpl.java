@@ -73,7 +73,7 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 			if ((model.getPerson() != null)
 					&& (model.getPerson().getDemographics() != null)) {
 				model.getPerson().getDemographics()
-						.setObjectStatus(ObjectStatus.DELETED);
+						.setObjectStatus(ObjectStatus.INACTIVE);
 			}
 
 		}
@@ -87,7 +87,7 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 			if ((model.getPerson() != null)
 					&& (model.getPerson().getEducationPlan() != null)) {
 				model.getPerson().getEducationPlan()
-						.setObjectStatus(ObjectStatus.DELETED);
+						.setObjectStatus(ObjectStatus.INACTIVE);
 			}
 		}
 
@@ -100,7 +100,7 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 			if ((model.getPerson() != null)
 					&& (model.getPerson().getEducationPlan() != null)) {
 				model.getPerson().getEducationPlan()
-						.setObjectStatus(ObjectStatus.DELETED);
+						.setObjectStatus(ObjectStatus.INACTIVE);
 			}
 		}
 
@@ -150,7 +150,7 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 
 	private <T extends PersonAssoc> void associateWithPerson(
 			final Set<T> personAssocs, final Person person) {
-		for (PersonAssoc pa : personAssocs) {
+		for (final PersonAssoc pa : personAssocs) {
 			if (!(pa.getPerson().getId()).equals(person.getId())) {
 				pa.setPerson(person);
 			}

@@ -211,13 +211,4 @@ public class VeteranStatusControllerIntegrationTest {
 		assertFalse("CreatedBy id should not have been empty.", veteranStatus
 				.getCreatedBy().getId().equals(UUID.randomUUID()));
 	}
-
-	/**
-	 * Test that the getAll action rejects a filter of
-	 * {@link ObjectStatus#DELETED}.
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testControllerGetAllRejectsDeletedFilter() {
-		controller.getAll(ObjectStatus.DELETED, null, null, null, null);
-	}
 }

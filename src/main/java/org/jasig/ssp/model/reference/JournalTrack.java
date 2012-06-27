@@ -9,7 +9,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -33,7 +32,6 @@ public class JournalTrack
 	 * persisted.
 	 */
 	@OneToMany(mappedBy = "journalTrack")
-	@Where(clause = "object_status <> 3")
 	private Set<JournalTrackJournalStep> journalTrackJournalSteps = new HashSet<JournalTrackJournalStep>(
 			0);
 

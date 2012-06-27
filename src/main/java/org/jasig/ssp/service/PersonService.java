@@ -63,7 +63,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * Mark a Person as deleted.
 	 * 
 	 * Does not remove them from persistent storage, but marks their status flag
-	 * to {@link ObjectStatus#DELETED}.
+	 * to {@link ObjectStatus#INACTIVE}.
 	 */
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;

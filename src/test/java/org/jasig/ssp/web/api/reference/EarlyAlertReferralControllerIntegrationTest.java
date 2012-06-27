@@ -243,13 +243,4 @@ public class EarlyAlertReferralControllerIntegrationTest {
 				earlyAlertReferral
 						.getCreatedBy().getId().equals(UUID.randomUUID()));
 	}
-
-	/**
-	 * Test that the getAll action rejects a filter of
-	 * {@link ObjectStatus#DELETED}.
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testControllerGetAllRejectsDeletedFilter() {
-		controller.getAll(ObjectStatus.DELETED, null, null, null, null);
-	}
 }

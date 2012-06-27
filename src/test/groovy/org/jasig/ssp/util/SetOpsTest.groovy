@@ -69,7 +69,7 @@ class SetOpsTest {
 		SetOps.updateSet(set1, set2);
 
 		final List active = ObjectStatus.filterForStatus(set1, ObjectStatus.ACTIVE)
-		final List softDeleted = ObjectStatus.filterForStatus(set1, ObjectStatus.DELETED)
+		final List softDeleted = ObjectStatus.filterForStatus(set1, ObjectStatus.INACTIVE)
 
 		assertEquals("only one element should be active", 1, active.size())
 		assertTrue("a2 should be the active element", active.contains(a2))
@@ -92,7 +92,7 @@ class SetOpsTest {
 		SetOps.updateSet(set1, set2);
 
 		final List active = ObjectStatus.filterForStatus(set1, ObjectStatus.ACTIVE)
-		final List softDeleted = ObjectStatus.filterForStatus(set1, ObjectStatus.DELETED)
+		final List softDeleted = ObjectStatus.filterForStatus(set1, ObjectStatus.INACTIVE)
 
 		assertEquals("only one element should be active", 1, active.size())
 		assertTrue("a2 should be the active element", active.contains(a2))
