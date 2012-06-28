@@ -116,6 +116,6 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     },
     
     loadDisplay: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    	var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
     }
 });

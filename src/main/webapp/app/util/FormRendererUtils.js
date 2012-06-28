@@ -536,9 +536,6 @@ Ext.define('Ssp.util.FormRendererUtils',{
      * a new set of columns or a new store of data.
      */
     reconfigureGridPanel: function(gridPanel, store, columns) {
-        console.log(store);
-    	console.log(columns);
-        
     	var me = gridPanel,
             headerCt = me.headerCt;
 
@@ -563,6 +560,79 @@ Ext.define('Ssp.util.FormRendererUtils',{
             }
         }
         me.fireEvent('reconfigure', me);
-    }	
+    },
+    
+	/**
+	 * Determines if one or more forms have invalid fields
+	 * and ensures that the first invalid item is visible
+	 * in the interface.
+	 * 
+	 * Returns a result object with an array of invalid fields
+	 * and a valid flag to determine if the form is valid
+	 * 
+	 */
+	validateForms: function( forms ){
+		var me=this;
+		var form;
+		var result = {fields:[],valid:true};			
+		Ext.Array.each(forms, function(form, index){
+			var f;
+			if (form.isValid()==false)
+			{
+				// collect all invalid fields
+				// from the form
+				var invalidFields = me.findInvalidFields( form );
+				if (invalidFields.items.length>0)
+				{
+					Ext.Array.each(invalidFields.items,function(field,index){
+						result.fields.push( me.cleanInvalidField( field ) );
+					},me);
+				}
+				
+				// find the first invalid field and display it
+				if (result.valid==true)
+				{
+					f = form.findInvalid()[0];
+					if (f) 
+					{
+						f.ensureVisible();
+						// flag the form invalid
+						result.valid=false;
+					}
+				}
+			}
+		});
+		
+		return result;	
+	},
+	
+	/**
+	 * Method to collect all of the invalid
+	 * fields from a form.
+	 */
+	findInvalidFields: function(form)
+	{
+		return form.getFields().filterBy(function(field) {
+	        var result=false;
+			if (!field.validate())
+	        {
+				result = true;
+	        }
+			return result;
+	    });
+	},
+
+	/**
+	 * Clean a fields label of span tags used for
+	 * outputing error asterisks on validatable fields
+	 */
+	cleanInvalidField: function( field )
+	{
+		return new Ssp.model.FieldError({
+			label: field.fieldLabel.replace(Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,"","gi"),
+			errorMessage: field.activeErrors[0]
+		});
+	}	
+	
 });
 

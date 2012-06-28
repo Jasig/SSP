@@ -57,8 +57,8 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
 								        }]
 						    	    }]
 						})
-						,{xtype: 'displayactionplangoals', flex: 1}
-						,{xtype: 'displaystrengths'}
+						,{xtype: 'displayactionplangoals', itemId: 'goalsPanel', flex: 1}
+						,{xtype: 'displaystrengths', itemId: 'strengthsPanel'}
 				    ],
 				    
 				    dockedItems: [{

@@ -22,7 +22,7 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 						        height: '100%',
 						        activeTab: 0,
 								border: 0,
-						        items: [ { title: 'Personal',
+						        items: [ { title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
 						        		   autoScroll: true,
 						        		   items: [{xtype: 'studentintakepersonal'}]
 						        		},{

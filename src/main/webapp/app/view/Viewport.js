@@ -1,7 +1,9 @@
 Ext.define('Ssp.view.Viewport',{
 	extend: 'Ext.container.Container',
 	requires: ['Ext.EventManager'],
-    mixins: [ 'Deft.mixin.Injectable'],
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.ViewportViewController',
     inject: {
     	parentDivId: 'sspParentDivId',
     	renderFullScreen: 'renderSSPFullScreen'
@@ -18,7 +20,7 @@ Ext.define('Ssp.view.Viewport',{
             el;
 
         // Init the Main Shell for the application
-        Ext.apply(this, {items: [{xtype:'mainview'}]}); 
+        //Ext.apply(this, {items: [{xtype:'mainview'}]}); 
         
         // Get the DOM disruption over with before the Viewport renders and begins a layout
         Ext.getScrollbarSize();

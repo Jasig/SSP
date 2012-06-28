@@ -14,7 +14,7 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 		// alias the studentId field
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		// Set defined configured label for the studentId field
-		studentIdField.setFieldLabel(studentIdAlias+'<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>');		
+		studentIdField.setFieldLabel(studentIdAlias + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);		
 		
 		me.getView().loadRecord( this.person );
 		

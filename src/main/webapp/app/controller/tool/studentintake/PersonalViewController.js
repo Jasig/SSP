@@ -36,7 +36,7 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
 		// since the required asterisk is overridden to the initComponent
 		// method. See app.js -> application launch method for additional
 		// detail on required fields
-		studentId.setFieldLabel(studentIdAlias+'<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>');
+		studentId.setFieldLabel(studentIdAlias + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 		Ext.apply(studentId, {
 			                  minLength: minStudentIdLen,
 			                  minLengthText: '',
