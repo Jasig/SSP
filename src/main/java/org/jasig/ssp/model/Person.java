@@ -24,7 +24,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
@@ -41,6 +40,8 @@ import org.jasig.ssp.model.tool.PersonTool;
 public final class Person extends AbstractAuditable implements Auditable { // NOPMD
 
 	private static final long serialVersionUID = 4122282021549627683L;
+
+	private static final String DATABASE_TABLE_NAME = "person";
 
 	/**
 	 * Static, super administrator account identifier. Only used by IT and
@@ -113,6 +114,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Maximum length of 25.
 	 */
+	@NotNull
+	@NotEmpty
 	@Column(length = 25)
 	@Size(max = 25)
 	private String username;
@@ -244,6 +247,15 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private Date studentIntakeRequestDate;
 
 	/**
+	 * Strengths
+	 * 
+	 * Maximum length of 4000.
+	 */
+	@Column(length = 4000)
+	@Size(max = 4000)
+	private String strengths;
+
+	/**
 	 * Demographics about a student.
 	 * 
 	 * Should be null for non-student users.
@@ -282,10 +294,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
 	private Set<PersonEducationLevel> educationLevels;
 
 	/**
@@ -294,9 +305,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
 	private Set<PersonFundingSource> fundingSources;
 
 	/**
@@ -305,65 +315,50 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
 	private Set<PersonChallenge> challenges;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
 	private Set<PersonTool> tools;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
 	private Set<PersonConfidentialityDisclosureAgreement> confidentialityDisclosureAgreements;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
 	private Set<Task> tasks;
 
-	/**
-	 * Strengths
-	 * 
-	 * Maximum length of 4000.
-	 */
-	@Column(length = 4000)
-	@Size(max = 4000)
-	private String strengths;
-
+	@Nullable
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "coach_id", nullable = true)
 	private Person coach;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
 	private Set<PersonServiceReason> serviceReasons;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
 	private Set<PersonSpecialServiceGroup> specialServiceGroups;
 
 	@Nullable
-	@OneToMany(mappedBy = "person", orphanRemoval = true)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
-	@Where(clause = "object_status <> 3")
 	private Set<PersonReferralSource> referralSources;
 
 	@Nullable
@@ -470,7 +465,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		return username;
 	}
 
-	public void setUsername(final String username) {
+	public void setUsername(@NotNull @NotEmpty final String username) {
 		this.username = username;
 	}
 

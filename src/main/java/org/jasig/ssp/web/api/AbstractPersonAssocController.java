@@ -131,9 +131,10 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
-
+		// Check permissions
 		checkPermissionForOp("READ");
 
+		// Run getAll for the specified person
 		final Person person = personService.get(personId);
 		final PagingWrapper<T> data = getService().getAllForPerson(person,
 				SortingAndPaging.createForSingleSort(status, start,

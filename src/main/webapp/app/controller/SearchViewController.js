@@ -7,8 +7,10 @@ Ext.define('Ssp.controller.SearchViewController', {
         columnRendererUtils: 'columnRendererUtils',
         formUtils: 'formRendererUtils',
         person: 'currentPerson',
+        preferences: 'preferences',
         programStatusesStore: 'programStatusesStore',
         studentsStore: 'studentsStore',
+        sspConfig: 'sspConfig'
     },
 
     config: {
@@ -39,6 +41,9 @@ Ext.define('Ssp.controller.SearchViewController', {
     
 	init: function() {
 		var me=this;
+		
+		me.applyColumns();
+		
 		me.personUrl =  me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );		
 		me.personSearchUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personSearch') );		
 		
@@ -87,24 +92,28 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},  
 
 	onDisplayPhotoClick: function( button ){
-		this.applyColumns('search');
+		this.preferences.set('SEARCH_GRID_VIEW_TYPE',0);
+		this.applyColumns();
 	},
 	
 	onDisplayListClick: function( button ){
-		this.applyColumns('caseload');
+		this.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
+		this.applyColumns();
 	},
 	
-	applyColumns: function( display ){
-		var grid = this.getView();
-		var store = this.studentsStore;
-		if (display=='caseload'){
+	applyColumns: function(){
+		var me=this;
+		var grid = me.getView();
+		var store = me.studentsStore;
+		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		if (me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1){
 			columns = [
     	              { header: 'First', dataIndex: 'firstName', flex: 1 },		        
     	              { header: 'MI', dataIndex: 'middleInitial', flex: .2},
     	              { header: 'Last', dataIndex: 'lastName', flex: 1},
-    	              { header: 'Type', dataIndex: 'studentType', flex: 1},
-    	              { header: 'Tartan Id', dataIndex: 'schoolId', flex: 1},
-    	              { header: 'Alerts', dataIndex: 'alerts', flex: 1}
+    	              { header: 'Type', dataIndex: 'studentType', flex: .2},
+    	              { header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
+    	              { header: 'Alerts', dataIndex: 'alerts', flex: .2}
     	              ];			
 		}else{
 			columns = [
@@ -113,7 +122,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              ];		
 		}
 		
-		this.formUtils.reconfigureGridPanel(grid, store, columns);		
+		me.formUtils.reconfigureGridPanel(grid, store, columns);		
 	},
     
 	onAddPerson: function(){

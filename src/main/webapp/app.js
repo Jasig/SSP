@@ -99,6 +99,12 @@ Ext.require([
     'Ssp.view.admin.forms.campus.DefineCampus',
     'Ssp.view.admin.forms.campus.EditCampus',
     
+    // ERROR DISPLAYS
+    'Ssp.view.ErrorWindow',
+    
+    'Ssp.model.Preferences',
+    'Ssp.model.FieldError',
+    'Ssp.model.AuthenticatedPerson',
     'Ssp.model.util.TreeRequest',
     'Ssp.model.Configuration',
 	'Ssp.model.Person',
@@ -235,6 +241,7 @@ var apiUrls = [
   {name: 'programStatusChangeReason', url: 'reference/programStatusChangeReason/'},
   {name: 'referralSource', url: 'reference/referralSource/'},
   {name: 'serviceReasons', url: 'reference/serviceReason/'},
+  {name: 'session', url: 'session/'},
   {name: 'specialServiceGroup', url: 'reference/specialServiceGroup/'},
   {name: 'studentIntakeTool', url: 'tool/studentIntake/'},
   {name: 'studentType', url: 'reference/studentType/'}
@@ -275,7 +282,13 @@ Ext.onReady(function(){
 	    },
 	    authenticatedPerson: {
 	        fn: function(){
-	            return new Ssp.model.Person({id:"1010e4a0-1001-0110-1011-4ffc02fe81ff"});
+	            return new Ssp.model.AuthenticatedPerson({id:"1010e4a0-1001-0110-1011-4ffc02fe81ff"});
+	        },
+	        singleton: true
+	    },
+	    preferences: {
+	        fn: function(){
+	            return new Ssp.model.Preferences();
 	        },
 	        singleton: true
 	    },
@@ -409,6 +422,14 @@ Ext.onReady(function(){
 	    	},
 	        singleton: true
         },
+        errorsStore:{
+	        fn: function(){
+	            return Ext.create('Ext.data.Store',{
+	            	model: 'Ssp.model.FieldError'
+	            });
+	    	},
+	        singleton: true
+        },
 		abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 	    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 	    anticipatedStartTermsStore: 'Ssp.store.reference.AnticipatedStartTerms',
@@ -491,11 +512,71 @@ Ext.onReady(function(){
 	    	Ext.Function.interceptAfter(Ext.form.Field.prototype,'initComponent', function(){
 	    		var fl=this.fieldLabel, ab=this.allowBlank;
 	    		if (ab===false && fl){
-	    			this.fieldLabel += '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>';
+	    			this.fieldLabel += Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY;
 	    		}
 	    	});		
 
-    		// load the main view
+	    	/*
+	    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
+	    	 * Override to provide a function to determine the invalid
+	    	 * fields in a form.
+	    	 */
+	    	Ext.override(Ext.form.BasicForm, {
+	    	    findInvalid: function() {
+	    	        var result = [], it = this.getFields().items, l = it.length, i, f;
+	    	        for (i = 0; i < l; i++) {
+	    	            if(!(f = it[i]).disabled && f.isValid()){
+	    	                result.push(f);
+	    	            }
+	    	        }
+	    	        return result;
+	    	    }
+	    	});	    	
+
+	    	/*
+	    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
+	    	 * Override component so that the first invalid field
+	    	 * will be displayed for the user when a form is invalid.
+	    	 */
+	    	Ext.override(Ext.Component, {
+	    	    ensureVisible: function(stopAt) {
+	    	    	var p;
+	    	        this.ownerCt.bubble(function(c) {
+	    	        	if (p = c.ownerCt) {
+	    	                if (p instanceof Ext.TabPanel) {
+	    	                    p.setActiveTab(c);
+	    	                } else if (p.layout.setActiveItem) {
+	    	                    p.layout.setActiveItem(c);
+	    	                } else if (p.layout.type == 'accordion'){
+	    	                	c.expand();
+	    	                }
+	    	            }
+	    	            return (c !== stopAt);
+	    	        });
+	    	        //this.el.scrollIntoView(this.el.up(':scrollable'));
+	    	        return this;
+	    	    }
+	    	});
+
+	    	/*
+	    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
+	    	 * Enables scrolling to the nearest visible elements
+	    	 * in a form for use with the above override for
+	    	 * visually indicating when a form validation fails
+	    	 * and setting the user to see the first invalid field.    	 
+	    	Ext.DomQuery.pseudos.scrollable = function(c, t) {
+	    	    var r = [], ri = -1;
+	    	    for(var i = 0, ci; ci = c[i]; i++){
+	    	        var o = ci.style.overflow;
+	    	        if(o=='auto'||o=='scroll') {
+	    	            if (ci.scrollHeight < Ext.fly(ci).getHeight(true)) r[++ri] = ci;
+	    	        }
+	    	    }
+	    	    return r;
+	    	};
+	    	*/
+	    	
+   	    	// load the main view
     		Ext.apply(me,{
 	    		items: [{xtype:'sspview'}]
 	    	});			

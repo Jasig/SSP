@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
@@ -25,8 +26,7 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Task // NOPMD by jon.adams
-		extends AbstractAuditable
-		implements RestrictedPersonAssocAuditable {
+		extends AbstractAuditable implements RestrictedPersonAssocAuditable {
 
 	private static final long serialVersionUID = 1477217415946557983L;
 
@@ -38,9 +38,11 @@ public class Task // NOPMD by jon.adams
 
 	public static final String SSP_ACTION_PLAN_TASK = "SSP";
 
+	@NotNull
 	@Column(nullable = false, length = 100)
 	private String name;
 
+	@NotNull
 	@Column(nullable = false, length = 64000)
 	@Size(max = 64000)
 	private String description;
@@ -84,17 +86,19 @@ public class Task // NOPMD by jon.adams
 	private ConfidentialityLevel confidentialityLevel;
 
 	/**
-	 * Constructor that only calls {@link AbstractAuditable#AbstractAuditable()}
-	 * .
+	 * Constructor that only calls the
+	 * {@link AbstractAuditable#AbstractAuditable()} constructor.
 	 */
 	public Task() {
 		super();
 	}
 
-	public Task(final String description, final Date dueDate,
-			final Person person,
-			final Challenge challenge, final ChallengeReferral challengeReferral) {
+	public Task(@NotNull final String name, @NotNull final String description,
+			final Date dueDate,
+			@NotNull final Person person, final Challenge challenge,
+			final ChallengeReferral challengeReferral) {
 		super();
+		this.name = name;
 		this.description = description;
 		this.dueDate = new Date(dueDate.getTime());
 		this.person = person;
@@ -148,7 +152,7 @@ public class Task // NOPMD by jon.adams
 		return name;
 	}
 
-	public void setName(final String name) {
+	public void setName(@NotNull final String name) {
 		this.name = name;
 	}
 
@@ -156,7 +160,7 @@ public class Task // NOPMD by jon.adams
 		return description;
 	}
 
-	public void setDescription(final String description) {
+	public void setDescription(@NotNull final String description) {
 		this.description = description;
 	}
 
@@ -183,7 +187,7 @@ public class Task // NOPMD by jon.adams
 	}
 
 	@Override
-	public void setPerson(final Person person) {
+	public void setPerson(@NotNull final Person person) {
 		this.person = person;
 	}
 
@@ -226,7 +230,7 @@ public class Task // NOPMD by jon.adams
 	 *            the confidentialityLevel to set
 	 */
 	public void setConfidentialityLevel(
-			final ConfidentialityLevel confidentialityLevel) {
+			@NotNull final ConfidentialityLevel confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
 	}
 

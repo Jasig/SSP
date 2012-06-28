@@ -1,4 +1,4 @@
-package org.jasig.mygps.business;
+package org.jasig.mygps.business; // NOPMD
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -1482,7 +1482,7 @@ public class StudentIntakeFormManager {
 						.getFormOptionByValue(value);
 
 				if (formOptionTO != null) {
-					final PersonChallenge studentChallenge = new PersonChallenge();
+					final PersonChallenge studentChallenge = new PersonChallenge(); // NOPMD
 					studentChallenge.setPerson(student);
 					studentChallenge.setChallenge(challengeDao.get(formOptionTO
 							.getId()));

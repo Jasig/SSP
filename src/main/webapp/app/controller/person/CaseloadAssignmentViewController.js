@@ -5,6 +5,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	appEventsController: 'appEventsController',
     	apiProperties: 'apiProperties',
      	appointment: 'currentAppointment',
+     	errorsStore: 'errorsStore',
      	formUtils: 'formRendererUtils',
         person: 'currentPerson'
     },
@@ -54,11 +55,11 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		// retrieve the appointment screen and define items for the screen
 		caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
 		
-		items = [{ title: 'Personal',
+		items = [{ title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
         	       autoScroll: true,
         		   items: [{xtype: 'editperson'}]
         		},{
-            		title: 'Appointment',
+            		title: 'Appointment'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
             		autoScroll: true,
             		items: [{xtype: 'personcoach'},
             		        {xtype:'personappointment'}]
@@ -138,12 +139,21 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var anticipatedStartDateView = Ext.ComponentQuery.query('.personanticipatedstartdate')[0];
 		var anticipatedStartDateForm = anticipatedStartDateView.getForm();
 
+		var formsToValidate = [personForm,
+	                 coachForm,
+	                 appointmentForm,
+	                 anticipatedStartDateForm,
+	                 serviceReasonsForm,
+	                 specialServiceGroupsForm,
+	                 referralSourcesForm];		
+
+		var validateResult = me.formUtils.validateForms( formsToValidate );
+
 		var personSuccessFunc = function(response,view){
 			var r = Ext.decode(response.responseText);
 			var personId;
 			console.log( 'CaseloadAssignmentViewController->onSaveClick - Save Person Success' );
-			console.log( response );
-			if (r.status==200)
+			if (r.success==true)
 			{
 				personId = r.id;
 
@@ -166,7 +176,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			}
 		};
 		
-		if ( personForm.isValid() && coachForm.isValid() && appointmentForm.isValid() && anticipatedStartDateForm.isValid() && serviceReasonsForm.isValid() && specialServiceGroupsForm.isValid() && referralSourcesForm.isValid()) 
+		// personForm.isValid() && coachForm.isValid() && appointmentForm.isValid() && anticipatedStartDateForm.isValid() && serviceReasonsForm.isValid() && specialServiceGroupsForm.isValid() && referralSourcesForm.isValid()
+		if ( validateResult.valid ) 
 		{
 			personForm.updateRecord();
 			coachForm.updateRecord();
@@ -229,8 +240,12 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			}
 			
 		}else{
-			Ext.Msg.alert('Error','Please correct the errors in your form before continuing.');		
-		}
+			me.errorsStore.loadData( validateResult.fields );
+			Ext.create('Ssp.view.ErrorWindow', {
+				title: 'Invalid Caseload Assignment Data',
+			    height: 300,
+			    width: 500
+			}).show();		}
     },
     
     getSelectedItemSelectorIdsForTransfer: function(values){

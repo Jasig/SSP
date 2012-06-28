@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Where;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
 
@@ -46,7 +45,6 @@ public class SelfHelpGuideQuestion
 	private SelfHelpGuide selfHelpGuide;
 
 	@OneToMany(mappedBy = "selfHelpGuideQuestion")
-	@Where(clause = "object_status <> 3")
 	private Set<SelfHelpGuideQuestionResponse> selfHelpGuideQuestionResponses = new HashSet<SelfHelpGuideQuestionResponse>(
 			0);
 

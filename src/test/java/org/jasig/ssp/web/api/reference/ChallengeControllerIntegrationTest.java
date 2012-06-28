@@ -1,4 +1,4 @@
-package org.jasig.ssp.web.api.reference;
+package org.jasig.ssp.web.api.reference; // NOPMD
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -46,7 +46,11 @@ public class ChallengeControllerIntegrationTest {
 	private static final String CHALLENGE_NAME = "Test Challenge";
 
 	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
+	private transient SecurityServiceInTestEnvironment securityService;
+
+	private static final String TEST_STRING1 = "testString1";
+
+	private static final String TEST_STRING2 = "testString1";
 
 	/**
 	 * Setup the security service with the administrator user for use by
@@ -61,16 +65,17 @@ public class ChallengeControllerIntegrationTest {
 	/**
 	 * Test the {@link ChallengeController#get(UUID)} action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 * @throws ObjectNotFoundException
 	 */
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		ChallengeTO obj = controller.get(CHALLENGE_ID);
+		final ChallengeTO obj = controller.get(CHALLENGE_ID);
 
 		assertNotNull(
 				"Returned ChallengeTO from the controller should not have been null.",
@@ -84,16 +89,19 @@ public class ChallengeControllerIntegrationTest {
 	 * Test that the {@link ChallengeController#get(UUID)} action returns the
 	 * correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		ChallengeTO obj = controller.get(UUID.randomUUID());
+		final ChallengeTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned ChallengeTO from the controller should have been null.",
@@ -102,61 +110,59 @@ public class ChallengeControllerIntegrationTest {
 
 	/**
 	 * Test the {@link ChallengeController#create(ChallengeTO)} and
-	 * {@link ChallengeController#delete(UUID)} actions.
+	 * {@link ChallengeController#delete(UUID)} actions. * @throws
+	 * ValidationException If validation error occurred.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerCreateAndDelete() throws Exception {
+	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final String testString1 = "testString1";
-		final String testString2 = "testString1";
-
 		// Check validation of 'no ID for create()'
-		ChallengeTO obj = new ChallengeTO(UUID.randomUUID(), testString1,
-				testString2);
+		final ChallengeTO invalid = new ChallengeTO(UUID.randomUUID(),
+				TEST_STRING1,
+				TEST_STRING2);
 		try {
-			obj = controller.create(obj);
-			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
-		} catch (ValidationException exc) {
+			controller.create(invalid);
+			fail("Calling create with an object with an ID should have thrown a validation excpetion."); // NOPMD
+		} catch (final ValidationException exc) { // NOPMD
 			/* expected */
 		}
 
 		// Now create a valid Challenge
-		obj = new ChallengeTO(null, testString1, testString2);
-		obj = controller.create(obj);
+		final ChallengeTO challenge = new ChallengeTO(null, TEST_STRING1,
+				TEST_STRING2);
+		final ChallengeTO saved = controller.create(challenge);
 
 		assertNotNull(
 				"Returned ChallengeTO from the controller should not have been null.",
-				obj);
+				saved);
 		assertNotNull(
 				"Returned ChallengeTO.ID from the controller should not have been null.",
-				obj.getId());
+				saved.getId());
 		assertEquals(
 				"Returned ChallengeTO.Name from the controller did not match.",
-				testString1, obj.getName());
+				TEST_STRING1, saved.getName());
 		assertEquals(
 				"Returned ChallengeTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
+				Person.SYSTEM_ADMINISTRATOR_ID, saved.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
-				controller.delete(obj.getId()).isSuccess());
+				controller.delete(saved.getId()).isSuccess());
 	}
 
 	/**
 	 * Test the
 	 * {@link ChallengeController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<ChallengeTO> list = controller.getAll(
 				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
@@ -170,12 +176,9 @@ public class ChallengeControllerIntegrationTest {
 	 * Test the
 	 * {@link ChallengeController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action results.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerGetAllResults() throws Exception {
+	public void testControllerGetAllResults() {
 		final Collection<ChallengeTO> list = controller.getAll(
 				ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();

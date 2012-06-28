@@ -5,11 +5,15 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * Person service
+ */
 public interface PersonService extends AuditableCrudService<Person> {
 
 	@Override
@@ -59,7 +63,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * Mark a Person as deleted.
 	 * 
 	 * Does not remove them from persistent storage, but marks their status flag
-	 * to {@link ObjectStatus#DELETED}.
+	 * to {@link ObjectStatus#INACTIVE}.
 	 */
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;
@@ -87,23 +91,29 @@ public interface PersonService extends AuditableCrudService<Person> {
 	Person getByStudentId(String studentId) throws ObjectNotFoundException;
 
 	/**
-	 * Retrieve a list of person objects based on specific criteria
+	 * Gets a list of {@link Person} objects based on specified criteria
 	 * 
 	 * @param addressLabelSearchTO
+	 *            criteria
 	 * @param sAndP
-	 * @return
+	 *            Sorting and paging parameters
+	 * @return List of person objects based on specified criteria
 	 * @throws ObjectNotFoundException
 	 */
-	// TODO: change params to use a TO
 	List<Person> peopleFromCriteria(AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException;
 
 	/**
+	 * Gets a list of {@link Person} objects based on the specified criteria and
+	 * {@link SpecialServiceGroup} identifiers.
 	 * 
 	 * @param specialServiceGroupIDs
+	 *            list of {@link SpecialServiceGroup} service group identifiers
 	 * @param createForSingleSort
-	 * @return
+	 * @return A list of {@link Person} objects based on the specified criteria
+	 *         and special service groups.
 	 * @throws ObjectNotFoundException
+	 *             If any of the special service groups could not be found.
 	 */
 	List<Person> peopleFromSpecialServiceGroups(
 			List<UUID> specialServiceGroupIDs,

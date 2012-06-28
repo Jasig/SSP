@@ -3,10 +3,11 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	person: 'currentPerson',
     	appEventsController: 'appEventsController',
     	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
+    	person: 'currentPerson',
+    	preferences: 'preferences',
     	store: 'tasksStore'
     },
     
@@ -38,12 +39,15 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     	
 		'addTaskButton': {
 			click: 'onAddTaskClick'
-		}
+		},
+		
+		
 	},
 	
 	init: function() {
 		var me = this;
 		var personId;
+		var child;
 		var successFunc = function(response,view){
 	    	var r, records;
 	    	var groupedTasks=[];
@@ -65,25 +69,25 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    	}
 		};
 		
-		personId = this.person.get('id');
-		this.personTaskUrl = this.apiProperties.getItemUrl('personTask');
-		this.personTaskUrl = this.personTaskUrl.replace('{id}',personId);
-		this.personTaskGroupUrl = this.apiProperties.getItemUrl('personTaskGroup');
-		this.personTaskGroupUrl = this.personTaskGroupUrl.replace('{id}',personId);
-		this.personEmailTaskUrl = this.apiProperties.getItemUrl('personEmailTask');
-		this.personEmailTaskUrl = this.personEmailTaskUrl.replace('{id}',personId);	
-		this.personPrintTaskUrl = this.apiProperties.getItemUrl('personPrintTask');
-		this.personPrintTaskUrl = this.personPrintTaskUrl.replace('{id}',personId);
+		personId = me.person.get('id');
+		me.personTaskUrl = me.apiProperties.getItemUrl('personTask');
+		me.personTaskUrl = me.personTaskUrl.replace('{id}',personId);
+		me.personTaskGroupUrl = me.apiProperties.getItemUrl('personTaskGroup');
+		me.personTaskGroupUrl = me.personTaskGroupUrl.replace('{id}',personId);
+		me.personEmailTaskUrl = me.apiProperties.getItemUrl('personEmailTask');
+		me.personEmailTaskUrl = me.personEmailTaskUrl.replace('{id}',personId);	
+		me.personPrintTaskUrl = me.apiProperties.getItemUrl('personPrintTask');
+		me.personPrintTaskUrl = me.personPrintTaskUrl.replace('{id}',personId);
 		
-		this.apiProperties.makeRequest({
-			url: this.apiProperties.createUrl(this.personTaskGroupUrl),
+		me.apiProperties.makeRequest({
+			url: me.apiProperties.createUrl(me.personTaskGroupUrl),
 			method: 'GET',
 			successFunc: successFunc 
 		});
-	
-    	this.appEventsController.assignEvent({eventName: 'filterTasks', callBackFunc: this.onFilterTasks, scope: this});		
+			
+    	me.appEventsController.assignEvent({eventName: 'filterTasks', callBackFunc: this.onFilterTasks, scope: this});		
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
     },
 
     destroy: function(){

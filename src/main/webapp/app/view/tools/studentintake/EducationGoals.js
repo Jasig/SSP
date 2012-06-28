@@ -33,7 +33,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				            xtype: "radiogroup",
 				            id: 'StudentIntakeEducationGoalsRadioGroup',
 				            fieldLabel: "Education/Career Goal",
-				            allowBlank: false,
+				            allowBlank: true,
 				            columns: 1
 				        }]
 				    },{

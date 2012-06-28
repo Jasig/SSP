@@ -110,8 +110,8 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 		final PersonDemographics current = get(id);
 
 		if (null != current
-				&& !ObjectStatus.DELETED.equals(current.getObjectStatus())) {
-			current.setObjectStatus(ObjectStatus.DELETED);
+				&& !ObjectStatus.INACTIVE.equals(current.getObjectStatus())) {
+			current.setObjectStatus(ObjectStatus.INACTIVE);
 			save(current);
 		}
 	}

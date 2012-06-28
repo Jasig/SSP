@@ -7,8 +7,11 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.jasig.ssp.model.reference.Challenge;
 
 /**
@@ -34,21 +37,35 @@ public class PersonChallenge
 	private String description;
 
 	/**
-	 * Associated person. Changes to this Person are not persisted.
+	 * Associated person.
+	 * 
+	 * <p>
+	 * This association should never be changed after creation.
 	 */
+	@NotNull
 	@ManyToOne()
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Person person;
 
+	/**
+	 * Associated challenge.
+	 * 
+	 * <p>
+	 * This association should never be changed after creation.
+	 */
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "challenge_id", updatable = false, nullable = false)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Challenge challenge;
 
 	public PersonChallenge() {
 		super();
 	}
 
-	public PersonChallenge(final Person person, final Challenge challenge) {
+	public PersonChallenge(@NotNull final Person person,
+			@NotNull final Challenge challenge) {
 		super();
 		this.person = person;
 		this.challenge = challenge;
@@ -68,7 +85,7 @@ public class PersonChallenge
 	}
 
 	@Override
-	public void setPerson(final Person person) {
+	public void setPerson(@NotNull final Person person) {
 		this.person = person;
 	}
 
@@ -76,18 +93,8 @@ public class PersonChallenge
 		return challenge;
 	}
 
-	public void setChallenge(final Challenge challenge) {
+	public void setChallenge(@NotNull final Challenge challenge) {
 		this.challenge = challenge;
-	}
-
-	/**
-	 * Overwrites simple properties with the parameter's properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 */
-	public void overwrite(final PersonChallenge source) {
-		setDescription(source.getDescription());
 	}
 
 	@Override

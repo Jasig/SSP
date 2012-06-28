@@ -121,7 +121,7 @@ public class MaritalStatusControllerIntegrationTest {
 		try {
 			obj = controller.create(obj);
 			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
-		} catch (ValidationException exc) {
+		} catch (final ValidationException exc) {
 			/* expected */
 		}
 
@@ -150,12 +150,9 @@ public class MaritalStatusControllerIntegrationTest {
 	 * Test the
 	 * {@link MaritalStatusController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<MaritalStatusTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 

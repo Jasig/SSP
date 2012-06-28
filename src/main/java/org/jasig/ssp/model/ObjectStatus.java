@@ -37,7 +37,12 @@ public enum ObjectStatus {
 	/**
 	 * Object has been removed, and should not be used in creating/editing
 	 * records (integer: 3)
+	 * 
+	 * <p>
+	 * ObjectStatus should be set to {@link #INACTIVE} instead of
+	 * {@link #DELETED}.
 	 */
+	@Deprecated
 	DELETED;
 
 	/**
@@ -53,7 +58,7 @@ public enum ObjectStatus {
 			final Collection<T> list, final ObjectStatus status) {
 		final List<T> inStatus = Lists.newArrayList();
 
-		for (T t : list) {
+		for (final T t : list) {
 			if (status.equals(ObjectStatus.ALL)
 					|| status.equals(t.getObjectStatus())) {
 				inStatus.add(t);

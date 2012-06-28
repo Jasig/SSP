@@ -41,7 +41,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     onViewReady: function(comp, obj){
     	this.appEventsController.assignEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});
     	this.appEventsController.assignEvent({eventName: 'deleteGoal', callBackFunc: this.deleteConfirmation, scope: this});
-    }, 
+    },
     
     destroy: function() {
     	this.appEventsController.removeEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});

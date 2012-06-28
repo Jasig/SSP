@@ -11,6 +11,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	educationGoalsStore: 'educationGoalsStore',
     	educationLevelsStore: 'educationLevelsStore',
     	employmentShiftsStore: 'employmentShiftsStore',
+    	errorsStore: 'errorsStore',
     	ethnicitiesStore: 'ethnicitiesStore',
     	formUtils: 'formRendererUtils',
     	fundingSourcesStore: 'fundingSourcesStore',
@@ -32,7 +33,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	},
     
 	init: function() {
-
+		var me=this;
+		
     	// Create a custom validator for
 		// mapped field types
 		Ext.apply(Ext.form.field.VTypes, {
@@ -55,7 +57,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		// This enables mapped text fields and mapped text areas
 		// to be shown or hidden upon selection from a parent object
 		// such as a dynamic check box.
-		this.appEventsController.getApplication().addListener('dynamicCompChange', function( comp ){
+		me.appEventsController.getApplication().addListener('dynamicCompChange', function( comp ){
 			var tfArr = Ext.ComponentQuery.query('.mappedtextfield');
 			var taArr = Ext.ComponentQuery.query('.mappedtextarea');
 			
@@ -86,16 +88,19 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 					}
 				}	
 			},this);
-		},this);
+		},me);
 		
 		// Load the Student Intake
 		Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
-		Form.load(this.currentPerson.getId(),{
-			success: this.loadStudentIntakeResult,
-			scope: this
+		Form.load(me.currentPerson.getId(),{
+			success: me.loadStudentIntakeResult,
+			scope: me
 		});
 		
-		return this.callParent(arguments);
+		// display loader
+		me.getView().setLoading( true );
+		
+		return me.callParent(arguments);
     },
 
     destroy: function() {
@@ -105,6 +110,11 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     },     
     
     loadStudentIntakeResult: function( formData ){
+    	var me=this;
+    	
+    	// hide the loader
+    	me.getView().setLoading( false );
+    	
     	// PERSON RECORD
 		var person = formData.data.person;
 		var personDemographics = formData.data.personDemographics;
@@ -126,24 +136,24 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var defaultLabelWidth;
 
 		// REFERENCE OBJECTS
-		var challenges = this.formUtils.alphaSortByField( formData.data.referenceData.challenges, 'name' );
-		var educationGoals = this.formUtils.alphaSortByField( formData.data.referenceData.educationGoals, 'name' );
-		var educationLevels = this.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
-		var fundingSources = this.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
+		var challenges = me.formUtils.alphaSortByField( formData.data.referenceData.challenges, 'name' );
+		var educationGoals = me.formUtils.alphaSortByField( formData.data.referenceData.educationGoals, 'name' );
+		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
+		var fundingSources = me.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
 
-		this.challengesStore.loadData( challenges );
-		this.childCareArrangementsStore.loadData( formData.data.referenceData.childCareArrangements );
-		this.citizenshipsStore.loadData( formData.data.referenceData.citizenships );
-		this.educationGoalsStore.loadData( educationGoals );
-		this.educationLevelsStore.loadData( educationLevels );
-		this.employmentShiftsStore.loadData( formData.data.referenceData.employmentShifts );
-		this.ethnicitiesStore.loadData( formData.data.referenceData.ethnicities );
-		this.fundingSourcesStore.loadData( fundingSources );
-		this.gendersStore.loadData( formData.data.referenceData.genders );
-		this.maritalStatusesStore.loadData( formData.data.referenceData.maritalStatuses );
-		this.statesStore.loadData( formData.data.referenceData.states );
-		this.studentStatusesStore.loadData( formData.data.referenceData.studentStatuses );
-		this.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
+		me.challengesStore.loadData( challenges );
+		me.childCareArrangementsStore.loadData( formData.data.referenceData.childCareArrangements );
+		me.citizenshipsStore.loadData( formData.data.referenceData.citizenships );
+		me.educationGoalsStore.loadData( educationGoals );
+		me.educationLevelsStore.loadData( educationLevels );
+		me.employmentShiftsStore.loadData( formData.data.referenceData.employmentShifts );
+		me.ethnicitiesStore.loadData( formData.data.referenceData.ethnicities );
+		me.fundingSourcesStore.loadData( fundingSources );
+		me.gendersStore.loadData( formData.data.referenceData.genders );
+		me.maritalStatusesStore.loadData( formData.data.referenceData.maritalStatuses );
+		me.statesStore.loadData( formData.data.referenceData.states );
+		me.studentStatusesStore.loadData( formData.data.referenceData.studentStatuses );
+		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
 		
 		// LOAD RECORDS FOR EACH OF THE FORMS
 		Ext.getCmp('StudentIntakePersonal').loadRecord( person );
@@ -207,7 +217,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
                 radioGroupId: 'StudentIntakeEducationGoalsRadioGroup',
                 radioGroupFieldSetId: 'StudentIntakeEducationGoalsFieldSet'};		
 		
-		this.formUtils.createForm( educationGoalFormProps );	
+		me.formUtils.createForm( educationGoalFormProps );	
 
 		educationLevelsAdditionalFieldsMap = [{parentId: Ssp.util.Constants.EDUCATION_LEVEL_NO_DIPLOMA_GED_ID, 
 			                                   parentName: "no diploma/no ged", 
@@ -270,7 +280,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
                 selectedIdFieldName: 'educationLevelId',
                 additionalFieldsMap: educationLevelsAdditionalFieldsMap };
 		
-		this.formUtils.createForm( educationLevelFormProps );
+		me.formUtils.createForm( educationLevelFormProps );
 
 		fundingSourcesAdditionalFieldsMap = [{parentId: Ssp.util.Constants.FUNDING_SOURCE_OTHER_ID, 
 											  parentName: "other",
@@ -289,7 +299,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
                 selectedIdFieldName: 'fundingSourceId',
                 additionalFieldsMap: fundingSourcesAdditionalFieldsMap };
 		
-		this.formUtils.createForm( fundingSourceFormProps );	
+		me.formUtils.createForm( fundingSourceFormProps );	
 		
 		challengesAdditionalFieldsMap = [{parentId: Ssp.util.Constants.CHALLENGE_OTHER_ID,
 			                              parentName: "other",
@@ -308,11 +318,12 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
                 selectedIdFieldName: 'challengeId',
                 additionalFieldsMap: challengesAdditionalFieldsMap };
 		
-		this.formUtils.createForm( challengeFormProps );
+		me.formUtils.createForm( challengeFormProps );
 	},    
     
 	save: function( button ) {
-		var formUtils = this.formUtils;
+		var me=this;
+		var formUtils = me.formUtils;
 		var personalForm = Ext.getCmp('StudentIntakePersonal').getForm();
 		var demographicsForm = Ext.getCmp('StudentIntakeDemographics').getForm();
 		var educationPlansForm = Ext.getCmp('StudentIntakeEducationPlans').getForm();
@@ -335,8 +346,17 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var personId = "";
 		var intakeData = {};
 		
+		var formsToValidate = [personalForm,
+		             demographicsForm,
+		             educationPlansForm,
+		             educationLevelsForm,
+		             educationGoalForm,
+		             fundingForm,
+		             challengesForm];
+		
 		// validate and save the model
-		if (personalForm.isValid() && demographicsForm.isValid() && educationPlansForm.isValid()  && educationLevelsForm.isValid() && educationGoalForm.isValid() && fundingForm.isValid() && challengesForm.isValid() )
+		var validateResult = me.formUtils.validateForms( formsToValidate );
+		if ( validateResult.valid )
 		{
 			// retrieve the models
 			personalFormModel = personalForm.getRecord();
@@ -396,23 +416,46 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			{
 				intakeData.person.serviceReasons=null;
 			}
+
+			if (intakeData.personEducationPlan.studentStatusId=="")
+			{
+				intakeData.personEducationPlan.studentStatusId=null;
+			}
+
+			if (intakeData.personEducationGoal.educationGoalId=="")
+			{
+				intakeData.personEducationGoal.educationGoalId=null;
+			}			
 			
+			// display loader
+			me.getView().setLoading( true );
+			
+			// Save the intake
 			Ext.Ajax.request({
-				url: this.apiProperties.createUrl(this.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
+				url: me.apiProperties.createUrl(me.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
 				jsonData: intakeData,
 				success: function(response) {
 					var r = Ext.decode(response.responseText);
+					
+					// hide loader
+					me.getView().setLoading( false );
+					
 					if(r.success == true) {
 						console.log('student intake saved successfully');							
 					}								
 				},
-				failure: this.apiProperties.handleError
-			}, this);
+				failure: me.apiProperties.handleError
+			}, me);
 
 		}else{
-			Ext.Msg.alert('Invalid Data','Please correct the errors in this Student Intake before saving the record.');
+			me.errorsStore.loadData( validateResult.fields );
+			Ext.create('Ssp.view.ErrorWindow', {
+				title: 'Invalid Student Intake Data',
+			    height: 300,
+			    width: 500
+			}).show();
 		}
 		
 	},

@@ -70,6 +70,8 @@ public final class UUIDCustomType extends
 			sqlDescription = PostgresUUIDType.PostgresUUIDSqlTypeDescriptor.INSTANCE;
 		} else if ("org.hibernate.dialect.SQLServerDialect"
 				.equalsIgnoreCase(dialect)
+				|| "org.hibernate.dialect.SQLServer2005Dialect"
+						.equalsIgnoreCase(dialect)
 				|| "org.hibernate.dialect.SQLServer2008Dialect"
 						.equalsIgnoreCase(dialect)) {
 			sqlDescription = VarcharTypeDescriptor.INSTANCE;

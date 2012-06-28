@@ -82,8 +82,7 @@ public class ReferralSourceControllerIntegrationTest {
 
 	/**
 	 * Test that the {@link ReferralSourceController#get(UUID)} action returns
-	 * the
-	 * correct validation errors when an invalid ID is sent.
+	 * the correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.

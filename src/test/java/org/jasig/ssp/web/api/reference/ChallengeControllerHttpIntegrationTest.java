@@ -130,7 +130,8 @@ public class ChallengeControllerHttpIntegrationTest
 				response);
 
 		// Handle the actual request
-		ModelAndView mav = handlerAdapter.handle(request, response, handler);
+		final ModelAndView mav = handlerAdapter.handle(request, response,
+				handler);
 		assertNotNull("Response was not handled.", mav);
 
 		@SuppressWarnings("unchecked")
@@ -162,7 +163,7 @@ public class ChallengeControllerHttpIntegrationTest
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		ChallengeTO obj = controller.get(CHALLENGE_ID);
+		final ChallengeTO obj = controller.get(CHALLENGE_ID);
 
 		assertNotNull(
 				"Returned ChallengeTO from the controller should not have been null.",
@@ -200,10 +201,11 @@ public class ChallengeControllerHttpIntegrationTest
 				response);
 
 		// Handle the actual request
-		ModelAndView mav = handlerAdapter.handle(request, response, handler);
+		final ModelAndView mav = handlerAdapter.handle(request, response,
+				handler);
 		assertNotNull("Response was not handled.", mav);
 
-		ChallengeTO result = (ChallengeTO) getModelObject(mav);
+		final ChallengeTO result = (ChallengeTO) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",
@@ -247,10 +249,11 @@ public class ChallengeControllerHttpIntegrationTest
 				response);
 
 		// Handle the actual request
-		ModelAndView mav = handlerAdapter.handle(request, response, handler);
+		final ModelAndView mav = handlerAdapter.handle(request, response,
+				handler);
 		assertNotNull("Response was not handled.", mav);
 
-		ServiceResponse result = (ServiceResponse) getModelObject(mav);
+		final ServiceResponse result = (ServiceResponse) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",

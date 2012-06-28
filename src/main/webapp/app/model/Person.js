@@ -1,6 +1,6 @@
 Ext.define('Ssp.model.Person', {
     extend: 'Ssp.model.AbstractBase',
-    fields: [{name: 'photoUrl', type: 'string', defaultValue: 'images/student-pic-small.png'},
+    fields: [{name: 'photoUrl', type: 'string'},
              {name: 'schoolId', type: 'string'},
     		 {name: 'firstName', type: 'string'},
              {name: 'middleInitial', type: 'string'},

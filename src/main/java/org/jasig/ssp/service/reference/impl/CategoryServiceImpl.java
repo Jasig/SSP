@@ -77,9 +77,9 @@ public class CategoryServiceImpl extends AbstractReferenceService<Category>
 		ChallengeCategory challengeCategory = null;
 		// if this challenge is already there and ACTIVE, delete
 		if (challengeCategories.getResults() > 0) {
-			for (ChallengeCategory item : challengeCategories
+			for (final ChallengeCategory item : challengeCategories
 					.getRows()) {
-				item.setObjectStatus(ObjectStatus.DELETED);
+				item.setObjectStatus(ObjectStatus.INACTIVE);
 
 				// we'll just return the last one
 				challengeCategory = challengeCategoryDao.save(item);

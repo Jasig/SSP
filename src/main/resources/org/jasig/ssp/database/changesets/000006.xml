@@ -1341,10 +1341,8 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 
 	<changeSet id="usernames must be unique" author="daniel.bower">
 		<addUniqueConstraint tableName="person"
-			columnNames="username" />
-		<!-- has autorollback support -->
+			columnNames="username" constraintName="unique_person_username" />
 	</changeSet>
-
 
 	<!-- changeSet id="Additional Legacy MessageTemplates 2" author="daniel.bower"> 
 		<insert tableName="message_template"> <column name="id" value="919F6FF5-8F22-4684-8729-D615206A2644" 
@@ -1555,78 +1553,79 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 		</modifySql>
 
 	</changeSet>
-	
+
 	<changeSet id="Add role to ConfidentialityLevel" author="daniel.bower">
 		<addColumn tableName="confidentiality_level">
-			<column name="permission" type="${nvarchar.type}(36)" >
+			<column name="permission" type="${nvarchar.type}(36)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_ACADEMIC_RESOURCE_CENTER" />
 			<where>id='b2d077a7-4055-0510-7957-4a09f93a0346'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_STAFF" />
 			<where>id='b2d078b8-5056-a51a-8057-4a09f93a0347'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_MANAGER" />
 			<where>id='b2d07906-5056-a51a-80fd-9d19f636e501'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_DISABILITY" />
 			<where>id='b2d07915-5056-a51a-80ce-334eca0e0a10'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_COUNSELING_SERVICES" />
 			<where>id='b2d07935-5056-a51a-80db-caa0dadd3f2e'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_INDIVIDUALIZED_LEARNING_PLAN" />
 			<where>id='b2d07944-5056-a51a-8047-654512d4d083'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_ENGLISH_SECOND_LANGUAGE" />
 			<where>id='b2d07964-5056-a51a-800a-a95d3bb3c4d1'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_DISPLACED_WORKERS" />
 			<where>id='b2d07964-5157-a51a-800a-a95d3bb3c4e3'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_EARLY_ALERT" />
 			<where>id='b2d07964-5157-a51a-800a-a95d3bb3c4f4'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_FAST_FORWARD" />
 			<where>id='b2d07964-5157-a51a-800a-a95d3bb3c505'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="DATA_EVERYONE" />
 			<where>id='b3d077a7-4055-0510-7967-4a09f93a0357'</where>
 		</update>
-		
+
 		<update tableName="confidentiality_level">
 			<column name="permission" value="UNKNOWN" />
 			<where>permission is NULL</where>
 		</update>
-		
-		<addNotNullConstraint tableName="confidentiality_level" columnName="permission" columnDataType="${nvarchar.type}(36)" />
-		
+
+		<addNotNullConstraint tableName="confidentiality_level"
+			columnName="permission" columnDataType="${nvarchar.type}(36)" />
+
 		<rollback>
-			<dropColumn tableName="confidentiality_level" columnName="permission"/>
+			<dropColumn tableName="confidentiality_level" columnName="permission" />
 		</rollback>
 	</changeSet>
 

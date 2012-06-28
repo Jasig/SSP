@@ -1,10 +1,23 @@
 Ext.define('Ssp.model.reference.ConfidentialityDisclosureAgreement', {
     extend: 'Ssp.model.reference.AbstractReference',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },    
     fields: [{name:'text',type:'string'}],
-	autoLoad: false,
- 	proxy: {
+
+	constructor: function(){
+		Ext.apply(this.getProxy(), 
+				{ 
+			url: this.apiProperties.createUrl( this.apiProperties.getItemUrl('confidentialityDisclosureAgreement') )
+			    }
+		);
+		return this.callParent(arguments);
+	}, 	
+	
+	proxy: {
 		type: 'rest',
-		url: '/ssp/api/1/reference/confidentialityDisclosureAgreement/',
+		url: '',
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 

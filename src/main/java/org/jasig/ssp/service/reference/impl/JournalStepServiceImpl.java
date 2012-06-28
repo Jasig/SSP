@@ -82,9 +82,9 @@ public class JournalStepServiceImpl extends
 		JournalStepJournalStepDetail journalStepJournalStepDetail = null;
 		// if this journalStepDetail is already there and ACTIVE, delete
 		if (journalStepDetailCategories.getResults() > 0) {
-			for (JournalStepJournalStepDetail item : journalStepDetailCategories
+			for (final JournalStepJournalStepDetail item : journalStepDetailCategories
 					.getRows()) {
-				item.setObjectStatus(ObjectStatus.DELETED);
+				item.setObjectStatus(ObjectStatus.INACTIVE);
 
 				// we'll just return the last one
 				journalStepJournalStepDetail = journalStepJournalStepDetailDao

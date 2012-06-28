@@ -75,9 +75,9 @@ public class JournalTrackServiceImpl
 		JournalTrackJournalStep journalTrackJournalStep = null;
 		// if this step is already there and Active, delete
 		if (journalTrackJournalSteps.getResults() > 0) {
-			for (JournalTrackJournalStep item : journalTrackJournalSteps
+			for (final JournalTrackJournalStep item : journalTrackJournalSteps
 					.getRows()) {
-				item.setObjectStatus(ObjectStatus.DELETED);
+				item.setObjectStatus(ObjectStatus.INACTIVE);
 
 				// we'll just return the last one
 				journalTrackJournalStep = journalTrackJournalStepDao.save(item);

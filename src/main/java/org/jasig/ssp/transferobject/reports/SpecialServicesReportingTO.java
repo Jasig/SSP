@@ -15,9 +15,6 @@ import org.jasig.ssp.model.reference.StudentType;
 public class SpecialServicesReportingTO
 		implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5316251830392732984L;
 
 	@SuppressWarnings("unused")
@@ -26,7 +23,7 @@ public class SpecialServicesReportingTO
 		// must create through ReportablePerson
 	}
 
-	public SpecialServicesReportingTO(Person person) {
+	public SpecialServicesReportingTO(final Person person) {
 		super();
 		this.person = person;
 	}
@@ -54,9 +51,9 @@ public class SpecialServicesReportingTO
 	}
 
 	public List<String> getSpecialServices() {
-		List<String> retVal = new ArrayList<String>();
+		final List<String> retVal = new ArrayList<String>();
 
-		Iterator<PersonSpecialServiceGroup> pssIter = person
+		final Iterator<PersonSpecialServiceGroup> pssIter = person
 				.getSpecialServiceGroups().iterator();
 		while (pssIter.hasNext())
 		{

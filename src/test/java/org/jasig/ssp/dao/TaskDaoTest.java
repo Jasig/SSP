@@ -97,8 +97,8 @@ public class TaskDaoTest {
 		final ConfidentialityLevel testConfLevel = confidentialityLevelService
 				.get(CONFIDENTIALITYLEVEL_ID);
 
-		testTask = new Task("test task", cal.getTime(), ken, testChallenge,
-				testChallengeReferral);
+		testTask = new Task("testTask", "test task", cal.getTime(), ken,
+				testChallenge, testChallengeReferral);
 		testTask.setConfidentialityLevel(testConfLevel);
 		dao.save(testTask);
 	}
@@ -189,7 +189,7 @@ public class TaskDaoTest {
 		taskIds.add(UUID.fromString("f42f4970-b566-11e1-a224-0026b9e7ff4c"));
 		taskIds.add(UUID.fromString("4a24c8c2-b568-11e1-b82e-0026b9e7ff4c"));
 		taskIds.add(UUID.randomUUID());
-		List<Task> tasks = dao.getTasksInList(taskIds,
+		final List<Task> tasks = dao.getTasksInList(taskIds,
 				securityService.currentlyAuthenticatedUser(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE));

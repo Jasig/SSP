@@ -14,6 +14,9 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * PersonEducationPlan service implementation
+ */
 @Service
 public class PersonEducationPlanServiceImpl implements
 		PersonEducationPlanService {
@@ -70,9 +73,8 @@ public class PersonEducationPlanServiceImpl implements
 		final PersonEducationPlan current = get(id);
 
 		if (null != current) {
-			current.setObjectStatus(ObjectStatus.DELETED);
+			current.setObjectStatus(ObjectStatus.INACTIVE);
 			save(current);
 		}
 	}
-
 }

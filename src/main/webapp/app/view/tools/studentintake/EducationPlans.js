@@ -46,7 +46,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: false
+				        allowBlank: true
 					},{
 				        xtype: 'checkboxgroup',
 				        fieldLabel: 'Check all that you have completed',

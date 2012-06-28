@@ -83,6 +83,6 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
     },
     
     loadDisplay: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+    	var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
     }
 });

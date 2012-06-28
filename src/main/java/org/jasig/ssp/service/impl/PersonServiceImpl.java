@@ -87,14 +87,14 @@ public class PersonServiceImpl implements PersonService {
 	 * Mark a Person as deleted.
 	 * 
 	 * Does not remove them from persistent storage, but marks their status flag
-	 * to {@link ObjectStatus#DELETED}.
+	 * to {@link ObjectStatus#INACTIVE}.
 	 */
 	@Override
 	public void delete(final UUID id) throws ObjectNotFoundException {
 		final Person current = get(id);
 
 		if (null != current) {
-			current.setObjectStatus(ObjectStatus.DELETED);
+			current.setObjectStatus(ObjectStatus.INACTIVE);
 			save(current);
 		}
 	}

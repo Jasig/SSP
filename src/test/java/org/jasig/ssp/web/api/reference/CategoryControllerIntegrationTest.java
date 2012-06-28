@@ -47,6 +47,10 @@ public class CategoryControllerIntegrationTest {
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
+	private static final String TEST_STRING1 = "testString1";
+
+	private static final String TEST_STRING2 = "testString1";
+
 	/**
 	 * Setup the security service with the admin user for use by
 	 * {@link #testControllerCreateAndDelete()} that checks that the Auditable
@@ -60,11 +64,14 @@ public class CategoryControllerIntegrationTest {
 	/**
 	 * Test the {@link CategoryController#get(UUID)} action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -83,11 +90,14 @@ public class CategoryControllerIntegrationTest {
 	 * Test that the {@link CategoryController#get(UUID)} action returns the
 	 * correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -103,30 +113,30 @@ public class CategoryControllerIntegrationTest {
 	 * Test the {@link CategoryController#create(CategoryTO)} and
 	 * {@link CategoryController#delete(UUID)} actions.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If lookup data can not be found.
+	 * @throws ValidationException
+	 *             If there are any validation errors.
 	 */
 	@Test
-	public void testControllerCreateAndDelete() throws Exception {
+	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final String testString1 = "testString1";
-		final String testString2 = "testString1";
-
 		// Check validation of 'no ID for create()'
-		CategoryTO obj = new CategoryTO(UUID.randomUUID(), testString1,
-				testString2);
+		CategoryTO obj = new CategoryTO(UUID.randomUUID(), TEST_STRING1,
+				TEST_STRING2);
 		try {
 			obj = controller.create(obj);
-			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
-		} catch (final ValidationException exc) {
+			fail("Calling create with an object with an ID should have thrown a validation excpetion."); // NOPMD
+		} catch (final ValidationException exc) { // NOPMD
 			/* expected */
 		}
 
 		// Now create a valid Category
-		obj = new CategoryTO(null, testString1, testString2);
+		obj = new CategoryTO(null, TEST_STRING1, TEST_STRING2);
 		obj = controller.create(obj);
 
 		assertNotNull(
@@ -137,7 +147,7 @@ public class CategoryControllerIntegrationTest {
 				obj.getId());
 		assertEquals(
 				"Returned CategoryTO.Name from the controller did not match.",
-				testString1, obj.getName());
+				TEST_STRING1, obj.getName());
 		assertEquals(
 				"Returned CategoryTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
 				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
@@ -150,12 +160,9 @@ public class CategoryControllerIntegrationTest {
 	 * Test the
 	 * {@link CategoryController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<CategoryTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
