@@ -205,11 +205,33 @@ public class TaskServiceImpl
 		task.setSessionId(sessionId);
 		task.setDescription(challengeReferral.getPublicDescription());
 		task.setName(challengeReferral.getName());
-		task.setConfidentialityLevel(challenge.getDefaultConfidentialityLevel());
+
+		setDefaultConfidentialityLevel(task, challenge);
 
 		create(task);
 
 		return task;
+	}
+
+	private void setDefaultConfidentialityLevel(final Task task,
+			final Challenge challenge) {
+		if (challenge != null) {
+			if (challenge.getDefaultConfidentialityLevel() != null) {
+				task.setConfidentialityLevel(challenge
+						.getDefaultConfidentialityLevel());
+			}
+		}
+
+		if (task.getConfidentialityLevel() == null) {
+			try {
+				task.setConfidentialityLevel(confidentialityLevelService
+						.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
+			} catch (ObjectNotFoundException e) {
+				LOGGER.error(
+						"Unable to find the default confidentiality level", e);
+			}
+		}
+
 	}
 
 	@Override
@@ -222,8 +244,7 @@ public class TaskServiceImpl
 		customTask.setDescription(description);
 		customTask.setPerson(student);
 		customTask.setName(name);
-		customTask.setConfidentialityLevel(confidentialityLevelService
-				.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
+		setDefaultConfidentialityLevel(customTask, null);
 
 		create(customTask);
 
