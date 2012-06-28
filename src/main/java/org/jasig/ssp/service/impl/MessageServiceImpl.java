@@ -254,7 +254,7 @@ public class MessageServiceImpl implements MessageService {
 			} catch (MailSendException e) {
 				try {
 					LOGGER.warn("Send failed, going to wait and try again");
-					Thread.currentThread().wait(20 * 1000L);
+					Thread.sleep(20 * 1000L);
 					javaMailSender.send(mimeMessage);
 				} catch (InterruptedException e1) {
 					LOGGER.error("Thread error", e1);
