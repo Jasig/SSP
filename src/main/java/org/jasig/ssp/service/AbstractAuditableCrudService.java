@@ -72,9 +72,9 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	public void delete(final UUID id) throws ObjectNotFoundException {
 		final T current = getDao().get(id);
 
-		if (!ObjectStatus.DELETED.equals(current.getObjectStatus())) {
+		if (!ObjectStatus.INACTIVE.equals(current.getObjectStatus())) {
 			// Object found and is not already deleted, set it and save change.
-			current.setObjectStatus(ObjectStatus.DELETED);
+			current.setObjectStatus(ObjectStatus.INACTIVE);
 			try {
 				save(current);
 			} catch (final ValidationException exc) {

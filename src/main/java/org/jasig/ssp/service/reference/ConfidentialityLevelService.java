@@ -38,6 +38,9 @@ public interface ConfidentialityLevelService extends
 
 	Collection<GrantedAuthority> confidentialityLevelsAsGrantedAuthorities();
 
-	Collection<ConfidentialityLevel> filterConfidentialityLevelsFromAuthorities(
-			Collection<String> authorities);
+	Collection<ConfidentialityLevel> filterConfidentialityLevelsFromPermissions(
+			Collection<String> permissions);
+
+	Collection<ConfidentialityLevel> filterConfidentialityLevelsFromGrantedAuthorities(
+			Collection<GrantedAuthority> authorities);
 }

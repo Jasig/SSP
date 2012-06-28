@@ -120,9 +120,9 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 		ChallengeChallengeReferral challengeReferral = null;
 		// if this challenge referral is already there and ACTIVE, delete
 		if (challengeReferralChallenges.getResults() > 0) {
-			for (ChallengeChallengeReferral item : challengeReferralChallenges
+			for (final ChallengeChallengeReferral item : challengeReferralChallenges
 					.getRows()) {
-				item.setObjectStatus(ObjectStatus.DELETED);
+				item.setObjectStatus(ObjectStatus.INACTIVE);
 
 				// we'll just return the last one
 				challengeReferral = challengeChallengeReferralDao.save(item);

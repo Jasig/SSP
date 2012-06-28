@@ -2,7 +2,7 @@ package org.jasig.ssp.service.impl;
 
 import org.jasig.ssp.dao.GoalDao;
 import org.jasig.ssp.model.Goal;
-import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
+import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 import org.jasig.ssp.service.GoalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class GoalServiceImpl
-		extends AbstractPersonAssocAuditableService<Goal>
+		extends AbstractRestrictedPersonAssocAuditableService<Goal>
 		implements GoalService {
 
 	@Autowired

@@ -80,8 +80,9 @@ public class PersonTOFactoryImpl extends
 		model.setStudentType((tObject.getStudentTypeId() == null) ? null
 				: studentTypeService.get(tObject.getStudentTypeId()));
 
-		model.setCoach((tObject.getCoachId() == null) ? null : personService
-				.get(tObject.getCoachId()));
+		model.setCoach(((tObject.getCoach() == null) || (tObject.getCoach()
+				.getId() == null)) ? null : personService
+				.get(tObject.getCoach().getId()));
 
 		personSpecialServiceGroupTOFactory.updateSetFromLites(
 				model.getSpecialServiceGroups(),

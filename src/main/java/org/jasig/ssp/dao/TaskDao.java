@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -15,53 +16,64 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class TaskDao
-		extends AbstractPersonAssocAuditableCrudDao<Task>
-		implements PersonAssocAuditableCrudDao<Task> {
+		extends AbstractRestrictedPersonAssocAuditableCrudDao<Task>
+		implements RestrictedPersonAssocAuditableDao<Task> {
+
+	private static final String UNCHECKED = "unchecked";
 
 	protected TaskDao() {
 		super(Task.class);
 	}
 
-	@SuppressWarnings("unchecked")
+	private void addCompleteRestriction(final boolean complete,
+			final Criteria criteria) {
+
+		if (complete) {
+			criteria.add(Restrictions.isNotNull("completedDate"));
+		} else {
+			criteria.add(Restrictions.isNull("completedDate"));
+		}
+	}
+
+	@SuppressWarnings(UNCHECKED)
 	public List<Task> getAllForPersonId(final UUID personId,
-			final boolean complete, final SortingAndPaging sAndP) {
+			final boolean complete,
+			final SspUser requestor,
+			final SortingAndPaging sAndP) {
+
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("person.id", personId));
 
-		if (complete) {
-			criteria.add(Restrictions.isNotNull("completedDate"));
-		} else {
-			criteria.add(Restrictions.isNull("completedDate"));
-		}
+		addCompleteRestriction(complete, criteria);
+		addConfidentialityLevelsRestriction(requestor, criteria);
 
 		return criteria.list();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Task> getAllForSessionId(final String sessionId,
 			final SortingAndPaging sAndP) {
+
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("sessionId", sessionId));
 		return criteria.list();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Task> getAllForSessionId(final String sessionId,
 			final boolean complete, final SortingAndPaging sAndP) {
+
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("sessionId", sessionId));
 
-		if (complete) {
-			criteria.add(Restrictions.isNotNull("completedDate"));
-		} else {
-			criteria.add(Restrictions.isNull("completedDate"));
-		}
+		addCompleteRestriction(complete, criteria);
 
 		return criteria.list();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Task> getAllWhichNeedRemindersSent(final SortingAndPaging sAndP) {
+
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.isNull("completedDate"));
 		criteria.add(Restrictions.isNull("reminderSentDate"));
@@ -70,50 +82,49 @@ public class TaskDao
 		return criteria.list();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Task> getAllForPersonIdAndChallengeReferralId(
 			final UUID personId,
 			final boolean complete, final UUID challengeReferralId,
+			final SspUser requestor,
 			final SortingAndPaging sAndP) {
+
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("person.id", personId));
 		criteria.add(Restrictions.eq("challengeReferral.id",
 				challengeReferralId));
 
-		if (complete) {
-			criteria.add(Restrictions.isNotNull("completedDate"));
-		} else {
-			criteria.add(Restrictions.isNull("completedDate"));
-		}
+		addCompleteRestriction(complete, criteria);
+		addConfidentialityLevelsRestriction(requestor, criteria);
 
 		return criteria.list();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Task> getAllForSessionIdAndChallengeReferralId(
 			final String sessionId, final boolean complete,
 			final UUID challengeReferralId, final SortingAndPaging sAndP) {
+
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("sessionId", sessionId));
 		criteria.add(Restrictions.eq("challengeReferral.id",
 				challengeReferralId));
 
-		if (complete) {
-			criteria.add(Restrictions.isNotNull("completedDate"));
-		} else {
-			criteria.add(Restrictions.isNull("completedDate"));
-		}
+		addCompleteRestriction(complete, criteria);
 
 		return criteria.list();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Task> getTasksInList(final List<UUID> taskIds,
+			final SspUser requestor,
 			final SortingAndPaging sAndP) {
+
 		final Criteria criteria = createCriteria(sAndP);
-		// :TODO this ought to start working correctly when ids are switched to
-		// Long?
 		criteria.add(Restrictions.in("id", taskIds));
+
+		addConfidentialityLevelsRestriction(requestor, criteria);
+
 		return criteria.list();
 	}
 }

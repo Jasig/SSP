@@ -3,6 +3,7 @@ package org.jasig.ssp.web.api;
 import java.util.UUID;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -79,9 +80,11 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	public abstract String permissionBaseName();
 
 	public void checkPermissionForOp(final String op) {
+
 		if (!securityService.hasAuthority("ROLE_PERSON_"
 				+ permissionBaseName() + "_" + op)) {
-			throw new AccessDeniedException("Access is denied.");
+
+			throw new AccessDeniedException("Access is denied for Operation.");
 		}
 	}
 
@@ -122,16 +125,17 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	PagingTO<TO, T> getAll(@PathVariable final UUID personId,
+	PagingTO<TO, T> getAll(@NotNull @PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
-
+		// Check permissions
 		checkPermissionForOp("READ");
 
+		// Run getAll for the specified person
 		final Person person = personService.get(personId);
 		final PagingWrapper<T> data = getService().getAllForPerson(person,
 				SortingAndPaging.createForSingleSort(status, start,
@@ -237,14 +241,12 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id,
 			@PathVariable final UUID personId) throws ObjectNotFoundException {
-
 		checkPermissionForOp("DELETE");
-
 		getService().delete(id);
 		return new ServiceResponse(true);
 	}
 
-	private TO instantiateTO(final T model) throws ValidationException {
+	protected TO instantiateTO(final T model) throws ValidationException {
 		TO out;
 		try {
 			out = this.transferObjectClass.newInstance();

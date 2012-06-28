@@ -135,8 +135,8 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 	public void testControllerDelete() throws ValidationException,
 			ObjectNotFoundException {
 		final Date now = new Date();
-
 		final PersonProgramStatusTO obj = createProgramStatus();
+		obj.setEffectiveDate(now);
 		final PersonProgramStatusTO saved = controller.create(PERSON_ID,
 				obj);
 		assertNotNull("Saved instance should not have been null.", saved);
@@ -185,6 +185,7 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 		final Date now = new Date();
 
 		final PersonProgramStatusTO obj = createProgramStatus();
+		obj.setEffectiveDate(now);
 		final PersonProgramStatusTO saved = controller.create(PERSON_ID,
 				obj);
 
@@ -197,6 +198,7 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 				saved.getProgramStatusChangeReasonId());
 
 		final PersonProgramStatusTO obj2 = createProgramStatus();
+		obj2.setEffectiveDate(now);
 
 		final PersonProgramStatusTO saved2 = controller.create(PERSON_ID,
 				obj2);
@@ -230,8 +232,8 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 	public void testControllerCreateDuplicateProhibition()
 			throws ValidationException, ObjectNotFoundException {
 		final Date now = new Date();
-
 		final PersonProgramStatusTO obj = createProgramStatus();
+		obj.setEffectiveDate(now);
 		final PersonProgramStatusTO saved = controller.create(PERSON_ID,
 				obj);
 
@@ -277,7 +279,6 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 		final PersonProgramStatusTO obj = new PersonProgramStatusTO();
 		obj.setPersonId(PERSON_ID);
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setEffectiveDate(new Date());
 		obj.setProgramStatusId(PROGRAM_STATUS_ID);
 		obj.setProgramStatusChangeReasonId(PROGRAM_STATUS_CHANGE_REASON_ID);
 		return obj;

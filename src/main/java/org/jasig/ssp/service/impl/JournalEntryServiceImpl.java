@@ -2,7 +2,7 @@ package org.jasig.ssp.service.impl;
 
 import org.jasig.ssp.dao.JournalEntryDao;
 import org.jasig.ssp.model.JournalEntry;
-import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
+import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class JournalEntryServiceImpl
-		extends AbstractPersonAssocAuditableService<JournalEntry>
+		extends AbstractRestrictedPersonAssocAuditableService<JournalEntry>
 		implements JournalEntryService {
 
 	@Autowired

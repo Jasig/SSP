@@ -112,7 +112,7 @@ public class ConfidentialityLevelServiceTest {
 	public void filterConfidentialityLevelsFromAuthorities() {
 		final List<ConfidentialityLevel> daoAll = new ArrayList<ConfidentialityLevel>();
 		daoAll.add(new ConfidentialityLevel(UUID.randomUUID(), "TEST 1", "T1",
-				DataPermissions.DATA_MY_RECORD_ONLY));
+				DataPermissions.DATA_DISABILITY));
 		daoAll.add(new ConfidentialityLevel(UUID.randomUUID(), "TEST 2", "T2",
 				DataPermissions.DATA_COUNSELING_SERVICES));
 
@@ -122,10 +122,10 @@ public class ConfidentialityLevelServiceTest {
 		replay(dao);
 
 		final List<String> authorities = Lists.newArrayList();
-		authorities.add("ROLE_DATA_MY_RECORD_ONLY");
+		authorities.add("ROLE_DATA_DISABILITY");
 
 		final Collection<ConfidentialityLevel> all = service
-				.filterConfidentialityLevelsFromAuthorities(authorities);
+				.filterConfidentialityLevelsFromPermissions(authorities);
 		assertEquals(1, all.size());
 		verify(dao);
 	}

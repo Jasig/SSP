@@ -73,9 +73,10 @@ public class PersonToolServiceImpl
 			final Tools tool) {
 		final PersonTool personTool = personHasTool(student, tool);
 		if (personTool != null) {
-			personTool.setObjectStatus(ObjectStatus.DELETED);
+			personTool.setObjectStatus(ObjectStatus.INACTIVE);
 			personToolsDao.save(personTool);
 		}
+
 		return personTool;
 	}
 

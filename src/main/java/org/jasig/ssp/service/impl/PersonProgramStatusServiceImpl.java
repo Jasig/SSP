@@ -75,10 +75,10 @@ public class PersonProgramStatusServiceImpl extends
 	public void delete(final UUID id) throws ObjectNotFoundException {
 		final PersonProgramStatus current = getDao().get(id);
 
-		if (!ObjectStatus.DELETED.equals(current.getObjectStatus())
+		if (!ObjectStatus.INACTIVE.equals(current.getObjectStatus())
 				|| current.getExpirationDate() == null) {
 			// Object found and is not already deleted, set it and save change.
-			current.setObjectStatus(ObjectStatus.DELETED);
+			current.setObjectStatus(ObjectStatus.INACTIVE);
 			current.setExpirationDate(new Date());
 			try {
 				save(current);

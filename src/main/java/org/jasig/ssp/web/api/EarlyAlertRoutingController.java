@@ -102,6 +102,7 @@ public class EarlyAlertRoutingController
 			throws ObjectNotFoundException {
 		service.checkCampusIds(campusId, null);
 
+		// Run getAll for the specified Campus
 		final PagingWrapper<EarlyAlertRouting> list = service
 				.getAllForCampus(campusService.get(campusId), SortingAndPaging
 						.createForSingleSort(status, start, limit, sort,
@@ -132,6 +133,7 @@ public class EarlyAlertRoutingController
 			final @PathVariable UUID id)
 			throws ObjectNotFoundException {
 		final EarlyAlertRouting model = service.get(id);
+
 		if (model == null) {
 			throw new ObjectNotFoundException(id, "EarlyAlertRouting");
 		}
@@ -227,7 +229,7 @@ public class EarlyAlertRoutingController
 
 	/**
 	 * Marks the specified data instance with a status of
-	 * {@link ObjectStatus#DELETED}.
+	 * {@link ObjectStatus#INACTIVE}.
 	 * 
 	 * @param campusId
 	 *            Campus identifier

@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.impl;
+package org.jasig.ssp.service.impl; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -14,25 +14,31 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
+/**
+ * {@link PersonServiceImpl} test suite
+ * 
+ * @author jon.adams
+ * 
+ */
 public class PersonServiceTest {
 
-	private PersonServiceImpl service;
+	private transient PersonServiceImpl service;
 
-	private PersonDao dao;
+	private transient PersonDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new PersonServiceImpl();
 		dao = createMock(PersonDao.class);
 		service.setDao(dao);
@@ -40,7 +46,7 @@ public class PersonServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<Person> daoAll = new ArrayList<Person>();
+		final List<Person> daoAll = new ArrayList<Person>();
 		daoAll.add(new Person());
 
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
@@ -48,7 +54,7 @@ public class PersonServiceTest {
 
 		replay(dao);
 
-		Collection<Person> all = service.getAll(
+		final Collection<Person> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertFalse(all.isEmpty());
 		verify(dao);
@@ -56,8 +62,8 @@ public class PersonServiceTest {
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Person daoOne = new Person(id);
+		final UUID id = UUID.randomUUID();
+		final Person daoOne = new Person(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 
@@ -69,8 +75,8 @@ public class PersonServiceTest {
 
 	@Test
 	public void testSave() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Person daoOne = new Person(id);
+		final UUID id = UUID.randomUUID();
+		final Person daoOne = new Person(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
 
@@ -82,8 +88,8 @@ public class PersonServiceTest {
 
 	@Test
 	public void testDelete() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Person daoOne = new Person(id);
+		final UUID id = UUID.randomUUID();
+		final Person daoOne = new Person(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
@@ -97,13 +103,13 @@ public class PersonServiceTest {
 
 	@Test
 	public void personFromUserId() throws ObjectNotFoundException {
-		String userId = "12345";
-		Person person = new Person();
+		final String userId = "12345";
+		final Person person = new Person();
 		expect(dao.fromUserId(userId)).andReturn(person);
 
 		replay(dao);
 
-		Person result = service.personFromUserId(userId);
+		final Person result = service.personFromUserId(userId);
 
 		verify(dao);
 		assertEquals(person, result);
@@ -124,7 +130,8 @@ public class PersonServiceTest {
 
 		replay(dao);
 
-		List<Person> result = service.peopleFromListOfIds(personIds, sAndP);
+		final List<Person> result = service.peopleFromListOfIds(personIds,
+				sAndP);
 
 		verify(dao);
 		assertEquals(people, result);

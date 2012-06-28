@@ -379,7 +379,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		final EarlyAlertSuggestionTO deletedSuggestion = new EarlyAlertSuggestionTO(
 				EARLY_ALERT_SUGGESTION_DELETED_ID,
 				"EARLY_ALERT_SUGGESTION_DELETED_NAME");
-		deletedSuggestion.setObjectStatus(ObjectStatus.DELETED);
+		deletedSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
 		earlyAlertSuggestionIds.add(deletedSuggestion);
 		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 		return obj;

@@ -1,7 +1,6 @@
 package org.jasig.ssp.transferobject.reports;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,10 +10,7 @@ import java.util.UUID;
 public class AddressLabelSearchTO
 		implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3118831549819428989L;
 	private UUID programStatus;
 	private List<UUID> specialServiceGroupIds;
 	private List<UUID> referralSourcesIds;

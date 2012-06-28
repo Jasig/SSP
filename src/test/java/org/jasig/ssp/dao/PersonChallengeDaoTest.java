@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -63,13 +63,17 @@ public class PersonChallengeDaoTest {
 		Person person = personService.get(UUID
 				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
 
-		List<PersonChallenge> modelsBefore = dao.getAllForPerson(person);
+		Collection<PersonChallenge> modelsBefore = dao.getAllForPersonId(
+				person.getId(), new SortingAndPaging(ObjectStatus.ACTIVE))
+				.getRows();
 
 		// save a new challenge for a person
 		PersonChallenge model = new PersonChallenge(person, testChallenge);
 		dao.save(model);
 
-		List<PersonChallenge> modelsAfter = dao.getAllForPerson(person);
+		Collection<PersonChallenge> modelsAfter = dao.getAllForPersonId(
+				person.getId(), new SortingAndPaging(ObjectStatus.ACTIVE))
+				.getRows();
 
 		// we should see more than before
 		assertTrue(modelsBefore.size() < modelsAfter.size());
@@ -112,7 +116,9 @@ public class PersonChallengeDaoTest {
 		}
 		assertNull(model);
 
-		List<PersonChallenge> modelsAfter = dao.getAllForPerson(new Person(id));
+		Collection<PersonChallenge> modelsAfter = dao.getAllForPersonId(
+				id, new SortingAndPaging(ObjectStatus.ACTIVE))
+				.getRows();
 		assertEquals(0, modelsAfter.size());
 	}
 

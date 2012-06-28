@@ -122,6 +122,7 @@ public class IntakeServiceIntegrationTest {
 		Person person = new Person();
 		person.setFirstName("first");
 		person.setLastName(LASTNAME);
+		person.setUsername("username");
 		person.setPrimaryEmailAddress("email");
 		person.setAddressLine1("address line 1");
 		person.setCellPhone("867-5309");

@@ -73,9 +73,8 @@ public class PersonEducationGoalServiceImpl implements
 		final PersonEducationGoal current = get(id);
 
 		if (null != current) {
-			current.setObjectStatus(ObjectStatus.DELETED);
+			current.setObjectStatus(ObjectStatus.INACTIVE);
 			save(current);
 		}
 	}
-
 }

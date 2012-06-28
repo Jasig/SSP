@@ -151,12 +151,9 @@ public class JournalStepControllerIntegrationTest {
 	 * Test the
 	 * {@link JournalStepController#getAll(ObjectStatus, Integer, Integer, String, String)}
 	 * action.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerAll() throws Exception {
+	public void testControllerAll() {
 		final Collection<JournalStepTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 

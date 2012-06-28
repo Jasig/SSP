@@ -86,7 +86,7 @@ public class ConfidentialityLevelServiceImpl extends
 	}
 
 	@Override
-	public Collection<ConfidentialityLevel> filterConfidentialityLevelsFromAuthorities(
+	public Collection<ConfidentialityLevel> filterConfidentialityLevelsFromPermissions(
 			final Collection<String> authorities) {
 
 		final Collection<ConfidentialityLevel> filtered = Lists.newArrayList();
@@ -98,6 +98,25 @@ public class ConfidentialityLevelServiceImpl extends
 		for (ConfidentialityLevel level : levels) {
 			if (authorities
 					.contains(level.getPermission().asPermissionString())) {
+				filtered.add(level);
+			}
+		}
+		return filtered;
+	}
+
+	@Override
+	public Collection<ConfidentialityLevel> filterConfidentialityLevelsFromGrantedAuthorities(
+			final Collection<GrantedAuthority> authorities) {
+
+		final Collection<ConfidentialityLevel> filtered = Lists.newArrayList();
+
+		final Collection<ConfidentialityLevel> levels = getAll(
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE)).getRows();
+
+		for (ConfidentialityLevel level : levels) {
+			if (authorities
+					.contains(level.getPermission().asGrantedAuthority())) {
 				filtered.add(level);
 			}
 		}

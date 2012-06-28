@@ -126,15 +126,15 @@ br {
 				<option value=""></option>
 				</select>
 			<br /> <label><span>Student Type</span></label> <select
-				id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+				id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select> 
 			<br /> <label><span>Special Service Groups</span></label> <select
 				id="SpecialServiceGroupIds" name="specialServiceGroupIds"
 				multiple="multiple"></select> <br /> <label><span>Referral
 					Source</span></label> <select id="ReferralSourceGroup" name="referralSourcesIds"
 				multiple="multiple" /></select> <br />
 			<label><span>Date Student Added From</span></label><input
-				type="textbox" name="test1" id="dateAddedFrom" /><br /> <label><span>Date
-					Student Added To</span></label><input type="textbox" name="test2" id="dateAddedTo" /><br />
+				type="text" name="test1" id="dateAddedFrom" /><br /> <label><span>Date
+					Student Added To</span></label><input type="text" name="test2" id="dateAddedTo" /><br />
 			<label><span>Anticipated Start Term</span></label> <select
 				id="anticipatedStartTerm" name="anticipatedStartTerm"
 				class="custom-class1 custom-class2" style="width: 200px;">

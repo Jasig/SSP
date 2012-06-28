@@ -10,11 +10,12 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface TaskService
-		extends PersonAssocAuditableService<Task> {
+		extends RestrictedPersonAssocAuditableService<Task> {
 
 	/**
 	 * Get all tasks for the Person in the given completion state
@@ -26,6 +27,7 @@ public interface TaskService
 	 * @return All tasks for the Person in the given completion state
 	 */
 	List<Task> getAllForPerson(Person person, boolean complete,
+			SspUser requestor,
 			SortingAndPaging sAndP);
 
 	/**
@@ -35,7 +37,8 @@ public interface TaskService
 	 * @param sAndP
 	 * @return All tasks for the Session
 	 */
-	List<Task> getAllForSessionId(String sessionId, SortingAndPaging sAndP);
+	List<Task> getAllForSessionId(final String sessionId,
+			final SortingAndPaging sAndP);
 
 	/**
 	 * Get all tasks for the Session in the given completion state
@@ -97,6 +100,7 @@ public interface TaskService
 	 */
 	List<Task> getAllForPersonAndChallengeReferral(Person person,
 			boolean complete, ChallengeReferral challengeReferral,
+			SspUser requestor,
 			SortingAndPaging sAndP);
 
 	/**
@@ -124,6 +128,7 @@ public interface TaskService
 	 * @return All tasks for the person, grouped by Task Group
 	 */
 	Map<String, List<Task>> getAllGroupedByTaskGroup(Person person,
+			SspUser requestor,
 			SortingAndPaging sAndP);
 
 	/**
@@ -192,7 +197,9 @@ public interface TaskService
 	 *            sorting and paging options
 	 * @return Tasks from task ids
 	 */
-	List<Task> getTasksInList(List<UUID> taskIds, SortingAndPaging sAndP);
+	List<Task> getTasksInList(final List<UUID> taskIds,
+			final SspUser requestor,
+			final SortingAndPaging sAndP);
 
 	/**
 	 * Sends taskReminders for all tasks in the task reminder window
@@ -212,5 +219,6 @@ public interface TaskService
 	 */
 	List<Task> getTasksForPersonIfNoneSelected(
 			final List<UUID> selectedIds, final Person person,
+			final SspUser requestor,
 			final String sessionId, final SortingAndPaging sAndP);
 }

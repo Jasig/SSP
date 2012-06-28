@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.security.SspUser;
@@ -39,6 +40,9 @@ public class SessionController extends BaseController {
 
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;
+
+	@Autowired
+	private transient PersonTOFactory factory;
 
 	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
 	public @ResponseBody
@@ -80,7 +84,7 @@ public class SessionController extends BaseController {
 			}
 
 			levels = confidentialityLevelService
-					.filterConfidentialityLevelsFromAuthorities(permissions);
+					.filterConfidentialityLevelsFromPermissions(permissions);
 		}
 
 		model.put("success", true);
@@ -113,12 +117,8 @@ public class SessionController extends BaseController {
 			return null;
 		}
 
-		// Convert model to a transfer object
-		final PersonTO pTo = new PersonTO();
-		pTo.from(user.getPerson());
-
 		// Return authenticated person transfer object
-		return pTo;
+		return factory.from(user.getPerson());
 	}
 
 	@Override

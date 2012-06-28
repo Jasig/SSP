@@ -12,6 +12,8 @@ import org.jasig.ssp.model.Person
 import org.jasig.ssp.model.Task
 import org.jasig.ssp.model.reference.Challenge
 import org.jasig.ssp.model.reference.ChallengeReferral
+import org.jasig.ssp.security.SspUser
+import org.springframework.security.core.GrantedAuthority
 
 
 class TaskServiceImplTest {
@@ -26,7 +28,7 @@ class TaskServiceImplTest {
 	private def dao = [
 		get:{UUID id -> testTask1},
 		save:{Task task -> return task},
-		getAllForPersonId:{personId, sAndP -> return all}
+		getAllForPersonId:{personId, requestor, sAndP -> return all}
 	] as TaskDao
 
 	private TaskServiceImpl service
@@ -106,7 +108,10 @@ class TaskServiceImplTest {
 				person: testStudent,
 				createdBy: testStudent);
 
-		Map<String, List<Task>> grouped = service.getAllGroupedByTaskGroup(testStudent, null);
+		SspUser requestor = new SspUser("username", "password",
+				true, true,true,true, new ArrayList<GrantedAuthority>())
+
+		Map<String, List<Task>> grouped = service.getAllGroupedByTaskGroup(testStudent, requestor, null);
 		assertEquals(2,grouped["testChallenge"].size());
 		assertEquals(1,grouped["testChallenge2"].size());
 		assertEquals(1,grouped[Task.CUSTOM_GROUP_NAME].size());

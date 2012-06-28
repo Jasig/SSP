@@ -84,9 +84,10 @@ public class PersonChallengeController extends
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
-
+		// Check permissions
 		checkPermissionForOp("READ");
 
+		// Run getAll for the specified person
 		final Person person = personService.get(personId);
 		final PagingWrapper<PersonChallenge> data = getService()
 				.getAllForPerson(person,

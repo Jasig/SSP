@@ -16,6 +16,7 @@
 		& @Repository to configure as beans -->
 	<context:component-scan
 		base-package="org.jasig.ssp,org.jasig.mygps" />
+		
 	<mvc:annotation-driven />
 
 	<mvc:interceptors>

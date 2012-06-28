@@ -11,6 +11,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonReferralSource;
 import org.jasig.ssp.model.PersonServiceReason;
@@ -29,25 +30,51 @@ public class PersonTO
 		extends AbstractAuditableTO<Person>
 		implements TransferObject<Person> {
 
-	private String firstName, middleInitial, lastName;
+	@NotNull
+	private String firstName;
+
+	private String middleInitial;
+
+	@NotNull
+	private String lastName;
 
 	private Date birthDate;
 
-	private String primaryEmailAddress, secondaryEmailAddress;
+	@NotNull
+	private String primaryEmailAddress;
 
-	private String username, userId;
+	private String secondaryEmailAddress;
 
-	private String homePhone, workPhone, cellPhone;
+	@NotNull
+	private String username;
 
-	private String addressLine1, addressLine2, city, state, zipCode;
+	private String userId;
+
+	private String homePhone;
+
+	private String workPhone;
+
+	private String cellPhone;
+
+	private String addressLine1;
+
+	private String addressLine2;
+
+	private String city;
+
+	private String state;
+
+	private String zipCode;
 
 	private String photoUrl;
 
 	private String schoolId;
 
-	private boolean enabled;
+	private Boolean enabled;
 
-	private UUID coachId, studentTypeId;
+	private UUID studentTypeId;
+
+	private PersonLiteTO coach;
 
 	private String strengths;
 
@@ -112,20 +139,29 @@ public class PersonTO
 		photoUrl = model.getPhotoUrl();
 		schoolId = model.getSchoolId();
 		enabled = model.getEnabled();
-		coachId = model.getCoach() == null ? null : model.getCoach().getId();
+
+		final Person coachPerson = model.getCoach();
+		if (coachPerson == null) {
+			coach = null;
+		} else {
+			coach = new PersonLiteTO(coachPerson.getId(),
+					coachPerson.getFirstName(),
+					coachPerson.getLastName());
+		}
+
 		strengths = model.getStrengths();
 		abilityToBenefit = model.getAbilityToBenefit();
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
 		anticipatedStartYear = model.getAnticipatedStartYear();
 		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
-		studentTypeId = (model.getStudentType() == null) ? null : model
+		studentTypeId = model.getStudentType() == null ? null : model
 				.getStudentType().getId();
 
 		if ((null != model.getSpecialServiceGroups())
 				&& !(model.getSpecialServiceGroups().isEmpty())) {
 			final List<SpecialServiceGroup> specialServiceGroupsFromModel = Lists
 					.newArrayList();
-			for (PersonSpecialServiceGroup pssg : model
+			for (final PersonSpecialServiceGroup pssg : model
 					.getSpecialServiceGroups()) {
 				specialServiceGroupsFromModel
 						.add(pssg.getSpecialServiceGroup());
@@ -138,7 +174,7 @@ public class PersonTO
 				&& !(model.getSpecialServiceGroups().isEmpty())) {
 			final List<ReferralSource> referralSourcesFromModel = Lists
 					.newArrayList();
-			for (PersonReferralSource prs : model.getReferralSources()) {
+			for (final PersonReferralSource prs : model.getReferralSources()) {
 				referralSourcesFromModel.add(prs.getReferralSource());
 			}
 			referralSources = ReferenceLiteTO
@@ -149,7 +185,7 @@ public class PersonTO
 				&& !(model.getServiceReasons().isEmpty())) {
 			final List<ServiceReason> serviceReasonsFromModel = Lists
 					.newArrayList();
-			for (PersonServiceReason psr : model.getServiceReasons()) {
+			for (final PersonServiceReason psr : model.getServiceReasons()) {
 				serviceReasonsFromModel.add(psr.getServiceReason());
 			}
 			serviceReasons = ReferenceLiteTO.toTOList(serviceReasonsFromModel);
@@ -227,7 +263,21 @@ public class PersonTO
 		return username;
 	}
 
-	public void setUsername(final String username) {
+	/**
+	 * the user name for authentication and identification purposes
+	 * 
+	 * <p>
+	 * Required to be non-empty and unique.
+	 * 
+	 * @param username
+	 *            the user name, required, not empty, unique amongst all Person
+	 *            instances
+	 */
+	public void setUsername(@NotNull final String username) {
+		if (StringUtils.isWhitespace(username)) {
+			throw new IllegalArgumentException("username can not be empty.");
+		}
+
 		this.username = username;
 	}
 
@@ -339,21 +389,6 @@ public class PersonTO
 		this.enabled = enabled;
 	}
 
-	/**
-	 * @return the coachId
-	 */
-	public UUID getCoachId() {
-		return coachId;
-	}
-
-	/**
-	 * @param coachId
-	 *            the coachId to set
-	 */
-	public void setCoachId(final UUID coachId) {
-		this.coachId = coachId;
-	}
-
 	public String getStrengths() {
 		return strengths;
 	}
@@ -429,6 +464,27 @@ public class PersonTO
 	public void setServiceReasons(
 			final List<ReferenceLiteTO<ServiceReason>> serviceReasons) {
 		this.serviceReasons = serviceReasons;
+	}
+
+	public PersonLiteTO getCoach() {
+		return coach;
+	}
+
+	public void setCoach(final PersonLiteTO coach) {
+		this.coach = coach;
+	}
+
+	public UUID getCoachId() {
+		if (coach == null) {
+			return null;
+		} else {
+			return coach.getId();
+		}
+	}
+
+	public void setCoachId(final UUID coachId) {
+		coach = new PersonLiteTO();
+		coach.setId(coachId);
 	}
 
 }

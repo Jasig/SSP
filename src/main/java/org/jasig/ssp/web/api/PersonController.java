@@ -61,7 +61,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
-
+		// Run getAll
 		final PagingWrapper<Person> people = service.getAll(SortingAndPaging
 				.createForSingleSort(status, start, limit, sort, sortDirection,
 						null));
@@ -78,9 +78,9 @@ public class PersonController extends RestController<PersonTO, Person> {
 		final Person model = service.get(id);
 		if (model == null) {
 			return null;
-		} else {
-			return new PersonTO(model);
 		}
+
+		return new PersonTO(model);
 	}
 
 	@Override

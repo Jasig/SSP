@@ -1,4 +1,4 @@
-package org.jasig.mygps.web;
+package org.jasig.mygps.web; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -20,6 +20,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
@@ -28,6 +29,7 @@ import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -81,8 +83,10 @@ public class MyGpsTaskControllerTest {
 		replay(personService);
 		replay(service);
 
-		assertTrue(controller.createTaskForStudent(name, description,
-				student.getUserId(), new Date()));
+		assertTrue(
+				"Task creation should have returned success.",
+				controller.createTaskForStudent(name, description,
+						student.getUserId(), new Date()));
 
 		verify(personService);
 		verify(service);
@@ -108,11 +112,12 @@ public class MyGpsTaskControllerTest {
 		final TaskTO result = controller.createCustom(name, description);
 
 		verify(service);
-		assertNotNull(result);
+		assertNotNull("Custom Task should not have been null.", result);
 	}
 
 	@Test
-	public void createForChallengeReferral() throws Exception { // NOPMD
+	public void createForChallengeReferral() throws ObjectNotFoundException,
+			ValidationException {
 		final UUID challengeId = UUID.randomUUID();
 		final Challenge challenge = new Challenge(challengeId);
 		final UUID challengeReferralId = UUID.randomUUID();
@@ -142,8 +147,8 @@ public class MyGpsTaskControllerTest {
 			verify(service);
 			verify(challengeService);
 			verify(challengeReferralService);
-			assertEquals(task.getId(), response.getId());
-		} catch (Exception e) {
+			assertEquals("IDs did not match.", task.getId(), response.getId());
+		} catch (final Exception e) {
 			fail("Some controller error thrown: " + e.getMessage());
 		}
 	}
@@ -160,8 +165,8 @@ public class MyGpsTaskControllerTest {
 			final Boolean response = controller.delete(taskId);
 
 			verify(service);
-			assertTrue(response);
-		} catch (Exception e) {
+			assertTrue("Delete action should have returned success.", response);
+		} catch (final Exception e) {
 			fail("A controller error was thrown: " + e.getMessage());
 		}
 	}
@@ -181,6 +186,7 @@ public class MyGpsTaskControllerTest {
 
 		expect(
 				service.getAllForPerson(eq(student), eq(false),
+						eq(securityService.currentUser()),
 						isA(SortingAndPaging.class))).andReturn(tasks);
 		service.sendTasksForPersonToEmail(tasks, student, emailAddresses, null);
 
@@ -190,8 +196,8 @@ public class MyGpsTaskControllerTest {
 			final Boolean response = controller.email(emailAddress);
 
 			verify(service);
-			assertTrue(response);
-		} catch (Exception e) {
+			assertTrue("Email action should have returned success.", response);
+		} catch (final Exception e) {
 			fail("controller error");
 		}
 	}
@@ -208,6 +214,7 @@ public class MyGpsTaskControllerTest {
 
 		expect(
 				service.getAllForPerson(eq(student),
+						eq(securityService.currentUser()),
 						isA(SortingAndPaging.class))).andReturn(tasks);
 
 		replay(service);
@@ -216,8 +223,8 @@ public class MyGpsTaskControllerTest {
 			final List<TaskTO> response = controller.getAll();
 
 			verify(service);
-			assertNotNull(response);
-		} catch (Exception e) {
+			assertNotNull("Task.getAll should not have return null.", response);
+		} catch (final Exception e) {
 			fail("controller error");
 		}
 	}
@@ -238,8 +245,8 @@ public class MyGpsTaskControllerTest {
 			final TaskTO response = controller.mark(taskId, complete);
 
 			verify(service);
-			assertEquals(task.getId(), response.getId());
-		} catch (Exception e) {
+			assertEquals("IDs did not match.", task.getId(), response.getId());
+		} catch (final Exception e) {
 			fail("controller error");
 		}
 	}

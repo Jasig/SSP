@@ -3,6 +3,7 @@ package org.jasig.ssp.dao; // NOPMD by jon.adams on 5/17/12 8:23 PM
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -11,15 +12,17 @@ import java.util.UUID;
 
 import org.jasig.ssp.dao.reference.ChallengeDao;
 import org.jasig.ssp.dao.reference.ChallengeReferralDao;
-import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.After;
 import org.junit.Before;
@@ -53,7 +56,7 @@ public class TaskDaoTest {
 	private transient TaskDao dao;
 
 	@Autowired
-	private transient ConfidentialityLevelDao confidentialityLevelDao;
+	private transient ConfidentialityLevelService confidentialityLevelService;
 
 	@Autowired
 	protected transient PersonService personService;
@@ -80,7 +83,9 @@ public class TaskDaoTest {
 		} catch (final ObjectNotFoundException e) {
 			LOGGER.error("can't find one of either sysadmin or ken");
 		}
-		securityService.setCurrent(ken);
+		securityService.setCurrent(ken,
+				confidentialityLevelService
+						.confidentialityLevelsAsGrantedAuthorities());
 
 		final Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, 7);
@@ -89,8 +94,12 @@ public class TaskDaoTest {
 		testChallengeReferral = challengeReferralDao.get(UUID
 				.fromString("19fbec43-8c0b-478b-9d5f-00ec6ec57511"));
 
+		final ConfidentialityLevel testConfLevel = confidentialityLevelService
+				.get(CONFIDENTIALITYLEVEL_ID);
+
 		testTask = new Task("test task", cal.getTime(), ken, testChallenge,
 				testChallengeReferral);
+		testTask.setConfidentialityLevel(testConfLevel);
 		dao.save(testTask);
 	}
 
@@ -99,25 +108,38 @@ public class TaskDaoTest {
 		dao.delete(testTask);
 	}
 
-	/*
-	 * public void crud() { This is in effect tested by the setup and teardown
-	 * of the tests in this class }
+	@Test(expected = UnsupportedOperationException.class)
+	public void getAllForPersonIdWithoutRequestor() {
+		assertList(dao.getAllForPersonId(UUID.randomUUID(),
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE)).getRows());
+	}
+
+	/**
+	 * A user with all confidentiality levels accessing the goal
 	 */
 	@Test
-	public void getAllForPersonId() {
-		assertList(dao.getAllForPersonId(ken.getId(), new SortingAndPaging(
-				ObjectStatus.ACTIVE)).getRows());
+	public void getAllForPersonIdAllLevels() throws ObjectNotFoundException {
+		final PagingWrapper<Task> tasks = dao.getAllForPersonId(
+				ken.getId(),
+				securityService.currentUser(),
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE));
+		assertList(tasks.getRows());
+		assertTrue(tasks.getResults() > 0);
 	}
 
 	@Test
 	public void getAllForPersonIdComplete() {
 		assertList(dao.getAllForPersonId(ken.getId(), true,
+				securityService.currentlyAuthenticatedUser(),
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForPersonIdIncomplete() {
 		assertList(dao.getAllForPersonId(ken.getId(), false,
+				securityService.currentlyAuthenticatedUser(),
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
@@ -148,7 +170,9 @@ public class TaskDaoTest {
 	@Test
 	public void getAllForPersonIdAndChallengeReferralId() {
 		assertList(dao.getAllForPersonIdAndChallengeReferralId(ken.getId(),
-				true, testChallengeReferral.getId(), new SortingAndPaging(
+				true, testChallengeReferral.getId(),
+				securityService.currentlyAuthenticatedUser(),
+				new SortingAndPaging(
 						ObjectStatus.ACTIVE)));
 	}
 
@@ -162,11 +186,15 @@ public class TaskDaoTest {
 	@Test
 	public void getTasksInList() {
 		final List<UUID> taskIds = Lists.newArrayList();
+		taskIds.add(UUID.fromString("f42f4970-b566-11e1-a224-0026b9e7ff4c"));
+		taskIds.add(UUID.fromString("4a24c8c2-b568-11e1-b82e-0026b9e7ff4c"));
 		taskIds.add(UUID.randomUUID());
-		taskIds.add(UUID.randomUUID());
-		taskIds.add(UUID.randomUUID());
-		assertList(dao.getTasksInList(taskIds, new SortingAndPaging(
-				ObjectStatus.ACTIVE)));
+		List<Task> tasks = dao.getTasksInList(taskIds,
+				securityService.currentlyAuthenticatedUser(),
+				new SortingAndPaging(
+						ObjectStatus.ACTIVE));
+		assertList(tasks);
+		assertTrue(tasks.size() > 0);
 	}
 
 	protected void assertList(final Collection<Task> objects) {
@@ -184,8 +212,8 @@ public class TaskDaoTest {
 		obj.setDescription("new description");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setPerson(securityService.currentUser().getPerson());
-		obj.setConfidentialityLevel(confidentialityLevelDao
-				.load(CONFIDENTIALITYLEVEL_ID));
+		obj.setConfidentialityLevel(confidentialityLevelService
+				.get(CONFIDENTIALITYLEVEL_ID));
 		dao.save(obj);
 
 		assertNotNull("obj.id should not have been null.", obj.getId());

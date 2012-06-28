@@ -26,7 +26,7 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Task // NOPMD by jon.adams
 		extends AbstractAuditable
-		implements Restricted, PersonAssocAuditable {
+		implements RestrictedPersonAssocAuditable {
 
 	private static final long serialVersionUID = 1477217415946557983L;
 
@@ -80,7 +80,7 @@ public class Task // NOPMD by jon.adams
 	@Nullable()
 	@ManyToOne()
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "confidentiality_level_id", nullable = true)
+	@JoinColumn(name = "confidentiality_level_id", nullable = false)
 	private ConfidentialityLevel confidentialityLevel;
 
 	/**

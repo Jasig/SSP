@@ -71,11 +71,11 @@ public interface AuditableCrudDao<T extends Auditable> {
 	/**
 	 * <i>Permanently</i> removes the specified data instance!
 	 * <p>
-	 * In the SSP application, not entities should be deleted in a production
+	 * In the SSP application, no entities should be deleted in a production
 	 * system. This method should only be used for testing and debugging
 	 * purposes. To mark objects as deleted without removing them, use
 	 * {@link Auditable#setObjectStatus(ObjectStatus)} to set a status of
-	 * {@link ObjectStatus#DELETED}.
+	 * {@link ObjectStatus#INACTIVE}.
 	 * 
 	 * @param id
 	 *            The id of the data instance to permanently delete.
