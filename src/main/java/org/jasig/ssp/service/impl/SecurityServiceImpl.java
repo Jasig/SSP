@@ -2,6 +2,7 @@ package org.jasig.ssp.service.impl;
 
 import java.util.ArrayList;
 
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -21,6 +22,9 @@ public class SecurityServiceImpl implements SecurityService {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SecurityServiceImpl.class);
+
+	@Autowired
+	protected transient SessionFactory sessionFactory;
 
 	@Autowired
 	private transient PersonService personService;
@@ -106,6 +110,14 @@ public class SecurityServiceImpl implements SecurityService {
 			} catch (ObjectNotFoundException e) {
 				LOGGER.error("Did not find the person's domain object");
 				return null;
+			}
+		} else if (!sessionFactory.getCurrentSession().contains(
+				sspUser.getPerson())) {
+			try {
+				sspUser.setPerson(personService
+						.get(sspUser.getPerson().getId()));
+			} catch (ObjectNotFoundException e) {
+				LOGGER.error("Unable to load the person from the db", e);
 			}
 		}
 
