@@ -31,6 +31,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
 /**
  * Tests for the {@link GoalDao} class.
  */
@@ -139,21 +141,22 @@ public class GoalDaoTest {
 	 * A user with all confidentiality levels accessing the goal
 	 */
 	@Test
-	public void getAllForPersonIdAllLevels() throws ObjectNotFoundException {
+	public void getAllForPersonIdAllLevels() {
 		final PagingWrapper<Goal> goals = dao.getAllForPersonId(
 				KEN,
 				securityService.currentUser(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE));
 		assertList(goals.getRows());
-		assertTrue(goals.getResults() > 0);
+		assertTrue("Goals should not be empty.", goals.getResults() > 0);
 	}
 
 	/**
-	 * A user with only the create attribute (no conf levels) accessing the goal
+	 * A user with only the create attribute (no confidentiality levels)
+	 * accessing the goal
 	 */
 	@Test
-	public void getAllForPersonIdNoLevels() throws ObjectNotFoundException {
+	public void getAllForPersonIdNoLevels() {
 		securityService.setCurrent(new Person(KEN));
 		final PagingWrapper<Goal> goals = dao.getAllForPersonId(
 				KEN,
@@ -161,7 +164,20 @@ public class GoalDaoTest {
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE));
 		assertList(goals.getRows());
-		assertTrue(goals.getResults() > 0);
+		assertTrue("Results should not have been empty.",
+				goals.getResults() > 0);
+	}
+
+	@Test
+	public void getGoalsInList() {
+		final List<UUID> goalIds = Lists.newArrayList();
+		goalIds.add(UUID.fromString("1B18BF52-BFC7-11E1-9CB8-0026B9E7FF4C"));
+		goalIds.add(UUID.randomUUID());
+		final List<Goal> goals = dao.get(goalIds,
+				securityService.currentlyAuthenticatedUser(),
+				new SortingAndPaging(ObjectStatus.ACTIVE));
+		assertList(goals);
+		assertFalse("Goal list should not have been empty.", goals.isEmpty());
 	}
 
 	private void assertList(final Collection<Goal> objects) {

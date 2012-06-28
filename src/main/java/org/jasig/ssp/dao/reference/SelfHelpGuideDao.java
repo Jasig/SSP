@@ -32,7 +32,7 @@ public class SelfHelpGuideDao extends
 		return (SelfHelpGuide) query.uniqueResult();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<SelfHelpGuide> findAllActiveForUnauthenticated() {
 		return sessionFactory
 				.getCurrentSession()
@@ -43,7 +43,7 @@ public class SelfHelpGuideDao extends
 				.setParameter(0, ObjectStatus.ACTIVE).list();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<SelfHelpGuide> findAllActiveBySelfHelpGuideGroup(
 			final UUID selfHelpGuideGroupId) {
 		return sessionFactory

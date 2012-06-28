@@ -7,15 +7,18 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasig.ssp.factory.GoalTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.service.GoalService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,11 +40,28 @@ import com.google.common.collect.Lists;
 @Transactional
 public class MessageTemplateServiceIntegrationTest {
 
+	private static final String TEST_SUBJECT = "Test Subject";
+
+	private static final String TEST_BODY = "Test Body";
+
+	private static final UUID TEST_TASK_ID = UUID
+			.fromString("f42f4970-b566-11e1-a224-0026b9e7ff4c");
+
+	private static final String TEST_TASK_NAME = "Test Task Name";
+
+	private static final UUID TEST_GOAL_ID = UUID
+			.fromString("1B18BF52-BFC7-11E1-9CB8-0026B9E7FF4C");
+
+	private static final String TEST_GOAL_NAME = "Test Goal Name";
+
 	@Autowired
 	private transient MessageTemplateService service;
 
 	@Autowired
-	private transient SecurityServiceInTestEnvironment securityService;
+	private transient GoalService goalService;
+
+	@Autowired
+	private transient GoalTOFactory goalTOFactory;
 
 	@Autowired
 	private transient PersonService personService;
@@ -51,6 +71,9 @@ public class MessageTemplateServiceIntegrationTest {
 
 	@Autowired
 	private transient TaskTOFactory taskTOFactory;
+
+	@Autowired
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	/**
 	 * Setup the security service with the administrator user.
@@ -88,13 +111,11 @@ public class MessageTemplateServiceIntegrationTest {
 
 	@Test
 	public void createContactCoachMessage() throws ObjectNotFoundException {
-		final String testSubject = "Test Subject";
-		final String testBody = "Test Body";
 		final SubjectAndBody subjAndBody = service.createContactCoachMessage(
-				testBody, testSubject, personService.get(UUID
+				TEST_BODY, TEST_SUBJECT, personService.get(UUID
 						.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194")));
 		assertSubjectAndBody(subjAndBody, "A Message from Your Advisee",
-				testBody);
+				TEST_BODY);
 	}
 
 	@Test
@@ -110,9 +131,8 @@ public class MessageTemplateServiceIntegrationTest {
 	public void createCustomActionPlanTaskMessage()
 			throws ObjectNotFoundException {
 		final SubjectAndBody subjAndBody = service
-				.createCustomActionPlanTaskMessage(
-				taskService.get(UUID
-						.fromString("f42f4970-b566-11e1-a224-0026b9e7ff4c")));
+				.createCustomActionPlanTaskMessage(taskService
+						.get(TEST_TASK_ID));
 		assertSubjectAndBody(subjAndBody, "An Action Item is Due for Review",
 				"Kenneth,<br/>An Action Item ");
 	}
@@ -120,24 +140,27 @@ public class MessageTemplateServiceIntegrationTest {
 	@Test
 	public void createActionPlanMessage() throws ObjectNotFoundException {
 		final List<TaskTO> taskTOs = Lists.newArrayList();
-		taskTOs.add(taskTOFactory.from(taskService.get(UUID
-				.fromString("f42f4970-b566-11e1-a224-0026b9e7ff4c"))));
+		taskTOs.add(taskTOFactory.from(taskService.get(TEST_TASK_ID)));
+
+		final List<GoalTO> goalTOs = Lists.newArrayList();
+		goalTOs.add(goalTOFactory.from(goalService.get(TEST_GOAL_ID)));
 
 		final SubjectAndBody subjAndBody = service.createActionPlanMessage(
 				personService.get(UUID
 						.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea")),
-				taskTOs);
+				taskTOs, goalTOs);
 		assertSubjectAndBody(subjAndBody, "Action plan for Kenneth Thompson",
-				"<html><body>Dear Kenneth Thompson,");
+				"<html>\n<body>Dear Kenneth Thompson,<br/>");
 		assertTrue("Body should contain the name of a task", subjAndBody
-				.getBody().contains("Test Task Name"));
+				.getBody().contains(TEST_TASK_NAME));
+		assertTrue("Body should contain the name of a goal", subjAndBody
+				.getBody().contains(TEST_GOAL_NAME));
 	}
 
 	@Test
 	public void createStudentIntakeTaskMessage() throws ObjectNotFoundException {
 		final SubjectAndBody subjAndBody = service
-				.createStudentIntakeTaskMessage(taskService.get(UUID
-						.fromString("f42f4970-b566-11e1-a224-0026b9e7ff4c")));
+				.createStudentIntakeTaskMessage(taskService.get(TEST_TASK_ID));
 		assertSubjectAndBody(subjAndBody, "Student Intake Form Request",
 				"<html><body><p>Hello Kenneth Thompson");
 	}

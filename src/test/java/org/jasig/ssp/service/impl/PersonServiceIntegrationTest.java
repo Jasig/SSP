@@ -9,13 +9,11 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
-import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonChallenge;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
@@ -37,19 +35,10 @@ public class PersonServiceIntegrationTest {
 	private transient PersonService service;
 
 	@Autowired
-	private transient ChallengeService challengeService;
-
-	@Autowired
-	private transient SessionFactory sessionFactory;
-
-	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
 	private static final UUID PERSON_ID = UUID
 			.fromString("1010E4A0-1001-0110-1011-4FFC02FE81FF");
-
-	private static final UUID CHALLENGE_ID = UUID
-			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
 
 	@Before
 	public void setUp() {

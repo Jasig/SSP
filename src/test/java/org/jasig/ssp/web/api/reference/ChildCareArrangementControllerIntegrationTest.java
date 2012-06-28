@@ -47,6 +47,10 @@ public class ChildCareArrangementControllerIntegrationTest {
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
+	private static final String TEST_STRING1 = "testString1";
+
+	private static final String TEST_STRING2 = "testString1";
+
 	/**
 	 * Setup the security service with the admin user for use by
 	 * {@link #testControllerCreateAndDelete()} that checks that the Auditable
@@ -60,11 +64,14 @@ public class ChildCareArrangementControllerIntegrationTest {
 	/**
 	 * Test the {@link ChildCareArrangementController#get(UUID)} action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -85,11 +92,14 @@ public class ChildCareArrangementControllerIntegrationTest {
 	 * Test that the {@link ChildCareArrangementController#get(UUID)} action
 	 * returns the correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -106,48 +116,48 @@ public class ChildCareArrangementControllerIntegrationTest {
 	 * {@link ChildCareArrangementController#create(ChildCareArrangementTO)} and
 	 * {@link ChildCareArrangementController#delete(UUID)} actions.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerCreateAndDelete() throws Exception {
+	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final String testString1 = "testString1";
-		final String testString2 = "testString1";
-
 		// Check validation of 'no ID for create()'
-		ChildCareArrangementTO obj = new ChildCareArrangementTO(
-				UUID.randomUUID(), testString1,
-				testString2);
+		final ChildCareArrangementTO childCareArrangement = new ChildCareArrangementTO(
+				UUID.randomUUID(), TEST_STRING1, TEST_STRING2);
 		try {
-			obj = controller.create(obj);
-			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
-		} catch (final ValidationException exc) {
+			controller.create(childCareArrangement);
+			fail("Calling create with an object with an ID should have thrown a validation excpetion."); // NOPMD
+		} catch (final ValidationException exc) { // NOPMD
 			/* expected */
 		}
 
 		// Now create a valid ChildCareArrangement
-		obj = new ChildCareArrangementTO(null, testString1, testString2);
-		obj = controller.create(obj);
+		final ChildCareArrangementTO saved = controller
+				.create(new ChildCareArrangementTO(null, TEST_STRING1,
+						TEST_STRING2));
 
 		assertNotNull(
 				"Returned ChildCareArrangementTO from the controller should not have been null.",
-				obj);
+				saved);
 		assertNotNull(
 				"Returned ChildCareArrangementTO.ID from the controller should not have been null.",
-				obj.getId());
+				saved.getId());
 		assertEquals(
 				"Returned ChildCareArrangementTO.Name from the controller did not match.",
-				testString1, obj.getName());
+				TEST_STRING1, saved.getName());
 		assertEquals(
 				"Returned ChildCareArrangementTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
+				Person.SYSTEM_ADMINISTRATOR_ID, saved.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
-				controller.delete(obj.getId()).isSuccess());
+				controller.delete(saved.getId()).isSuccess());
 	}
 
 	/**

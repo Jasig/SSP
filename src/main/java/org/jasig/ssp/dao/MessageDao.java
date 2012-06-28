@@ -25,7 +25,7 @@ public class MessageDao extends AbstractAuditableCrudDao<Message> implements
 	 * 
 	 * @return Returns up to 25 messages that have not been sent.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Message> queued() {
 		return sessionFactory
 				.getCurrentSession()

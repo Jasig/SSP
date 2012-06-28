@@ -30,5 +30,4 @@ public abstract class AbstractPersonAssocAuditableCrudDao<T extends PersonAssocA
 		criteria.add(Restrictions.eq("person.id", personId));
 		return processCriteriaWithPaging(criteria, sAndP);
 	}
-
 }

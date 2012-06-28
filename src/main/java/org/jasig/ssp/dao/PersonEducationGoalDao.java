@@ -2,10 +2,9 @@ package org.jasig.ssp.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonEducationGoal;
+import org.springframework.stereotype.Repository;
 
 /**
  * CRUD methods for the PersonEducationGoal model.
@@ -30,8 +29,8 @@ public class PersonEducationGoalDao extends
 	 * 
 	 * @return The education goal for the specified Person.
 	 */
-	public PersonEducationGoal forPerson(Person person) {
-		Criteria query = sessionFactory.getCurrentSession()
+	public PersonEducationGoal forPerson(final Person person) {
+		final Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(PersonEducationGoal.class)
 				.add(Restrictions.eq("person", person));
 		return (PersonEducationGoal) query.uniqueResult();

@@ -1,6 +1,7 @@
 package org.jasig.ssp.dao;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
@@ -67,12 +68,26 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
 
 	/**
 	 * this method will throw UnsupportedOperationException. Use
-	 * getAllForPersonId with personId, requestor and sAndP instead.
+	 * getAllForPersonId with personId, requester and sAndP instead.
 	 */
 	@Override
 	public PagingWrapper<T> getAllForPersonId(final UUID personId,
 			final SortingAndPaging sAndP) {
 		throw new UnsupportedOperationException(
 				"For Restricted Person Associated Auditables, you must call getAllForPersonId and supply a requestor");
+	}
+
+	@Override
+	@SuppressWarnings(UNCHECKED)
+	public List<T> get(final List<UUID> taskIds,
+			final SspUser requester,
+			final SortingAndPaging sAndP) {
+
+		final Criteria criteria = createCriteria(sAndP);
+		criteria.add(Restrictions.in("id", taskIds));
+
+		addConfidentialityLevelsRestriction(requester, criteria);
+
+		return criteria.list();
 	}
 }

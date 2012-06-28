@@ -85,6 +85,9 @@ public class JournalEntryDaoTest {
 
 	/**
 	 * A user with all confidentiality levels accessing the goal
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
 	public void getAllForPersonIdAllLevels() throws ObjectNotFoundException {
@@ -94,7 +97,8 @@ public class JournalEntryDaoTest {
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE));
 		assertList(entries.getRows());
-		assertTrue(entries.getResults() > 0);
+		assertTrue("Entries should not have been empty.",
+				entries.getResults() > 0);
 	}
 
 	protected void assertList(final Collection<JournalEntry> objects) {

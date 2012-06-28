@@ -47,7 +47,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<Person> getAll(final SortingAndPaging sAndP) {
 
 		if (!sAndP.isSorted()) {
@@ -79,7 +79,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return (Person) query.uniqueResult();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleInList(final List<UUID> personIds,
 			final SortingAndPaging sAndP) {
 		final Criteria criteria = createCriteria(sAndP);
@@ -123,13 +123,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 * @return
 	 * @throws ObjectNotFoundException
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleByCriteria(
-			AddressLabelSearchTO addressLabelSearchTO,
+			final AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
-		
+
 		if (addressLabelSearchTO.getProgramStatus() != null) {
 			// criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
 		}
@@ -148,15 +148,18 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							addressLabelSearchTO.getReferralSourcesIds()));
 		}
 		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
-			criteria.add(Restrictions.eq("anticipatedStartTerm",addressLabelSearchTO.getAnticipatedStartTerm()).ignoreCase());
+			criteria.add(Restrictions.eq("anticipatedStartTerm",
+					addressLabelSearchTO.getAnticipatedStartTerm())
+					.ignoreCase());
 		}
 		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
-			criteria.add(Restrictions.eq("anticipatedStartYear",addressLabelSearchTO.getAnticipatedStartYear()));
+			criteria.add(Restrictions.eq("anticipatedStartYear",
+					addressLabelSearchTO.getAnticipatedStartYear()));
 		}
 		if (addressLabelSearchTO.getStudentTypeIds() != null) {
 			criteria.add(Restrictions.in("studentType.id",
 					addressLabelSearchTO.getStudentTypeIds()));
-		}		
+		}
 
 		return criteria.list();
 	}
@@ -180,9 +183,9 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 * @return
 	 * @throws ObjectNotFoundException
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleBySpecialServices(
-			List<UUID> specialServiceGroups, final SortingAndPaging sAndP)
+			final List<UUID> specialServiceGroups, final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
@@ -193,8 +196,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									specialServiceGroups));
-		}		
-		
+		}
+
 		return criteria.list();
 	}
 

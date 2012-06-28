@@ -42,7 +42,7 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 	 * @return All Challenges that have been marked "Affirmative" for the
 	 *         specified SelfHelpGuideResponseId.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Challenge> selectAffirmativeBySelfHelpGuideResponseId(
 			@NotNull final UUID selfHelpGuideResponseId) {
 		return sessionFactory
@@ -70,7 +70,7 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 	 *            SelfHelpGuide Question, Description, and Tags fields
 	 * @return All Challenges that match the specified criteria.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Challenge> searchByQuery(final String query) {
 		return sessionFactory
 				.getCurrentSession()

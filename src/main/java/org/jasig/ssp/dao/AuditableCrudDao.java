@@ -1,5 +1,6 @@
 package org.jasig.ssp.dao;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.Auditable;
@@ -49,6 +50,18 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 *             If object was not found.
 	 */
 	T get(UUID id) throws ObjectNotFoundException;
+
+	/**
+	 * Retrieves the specified instances from persistent storage.
+	 * 
+	 * @param ids
+	 *            the identifiers to load
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return Specified entities, filtered by the specified parameters, or
+	 *         empty List if null
+	 */
+	PagingWrapper<T> get(List<UUID> ids, final SortingAndPaging sAndP);
 
 	/**
 	 * Lazily retrieves the specified instance from persistent storage.
