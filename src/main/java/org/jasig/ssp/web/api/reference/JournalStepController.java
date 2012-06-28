@@ -14,7 +14,7 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.service.reference.JournalStepService;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
@@ -75,7 +75,7 @@ public class JournalStepController
 	@RequestMapping(value = "/{journalStepId}/journalStepDetail/", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	PagingTO<JournalStepDetailTO, JournalStepDetail> getAllForJournalStep(
+	PagedResponse<JournalStepDetailTO> getAllForJournalStep(
 			final @PathVariable UUID journalStepId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
@@ -92,7 +92,7 @@ public class JournalStepController
 						SortingAndPaging.createForSingleSort(status, start,
 								limit, sort, sortDirection, "sortOrder"));
 
-		return new PagingTO<JournalStepDetailTO, JournalStepDetail>(true,
+		return new PagedResponse<JournalStepDetailTO>(true,
 				data.getResults(), journalStepDetailTOFactory
 						.asTOList(data.getRows()));
 	}

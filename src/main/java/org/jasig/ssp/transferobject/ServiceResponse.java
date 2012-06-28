@@ -1,5 +1,6 @@
 package org.jasig.ssp.transferobject;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,11 +11,19 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.google.common.collect.Lists;
 
-public class ServiceResponse {
+public class ServiceResponse implements Serializable {
+
+	private static final long serialVersionUID = 256473140649271859L;
 
 	private final transient boolean success;
 
 	private final transient String message;
+
+	public ServiceResponse() {
+		super();
+		this.success = false;
+		message = "";
+	}
 
 	public ServiceResponse(final boolean success) {
 		this.success = success;

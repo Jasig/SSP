@@ -12,11 +12,10 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.impl.EarlyAlertOutcomeServiceImpl;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.reference.EarlyAlertOutcomeTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
@@ -214,7 +213,7 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerGetAllResults() {
-		final PagingTO<EarlyAlertOutcomeTO, EarlyAlertOutcome> results = controller
+		final PagedResponse<EarlyAlertOutcomeTO> results = controller
 				.getAll(ObjectStatus.ACTIVE, 0, 4, null, null);
 
 		final Collection<EarlyAlertOutcomeTO> list = results.getRows();

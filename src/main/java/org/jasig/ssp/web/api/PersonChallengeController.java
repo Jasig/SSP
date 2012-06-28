@@ -11,7 +11,7 @@ import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonChallengeService;
 import org.jasig.ssp.service.reference.ChallengeService;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonChallengeTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -76,7 +76,7 @@ public class PersonChallengeController extends
 	@Override
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public @ResponseBody
-	PagingTO<PersonChallengeTO, PersonChallenge> getAll(
+	PagedResponse<PersonChallengeTO> getAll(
 			@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
@@ -93,7 +93,7 @@ public class PersonChallengeController extends
 						SortingAndPaging.createForSingleSort(status, start,
 								limit, sort, sortDirection, null));
 
-		return new PagingTO<PersonChallengeTO, PersonChallenge>(true,
+		return new PagedResponse<PersonChallengeTO>(true,
 				data.getResults(), getFactory()
 						.asTOList(data.getRows()));
 	}
@@ -119,7 +119,7 @@ public class PersonChallengeController extends
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	PagingTO<ChallengeTO, Challenge> getChallengesForPerson(
+	PagedResponse<ChallengeTO> getChallengesForPerson(
 			@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
@@ -136,7 +136,7 @@ public class PersonChallengeController extends
 				SortingAndPaging.createForSingleSort(status, start,
 						limit, sort, sortDirection, null));
 
-		return new PagingTO<ChallengeTO, Challenge>(true, data.getResults(),
+		return new PagedResponse<ChallengeTO>(true, data.getResults(),
 				challengeTOFactory.asTOList(data.getRows()));
 	}
 

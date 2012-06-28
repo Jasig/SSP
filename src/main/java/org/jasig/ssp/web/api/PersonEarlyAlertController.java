@@ -12,7 +12,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -107,7 +107,7 @@ public class PersonEarlyAlertController extends
 	@Override
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/", method = RequestMethod.GET)
 	public @ResponseBody
-	PagingTO<EarlyAlertTO, EarlyAlert> getAll(
+	PagedResponse<EarlyAlertTO> getAll(
 			@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
@@ -124,7 +124,7 @@ public class PersonEarlyAlertController extends
 				SortingAndPaging.createForSingleSort(status, start,
 						limit, sort, sortDirection, "createdDate"));
 
-		return new PagingTO<EarlyAlertTO, EarlyAlert>(true, data.getResults(),
+		return new PagedResponse<EarlyAlertTO>(true, data.getResults(),
 				getFactory().asTOList(data.getRows()));
 	}
 

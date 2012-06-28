@@ -13,7 +13,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.junit.Assert;
 import org.junit.Before;
@@ -138,7 +138,7 @@ public class PersonEarlyAlertControllerHttpIntegrationTest
 		assertNotNull("Response was not handled.", mav);
 
 		@SuppressWarnings("unchecked")
-		final PagingTO<EarlyAlertTO, Person> result = (PagingTO<EarlyAlertTO, Person>) getModelObject(mav);
+		final PagedResponse<EarlyAlertTO> result = (PagedResponse<EarlyAlertTO>) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",

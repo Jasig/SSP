@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.junit.Assert;
@@ -132,7 +132,7 @@ public class PersonControllerHttpIntegrationTest
 		assertNotNull("Response was not handled.", mav);
 
 		@SuppressWarnings("unchecked")
-		final PagingTO<PersonTO, Person> result = (PagingTO<PersonTO, Person>) getModelObject(mav);
+		final PagedResponse<PersonTO> result = (PagedResponse<PersonTO>) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",

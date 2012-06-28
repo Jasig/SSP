@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TransferObject;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -49,7 +49,8 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 *            <code>DESC</code>.
 	 * @return All entities in the database filtered by the supplied status.
 	 */
-	public abstract PagingTO<TO, T> getAll(ObjectStatus status, Integer start,
+	public abstract PagedResponse<TO> getAll(ObjectStatus status,
+			Integer start,
 			Integer limit, String sort, String sortDirection);
 
 	/**

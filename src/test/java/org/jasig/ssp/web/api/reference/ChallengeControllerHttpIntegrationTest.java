@@ -11,7 +11,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.web.api.AbstractControllerHttpTestSupport;
@@ -134,7 +134,7 @@ public class ChallengeControllerHttpIntegrationTest
 		assertNotNull("Response was not handled.", mav);
 
 		@SuppressWarnings("unchecked")
-		PagingTO<ChallengeTO, Challenge> result = (PagingTO<ChallengeTO, Challenge>) getModelObject(mav);
+		PagedResponse<ChallengeTO> result = (PagedResponse<ChallengeTO>) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",

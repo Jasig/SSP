@@ -12,10 +12,9 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.VeteranStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.reference.VeteranStatusTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
@@ -185,7 +184,7 @@ public class VeteranStatusControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerGetAllResults() {
-		final PagingTO<VeteranStatusTO, VeteranStatus> results = controller
+		final PagedResponse<VeteranStatusTO> results = controller
 				.getAll(ObjectStatus.ACTIVE, 0, 4, null, null);
 
 		final Collection<VeteranStatusTO> list = results.getRows();

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jasig.ssp.transferobject.AbstractAuditableTO;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TransferObject;
 import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
@@ -51,14 +51,14 @@ public class JacksonMethodReturnValueHandler implements
 		classes.add(AbstractReferenceTO.class);
 		classes.add(AbstractAuditableTO.class);
 		classes.add(List.class);
-		classes.add(PagingTO.class);
+		classes.add(PagedResponse.class);
 		classes.add(ServiceResponse.class);
 		classes.add(Set.class);
 		classes.add(TransferObject.class);
 
 		for (final Class<?> valid : classes) {
 			Class<?> currentClass = paramType;
-			while (currentClass != null && !Object.class.equals(currentClass)) {
+			while ((currentClass != null) && !Object.class.equals(currentClass)) {
 				if (valid.equals(currentClass)) {
 					return true;
 				}

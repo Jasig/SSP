@@ -13,7 +13,7 @@ import org.jasig.ssp.service.PersonAssocAuditableService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.AbstractAuditableTO;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -124,7 +124,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	PagingTO<TO, T> getAll(@PathVariable final UUID personId,
+	PagedResponse<TO> getAll(@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
@@ -139,7 +139,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 				SortingAndPaging.createForSingleSort(status, start,
 						limit, sort, sortDirection, null));
 
-		return new PagingTO<TO, T>(true, data.getResults(), getFactory()
+		return new PagedResponse<TO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));
 	}
 
