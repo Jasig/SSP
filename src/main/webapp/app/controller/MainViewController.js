@@ -125,14 +125,23 @@ Ext.define('Ssp.controller.MainViewController', {
     },	
     
     onAddPersonClick: function( button ){
+    	var me=this;
+    	me.personButtonsVisible=false;
+    	me.setPersonButtons();
     	this.appEventsController.getApplication().fireEvent('addPerson');
 	},
 	
 	onEditPersonClick: function( button ){
+    	var me=this;
+    	me.personButtonsVisible=false;
+    	me.setPersonButtons();
 		this.appEventsController.getApplication().fireEvent('editPerson');
 	},
 
 	onDeletePersonClick: function( button ){
+    	var me=this;
+    	me.personButtonsVisible=false;
+    	me.setPersonButtons();
 		this.appEventsController.getApplication().fireEvent('deletePerson');
 	},
 	

@@ -20,7 +20,32 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 		            autoScroll: true,
 		            title: 'Journal',
 		            store: this.store,
-	    		      columns: [
+	    		      columns: [{
+					    	        xtype:'actioncolumn',
+					    	        width:65,
+					    	        header: 'Action',
+					    	        items: [{
+					    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
+					    	            tooltip: 'Edit Task',
+					    	            handler: function(grid, rowIndex, colIndex) {
+					    	            	var rec = grid.getStore().getAt(rowIndex);
+					    	            	var panel = grid.up('panel');
+					    	                panel.model.data=rec.data;
+					    	                panel.appEventsController.getApplication().fireEvent('editJournalEntry');
+					    	            },
+					    	            scope: this
+					    	        },{
+					    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
+					    	            tooltip: 'Delete Task',
+					    	            handler: function(grid, rowIndex, colIndex) {
+					    	            	var rec = grid.getStore().getAt(rowIndex);
+					    	            	var panel = grid.up('panel');
+					    	                panel.model.data=rec.data;
+					    	            	panel.appEventsController.getApplication().fireEvent('deleteJournalEntry');
+					    	            },
+					    	            scope: this
+					    	        }]
+				                },
 	    		                { header: 'Date',  
 		    		                  dataIndex: 'createdBy',
 		    		                  flex: 1,
@@ -40,31 +65,6 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 	      		                  dataIndex: 'confidentialityLevel', 
 	      		                  flex: 1,
 	      		                  renderer: this.columnRendererUtils.renderConfidentialityLevelName
-	    		                },{
-	    			    	        xtype:'actioncolumn',
-	    			    	        width:65,
-	    			    	        header: 'Action',
-	    			    	        items: [{
-	    			    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-	    			    	            tooltip: 'Edit Task',
-	    			    	            handler: function(grid, rowIndex, colIndex) {
-	    			    	            	var rec = grid.getStore().getAt(rowIndex);
-	    			    	            	var panel = grid.up('panel');
-	    			    	                panel.model.data=rec.data;
-	    			    	                panel.appEventsController.getApplication().fireEvent('editJournalEntry');
-	    			    	            },
-	    			    	            scope: this
-	    			    	        },{
-	    			    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-	    			    	            tooltip: 'Delete Task',
-	    			    	            handler: function(grid, rowIndex, colIndex) {
-	    			    	            	var rec = grid.getStore().getAt(rowIndex);
-	    			    	            	var panel = grid.up('panel');
-	    			    	                panel.model.data=rec.data;
-	    			    	            	panel.appEventsController.getApplication().fireEvent('deleteJournalEntry');
-	    			    	            },
-	    			    	            scope: this
-	    			    	        }]
 	    		                }],
 				    
 				    dockedItems: [{

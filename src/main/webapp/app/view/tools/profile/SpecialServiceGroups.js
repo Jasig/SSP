@@ -10,10 +10,11 @@ Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
-		            store: this.store,
+			        hideHeaders: true,
+			        store: this.store,
 					autoScroll: true,
     		        columns: [
-    		                { header: 'Special Service Group',  
+    		                { header: 'Group',  
     		                  dataIndex: 'name',
     		                  flex: 1,
     		                }],

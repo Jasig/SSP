@@ -6,13 +6,15 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.crg.DisplayChallengesAdminViewController',
     inject: {
-        apiProperties: 'apiProperties'
+        apiProperties: 'apiProperties',
+        columnRendererUtils: 'columnRendererUtils'
     },
     height: '100%',
 	width: '100%',
 
     initComponent: function(){
-    	Ext.apply(this,
+    	var me=this;
+    	Ext.apply(me,
     			{
 		          viewConfig: {
 		        	  plugins: {
@@ -27,11 +29,13 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
     		      columns: [
     		                { header: 'Name',  
     		                  dataIndex: 'name',
-    		                  field: {
-    		                      xtype: 'textfield'
-    		                  },
     		                  flex: 1 
-    		                }
+    		                },
+    		                { header: 'Show On Intake',  
+      		                  dataIndex: 'showInStudentIntake',
+      		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
+      		                  flex: 1 
+      		                }
     		           ],
     		        
     		           dockedItems: [
@@ -39,7 +43,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
      		       			xtype: 'pagingtoolbar',
      		       		    dock: 'bottom',
      		       		    displayInfo: true,
-     		       		    pageSize: this.apiProperties.getPagingSize()
+     		       		    pageSize: me.apiProperties.getPagingSize()
      		       		},
      		              {
      		               xtype: 'toolbar',
@@ -72,7 +76,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
      		           }]    	
     	});
     	
-    	return this.callParent(arguments);
+    	return me.callParent(arguments);
     },
     
     reconfigure: function(store, columns) {

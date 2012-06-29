@@ -27,15 +27,6 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 				store: this.store,
 				selModel: sm,
 			    columns: [{
-	    	        header: 'Name',
-	    	        flex: 1,
-	    	        dataIndex: 'name',
-	    	        renderer: this.columnRendererUtils.renderGoalName
-	    	    },{
-	    	        header: 'Confidentiality',
-	    	        dataIndex: 'confidentialityLevel',
-	    	        renderer: this.columnRendererUtils.renderConfidentialityLevelName
-	    	    },{
 	    	        xtype:'actioncolumn',
 	    	        width:65,
 	    	        header: 'Action',
@@ -60,6 +51,15 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 	    	            },
 	    	            scope: this
 	    	        }]
+	    	    },{
+	    	        header: 'Name',
+	    	        flex: 1,
+	    	        dataIndex: 'name',
+	    	        renderer: this.columnRendererUtils.renderGoalName
+	    	    },{
+	    	        header: 'Confidentiality',
+	    	        dataIndex: 'confidentialityLevel',
+	    	        renderer: this.columnRendererUtils.renderConfidentialityLevelName
 	    	    }],
 	    	    
 	    	    dockedItems: [{

@@ -1,5 +1,9 @@
 Ext.define('Ssp.store.admin.AdminTreeMenus',{
 	extend: 'Ext.data.TreeStore',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        columnRendererUtils: 'columnRendererUtils'
+    },
 	autoLoad: false,
     constructor: function(){
     	var items = {
@@ -64,6 +68,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     						    		                  required: true,
     						      		                  dataIndex: 'requireInitialAppointment', 
     						      		                  flex: .25,
+    						      		                  renderer: this.columnRendererUtils.renderFriendlyBoolean,
     						      		                  field: {
     						      		                      xtype: 'checkbox'
     						      		                  }

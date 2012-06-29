@@ -4,6 +4,10 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	initComponent: function() {
 		return this.callParent( arguments );
     },
+
+	renderFriendlyBoolean: function(val, metaData, record) {
+		return ((val==true)?'Yes':'No');
+	},    
     
 	renderTaskName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';

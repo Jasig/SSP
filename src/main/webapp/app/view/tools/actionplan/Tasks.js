@@ -19,6 +19,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     	
     	Ext.apply(this,
     			{
+    		        scroll: 'vertical',
     	    		store: this.store,    		
     	    		selModel: sm,
     	    		features: [{
@@ -30,18 +31,6 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	    }],
 		
 		    	    columns: [{
-		    	        text: 'Description',
-		    	        flex: 1,
-		    	        tdCls: 'task',
-		    	        sortable: true,
-		    	        dataIndex: 'name',
-		    	        renderer: this.columnRendererUtils.renderTaskName
-		    	    },{
-		    	        header: 'Due Date',
-		    	        width: 100,
-		    	        dataIndex: 'dueDate',
-		    	        renderer: this.columnRendererUtils.renderTaskDueDate
-		    	    },{
 		    	        xtype:'actioncolumn',
 		    	        width:65,
 		    	        header: 'Action',
@@ -76,6 +65,18 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	            },
 		    	            scope: this
 		    	        }]
+		    	    },{
+		    	        text: 'Description',
+		    	        flex: 1,
+		    	        tdCls: 'task',
+		    	        sortable: true,
+		    	        dataIndex: 'name',
+		    	        renderer: this.columnRendererUtils.renderTaskName
+		    	    },{
+		    	        header: 'Due Date',
+		    	        width: 100,
+		    	        dataIndex: 'dueDate',
+		    	        renderer: this.columnRendererUtils.renderTaskDueDate
 		    	    }]
     	
 
