@@ -58,7 +58,8 @@ public class PersonServiceTest {
 
 		final Collection<Person> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertFalse(all.isEmpty());
+		assertFalse("GetAll() result should not have returned an empty list.",
+				all.isEmpty());
 		verify(dao);
 	}
 
@@ -91,7 +92,7 @@ public class PersonServiceTest {
 	}
 
 	@Test
-	public void testDelete() throws ObjectNotFoundException {
+	public void testDelete() throws ObjectNotFoundException { // NOPMD
 		final UUID id = UUID.randomUUID();
 		final Person daoOne = new Person(id);
 

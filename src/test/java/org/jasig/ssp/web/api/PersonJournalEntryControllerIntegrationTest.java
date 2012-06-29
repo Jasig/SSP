@@ -1,12 +1,14 @@
-package org.jasig.ssp.web.api;
+package org.jasig.ssp.web.api; // NOPMD
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.Session;
@@ -14,11 +16,15 @@ import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.JournalSource;
+import org.jasig.ssp.model.reference.JournalStep;
+import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.security.permissions.DataPermissions;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.transferobject.JournalEntryDetailTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
@@ -31,6 +37,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Sets;
 
 /**
  * {@link PersonJournalEntryController} tests
@@ -47,7 +55,15 @@ public class PersonJournalEntryControllerIntegrationTest {
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
 
 	private static final UUID CONFIDENTIALITY_LEVEL_ID = UUID
-			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
+			.fromString("B3D077A7-4055-0510-7967-4A09F93A0357");
+
+	private static final DataPermissions CONFIDENTIALITY_LEVEL_PERMISSION = DataPermissions.DATA_EVERYONE;
+
+	private static final UUID JOURNAL_STEP_ID = UUID
+			.fromString("ABA1440C-AB5B-11E1-BA73-0026B9E7FF4C");
+
+	private static final UUID JOURNAL_STEP_DETAIL_ID = UUID
+			.fromString("471AFC02-AB5C-11E1-A997-0026B9E7FF4C");
 
 	@Autowired
 	private transient PersonJournalEntryController controller;
@@ -74,7 +90,8 @@ public class PersonJournalEntryControllerIntegrationTest {
 						.confidentialityLevelsAsGrantedAuthorities(),
 				"ROLE_PERSON_JOURNAL_ENTRY_READ",
 				"ROLE_PERSON_JOURNAL_ENTRY_WRITE",
-				"ROLE_PERSON_JOURNAL_ENTRY_DELETE");
+				"ROLE_PERSON_JOURNAL_ENTRY_DELETE",
+				CONFIDENTIALITY_LEVEL_PERMISSION.asPermissionString());
 	}
 
 	/**
@@ -138,6 +155,16 @@ public class PersonJournalEntryControllerIntegrationTest {
 				CONFIDENTIALITY_LEVEL_ID, ""));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 
+		final Set<JournalEntryDetailTO> journalEntryDetails = Sets.newHashSet();
+		final JournalEntryDetailTO journalEntryDetail = new JournalEntryDetailTO();
+		journalEntryDetail.setJournalStep(new ReferenceLiteTO<JournalStep>(
+				JOURNAL_STEP_ID, ""));
+		journalEntryDetail
+				.setJournalStepDetail(new ReferenceLiteTO<JournalStepDetail>(
+						JOURNAL_STEP_DETAIL_ID, ""));
+		journalEntryDetails.add(journalEntryDetail);
+		obj.setJournalEntryDetails(journalEntryDetails);
+
 		final JournalEntryTO saved = controller.create(PERSON_ID, obj);
 		final Session session = sessionFactory.getCurrentSession();
 		session.flush();
@@ -146,9 +173,46 @@ public class PersonJournalEntryControllerIntegrationTest {
 		assertNotNull("Saved instance identifier should not have been null.",
 				savedId);
 		assertEquals("PersonIds did not match.", PERSON_ID, saved.getPersonId());
+		assertFalse("JournalEntryDetails should have had entries.", saved
+				.getJournalEntryDetails().isEmpty());
 
+		session.flush();
 		session.clear();
 
+		final JournalEntryTO reloaded = controller.get(savedId, PERSON_ID);
+		assertFalse("JournalEntryDetails should have had entries.", reloaded
+				.getJournalEntryDetails().isEmpty());
+
+		// Try save (update)
+		final JournalEntryDetailTO journalEntryDetail2 = new JournalEntryDetailTO();
+		journalEntryDetail2.setJournalStep(new ReferenceLiteTO<JournalStep>(
+				JOURNAL_STEP_ID, ""));
+		journalEntryDetail2
+				.setJournalStepDetail(new ReferenceLiteTO<JournalStepDetail>(
+						JOURNAL_STEP_DETAIL_ID, ""));
+		journalEntryDetails.add(journalEntryDetail2);
+		reloaded.getJournalEntryDetails().add(journalEntryDetail2);
+
+		final JournalEntryTO updated = controller.save(savedId, PERSON_ID,
+				reloaded);
+		session.flush();
+
+		assertEquals("Saved instance identifiers do not match.", savedId,
+				updated.getId());
+		assertEquals("PersonIds did not match.", PERSON_ID,
+				updated.getPersonId());
+		assertFalse("JournalEntryDetails should have had entries.", updated
+				.getJournalEntryDetails().isEmpty());
+
+		session.flush();
+		session.clear();
+
+		final JournalEntryTO reloadedAgain = controller.get(savedId, PERSON_ID);
+		assertEquals(
+				"JournalEntryDetails did not have the expected number of entries.",
+				2, reloadedAgain.getJournalEntryDetails().size());
+
+		// finally delete
 		final ServiceResponse response = controller.delete(savedId, PERSON_ID);
 
 		assertNotNull("Deletion response should not have been null.",

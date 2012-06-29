@@ -48,10 +48,11 @@ public class RestrictedPersonAssocPermissionServiceImpl implements
 		if (grantedLevels.contains(model.getConfidentialityLevel())
 				|| (model.getCreatedBy().equals(
 						requestor.getPerson()))) {
-			LOGGER.debug("Required ConfidentialityLevel not present: {}",
-					model.getConfidentialityLevel().getName());
 			return true;
 		}
+
+		LOGGER.debug("Required ConfidentialityLevel not present: {}", model
+				.getConfidentialityLevel().getName());
 		return false;
 	}
 }

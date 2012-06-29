@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
 /**
  * Person transfer object
  */
-public class PersonTO
+public class PersonTO // NOPMD
 		extends AbstractAuditableTO<Person>
 		implements TransferObject<Person> {
 
@@ -117,7 +117,7 @@ public class PersonTO
 	}
 
 	@Override
-	public final void from(final Person model) {
+	public final void from(final Person model) { // NOPMD
 		super.from(model);
 
 		firstName = model.getFirstName();
@@ -142,7 +142,7 @@ public class PersonTO
 
 		final Person coachPerson = model.getCoach();
 		if (coachPerson == null) {
-			coach = null;
+			coach = null; // NOPMD
 		} else {
 			coach = new PersonLiteTO(coachPerson.getId(),
 					coachPerson.getFirstName(),
@@ -381,11 +381,11 @@ public class PersonTO
 		this.schoolId = schoolId;
 	}
 
-	public boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(final boolean enabled) {
+	public void setEnabled(final Boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -486,5 +486,4 @@ public class PersonTO
 		coach = new PersonLiteTO();
 		coach.setId(coachId);
 	}
-
 }

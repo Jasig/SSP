@@ -15,7 +15,10 @@ import org.jasig.ssp.transferobject.PersonFundingSourceTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.TransferObject;
 
-public class IntakeFormTO implements TransferObject<IntakeForm> {
+/**
+ * IntakeForm transfer object
+ */
+public class IntakeFormTO implements TransferObject<IntakeForm> { // NOPMD
 
 	@Valid
 	private PersonTO person;
@@ -50,7 +53,7 @@ public class IntakeFormTO implements TransferObject<IntakeForm> {
 	}
 
 	@Override
-	public final void from(final IntakeForm model) {
+	public final void from(final IntakeForm model) { // NOPMD
 		if (model.getPerson() != null) {
 			person = new PersonTO(model.getPerson());
 		}

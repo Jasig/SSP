@@ -1,11 +1,27 @@
 package org.jasig.ssp.web.api; // NOPMD
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+//import javassist.bytecode.Descriptor.Iterator;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 
 import org.jasig.ssp.factory.GoalTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
@@ -20,6 +36,7 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
+import org.jasig.ssp.transferobject.reports.StudentActionPlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -61,9 +78,6 @@ public class PersonTaskController extends
 
 	@Autowired
 	private transient GoalService goalService;
-
-	@Autowired
-	private transient GoalTOFactory goalTOFactory;
 
 	@Override
 	protected TaskTOFactory getFactory() {
@@ -148,36 +162,85 @@ public class PersonTaskController extends
 	 * @return All (or all specified) tasks for the specified Person
 	 * @throws ObjectNotFoundException
 	 *             If the Person id could not be found
+	 * @throws JRException 
+	 * @throws IOException  
 	 */
-	@RequestMapping(value = "/print/", method = RequestMethod.POST)
+	@RequestMapping(value = "/print/", method = RequestMethod.GET)
 	public @ResponseBody
-	Map<String, Object> print(
-			final @PathVariable UUID personId,
-			final @RequestBody List<UUID> taskIds)
-			throws ObjectNotFoundException {
+	void print(
+			final HttpServletResponse response,
+			final @PathVariable UUID personId
+			//final @RequestParam(required = false) List<UUID> taskIds
+			)
+			throws ObjectNotFoundException, JRException, IOException {
 
+		
+		List<UUID> taskIds = new ArrayList<UUID>();
+				
 		checkPermissionForOp("READ");
 
 		final SspUser requestor = securityService.currentUser();
-
-		final Map<String, Object> tasksAndGoals = Maps.newHashMap();
-
+		final Map<String, ArrayList<Task>> challengesAndTasks = Maps.newHashMap();				
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
-
 		final Person person = personService.get(personId);
-
 		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
 				taskIds, person, requestor, securityService.getSessionId(),
 				sAndP);
-
-		tasksAndGoals.put("tasks", TaskTO.toTOList(tasks));
-
 		final PagingWrapper<Goal> goals = goalService.getAllForPerson(person,
 				requestor, sAndP);
+					
+		Goal[] goalsArray = goals.getRows().toArray(new Goal[goals.getRows().size()]);
+		
+		Iterator<Task> taskIter = tasks.iterator();
+		while(taskIter.hasNext())
+		{
+			Task task = taskIter.next();
+			ArrayList<Task> taskList = challengesAndTasks.get(task.getChallenge().getName());
+			if(taskList == null)
+			{
+				taskList = new ArrayList<Task>();
+				taskList.add(task);
+				challengesAndTasks.put(task.getChallenge().getName(), taskList);
+			}
+			else
+			{
+				taskList.add(task);
+			}
+		}
 
-		tasksAndGoals.put("goals", goalTOFactory.asTOList(goals.getRows()));
-
-		return tasksAndGoals;
+		Collection<ArrayList<Task>> taskList = challengesAndTasks.values();
+		ArrayList<StudentActionPlanTO> studentActionPlanTOs = new ArrayList<StudentActionPlanTO>();
+		Iterator<ArrayList<Task>> tasklistIter = taskList.iterator();
+		while(tasklistIter.hasNext())
+		{
+			ArrayList<Task> currentTaskList = tasklistIter.next();
+			studentActionPlanTOs.add(new StudentActionPlanTO(currentTaskList,currentTaskList.get(0).getChallenge().getName(),currentTaskList.get(0).getChallenge().getDescription()));
+		}
+		
+		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(studentActionPlanTOs.toArray(new StudentActionPlanTO[studentActionPlanTOs.size()] ));
+		final JRBeanArrayDataSource goalsDS = new JRBeanArrayDataSource(goalsArray);
+		final Map<String, Object> parameters = Maps.newHashMap();
+		parameters.put("ReportTitle", "Address Report");
+		parameters.put("DataFile", "Person.java - Bean Array");		
+		parameters.put("studentName", person.getFirstName() + " " + person.getLastName());
+		parameters.put("studentId", person.getSchoolId());
+		parameters.put("initialDate", person.getCreatedDate());
+		parameters.put("reviewDate", new Date());		
+		parameters.put("goals", goalsDS);						
+				
+		response.setContentType("application/pdf");	
+		final InputStream is = getClass().getResourceAsStream(
+				"/reports/studentActionPlan.jasper");
+		final ByteArrayOutputStream os = new ByteArrayOutputStream();
+		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
+		final InputStream decodedInput = new ByteArrayInputStream(
+				os.toByteArray());
+		JasperExportManager.exportReportToPdfStream(decodedInput,
+				response.getOutputStream());
+		response.flushBuffer();
+		
+		is.close();
+		os.close();		
 	}
 
 	/**

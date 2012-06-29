@@ -392,13 +392,9 @@
 	</dependencies>
 
 
-
-
-
-
-
 	<build>
 		<plugins>
+			<!-- Bundle licenses into deployed file -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>
@@ -425,6 +421,7 @@
 					</archive>
 				</configuration>
 			</plugin>
+			<!-- Set encoding to utf-8 and compile at 1.6 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -450,6 +447,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Report on test code coverage -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
@@ -461,22 +459,30 @@
 					</formats>
 				</configuration>
 			</plugin>
+			<!-- Run Unit tests -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.9</version>
+				<version>2.12</version>
 				<inherited>true</inherited>
 				<configuration>
 					<forkMode>once</forkMode>
 					<reportFormat>plain</reportFormat>
-					<!-- classesDirectory>${project.build.directory}/generated-classes/emma/classes</classesDirectory -->
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>2.12</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.0</version>
 			</plugin>
+			<!-- Allow running liquibase from the command line through maven -->
 			<plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
@@ -492,6 +498,7 @@
 					<changeLogFile>org/jasig/ssp/database/masterChangeLog-test.xml</changeLogFile>
 				</configuration>
 			</plugin>
+			<!-- Read ssp config file for use in maven -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
@@ -541,8 +548,6 @@
 
 	<reporting>
 		<plugins>
-			<!-- plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>emma-maven-plugin</artifactId> 
-				<version>1.0-alpha-3</version> <inherited>true</inherited> </plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
