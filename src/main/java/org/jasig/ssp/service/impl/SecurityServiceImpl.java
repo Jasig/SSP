@@ -1,6 +1,7 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.Person;
@@ -133,7 +134,9 @@ public class SecurityServiceImpl implements SecurityService {
 
 	@Override
 	public boolean hasAuthority(final String authority) {
-		for (GrantedAuthority auth : currentUser().getAuthorities()) {
+		final Collection<GrantedAuthority> authorities = currentUser()
+				.getAuthorities();
+		for (GrantedAuthority auth : authorities) {
 			if (auth.getAuthority().equalsIgnoreCase(authority)) {
 				return true;
 			}
