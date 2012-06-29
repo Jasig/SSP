@@ -15,7 +15,7 @@ import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.CategoryService;
 import org.jasig.ssp.service.reference.ChallengeService;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.CategoryTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
@@ -76,7 +76,7 @@ public class CategoryController
 	@RequestMapping(value = "/{id}/challenge/", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	PagingTO<ChallengeTO, Challenge> getChallengesForCategory(
+	PagedResponse<ChallengeTO> getChallengesForCategory(
 			@PathVariable final UUID id,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
@@ -92,7 +92,7 @@ public class CategoryController
 						SortingAndPaging.createForSingleSort(status, start,
 								limit, sort, sortDirection, null));
 
-		return new PagingTO<ChallengeTO, Challenge>(true, data.getResults(),
+		return new PagedResponse<ChallengeTO>(true, data.getResults(),
 				challengeTOFactory.asTOSet(data.getRows()));
 	}
 

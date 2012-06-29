@@ -33,7 +33,7 @@ public class PersonEducationGoal
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "education_goal_id", nullable = false)
+	@JoinColumn(name = "education_goal_id", nullable = true)
 	private EducationGoal educationGoal;
 
 	@Column(length = 50)

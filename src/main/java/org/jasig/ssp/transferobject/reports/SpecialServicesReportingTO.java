@@ -15,9 +15,6 @@ import org.jasig.ssp.model.reference.StudentType;
 public class SpecialServicesReportingTO
 		implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5316251830392732984L;
 
 	@SuppressWarnings("unused")
@@ -31,9 +28,7 @@ public class SpecialServicesReportingTO
 		this.person = person;
 	}
 
-	Person person;
-
-	List<String> specialServices;
+	private Person person;
 
 	public String getFirstName() {
 		return person.getFirstName();

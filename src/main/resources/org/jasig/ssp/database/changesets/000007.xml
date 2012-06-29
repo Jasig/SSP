@@ -25,4 +25,30 @@
 		<!-- Auto rollback support -->
 	</changeSet>
 
+
+	<changeSet id="Add goals to action plan MessageTemplate"
+		author="jon.adams">
+		<update tableName="message_template">
+			<column name="modified_date" valueDate="2012-06-28T18:00:00" />
+			<column name="body"><![CDATA[<html>
+<body>Dear ${fullName},<br/>
+<br/>
+As a result of completing the self help guide questionnaire(s) you have 
+identified the following resource information as being imperative to your 
+success.&nbsp;&nbsp;Below you will find the solutions you felt offered the best 
+path to your success.<br/>
+<br/>
+<br/>
+#foreach($taskTO in $taskTOs)<b>Resource:</b>&nbsp;${taskTO.name}<br/><b>Description:</b>&nbsp;${taskTO.description}<br/><br/>#end <br/>
+#foreach($goalTO in $goalTOs)<b>Resource:</b>&nbsp;${goalTO.name}<br/><b>Description:</b>&nbsp;${goalTO.description}<br/><br/>#end <br/>
+Should you have any questions concerning the resource information listed please contact the resource in question or the counseling staff at your institution.<br/>
+<br/>
+Thank you.</body></html>]]>
+			</column>
+			<where>
+				id = '5D183F35-023D-40EA-B8D9-66FBE190FFFB'
+			</where>
+		</update>
+	</changeSet>
+
 </databaseChangeLog>

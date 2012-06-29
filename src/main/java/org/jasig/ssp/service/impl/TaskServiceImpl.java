@@ -8,9 +8,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.mail.SendFailedException;
+import javax.validation.constraints.NotNull;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.TaskDao;
+import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
@@ -26,6 +28,7 @@ import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -85,10 +88,10 @@ public class TaskServiceImpl
 	@Override
 	public List<Task> getAllForPerson(final Person person,
 			final boolean complete,
-			final SspUser requestor,
+			final SspUser requester,
 			final SortingAndPaging sAndP) {
 		return getDao().getAllForPersonId(person.getId(), complete,
-				requestor, sAndP);
+				requester, sAndP);
 	}
 
 	@Override
@@ -107,14 +110,6 @@ public class TaskServiceImpl
 	@Override
 	public List<Task> getAllWhichNeedRemindersSent(final SortingAndPaging sAndP) {
 		return getDao().getAllWhichNeedRemindersSent(sAndP);
-	}
-
-	@Override
-	public List<Task> getTasksInList(final List<UUID> taskIds,
-			final SspUser requestor,
-			final SortingAndPaging sAndP) {
-		return getDao().getTasksInList(taskIds, requestor,
-				sAndP);
 	}
 
 	@Override
@@ -147,11 +142,11 @@ public class TaskServiceImpl
 	@Override
 	public List<Task> getAllForPersonAndChallengeReferral(final Person person,
 			final boolean complete, final ChallengeReferral challengeReferral,
-			final SspUser requestor,
+			final SspUser requester,
 			final SortingAndPaging sAndP) {
 		return dao.getAllForPersonIdAndChallengeReferralId(person.getId(),
 				complete, challengeReferral.getId(),
-				requestor, sAndP);
+				requester, sAndP);
 	}
 
 	@Override
@@ -166,12 +161,12 @@ public class TaskServiceImpl
 	@Override
 	public Map<String, List<Task>> getAllGroupedByTaskGroup(
 			final Person person,
-			final SspUser requestor,
+			final SspUser requester,
 			final SortingAndPaging sAndP) {
 
 		final Map<String, List<Task>> grouped = Maps.newTreeMap();
 		final PagingWrapper<Task> tasksForPerson = dao
-				.getAllForPersonId(person.getId(), requestor,
+				.getAllForPersonId(person.getId(), requester,
 						sAndP);
 
 		for (final Task task : tasksForPerson.getRows()) {
@@ -205,11 +200,33 @@ public class TaskServiceImpl
 		task.setSessionId(sessionId);
 		task.setDescription(challengeReferral.getPublicDescription());
 		task.setName(challengeReferral.getName());
-		task.setConfidentialityLevel(challenge.getDefaultConfidentialityLevel());
+
+		setDefaultConfidentialityLevel(task, challenge);
 
 		create(task);
 
 		return task;
+	}
+
+	private void setDefaultConfidentialityLevel(final Task task,
+			final Challenge challenge) {
+		if (challenge != null) {
+			if (challenge.getDefaultConfidentialityLevel() != null) {
+				task.setConfidentialityLevel(challenge
+						.getDefaultConfidentialityLevel());
+			}
+		}
+
+		if (task.getConfidentialityLevel() == null) {
+			try {
+				task.setConfidentialityLevel(confidentialityLevelService
+						.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
+			} catch (ObjectNotFoundException e) {
+				LOGGER.error(
+						"Unable to find the default confidentiality level", e);
+			}
+		}
+
 	}
 
 	@Override
@@ -222,8 +239,7 @@ public class TaskServiceImpl
 		customTask.setDescription(description);
 		customTask.setPerson(student);
 		customTask.setName(name);
-		customTask.setConfidentialityLevel(confidentialityLevelService
-				.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
+		setDefaultConfidentialityLevel(customTask, null);
 
 		create(customTask);
 
@@ -241,25 +257,17 @@ public class TaskServiceImpl
 		messageService.createMessage(customTask.getPerson(), null, subjAndBody);
 	}
 
-	/**
-	 * Send a list of the given tasks to each emailAddress and each recipient.
-	 * 
-	 * @throws ObjectNotFoundException
-	 *             If reference objects could not be loaded.
-	 */
 	@Override
-	public void sendTasksForPersonToEmail(final List<Task> tasks,
+	public void sendTasksForPersonToEmail(@NotNull final List<Task> tasks,
+			final List<Goal> goals,
 			final Person student, final List<String> emailAddresses,
 			final List<Person> recipients) throws ObjectNotFoundException {
 
-		if ((tasks == null) || (tasks.isEmpty())) {
-			return;
-		}
-
 		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
+		final List<GoalTO> goalTOs = GoalTO.toTOList(goals);
 
 		final SubjectAndBody subjAndBody = messageTemplateService
-				.createActionPlanMessage(student, taskTOs);
+				.createActionPlanMessage(student, taskTOs, goalTOs);
 
 		if (emailAddresses != null) {
 			for (final String address : emailAddresses) {
@@ -276,31 +284,24 @@ public class TaskServiceImpl
 		}
 	}
 
-	/**
-	 * If tasks are selected, get them, otherwise return the tasks for the
-	 * person, (just for the session if it is the anon user).
-	 */
 	@Override
 	public List<Task> getTasksForPersonIfNoneSelected(
 			final List<UUID> selectedIds, final Person person,
-			final SspUser requestor,
-			final String sessionId, final SortingAndPaging sAndP) {
-
-		List<Task> tasks;
-
-		if ((selectedIds != null) && (selectedIds.isEmpty())) {
-			tasks = getTasksInList(selectedIds, requestor,
-					sAndP);
-		} else {
-			if (person.getId() == SspUser.ANONYMOUS_PERSON_ID) {
-				tasks = getAllForSessionId(sessionId, sAndP);
-			} else {
-				tasks = (List<Task>) getAllForPerson(person,
-						requestor, sAndP).getRows();
-			}
+			final SspUser requester, final String sessionId,
+			final SortingAndPaging sAndP) {
+		/*
+		 * If tasks are selected, get them, otherwise return the tasks for the
+		 * person, (just for the session if it is the anon user).
+		 */
+		if (selectedIds != null && !selectedIds.isEmpty()) {
+			return get(selectedIds, requester, sAndP);
 		}
 
-		return tasks;
+		if (person.getId() == SspUser.ANONYMOUS_PERSON_ID) {
+			return getAllForSessionId(sessionId, sAndP);
+		}
+
+		return (List<Task>) getAllForPerson(person, requester, sAndP).getRows();
 	}
 
 	@Override

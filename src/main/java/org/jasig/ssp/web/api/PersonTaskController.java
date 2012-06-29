@@ -209,13 +209,6 @@ public class PersonTaskController extends
 
 		checkPermissionForOp("READ");
 
-		final Person student = personService.get(personId);
-
-		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
-				emailForm.getTaskIds(), student, securityService.currentUser(),
-				securityService.getSessionId(),
-				new SortingAndPaging(ObjectStatus.ACTIVE));
-
 		List<Person> recipients = null; // NOPMD because passing null as allowed
 
 		if (emailForm.getRecipientIds() != null) {
@@ -225,7 +218,21 @@ public class PersonTaskController extends
 					new SortingAndPaging(ObjectStatus.ACTIVE));
 		}
 
-		service.sendTasksForPersonToEmail(tasks, student,
+		final Person student = personService.get(personId);
+
+		// goals
+		final List<Goal> goals = goalService.getGoalsForPersonIfNoneSelected(
+				emailForm.getGoalIds(), student, securityService.currentUser(),
+				securityService.getSessionId(),
+				new SortingAndPaging(ObjectStatus.ACTIVE));
+
+		// tasks
+		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
+				emailForm.getTaskIds(), student, securityService.currentUser(),
+				securityService.getSessionId(),
+				new SortingAndPaging(ObjectStatus.ACTIVE));
+
+		service.sendTasksForPersonToEmail(tasks, goals, student,
 				emailForm.getRecipientEmailAddresses(), recipients);
 
 		return true;

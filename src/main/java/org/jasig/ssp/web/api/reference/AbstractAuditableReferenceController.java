@@ -10,7 +10,7 @@ import org.jasig.ssp.model.reference.AbstractReference;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -88,7 +88,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	PagingTO<TO, T> getAll(
+	PagedResponse<TO> getAll(
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
@@ -101,8 +101,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 						status == null ? ObjectStatus.ALL : status, start,
 						limit, sort, sortDirection, "name"));
 
-		// Return paged view
-		return new PagingTO<TO, T>(true, data.getResults(), getFactory()
+		return new PagedResponse<TO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));
 	}
 

@@ -12,7 +12,7 @@ import org.jasig.ssp.service.EarlyAlertRoutingService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.transferobject.EarlyAlertRoutingTO;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -92,7 +92,7 @@ public class EarlyAlertRoutingController
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	PagingTO<EarlyAlertRoutingTO, EarlyAlertRouting> getAll(
+	PagedResponse<EarlyAlertRoutingTO> getAll(
 			final @PathVariable UUID campusId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
@@ -109,7 +109,7 @@ public class EarlyAlertRoutingController
 								sortDirection,
 								null));
 
-		return new PagingTO<EarlyAlertRoutingTO, EarlyAlertRouting>(true,
+		return new PagedResponse<EarlyAlertRoutingTO>(true,
 				list.getResults(),
 				factory.asTOList(list.getRows()));
 	}

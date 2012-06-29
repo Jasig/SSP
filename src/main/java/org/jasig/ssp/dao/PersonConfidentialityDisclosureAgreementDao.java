@@ -22,7 +22,7 @@ public class PersonConfidentialityDisclosureAgreementDao
 		super(PersonConfidentialityDisclosureAgreement.class);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<PersonConfidentialityDisclosureAgreement> forStudent(
 			final Person student) {
 		final Criteria query = sessionFactory.getCurrentSession()

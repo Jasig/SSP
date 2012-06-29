@@ -4,14 +4,17 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Command Object for the email method of the PersonTaskController
- * Only one of either recipientEmailAddresses or recipientIds is required
+ * Command Object for the email method of the PersonTaskController.
  * 
+ * Only one of either recipientEmailAddresses or recipientIds is required.
  */
 public class EmailPersonTasksForm {
 	private List<UUID> taskIds;
 
+	private List<UUID> goalIds;
+
 	private List<String> recipientEmailAddresses;
+
 	private List<UUID> recipientIds;
 
 	public List<UUID> getTaskIds() {
@@ -20,6 +23,14 @@ public class EmailPersonTasksForm {
 
 	public void setTaskIds(final List<UUID> taskIds) {
 		this.taskIds = taskIds;
+	}
+
+	public List<UUID> getGoalIds() {
+		return goalIds;
+	}
+
+	public void setGoalIds(final List<UUID> goalIds) {
+		this.goalIds = goalIds;
 	}
 
 	public List<String> getRecipientEmailAddresses() {

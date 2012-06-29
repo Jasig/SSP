@@ -91,7 +91,8 @@ public class AddressLabelsReportController extends BaseController {
 
 		// Get the actual names of the UUIDs for the special groups
 		final List<String> specialGroupsNames = new ArrayList<String>();
-		if (specialServiceGroupIds != null && specialServiceGroupIds.size() > 0) {
+		if ((specialServiceGroupIds != null)
+				&& (specialServiceGroupIds.size() > 0)) {
 			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
 			while (ssgIter.hasNext()) {
 				specialGroupsNames
@@ -101,7 +102,7 @@ public class AddressLabelsReportController extends BaseController {
 
 		// Get the actual names of the UUIDs for the referralSources
 		final List<String> referralSourcesNames = new ArrayList<String>();
-		if (referralSourcesIds != null && referralSourcesIds.size() > 0) {
+		if ((referralSourcesIds != null) && (referralSourcesIds.size() > 0)) {
 			final Iterator<UUID> referralSourceIter = referralSourcesIds
 					.iterator();
 			while (referralSourceIter.hasNext()) {

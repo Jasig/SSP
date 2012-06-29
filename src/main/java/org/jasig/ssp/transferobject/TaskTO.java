@@ -10,6 +10,9 @@ import java.util.UUID;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 
+/**
+ * Task transfer object
+ */
 public class TaskTO
 		extends AbstractAuditableTO<Task>
 		implements TransferObject<Task>, Serializable, NamedTO {
@@ -17,9 +20,13 @@ public class TaskTO
 	private static final long serialVersionUID = 5796302591576434925L;
 
 	private String type;
+
 	private String name, description;
-	private boolean completed, deletable;
+
+	private boolean deletable;
+
 	private Date dueDate, completedDate, reminderSentDate;
+
 	private UUID personId, challengeId, challengeReferralId;
 
 	private ConfidentialityLevelLiteTO confidentialityLevel;
@@ -38,18 +45,18 @@ public class TaskTO
 		super.from(task);
 
 		type = task.getType();
-		completed = (task.getCompletedDate() != null);
 		deletable = task.isDeletable();
 		dueDate = task.getDueDate();
 		completedDate = task.getCompletedDate();
 		reminderSentDate = task.getReminderSentDate();
 
+		name = task.getName();
+		description = task.getDescription() == null ? null : task
+				.getDescription().replaceAll("\\<.*?>", "");
+
 		if (task.getChallenge() != null) {
 			challengeId = task.getChallenge().getId();
 		}
-
-		name = task.getName();
-		description = task.getDescription();
 
 		if (task.getChallengeReferral() != null) {
 			challengeReferralId = task.getChallengeReferral().getId();
@@ -57,16 +64,20 @@ public class TaskTO
 
 		confidentialityLevel = ConfidentialityLevelLiteTO.fromModel(
 				task.getConfidentialityLevel());
-
-		if (description != null) {
-			description = description.replaceAll("\\<.*?>", "");
-		}
 	}
 
-	public static List<TaskTO> toTOList(final Collection<Task> tasks) {
+	/**
+	 * Converts a list of models to equivalent transfer objects.
+	 * 
+	 * @param models
+	 *            model tasks to convert to equivalent transfer objects
+	 * @return List of equivalent transfer objects, or empty List if null or
+	 *         empty.
+	 */
+	public static List<TaskTO> toTOList(final Collection<Task> models) {
 		final List<TaskTO> taskTOs = new ArrayList<TaskTO>();
-		if ((tasks != null) && !tasks.isEmpty()) {
-			for (final Task task : tasks) {
+		if ((models != null) && !models.isEmpty()) {
+			for (final Task task : models) {
 				taskTOs.add(new TaskTO(task)); // NOPMD
 			}
 		}
@@ -108,12 +119,37 @@ public class TaskTO
 		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
+	/**
+	 * Has this Task been completed?
+	 * 
+	 * <p>
+	 * Generated field that will always be true if completedDate is non-null.
+	 * 
+	 * @return true if Task has been completed, determined by a non-null
+	 *         completedDate
+	 */
 	public boolean isCompleted() {
-		return completed;
+		return completedDate != null;
 	}
 
+	/**
+	 * Side affect: Sets or nulls the completedDate if necessary.
+	 * 
+	 * <p>
+	 * It is advised to use {@link #setCompletedDate(Date)} explicitly instead
+	 * of changing the value via this setter.
+	 * 
+	 * @param completed
+	 *            Is this task completed or not?
+	 */
 	public void setCompleted(final boolean completed) {
-		this.completed = completed;
+		if (completed && completedDate == null) {
+			// Completed date not already set, so set it to now.
+			completedDate = new Date();
+		} else if (!completed) {
+			// Ensure completed date is not set.
+			completedDate = null; // NOPMD
+		}
 	}
 
 	public boolean isDeletable() {
@@ -144,6 +180,16 @@ public class TaskTO
 		return completedDate == null ? null : new Date(completedDate.getTime());
 	}
 
+	/**
+	 * Completed date.
+	 * 
+	 * <p>
+	 * Side affect: the result of {@link #isCompleted()} is generated based on
+	 * this value.
+	 * 
+	 * @param completedDate
+	 *            Completed date
+	 */
 	public void setCompletedDate(final Date completedDate) {
 		this.completedDate = completedDate == null ? null : new Date(
 				completedDate.getTime());

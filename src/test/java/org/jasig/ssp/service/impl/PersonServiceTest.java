@@ -37,6 +37,8 @@ public class PersonServiceTest {
 
 	private transient PersonDao dao;
 
+	private static final String TEST_USER_ID = "12345";
+
 	@Before
 	public void setUp() {
 		service = new PersonServiceImpl();
@@ -69,7 +71,8 @@ public class PersonServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.get(id));
+		assertNotNull("Get() result should not have been null.",
+				service.get(id));
 		verify(dao);
 	}
 
@@ -82,7 +85,8 @@ public class PersonServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		assertNotNull("Save() result should not have been null.",
+				service.save(daoOne));
 		verify(dao);
 	}
 
@@ -103,16 +107,16 @@ public class PersonServiceTest {
 
 	@Test
 	public void personFromUserId() throws ObjectNotFoundException {
-		final String userId = "12345";
 		final Person person = new Person();
-		expect(dao.fromUserId(userId)).andReturn(person);
+
+		expect(dao.fromUserId(TEST_USER_ID)).andReturn(person);
 
 		replay(dao);
 
-		final Person result = service.personFromUserId(userId);
+		final Person result = service.personFromUserId(TEST_USER_ID);
 
 		verify(dao);
-		assertEquals(person, result);
+		assertEquals("Lists do not match.", person, result);
 	}
 
 	@Test
@@ -134,6 +138,6 @@ public class PersonServiceTest {
 				sAndP);
 
 		verify(dao);
-		assertEquals(people, result);
+		assertEquals("Lists do not match.", people, result);
 	}
 }

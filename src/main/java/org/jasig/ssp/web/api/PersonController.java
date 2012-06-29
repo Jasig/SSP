@@ -12,7 +12,7 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -55,7 +55,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
-	PagingTO<PersonTO, Person> getAll(
+	PagedResponse<PersonTO> getAll(
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
@@ -66,7 +66,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 				.createForSingleSort(status, start, limit, sort, sortDirection,
 						null));
 
-		return new PagingTO<PersonTO, Person>(true, people.getResults(),
+		return new PagedResponse<PersonTO>(true, people.getResults(),
 				factory.asTOList(people.getRows()));
 	}
 

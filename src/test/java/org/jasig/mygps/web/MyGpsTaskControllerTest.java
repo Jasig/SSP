@@ -50,6 +50,14 @@ public class MyGpsTaskControllerTest {
 
 	private transient SecurityServiceInTestEnvironment securityService;
 
+	private static final String TEST_TASK_NAME = "custom task";
+
+	private static final String TEST_TASK_DESCRIPTION = "custom task desc";
+
+	private static final String TEST_TASK_SESSION_ID = "12345";
+
+	private static final String TEST_TASK_EMAIL = "asdf@a.com";
+
 	@Before
 	public void setUp() {
 		service = createMock(TaskService.class);
@@ -67,17 +75,15 @@ public class MyGpsTaskControllerTest {
 	public void createTaskForStudent() throws Exception { // NOPMD
 		final Person student = new Person();
 		student.setUserId("student id");
-		final String name = "custom task";
-		final String description = "custom task desc";
-		final String session = "123456";
 		final Task task = new Task();
 
 		expect(personService.personFromUserId(student.getUserId())).andReturn(
 				student);
-		securityService.setSessionId(session);
+		securityService.setSessionId(TEST_TASK_SESSION_ID);
 		expect(
-				service.createCustomTaskForPerson(name, description, student,
-						session)).andReturn(task);
+				service.createCustomTaskForPerson(TEST_TASK_NAME,
+						TEST_TASK_DESCRIPTION, student,
+						TEST_TASK_SESSION_ID)).andReturn(task);
 		service.sendNoticeToStudentOnCustomTask(task);
 
 		replay(personService);
@@ -85,7 +91,8 @@ public class MyGpsTaskControllerTest {
 
 		assertTrue(
 				"Task creation should have returned success.",
-				controller.createTaskForStudent(name, description,
+				controller.createTaskForStudent(TEST_TASK_NAME,
+						TEST_TASK_DESCRIPTION,
 						student.getUserId(), new Date()));
 
 		verify(personService);
@@ -94,22 +101,21 @@ public class MyGpsTaskControllerTest {
 
 	@Test
 	public void createCustom() throws Exception { // NOPMD
-		final String name = "custom task";
-		final String description = "custom task desc";
 		final Task task = new Task();
 		final Person student = new Person();
-		final String session = "1234";
 
 		securityService.setCurrent(student);
-		securityService.setSessionId(session);
+		securityService.setSessionId(TEST_TASK_SESSION_ID);
 
 		expect(
-				service.createCustomTaskForPerson(name, description, student,
-						session)).andReturn(task);
+				service.createCustomTaskForPerson(TEST_TASK_NAME,
+						TEST_TASK_DESCRIPTION, student, TEST_TASK_SESSION_ID))
+				.andReturn(task);
 
 		replay(service);
 
-		final TaskTO result = controller.createCustom(name, description);
+		final TaskTO result = controller.createCustom(TEST_TASK_NAME,
+				TEST_TASK_DESCRIPTION);
 
 		verify(service);
 		assertNotNull("Custom Task should not have been null.", result);
@@ -126,15 +132,15 @@ public class MyGpsTaskControllerTest {
 		final Task task = new Task();
 		task.setId(UUID.randomUUID());
 		final Person student = new Person();
-		final String session = "12345";
 
 		expect(challengeService.get(challengeId)).andReturn(challenge);
 		expect(challengeReferralService.get(challengeReferralId)).andReturn(
 				challengeReferral);
 		securityService.setCurrent(student);
-		securityService.setSessionId(session);
+		securityService.setSessionId(TEST_TASK_SESSION_ID);
 		expect(service.createForPersonWithChallengeReferral(challenge,
-				challengeReferral, student, session)).andReturn(task);
+				challengeReferral, student, TEST_TASK_SESSION_ID)).andReturn(
+				task);
 
 		replay(service);
 		replay(challengeService);
@@ -174,43 +180,37 @@ public class MyGpsTaskControllerTest {
 	@Test
 	public void email() throws Exception { // NOPMD
 		final Person student = new Person();
-		final String session = "12345";
-		final String emailAddress = "asdf@a.com";
 		final List<Task> tasks = Lists.newArrayList();
 
 		final List<String> emailAddresses = Lists.newArrayList();
-		emailAddresses.add(emailAddress);
+		emailAddresses.add(TEST_TASK_EMAIL);
 
 		securityService.setCurrent(student);
-		securityService.setSessionId(session);
+		securityService.setSessionId(TEST_TASK_SESSION_ID);
 
 		expect(
 				service.getAllForPerson(eq(student), eq(false),
 						eq(securityService.currentUser()),
 						isA(SortingAndPaging.class))).andReturn(tasks);
-		service.sendTasksForPersonToEmail(tasks, student, emailAddresses, null);
+		service.sendTasksForPersonToEmail(tasks, null, student, emailAddresses,
+				null);
 
 		replay(service);
 
-		try {
-			final Boolean response = controller.email(emailAddress);
+		final Boolean response = controller.email(TEST_TASK_EMAIL);
 
-			verify(service);
-			assertTrue("Email action should have returned success.", response);
-		} catch (final Exception e) {
-			fail("controller error");
-		}
+		verify(service);
+		assertTrue("Email action should have returned success.", response);
 	}
 
 	@Test
 	public void getAll() {
 		final Person student = new Person();
-		final String session = "12345";
 		final PagingWrapper<Task> tasks = new PagingWrapper<Task>(
 				new ArrayList<Task>());
 
 		securityService.setCurrent(student);
-		securityService.setSessionId(session);
+		securityService.setSessionId(TEST_TASK_SESSION_ID);
 
 		expect(
 				service.getAllForPerson(eq(student),
@@ -232,17 +232,16 @@ public class MyGpsTaskControllerTest {
 	@Test
 	public void mark() {
 		final UUID taskId = UUID.randomUUID();
-		final Boolean complete = false;
 		final Task task = new Task();
 		task.setId(taskId);
 
 		try {
 			expect(service.get(taskId)).andReturn(task);
-			service.markTaskCompletion(task, complete);
+			service.markTaskCompletion(task, false);
 
 			replay(service);
 
-			final TaskTO response = controller.mark(taskId, complete);
+			final TaskTO response = controller.mark(taskId, false);
 
 			verify(service);
 			assertEquals("IDs did not match.", task.getId(), response.getId());

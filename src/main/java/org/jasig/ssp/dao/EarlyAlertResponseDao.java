@@ -37,7 +37,7 @@ public class EarlyAlertResponseDao extends
 	 *            Sorting and paging filters
 	 * @return All EarlyAlertResponses for the specified person.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<EarlyAlertResponse> getAllForPersonId(
 			final UUID personId,
 			final SortingAndPaging sAndP) {

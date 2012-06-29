@@ -54,5 +54,4 @@ public class RestrictedPersonAssocPermissionServiceImpl implements
 		}
 		return false;
 	}
-
 }

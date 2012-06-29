@@ -12,7 +12,8 @@ import org.springframework.stereotype.Repository;
  * Data access class for the VeteranStatus reference entity.
  */
 @Repository
-public class VeteranStatusDao extends AbstractReferenceAuditableCrudDao<VeteranStatus>
+public class VeteranStatusDao extends
+		AbstractReferenceAuditableCrudDao<VeteranStatus>
 		implements AuditableCrudDao<VeteranStatus> {
 
 	/**
@@ -24,7 +25,7 @@ public class VeteranStatusDao extends AbstractReferenceAuditableCrudDao<VeteranS
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<VeteranStatus> getAll(final SortingAndPaging sAndP) {
 		final long totalRows = (Long) createCriteria().setProjection(
 				Projections.rowCount()).uniqueResult();

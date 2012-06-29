@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
@@ -34,10 +36,15 @@ import com.google.common.collect.Lists;
 @ContextConfiguration("reference/dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
-public class PersonDaoTest {
+public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonDaoTest.class);
+
+	private static final UUID PERSON_ID = UUID
+			.fromString("F549ECAB-5110-4CC1-B2BB-369CAC854DEA");
+
+	private static final String PERSON_USER_ID = "userId ken.1";
 
 	@Autowired
 	private transient PersonDao dao;
@@ -58,7 +65,6 @@ public class PersonDaoTest {
 	@Test
 	public void testGetAll() {
 		final Collection<Person> list = dao.getAll(ObjectStatus.ALL).getRows();
-		assertNotNull(list);
 		assertTrue("List should have included multiple entities.",
 				list.size() > 1);
 	}
@@ -71,13 +77,9 @@ public class PersonDaoTest {
 				new SortingAndPaging(ObjectStatus.ALL, 1, 2, null, "lastName",
 						SortDirection.ASC)).getRows();
 
-		assertNotNull(listAll);
 		assertTrue("List should have included multiple entities.",
 				listAll.size() > 2);
 
-		assertNotNull(listFiltered);
-		assertEquals("List should have included exactly 2 entities.", 2,
-				listFiltered.size());
 		assertEquals("List should have included exactly 2 entities.", 2,
 				listFiltered.size());
 
@@ -88,8 +90,18 @@ public class PersonDaoTest {
 
 	@Test
 	public void testGet() throws ObjectNotFoundException {
-		assertEquals(Person.SYSTEM_ADMINISTRATOR_ID,
-				dao.get(Person.SYSTEM_ADMINISTRATOR_ID).getId());
+		assertEquals("Ids did not match.", Person.SYSTEM_ADMINISTRATOR_ID, dao
+				.get(Person.SYSTEM_ADMINISTRATOR_ID).getId());
+	}
+
+	@Test
+	public void testGetFromUserId() {
+		// act
+		final Person person = dao.fromUserId(PERSON_USER_ID);
+
+		// assert
+		assertNotNull("Person should not have been null.", person);
+		assertEquals("IDs did not match.", PERSON_ID, person.getId());
 	}
 
 	@Test
@@ -112,15 +124,14 @@ public class PersonDaoTest {
 		LOGGER.debug(obj.toString());
 
 		final Person loaded = dao.get(saved.getId());
-		assertNotNull(loaded);
-		assertNotNull(loaded.getId());
+		assertNotNull("Loaded ID should not have been null.", loaded.getId());
 		assertEquals("Strengths property did not match.", "strengths",
 				loaded.getStrengths());
 
 		final Collection<Person> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
-		assertNotNull(all);
-		assertFalse(all.isEmpty());
+		assertFalse("GetAll() result should not have been empty.",
+				all.isEmpty());
 		assertList(all);
 
 		dao.delete(loaded);
@@ -131,13 +142,13 @@ public class PersonDaoTest {
 		final UUID id = UUID.randomUUID();
 		final Person person = dao.get(id);
 
-		assertNull(person);
+		assertNull("Person should not have been null.", person);
 	}
 
 	@Test
 	public void testFromUsername() {
-		assertEquals(Person.SYSTEM_ADMINISTRATOR_ID, dao.fromUsername("system")
-				.getId());
+		assertEquals("Ids did not match.", Person.SYSTEM_ADMINISTRATOR_ID, dao
+				.fromUsername("system").getId());
 	}
 
 	@Test
@@ -150,9 +161,36 @@ public class PersonDaoTest {
 				ObjectStatus.ACTIVE)));
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetWithEmptyList() {
+		dao.get(new ArrayList<UUID>(), null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetWithNullList() {
+		dao.get(null, null);
+	}
+
+	@Test
+	public void testGetList() {
+		// arrange
+		final List<UUID> list = Lists.newArrayList();
+		list.add(Person.SYSTEM_ADMINISTRATOR_ID);
+
+		// act
+		final PagingWrapper<Person> result = dao.get(list,
+				new SortingAndPaging(ObjectStatus.ALL));
+
+		// assert
+		assertEquals(
+				"Result list did not contain the expected number of items.", 1,
+				result.getResults());
+	}
+
 	private void assertList(final Collection<Person> objects) {
 		for (final Person object : objects) {
-			assertNotNull(object.getId());
+			assertNotNull("List item should not have been null.",
+					object.getId());
 		}
 	}
 }

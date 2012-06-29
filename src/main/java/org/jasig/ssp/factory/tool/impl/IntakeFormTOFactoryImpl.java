@@ -64,6 +64,13 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 		}
 
 		if (tObject.getPersonDemographics() != null) {
+			// is there one already present?
+			if ((model.getPerson() != null)
+					&& (model.getPerson().getDemographics() != null)) {
+				tObject.getPersonDemographics().setId(
+						model.getPerson().getDemographics().getId());
+			}
+
 			model.getPerson()
 					.setDemographics(
 							personDemographicsTOFactory.from(tObject
@@ -79,6 +86,12 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 		}
 
 		if (tObject.getPersonEducationGoal() != null) {
+			if ((model.getPerson() != null)
+					&& (model.getPerson().getEducationGoal() != null)) {
+				tObject.getPersonEducationGoal().setId(
+						model.getPerson().getEducationGoal().getId());
+			}
+
 			model.getPerson().setEducationGoal(
 					personEducationGoalTOFactory.from(tObject
 							.getPersonEducationGoal()));
@@ -92,6 +105,12 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 		}
 
 		if (tObject.getPersonEducationPlan() != null) {
+			if ((model.getPerson() != null)
+					&& (model.getPerson().getEducationPlan() != null)) {
+				tObject.getPersonEducationPlan().setId(
+						model.getPerson().getEducationPlan().getId());
+			}
+
 			model.getPerson().setEducationPlan(
 					personEducationPlanTOFactory.from(tObject
 							.getPersonEducationPlan()));

@@ -50,6 +50,10 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	//def specialServiceGroups = null;
 	result.person.specialServiceGroups = specialServiceGroups;
 	
+	result.personEducationGoal = new PersonEducationGoalTO(description:"ed goal description", plannedOccupation:"occupied", howSureAboutMajor:2)
+	
+	result.personEducationPlan = new PersonEducationPlanTO(newOrientationComplete:false, registeredForClasses:false, collegeDegreeForParents:false, specialNeeds:false, gradeTypicallyEarned:"B")
+	
 	//subit the manipulated form
 	conn.put("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff", toJson(result))
 	

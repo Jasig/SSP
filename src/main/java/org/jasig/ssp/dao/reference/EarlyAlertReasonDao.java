@@ -27,7 +27,7 @@ public class EarlyAlertReasonDao extends
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<EarlyAlertReason> getAll(final SortingAndPaging sAndP) {
 		final long totalRows = (Long) createCriteria().setProjection(
 				Projections.rowCount()).uniqueResult();

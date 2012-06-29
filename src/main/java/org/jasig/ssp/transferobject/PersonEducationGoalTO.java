@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import javax.validation.constraints.NotNull;
-
 import org.jasig.ssp.model.PersonEducationGoal;
 
 import com.google.common.collect.Lists;
@@ -14,10 +12,8 @@ public class PersonEducationGoalTO
 		extends AbstractAuditableTO<PersonEducationGoal>
 		implements TransferObject<PersonEducationGoal> {
 
-	@NotNull
 	private UUID educationGoalId;
 
-	@NotNull
 	private UUID personId;
 
 	private String description, plannedOccupation;

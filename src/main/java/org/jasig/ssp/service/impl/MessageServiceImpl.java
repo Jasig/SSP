@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -231,12 +232,7 @@ public class MessageServiceImpl implements MessageService {
 			mimeMessageHelper.setText(message.getBody());
 			mimeMessage.setContent(message.getBody(), "text/html");
 
-			if (shouldSendMail()) {
-				LOGGER.debug("_ : JavaMailSender.send()");
-				javaMailSender.send(mimeMessage);
-			} else {
-				LOGGER.warn("_ : JavaMailSender was not called; message was marked sent but was not actually sent.  To enable mail, update the configuration of the app.");
-			}
+			send(mimeMessage);
 
 			message.setSentDate(new Date());
 			messageDao.save(message);
@@ -248,5 +244,27 @@ public class MessageServiceImpl implements MessageService {
 
 		LOGGER.info("END : sendMessage()");
 		return true;
+	}
+
+	private void send(final MimeMessage mimeMessage) throws SendFailedException {
+		if (shouldSendMail()) {
+			LOGGER.debug("_ : JavaMailSender.send()");
+			try {
+				javaMailSender.send(mimeMessage);
+			} catch (MailSendException e) {
+				try {
+					LOGGER.warn("Send failed, going to wait and try again");
+					Thread.sleep(20 * 1000L);
+					javaMailSender.send(mimeMessage);
+				} catch (InterruptedException e1) {
+					LOGGER.error("Thread error", e1);
+				} catch (MailSendException e2) {
+					throw new SendFailedException(
+							"Unable to send message.", e2);
+				}
+			}
+		} else {
+			LOGGER.warn("_ : JavaMailSender was not called; message was marked sent but was not actually sent.  To enable mail, update the configuration of the app.");
+		}
 	}
 }

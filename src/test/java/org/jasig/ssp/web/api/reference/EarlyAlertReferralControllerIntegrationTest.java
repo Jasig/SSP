@@ -14,10 +14,9 @@ import java.util.UUID;
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.EarlyAlertReferral;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.PagingTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.reference.EarlyAlertReferralTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
@@ -215,7 +214,7 @@ public class EarlyAlertReferralControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerGetAllResults() {
-		final PagingTO<EarlyAlertReferralTO, EarlyAlertReferral> results = controller
+		final PagedResponse<EarlyAlertReferralTO> results = controller
 				.getAll(ObjectStatus.ACTIVE, 0, 4, null, null);
 
 		final Collection<EarlyAlertReferralTO> list = results.getRows();

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -13,7 +14,9 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +29,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
 /**
  * Tests for {@link ConfigDao}.
  */
@@ -37,6 +42,14 @@ public class ConfigDaoTest {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ConfigDaoTest.class);
+
+	/**
+	 * For testing that overriding sort by name instead of tree order works. See
+	 * {@link #testGetAllWithSorting()}. "67BD120E-9BE1-11E1-AD1F-0026B9E7FF4C"
+	 * is for the "app_title" configuration item.
+	 */
+	private static final UUID CONFIG_ID_FOR_FIRST_ALPHABETICAL_NAME = UUID
+			.fromString("67BD120E-9BE1-11E1-AD1F-0026B9E7FF4C");
 
 	@Autowired
 	private transient ConfigDao dao;
@@ -149,5 +162,24 @@ public class ConfigDaoTest {
 		assertNotNull("Config data should not be null.", data);
 		assertFalse("Config data should not be empty.", data.getRows()
 				.isEmpty());
+	}
+
+	@Test
+	public void testGetAllWithSorting() {
+		// arrange
+		final List<Pair<String, SortDirection>> sorts = Lists.newArrayList();
+		sorts.add(new Pair<String, SortDirection>("name", SortDirection.ASC));
+
+		// act
+		final PagingWrapper<Config> list = dao
+				.getAll(new SortingAndPaging(ObjectStatus.ALL, 0, 10, sorts,
+						null, null));
+
+		// assert
+		assertFalse("List should not have been empty.", list.getRows()
+				.isEmpty());
+		assertEquals("Sorted first result ID did not match expected.",
+				CONFIG_ID_FOR_FIRST_ALPHABETICAL_NAME, list.getRows()
+						.iterator().next().getId());
 	}
 }

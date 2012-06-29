@@ -97,8 +97,8 @@ public class TaskDaoTest {
 		final ConfidentialityLevel testConfLevel = confidentialityLevelService
 				.get(CONFIDENTIALITYLEVEL_ID);
 
-		testTask = new Task("test task", cal.getTime(), ken, testChallenge,
-				testChallengeReferral);
+		testTask = new Task("testTask", "test task", cal.getTime(), ken,
+				testChallenge, testChallengeReferral);
 		testTask.setConfidentialityLevel(testConfLevel);
 		dao.save(testTask);
 	}
@@ -119,14 +119,13 @@ public class TaskDaoTest {
 	 * A user with all confidentiality levels accessing the goal
 	 */
 	@Test
-	public void getAllForPersonIdAllLevels() throws ObjectNotFoundException {
-		final PagingWrapper<Task> tasks = dao.getAllForPersonId(
-				ken.getId(),
-				securityService.currentUser(),
-				new SortingAndPaging(
+	public void getAllForPersonIdAllLevels() {
+		final PagingWrapper<Task> tasks = dao.getAllForPersonId(ken.getId(),
+				securityService.currentUser(), new SortingAndPaging(
 						ObjectStatus.ACTIVE));
 		assertList(tasks.getRows());
-		assertTrue(tasks.getResults() > 0);
+		assertTrue("Task results should not have been empty.",
+				tasks.getResults() > 0);
 	}
 
 	@Test
@@ -189,12 +188,11 @@ public class TaskDaoTest {
 		taskIds.add(UUID.fromString("f42f4970-b566-11e1-a224-0026b9e7ff4c"));
 		taskIds.add(UUID.fromString("4a24c8c2-b568-11e1-b82e-0026b9e7ff4c"));
 		taskIds.add(UUID.randomUUID());
-		List<Task> tasks = dao.getTasksInList(taskIds,
+		final List<Task> tasks = dao.get(taskIds,
 				securityService.currentlyAuthenticatedUser(),
-				new SortingAndPaging(
-						ObjectStatus.ACTIVE));
+				new SortingAndPaging(ObjectStatus.ACTIVE));
 		assertList(tasks);
-		assertTrue(tasks.size() > 0);
+		assertFalse("Task list should not have been empty.", tasks.isEmpty());
 	}
 
 	protected void assertList(final Collection<Task> objects) {
