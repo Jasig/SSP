@@ -3,6 +3,9 @@ package org.jasig.ssp.dao;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.criterion.Projections;
@@ -47,7 +50,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<Person> getAll(final SortingAndPaging sAndP) {
 
 		if (!sAndP.isSorted()) {
@@ -64,7 +67,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return new PagingWrapper<Person>(totalRows, criteria.list());
 	}
 
-	public Person fromUsername(final String username) {
+	public Person fromUsername(@NotNull final String username) {
+		if (StringUtils.isWhitespace(username)) {
+			throw new IllegalArgumentException("username can not be empty.");
+		}
+
 		final Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(Person.class);
 		query.add(Restrictions.eq("username", username)).setFlushMode(
@@ -72,14 +79,18 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return (Person) query.uniqueResult();
 	}
 
-	public Person fromUserId(final String userId) {
+	public Person fromUserId(@NotNull final String userId) {
+		if (StringUtils.isWhitespace(userId)) {
+			throw new IllegalArgumentException("userId can not be empty.");
+		}
+
 		final Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(Person.class);
 		query.add(Restrictions.eq("userId", userId));
 		return (Person) query.uniqueResult();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleInList(final List<UUID> personIds,
 			final SortingAndPaging sAndP) {
 		final Criteria criteria = createCriteria(sAndP);
@@ -123,13 +134,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 * @return
 	 * @throws ObjectNotFoundException
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleByCriteria(
-			AddressLabelSearchTO addressLabelSearchTO,
+			final AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
-		
+
 		if (addressLabelSearchTO.getProgramStatus() != null) {
 			// criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
 		}
@@ -148,15 +159,18 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							addressLabelSearchTO.getReferralSourcesIds()));
 		}
 		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
-			criteria.add(Restrictions.eq("anticipatedStartTerm",addressLabelSearchTO.getAnticipatedStartTerm()).ignoreCase());
+			criteria.add(Restrictions.eq("anticipatedStartTerm",
+					addressLabelSearchTO.getAnticipatedStartTerm())
+					.ignoreCase());
 		}
 		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
-			criteria.add(Restrictions.eq("anticipatedStartYear",addressLabelSearchTO.getAnticipatedStartYear()));
+			criteria.add(Restrictions.eq("anticipatedStartYear",
+					addressLabelSearchTO.getAnticipatedStartYear()));
 		}
 		if (addressLabelSearchTO.getStudentTypeIds() != null) {
 			criteria.add(Restrictions.in("studentType.id",
 					addressLabelSearchTO.getStudentTypeIds()));
-		}		
+		}
 
 		return criteria.list();
 	}
@@ -180,9 +194,9 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 * @return
 	 * @throws ObjectNotFoundException
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleBySpecialServices(
-			List<UUID> specialServiceGroups, final SortingAndPaging sAndP)
+			final List<UUID> specialServiceGroups, final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
@@ -193,8 +207,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									specialServiceGroups));
-		}		
-		
+		}
+
 		return criteria.list();
 	}
 

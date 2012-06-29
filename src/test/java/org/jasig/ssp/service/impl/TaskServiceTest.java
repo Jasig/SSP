@@ -1,15 +1,16 @@
-/**
- * 
- */
-package org.jasig.ssp.service.impl;
+package org.jasig.ssp.service.impl; // NOPMD
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -17,6 +18,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +27,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author jon.adams
@@ -41,6 +45,12 @@ public class TaskServiceTest {
 
 	private static final UUID CONFIDENTIALITYLEVEL_ID = UUID
 			.fromString("afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c");
+
+	private static final UUID TEST_TASK_ID1 = UUID
+			.fromString("F42F4970-B566-11E1-A224-0026B9E7FF4C");
+
+	private static final UUID TEST_TASK_ID2 = UUID
+			.fromString("4A24C8C2-B568-11E1-B82E-0026B9E7FF4C");
 
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;
@@ -129,6 +139,44 @@ public class TaskServiceTest {
 		assertTrue(
 				"Task generated complete value should have been true.",
 				wasIncompleteTaskTO.isCompleted());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetWithEmptyList() {
+		service.get(new ArrayList<UUID>(), securityService.currentUser(), null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetWithNullList() {
+		service.get(null, securityService.currentUser(), null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetWithNullUser() {
+		// arrange
+		final List<UUID> list = Lists.newArrayList();
+		list.add(TEST_TASK_ID1);
+		list.add(TEST_TASK_ID2);
+
+		// act
+		service.get(list, null, new SortingAndPaging(ObjectStatus.ALL));
+	}
+
+	@Test
+	public void testGetList() {
+		// arrange
+		final List<UUID> list = Lists.newArrayList();
+		list.add(TEST_TASK_ID1);
+		list.add(TEST_TASK_ID2);
+
+		// act
+		final List<Task> result = service.get(list, securityService
+				.currentUser(), new SortingAndPaging(ObjectStatus.ALL));
+
+		// assert
+		assertEquals(
+				"Result list did not contain the expected number of items.", 2,
+				result.size());
 	}
 
 	private Task createTask() throws ObjectNotFoundException {

@@ -66,10 +66,18 @@ public class TaskTO
 				task.getConfidentialityLevel());
 	}
 
-	public static List<TaskTO> toTOList(final Collection<Task> tasks) {
+	/**
+	 * Converts a list of models to equivalent transfer objects.
+	 * 
+	 * @param models
+	 *            model tasks to convert to equivalent transfer objects
+	 * @return List of equivalent transfer objects, or empty List if null or
+	 *         empty.
+	 */
+	public static List<TaskTO> toTOList(final Collection<Task> models) {
 		final List<TaskTO> taskTOs = new ArrayList<TaskTO>();
-		if ((tasks != null) && !tasks.isEmpty()) {
-			for (final Task task : tasks) {
+		if ((models != null) && !models.isEmpty()) {
+			for (final Task task : models) {
 				taskTOs.add(new TaskTO(task)); // NOPMD
 			}
 		}

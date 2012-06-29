@@ -39,7 +39,7 @@ public class EarlyAlertRoutingDao
 	 * @return All instance for the specified Person with any specified filters
 	 *         applied.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<EarlyAlertRouting> getAllForCampusId(
 			final UUID campusId,
 			final SortingAndPaging sAndP) {

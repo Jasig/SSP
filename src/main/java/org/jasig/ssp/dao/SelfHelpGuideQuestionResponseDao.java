@@ -29,7 +29,7 @@ public class SelfHelpGuideQuestionResponseDao extends
 	 * @return List of SelfHelpGuideQuestionResponse responses that need Early
 	 *         Alerts sent
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<SelfHelpGuideQuestionResponse> criticalResponsesForEarlyAlert() {
 		return sessionFactory.getCurrentSession()
 				.createQuery("from SelfHelpGuideQuestionResponse " +

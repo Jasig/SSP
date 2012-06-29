@@ -7,6 +7,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -23,6 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		AuditableCrudDao<T> {
+
+	/**
+	 * String constant for unchecked casting warnings that occur all over the
+	 * DAO layer
+	 */
+	public static final String UNCHECKED = "unchecked";
 
 	@Autowired
 	protected transient SessionFactory sessionFactory;
@@ -44,7 +51,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		return processCriteriaWithPaging(createCriteria(), sAndP);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	@Override
 	public T get(final UUID id) throws ObjectNotFoundException {
 		final T obj = (T) sessionFactory.getCurrentSession().get(
@@ -58,14 +65,27 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		throw new ObjectNotFoundException(id, persistentClass.getName());
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
+	public PagingWrapper<T> get(final List<UUID> ids,
+			final SortingAndPaging sAndP) {
+		if (ids == null || ids.isEmpty()) {
+			throw new IllegalArgumentException(
+					"List of ids can not be null or empty.");
+		}
+
+		final Criteria criteria = createCriteria();
+		criteria.add(Restrictions.in("id", ids));
+		return processCriteriaWithPaging(criteria, sAndP);
+	}
+
+	@SuppressWarnings(UNCHECKED)
 	@Override
 	public T load(final UUID id) {
 		return (T) sessionFactory.getCurrentSession().load(
 				this.persistentClass, id);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	@Override
 	public T save(final T obj) {
 		final Session session = sessionFactory.getCurrentSession();
@@ -140,7 +160,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 		}
 
 		// Query results
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings(UNCHECKED)
 		final List<T> results = query.list();
 
 		// If there is no total yet, take it from the size of the results

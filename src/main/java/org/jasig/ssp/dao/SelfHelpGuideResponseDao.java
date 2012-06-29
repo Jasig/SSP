@@ -29,7 +29,7 @@ public class SelfHelpGuideResponseDao
 	 * @return List of all applicable SelfHelpGuideResponses, for all
 	 *         non-anonymous users.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	public List<SelfHelpGuideResponse> forEarlyAlert() {
 		return sessionFactory.getCurrentSession()
 				.createQuery("from SelfHelpGuideResponse shgr " +

@@ -26,7 +26,7 @@ public class ChallengeReferralDao extends
 		super(ChallengeReferral.class);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	// :TODO paging?
 	public List<ChallengeReferral> byChallengeId(final UUID challengeId) {
 		return sessionFactory
@@ -43,7 +43,7 @@ public class ChallengeReferralDao extends
 				.setParameter(1, ObjectStatus.ACTIVE).setMaxResults(100).list();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	// :TODO paging?
 	public List<ChallengeReferral> byChallengeIdAndQuery(
 			final UUID challengeId,
@@ -97,7 +97,7 @@ public class ChallengeReferralDao extends
 				.uniqueResult();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(UNCHECKED)
 	// :TODO paging?
 	public List<ChallengeReferral> byChallengeIdNotOnActiveTaskList(
 			final UUID challengeId, final Person student, final String sessionId) {

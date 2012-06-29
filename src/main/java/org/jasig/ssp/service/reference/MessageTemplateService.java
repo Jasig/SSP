@@ -11,6 +11,7 @@ import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -46,7 +47,8 @@ public interface MessageTemplateService extends
 
 	SubjectAndBody createCustomActionPlanTaskMessage(final Task task);
 
-	SubjectAndBody createActionPlanMessage(Person student, List<TaskTO> taskTOs);
+	SubjectAndBody createActionPlanMessage(Person student,
+			List<TaskTO> taskTOs, List<GoalTO> goalTOs);
 
 	SubjectAndBody createJournalNoteForEarlyAlertResponseMessage(
 			String termToRepresentEarlyAlert, EarlyAlert earlyAlert);

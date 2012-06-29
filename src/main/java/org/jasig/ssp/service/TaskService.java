@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.mail.SendFailedException;
 
+import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
@@ -22,13 +23,13 @@ public interface TaskService
 	 * 
 	 * @param person
 	 * @param complete
+	 * @param requester
 	 * @param sAndP
 	 *            sorting and paging options
 	 * @return All tasks for the Person in the given completion state
 	 */
 	List<Task> getAllForPerson(Person person, boolean complete,
-			SspUser requestor,
-			SortingAndPaging sAndP);
+			SspUser requester, SortingAndPaging sAndP);
 
 	/**
 	 * Get all tasks for the Session
@@ -94,13 +95,14 @@ public interface TaskService
 	 * @param person
 	 * @param complete
 	 * @param challengeReferral
+	 * @param requester
 	 * @param sAndP
 	 * @return All tasks for the person, challenge referral, and completion
 	 *         status.
 	 */
 	List<Task> getAllForPersonAndChallengeReferral(Person person,
 			boolean complete, ChallengeReferral challengeReferral,
-			SspUser requestor,
+			SspUser requester,
 			SortingAndPaging sAndP);
 
 	/**
@@ -123,12 +125,13 @@ public interface TaskService
 	 * 
 	 * @param person
 	 *            Person
+	 * @param requester
 	 * @param sAndP
 	 *            sorting and paging options
 	 * @return All tasks for the person, grouped by Task Group
 	 */
 	Map<String, List<Task>> getAllGroupedByTaskGroup(Person person,
-			SspUser requestor,
+			SspUser requester,
 			SortingAndPaging sAndP);
 
 	/**
@@ -178,28 +181,26 @@ public interface TaskService
 	 * Send a list of the given tasks to each emailAddress and each recipient.
 	 * 
 	 * @param tasks
+	 *            the tasks
+	 * @param goals
+	 *            the goals
 	 * @param student
+	 *            the student
 	 * @param emailAddresses
+	 *            e-mail addresses
 	 * @param recipients
+	 *            the recipients
 	 * @throws ObjectNotFoundException
+	 *             If the specified tasks or any referenced data could not be
+	 *             found.
 	 * @throws ValidationException
+	 *             If there were any validation errors.
 	 */
 	void sendTasksForPersonToEmail(final List<Task> tasks,
+			final List<Goal> goals,
 			final Person student, final List<String> emailAddresses,
 			final List<Person> recipients) throws ObjectNotFoundException,
 			ValidationException;
-
-	/**
-	 * Get tasks from taskIds
-	 * 
-	 * @param taskIds
-	 * @param sAndP
-	 *            sorting and paging options
-	 * @return Tasks from task ids
-	 */
-	List<Task> getTasksInList(final List<UUID> taskIds,
-			final SspUser requestor,
-			final SortingAndPaging sAndP);
 
 	/**
 	 * Sends taskReminders for all tasks in the task reminder window
@@ -211,14 +212,19 @@ public interface TaskService
 	 * person, (just for the session if it is the anonymous user).
 	 * 
 	 * @param selectedIds
+	 *            Selected {@link Task} identifiers
 	 * @param person
+	 *            the person
+	 * @param requester
+	 *            the requester
 	 * @param sessionId
+	 *            session identifier
 	 * @param sAndP
 	 *            sorting and paging options
 	 * @return Selected tasks, or all tasks for the anonymous user.
 	 */
 	List<Task> getTasksForPersonIfNoneSelected(
 			final List<UUID> selectedIds, final Person person,
-			final SspUser requestor,
-			final String sessionId, final SortingAndPaging sAndP);
+			final SspUser requester, final String sessionId,
+			final SortingAndPaging sAndP);
 }

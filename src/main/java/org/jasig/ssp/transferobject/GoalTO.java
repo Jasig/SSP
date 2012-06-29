@@ -63,11 +63,12 @@ public class GoalTO
 	}
 
 	/**
-	 * Convert a collection of models to a list of equivalent transfer objects.
+	 * Converts a list of models to equivalent transfer objects.
 	 * 
 	 * @param models
-	 *            Collection of models to copy
-	 * @return List of equivalent transfer objects
+	 *            model tasks to convert to equivalent transfer objects
+	 * @return List of equivalent transfer objects, or empty List if null or
+	 *         empty.
 	 */
 	public static List<GoalTO> toTOList(
 			final Collection<Goal> models) {

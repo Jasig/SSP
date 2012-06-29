@@ -19,6 +19,7 @@ import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfigException;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MessageTemplateServiceImpl extends
 		AbstractReferenceService<MessageTemplate>
-		implements MessageTemplateService {
+		implements MessageTemplateService { // NOPMD
 
 	@Autowired
 	transient private MessageTemplateDao dao;
@@ -66,25 +67,24 @@ public class MessageTemplateServiceImpl extends
 	private SubjectAndBody populateFromTemplate(
 			final UUID messageTemplateId,
 			final Map<String, Object> templateParameters) {
-
-		MessageTemplate messageTemplate;
-
 		try {
-			messageTemplate = dao.get(messageTemplateId);
-		} catch (ObjectNotFoundException e) {
+			final MessageTemplate messageTemplate = dao.get(messageTemplateId);
+
+			final String subject = velocityTemplateService
+					.generateContentFromTemplate(messageTemplate.getSubject(),
+							messageTemplate.subjectTemplateId(),
+							templateParameters);
+
+			final String body = velocityTemplateService
+					.generateContentFromTemplate(messageTemplate.getBody(),
+							messageTemplate.bodyTemplateId(),
+							templateParameters);
+
+			return new SubjectAndBody(subject, body);
+		} catch (final ObjectNotFoundException e) {
 			throw new ConfigException(messageTemplateId,
 					ConfigException.TEMPLATE_TYPE, e);
 		}
-
-		final String subject = velocityTemplateService
-				.generateContentFromTemplate(messageTemplate.getSubject(),
-						messageTemplate.subjectTemplateId(), templateParameters);
-
-		final String body = velocityTemplateService
-				.generateContentFromTemplate(messageTemplate.getBody(),
-						messageTemplate.bodyTemplateId(), templateParameters);
-
-		return new SubjectAndBody(subject, body);
 	}
 
 	private String formatDate(final Date date) {
@@ -129,10 +129,11 @@ public class MessageTemplateServiceImpl extends
 
 	@Override
 	public SubjectAndBody createActionPlanMessage(final Person student,
-			final List<TaskTO> taskTOs) {
+			final List<TaskTO> taskTOs, final List<GoalTO> goalTOs) {
 
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("taskTOs", taskTOs);
+		messageParams.put("goalTOs", goalTOs);
 		messageParams.put("student", student);
 		messageParams.put("fullName", student.getFullName());
 

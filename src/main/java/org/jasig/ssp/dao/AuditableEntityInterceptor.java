@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
  * {@link org.jasig.ssp.model.AbstractAuditable} class.
  */
 @Service
-public class AuditableEntityInterceptor extends EmptyInterceptor implements
+public class AuditableEntityInterceptor extends EmptyInterceptor implements // NOPMD
 		ApplicationContextAware {
 
 	private static final long serialVersionUID = 1L;
@@ -86,8 +86,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 
 	/**
 	 * If the entity parameter is an instance of an {@link AbstractAuditable},
-	 * then fill
-	 * in any missing created fields, object status (defaults to
+	 * then fill in any missing created fields, object status (defaults to
 	 * {@link ObjectStatus#ACTIVE}, and always updates the modified fields with
 	 * the currently authenticated user and the current time stamp.
 	 * 
@@ -101,7 +100,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 	 * @return If state was modified any, will return true to indicate this to
 	 *         Hibernate
 	 */
-	private boolean addAuditingProps(final Object entity,
+	private boolean addAuditingProps(final Object entity, // NOPMD
 			final Object[] state, final String[] propertyNames) {
 		if (!(entity instanceof AbstractAuditable)) {
 			// Not AbstractAuditable, so no changes are necessary.
@@ -109,11 +108,12 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 		}
 
 		final Person current = currentUser();
+		final Date now = new Date();
 
 		for (int i = 0; i < propertyNames.length; i++) {
 			final String property = propertyNames[i];
 			if ("createdDate".equals(property) && (state[i] == null)) {
-				state[i] = new Date();
+				state[i] = now;
 				continue;
 			}
 
@@ -128,7 +128,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements
 			}
 
 			if ("modifiedDate".equals(property)) {
-				state[i] = new Date();
+				state[i] = now;
 				continue;
 			}
 

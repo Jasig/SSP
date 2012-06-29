@@ -19,8 +19,6 @@ public class TaskDao
 		extends AbstractRestrictedPersonAssocAuditableCrudDao<Task>
 		implements RestrictedPersonAssocAuditableDao<Task> {
 
-	private static final String UNCHECKED = "unchecked";
-
 	protected TaskDao() {
 		super(Task.class);
 	}
@@ -111,19 +109,6 @@ public class TaskDao
 				challengeReferralId));
 
 		addCompleteRestriction(complete, criteria);
-
-		return criteria.list();
-	}
-
-	@SuppressWarnings(UNCHECKED)
-	public List<Task> getTasksInList(final List<UUID> taskIds,
-			final SspUser requestor,
-			final SortingAndPaging sAndP) {
-
-		final Criteria criteria = createCriteria(sAndP);
-		criteria.add(Restrictions.in("id", taskIds));
-
-		addConfidentialityLevelsRestriction(requestor, criteria);
 
 		return criteria.list();
 	}

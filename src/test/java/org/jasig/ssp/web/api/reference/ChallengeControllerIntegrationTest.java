@@ -66,7 +66,9 @@ public class ChallengeControllerIntegrationTest {
 	 * Test the {@link ChallengeController#get(UUID)} action.
 	 * 
 	 * @throws ValidationException
+	 *             If validation error occurred.
 	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
 	public void testControllerGet() throws ObjectNotFoundException,
@@ -113,6 +115,8 @@ public class ChallengeControllerIntegrationTest {
 	 * {@link ChallengeController#delete(UUID)} actions. * @throws
 	 * ValidationException If validation error occurred.
 	 * 
+	 * @throws ValidationException
+	 *             If validation error occurred.
 	 * @throws ObjectNotFoundException
 	 *             If object could not be found.
 	 */
