@@ -16,7 +16,6 @@ import com.google.common.collect.Lists;
 /**
  * A Security Service for use in a test environment. Allows an integration test
  * to directly set the User that will be used in the test.
- * 
  */
 public class SecurityServiceInTestEnvironment implements SecurityService {
 
@@ -31,7 +30,7 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 
 	@Override
 	public SspUser currentlyAuthenticatedUser() {
-		return current.getUsername().equals(SspUser.ANONYMOUS_PERSON_USERNAME) ? null
+		return current.getUsername().equals(SspUser.ANONYMOUS_PERSON_USERNAME) ? null // NOPMD
 				: current;
 	}
 
@@ -81,11 +80,31 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 		this.current = new MockUser(current, current.getUsername(), authorities);
 	}
 
+	/**
+	 * Sets the specified user with the specified GrantedAuthorities in the
+	 * testing authentication session.
+	 * 
+	 * @param current
+	 *            current user
+	 * @param authorities
+	 *            list of authorities
+	 */
 	public void setCurrent(final Person current,
 			final String... authorities) {
 		setCurrent(current, null, authorities);
 	}
 
+	/**
+	 * Sets the specified user with the specified GrantedAuthorities in the
+	 * testing authentication session.
+	 * 
+	 * @param current
+	 *            current user
+	 * @param authoritiesCollection
+	 *            a list of authorities
+	 * @param authorities
+	 *            additional authorities
+	 */
 	public void setCurrent(final Person current,
 			final Collection<GrantedAuthority> authoritiesCollection,
 			final String... authorities) {
@@ -96,8 +115,8 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 			grantedAuthorities.addAll(authoritiesCollection);
 		}
 
-		for (String authority : authorities) {
-			grantedAuthorities.add(new GrantedAuthorityImpl(authority));
+		for (final String authority : authorities) {
+			grantedAuthorities.add(new GrantedAuthorityImpl(authority)); // NOPMD
 		}
 
 		setCurrent(current, grantedAuthorities);
@@ -119,7 +138,7 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 
 	@Override
 	public boolean hasAuthority(final String authority) {
-		for (GrantedAuthority auth : currentUser().getAuthorities()) {
+		for (final GrantedAuthority auth : currentUser().getAuthorities()) {
 			if (auth.getAuthority().equalsIgnoreCase(authority)) {
 				return true;
 			}

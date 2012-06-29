@@ -1,14 +1,18 @@
 package org.jasig.ssp.factory.impl;
 
+import java.util.HashSet;
+
 import org.jasig.ssp.dao.JournalEntryDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.JournalEntryDetailTOFactory;
 import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.model.JournalEntry;
+import org.jasig.ssp.model.JournalEntryDetail;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.JournalTrackService;
+import org.jasig.ssp.transferobject.JournalEntryDetailTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.util.SetOps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-public class JournalEntryTOFactoryImpl
+public class JournalEntryTOFactoryImpl // NOPMD
 		extends AbstractAuditableTOFactory<JournalEntryTO, JournalEntry>
 		implements JournalEntryTOFactory {
 
@@ -46,7 +50,7 @@ public class JournalEntryTOFactoryImpl
 	}
 
 	@Override
-	public JournalEntry from(final JournalEntryTO tObject)
+	public JournalEntry from(final JournalEntryTO tObject) // NOPMD
 			throws ObjectNotFoundException {
 		final JournalEntry model = super.from(tObject);
 
@@ -77,12 +81,20 @@ public class JournalEntryTOFactoryImpl
 				|| tObject.getJournalEntryDetails().isEmpty()) {
 			SetOps.softDeleteSetItems(model.getJournalEntryDetails());
 		} else {
-			SetOps.updateSet(model.getJournalEntryDetails(),
-					journalEntryDetailTOFactory.asSet(tObject
-							.getJournalEntryDetails()));
+			SetOps.updateSet(
+					model.getJournalEntryDetails(),
+					journalEntryDetailTOFactory.asSet(
+							tObject.getJournalEntryDetails() == null ? new HashSet<JournalEntryDetailTO>()
+									: tObject.getJournalEntryDetails(), model));
+		}
+
+		// ensure JournalEntry.Id is set on all children as necessary
+		if (model.getId() != null) {
+			for (final JournalEntryDetail jed : model.getJournalEntryDetails()) {
+				jed.setJournalEntry(model);
+			}
 		}
 
 		return model;
 	}
-
 }

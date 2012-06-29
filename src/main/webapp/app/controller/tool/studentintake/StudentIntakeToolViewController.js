@@ -20,11 +20,18 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         studentStatusesStore: 'studentStatusesStore',
     	veteranStatusesStore: 'veteranStatusesStore'        
     }, 
-
+    config: {
+    	personUrl: null,
+    	studentIntakeForm: null
+    },
     control: {
-		'saveStudentIntakeButton': {
-			click: 'save'
+		'saveButton': {
+			click: 'onSaveClick'
 		},
+		
+    	'cancelButton': {
+    		click: 'onCancelClick'
+    	},
 		
 		'viewConfidentialityAgreementButton': {
 			click: 'viewConfidentialityAgreement'
@@ -33,7 +40,13 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     
 	init: function() {
 		var me=this;	
+		var studentIntakeUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('studentIntakeTool') );
 		
+		// Load the views dynamically
+		// otherwise duplicate id's will be registered
+		// on cancel
+		me.initStudentIntakeViews();
+	
 		// This enables mapped text fields and mapped text areas
 		// to be shown or hidden upon selection from a parent object
 		// such as a dynamic check box.
@@ -70,12 +83,22 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			},this);
 		},me);
 		
+		// load the person record
+		me.apiProperties.makeRequest({
+			url: studentIntakeUrl+me.currentPerson.getId(),
+			method: 'GET',
+			successFunc: me.loadStudentIntakeResult,
+			scope: me
+		});		
+		
+		/*
 		// Load the Student Intake
 		Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
 		Form.load(me.currentPerson.getId(),{
 			success: me.loadStudentIntakeResult,
 			scope: me
 		});
+		*/
 		
 		// display loader
 		me.getView().setLoading( true );
@@ -89,12 +112,67 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         return this.callParent( arguments );
     },     
     
-    loadStudentIntakeResult: function( formData ){
+    initStudentIntakeViews: function(){
     	var me=this;
+    	var items = [ Ext.createWidget('tabpanel', {
+	        width: '100%',
+	        height: '100%',
+	        activeTab: 0,
+			border: 0,
+	        items: [ { title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+	        		   autoScroll: true,
+	        		   items: [{xtype: 'studentintakepersonal'}]
+	        		},{
+	            		title: 'Demographics',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakedemographics'}]
+	        		},{
+	            		title: 'EduPlan',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakeeducationplans'}]
+	        		},{
+	            		title: 'EduLevel',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakeeducationlevels'}]
+	        		},{
+	            		title: 'EduGoal',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakeeducationgoals'}]
+	        		},{
+	            		title: 'Funding',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakefunding'}]
+	        		},{
+	            		title: 'Challenges',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakechallenges'}]
+	        		}]
+		    })
+	    
+		];
     	
-    	// hide the loader
-    	me.getView().setLoading( false );
-    	
+    	me.getView().add( items );
+    },
+    
+    loadStudentIntakeResult: function( response, view ){
+    	var me=this;
+    	var r = Ext.decode(response.responseText);
+    	var studentIntakeModel;
+    	if ( r != null )
+    	{  		
+    		// hide the loader
+        	me.getView().setLoading( false );
+        	studentIntakeModel = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
+    		me.studentIntakeForm = studentIntakeModel.getProxy().getReader().read( r ).records[0];		
+    		me.buildStudentIntake( me.studentIntakeForm );    		
+    	}else{
+    		Ext.Msg.alert('Error','There was an error loading the Student Intake form for this student.');
+    	}
+	},    
+    
+	buildStudentIntake: function( formData ){
+		var me=this;
+		
     	// PERSON RECORD
 		var person = formData.data.person;
 		var personDemographics = formData.data.personDemographics;
@@ -300,9 +378,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
                 additionalFieldsMap: challengesAdditionalFieldsMap };
 		
 		me.formUtils.createForm( challengeFormProps );
-	},    
-    
-	save: function( button ) {
+	},
+	
+	onSaveClick: function( button ) {
 		var me=this;
 		var formUtils = me.formUtils;
 		var personalForm = Ext.getCmp('StudentIntakePersonal').getForm();
@@ -438,6 +516,12 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	
 	viewConfidentialityAgreement: function(button){
 		Ext.Msg.alert("Attention", "Print the confidentiality Agreement after the report is available.");
+	},
+	
+	onCancelClick: function( button ){
+		var me=this;
+		me.getView().removeAll();
+		me.initStudentIntakeViews();
+		me.buildStudentIntake( me.studentIntakeForm );	
 	}
-    
 });

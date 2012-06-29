@@ -1,14 +1,10 @@
 package org.jasig.ssp.transferobject; // NOPMD
 
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.PersonDemographics;
-
-import com.google.common.collect.Lists;
 
 public class PersonDemographicsTO
 		extends AbstractAuditableTO<PersonDemographics>
@@ -82,15 +78,6 @@ public class PersonDemographicsTO
 
 		wage = model.getWage();
 		totalHoursWorkedPerWeek = model.getTotalHoursWorkedPerWeek();
-	}
-
-	public static List<PersonDemographicsTO> toTOList(
-			final Collection<PersonDemographics> models) {
-		final List<PersonDemographicsTO> tos = Lists.newArrayList();
-		for (final PersonDemographics model : models) {
-			tos.add(new PersonDemographicsTO(model)); // NOPMD by jon.adams
-		}
-		return tos;
 	}
 
 	public UUID getPersonId() {

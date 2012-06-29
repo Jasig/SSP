@@ -10,13 +10,30 @@ import java.util.UUID;
 
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonDemographics;
+import org.jasig.ssp.model.PersonEducationGoal;
+import org.jasig.ssp.model.PersonEducationLevel;
+import org.jasig.ssp.model.reference.ChildCareArrangement;
+import org.jasig.ssp.model.reference.Citizenship;
+import org.jasig.ssp.model.reference.EducationGoal;
+import org.jasig.ssp.model.reference.EducationLevel;
+import org.jasig.ssp.model.reference.EmploymentShifts;
+import org.jasig.ssp.model.reference.Ethnicity;
+import org.jasig.ssp.model.reference.Genders;
+import org.jasig.ssp.model.reference.MaritalStatus;
+import org.jasig.ssp.model.reference.VeteranStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.PersonDemographicsTO;
+import org.jasig.ssp.transferobject.PersonEducationGoalTO;
+import org.jasig.ssp.transferobject.PersonEducationLevelTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.transferobject.tool.IntakeFormTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -25,6 +42,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 /**
  * {@link IntakeController} tests
@@ -51,14 +70,32 @@ public class IntakeControllerIntegrationTest {
 
 	private static final String STUDENT_FIRSTNAME = "Dennis";
 
+	private static final UUID EDUCATION_LEVEL_ID = UUID
+			.fromString("459F4CB3-2274-4F47-B757-68B987F8707E");
+
+	private static final UUID EDUCATION_GOAL_ID = UUID
+			.fromString("5CCCDCA1-9A73-47E8-814F-134663A2AE67");
+
+	@Autowired
+	private transient SecurityServiceInTestEnvironment securityService;
+
+	/**
+	 * Setup the security service with the administrator user.
+	 */
+	@Before
+	public void setUp() {
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+	}
+
 	/**
 	 * Test the {@link IntakeController#load(UUID)} action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             Thrown if any of the expected test data identifiers are not
+	 *             found in the database.
 	 */
 	@Test
-	public void testControllerLoad() throws Exception {
+	public void testControllerLoad() throws ObjectNotFoundException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -84,11 +121,69 @@ public class IntakeControllerIntegrationTest {
 	@Test
 	public void testControllerSave() throws ObjectNotFoundException,
 			ValidationException {
+		// arrange
 		final IntakeFormTO obj = new IntakeFormTO();
 		final Person person = personService.get(STUDENT_ID);
 		obj.setPerson(personTOFactory.from(person));
+
+		final PersonDemographics personDemographics = new PersonDemographics();
+		personDemographics.setAbilityToBenefit(true);
+		personDemographics.setAnticipatedStartTerm("spring");
+		personDemographics.setAnticipatedStartYear("fall");
+		personDemographics.setChildAges("age 1");
+		personDemographics.setChildCareArrangement(new ChildCareArrangement());
+		personDemographics.setChildCareNeeded(true);
+		personDemographics.setCitizenship(new Citizenship());
+		personDemographics.setCountryOfCitizenship("Brazil");
+		personDemographics.setCountryOfResidence("San Diego");
+		personDemographics.setEmployed(true);
+		personDemographics.setEthnicity(new Ethnicity());
+		personDemographics.setGender(Genders.F);
+		personDemographics.setLocal(true);
+		personDemographics.setMaritalStatus(new MaritalStatus());
+		personDemographics.setNumberOfChildren(Integer.MAX_VALUE);
+		personDemographics.setPaymentStatus("paymentStatus");
+		personDemographics.setPlaceOfEmployment("Chili's");
+		personDemographics.setPrimaryCaregiver(true);
+		personDemographics.setShift(EmploymentShifts.SECOND);
+		personDemographics.setTotalHoursWorkedPerWeek("40");
+		personDemographics.setVeteranStatus(new VeteranStatus());
+		personDemographics.setWage("435246246");
+
+		obj.setPersonDemographics(new PersonDemographicsTO(
+				personDemographics));
+
+		final List<PersonEducationLevelTO> personEducationLevels = Lists
+				.newArrayList();
+		final PersonEducationLevel personEducationLevel = new PersonEducationLevel();
+		personEducationLevel.setEducationLevel(new EducationLevel(
+				EDUCATION_LEVEL_ID));
+		personEducationLevel.setPerson(person);
+		personEducationLevel.setGraduatedYear(2008);
+		personEducationLevel.setHighestGradeCompleted(4);
+		personEducationLevel.setLastYearAttended(2011);
+		personEducationLevel.setDescription("description");
+		personEducationLevel.setSchoolName("School name");
+		personEducationLevels.add(new PersonEducationLevelTO(
+				personEducationLevel));
+
+		obj.setPersonEducationLevels(personEducationLevels);
+
+		final PersonEducationGoal personEducationGoal = new PersonEducationGoal();
+		personEducationGoal.setEducationGoal(new EducationGoal(
+				EDUCATION_GOAL_ID));
+		personEducationGoal.setHowSureAboutMajor(1);
+		personEducationGoal.setMilitaryBranchDescription("mb");
+		personEducationGoal.setDescription("description");
+		personEducationGoal.setPlannedOccupation("fd");
+
+		obj.setPersonEducationGoal(new PersonEducationGoalTO(
+				personEducationGoal));
+
+		// act
 		final ServiceResponse response = controller.save(STUDENT_ID, obj);
 
+		// assert
 		assertNotNull(
 				"Returned IntakeFormTO from the controller should not have been null.",
 				response);
@@ -102,12 +197,9 @@ public class IntakeControllerIntegrationTest {
 	 * 
 	 * This test assumes that there is at least 1 valid, active
 	 * ChallengeReferral in the test database.
-	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerRefData() throws Exception {
+	public void testControllerRefData() {
 		final Map<String, Object> data = controller.referenceData();
 
 		assertNotNull("The map should not have been null.", data);

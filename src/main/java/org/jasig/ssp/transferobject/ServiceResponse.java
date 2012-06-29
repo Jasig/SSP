@@ -15,19 +15,16 @@ public class ServiceResponse implements Serializable {
 
 	private static final long serialVersionUID = 256473140649271859L;
 
-	private final transient boolean success;
+	private boolean success = false;
 
-	private final transient String message;
+	private String message = "";
 
 	public ServiceResponse() {
 		super();
-		this.success = false;
-		message = "";
 	}
 
 	public ServiceResponse(final boolean success) {
 		this.success = success;
-		message = "";
 	}
 
 	public ServiceResponse(final boolean success, final String message) {
@@ -48,12 +45,10 @@ public class ServiceResponse implements Serializable {
 			final MethodArgumentNotValidException e) {
 		this.success = success;
 
-		StringBuilder sb;
-
 		// collect the error messages
 		final List<String> errorMessages = Lists.newArrayList();
-		for (ObjectError error : e.getBindingResult().getAllErrors()) {
-			sb = new StringBuilder();
+		for (final ObjectError error : e.getBindingResult().getAllErrors()) {
+			final StringBuilder sb = new StringBuilder(); // NOPMD
 
 			// get the field name if it is a field error.
 			if (error instanceof FieldError) {
@@ -74,7 +69,8 @@ public class ServiceResponse implements Serializable {
 
 		// introduce the error messages
 		final int errorCount = e.getBindingResult().getErrorCount();
-		sb = new StringBuilder("Validation failed for argument ")
+		final StringBuilder sb = new StringBuilder(
+				"Validation failed for argument ")
 				.append(e.getParameter().getParameterName()).append(", with ")
 				.append(errorCount)
 				.append(errorCount > 1 ? " errors: " : " error: ");
@@ -90,8 +86,16 @@ public class ServiceResponse implements Serializable {
 		return success;
 	}
 
+	protected void setSuccess(final boolean success) {
+		this.success = success;
+	}
+
 	public String getMessage() {
 		return message;
+	}
+
+	protected void setMessage(final String message) {
+		this.message = message;
 	}
 
 	@Override
@@ -103,9 +107,11 @@ public class ServiceResponse implements Serializable {
 		} else {
 			sb.append("false");
 		}
+
 		sb.append("\", \"message\":\"");
 		sb.append(message);
 		sb.append("\"}");
+
 		return sb.toString();
 	}
 }

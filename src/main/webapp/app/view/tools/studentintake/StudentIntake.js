@@ -17,47 +17,13 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 		    		layout: 'fit',
 		    		padding: 0,
 		    		border: 0,
-		    		items: [ Ext.createWidget('tabpanel', {
-						        width: '100%',
-						        height: '100%',
-						        activeTab: 0,
-								border: 0,
-						        items: [ { title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
-						        		   autoScroll: true,
-						        		   items: [{xtype: 'studentintakepersonal'}]
-						        		},{
-						            		title: 'Demographics',
-						            		autoScroll: true,
-						            		items: [{xtype: 'studentintakedemographics'}]
-						        		},{
-						            		title: 'EduPlan',
-						            		autoScroll: true,
-						            		items: [{xtype: 'studentintakeeducationplans'}]
-						        		},{
-						            		title: 'EduLevel',
-						            		autoScroll: true,
-						            		items: [{xtype: 'studentintakeeducationlevels'}]
-						        		},{
-						            		title: 'EduGoal',
-						            		autoScroll: true,
-						            		items: [{xtype: 'studentintakeeducationgoals'}]
-						        		},{
-						            		title: 'Funding',
-						            		autoScroll: true,
-						            		items: [{xtype: 'studentintakefunding'}]
-						        		},{
-						            		title: 'Challenges',
-						            		autoScroll: true,
-						            		items: [{xtype: 'studentintakechallenges'}]
-						        		}]
-						    })
-					    
-						],
+		    		items: [],
 						
 			    		dockedItems: [{
 					        dock: 'top',
 					        xtype: 'toolbar',
-					        items: [{xtype: 'button', itemId: 'saveStudentIntakeButton', text:'Save', action: 'save' },
+					        items: [{xtype: 'button', itemId: 'saveButton', text:'Save', action: 'save' },
+					                {xtype: 'button', itemId: 'cancelButton', text:'Cancel', action: 'reset' },
 					                { 
 					        	     xtype: 'tbspacer',
 					        	     flex: 1

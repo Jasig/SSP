@@ -68,8 +68,9 @@ Ext.define('Ssp.mixin.ApiProperties', {
 			headers: { 'Content-Type': 'application/json' },
 			jsonData: args.jsonData || '',
 			success: args.successFunc,
-			failure: this.handleError
-		}, args.scope || this);		
+			failure: this.handleError,
+			scope: ((args.scope != null)? args.scope : this)
+		},this);		
 	},
 	
 	handleError: function(response) {
