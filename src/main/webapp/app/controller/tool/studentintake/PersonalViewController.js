@@ -5,7 +5,7 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
     	citizenshipsStore: 'citizenshipsStore',
     	sspConfig: 'sspConfig'
     },
-    
+   
 	init: function() {
 		var me=this;
     	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalSISData');
