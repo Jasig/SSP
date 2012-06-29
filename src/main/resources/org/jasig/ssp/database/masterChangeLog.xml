@@ -16,15 +16,17 @@
 
 	<include file="org/jasig/ssp/database/changesets/000001.xml" />
 
-	<include file="org/jasig/ssp/database/changesets/000002.xml"/>
+	<include file="org/jasig/ssp/database/changesets/000002.xml" />
 
-	<include file="org/jasig/ssp/database/changesets/000003.xml"/>
-	
-	<include file="org/jasig/ssp/database/changesets/000004.xml"/>
-	
-	<include file="org/jasig/ssp/database/changesets/000005.xml"/>
-	
-	<include file="org/jasig/ssp/database/changesets/000006.xml"/>
-	
-	<include file="org/jasig/ssp/database/changesets/000007.xml"/>
+	<include file="org/jasig/ssp/database/changesets/000003.xml" />
+
+	<include file="org/jasig/ssp/database/changesets/000004.xml" />
+
+	<include file="org/jasig/ssp/database/changesets/000005.xml" />
+
+	<include file="org/jasig/ssp/database/changesets/000006.xml" />
+
+	<include file="org/jasig/ssp/database/changesets/000007.xml" />
+
+	<include file="org/jasig/ssp/database/changesets/000008.xml" />
 </databaseChangeLog>

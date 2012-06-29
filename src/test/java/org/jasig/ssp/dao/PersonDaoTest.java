@@ -112,6 +112,7 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 		obj.setFirstName("System");
 		obj.setLastName("User");
 		obj.setUsername("username");
+		obj.setSchoolId("school id");
 		obj.setPrimaryEmailAddress("user@sinclair.edu");
 		obj.setStrengths("strengths");
 
