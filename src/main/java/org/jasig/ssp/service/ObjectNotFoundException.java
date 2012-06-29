@@ -146,7 +146,7 @@ public class ObjectNotFoundException extends Exception implements Serializable {
 	 */
 	private static String message(final UUID objectId,
 			@NotNull final String name) {
-		return "Unable to access {" + name + "} with ID {"
+		return "Unable to load {" + name + "} with ID {"
 				+ (objectId == null ? "null" : objectId.toString() + "}");
 	}
 

@@ -49,15 +49,13 @@ public class ConfidentialityLevelServiceImpl extends
 
 		/*
 		 * final PagingWrapper<ConfidentialityLevel> levels = getAll(new
-		 * SortingAndPaging(
-		 * ObjectStatus.ACTIVE));
+		 * SortingAndPaging( ObjectStatus.ACTIVE));
 		 * 
 		 * for (ConfidentialityLevel level : levels) {
-		 * asStrings.add(level.getRoleId().asPermissionString());
-		 * }
+		 * asStrings.add(level.getRoleId().asPermissionString()); }
 		 */
 
-		for (DataPermissions permission : DataPermissions.values()) {
+		for (final DataPermissions permission : DataPermissions.values()) {
 			asStrings.add(permission.asPermissionString());
 		}
 
@@ -74,11 +72,10 @@ public class ConfidentialityLevelServiceImpl extends
 		 * SortingAndPaging(ObjectStatus.ACTIVE));
 		 * 
 		 * for (ConfidentialityLevel level : levels) {
-		 * asAuths.add(level.getRoleId().asGrantedAuthority());
-		 * }
+		 * asAuths.add(level.getRoleId().asGrantedAuthority()); }
 		 */
 
-		for (DataPermissions permission : DataPermissions.values()) {
+		for (final DataPermissions permission : DataPermissions.values()) {
 			asAuths.add(permission.asGrantedAuthority());
 		}
 
@@ -95,7 +92,7 @@ public class ConfidentialityLevelServiceImpl extends
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows();
 
-		for (ConfidentialityLevel level : levels) {
+		for (final ConfidentialityLevel level : levels) {
 			if (authorities
 					.contains(level.getPermission().asPermissionString())) {
 				filtered.add(level);
@@ -114,12 +111,13 @@ public class ConfidentialityLevelServiceImpl extends
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows();
 
-		for (ConfidentialityLevel level : levels) {
+		for (final ConfidentialityLevel level : levels) {
 			if (authorities
 					.contains(level.getPermission().asGrantedAuthority())) {
 				filtered.add(level);
 			}
 		}
+
 		return filtered;
 	}
 }
