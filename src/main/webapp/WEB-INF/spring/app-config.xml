@@ -30,6 +30,9 @@
 			expression=".*Controller" />
 	</context:component-scan>
 
+	<!-- Provides access to the HttpRequest and HttpResponse for Api's that require them -->
+	<bean name="requestAndResponseAccessFilter" class="org.jasig.ssp.security.uportal.RequestAndResponseAccessFilter" />
+	
 	<!-- Mail and Other Templates -->
 	<bean id="velocityEngine"
 		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
