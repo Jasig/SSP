@@ -58,6 +58,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 	},
 	
 	displayCoachDepartment: function( coach ){
+		var me=this;
 		me.getDepartmentField().setValue( coach.get('department') );
 		me.getPhoneField().setValue( coach.get('workPhone') );
 		me.getEmailAddressField().setValue( coach.get('primaryEmailAddress') );

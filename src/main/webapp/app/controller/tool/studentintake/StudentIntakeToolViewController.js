@@ -120,7 +120,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var educationGoals = me.formUtils.alphaSortByField( formData.data.referenceData.educationGoals, 'name' );
 		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
 		var fundingSources = me.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
-
+		var studentStatuses =  me.formUtils.alphaSortByField( formData.data.referenceData.studentStatuses, 'name' );
+		
 		me.challengesStore.loadData( challenges );
 		me.childCareArrangementsStore.loadData( formData.data.referenceData.childCareArrangements );
 		me.citizenshipsStore.loadData( formData.data.referenceData.citizenships );
@@ -132,7 +133,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.gendersStore.loadData( formData.data.referenceData.genders );
 		me.maritalStatusesStore.loadData( formData.data.referenceData.maritalStatuses );
 		me.statesStore.loadData( formData.data.referenceData.states );
-		me.studentStatusesStore.loadData( formData.data.referenceData.studentStatuses );
+		me.studentStatusesStore.loadData( studentStatuses );
 		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
 		
 		// LOAD RECORDS FOR EACH OF THE FORMS

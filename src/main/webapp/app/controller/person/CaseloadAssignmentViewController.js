@@ -150,26 +150,10 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 
 		var personSuccessFunc = function(response,view){
 			var r = Ext.decode(response.responseText);
-			var personId;
-			console.log( 'CaseloadAssignmentViewController->onSaveClick - Save Person Success' );
-			if (r.success==true)
+			if (r.id != "")
 			{
-				personId = r.id;
-
-				// assign the personId to use for the appointment
-				me.appointmentUrl = me.appointmentUrl.replace('{id}', personId);
-
-				// save the appointment
-				var personAppointment = new Ssp.model.PersonAppointment();
-				
-				appointmentForm.updateRecord();
-				
-				personAppointment.set( 'startDate', me.appointment.getStartDate() );
-				personAppointment.set( 'endDate', me.appointment.getEndDate() );
-
 				// display the search screen
-				me.loadStudentToolsView();	
-				
+				me.loadStudentToolsView();
 			}else{
 				Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.')
 			}
@@ -211,6 +195,14 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			}else{
 				model.data.serviceReasons=null;
 			}
+
+			// save the appointment dates and times
+			appointmentForm.updateRecord();
+			
+			/*
+			person.set( 'nextAppointmentStartDate', me.appointment.getStartDate() );
+			person.set( 'nextAppointmentEndDate', me.appointment.getEndDate() );
+			*/
 			
 			if (id=="")
 			{

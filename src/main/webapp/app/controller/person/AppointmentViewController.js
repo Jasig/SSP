@@ -17,8 +17,8 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 	init: function() {
 		var me=this;
 		
-    	me.appEventsController.assignEvent({eventName: 'studentTypeChange', callBackFunc: this.onStudentTypeChange, scope: this});    	
-
+    	me.appEventsController.assignEvent({eventName: 'studentTypeChange', callBackFunc: this.onStudentTypeChange, scope: this});
+    	
 		me.getView().loadRecord( me.appointment );
 
 		me.assignAppointmentRequiredFields();
