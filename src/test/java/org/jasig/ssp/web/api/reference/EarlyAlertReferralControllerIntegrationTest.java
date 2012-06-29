@@ -46,16 +46,18 @@ public class EarlyAlertReferralControllerIntegrationTest {
 	private transient SessionFactory sessionFactory;
 
 	private static final UUID EARLYALERT_REFERRAL_ID = UUID
-			.fromString("b2d11335-5056-a51a-80ea-074f8fef94ea");
+			.fromString("300d68ef-38c2-4b7d-ad46-7874aa5d34ac");
 
-	private static final String EARLYALERT_REFERRAL_NAME = "Other";
+	private static final String EARLYALERT_REFERRAL_NAME = "Registration";
 
 	private static final UUID EARLYALERT_REFERRAL_FIRST_ID = UUID
 			.fromString("b2d112a9-5056-a51a-8010-b510525ea3a8");
 
 	private static final String TESTSTRING1 = "testString1";
 
-	private static final String TESTSTRING2 = "testString1";
+	private static final String TESTSTRING2 = "testString2";
+
+	private static final String TEST_ACRONYM = "ABC";
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -139,7 +141,7 @@ public class EarlyAlertReferralControllerIntegrationTest {
 		try {
 			final EarlyAlertReferralTO obj = controller
 					.create(new EarlyAlertReferralTO(UUID.randomUUID(),
-							TESTSTRING1, TESTSTRING2, (short) 1, "ABC")); // NOPMD
+							TESTSTRING1, TESTSTRING2, (short) 1, TEST_ACRONYM)); // NOPMD
 			assertNull(
 					"Calling create with an object with an ID should have thrown a validation excpetion.",
 					obj);
@@ -152,7 +154,7 @@ public class EarlyAlertReferralControllerIntegrationTest {
 				.create(new EarlyAlertReferralTO(
 						null,
 						TESTSTRING1,
-						TESTSTRING2, (short) 1, "ABC")); // NOPMD
+						TESTSTRING2, (short) 1, TEST_ACRONYM)); // NOPMD
 
 		assertNotNull(
 				"Returned EarlyAlertReferralTO from the controller should not have been null.",
