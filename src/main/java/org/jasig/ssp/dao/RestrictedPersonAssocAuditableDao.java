@@ -3,6 +3,8 @@ package org.jasig.ssp.dao;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.RestrictedPersonAssocAuditable;
@@ -44,15 +46,17 @@ public interface RestrictedPersonAssocAuditableDao<T extends RestrictedPersonAss
 	 * Retrieves the specified instances from persistent storage.
 	 * 
 	 * @param ids
-	 *            the identifiers of the entities to load
+	 *            the identifiers of the entities to load; required to be
+	 *            non-empty
 	 * @param requester
 	 *            user requesting the data, for restricting by
-	 *            {@link ConfidentialityLevel}
+	 *            {@link ConfidentialityLevel}; required
 	 * @param sAndP
 	 *            Sorting and paging parameters
 	 * @return Specified entities, filtered by the specified parameters, or
 	 *         empty List if null
 	 */
-	List<T> get(final List<UUID> ids, final SspUser requester,
+	List<T> get(@NotNull final List<UUID> ids,
+			@NotNull final SspUser requester,
 			final SortingAndPaging sAndP);
 }

@@ -15,9 +15,9 @@ public abstract class AbstractRestrictedPersonAssocAuditableService<T extends Re
 		implements RestrictedPersonAssocAuditableService<T> {
 
 	@Override
-	public List<T> get(final List<UUID> taskIds, final SspUser requester,
+	public List<T> get(final List<UUID> ids, final SspUser requester,
 			final SortingAndPaging sAndP) {
-		return getDao().get(taskIds, requester, sAndP);
+		return getDao().get(ids, requester, sAndP);
 	}
 
 	@Override

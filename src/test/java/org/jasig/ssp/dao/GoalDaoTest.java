@@ -1,10 +1,12 @@
-package org.jasig.ssp.dao;
+package org.jasig.ssp.dao; // NOPMD
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -48,6 +50,12 @@ public class GoalDaoTest {
 	@Autowired
 	private transient GoalDao dao;
 
+	private static final UUID TEST_GOAL_ID1 = UUID
+			.fromString("1B18BF52-BFC7-11E1-9CB8-0026B9E7FF4C");
+
+	private static final UUID KEN = UUID
+			.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea");
+
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;
 
@@ -58,9 +66,6 @@ public class GoalDaoTest {
 	private transient SessionFactory sessionFactory;
 
 	private transient ConfidentialityLevel testConfidentialityLevel;
-
-	private static final UUID KEN = UUID
-			.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea");
 
 	/**
 	 * Initialize security and test data.
@@ -178,6 +183,42 @@ public class GoalDaoTest {
 				new SortingAndPaging(ObjectStatus.ACTIVE));
 		assertList(goals);
 		assertFalse("Goal list should not have been empty.", goals.isEmpty());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetWithEmptyList() {
+		dao.get(new ArrayList<UUID>(), securityService.currentUser(), null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetWithNullList() {
+		dao.get(null, securityService.currentUser(), null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetWithNullUser() {
+		// arrange
+		final List<UUID> list = Lists.newArrayList();
+		list.add(TEST_GOAL_ID1);
+
+		// act
+		dao.get(list, null, new SortingAndPaging(ObjectStatus.ALL));
+	}
+
+	@Test
+	public void testGetList() {
+		// arrange
+		final List<UUID> list = Lists.newArrayList();
+		list.add(TEST_GOAL_ID1);
+
+		// act
+		final List<Goal> result = dao.get(list, securityService.currentUser(),
+				new SortingAndPaging(ObjectStatus.ALL));
+
+		// assert
+		assertEquals(
+				"Result list did not contain the expected number of items.", 1,
+				result.size());
 	}
 
 	private void assertList(final Collection<Goal> objects) {

@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.RestrictedPersonAssocAuditable;
@@ -79,12 +81,20 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
 
 	@Override
 	@SuppressWarnings(UNCHECKED)
-	public List<T> get(final List<UUID> taskIds,
-			final SspUser requester,
-			final SortingAndPaging sAndP) {
+	public List<T> get(@NotNull final List<UUID> ids,
+			@NotNull final SspUser requester, final SortingAndPaging sAndP) {
+		if (ids == null || ids.isEmpty()) {
+			throw new IllegalArgumentException(
+					"List of ids can not be null or empty.");
+		}
+
+		if (requester == null) {
+			throw new IllegalArgumentException(
+					"Requester can not be null.");
+		}
 
 		final Criteria criteria = createCriteria(sAndP);
-		criteria.add(Restrictions.in("id", taskIds));
+		criteria.add(Restrictions.in("id", ids));
 
 		addConfidentialityLevelsRestriction(requester, criteria);
 

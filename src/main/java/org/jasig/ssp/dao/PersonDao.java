@@ -3,6 +3,9 @@ package org.jasig.ssp.dao;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.criterion.Projections;
@@ -64,7 +67,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return new PagingWrapper<Person>(totalRows, criteria.list());
 	}
 
-	public Person fromUsername(final String username) {
+	public Person fromUsername(@NotNull final String username) {
+		if (StringUtils.isWhitespace(username)) {
+			throw new IllegalArgumentException("username can not be empty.");
+		}
+
 		final Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(Person.class);
 		query.add(Restrictions.eq("username", username)).setFlushMode(
@@ -72,7 +79,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return (Person) query.uniqueResult();
 	}
 
-	public Person fromUserId(final String userId) {
+	public Person fromUserId(@NotNull final String userId) {
+		if (StringUtils.isWhitespace(userId)) {
+			throw new IllegalArgumentException("userId can not be empty.");
+		}
+
 		final Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(Person.class);
 		query.add(Restrictions.eq("userId", userId));

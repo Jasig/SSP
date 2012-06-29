@@ -68,8 +68,14 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable> implements
 	@Override
 	public PagingWrapper<T> get(final List<UUID> ids,
 			final SortingAndPaging sAndP) {
-		return processCriteriaWithPaging(
-				createCriteria().add(Restrictions.in("id", ids)), sAndP);
+		if (ids == null || ids.isEmpty()) {
+			throw new IllegalArgumentException(
+					"List of ids can not be null or empty.");
+		}
+
+		final Criteria criteria = createCriteria();
+		criteria.add(Restrictions.in("id", ids));
+		return processCriteriaWithPaging(criteria, sAndP);
 	}
 
 	@SuppressWarnings(UNCHECKED)
