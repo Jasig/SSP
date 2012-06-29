@@ -1,9 +1,8 @@
 package org.jasig.ssp.transferobject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.jasig.ssp.model.JournalEntryDetail;
@@ -11,6 +10,8 @@ import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
+
+import com.google.common.collect.Sets;
 
 /**
  * JournalEntryDetail transfer object
@@ -47,8 +48,8 @@ public class JournalEntryDetailTO extends
 		final JournalStepJournalStepDetail jsJsDetail = model
 				.getJournalStepJournalStepDetail();
 		if (jsJsDetail == null) {
-			journalStep = null;
-			journalStepDetail = null;
+			journalStep = null; // NOPMD
+			journalStepDetail = null; // NOPMD
 		} else {
 			journalStep = jsJsDetail.getJournalStep() == null ? null
 					: new ReferenceLiteTO<JournalStep>(
@@ -59,11 +60,11 @@ public class JournalEntryDetailTO extends
 		}
 	}
 
-	public static List<JournalEntryDetailTO> toTOList(
+	public static Set<JournalEntryDetailTO> toTOSet(
 			final Collection<JournalEntryDetail> models) {
-		final List<JournalEntryDetailTO> tos = new ArrayList<JournalEntryDetailTO>();
+		final Set<JournalEntryDetailTO> tos = Sets.newHashSet();
 		if ((models != null) && !models.isEmpty()) {
-			for (JournalEntryDetail model : models) {
+			for (final JournalEntryDetail model : models) {
 				tos.add(new JournalEntryDetailTO(model)); // NOPMD
 			}
 		}
@@ -95,5 +96,4 @@ public class JournalEntryDetailTO extends
 			final ReferenceLiteTO<JournalStepDetail> journalStepDetail) {
 		this.journalStepDetail = journalStepDetail;
 	}
-
 }

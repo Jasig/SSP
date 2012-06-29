@@ -1,6 +1,7 @@
 package org.jasig.ssp.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -47,8 +48,20 @@ public class JournalEntry
 	@JoinColumn(name = "journal_track_id", updatable = false, nullable = false)
 	private JournalTrack journalTrack;
 
+	/**
+	 * Each JournalEntry may have multiple JournalEntryDetails. Each one points
+	 * to a association between the two reference entities JournalStep and
+	 * JournalStepDetail that have a many-to-many association between each
+	 * other.
+	 * 
+	 * <p>
+	 * Changes to this set are persisted, since this side is the owning side of
+	 * the Hibernate relationship because of the "mappedBy" and CascadeTypes of
+	 * PERSIST and MERGE.
+	 */
 	@OneToMany(mappedBy = "journalEntry")
-	private Set<JournalEntryDetail> journalEntryDetails;
+	@Cascade(value = { CascadeType.ALL })
+	private Set<JournalEntryDetail> journalEntryDetails = new HashSet<JournalEntryDetail>();
 
 	@ManyToOne
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
@@ -103,7 +116,8 @@ public class JournalEntry
 
 	public void setJournalEntryDetails(
 			final Set<JournalEntryDetail> journalEntryDetails) {
-		this.journalEntryDetails = journalEntryDetails;
+		this.journalEntryDetails = journalEntryDetails == null ? new HashSet<JournalEntryDetail>()
+				: journalEntryDetails;
 	}
 
 	@Override

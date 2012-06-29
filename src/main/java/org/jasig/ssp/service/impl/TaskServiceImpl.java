@@ -171,7 +171,7 @@ public class TaskServiceImpl
 
 		for (final Task task : tasksForPerson.getRows()) {
 			final String group = task.getGroup();
-			final List<Task> tasksForGroup;
+			List<Task> tasksForGroup;
 			if (grouped.keySet().contains(group)) {
 				tasksForGroup = grouped.get(group);
 			} else {
@@ -210,18 +210,17 @@ public class TaskServiceImpl
 
 	private void setDefaultConfidentialityLevel(final Task task,
 			final Challenge challenge) {
-		if (challenge != null) {
-			if (challenge.getDefaultConfidentialityLevel() != null) {
-				task.setConfidentialityLevel(challenge
-						.getDefaultConfidentialityLevel());
-			}
+		if (challenge != null
+				&& challenge.getDefaultConfidentialityLevel() != null) {
+			task.setConfidentialityLevel(challenge
+					.getDefaultConfidentialityLevel());
 		}
 
 		if (task.getConfidentialityLevel() == null) {
 			try {
 				task.setConfidentialityLevel(confidentialityLevelService
 						.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
-			} catch (ObjectNotFoundException e) {
+			} catch (final ObjectNotFoundException e) {
 				LOGGER.error(
 						"Unable to find the default confidentiality level", e);
 			}

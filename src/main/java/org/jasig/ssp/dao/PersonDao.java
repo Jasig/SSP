@@ -114,25 +114,17 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 				Restrictions.eq("schoolId", studentId)).uniqueResult();
 	}
 
-	// TODO: Implement with a TO
 	/**
 	 * Retrieves a List of People, likely used by the Address Labels Report
 	 * 
-	 * @param intakeDatefrom
-	 * @param intakeDateTo
-	 * @param homeDepartment
-	 * @param coachId
-	 * @param programStatus
-	 * @param specialServiceGroupId
-	 * @param referralSourcesId
-	 * @param anticipatedStartTerm
-	 * @param anticipatedStartYear
-	 * @param studentTypeId
-	 * @param registrationTerm
-	 * @param registrationYear
+	 * @param addressLabelSearchTO
+	 *            Search criteria
 	 * @param sAndP
-	 * @return
+	 *            Sorting and paging parameters
+	 * @return List of People, filtered appropriately
+	 * 
 	 * @throws ObjectNotFoundException
+	 *             If any referenced data is not found.
 	 */
 	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleByCriteria(
@@ -142,6 +134,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		final Criteria criteria = createCriteria(sAndP);
 
 		if (addressLabelSearchTO.getProgramStatus() != null) {
+			// TODO
 			// criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
 		}
 		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
@@ -178,21 +171,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	/**
 	 * Retrieves a List of People, likely used by the Address Labels Report
 	 * 
-	 * @param intakeDatefrom
-	 * @param intakeDateTo
-	 * @param homeDepartment
-	 * @param coachId
-	 * @param programStatus
-	 * @param specialServiceGroupId
-	 * @param referralSourcesId
-	 * @param anticipatedStartTerm
-	 * @param anticipatedStartYear
-	 * @param studentTypeId
-	 * @param registrationTerm
-	 * @param registrationYear
+	 * @param specialServiceGroups
+	 *            Search criteria
 	 * @param sAndP
-	 * @return
+	 *            Sorting and paging parameters.
+	 * @return List of People, filtered appropriately
 	 * @throws ObjectNotFoundException
+	 *             If any referenced data is not found.
 	 */
 	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleBySpecialServices(
