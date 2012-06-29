@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -14,6 +15,8 @@ import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.model.reference.JournalTrack;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
+
+import com.google.common.collect.Sets;
 
 /**
  * JournalEntry transfer object
@@ -40,7 +43,7 @@ public class JournalEntryTO
 	@NotNull
 	private ConfidentialityLevelLiteTO confidentialityLevel;
 
-	private List<JournalEntryDetailTO> journalEntryDetails;
+	private Set<JournalEntryDetailTO> journalEntryDetails = Sets.newHashSet();
 
 	/**
 	 * Empty constructor
@@ -72,12 +75,11 @@ public class JournalEntryTO
 		confidentialityLevel = ConfidentialityLevelLiteTO.fromModel(
 				journalEntry.getConfidentialityLevel());
 
-		if ((journalEntry.getJournalEntryDetails() != null)
-				&& (journalEntry.getJournalEntryDetails().size() > 0)) {
-			journalEntryDetails = JournalEntryDetailTO
-					.toTOList(journalEntry.getJournalEntryDetails());
+		if (journalEntry.getJournalEntryDetails() != null
+				&& !journalEntry.getJournalEntryDetails().isEmpty()) {
+			journalEntryDetails = JournalEntryDetailTO.toTOSet(journalEntry
+					.getJournalEntryDetails());
 		}
-
 	}
 
 	/**
@@ -92,7 +94,7 @@ public class JournalEntryTO
 			final Collection<JournalEntry> journalEntries) {
 		final List<JournalEntryTO> journalEntryTOs = new ArrayList<JournalEntryTO>();
 		if ((journalEntries != null) && !journalEntries.isEmpty()) {
-			for (JournalEntry journalEntry : journalEntries) {
+			for (final JournalEntry journalEntry : journalEntries) {
 				journalEntryTOs.add(new JournalEntryTO(journalEntry)); // NOPMD
 			}
 		}
@@ -163,12 +165,12 @@ public class JournalEntryTO
 		this.confidentialityLevel = confidentialityLevel;
 	}
 
-	public List<JournalEntryDetailTO> getJournalEntryDetails() {
+	public Set<JournalEntryDetailTO> getJournalEntryDetails() {
 		return journalEntryDetails;
 	}
 
 	public void setJournalEntryDetails(
-			final List<JournalEntryDetailTO> journalEntryDetails) {
+			final Set<JournalEntryDetailTO> journalEntryDetails) {
 		this.journalEntryDetails = journalEntryDetails;
 	}
 }

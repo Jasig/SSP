@@ -20,8 +20,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * 
  * <p>
  * Handles return types from controllers used in the SSP API like
- * {@link AbstractReferenceTO}, {@link AbstractAuditableTO}, {@link PagingTO},
- * and Lists and Sets with values of those types.
+ * {@link AbstractReferenceTO}, {@link AbstractAuditableTO},
+ * {@link PagedResponse}, and Lists and Sets with values of those types.
  * <p>
  * This custom resolver is required because the built-in Spring mocks only
  * handle Views and simple String return types, so this handler is needed to

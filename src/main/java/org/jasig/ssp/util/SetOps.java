@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 
@@ -30,8 +32,15 @@ public final class SetOps {
 	 *            Replace existing set with this set.
 	 * @return Updated set.
 	 */
-	public static <T extends Auditable> Set<T> updateSet(final Set<T> existing,
-			final Set<T> replacingWith) {
+	public static <T extends Auditable> Set<T> updateSet(
+			@NotNull final Set<T> existing, @NotNull final Set<T> replacingWith) {
+		if (existing == null) {
+			throw new IllegalArgumentException("Missing existing set.");
+		}
+
+		if (replacingWith == null) {
+			throw new IllegalArgumentException("Missing replacement set.");
+		}
 
 		// Pull ids and verify existingIds are indeed persisted (have ids)
 		final Map<UUID, T> existingIds = Maps.newHashMap();
@@ -40,6 +49,7 @@ public final class SetOps {
 				throw new IllegalArgumentException(
 						"Every object in the existing list must have a non-null id");
 			}
+
 			existingIds.put(t.getId(), t);
 		}
 
