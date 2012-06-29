@@ -74,6 +74,8 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    	xtype: 'datefield',
 				    	fieldLabel: 'Birth Date',
 				    	itemId: 'birthDate',
+				    	altFormats: 'm/d/Y|m-d-Y',
+				    	invalidText: '{0} is not a valid date - it must be in the format: 06/21/2012 or 06-21-2012',
 				        name: 'birthDate',
 				        allowBlank:false
 				    },{
