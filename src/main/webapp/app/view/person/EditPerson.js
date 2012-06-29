@@ -8,6 +8,11 @@ Ext.define('Ssp.view.person.EditPerson', {
 		Ext.apply(this, 
 				{
 					border: 0,	    
+				    fieldDefaults: {
+				        msgTarget: 'side',
+				        labelAlign: 'right',
+				        labelWidth: 100
+				    },
 					items: [{
 			            xtype: 'fieldset',
 			            border: 0,
@@ -66,7 +71,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        name: 'primaryEmailAddress',
 			        vtype:'email',
 			        maxLength: 100,
-			        allowBlank:false,
+			        allowBlank:true,
 			        itemId: 'primaryEmailAddress'
 			    },{
 			        fieldLabel: 'Home Email',

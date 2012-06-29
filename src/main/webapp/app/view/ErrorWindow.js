@@ -3,11 +3,12 @@ Ext.define('Ssp.view.ErrorWindow', {
 	alias : 'widget.ssperrorwindow',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
+    	columnRendererUtils: 'columnRendererUtils',
     	store: 'errorsStore'
     },
 	width: '100%',
 	height: '100%',
-	title: 'Invalid Data',
+	title: 'Error - Invalid Data',
     initComponent: function(){
     	var me=this;
     	Ext.apply(me,
@@ -25,13 +26,22 @@ Ext.define('Ssp.view.ErrorWindow', {
 						           flex:.25 
 						         },{ header: 'Message', 
 						           dataIndex: 'errorMessage',
+						           renderer: me.columnRendererUtils.renderErrorMessage,
 						           sortable: false,
 						           menuDisabled: true,
 						           flex:.75 
 						         }],     
     			        store: me.store
-    			    }]
-    				
+    			    }],
+    			    bbar: [
+    			           { xtype: 'button', 
+    			        	 text: 'Okay', 
+    			        	 itemId: 'closeButton', 
+    			        	 handler: function() {
+    			        		 me.close();
+    			             }
+    			           }
+    			         ]
 		    	    });
     	
     	return me.callParent(arguments);

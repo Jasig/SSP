@@ -5,7 +5,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	appEventsController: 'appEventsController',
     	apiProperties: 'apiProperties',
      	appointment: 'currentAppointment',
-     	errorsStore: 'errorsStore',
      	formUtils: 'formRendererUtils',
         person: 'currentPerson'
     },
@@ -240,12 +239,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			}
 			
 		}else{
-			me.errorsStore.loadData( validateResult.fields );
-			Ext.create('Ssp.view.ErrorWindow', {
-				title: 'Invalid Caseload Assignment Data',
-			    height: 300,
-			    width: 500
-			}).show();		}
+			me.formUtils.displayErrors( validateResult.fields );
+		}
     },
     
     getSelectedItemSelectorIdsForTransfer: function(values){

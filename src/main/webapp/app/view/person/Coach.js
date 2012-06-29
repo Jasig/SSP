@@ -61,6 +61,8 @@ Ext.define('Ssp.view.person.Coach', {
 				    },{
 				        xtype: 'combobox',
 				        name: 'studentTypeId',
+				        itemId: 'studentTypeCombo',
+				        id: 'studentTypeCombo',
 				        fieldLabel: 'Student Type',
 				        emptyText: 'Select One',
 				        store: this.studentTypesStore,

@@ -76,6 +76,13 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	                'addToolIcon':
 	                'hideAddToolIcon';
 	},
+
+	renderErrorMessage: function(val, metaData, record) {
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + record.get('errorMessage') + '</p>';
+		strHtml += '</div>';
+	    return strHtml;
+	},
 	
 	/**
 	 * This method is used to return an object with id values

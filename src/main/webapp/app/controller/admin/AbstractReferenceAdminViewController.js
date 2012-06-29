@@ -73,6 +73,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				item.populateFromGenericObject(r);
 				store.insert(0, item );
 		       	grid.plugins[0].startEdit(0, 0);
+		       	grid.plugins[0].editor.items.getAt(0).selectText();
 			},
 			failure: this.apiProperties.handleError
 		}, this);

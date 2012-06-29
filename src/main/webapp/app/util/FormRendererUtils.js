@@ -2,12 +2,53 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	extend: 'Ext.Component',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-        appEventsController: 'appEventsController'
+        appEventsController: 'appEventsController',
+        errorsStore: 'errorsStore'
     },
 	config: {
 		additionalFieldsKeySeparator: '_'
 	},
+	
 	initComponent: function() {
+		
+    	// Create a custom validator for
+		// mapped field types
+		Ext.apply(Ext.form.field.VTypes, {
+            //  vtype validation function
+            mappedFieldValidator: function(val, field) {
+            	var valid = true;
+            	var exp = new RegExp(field.validationExpression);
+            	var check = Ext.ComponentQuery.query('#'+field.parentId)[0];
+            	if (check != null)
+            	{
+            		if (check.getValue()==true)
+            		{
+                    	valid = exp.test(val);
+            		}
+            	}
+            	return valid;
+            }
+        });	
+
+    	// Create a custom validator for
+		// dates that are not required
+		Ext.apply(Ext.form.field.VTypes, {
+            //  vtype validation function
+            forceDateValidator: function(val, field) {
+            	var valid = true;
+            	var exp = new RegExp(/\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}/);
+            	var check = field;
+            	if (check != null)
+            	{
+            		if (check.getValue()==true)
+            		{
+                    	valid = exp.test(val);
+            		}
+            	}
+            	return valid;
+            }
+        });		
+		
 		return this.callParent(arguments);
     },
     
@@ -630,9 +671,16 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	{
 		return new Ssp.model.FieldError({
 			label: field.fieldLabel.replace(Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,"","gi"),
-			errorMessage: field.activeErrors[0]
+			errorMessage: field.activeErrors.join('. ')
 		});
-	}	
+	},
 	
+	displayErrors: function( fields ){
+		this.errorsStore.loadData( fields );
+		Ext.create('Ssp.view.ErrorWindow', {
+		    height: 300,
+		    width: 500
+		}).show();
+	}
 });
 

@@ -10,12 +10,18 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     },  
 	init: function() {
 		var me=this;
-		var studentIdField = me.getStudentIdField();
-		// alias the studentId field
-		var studentIdAlias = me.sspConfig.get('studentIdAlias');
-		// Set defined configured label for the studentId field
-		studentIdField.setFieldLabel(studentIdAlias + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);		
 		
+		// alias the studentId field and provide validation
+		var studentId = me.getStudentIdField();
+		studentId.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+		Ext.apply(studentId, {
+	                  minLength: me.sspConfig.get('studentIdMinValidationLength'),
+	                  minLengthText: me.sspConfig.get('studentIdMinValidationErrorText'),
+	                  maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
+	                  maxLengthText: me.sspConfig.get('studentIdMaxValidationErrorText'),
+	                  vtype: 'studentIdValidator',
+	                  vtypeText: me.sspConfig.get('studentIdValidationErrorText')
+                     });		
 		me.getView().loadRecord( this.person );
 		
 		return me.callParent(arguments);

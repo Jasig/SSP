@@ -29,24 +29,24 @@ Ext.define('Ssp.view.person.Appointment', {
 			       items: [{
 				    	xtype: 'datefield',
 				    	fieldLabel: 'Appointment Date',
-				    	itemId: 'appointmentDate',
+				    	itemId: 'appointmentDateField',
 				        name: 'appointmentDate',
 				        allowBlank: false
 				    },{
 				        xtype: 'timefield',
 				        name: 'startTime',
+				        itemId: 'startTimeField',
 				        fieldLabel: 'Start Time',
-				        minValue: '8:00 AM',
-				        maxValue: '7:00 PM',
 				        increment: 30,
+				        typeAhead: false,
 				        allowBlank: false,
 				        anchor: '100%'
 				    },{
 				        xtype: 'timefield',
 				        name: 'endTime',
+				        itemId: 'endTimeField',
 				        fieldLabel: 'End Time',
-				        minValue: '8:00 AM',
-				        maxValue: '7:00 PM',
+				        typeAhead: false,
 				        allowBlank: false,
 				        increment: 30,
 				        anchor: '100%'

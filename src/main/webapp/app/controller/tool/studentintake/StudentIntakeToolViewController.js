@@ -11,7 +11,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	educationGoalsStore: 'educationGoalsStore',
     	educationLevelsStore: 'educationLevelsStore',
     	employmentShiftsStore: 'employmentShiftsStore',
-    	errorsStore: 'errorsStore',
     	ethnicitiesStore: 'ethnicitiesStore',
     	formUtils: 'formRendererUtils',
     	fundingSourcesStore: 'fundingSourcesStore',
@@ -33,26 +32,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	},
     
 	init: function() {
-		var me=this;
-		
-    	// Create a custom validator for
-		// mapped field types
-		Ext.apply(Ext.form.field.VTypes, {
-            //  vtype validation function
-            mappedFieldValidator: function(val, field) {
-            	var valid = true;
-            	var exp = new RegExp(field.validationExpression);
-            	var check = Ext.ComponentQuery.query('#'+field.parentId)[0];
-            	if (check != null)
-            	{
-            		if (check.getValue()==true)
-            		{
-                    	valid = exp.test(val);
-            		}
-            	}
-            	return valid;
-            }
-        });		
+		var me=this;	
 		
 		// This enables mapped text fields and mapped text areas
 		// to be shown or hidden upon selection from a parent object
@@ -450,12 +430,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			}, me);
 
 		}else{
-			me.errorsStore.loadData( validateResult.fields );
-			Ext.create('Ssp.view.ErrorWindow', {
-				title: 'Invalid Student Intake Data',
-			    height: 300,
-			    width: 500
-			}).show();
+			me.formUtils.displayErrors( validateResult.fields );
 		}
 		
 	},
