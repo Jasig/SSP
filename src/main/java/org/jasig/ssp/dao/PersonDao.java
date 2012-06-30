@@ -164,6 +164,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			criteria.add(Restrictions.in("studentType.id",
 					addressLabelSearchTO.getStudentTypeIds()));
 		}
+		if (addressLabelSearchTO.getCreateDateFrom() != null) {
+			criteria.add(Restrictions.ge("createdDate", addressLabelSearchTO.getCreateDateFrom()));			
+		}
+		if (addressLabelSearchTO.getCreateDateTo() != null) {
+			criteria.add(Restrictions.le("createdDate", addressLabelSearchTO.getCreateDateTo()));			
+		}		
 
 		return criteria.list();
 	}

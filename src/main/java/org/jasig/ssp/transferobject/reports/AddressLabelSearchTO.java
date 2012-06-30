@@ -1,6 +1,7 @@
 package org.jasig.ssp.transferobject.reports;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,8 +18,26 @@ public class AddressLabelSearchTO
 	private String anticipatedStartTerm;
 	private Integer anticipatedStartYear;
 	private List<UUID> studentTypeIds;
+	private Date createDateFrom;
+	private Date createDateTo;
 	
 	
+	public Date getCreateDateFrom() {
+		return createDateFrom;
+	}
+
+	public void setCreateDateFrom(Date createDateFrom) {
+		this.createDateFrom = createDateFrom;
+	}
+
+	public Date getCreateDateTo() {
+		return createDateTo;
+	}
+
+	public void setCreateDateTo(Date createDateTo) {
+		this.createDateTo = createDateTo;
+	}
+
 	public List<UUID> getStudentTypeIds() {
 		return studentTypeIds;
 	}
@@ -43,7 +62,7 @@ public class AddressLabelSearchTO
 		this.specialServiceGroupIds = specialServiceGroupIds;
 	}
 
-	public List<UUID> getReferralSourcesIds() {
+	public List<UUID> getReferralSourcesIds() { 
 		return referralSourcesIds;
 	}
 
@@ -67,11 +86,11 @@ public class AddressLabelSearchTO
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
-
+ 
 
 	public AddressLabelSearchTO(UUID programStatus, List<UUID> specialServiceGroupId,
 			List<UUID> referralSourcesId, String anticipatedStartTerm,
-			Integer anticipatedStartYear, List<UUID> studentTypeIds) {
+			Integer anticipatedStartYear, List<UUID> studentTypeIds, Date createDateFrom, Date createDateTo) {
 		super();
 		this.programStatus = programStatus;
 		this.specialServiceGroupIds = specialServiceGroupId;
@@ -79,6 +98,8 @@ public class AddressLabelSearchTO
 		this.anticipatedStartTerm = anticipatedStartTerm;
 		this.anticipatedStartYear = anticipatedStartYear;
 		this.studentTypeIds = studentTypeIds;
+		this.createDateFrom = createDateFrom;
+		this.createDateTo = createDateTo;
 	}
 
 }

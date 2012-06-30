@@ -99,16 +99,12 @@ br {
 		container.append($(html));
 	}
 
-	
-	
-	
 	$(document).ready(function() {
 		populateSpecialServices();
 		populateProgramStatus();
 		populateReferralSource();
 		populateStudentType();
-	});	
-	
+	});
 </script>
 
 </head>
@@ -124,17 +120,16 @@ br {
 				id="ProgramStatusGroup" name="programStatus"
 				class="custom-class1 custom-class2" style="width: 200px;">
 				<option value=""></option>
-				</select>
-			<br /> <label><span>Student Type</span></label> <select
-				id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select> 
+			</select> <br /> <label><span>Student Type</span></label> <select
+				id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
 			<br /> <label><span>Special Service Groups</span></label> <select
 				id="SpecialServiceGroupIds" name="specialServiceGroupIds"
 				multiple="multiple"></select> <br /> <label><span>Referral
 					Source</span></label> <select id="ReferralSourceGroup" name="referralSourcesIds"
-				multiple="multiple" /></select> <br />
-			<label><span>Date Student Added From</span></label><input
-				type="text" name="test1" id="dateAddedFrom" /><br /> <label><span>Date
-					Student Added To</span></label><input type="text" name="test2" id="dateAddedTo" /><br />
+				multiple="multiple" /></select> <br /> <label><span>Date
+					Student Added From (yyyy-MM-dd)</span></label><input type="text" name="createDateFrom"
+				id="dateAddedFrom" />(yyyy-MM-dd)<br /> 
+<label><span>Date Student Added To</span></label><input type="text" name="createDateTo" id="createDateTo" />(yyyy-MM-dd)<br />
 			<label><span>Anticipated Start Term</span></label> <select
 				id="anticipatedStartTerm" name="anticipatedStartTerm"
 				class="custom-class1 custom-class2" style="width: 200px;">
@@ -146,7 +141,7 @@ br {
 			</select><br /> <label><span>Anticipated Start Year</span></label> <select
 				id="anticipatedStartYear" name="anticipatedStartYear"
 				class="custom-class1 custom-class2" style="width: 200px;">
-                                <option value=""></option> 
+				<option value=""></option>
 				<option value="2010" class="test-class-1">2010</option>
 				<option value="2011" class="test-class-1">2011</option>
 				<option value="2012" class="test-class-1">2012</option>
@@ -158,11 +153,22 @@ br {
 				<option value="2018" class="test-class-1">2018</option>
 				<option value="2019" class="test-class-1">2019</option>
 				<option value="2020" class="test-class-1">2020</option>
-			</select><br /> <input type="submit" />
+			</select><br />
+			<br />
+			<br />
+			<div
+				style="border: 1px solid; border-radius: 5px; -moz-border-radius: 5px; padding: 5px; width: 250px">
+				
+					<span>Report Output</span>
+				
+				<br /> <label><span>pdf</span></label><input type="radio"
+					name="reportType" value="pdf" checked /><br /> <label><span>csv</span></label><input
+					type="radio" name="reportType" value="csv" /><br /> 
+			</div>
+			<br /> <input type="submit" />
 		</div>
 	</form>
 </div>
-
 
 
 
