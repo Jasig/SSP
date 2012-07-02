@@ -3,9 +3,13 @@ Ext.define('Ssp.view.Main', {
     alias: 'widget.mainview',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
     controller: 'Ssp.controller.MainViewController',
     initComponent: function(){
-    	Ext.apply(this,
+    	var me=this;
+    	Ext.apply(me,
 		    			{
 		    	    layout: {
 		    	    	type: 'hbox',
@@ -55,6 +59,6 @@ Ext.define('Ssp.view.Main', {
 		    	    }    		
     			});
     	
-    	return this.callParent(arguments);
+    	return me.callParent(arguments);
     }
 });

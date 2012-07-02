@@ -18,34 +18,41 @@ Ext.define('Ssp.view.person.EditPerson', {
 			            border: 0,
 			            title: '',
 			            defaultType: 'textfield',
-			            defaults: {
-			                anchor: '100%'
-			            },
+
 			       items: [{
 			        fieldLabel: 'First Name',
 			        name: 'firstName',
 			        itemId: 'firstName',
 			        maxLength: 50,
-			        allowBlank:false
+			        allowBlank:false,
+			        width: 350
 			    },{
 			        fieldLabel: 'Middle Initial',
 			        name: 'middleInitial',
-			        itemId: 'middleInitial',
+			        itemId: 'middleName',
 			        maxLength: 1,
-			        allowBlank:true
+			        allowBlank:true,
+			        width: 350
 			    },{
 			        fieldLabel: 'Last Name',
 			        name: 'lastName',
 			        itemId: 'lastName',
 			        maxLength: 50,
-			        allowBlank:false
+			        allowBlank:false,
+			        width: 350
 			    },{
 			        fieldLabel: 'Student ID',
 			        name: 'schoolId',
 			        minLength: 7,
 			        maxLength: 7,
 			        itemId: 'studentId',
-			        allowBlank:false
+			        allowBlank:false,
+			        width: 350
+			    },{
+			    	xtype: 'button',
+			    	tooltip: 'Load record from external system',
+			    	text: 'Retrieve from SIS',
+			    	itemId: 'retrieveFromExternalButton'
 			    },{
 			        fieldLabel: 'Home Phone',
 			        name: 'homePhone',
@@ -55,7 +62,8 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        regexText: 'Must be in the format xxx-xxx-xxxx',
 			        maxLength: 12,
 			        allowBlank:true,
-			        itemId: 'homePhone' 
+			        itemId: 'homePhone',
+			        width: 350
 			    },{
 			        fieldLabel: 'Work Phone',
 			        name: 'workPhone',
@@ -65,21 +73,24 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        regexText: 'Must be in the format xxx-xxx-xxxx',
 			        maxLength: 12,
 			        allowBlank:true,
-			        itemId: 'workPhone'
+			        itemId: 'workPhone',
+			        width: 350
 			    },{
 			        fieldLabel: 'School Email',
 			        name: 'primaryEmailAddress',
 			        vtype:'email',
 			        maxLength: 100,
 			        allowBlank:true,
-			        itemId: 'primaryEmailAddress'
+			        itemId: 'primaryEmailAddress',
+			        width: 350
 			    },{
 			        fieldLabel: 'Home Email',
 			        name: 'secondaryEmailAddress',
 			        vtype:'email',
 			        maxLength: 100,
 			        allowBlank:true,
-			        itemId: 'secondaryEmailAddress'
+			        itemId: 'secondaryEmailAddress',
+			        width: 350
 			    }]
 			}]
 		});

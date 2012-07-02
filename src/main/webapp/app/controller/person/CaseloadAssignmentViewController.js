@@ -37,6 +37,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var successFunc = function(response ,view){
 			var r = Ext.decode(response.responseText);
 			
+			me.getView().setLoading( false );
+			
 			// load the person record
 			me.person.populateFromGenericObject(r);
 			
@@ -78,11 +80,13 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
             		title: 'Ability to Benefit/Anticipated Start Date',
             		autoScroll: true,
             		items: [{xtype: 'personanticipatedstartdate'}]
-        		}];
+        		}];	
 		
 		// load the person record and init the view
 		if (id.length > 0)
 		{
+			me.getView().setLoading( true );
+			
 			// load the person to edit
 			me.apiProperties.makeRequest({
 				url: me.personUrl+id,

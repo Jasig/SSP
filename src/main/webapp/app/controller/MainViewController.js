@@ -50,7 +50,7 @@ Ext.define('Ssp.controller.MainViewController', {
     },
     
     setListeners: function(container, component, index, obj){
-		/**
+    	/**
 		 * TODO: Figure out a better workaround than this for loading
 		 * the listener that allows the display to be reset after
 		 * saving the caseload assignment. This works because the Profile

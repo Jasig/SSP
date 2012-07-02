@@ -82,8 +82,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
                     fieldLabel: 'Comment',
                     itemId: 'commentText',
                     anchor: '100%',
-                    name: 'comment',
-                    anchor: '100%'
+                    name: 'comment'
                 }],
             
             dockedItems: [{

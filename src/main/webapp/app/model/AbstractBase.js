@@ -16,11 +16,12 @@ Ext.define('Ssp.model.AbstractBase', {
  		                        lastName: value.lastName || ''};	
  		            return obj;
  		      }
-             },
-             {name: 'createdDate', type: 'date', dateFormat: 'time'}
+             }
+             ,{name: 'createdDate', type: 'date', dateFormat: 'time'}
+             ,{name: 'objectStatus', type: 'string'}
              /*,
              {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
-             {name: 'objectStatus', type: 'string'}*/],
+             */],
     
 	populateFromGenericObject: function( record ){
 		if (record != null)
