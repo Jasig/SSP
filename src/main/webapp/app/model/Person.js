@@ -29,7 +29,8 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'specialServiceGroups', type: 'auto'},
     		 {name: 'referralSources', type: 'auto'},
     		 {name: 'serviceReasons', type: 'auto'},
-    		 {name:'permissions', type:'auto', defaultValue: null}],
+    		 {name:'permissions', type:'auto', defaultValue: null},
+    		 {name:'confidentialityLevels', type:'auto', defaultValue: null}],
     
     		 //'programStatus',
     		 //'registrationStatus',

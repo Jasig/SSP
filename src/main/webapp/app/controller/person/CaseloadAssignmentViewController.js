@@ -42,7 +42,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// load the person record
 			me.person.populateFromGenericObject(r);
 			
-			me.getView().setTitle( 'Caseload Assignment: Edit Student - ' + me.person.getFullName() );
+			me.updateTitle();
 			
 			// init the view
 			caseloadAssignmentView.add(items);
@@ -97,10 +97,27 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// adding a record, so simply init the view
 			caseloadAssignmentView.add(items);
 
-			me.getView().setTitle( 'Caseload Assignment: Add Student' );
+			me.updateTitle();
 		}
 		
+		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
+		
 		return this.callParent(arguments);
+    },
+    
+    destroy: function(){
+		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
+    	
+    	return this.callParent( arguments );
+    },
+    
+    onPersonNameChange: function(){
+    	this.updateTitle();
+    },
+    
+    updateTitle: function(){
+    	var me=this;
+    	me.getView().setTitle( 'Caseload Assignment ' + ((me.person.get('id') != "")?"Edit":"Add") + ' - ' + me.person.getFullName());
     },
     
     onSaveClick: function(button){

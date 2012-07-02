@@ -2,15 +2,33 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
+    	appEventsController: 'appEventsController',
         person: 'currentPerson',
         sspConfig: 'sspConfig'
     },
     control: {
     	retrieveFromExternalButton: '#retrieveFromExternalButton',
     	
-    	firstNameField: '#firstName',
-    	middleNameField: '#middleName',
-    	lastNameField: '#lastName',
+    	firstNameField: {
+    		selector: '#firstName',
+    		listeners: {
+                change: 'onStudentNameChange'
+            }
+    	},
+    	
+    	middleNameField: {
+    		selector: '#middleName',
+    		listeners: {
+                change: 'onStudentNameChange'
+            }    		
+    	},
+    	
+    	lastNameField: {
+    		selector: '#lastName',
+    		listeners: {
+                change: 'onStudentNameChange'
+            }
+    	}, 
     	
     	studentIdField: {
     		selector: '#studentId',
@@ -57,12 +75,17 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 			me.getSecondaryEmailAddressField().setDisabled(disabled);
 		}
 
-		
 		me.getView().loadRecord( this.person );
 		
 		me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );
 		
 		return me.callParent(arguments);
+    },
+    
+    onStudentNameChange: function( comp, newValue, oldValue, eOpts){
+    	var me=this;
+    	me.person.set(comp.name,newValue);
+    	me.appEventsController.getApplication().fireEvent('studentNameChange');
     },
     
     onStudentIdValidityChange: function(comp, isValid, eOpts){

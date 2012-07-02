@@ -5,15 +5,17 @@
 <!-- ExtJS Styles -->
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/resources/css/ext-all.css" />">
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/CheckHeader.css" />">
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/ItemSelector.css" />">
 
 <!-- SSP Theme -->
 <link href="<c:url value="/resources/css/tabs.css" />" rel="stylesheet" type="text/css" />
+<link href="<c:url value="/resources/css/ssp-ext-theme.css" />" rel="stylesheet" type="text/css" />
 
 <!-- ExtJS Lib -->
-<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/ext-debug.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/ext.js" />"></script>
 
 <!-- DEFT Lib -->
-<script type="text/javascript" src="<c:url value="/js/libs/deft/deft-debug-0.6.3.js" />"></script>    
+<script type="text/javascript" src="<c:url value="/js/libs/deft/deft-0.6.3.js" />"></script>
 
 <script type="text/javascript">
 	// setting renderSSPFullScreen to true will render the app 
