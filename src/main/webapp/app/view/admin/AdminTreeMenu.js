@@ -12,6 +12,7 @@ Ext.define('Ssp.view.admin.AdminTreeMenu', {
 		Ext.apply(this, 
 				{
 					store: this.store,
+					singleExpand: true,
 					fields: ['title','form','text'],	
 				});
 		
