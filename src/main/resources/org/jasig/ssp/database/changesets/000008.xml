@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="not null constraint to person.school_id"
+		author="jon.adams">
+		<update tableName="person">
+			<column name="school_id">userid_3</column>
+			<where>id = '46DA4CB4-6EB4-4B91-8E39-8F9FA4D85552'</where>
+		</update>
+		<update tableName="person">
+			<column name="school_id">userid_4</column>
+			<where>id = '58BA5EE3-734E-4AE9-B9C5-943774B4DE41'</where>
+		</update>
+
+		<addNotNullConstraint tableName="person"
+			columnName="school_id" columnDataType="${nvarchar.type}(50)" />
+		<addUniqueConstraint tableName="person"
+			columnNames="school_id" constraintName="uq_person_school_id" />
+		<rollback>
+			<dropNotNullConstraint tableName="person"
+				columnName="school_id" columnDataType="${nvarchar.type}(50)" />
+			<dropUniqueConstraint tableName="person"
+				constraintName="uq_person_school_id" />
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

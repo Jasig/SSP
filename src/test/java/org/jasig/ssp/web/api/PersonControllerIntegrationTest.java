@@ -5,14 +5,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +49,8 @@ public class PersonControllerIntegrationTest {
 	private static final String PERSON_SORTEDBY_FIRSTNAME_0 = "Alan";
 
 	private static final String PERSON_SORTEDBY_FIRSTNAME_3 = "James";
+
+	private static final String TEST_SCHOOLID = "legacy school id";
 
 	/**
 	 * Test the {@link PersonController#get(UUID)} action.
@@ -161,5 +167,28 @@ public class PersonControllerIntegrationTest {
 		final PersonTO person4 = iter.next(); // check 4th
 		assertEquals("4th",
 				PERSON_SORTEDBY_FIRSTNAME_3, person4.getFirstName());
+	}
+
+	@Test(expected = ConstraintViolationException.class)
+	public void testUniqueSchoolId() throws ObjectNotFoundException,
+			ValidationException {
+		final Person person1 = createPerson();
+		person1.setUsername(TEST_SCHOOLID);
+		controller.create(new PersonTO(person1));
+
+		final Person person2 = createPerson();
+		person2.setUsername(TEST_SCHOOLID);
+		controller.create(new PersonTO(person2));
+		fail("Exception should have been thrown.");
+	}
+
+	private Person createPerson() {
+		final Person person = new Person();
+		person.setFirstName(PERSON_FIRSTNAME);
+		person.setLastName(PERSON_LASTNAME);
+		person.setPrimaryEmailAddress("email");
+		person.setUsername("username");
+		person.setSchoolId("legacy id");
+		return person;
 	}
 }

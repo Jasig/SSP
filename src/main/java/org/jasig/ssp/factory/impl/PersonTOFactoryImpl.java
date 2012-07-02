@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Person transfer object factory implementation
+ */
 @Service
 @Transactional(readOnly = true)
 public class PersonTOFactoryImpl extends
@@ -71,7 +74,7 @@ public class PersonTOFactoryImpl extends
 		model.setZipCode(tObject.getZipCode());
 		model.setPhotoUrl(tObject.getPhotoUrl());
 		model.setSchoolId(tObject.getSchoolId());
-		model.setEnabled(tObject.isEnabled());
+		model.setEnabled(tObject.getEnabled());
 		model.setStrengths(tObject.getStrengths());
 		model.setAbilityToBenefit(tObject.getAbilityToBenefit());
 		model.setAnticipatedStartTerm(tObject.getAnticipatedStartTerm());
@@ -97,5 +100,4 @@ public class PersonTOFactoryImpl extends
 
 		return model;
 	}
-
 }

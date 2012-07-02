@@ -10,10 +10,11 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
-		            autoScroll: true,
+			        hideHeaders: true,
+			        autoScroll: true,
 		            store: this.store,
     		        columns: [
-    		                { header: 'Referral Source',  
+    		                { header: 'Source',  
     		                  dataIndex: 'name',
     		                  flex: 1,
     		                }],

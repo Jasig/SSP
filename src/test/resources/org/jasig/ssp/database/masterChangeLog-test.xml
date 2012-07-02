@@ -30,4 +30,5 @@
 	<include file="org/jasig/ssp/database/changesets/000006-test.xml" />
 	<include file="org/jasig/ssp/database/changesets/000007.xml" />
 	<include file="org/jasig/ssp/database/changesets/000007-test.xml" />
+	<include file="org/jasig/ssp/database/changesets/000008.xml" />
 </databaseChangeLog>

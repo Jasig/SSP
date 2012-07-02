@@ -28,7 +28,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         },
         
         'deleteAssociationButton': {
-            click: 'onDeleteAssociationClick'
+            click: 'deleteConfirmation'
         }
         	
     },
@@ -112,7 +112,49 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         
         return 1;
     },
+ 
+    deleteConfirmation: function( button ) {
+    	var me=this;
+    	var tree = me.getView();
+    	var treeUtils = me.treeUtils;
+    	var records = tree.getView().getChecked();
+    	if (records.length > 0)
+    	{
+     	   message = 'You are about to delete the selected item associations. Would you like to continue?';
+     	      	   
+            Ext.Msg.confirm({
+    		     title:'Delete?',
+    		     msg: message,
+    		     buttons: Ext.Msg.YESNO,
+    		     fn: me.onDeleteAssociationConfirm,
+    		     scope: me
+    		   });
+    	}else{
+    		Ext.Msg.alert('Error', 'Please select an item to delete.');
+    	}
+    },    
     
+    onDeleteAssociationConfirm: function( btnId){
+    	var tree = this.getView();
+    	var treeUtils = this.treeUtils;
+    	var records = tree.getView().getChecked();
+    	var parentId, parentNode;
+     	if (btnId=="yes")
+     	{
+        	parentId = treeUtils.getIdFromNodeId( records[0].data.parentId );
+        	// To set the parentNode use the full parentId, while the previously set parentId attribute
+        	// used the treeUtils.getIdFromNodeId() method to trim the id of the category description
+        	// so the id from the database could be ascertained. The actual parentId attribute in the data
+        	// from the record is separated by a character like this: 'guid_category'
+        	parentNode = tree.getView().getStore().findRecord('id', records[0].data.parentId ); 
+
+        	Ext.Array.each(records, function(rec){
+    	        var associatedItemId = treeUtils.getIdFromNodeId( rec.data.id );
+    	        this.deleteAssociation( parentId, associatedItemId, parentNode );
+    	    },this);   		
+    	}
+	},
+	
     deleteAssociation: function( parentId, associatedItemId, node ){
     	var me=this;
     	var url, parentId, associatedItemId;
@@ -129,27 +171,5 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
 				} 
 			});
     	}
-    },
-    
-    onDeleteAssociationClick: function(){
-    	var tree = this.getView();
-    	var treeUtils = this.treeUtils;
-    	var records = tree.getView().getChecked();
-    	if (records.length > 0)
-    	{
-        	var parentId = treeUtils.getIdFromNodeId( records[0].data.parentId );
-        	// To set the parentNode use the full parentId, while the previously set parentId attribute
-        	// used the treeUtils.getIdFromNodeId() method to trim the id of the category description
-        	// so the id from the database could be ascertained. The actual parentId attribute in the data
-        	// from the record is separated by a character like this: 'guid_category'
-        	var parentNode = tree.getView().getStore().findRecord('id', records[0].data.parentId ); 
-
-        	Ext.Array.each(records, function(rec){
-    	        var associatedItemId = treeUtils.getIdFromNodeId( rec.data.id );
-    	        this.deleteAssociation( parentId, associatedItemId, parentNode );
-    	    },this);   		
-    	}else{
-    		Ext.Msg.alert('Error', 'Please select an item to delete.');
-    	}
-	}
+    }
 });

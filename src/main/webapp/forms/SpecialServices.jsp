@@ -74,7 +74,15 @@ br {
 
 			<label><span>Special Service Groups</span></label> <select
 				id="SpecialServiceGroupIds" name="specialServiceGroupIds"
-				multiple="multiple"></select> <br /> <input type="submit" />
+				multiple="multiple"></select> <br /> <br />
+			<div
+				style="border: 1px solid; border-radius: 5px; -moz-border-radius: 5px; padding: 5px; width: 250px">
+
+				<span>Report Output</span> <br /> <label><span>pdf</span></label><input
+					type="radio" name="reportType" value="pdf" checked /><br /> <label><span>csv</span></label><input
+					type="radio" name="reportType" value="csv" /><br />
+			</div>
+			<br /> <input type="submit" />
 		</div>
 	</form>
 </div>
