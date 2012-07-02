@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.mail.internet.MimeMessage;
 
-import org.jasig.ssp.service.reference.ConfigException;
+import org.jasig.ssp.service.ComponentException;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -70,15 +70,14 @@ public class MockMailService implements JavaMailSender {
 	 */
 	public SimpleSmtpServer getSmtpServer() {
 
-		if ((smtpServer == null)) {
-			smtpServer = SimpleSmtpServer.start(getPort());
-		} else if (!smtpServer.isStopped()) {
+		if ((smtpServer != null) && !smtpServer.isStopped()) {
 			smtpServer.stop();
-			smtpServer = SimpleSmtpServer.start(getPort());
 		}
 
+		smtpServer = SimpleSmtpServer.start(getPort());
+
 		if (smtpServer.isStopped()) {
-			throw new ConfigException("smtpServer",
+			throw new ComponentException(
 					"Simple SmtpServer unable to startup");
 		}
 

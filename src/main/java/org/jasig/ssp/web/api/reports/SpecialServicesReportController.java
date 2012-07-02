@@ -14,9 +14,12 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -61,7 +64,8 @@ public class SpecialServicesReportController extends BaseController {
 	void getSpecialServices(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
-			final @RequestParam(required = false) List<UUID> specialServiceGroupIds)
+			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
+			final @RequestParam(required = false, defaultValue="pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
 		// List<String> specialServiceGroupIDs;
@@ -97,8 +101,25 @@ public class SpecialServicesReportController extends BaseController {
 		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
-		JasperExportManager.exportReportToPdfStream(decodedInput,
-				response.getOutputStream());
+		
+		if(reportType.equals("pdf"))
+		{
+			JasperExportManager.exportReportToPdfStream(decodedInput,
+					response.getOutputStream());	
+		}
+		else if(reportType.equals("csv"))
+		{
+			response.setContentType("application/vnd.ms-excel");
+			response.setHeader("Content-disposition","attachment; filename=test.csv"); 
+			
+			JRCsvExporter exporter = new JRCsvExporter();
+			exporter.setParameter(JRExporterParameter.INPUT_STREAM, decodedInput);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
+			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+			
+			exporter.exportReport();
+		}		
+		
 		response.flushBuffer();
 		is.close();
 		os.close();

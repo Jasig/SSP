@@ -83,5 +83,108 @@
 			</update>
 		</rollback>
 	</changeSet>
+	
+	
+	
+	<changeSet id="add goals and Tasks" author="steve.cody">
+		<insert tableName="goal">
+			<column name="id" value="8e31c924-c22f-11e1-9423-137d2b7bb311" />
+			<column name="name" value="Generated Test Goal Name 1" />
+			<column name="description" value="Test Goal Description 1" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="modified_by" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="object_status" value="1" />
+			<column name="confidentiality_level_id" value="b3d077a7-4055-0510-7967-4a09f93a0357" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+		</insert>
+		
+		<insert tableName="goal">
+			<column name="id" value="d9a80206-c22f-11e1-98d3-8b22c5f04508" />
+			<column name="name" value="Generated Test Goal Name 2" />
+			<column name="description" value="Test Goal Description 2" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="modified_by" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="object_status" value="1" />
+			<column name="confidentiality_level_id" value="b3d077a7-4055-0510-7967-4a09f93a0357" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+		</insert>	
+		
+		<insert tableName="goal">
+			<column name="id" value="fb60ca72-c22f-11e1-9c79-472617a6db66" />
+			<column name="name" value="Generated Test Goal Name 3" />
+			<column name="description" value="Test Goal Description 3" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="modified_by" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="object_status" value="1" />
+			<column name="confidentiality_level_id" value="b3d077a7-4055-0510-7967-4a09f93a0357" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+		</insert>
+		
+		
+        <insert tableName="task">
+			<column name="id" value="d65a685e-c230-11e1-87b5-9791aa275fef" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="description" value="Test Task Description 3" />
+			<column name="due_date" valueDate="2016-03-20T00:00:00" />
+			<column name="session_id" value="ABCDEFG" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="challenge_id" value="22d23035-74f0-40f1-ac41-47a22c798af7" />
+			<column name="challenge_referral_id" value="19fbec43-8c0b-478b-9d5f-00ec6ec57511" />			
+			<column name="name" value="Test Task Name 3" />
+			<column name="confidentiality_level_id" value="b3d077a7-4055-0510-7967-4a09f93a0357" />
+		</insert>
+		<insert tableName="task">
+			<column name="id" value="c67ba1f0-c230-11e1-a265-3bf09818b882" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="description" value="Test Task Description 4" />
+			<column name="due_date" valueDate="2016-03-21T00:00:00" />
+			<column name="session_id" value="ABCDEFG" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="challenge_id" value="22d23035-74f0-40f1-ac41-47a22c798af7" />
+			<column name="challenge_referral_id" value="19fbec43-8c0b-478b-9d5f-00ec6ec57511" />
+			<column name="name" value="Test Task Name 4" />
+			<column name="confidentiality_level_id" value="b3d077a7-4055-0510-7967-4a09f93a0357" />
+		</insert>		
+		
+		
+		
+		
+		<rollback>
+			<delete tableName="goal">
+				<where>id='8e31c924-c22f-11e1-9423-137d2b7bb311'</where>
+			</delete>
+			<delete tableName="goal">
+				<where>id='d9a80206-c22f-11e1-98d3-8b22c5f04508'</where>
+			</delete>	
+			<delete tableName="goal">
+				<where>id='fb60ca72-c22f-11e1-9c79-472617a6db66'</where>
+			</delete>					
+			<delete tableName="task">
+				<where>id='d65a685e-c230-11e1-87b5-9791aa275fef'</where>
+			</delete>
+			<delete tableName="task">
+				<where>id='c67ba1f0-c230-11e1-a265-3bf09818b882'</where>
+			</delete>
+							
+		</rollback>
+	</changeSet>	
+	
+	
+	
+	
 
 </databaseChangeLog>

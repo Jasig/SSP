@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -14,9 +15,14 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
+import net.sf.jasperreports.engine.export.JRHtmlExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -31,13 +37,17 @@ import org.jasig.ssp.web.api.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
+import com.sun.mail.iap.Response;
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -65,9 +75,18 @@ public class AddressLabelsReportController extends BaseController {
 	// @Autowired
 	// private transient PersonTOFactory factory;
 
+	
+	@InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+    }	
+	
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	void getAddressLabels(
+	void getAddressLabels( 
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 
@@ -76,14 +95,17 @@ public class AddressLabelsReportController extends BaseController {
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) Integer anticipatedStartYear,
-			final @RequestParam(required = false) String anticipatedStartTerm)
-			throws ObjectNotFoundException, JRException, IOException {
+			final @RequestParam(required = false) Date createDateFrom,
+			final @RequestParam(required = false) Date createDateTo,
+			final @RequestParam(required = false) String anticipatedStartTerm,
+			final @RequestParam(required = false, defaultValue="pdf") String reportType)
+			throws ObjectNotFoundException, JRException, IOException { 
 
 		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
 				programStatus, specialServiceGroupIds, referralSourcesIds,
 				(anticipatedStartTerm.length() <= 0 ? null
 						: anticipatedStartTerm), anticipatedStartYear,
-				studentTypeIds);
+				studentTypeIds, createDateFrom, createDateTo);
 
 		final List<Person> people = personService.peopleFromCriteria(
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
@@ -93,7 +115,7 @@ public class AddressLabelsReportController extends BaseController {
 		final List<String> specialGroupsNames = new ArrayList<String>();
 		if ((specialServiceGroupIds != null)
 				&& (specialServiceGroupIds.size() > 0)) {
-			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
+			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator(); 
 			while (ssgIter.hasNext()) {
 				specialGroupsNames
 						.add(ssgService.get(ssgIter.next()).getName());
@@ -135,8 +157,25 @@ public class AddressLabelsReportController extends BaseController {
 		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
-		JasperExportManager.exportReportToPdfStream(decodedInput,
-				response.getOutputStream());
+		
+		if(reportType.equals("pdf"))
+		{
+			JasperExportManager.exportReportToPdfStream(decodedInput,
+					response.getOutputStream());	
+		}
+		else if(reportType.equals("csv"))
+		{
+			response.setContentType("application/vnd.ms-excel");
+			response.setHeader("Content-disposition","attachment; filename=test.csv"); 
+			
+			JRCsvExporter exporter = new JRCsvExporter();
+			exporter.setParameter(JRExporterParameter.INPUT_STREAM, decodedInput);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
+			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+			
+			exporter.exportReport();
+		}		
+		
 		response.flushBuffer();
 		is.close();
 		os.close();

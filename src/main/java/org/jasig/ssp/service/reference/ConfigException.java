@@ -22,7 +22,7 @@ public class ConfigException extends RuntimeException {
 
 	public ConfigException(final String propertyName, final String message) {
 		super("Expected property " + propertyName
-				+ " to :" + message);
+				+ " not found in Config table.  Reason:" + message);
 	}
 
 	public ConfigException(final UUID propertyId,

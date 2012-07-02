@@ -15,8 +15,10 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,20 @@ public class PersonControllerIntegrationTest {
 	private static final String PERSON_SORTEDBY_FIRSTNAME_3 = "James";
 
 	private static final String TEST_SCHOOLID = "legacy school id";
+
+	@Autowired
+	private transient SecurityServiceInTestEnvironment securityService;
+
+	/**
+	 * Setup the security service with the administrator user.
+	 */
+	@Before
+	public void setUp() {
+		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
+				"ROLE_PERSON_EARLY_ALERT_READ",
+				"ROLE_PERSON_EARLY_ALERT_WRITE",
+				"ROLE_PERSON_EARLY_ALERT_DELETE");
+	}
 
 	/**
 	 * Test the {@link PersonController#get(UUID)} action.

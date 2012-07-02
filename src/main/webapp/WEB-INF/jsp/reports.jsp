@@ -25,10 +25,6 @@ function swapOut(newHTML){
 	$('#rightbar').html(newHTML);
 }
 
-
-
-
-
 function clearFormDiv(){
      jQuery('#rightbar').html('');
 }
@@ -85,6 +81,7 @@ clear: left;
 <ul>
 <li><a onclick="populateForm('/ssp/forms/AddressLabel.jsp');">Address labels</a></li>
 <li><a onclick="populateForm('/ssp/forms/SpecialServices.jsp');">Special Services labels</a></li>
+<li><a onclick="populateForm('/ssp/forms/StudentActionPlan.jsp');">Student Action Plan</a></li>
 <li><a onclick="clearFormDiv();" >Clear Form</a></li>
 </ul> 
 </div>
@@ -95,7 +92,6 @@ clear: left;
 </div>
 
 <div id="stagingDiv" style="display:none" ></div>
-
 
 
 
