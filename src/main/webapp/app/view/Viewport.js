@@ -20,7 +20,7 @@ Ext.define('Ssp.view.Viewport',{
             el;
 
         // Init the Main Shell for the application
-        //Ext.apply(this, {items: [{xtype:'mainview'}]}); 
+        Ext.apply(this, {items: [{xtype:'mainview'}]}); 
         
         // Get the DOM disruption over with before the Viewport renders and begins a layout
         Ext.getScrollbarSize();

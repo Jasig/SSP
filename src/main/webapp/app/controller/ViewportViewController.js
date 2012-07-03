@@ -14,7 +14,7 @@ Ext.define('Ssp.controller.ViewportViewController', {
 		me.sessionUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('session') );
         
 		// init the main view for the application
-        me.getView().add( [{xtype:'mainview'}] );
+        // me.getView().add( [{xtype:'mainview'}] );
 		
 		return this.callParent(arguments);
     }
