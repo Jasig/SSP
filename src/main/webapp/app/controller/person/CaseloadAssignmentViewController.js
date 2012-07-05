@@ -37,10 +37,12 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var successFunc = function(response ,view){
 			var r = Ext.decode(response.responseText);
 			
+			me.getView().setLoading( false );
+			
 			// load the person record
 			me.person.populateFromGenericObject(r);
 			
-			me.getView().setTitle( 'Caseload Assignment: Edit Student - ' + me.person.getFullName() );
+			me.updateTitle();
 			
 			// init the view
 			caseloadAssignmentView.add(items);
@@ -78,11 +80,13 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
             		title: 'Ability to Benefit/Anticipated Start Date',
             		autoScroll: true,
             		items: [{xtype: 'personanticipatedstartdate'}]
-        		}];
+        		}];	
 		
 		// load the person record and init the view
 		if (id.length > 0)
 		{
+			me.getView().setLoading( true );
+			
 			// load the person to edit
 			me.apiProperties.makeRequest({
 				url: me.personUrl+id,
@@ -93,10 +97,27 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// adding a record, so simply init the view
 			caseloadAssignmentView.add(items);
 
-			me.getView().setTitle( 'Caseload Assignment: Add Student' );
+			me.updateTitle();
 		}
 		
+		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
+		
 		return this.callParent(arguments);
+    },
+    
+    destroy: function(){
+		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
+    	
+    	return this.callParent( arguments );
+    },
+    
+    onPersonNameChange: function(){
+    	this.updateTitle();
+    },
+    
+    updateTitle: function(){
+    	var me=this;
+    	me.getView().setTitle( 'Caseload Assignment ' + ((me.person.get('id') != "")?"Edit":"Add") + ' - ' + me.person.getFullName());
     },
     
     onSaveClick: function(button){

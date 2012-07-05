@@ -112,7 +112,11 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
        		   url: store.getProxy().url+id,
        		   method: 'DELETE',
        		   successFunc: function(response,responseText){
-       			   store.remove( store.getById( id ) );
+       			   var r = Ext.decode(response.responseText);
+       			   if (r.success==true)
+       			   {
+       				store.remove( store.getById( id ) );
+       			   }
        		   }
        	    });
        }

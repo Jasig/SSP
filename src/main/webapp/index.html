@@ -17,6 +17,7 @@ License details: http://www.gnu.org/licenses/lgpl.html
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
     <!-- ExtJS Styles -->
     <link rel="stylesheet" type="text/css" href="js/libs/ext-4.1/resources/css/ext-all.css">
     <link rel="stylesheet" type="text/css" href="js/libs/ext-4.1/src/ux/css/CheckHeader.css">
@@ -25,14 +26,18 @@ License details: http://www.gnu.org/licenses/lgpl.html
     <!-- SSP Theme -->
     <link href="resources/css/ssp-ext-theme.css" rel="stylesheet" type="text/css" />
     <!-- <link href='http://fonts.googleapis.com/css?family=Gruppo' rel='stylesheet' type='text/css'>  -->
-    <link href="resources/css/tabs.css" rel="stylesheet" type="text/css" />
-    
-    <!-- ExtJS Lib -->
-    <script type="text/javascript" src="js/libs/ext-4.1/ext.js"></script>
-	   
-    <!-- DEFT Lib -->
-    <script type="text/javascript" src="js/libs/deft/deft-0.6.3.js"></script>    
+    <link href="resources/css/tabs.css" rel="stylesheet" type="text/css" />    
 
+    <!-- ExtJS Lib -->
+    <script type="text/javascript" src="js/libs/ext-4.1/ext-all.js"></script>
+
+    <!-- ExtJS UX -->
+    <script type="text/javascript" src="js/libs/ext-4.1/src/ux/CheckColumn.js"></script>
+    <script type="text/javascript" src="js/libs/ext-4.1/src/ux/form/MultiSelect.js"></script>
+    <script type="text/javascript" src="js/libs/ext-4.1/src/ux/form/ItemSelector.js"></script>   
+    
+    <!-- DEFT Lib -->
+    <script type="text/javascript" src="js/libs/deft/deft-0.6.3.js"></script>
     
     <script type="text/javascript">
 	    var sspParentDivId = "sspApp";
@@ -48,15 +53,12 @@ License details: http://www.gnu.org/licenses/lgpl.html
 
     <!-- SSP Application -->
     <script type="text/javascript" src="app.js"></script>
-   
+       
     <title id="page-title">Student Success Plan</title>
 
 </head>
 <body>
-<div id="portalPageHeader" style="height:5%"></div>
-<div id="portalPageNavigation" style="height:5%"></div>
-<div id="sspApp" style="height:75%;overflow:hidden"></div>
-<div id="portalPageFooter" style="height:10%"></div>
+<div id="sspApp" style="height:100%;overflow:hidden"></div>
 </body>
 </html>
 <!-- eof -->

@@ -25,14 +25,19 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     		                  field: {
     		                      xtype: 'textfield'
     		                  },
-    		                  flex: 50 },
+    		                  flex: 50 
+    		                 },
     		                { header: 'Description',
     		                  dataIndex: 'description', 
     		                  flex: 50,
     		                  field: {
     		                      xtype: 'textfield'
     		                  }
-    		                }
+    		                },
+    		                { 
+    		                  header: 'Status',
+      		                  dataIndex: 'objectStatus' 
+      		                }
     		           ],
     		        
     		           dockedItems: [

@@ -8,7 +8,7 @@ Ext.define('Ssp.view.ErrorWindow', {
     },
 	width: '100%',
 	height: '100%',
-	title: 'Error - Invalid Data',
+	title: 'Error! Please correct the errors listed below:',
     initComponent: function(){
     	var me=this;
     	Ext.apply(me,
@@ -17,7 +17,6 @@ Ext.define('Ssp.view.ErrorWindow', {
 		    		layout: 'fit',
     				items: [{
     			        xtype: 'grid',
-    			        title: 'Please correct the errrors listed below:',
     			        border: false,
     			        columns:[{ header: 'Error', 
 		 				           dataIndex: 'label',
@@ -35,7 +34,7 @@ Ext.define('Ssp.view.ErrorWindow', {
     			    }],
     			    bbar: [
     			           { xtype: 'button', 
-    			        	 text: 'Okay', 
+    			        	 text: 'OK', 
     			        	 itemId: 'closeButton', 
     			        	 handler: function() {
     			        		 me.close();
