@@ -40,7 +40,8 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		}
 
 		final PagingWrapper<Person> people = dao.searchBy(programStatus,
-				outsideCaseload, searchTerm, advisor, sAndP);
+				(outsideCaseload == null ? false : outsideCaseload),
+				searchTerm, advisor, sAndP);
 
 		final Collection<PersonSearchResult> personSearchResults = Lists
 				.newArrayList();

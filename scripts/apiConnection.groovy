@@ -94,6 +94,16 @@ String toJson(def form){
 	return builder.toString()
 }
 
+String search(ApiConnection conn){
+	//"/1/person/search"
+	return conn.get("api/1/person/search?searchTerm=dennis")
+}
+
+String getCaseload(ApiConnection conn){
+	//"/1/person/caseload"
+	return conn.get("api/1/person/caseload")
+}
+
 /**
  * You can exercise the ssp api from within STS (eclipse) using this script
  */
@@ -105,7 +115,9 @@ ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0",
 //String output = addChallengeToCategory(conn) 
 //String output = addGoalToPerson(conn) 
 //String output = getAllJournalEntriesForPerson(conn);
-String output = getPerson(conn)
+//String output = getPerson(conn)
+String output = search(conn)
+//String output = getCaseload(conn)
 
 conn.formatAndPrintJson(output)
 //println (output);
