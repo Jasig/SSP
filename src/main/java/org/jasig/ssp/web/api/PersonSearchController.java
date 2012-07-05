@@ -6,7 +6,6 @@ import org.jasig.ssp.factory.PersonSearchResultTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.PersonSearchResult;
 import org.jasig.ssp.model.reference.ProgramStatus;
-import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.SecurityService;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@PreAuthorize("ROLE_PERSON_SEARCH_READ")
+@PreAuthorize("hasRole('ROLE_PERSON_SEARCH_READ')")
 @RequestMapping("/1/person")
 public class PersonSearchController extends BaseController {
 
@@ -51,7 +50,6 @@ public class PersonSearchController extends BaseController {
 	}
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	PagedResponse<PersonSearchResultTO> search(
 			final @RequestParam String searchTerm,
