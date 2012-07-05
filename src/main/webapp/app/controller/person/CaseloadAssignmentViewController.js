@@ -9,7 +9,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
         person: 'currentPerson'
     },
     config: {
-    	appointmentUrl: null,
     	person: 'currentPerson',
     	personUrl: null
     },
@@ -51,7 +50,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		id = me.person.get('id');
 			
 		me.personUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
-		me.appointmentUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personAppointment') );
 		
 		// retrieve the appointment screen and define items for the screen
 		caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
@@ -125,6 +123,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var model=me.person;
 		var id = model.get('id');
 		var jsonData = new Object();
+		var currentAppointment;
 		
 		// edit person view
 		var personView = Ext.ComponentQuery.query('.editperson')[0];
@@ -180,7 +179,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			}
 		};
 		
-		// personForm.isValid() && coachForm.isValid() && appointmentForm.isValid() && anticipatedStartDateForm.isValid() && serviceReasonsForm.isValid() && specialServiceGroupsForm.isValid() && referralSourcesForm.isValid()
+		// Validate all of the forms
 		if ( validateResult.valid ) 
 		{
 			personForm.updateRecord();
@@ -220,25 +219,40 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// save the appointment dates and times
 			appointmentForm.updateRecord();
 			
-			/*
-			person.set( 'nextAppointmentStartDate', me.appointment.getStartDate() );
-			person.set( 'nextAppointmentEndDate', me.appointment.getEndDate() );
-			*/
-			
-			if (id=="")
+			if ( model.get('currentAppointment') != null && me.person.get('currentAppointment') != "" )
 			{
-				// remove createdDate so no flags are thrown
-				// from the API
-				delete jsonData.createdDate;
+			   model.get('currentAppointment').startDate = me.appointment.getStartDate();
+			   model.get('currentAppointment').endDate = me.appointment.getEndDate();
+			}else{
+			   model.set('currentAppointment', {
+				                                  "id":"",
+				                                  "startDate":me.appointment.getStartDate(),
+				                                  "endDate":me.appointment.getEndDate()
+				                                 });
+			}
+			
+			jsonData = model.data;
+			
+			// TODO: Handle username field
+			if (model.get("username") == "")
+				model.set('username',model.get('firstName')+'.'+model.get('lastName'));				
 
-				// TODO: Handle username field
-				model.set('username',model.getFullName());				
-				
+			if (model.get("userId") == "")
+				model.set('userId',model.get('firstName')+'.'+model.get('lastName'));				
+			
+			// TODO: handle unused fields from the json
+			// since these will throw an error in the
+			// current API
+			delete jsonData.currentAppointment;			
+			
+			// save the person
+			if (id=="")
+			{				
 				// create
 				me.apiProperties.makeRequest({
 	    			url: me.personUrl,
 	    			method: 'POST',
-	    			jsonData: model.data,
+	    			jsonData: jsonData,
 	    			successFunc: personSuccessFunc
 	    		});				
 			}else{
@@ -246,7 +260,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 	    		me.apiProperties.makeRequest({
 	    			url: me.personUrl+id,
 	    			method: 'PUT',
-	    			jsonData: model.data,
+	    			jsonData: jsonData,
 	    			successFunc: personSuccessFunc
 	    		});	
 			}

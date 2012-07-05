@@ -101,7 +101,7 @@ Ext.require([
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
-    
+    'Ssp.model.AuthenticatedPerson',
     'Ssp.model.Preferences',
     'Ssp.model.FieldError',
     'Ssp.model.util.TreeRequest',
@@ -308,7 +308,7 @@ Ext.onReady(function(){
 							    },
 							    authenticatedPerson: {
 							        fn: function(){
-							        	var p = new Ssp.model.Person();
+							        	var p = new Ssp.model.AuthenticatedPerson();
 							        	p.populateFromGenericObject( this.user );
 							        	p.set('permissions',this.permissions);
 							            return p;
@@ -520,6 +520,22 @@ Ext.onReady(function(){
 							    	console.log('launch application');
 							    	Deft.Injector.providers.appEventsController.value.config.app=me;
 							    	Deft.Injector.providers.appEventsController.value.app=me;
+							    	
+							    	// Date patterns for formatting by a description
+							    	// rather than a date format
+							    	Ext.Date.patterns = {
+							    		    ISO8601Long:"Y-m-d H:i:s",
+							    		    ISO8601Short:"Y-m-d",
+							    		    ShortDate: "n/j/Y",
+							    		    LongDate: "l, F d, Y",
+							    		    FullDateTime: "l, F d, Y g:i:s A",
+							    		    MonthDay: "F d",
+							    		    ShortTime: "g:i A",
+							    		    LongTime: "g:i:s A",
+							    		    SortableDateTime: "Y-m-d\\TH:i:s",
+							    		    UniversalSortableDateTime: "Y-m-d H:i:sO",
+							    		    YearMonth: "F, Y"
+							    	};
 							    	
 							    	// Global error handling for Ajax calls 
 							    	Ext.override(Ext.data.proxy.Server, {

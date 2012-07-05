@@ -109,14 +109,15 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     },
     
     filterTasks: function(){
+    	var me=this;
     	var filtersArr = [];
 		var filterStatusFunc = null;
-		var authenticatedId = this.authenticatedPerson.get('id');
-		var filterAuthenticatedFunc = function(item) { 
+		var authenticatedId = me.authenticatedPerson.get('id');
+		var filterAuthenticatedFunc = function(item) {
 			return (item.get('createdBy').id == authenticatedId); 
 		}; 
 
-		switch (this.filteredTaskStatus)
+		switch (me.filteredTaskStatus)
 		{
 			case 'ACTIVE':
 				filterStatusFunc = function(item) { return (item.get('completed') == false); };
@@ -130,14 +131,14 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		if (filterStatusFunc != null)
 			filtersArr.push(filterStatusFunc);
 		
-		if (this.filterAuthenticated)
+		if (me.filterAuthenticated == true)
 			filtersArr.push(filterAuthenticatedFunc);
 		
 		// reset filter
-		this.store.clearFilter();
+		me.store.clearFilter();
 		
 		// apply new filters
-		this.store.filter(filtersArr);
+		me.store.filter(filtersArr);
     },
 
     onEmailTasksClick: function(button) {
