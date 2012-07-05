@@ -29,16 +29,18 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'specialServiceGroups', type: 'auto'},
     		 {name: 'referralSources', type: 'auto'},
     		 {name: 'serviceReasons', type: 'auto'},
-    		 {name:'permissions', type:'auto', defaultValue: null},
-    		 {name:'confidentialityLevels', type:'auto', defaultValue: null}],
+             {name: 'currentAppointment', type: 'auto'}],
     
+             /*defaultValue:{"id" : "",
+             "startDate" : 1331269200000,
+             "endDate" : 1331269200000} */
+    		 
     		 //'programStatus',
     		 //'registrationStatus',
     		 //'paymentStatus',
     		 //'cumGPA',
     		 //'academicPrograms'
-    		 
-    		 
+    		 		 
     getFullName: function(){ 
     	var firstName = this.get('firstName') || "";
     	var middleInitial = this.get('middleInitial') || "";
@@ -52,31 +54,5 @@ Ext.define('Ssp.model.Person', {
     
     getFormattedStudentIntakeRequestDate: function(){
     	return Ext.util.Format.date( this.get('studentIntakeRequestDate'),'m/d/Y');   	
-    },
-
-    /**
-     * Determines if a user has access to a provided array of permissions.
-     * 
-     * @arguments
-     *  arrPermissions - an array of permissions to test against the granted permissions for this user.
-     *  
-     *  return true if all of the permissionsToTest exist in the user's record
-     */
-    hasPermissions: function( arrPermissions ){
-   	   return Ext.Array.every(arrPermissions,function(permission){
-   		   return this.hasPermission( permission );
-   	   },this);
-    },
-    
-    /**
-     * Determines if a user has access to the provided permission.
-     * @arguments
-     *  - permission - a permission
-     *  to test against the granted permissions for this user.
-     *  
-     *  return true if the permission exists in the user's record
-     */
-    hasPermission: function( permission ){
-   	 return Ext.Array.contains( this.get('permissions'), permission );
-    }    
+    }
 });

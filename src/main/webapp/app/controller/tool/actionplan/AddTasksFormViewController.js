@@ -81,9 +81,10 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 	    			successFunc: successFunc
 	    		});
     		}else{
+    			
     			// This removes the group property from
     			// a TaskGroup item before it is saved
-    			// as a Task
+    			// as a Task. Task grouping is handled in the Tasks display.
         		if (model.data.group != null)
         			delete model.data.group;    			
     			
