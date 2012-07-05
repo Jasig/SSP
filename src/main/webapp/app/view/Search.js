@@ -10,27 +10,30 @@ Ext.define('Ssp.view.Search', {
     	columnRendererUtils: 'columnRendererUtils',
     	person: 'currentPerson',
         store: 'studentsStore',
-        programStatusesStore: 'programStatusesStore'
+        programStatusesStore: 'programStatusesStore',
+        sspConfig: 'sspConfig'
     },
     initComponent: function(){
-    	Ext.apply(this,
+    	var me=this;
+    	Ext.apply(me,
     			   {
+    		        submitEmptyText: false,
     				title: 'Students',
     	            collapsible: true,
     	            collapseDirection: 'left',
     	        	width: '100%',
     	        	height: '100%',
 		    	    columns: [
-		    	              { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 },		        
-		    	              { text: 'Name', dataIndex: 'lastName', renderer: this.columnRendererUtils.renderStudentDetails, flex: 50},
+		    	              { header: "Photo", dataIndex: 'photoUrl', renderer: me.columnRendererUtils.renderPhotoIcon, flex: 50 },		        
+		    	              { text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderStudentDetails, flex: 50},
 		    	              ],
     	          
 		    	    dockedItems: [{
 		       			xtype: 'pagingtoolbar',
-		       		    store: this.store,
+		       		    store: me.store,
 		       			dock: 'bottom',
 		       		    displayInfo: true,
-		       		    pageSize: this.apiProperties.getPagingSize()
+		       		    pageSize: me.apiProperties.getPagingSize()
 		       		},{
 		       			xtype: 'toolbar',
 		       			dock: 'top',
@@ -40,15 +43,26 @@ Ext.define('Ssp.view.Search', {
 		       		    items: [
 		       		        {
 		       		        	xtype: 'textfield',
-		       		        	itemId: 'searchText'
+		       		        	itemId: 'searchText',
+		       		        	emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
+		       		        	width: 200
 		       		        },{
 		       		        	xtype: 'button',
-		       		        	tooltip: 'Find a student',
+		       		        	tooltip: 'Find a Student',
 		       		        	itemId: 'searchButton',
 					            width: 30,
 					            height: 23,
 					            cls: 'searchIcon'
 		       		        },{
+		       		        	xtype: 'tbspacer',
+		       		        	width: 5
+		       		        },{
+		       		        	xtype: 'checkboxfield',
+		                        boxLabel  : 'Search My Caseload',
+		                        itemId: 'searchCaseloadCheck',
+		                        name      : 'searchInCaseload',
+		                        inputValue: false
+		                    },{
 		       		        	xtype: 'tbspacer',
 		       		        	flex: 1
 		       		        },{
@@ -79,7 +93,7 @@ Ext.define('Ssp.view.Search', {
 		    			        name: 'programStatusId',
 		    			        fieldLabel: 'Caseload Status',
 		    			        emptyText: 'Select One',
-		    			        store: this.programStatusesStore,
+		    			        store: me.programStatusesStore,
 		    			        valueField: 'id',
 		    			        displayField: 'name',
 		    			        mode: 'local',
@@ -97,6 +111,6 @@ Ext.define('Ssp.view.Search', {
 		       		}*/]
 		    	    });
     	
-    	return this.callParent(arguments);
+    	return me.callParent(arguments);
     }
 });
