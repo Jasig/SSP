@@ -199,8 +199,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 		if (me.getSearchText().value != undefined && me.getSearchText().value != "")
 		{
 			me.apiProperties.makeRequest({
-				url: me.personSearchUrl,
-				json: { outsideCaseload : true, searchTerm : me.getSearchText().value},
+				url: me.personSearchUrl+'?searchTerm='+me.getSearchText().value,
+				//json: { outsideCaseload : true, searchTerm : me.getSearchText().value},
 				method: 'GET',
 				successFunc: successFunc
 			});			
