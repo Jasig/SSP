@@ -83,4 +83,11 @@ public interface ConfigService extends
 	 *             A runtimeException if the value is not found
 	 */
 	int getByNameExceptionOrDefaultAsInt(String name);
+
+	/**
+	 * Some databases don't accept ANSI SQL.
+	 * 
+	 * @return
+	 */
+	String getDatabaseConcatOperator();
 }

@@ -19,6 +19,9 @@ public class ProgramStatus extends AbstractReference implements Auditable {
 
 	private static final long serialVersionUID = -6549195550826087907L;
 
+	public static final UUID ACTIVE_ID = UUID
+			.fromString("b2d12527-5056-a51a-8054-113116baab88");
+
 	@Column(nullable = false)
 	@NotNull
 	private boolean programStatusChangeReasonRequired = false;

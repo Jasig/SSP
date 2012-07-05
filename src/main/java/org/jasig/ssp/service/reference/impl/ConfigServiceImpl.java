@@ -1,5 +1,7 @@
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.Locale;
+
 import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.reference.ConfigDao;
 import org.jasig.ssp.model.reference.Config;
@@ -9,6 +11,7 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,9 @@ public class ConfigServiceImpl extends
 	@Autowired
 	transient private ConfigDao dao;
 
+	@Value("#{configProperties.db_dialect}")
+	private String dialect;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ConfigServiceImpl.class);
 
@@ -42,6 +48,15 @@ public class ConfigServiceImpl extends
 	@Override
 	protected ConfigDao getDao() {
 		return dao;
+	}
+
+	@Override
+	public String getDatabaseConcatOperator() {
+		if (dialect.toLowerCase(Locale.getDefault()).contains("sqlserver")) {
+			return "+";
+		} else {
+			return "||";
+		}
 	}
 
 	private Config getByName(final String name) {
