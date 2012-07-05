@@ -248,9 +248,6 @@ var apiUrls = [
 
 Ext.onReady(function(){	
 
-	var user={};
-	var permissions=[];
-	
     // load the authenticated user
 	Ext.Ajax.request({
 		url: Ssp.mixin.ApiProperties.getBaseAppUrl() + 'session/getAuthenticatedPerson',
@@ -258,382 +255,367 @@ Ext.onReady(function(){
 		headers: { 'Content-Type': 'application/json' },
 		success: function(response){
 			var r = Ext.decode(response.responseText);
+			var user={};
+			
 			if (r != null)
-			{				
-			    this.user=r;
+			{			
+				// authenticated user
+			    user=r;
+
+				// configure the application
+				Deft.Injector.configure({
+					sspParentDivId: {
+				        value: sspParentDivId
+				    },
+				    renderSSPFullScreen: {
+				        value: renderSSPFullScreen
+				    },
+					apiUrlStore: {
+						fn: function(){
+							var urlStore = Ext.create('Ext.data.Store', {
+							     model: 'Ssp.model.ApiUrl',
+							     storeId: 'apiUrlStore'
+							 });
+							
+							urlStore.loadData( apiUrls );
+							
+							return urlStore;
+						},
+						singleton: true
+					},
+					sspConfig: {
+				        fn: function(){
+				            return new Ssp.model.Configuration({});
+				        },
+				        singleton: true
+				    },
+					currentPerson: {
+				        fn: function(){
+				            return new Ssp.model.Person({id:""});
+				        },
+				        singleton: true
+				    },
+				    authenticatedPerson: {
+				        fn: function(){
+				        	var p = new Ssp.model.AuthenticatedPerson();
+				        	p.populateFromGenericObject( this.user );
+				            return p;
+				        },
+				        singleton: true
+				    },
+				    preferences: {
+				        fn: function(){
+				            return new Ssp.model.Preferences();
+				        },
+				        singleton: true
+				    },
+				    apiProperties: {
+				        fn: function(){
+				            return new Ssp.mixin.ApiProperties({});
+				        },
+				        singleton: true
+				    },
+				    formRendererUtils:{
+				        fn: function(){
+				            return new Ssp.util.FormRendererUtils({});
+				    	},
+				        singleton: true
+				    },
+				    columnRendererUtils:{
+				        fn: function(){
+				            return new Ssp.util.ColumnRendererUtils({});
+				    	},
+				        singleton: true
+				    },
+				    treeRendererUtils:{
+				        fn: function(){
+				            return new Ssp.util.TreeRendererUtils({});
+				    	},
+				        singleton: true
+				    },
+			        appEventsController:{
+				        fn: function(){
+				            return new Ssp.controller.ApplicationEventsController({});
+				    	},
+				        singleton: true
+			        },
+					currentAppointment: {
+				        fn: function(){
+				            return new Ssp.model.Appointment({id:""});
+				        },
+				        singleton: true
+				    },
+			        currentChallenge:{
+				        fn: function(){
+				            return new Ssp.model.reference.Challenge({id:""});
+				    	},
+				        singleton: true
+			        },
+			        currentChallengeReferral:{
+				        fn: function(){
+				            return new Ssp.model.reference.ChallengeReferral({id:""});
+				    	},
+				        singleton: true
+			        },
+			        currentJournalStep:{
+				        fn: function(){
+				            return new Ssp.model.reference.JournalStep({id:""});
+				    	},
+				        singleton: true
+			        },
+			        currentJournalStepDetail:{
+				        fn: function(){
+				            return new Ssp.model.reference.JournalStepDetail({id:""});
+				    	},
+				        singleton: true
+			        },
+			        currentTask:{
+				        fn: function(){
+				            return new Ssp.model.tool.actionplan.Task({id:""});
+				    	},
+				        singleton: true
+			        },
+			        currentGoal:{
+				        fn: function(){
+				            return new Ssp.model.PersonGoal({id:""});
+				    	},
+				        singleton: true
+			        },
+			        currentJournalEntry:{
+				        fn: function(){
+				            return new Ssp.model.tool.journal.JournalEntry({id:""});
+				    	},
+				        singleton: true
+			        },
+			        currentEarlyAlert:{
+				        fn: function(){
+				            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:"",courseTitle:'DEV-065-TC - Developmental Reading'});
+				    	},
+				        singleton: true
+			        },
+			        currentEarlyAlertResponse:{
+				        fn: function(){
+				            return new Ssp.model.tool.earlyalert.EarlyAlertResponse({id:""});
+				    	},
+				        singleton: true
+			        },
+			        currentDocument:{
+				        fn: function(){
+				            return new Ssp.model.PersonDocument({id:""});
+				    	},
+				        singleton: true
+			        },
+			        currentCampus:{
+				        fn: function(){
+				            return new Ssp.model.reference.Campus({id:""});
+				    	},
+				        singleton: true
+			        },
+			        treeStore:{
+				        fn: function(){
+				            return Ext.create('Ext.data.TreeStore',{
+				            	root: {
+				    	          text: 'root',
+				    	          expanded: true,
+				    	          children: []
+				    	        }
+				            });
+				    	},
+				        singleton: true
+			        },
+			        profileSpecialServiceGroupsStore:{
+				        fn: function(){
+				            return Ext.create('Ext.data.Store',{
+				            	model: 'Ssp.model.reference.SpecialServiceGroup'
+				            });
+				    	},
+				        singleton: true
+			        },
+			        profileReferralSourcesStore:{
+				        fn: function(){
+				            return Ext.create('Ext.data.Store',{
+				            	model: 'Ssp.model.reference.ReferralSource'
+				            });
+				    	},
+				        singleton: true
+			        },
+			        errorsStore:{
+				        fn: function(){
+				            return Ext.create('Ext.data.Store',{
+				            	model: 'Ssp.model.FieldError'
+				            });
+				    	},
+				        singleton: true
+			        },
+					abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
+				    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
+				    anticipatedStartTermsStore: 'Ssp.store.reference.AnticipatedStartTerms',
+				    anticipatedStartYearsStore: 'Ssp.store.reference.AnticipatedStartYears',
+					campusesStore: 'Ssp.store.reference.Campuses',
+					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
+				    challengesStore: 'Ssp.store.reference.Challenges',
+					challengeCategoriesStore: 'Ssp.store.reference.ChallengeCategories',
+					challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
+				    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
+				    citizenshipsStore: 'Ssp.store.reference.Citizenships',
+			    	coachesStore: 'Ssp.store.Coaches',
+				    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',		
+				    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
+				    documentsStore: 'Ssp.store.Documents',
+				    earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
+					earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
+					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
+					earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
+				    earlyAlertsStore: 'Ssp.store.EarlyAlerts',
+					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
+				    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
+			    	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
+			    	employmentShiftsStore: 'Ssp.store.reference.EmploymentShifts',
+			    	ethnicitiesStore: 'Ssp.store.reference.Ethnicities',
+			    	fundingSourcesStore: 'Ssp.store.reference.FundingSources',
+			    	gendersStore: 'Ssp.store.reference.Genders',
+				    goalsStore: 'Ssp.store.Goals',
+			    	journalEntriesStore: 'Ssp.store.JournalEntries',
+			    	journalEntryDetailsStore: 'Ssp.store.JournalEntryDetails',
+			    	journalSourcesStore: 'Ssp.store.reference.JournalSources',
+			        journalStepsStore: 'Ssp.store.reference.JournalSteps',
+			        journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
+			        journalTracksStore: 'Ssp.store.reference.JournalTracks',
+			    	maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
+			    	programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
+			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
+				    referralSourcesStore: 'Ssp.store.reference.ReferralSources',
+				    referralSourcesBindStore: 'Ssp.store.reference.ReferralSourcesBind',
+				    serviceReasonsStore: 'Ssp.store.reference.ServiceReasons',
+				    specialServiceGroupsStore: 'Ssp.store.reference.SpecialServiceGroups',
+				    specialServiceGroupsBindStore: 'Ssp.store.reference.SpecialServiceGroupsBind',
+				    statesStore: 'Ssp.store.reference.States',
+				    studentsStore: 'Ssp.store.Students',
+				    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
+				    studentTypesStore: 'Ssp.store.reference.StudentTypes',
+				    tasksStore: 'Ssp.store.Tasks',
+				    toolsStore: 'Ssp.store.Tools',
+			    	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
+			        yesNoStore: 'Ssp.store.reference.YesNo'
+				});
 				
-				// determine the permissions for the current authenticated user
-				Ext.Ajax.request({
-					url: Ssp.mixin.ApiProperties.getBaseAppUrl() + 'session/permissions',
-					method: 'GET',
-					headers: { 'Content-Type': 'application/json' },
-					success: function(response){
-						var r = Ext.decode(response.responseText);
-						if (r.success==true)
-						{				
-							this.permissions = r.permissions;
+				Ext.application({
+				    name: 'Ssp',
+				    appFolder: Ext.Loader.getPath('Ssp'),
+					autoCreateViewport: true,
+				    launch: function( app ) {
+				    	var me=this;
+				    	console.log('launch application');
+				    	Deft.Injector.providers.appEventsController.value.config.app=me;
+				    	Deft.Injector.providers.appEventsController.value.app=me;
+				    	
+				    	// Date patterns for formatting by a description
+				    	// rather than a date format
+				    	Ext.Date.patterns = {
+				    		    ISO8601Long:"Y-m-d H:i:s",
+				    		    ISO8601Short:"Y-m-d",
+				    		    ShortDate: "n/j/Y",
+				    		    LongDate: "l, F d, Y",
+				    		    FullDateTime: "l, F d, Y g:i:s A",
+				    		    MonthDay: "F d",
+				    		    ShortTime: "g:i A",
+				    		    LongTime: "g:i:s A",
+				    		    SortableDateTime: "Y-m-d\\TH:i:s",
+				    		    UniversalSortableDateTime: "Y-m-d H:i:sO",
+				    		    YearMonth: "F, Y"
+				    	};
+				    	
+				    	// Global error handling for Ajax calls 
+				    	Ext.override(Ext.data.proxy.Server, {
+				            constructor: function(config)
+				            {
+				                this.callOverridden([config]);
+				                this.addListener("exception",  function (proxy, response, operation) {
+				                    if (response.responseText != null)
+				                    {
+				                        Ext.Msg.alert('Error', response.responseText);
+				                    }
+				                });
+				            }
+				        });
+				    	
+				    	/*
+				    	 * Provide global asterisks next to required fields
+				    	 */
+				    	Ext.Function.interceptAfter(Ext.form.Field.prototype,'initComponent', function(){
+				    		var fl=this.fieldLabel, ab=this.allowBlank;
+				    		if (ab===false && fl){
+				    			this.fieldLabel += Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY;
+				    		}
+				    	});		
 
-							// configure the application
-							Deft.Injector.configure({
-								sspParentDivId: {
-							        value: sspParentDivId
-							    },
-							    renderSSPFullScreen: {
-							        value: renderSSPFullScreen
-							    },
-								apiUrlStore: {
-									fn: function(){
-										var urlStore = Ext.create('Ext.data.Store', {
-										     model: 'Ssp.model.ApiUrl',
-										     storeId: 'apiUrlStore'
-										 });
-										
-										urlStore.loadData( apiUrls );
-										
-										return urlStore;
-									},
-									singleton: true
-								},
-								sspConfig: {
-							        fn: function(){
-							            return new Ssp.model.Configuration({});
-							        },
-							        singleton: true
-							    },
-								currentPerson: {
-							        fn: function(){
-							            return new Ssp.model.Person({id:""});
-							        },
-							        singleton: true
-							    },
-							    authenticatedPerson: {
-							        fn: function(){
-							        	var p = new Ssp.model.AuthenticatedPerson();
-							        	p.populateFromGenericObject( this.user );
-							        	p.set('permissions',this.permissions);
-							            return p;
-							        },
-							        singleton: true
-							    },
-							    preferences: {
-							        fn: function(){
-							            return new Ssp.model.Preferences();
-							        },
-							        singleton: true
-							    },
-							    apiProperties: {
-							        fn: function(){
-							            return new Ssp.mixin.ApiProperties({});
-							        },
-							        singleton: true
-							    },
-							    formRendererUtils:{
-							        fn: function(){
-							            return new Ssp.util.FormRendererUtils({});
-							    	},
-							        singleton: true
-							    },
-							    columnRendererUtils:{
-							        fn: function(){
-							            return new Ssp.util.ColumnRendererUtils({});
-							    	},
-							        singleton: true
-							    },
-							    treeRendererUtils:{
-							        fn: function(){
-							            return new Ssp.util.TreeRendererUtils({});
-							    	},
-							        singleton: true
-							    },
-						        appEventsController:{
-							        fn: function(){
-							            return new Ssp.controller.ApplicationEventsController({});
-							    	},
-							        singleton: true
-						        },
-								currentAppointment: {
-							        fn: function(){
-							            return new Ssp.model.Appointment({id:""});
-							        },
-							        singleton: true
-							    },
-						        currentChallenge:{
-							        fn: function(){
-							            return new Ssp.model.reference.Challenge({id:""});
-							    	},
-							        singleton: true
-						        },
-						        currentChallengeReferral:{
-							        fn: function(){
-							            return new Ssp.model.reference.ChallengeReferral({id:""});
-							    	},
-							        singleton: true
-						        },
-						        currentJournalStep:{
-							        fn: function(){
-							            return new Ssp.model.reference.JournalStep({id:""});
-							    	},
-							        singleton: true
-						        },
-						        currentJournalStepDetail:{
-							        fn: function(){
-							            return new Ssp.model.reference.JournalStepDetail({id:""});
-							    	},
-							        singleton: true
-						        },
-						        currentTask:{
-							        fn: function(){
-							            return new Ssp.model.tool.actionplan.Task({id:""});
-							    	},
-							        singleton: true
-						        },
-						        currentGoal:{
-							        fn: function(){
-							            return new Ssp.model.PersonGoal({id:""});
-							    	},
-							        singleton: true
-						        },
-						        currentJournalEntry:{
-							        fn: function(){
-							            return new Ssp.model.tool.journal.JournalEntry({id:""});
-							    	},
-							        singleton: true
-						        },
-						        currentEarlyAlert:{
-							        fn: function(){
-							            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:"",courseTitle:'DEV-065-TC - Developmental Reading'});
-							    	},
-							        singleton: true
-						        },
-						        currentEarlyAlertResponse:{
-							        fn: function(){
-							            return new Ssp.model.tool.earlyalert.EarlyAlertResponse({id:""});
-							    	},
-							        singleton: true
-						        },
-						        currentDocument:{
-							        fn: function(){
-							            return new Ssp.model.PersonDocument({id:""});
-							    	},
-							        singleton: true
-						        },
-						        currentCampus:{
-							        fn: function(){
-							            return new Ssp.model.reference.Campus({id:""});
-							    	},
-							        singleton: true
-						        },
-						        treeStore:{
-							        fn: function(){
-							            return Ext.create('Ext.data.TreeStore',{
-							            	root: {
-							    	          text: 'root',
-							    	          expanded: true,
-							    	          children: []
-							    	        }
-							            });
-							    	},
-							        singleton: true
-						        },
-						        profileSpecialServiceGroupsStore:{
-							        fn: function(){
-							            return Ext.create('Ext.data.Store',{
-							            	model: 'Ssp.model.reference.SpecialServiceGroup'
-							            });
-							    	},
-							        singleton: true
-						        },
-						        profileReferralSourcesStore:{
-							        fn: function(){
-							            return Ext.create('Ext.data.Store',{
-							            	model: 'Ssp.model.reference.ReferralSource'
-							            });
-							    	},
-							        singleton: true
-						        },
-						        errorsStore:{
-							        fn: function(){
-							            return Ext.create('Ext.data.Store',{
-							            	model: 'Ssp.model.FieldError'
-							            });
-							    	},
-							        singleton: true
-						        },
-								abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
-							    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
-							    anticipatedStartTermsStore: 'Ssp.store.reference.AnticipatedStartTerms',
-							    anticipatedStartYearsStore: 'Ssp.store.reference.AnticipatedStartYears',
-								campusesStore: 'Ssp.store.reference.Campuses',
-								campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
-							    challengesStore: 'Ssp.store.reference.Challenges',
-								challengeCategoriesStore: 'Ssp.store.reference.ChallengeCategories',
-								challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
-							    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
-							    citizenshipsStore: 'Ssp.store.reference.Citizenships',
-						    	coachesStore: 'Ssp.store.Coaches',
-							    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',		
-							    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
-							    documentsStore: 'Ssp.store.Documents',
-							    earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
-								earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
-								earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
-								earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
-							    earlyAlertsStore: 'Ssp.store.EarlyAlerts',
-								earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
-							    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
-						    	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
-						    	employmentShiftsStore: 'Ssp.store.reference.EmploymentShifts',
-						    	ethnicitiesStore: 'Ssp.store.reference.Ethnicities',
-						    	fundingSourcesStore: 'Ssp.store.reference.FundingSources',
-						    	gendersStore: 'Ssp.store.reference.Genders',
-							    goalsStore: 'Ssp.store.Goals',
-						    	journalEntriesStore: 'Ssp.store.JournalEntries',
-						    	journalEntryDetailsStore: 'Ssp.store.JournalEntryDetails',
-						    	journalSourcesStore: 'Ssp.store.reference.JournalSources',
-						        journalStepsStore: 'Ssp.store.reference.JournalSteps',
-						        journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
-						        journalTracksStore: 'Ssp.store.reference.JournalTracks',
-						    	maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
-						    	programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
-						    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
-							    referralSourcesStore: 'Ssp.store.reference.ReferralSources',
-							    referralSourcesBindStore: 'Ssp.store.reference.ReferralSourcesBind',
-							    serviceReasonsStore: 'Ssp.store.reference.ServiceReasons',
-							    specialServiceGroupsStore: 'Ssp.store.reference.SpecialServiceGroups',
-							    specialServiceGroupsBindStore: 'Ssp.store.reference.SpecialServiceGroupsBind',
-							    statesStore: 'Ssp.store.reference.States',
-							    studentsStore: 'Ssp.store.Students',
-							    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
-							    studentTypesStore: 'Ssp.store.reference.StudentTypes',
-							    tasksStore: 'Ssp.store.Tasks',
-							    toolsStore: 'Ssp.store.Tools',
-						    	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
-						        yesNoStore: 'Ssp.store.reference.YesNo'
-							});
-							
-							Ext.application({
-							    name: 'Ssp',
-							    appFolder: Ext.Loader.getPath('Ssp'),
-								autoCreateViewport: true,
-							    launch: function( app ) {
-							    	var me=this;
-							    	console.log('launch application');
-							    	Deft.Injector.providers.appEventsController.value.config.app=me;
-							    	Deft.Injector.providers.appEventsController.value.app=me;
-							    	
-							    	// Date patterns for formatting by a description
-							    	// rather than a date format
-							    	Ext.Date.patterns = {
-							    		    ISO8601Long:"Y-m-d H:i:s",
-							    		    ISO8601Short:"Y-m-d",
-							    		    ShortDate: "n/j/Y",
-							    		    LongDate: "l, F d, Y",
-							    		    FullDateTime: "l, F d, Y g:i:s A",
-							    		    MonthDay: "F d",
-							    		    ShortTime: "g:i A",
-							    		    LongTime: "g:i:s A",
-							    		    SortableDateTime: "Y-m-d\\TH:i:s",
-							    		    UniversalSortableDateTime: "Y-m-d H:i:sO",
-							    		    YearMonth: "F, Y"
-							    	};
-							    	
-							    	// Global error handling for Ajax calls 
-							    	Ext.override(Ext.data.proxy.Server, {
-							            constructor: function(config)
-							            {
-							                this.callOverridden([config]);
-							                this.addListener("exception",  function (proxy, response, operation) {
-							                    if (response.responseText != null)
-							                    {
-							                        Ext.Msg.alert('Error', response.responseText);
-							                    }
-							                });
-							            }
-							        });
-							    	
-							    	/*
-							    	 * Provide global asterisks next to required fields
-							    	 */
-							    	Ext.Function.interceptAfter(Ext.form.Field.prototype,'initComponent', function(){
-							    		var fl=this.fieldLabel, ab=this.allowBlank;
-							    		if (ab===false && fl){
-							    			this.fieldLabel += Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY;
-							    		}
-							    	});		
+				    	/*
+				    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
+				    	 * Override to provide a function to determine the invalid
+				    	 * fields in a form.
+				    	 */
+				    	Ext.override(Ext.form.BasicForm, {
+				    	    findInvalid: function() {
+				    	        var result = [], it = this.getFields().items, l = it.length, i, f;
+				    	        for (i = 0; i < l; i++) {
+				    	            if(!(f = it[i]).disabled && f.isValid()){
+				    	                result.push(f);
+				    	            }
+				    	        }
+				    	        return result;
+				    	    }
+				    	});	    	
 
-							    	/*
-							    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
-							    	 * Override to provide a function to determine the invalid
-							    	 * fields in a form.
-							    	 */
-							    	Ext.override(Ext.form.BasicForm, {
-							    	    findInvalid: function() {
-							    	        var result = [], it = this.getFields().items, l = it.length, i, f;
-							    	        for (i = 0; i < l; i++) {
-							    	            if(!(f = it[i]).disabled && f.isValid()){
-							    	                result.push(f);
-							    	            }
-							    	        }
-							    	        return result;
-							    	    }
-							    	});	    	
+				    	/*
+				    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
+				    	 * Override component so that the first invalid field
+				    	 * will be displayed for the user when a form is invalid.
+				    	 */
+				    	Ext.override(Ext.Component, {
+				    	    ensureVisible: function(stopAt) {
+				    	    	var p;
+				    	        this.ownerCt.bubble(function(c) {
+				    	        	if (p = c.ownerCt) {
+				    	                if (p instanceof Ext.TabPanel) {
+				    	                    p.setActiveTab(c);
+				    	                } else if (p.layout.setActiveItem) {
+				    	                    p.layout.setActiveItem(c);
+				    	                } else if (p.layout.type == 'accordion'){
+				    	                	c.expand();
+				    	                }
+				    	            }
+				    	            return (c !== stopAt);
+				    	        });
+				    	        //this.el.scrollIntoView(this.el.up(':scrollable'));
+				    	        return this;
+				    	    }
+				    	});
 
-							    	/*
-							    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
-							    	 * Override component so that the first invalid field
-							    	 * will be displayed for the user when a form is invalid.
-							    	 */
-							    	Ext.override(Ext.Component, {
-							    	    ensureVisible: function(stopAt) {
-							    	    	var p;
-							    	        this.ownerCt.bubble(function(c) {
-							    	        	if (p = c.ownerCt) {
-							    	                if (p instanceof Ext.TabPanel) {
-							    	                    p.setActiveTab(c);
-							    	                } else if (p.layout.setActiveItem) {
-							    	                    p.layout.setActiveItem(c);
-							    	                } else if (p.layout.type == 'accordion'){
-							    	                	c.expand();
-							    	                }
-							    	            }
-							    	            return (c !== stopAt);
-							    	        });
-							    	        //this.el.scrollIntoView(this.el.up(':scrollable'));
-							    	        return this;
-							    	    }
-							    	});
-
-							    	/*
-							    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
-							    	 * Enables scrolling to the nearest visible elements
-							    	 * in a form for use with the above override for
-							    	 * visually indicating when a form validation fails
-							    	 * and setting the user to see the first invalid field.    	 
-							    	Ext.DomQuery.pseudos.scrollable = function(c, t) {
-							    	    var r = [], ri = -1;
-							    	    for(var i = 0, ci; ci = c[i]; i++){
-							    	        var o = ci.style.overflow;
-							    	        if(o=='auto'||o=='scroll') {
-							    	            if (ci.scrollHeight < Ext.fly(ci).getHeight(true)) r[++ri] = ci;
-							    	        }
-							    	    }
-							    	    return r;
-							    	};
-							    	*/    	
-							    	
-						   	    	// load the main view
-						    		Ext.apply(me,{
-							    		items: [{xtype:'sspview'}]
-							    	});	    	
-							    	
-							   }
-							});							
-							
-						}else{
-							Ext.Msg.alert('Error','Unable to determine permissions for authenticated user. Please see your system administrator for assistance.');
-						}
-					}
-				}, this);
+				    	/*
+				    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
+				    	 * Enables scrolling to the nearest visible elements
+				    	 * in a form for use with the above override for
+				    	 * visually indicating when a form validation fails
+				    	 * and setting the user to see the first invalid field.    	 
+				    	Ext.DomQuery.pseudos.scrollable = function(c, t) {
+				    	    var r = [], ri = -1;
+				    	    for(var i = 0, ci; ci = c[i]; i++){
+				    	        var o = ci.style.overflow;
+				    	        if(o=='auto'||o=='scroll') {
+				    	            if (ci.scrollHeight < Ext.fly(ci).getHeight(true)) r[++ri] = ci;
+				    	        }
+				    	    }
+				    	    return r;
+				    	};
+				    	*/    	
+				    	
+			   	    	// load the main view
+			    		Ext.apply(me,{
+				    		items: [{xtype:'sspview'}]
+				    	});	    	
+				    	
+				   }
+				});
 				
 			}else{
 				Ext.Msg.alert('Error','Unable to determine authenticated user. Please see your system administrator for assistance.');
