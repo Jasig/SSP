@@ -12,7 +12,10 @@
 <link href="<c:url value="/resources/css/ssp-ext-theme.css" />" rel="stylesheet" type="text/css" />
 
 <!-- ExtJS Lib -->
-<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/ext.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/ext-all.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/CheckColumn.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/form/MultiSelect.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/form/ItemSelector.js" />"></script>   
 
 <!-- DEFT Lib -->
 <script type="text/javascript" src="<c:url value="/js/libs/deft/deft-0.6.3.js" />"></script>

@@ -182,7 +182,6 @@ Ext.require([
     'Ssp.store.reference.YesNo',
     'Ssp.controller.ApplicationEventsController',
     'Ext.tab.*',
-	'Ext.ux.CheckColumn',
 	'Ext.util.Filter',
 	'Ext.data.TreeStore',
 	'Ext.dd.DropTarget',
@@ -190,9 +189,10 @@ Ext.require([
 	'Ext.form.field.VTypes',
 	'Ext.form.field.Text',
 	'Ext.form.field.TextArea',
+	'Ext.form.FieldSet',
+	'Ext.ux.CheckColumn',
 	'Ext.ux.form.MultiSelect',
-	'Ext.ux.form.ItemSelector',
-	'Ext.form.FieldSet'
+	'Ext.ux.form.ItemSelector'
 ]);
 
 var apiUrls = [

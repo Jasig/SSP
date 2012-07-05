@@ -30,6 +30,10 @@
 		
 		<intercept-url pattern="/index.html" access="isAuthenticated()" />
 		
+		<!-- Use for compiling jsb3 file from SSP app.
+		<intercept-url pattern="/index.html" access="permitAll" />
+		-->
+		 
 		<form-login login-page="/login.jsp" 
 			default-target-url="/index.html"
 			authentication-failure-url="/login.jsp?login_error=1" />

@@ -1,0 +1,991 @@
+{
+    "projectName": "Student Success Plan",
+    "licenseText": "Copyright(c) 2012 Sinclair Community College",
+    "builds": [
+        {
+            "name": "All Classes",
+            "target": "all-classes.js",
+            "options": {
+                "debug": true
+            },
+            "files": [
+                {
+                    "clsName": "Ssp.view.admin.AdminTreeMenu",
+                    "name": "AdminTreeMenu.js",
+                    "path": "/app/view/admin/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.AdminForms",
+                    "name": "AdminForms.js",
+                    "path": "/app/view/admin/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.AdminMain",
+                    "name": "AdminMain.js",
+                    "path": "/app/view/admin/"
+                },
+                {
+                    "clsName": "Ssp.view.Search",
+                    "name": "Search.js",
+                    "path": "/app/view/"
+                },
+                {
+                    "clsName": "Ssp.view.Main",
+                    "name": "Main.js",
+                    "path": "/app/view/"
+                },
+                {
+                    "clsName": "Ssp.view.StudentRecord",
+                    "name": "StudentRecord.js",
+                    "path": "/app/view/"
+                },
+                {
+                    "clsName": "Ssp.view.person.CaseloadAssignment",
+                    "name": "CaseloadAssignment.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.EditPerson",
+                    "name": "EditPerson.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.Coach",
+                    "name": "Coach.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.Appointment",
+                    "name": "Appointment.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.SpecialServiceGroups",
+                    "name": "SpecialServiceGroups.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.ReferralSources",
+                    "name": "ReferralSources.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.ServiceReasons",
+                    "name": "ServiceReasons.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.AnticipatedStartDate",
+                    "name": "AnticipatedStartDate.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.component.MappedTextField",
+                    "name": "MappedTextField.js",
+                    "path": "/app/view/component/"
+                },
+                {
+                    "clsName": "Ssp.view.component.MappedTextArea",
+                    "name": "MappedTextArea.js",
+                    "path": "/app/view/component/"
+                },
+                {
+                    "clsName": "Ssp.view.component.MappedCheckBox",
+                    "name": "MappedCheckBox.js",
+                    "path": "/app/view/component/"
+                },
+                {
+                    "clsName": "Ssp.view.component.MappedRadioButton",
+                    "name": "MappedRadioButton.js",
+                    "path": "/app/view/component/"
+                },
+                {
+                    "clsName": "Ssp.view.ToolsMenu",
+                    "name": "ToolsMenu.js",
+                    "path": "/app/view/"
+                },
+                {
+                    "clsName": "Ssp.view.Tools",
+                    "name": "Tools.js",
+                    "path": "/app/view/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Profile",
+                    "name": "Profile.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Person",
+                    "name": "Person.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.SpecialServiceGroups",
+                    "name": "SpecialServiceGroups.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.ReferralSources",
+                    "name": "ReferralSources.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.ServicesProvided",
+                    "name": "ServicesProvided.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.ActionPlan",
+                    "name": "ActionPlan.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.Tasks",
+                    "name": "Tasks.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.AddTask",
+                    "name": "AddTask.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.AddTaskForm",
+                    "name": "AddTaskForm.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.EditGoalForm",
+                    "name": "EditGoalForm.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.DisplayActionPlan",
+                    "name": "DisplayActionPlan.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.DisplayActionPlanGoals",
+                    "name": "DisplayActionPlanGoals.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.DisplayStrengths",
+                    "name": "DisplayStrengths.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.TaskTree",
+                    "name": "TaskTree.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentintake.StudentIntake",
+                    "name": "StudentIntake.js",
+                    "path": "/app/view/tools/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentintake.Challenges",
+                    "name": "Challenges.js",
+                    "path": "/app/view/tools/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentintake.EducationGoals",
+                    "name": "EducationGoals.js",
+                    "path": "/app/view/tools/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentintake.Demographics",
+                    "name": "Demographics.js",
+                    "path": "/app/view/tools/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentintake.EducationLevels",
+                    "name": "EducationLevels.js",
+                    "path": "/app/view/tools/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentintake.EducationPlans",
+                    "name": "EducationPlans.js",
+                    "path": "/app/view/tools/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentintake.Funding",
+                    "name": "Funding.js",
+                    "path": "/app/view/tools/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentintake.Personal",
+                    "name": "Personal.js",
+                    "path": "/app/view/tools/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.journal.Journal",
+                    "name": "Journal.js",
+                    "path": "/app/view/tools/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.journal.EditJournal",
+                    "name": "EditJournal.js",
+                    "path": "/app/view/tools/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.journal.DisplayDetails",
+                    "name": "DisplayDetails.js",
+                    "path": "/app/view/tools/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.journal.TrackTree",
+                    "name": "TrackTree.js",
+                    "path": "/app/view/tools/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.earlyalert.EarlyAlert",
+                    "name": "EarlyAlert.js",
+                    "path": "/app/view/tools/earlyalert/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.earlyalert.EarlyAlertResponse",
+                    "name": "EarlyAlertResponse.js",
+                    "path": "/app/view/tools/earlyalert/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.document.StudentDocuments",
+                    "name": "StudentDocuments.js",
+                    "path": "/app/view/tools/document/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.document.EditDocument",
+                    "name": "EditDocument.js",
+                    "path": "/app/view/tools/document/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.sis.StudentInformationSystem",
+                    "name": "StudentInformationSystem.js",
+                    "path": "/app/view/tools/sis/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.sis.Registration",
+                    "name": "Registration.js",
+                    "path": "/app/view/tools/sis/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.sis.Assessment",
+                    "name": "Assessment.js",
+                    "path": "/app/view/tools/sis/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.sis.Transcript",
+                    "name": "Transcript.js",
+                    "path": "/app/view/tools/sis/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.sis.Act",
+                    "name": "Act.js",
+                    "path": "/app/view/tools/sis/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.disability.DisabilityServices",
+                    "name": "DisabilityServices.js",
+                    "path": "/app/view/tools/disability/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.disability.General",
+                    "name": "General.js",
+                    "path": "/app/view/tools/disability/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.disability.AgencyContacts",
+                    "name": "AgencyContacts.js",
+                    "path": "/app/view/tools/disability/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.disability.DisabilityCodes",
+                    "name": "DisabilityCodes.js",
+                    "path": "/app/view/tools/disability/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.disability.Disposition",
+                    "name": "Disposition.js",
+                    "path": "/app/view/tools/disability/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.disability.Accommodations",
+                    "name": "Accommodations.js",
+                    "path": "/app/view/tools/disability/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.displacedworker.DisplacedWorker",
+                    "name": "DisplacedWorker.js",
+                    "path": "/app/view/tools/displacedworker/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentsuccess.StudentSuccess",
+                    "name": "StudentSuccess.js",
+                    "path": "/app/view/tools/studentsuccess/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.AbstractReferenceAdmin",
+                    "name": "AbstractReferenceAdmin.js",
+                    "path": "/app/view/admin/forms/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin",
+                    "name": "ConfidentialityDisclosureAgreementAdmin.js",
+                    "path": "/app/view/admin/forms/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.crg.ChallengeAdmin",
+                    "name": "ChallengeAdmin.js",
+                    "path": "/app/view/admin/forms/crg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.crg.ChallengeReferralAdmin",
+                    "name": "ChallengeReferralAdmin.js",
+                    "path": "/app/view/admin/forms/crg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.crg.AssociateChallengeCategoriesAdmin",
+                    "name": "AssociateChallengeCategoriesAdmin.js",
+                    "path": "/app/view/admin/forms/crg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin",
+                    "name": "AssociateChallengeReferralsAdmin.js",
+                    "path": "/app/view/admin/forms/crg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.crg.DisplayChallengesAdmin",
+                    "name": "DisplayChallengesAdmin.js",
+                    "path": "/app/view/admin/forms/crg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.crg.DisplayReferralsAdmin",
+                    "name": "DisplayReferralsAdmin.js",
+                    "path": "/app/view/admin/forms/crg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.crg.EditChallenge",
+                    "name": "EditChallenge.js",
+                    "path": "/app/view/admin/forms/crg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.crg.EditReferral",
+                    "name": "EditReferral.js",
+                    "path": "/app/view/admin/forms/crg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.journal.JournalStepAdmin",
+                    "name": "JournalStepAdmin.js",
+                    "path": "/app/view/admin/forms/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.journal.JournalStepDetailAdmin",
+                    "name": "JournalStepDetailAdmin.js",
+                    "path": "/app/view/admin/forms/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.journal.AssociateTrackStepsAdmin",
+                    "name": "AssociateTrackStepsAdmin.js",
+                    "path": "/app/view/admin/forms/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.journal.AssociateStepDetailsAdmin",
+                    "name": "AssociateStepDetailsAdmin.js",
+                    "path": "/app/view/admin/forms/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.journal.DisplayDetailsAdmin",
+                    "name": "DisplayDetailsAdmin.js",
+                    "path": "/app/view/admin/forms/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.journal.DisplayStepsAdmin",
+                    "name": "DisplayStepsAdmin.js",
+                    "path": "/app/view/admin/forms/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.journal.EditStep",
+                    "name": "EditStep.js",
+                    "path": "/app/view/admin/forms/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.journal.EditStepDetail",
+                    "name": "EditStepDetail.js",
+                    "path": "/app/view/admin/forms/journal/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.campus.CampusAdmin",
+                    "name": "CampusAdmin.js",
+                    "path": "/app/view/admin/forms/campus/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.campus.DefineCampus",
+                    "name": "DefineCampus.js",
+                    "path": "/app/view/admin/forms/campus/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.campus.EditCampus",
+                    "name": "EditCampus.js",
+                    "path": "/app/view/admin/forms/campus/"
+                },
+                {
+                    "clsName": "Ssp.view.ErrorWindow",
+                    "name": "ErrorWindow.js",
+                    "path": "/app/view/"
+                },
+                {
+                    "clsName": "Ssp.model.Preferences",
+                    "name": "Preferences.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.FieldError",
+                    "name": "FieldError.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.util.TreeRequest",
+                    "name": "TreeRequest.js",
+                    "path": "/app/model/util/"
+                },
+                {
+                    "clsName": "Ssp.model.Configuration",
+                    "name": "Configuration.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.studentintake.StudentIntakeForm",
+                    "name": "StudentIntakeForm.js",
+                    "path": "/app/model/tool/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.journal.JournalEntryDetail",
+                    "name": "JournalEntryDetail.js",
+                    "path": "/app/model/tool/journal/"
+                },
+                {
+                    "clsName": "Ssp.model.ApiUrl",
+                    "name": "ApiUrl.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.mixin.ApiProperties",
+                    "name": "ApiProperties.js",
+                    "path": "/app/mixin/"
+                },
+                {
+                    "clsName": "Ssp.util.FormRendererUtils",
+                    "name": "FormRendererUtils.js",
+                    "path": "/app/util/"
+                },
+                {
+                    "clsName": "Ssp.util.ColumnRendererUtils",
+                    "name": "ColumnRendererUtils.js",
+                    "path": "/app/util/"
+                },
+                {
+                    "clsName": "Ssp.util.TreeRendererUtils",
+                    "name": "TreeRendererUtils.js",
+                    "path": "/app/util/"
+                },
+                {
+                    "clsName": "Ssp.util.Constants",
+                    "name": "Constants.js",
+                    "path": "/app/util/"
+                },
+                {
+                    "clsName": "Ssp.store.JournalEntryDetails",
+                    "name": "JournalEntryDetails.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.admin.AdminTreeMenus",
+                    "name": "AdminTreeMenus.js",
+                    "path": "/app/store/admin/"
+                },
+                {
+                    "clsName": "Ssp.controller.ApplicationEventsController",
+                    "name": "ApplicationEventsController.js",
+                    "path": "/app/controller/"
+                },
+                {
+                    "clsName": "Ssp.model.AbstractBase",
+                    "name": "AbstractBase.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.Coach",
+                    "name": "Coach.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.Gender",
+                    "name": "Gender.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.State",
+                    "name": "State.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.Tool",
+                    "name": "Tool.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.Person",
+                    "name": "Person.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.PersonAppointment",
+                    "name": "PersonAppointment.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.Appointment",
+                    "name": "Appointment.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.PersonGoal",
+                    "name": "PersonGoal.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.PersonDocument",
+                    "name": "PersonDocument.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.studentintake.PersonDemographics",
+                    "name": "PersonDemographics.js",
+                    "path": "/app/model/tool/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.studentintake.PersonEducationGoal",
+                    "name": "PersonEducationGoal.js",
+                    "path": "/app/model/tool/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.studentintake.PersonEducationPlan",
+                    "name": "PersonEducationPlan.js",
+                    "path": "/app/model/tool/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.actionplan.Task",
+                    "name": "Task.js",
+                    "path": "/app/model/tool/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.earlyalert.PersonEarlyAlert",
+                    "name": "PersonEarlyAlert.js",
+                    "path": "/app/model/tool/earlyalert/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.earlyalert.EarlyAlertResponse",
+                    "name": "EarlyAlertResponse.js",
+                    "path": "/app/model/tool/earlyalert/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.journal.JournalEntry",
+                    "name": "JournalEntry.js",
+                    "path": "/app/model/tool/journal/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.AbstractReference",
+                    "name": "AbstractReference.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.Challenge",
+                    "name": "Challenge.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ChallengeCategory",
+                    "name": "ChallengeCategory.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ChallengeReferral",
+                    "name": "ChallengeReferral.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.JournalTrack",
+                    "name": "JournalTrack.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.JournalStep",
+                    "name": "JournalStep.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.JournalStepDetail",
+                    "name": "JournalStepDetail.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ConfidentialityLevel",
+                    "name": "ConfidentialityLevel.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ConfidentialityDisclosureAgreement",
+                    "name": "ConfidentialityDisclosureAgreement.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.Coaches",
+                    "name": "Coaches.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.Goals",
+                    "name": "Goals.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.JournalEntries",
+                    "name": "JournalEntries.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.EarlyAlerts",
+                    "name": "EarlyAlerts.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.Documents",
+                    "name": "Documents.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.AbstractReferences",
+                    "name": "AbstractReferences.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.AnticipatedStartTerms",
+                    "name": "AnticipatedStartTerms.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.AnticipatedStartYears",
+                    "name": "AnticipatedStartYears.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.Challenges",
+                    "name": "Challenges.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ChallengeCategories",
+                    "name": "ChallengeCategories.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ChallengeReferrals",
+                    "name": "ChallengeReferrals.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ConfidentialityLevels",
+                    "name": "ConfidentialityLevels.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.Genders",
+                    "name": "Genders.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.JournalStepDetails",
+                    "name": "JournalStepDetails.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.JournalSteps",
+                    "name": "JournalSteps.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.JournalTracks",
+                    "name": "JournalTracks.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.States",
+                    "name": "States.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.Students",
+                    "name": "Students.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.Tools",
+                    "name": "Tools.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.YesNo",
+                    "name": "YesNo.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.actionplan.TaskGroup",
+                    "name": "TaskGroup.js",
+                    "path": "/app/model/tool/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.store.Tasks",
+                    "name": "Tasks.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.EmploymentShift",
+                    "name": "EmploymentShift.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.EmploymentShifts",
+                    "name": "EmploymentShifts.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.Campus",
+                    "name": "Campus.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.CampusEarlyAlertRouting",
+                    "name": "CampusEarlyAlertRouting.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ChildCareArrangement",
+                    "name": "ChildCareArrangement.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.Citizenship",
+                    "name": "Citizenship.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.EarlyAlertOutcome",
+                    "name": "EarlyAlertOutcome.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.EarlyAlertOutreach",
+                    "name": "EarlyAlertOutreach.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.EarlyAlertReason",
+                    "name": "EarlyAlertReason.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.EarlyAlertReferral",
+                    "name": "EarlyAlertReferral.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.EarlyAlertSuggestion",
+                    "name": "EarlyAlertSuggestion.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.Ethnicity",
+                    "name": "Ethnicity.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.FundingSource",
+                    "name": "FundingSource.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.JournalSource",
+                    "name": "JournalSource.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.MaritalStatus",
+                    "name": "MaritalStatus.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ProgramStatus",
+                    "name": "ProgramStatus.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ProgramStatusChangeReason",
+                    "name": "ProgramStatusChangeReason.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ReferralSource",
+                    "name": "ReferralSource.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ServiceReason",
+                    "name": "ServiceReason.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.SpecialServiceGroup",
+                    "name": "SpecialServiceGroup.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.VeteranStatus",
+                    "name": "VeteranStatus.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.StudentType",
+                    "name": "StudentType.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.StudentStatus",
+                    "name": "StudentStatus.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.Campuses",
+                    "name": "Campuses.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.CampusEarlyAlertRoutings",
+                    "name": "CampusEarlyAlertRoutings.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ChildCareArrangements",
+                    "name": "ChildCareArrangements.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.Citizenships",
+                    "name": "Citizenships.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.EarlyAlertOutcomes",
+                    "name": "EarlyAlertOutcomes.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.EarlyAlertOutreaches",
+                    "name": "EarlyAlertOutreaches.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.EarlyAlertReasons",
+                    "name": "EarlyAlertReasons.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.EarlyAlertReferrals",
+                    "name": "EarlyAlertReferrals.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.EarlyAlertSuggestions",
+                    "name": "EarlyAlertSuggestions.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.Ethnicities",
+                    "name": "Ethnicities.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.FundingSources",
+                    "name": "FundingSources.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.JournalSources",
+                    "name": "JournalSources.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.MaritalStatuses",
+                    "name": "MaritalStatuses.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ProgramStatuses",
+                    "name": "ProgramStatuses.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ProgramStatusChangeReasons",
+                    "name": "ProgramStatusChangeReasons.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ReferralSources",
+                    "name": "ReferralSources.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ServiceReasons",
+                    "name": "ServiceReasons.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.SpecialServiceGroups",
+                    "name": "SpecialServiceGroups.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.StudentStatuses",
+                    "name": "StudentStatuses.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.StudentTypes",
+                    "name": "StudentTypes.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.VeteranStatuses",
+                    "name": "VeteranStatuses.js",
+                    "path": "/app/store/reference/"
+                }
+            ]
+        },
+        {
+            "name": "Application - Production",
+            "target": "app-all.js",
+            "compress": true,
+            "files": [
+                {
+                    "path": "",
+                    "name": "all-classes.js"
+                },
+                {
+                    "path": "",
+                    "name": "app.js"
+                }
+            ]
+        }
+    ],
+    "resources": []
+}
