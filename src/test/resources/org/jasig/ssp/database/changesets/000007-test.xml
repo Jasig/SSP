@@ -183,8 +183,55 @@
 		</rollback>
 	</changeSet>	
 	
+
+	<changeSet id="test program status for james" author="daniel.bower">
+		<insert tableName="person_program_status">
+			<column name="id" value="c0403da8-c6a6-11e1-af59-0026b9e7ff4c" />
+			<column name="person_id" value="1010E4A0-1001-0110-1011-4FFC02FE81FF" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_id" value="b2d12527-5056-a51a-8054-113116baab88" />
+			<column name="effective_date" valueDate="2012-03-20T00:00:00" />
+			<column name="expiration_date" valueDate="2014-03-20T00:00:00" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="person_program_status">
+				<where>id='c0403da8-c6a6-11e1-af59-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 	
-	
-	
+	<changeSet id="Set coach" author="daniel.bower">
+		<update tableName="person">
+			<column name="coach_id">252de4a0-7c06-4254-b7d8-4ffc02fe81ff</column>
+			<where>id = '1010e4a0-1001-0110-1011-4ffc02fe81ff'</where>
+		</update>
+		<update tableName="person">
+			<column name="coach_id">252de4a0-7c06-4254-b7d8-4ffc02fe81ff</column>
+			<where>id = '7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194'</where>
+		</update>
+		<update tableName="person">
+			<column name="coach_id">252de4a0-7c06-4254-b7d8-4ffc02fe81ff</column>
+			<where>id = 'f549ecab-5110-4cc1-b2bb-369cac854dea'</where>
+		</update>
+		<rollback>
+			<update tableName="person">
+				<column name="coach_id"></column>
+				<where>id = '1010e4a0-1001-0110-1011-4ffc02fe81ff'</where>
+			</update>
+			<update tableName="person">
+				<column name="coach_id"></column>
+				<where>id = '7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194'</where>
+			</update>
+			<update tableName="person">
+				<column name="coach_id"></column>
+				<where>id = 'f549ecab-5110-4cc1-b2bb-369cac854dea'</where>
+			</update>
+		</rollback>
+	</changeSet>
 
 </databaseChangeLog>

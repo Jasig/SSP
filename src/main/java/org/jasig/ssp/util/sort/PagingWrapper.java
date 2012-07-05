@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.jasig.ssp.model.Auditable;
-
 /**
  * Wrap results (rows) that have been paged but still include the total record
  * count in this returned data instance.
@@ -13,9 +11,8 @@ import org.jasig.ssp.model.Auditable;
  * @author jon.adams
  * 
  * @param <T>
- *            Model type that must inherit from Auditable
  */
-public class PagingWrapper<T extends Auditable> implements Serializable,
+public class PagingWrapper<T> implements Serializable,
 		Iterable<T> {
 
 	private static final long serialVersionUID = -6028264862839080192L;

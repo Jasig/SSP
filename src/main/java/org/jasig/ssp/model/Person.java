@@ -362,6 +362,12 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private Set<PersonReferralSource> referralSources;
 
 	@Nullable
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
+	private Set<PersonProgramStatus> programStatuses;
+
+	@Nullable
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_type_id", updatable = false, nullable = true)
 	private StudentType studentType;
@@ -745,6 +751,15 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	public void setStudentType(final StudentType studentType) {
 		this.studentType = studentType;
+	}
+
+	public Set<PersonProgramStatus> getProgramStatuses() {
+		return programStatuses;
+	}
+
+	public void setProgramStatuses(
+			final Set<PersonProgramStatus> programStatuses) {
+		this.programStatuses = programStatuses;
 	}
 
 	@Override
