@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.DataPermissions;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -51,4 +52,7 @@ public interface ConfidentialityLevelService extends
 
 	Collection<ConfidentialityLevel> filterConfidentialityLevelsFromGrantedAuthorities(
 			Collection<GrantedAuthority> authorities);
+
+	Collection<ConfidentialityLevel> confidentialityLevelsForSspUser(
+			SspUser user);
 }

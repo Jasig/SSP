@@ -16,6 +16,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonReferralSource;
 import org.jasig.ssp.model.PersonServiceReason;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.ReferralSource;
 import org.jasig.ssp.model.reference.ServiceReason;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
@@ -97,6 +98,10 @@ public class PersonTO // NOPMD
 	private List<ReferenceLiteTO<ReferralSource>> referralSources;
 
 	private List<ReferenceLiteTO<ServiceReason>> serviceReasons;
+
+	private List<ReferenceLiteTO<ConfidentialityLevel>> confidentialityLevels;
+
+	private List<String> permissions;
 
 	/**
 	 * Empty constructor
@@ -486,4 +491,22 @@ public class PersonTO // NOPMD
 		coach = new PersonLiteTO();
 		coach.setId(coachId);
 	}
+
+	public List<ReferenceLiteTO<ConfidentialityLevel>> getConfidentialityLevels() {
+		return confidentialityLevels;
+	}
+
+	public void setConfidentialityLevels(
+			final List<ReferenceLiteTO<ConfidentialityLevel>> confidentialityLevels) {
+		this.confidentialityLevels = confidentialityLevels;
+	}
+
+	public List<String> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(final List<String> permissions) {
+		this.permissions = permissions;
+	}
+
 }

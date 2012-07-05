@@ -1,16 +1,15 @@
 package org.jasig.ssp.web.api;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +49,15 @@ public class SessionController extends BaseController {
 
 		final Map<String, Object> model = Maps.newHashMap();
 
+		final List<String> permissions = permissions();
+
+		model.put("success", true);
+		model.put("permissions", permissions);
+
+		return model;
+	}
+
+	private List<String> permissions() {
 		final List<String> permissions = Lists.newArrayList();
 
 		final SspUser user = service.currentlyAuthenticatedUser();
@@ -60,10 +68,7 @@ public class SessionController extends BaseController {
 			}
 		}
 
-		model.put("success", true);
-		model.put("permissions", permissions);
-
-		return model;
+		return permissions;
 	}
 
 	@RequestMapping(value = "/confidentialityLevels", method = RequestMethod.GET)
@@ -72,23 +77,12 @@ public class SessionController extends BaseController {
 
 		final Map<String, Object> model = Maps.newHashMap();
 
-		final List<String> permissions = Lists.newArrayList();
-
-		Collection<ConfidentialityLevel> levels = null;
-
 		final SspUser user = service.currentlyAuthenticatedUser();
 
-		if (user != null) {
-			for (GrantedAuthority auth : user.getAuthorities()) {
-				permissions.add(auth.getAuthority());
-			}
-
-			levels = confidentialityLevelService
-					.filterConfidentialityLevelsFromPermissions(permissions);
-		}
-
 		model.put("success", true);
-		model.put("levels", levels);
+		model.put("levels", ReferenceLiteTO.toTOList(
+				confidentialityLevelService
+						.confidentialityLevelsForSspUser(user)));
 
 		return model;
 	}
@@ -118,7 +112,15 @@ public class SessionController extends BaseController {
 		}
 
 		// Return authenticated person transfer object
-		return factory.from(user.getPerson());
+		final PersonTO personTO = factory.from(user.getPerson());
+
+		personTO.setConfidentialityLevels(ReferenceLiteTO
+				.toTOList(confidentialityLevelService
+						.confidentialityLevelsForSspUser(user)));
+
+		personTO.setPermissions(permissions());
+
+		return personTO;
 	}
 
 	@Override

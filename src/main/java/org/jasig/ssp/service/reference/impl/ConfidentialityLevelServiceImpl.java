@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.DataPermissions;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
@@ -112,12 +113,27 @@ public class ConfidentialityLevelServiceImpl extends
 						ObjectStatus.ACTIVE)).getRows();
 
 		for (final ConfidentialityLevel level : levels) {
-			if (authorities
-					.contains(level.getPermission().asGrantedAuthority())) {
-				filtered.add(level);
+			for (GrantedAuthority auth : authorities) {
+				if (auth.getAuthority().equals(
+						level.getPermission().asPermissionString())) {
+					filtered.add(level);
+					break;
+				}
 			}
+
 		}
 
 		return filtered;
+	}
+
+	@Override
+	public Collection<ConfidentialityLevel> confidentialityLevelsForSspUser(
+			final SspUser user) {
+		if (user != null) {
+			return filterConfidentialityLevelsFromGrantedAuthorities(user
+					.getAuthorities());
+		}
+
+		return null;
 	}
 }
