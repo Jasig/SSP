@@ -41,7 +41,6 @@ public class PersonTO // NOPMD
 
 	private Date birthDate;
 
-	@NotNull
 	private String primaryEmailAddress;
 
 	private String secondaryEmailAddress;
