@@ -92,11 +92,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	/**
 	 * Primary e-mail address; required.
 	 * 
-	 * Can not be null or empty. Maximum length of 100 characters.
+	 * Maximum length of 100 characters.
 	 */
 	@Column(length = 100)
-	@NotNull
-	@NotEmpty
 	@Size(max = 100)
 	private String primaryEmailAddress;
 

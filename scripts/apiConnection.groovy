@@ -34,6 +34,8 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	//remove the referenceData
 	result.referenceData = null
 	
+	result.person.primaryEmailAddress = 'test@sinclair.edu'
+	
 	//add a challenge
 	List<PersonChallengeTO> challenges = Lists.newArrayList();
 	challenges << new PersonChallengeTO(challengeId: UUID.fromString("07b5c3ac-3bdf-4d12-b65d-94cb55167998"), personId: UUID.fromString(result.person.id), description:"Childcare")
@@ -94,6 +96,16 @@ String toJson(def form){
 	return builder.toString()
 }
 
+String search(ApiConnection conn){
+	//"/1/person/search"
+	return conn.get("api/1/person/search?searchTerm=dennis")
+}
+
+String getCaseload(ApiConnection conn){
+	//"/1/person/caseload"
+	return conn.get("api/1/person/caseload")
+}
+
 /**
  * You can exercise the ssp api from within STS (eclipse) using this script
  */
@@ -101,11 +113,13 @@ String toJson(def form){
 JsonSlurper jsonParser = new JsonSlurper()
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0", "advisor0", false)
 
-//String output = getStudentIntakeForm(conn, jsonParser)
+String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
 //String output = addGoalToPerson(conn) 
 //String output = getAllJournalEntriesForPerson(conn);
-String output = getPerson(conn)
+//String output = getPerson(conn)
+//String output = search(conn)
+//String output = getCaseload(conn)
 
 conn.formatAndPrintJson(output)
 //println (output);

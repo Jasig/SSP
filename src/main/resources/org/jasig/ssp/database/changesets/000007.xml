@@ -358,4 +358,11 @@ Thank you.</body></html>]]>
 		</rollback>
 	</changeSet>
 
+	<changeSet id="primary email is nullable" author="daniel.bower">
+		<dropNotNullConstraint tableName="person" columnName="primary_email_address"/>
+		<rollback>
+			<addNotNullConstraint tableName="person" columnName="primary_email_address"/>
+		</rollback>
+	</changeSet>
+	
 </databaseChangeLog>
