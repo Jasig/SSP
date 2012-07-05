@@ -3,6 +3,7 @@ package org.jasig.ssp.transferobject;
 import java.util.Date;
 import java.util.UUID;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 
@@ -57,6 +58,7 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		return createdDate == null ? null : new Date(createdDate.getTime());
 	}
 
+	@JsonIgnore
 	public void setCreatedDate(final Date createdDate) {
 		this.createdDate = createdDate == null ? null : new Date(
 				createdDate.getTime());
@@ -66,6 +68,7 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		return createdBy;
 	}
 
+	@JsonIgnore
 	public void setCreatedBy(final PersonLiteTO createdBy) {
 		this.createdBy = createdBy;
 	}
@@ -74,6 +77,7 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		return modifiedDate == null ? null : new Date(modifiedDate.getTime());
 	}
 
+	@JsonIgnore
 	public void setModifiedDate(final Date modifiedDate) {
 		this.modifiedDate = modifiedDate == null ? null : new Date(
 				modifiedDate.getTime());
@@ -83,6 +87,7 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		return modifiedBy;
 	}
 
+	@JsonIgnore
 	public void setModifiedBy(
 			final PersonLiteTO modifiedBy) {
 		this.modifiedBy = modifiedBy;
