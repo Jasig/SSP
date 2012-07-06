@@ -23,6 +23,7 @@ import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.ReferralSource;
 import org.jasig.ssp.model.reference.ServiceReason;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 import com.google.common.collect.Lists;
@@ -76,7 +77,7 @@ public class PersonTO // NOPMD
 
 	private Boolean enabled;
 
-	private UUID studentTypeId;
+	private ReferenceLiteTO<StudentType> studentType;
 
 	private PersonLiteTO coach;
 
@@ -164,8 +165,8 @@ public class PersonTO // NOPMD
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
 		anticipatedStartYear = model.getAnticipatedStartYear();
 		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
-		studentTypeId = model.getStudentType() == null ? null : model
-				.getStudentType().getId();
+		studentType = model.getStudentType() == null ? null
+				: new ReferenceLiteTO<StudentType>(model.getStudentType());
 
 		if ((null != model.getSpecialServiceGroups())
 				&& !(model.getSpecialServiceGroups().isEmpty())) {
@@ -454,12 +455,13 @@ public class PersonTO // NOPMD
 				: new Date(studentIntakeRequestDate.getTime());
 	}
 
-	public UUID getStudentTypeId() {
-		return studentTypeId;
+	public ReferenceLiteTO<StudentType> getStudentType() {
+		return studentType;
 	}
 
-	public void setStudentTypeId(final UUID studentTypeId) {
-		this.studentTypeId = studentTypeId;
+	public void setStudentType(
+			final ReferenceLiteTO<StudentType> studentType) {
+		this.studentType = studentType;
 	}
 
 	public List<ReferenceLiteTO<SpecialServiceGroup>> getSpecialServiceGroups() {

@@ -36,6 +36,8 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	
 	result.person.primaryEmailAddress = 'test@sinclair.edu'
 	
+	result.person.studentType = new ReferenceLiteTO(id:UUID.fromString("b2d05919-5056-a51a-80bd-03e5288de771"))
+	
 	//add a challenge
 	List<PersonChallengeTO> challenges = Lists.newArrayList();
 	challenges << new PersonChallengeTO(challengeId: UUID.fromString("07b5c3ac-3bdf-4d12-b65d-94cb55167998"), personId: UUID.fromString(result.person.id), description:"Childcare")
@@ -113,13 +115,13 @@ String getCaseload(ApiConnection conn){
 JsonSlurper jsonParser = new JsonSlurper()
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0", "advisor0", false)
 
-//String output = getStudentIntakeForm(conn, jsonParser)
+String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
 //String output = addGoalToPerson(conn) 
 //String output = getAllJournalEntriesForPerson(conn);
 //String output = getPerson(conn)
 //String output = search(conn)
-String output = getCaseload(conn)
+//String output = getCaseload(conn)
 
 conn.formatAndPrintJson(output)
 //println (output);

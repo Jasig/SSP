@@ -84,11 +84,12 @@ public class PersonTOFactoryImpl extends
 		model.setAnticipatedStartTerm(tObject.getAnticipatedStartTerm());
 		model.setAnticipatedStartYear(tObject.getAnticipatedStartYear());
 		model.setStudentIntakeRequestDate(tObject.getStudentIntakeRequestDate());
-		model.setStudentType(tObject.getStudentTypeId() == null ? null
-				: studentTypeService.get(tObject.getStudentTypeId()));
+		model.setStudentType(((tObject.getStudentType() == null) || (tObject
+				.getStudentType().getId() == null)) ? null
+				: studentTypeService.get(tObject.getStudentType().getId()));
 
-		model.setCoach(tObject.getCoach() == null
-				|| tObject.getCoach().getId() == null ? null : personService
+		model.setCoach((tObject.getCoach() == null)
+				|| (tObject.getCoach().getId() == null) ? null : personService
 				.get(tObject.getCoach().getId()));
 
 		personSpecialServiceGroupTOFactory.updateSetFromLites(
