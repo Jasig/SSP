@@ -17,10 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PersonSearchDao {
+public class PersonSearchDao extends AbstractDao<Person> {
 
-	@Autowired
-	private transient PersonDao personDao;
+	public PersonSearchDao() {
+		super(Person.class);
+	}
 
 	@Autowired
 	private transient ConfigService configService;
@@ -30,7 +31,7 @@ public class PersonSearchDao {
 			final String searchTerm, final Person advisor,
 			final SortingAndPaging sAndP) {
 
-		final Criteria query = personDao.createCriteria();
+		final Criteria query = createCriteria();
 
 		if (programStatus != null) {
 			query.createAlias("programStatuses", "personProgramStatus")
@@ -69,6 +70,6 @@ public class PersonSearchDao {
 		}
 		query.add(terms);
 
-		return personDao.processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithPaging(query, sAndP);
 	}
 }
