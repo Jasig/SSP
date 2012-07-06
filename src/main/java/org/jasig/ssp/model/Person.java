@@ -28,6 +28,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
 
+import com.google.common.collect.Sets;
+
 /**
  * A Person entity.
  * 
@@ -377,9 +379,16 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 */
 	public Person() {
 		super();
-		challenges = new HashSet<PersonChallenge>();
-		fundingSources = new HashSet<PersonFundingSource>();
-		educationLevels = new HashSet<PersonEducationLevel>();
+		challenges = Sets.newHashSet();
+		fundingSources = Sets.newHashSet();
+		educationLevels = Sets.newHashSet();
+		tools = Sets.newHashSet();
+		confidentialityDisclosureAgreements = Sets.newHashSet();
+		tasks = Sets.newHashSet();
+		serviceReasons = Sets.newHashSet();
+		specialServiceGroups = Sets.newHashSet();
+		referralSources = Sets.newHashSet();
+		programStatuses = Sets.newHashSet();
 	}
 
 	/**
@@ -394,6 +403,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		challenges = new HashSet<PersonChallenge>();
 		fundingSources = new HashSet<PersonFundingSource>();
 		educationLevels = new HashSet<PersonEducationLevel>();
+
 	}
 
 	/**

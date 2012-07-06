@@ -3,6 +3,7 @@ package org.jasig.ssp.transferobject; // NOPMD
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -13,16 +14,19 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.PersonReferralSource;
 import org.jasig.ssp.model.PersonServiceReason;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.ReferralSource;
 import org.jasig.ssp.model.reference.ServiceReason;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Person transfer object
@@ -102,6 +106,8 @@ public class PersonTO // NOPMD
 
 	private List<String> permissions;
 
+	private Set<ReferenceLiteTO<ProgramStatus>> programStatuses;
+
 	/**
 	 * Empty constructor
 	 */
@@ -170,6 +176,7 @@ public class PersonTO // NOPMD
 				specialServiceGroupsFromModel
 						.add(pssg.getSpecialServiceGroup());
 			}
+
 			specialServiceGroups = ReferenceLiteTO
 					.toTOList(specialServiceGroupsFromModel);
 		}
@@ -181,6 +188,7 @@ public class PersonTO // NOPMD
 			for (final PersonReferralSource prs : model.getReferralSources()) {
 				referralSourcesFromModel.add(prs.getReferralSource());
 			}
+
 			referralSources = ReferenceLiteTO
 					.toTOList(referralSourcesFromModel);
 		}
@@ -192,9 +200,20 @@ public class PersonTO // NOPMD
 			for (final PersonServiceReason psr : model.getServiceReasons()) {
 				serviceReasonsFromModel.add(psr.getServiceReason());
 			}
+
 			serviceReasons = ReferenceLiteTO.toTOList(serviceReasonsFromModel);
 		}
 
+		if ((null != model.getProgramStatuses())
+				&& !(model.getProgramStatuses().isEmpty())) {
+			final Set<ProgramStatus> programStatusesFromModel = Sets
+					.newHashSet();
+			for (final PersonProgramStatus psr : model.getProgramStatuses()) {
+				programStatusesFromModel.add(psr.getProgramStatus());
+			}
+
+			programStatuses = ReferenceLiteTO.toTOSet(programStatusesFromModel);
+		}
 	}
 
 	/**
@@ -508,4 +527,19 @@ public class PersonTO // NOPMD
 		this.permissions = permissions;
 	}
 
+	/**
+	 * @return the "lite" version of the programStatuses
+	 */
+	public Set<ReferenceLiteTO<ProgramStatus>> getProgramStatuses() {
+		return programStatuses;
+	}
+
+	/**
+	 * @param programStatuses
+	 *            the "lite" version of the programStatuses to set
+	 */
+	public void setProgramStatuses(
+			final Set<ReferenceLiteTO<ProgramStatus>> programStatuses) {
+		this.programStatuses = programStatuses;
+	}
 }
