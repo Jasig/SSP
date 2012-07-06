@@ -182,11 +182,18 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		// Validate all of the forms
 		if ( validateResult.valid ) 
 		{
-			personForm.updateRecord();
-			// coachForm.updateRecord();
-			console.log(coachForm);
-			anticipatedStartDateForm.updateRecord();			
+			personForm.updateRecord();	
+			anticipatedStartDateForm.updateRecord();
+
+			//set coach and student type
+			model.setCoachId( coachForm.findField('coachId').getValue() );
+			model.setStudentTypeId( coachForm.findField('studentTypeId').getValue() );			
 			
+			// save the appointment dates and times
+			appointmentForm.updateRecord();
+			
+			model.setAppointment(me.appointment.getStartDate(), me.appointment.getEndDate() );			
+						
 			// set special service groups
 			specialServiceGroupsFormValues = specialServiceGroupsItemSelector.getValue();
 			selectedSpecialServiceGroups = me.getSelectedItemSelectorIdsForTransfer(specialServiceGroupsFormValues);
@@ -216,21 +223,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			}else{
 				model.data.serviceReasons=null;
 			}
-
-			// save the appointment dates and times
-			appointmentForm.updateRecord();
-			
-			if ( model.get('currentAppointment') != null && me.person.get('currentAppointment') != "" )
-			{
-			   model.get('currentAppointment').startDate = me.appointment.getStartDate();
-			   model.get('currentAppointment').endDate = me.appointment.getEndDate();
-			}else{
-			   model.set('currentAppointment', {
-				                                  "id":"",
-				                                  "startDate":me.appointment.getStartDate(),
-				                                  "endDate":me.appointment.getEndDate()
-				                                 });
-			}
 			
 			jsonData = model.data;
 			
@@ -246,7 +238,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// current API
 			delete jsonData.currentAppointment;			
 			
-			/*
 			// save the person
 			if (id=="")
 			{				
@@ -266,7 +257,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 	    			successFunc: personSuccessFunc
 	    		});	
 			}
-			*/
 			
 		}else{
 			me.formUtils.displayErrors( validateResult.fields );

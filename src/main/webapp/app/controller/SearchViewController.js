@@ -115,14 +115,14 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              { header: 'First', dataIndex: 'firstName', flex: 1 },		        
     	              { header: 'MI', dataIndex: 'middleInitial', flex: .2},
     	              { header: 'Last', dataIndex: 'lastName', flex: 1},
-    	              { header: 'Type', dataIndex: 'studentType', flex: .2},
+    	              { header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
     	              { header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
     	              { header: 'Alerts', dataIndex: 'alerts', flex: .2}
     	              ];			
 		}else{
 			columns = [
     	              /* { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 }, */		        
-    	              { text: 'Name', dataIndex: 'lastName', renderer: this.columnRendererUtils.renderStudentDetails, flex: 50}
+    	              { text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderStudentDetails, flex: 50}
     	              ];		
 		}
 		

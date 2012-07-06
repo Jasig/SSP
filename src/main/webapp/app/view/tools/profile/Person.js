@@ -35,7 +35,11 @@ Ext.define('Ssp.view.tools.profile.Person', {
 					        fieldLabel: 'Student',
 					        name: 'name',
 					        itemId: 'studentName'
-					    }, {
+					    },,{
+					        fieldLabel: 'Coach',
+					        name: 'coachName',
+					        itemId: 'coachName'
+					    },{
 					        fieldLabel: 'Student Id',
 					        itemId: 'studentId',
 					        name: 'schoolId'
@@ -69,7 +73,8 @@ Ext.define('Ssp.view.tools.profile.Person', {
 					        name: 'secondaryEmailAddress'
 					    }, {
 					        fieldLabel: 'Student Type',
-					        name: 'studentType'
+					        name: 'studentType',
+					        itemId: 'studentType'
 					    }, {
 					        fieldLabel: 'SSP Program Status',
 					        name: 'programStatus'
@@ -82,7 +87,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
 					    }, {
 					        fieldLabel: 'CUM GPA',
 					        name: 'cumGPA'
-					    }, {
+					    },{
 					        fieldLabel: 'Academic Program',
 					        name: 'academicPrograms'
 					    }]

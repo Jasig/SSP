@@ -21,7 +21,7 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'enabled', type: 'boolean'},
              {name: 'coach', type: 'auto'},
     		 {name: 'strengths', type: 'string'},
-    		 {name: 'studentType',type:'string'},
+    		 {name: 'studentType',type:'auto'},
     		 {name: 'abilityToBenefit', type: 'boolean'},
     		 {name: 'anticipatedStartTerm', type: 'string'},
     		 {name: 'anticipatedStartYear', type: 'string'},
@@ -57,12 +57,63 @@ Ext.define('Ssp.model.Person', {
     },
     
     getCoachId: function(){
-    	var id = this.get('coach').id;
-    	return ((id != null)? id : "");   	
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.id : "");   	
     },
 
+    getCoachName: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.firstName + ' ' + coach.lastName : "");   	
+    },     
+    
+    setCoachId: function( value ){
+    	if (value != "")
+    	{
+        	if ( this.get('coach') != null)
+        	{
+        		this.get('coach').id = value;
+        	}else{
+        		this.set('coach',{"id":value});
+        	}    		
+    	}
+    },
+    
     getStudentTypeId: function(){
-    	var id = this.get('studentType').id;
-    	return ((id != null)? id : "");   	
+    	var studentType = this.get('studentType');
+    	return ((studentType != null)? studentType.id : "");   	
+    },
+ 
+    getStudentTypeName: function(){
+    	var studentType = this.get('studentType');
+    	return ((studentType != null)? studentType.name : "");   	
+    },    
+    
+    setStudentTypeId: function( value ){
+    	if (value != "")
+    	{
+        	if ( this.get('studentType') != null)
+        	{
+        		this.get('studentType').id = value;
+        	}else{
+        		this.set('studentType',{"id":value});
+        	}    		
+    	}
+    },
+    
+    setAppointment: function( startDate, endDate ){
+    	if (startDate != null && endDate != null)
+    	{
+        	if ( this.get('currentAppointment') != null )
+    		{
+    		   this.get('currentAppointment').startDate = startDate;
+    		   this.get('currentAppointment').endDate = endDate;
+    		}else{
+    		   model.set('currentAppointment', {
+    			                                  "id":"",
+    			                                  "startDate":startDate,
+    			                                  "endDate":endDate
+    			                                 });
+    		}    		
+    	}
     }
 });

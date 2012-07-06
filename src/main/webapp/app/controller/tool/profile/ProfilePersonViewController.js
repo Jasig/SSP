@@ -12,8 +12,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     
     control: {
     	nameField: '#studentName',
+    	coachNameField: '#coachName',
     	studentIdField: '#studentId',
-    	birthDateField: '#birthDate'
+    	birthDateField: '#birthDate',
+    	studentTypeField: '#studentType'
     },
 	init: function() {
 		var me=this;
@@ -21,18 +23,24 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
 		var studentIdField = me.getStudentIdField();
 		var nameField = me.getNameField();
+		var coachNameField = me.getCoachNameField();
 		var birthDateField = me.getBirthDateField();
+		var studentTypeField = me.getStudentTypeField();
 		var id= me.person.get('id');
 		var personUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');			
 		var successFunc = function(response,view){
 	    	var r = Ext.decode(response.responseText);
     		var fullName;
+    		var studentTypeName;
+    		var coachName;
 	    	
     		// load the person data
     		me.person.populateFromGenericObject(r);
     		
 	    	fullName = me.person.getFullName();
+	    	studentTypeName = me.person.getStudentTypeName();
+	    	coachName = me.person.getCoachName();
     		
     		// load special service groups
     		if (r.specialServiceGroups != null)
@@ -55,7 +63,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		
     		// load additional values
     		nameField.setValue( fullName );
+    		coachNameField.setValue( coachName );
     		birthDateField.setValue( me.person.getFormattedBirthDate() );
+    		studentTypeField.setValue( studentTypeName );
     		studentRecordComp.setTitle('Student Record - ' + fullName)
 		};
 
