@@ -113,9 +113,12 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     	var filtersArr = [];
 		var filterStatusFunc = null;
 		var authenticatedId = me.authenticatedPerson.get('id');
-		var filterAuthenticatedFunc = function(item) {
-			return (item.get('createdBy').id == authenticatedId); 
-		}; 
+		var filterAuthenticatedFunc = new Ext.util.Filter({
+		    filterFn: function(item) {
+				return (item.get('createdBy').id == authenticatedId); 
+			},
+			scope: me
+		});
 
 		switch (me.filteredTaskStatus)
 		{

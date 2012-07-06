@@ -298,7 +298,7 @@ Ext.onReady(function(){
 				    authenticatedPerson: {
 				        fn: function(){
 				        	var p = new Ssp.model.AuthenticatedPerson();
-				        	p.populateFromGenericObject( this.user );
+				        	p.populateFromGenericObject( user );
 				            return p;
 				        },
 				        singleton: true

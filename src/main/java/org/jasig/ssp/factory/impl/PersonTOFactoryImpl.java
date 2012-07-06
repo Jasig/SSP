@@ -2,6 +2,7 @@ package org.jasig.ssp.factory.impl;
 
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.PersonProgramStatusTOFactory;
 import org.jasig.ssp.factory.PersonReferralSourceTOFactory;
 import org.jasig.ssp.factory.PersonServiceReasonTOFactory;
 import org.jasig.ssp.factory.PersonSpecialServiceGroupTOFactory;
@@ -46,6 +47,9 @@ public class PersonTOFactoryImpl extends
 	@Autowired
 	private transient PersonServiceReasonTOFactory personServiceReasonTOFactory;
 
+	@Autowired
+	private transient PersonProgramStatusTOFactory personProgramStatusTOFactory;
+
 	@Override
 	protected PersonDao getDao() {
 		return dao;
@@ -80,11 +84,11 @@ public class PersonTOFactoryImpl extends
 		model.setAnticipatedStartTerm(tObject.getAnticipatedStartTerm());
 		model.setAnticipatedStartYear(tObject.getAnticipatedStartYear());
 		model.setStudentIntakeRequestDate(tObject.getStudentIntakeRequestDate());
-		model.setStudentType((tObject.getStudentTypeId() == null) ? null
+		model.setStudentType(tObject.getStudentTypeId() == null ? null
 				: studentTypeService.get(tObject.getStudentTypeId()));
 
-		model.setCoach(((tObject.getCoach() == null) || (tObject.getCoach()
-				.getId() == null)) ? null : personService
+		model.setCoach(tObject.getCoach() == null
+				|| tObject.getCoach().getId() == null ? null : personService
 				.get(tObject.getCoach().getId()));
 
 		personSpecialServiceGroupTOFactory.updateSetFromLites(
@@ -97,6 +101,11 @@ public class PersonTOFactoryImpl extends
 
 		personServiceReasonTOFactory.updateSetFromLites(
 				model.getServiceReasons(), tObject.getServiceReasons(), model);
+
+		personProgramStatusTOFactory
+				.updateSetFromLites(
+						model.getProgramStatuses(),
+						tObject.getProgramStatuses(), model);
 
 		return model;
 	}

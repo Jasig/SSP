@@ -3,6 +3,7 @@ package org.jasig.ssp.transferobject.reference;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -10,7 +11,15 @@ import javax.validation.constraints.NotNull;
 import org.jasig.ssp.model.reference.AbstractReference;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
+/**
+ * "Lite" version for a reference model, only including the ID and name
+ * properties.
+ * 
+ * @param <T>
+ *            Any reference model.
+ */
 public class ReferenceLiteTO<T extends AbstractReference> implements
 		Serializable {
 
@@ -57,6 +66,16 @@ public class ReferenceLiteTO<T extends AbstractReference> implements
 		return tos;
 	}
 
+	public static <T extends AbstractReference> Set<ReferenceLiteTO<T>> toTOSet(
+			@NotNull final Collection<T> models) {
+		final Set<ReferenceLiteTO<T>> tos = Sets.newHashSet();
+		for (final T model : models) {
+			tos.add(fromModel(model));
+		}
+
+		return tos;
+	}
+
 	public UUID getId() {
 		return id;
 	}
@@ -72,5 +91,4 @@ public class ReferenceLiteTO<T extends AbstractReference> implements
 	public void setName(final String name) {
 		this.name = name;
 	}
-
 }

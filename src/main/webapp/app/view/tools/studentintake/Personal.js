@@ -145,7 +145,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        name: 'primaryEmailAddress',
 				        vtype:'email',
 				        maxLength: 100,
-				        allowBlank:false,
+				        allowBlank:true,
 				        itemId: 'primaryEmailAddress'
 				    },{
 				        fieldLabel: 'Alternate Email',

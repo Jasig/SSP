@@ -34,7 +34,7 @@ public abstract class AbstractPersonAssocReferenceTOFactory<TObject extends Abst
 		final Set<M> results = Sets
 				.newHashSet();
 
-		for (ReferenceLiteTO<R> lite : lites) {
+		for (final ReferenceLiteTO<R> lite : lites) {
 			results.add(fromLite(lite, person));
 		}
 
@@ -54,5 +54,4 @@ public abstract class AbstractPersonAssocReferenceTOFactory<TObject extends Abst
 			SetOps.updateSet(updateSet, replacingWith);
 		}
 	}
-
 }
