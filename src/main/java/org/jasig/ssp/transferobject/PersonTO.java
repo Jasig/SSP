@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Max;
@@ -497,19 +496,6 @@ public class PersonTO // NOPMD
 
 	public void setCoach(final PersonLiteTO coach) {
 		this.coach = coach;
-	}
-
-	public UUID getCoachId() {
-		if (coach == null) {
-			return null;
-		} else {
-			return coach.getId();
-		}
-	}
-
-	public void setCoachId(final UUID coachId) {
-		coach = new PersonLiteTO();
-		coach.setId(coachId);
 	}
 
 	public List<ReferenceLiteTO<ConfidentialityLevel>> getConfidentialityLevels() {
