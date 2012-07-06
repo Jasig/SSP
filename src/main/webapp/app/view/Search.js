@@ -24,8 +24,8 @@ Ext.define('Ssp.view.Search', {
     	        	width: '100%',
     	        	height: '100%',
 		    	    columns: [
-		    	              { header: "Photo", dataIndex: 'photoUrl', renderer: me.columnRendererUtils.renderPhotoIcon, flex: 50 },		        
-		    	              { text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderStudentDetails, flex: 50},
+		    	              /* { header: "Photo", dataIndex: 'photoUrl', renderer: me.columnRendererUtils.renderPhotoIcon, flex: 50 }, */		        
+		    	              { text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderStudentDetails, flex: 50}
 		    	              ],
     	          
 		    	    dockedItems: [{
