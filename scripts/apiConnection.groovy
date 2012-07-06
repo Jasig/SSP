@@ -38,6 +38,10 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	
 	result.person.studentType = new ReferenceLiteTO(id:UUID.fromString("b2d05919-5056-a51a-80bd-03e5288de771"))
 	
+	List<ReferenceLiteTO<ProgramStatus>> programStatuses = Lists.newArrayList();
+	programStatuses << new ReferenceLiteTO<ProgramStatus>(id:UUID.fromString("b2d12527-5056-a51a-8054-113116baab88"))
+	result.person.programStatuses = programStatuses
+	
 	//add a challenge
 	List<PersonChallengeTO> challenges = Lists.newArrayList();
 	challenges << new PersonChallengeTO(challengeId: UUID.fromString("07b5c3ac-3bdf-4d12-b65d-94cb55167998"), personId: UUID.fromString(result.person.id), description:"Childcare")
