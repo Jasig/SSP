@@ -26,7 +26,7 @@ String submitChildCareArrangement(ApiConnection conn, JsonSlurper jsonParser){
 String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	
 	//retrieve the intake form
-	String intakeForm = conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff")
+	String intakeForm = conn.get("api/1/tool/studentIntake/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194")
 	
 	//lets manipulate it a bit
 	def result = jsonParser.parseText(intakeForm)
@@ -63,10 +63,10 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	result.personEducationPlan = new PersonEducationPlanTO(newOrientationComplete:false, registeredForClasses:false, collegeDegreeForParents:false, specialNeeds:false, gradeTypicallyEarned:"B")
 	
 	//subit the manipulated form
-	conn.put("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff", toJson(result))
+	conn.put("api/1/tool/studentIntake/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194", toJson(result))
 	
 	//Retrieve the form once more
-	result = jsonParser.parseText( conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff"))
+	result = jsonParser.parseText( conn.get("api/1/tool/studentIntake/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"))
 	
 	//we're not interested in the reference data
 	result.referenceData = null
@@ -119,13 +119,13 @@ String getCaseload(ApiConnection conn){
 JsonSlurper jsonParser = new JsonSlurper()
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0", "advisor0", false)
 
-String output = getStudentIntakeForm(conn, jsonParser)
+//String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
 //String output = addGoalToPerson(conn) 
 //String output = getAllJournalEntriesForPerson(conn);
 //String output = getPerson(conn)
 //String output = search(conn)
-//String output = getCaseload(conn)
+String output = getCaseload(conn)
 
 conn.formatAndPrintJson(output)
 //println (output);

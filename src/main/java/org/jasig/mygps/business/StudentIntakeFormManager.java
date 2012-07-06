@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -846,9 +847,9 @@ public class StudentIntakeFormManager {
 		final FormSectionTO confidentialitySection = formTO
 				.getFormSectionById(SECTION_CONFIDENTIALITY_ID);
 
-		if (null != confidentialitySection
-				&& confidentialitySection.getFormQuestionById(
-						SECTION_CONFIDENTIALITY_QUESTION_AGREE_ID).getValue() != null) {
+		if ((null != confidentialitySection)
+				&& (confidentialitySection.getFormQuestionById(
+						SECTION_CONFIDENTIALITY_QUESTION_AGREE_ID).getValue() != null)) {
 			final Boolean agreed = SspStringUtils
 					.booleanFromString(confidentialitySection
 							.getFormQuestionById(
@@ -988,8 +989,8 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO citizenshipQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID);
 
-		if (citizenshipQuestion.getValue() == null
-				|| citizenshipQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if ((citizenshipQuestion.getValue() == null)
+				|| (citizenshipQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)) {
 			demographics.setCitizenship(null);
 		} else {
 			// get matching FormOption since IDs do not line up with database
@@ -1360,8 +1361,8 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO educationGoalQuestion = educationGoalSection
 				.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID);
 
-		if (studentEducationGoal == null
-				&& educationGoalQuestion.getValue() != null) {
+		if ((studentEducationGoal == null)
+				&& (educationGoalQuestion.getValue() != null)) {
 			studentEducationGoal = new PersonEducationGoal();
 			student.setEducationGoal(studentEducationGoal);
 		}
@@ -1493,6 +1494,8 @@ public class StudentIntakeFormManager {
 				}
 			}
 		}
+
+		student.setStudentIntakeCompleteDate(new Date());
 
 		return personService.save(student);
 	}

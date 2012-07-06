@@ -1,5 +1,6 @@
 package org.jasig.ssp.service.tool.impl;
 
+import java.util.Date;
 import java.util.UUID;
 
 import org.jasig.ssp.model.Person;
@@ -50,8 +51,11 @@ public class IntakeServiceImpl implements IntakeService {
 					"Person");
 		}
 
+		final Person person = form.getPerson();
+		person.setStudentIntakeCompleteDate(new Date());
+
 		// Save changes to persistent storage.
-		personService.save(form.getPerson());
+		personService.save(person);
 
 		return true;
 	}

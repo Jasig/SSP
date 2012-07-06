@@ -247,6 +247,12 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private Date studentIntakeRequestDate;
 
 	/**
+	 * Set when last someone completed the student intake tool for this
+	 * person.
+	 */
+	private Date studentIntakeCompleteDate;
+
+	/**
 	 * Strengths
 	 * 
 	 * Maximum length of 4000.
@@ -770,6 +776,15 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.programStatuses = programStatuses;
 	}
 
+	public Date getStudentIntakeCompleteDate() {
+		return studentIntakeCompleteDate;
+	}
+
+	public void setStudentIntakeCompleteDate(
+			final Date studentIntakeCompleteDate) {
+		this.studentIntakeCompleteDate = studentIntakeCompleteDate;
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 3;
@@ -812,6 +827,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 				: (abilityToBenefit ? 3 : 2);
 		result *= hashField("studentIntakeRequestDate",
 				studentIntakeRequestDate);
+		result *= hashField("studentIntakeCompleteDate",
+				studentIntakeCompleteDate);
 
 		// not all fields included. only the business or non-expensive set
 		// fields are included in the hashCode

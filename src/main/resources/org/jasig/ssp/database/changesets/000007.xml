@@ -368,5 +368,23 @@ Thank you.</body></html>]]>
 				columnDataType="${nvarchar.type}(100)" />
 		</rollback>
 	</changeSet>
+
+	<changeSet id="add student intake completed date to person" author="daniel.bower">
+		<addColumn tableName="person">
+			<column name="student_intake_complete_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<rollback>
+			<dropColumn tableName="person" columnName="student_intake_complete_date"/>
+		</rollback>
+		
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
 	
 </databaseChangeLog>

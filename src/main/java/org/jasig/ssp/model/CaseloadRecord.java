@@ -8,9 +8,8 @@ public class CaseloadRecord {
 	private UUID personId;
 	private String schoolId, firstName, middleInitial, lastName,
 			studentTypeName;
-	private Date currentAppointmentDate;
+	private Date currentAppointmentDate, studentIntakeCompleteDate;
 	private int numberOfEarlyAlerts;
-	private boolean studentIntakeComplete;
 
 	public UUID getPersonId() {
 		return personId;
@@ -40,11 +39,18 @@ public class CaseloadRecord {
 	}
 
 	public boolean isStudentIntakeComplete() {
-		return studentIntakeComplete;
+		return (studentIntakeCompleteDate != null);
 	}
 
-	public void setStudentIntakeComplete(final boolean studentIntakeComplete) {
-		this.studentIntakeComplete = studentIntakeComplete;
+	public Date getStudentIntakeCompleteDate() {
+		return (studentIntakeCompleteDate == null) ? null : new Date(
+				studentIntakeCompleteDate.getTime());
+	}
+
+	public void setStudentIntakeCompleteDate(
+			final Date studentIntakeCompleteDate) {
+		this.studentIntakeCompleteDate = ((studentIntakeCompleteDate == null) ? null
+				: new Date(studentIntakeCompleteDate.getTime()));
 	}
 
 	public String getSchoolId() {

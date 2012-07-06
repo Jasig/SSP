@@ -76,6 +76,8 @@ public class PersonTO // NOPMD
 
 	private Boolean enabled;
 
+	private Date studentIntakeCompleteDate;
+
 	private ReferenceLiteTO<StudentType> studentType;
 
 	private PersonLiteTO coach;
@@ -149,6 +151,7 @@ public class PersonTO // NOPMD
 		photoUrl = model.getPhotoUrl();
 		schoolId = model.getSchoolId();
 		enabled = model.getEnabled();
+		studentIntakeCompleteDate = model.getStudentIntakeCompleteDate();
 
 		final Person coachPerson = model.getCoach();
 		if (coachPerson == null) {
@@ -410,6 +413,17 @@ public class PersonTO // NOPMD
 
 	public void setEnabled(final Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public Date getStudentIntakeCompleteDate() {
+		return studentIntakeCompleteDate == null ? null : new Date(
+				studentIntakeCompleteDate.getTime());
+	}
+
+	public void setStudentIntakeCompleteDate(
+			final Date studentIntakeCompleteDate) {
+		this.studentIntakeCompleteDate = (studentIntakeCompleteDate == null ? null
+				: new Date(studentIntakeCompleteDate.getTime()));
 	}
 
 	public String getStrengths() {

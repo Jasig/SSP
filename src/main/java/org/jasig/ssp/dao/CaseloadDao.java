@@ -49,10 +49,10 @@ public class CaseloadDao extends AbstractDao<Person> {
 				"studentTypeName"));
 		// :TODO current AppointmentDate for Caseload
 		// projections.add(Projections.property("currentAppointmentDate").as("currentAppointmentDate"));
-		// :TODO studentIntakeComplete for Caseload
-		// projections.add(Projections.property("studentIntakeComplete").as(
-		// "studentIntakeComplete"));
+		projections.add(Projections.property("studentIntakeCompleteDate").as(
+				"studentIntakeCompleteDate"));
 		query.setProjection(projections);
+		// :TODO EarlyAlert Count
 
 		query.setResultTransformer(new AliasToBeanResultTransformer(
 				CaseloadRecord.class));
