@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Max;
@@ -23,6 +22,7 @@ import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.ReferralSource;
 import org.jasig.ssp.model.reference.ServiceReason;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 import com.google.common.collect.Lists;
@@ -76,7 +76,7 @@ public class PersonTO // NOPMD
 
 	private Boolean enabled;
 
-	private UUID studentTypeId;
+	private ReferenceLiteTO<StudentType> studentType;
 
 	private PersonLiteTO coach;
 
@@ -164,8 +164,8 @@ public class PersonTO // NOPMD
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
 		anticipatedStartYear = model.getAnticipatedStartYear();
 		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
-		studentTypeId = model.getStudentType() == null ? null : model
-				.getStudentType().getId();
+		studentType = model.getStudentType() == null ? null
+				: new ReferenceLiteTO<StudentType>(model.getStudentType());
 
 		if ((null != model.getSpecialServiceGroups())
 				&& !(model.getSpecialServiceGroups().isEmpty())) {
@@ -454,12 +454,13 @@ public class PersonTO // NOPMD
 				: new Date(studentIntakeRequestDate.getTime());
 	}
 
-	public UUID getStudentTypeId() {
-		return studentTypeId;
+	public ReferenceLiteTO<StudentType> getStudentType() {
+		return studentType;
 	}
 
-	public void setStudentTypeId(final UUID studentTypeId) {
-		this.studentTypeId = studentTypeId;
+	public void setStudentType(
+			final ReferenceLiteTO<StudentType> studentType) {
+		this.studentType = studentType;
 	}
 
 	public List<ReferenceLiteTO<SpecialServiceGroup>> getSpecialServiceGroups() {
@@ -495,19 +496,6 @@ public class PersonTO // NOPMD
 
 	public void setCoach(final PersonLiteTO coach) {
 		this.coach = coach;
-	}
-
-	public UUID getCoachId() {
-		if (coach == null) {
-			return null;
-		} else {
-			return coach.getId();
-		}
-	}
-
-	public void setCoachId(final UUID coachId) {
-		coach = new PersonLiteTO();
-		coach.setId(coachId);
 	}
 
 	public List<ReferenceLiteTO<ConfidentialityLevel>> getConfidentialityLevels() {

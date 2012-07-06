@@ -369,7 +369,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	@Nullable
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "student_type_id", updatable = false, nullable = true)
+	@JoinColumn(name = "student_type_id", nullable = true)
 	private StudentType studentType;
 
 	/**
