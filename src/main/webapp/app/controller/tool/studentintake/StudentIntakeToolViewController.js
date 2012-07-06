@@ -158,10 +158,12 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	var me=this;
     	var r = Ext.decode(response.responseText);
     	var studentIntakeModel;
+		
+    	// hide the loader
+    	me.getView().setLoading( false );
+    	
     	if ( r != null )
     	{  		
-    		// hide the loader
-        	me.getView().setLoading( false );
         	studentIntakeModel = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
     		me.studentIntakeForm = studentIntakeModel.getProxy().getReader().read( r ).records[0];		
     		me.buildStudentIntake( me.studentIntakeForm );    		

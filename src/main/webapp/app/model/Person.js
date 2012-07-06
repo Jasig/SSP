@@ -19,9 +19,9 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'username', type: 'string'},
              {name: 'userId', type: 'string'},
     		 {name: 'enabled', type: 'boolean'},
-             {name: 'coachId', type: 'string'},
+             {name: 'coach', type: 'auto'},
     		 {name: 'strengths', type: 'string'},
-    		 {name: 'studentTypeId',type:'string'},
+    		 {name: 'studentType',type:'string'},
     		 {name: 'abilityToBenefit', type: 'boolean'},
     		 {name: 'anticipatedStartTerm', type: 'string'},
     		 {name: 'anticipatedStartYear', type: 'string'},
@@ -54,5 +54,15 @@ Ext.define('Ssp.model.Person', {
     
     getFormattedStudentIntakeRequestDate: function(){
     	return Ext.util.Format.date( this.get('studentIntakeRequestDate'),'m/d/Y');   	
+    },
+    
+    getCoachId: function(){
+    	var id = this.get('coach').id;
+    	return ((id != null)? id : "");   	
+    },
+
+    getStudentTypeId: function(){
+    	var id = this.get('studentType').id;
+    	return ((id != null)? id : "");   	
     }
 });
