@@ -61,7 +61,7 @@ Ext.define('Ssp.view.Viewport',{
             me.height = Ext.Element.getViewportHeight();
         }else{
         	me.width = Ext.Element.getViewportWidth()-22; // me.el.getViewSize().width;
-            me.height = me.el.getViewSize().height; // Ext.Element.getViewportHeight()-160;
+            me.height = Ext.Element.getViewportHeight()-160; // me.el.getViewSize().height; 
         }
     },
 
@@ -89,7 +89,7 @@ Ext.define('Ssp.view.Viewport',{
     		newHeight = Ext.Element.getViewportHeight();
     	}else{
     		newWidth = me.width+(width-me.el.getWidth());
-    		newHeight = me.height; // Ext.Element.getViewportHeight()-160;
+    		newHeight = Ext.Element.getViewportHeight()-160; // me.height;
     	}
     		
     	if (width != me.width || height != me.height) {
