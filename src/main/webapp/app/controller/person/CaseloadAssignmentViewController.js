@@ -183,7 +183,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		if ( validateResult.valid ) 
 		{
 			personForm.updateRecord();
-			coachForm.updateRecord();
+			// coachForm.updateRecord();
+			console.log(coachForm);
 			anticipatedStartDateForm.updateRecord();			
 			
 			// set special service groups
@@ -245,6 +246,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// current API
 			delete jsonData.currentAppointment;			
 			
+			/*
 			// save the person
 			if (id=="")
 			{				
@@ -264,6 +266,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 	    			successFunc: personSuccessFunc
 	    		});	
 			}
+			*/
 			
 		}else{
 			me.formUtils.displayErrors( validateResult.fields );

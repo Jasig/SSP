@@ -52,6 +52,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    	var r, records;
 	    	var groupedTasks=[];
 	    	r = Ext.decode(response.responseText);
+	    	
+	    	// hide the loader
+	    	me.getView().setLoading( false );
+	    	
 	    	if (r != null)
 	    	{
 	    		Ext.Object.each(r,function(key,value){
@@ -68,6 +72,12 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    		me.filterTasks();
 	    	}
 		};
+		
+		// clear any existing tasks
+		me.store.removeAll();
+
+		// display loader
+		me.getView().setLoading( true );
 		
 		personId = me.person.get('id');
 		me.personTaskUrl = me.apiProperties.getItemUrl('personTask');
@@ -258,20 +268,21 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    				"taskIds": this.getSelectedIdsArray( tasksGrid.getView().getSelectionModel().getSelection() ),
 	    		        "goalIds": this.getSelectedIdsArray( goalsGrid.getView().getSelectionModel().getSelection() )
 	    		        };
-		
+
 		if (jsonData.taskIds.length > 0 && jsonData.goalIds.length > 0)
 	    {
 	    	url = this.apiProperties.createUrl( this.personPrintTaskUrl );
-	        /*
+
 			this.apiProperties.makeRequest({
 				url: url,
 				method: 'GET',
 				jsonData: jsonData,
-				successFunc: function(){
-					// handle response here
+				successFunc: function(response,view){
+					var r = Ext.decode(response.responseText);
+					console.log(r);
 				}
 			});
-			*/	    	
+	    	
 	    }else{
 	    	Ext.Msg.alert('Error','Please select the tasks and goals you would like to print.');
 	    }
