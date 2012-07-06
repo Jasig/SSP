@@ -1,7 +1,7 @@
 Ext.define('Ssp.model.tool.journal.JournalEntry', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'comment',type:'string'},
-             {name:'entryDate',type: 'date',dateFormat:'time'},
+             {name:'entryDate',type: 'date',dateFormat:'time', defaultValue: new Date()},
              {name:'confidentialityLevel', type:'auto'},
 			 {name:'journalSource', type:'auto'},
 			 {name:'journalTrack', type:'auto'},
