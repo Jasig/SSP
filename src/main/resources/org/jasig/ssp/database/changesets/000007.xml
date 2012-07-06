@@ -359,9 +359,13 @@ Thank you.</body></html>]]>
 	</changeSet>
 
 	<changeSet id="primary email is nullable" author="daniel.bower">
-		<dropNotNullConstraint tableName="person" columnName="primary_email_address"/>
+		<dropNotNullConstraint tableName="person"
+			columnName="primary_email_address" 
+			columnDataType="${nvarchar.type}(100)" />
 		<rollback>
-			<addNotNullConstraint tableName="person" columnName="primary_email_address"/>
+			<addNotNullConstraint tableName="person"
+				columnName="primary_email_address" 
+				columnDataType="${nvarchar.type}(100)" />
 		</rollback>
 	</changeSet>
 	
