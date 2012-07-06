@@ -9,6 +9,9 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Person association to ServiceReason DAO
+ */
 @Repository
 public class PersonServiceReasonDao
 		extends AbstractPersonAssocAuditableCrudDao<PersonServiceReason>

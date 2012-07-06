@@ -113,13 +113,13 @@ String getCaseload(ApiConnection conn){
 JsonSlurper jsonParser = new JsonSlurper()
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0", "advisor0", false)
 
-String output = getStudentIntakeForm(conn, jsonParser)
+//String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
 //String output = addGoalToPerson(conn) 
 //String output = getAllJournalEntriesForPerson(conn);
 //String output = getPerson(conn)
 //String output = search(conn)
-//String output = getCaseload(conn)
+String output = getCaseload(conn)
 
 conn.formatAndPrintJson(output)
 //println (output);

@@ -26,6 +26,9 @@ public class PersonServiceReasonTOFactoryImpl
 		AbstractPersonAssocReferenceTOFactory<PersonServiceReasonTO, PersonServiceReason, ServiceReason>
 		implements PersonServiceReasonTOFactory {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonServiceReasonTOFactoryImpl.class);
+
 	public PersonServiceReasonTOFactoryImpl() {
 		super(PersonServiceReasonTO.class,
 				PersonServiceReason.class);
@@ -45,16 +48,13 @@ public class PersonServiceReasonTOFactoryImpl
 		return dao;
 	}
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PersonServiceReasonTOFactoryImpl.class);
-
 	@Override
 	public PersonServiceReason from(
 			final PersonServiceReasonTO tObject)
 			throws ObjectNotFoundException {
 		final PersonServiceReason model = super.from(tObject);
 
-		model.setServiceReason((tObject.getServiceReasonId() == null) ? null
+		model.setServiceReason(tObject.getServiceReasonId() == null ? null
 				: service.get(tObject.getServiceReasonId()));
 
 		if (tObject.getPersonId() != null) {
@@ -69,8 +69,6 @@ public class PersonServiceReasonTOFactoryImpl
 			final ReferenceLiteTO<ServiceReason> lite,
 			final Person person) throws ObjectNotFoundException {
 
-		PersonServiceReason pssg = null;
-
 		final PagingWrapper<PersonServiceReason> results = dao
 				.getAllForPersonIdAndServiceReasonId(person.getId(),
 						lite.getId(),
@@ -79,17 +77,17 @@ public class PersonServiceReasonTOFactoryImpl
 		if (results.getResults() > 1) {
 			LOGGER.error("Multiple active PersonServiceReasons found for Person: "
 					+ person.getId().toString()
-					+ "ServiceReason:"
+					+ ", ServiceReason: "
 					+ lite.getId().toString());
-			pssg = results.getRows().iterator().next();
+			return results.getRows().iterator().next();
 		} else if (results.getResults() == 1) {
-			pssg = results.getRows().iterator().next();
-		} else {
-			pssg = new PersonServiceReason();
-			pssg.setPerson(person);
-			pssg.setServiceReason(service.get(lite.getId()));
+			return results.getRows().iterator().next();
 		}
 
+		// else
+		final PersonServiceReason pssg = new PersonServiceReason();
+		pssg.setPerson(person);
+		pssg.setServiceReason(service.get(lite.getId()));
 		return pssg;
 	}
 }

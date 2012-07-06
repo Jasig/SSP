@@ -9,14 +9,19 @@ import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.model.reference.ServiceReason;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +31,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * {@link PersonController} tests
@@ -196,6 +204,37 @@ public class PersonControllerIntegrationTest {
 		person2.setUsername(TEST_SCHOOLID);
 		controller.create(new PersonTO(person2));
 		fail("Exception should have been thrown.");
+	}
+
+	@Test
+	public void testProgramStatus() throws ObjectNotFoundException,
+			ValidationException {
+		// arrange
+		final PersonTO person1 = new PersonTO(createPerson());
+		final List<ReferenceLiteTO<ServiceReason>> serviceReasons = Lists
+				.newArrayList();
+		serviceReasons
+				.add(new ReferenceLiteTO<ServiceReason>(UUID
+						.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+						"IGNORED"));
+		person1.setServiceReasons(serviceReasons);
+
+		final Set<ReferenceLiteTO<ProgramStatus>> programStatuses = Sets
+				.newHashSet();
+		programStatuses.add(new ReferenceLiteTO<ProgramStatus>(UUID
+				.fromString("b2d12527-5056-a51a-8054-113116baab88"), "ACTIVE"));
+		programStatuses
+				.add(new ReferenceLiteTO<ProgramStatus>(UUID
+						.fromString("b2d125a4-5056-a51a-8042-d50b8eff0df1"),
+						"INACTIVE"));
+		person1.setProgramStatuses(programStatuses);
+
+		// act
+		final PersonTO person = controller.create(person1);
+
+		// assert
+		assertEquals("Program status count did not match.", 2, person
+				.getProgramStatuses().size());
 	}
 
 	private Person createPerson() {

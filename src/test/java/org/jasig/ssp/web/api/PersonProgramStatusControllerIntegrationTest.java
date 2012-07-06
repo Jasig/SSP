@@ -180,8 +180,7 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 	 */
 	@Test
 	public void testControllerCreateWithAutoExpiration()
-			throws ValidationException,
-			ObjectNotFoundException {
+			throws ValidationException, ObjectNotFoundException {
 		final Date now = new Date();
 
 		final PersonProgramStatusTO obj = createProgramStatus();
