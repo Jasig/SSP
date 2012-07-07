@@ -52,6 +52,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    	var r, records;
 	    	var groupedTasks=[];
 	    	r = Ext.decode(response.responseText);
+	    	
+	    	// hide the loader
+	    	me.getView().setLoading( false );
+	    	
 	    	if (r != null)
 	    	{
 	    		Ext.Object.each(r,function(key,value){
@@ -68,6 +72,12 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    		me.filterTasks();
 	    	}
 		};
+		
+		// clear any existing tasks
+		me.store.removeAll();
+
+		// display loader
+		me.getView().setLoading( true );
 		
 		personId = me.person.get('id');
 		me.personTaskUrl = me.apiProperties.getItemUrl('personTask');
@@ -109,14 +119,18 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     },
     
     filterTasks: function(){
+    	var me=this;
     	var filtersArr = [];
 		var filterStatusFunc = null;
-		var authenticatedId = this.authenticatedPerson.get('id');
-		var filterAuthenticatedFunc = function(item) { 
-			return (item.get('createdBy').id == authenticatedId); 
-		}; 
+		var authenticatedId = me.authenticatedPerson.get('id');
+		var filterAuthenticatedFunc = new Ext.util.Filter({
+		    filterFn: function(item) {
+				return (item.get('createdBy').id == authenticatedId); 
+			},
+			scope: me
+		});
 
-		switch (this.filteredTaskStatus)
+		switch (me.filteredTaskStatus)
 		{
 			case 'ACTIVE':
 				filterStatusFunc = function(item) { return (item.get('completed') == false); };
@@ -130,14 +144,14 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		if (filterStatusFunc != null)
 			filtersArr.push(filterStatusFunc);
 		
-		if (this.filterAuthenticated)
+		if (me.filterAuthenticated == true)
 			filtersArr.push(filterAuthenticatedFunc);
 		
 		// reset filter
-		this.store.clearFilter();
+		me.store.clearFilter();
 		
 		// apply new filters
-		this.store.filter(filtersArr);
+		me.store.filter(filtersArr);
     },
 
     onEmailTasksClick: function(button) {
@@ -254,20 +268,21 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    				"taskIds": this.getSelectedIdsArray( tasksGrid.getView().getSelectionModel().getSelection() ),
 	    		        "goalIds": this.getSelectedIdsArray( goalsGrid.getView().getSelectionModel().getSelection() )
 	    		        };
-		
+
 		if (jsonData.taskIds.length > 0 && jsonData.goalIds.length > 0)
 	    {
 	    	url = this.apiProperties.createUrl( this.personPrintTaskUrl );
-	        /*
+
 			this.apiProperties.makeRequest({
 				url: url,
 				method: 'GET',
 				jsonData: jsonData,
-				successFunc: function(){
-					// handle response here
+				successFunc: function(response,view){
+					var r = Ext.decode(response.responseText);
+					console.log(r);
 				}
 			});
-			*/	    	
+	    	
 	    }else{
 	    	Ext.Msg.alert('Error','Please select the tasks and goals you would like to print.');
 	    }

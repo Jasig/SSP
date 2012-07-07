@@ -71,53 +71,61 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		var record, id, jsonData, url;
 		var form = this.getView().getForm();
 		var values = form.getValues();
+		var handleSuccess = me.saveSuccess;
 		url = this.url;
 		record = this.model;
 		id = record.get('id');
 		
-		successFunc = function(response, view) {
-			me.displayMain();
-		};
 		if (form.isValid())
-		{
-			/*
-			form.updateRecord();    		
-    		record.set('confidentialityLevel',{"id": form.getValues().confidentialityLevelId});
-    		record.set('journalSource',{"id": form.getValues().journalSourceId});
-    		record.set('journalTrack',{"id": form.getValues().journalTrackId});
-			*/
-			
+		{			
     		// if a journal track is selected then validate that the details are set
-    		if (record.data.journalTrack.id != null && record.data.journalEntryDetails.length == 0)
+    		if ( (record.data.journalTrack.id != null && record.data.journalTrack.id != "") && record.data.journalEntryDetails.length == 0)
     		{
     			Ext.Msg.alert('Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
     		}else{
+    			
     			jsonData = record.data;
     			
-    			if (id.length > 0)
+    			// null out journalTrack.id prop in case
+    			if ( record.data.journalTrack == "" )
     			{
-    				// editing
-    				this.apiProperties.makeRequest({
-    					url: url+id,
-    					method: 'PUT',
-    					jsonData: jsonData,
-    					successFunc: successFunc 
-    				});		
-    			}else{
+    				record.data.journalTrack = null;
+    				record.data.journalEntryDetails = null;
+    			}
+    			
+    			console.log( 'EditJournalViewController->onSaveClick' );
+
+    			if (id == "")
+    			{	
+    				// Prevent tripping null errors
+    				// since no entry date will exist
+    				delete jsonData.entryDate;
+    				
     				// adding
     				this.apiProperties.makeRequest({
     					url: url,
     					method: 'POST',
     					jsonData: jsonData,
-    					successFunc: successFunc 
-    				});		
-    			} 
+    					successFunc: handleSuccess 
+    				});
+    			}else{
+    				// editing
+    				this.apiProperties.makeRequest({
+    					url: url+id,
+    					method: 'PUT',
+    					jsonData: jsonData,
+    					successFunc: handleSuccess 
+    				});
+    			}
     		}
-		
 		}else{
 			Ext.Msg.alert('Error','Please correct the errors in your Journal Entry.');
 		}
 
+	},
+	
+	saveSuccess: function(response, view) {
+		me.displayMain();
 	},
 	
 	onCancelClick: function(button){
@@ -141,7 +149,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	onJournalTrackComboSelect: function(comp, records, eOpts){
     	if (records.length > 0)
     	{
-    		this.model.set('journalTrack',{id: records[0].get('id')});
+    		this.model.set('journalTrack',{"id": records[0].get('id')});
     		
     		// the inited property prevents the
     		// Journal Entry Details from clearing

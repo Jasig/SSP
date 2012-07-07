@@ -18,7 +18,7 @@ Ext.define('Ssp.model.AbstractBase', {
  		      }
              }
              ,{name: 'createdDate', type: 'date', dateFormat: 'time'}
-             ,{name: 'objectStatus', type: 'string'}
+             /*,{name: 'objectStatus', type: 'string'}*/
              /*,
              {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
              */],
@@ -38,6 +38,10 @@ Ext.define('Ssp.model.AbstractBase', {
     
     getCreatedByPersonName: function(){
     	return this.get('createdBy').firstName + ' ' + this.get('createdBy').lastName;
+    },
+
+    getCreatedById: function(){
+    	return this.get('createdBy').id + ' ' + this.get('createdBy').id;
     },
 
 });

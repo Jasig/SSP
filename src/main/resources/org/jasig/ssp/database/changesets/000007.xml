@@ -358,4 +358,33 @@ Thank you.</body></html>]]>
 		</rollback>
 	</changeSet>
 
+	<changeSet id="primary email is nullable" author="daniel.bower">
+		<dropNotNullConstraint tableName="person"
+			columnName="primary_email_address" 
+			columnDataType="${nvarchar.type}(100)" />
+		<rollback>
+			<addNotNullConstraint tableName="person"
+				columnName="primary_email_address" 
+				columnDataType="${nvarchar.type}(100)" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add student intake completed date to person" author="daniel.bower">
+		<addColumn tableName="person">
+			<column name="student_intake_complete_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<rollback>
+			<dropColumn tableName="person" columnName="student_intake_complete_date"/>
+		</rollback>
+		
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+	
 </databaseChangeLog>

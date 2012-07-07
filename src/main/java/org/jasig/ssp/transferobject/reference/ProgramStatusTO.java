@@ -1,15 +1,11 @@
 package org.jasig.ssp.transferobject.reference;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.transferobject.TransferObject;
-
-import com.google.common.collect.Lists;
 
 /**
  * ProgramStatus reference transfer objects
@@ -112,23 +108,5 @@ public class ProgramStatusTO extends AbstractReferenceTO<ProgramStatus>
 	public void setProgramStatusChangeReasonRequired(
 			final boolean programStatusChangeReasonRequired) {
 		this.programStatusChangeReasonRequired = programStatusChangeReasonRequired;
-	}
-
-	/**
-	 * Convert a collection of models to a collection of equivalent transfer
-	 * objects.
-	 * 
-	 * @param models
-	 *            Collection of models to copy
-	 * @return A collection of equivalent transfer objects.
-	 */
-	public static List<ProgramStatusTO> toTOList(
-			@NotNull final Collection<ProgramStatus> models) {
-		final List<ProgramStatusTO> tObjects = Lists.newArrayList();
-		for (final ProgramStatus model : models) {
-			tObjects.add(new ProgramStatusTO(model)); // NOPMD
-		}
-
-		return tObjects;
 	}
 }

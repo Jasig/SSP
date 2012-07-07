@@ -28,6 +28,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
 
+import com.google.common.collect.Sets;
+
 /**
  * A Person entity.
  * 
@@ -92,11 +94,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	/**
 	 * Primary e-mail address; required.
 	 * 
-	 * Can not be null or empty. Maximum length of 100 characters.
+	 * Maximum length of 100 characters.
 	 */
 	@Column(length = 100)
-	@NotNull
-	@NotEmpty
 	@Size(max = 100)
 	private String primaryEmailAddress;
 
@@ -247,6 +247,12 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private Date studentIntakeRequestDate;
 
 	/**
+	 * Set when last someone completed the student intake tool for this
+	 * person.
+	 */
+	private Date studentIntakeCompleteDate;
+
+	/**
 	 * Strengths
 	 * 
 	 * Maximum length of 4000.
@@ -362,8 +368,14 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private Set<PersonReferralSource> referralSources;
 
 	@Nullable
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
+	private Set<PersonProgramStatus> programStatuses;
+
+	@Nullable
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "student_type_id", updatable = false, nullable = true)
+	@JoinColumn(name = "student_type_id", nullable = true)
 	private StudentType studentType;
 
 	/**
@@ -373,9 +385,16 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 */
 	public Person() {
 		super();
-		challenges = new HashSet<PersonChallenge>();
-		fundingSources = new HashSet<PersonFundingSource>();
-		educationLevels = new HashSet<PersonEducationLevel>();
+		challenges = Sets.newHashSet();
+		fundingSources = Sets.newHashSet();
+		educationLevels = Sets.newHashSet();
+		tools = Sets.newHashSet();
+		confidentialityDisclosureAgreements = Sets.newHashSet();
+		tasks = Sets.newHashSet();
+		serviceReasons = Sets.newHashSet();
+		specialServiceGroups = Sets.newHashSet();
+		referralSources = Sets.newHashSet();
+		programStatuses = Sets.newHashSet();
 	}
 
 	/**
@@ -390,6 +409,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		challenges = new HashSet<PersonChallenge>();
 		fundingSources = new HashSet<PersonFundingSource>();
 		educationLevels = new HashSet<PersonEducationLevel>();
+
 	}
 
 	/**
@@ -747,6 +767,24 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.studentType = studentType;
 	}
 
+	public Set<PersonProgramStatus> getProgramStatuses() {
+		return programStatuses;
+	}
+
+	public void setProgramStatuses(
+			final Set<PersonProgramStatus> programStatuses) {
+		this.programStatuses = programStatuses;
+	}
+
+	public Date getStudentIntakeCompleteDate() {
+		return studentIntakeCompleteDate;
+	}
+
+	public void setStudentIntakeCompleteDate(
+			final Date studentIntakeCompleteDate) {
+		this.studentIntakeCompleteDate = studentIntakeCompleteDate;
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 3;
@@ -781,7 +819,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		result *= hashField("schoolId", schoolId);
 		result *= hashField("strengths", strengths);
 		result *= hashField("coach", coach);
-		result *= hashField("studentType", studentType);
+		// result *= hashField("studentType", studentType);
 		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
 		result *= hashField("anticipatedStartYear", anticipatedStartYear);
 		result *= enabled == null ? "enabled".hashCode() : (enabled ? 3 : 2);
@@ -789,6 +827,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 				: (abilityToBenefit ? 3 : 2);
 		result *= hashField("studentIntakeRequestDate",
 				studentIntakeRequestDate);
+		result *= hashField("studentIntakeCompleteDate",
+				studentIntakeCompleteDate);
 
 		// not all fields included. only the business or non-expensive set
 		// fields are included in the hashCode

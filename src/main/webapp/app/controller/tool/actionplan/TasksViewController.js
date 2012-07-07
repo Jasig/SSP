@@ -68,6 +68,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
        if (id != "") 
        {
            model.set('completed',true);
+           model.set('completedDate', new Date() );
            // remove group property before save, since
            // the group property was added dynamically for
            // sorting and will invalidate the model on the
@@ -79,13 +80,20 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
 			   method: 'PUT',
 			   jsonData: model.data,
 			   successFunc: function(response,responseText){
-				   // reset the group for sorting purposes
-				   model.set('group',groupName);
-				   model.commit();
-				   store.sync();
-				   // filter the tasks, so the completed task is no longer
-				   // listed
-				   me.appEventsController.getApplication().fireEvent('filterTasks');
+				   var r = Ext.decode(response.responseText);
+				   // ensure proper save
+				   if ( r.id != "" )
+				   {
+					   model.set( "completedDate", r.completedDate );
+					   model.set( "completed", r.completed );
+					   // reset the group for sorting purposes
+					   model.set('group',groupName);
+					   model.commit();
+					   store.sync();
+					   // filter the tasks, so the completed task is no longer
+					   // listed
+					   me.appEventsController.getApplication().fireEvent('filterTasks');					   
+				   }
 			   },
 			   scope: me
 		   });

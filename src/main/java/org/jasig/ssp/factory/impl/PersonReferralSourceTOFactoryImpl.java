@@ -54,7 +54,7 @@ public class PersonReferralSourceTOFactoryImpl
 			throws ObjectNotFoundException {
 		final PersonReferralSource model = super.from(tObject);
 
-		model.setReferralSource((tObject.getReferralSourceId() == null) ? null
+		model.setReferralSource(tObject.getReferralSourceId() == null ? null
 				: service.get(tObject.getReferralSourceId()));
 
 		if (tObject.getPersonId() != null) {
@@ -69,8 +69,6 @@ public class PersonReferralSourceTOFactoryImpl
 			final ReferenceLiteTO<ReferralSource> lite,
 			final Person person) throws ObjectNotFoundException {
 
-		PersonReferralSource pssg = null;
-
 		final PagingWrapper<PersonReferralSource> results = dao
 				.getAllForPersonIdAndReferralSourceId(person.getId(),
 						lite.getId(),
@@ -78,18 +76,16 @@ public class PersonReferralSourceTOFactoryImpl
 
 		if (results.getResults() > 1) {
 			LOGGER.error("Multiple active PersonReferralSources found for Person: "
-					+ person.getId().toString()
-					+ "ReferralSource:"
-					+ lite.getId().toString());
-			pssg = results.getRows().iterator().next();
+					+ person.getId() + ", ReferralSource:" + lite.getId());
+			return results.getRows().iterator().next();
 		} else if (results.getResults() == 1) {
-			pssg = results.getRows().iterator().next();
-		} else {
-			pssg = new PersonReferralSource();
-			pssg.setPerson(person);
-			pssg.setReferralSource(service.get(lite.getId()));
+			return results.getRows().iterator().next();
 		}
 
+		// else
+		final PersonReferralSource pssg = new PersonReferralSource();
+		pssg.setPerson(person);
+		pssg.setReferralSource(service.get(lite.getId()));
 		return pssg;
 	}
 }

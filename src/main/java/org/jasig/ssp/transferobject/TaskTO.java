@@ -25,9 +25,17 @@ public class TaskTO
 
 	private boolean deletable;
 
-	private Date dueDate, completedDate, reminderSentDate;
+	private Date dueDate;
 
-	private UUID personId, challengeId, challengeReferralId;
+	private Date completedDate;
+
+	private Date reminderSentDate;
+
+	private UUID personId;
+
+	private UUID challengeId;
+
+	private UUID challengeReferralId;
 
 	private ConfidentialityLevelLiteTO confidentialityLevel;
 
@@ -181,18 +189,22 @@ public class TaskTO
 	}
 
 	/**
-	 * Completed date.
+	 * Completed date. Can not be un-set. In other words, null is ignored if not
+	 * null already.
 	 * 
 	 * <p>
 	 * Side affect: the result of {@link #isCompleted()} is generated based on
 	 * this value.
 	 * 
 	 * @param completedDate
-	 *            Completed date
+	 *            Completed date; silently ignored if null but current value is
+	 *            not null. See discussion in issue <a
+	 *            href="https://issues.jasig.org/browse/SSP-127">SSP-127</a>.
 	 */
 	public void setCompletedDate(final Date completedDate) {
-		this.completedDate = completedDate == null ? null : new Date(
-				completedDate.getTime());
+		if (this.completedDate == null && completedDate != null) {
+			this.completedDate = new Date(completedDate.getTime());
+		}
 	}
 
 	public Date getReminderSentDate() {

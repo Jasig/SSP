@@ -54,7 +54,7 @@ public class PersonSpecialServiceGroupTOFactoryImpl
 			throws ObjectNotFoundException {
 		final PersonSpecialServiceGroup model = super.from(tObject);
 
-		model.setSpecialServiceGroup((tObject.getSpecialServiceGroupId() == null) ? null
+		model.setSpecialServiceGroup(tObject.getSpecialServiceGroupId() == null ? null
 				: service.get(tObject.getSpecialServiceGroupId()));
 
 		if (tObject.getPersonId() != null) {
@@ -69,8 +69,6 @@ public class PersonSpecialServiceGroupTOFactoryImpl
 			final ReferenceLiteTO<SpecialServiceGroup> lite,
 			final Person person) throws ObjectNotFoundException {
 
-		PersonSpecialServiceGroup pssg = null;
-
 		final PagingWrapper<PersonSpecialServiceGroup> results = dao
 				.getAllForPersonIdAndSpecialServiceGroupId(person.getId(),
 						lite.getId(),
@@ -81,16 +79,15 @@ public class PersonSpecialServiceGroupTOFactoryImpl
 					+ person.getId().toString()
 					+ "SpecialServiceGroup:"
 					+ lite.getId().toString());
-			pssg = results.getRows().iterator().next();
+			return results.getRows().iterator().next();
 		} else if (results.getResults() == 1) {
-			pssg = results.getRows().iterator().next();
-		} else {
-			pssg = new PersonSpecialServiceGroup();
-			pssg.setPerson(person);
-			pssg.setSpecialServiceGroup(service.get(lite.getId()));
+			return results.getRows().iterator().next();
 		}
 
+		// else
+		final PersonSpecialServiceGroup pssg = new PersonSpecialServiceGroup();
+		pssg.setPerson(person);
+		pssg.setSpecialServiceGroup(service.get(lite.getId()));
 		return pssg;
 	}
-
 }

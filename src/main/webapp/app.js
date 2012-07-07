@@ -101,7 +101,7 @@ Ext.require([
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
-    
+    'Ssp.model.AuthenticatedPerson',
     'Ssp.model.Preferences',
     'Ssp.model.FieldError',
     'Ssp.model.util.TreeRequest',
@@ -182,7 +182,6 @@ Ext.require([
     'Ssp.store.reference.YesNo',
     'Ssp.controller.ApplicationEventsController',
     'Ext.tab.*',
-	'Ext.ux.CheckColumn',
 	'Ext.util.Filter',
 	'Ext.data.TreeStore',
 	'Ext.dd.DropTarget',
@@ -190,9 +189,10 @@ Ext.require([
 	'Ext.form.field.VTypes',
 	'Ext.form.field.Text',
 	'Ext.form.field.TextArea',
+	'Ext.form.FieldSet',
+	'Ext.ux.CheckColumn',
 	'Ext.ux.form.MultiSelect',
-	'Ext.ux.form.ItemSelector',
-	'Ext.form.FieldSet'
+	'Ext.ux.form.ItemSelector'
 ]);
 
 var apiUrls = [
@@ -246,35 +246,21 @@ var apiUrls = [
   {name: 'studentType', url: 'reference/studentType/'}
 ];
 
-Ext.onReady(function(){
+Ext.onReady(function(){	
 
-    // determine the permissions for the current authenticated
-	/*
-	me.apiProperties.makeRequest({
-		url: '/ssp/api/1/session/getAuthenticatedPerson/',
-		method: 'GET',
-		successFunc: function(response ,view){
-			var r = Ext.decode(response.responseText);
-			if (r != null)
-			{
-				// load the authenticated person
-				me.authenticatedPerson.populateFromGenericObject( r );
-			}
-		}
-	});
-	*/		
-	
-    // determine the permissions for the current authenticated user
+    // load the authenticated user
 	Ext.Ajax.request({
-		url: Ssp.mixin.ApiProperties.getBaseAppUrl() + 'session/permissions',
+		url: Ssp.mixin.ApiProperties.getBaseAppUrl() + 'session/getAuthenticatedPerson',
 		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 		success: function(response){
 			var r = Ext.decode(response.responseText);
-			var permissions=[];
-			if (r.success==true)
-			{
-				permissions = r.permissions;
+			var user={};
+			
+			if (r != null)
+			{			
+				// authenticated user
+			    user=r;
 
 				// configure the application
 				Deft.Injector.configure({
@@ -311,7 +297,9 @@ Ext.onReady(function(){
 				    },
 				    authenticatedPerson: {
 				        fn: function(){
-				            return new Ssp.model.Person({permissions:permissions});
+				        	var p = new Ssp.model.AuthenticatedPerson();
+				        	p.populateFromGenericObject( user );
+				            return p;
 				        },
 				        singleton: true
 				    },
@@ -521,6 +509,22 @@ Ext.onReady(function(){
 				    	Deft.Injector.providers.appEventsController.value.config.app=me;
 				    	Deft.Injector.providers.appEventsController.value.app=me;
 				    	
+				    	// Date patterns for formatting by a description
+				    	// rather than a date format
+				    	Ext.Date.patterns = {
+				    		    ISO8601Long:"Y-m-d H:i:s",
+				    		    ISO8601Short:"Y-m-d",
+				    		    ShortDate: "n/j/Y",
+				    		    LongDate: "l, F d, Y",
+				    		    FullDateTime: "l, F d, Y g:i:s A",
+				    		    MonthDay: "F d",
+				    		    ShortTime: "g:i A",
+				    		    LongTime: "g:i:s A",
+				    		    SortableDateTime: "Y-m-d\\TH:i:s",
+				    		    UniversalSortableDateTime: "Y-m-d H:i:sO",
+				    		    YearMonth: "F, Y"
+				    	};
+				    	
 				    	// Global error handling for Ajax calls 
 				    	Ext.override(Ext.data.proxy.Server, {
 				            constructor: function(config)
@@ -611,14 +615,12 @@ Ext.onReady(function(){
 				    	});	    	
 				    	
 				   }
-				});					
-
-				
+				});
 				
 			}else{
-				Ext.Msg.alert('Error','Unable to determine permissions for authenticated user. Please see your system administrator for assistance.');
+				Ext.Msg.alert('Error','Unable to determine authenticated user. Please see your system administrator for assistance.');
 			}
 		}
-	}, this);	
+	}, this);		
 	
 });

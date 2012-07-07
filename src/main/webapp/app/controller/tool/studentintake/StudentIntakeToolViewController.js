@@ -158,10 +158,12 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	var me=this;
     	var r = Ext.decode(response.responseText);
     	var studentIntakeModel;
+		
+    	// hide the loader
+    	me.getView().setLoading( false );
+    	
     	if ( r != null )
     	{  		
-    		// hide the loader
-        	me.getView().setLoading( false );
         	studentIntakeModel = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
     		me.studentIntakeForm = studentIntakeModel.getProxy().getReader().read( r ).records[0];		
     		me.buildStudentIntake( me.studentIntakeForm );    		
@@ -382,6 +384,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	
 	onSaveClick: function( button ) {
 		var me=this;
+		var handleSuccess = me.saveStudentIntakeSuccess;
 		var formUtils = me.formUtils;
 		var personalForm = Ext.getCmp('StudentIntakePersonal').getForm();
 		var demographicsForm = Ext.getCmp('StudentIntakeDemographics').getForm();
@@ -489,24 +492,19 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			// display loader
 			me.getView().setLoading( true );
 			
+			// TODO: handle unused fields from the json
+			// since these will throw an error in the
+			// current API
+			delete intakeData.person.currentAppointment;
+			
 			// Save the intake
-			Ext.Ajax.request({
+			me.apiProperties.makeRequest({
 				url: me.apiProperties.createUrl(me.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
 				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
 				jsonData: intakeData,
-				success: function(response) {
-					var r = Ext.decode(response.responseText);
-					
-					// hide loader
-					me.getView().setLoading( false );
-					
-					if(r.success == true) {
-						console.log('student intake saved successfully');							
-					}								
-				},
-				failure: me.apiProperties.handleError
-			}, me);
+				successFunc: handleSuccess,
+				scope: me
+			});
 
 		}else{
 			me.formUtils.displayErrors( validateResult.fields );
@@ -514,8 +512,20 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
 	},
 	
+	saveStudentIntakeSuccess: function(response) {
+		var me=this;
+		var r = Ext.decode(response.responseText);
+		
+		// hide loader
+		me.getView().setLoading( false );
+		
+		if(r.success == true) {
+			console.log('student intake saved successfully');							
+		}								
+	},
+	
 	viewConfidentialityAgreement: function(button){
-		Ext.Msg.alert("Attention", "Print the confidentiality Agreement after the report is available.");
+		Ext.Msg.alert("Attention", "This feature is not yet available.");
 	},
 	
 	onCancelClick: function( button ){

@@ -1,5 +1,7 @@
 package org.jasig.ssp.dao;
 
+import java.util.UUID;
+
 import javax.validation.ValidationException;
 
 import org.hibernate.Criteria;
@@ -7,6 +9,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -54,5 +58,15 @@ public class PersonProgramStatusDao
 					"Multiple PersonProgramStatus instances for a single person were found, which is not allowed.",
 					exc);
 		}
+	}
+
+	public PagingWrapper<PersonProgramStatus> getAllForPersonIdAndProgramStatusId(
+			final UUID personId, final UUID serviceReasonId,
+			final SortingAndPaging sAndP) {
+		final Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("person.id", personId));
+		criteria.add(Restrictions.eq("programStatus.id",
+				serviceReasonId));
+		return processCriteriaWithPaging(criteria, sAndP);
 	}
 }

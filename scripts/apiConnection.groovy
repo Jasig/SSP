@@ -26,13 +26,21 @@ String submitChildCareArrangement(ApiConnection conn, JsonSlurper jsonParser){
 String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	
 	//retrieve the intake form
-	String intakeForm = conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff")
+	String intakeForm = conn.get("api/1/tool/studentIntake/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194")
 	
 	//lets manipulate it a bit
 	def result = jsonParser.parseText(intakeForm)
 	
 	//remove the referenceData
 	result.referenceData = null
+	
+	result.person.primaryEmailAddress = 'test@sinclair.edu'
+	
+	result.person.studentType = new ReferenceLiteTO(id:UUID.fromString("b2d05919-5056-a51a-80bd-03e5288de771"))
+	
+	List<ReferenceLiteTO<ProgramStatus>> programStatuses = Lists.newArrayList();
+	programStatuses << new ReferenceLiteTO<ProgramStatus>(id:UUID.fromString("b2d12527-5056-a51a-8054-113116baab88"))
+	result.person.programStatuses = programStatuses
 	
 	//add a challenge
 	List<PersonChallengeTO> challenges = Lists.newArrayList();
@@ -55,10 +63,10 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	result.personEducationPlan = new PersonEducationPlanTO(newOrientationComplete:false, registeredForClasses:false, collegeDegreeForParents:false, specialNeeds:false, gradeTypicallyEarned:"B")
 	
 	//subit the manipulated form
-	conn.put("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff", toJson(result))
+	conn.put("api/1/tool/studentIntake/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194", toJson(result))
 	
 	//Retrieve the form once more
-	result = jsonParser.parseText( conn.get("api/1/tool/studentIntake/252de4a0-7c06-4254-b7d8-4ffc02fe81ff"))
+	result = jsonParser.parseText( conn.get("api/1/tool/studentIntake/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"))
 	
 	//we're not interested in the reference data
 	result.referenceData = null
@@ -83,10 +91,25 @@ String getAllJournalEntriesForPerson(ApiConnection conn){
 	return conn.get("api/1/person/58ba5ee3-734e-4ae9-b9c5-943774b4de41/journalEntry/")
 }
 
+String getPerson(ApiConnection conn){
+	//"/1/session/getAuthenticatedPerson"
+	return conn.get("api/1/session/getAuthenticatedPerson")
+}
+
 String toJson(def form){
 	def builder = new JsonBuilder()
 	builder.call(form)
 	return builder.toString()
+}
+
+String search(ApiConnection conn){
+	//"/1/person/search"
+	return conn.get("api/1/person/search?searchTerm=dennis")
+}
+
+String getCaseload(ApiConnection conn){
+	//"/1/person/caseload"
+	return conn.get("api/1/person/caseload")
 }
 
 /**
@@ -96,11 +119,13 @@ String toJson(def form){
 JsonSlurper jsonParser = new JsonSlurper()
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0", "advisor0", false)
 
-String output = getStudentIntakeForm(conn, jsonParser)
+//String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
 //String output = addGoalToPerson(conn) 
-
 //String output = getAllJournalEntriesForPerson(conn);
+//String output = getPerson(conn)
+//String output = search(conn)
+String output = getCaseload(conn)
 
 conn.formatAndPrintJson(output)
 //println (output);

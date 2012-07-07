@@ -3,7 +3,7 @@ package org.jasig.ssp.transferobject; // NOPMD
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Max;
@@ -13,15 +13,20 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.PersonReferralSource;
 import org.jasig.ssp.model.PersonServiceReason;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.ReferralSource;
 import org.jasig.ssp.model.reference.ServiceReason;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Person transfer object
@@ -40,7 +45,6 @@ public class PersonTO // NOPMD
 
 	private Date birthDate;
 
-	@NotNull
 	private String primaryEmailAddress;
 
 	private String secondaryEmailAddress;
@@ -72,7 +76,9 @@ public class PersonTO // NOPMD
 
 	private Boolean enabled;
 
-	private UUID studentTypeId;
+	private Date studentIntakeCompleteDate;
+
+	private ReferenceLiteTO<StudentType> studentType;
 
 	private PersonLiteTO coach;
 
@@ -97,6 +103,12 @@ public class PersonTO // NOPMD
 	private List<ReferenceLiteTO<ReferralSource>> referralSources;
 
 	private List<ReferenceLiteTO<ServiceReason>> serviceReasons;
+
+	private List<ReferenceLiteTO<ConfidentialityLevel>> confidentialityLevels;
+
+	private List<String> permissions;
+
+	private Set<ReferenceLiteTO<ProgramStatus>> programStatuses;
 
 	/**
 	 * Empty constructor
@@ -139,6 +151,7 @@ public class PersonTO // NOPMD
 		photoUrl = model.getPhotoUrl();
 		schoolId = model.getSchoolId();
 		enabled = model.getEnabled();
+		studentIntakeCompleteDate = model.getStudentIntakeCompleteDate();
 
 		final Person coachPerson = model.getCoach();
 		if (coachPerson == null) {
@@ -154,8 +167,8 @@ public class PersonTO // NOPMD
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
 		anticipatedStartYear = model.getAnticipatedStartYear();
 		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
-		studentTypeId = model.getStudentType() == null ? null : model
-				.getStudentType().getId();
+		studentType = model.getStudentType() == null ? null
+				: new ReferenceLiteTO<StudentType>(model.getStudentType());
 
 		if ((null != model.getSpecialServiceGroups())
 				&& !(model.getSpecialServiceGroups().isEmpty())) {
@@ -166,6 +179,7 @@ public class PersonTO // NOPMD
 				specialServiceGroupsFromModel
 						.add(pssg.getSpecialServiceGroup());
 			}
+
 			specialServiceGroups = ReferenceLiteTO
 					.toTOList(specialServiceGroupsFromModel);
 		}
@@ -177,6 +191,7 @@ public class PersonTO // NOPMD
 			for (final PersonReferralSource prs : model.getReferralSources()) {
 				referralSourcesFromModel.add(prs.getReferralSource());
 			}
+
 			referralSources = ReferenceLiteTO
 					.toTOList(referralSourcesFromModel);
 		}
@@ -188,9 +203,20 @@ public class PersonTO // NOPMD
 			for (final PersonServiceReason psr : model.getServiceReasons()) {
 				serviceReasonsFromModel.add(psr.getServiceReason());
 			}
+
 			serviceReasons = ReferenceLiteTO.toTOList(serviceReasonsFromModel);
 		}
 
+		if ((null != model.getProgramStatuses())
+				&& !(model.getProgramStatuses().isEmpty())) {
+			final Set<ProgramStatus> programStatusesFromModel = Sets
+					.newHashSet();
+			for (final PersonProgramStatus psr : model.getProgramStatuses()) {
+				programStatusesFromModel.add(psr.getProgramStatus());
+			}
+
+			programStatuses = ReferenceLiteTO.toTOSet(programStatusesFromModel);
+		}
 	}
 
 	/**
@@ -389,6 +415,17 @@ public class PersonTO // NOPMD
 		this.enabled = enabled;
 	}
 
+	public Date getStudentIntakeCompleteDate() {
+		return studentIntakeCompleteDate == null ? null : new Date(
+				studentIntakeCompleteDate.getTime());
+	}
+
+	public void setStudentIntakeCompleteDate(
+			final Date studentIntakeCompleteDate) {
+		this.studentIntakeCompleteDate = (studentIntakeCompleteDate == null ? null
+				: new Date(studentIntakeCompleteDate.getTime()));
+	}
+
 	public String getStrengths() {
 		return strengths;
 	}
@@ -431,12 +468,13 @@ public class PersonTO // NOPMD
 				: new Date(studentIntakeRequestDate.getTime());
 	}
 
-	public UUID getStudentTypeId() {
-		return studentTypeId;
+	public ReferenceLiteTO<StudentType> getStudentType() {
+		return studentType;
 	}
 
-	public void setStudentTypeId(final UUID studentTypeId) {
-		this.studentTypeId = studentTypeId;
+	public void setStudentType(
+			final ReferenceLiteTO<StudentType> studentType) {
+		this.studentType = studentType;
 	}
 
 	public List<ReferenceLiteTO<SpecialServiceGroup>> getSpecialServiceGroups() {
@@ -474,16 +512,36 @@ public class PersonTO // NOPMD
 		this.coach = coach;
 	}
 
-	public UUID getCoachId() {
-		if (coach == null) {
-			return null;
-		} else {
-			return coach.getId();
-		}
+	public List<ReferenceLiteTO<ConfidentialityLevel>> getConfidentialityLevels() {
+		return confidentialityLevels;
 	}
 
-	public void setCoachId(final UUID coachId) {
-		coach = new PersonLiteTO();
-		coach.setId(coachId);
+	public void setConfidentialityLevels(
+			final List<ReferenceLiteTO<ConfidentialityLevel>> confidentialityLevels) {
+		this.confidentialityLevels = confidentialityLevels;
+	}
+
+	public List<String> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(final List<String> permissions) {
+		this.permissions = permissions;
+	}
+
+	/**
+	 * @return the "lite" version of the programStatuses
+	 */
+	public Set<ReferenceLiteTO<ProgramStatus>> getProgramStatuses() {
+		return programStatuses;
+	}
+
+	/**
+	 * @param programStatuses
+	 *            the "lite" version of the programStatuses to set
+	 */
+	public void setProgramStatuses(
+			final Set<ReferenceLiteTO<ProgramStatus>> programStatuses) {
+		this.programStatuses = programStatuses;
 	}
 }

@@ -7,6 +7,9 @@ Ext.define('Ssp.controller.person.CoachViewController', {
     	person: 'currentPerson', 	
         studentTypesStore: 'studentTypesStore'
     },
+    config: {
+    	inited: false
+    },
     control: {
     	departmentField: '#departmentField',
     	phoneField: '#phoneField',
@@ -35,10 +38,18 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 		me.studentTypesStore.load();
 		me.coachesStore.load();
 		
-		me.getView().loadRecord( me.person );
+		me.initForm();
 		
 		return this.callParent(arguments);
     },
+
+	initForm: function(){
+		var me=this;
+		me.getView().getForm().reset();
+		me.getCoachCombo().setValue( me.person.getCoachId() );
+		me.getStudentTypeCombo().setValue( me.person.getStudentTypeId() );
+		me.inited=true;
+	},    
     
 	onCoachComboSelect: function(comp, records, eOpts){
 		var me=this;

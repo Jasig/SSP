@@ -20,6 +20,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     
     control: {
     	searchText: '#searchText',
+    	searchCaseloadCheck: '#searchCaseloadCheck',
     	
     	view: {
     		selectionchange: 'onSelectionChange',
@@ -47,8 +48,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.personUrl =  me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );		
 		me.personSearchUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personSearch') );		
 		
-		// load students
-    	me.studentsStore.load();
+		me.initializeStudents();
 
  		return me.callParent(arguments);
     },
@@ -83,6 +83,10 @@ Ext.define('Ssp.controller.SearchViewController', {
         return this.callParent( arguments );
     },	
 
+    initializeStudents: function(){
+    	this.studentsStore.load();
+    },
+    
     onCollapseStudentRecord: function(){
     	console.log('SearchViewController->onCollapseStudentRecord');
 	},
@@ -111,14 +115,14 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              { header: 'First', dataIndex: 'firstName', flex: 1 },		        
     	              { header: 'MI', dataIndex: 'middleInitial', flex: .2},
     	              { header: 'Last', dataIndex: 'lastName', flex: 1},
-    	              { header: 'Type', dataIndex: 'studentType', flex: .2},
+    	              { header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
     	              { header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
     	              { header: 'Alerts', dataIndex: 'alerts', flex: .2}
     	              ];			
 		}else{
 			columns = [
-    	              { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 },		        
-    	              { text: 'Name', dataIndex: 'lastName', renderer: this.columnRendererUtils.renderStudentDetails, flex: 50},
+    	              /* { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 }, */		        
+    	              { text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderStudentDetails, flex: 50}
     	              ];		
 		}
 		
@@ -188,24 +192,27 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	onSearchClick: function(button){
 		var me=this;
+		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
 		var successFunc = function(response,view){
 	    	var r = Ext.decode(response.responseText);
 	    	if (r.rows.length > 0)
 	    	{
 	    		me.studentsStore.loadData(r.rows);
+	    	}else{
+	    		Ext.Msg.alert('Attention','No students match your search. Try a different search value.');
 	    	}
 		};
 		
 		if (me.getSearchText().value != undefined && me.getSearchText().value != "")
 		{
+			
 			me.apiProperties.makeRequest({
-				url: me.personSearchUrl,
-				json: { outsideCaseload : true, searchTerm : me.getSearchText().value},
+				url: me.personSearchUrl+'?outsideCaseload='+outsideCaseload+'&searchTerm='+me.getSearchText().value,
 				method: 'GET',
 				successFunc: successFunc
 			});			
 		}else{
-			Ext.Msg.alert('Attention','Please provide a value to search such as Student Id,  ( First Name, Last Name ) or any portion of the name.');
+			me.initializeStudents();
 		}	
 	},
 	

@@ -1,14 +1,23 @@
 package org.jasig.ssp.factory.impl;
 
+import java.util.Date;
+
 import org.jasig.ssp.dao.PersonProgramStatusDao;
-import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.PersonProgramStatusTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusChangeReasonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PersonProgramStatusTO;
+import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +32,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class PersonProgramStatusTOFactoryImpl
 		extends
-		AbstractAuditableTOFactory<PersonProgramStatusTO, PersonProgramStatus>
+		AbstractPersonAssocReferenceTOFactory<PersonProgramStatusTO, PersonProgramStatus, ProgramStatus>
 		implements PersonProgramStatusTOFactory {
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonServiceReasonTOFactoryImpl.class);
 
 	public PersonProgramStatusTOFactoryImpl() {
 		super(PersonProgramStatusTO.class, PersonProgramStatus.class);
@@ -68,5 +80,35 @@ public class PersonProgramStatusTOFactoryImpl
 		model.setExpirationDate(tObject.getExpirationDate());
 
 		return model;
+	}
+
+	@Override
+	public PersonProgramStatus fromLite(
+			final ReferenceLiteTO<ProgramStatus> lite,
+			final Person person) throws ObjectNotFoundException {
+
+		final PagingWrapper<PersonProgramStatus> results = dao
+				.getAllForPersonIdAndProgramStatusId(person.getId(),
+						lite.getId(), new SortingAndPaging(ObjectStatus.ACTIVE));
+
+		if (results.getResults() > 1) {
+			final StringBuilder msg = new StringBuilder(
+					"Multiple active PersonProgramStatuss found for Person: ");
+			msg.append(person.getId());
+			msg.append(", ProgramStatus: ");
+			msg.append(lite.getId());
+			LOGGER.error(msg.toString());
+			throw new ObjectNotFoundException(msg.toString(),
+					"PersonProgramStatus");
+		} else if (results.getResults() == 1) {
+			return results.getRows().iterator().next();
+		}
+
+		// else
+		final PersonProgramStatus pps = new PersonProgramStatus();
+		pps.setPerson(person);
+		pps.setProgramStatus(service.get(lite.getId()));
+		pps.setEffectiveDate(new Date());
+		return pps;
 	}
 }

@@ -11,20 +11,37 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     	    	title: 'Administrative Tools',
     	    	form: '',
     	        expanded: true,
-    	        children: [
+    	        children: [ {
+    	        	            text: 'Beta',
+    	        	            title: 'Beta',
+    	        	            form: '',
+    	        	            expanded: false,
+    	        	            children: [{
+							    	text: 'Campuses',
+									title: 'Campuses',
+									store: '',
+									form: 'CampusAdmin',
+									leaf: true
+								}]
+    	                    },{
+    	        	            text: 'Caseload',
+    	        	            title: 'Caseload',
+    	        	            form: '',
+    	        	            expanded: false,
+    	        	            children: [{
+									text: 'Program Status Change Reasons',
+									title: 'Program Status Change Reasons',
+									store: 'programStatusChangeReasons',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    }]
+    	                    },
     						{
-    							text: 'Beta',
-    							title: 'Beta',
+    							text: 'Caseload Assignment',
+    							title: 'Caseload Assignment',
     							form: '',
     							expanded: false,
-    							children: [
-    									{
-    										text: 'Program Status Change Reasons',
-    										title: 'Program Status Change Reasons',
-    										store: 'programStatusChangeReasons',
-    								        form: 'AbstractReferenceAdmin',
-    										leaf: true
-    								    },{
+    							children: [{
     										text: 'Referral Sources',
     										title: 'Referral Sources',
     										store: 'referralSources',
@@ -74,12 +91,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     						      		                  }
     						    		                }
     						    		           ]
-    									},{
-    								    	text: 'Campuses',
-    										title: 'Campuses',
-    										store: '',
-    										form: 'CampusAdmin',
-    										leaf: true
     									}
     							]
     						},{

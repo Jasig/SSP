@@ -75,6 +75,13 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	    return strHtml;
 	},
 	
+	renderStudentType: function(val, metaData, record) {
+		var strHtml = '<div>';
+        strHtml += '<p>' + record.getStudentTypeName() + '</p>';
+        strHtml += '</div>';
+	    return strHtml;
+	},
+	
 	renderAddToolIcon: function(value,meta,record,rowIx,ColIx, store) {
 	    return (record.get("active")==false)?
 	                'addToolIcon':
