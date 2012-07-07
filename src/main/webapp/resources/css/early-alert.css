@@ -1,0 +1,54 @@
+/* Roster Screen */
+
+.early-alert .course-label {
+	font-size: 14px;
+	padding: .5em;
+}
+.early-alert .course-select {
+	border: 1px solid darkGray;
+	font-size: 14px;
+	padding: .5em;
+}
+
+/* Form Screen */
+
+.early-alert .ea-label {
+    float: right;
+    margin: 3px 0;
+}
+
+.early-alert .ea-required {
+    float: right;
+    margin: 3px 0 3px 6px;
+    color: #F00;
+}
+
+.early-alert .ea-input, .early-alert .ea-buttons {
+    float: right;
+    margin: 3px 0 3px 4px;
+    width: 400px;
+}
+
+.early-alert .ea-input input, .early-alert .ea-input select, .early-alert .ea-input textarea {
+    width: 300px;
+}
+
+.ea-input p {
+    margin: 3px 0 6px 0;
+}
+
+.ea-input textarea {
+    height: 100px;
+}
+
+.early-alert .ea-input ul {
+    margin: 0;
+    padding-left: 20px;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-padding-start: 20px;
+}
+
+.early-alert .ea-clear {
+    clear: both;
+}

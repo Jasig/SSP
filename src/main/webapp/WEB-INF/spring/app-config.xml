@@ -107,5 +107,11 @@
 		<property name="maxIdle" value="5" />
 		<property name="maxWait" value="10000" />
 	</bean>
+	
+	<!-- Message source for this context, loaded from localized "messages_xx" files -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames" value="i18n/messages"/>
+		<property name="useCodeAsDefaultMessage" value="true"/>
+	</bean>
 
 </beans>
