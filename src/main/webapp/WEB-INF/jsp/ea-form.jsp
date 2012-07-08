@@ -1,5 +1,8 @@
 <jsp:directive.include file="/WEB-INF/jsp/include.jsp"/>
 
+<portlet:renderURL var="cancelUrl"/>
+<portlet:actionURL var="submitUrl"/>
+
 <c:set var="n"><portlet:namespace/></c:set>
 
 <script src="<rs:resourceURL value="/rs/jquery/1.6.1/jquery-1.6.1.min.js"/>" type="text/javascript"></script>
@@ -29,105 +32,105 @@
       </div>
     </div>
     
-    <form>
+    <form method="POST" class="alert-form" action="${cancelUrl}">
     
       <!-- Course -->
       <div class="ea-input">
-        <span>ENGLISH - 124 - 001 - Academic Writing and Literature</span>
+        <span class="field-course"></span>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Course:</span>
+        <span><spring:message code="course"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Term -->
       <div class="ea-input">
-        <span>11/SD</span>
+        <span class="field-term"></span>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Term:</span>
+        <span><spring:message code="term"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Student -->
       <div class="ea-input">
-        <span>James K Polk</span>
+        <span class="field-student"></span>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Student:</span>
+        <span><spring:message code="student"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Net ID -->
       <div class="ea-input">
-        <span>5555555</span>
+        <span class="field-net-id"></span>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Net ID:</span>
+        <span><spring:message code="net.id"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Student Email -->
       <div class="ea-input">
-        <span>james.polk@president.gov</span>
+        <span class="field-student-email"></span>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Student Email:</span>
+        <span><spring:message code="student.email"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Student Type -->
       <div class="ea-input">
-        <span>ARC</span>
+        <span class="field-student-type"></span>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Student Type:</span>
+        <span><spring:message code="student.type"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Assigned Counselor/Coach -->
       <div class="ea-input">
-        <span>Lumpkin, Hortense</span>
+        <span class="field-assigned-counselor"></span>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Assigned Counselor/Coach:</span>
+        <span><spring:message code="assigned.counselor.coach"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Office -->
       <div class="ea-input">
-        <span>6122A</span>
+        <span class="field-office"></span>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Office:</span>
+        <span><spring:message code="office"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Phone -->
       <div class="ea-input">
-        <span>555-5555</span>
+        <span class="field-phone"></span>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Phone:</span>
+        <span><spring:message code="phone"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Department -->
       <div class="ea-input">
-        <span>Academic Resource Center</span>
+        <span class="field-department"></span>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Department:</span>
+        <span><spring:message code="department"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
@@ -137,45 +140,38 @@
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Email cc:</span>
+        <span><spring:message code="email.cc"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Campus -->
       <div class="ea-input">
-        <select>
-          <option>Dayton Campus</option>
-        </select>
+        <select class="field-campus"></select>
       </div>
       <div class="ea-required">*</div>
       <div class="ea-label">
-        <span>Campus:</span>
+        <span><spring:message code="campus"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Referral Reason -->
       <div class="ea-input">
-        <select>
-          <option>Academic Concern</option>
-        </select>
+        <select class="field-reason"></select>
       </div>
       <div class="ea-required">*</div>
       <div class="ea-label">
-        <span>Referral Reason:</span>
+        <span><spring:message code="referral.reason"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Faculty Suggestions -->
       <div class="ea-input">
-        <ul>
-          <li>The Tutoring &amp; Learning Center</li>
-          <li>See Advisor or Coach</li>
-        </ul>
-        <p><a href="">Add/Edit</a></p>
+        <ul class="field-suggestions"></ul>
+        <p><a href="javascript:void(0);" class="suggestions-add-edit"><spring:message code="add.edit"/></a></p>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Faculty Suggestions:</span>
+        <span><spring:message code="faculty.suggestions"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
@@ -185,20 +181,25 @@
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span>Comments:</span>
+        <span><spring:message code="comments"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
       <!-- Buttons -->
       <div class="ea-buttons">
         <div class="buttons">
-          <input class="button primary" type="submit" value="Send Early Alert">
-          <a class="button" href="">Cancel</a>
+          <input class="button primary" type="submit" value="<spring:message code="send.early.alert"/>" />
+          <a class="button" href="${cancelUrl}"><spring:message code="cancel"/></a>
         </div>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">&nbsp;</div>
       <div class="ea-clear"></div>
+      
+      <div class="suggestions-dialog">
+        <ul>
+        </ul>
+      </div>
     
     </form>
     
@@ -212,6 +213,12 @@
 
     ${n}.jQuery(function() {
         var $ = up.jQuery;
+        
+        ssp.EarlyAlertForm('#${n}earlyAlert', {
+            course: 'ENGLISH - 124 - 001 - Academic Writing and Literature',
+            term: '11/SD',
+            studentId: '58ba5ee3-734e-4ae9-b9c5-943774b4de41'
+        });
 
     });
 </script>

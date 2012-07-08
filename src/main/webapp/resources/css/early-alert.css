@@ -12,6 +12,10 @@
 
 /* Form Screen */
 
+.early-alert .alert-form {
+    width: 600px
+}
+
 .early-alert .ea-label {
     float: right;
     margin: 3px 0;
