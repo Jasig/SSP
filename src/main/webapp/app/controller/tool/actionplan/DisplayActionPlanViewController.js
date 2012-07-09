@@ -37,11 +37,12 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 			change: 'onFilterTasksBySelfChange'
 		},
     	
-		'addTaskButton': {
-			click: 'onAddTaskClick'
-		},
-		
-		
+		addTaskButton: {
+			selector: '#addTaskButton',
+			listeners: {
+				click: 'onAddTaskClick'
+			}
+		}
 	},
 	
 	init: function() {
@@ -72,6 +73,8 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    		me.filterTasks();
 	    	}
 		};
+	
+    	me.getAddTaskButton().setDisabled( !me.authenticatedPerson.hasPermission('ROLE_PERSON_TASK_WRITE') );
 		
 		// clear any existing tasks
 		me.store.removeAll();

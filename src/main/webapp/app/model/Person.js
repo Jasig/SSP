@@ -29,7 +29,8 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'specialServiceGroups', type: 'auto'},
     		 {name: 'referralSources', type: 'auto'},
     		 {name: 'serviceReasons', type: 'auto'},
-             {name: 'currentAppointment', type: 'auto'}],
+             {name: 'currentAppointment', type: 'auto'},
+    		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'}],
     
              /*defaultValue:{"id" : "",
              "startDate" : 1331269200000,

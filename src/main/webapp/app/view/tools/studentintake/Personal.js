@@ -39,6 +39,10 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        name: 'studentIntakeCreatedDate'
 				    },{
 				    	xtype: 'displayfield',
+				        fieldLabel: 'Intake Completion Date',
+				        name: 'studentIntakeCompleteDate'
+				    },{
+				    	xtype: 'displayfield',
 				        fieldLabel: 'Agreed to Confidentiality',
 				        name: 'confidentialityAgreement'
 				    },{

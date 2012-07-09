@@ -385,6 +385,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	onSaveClick: function( button ) {
 		var me=this;
 		var handleSuccess = me.saveStudentIntakeSuccess;
+		var handleError = me.saveErrorHandler;
 		var formUtils = me.formUtils;
 		var personalForm = Ext.getCmp('StudentIntakePersonal').getForm();
 		var demographicsForm = Ext.getCmp('StudentIntakeDemographics').getForm();
@@ -487,7 +488,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			if (intakeData.personEducationGoal.educationGoalId=="")
 			{
 				intakeData.personEducationGoal.educationGoalId=null;
-			}			
+			}
 			
 			// display loader
 			me.getView().setLoading( true );
@@ -496,6 +497,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			// since these will throw an error in the
 			// current API
 			delete intakeData.person.currentAppointment;
+			delete intakeData.person.studentType;
 			
 			// Save the intake
 			me.apiProperties.makeRequest({
@@ -503,6 +505,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 				method: 'PUT',
 				jsonData: intakeData,
 				successFunc: handleSuccess,
+				failure: handleError,
 				scope: me
 			});
 
@@ -510,6 +513,23 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			me.formUtils.displayErrors( validateResult.fields );
 		}
 		
+	},
+
+	saveErrorHandler: function(response) {
+		var me=this;
+		var r = Ext.decode(response.responseText);
+		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
+
+		// hide loader
+		me.getView().setLoading( false );		
+		
+		if (r.message != null)
+		{
+			msg = msg + " " + r.message;
+		}
+		
+		// display error message
+		Ext.Msg.alert('SSP Error', msg);								
 	},
 	
 	saveStudentIntakeSuccess: function(response) {

@@ -4,6 +4,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     inject: {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
     	model: 'currentGoal',
     	person: 'currentPerson',
@@ -19,9 +20,12 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
 			viewready: 'onViewReady'
 		},
     	
-    	'addGoalButton': {
-			click: 'onAddGoalClick'
-		}
+    	addGoalButton:{
+    		selector: '#addGoalButton',
+    		listeners: {
+    			click: 'onAddGoalClick'
+    		}
+    	}
     },
     
     constructor: function() {
@@ -39,8 +43,11 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     },
 
     onViewReady: function(comp, obj){
-    	this.appEventsController.assignEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});
-    	this.appEventsController.assignEvent({eventName: 'deleteGoal', callBackFunc: this.deleteConfirmation, scope: this});
+    	var me=this;
+    	me.getAddGoalButton().setDisabled( !me.authenticatedPerson.hasPermission('ROLE_PERSON_GOAL_WRITE') );
+    	
+    	me.appEventsController.assignEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});
+    	me.appEventsController.assignEvent({eventName: 'deleteGoal', callBackFunc: this.deleteConfirmation, scope: this});
     },
     
     destroy: function() {
