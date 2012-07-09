@@ -59,20 +59,22 @@ public class ReferenceLiteTO<T extends AbstractReference> implements
 	public static <T extends AbstractReference> List<ReferenceLiteTO<T>> toTOList(
 			@NotNull final Collection<T> models) {
 		final List<ReferenceLiteTO<T>> tos = Lists.newArrayList();
-		for (final T model : models) {
-			tos.add(fromModel(model));
+		if (models != null) {
+			for (final T model : models) {
+				tos.add(fromModel(model));
+			}
 		}
-
 		return tos;
 	}
 
 	public static <T extends AbstractReference> Set<ReferenceLiteTO<T>> toTOSet(
 			@NotNull final Collection<T> models) {
 		final Set<ReferenceLiteTO<T>> tos = Sets.newHashSet();
-		for (final T model : models) {
-			tos.add(fromModel(model));
+		if (models != null) {
+			for (final T model : models) {
+				tos.add(fromModel(model));
+			}
 		}
-
 		return tos;
 	}
 
