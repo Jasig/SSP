@@ -18,6 +18,16 @@
 <!-- Portlet -->
 <div id="${n}earlyAlert" class="fl-widget portlet early-alert" role="section">
   
+  	<!-- Portlet Message (success) -->
+  <div class="portlet-msg-success portlet-msg success sent-message" role="status" style="display: none;">
+    <div class="titlebar">
+      <h3 class="title"><spring:message code="early.alert.sent"/></h3>
+    </div>
+    <div class="content">
+      <p><spring:message code="alert.sent.prefix"/> <strong><c:out value="${studentName}"/></strong> <spring:message code="alert.sent.suffix"/></p>
+    </div>
+  </div>
+
   <!-- Portlet Titlebar -->
   <div class="fl-widget-titlebar titlebar portlet-titlebar" role="sectionhead">
   	<h2 class="title" role="heading"><spring:message code="course.roster"/></h2>
@@ -35,7 +45,7 @@
   <!-- Portlet Content -->
   <div class="fl-widget-content content portlet-content" role="main">
   
-  	<!-- Portlet Message -->
+  	<!-- Portlet Message (loading) -->
   	<div class="portlet-msg-info portlet-msg info loading-message" role="status" style="display: none;">
     	<div class="titlebar">
         <h3 class="title"><spring:message code="loading"/> . . .</h3>
@@ -44,7 +54,7 @@
     	  <p><spring:message code="please.wait.while.the.system.finishes.loading.roster"/></p>
       </div>
     </div>
-    
+
     <!-- Portlet Section -->
     <div class="fl-pager roster">   
         <div class="fl-col-flex2">
@@ -116,6 +126,11 @@
         var fluid = up.fluid;
 
         ssp.EarlyAlertRoster('#${n}earlyAlert', { enterAlertUrl: '${enterAlertUrl}' });
+        
+        // Confirm submission
+        if (${studentName != null ? 'true' : 'false'}) {
+            $('#${n}earlyAlert .sent-message').slideDown(1000);
+        }
 
     });
 </script>
