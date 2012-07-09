@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.mail.SendFailedException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.EarlyAlertResponseDao;
@@ -27,6 +29,7 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
@@ -60,8 +63,20 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		AbstractAuditableCrudService<EarlyAlertResponse>
 		implements EarlyAlertResponseService {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(EarlyAlertResponseServiceImpl.class);
+
 	@Autowired
 	private transient EarlyAlertResponseDao dao;
+
+	@Autowired
+	private transient PersonAttributesService personAttributeService;
+
+	@Autowired
+	private transient HttpServletRequest request;
+
+	@Autowired
+	private transient HttpServletResponse response;
 
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;
@@ -101,9 +116,6 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 	@Autowired
 	private transient VelocityTemplateService velocityTemplateService;
-
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(EarlyAlertResponseServiceImpl.class);
 
 	@Override
 	protected EarlyAlertResponseDao getDao() {
@@ -335,6 +347,20 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 				configService.getByNameEmpty("app_title"));
 		templateParameters.put("institutionName",
 				configService.getByNameEmpty("inst_name"));
+
+		try {
+			templateParameters.put("officeLocation", personAttributeService
+					.getAttributes(request, response, "officeLocation"));
+		} catch (final ObjectNotFoundException e) {
+			LOGGER.info("Person attribute \"officeLocation\" could not be loaded.");
+		}
+
+		try {
+			templateParameters.put("workPhone", personAttributeService
+					.getAttributes(request, response, "workPhone"));
+		} catch (final ObjectNotFoundException e) {
+			LOGGER.info("Person attribute \"workPhone\" could not be loaded.");
+		}
 
 		return templateParameters;
 	}

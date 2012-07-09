@@ -30,19 +30,23 @@ import org.springframework.web.filter.GenericFilterBean;
 
 /**
  * @see org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter
- * @author daniel
- *         Couldn't extend AbstractPreAuthenticatedProcessingFilter to the
- *         proper degree, so pulling a bunch of code from it.
+ * @author daniel Couldn't extend AbstractPreAuthenticatedProcessingFilter to
+ *         the proper degree, so pulling a bunch of code from it.
  */
 public class UPortalPreAuthenticatedProcessingFilter
 		extends GenericFilterBean
 		implements InitializingBean, ApplicationEventPublisherAware {
 
 	private ApplicationEventPublisher eventPublisher = null;
+
 	private AuthenticationDetailsSource authenticationDetailsSource = new WebAuthenticationDetailsSource();
+
 	private AuthenticationManager authenticationManager = null;
+
 	private boolean continueFilterChainOnUnsuccessfulAuthentication = true;
+
 	private boolean checkForPrincipalChanges;
+
 	private boolean invalidateSessionOnPrincipalChange = true;
 
 	private static final Logger LOGGER = LoggerFactory
@@ -149,7 +153,7 @@ public class UPortalPreAuthenticatedProcessingFilter
 			final Authentication authResult = authenticationManager
 					.authenticate(preAuthToken);
 			successfulAuthentication(request, response, authResult);
-		} catch (AuthenticationException failed) {
+		} catch (final AuthenticationException failed) {
 			unsuccessfulAuthentication(request, response, failed);
 
 			if (!continueFilterChainOnUnsuccessfulAuthentication) {
@@ -170,7 +174,7 @@ public class UPortalPreAuthenticatedProcessingFilter
 
 		SecurityContextHolder.getContext().setAuthentication(authResult);
 		// Fire event
-		if (this.eventPublisher != null) {
+		if (eventPublisher != null) {
 			eventPublisher
 					.publishEvent(new InteractiveAuthenticationSuccessEvent(
 							authResult, this.getClass()));
@@ -200,7 +204,7 @@ public class UPortalPreAuthenticatedProcessingFilter
 	@Override
 	public void setApplicationEventPublisher(
 			final ApplicationEventPublisher anApplicationEventPublisher) {
-		this.eventPublisher = anApplicationEventPublisher;
+		eventPublisher = anApplicationEventPublisher;
 	}
 
 	/**
@@ -223,17 +227,23 @@ public class UPortalPreAuthenticatedProcessingFilter
 		this.authenticationManager = authenticationManager;
 	}
 
+	public boolean isContinueFilterChainOnUnsuccessfulAuthentication() {
+		return continueFilterChainOnUnsuccessfulAuthentication;
+	}
+
 	public void setContinueFilterChainOnUnsuccessfulAuthentication(
 			final boolean shouldContinue) {
 		continueFilterChainOnUnsuccessfulAuthentication = shouldContinue;
 	}
 
+	public boolean isCheckForPrincipalChanges() {
+		return checkForPrincipalChanges;
+	}
+
 	/**
 	 * If set, the pre-authenticated principal will be checked on each request
-	 * and compared
-	 * against the name of the current <tt>Authentication</tt> object. If a
-	 * change is detected,
-	 * the user will be reauthenticated.
+	 * and compared against the name of the current <tt>Authentication</tt>
+	 * object. If a change is detected, the user will be reauthenticated.
 	 * 
 	 * @param checkForPrincipalChanges
 	 */
@@ -242,11 +252,14 @@ public class UPortalPreAuthenticatedProcessingFilter
 		this.checkForPrincipalChanges = checkForPrincipalChanges;
 	}
 
+	public boolean isInvalidateSessionOnPrincipalChange() {
+		return invalidateSessionOnPrincipalChange;
+	}
+
 	/**
 	 * If <tt>checkForPrincipalChanges</tt> is set, and a change of principal is
-	 * detected, determines whether
-	 * any existing session should be invalidated before proceeding to
-	 * authenticate the new principal.
+	 * detected, determines whether any existing session should be invalidated
+	 * before proceeding to authenticate the new principal.
 	 * 
 	 * @param invalidateSessionOnPrincipalChange
 	 *            <tt>false</tt> to retain the existing session. Defaults to
@@ -256,5 +269,4 @@ public class UPortalPreAuthenticatedProcessingFilter
 			final boolean invalidateSessionOnPrincipalChange) {
 		this.invalidateSessionOnPrincipalChange = invalidateSessionOnPrincipalChange;
 	}
-
 }

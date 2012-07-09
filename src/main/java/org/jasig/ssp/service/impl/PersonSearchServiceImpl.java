@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
+/**
+ * PersonSearch service implementation
+ */
 @Service
 @Transactional
 public class PersonSearchServiceImpl implements PersonSearchService {
@@ -45,12 +48,11 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 		final Collection<PersonSearchResult> personSearchResults = Lists
 				.newArrayList();
-		for (Person person : people) {
+		for (final Person person : people) {
 			personSearchResults.add(new PersonSearchResult(person));
 		}
 
 		return new PagingWrapper<PersonSearchResult>(people.getResults(),
 				personSearchResults);
 	}
-
 }

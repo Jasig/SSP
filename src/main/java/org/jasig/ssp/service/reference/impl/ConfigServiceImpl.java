@@ -30,7 +30,7 @@ public class ConfigServiceImpl extends
 	transient private ConfigDao dao;
 
 	@Value("#{configProperties.db_dialect}")
-	private String dialect;
+	private transient String dialect;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ConfigServiceImpl.class);

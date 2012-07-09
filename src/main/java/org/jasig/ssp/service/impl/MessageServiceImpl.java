@@ -251,16 +251,15 @@ public class MessageServiceImpl implements MessageService {
 			LOGGER.debug("_ : JavaMailSender.send()");
 			try {
 				javaMailSender.send(mimeMessage);
-			} catch (MailSendException e) {
+			} catch (final MailSendException e) {
 				try {
 					LOGGER.warn("Send failed, going to wait and try again");
 					Thread.sleep(20 * 1000L);
 					javaMailSender.send(mimeMessage);
-				} catch (InterruptedException e1) {
+				} catch (final InterruptedException e1) {
 					LOGGER.error("Thread error", e1);
-				} catch (MailSendException e2) {
-					throw new SendFailedException(
-							"Unable to send message.", e2);
+				} catch (final MailSendException e2) {
+					throw new SendFailedException("Unable to send message.", e2);
 				}
 			}
 		} else {

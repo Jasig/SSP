@@ -43,14 +43,14 @@ public class CaseloadRecord {
 	}
 
 	public Date getStudentIntakeCompleteDate() {
-		return (studentIntakeCompleteDate == null) ? null : new Date(
+		return studentIntakeCompleteDate == null ? null : new Date(
 				studentIntakeCompleteDate.getTime());
 	}
 
 	public void setStudentIntakeCompleteDate(
 			final Date studentIntakeCompleteDate) {
-		this.studentIntakeCompleteDate = ((studentIntakeCompleteDate == null) ? null
-				: new Date(studentIntakeCompleteDate.getTime()));
+		this.studentIntakeCompleteDate = studentIntakeCompleteDate == null ? null
+				: new Date(studentIntakeCompleteDate.getTime());
 	}
 
 	public String getSchoolId() {

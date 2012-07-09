@@ -19,8 +19,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class RequestAndResponseAccessFilter implements Filter {
 
-	private final ThreadLocal<HttpServletRequest> requests = new ThreadLocal<HttpServletRequest>();
-	private final ThreadLocal<HttpServletResponse> responses = new ThreadLocal<HttpServletResponse>();
+	private transient final ThreadLocal<HttpServletRequest> requests = new ThreadLocal<HttpServletRequest>();
+
+	private transient final ThreadLocal<HttpServletResponse> responses = new ThreadLocal<HttpServletResponse>();
 
 	@Override
 	public void init(final FilterConfig config) {
