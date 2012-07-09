@@ -197,36 +197,46 @@ var ssp = ssp || {};
             reason:             '.field-reason',
             suggestions:        '.field-suggestions',
             suggestionsAddEdit: '.suggestions-add-edit',
-            suggestionsDialog:  '.suggestions-dialog'
+            suggestionsDialog:  '.suggestions-dialog',
+            noticeDialog:       '.notice-dialog',
+            buttonSend:         '.button-send'
         }, function(name, value) {
             rslt[name] = container + ' ' + value;
         });
         return rslt;
     };
     
-    ssp.EarlyAlertForm = function(container, parameters) {
+    ssp.EarlyAlertForm = function(container, options) {
 
         var selectors = buildSelectors(container);
 
-        var student = getPersonData(parameters.studentId);
+        var student = getPersonData(options.parameters.studentId);
         var campuses = getCampusData();
         var reasons = getReasonsData();
         var suggestions = getSuggestionsData();
+        
+        // studentName
+        var studentName = student.firstName + ' '
+                + (student.middleInitial ? ' ' + student.middleInitial + ' ' : ' ')
+                + student.lastName;
+
+        // Submit function
+        var submitEarlyAlert = function(sendNotice) {
+        	var url = options.doneUrl.replace('STUDENTNAME', escape(studentName));
+            window.location = url;
+        }
 
         /*
          * Populate the fields...
          */
 
         // course
-        $(selectors.course).text(parameters.course);
+        $(selectors.course).text(options.parameters.course);
 
         // term
-        $(selectors.term).text(parameters.term);
+        $(selectors.term).text(options.parameters.term);
 
         // student
-        var studentName = student.firstName + ' '
-                + (student.middleInitial ? ' ' + student.middleInitial + ' ' : ' ')
-                + student.lastName;
         $(selectors.student).text(studentName);
 
         // netId
@@ -262,7 +272,7 @@ var ssp = ssp || {};
         	var html = '<li><input type="checkbox" value="' + value.id + '">' + value.name + '</li>';
             $(selectors.suggestionsDialog).find('ul').append(html);
         });
-        var dialogOptions = {
+        var suggestionsDlgOptions = {
             autoOpen: false,
             buttons: {
                 'OK': function() {
@@ -281,10 +291,25 @@ var ssp = ssp || {};
             modal: true,
             title: 'Edit Faculty Suggestions'
         };
-        var dlg = $(selectors.suggestionsDialog).dialog(dialogOptions);
+        var suggestionsDlg = $(selectors.suggestionsDialog).dialog(suggestionsDlgOptions);
         $(selectors.suggestionsAddEdit).click(function() {
-            dlg.dialog('open');
+            suggestionsDlg.dialog('open');
         });
+        
+        // send button
+        var noticeDlgOptions = {
+                autoOpen: false,
+                buttons: {
+                    'Yes': function() { submitEarlyAlert(true); },
+                    'No': function() { submitEarlyAlert(false); },
+                },
+                modal: true,
+                title: 'Send Early Alert'
+            };
+            var noticeDlg = $(selectors.noticeDialog).dialog(noticeDlgOptions);
+            $(selectors.buttonSend).click(function() {
+                noticeDlg.dialog('open');
+            });
 
     };
 

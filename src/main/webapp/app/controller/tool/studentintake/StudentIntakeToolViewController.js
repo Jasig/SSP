@@ -498,6 +498,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			// current API
 			delete intakeData.person.currentAppointment;
 			delete intakeData.person.studentType;
+			delete intakeData.person.programStatuses;
 			
 			// Save the intake
 			me.apiProperties.makeRequest({

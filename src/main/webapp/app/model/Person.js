@@ -30,7 +30,8 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'referralSources', type: 'auto'},
     		 {name: 'serviceReasons', type: 'auto'},
              {name: 'currentAppointment', type: 'auto'},
-    		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'}],
+    		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
+    		 {name: 'programStatuses', type: 'auto'}],
     
              /*defaultValue:{"id" : "",
              "startDate" : 1331269200000,
@@ -100,6 +101,19 @@ Ext.define('Ssp.model.Person', {
         	}    		
     	}
     },
+    
+    getProgramStatusName: function(){
+    	var programStatus = this.get('programStatuses');
+    	var programStatusName = "";
+    	if (programStatus != null)
+    	{
+        	if (programStatus.length > 0)
+        	{
+        		programStatusName = programStatus[0].name;
+        	}
+    	}
+    	return programStatusName;   	
+    },  
     
     setAppointment: function( startDate, endDate ){
     	if (startDate != null && endDate != null)

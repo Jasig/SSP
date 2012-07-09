@@ -49,11 +49,11 @@ var ssp = ssp || {};
         var refreshRoster = function() {
         	var roster = that.locate('roster');
             var loadingMessage = that.locate('loadingMessage');
-            roster.slideUp(1000, function() {
+            roster.slideUp(500, function() {
                 loadingMessage.slideDown(1000, function() {
                     loadRoster();
                     loadingMessage.slideUp(1000, function() {
-                        roster.slideDown(1000);
+                        roster.slideDown(500);
                     });
                 });
             });
