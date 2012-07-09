@@ -27,6 +27,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	        id: 'group',
 		    	        ftype: 'grouping',
 		    	        groupHeaderTpl: '{name}',
+		    	        depthToIndent: 0,
 		    	        hideGroupedHeader: false,
 		    	        enableGroupingMenu: false
 		    	    }],

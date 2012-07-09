@@ -217,6 +217,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
 		
 		// LOAD RECORDS FOR EACH OF THE FORMS
+		
+		// format the dates
 		Ext.getCmp('StudentIntakePersonal').loadRecord( person );
 		
 		if ( personDemographics != null && personDemographics != undefined ){
@@ -496,9 +498,11 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			// TODO: handle unused fields from the json
 			// since these will throw an error in the
 			// current API
+			delete intakeData.person.studentIntakeCompleteDate;
 			delete intakeData.person.currentAppointment;
 			delete intakeData.person.studentType;
 			delete intakeData.person.programStatuses;
+			delete intakeData.person.coach;
 			
 			// Save the intake
 			me.apiProperties.makeRequest({

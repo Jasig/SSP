@@ -88,7 +88,7 @@ Ext.define('Ssp.view.Viewport',{
     		newWidth = Ext.Element.getViewportWidth();
     		newHeight = Ext.Element.getViewportHeight();
     	}else{
-    		newWidth = me.width+(width-me.el.getWidth());
+    		newWidth = Ext.Element.getViewportWidth()-22; // me.width+(width-me.el.getWidth());
     		newHeight = Ext.Element.getViewportHeight()-160; // me.height;
     	}
     		

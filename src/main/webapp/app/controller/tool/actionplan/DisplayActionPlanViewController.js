@@ -264,19 +264,26 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     },
     
     onPrintTasksClick: function(button) {
+    	var me=this;
     	var grid, url, jsonData;	
-		var tasksGrid = button.up('panel').down('grid');
-		var goalsGrid = Ext.ComponentQuery.query('.displayactionplangoals')[0];
+		var activeTasksGrid = Ext.ComponentQuery.query('#activeTasks')[0];
+		var completeTasksGrid = Ext.ComponentQuery.query('#completeTasks')[0];
+		var allTasksGrid = Ext.ComponentQuery.query('#allTasks')[0];
+		var goalsPanel = Ext.ComponentQuery.query('.displayactionplangoals')[0];
+		var activeTaskIds = me.getSelectedIdsArray( activeTasksGrid.getView().getSelectionModel().getSelection() );
+		var completeTaskIds = me.getSelectedIdsArray( completeTasksGrid.getView().getSelectionModel().getSelection() );
+		var allTaskIds = me.getSelectedIdsArray( allTasksGrid.getView().getSelectionModel().getSelection() );
+		var taskIds = Ext.Array.merge( activeTaskIds, completeTaskIds, allTaskIds);
 		var jsonData = {
-	    				"taskIds": this.getSelectedIdsArray( tasksGrid.getView().getSelectionModel().getSelection() ),
-	    		        "goalIds": this.getSelectedIdsArray( goalsGrid.getView().getSelectionModel().getSelection() )
-	    		        };
-
+				"taskIds": taskIds,
+		        "goalIds": me.getSelectedIdsArray( goalsPanel.getView().getSelectionModel().getSelection() )
+		        };
+		
 		if (jsonData.taskIds.length > 0 && jsonData.goalIds.length > 0)
 	    {
-	    	url = this.apiProperties.createUrl( this.personPrintTaskUrl );
+	    	url = me.apiProperties.createUrl( me.personPrintTaskUrl );
 
-			this.apiProperties.makeRequest({
+			me.apiProperties.makeRequest({
 				url: url,
 				method: 'GET',
 				jsonData: jsonData,
