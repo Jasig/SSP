@@ -18,12 +18,15 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
     },    
 	width: '100%',
     height: '100%',
-
 	initComponent: function() {	
-		Ext.apply(this, 
+		var me=this;
+		Ext.apply(me, 
 				{
 					autoScroll: true,
-				    layout: 'anchor',
+				    layout: {
+				    	type: 'vbox',
+				    	align: 'stretch'
+				    },
 				    border: 0,
 				    defaults: {
 				        anchor: '100%'
@@ -37,6 +40,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				    items: [{
 				            xtype: 'fieldset',
 							border: 0,
+							padding: 10,
 				            title: '',
 				            defaultType: 'textfield',
 				            defaults: {
@@ -47,7 +51,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        name: 'maritalStatusId',
 				        fieldLabel: 'Marital Status',
 				        emptyText: 'Select One',
-				        store: this.maritalStatusesStore,
+				        store: me.maritalStatusesStore,
 				        valueField: 'id',
 				        displayField: 'name',
 				        mode: 'local',
@@ -59,7 +63,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        name: 'ethnicityId',
 				        fieldLabel: 'Ethnicity',
 				        emptyText: 'Select One',
-				        store: this.ethnicitiesStore,
+				        store: me.ethnicitiesStore,
 				        valueField: 'id',
 				        displayField: 'name',
 				        mode: 'local',
@@ -71,7 +75,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        name: 'gender',
 				        fieldLabel: 'Gender',
 				        emptyText: 'Select One',
-				        store: this.gendersStore,
+				        store: me.gendersStore,
 				        valueField: 'code',
 				        displayField: 'title',
 				        mode: 'local',
@@ -84,7 +88,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        name: 'citizenshipId',
 				        fieldLabel: 'Citizenship',
 				        emptyText: 'Select One',
-				        store: this.citizenshipsStore,
+				        store: me.citizenshipsStore,
 				        valueField: 'id',
 				        displayField: 'name',
 				        mode: 'local',
@@ -100,7 +104,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        name: 'veteranStatusId',
 				        fieldLabel: 'Veteran Status',
 				        emptyText: 'Select One',
-				        store: this.veteranStatusesStore,
+				        store: me.veteranStatusesStore,
 				        valueField: 'id',
 				        displayField: 'name',
 				        mode: 'local',
@@ -141,7 +145,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        name: 'childCareArrangementId',
 				        fieldLabel: 'If yes, what are your childcare arrangements?',
 				        emptyText: 'Select One',
-				        store: this.childCareArrangementsStore,
+				        store: me.childCareArrangementsStore,
 				        valueField: 'id',
 				        displayField: 'name',
 				        mode: 'local',
@@ -166,7 +170,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        itemId: 'shift',
 				        fieldLabel: 'Shift',
 				        emptyText: 'Select One',
-				        store: this.employmentShiftsStore,
+				        store: me.employmentShiftsStore,
 				        valueField: 'code',
 				        displayField: 'title',
 				        mode: 'local',
@@ -185,6 +189,6 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				    }]
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });
