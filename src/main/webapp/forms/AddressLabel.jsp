@@ -132,13 +132,13 @@ var rgx = /(\d{4})-(\d{2})-(\d{2})/;
 
 if(form.createDateFrom.value != '' && !form.createDateFrom.value.match(rgx))
 {
-	alert('Date Student Added To does not match (yyyy-MM-dd');
+	alert('Date Student Added To does not match (yyyy-MM-dd)');
 form.createDateFrom.focus();
 	return false;
 }
 if(form.createDateTo.value != '' && !form.createDateTo.value.match(rgx))
 {
-	alert('Date Student Added From does not match (yyyy-MM-dd');
+	alert('Date Student Added From does not match (yyyy-MM-dd)');
 form.createDateTo.focus();
 	return false;
 }
