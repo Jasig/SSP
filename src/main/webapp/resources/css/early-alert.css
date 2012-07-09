@@ -1,5 +1,9 @@
 /* Roster Screen */
 
+.early-alert .sent-message {
+    margin-bottom: 16px;
+}
+
 .early-alert .course-label {
 	font-size: 14px;
 	padding: .5em;
