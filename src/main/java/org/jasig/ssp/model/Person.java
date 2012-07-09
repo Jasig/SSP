@@ -1,7 +1,6 @@
 package org.jasig.ssp.model; // NOPMD
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -378,6 +377,12 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@JoinColumn(name = "student_type_id", nullable = true)
 	private StudentType studentType;
 
+	@Nullable
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
+	private Set<EarlyAlert> earlyAlerts;
+
 	/**
 	 * Initialize a Person.
 	 * 
@@ -385,16 +390,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 */
 	public Person() {
 		super();
-		challenges = Sets.newHashSet();
-		fundingSources = Sets.newHashSet();
-		educationLevels = Sets.newHashSet();
-		tools = Sets.newHashSet();
-		confidentialityDisclosureAgreements = Sets.newHashSet();
-		tasks = Sets.newHashSet();
-		serviceReasons = Sets.newHashSet();
-		specialServiceGroups = Sets.newHashSet();
-		referralSources = Sets.newHashSet();
-		programStatuses = Sets.newHashSet();
+		initializeSets();
 	}
 
 	/**
@@ -406,10 +402,22 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	public Person(final UUID id) {
 		super();
 		setId(id);
-		challenges = new HashSet<PersonChallenge>();
-		fundingSources = new HashSet<PersonFundingSource>();
-		educationLevels = new HashSet<PersonEducationLevel>();
+		initializeSets();
 
+	}
+
+	private void initializeSets() {
+		challenges = Sets.newHashSet();
+		fundingSources = Sets.newHashSet();
+		educationLevels = Sets.newHashSet();
+		tools = Sets.newHashSet();
+		confidentialityDisclosureAgreements = Sets.newHashSet();
+		tasks = Sets.newHashSet();
+		serviceReasons = Sets.newHashSet();
+		specialServiceGroups = Sets.newHashSet();
+		referralSources = Sets.newHashSet();
+		programStatuses = Sets.newHashSet();
+		earlyAlerts = Sets.newHashSet();
 	}
 
 	/**
@@ -777,12 +785,22 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	}
 
 	public Date getStudentIntakeCompleteDate() {
-		return studentIntakeCompleteDate;
+		return (studentIntakeCompleteDate == null) ? null : new Date(
+				studentIntakeCompleteDate.getTime());
 	}
 
 	public void setStudentIntakeCompleteDate(
 			final Date studentIntakeCompleteDate) {
-		this.studentIntakeCompleteDate = studentIntakeCompleteDate;
+		this.studentIntakeCompleteDate = (studentIntakeCompleteDate == null) ? null
+				: new Date(studentIntakeCompleteDate.getTime());
+	}
+
+	public Set<EarlyAlert> getEarlyAlerts() {
+		return earlyAlerts;
+	}
+
+	public void setEarlyAlerts(final Set<EarlyAlert> earlyAlerts) {
+		this.earlyAlerts = earlyAlerts;
 	}
 
 	@Override
