@@ -39,6 +39,23 @@ br {
 
 
 <script>
+function loadPdf(url, timeout){
+   $.ajax({
+     url: url,
+     success: function(data){
+       window.open(url);
+     },
+     error: function(error, status){
+       window.alert("Problem retrieving PDF.\nThe error status is: " + status);
+     },
+     timeout: timeout,
+     dataType: "application/pdf"   
+  });
+}
+
+
+
+
 	function populateSpecialServices() {
 		$.getJSON("/ssp/api/1/reference/specialServiceGroup/", function(data) {
 			var container = $("#SpecialServiceGroupIds");
@@ -105,6 +122,29 @@ br {
 		populateReferralSource();
 		populateStudentType();
 	});
+
+
+
+
+function validateForm(form)
+{
+var rgx = /(\d{4})-(\d{2})-(\d{2})/;
+
+if(form.createDateFrom.value != '' && !form.createDateFrom.value.match(rgx))
+{
+	alert('Date Student Added To does not match (yyyy-MM-dd');
+form.createDateFrom.focus();
+	return false;
+}
+if(form.createDateTo.value != '' && !form.createDateTo.value.match(rgx))
+{
+	alert('Date Student Added From does not match (yyyy-MM-dd');
+form.createDateTo.focus();
+	return false;
+}
+return true;
+}
+
 </script>
 
 </head>
@@ -112,7 +152,7 @@ br {
 
 <div class="AddressLabelForm">
 	<h1>Address labels</h1>
-	<form action="/ssp/api/1/report/AddressLabels/" method="get">
+	<form action="/ssp/api/1/report/AddressLabels/" method="get" target="_top" onSubmit="return validateForm(this);" >
 		<div class="box">
 			<p>Address Label Report Criteria:</p>
 			<p>required fields are denoted by an asterisc</p>
@@ -127,8 +167,8 @@ br {
 				multiple="multiple"></select> <br /> <label><span>Referral
 					Source</span></label> <select id="ReferralSourceGroup" name="referralSourcesIds"
 				multiple="multiple" /></select> <br /> <label><span>Date
-					Student Added From (yyyy-MM-dd)</span></label><input type="text" name="createDateFrom"
-				id="dateAddedFrom" />(yyyy-MM-dd)<br /> 
+					Student Added From</span></label><input type="text" name="createDateFrom"
+				id="createDateFrom" />(yyyy-MM-dd)<br /> 
 <label><span>Date Student Added To</span></label><input type="text" name="createDateTo" id="createDateTo" />(yyyy-MM-dd)<br />
 			<label><span>Anticipated Start Term</span></label> <select
 				id="anticipatedStartTerm" name="anticipatedStartTerm"
@@ -169,7 +209,6 @@ br {
 		</div>
 	</form>
 </div>
-
 
 
 
