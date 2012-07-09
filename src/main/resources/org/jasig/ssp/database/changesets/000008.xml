@@ -33,4 +33,23 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="Remove program status Completed item" author="jon.adams">
+		<delete tableName="program_status">
+			<where>id = 'b2d125f2-5056-a51a-8061-5e041339311d'</where>
+		</delete>
+		<rollback>
+			<insert tableName="program_status">
+				<column name="id" value="B2D125F2-5056-A51A-8061-5E041339311D" />
+				<column name="name" value="Completed" />
+				<column name="description" value="Student has completed CAP assessment." />
+				<column name="created_date" valueDate="2012-05-18T14:00:00" />
+				<column name="modified_date" valueDate="2012-05-18T14:00:00" />
+				<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+				<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+				<column name="object_status" value="1" />
+				<column name="program_status_change_reason_required" value="0" />
+			</insert>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>
