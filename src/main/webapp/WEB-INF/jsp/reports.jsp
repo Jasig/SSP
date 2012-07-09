@@ -81,9 +81,8 @@ clear: left;
 <ul>
 <li><a onclick="populateForm('/ssp/forms/AddressLabel.jsp');" style='cursor:default'>Address labels</a></li>
 <li><a onclick="populateForm('/ssp/forms/SpecialServices.jsp');" style='cursor:default'>Special Services labels</a></li>
-<li><a onclick="populateForm('/ssp/forms/StudentActionPlan.jsp');" style='cursor:default'>Student Action Plan</a></li>
-<li><a href="/ssp/api/1/person/f549ecab-5110-4cc1-b2bb-369cac854dea/task/print/">Test Student Action Plan</a></li>
-<li><a href="/ssp/api/1/report/f549ecab-5110-4cc1-b2bb-369cac854dea/History/">Test Student History</a></li>
+<!-- li><a href="/ssp/api/1/person/f549ecab-5110-4cc1-b2bb-369cac854dea/task/print/">Test Student Action Plan</a></li>
+<li><a href="/ssp/api/1/report/f549ecab-5110-4cc1-b2bb-369cac854dea/History/">Test Student History</a></li-->
 </ul> 
 </div>
 
