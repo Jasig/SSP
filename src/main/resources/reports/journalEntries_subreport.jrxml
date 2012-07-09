@@ -3,9 +3,6 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/home/codynet/workspace/ssd/SSP-Open-Source-Project/src/main/resources/reports/"]]></defaultValueExpression>
-	</parameter>
 	<field name="entryDate" class="java.util.Date"/>
 	<field name="comment" class="java.lang.String"/>
 	<field name="confidentialityLevel.name" class="java.lang.String"/>
@@ -71,7 +68,7 @@
 			<subreport>
 				<reportElement uuid="18003255-e953-4d75-90ce-03817fc92dd7" x="100" y="85" width="200" height="16"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{journalEntryDetails})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "sessionDetails_subreport.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["sessionDetails_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
 				<reportElement uuid="3b089129-2012-4d70-96e1-fc7479c4e408" x="0" y="85" width="100" height="16"/>

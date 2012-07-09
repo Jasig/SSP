@@ -3,9 +3,6 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/home/codynet/workspace/ssd/SSP-Open-Source-Project/src/main/resources/reports/"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="studentName" class="java.lang.String"/>
 	<parameter name="studentId" class="java.lang.String"/>
 	<parameter name="initialDate" class="java.util.Date"/>
@@ -88,7 +85,7 @@
 			<subreport>
 				<reportElement uuid="a03fafd2-be35-4d86-a0c9-034f81295b02" x="0" y="20" width="572" height="41"/>
 				<dataSourceExpression><![CDATA[$P{goals}]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "goals_subreport.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["goals_subreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</pageHeader>
@@ -128,7 +125,7 @@
 			<subreport>
 				<reportElement uuid="6771cd58-e900-4460-868f-a337c87f11fe" x="0" y="48" width="572" height="42"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{tasks})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "tasks_subreport.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["tasks_subreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
