@@ -8,27 +8,31 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
         store: 'confidentialityLevelsStore'
     },
 	width: '100%',
-    height: '100%',
-	autoScroll: true,
-	padding: 0,
-    fieldDefaults: {
-        msgTarget: 'side',
-        labelAlign: 'right',
-        labelWidth: 150
-    },    
+    height: '100%',    
 	initComponent: function() {
-		Ext.apply(this, 
+		var me=this;
+		Ext.apply(me, 
 				{
+			        autoScroll: true,
+			        border: 0,
+			        padding: 0,
+		            fieldDefaults: {
+		                msgTarget: 'side',
+		                labelAlign: 'right',
+		                labelWidth: 150
+		            },
 				    items: [{
 				            xtype: 'fieldset',
 				            title: 'Add Task',
 				            defaultType: 'textfield',
+					        border: 0,
+					        padding: 0,
 				            defaults: {
-				                anchor: '100%'
+				                anchor: '95%'
 				            },
 				       items: [{
 					    	xtype: 'displayfield',
-					        fieldLabel: 'Name',
+					        fieldLabel: 'Task Name',
 					        name: 'name'
 					    },{
 				    	xtype: 'textarea',
@@ -42,7 +46,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        name: 'confidentialityLevelId',
 				        fieldLabel: 'Confidentiality Level',
 				        emptyText: 'Select One',
-				        store: this.store,
+				        store: me.store,
 				        valueField: 'id',
 				        displayField: 'name',
 				        mode: 'local',
@@ -73,6 +77,6 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				    }]
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

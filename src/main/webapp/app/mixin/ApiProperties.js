@@ -67,19 +67,31 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	 *    scope - scope
 	 */
 	makeRequest: function(args){
+		var errorHandler = this.handleError;
+		if (args.failure != null)
+		{
+			errorHandler = args.failure;
+		}
 		Ext.Ajax.request({
 			url: args.url,
 			method: args.method,
 			headers: { 'Content-Type': 'application/json' },
 			jsonData: args.jsonData || '',
 			success: args.successFunc,
-			failure: this.handleError,
+			failure: errorHandler,
 			scope: ((args.scope != null)? args.scope : this)
 		},this);		
 	},
 	
 	handleError: function(response) {
 		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
+		var r = Ext.decode(response.responseText);
+
+		if (r.message != null)
+		{
+			msg = msg + " " + r.message;
+		}
+		
 		Ext.Msg.alert('SSP Error', msg);								
 	},
 	

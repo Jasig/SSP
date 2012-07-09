@@ -3,6 +3,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson',
     	model: 'currentPerson'
     },
     
@@ -11,22 +12,30 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
     },
     
     control: {  	
-    	saveButton: '#saveButton',
-    	
-    	'saveButton': {
-    		click: 'onSaveClick'
+    	saveButton: {
+    		selector: '#saveButton',
+    		listeners: {
+    			click: 'onSaveClick'
+    		}
     	},
     	
-    	'strengths': {
-    		change: 'onStrengthsChange'
+    	strengthsField: {
+    		selector: '#strengths',
+    		listeners: {
+    			change: 'onStrengthsChange'
+    		}
     	}
 	},
 	
 	init: function() {
-		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('person'));
-		this.getView().getForm().loadRecord(this.model);
-		this.getSaveButton().disabled=true;
-		return this.callParent(arguments);
+		var me=this;
+		me.url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person'));
+		me.getView().getForm().loadRecord( me.model );
+		me.getSaveButton().disabled=true;
+    	
+		me.getStrengthsField().setDisabled( !me.authenticatedPerson.hasPermission('ROLE_PERSON_WRITE') );
+
+		return me.callParent(arguments);
     },
     
     onSaveClick: function(button) {

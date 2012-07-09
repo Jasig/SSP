@@ -27,32 +27,47 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 		final Criteria query = createCriteria();
 
-		query.add(Restrictions.eq("coach", coach));
-
+		// Restrict by program status if provided
 		if (programStatus != null) {
 			query.createAlias("programStatuses", "personProgramStatus")
 					.add(Restrictions.eq("personProgramStatus.programStatus",
 							programStatus));
 		}
 
+		// Set Columns to Return: id, firstName, middleInitial, lastName,
+		// schoolId
+		final ProjectionList projections = Projections.projectionList();
+		projections.add(Projections.groupProperty("id").as("personId"));
+		projections.add(Projections.groupProperty("firstName").as("firstName"));
+		projections.add(Projections.groupProperty("middleInitial").as(
+				"middleInitial"));
+		projections.add(Projections.groupProperty("lastName").as("lastName"));
+		projections.add(Projections.groupProperty("schoolId").as("schoolId"));
+		projections.add(Projections.groupProperty("studentIntakeCompleteDate")
+				.as(
+						"studentIntakeCompleteDate"));
+
+		// Join to Student Type
 		query.createAlias("studentType", "studentType",
 				JoinType.LEFT_OUTER_JOIN);
-
-		final ProjectionList projections = Projections.projectionList();
-		projections.add(Projections.id().as("personId"));
-		projections.add(Projections.property("firstName").as("firstName"));
-		projections.add(Projections.property("middleInitial").as(
-				"middleInitial"));
-		projections.add(Projections.property("lastName").as("lastName"));
-		projections.add(Projections.property("schoolId").as("schoolId"));
-		projections.add(Projections.property("studentType.name").as(
+		// add StudentTypeName Column
+		projections.add(Projections.groupProperty("studentType.name").as(
 				"studentTypeName"));
+
+		// Join to EarlyAlert
+		query.createAlias("earlyAlerts", "earlyAlert", JoinType.LEFT_OUTER_JOIN);
+		// but only look at earlyAlerts that haven't been closed
+		query.add(Restrictions.isNull("earlyAlert.closedDate"));
+		// Add numberOfEarlyalerts Column
+		projections.add(Projections.count("earlyAlert.id").as(
+				"numberOfEarlyAlerts"));
+
 		// :TODO current AppointmentDate for Caseload
 		// projections.add(Projections.property("currentAppointmentDate").as("currentAppointmentDate"));
-		projections.add(Projections.property("studentIntakeCompleteDate").as(
-				"studentIntakeCompleteDate"));
+
 		query.setProjection(projections);
-		// :TODO EarlyAlert Count
+
+		query.add(Restrictions.eq("coach", coach));
 
 		query.setResultTransformer(new AliasToBeanResultTransformer(
 				CaseloadRecord.class));

@@ -18,7 +18,7 @@ Ext.define('Ssp.view.tools.actionplan.TaskTree', {
     			 dockedItems: [
      		              {
      		               xtype: 'toolbar',
-     		               items: [{
+     		               items: [/*{
      	                      xtype: 'textfield',
      	                      fieldLabel: 'Search'
      	                     },
@@ -27,8 +27,12 @@ Ext.define('Ssp.view.tools.actionplan.TaskTree', {
      	                    	  text: 'GO',
      	                    	  action: 'search',
      	                    	  itemId: 'searchButton'
-     	                      }]
-     		           } ] 
+     	                      }*/
+	                       {
+	                         xtype: "label",
+	                         text: "Select a task to add to the Student's Action Plan:"
+	                       }]
+     		           }]
      		       	
     	});
     	

@@ -6,6 +6,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
     controller: 'Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController',
     inject: {
     	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
     	columnRendererUtils: 'columnRendererUtils',
     	model: 'currentGoal',
         store: 'goalsStore'
@@ -18,13 +19,13 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
         anchor: '100%'
     },	
 	initComponent: function() {	
-		
+		var me=this;
     	var sm = Ext.create('Ext.selection.CheckboxModel');
 		
-		Ext.apply(this, {
+		Ext.apply(me, {
 
 				title: 'Goals',
-				store: this.store,
+				store: me.store,
 				selModel: sm,
 			    columns: [{
 	    	        xtype:'actioncolumn',
@@ -39,7 +40,18 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 	    	                panel.model.data=rec.data;
 	    	            	panel.appEventsController.getApplication().fireEvent('editGoal');
 	    	            },
-	    	            scope: this
+	    	            getClass: function(value, metadata, record)
+                        {
+	    	            	// hide if user does not have permission to edit
+	    	            	var cls = 'x-hide-display';
+	    	            	if ( me.authenticatedPerson.hasPermission('ROLE_PERSON_GOAL_WRITE') )
+	    	            	{
+	    	            		cls = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
+	    	            	}
+	    	            	
+	    	            	return cls;                            
+	    	            },
+	    	            scope: me
 	    	        },{
 	    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
 	    	            tooltip: 'Delete Goal',
@@ -49,17 +61,28 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 	    	                panel.model.data=rec.data;
 	    	            	panel.appEventsController.getApplication().fireEvent('deleteGoal');
 	    	            },
-	    	            scope: this
+	    	            getClass: function(value, metadata, record)
+                        {
+	    	            	// hide if user does not have permission to delete
+	    	            	var cls = 'x-hide-display';
+	    	            	if ( me.authenticatedPerson.hasPermission('ROLE_PERSON_GOAL_DELETE') )
+	    	            	{
+	    	            		cls = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
+	    	            	}
+	    	            	
+	    	            	return cls;                            
+	    	            },
+	    	            scope: me
 	    	        }]
 	    	    },{
 	    	        header: 'Name',
 	    	        flex: 1,
 	    	        dataIndex: 'name',
-	    	        renderer: this.columnRendererUtils.renderGoalName
+	    	        renderer: me.columnRendererUtils.renderGoalName
 	    	    },{
 	    	        header: 'Confidentiality',
 	    	        dataIndex: 'confidentialityLevel',
-	    	        renderer: this.columnRendererUtils.renderConfidentialityLevelName
+	    	        renderer: me.columnRendererUtils.renderConfidentialityLevelName
 	    	    }],
 	    	    
 	    	    dockedItems: [{
@@ -74,6 +97,6 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 	    	    }]
 		});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });
