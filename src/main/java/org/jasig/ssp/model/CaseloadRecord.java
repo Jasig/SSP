@@ -34,8 +34,8 @@ public class CaseloadRecord {
 		return numberOfEarlyAlerts;
 	}
 
-	public void setNumberOfEarlyAlerts(final int numberOfEarlyAlerts) {
-		this.numberOfEarlyAlerts = numberOfEarlyAlerts;
+	public void setNumberOfEarlyAlerts(final Number numberOfEarlyAlerts) {
+		this.numberOfEarlyAlerts = numberOfEarlyAlerts.intValue();
 	}
 
 	public boolean isStudentIntakeComplete() {
