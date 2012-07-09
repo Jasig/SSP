@@ -15,7 +15,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     	coachNameField: '#coachName',
     	studentIdField: '#studentId',
     	birthDateField: '#birthDate',
-    	studentTypeField: '#studentType'
+    	studentTypeField: '#studentType',
+    	programStatusField: '#programStatus'
     },
 	init: function() {
 		var me=this;
@@ -26,6 +27,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var coachNameField = me.getCoachNameField();
 		var birthDateField = me.getBirthDateField();
 		var studentTypeField = me.getStudentTypeField();
+		var programStatusField = me.getProgramStatusField();
 		var id= me.person.get('id');
 		var personUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');			
@@ -33,6 +35,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 	    	var r = Ext.decode(response.responseText);
     		var fullName;
     		var studentTypeName;
+    		var programStatusName;
     		var coachName;
 	    	
     		// load the person data
@@ -40,6 +43,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		
 	    	fullName = me.person.getFullName();
 	    	studentTypeName = me.person.getStudentTypeName();
+	    	programStatusName = me.person.getProgramStatusName();
 	    	coachName = me.person.getCoachName();
     		
     		// load special service groups
@@ -66,7 +70,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		coachNameField.setValue( coachName );
     		birthDateField.setValue( me.person.getFormattedBirthDate() );
     		studentTypeField.setValue( studentTypeName );
-    		studentRecordComp.setTitle('Student Record - ' + fullName)
+    		programStatusField.setValue( programStatusName );
+    		studentRecordComp.setTitle('Student Record - ' + fullName);
 		};
 
 		// Set defined configured label for the studentId field

@@ -77,7 +77,8 @@ Ext.define('Ssp.view.tools.profile.Person', {
 					        itemId: 'studentType'
 					    }, {
 					        fieldLabel: 'SSP Program Status',
-					        name: 'programStatus'
+					        name: 'programStatus',
+					        itemId: 'programStatus'
 					    }, {
 					        fieldLabel: 'Registration Status',
 					        name: 'registrationStatus'
