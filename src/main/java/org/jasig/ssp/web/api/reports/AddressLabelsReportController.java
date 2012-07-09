@@ -20,8 +20,6 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.JRHtmlExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -47,7 +45,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
-import com.sun.mail.iap.Response;
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -75,18 +72,17 @@ public class AddressLabelsReportController extends BaseController {
 	// @Autowired
 	// private transient PersonTOFactory factory;
 
-	
 	@InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false);
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
-    }	
-	
-	
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(
+				dateFormat, true));
+	}
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
-	void getAddressLabels( 
+	void getAddressLabels(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 
@@ -98,8 +94,8 @@ public class AddressLabelsReportController extends BaseController {
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String anticipatedStartTerm,
-			final @RequestParam(required = false, defaultValue="pdf") String reportType)
-			throws ObjectNotFoundException, JRException, IOException { 
+			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			throws ObjectNotFoundException, JRException, IOException {
 
 		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
 				programStatus, specialServiceGroupIds, referralSourcesIds,
@@ -115,7 +111,7 @@ public class AddressLabelsReportController extends BaseController {
 		final List<String> specialGroupsNames = new ArrayList<String>();
 		if ((specialServiceGroupIds != null)
 				&& (specialServiceGroupIds.size() > 0)) {
-			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator(); 
+			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
 			while (ssgIter.hasNext()) {
 				specialGroupsNames
 						.add(ssgService.get(ssgIter.next()).getName());
@@ -157,25 +153,26 @@ public class AddressLabelsReportController extends BaseController {
 		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
-		
-		if(reportType.equals("pdf"))
-		{
+
+		if (reportType.equals("pdf")) {
 			JasperExportManager.exportReportToPdfStream(decodedInput,
-					response.getOutputStream());	
-		}
-		else if(reportType.equals("csv"))
-		{
+					response.getOutputStream());
+		} else if (reportType.equals("csv")) {
 			response.setContentType("application/vnd.ms-excel");
-			response.setHeader("Content-disposition","attachment; filename=test.csv"); 
-			
+			response.setHeader("Content-disposition",
+					"attachment; filename=test.csv");
+
 			JRCsvExporter exporter = new JRCsvExporter();
-			exporter.setParameter(JRExporterParameter.INPUT_STREAM, decodedInput);
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
-			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
-			
+			exporter.setParameter(JRExporterParameter.INPUT_STREAM,
+					decodedInput);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
+					response.getOutputStream());
+			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
+					Boolean.FALSE);
+
 			exporter.exportReport();
-		}		
-		
+		}
+
 		response.flushBuffer();
 		is.close();
 		os.close();

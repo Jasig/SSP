@@ -54,7 +54,7 @@
 			<textField>
 				<reportElement uuid="b6d2a5e6-e868-4229-834f-391bc3a81f59" x="202" y="13" width="608" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA["\"" + $P{specialServiceGroupNames} + "\""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -141,7 +141,7 @@
 			<textField>
 				<reportElement uuid="ce9d2cd4-2571-4b65-b981-a04d2f862fee" x="507" y="1" width="243" height="31"/>
 				<textElement/>
-				<textFieldExpression><![CDATA["\"" + $F{specialServices} + "\""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{specialServices}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

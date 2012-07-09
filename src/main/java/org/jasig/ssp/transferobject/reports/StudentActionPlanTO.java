@@ -9,7 +9,7 @@ import org.jasig.ssp.model.Task;
 /**
  * SpecialServicesReportingTO transfer object
  */
-public class StudentActionPlanTO
+public class StudentActionPlanTO 
 		implements Serializable {
 
 	private static final long serialVersionUID = -6470796322082662019L;

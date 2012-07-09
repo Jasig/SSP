@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="studentActionPlan" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aac79acd-053b-4b36-bb85-9b85200e4ec8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/codynet/workspace/ssd/SSP-Open-Source-Project/src/main/resources/reports/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="studentTO" class="org.jasig.ssp.transferobject.PersonTO"/>
+	<parameter name="reportDate" class="java.util.Date"/>
+	<field name="dateDayOnly" class="java.lang.String"/>
+	<field name="journalEntries" class="java.util.List"/>
+	<field name="taskList" class="java.util.List"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="85" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="14" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Student:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="28" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Student ID:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b2cacac0-c674-44db-9f81-f492c96ee44b" x="103" y="14" width="100" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentTO}.getFirstName() + " " + $P{studentTO}.getLastName()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="715fb951-1ddd-47a9-bf52-5bf895e97c02" x="103" y="28" width="100" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentTO}.getSchoolId()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d372eb0f-7e6f-4f13-b9bd-9dbd384d95a7" x="103" y="0" width="100" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="46" width="572" height="35" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="6457d202-3d00-44b4-9231-1ea0a8b713f2" x="83" y="47" width="393" height="35" backcolor="#46C6D2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Student Counseling History]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="ecb4de43-0aa5-484c-8c57-a3194ab29d30" mode="Opaque" x="0" y="0" width="572" height="20" backcolor="#C6BCBC"/>
+				<textElement>
+					<font size="14" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateDayOnly}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="43">
+			<printWhenExpression><![CDATA[!$F{journalEntries}.isEmpty();]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="9e8c4f35-4564-41fb-9f57-97834d567f98" positionType="Float" stretchType="RelativeToTallestObject" x="14" y="20" width="558" height="22" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{journalEntries})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "journalEntries_subreport.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="b7b6e397-15cd-474a-bc44-2585d8216aa0" positionType="Float" mode="Opaque" x="0" y="0" width="572" height="20" backcolor="#87F1EE">
+					<printWhenExpression><![CDATA[!$F{journalEntries}.isEmpty();]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[JOURNAL ENTRY]]></text>
+			</staticText>
+		</band>
+		<band height="36">
+			<printWhenExpression><![CDATA[!$F{taskList}.isEmpty()]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="2f28ed7a-0c04-4584-bfc2-aee090764c3c" positionType="Float" x="14" y="16" width="558" height="20" isRemoveLineWhenBlank="true"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{taskList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "groupsHistory_subreport.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="b7b6e397-15cd-474a-bc44-2585d8216aa0" positionType="Float" mode="Opaque" x="0" y="1" width="572" height="15" backcolor="#87F1EE">
+					<printWhenExpression><![CDATA[!$F{taskList}.isEmpty();]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[ACTION PLAN]]></text>
+			</staticText>
+		</band>
+		<band height="31">
+			<rectangle>
+				<reportElement uuid="942aff52-9d2c-4551-8098-69343f0d5370" x="0" y="5" width="572" height="2" backcolor="#7E7979"/>
+			</rectangle>
+		</band>
+	</detail>
+</jasperReport>

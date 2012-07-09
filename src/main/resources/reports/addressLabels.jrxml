@@ -109,7 +109,7 @@
 			<textField>
 				<reportElement uuid="acb5d97c-744c-4734-a98d-a800ceceff3d" x="127" y="103" width="625" height="26"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{referralSourceNames}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["\"" + $P{referralSourceNames} + "\""]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

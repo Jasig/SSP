@@ -32,32 +32,32 @@
 				<text><![CDATA[Initial Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="40" width="100" height="13"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="46" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Review Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="10" width="100" height="13"/>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="2" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Student:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="10" y="20" width="100" height="13"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="10" y="16" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Student ID:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="359" y="43" width="100" height="13"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="359" y="39" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Follow-up Date:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="b26140ef-3358-4e7e-a198-7cb81bc4c088" x="110" y="5" width="100" height="13"/>
+				<reportElement uuid="b26140ef-3358-4e7e-a198-7cb81bc4c088" x="110" y="2" width="100" height="13"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8517d5e1-ff4b-42ad-b803-cf7aa810fa37" x="110" y="20" width="100" height="13"/>
+				<reportElement uuid="8517d5e1-ff4b-42ad-b803-cf7aa810fa37" x="110" y="16" width="100" height="13"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentId}]]></textFieldExpression>
 			</textField>
@@ -67,12 +67,12 @@
 				<textFieldExpression><![CDATA[$P{initialDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="a823e823-5bf8-4813-8611-c57ed09ca76b" x="110" y="43" width="100" height="13"/>
+				<reportElement uuid="a823e823-5bf8-4813-8611-c57ed09ca76b" x="110" y="46" width="100" height="13"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reviewDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="3234291d-9c1c-4a26-9a01-76820bc91e62" x="472" y="40" width="100" height="20"/>
+				<reportElement uuid="3234291d-9c1c-4a26-9a01-76820bc91e62" x="472" y="39" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{followupDate}]]></textFieldExpression>
 			</textField>
