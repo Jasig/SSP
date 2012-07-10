@@ -371,6 +371,8 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setClosedById(PERSON_ID);
 		obj.setCampusId(UUID.fromString("901E104B-4DC7-43F5-A38E-581015E204E1"));
+		obj.setEarlyAlertReasonOtherDescription("some string");
+		obj.setEarlyAlertSuggestionOtherDescription("some other description");
 
 		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
 				.newHashSet();

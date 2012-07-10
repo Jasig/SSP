@@ -71,6 +71,8 @@ public class EarlyAlertTOFactoryImpl extends
 		model.setCampus(tObject.getCampusId() == null ? null : campusService
 				.get(tObject.getCampusId()));
 		model.setEarlyAlertReasonOtherDescription(tObject
+				.getEarlyAlertReasonOtherDescription());
+		model.setEarlyAlertSuggestionOtherDescription(tObject
 				.getEarlyAlertSuggestionOtherDescription());
 		model.setComment(tObject.getComment());
 		model.setClosedDate(tObject.getClosedDate());
