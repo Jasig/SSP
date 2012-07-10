@@ -15,6 +15,7 @@ import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.transferobject.JournalEntryDetailTO;
+import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -130,13 +131,15 @@ public class JournalEntryDetailTOFactoryImpl
 			throws ObjectNotFoundException {
 		final Set<JournalEntryDetail> models = Sets.newHashSet();
 		for (final JournalEntryDetailTO tObject : tObjects) {
-			try {
-				models.add(from(tObject, journalEntry, journalStepDetailService
-						.get(tObject.getJournalStepDetail().getId())));
-			} catch (final ValidationException exc) {
-				throw new ObjectNotFoundException(tObject
-						.getJournalStepDetail().getId(), "JournalStepDetail",
-						exc);
+			for (final ReferenceLiteTO<JournalStepDetail> jsd : tObject
+					.getJournalStepDetails()) {
+				try {
+					models.add(from(tObject, journalEntry,
+							journalStepDetailService.get(jsd.getId())));
+				} catch (final ValidationException exc) {
+					throw new ObjectNotFoundException(jsd.getId(),
+							"JournalStepDetail", exc);
+				}
 			}
 		}
 
