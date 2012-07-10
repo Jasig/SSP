@@ -9,7 +9,7 @@
 	<field name="journalEntries" class="java.util.List"/>
 	<field name="taskList" class="java.util.List"/>
 	<background>
-		<band splitType="Stretch"/>
+		<band splitType="Stretch"/> 
 	</background>
 	<title>
 		<band height="85" splitType="Stretch">
@@ -71,7 +71,7 @@
 				<reportElement uuid="9e8c4f35-4564-41fb-9f57-97834d567f98" positionType="Float" stretchType="RelativeToTallestObject" x="14" y="20" width="558" height="22" isRemoveLineWhenBlank="true"/>
 				<subreportParameter name="SUBREPORT_DIR"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{journalEntries})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["/resources/reports/journalEntries_subreport.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["reports/journalEntries_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
 				<reportElement uuid="b7b6e397-15cd-474a-bc44-2585d8216aa0" positionType="Float" mode="Opaque" x="0" y="0" width="572" height="20" backcolor="#87F1EE">
@@ -86,7 +86,7 @@
 			<subreport>
 				<reportElement uuid="2f28ed7a-0c04-4584-bfc2-aee090764c3c" positionType="Float" x="14" y="16" width="558" height="20" isRemoveLineWhenBlank="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{taskList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["/resources/reports/groupsHistory_subreport.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["reports/groupsHistory_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
 				<reportElement uuid="b7b6e397-15cd-474a-bc44-2585d8216aa0" positionType="Float" mode="Opaque" x="0" y="1" width="572" height="15" backcolor="#87F1EE">
