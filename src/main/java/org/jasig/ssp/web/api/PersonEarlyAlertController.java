@@ -77,7 +77,7 @@ public class PersonEarlyAlertController extends
 	}
 
 	@Override
-	@RequestMapping(value = "/1/person/{personId}/earlyAlert/", method = RequestMethod.POST)
+	@RequestMapping(value = "/1/person/{personId}/earlyAlert", method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertTO create(@PathVariable final UUID personId,
 			@Valid @RequestBody final EarlyAlertTO obj)
@@ -105,7 +105,7 @@ public class PersonEarlyAlertController extends
 
 	// Overriding because the default sort column needs to be unique
 	@Override
-	@RequestMapping(value = "/1/person/{personId}/earlyAlert/", method = RequestMethod.GET)
+	@RequestMapping(value = "/1/person/{personId}/earlyAlert", method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<EarlyAlertTO> getAll(
 			@PathVariable final UUID personId,

@@ -232,7 +232,7 @@ public class PersonEarlyAlertControllerHttpIntegrationTest
 	 */
 	@Test
 	public void testControllerCreateWithPersonId() throws Exception { // NOPMD
-		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert/";
+		final String requestUri = "/1/person/" + PERSON_ID + "/earlyAlert";
 
 		request.setMethod(RequestMethod.POST.toString());
 		request.setRequestURI(requestUri);
