@@ -18,7 +18,7 @@
 			<subreport>
 				<reportElement uuid="463f5dd1-6b8b-4aef-96a3-28f44388b49d" stretchType="RelativeToTallestObject" x="28" y="17" width="527" height="16"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{taskList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["/resources/reports/tasksHistory_subreport.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["reports/tasksHistory_subreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
