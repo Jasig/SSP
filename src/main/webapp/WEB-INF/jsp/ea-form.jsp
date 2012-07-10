@@ -139,7 +139,7 @@
 
       <!-- Email CC -->
       <div class="ea-input">
-        <input type="text" value="" />
+        <input type="text" class="field-email-cc" value="" />
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
@@ -149,7 +149,9 @@
 
       <!-- Campus -->
       <div class="ea-input">
-        <select class="field-campus"></select>
+        <select class="field-campus">
+          <option class="prompt"><spring:message code="select.a.campus"/></option>
+        </select>
       </div>
       <div class="ea-required">*</div>
       <div class="ea-label">
@@ -159,7 +161,10 @@
 
       <!-- Referral Reason -->
       <div class="ea-input">
-        <select class="field-reason"></select>
+        <select class="field-reason">
+          <option class="prompt"><spring:message code="select.a.reason"/></option>
+        </select><br/>
+        <input type="text" class="field-other-reason-text" name="earlyAlertReasonOtherDescription" value="" placeholder="<spring:message code="type.a.reason"/>" style="display: none; margin-top: 8px;" />
       </div>
       <div class="ea-required">*</div>
       <div class="ea-label">
@@ -180,7 +185,7 @@
 
       <!-- Comments -->
       <div class="ea-input">
-        <textarea></textarea>
+        <textarea class="field-comments"></textarea>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
@@ -223,8 +228,10 @@
         
         var options = {
             doneUrl: '${doneUrl}',
+            submitUrl: '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
             parameters: {
-                course: 'ENGLISH - 124 - 001 - Academic Writing and Literature',
+                courseName: 'ENGLISH - 124 - 001',
+                courseTitle: 'Academic Writing and Literature',
                 term: '11/SD',
                 studentId: '58ba5ee3-734e-4ae9-b9c5-943774b4de41'
             }

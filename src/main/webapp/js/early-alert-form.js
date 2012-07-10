@@ -183,23 +183,28 @@ var ssp = ssp || {};
     var buildSelectors = function(container) {
         var rslt = {};
         $.each({
-            course:             '.field-course',
-            term:               '.field-term',
-            student:            '.field-student',
-            netId:              '.field-net-id',
-            studentEmail:       '.field-student-email',
-            studentType:        '.field-student-type',
-            assignedCounselor:  '.field-assigned-counselor',
-            office:             '.field-office',
-            phone:              '.field-phone',
-            department:         '.field-department',
-            campus:             '.field-campus',
-            reason:             '.field-reason',
-            suggestions:        '.field-suggestions',
-            suggestionsAddEdit: '.suggestions-add-edit',
-            suggestionsDialog:  '.suggestions-dialog',
-            noticeDialog:       '.notice-dialog',
-            buttonSend:         '.button-send'
+            course:                  '.field-course',
+            term:                    '.field-term',
+            student:                 '.field-student',
+            netId:                   '.field-net-id',
+            studentEmail:            '.field-student-email',
+            studentType:             '.field-student-type',
+            assignedCounselor:       '.field-assigned-counselor',
+            office:                  '.field-office',
+            phone:                   '.field-phone',
+            department:              '.field-department',
+            emailCc:                 '.field-email-cc',
+            campus:                  '.field-campus',
+            reason:                  '.field-reason',
+            otherReasonText:         '.field-other-reason-text',
+            suggestions:             '.field-suggestions',
+            suggestionsId:           '.field-suggestions-id',
+            suggestionsOtherHidden:  '.field-suggestions-other-hidden',
+            suggestionsAddEdit:      '.suggestions-add-edit',
+            suggestionsDialog:       '.suggestions-dialog',
+            comments:                '.field-comments',
+            noticeDialog:            '.notice-dialog',
+            buttonSend:              '.button-send'
         }, function(name, value) {
             rslt[name] = container + ' ' + value;
         });
@@ -222,8 +227,48 @@ var ssp = ssp || {};
 
         // Submit function
         var submitEarlyAlert = function(sendNotice) {
-        	var url = options.doneUrl.replace('STUDENTNAME', escape(studentName));
-            window.location = url;
+        	
+            // Marshal the POST data
+            var postData = {
+                courseName: options.parameters.courseName,
+                courseTitle: options.parameters.courseTitle,
+                emailCC: $(selectors.emailCc).val(),
+                campusId: $(selectors.campus).val(),
+                earlyAlertReasonIds: [],  // Set below...
+                earlyAlertReasonOtherDescription: $(selectors.otherReasonText).val(),
+                earlyAlertSuggestionOtherDescription: $(selectors.suggestionsOtherHidden).val(),
+                comment: $(selectors.comments).val()
+            };
+            if ($(selectors.reason).val() && $(selectors.reason).val() != 'other') {
+                postData.earlyAlertReasonIds.push({ id: $(selectors.reason).val() });
+            }
+            var earlyAlertSuggestionIds = [];
+            $(selectors.suggestionsId).each(function() {
+            	earlyAlertSuggestionIds.push({ id: $(this).val() });
+            });
+            postData.earlyAlertSuggestionIds = earlyAlertSuggestionIds;
+            
+            // Submit the alert
+            $.ajax({
+                url: options.submitUrl.replace('STUDENTID', options.parameters.studentId),
+                async: false,
+                contentType: 'application/json',
+                data: postData,
+                processData: false,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Display the error
+                    alert(textStatus + errorThrown);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    alert(textStatus + data);
+                	// Return to the roster screen, with a message
+                    var url = options.doneUrl.replace('STUDENTNAME', escape(studentName));
+                    window.location = url;
+                },
+                type: 'POST'
+            });
+
         }
 
         /*
@@ -231,7 +276,7 @@ var ssp = ssp || {};
          */
 
         // course
-        $(selectors.course).text(options.parameters.course);
+        $(selectors.course).text(options.parameters.courseName + ' - ' + options.parameters.courseTitle);
 
         // term
         $(selectors.term).text(options.parameters.term);
@@ -266,12 +311,24 @@ var ssp = ssp || {};
         	var html = '<option value="' + value.id + '">' + value.name + '</option>';
             $(selectors.reason).append(html);
         });
+        $(selectors.reason).append('<option value="other">Other...</option>');
+        $(selectors.reason).change(function() {
+            if ($(this).val() === 'other') {
+                $(selectors.otherReasonText).slideDown(500);
+            } else {
+            	$(selectors.otherReasonText).val('');
+                $(selectors.otherReasonText).slideUp(500);
+            }
+        })
 
         // suggestions
         $.each(suggestions, function(index, value) {
         	var html = '<li><input type="checkbox" value="' + value.id + '">' + value.name + '</li>';
             $(selectors.suggestionsDialog).find('ul').append(html);
         });
+        $(selectors.suggestionsDialog).find('ul').append(
+                '<li><input type="checkbox" value="other">Other: <input type="text" name="earlyAlertSuggestionOtherDescription" value="" placeholder="Type a suggestion..." /></li>'
+        );
         var suggestionsDlgOptions = {
             autoOpen: false,
             buttons: {
@@ -280,8 +337,10 @@ var ssp = ssp || {};
                     $(this).find('li').each(function() {
                         var chk = $(this).find('input');
                         if (chk.attr('checked')) {
-                            var html = '<li>' + $(this).text() + '</li>';
-                            $(selectors.suggestions).append(html);
+                            var html = chk.val() === 'other' 
+                                ? $(this).find(':text').val() + '<input type="hidden" class="field-suggestions-other-hidden" value="' + $(this).find(':text').val() + '" />'
+                                : $(this).text() + '<input type="hidden" class="field-suggestions-id" value="' + chk.val() + '" />';
+                            $(selectors.suggestions).append('<li>' + html + '</li>');
                         }
                     });
                     $(this).dialog('close');
