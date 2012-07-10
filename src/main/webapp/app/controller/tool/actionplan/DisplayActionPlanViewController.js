@@ -42,7 +42,12 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 			listeners: {
 				click: 'onAddTaskClick'
 			}
-		}
+		},
+		
+		goalsPanel: '#goalsPanel',
+		activeTasksGrid: '#activeTasksGrid',
+		completeTasksGrid: '#completeTasksGrid',
+		allTasksGrid: '#allTasksGrid'
 	},
 	
 	init: function() {
@@ -266,10 +271,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     onPrintTasksClick: function(button) {
     	var me=this;
     	var grid, url, jsonData;	
-		var activeTasksGrid = Ext.ComponentQuery.query('#activeTasks')[0];
-		var completeTasksGrid = Ext.ComponentQuery.query('#completeTasks')[0];
-		var allTasksGrid = Ext.ComponentQuery.query('#allTasks')[0];
-		var goalsPanel = Ext.ComponentQuery.query('.displayactionplangoals')[0];
+		var activeTasksGrid = me.getActiveTasksGrid();
+		var completeTasksGrid = me.getCompleteTasksGrid();
+		var allTasksGrid = me.getAllTasksGrid();
+		var goalsPanel = me.getGoalsPanel();
 		var activeTaskIds = me.getSelectedIdsArray( activeTasksGrid.getView().getSelectionModel().getSelection() );
 		var completeTaskIds = me.getSelectedIdsArray( completeTasksGrid.getView().getSelectionModel().getSelection() );
 		var allTaskIds = me.getSelectedIdsArray( allTasksGrid.getView().getSelectionModel().getSelection() );
@@ -283,15 +288,29 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    {
 	    	url = me.apiProperties.createUrl( me.personPrintTaskUrl );
 
+	    	me.apiProperties.getReporter().load({
+	    		  url: url,
+	    		  params: jsonData
+	    		});
+	    	/*
 			me.apiProperties.makeRequest({
 				url: url,
 				method: 'GET',
 				jsonData: jsonData,
+				isUpload: true,
 				successFunc: function(response,view){
-					var r = Ext.decode(response.responseText);
-					console.log(r);
-				}
+					console.log( response );
+					// var r = Ext.decode(response.responseText);
+                    var win=window.open('about:blank');
+			        with(win.document)
+			        {
+			            open();
+			            write( response.responseText );
+			            close();
+			        }
+                }
 			});
+			*/
 	    	
 	    }else{
 	    	Ext.Msg.alert('Error','Please select the tasks and goals you would like to print.');

@@ -37,7 +37,28 @@ Ext.define('Ssp.controller.SearchViewController', {
     	
     	'displayListButton': {
     		click: 'onDisplayListClick'
-    	}	
+    	},
+
+    	addPersonButton: {
+    		selector: '#addPersonButton',
+    		listeners: {
+    			click: 'onAddPersonClick'
+    		}
+    	},
+    	
+    	editPersonButton: {
+    		selector: '#editPersonButton',
+    		listeners: {
+    			click: 'onEditPersonClick'
+    		}
+    	},
+    	
+    	deletePersonButton: {
+    		selector: '#deletePersonButton',
+    		listeners: {
+    			click: 'onDeletePersonClick'
+    		}
+    	}
     },
     
 	init: function() {
@@ -62,10 +83,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 
 	onViewReady: function(comp, eobj){
-		this.appEventsController.assignEvent({eventName: 'addPerson', callBackFunc: this.onAddPerson, scope: this});
-		this.appEventsController.assignEvent({eventName: 'editPerson', callBackFunc: this.onEditPerson, scope: this});
-		this.appEventsController.assignEvent({eventName: 'deletePerson', callBackFunc: this.deleteConfirmation, scope: this});
-
 		this.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: this.onCollapseStudentRecord, scope: this});
 	   	this.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: this.onExpandStudentRecord, scope: this});
 	   	
@@ -73,10 +90,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 
     destroy: function() {
-		this.appEventsController.removeEvent({eventName: 'addPerson', callBackFunc: this.onAddPerson, scope: this});
-		this.appEventsController.removeEvent({eventName: 'editPerson', callBackFunc: this.onEditPerson, scope: this});
-		this.appEventsController.removeEvent({eventName: 'deletePerson', callBackFunc: this.deleteConfirmation, scope: this});
-
     	this.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: this.onCollapseStudentRecord, scope: this});
 	   	this.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: this.onExpandStudentRecord, scope: this});
 
@@ -128,7 +141,22 @@ Ext.define('Ssp.controller.SearchViewController', {
 		
 		me.formUtils.reconfigureGridPanel(grid, store, columns);		
 	},
-    
+
+    onAddPersonClick: function( button ){
+    	var me=this;
+    	me.onAddPerson();
+	},
+	
+	onEditPersonClick: function( button ){
+    	var me=this;
+    	me.onEditPerson();
+	},
+
+	onDeletePersonClick: function( button ){
+    	var me=this;
+    	me.onDeletePerson();
+	},	
+	
 	onAddPerson: function(){
     	var model = new Ssp.model.Person();
     	this.person.data = model.data;

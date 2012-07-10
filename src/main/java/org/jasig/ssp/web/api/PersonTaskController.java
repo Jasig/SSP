@@ -237,7 +237,8 @@ public class PersonTaskController extends
 		parameters.put("initialDate", person.getCreatedDate());
 		parameters.put("reviewDate", new Date());
 		parameters.put("goals", goalsDS);
-
+		
+		response.addHeader("Content-Disposition", "attachment");
 		response.setContentType("application/pdf");
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/studentActionPlan.jasper");

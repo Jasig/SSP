@@ -33,17 +33,17 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
 						    	      title: 'Active',
 						    		  autoScroll: true,
 						    		  action: 'active',
-						    		  items: [{xtype: 'tasks', itemId:'activeTasks'}]
+						    		  items: [{xtype: 'tasks', itemId:'activeTasksGrid'}]
 						    		},{ 
 						    		  title: 'Complete',
 						    		  autoScroll: true,
 						    		  action: 'complete',
-						    		  items: [{xtype: 'tasks', itemId:'completeTasks'}]
+						    		  items: [{xtype: 'tasks', itemId:'completeTasksGrid'}]
 						    		},{ 
 						    		  title: 'All',
 						    		  autoScroll: true,
 						    		  action: 'all',
-						    		  items: [{xtype: 'tasks', itemId:'allTasks'}]
+						    		  items: [{xtype: 'tasks', itemId:'allTasksGrid'}]
 						    		}],
 						    	    
 						    	    dockedItems: [{

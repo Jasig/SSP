@@ -101,6 +101,10 @@ Ext.require([
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
+    
+    // REPORT DISPLAY
+    'Ssp.view.Report',
+    
     'Ssp.model.AuthenticatedPerson',
     'Ssp.model.Preferences',
     'Ssp.model.FieldError',
