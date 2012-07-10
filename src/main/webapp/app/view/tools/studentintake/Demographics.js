@@ -44,7 +44,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				            title: '',
 				            defaultType: 'textfield',
 				            defaults: {
-				                anchor: '100%'
+				                anchor: '95%'
 				            },
 				       items: [{
 				        xtype: 'combobox',

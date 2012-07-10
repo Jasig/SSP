@@ -27,7 +27,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				            id: 'StudentIntakeEducationGoalsFieldSet',
 				            defaultType: "textfield",
 				            defaults: {
-				                anchor: "100%"
+				                anchor: "95%"
 				            },
 				       items: [{
 				            xtype: "radiogroup",
@@ -42,7 +42,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 			            title: '',
 			            defaultType: "textfield",
 			            defaults: {
-			                anchor: "100%"
+			                anchor: "95%"
 			            },
 			       items: [{
 			            xtype: "radiogroup",

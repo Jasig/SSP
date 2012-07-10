@@ -9,7 +9,7 @@ Ext.define('Ssp.view.person.Appointment', {
     },
 	initComponent: function() {	
 		var me=this;
-		Ext.apply(this, 
+		Ext.apply(me, 
 				{
 			    fieldDefaults: {
 			        msgTarget: 'side',
@@ -21,6 +21,7 @@ Ext.define('Ssp.view.person.Appointment', {
 				items: [{
 			            xtype: 'fieldset',
 			            border: 0,
+			            padding: 0,
 			            title: '',
 			            defaultType: 'textfield',
 			            defaults: {
@@ -52,18 +53,6 @@ Ext.define('Ssp.view.person.Appointment', {
 				        allowBlank: false,
 				        increment: 30,
 				        anchor: '100%'
-				    },{
-				        xtype: 'checkboxgroup',
-				        fieldLabel: 'Send Student Intake Request',
-				        columns: 1,
-				        items: [
-				            {boxLabel: '', name: 'sendStudentIntakeRequest'},
-				        ]
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Last Student Intake Request Date',
-				        name: 'lastStudentIntakeRequestDate',
-				        value: ((me.person.getFormattedStudentIntakeRequestDate().length > 0) ? me.person.getFormattedStudentIntakeRequestDate() : 'No requests have been sent')
 				    }]
 			    }]
 			});

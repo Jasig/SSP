@@ -10,22 +10,30 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
     width: '100%',
 	height: '100%',   
 	initComponent: function() {
-		Ext.apply(this, 
+		var me=this;
+		Ext.apply(me, 
 				{
 			        title: "Caseload Assignment",
 		    		autoScroll: true,
 		    	    defaults: {
-		    	        bodyStyle: 'padding:15px'
+		    	        bodyStyle: 'padding:5px'
 		    	    },
 		    	    layout: {
 		    	        type: 'accordion',
+		    	        align: 'stretch',
 		    	        titleCollapse: true,
 		    	        animate: true,
 		    	        activeOnTop: true
 		    	    },		    		
-		    		
 		    		dockedItems: [{
-				        dock: 'top',
+  		               xtype: 'toolbar',
+  		               dock: 'top',
+  		               items: [{
+  		                         xtype: 'label',
+  		                         text: 'Fill out the following forms with assigned coach details and appointment information'
+  		                       }]  
+  		            },{
+				        dock: 'bottom',
 				        xtype: 'toolbar',
 				        items: [{xtype: 'button', 
 				        	     itemId: 'saveButton', 
@@ -36,6 +44,21 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 				            	   itemId: 'cancelButton',
 				            	   text: 'Cancel',
 				                 },{ 
+						        	xtype: 'tbspacer',
+						        	width: 50
+						         },{
+							        xtype: 'checkbox',
+							        boxLabel: 'Send Student Intake Request', 
+							        name: 'sendStudentIntakeRequest'
+								 },{ 
+						        	xtype: 'tbspacer',
+						        	width: 25
+						         },{
+							    	xtype: 'displayfield',
+							        fieldLabel: 'Last Request Date',
+							        name: 'lastStudentIntakeRequestDate',
+							        value: ((me.model.getFormattedStudentIntakeRequestDate().length > 0) ? me.person.getFormattedStudentIntakeRequestDate() : 'No requests have been sent')
+								 },{ 
 						        	xtype: 'tbspacer',
 						        	flex: 1
 						         },
@@ -60,7 +83,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 				    items: [ ]
 			});
 	
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 
 });
