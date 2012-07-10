@@ -60,3 +60,15 @@
 .early-alert .ea-clear {
     clear: both;
 }
+
+.suggestions-dialog {
+    width: 400px;
+}
+
+.suggestions-dialog ul li {
+    list-style-type: none;
+}
+
+.suggestions-dialog li input[type="text"] {
+    width: 240px;
+}
