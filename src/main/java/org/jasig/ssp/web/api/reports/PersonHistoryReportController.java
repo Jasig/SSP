@@ -103,22 +103,26 @@ public class PersonHistoryReportController extends BaseController {
 		PersonTO personTO = personTOFactory.from(person);
 		SspUser requestor = securityService.currentUser();
 
+		LOGGER.debug("Requester id: " + requestor.getPerson().getId());
 		// get all the journal entries for this person
 		PagingWrapper<JournalEntry> journalEntrys = journalEntryService
 				.getAllForPerson(person, requestor, null);
 		List<JournalEntryTO> journalEntryTOs = journalEntryTOFactory
 				.asTOList(journalEntrys.getRows());
+		LOGGER.debug("JournalEntryTOs.size(): " + journalEntryTOs.size());
 
 		// get all the early alerts for this person
 		PagingWrapper<EarlyAlert> earlyAlert = earlyAlertService
 				.getAllForPerson(person, null);
 		List<EarlyAlertTO> earlyAlertTOs = earlyAlertTOFactory
 				.asTOList(earlyAlert.getRows());
-
+		LOGGER.debug("EarlyAlertTOs.size(): " + earlyAlertTOs.size());
+		
 		// get all the tasks for this person
 		Map<String, List<Task>> taskMap = taskService.getAllGroupedByTaskGroup(
 				person, requestor, null);
 		Map<String, List<TaskTO>> taskTOMap = new HashMap<String, List<TaskTO>>();
+		LOGGER.debug("taskTOMap.size(): " + taskMap.size());
 
 		// change all tasks to TaskTOs
 		for (Map.Entry<String, List<Task>> entry : taskMap.entrySet()) {

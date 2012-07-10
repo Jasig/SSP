@@ -29,6 +29,7 @@ import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.GoalService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -126,11 +127,10 @@ public class PersonTaskController extends
 				.newTreeMap();
 
 		final Map<String, List<Task>> tasksWithTaskGroups = service
-				.getAllGroupedByTaskGroup(
-						personService.get(personId),
-						securityService.currentUser(),
-						SortingAndPaging.createForSingleSort(status, start,
-								limit, sort, sortDirection, null));
+				.getAllGroupedByTaskGroup(personService.get(personId),
+						securityService.currentUser(), SortingAndPaging
+								.createForSingleSort(status, start, limit,
+										sort, sortDirection, null));
 
 		for (final Entry<String, List<Task>> tasksWithTaskGroup : tasksWithTaskGroups
 				.entrySet()) {
@@ -162,25 +162,23 @@ public class PersonTaskController extends
 	 * @return All (or all specified) tasks for the specified Person
 	 * @throws ObjectNotFoundException
 	 *             If the Person id could not be found
-	 * @throws JRException 
-	 * @throws IOException  
+	 * @throws JRException
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/print/", method = RequestMethod.GET)
 	public @ResponseBody
-	void print(
-			final HttpServletResponse response,
+	void print(final HttpServletResponse response,
 			final @PathVariable UUID personId
-			//final @RequestParam(required = false) List<UUID> taskIds
-			)
-			throws ObjectNotFoundException, JRException, IOException {
+	// final @RequestParam(required = false) List<UUID> taskIds
+	) throws ObjectNotFoundException, JRException, IOException {
 
-		
 		List<UUID> taskIds = new ArrayList<UUID>();
-				
+
 		checkPermissionForOp("READ");
 
 		final SspUser requestor = securityService.currentUser();
-		final Map<String, ArrayList<Task>> challengesAndTasks = Maps.newHashMap();				
+		final Map<String, ArrayList<Task>> challengesAndTasks = Maps
+				.newHashMap();
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 		final Person person = personService.get(personId);
 		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
@@ -188,22 +186,27 @@ public class PersonTaskController extends
 				sAndP);
 		final PagingWrapper<Goal> goals = goalService.getAllForPerson(person,
 				requestor, sAndP);
-					
-		Goal[] goalsArray = goals.getRows().toArray(new Goal[goals.getRows().size()]);
-		
+
+		Goal[] goalsArray = goals.getRows().toArray(
+				new Goal[goals.getRows().size()]);
+
 		Iterator<Task> taskIter = tasks.iterator();
-		while(taskIter.hasNext())
-		{
+		while (taskIter.hasNext()) {
 			Task task = taskIter.next();
-			ArrayList<Task> taskList = challengesAndTasks.get(task.getChallenge().getName());
-			if(taskList == null)
-			{
+			Challenge challenge = task.getChallenge();
+
+			// handle an empty challenge
+			String challengeName = "";
+			if (challenge != null) {
+				challengeName = task.getChallenge().getName();
+			}
+
+			ArrayList<Task> taskList = challengesAndTasks.get(challengeName);
+			if (taskList == null) {
 				taskList = new ArrayList<Task>();
 				taskList.add(task);
-				challengesAndTasks.put(task.getChallenge().getName(), taskList);
-			}
-			else
-			{
+				challengesAndTasks.put(challengeName, taskList);
+			} else {
 				taskList.add(task);
 			}
 		}
@@ -211,24 +214,32 @@ public class PersonTaskController extends
 		Collection<ArrayList<Task>> taskList = challengesAndTasks.values();
 		ArrayList<StudentActionPlanTO> studentActionPlanTOs = new ArrayList<StudentActionPlanTO>();
 		Iterator<ArrayList<Task>> tasklistIter = taskList.iterator();
-		while(tasklistIter.hasNext())
-		{
+		while (tasklistIter.hasNext()) {
 			ArrayList<Task> currentTaskList = tasklistIter.next();
-			studentActionPlanTOs.add(new StudentActionPlanTO(currentTaskList,currentTaskList.get(0).getChallenge().getName(),currentTaskList.get(0).getChallenge().getDescription()));
+			studentActionPlanTOs.add(new StudentActionPlanTO(currentTaskList,
+					(currentTaskList.get(0).getChallenge() == null ? ""
+							: currentTaskList.get(0).getChallenge().getName()),
+					(currentTaskList.get(0).getChallenge() == null ? ""
+							: currentTaskList.get(0).getChallenge()
+									.getDescription())));
 		}
-		
-		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(studentActionPlanTOs.toArray(new StudentActionPlanTO[studentActionPlanTOs.size()] ));
-		final JRBeanArrayDataSource goalsDS = new JRBeanArrayDataSource(goalsArray);
+
+		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
+				studentActionPlanTOs
+						.toArray(new StudentActionPlanTO[studentActionPlanTOs
+								.size()]));
+		final JRBeanArrayDataSource goalsDS = new JRBeanArrayDataSource(
+				goalsArray);
 		final Map<String, Object> parameters = Maps.newHashMap();
-		parameters.put("ReportTitle", "Address Report");
-		parameters.put("DataFile", "Person.java - Bean Array");		
-		parameters.put("studentName", person.getFirstName() + " " + person.getLastName());
+		parameters.put("studentName",
+				person.getFirstName() + " " + person.getLastName());
 		parameters.put("studentId", person.getSchoolId());
 		parameters.put("initialDate", person.getCreatedDate());
-		parameters.put("reviewDate", new Date());		
-		parameters.put("goals", goalsDS);						
-				
-		response.setContentType("application/pdf");	
+		parameters.put("reviewDate", new Date());
+		parameters.put("goals", goalsDS);
+		
+		response.addHeader("Content-Disposition", "attachment");
+		response.setContentType("application/pdf");
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/studentActionPlan.jasper");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -238,9 +249,9 @@ public class PersonTaskController extends
 		JasperExportManager.exportReportToPdfStream(decodedInput,
 				response.getOutputStream());
 		response.flushBuffer();
-		
+
 		is.close();
-		os.close();		
+		os.close();
 	}
 
 	/**
@@ -265,8 +276,7 @@ public class PersonTaskController extends
 	 */
 	@RequestMapping(value = "/email/", method = RequestMethod.POST)
 	public @ResponseBody
-	boolean email(
-			final @PathVariable UUID personId,
+	boolean email(final @PathVariable UUID personId,
 			final @RequestBody @Valid EmailPersonTasksForm emailForm)
 			throws ObjectNotFoundException, ValidationException {
 
@@ -276,9 +286,9 @@ public class PersonTaskController extends
 
 		if (emailForm.getRecipientIds() != null) {
 			// get a list of recipients from a list of recipientIds
-			recipients = personService.peopleFromListOfIds(
-					emailForm.getRecipientIds(),
-					new SortingAndPaging(ObjectStatus.ACTIVE));
+			recipients = personService.peopleFromListOfIds(emailForm
+					.getRecipientIds(), new SortingAndPaging(
+					ObjectStatus.ACTIVE));
 		}
 
 		final Person student = personService.get(personId);
@@ -286,14 +296,14 @@ public class PersonTaskController extends
 		// goals
 		final List<Goal> goals = goalService.getGoalsForPersonIfNoneSelected(
 				emailForm.getGoalIds(), student, securityService.currentUser(),
-				securityService.getSessionId(),
-				new SortingAndPaging(ObjectStatus.ACTIVE));
+				securityService.getSessionId(), new SortingAndPaging(
+						ObjectStatus.ACTIVE));
 
 		// tasks
 		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
 				emailForm.getTaskIds(), student, securityService.currentUser(),
-				securityService.getSessionId(),
-				new SortingAndPaging(ObjectStatus.ACTIVE));
+				securityService.getSessionId(), new SortingAndPaging(
+						ObjectStatus.ACTIVE));
 
 		service.sendTasksForPersonToEmail(tasks, goals, student,
 				emailForm.getRecipientEmailAddresses(), recipients);

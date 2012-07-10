@@ -4,12 +4,11 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
     inject: {
     	citizenshipsStore: 'citizenshipsStore',
     	sspConfig: 'sspConfig'
-    },
-   
+    },  
 	init: function() {
 		var me=this;
     	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalSISData');
-		firstName = Ext.ComponentQuery.query('#firstName')[0].setDisabled(disabled);
+    	firstName = Ext.ComponentQuery.query('#firstName')[0].setDisabled(disabled);
 		middleInitial = Ext.ComponentQuery.query('#middleInitial')[0].setDisabled(disabled);
 		lastName = Ext.ComponentQuery.query('#lastName')[0].setDisabled(disabled);
 		studentId = Ext.ComponentQuery.query('#studentId')[0];

@@ -62,27 +62,54 @@ Ext.define('Ssp.view.Search', {
 		                        itemId: 'searchCaseloadCheck',
 		                        name      : 'searchInCaseload',
 		                        inputValue: false
-		                    },{
-		       		        	xtype: 'tbspacer',
-		       		        	flex: 1
-		       		        },{
-					            tooltip: 'Display with photo',
-					            text: '',
-					            width: 20,
-					            height: 20,
-					            cls: 'displayPhotoListIcon',
-					            xtype: 'button',
-					            itemId: 'displayPhotoButton'				        	
-					        },{
-					            tooltip: 'Display without photo',
-					            text: '',
-					            width: 20,
-					            height: 20,
-					            cls: 'displayListIcon',
-					            xtype: 'button',
-					            itemId: 'displayListButton'				        	
-					        }
-		       		    ]
+		                    }]
+		       		},{
+		       			xtype: 'toolbar',
+		       			dock: 'top',
+		       			items: [{
+						    tooltip: 'Add Student',
+						    text: '',
+						    width: 25,
+						    height: 25,
+						    cls: 'addPersonIcon',
+						    xtype: 'button',
+						    itemId: 'addPersonButton'
+						},{
+						    tooltip: 'Edit Student',
+						    text: '',
+						    width: 25,
+						    height: 25,
+						    cls: 'editPersonIcon',
+						    xtype: 'button',
+						    itemId: 'editPersonButton'
+						},{
+						    tooltip: 'Delete Student',
+						    text: '',
+						    width: 25,
+						    height: 25,
+						    cls: 'deletePersonIcon',
+						    xtype: 'button',
+						    itemId: 'deletePersonButton'
+						},{
+	       		        	xtype: 'tbspacer',
+	       		        	flex: 1
+	       		        },{
+				            tooltip: 'Display with photo',
+				            text: '',
+				            width: 20,
+				            height: 20,
+				            cls: 'displayPhotoListIcon',
+				            xtype: 'button',
+				            itemId: 'displayPhotoButton'				        	
+				        },{
+				            tooltip: 'Display without photo',
+				            text: '',
+				            width: 20,
+				            height: 20,
+				            cls: 'displayListIcon',
+				            xtype: 'button',
+				            itemId: 'displayListButton'				        	
+				        }]
 		       		}/*,{
 		       			xtype: 'toolbar',
 		       			dock: 'top',

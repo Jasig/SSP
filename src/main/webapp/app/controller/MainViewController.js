@@ -19,28 +19,7 @@ Ext.define('Ssp.controller.MainViewController', {
 
 		'adminViewNav': {
 			click: 'onAdminViewNavClick'
-		},
-    	
-    	addPersonButton: {
-    		selector: '#addPersonButton',
-    		listeners: {
-    			click: 'onAddPersonClick'
-    		}
-    	},
-    	
-    	editPersonButton: {
-    		selector: '#editPersonButton',
-    		listeners: {
-    			click: 'onEditPersonClick'
-    		}
-    	},
-    	
-    	deletePersonButton: {
-    		selector: '#deletePersonButton',
-    		listeners: {
-    			click: 'onDeletePersonClick'
-    		}
-    	}
+		}
 	},
 	
 	init: function() {
@@ -89,9 +68,6 @@ Ext.define('Ssp.controller.MainViewController', {
     	var mainView = Ext.ComponentQuery.query('mainview')[0];
     	var arrViewItems;
     	
-    	me.personButtonsVisible=true;
-    	me.setPersonButtons();
-    	
     	if (mainView.items.length > 0)
 		{
 			mainView.removeAll();
@@ -108,9 +84,6 @@ Ext.define('Ssp.controller.MainViewController', {
     	var mainView = Ext.ComponentQuery.query('mainview')[0];
     	var arrViewItems;	
     	
-    	me.personButtonsVisible=false;
-    	me.setPersonButtons();
-    	
     	if (mainView.items.length > 0)
 		{
 			mainView.removeAll();
@@ -122,33 +95,5 @@ Ext.define('Ssp.controller.MainViewController', {
 					     flex:5}];
 		
 		mainView.add( arrViewItems );
-    },	
-    
-    onAddPersonClick: function( button ){
-    	var me=this;
-    	me.personButtonsVisible=false;
-    	me.setPersonButtons();
-    	this.appEventsController.getApplication().fireEvent('addPerson');
-	},
-	
-	onEditPersonClick: function( button ){
-    	var me=this;
-    	me.personButtonsVisible=false;
-    	me.setPersonButtons();
-		this.appEventsController.getApplication().fireEvent('editPerson');
-	},
-
-	onDeletePersonClick: function( button ){
-    	var me=this;
-    	me.personButtonsVisible=false;
-    	me.setPersonButtons();
-		this.appEventsController.getApplication().fireEvent('deletePerson');
-	},
-	
-	setPersonButtons: function(){
-		var me=this;
-		me.getAddPersonButton().setVisible( me.personButtonsVisible );
-		me.getEditPersonButton().setVisible( me.personButtonsVisible );
-		me.getDeletePersonButton().setVisible( me.personButtonsVisible );
-	}
+    }
 });

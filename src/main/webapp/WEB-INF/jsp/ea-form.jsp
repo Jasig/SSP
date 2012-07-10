@@ -1,7 +1,10 @@
 <jsp:directive.include file="/WEB-INF/jsp/include.jsp"/>
 
-<portlet:renderURL var="cancelUrl"/>
-<portlet:actionURL var="submitUrl"/>
+<portlet:renderURL var="cancelUrl" />
+<portlet:renderURL var="doneUrl" escapeXml="false">
+    <portlet:param name="confirm" value="true"/>
+    <portlet:param name="studentName" value="STUDENTNAME"/>
+</portlet:renderURL>
 
 <c:set var="n"><portlet:namespace/></c:set>
 
@@ -32,7 +35,7 @@
       </div>
     </div>
     
-    <form method="POST" class="alert-form" action="${cancelUrl}">
+    <form method="POST" class="alert-form">
     
       <!-- Course -->
       <div class="ea-input">
@@ -136,7 +139,7 @@
 
       <!-- Email CC -->
       <div class="ea-input">
-        <input type="text" value="" />
+        <input type="text" class="field-email-cc" value="" />
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
@@ -146,7 +149,9 @@
 
       <!-- Campus -->
       <div class="ea-input">
-        <select class="field-campus"></select>
+        <select class="field-campus">
+          <option class="prompt"><spring:message code="select.a.campus"/></option>
+        </select>
       </div>
       <div class="ea-required">*</div>
       <div class="ea-label">
@@ -156,7 +161,10 @@
 
       <!-- Referral Reason -->
       <div class="ea-input">
-        <select class="field-reason"></select>
+        <select class="field-reason">
+          <option class="prompt"><spring:message code="select.a.reason"/></option>
+        </select><br/>
+        <input type="text" class="field-other-reason-text" name="earlyAlertReasonOtherDescription" value="" placeholder="<spring:message code="type.a.reason"/>" style="display: none; margin-top: 8px;" />
       </div>
       <div class="ea-required">*</div>
       <div class="ea-label">
@@ -177,7 +185,7 @@
 
       <!-- Comments -->
       <div class="ea-input">
-        <textarea></textarea>
+        <textarea class="field-comments"></textarea>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
@@ -188,7 +196,7 @@
       <!-- Buttons -->
       <div class="ea-buttons">
         <div class="buttons">
-          <input class="button primary" type="submit" value="<spring:message code="send.early.alert"/>" />
+          <input class="button primary button-send" type="button" value="<spring:message code="send.early.alert"/>" />
           <a class="button" href="${cancelUrl}"><spring:message code="cancel"/></a>
         </div>
       </div>
@@ -196,11 +204,15 @@
       <div class="ea-label">&nbsp;</div>
       <div class="ea-clear"></div>
       
-      <div class="suggestions-dialog">
+      <div class="suggestions-dialog" style="display: none;">
         <ul>
         </ul>
       </div>
     
+      <div class="notice-dialog" style="display: none;">
+        <p><spring:message code="send.email.notice.to.student"/></p>
+      </div>
+
     </form>
     
   </div> <!-- end: portlet-body -->
@@ -214,11 +226,17 @@
     ${n}.jQuery(function() {
         var $ = up.jQuery;
         
-        ssp.EarlyAlertForm('#${n}earlyAlert', {
-            course: 'ENGLISH - 124 - 001 - Academic Writing and Literature',
-            term: '11/SD',
-            studentId: '58ba5ee3-734e-4ae9-b9c5-943774b4de41'
-        });
+        var options = {
+            doneUrl: '${doneUrl}',
+            submitUrl: '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
+            parameters: {
+                courseName: 'ENGLISH - 124 - 001',
+                courseTitle: 'Academic Writing and Literature',
+                term: '11/SD',
+                studentId: '58ba5ee3-734e-4ae9-b9c5-943774b4de41'
+            }
+        };
+        ssp.EarlyAlertForm('#${n}earlyAlert', options);
 
     });
 </script>

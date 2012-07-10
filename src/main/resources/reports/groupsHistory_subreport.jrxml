@@ -3,9 +3,6 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/home/codynet/workspace/ssd/SSP-Open-Source-Project/src/main/resources/reports/"]]></defaultValueExpression>
-	</parameter>
 	<field name="groupName" class="java.lang.String"/>
 	<field name="taskList" class="java.util.List"/>
 	<background>
@@ -21,7 +18,7 @@
 			<subreport>
 				<reportElement uuid="463f5dd1-6b8b-4aef-96a3-28f44388b49d" stretchType="RelativeToTallestObject" x="28" y="17" width="527" height="16"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{taskList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "tasksHistory_subreport.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["reports/tasksHistory_subreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

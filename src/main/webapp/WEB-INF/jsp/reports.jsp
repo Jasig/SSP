@@ -68,32 +68,38 @@ clear: left;
 }
 
 #container{width:100%; margin:0 auto; background:#fff;}
-#leftbar{ float:left; width:35%; background:#fff;}
-#rightbar{ margin:0 0 0 45%; background:#E6E6E6; padding-bottom: 2em; padding-left: 2em;  height:500}
+#leftbar{ float:left; width:35; background:#fff; height:100%;border:.5px solid; padding-left:5em;}
+#rightbar{ margin:0 0 0 45%;  background:#E6E6E6; padding-bottom: 2em; padding-left: 2em;  height:100% border:.5px solid;}
 
 </style>
-
+ 
 
 </head>
 
 <div id="container" style="height:100%;">
-<div id="leftbar" style="height:100%;">
+<div id="leftbar" style="height:100%;border:.5px solid;">
+<p>Select Report Form</p>
 <ul>
-<li><a onclick="populateForm('/ssp/forms/AddressLabel.jsp');">Address labels</a></li>
-<li><a onclick="populateForm('/ssp/forms/SpecialServices.jsp');">Special Services labels</a></li>
-<li><a onclick="populateForm('/ssp/forms/StudentActionPlan.jsp');">Student Action Plan</a></li>
-<li><a onclick="clearFormDiv();" >Clear Form</a></li>
+<li><a onclick="populateForm('/ssp/forms/AddressLabel.jsp');" style='cursor:default'>Address Labels</a></li>
+<li><a onclick="populateForm('/ssp/forms/SpecialServices.jsp');" style='cursor:default'>Special Services Report</a></li>
+<li><a onclick="populateForm('/ssp/forms/ConfidentialityAgreement.jsp');" style='cursor:default'>Confidendiality Agreement</a></li>
+<li><a href="/ssp/api/1/person/f549ecab-5110-4cc1-b2bb-369cac854dea/task/print/">Test Student Action Plan Report for Kenneth</a></li>
+<li><a href="/ssp/api/1/report/f549ecab-5110-4cc1-b2bb-369cac854dea/History/">Test Student History Report for Kenneth</a></li>
 </ul> 
 </div>
 
-<div id="rightbar" style="height:1000;" ></div>
+<div id="rightbar"></div>
 <br style="clear:both;"/>
 
 </div>
 
 <div id="stagingDiv" style="display:none" ></div>
 
-
+<script>
+$(document).ready(function() {
+		populateForm('/ssp/forms/AddressLabel.jsp');
+	});
+</script>
 
 
 

@@ -32,30 +32,9 @@ Ext.define('Ssp.view.Main', {
 			       		        	xtype: 'tbspacer',
 			       		        	flex: 1
 			       		        },{
-								    tooltip: 'Add Student',
-								    text: '',
-								    width: 25,
-								    height: 25,
-								    cls: 'addPersonIcon',
-								    xtype: 'button',
-								    itemId: 'addPersonButton'
-								},{
-								    tooltip: 'Edit Student',
-								    text: '',
-								    width: 25,
-								    height: 25,
-								    cls: 'editPersonIcon',
-								    xtype: 'button',
-								    itemId: 'editPersonButton'
-								},{
-								    tooltip: 'Delete Student',
-								    text: '',
-								    width: 25,
-								    height: 25,
-								    cls: 'deletePersonIcon',
-								    xtype: 'button',
-								    itemId: 'deletePersonButton'
-								}]
+	    		    	    	  id: 'report',
+	    		    	    	  xtype: 'sspreport'
+	    		    	    	}]
 		    	    }    		
     			});
     	

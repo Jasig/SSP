@@ -6,12 +6,14 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.studentintake.PersonalViewController',
     inject: {
+    	person: 'currentPerson',
         statesStore: 'statesStore'
     },
 	width: '100%',
     height: '100%',    
 	initComponent: function() {
-		Ext.apply(this, 
+		var me=this;
+		Ext.apply(me, 
 				{
 					autoScroll: true,
     		        border: 0,	
@@ -31,7 +33,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				            title: '',
 				            defaultType: 'textfield',
 				            defaults: {
-				                anchor: '100%'
+				                anchor: '95%'
 				            },
 				       items: [{
 				    	xtype: 'displayfield',
@@ -40,7 +42,8 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    },{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Intake Completion Date',
-				        name: 'studentIntakeCompleteDate'
+				        name: 'studentIntakeCompleteDate',
+				        renderer: Ext.util.Format.dateRenderer('m/d/Y')
 				    },{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Agreed to Confidentiality',
@@ -129,7 +132,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        name: 'state',
 				        fieldLabel: 'State',
 				        emptyText: 'Select a State',
-				        store: this.statesStore,
+				        store: me.statesStore,
 				        valueField: 'code',
 				        displayField: 'title',
 				        mode: 'local',
@@ -162,6 +165,6 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    }]
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });
