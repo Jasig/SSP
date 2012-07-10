@@ -292,26 +292,6 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    		  url: url,
 	    		  params: jsonData
 	    		});
-	    	/*
-			me.apiProperties.makeRequest({
-				url: url,
-				method: 'GET',
-				jsonData: jsonData,
-				isUpload: true,
-				successFunc: function(response,view){
-					console.log( response );
-					// var r = Ext.decode(response.responseText);
-                    var win=window.open('about:blank');
-			        with(win.document)
-			        {
-			            open();
-			            write( response.responseText );
-			            close();
-			        }
-                }
-			});
-			*/
-	    	
 	    }else{
 	    	Ext.Msg.alert('Error','Please select the tasks and goals you would like to print.');
 	    }
