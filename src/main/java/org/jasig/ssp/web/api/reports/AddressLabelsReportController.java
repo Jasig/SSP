@@ -1,4 +1,4 @@
-package org.jasig.ssp.web.api.reports;
+package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -55,7 +56,7 @@ import com.google.common.collect.Maps;
 // TODO: Add PreAuthorize
 @Controller
 @RequestMapping("/1/report/AddressLabels")
-public class AddressLabelsReportController extends BaseController {
+public class AddressLabelsReportController extends BaseController { // NOPMD
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
@@ -73,19 +74,19 @@ public class AddressLabelsReportController extends BaseController {
 	// private transient PersonTOFactory factory;
 
 	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	public void initBinder(final WebDataBinder binder) {
+		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",
+				Locale.US);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
 				dateFormat, true));
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody
-	void getAddressLabels(
+	@ResponseBody
+	public void getAddressLabels(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
-
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
@@ -99,8 +100,8 @@ public class AddressLabelsReportController extends BaseController {
 
 		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
 				programStatus, specialServiceGroupIds, referralSourcesIds,
-				(anticipatedStartTerm.length() <= 0 ? null
-						: anticipatedStartTerm), anticipatedStartYear,
+				anticipatedStartTerm.length() == 0 ? null
+						: anticipatedStartTerm, anticipatedStartYear,
 				studentTypeIds, createDateFrom, createDateTo);
 
 		final List<Person> people = personService.peopleFromCriteria(
@@ -154,15 +155,15 @@ public class AddressLabelsReportController extends BaseController {
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
 
-		if (reportType.equals("pdf")) {
+		if ("pdf".equals(reportType)) {
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
-		} else if (reportType.equals("csv")) {
+		} else if ("csv".equals(reportType)) {
 			response.setContentType("application/vnd.ms-excel");
 			response.setHeader("Content-disposition",
 					"attachment; filename=test.csv");
 
-			JRCsvExporter exporter = new JRCsvExporter();
+			final JRCsvExporter exporter = new JRCsvExporter();
 			exporter.setParameter(JRExporterParameter.INPUT_STREAM,
 					decodedInput);
 			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
@@ -182,5 +183,4 @@ public class AddressLabelsReportController extends BaseController {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-
 }

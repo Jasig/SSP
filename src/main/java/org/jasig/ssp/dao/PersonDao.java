@@ -127,7 +127,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 *             If any referenced data is not found.
 	 */
 	@SuppressWarnings(UNCHECKED)
-	public List<Person> getPeopleByCriteria(
+	public List<Person> getPeopleByCriteria( // NOPMD
 			final AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
@@ -137,6 +137,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			// TODO
 			// criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
 		}
+
 		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
 			criteria.createAlias("specialServiceGroups",
 					"personSpecialServiceGroups")
@@ -145,31 +146,39 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 									addressLabelSearchTO
 											.getSpecialServiceGroupIds()));
 		}
+
 		if (addressLabelSearchTO.getReferralSourcesIds() != null) {
 			criteria.createAlias("referralSources", "personReferralSources")
 					.add(Restrictions.in(
 							"personReferralSources.referralSource.id",
 							addressLabelSearchTO.getReferralSourcesIds()));
 		}
+
 		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
 			criteria.add(Restrictions.eq("anticipatedStartTerm",
 					addressLabelSearchTO.getAnticipatedStartTerm())
 					.ignoreCase());
 		}
+
 		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
 			criteria.add(Restrictions.eq("anticipatedStartYear",
 					addressLabelSearchTO.getAnticipatedStartYear()));
 		}
+
 		if (addressLabelSearchTO.getStudentTypeIds() != null) {
 			criteria.add(Restrictions.in("studentType.id",
 					addressLabelSearchTO.getStudentTypeIds()));
 		}
+
 		if (addressLabelSearchTO.getCreateDateFrom() != null) {
-			criteria.add(Restrictions.ge("createdDate", addressLabelSearchTO.getCreateDateFrom()));			
+			criteria.add(Restrictions.ge("createdDate",
+					addressLabelSearchTO.getCreateDateFrom()));
 		}
+
 		if (addressLabelSearchTO.getCreateDateTo() != null) {
-			criteria.add(Restrictions.le("createdDate", addressLabelSearchTO.getCreateDateTo()));			
-		}		
+			criteria.add(Restrictions.le("createdDate",
+					addressLabelSearchTO.getCreateDateTo()));
+		}
 
 		return criteria.list();
 	}

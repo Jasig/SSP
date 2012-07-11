@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-//import javassist.bytecode.Descriptor.Iterator;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -23,7 +21,6 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 
-import org.jasig.ssp.factory.GoalTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
@@ -155,24 +152,24 @@ public class PersonTaskController extends
 	 * report
 	 * </p>
 	 * 
+	 * @param response
+	 *            Servlet response
 	 * @param personId
 	 *            Person id
-	 * @param taskIds
-	 *            Task identifiers to retrieve
-	 * @return All (or all specified) tasks for the specified Person
 	 * @throws ObjectNotFoundException
 	 *             If the Person id could not be found
 	 * @throws JRException
+	 *             Thrown for any reporting exception
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/print/", method = RequestMethod.GET)
 	public @ResponseBody
 	void print(final HttpServletResponse response,
 			final @PathVariable UUID personId
-	// final @RequestParam(required = false) List<UUID> taskIds
-	) throws ObjectNotFoundException, JRException, IOException {
+			// final @RequestParam(required = false) List<UUID> taskIds
+			) throws ObjectNotFoundException, JRException, IOException {
 
-		List<UUID> taskIds = new ArrayList<UUID>();
+		final List<UUID> taskIds = new ArrayList<UUID>();
 
 		checkPermissionForOp("READ");
 
@@ -187,23 +184,21 @@ public class PersonTaskController extends
 		final PagingWrapper<Goal> goals = goalService.getAllForPerson(person,
 				requestor, sAndP);
 
-		Goal[] goalsArray = goals.getRows().toArray(
+		final Goal[] goalsArray = goals.getRows().toArray(
 				new Goal[goals.getRows().size()]);
 
-		Iterator<Task> taskIter = tasks.iterator();
+		final Iterator<Task> taskIter = tasks.iterator();
 		while (taskIter.hasNext()) {
-			Task task = taskIter.next();
-			Challenge challenge = task.getChallenge();
+			final Task task = taskIter.next();
+			final Challenge challenge = task.getChallenge();
 
 			// handle an empty challenge
-			String challengeName = "";
-			if (challenge != null) {
-				challengeName = task.getChallenge().getName();
-			}
+			final String challengeName = challenge == null ? "" : task
+					.getChallenge().getName();
 
 			ArrayList<Task> taskList = challengesAndTasks.get(challengeName);
 			if (taskList == null) {
-				taskList = new ArrayList<Task>();
+				taskList = new ArrayList<Task>(); // NOPMD
 				taskList.add(task);
 				challengesAndTasks.put(challengeName, taskList);
 			} else {
@@ -211,12 +206,13 @@ public class PersonTaskController extends
 			}
 		}
 
-		Collection<ArrayList<Task>> taskList = challengesAndTasks.values();
-		ArrayList<StudentActionPlanTO> studentActionPlanTOs = new ArrayList<StudentActionPlanTO>();
-		Iterator<ArrayList<Task>> tasklistIter = taskList.iterator();
+		final Collection<ArrayList<Task>> taskList = challengesAndTasks
+				.values();
+		final ArrayList<StudentActionPlanTO> studentActionPlanTOs = new ArrayList<StudentActionPlanTO>();
+		final Iterator<ArrayList<Task>> tasklistIter = taskList.iterator();
 		while (tasklistIter.hasNext()) {
-			ArrayList<Task> currentTaskList = tasklistIter.next();
-			studentActionPlanTOs.add(new StudentActionPlanTO(currentTaskList,
+			final ArrayList<Task> currentTaskList = tasklistIter.next();
+			studentActionPlanTOs.add(new StudentActionPlanTO(currentTaskList, // NOPMD
 					(currentTaskList.get(0).getChallenge() == null ? ""
 							: currentTaskList.get(0).getChallenge().getName()),
 					(currentTaskList.get(0).getChallenge() == null ? ""
@@ -237,7 +233,7 @@ public class PersonTaskController extends
 		parameters.put("initialDate", person.getCreatedDate());
 		parameters.put("reviewDate", new Date());
 		parameters.put("goals", goalsDS);
-		
+
 		response.addHeader("Content-Disposition", "attachment");
 		response.setContentType("application/pdf");
 		final InputStream is = getClass().getResourceAsStream(
