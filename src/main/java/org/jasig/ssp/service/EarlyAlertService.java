@@ -1,5 +1,9 @@
 package org.jasig.ssp.service;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
+
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
@@ -23,4 +27,7 @@ public interface EarlyAlertService
 	@Override
 	EarlyAlert create(EarlyAlert obj) throws ObjectNotFoundException,
 			ValidationException;
+
+	Map<UUID, Number> getCountOfActiveAlertsForPeopleIds(
+			final Collection<UUID> peopleIds);
 }

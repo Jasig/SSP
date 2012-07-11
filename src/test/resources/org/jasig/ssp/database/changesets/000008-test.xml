@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="test appointment" author="daniel.bower">
+		<insert tableName="appointment">
+			<column name="id" value="6c892a1c-ca07-11e1-8c61-0026b9e7ff4c" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="start_time" valueDate="2012-03-20T00:00:00" />
+			<column name="end_time" valueDate="2012-03-20T01:00:00" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="appointment">
+				<where>id='6c892a1c-ca07-11e1-8c61-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="set studentTypes" author="daniel.bower">
+		<update tableName="person">
+			<column name="student_type_id">b2d058eb-5056-a51a-80a7-8a20c30d1e91</column>
+			<where>id = '1010e4a0-1001-0110-1011-4ffc02fe81ff'</where>
+		</update>
+		<update tableName="person">
+			<column name="student_type_id">b2d05919-5056-a51a-80bd-03e5288de771</column>
+			<where>id = '7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194'</where>
+		</update>
+		<update tableName="person">
+			<column name="student_type_id">b2d05919-5056-a51a-80bd-03e5288de771</column>
+			<where>id = 'f549ecab-5110-4cc1-b2bb-369cac854dea'</where>
+		</update>
+	</changeSet>
+
+</databaseChangeLog>

@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -382,6 +383,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
 	private Set<EarlyAlert> earlyAlerts;
+
+	@Transient
+	private Appointment currentAppointment;
 
 	/**
 	 * Initialize a Person.
@@ -801,6 +805,14 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	public void setEarlyAlerts(final Set<EarlyAlert> earlyAlerts) {
 		this.earlyAlerts = earlyAlerts;
+	}
+
+	public Appointment getCurrentAppointment() {
+		return currentAppointment;
+	}
+
+	public void setCurrentAppointment(final Appointment currentAppointment) {
+		this.currentAppointment = currentAppointment;
 	}
 
 	@Override

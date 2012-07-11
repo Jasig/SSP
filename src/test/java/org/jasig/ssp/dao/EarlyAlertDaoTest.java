@@ -31,6 +31,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -182,5 +183,32 @@ public class EarlyAlertDaoTest {
 		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 
 		return obj;
+	}
+
+	@Test
+	public void getCountOfActiveAlertsForPeopleIds()
+			throws ObjectNotFoundException {
+		EarlyAlert obj = createTestEarlyAlert();
+		obj.setClosedDate(null);
+		obj.setClosedById(null);
+		dao.save(obj);
+
+		Collection<UUID> peopleIds = Lists.newArrayList();
+		peopleIds.add(PERSON_ID);
+
+		try {
+			dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
+		} finally {
+			dao.delete(obj);
+		}
+	}
+
+	@Test
+	public void getCountOfActiveAlertsForPeopleIdsTTEmpty()
+			throws ObjectNotFoundException {
+		Collection<UUID> peopleIds = Lists.newArrayList();
+		peopleIds.add(PERSON_ID);
+
+		dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
 	}
 }
