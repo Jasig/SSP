@@ -108,7 +108,7 @@ Ext.define('Ssp.controller.tool.document.StudentDocumentToolViewController', {
      	if (btnId=="yes")
      	{
      		this.apiProperties.makeRequest({
-      		   url: this.personDocumentUrl+id,
+      		   url: this.personDocumentUrl+"/"+id,
       		   method: 'DELETE',
       		   successFunc: function(response,responseText){
       			   store.remove( store.getById( id ) );

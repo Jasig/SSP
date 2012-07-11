@@ -76,7 +76,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
            groupName = model.data.group;
            delete model.data.group;
 		   this.apiProperties.makeRequest({
-			   url: this.url+id,
+			   url: this.url+"/"+id,
 			   method: 'PUT',
 			   jsonData: model.data,
 			   successFunc: function(response,responseText){
@@ -131,7 +131,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
      	if (btnId=="yes")
      	{
          	this.apiProperties.makeRequest({
-      		   url: this.url+id,
+      		   url: this.url+"/"+id,
       		   method: 'DELETE',
       		   successFunc: function(response,responseText){
       			   store.remove( store.getById( id ) );

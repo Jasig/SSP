@@ -138,7 +138,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
      	if (btnId=="yes")
      	{
      		this.apiProperties.makeRequest({
-      		   url: this.personJournalUrl+id,
+      		   url: this.personJournalUrl+"/"+id,
       		   method: 'DELETE',
       		   successFunc: function(response,responseText){
       			   store.remove( store.getById( id ) );

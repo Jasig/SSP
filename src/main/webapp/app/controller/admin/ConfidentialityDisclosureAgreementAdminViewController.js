@@ -32,7 +32,7 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
 		jsonData = record.data;
 		
 		Ext.Ajax.request({
-			url: this.store.getProxy().url+id,
+			url: this.store.getProxy().url+"/"+id,
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			jsonData: jsonData,

@@ -85,20 +85,11 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
 		// load the person record
 		me.apiProperties.makeRequest({
-			url: studentIntakeUrl+me.currentPerson.getId(),
+			url: studentIntakeUrl+'/'+me.currentPerson.getId(),
 			method: 'GET',
 			successFunc: me.loadStudentIntakeResult,
 			scope: me
-		});		
-		
-		/*
-		// Load the Student Intake
-		Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
-		Form.load(me.currentPerson.getId(),{
-			success: me.loadStudentIntakeResult,
-			scope: me
 		});
-		*/
 		
 		// display loader
 		me.getView().setLoading( true );
@@ -509,7 +500,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 						
 			// Save the intake
 			me.apiProperties.makeRequest({
-				url: me.apiProperties.createUrl(me.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
+				url: me.apiProperties.createUrl(me.apiProperties.getItemUrl('studentIntakeTool') +"/"+ this.currentPerson.get('id')),
 				method: 'PUT',
 				jsonData: intakeData,
 				successFunc: handleSuccess,

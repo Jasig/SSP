@@ -79,7 +79,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		
 		// load the person record
 		me.apiProperties.makeRequest({
-			url: personUrl+id,
+			url: personUrl+'/'+id,
 			method: 'GET',
 			successFunc: successFunc 
 		});

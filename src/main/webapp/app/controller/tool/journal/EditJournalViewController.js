@@ -136,7 +136,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     			}else{
     				// editing
     				this.apiProperties.makeRequest({
-    					url: url+id,
+    					url: url+"/"+id,
     					method: 'PUT',
     					jsonData: jsonData,
     					successFunc: handleSuccess,

@@ -77,7 +77,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     getAssociatedItems: function(node, id){
     	var me=this;
     	var parentUrl = me.apiProperties.getItemUrl( me.parentItemType );
-    	var url = parentUrl + id + '/' + me.getAssociatedItemType() + '/';
+    	var url = parentUrl + '/' + id + '/' + me.getAssociatedItemType();
     	var treeRequest = new Ssp.model.util.TreeRequest();
     	treeRequest.set('url',url);
     	treeRequest.set('nodeType', me.getAssociatedItemType);
@@ -108,7 +108,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         	node = overModel;
         	parentId = me.treeUtils.getIdFromNodeId(node.data.id);
         	associatedItemId = data.records[0].get('id')
-        	parentUrl = me.apiProperties.getItemUrl( me.getParentItemType() ) + parentId + '/' + me.getAssociatedItemType() + '/'; 	
+        	parentUrl = me.apiProperties.getItemUrl( me.getParentItemType() ) + '/' + parentId + '/' + me.getAssociatedItemType(); 	
         	url = me.apiProperties.createUrl( parentUrl );
         	me.apiProperties.makeRequest({
 				url: url,
@@ -177,7 +177,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	var url, parentId, associatedItemId;
     	if ( parentId != "" && associatedItemId != null)
     	{
-        	parentUrl = me.apiProperties.getItemUrl( me.getParentItemType() ) + parentId + '/' + me.getAssociatedItemType() + '/'; 	
+        	parentUrl = me.apiProperties.getItemUrl( me.getParentItemType() ) + '/' + parentId + '/' + me.getAssociatedItemType(); 	
 	    	url = me.apiProperties.createUrl( parentUrl );
 	    	me.apiProperties.makeRequest({
 				url: url,

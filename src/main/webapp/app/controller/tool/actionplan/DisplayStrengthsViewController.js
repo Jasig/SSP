@@ -45,7 +45,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
 		{
 			form.updateRecord();
 			this.apiProperties.makeRequest({
-				url: me.url+me.model.get('id'),
+				url: me.url+"/"+me.model.get('id'),
 				method: 'PUT',
 				jsonData: me.model.data,
 				successFunc: successFunc = function(response ,view){

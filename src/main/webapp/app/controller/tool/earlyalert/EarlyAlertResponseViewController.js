@@ -76,7 +76,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		{
 			// editing
 			this.apiProperties.makeRequest({
-				url: url+id,
+				url: url+"/"+id,
 				method: 'PUT',
 				jsonData: jsonData,
 				successFunc: successFunc 

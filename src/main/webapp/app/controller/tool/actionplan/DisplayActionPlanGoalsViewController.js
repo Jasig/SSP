@@ -88,7 +88,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     	if (btnId=="yes")
     	{
         	this.apiProperties.makeRequest({
-     		   url: this.url+id,
+     		   url: this.url+"/"+id,
      		   method: 'DELETE',
      		   successFunc: function(response,responseText){
      			  store.remove( store.getById( id ) );

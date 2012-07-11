@@ -209,7 +209,7 @@ Ext.define('Ssp.controller.SearchViewController', {
      	if (btnId=="yes")
      	{
          	me.apiProperties.makeRequest({
-      		   url: me.personUrl+id,
+      		   url: me.personUrl+"/"+id,
       		   method: 'DELETE',
       		   successFunc: function(response,responseText){
       			   store.remove( store.getById( id ) );
@@ -235,7 +235,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		{
 			
 			me.apiProperties.makeRequest({
-				url: me.personSearchUrl+'?outsideCaseload='+outsideCaseload+'&searchTerm='+me.getSearchText().value,
+				url: me.personSearchUrl+'/?outsideCaseload='+outsideCaseload+'&searchTerm='+me.getSearchText().value,
 				method: 'GET',
 				successFunc: successFunc
 			});			

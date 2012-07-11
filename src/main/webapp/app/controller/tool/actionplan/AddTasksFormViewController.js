@@ -90,7 +90,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     			
     			// edit the task
 	    		this.apiProperties.makeRequest({
-	    			url: me.url+id,
+	    			url: me.url+"/"+id,
 	    			method: 'PUT',
 	    			jsonData: model.data,
 	    			successFunc: successFunc

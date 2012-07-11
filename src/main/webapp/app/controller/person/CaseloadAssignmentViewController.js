@@ -87,7 +87,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			
 			// load the person to edit
 			me.apiProperties.makeRequest({
-				url: me.personUrl+id,
+				url: me.personUrl+'/'+id,
 				method: 'GET',
 				successFunc: successFunc
 			});
@@ -251,7 +251,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			}else{
 				// update
 	    		me.apiProperties.makeRequest({
-	    			url: me.personUrl+id,
+	    			url: me.personUrl+"/"+id,
 	    			method: 'PUT',
 	    			jsonData: jsonData,
 	    			successFunc: personSuccessFunc

@@ -77,7 +77,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	switch ( nodeName )
     	{
     		case 'category':
-    			url = me.categoryUrl + id + '/challenge/';
+    			url = me.categoryUrl + '/' + id + '/challenge/';
     			nodeType = 'challenge';
     			break;
     			
@@ -92,7 +92,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
      			break;     			
      			
     		case 'challenge':
-    			url = me.challengeUrl + id + '/challengeReferral/'; // me.challengeReferralUrl;
+    			url = me.challengeUrl + '/' + id + '/challengeReferral/';
     			nodeType = 'referral';
     			isLeaf = true;
     			break;
@@ -148,7 +148,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 			};
 	    	
 	    	me.apiProperties.makeRequest({
-				url: me.apiProperties.createUrl( me.challengeReferralUrl+id ),
+				url: me.apiProperties.createUrl( me.challengeReferralUrl+'/'+id ),
 				method: 'GET',
 				jsonData: '',
 				successFunc: successFunc 

@@ -42,7 +42,7 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
 		{
 			// editing
 			this.apiProperties.makeRequest({
-				url: url+id,
+				url: url+"/"+id,
 				method: 'PUT',
 				jsonData: jsonData,
 				successFunc: successFunc 

@@ -81,7 +81,7 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
       	if (btnId=="yes")
       	{
       		me.apiProperties.makeRequest({
-        		   url: store.getProxy().url+id,
+        		   url: store.getProxy().url+"/"+id,
         		   method: 'DELETE',
         		   successFunc: function(response,responseText){
         			   store.remove( store.getById( id ) );

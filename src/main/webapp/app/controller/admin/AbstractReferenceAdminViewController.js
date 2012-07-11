@@ -26,8 +26,9 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		var record = e.record;
 		var id = record.get('id');
 		var jsonData = record.data;
+		console.log( editor.grid.getStore().getProxy().url+"/"+id );
 		Ext.Ajax.request({
-			url: editor.grid.getStore().getProxy().url+id,
+			url: editor.grid.getStore().getProxy().url+"/"+id,
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			jsonData: jsonData,
@@ -109,7 +110,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
      	if (btnId=="yes")
      	{
      		me.apiProperties.makeRequest({
-       		   url: store.getProxy().url+id,
+       		   url: store.getProxy().url+"/"+id,
        		   method: 'DELETE',
        		   successFunc: function(response,responseText){
        			   var r = Ext.decode(response.responseText);
