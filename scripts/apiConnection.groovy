@@ -81,14 +81,14 @@ String addChallengeToCategory(ApiConnection conn){
 }
 
 String addGoalToPerson(ApiConnection conn){
-	String form = '{"id":"","createdDate":null,"name":"Get a 2.0 GPA","personId":"58ba5ee3-734e-4ae9-b9c5-943774b4de41","description":"Get a 2.0 GPA","createdBy":{"id":"","firstName":"","lastName":""},"modifiedBy":{"id":"","firstName":"","lastName":""},"confidentialityLevel":{"id":"afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c","name":null}}'
-	return conn.post("api/1/person/58ba5ee3-734e-4ae9-b9c5-943774b4de41/goal/", form)
+	String form = '{"id":"","createdDate":null,"name":"Get a 2.0 GPA","personId":"7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194","description":"Get a 2.0 GPA","createdBy":{"id":"","firstName":"","lastName":""},"modifiedBy":{"id":"","firstName":"","lastName":""},"confidentialityLevel":{"id":"afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c","name":null}}'
+	return conn.post("api/1/person/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194/goal/", form)
 }
 
 
 String getAllJournalEntriesForPerson(ApiConnection conn){
 	//"/1/person/{personId}/journalEntry"
-	return conn.get("api/1/person/58ba5ee3-734e-4ae9-b9c5-943774b4de41/journalEntry/")
+	return conn.get("api/1/person/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194/journalEntry/")
 }
 
 String getPerson(ApiConnection conn){
@@ -112,6 +112,10 @@ String getCaseload(ApiConnection conn){
 	return conn.get("api/1/person/caseload")
 }
 
+String getAppointments(ApiConnection conn){
+	return conn.get("api/1/person/1010e4a0-1001-0110-1011-4ffc02fe81ff/appointment/")
+}
+
 /**
  * You can exercise the ssp api from within STS (eclipse) using this script
  */
@@ -125,7 +129,8 @@ ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0",
 //String output = getAllJournalEntriesForPerson(conn);
 //String output = getPerson(conn)
 //String output = search(conn)
-String output = getCaseload(conn)
+//String output = getCaseload(conn)
+String output = getAppointments(conn)
 
 conn.formatAndPrintJson(output)
 //println (output);
