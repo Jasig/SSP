@@ -82,7 +82,7 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 				dateFormat, true));
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public void getAddressLabels(
 			final HttpServletResponse response,

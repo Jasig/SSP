@@ -129,7 +129,7 @@ public class PersonEarlyAlertController extends
 				getFactory().asTOList(data.getRows()));
 	}
 
-	@RequestMapping(value = "/1/person/earlyAlert/", method = RequestMethod.POST)
+	@RequestMapping(value = "/1/person/earlyAlert", method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertTO create(@RequestParam final String studentId,
 			@Valid @RequestBody final EarlyAlertTO obj)

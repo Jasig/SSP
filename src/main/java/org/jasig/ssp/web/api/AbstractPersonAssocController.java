@@ -122,7 +122,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	 * @throws ObjectNotFoundException
 	 *             If specified person could not be found.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<TO> getAll(@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
@@ -160,7 +160,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		return instantiateTO(model);
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	TO create(@PathVariable final UUID personId,
 			@Valid @RequestBody final TO obj) throws ValidationException,

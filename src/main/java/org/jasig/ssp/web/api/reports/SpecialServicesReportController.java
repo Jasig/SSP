@@ -62,8 +62,8 @@ public class SpecialServicesReportController extends BaseController {
 	private transient PersonTOFactory personTOFactory;
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
- 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+
+	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	void getSpecialServices(
 			final HttpServletResponse response,
@@ -84,9 +84,9 @@ public class SpecialServicesReportController extends BaseController {
 		LOGGER.debug("Number of personTOs: " + personTOs.size());
 
 		// Get the actual names of the UUIDs for the special groups
-		List<String> specialGroupsNames = new ArrayList<String>();
+		final List<String> specialGroupsNames = new ArrayList<String>();
 		if (specialServiceGroupIds != null && specialServiceGroupIds.size() > 0) {
-			Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
+			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
 			while (ssgIter.hasNext()) {
 				specialGroupsNames
 						.add(ssgService.get(ssgIter.next()).getName());
@@ -118,7 +118,7 @@ public class SpecialServicesReportController extends BaseController {
 			response.setHeader("Content-disposition",
 					"attachment; filename=test.csv");
 
-			JRCsvExporter exporter = new JRCsvExporter();
+			final JRCsvExporter exporter = new JRCsvExporter();
 			exporter.setParameter(JRExporterParameter.INPUT_STREAM,
 					decodedInput);
 			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
@@ -139,9 +139,10 @@ public class SpecialServicesReportController extends BaseController {
 		return LOGGER;
 	}
 
-	List<SpecialServicesReportingTO> getReportablePersons(List<Person> persons) {
-		List<SpecialServicesReportingTO> retVal = new ArrayList<SpecialServicesReportingTO>();
-		Iterator<Person> personIter = persons.iterator();
+	List<SpecialServicesReportingTO> getReportablePersons(
+			final List<Person> persons) {
+		final List<SpecialServicesReportingTO> retVal = new ArrayList<SpecialServicesReportingTO>();
+		final Iterator<Person> personIter = persons.iterator();
 		while (personIter.hasNext()) {
 			retVal.add(new SpecialServicesReportingTO(personIter.next()));
 		}

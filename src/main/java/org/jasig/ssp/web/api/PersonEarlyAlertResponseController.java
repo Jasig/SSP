@@ -62,7 +62,7 @@ public class PersonEarlyAlertResponseController extends
 		return LOGGER;
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<EarlyAlertResponseTO> getAll(
 			@PathVariable final UUID personId,
@@ -103,7 +103,7 @@ public class PersonEarlyAlertResponseController extends
 		return instantiateTO(model);
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertResponseTO create(@PathVariable final UUID personId,
 			@Valid @RequestBody final EarlyAlertResponseTO obj)

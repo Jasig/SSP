@@ -73,7 +73,7 @@ public class JournalTrackController
 		return LOGGER;
 	}
 
-	@RequestMapping(value = "/{journalTrackId}/journalStep/", method = RequestMethod.GET)
+	@RequestMapping(value = "/{journalTrackId}/journalStep", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagedResponse<JournalStepTO> getAllForJournalTrack(

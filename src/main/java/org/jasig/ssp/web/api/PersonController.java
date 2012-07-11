@@ -52,7 +52,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 	protected transient SecurityService securityService;
 
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	PagedResponse<PersonTO> getAll(
@@ -84,7 +84,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 	}
 
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
 	public @ResponseBody
 	PersonTO create(final @Valid @RequestBody PersonTO obj)
@@ -151,5 +151,4 @@ public class PersonController extends RestController<PersonTO, Person> {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-
 }

@@ -51,7 +51,7 @@ public abstract class AbstractRestrictedPersonAssocController<T extends Restrict
 	protected abstract RestrictedPersonAssocAuditableService<T> getService();
 
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<TO> getAll(@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
@@ -153,7 +153,7 @@ public abstract class AbstractRestrictedPersonAssocController<T extends Restrict
 					.checkPermissionForModel(model,
 							securityService.currentUser());
 			getService().delete(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			LOGGER.debug("Item was not found: {}", id.toString());
 		}
 

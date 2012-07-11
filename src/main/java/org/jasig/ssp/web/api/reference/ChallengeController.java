@@ -73,7 +73,7 @@ public class ChallengeController
 		return LOGGER;
 	}
 
-	@RequestMapping(value = "/{id}/challengeReferral/", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}/challengeReferral", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagedResponse<ChallengeReferralTO> getChallengeReferralsForChallenge(
