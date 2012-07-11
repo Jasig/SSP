@@ -33,6 +33,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * Category controller
+ */
 @Controller
 @RequestMapping("/1/reference/category")
 public class CategoryController
@@ -73,7 +76,7 @@ public class CategoryController
 		return LOGGER;
 	}
 
-	@RequestMapping(value = "/{id}/challenge/", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}/challenge", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagedResponse<ChallengeTO> getChallengesForCategory(

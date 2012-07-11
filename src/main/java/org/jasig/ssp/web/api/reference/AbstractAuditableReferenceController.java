@@ -85,7 +85,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	}
 
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagedResponse<TO> getAll(
@@ -120,7 +120,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	}
 
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	TO create(@Valid @RequestBody final TO obj) throws ObjectNotFoundException,
 			ValidationException {

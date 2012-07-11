@@ -92,7 +92,7 @@ public class PersonHistoryReportController extends BaseController {
 	@Autowired
 	protected transient SecurityService securityService;
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	void getAddressLabels(
 			final HttpServletResponse response,

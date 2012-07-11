@@ -8,7 +8,7 @@ public class CaseloadRecord {
 	private UUID personId;
 	private String schoolId, firstName, middleInitial, lastName,
 			studentTypeName;
-	private Date currentAppointmentDate, studentIntakeCompleteDate;
+	private Date currentAppointmentStartDate, studentIntakeCompleteDate;
 	private int numberOfEarlyAlerts;
 
 	public UUID getPersonId() {
@@ -19,15 +19,15 @@ public class CaseloadRecord {
 		this.personId = personId;
 	}
 
-	public Date getCurrentAppointmentDate() {
-		return currentAppointmentDate == null ? null : new Date(
-				currentAppointmentDate.getTime());
+	public Date getCurrentAppointmentStartDate() {
+		return currentAppointmentStartDate == null ? null : new Date(
+				currentAppointmentStartDate.getTime());
 	}
 
-	public final void setCurrentAppointmentDate(
-			final Date currentAppointmentDate) {
-		this.currentAppointmentDate = currentAppointmentDate == null ? null
-				: new Date(currentAppointmentDate.getTime());
+	public final void setCurrentAppointmentStartDate(
+			final Date currentAppointmentStartDate) {
+		this.currentAppointmentStartDate = currentAppointmentStartDate == null ? null
+				: new Date(currentAppointmentStartDate.getTime());
 	}
 
 	public int getNumberOfEarlyAlerts() {

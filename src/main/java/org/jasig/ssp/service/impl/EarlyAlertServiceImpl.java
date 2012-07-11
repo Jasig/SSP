@@ -1,5 +1,6 @@
 package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -433,5 +434,11 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				configService.getByNameEmpty("inst_name"));
 
 		return templateParameters;
+	}
+
+	@Override
+	public Map<UUID, Number> getCountOfActiveAlertsForPeopleIds(
+			final Collection<UUID> peopleIds) {
+		return dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
 	}
 }

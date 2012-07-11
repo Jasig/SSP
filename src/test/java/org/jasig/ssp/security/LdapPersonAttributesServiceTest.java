@@ -2,6 +2,8 @@ package org.jasig.ssp.security;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collection;
+
 import org.jasig.ssp.service.impl.LdapPersonAttributesService;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,4 +29,11 @@ public class LdapPersonAttributesServiceTest {
 						.getPhone());
 	}
 
+	@Ignore
+	@Test
+	public void getCoaches() {
+		final Collection<String> coaches = ldapPersonAttributesService
+				.getCoaches();
+		assertEquals(2, coaches.size());
+	}
 }

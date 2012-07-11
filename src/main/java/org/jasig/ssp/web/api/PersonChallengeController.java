@@ -118,7 +118,7 @@ public class PersonChallengeController extends
 	 * @throws ObjectNotFoundException
 	 *             if object could not be found
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<ChallengeTO> getChallengesForPerson(
 			@PathVariable final UUID personId,

@@ -7,12 +7,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jasig.ssp.TestUtils;
 import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -117,7 +117,7 @@ public class GoalDaoTest {
 				.getRows();
 		assertNotNull("GetAll list should not have been null.", all);
 		assertFalse("GetAll list should not have been empty.", all.isEmpty());
-		assertList(all);
+		TestUtils.assertListDoesNotContainNullItems(all);
 
 		dao.delete(obj);
 	}
@@ -137,7 +137,7 @@ public class GoalDaoTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void getAllForPersonIdWithoutRequestor() {
-		assertList(dao.getAllForPersonId(UUID.randomUUID(),
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(UUID.randomUUID(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows());
 	}
@@ -152,7 +152,7 @@ public class GoalDaoTest {
 				securityService.currentUser(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE));
-		assertList(goals.getRows());
+		TestUtils.assertListDoesNotContainNullItems(goals.getRows());
 		assertTrue("Goals should not be empty.", goals.getResults() > 0);
 	}
 
@@ -168,7 +168,7 @@ public class GoalDaoTest {
 				securityService.currentUser(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE));
-		assertList(goals.getRows());
+		TestUtils.assertListDoesNotContainNullItems(goals.getRows());
 		assertTrue("Results should not have been empty.",
 				goals.getResults() > 0);
 	}
@@ -181,7 +181,7 @@ public class GoalDaoTest {
 		final List<Goal> goals = dao.get(goalIds,
 				securityService.currentlyAuthenticatedUser(),
 				new SortingAndPaging(ObjectStatus.ACTIVE));
-		assertList(goals);
+		TestUtils.assertListDoesNotContainNullItems(goals);
 		assertFalse("Goal list should not have been empty.", goals.isEmpty());
 	}
 
@@ -219,12 +219,5 @@ public class GoalDaoTest {
 		assertEquals(
 				"Result list did not contain the expected number of items.", 1,
 				result.size());
-	}
-
-	private void assertList(final Collection<Goal> objects) {
-		for (final Goal object : objects) {
-			assertNotNull("Object in the list should not have been null.",
-					object.getId());
-		}
 	}
 }

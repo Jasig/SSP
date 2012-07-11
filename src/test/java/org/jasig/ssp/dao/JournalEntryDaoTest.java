@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
+import org.jasig.ssp.TestUtils;
 import org.jasig.ssp.dao.reference.JournalSourceDao;
 import org.jasig.ssp.dao.reference.JournalTrackDao;
 import org.jasig.ssp.model.JournalEntry;
@@ -78,7 +79,7 @@ public class JournalEntryDaoTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void getAllForPersonIdWithoutRequestor() {
-		assertList(dao.getAllForPersonId(UUID.randomUUID(),
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(UUID.randomUUID(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows());
 	}
@@ -96,16 +97,9 @@ public class JournalEntryDaoTest {
 				securityService.currentUser(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE));
-		assertList(entries.getRows());
+		TestUtils.assertListDoesNotContainNullItems(entries.getRows());
 		assertTrue("Entries should not have been empty.",
 				entries.getResults() > 0);
-	}
-
-	protected void assertList(final Collection<JournalEntry> objects) {
-		for (final JournalEntry object : objects) {
-			assertNotNull("List item should not have been null.",
-					object.getId());
-		}
 	}
 
 	@Test
@@ -144,7 +138,7 @@ public class JournalEntryDaoTest {
 		assertNotNull("GetAll() result should not have been null.", all);
 		assertFalse("GetAll() result should not have been empty.",
 				all.isEmpty());
-		assertList(all);
+		TestUtils.assertListDoesNotContainNullItems(all);
 
 		dao.delete(obj);
 	}

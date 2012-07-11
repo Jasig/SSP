@@ -107,7 +107,7 @@ public class PersonTaskController extends
 	 * @throws ObjectNotFoundException
 	 *             If the person identifier is not valid.
 	 */
-	@RequestMapping(value = "/group/", method = RequestMethod.GET)
+	@RequestMapping(value = "/group", method = RequestMethod.GET)
 	public @ResponseBody
 	Map<String, List<TaskTO>> getAllTasksWithTaskGroup(
 			final @PathVariable UUID personId,
@@ -162,7 +162,7 @@ public class PersonTaskController extends
 	 *             Thrown for any reporting exception
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/print/", method = RequestMethod.GET)
+	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	public @ResponseBody
 	void print(final HttpServletResponse response,
 			final @PathVariable UUID personId
@@ -270,7 +270,7 @@ public class PersonTaskController extends
 	 * @throws ObjectNotFoundException
 	 *             If any reference data could not be found.
 	 */
-	@RequestMapping(value = "/email/", method = RequestMethod.POST)
+	@RequestMapping(value = "/email", method = RequestMethod.POST)
 	public @ResponseBody
 	boolean email(final @PathVariable UUID personId,
 			final @RequestBody @Valid EmailPersonTasksForm emailForm)

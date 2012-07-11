@@ -89,7 +89,7 @@ public class EarlyAlertRoutingController
 	 *             If any data could not be found
 	 * @return All entities in the database filtered by the supplied status.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagedResponse<EarlyAlertRoutingTO> getAll(
@@ -158,7 +158,7 @@ public class EarlyAlertRoutingController
 	 * @throws ObjectNotFoundException
 	 *             If the data could not be found.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertRoutingTO create(
 			final @PathVariable UUID campusId,

@@ -1,11 +1,15 @@
 package org.jasig.ssp.transferobject;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.Person;
+
+import com.google.common.collect.Lists;
 
 /**
  * Encapsulate simple Person properties.
@@ -61,6 +65,23 @@ public class PersonLiteTO implements Serializable {
 		id = person.getId();
 		firstName = person.getFirstName();
 		lastName = person.getLastName();
+	}
+
+	/**
+	 * Convert a collection of models to a List of equivalent transfer objects.
+	 * 
+	 * @param models
+	 *            A collection of models to convert to transfer objects
+	 * @return List of equivalent transfer objects
+	 */
+	public static List<PersonLiteTO> toTOList(
+			@NotNull final Collection<Person> models) {
+		final List<PersonLiteTO> tos = Lists.newArrayList();
+		for (final Person model : models) {
+			tos.add(new PersonLiteTO(model)); // NOPMD
+		}
+
+		return tos;
 	}
 
 	/**
