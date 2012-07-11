@@ -109,19 +109,19 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 
 	// Helper hashing methods to keep from providing 0 to any hashCode() result
 
-	protected int hashField(final String name, final UUID value) {
+	protected final int hashField(final String name, final UUID value) {
 		return (value == null ? name.hashCode() : value.hashCode());
 	}
 
-	protected int hashField(final String name, final ObjectStatus value) {
+	protected final int hashField(final String name, final ObjectStatus value) {
 		return (value == null ? name.hashCode() : value.hashCode());
 	}
 
-	protected int hashField(final String name, final String value) {
+	protected final int hashField(final String name, final String value) {
 		return (StringUtils.isEmpty(value) ? name.hashCode() : value.hashCode());
 	}
 
-	protected int hashField(final String name, final int value) {
+	protected final int hashField(final String name, final int value) {
 		return (value == 0 ? name.hashCode() : value);
 	}
 
@@ -134,22 +134,22 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	 * 4 primes, 6 unique primes for 3 fields, and so on.
 	 * 
 	 */
-	protected int hashField(final String name, final boolean value) {
+	protected final int hashField(final String name, final boolean value) {
 		throw new UnsupportedOperationException();
 	}
 
 	// full Integer class version is for nullable ints
-	protected int hashField(final String name, final Integer value) {
+	protected final int hashField(final String name, final Integer value) {
 		return ((value == null) || (value == 0) ? name.hashCode() : value);
 	}
 
-	protected int hashField(final String name, final Date value) {
+	protected final int hashField(final String name, final Date value) {
 		return ((value == null) || (value.getTime() == 0) ? name.hashCode()
 				: value
 						.hashCode());
 	}
 
-	protected int hashField(final String name, final Auditable value) {
+	protected final int hashField(final String name, final Auditable value) {
 		return ((value == null) || (value.getId() == null) ? name.hashCode()
 				: value.getId().hashCode());
 	}
