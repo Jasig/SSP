@@ -65,7 +65,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 		for (CaseloadRecord record : records) {
 			if (appts.containsKey(record.getPersonId())) {
-				record.setCurrentAppointmentDate(appts
+				record.setCurrentAppointmentStartDate(appts
 						.get(record.getPersonId())
 						.getStartTime());
 			}
