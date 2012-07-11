@@ -20,15 +20,26 @@ ou: groups
 ####
 # Users:
 ####
-dn: uid=testuser,ou=users,dc=springframework,dc=org
+dn: uid=testuser1,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
 objectClass: top
 objectClass: organizationalPerson
-uid: testuser
-userPassword: testuser
-cn: testuser
-sn: testuser
+uid: testuser1
+userPassword: testuser1
+cn: testuser1
+sn: testuser1
+telephonenumber: 111 867-5309
+
+dn: uid=testuser2,ou=users,dc=springframework,dc=org
+objectClass: uidObject
+objectClass: person
+objectClass: top
+objectClass: organizationalPerson
+uid: testuser2
+userPassword: testuser2
+cn: testuser2
+sn: testuser2
 telephonenumber: 111 867-5309
 
 ####
@@ -38,4 +49,5 @@ dn: cn=USER,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: USER
-uniqueMember: cn=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: cn=testuser1,ou=users,dc=springframework,dc=org
+uniqueMember: cn=testuser2,ou=users,dc=springframework,dc=org

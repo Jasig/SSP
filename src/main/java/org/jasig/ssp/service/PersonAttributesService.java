@@ -1,5 +1,7 @@
 package org.jasig.ssp.service;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,5 +21,10 @@ public interface PersonAttributesService {
 
 	PersonAttributesResult getAttributes(String username)
 			throws ObjectNotFoundException;
+
+	/*
+	 * @returns usernames of coaches
+	 */
+	Collection<String> getCoaches();
 
 }

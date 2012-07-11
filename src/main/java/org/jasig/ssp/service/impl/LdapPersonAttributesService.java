@@ -1,5 +1,6 @@
 package org.jasig.ssp.service.impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.naming.NamingException;
@@ -13,7 +14,11 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.ldap.core.ContextMapper;
+import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.LdapTemplate;
+
+import com.google.common.collect.Lists;
 
 public class LdapPersonAttributesService implements PersonAttributesService {
 
@@ -87,5 +92,34 @@ public class LdapPersonAttributesService implements PersonAttributesService {
 				return val.toString();
 			}
 		}
+	}
+
+	@Override
+	public Collection<String> getCoaches() {
+		final String groupId = "USER";
+
+		final Collection<String> coaches = Lists.newArrayList();
+
+		ldapTemplate.search(
+				"cn=" + groupId + ",ou=groups", "uniqueMember=*",
+				new ContextMapper() {
+					@Override
+					public Object mapFromContext(Object context) {
+						DirContextAdapter adapter = (DirContextAdapter) context;
+
+						for (String val : adapter
+								.getStringAttributes("uniqueMember")) {
+							coaches.add(extractUsername(val));
+						}
+						return null;
+					}
+				});
+
+		return coaches;
+	}
+
+	private String extractUsername(String val) {
+		// cn=testuser1,ou=users,dc=springframework,dc=org
+		return val.substring(3, (val.length() - 35));
 	}
 }

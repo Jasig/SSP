@@ -1,5 +1,6 @@
 package org.jasig.ssp.service.impl;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
@@ -123,6 +125,12 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 			return getAttributes(req, res, username);
 		}
 
+	}
+
+	@Override
+	public Collection<String> getCoaches() {
+		// :TODO getCoaches (usernames) from Uportal
+		throw new NotImplementedException("Not implemented yet.");
 	}
 
 }
