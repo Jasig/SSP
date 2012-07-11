@@ -32,6 +32,8 @@ public class EarlyAlertTO
 
 	private UUID campusId;
 
+	private String earlyAlertReasonOtherDescription;
+
 	private String earlyAlertSuggestionOtherDescription;
 
 	private String comment;
@@ -73,8 +75,10 @@ public class EarlyAlertTO
 		emailCC = earlyAlert.getEmailCC();
 		campusId = earlyAlert.getCampus() == null ? null : earlyAlert
 				.getCampus().getId();
-		earlyAlertSuggestionOtherDescription = earlyAlert
+		earlyAlertReasonOtherDescription = earlyAlert
 				.getEarlyAlertReasonOtherDescription();
+		earlyAlertSuggestionOtherDescription = earlyAlert
+				.getEarlyAlertSuggestionOtherDescription();
 		comment = earlyAlert.getComment();
 		closedDate = earlyAlert.getClosedDate();
 		closedById = earlyAlert.getClosedById();
@@ -99,7 +103,7 @@ public class EarlyAlertTO
 			final Collection<EarlyAlert> earlyAlerts) {
 		final List<EarlyAlertTO> earlyAlertTOs = new ArrayList<EarlyAlertTO>();
 		if ((earlyAlerts != null) && !earlyAlerts.isEmpty()) {
-			for (EarlyAlert earlyAlert : earlyAlerts) {
+			for (final EarlyAlert earlyAlert : earlyAlerts) {
 				earlyAlertTOs.add(new EarlyAlertTO(earlyAlert)); // NOPMD
 			}
 		}
@@ -165,6 +169,22 @@ public class EarlyAlertTO
 	 */
 	public void setCampusId(final UUID campusId) {
 		this.campusId = campusId;
+	}
+
+	/**
+	 * @return the ReasonOtherDescription
+	 */
+	public String getEarlyAlertReasonOtherDescription() {
+		return earlyAlertReasonOtherDescription;
+	}
+
+	/**
+	 * @param earlyAlertReasonOtherDescription
+	 *            the ReasonOtherDescription to set
+	 */
+	public void setEarlyAlertReasonOtherDescription(
+			final String earlyAlertReasonOtherDescription) {
+		this.earlyAlertReasonOtherDescription = earlyAlertReasonOtherDescription;
 	}
 
 	/**
