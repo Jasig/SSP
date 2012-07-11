@@ -58,7 +58,7 @@ public class JournalEntryDetailTO extends
 
 			final Set<ReferenceLiteTO<JournalStepDetail>> newSet = Sets
 					.newHashSet();
-			if (jsJsDetail.getJournalStepDetail() == null) {
+			if (jsJsDetail.getJournalStepDetail() != null) {
 				newSet.add(new ReferenceLiteTO<JournalStepDetail>(jsJsDetail
 						.getJournalStepDetail()));
 			}

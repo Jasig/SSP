@@ -79,7 +79,7 @@ public class JournalEntryDaoTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void getAllForPersonIdWithoutRequestor() {
-		TestUtils.assertList(dao.getAllForPersonId(UUID.randomUUID(),
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(UUID.randomUUID(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows());
 	}
@@ -97,7 +97,7 @@ public class JournalEntryDaoTest {
 				securityService.currentUser(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE));
-		TestUtils.assertList(entries.getRows());
+		TestUtils.assertListDoesNotContainNullItems(entries.getRows());
 		assertTrue("Entries should not have been empty.",
 				entries.getResults() > 0);
 	}
@@ -138,7 +138,7 @@ public class JournalEntryDaoTest {
 		assertNotNull("GetAll() result should not have been null.", all);
 		assertFalse("GetAll() result should not have been empty.",
 				all.isEmpty());
-		TestUtils.assertList(all);
+		TestUtils.assertListDoesNotContainNullItems(all);
 
 		dao.delete(obj);
 	}

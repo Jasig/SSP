@@ -93,7 +93,7 @@ public class AppointmentDaoTest {
 				.getRows();
 		assertNotNull("GetAll list should not have been null.", all);
 		assertFalse("GetAll list should not have been empty.", all.isEmpty());
-		TestUtils.assertList(all);
+		TestUtils.assertListDoesNotContainNullItems(all);
 
 		dao.delete(obj);
 	}

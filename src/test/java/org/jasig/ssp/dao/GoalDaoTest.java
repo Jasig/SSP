@@ -117,7 +117,7 @@ public class GoalDaoTest {
 				.getRows();
 		assertNotNull("GetAll list should not have been null.", all);
 		assertFalse("GetAll list should not have been empty.", all.isEmpty());
-		TestUtils.assertList(all);
+		TestUtils.assertListDoesNotContainNullItems(all);
 
 		dao.delete(obj);
 	}
@@ -137,7 +137,7 @@ public class GoalDaoTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void getAllForPersonIdWithoutRequestor() {
-		TestUtils.assertList(dao.getAllForPersonId(UUID.randomUUID(),
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(UUID.randomUUID(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows());
 	}
@@ -152,7 +152,7 @@ public class GoalDaoTest {
 				securityService.currentUser(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE));
-		TestUtils.assertList(goals.getRows());
+		TestUtils.assertListDoesNotContainNullItems(goals.getRows());
 		assertTrue("Goals should not be empty.", goals.getResults() > 0);
 	}
 
@@ -168,7 +168,7 @@ public class GoalDaoTest {
 				securityService.currentUser(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE));
-		TestUtils.assertList(goals.getRows());
+		TestUtils.assertListDoesNotContainNullItems(goals.getRows());
 		assertTrue("Results should not have been empty.",
 				goals.getResults() > 0);
 	}
@@ -181,7 +181,7 @@ public class GoalDaoTest {
 		final List<Goal> goals = dao.get(goalIds,
 				securityService.currentlyAuthenticatedUser(),
 				new SortingAndPaging(ObjectStatus.ACTIVE));
-		TestUtils.assertList(goals);
+		TestUtils.assertListDoesNotContainNullItems(goals);
 		assertFalse("Goal list should not have been empty.", goals.isEmpty());
 	}
 
