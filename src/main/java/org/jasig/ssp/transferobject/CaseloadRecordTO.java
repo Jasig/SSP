@@ -30,7 +30,7 @@ public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 
 		this.setNumberOfEarlyAlerts(model.getNumberOfEarlyAlerts());
 		this.setStudentIntakeComplete(model.isStudentIntakeComplete());
-		this.setCurrentAppointmentDate(model.getCurrentAppointmentDate());
+		this.setCurrentAppointmentDate(model.getCurrentAppointmentStartDate());
 	}
 
 	public UUID getPersonId() {
