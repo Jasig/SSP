@@ -59,6 +59,10 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	@Column(nullable = true, length = 64000)
 	@Size(max = 64000)
+	private String earlyAlertSuggestionOtherDescription;
+
+	@Column(nullable = true, length = 64000)
+	@Size(max = 64000)
 	private String comment;
 
 	@Column(nullable = true)
@@ -150,19 +154,35 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	}
 
 	/**
-	 * @return the earlyAlertSuggestionOtherDescription
+	 * @return the earlyAlertReasonOtherDescription
 	 */
 	public String getEarlyAlertReasonOtherDescription() {
 		return earlyAlertReasonOtherDescription;
 	}
 
 	/**
+	 * @param earlyAlertReasonOtherDescription
+	 *            the earlyAlertReasonOtherDescription to set
+	 */
+	public void setEarlyAlertReasonOtherDescription(
+			final String earlyAlertReasonOtherDescription) {
+		this.earlyAlertReasonOtherDescription = earlyAlertReasonOtherDescription;
+	}
+
+	/**
+	 * @return the earlyAlertSuggestionOtherDescription
+	 */
+	public String getEarlyAlertSuggestionOtherDescription() {
+		return earlyAlertSuggestionOtherDescription;
+	}
+
+	/**
 	 * @param earlyAlertSuggestionOtherDescription
 	 *            the earlyAlertSuggestionOtherDescription to set
 	 */
-	public void setEarlyAlertReasonOtherDescription(
+	public void setEarlyAlertSuggestionOtherDescription(
 			final String earlyAlertSuggestionOtherDescription) {
-		earlyAlertReasonOtherDescription = earlyAlertSuggestionOtherDescription;
+		this.earlyAlertSuggestionOtherDescription = earlyAlertSuggestionOtherDescription;
 	}
 
 	/**

@@ -447,6 +447,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 				personChallenges: []
 			};
 			
+			// account for date offset
+			intakeData.person.birthDate = me.formUtils.fixDateOffset( intakeData.person.birthDate );
+
 			intakeData.personDemographics.personId = personId;
 			intakeData.personEducationGoal.personId = personId;
 			intakeData.personEducationPlan.personId = personId;
@@ -503,7 +506,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			delete intakeData.person.studentType;
 			delete intakeData.person.programStatuses;
 			delete intakeData.person.coach;
-			
+						
 			// Save the intake
 			me.apiProperties.makeRequest({
 				url: me.apiProperties.createUrl(me.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
@@ -519,7 +522,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		}
 		
 	},
-
+	
 	saveErrorHandler: function(response) {
 		var me=this;
 		var r = Ext.decode(response.responseText);

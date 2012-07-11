@@ -7,11 +7,10 @@ Ext.define('Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewControl
         associatedItemIdAttribute: 'challengeReferralId'
     },
 	constructor: function(){
-		this.callParent(arguments);
-
-		this.clear();
-		this.getParentItems();
-		
-		return this;
-	}
+		var me=this;
+		me.callParent(arguments);
+		me.clear();
+		me.getParentItems();		
+		return me;
+	}	
 });

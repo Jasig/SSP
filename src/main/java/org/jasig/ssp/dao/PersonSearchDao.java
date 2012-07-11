@@ -16,6 +16,9 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+/**
+ * PersonSearch DAO
+ */
 @Repository
 public class PersonSearchDao extends AbstractDao<Person> {
 
@@ -39,7 +42,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 							programStatus));
 		}
 
-		if (!outsideCaseload) {
+		if (Boolean.FALSE.equals(outsideCaseload)) {
 			query.add(Restrictions.eq("coach", advisor));
 		}
 

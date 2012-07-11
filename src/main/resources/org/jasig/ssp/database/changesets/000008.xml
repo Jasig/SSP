@@ -52,4 +52,12 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet author='jon.adams' id='Add missing field to early_alert table'>
+		<addColumn tableName="early_alert">
+			<column name="early_alert_suggestion_other_description" type="text">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>
