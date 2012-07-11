@@ -111,7 +111,7 @@ public class TaskDaoTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void getAllForPersonIdWithoutRequestor() {
-		TestUtils.assertList(dao.getAllForPersonId(UUID.randomUUID(),
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(UUID.randomUUID(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows());
 	}
@@ -124,53 +124,53 @@ public class TaskDaoTest {
 		final PagingWrapper<Task> tasks = dao.getAllForPersonId(ken.getId(),
 				securityService.currentUser(), new SortingAndPaging(
 						ObjectStatus.ACTIVE));
-		TestUtils.assertList(tasks.getRows());
+		TestUtils.assertListDoesNotContainNullItems(tasks.getRows());
 		assertTrue("Task results should not have been empty.",
 				tasks.getResults() > 0);
 	}
 
 	@Test
 	public void getAllForPersonIdComplete() {
-		TestUtils.assertList(dao.getAllForPersonId(ken.getId(), true,
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(ken.getId(), true,
 				securityService.currentlyAuthenticatedUser(),
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForPersonIdIncomplete() {
-		TestUtils.assertList(dao.getAllForPersonId(ken.getId(), false,
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(ken.getId(), false,
 				securityService.currentlyAuthenticatedUser(),
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionId() {
-		TestUtils.assertList(dao.getAllForSessionId("test session id",
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionId("test session id",
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionIdComplete() {
-		TestUtils.assertList(dao.getAllForSessionId("test session id", true,
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionId("test session id", true,
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionIdIncomplete() {
-		TestUtils.assertList(dao.getAllForSessionId("test session id", false,
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionId("test session id", false,
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllWhichNeedRemindersSent() {
-		TestUtils.assertList(dao
+		TestUtils.assertListDoesNotContainNullItems(dao
 				.getAllWhichNeedRemindersSent(new SortingAndPaging(
 						ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForPersonIdAndChallengeReferralId() {
-		TestUtils.assertList(dao.getAllForPersonIdAndChallengeReferralId(
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonIdAndChallengeReferralId(
 				ken.getId(),
 				true, testChallengeReferral.getId(),
 				securityService.currentlyAuthenticatedUser(),
@@ -180,7 +180,7 @@ public class TaskDaoTest {
 
 	@Test
 	public void getAllForSessionIdAndChallengeReferralId() {
-		TestUtils.assertList(dao.getAllForSessionIdAndChallengeReferralId(
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionIdAndChallengeReferralId(
 				"test sessionId", true, testChallengeReferral.getId(),
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
@@ -194,7 +194,7 @@ public class TaskDaoTest {
 		final List<Task> tasks = dao.get(taskIds,
 				securityService.currentlyAuthenticatedUser(),
 				new SortingAndPaging(ObjectStatus.ACTIVE));
-		TestUtils.assertList(tasks);
+		TestUtils.assertListDoesNotContainNullItems(tasks);
 		assertFalse("Task list should not have been empty.", tasks.isEmpty());
 	}
 
@@ -226,7 +226,7 @@ public class TaskDaoTest {
 
 		final Collection<Task> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
 		assertFalse("GetAll() list should not have been empty.", all.isEmpty());
-		TestUtils.assertList(all);
+		TestUtils.assertListDoesNotContainNullItems(all);
 
 		dao.delete(obj);
 	}
