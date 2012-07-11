@@ -29,6 +29,7 @@ import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,7 +64,10 @@ public class PersonJournalEntryControllerIntegrationTest {
 			.fromString("ABA1440C-AB5B-11E1-BA73-0026B9E7FF4C");
 
 	private static final UUID JOURNAL_STEP_DETAIL_ID = UUID
-			.fromString("471AFC02-AB5C-11E1-A997-0026B9E7FF4C");
+			.fromString("471afc02-ab5c-11e1-a997-0026b9e7ff4c");
+
+	private static final UUID JOURNAL_STEP_DETAIL_ID2 = UUID
+			.fromString("471afc02-ab5c-11f1-a997-0026b9e7ff5d");
 
 	@Autowired
 	private transient PersonJournalEntryController controller;
@@ -98,11 +102,14 @@ public class PersonJournalEntryControllerIntegrationTest {
 	 * Test that the {@link PersonJournalEntryController#get(UUID, UUID)} action
 	 * returns the correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown for this test.
+	 * @throws ValidationException
+	 *             Should not be thrown for this test.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception { // NOPMD
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -120,11 +127,11 @@ public class PersonJournalEntryControllerIntegrationTest {
 	 * {@link PersonJournalEntryController#getAll(UUID, ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown for this test.
 	 */
 	@Test
-	public void testControllerAll() throws Exception { // NOPMD
+	public void testControllerAll() throws ObjectNotFoundException {
 		final Collection<JournalEntryTO> list = controller.getAll(
 				PERSON_ID,
 				ObjectStatus.ACTIVE,
@@ -138,11 +145,14 @@ public class PersonJournalEntryControllerIntegrationTest {
 	 * {@link PersonJournalEntryController#create(UUID, JournalEntryTO)} and
 	 * {@link PersonJournalEntryController#delete(UUID, UUID)} actions.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown for this test.
+	 * @throws ValidationException
+	 *             Should not be thrown for this test.
 	 */
 	@Test()
-	public void testControllerCreateAndDelete() throws Exception { // NOPMD
+	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
+			ValidationException {
 		// Now create JournalEntry for testing
 		final JournalEntryTO obj = new JournalEntryTO();
 		obj.setPersonId(PERSON_ID);
@@ -159,9 +169,11 @@ public class PersonJournalEntryControllerIntegrationTest {
 		final JournalEntryDetailTO journalEntryDetail = new JournalEntryDetailTO();
 		journalEntryDetail.setJournalStep(new ReferenceLiteTO<JournalStep>(
 				JOURNAL_STEP_ID, ""));
-		journalEntryDetail
-				.setJournalStepDetail(new ReferenceLiteTO<JournalStepDetail>(
-						JOURNAL_STEP_DETAIL_ID, ""));
+		final Set<ReferenceLiteTO<JournalStepDetail>> details = Sets
+				.newHashSet();
+		details.add(new ReferenceLiteTO<JournalStepDetail>(
+				JOURNAL_STEP_DETAIL_ID, ""));
+		journalEntryDetail.setJournalStepDetails(details);
 		journalEntryDetails.add(journalEntryDetail);
 		obj.setJournalEntryDetails(journalEntryDetails);
 
@@ -187,9 +199,11 @@ public class PersonJournalEntryControllerIntegrationTest {
 		final JournalEntryDetailTO journalEntryDetail2 = new JournalEntryDetailTO();
 		journalEntryDetail2.setJournalStep(new ReferenceLiteTO<JournalStep>(
 				JOURNAL_STEP_ID, ""));
-		journalEntryDetail2
-				.setJournalStepDetail(new ReferenceLiteTO<JournalStepDetail>(
-						JOURNAL_STEP_DETAIL_ID, ""));
+		final Set<ReferenceLiteTO<JournalStepDetail>> details2 = Sets
+				.newHashSet();
+		details2.add(new ReferenceLiteTO<JournalStepDetail>(
+				JOURNAL_STEP_DETAIL_ID, ""));
+		journalEntryDetail2.setJournalStepDetails(details2);
 		journalEntryDetails.add(journalEntryDetail2);
 		reloaded.getJournalEntryDetails().add(journalEntryDetail2);
 
@@ -230,5 +244,70 @@ public class PersonJournalEntryControllerIntegrationTest {
 		} catch (final ObjectNotFoundException exc) { // NOPMD by jon.adams
 			// expected
 		}
+	}
+
+	/**
+	 * Test the
+	 * {@link PersonJournalEntryController#create(UUID, JournalEntryTO)} action.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown for this test.
+	 * @throws ValidationException
+	 *             Should not be thrown for this test.
+	 */
+	@Test()
+	public void testControllerCreateMultiple() throws ValidationException,
+			ObjectNotFoundException {
+		// Now create JournalEntry for testing
+		final JournalEntryTO obj = new JournalEntryTO();
+		obj.setPersonId(PERSON_ID);
+		obj.setEntryDate(new Date());
+		obj.setJournalSource(new ReferenceLiteTO<JournalSource>(UUID
+				.fromString("b2d07973-5056-a51a-8073-1d3641ce507f"), ""));
+		obj.setJournalTrack(new ReferenceLiteTO<JournalTrack>(UUID
+				.fromString("b2d07a7d-5056-a51a-80a8-96ae5188a188"), ""));
+		obj.setConfidentialityLevel(new ConfidentialityLevelLiteTO(
+				CONFIDENTIALITY_LEVEL_ID, ""));
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+
+		final ReferenceLiteTO<JournalStep> journalStep = new ReferenceLiteTO<JournalStep>(
+				JOURNAL_STEP_ID, "");
+		final Set<JournalEntryDetailTO> journalEntryDetails = Sets.newHashSet();
+		final Set<ReferenceLiteTO<JournalStepDetail>> details = Sets
+				.newHashSet();
+
+		final JournalEntryDetailTO journalEntryDetail = new JournalEntryDetailTO();
+		journalEntryDetail.setJournalStep(journalStep);
+		details.add(new ReferenceLiteTO<JournalStepDetail>(
+				JOURNAL_STEP_DETAIL_ID, ""));
+
+		final JournalEntryDetailTO journalEntryDetail2 = new JournalEntryDetailTO();
+		journalEntryDetail2.setJournalStep(journalStep);
+		details.add(new ReferenceLiteTO<JournalStepDetail>(
+				JOURNAL_STEP_DETAIL_ID2, ""));
+
+		journalEntryDetail.setJournalStepDetails(details);
+		journalEntryDetails.add(journalEntryDetail);
+		obj.setJournalEntryDetails(journalEntryDetails);
+
+		final JournalEntryTO saved = controller.create(PERSON_ID, obj);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		final UUID savedId = saved.getId();
+		assertNotNull("Saved instance identifier should not have been null.",
+				savedId);
+		assertEquals("PersonIds did not match.", PERSON_ID, saved.getPersonId());
+		assertFalse("JournalEntryDetails should have had entries.", saved
+				.getJournalEntryDetails().isEmpty());
+
+		session.flush();
+		session.clear();
+
+		final JournalEntryTO reloaded = controller.get(savedId, PERSON_ID);
+		assertFalse("JournalEntryDetails should have had entries.", reloaded
+				.getJournalEntryDetails().isEmpty());
+		assertEquals("Details list did not have the expected item count.", 2,
+				reloaded.getJournalEntryDetails().size());
 	}
 }

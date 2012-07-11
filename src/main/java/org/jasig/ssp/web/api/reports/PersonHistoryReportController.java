@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -99,40 +100,41 @@ public class PersonHistoryReportController extends BaseController {
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
-		Person person = personService.get(personId);
-		PersonTO personTO = personTOFactory.from(person);
-		SspUser requestor = securityService.currentUser();
+		final Person person = personService.get(personId);
+		final PersonTO personTO = personTOFactory.from(person);
+		final SspUser requestor = securityService.currentUser();
 
 		LOGGER.debug("Requester id: " + requestor.getPerson().getId());
 		// get all the journal entries for this person
-		PagingWrapper<JournalEntry> journalEntrys = journalEntryService
+		final PagingWrapper<JournalEntry> journalEntrys = journalEntryService
 				.getAllForPerson(person, requestor, null);
-		List<JournalEntryTO> journalEntryTOs = journalEntryTOFactory
+		final List<JournalEntryTO> journalEntryTOs = journalEntryTOFactory
 				.asTOList(journalEntrys.getRows());
 		LOGGER.debug("JournalEntryTOs.size(): " + journalEntryTOs.size());
 
 		// get all the early alerts for this person
-		PagingWrapper<EarlyAlert> earlyAlert = earlyAlertService
+		final PagingWrapper<EarlyAlert> earlyAlert = earlyAlertService
 				.getAllForPerson(person, null);
-		List<EarlyAlertTO> earlyAlertTOs = earlyAlertTOFactory
+		final List<EarlyAlertTO> earlyAlertTOs = earlyAlertTOFactory
 				.asTOList(earlyAlert.getRows());
 		LOGGER.debug("EarlyAlertTOs.size(): " + earlyAlertTOs.size());
-		
+
 		// get all the tasks for this person
-		Map<String, List<Task>> taskMap = taskService.getAllGroupedByTaskGroup(
-				person, requestor, null);
-		Map<String, List<TaskTO>> taskTOMap = new HashMap<String, List<TaskTO>>();
+		final Map<String, List<Task>> taskMap = taskService
+				.getAllGroupedByTaskGroup(
+						person, requestor, null);
+		final Map<String, List<TaskTO>> taskTOMap = new HashMap<String, List<TaskTO>>();
 		LOGGER.debug("taskTOMap.size(): " + taskMap.size());
 
 		// change all tasks to TaskTOs
-		for (Map.Entry<String, List<Task>> entry : taskMap.entrySet()) {
-			String groupName = entry.getKey();
-			List<Task> tasks = entry.getValue();
+		for (final Map.Entry<String, List<Task>> entry : taskMap.entrySet()) {
+			final String groupName = entry.getKey();
+			final List<Task> tasks = entry.getValue();
 			taskTOMap.put(groupName, taskTOFactory.asTOList(tasks));
 		}
 
 		// separate the Students into bands by date
-		List<StudentHistoryTO> studentHistoryTOs = SORT(earlyAlertTOs,
+		final List<StudentHistoryTO> studentHistoryTOs = sort(earlyAlertTOs,
 				taskTOMap, journalEntryTOs);
 
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -157,7 +159,7 @@ public class PersonHistoryReportController extends BaseController {
 			response.setHeader("Content-disposition",
 					"attachment; filename=test.csv");
 
-			JRCsvExporter exporter = new JRCsvExporter();
+			final JRCsvExporter exporter = new JRCsvExporter();
 			exporter.setParameter(JRExporterParameter.INPUT_STREAM,
 					decodedInput);
 			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
@@ -171,7 +173,6 @@ public class PersonHistoryReportController extends BaseController {
 		response.flushBuffer();
 		is.close();
 		os.close();
-
 	}
 
 	@Override
@@ -179,46 +180,48 @@ public class PersonHistoryReportController extends BaseController {
 		return LOGGER;
 	}
 
-	public static final SimpleDateFormat dateFormatter = new SimpleDateFormat(
-			"yyyy/MM/dd");
+	public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(
+			"yyyy/MM/dd", Locale.US);
 
-	public static List<StudentHistoryTO> SORT(List<EarlyAlertTO> earlyAlerts,
-			Map<String, List<TaskTO>> taskMap,
-			List<JournalEntryTO> journalEntries) {
+	public static List<StudentHistoryTO> sort(
+			final List<EarlyAlertTO> earlyAlerts,
+			final Map<String, List<TaskTO>> taskMap,
+			final List<JournalEntryTO> journalEntries) {
 
 		final Map<String, StudentHistoryTO> studentHistoryMap = Maps
 				.newHashMap();
 
 		// first, iterate over each EarlyAlertTO, looking for matching dates int
 		// eh PersonHistoryTO
-		Iterator<EarlyAlertTO> alertIter = earlyAlerts.iterator();
+		final Iterator<EarlyAlertTO> alertIter = earlyAlerts.iterator();
 		while (alertIter.hasNext()) {
-			EarlyAlertTO thisEarlyAlertTO = alertIter.next();
-			String snewDate = dateFormatter.format(thisEarlyAlertTO
+			final EarlyAlertTO thisEarlyAlertTO = alertIter.next();
+			final String snewDate = DATE_FORMATTER.format(thisEarlyAlertTO
 					.getCreatedDate());
 			if (studentHistoryMap.containsKey(snewDate)) {
-				StudentHistoryTO studentHistoryTO = studentHistoryMap
+				final StudentHistoryTO studentHistoryTO = studentHistoryMap
 						.get(snewDate);
 				studentHistoryTO.addEarlyAlertTO(thisEarlyAlertTO);
 			} else {
-				StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(
+				final StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(
 						snewDate);
 				thisStudentHistoryTO.addEarlyAlertTO(thisEarlyAlertTO);
 				studentHistoryMap.put(snewDate, thisStudentHistoryTO);
 			}
 		}
 
-		Iterator<JournalEntryTO> journalEntryIter = journalEntries.iterator();
+		final Iterator<JournalEntryTO> journalEntryIter = journalEntries
+				.iterator();
 		while (journalEntryIter.hasNext()) {
-			JournalEntryTO thisJournalEntryTO = journalEntryIter.next();
-			String snewDate = dateFormatter.format(thisJournalEntryTO
+			final JournalEntryTO thisJournalEntryTO = journalEntryIter.next();
+			final String snewDate = DATE_FORMATTER.format(thisJournalEntryTO
 					.getCreatedDate());
 			if (studentHistoryMap.containsKey(snewDate)) {
-				StudentHistoryTO studentHistoryTO = studentHistoryMap
+				final StudentHistoryTO studentHistoryTO = studentHistoryMap
 						.get(snewDate);
 				studentHistoryTO.addJournalEntryTO(thisJournalEntryTO);
 			} else {
-				StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(
+				final StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(
 						snewDate);
 				thisStudentHistoryTO.addJournalEntryTO(thisJournalEntryTO);
 				studentHistoryMap.put(snewDate, thisStudentHistoryTO);
@@ -228,21 +231,21 @@ public class PersonHistoryReportController extends BaseController {
 		// Per the API, the tasks are already broken down into a map, sorted by
 		// group.
 		// we want to maintain this grouping, but sort these guys based date
-		for (Map.Entry<String, List<TaskTO>> entry : taskMap.entrySet()) {
-			String groupName = entry.getKey();
-			List<TaskTO> tasks = entry.getValue();
+		for (final Map.Entry<String, List<TaskTO>> entry : taskMap.entrySet()) {
+			final String groupName = entry.getKey();
+			final List<TaskTO> tasks = entry.getValue();
 
-			Iterator<TaskTO> taskIter = tasks.iterator();
+			final Iterator<TaskTO> taskIter = tasks.iterator();
 			while (taskIter.hasNext()) {
-				TaskTO thisTask = taskIter.next();
-				String snewDate = dateFormatter.format(thisTask
+				final TaskTO thisTask = taskIter.next();
+				final String snewDate = DATE_FORMATTER.format(thisTask
 						.getCreatedDate());
 				if (studentHistoryMap.containsKey(snewDate)) {
-					StudentHistoryTO studentHistoryTO = studentHistoryMap
+					final StudentHistoryTO studentHistoryTO = studentHistoryMap
 							.get(snewDate);
 					studentHistoryTO.addTask(groupName, thisTask);
 				} else {
-					StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(
+					final StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(
 							snewDate);
 					thisStudentHistoryTO.addTask(groupName, thisTask);
 					studentHistoryMap.put(snewDate, thisStudentHistoryTO);
@@ -251,14 +254,14 @@ public class PersonHistoryReportController extends BaseController {
 		}
 
 		// at this point, we should have a StudentHistoryTO map with Dates
-		Collection<StudentHistoryTO> studentHistoryTOs = studentHistoryMap
+		final Collection<StudentHistoryTO> studentHistoryTOs = studentHistoryMap
 				.values();
 
-		List<StudentHistoryTO> retVal = new ArrayList<StudentHistoryTO>();
-		Iterator<StudentHistoryTO> studentHistoryTOIter = studentHistoryTOs
+		final List<StudentHistoryTO> retVal = new ArrayList<StudentHistoryTO>();
+		final Iterator<StudentHistoryTO> studentHistoryTOIter = studentHistoryTOs
 				.iterator();
 		while (studentHistoryTOIter.hasNext()) {
-			StudentHistoryTO currentStudentHistoryTO = studentHistoryTOIter
+			final StudentHistoryTO currentStudentHistoryTO = studentHistoryTOIter
 					.next();
 			currentStudentHistoryTO.createTaskList();
 			retVal.add(currentStudentHistoryTO);
@@ -266,5 +269,4 @@ public class PersonHistoryReportController extends BaseController {
 
 		return retVal;
 	}
-
 }

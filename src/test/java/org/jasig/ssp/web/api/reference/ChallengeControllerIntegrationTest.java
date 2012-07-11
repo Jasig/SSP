@@ -43,6 +43,9 @@ public class ChallengeControllerIntegrationTest {
 	private static final UUID CHALLENGE_ID = UUID
 			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
 
+	private static final UUID CHALLENGE_DELETED_ID = UUID
+			.fromString("01bb0a62-1756-4ea2-857d-5821ee54a1b9");
+
 	private static final String CHALLENGE_NAME = "Test Challenge";
 
 	@Autowired
@@ -204,5 +207,31 @@ public class ChallengeControllerIntegrationTest {
 				.getCreatedBy().getId().equals(UUID.randomUUID()));
 		assertTrue("ShowInSelfHelpSearch should have been true.",
 				challenge.isShowInSelfHelpSearch());
+	}
+
+	/**
+	 * Test the {@link ChallengeController#delete(UUID)} action for already
+	 * deleted Challenges.
+	 * 
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
+	 */
+	@Test
+	public void testControllerDeleteAlreadyDeleted()
+			throws ObjectNotFoundException, ValidationException {
+		assertTrue("Delete action did not return success.",
+				controller.delete(CHALLENGE_DELETED_ID).isSuccess());
+
+		try {
+			controller.get(CHALLENGE_DELETED_ID);
+			fail("Get should have thrown exception for a deleted item."); // NOPMD
+		} catch (final ObjectNotFoundException exc) { // NOPMD
+			/*
+			 * Expected. Can use @Test(expected) because the delete() call above
+			 * should _not_ throw that exception.
+			 */
+		}
 	}
 }
