@@ -119,4 +119,12 @@ public interface PersonService extends AuditableCrudService<Person> {
 			List<UUID> specialServiceGroupIDs,
 			SortingAndPaging createForSingleSort)
 			throws ObjectNotFoundException;
+
+	/**
+	 * Get a list of all Coaches
+	 * 
+	 * @param sAndP
+	 * @return
+	 */
+	PagingWrapper<Person> getAllCoaches(SortingAndPaging sAndP);
 }
