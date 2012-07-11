@@ -1,5 +1,6 @@
 package org.jasig.ssp.service.impl;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -7,21 +8,32 @@ import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 @Service
 @Transactional
 public class PersonServiceImpl implements PersonService {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonServiceImpl.class);
+
 	@Autowired
 	private transient PersonDao dao;
+
+	@Autowired
+	private transient PersonAttributesService personAttributesService;
 
 	@Override
 	public PagingWrapper<Person> getAll(final SortingAndPaging sAndP) {
@@ -135,5 +147,22 @@ public class PersonServiceImpl implements PersonService {
 		// TODO: use a TO here
 		return dao.getPeopleBySpecialServices(specialServiceGroupIDs,
 				sAndP);
+	}
+
+	@Override
+	public PagingWrapper<Person> getAllCoaches(final SortingAndPaging sAndP) {
+		Collection<Person> coaches = Lists.newArrayList();
+
+		Collection<String> coachUsernames = personAttributesService
+				.getCoaches();
+		for (String coachUsername : coachUsernames) {
+			try {
+				coaches.add(personFromUsername(coachUsername));
+			} catch (ObjectNotFoundException e) {
+				LOGGER.debug("Coach {} not found", coachUsername);
+			}
+		}
+
+		return new PagingWrapper<Person>(coaches);
 	}
 }
