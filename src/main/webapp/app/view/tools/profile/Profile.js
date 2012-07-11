@@ -57,6 +57,7 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 					            text: '',
 					            width: 35,
 					            height: 35,
+					            /*hidden: Ssp.model.AuthenticatedPerson.PERMISSION_VIEW_PRINT_HISTORY_BUTTON*/,
 					            cls: 'studentHistoryIcon',
 					            xtype: 'button',
 					            itemId: 'viewHistoryButton'

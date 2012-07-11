@@ -3,6 +3,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson',
     	person: 'currentPerson',
         formUtils: 'formRendererUtils',
         appEventsController: 'appEventsController'
@@ -63,7 +64,8 @@ Ext.define('Ssp.controller.ToolsViewController', {
 	},
 	
 	loadTool: function( toolType ) {	
-		var comp = this.formUtils.loadDisplay('tools',toolType, true, {});
+		var me=this;
+		var comp = me.formUtils.loadDisplay('tools',toolType, true, {});
 	},
 
     onViewHistory: function(button) {

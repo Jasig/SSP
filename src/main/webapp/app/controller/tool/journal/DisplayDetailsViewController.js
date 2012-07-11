@@ -14,20 +14,10 @@ Ext.define('Ssp.controller.tool.journal.DisplayDetailsViewController', {
 	},
 	
     init: function() {
-		var groupedDetails=[];
-		var journalEntryDetails = this.model.get('journalEntryDetails');
-		Ext.Array.each(journalEntryDetails,function(item,index){
-			var stepName=item.journalStep.name;
-    		var details = item.journalStepDetail;
-    		Ext.Array.each(details,function(detail,index){
-    			detail.group=stepName;
-    			groupedDetails.push( detail );
-    		},this);
-    	},this);
-		
-		this.store.loadData( groupedDetails );
-		
-		return this.callParent(arguments);
+    	var me=this;
+    	console.log( 'DisplayDetailsViewController->init' );
+		me.store.loadData( me.model.getGroupedDetails() );		
+		return me.callParent( arguments );
     },
     
     onViewReady: function(){

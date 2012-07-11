@@ -105,6 +105,7 @@ Ext.require([
     // REPORT DISPLAY
     'Ssp.view.Report',
     
+    'Ssp.model.ObjectPermission',
     'Ssp.model.AuthenticatedPerson',
     'Ssp.model.Preferences',
     'Ssp.model.FieldError',
@@ -196,7 +197,8 @@ Ext.require([
 	'Ext.form.FieldSet',
 	'Ext.ux.CheckColumn',
 	'Ext.ux.form.MultiSelect',
-	'Ext.ux.form.ItemSelector'
+	'Ext.ux.form.ItemSelector',
+	'Ext.util.MixedCollection'
 ]);
 
 var apiUrls = [
@@ -611,7 +613,7 @@ Ext.onReady(function(){
 				    	    }
 				    	    return r;
 				    	};
-				    	*/    	
+				    	*/
 				    	
 			   	    	// load the main view
 			    		Ext.apply(me,{

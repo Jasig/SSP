@@ -67,17 +67,33 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	},    
     
 	onSaveClick: function(button) {
+		console.log( 'EditJournalViewController->onSaveClick' );
 		var me = this;
 		var record, id, jsonData, url;
 		var form = this.getView().getForm();
 		var values = form.getValues();
 		var handleSuccess = me.saveSuccess;
+		var error = false;
 		url = this.url;
 		record = this.model;
 		id = record.get('id');
 		
-		if (form.isValid())
-		{			
+		// ensure all required fields are supplied
+		if ( !form.isValid() )
+		{	
+			error = true;
+			Ext.Msg.alert('Error','Please correct the errors in your Journal Entry.');
+		}
+		
+		// ensure a comment or journal track are supplied
+		if ( record.get('comment') == "" && (record.data.journalTrack.id == null || record.data.journalTrack.id == "") )
+		{
+			error = true;
+			Ext.Msg.alert('Error','You are required to supply a Comment or Journal Track Details for a Journal Entry.');			
+		}
+		
+		if (error == false)
+		{
     		// if a journal track is selected then validate that the details are set
     		if ( (record.data.journalTrack.id != null && record.data.journalTrack.id != "") && record.data.journalEntryDetails.length == 0)
     		{
@@ -85,28 +101,37 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     		}else{
     			
     			jsonData = record.data;
-    			
-    			// null out journalTrack.id prop in case
-    			if ( record.data.journalTrack == "" )
+    			    			
+    			// null out journalTrack.id prop to prevent failure
+    			// from an empty string on null field
+    			if ( jsonData.journalTrack == "" )
     			{
-    				record.data.journalTrack = null;
-    				record.data.journalEntryDetails = null;
+    				jsonData.journalTrack = null;
+    				jsonData.journalEntryDetails = null;
     			}
     			
-    			console.log( 'EditJournalViewController->onSaveClick' );
-
+    			// clean the group property from the journal
+    			// entry details. It was only used for display
+    			// of the details.
+    			if ( jsonData.journalEntryDetails != null )
+    			{
+    				jsonData.journalEntryDetails = record.clearGroupedDetails( jsonData.journalEntryDetails );
+    			}
+    			
+    			console.log(jsonData.entryDate);
+    			
+    			// Fix entry date to represent appropriate date and time
+    			jsonData.entryDate = me.formUtils.fixDateOffsetWithTime( jsonData.entryDate );
+    			
     			if (id == "")
     			{	
-    				// Prevent tripping null errors
-    				// since no entry date will exist
-    				delete jsonData.entryDate;
-    				
     				// adding
     				this.apiProperties.makeRequest({
     					url: url,
     					method: 'POST',
     					jsonData: jsonData,
-    					successFunc: handleSuccess 
+    					successFunc: handleSuccess,
+    					scope: me
     				});
     			}else{
     				// editing
@@ -114,18 +139,16 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     					url: url+id,
     					method: 'PUT',
     					jsonData: jsonData,
-    					successFunc: handleSuccess 
+    					successFunc: handleSuccess,
+    					scope: me
     				});
     			}
-    		}
-		}else{
-			Ext.Msg.alert('Error','Please correct the errors in your Journal Entry.');
+    		}			
 		}
-
 	},
 	
 	saveSuccess: function(response, view) {
-		me.displayMain();
+		this.displayMain();
 	},
 	
 	onCancelClick: function(button){

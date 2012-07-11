@@ -40,7 +40,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        queryMode: 'local',
 			        allowBlank: false,
 			        forceSelection: true,
-			        anchor: '100%'
+			        anchor: '95%'
 				},{
 			        xtype: 'combobox',
 			        itemId: 'journalSourceCombo',
@@ -55,7 +55,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        queryMode: 'local',
 			        allowBlank: false,
 			        forceSelection: true,
-			        anchor: '100%'
+			        anchor: '95%'
 				},{
 			        xtype: 'combobox',
 			        itemId: 'journalTrackCombo',
@@ -70,7 +70,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        queryMode: 'local',
 			        allowBlank: true,
 			        forceSelection: false,
-			        anchor: '100%'
+			        anchor: '95%'
 				},{
 		        	xtype: 'label',
 		        	text: 'Session Details (Critical Components)'
@@ -83,12 +83,12 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 		            xtype: 'button',
 		            itemId: 'addSessionDetailsButton'
 	    	    },
-                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'100% 50%' }
+                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'95% 50%' }
 				,{
                     xtype: 'textareafield',
                     fieldLabel: 'Comment',
                     itemId: 'commentText',
-                    anchor: '100%',
+                    anchor: '95%',
                     name: 'comment'
                 }],
             

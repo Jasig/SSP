@@ -33,18 +33,13 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 	    	var r = Ext.decode(response.responseText);
 	    	if (r.rows.length > 0)
 	    	{
-	    		
-	    		var tempEntry = r.rows[0];
-	    		var journalEntryDetails = tempEntry.journalEntryDetails;
-	    		var tempArr = [];
-	    		tempArr.push( journalEntryDetails[0].journalStepDetail );
-	    		delete journalEntryDetails[0].journalStepDetail
-	    		journalEntryDetails[0].journalStepDetail = tempArr;
-	    		console.log( tempEntry );
 	    		me.journalEntriesStore.loadData(r.rows);
 	    	}
 		};
 
+		// clear any existing tasks
+		me.journalEntriesStore.removeAll();		
+		
     	this.confidentialityLevelsStore.load();
 		this.journalSourcesStore.load();
 		this.journalTracksStore.load();
@@ -59,6 +54,18 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		});
     	
 		/*
+		 * 
+
+	    		
+		var tempEntry = r.rows[0];
+		var journalEntryDetails = tempEntry.journalEntryDetails;
+		var tempArr = [];
+		tempArr.push( journalEntryDetails[0].journalStepDetail );
+		delete journalEntryDetails[0].journalStepDetail
+		journalEntryDetails[0].journalStepDetail = tempArr;
+		console.log( tempEntry );
+
+
     	var json = {"success":true,"results":0,"rows":[]};
     	var rows = [{
     		"id" : "240e97c0-7fe5-11e1-b0c4-0800200c9a66",
