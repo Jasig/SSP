@@ -45,9 +45,9 @@ telephonenumber: 111 867-5309
 ####
 # Groups:
 ####
-dn: cn=USER,ou=groups,dc=springframework,dc=org
+dn: cn=COACH,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
-cn: USER
+cn: COACH
 uniqueMember: cn=testuser1,ou=users,dc=springframework,dc=org
 uniqueMember: cn=testuser2,ou=users,dc=springframework,dc=org

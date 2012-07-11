@@ -60,6 +60,13 @@ telephonenumber: 111 867-5309
 ####
 # Groups:
 ####
+
+dn: cn=COACH,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: COACH
+uniqueMember: cn=advisor0,ou=users,dc=springframework,dc=org
+
 dn: cn=REFERENCE_READ,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top

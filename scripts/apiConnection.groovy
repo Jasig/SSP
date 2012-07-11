@@ -116,6 +116,10 @@ String getAppointments(ApiConnection conn){
 	return conn.get("api/1/person/1010e4a0-1001-0110-1011-4ffc02fe81ff/appointment/")
 }
 
+String getCoaches(ApiConnection conn){
+	return conn.get("api/1/person/coach/")
+}
+
 /**
  * You can exercise the ssp api from within STS (eclipse) using this script
  */
@@ -130,7 +134,8 @@ ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0",
 //String output = getPerson(conn)
 //String output = search(conn)
 //String output = getCaseload(conn)
-String output = getAppointments(conn)
+//String output = getAppointments(conn)
+String output = getCoaches(conn)
 
 conn.formatAndPrintJson(output)
 //println (output);

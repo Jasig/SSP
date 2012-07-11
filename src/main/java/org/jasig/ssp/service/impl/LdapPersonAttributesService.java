@@ -96,7 +96,7 @@ public class LdapPersonAttributesService implements PersonAttributesService {
 
 	@Override
 	public Collection<String> getCoaches() {
-		final String groupId = "USER";
+		final String groupId = "COACH";
 
 		final Collection<String> coaches = Lists.newArrayList();
 
