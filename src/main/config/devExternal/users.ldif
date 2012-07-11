@@ -283,3 +283,9 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: DATA_STAFF
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
+dn: cn=DATA_EVERYONE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: DATA_EVERYONE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
