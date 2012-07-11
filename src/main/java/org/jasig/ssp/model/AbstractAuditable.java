@@ -125,8 +125,17 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 		return (value == 0 ? name.hashCode() : value);
 	}
 
+	@Deprecated
+	/**
+	 * Two boolean fields that have reversed true/false values between to objects
+	 * will return the same hashcode since these two primes are hard-coded.
+	 * Therefore, each calling method must do this comparison itself with unique
+	 * primes for each true/false value. So far 2 boolean fields, it would need
+	 * 4 primes, 6 unique primes for 3 fields, and so on.
+	 * 
+	 */
 	protected int hashField(final String name, final boolean value) {
-		return (value ? 3 : 5);
+		throw new UnsupportedOperationException();
 	}
 
 	// full Integer class version is for nullable ints

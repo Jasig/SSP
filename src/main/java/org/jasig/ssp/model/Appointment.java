@@ -46,7 +46,7 @@ public class Appointment extends AbstractAuditable
 		result *= hashField("startTime", startTime);
 		result *= hashField("endTime", endTime);
 		result *= hashField("person", person);
-		result *= hashField("attended", attended);
+		result *= attended ? 3 : 5;
 		return result;
 	}
 
