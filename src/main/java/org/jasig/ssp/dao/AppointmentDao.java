@@ -1,16 +1,14 @@
 package org.jasig.ssp.dao;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Date;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Appointment;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.springframework.stereotype.Repository;
-
-import com.google.common.collect.Maps;
 
 @Repository
 public class AppointmentDao
@@ -22,27 +20,36 @@ public class AppointmentDao
 	}
 
 	public Appointment getCurrentAppointmentForPerson(final Person person) {
-		final Criteria query = createCriteria();
+
+		Criteria query = createCriteria();
+
+		// Active appt in the future for the given person
 		query.add(Restrictions.eq("person", person));
-		query.add(Restrictions.isNull("expirationDate"));
-		return (Appointment) query.uniqueResult();
-	}
+		query.add(Restrictions.ge("startTime", new Date()));
+		query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
 
-	public Map<UUID, Appointment> getCurrentAppointmentForPeopleIds(
-			final Collection<UUID> peopleIds) {
+		// only return the first appt in the future
+		query.addOrder(Order.asc("startTime"));
+		query.setMaxResults(1);
 
-		final Map<UUID, Appointment> apptForPeopleId = Maps.newHashMap();
+		final Appointment futureAppt = (Appointment) query.uniqueResult();
 
-		final Criteria query = createCriteria();
-		query.add(Restrictions.in("person.id", peopleIds));
-		query.add(Restrictions.isNull("expirationDate"));
+		// if there is no future appt, pull the most recent one
+		if (futureAppt == null) {
+			query = createCriteria();
 
-		@SuppressWarnings("unchecked")
-		final Collection<Appointment> appts = query.list();
-		for (Appointment appt : appts) {
-			apptForPeopleId.put(appt.getPerson().getId(), appt);
+			// Active appt in the past for the given person
+			query.add(Restrictions.eq("person", person));
+			query.add(Restrictions.le("startTime", new Date()));
+			query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+
+			// only return the first appt in the future
+			query.addOrder(Order.desc("startTime"));
+			query.setMaxResults(1);
+
+			return (Appointment) query.uniqueResult();
+		} else {
+			return futureAppt;
 		}
-
-		return apptForPeopleId;
 	}
 }

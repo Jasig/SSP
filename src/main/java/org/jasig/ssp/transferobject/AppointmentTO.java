@@ -18,7 +18,9 @@ public class AppointmentTO
 
 	private UUID personId;
 
-	private Date startTime, endTime, expirationDate;
+	private Date startTime, endTime;
+
+	private boolean attended;
 
 	public AppointmentTO() {
 		super();
@@ -37,7 +39,7 @@ public class AppointmentTO
 				.getId();
 		startTime = model.getStartTime();
 		endTime = model.getEndTime();
-		expirationDate = model.getExpirationDate();
+		attended = model.isAttended();
 	}
 
 	/**
@@ -85,14 +87,12 @@ public class AppointmentTO
 		this.endTime = (endTime == null) ? null : new Date(endTime.getTime());
 	}
 
-	public Date getExpirationDate() {
-		return (expirationDate == null) ? null : new Date(
-				expirationDate.getTime());
+	public boolean isAttended() {
+		return attended;
 	}
 
-	public void setExpirationDate(final Date expirationDate) {
-		this.expirationDate = (expirationDate == null) ? null : new Date(
-				expirationDate.getTime());
+	public void setAttended(final boolean attended) {
+		this.attended = attended;
 	}
 
 }
