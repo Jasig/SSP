@@ -2,13 +2,10 @@ package org.jasig.ssp.dao;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.Session;
@@ -30,8 +27,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("reference/dao-testConfig.xml")
@@ -109,19 +104,6 @@ public class AppointmentDaoTest {
 		Appointment appt = dao.getCurrentAppointmentForPerson(securityService
 				.currentUser().getPerson());
 		assertNotNull(appt);
-	}
-
-	@Test
-	public void getCurrentAppointmentForPeopleIds() {
-		Collection<UUID> peopleIds = Lists.newArrayList();
-		peopleIds.add(james.getId());
-
-		Map<UUID, Appointment> appts = dao
-				.getCurrentAppointmentForPeopleIds(peopleIds);
-
-		assertNotNull(appts);
-		assertFalse(appts.isEmpty());
-		assertTrue(appts.containsKey(james.getId()));
 	}
 
 }

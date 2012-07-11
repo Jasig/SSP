@@ -23,8 +23,7 @@ public class Appointment extends AbstractAuditable
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endTime;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date expirationDate;
+	private boolean attended;
 
 	@ManyToOne
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
@@ -46,8 +45,8 @@ public class Appointment extends AbstractAuditable
 		// Appointment
 		result *= hashField("startTime", startTime);
 		result *= hashField("endTime", endTime);
-		result *= hashField("expirationDate", expirationDate);
 		result *= hashField("person", person);
+		result *= hashField("attended", attended);
 		return result;
 	}
 
@@ -79,14 +78,12 @@ public class Appointment extends AbstractAuditable
 				endTime.getTime());
 	}
 
-	public Date getExpirationDate() {
-		return (expirationDate == null) ? null : new Date(
-				expirationDate.getTime());
+	public boolean isAttended() {
+		return attended;
 	}
 
-	public void setExpirationDate(final Date expirationDate) {
-		this.expirationDate = (expirationDate == null) ? null : new Date(
-				expirationDate.getTime());
+	public void setAttended(final boolean attended) {
+		this.attended = attended;
 	}
 
 }

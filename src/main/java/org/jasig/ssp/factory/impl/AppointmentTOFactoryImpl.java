@@ -39,7 +39,7 @@ public class AppointmentTOFactoryImpl
 
 		model.setStartTime(tObject.getStartTime());
 		model.setEndTime(tObject.getEndTime());
-		model.setExpirationDate(tObject.getExpirationDate());
+		model.setAttended(tObject.isAttended());
 
 		if (tObject.getPersonId() != null) {
 			model.setPerson(personService.get(tObject.getPersonId()));

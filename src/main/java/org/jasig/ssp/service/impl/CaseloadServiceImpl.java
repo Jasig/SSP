@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.jasig.ssp.dao.AppointmentDao;
 import org.jasig.ssp.dao.CaseloadDao;
 import org.jasig.ssp.model.Appointment;
 import org.jasig.ssp.model.CaseloadRecord;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.service.AppointmentService;
 import org.jasig.ssp.service.CaseloadService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -33,7 +33,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 	private transient CaseloadDao dao;
 
 	@Autowired
-	private transient AppointmentDao appointmentDao;
+	private transient AppointmentService appointmentService;
 
 	@Autowired
 	private transient EarlyAlertService earlyAlertService;
@@ -57,7 +57,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 			peopleIds.add(record.getPersonId());
 		}
 
-		final Map<UUID, Appointment> appts = appointmentDao
+		final Map<UUID, Appointment> appts = appointmentService
 				.getCurrentAppointmentForPeopleIds(peopleIds);
 
 		final Map<UUID, Number> earlyAlertCounts = earlyAlertService
