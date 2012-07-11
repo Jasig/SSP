@@ -18,8 +18,15 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
             	labelWidth: 150,
             	padding: 5
             },
-        	items: [
-                {
+        	items: [{
+			    	xtype: 'datefield',
+			    	fieldLabel: 'Entry Date',
+			    	itemId: 'entryDate',
+			    	altFormats: 'm/d/Y|m-d-Y',
+			    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
+			        name: 'entryDate',
+			        allowBlank:false
+			     },{
 			        xtype: 'combobox',
 			        itemId: 'confidentialityLevelCombo',
 			        name: 'confidentialityLevelId',
@@ -35,14 +42,6 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        forceSelection: true,
 			        anchor: '100%'
 				},{
-			    	xtype: 'datefield',
-			    	fieldLabel: 'Entry Date',
-			    	itemId: 'entryDate',
-			    	altFormats: 'm/d/Y|m-d-Y',
-			    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
-			        name: 'entryDate',
-			        allowBlank:false
-			    },{
 			        xtype: 'combobox',
 			        itemId: 'journalSourceCombo',
 			        name: 'journalSourceId',

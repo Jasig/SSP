@@ -12,13 +12,11 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
-		    		width: '100%',
+		    		autoScroll: true,
+					width: '100%',
 		    		height: '100%',
 				    bodyPadding: 5,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '100%'
-				    },
+				    layout: 'auto',
 				    fieldDefaults: {
 				        msgTarget: 'side',
 				        labelAlign: 'right',
@@ -28,6 +26,7 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
 				    items: [{
 				            xtype: 'fieldset',
 				            title: 'Confidentiality Disclosure Agreement',
+				            border: 0,
 				            defaultType: 'displayfield',
 				            defaults: {
 				                anchor: '100%'

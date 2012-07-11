@@ -681,6 +681,13 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		    height: 300,
 		    width: 500
 		}).show();
+	},
+    
+	/**
+	 * Fix a date to correct for the GMT Offset in ExtJS.
+	 */
+	fixDateOffset: function( dateToFix ) {
+		return new Date(dateToFix.toUTCString().substr(0, 25));
 	}
 });
 

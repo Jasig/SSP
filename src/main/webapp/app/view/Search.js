@@ -58,7 +58,7 @@ Ext.define('Ssp.view.Search', {
 		       		        	width: 5
 		       		        },{
 		       		        	xtype: 'checkboxfield',
-		                        boxLabel  : 'My Caseload',
+		                        boxLabel  : 'In My Caseload',
 		                        itemId: 'searchCaseloadCheck',
 		                        name      : 'searchInCaseload',
 		                        inputValue: false
