@@ -1,7 +1,5 @@
 package org.jasig.ssp.dao;
 
-import java.util.Date;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -23,33 +21,14 @@ public class AppointmentDao
 
 		Criteria query = createCriteria();
 
-		// Active appt in the future for the given person
+		// Active appt for the given person
 		query.add(Restrictions.eq("person", person));
-		query.add(Restrictions.ge("startTime", new Date()));
 		query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
 
-		// only return the first appt in the future
-		query.addOrder(Order.asc("startTime"));
+		// only return the most recently modified appt
+		query.addOrder(Order.asc("modifiedDate"));
 		query.setMaxResults(1);
 
-		final Appointment futureAppt = (Appointment) query.uniqueResult();
-
-		// if there is no future appt, pull the most recent one
-		if (futureAppt == null) {
-			query = createCriteria();
-
-			// Active appt in the past for the given person
-			query.add(Restrictions.eq("person", person));
-			query.add(Restrictions.le("startTime", new Date()));
-			query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
-
-			// only return the first appt in the future
-			query.addOrder(Order.desc("startTime"));
-			query.setMaxResults(1);
-
-			return (Appointment) query.uniqueResult();
-		} else {
-			return futureAppt;
-		}
+		return (Appointment) query.uniqueResult();
 	}
 }
