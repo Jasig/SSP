@@ -1,6 +1,6 @@
 /* Roster Screen */
 
-.early-alert .sent-message {
+.early-alert .sent-message, .early-alert .error-message {
     margin-bottom: 16px;
 }
 
@@ -71,4 +71,8 @@
 
 .suggestions-dialog li input[type="text"] {
     width: 240px;
+}
+
+.early-alert .invalid {
+    border: 1px red solid;
 }

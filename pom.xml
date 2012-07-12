@@ -448,6 +448,7 @@
 							<includes>
 								<include>rs/jquery/1.6.1/</include>
 								<include>rs/jqueryui/1.8.13/</include>
+								<include>rs/famfamfam/silk/1.3/add.png</include>
 								<include>rs/fluid/1.4.0/</include>
 							</includes>
 						</overlay>
