@@ -46,7 +46,10 @@
     </div>
     
 
-	<div class="reports-form-body">   		
+	<div class="reports-form-body"> 
+
+
+  		
 	</div>
     
   </div> <!-- end: portlet-body -->
@@ -60,9 +63,7 @@
 
     ${n}.jQuery(function() {
         var $ = up.jQuery;
-        
         var options = {};
-
 	ssp.ReportSelector('#${n}reportSelector', options);
 });
 </script>

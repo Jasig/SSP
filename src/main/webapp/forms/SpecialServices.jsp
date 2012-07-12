@@ -1,44 +1,7 @@
 <head>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-
-
-
-<style>
-label {
-	float: left;
-	width: 120px;
-	font-weight: bold;
-}
-
-input,textarea {
-	width: 180px;
-	margin-bottom: 5px;
-}
-
-textarea {
-	width: 250px;
-	height: 150px;
-}
-
-.boxes {
-	width: 1em;
-}
-
-#submitbutton {
-	margin-left: 120px;
-	margin-top: 5px;
-	width: 90px;
-}
-
-br {
-	clear: left;
-}
-</style>
-
-
-
-
 <script>
+
+
 	function populateSpecialServices() {
 		$.getJSON("/ssp/api/1/reference/specialServiceGroup/", function(data) {
 			var container = $("#SpecialServiceGroupIds");
@@ -60,34 +23,49 @@ br {
 		container.append($(html));
 	}
 
-	populateSpecialServices();
+	$(document).ready(function() {
+		populateSpecialServices();
+	});
+
 </script>
 
 </head>
 
 
-<div class="AddressLabelForm">
+<div class="report">
 	<h1>Special Services</h1>
-	<form action="/ssp/api/1/report/SpecialServices/" method="get">
-		<div class="box">
-			<p>Special Services Groups Report Criteria:</p>
+	<form action="/ssp/api/1/report/SpecialServices/" method="get" class="alert-form">
 
-			<label><span>Special Service Groups</span></label> <select
-				id="SpecialServiceGroupIds" name="specialServiceGroupIds"
-				multiple="multiple"></select> <br /> <br />
-			<div
-				style="border: 1px solid; border-radius: 5px; -moz-border-radius: 5px; padding: 5px; width: 250px">
 
-				<span>Report Output</span> <br /> <label><span>pdf</span></label><input
-					type="radio" name="reportType" value="pdf" checked /><br /> <label><span>csv</span></label><input
-					type="radio" name="reportType" value="csv" /><br />
+		<!-- Special Service Groups -->
+		<div class="ea-input">
+			<select id="SpecialServiceGroupIds" name="specialServiceGroupIds"
+				multiple="multiple"></select>
+		</div>
+		<div class="ea-label">
+			<span>Special Service Groups:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div>
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
 			</div>
-			<br /> <input type="submit" />
 		</div>
 	</form>
 </div>
-
-
 
 
 
