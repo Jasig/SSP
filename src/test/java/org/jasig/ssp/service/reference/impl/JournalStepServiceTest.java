@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,7 +50,7 @@ public class JournalStepServiceTest {
 
 		final Collection<JournalStep> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertFalse(all.isEmpty());
+		assertFalse("Collection should not have been empty.", all.isEmpty());
 		verify(dao);
 	}
 
@@ -62,7 +63,10 @@ public class JournalStepServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.get(id));
+		final JournalStep journalStep = service.get(id);
+		assertNotNull("Object should not have been null.", journalStep);
+		assertFalse("Default bool value did match expected.",
+				journalStep.isUsedForTransition());
 		verify(dao);
 	}
 
@@ -75,7 +79,8 @@ public class JournalStepServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		assertNotNull("Save result should not have been null.",
+				service.save(daoOne));
 		verify(dao);
 	}
 
@@ -93,15 +98,13 @@ public class JournalStepServiceTest {
 
 		service.delete(id);
 
-		boolean found = true;
 		try {
 			service.get(id);
-		} catch (final ObjectNotFoundException e) {
-			found = false;
+			fail("Deleted item should have thrown an exception upon reloading."); // NOPMD
+		} catch (final ObjectNotFoundException e) { // NOPMD
+			/* expected */
 		}
 
-		assertFalse(found);
 		verify(dao);
 	}
-
 }

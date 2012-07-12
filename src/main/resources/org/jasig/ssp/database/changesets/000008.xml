@@ -51,8 +51,8 @@
 			</insert>
 		</rollback>
 	</changeSet>
-	
-	<changeSet id="Add Appointment Table" author = "daniel.bower">
+
+	<changeSet id="Add Appointment Table" author="daniel.bower">
 		<createTable tableName="appointment">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
@@ -68,8 +68,8 @@
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="false" foreignKeyName="appointment_modified_by_person_id"
-					references="person(id)" />
+				<constraints nullable="false"
+					foreignKeyName="appointment_modified_by_person_id" references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
 				<constraints nullable="false" />
@@ -112,11 +112,11 @@
 	<changeSet id="modify appt table" author="daniel.bower">
 		<dropColumn tableName="appointment" columnName="expiration_date" />
 		<addColumn tableName="appointment">
-			<column name="attended" type="boolean" defaultValueBoolean="false"/>
+			<column name="attended" type="boolean" defaultValueBoolean="false" />
 		</addColumn>
-		
+
 		<rollback>
-			<dropColumn tableName="appointment" columnName="attended"/>
+			<dropColumn tableName="appointment" columnName="attended" />
 			<addColumn tableName="appointment">
 				<column name="expiration_date" type="datetime">
 					<constraints nullable="true" />
@@ -124,5 +124,13 @@
 			</addColumn>
 		</rollback>
 	</changeSet>
-	
+
+	<changeSet id="Add usedForTransition to journal_step" author="jon.adams">
+		<addColumn tableName="journal_step">
+			<column name="used_for_transition" type="boolean"
+				defaultValueBoolean="false" valueBoolean="false"
+				remarks="whether a journal entry with this journal step defined is automatically transitioned to a transition status"></column>
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>
