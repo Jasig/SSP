@@ -28,6 +28,15 @@ public class AddressLabelSearchTO
 	private Date createDateFrom;
 
 	private Date createDateTo;
+	
+
+	public UUID getProgramStatus() {
+		return programStatus;
+	}
+
+	public void setProgramStatus(UUID programStatus) {
+		this.programStatus = programStatus;
+	}
 
 	public Date getCreateDateFrom() {
 		return createDateFrom == null ? null : new Date(
@@ -56,13 +65,6 @@ public class AddressLabelSearchTO
 		this.studentTypeIds = studentTypeIds;
 	}
 
-	public UUID getProgramStatus() {
-		return programStatus;
-	}
-
-	public void setProgramStatus(final UUID programStatus) {
-		this.programStatus = programStatus;
-	}
 
 	public List<UUID> getSpecialServiceGroupIds() {
 		return specialServiceGroupIds;

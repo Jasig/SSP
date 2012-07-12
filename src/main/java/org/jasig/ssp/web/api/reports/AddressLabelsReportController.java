@@ -129,9 +129,10 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 						referralSourceIter.next()).getName());
 			}
 		}
-
+		
+		//final String programStatusName = ((null!=programStatus && !programStatus.isEmpty())?programStatus.get(0)():"");
 		// Get the actual name of the UUID for the programStatus
-		final String programStatusName = (programStatus == null ? ""
+		final String programStatusName = (programStatus == null ? "" 
 				: programStatusService.get(programStatus).getName());
 
 		final Map<String, Object> parameters = Maps.newHashMap();
