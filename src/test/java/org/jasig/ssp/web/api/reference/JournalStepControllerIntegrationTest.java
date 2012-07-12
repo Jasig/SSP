@@ -14,6 +14,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
@@ -172,6 +173,26 @@ public class JournalStepControllerIntegrationTest {
 	public void testControllerAll() {
 		final Collection<JournalStepTO> list = controller.getAll(
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
+
+		assertNotNull("List should not have been null.", list);
+		assertFalse("List action should have returned some objects.",
+				list.isEmpty());
+	}
+
+	/**
+	 * Test the
+	 * {@link JournalStepController#getAllForJournalStep(UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * action.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test.
+	 */
+	@Test
+	public void testControllerAllForJournalTrack()
+			throws ObjectNotFoundException {
+		final Collection<JournalStepDetailTO> list = controller
+				.getAllForJournalStep(JOURNALSTEP_ID, ObjectStatus.ALL, 0, 10,
+						null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",

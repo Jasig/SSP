@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -29,6 +30,8 @@ public class JournalStepServiceTest {
 	private transient JournalStepServiceImpl service;
 
 	private transient JournalStepDao dao;
+
+	public final static String TEST_STRING1 = "Test String 1";
 
 	@Before
 	public void setUp() {
@@ -67,6 +70,22 @@ public class JournalStepServiceTest {
 		assertNotNull("Object should not have been null.", journalStep);
 		assertFalse("Default bool value did match expected.",
 				journalStep.isUsedForTransition());
+		verify(dao);
+	}
+
+	@Test
+	public void testGetWithName() throws ObjectNotFoundException {
+		final UUID id = UUID.randomUUID();
+		final JournalStep daoOne = new JournalStep(id, TEST_STRING1);
+
+		expect(dao.get(id)).andReturn(daoOne);
+
+		replay(dao);
+
+		final JournalStep journalStep = service.get(id);
+		assertNotNull("Object should not have been null.", journalStep);
+		assertEquals("Names did not match.", TEST_STRING1,
+				journalStep.getName());
 		verify(dao);
 	}
 

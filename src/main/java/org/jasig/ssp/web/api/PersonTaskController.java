@@ -161,6 +161,7 @@ public class PersonTaskController extends
 	 * @throws JRException
 	 *             Thrown for any reporting exception
 	 * @throws IOException
+	 *             for any IO exception
 	 */
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	public @ResponseBody
