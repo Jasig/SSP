@@ -16,6 +16,10 @@
 
 <!-- Portlet -->
 <div id="${n}earlyAlert" class="fl-widget portlet early-alert" role="section">
+
+  <!-- Errors -->
+  <div class="errors">
+  </div>
   
   <!-- Portlet Titlebar -->
   <div class="fl-widget-titlebar titlebar portlet-titlebar" role="sectionhead">
@@ -26,7 +30,7 @@
   <div class="fl-widget-content content portlet-content" role="main">
   
   	<!-- Portlet Message -->
-  	<div class="portlet-msg-info portlet-msg info loading-message" role="status" style="display: none;">
+  	<div class="portlet-msg-info portlet-msg info loading-message" role="status">
     	<div class="titlebar">
         <h3 class="title"><spring:message code="loading"/> . . .</h3>
       </div>
@@ -35,7 +39,7 @@
       </div>
     </div>
     
-    <form method="POST" class="alert-form">
+    <form method="POST" class="alert-form" style="display: none;">
     
       <!-- Course -->
       <div class="ea-input">
@@ -150,7 +154,7 @@
       <!-- Campus -->
       <div class="ea-input">
         <select class="field-campus">
-          <option class="prompt"><spring:message code="select.a.campus"/></option>
+          <option class="prompt" value=""><spring:message code="select.a.campus"/></option>
         </select>
       </div>
       <div class="ea-required">*</div>
@@ -162,7 +166,7 @@
       <!-- Referral Reason -->
       <div class="ea-input">
         <select class="field-reason">
-          <option class="prompt"><spring:message code="select.a.reason"/></option>
+          <option class="prompt" value=""><spring:message code="select.a.reason"/></option>
         </select><br/>
         <input type="text" class="field-other-reason-text" name="earlyAlertReasonOtherDescription" value="" placeholder="<spring:message code="type.a.reason"/>" style="display: none; margin-top: 8px;" />
       </div>
@@ -175,7 +179,7 @@
       <!-- Faculty Suggestions -->
       <div class="ea-input">
         <ul class="field-suggestions"></ul>
-        <p><a href="javascript:void(0);" class="suggestions-add-edit"><spring:message code="add.edit"/></a></p>
+        <p><a href="javascript:void(0);" class="suggestions-add-edit"><img src="<c:url value="/rs/famfamfam/silk/1.3/add.png" />" alt="<spring:message code="add.edit"/>" /> <spring:message code="add.edit"/></a></p>
       </div>
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
@@ -217,6 +221,16 @@
     
   </div> <!-- end: portlet-body -->
 
+  	<!-- Error Message Template -->
+  	<div class="portlet-msg-error portlet-msg error error-message-template" role="status" style="display: none;">
+    	<div class="titlebar">
+        <h3 class="title"><span class="error-title"></span></h3>
+      </div>
+      <div class="content">
+    	  <p><span class="error-body"></span></p>
+      </div>
+    </div>
+
 </div> <!-- end: portlet -->
     	
 <script type="text/javascript">
@@ -227,13 +241,19 @@
         var $ = up.jQuery;
         
         var options = {
-            doneUrl: '${doneUrl}',
-            submitUrl: '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
+            urls: {
+                person: '<c:url value="/api/1/person/STUDENTID" />',
+                campus: '<c:url value="/api/1/reference/campus" />',
+                reason: '<c:url value="/api/1/reference/earlyAlertReason" />',
+                suggestions: '<c:url value="/api/1/reference/earlyAlertSuggestion" />',
+                submit: '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
+                done: '${doneUrl}'
+            },
             parameters: {
                 courseName: 'ENGLISH - 124 - 001',
                 courseTitle: 'Academic Writing and Literature',
                 term: '11/SD',
-                studentId: '58ba5ee3-734e-4ae9-b9c5-943774b4de41'
+                studentId: '1010e4a0-1001-0110-1011-4ffc02fe81ff'
             }
         };
         ssp.EarlyAlertForm('#${n}earlyAlert', options);
