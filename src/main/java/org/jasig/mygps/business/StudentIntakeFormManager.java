@@ -1929,7 +1929,7 @@ public class StudentIntakeFormManager {
 		final List<FormOptionTO> veteranStatusQuestionOptions = new ArrayList<FormOptionTO>();
 
 		for (final VeteranStatus veteranStatus : veteranStatusService.getAll(
-				new SortingAndPaging(ObjectStatus.ALL)).getRows()) {
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
 			veteranStatusQuestionOptions
 					.add(new FormOptionTO(veteranStatus.getId(), veteranStatus
 							.getName(), veteranStatus.getName()));
@@ -2149,7 +2149,7 @@ public class StudentIntakeFormManager {
 		final List<FormOptionTO> studentStatusQuestionOptions = new ArrayList<FormOptionTO>();
 
 		for (final StudentStatus studentStatus : studentStatusService.getAll(
-				new SortingAndPaging(ObjectStatus.ALL)).getRows()) {
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
 			studentStatusQuestionOptions
 					.add(new FormOptionTO(studentStatus.getId(), studentStatus
 							.getName(), studentStatus.getName()));

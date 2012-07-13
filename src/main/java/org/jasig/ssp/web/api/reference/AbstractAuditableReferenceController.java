@@ -98,7 +98,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		// Run getAll
 		final PagingWrapper<T> data = getService().getAll(
 				SortingAndPaging.createForSingleSort(
-						status == null ? ObjectStatus.ALL : status, start,
+						status == null ? ObjectStatus.ACTIVE : status, start,
 						limit, sort, sortDirection, "name"));
 
 		return new PagedResponse<TO>(true, data.getResults(), getFactory()
