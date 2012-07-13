@@ -5,8 +5,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
         person: 'currentPerson',
-        profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         profileReferralSourcesStore: 'profileReferralSourcesStore',
+        profileServiceReasonsStore: 'profileServiceReasonsStore',
+        profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         sspConfig: 'sspConfig'
     },
     
@@ -61,6 +62,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		}else{
     			me.profileReferralSourcesStore.removeAll();    			
     		}
+
+    		// load service reasons
+    		if (r.serviceReasons != null)
+    		{
+    			me.profileServiceReasonsStore.loadData( me.person.get('serviceReasons') );
+    		}else{
+    			me.profileServiceReasonsStore.removeAll();    			
+    		}    		
     		
     		// load general student record
     		me.getView().loadRecord( me.person );

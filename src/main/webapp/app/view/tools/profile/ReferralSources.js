@@ -7,12 +7,13 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
     },
 	width: '100%',
 	height: '100%',
-	initComponent: function() {	
-		Ext.apply(this, 
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
 				{
 			        hideHeaders: true,
 			        autoScroll: true,
-		            store: this.store,
+		            store: me.store,
     		        columns: [
     		                { header: 'Source',  
     		                  dataIndex: 'name',
@@ -20,6 +21,6 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
     		                }],
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });
