@@ -2,6 +2,7 @@ package org.jasig.ssp.service.impl;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -9,6 +10,7 @@ import javax.naming.directory.Attributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
@@ -121,5 +123,12 @@ public class LdapPersonAttributesService implements PersonAttributesService {
 	private String extractUsername(String val) {
 		// cn=testuser1,ou=users,dc=springframework,dc=org
 		return val.substring(3, (val.length() - 35));
+	}
+
+	@Override
+	public List<Map<String, Object>> searchForUsers(
+			HttpServletRequest req, HttpServletResponse res,
+			Map<String, String> query) {
+		throw new NotImplementedException();
 	}
 }
