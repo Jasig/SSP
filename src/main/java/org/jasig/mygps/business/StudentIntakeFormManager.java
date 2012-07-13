@@ -68,10 +68,12 @@ import com.google.common.collect.Sets;
 
 @Service
 @Transactional
-public class StudentIntakeFormManager {
+public class StudentIntakeFormManager { // NOPMD
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsStudentIntakeController.class);
+
+	private static final String DEFAULT_MAXIMUM_STRING_LENGTH = "255";
 
 	@Autowired
 	private transient ChallengeDao challengeDao;
@@ -316,7 +318,7 @@ public class StudentIntakeFormManager {
 	 *             If currently authenticated user data could not be refreshed.
 	 * @return A form transfer object filled with current user data.
 	 */
-	public FormTO populate() throws ObjectNotFoundException {
+	public FormTO populate() throws ObjectNotFoundException { // NOPMD
 		final FormTO formTO = create();
 		Person student = securityService.currentUser().getPerson();
 
@@ -832,7 +834,7 @@ public class StudentIntakeFormManager {
 		return formTO;
 	}
 
-	public Person save(final FormTO formTO) throws ObjectNotFoundException {
+	public Person save(final FormTO formTO) throws ObjectNotFoundException { // NOPMD
 
 		// Refresh Person from Hibernate so lazy-loading works in case the
 		// person instance was loaded in a previous request
@@ -1822,7 +1824,7 @@ public class StudentIntakeFormManager {
 		return personalSection;
 	}
 
-	private FormSectionTO buildDemographicsSection() {
+	private FormSectionTO buildDemographicsSection() { // NOPMD
 
 		final FormSectionTO demographicSection = new FormSectionTO();
 		final List<FormQuestionTO> demographicSectionQuestions = new ArrayList<FormQuestionTO>();
@@ -2149,7 +2151,7 @@ public class StudentIntakeFormManager {
 		final List<FormOptionTO> studentStatusQuestionOptions = new ArrayList<FormOptionTO>();
 
 		for (final StudentStatus studentStatus : studentStatusService.getAll(
-				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) { // NOPMD
 			studentStatusQuestionOptions
 					.add(new FormOptionTO(studentStatus.getId(), studentStatus
 							.getName(), studentStatus.getName()));
@@ -2493,7 +2495,7 @@ public class StudentIntakeFormManager {
 		bachelorsDegreeQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID);
 		bachelorsDegreeQuestion.setLabel("Bachelor's Degree Major");
-		bachelorsDegreeQuestion.setMaximumLength("255");
+		bachelorsDegreeQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		bachelorsDegreeQuestion.setType(FORM_TYPE_TEXTINPUT);
 		bachelorsDegreeQuestion.setRequired(true);
 		// DEPENDENCY -> bachelorsDegreeQuestion shown when
@@ -2510,7 +2512,7 @@ public class StudentIntakeFormManager {
 		militaryBranchQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID);
 		militaryBranchQuestion.setLabel("Military Branch");
-		militaryBranchQuestion.setMaximumLength("255");
+		militaryBranchQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		militaryBranchQuestion.setType(FORM_TYPE_TEXTINPUT);
 		militaryBranchQuestion.setRequired(true);
 		// DEPENDENCY -> militaryBranchQuestion shown when
@@ -2526,7 +2528,7 @@ public class StudentIntakeFormManager {
 
 		otherQuestion.setId(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID);
 		otherQuestion.setLabel("Other Goal");
-		otherQuestion.setMaximumLength("255");
+		otherQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		otherQuestion.setType(FORM_TYPE_TEXTINPUT);
 		otherQuestion.setRequired(true);
 		// DEPENDENCY -> otherQuestion shown when
@@ -2607,7 +2609,7 @@ public class StudentIntakeFormManager {
 
 		otherQuestion.setId(SECTION_FUNDING_QUESTION_OTHER_ID);
 		otherQuestion.setLabel("Other");
-		otherQuestion.setMaximumLength("255");
+		otherQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		otherQuestion.setType(FORM_TYPE_TEXTINPUT);
 		otherQuestion.setRequired(true);
 		// DEPENDENCY -> otherQuestion shown when fundingQuestionTO value is
@@ -2657,7 +2659,7 @@ public class StudentIntakeFormManager {
 
 		otherQuestion.setId(SECTION_CHALLENGE_QUESTION_OTHER_ID);
 		otherQuestion.setLabel("Other");
-		otherQuestion.setMaximumLength("255");
+		otherQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		otherQuestion.setType(FORM_TYPE_TEXTINPUT);
 		otherQuestion.setRequired(true);
 		// DEPENDENCY -> otherQuestion shown when challengeQuestionTO value is
