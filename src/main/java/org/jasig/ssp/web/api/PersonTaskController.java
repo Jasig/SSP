@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.model.Goal;
@@ -162,14 +163,13 @@ public class PersonTaskController extends
 	 *             Thrown for any reporting exception
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/print", method = RequestMethod.GET)
+	@RequestMapping(value = "/print", method = RequestMethod.POST)
 	public @ResponseBody
 	void print(final HttpServletResponse response,
-			final @PathVariable UUID personId
-			// final @RequestParam(required = false) List<UUID> taskIds
+			  final @PathVariable UUID personId,
+			  final @RequestParam(required = false) List<UUID> taskIds,
+			  final @RequestParam(required = false) List<UUID> goalIds
 			) throws ObjectNotFoundException, JRException, IOException {
-
-		final List<UUID> taskIds = new ArrayList<UUID>();
 
 		checkPermissionForOp("READ");
 
@@ -181,11 +181,10 @@ public class PersonTaskController extends
 		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
 				taskIds, person, requestor, securityService.getSessionId(),
 				sAndP);
-		final PagingWrapper<Goal> goals = goalService.getAllForPerson(person,
-				requestor, sAndP);
-
-		final Goal[] goalsArray = goals.getRows().toArray(
-				new Goal[goals.getRows().size()]);
+		final List<Goal> goals = goalService.getGoalsForPersonIfNoneSelected(goalIds, person, requestor, securityService.getSessionId(),
+				sAndP);
+		
+		
 
 		final Iterator<Task> taskIter = tasks.iterator();
 		while (taskIter.hasNext()) {
@@ -220,12 +219,9 @@ public class PersonTaskController extends
 									.getDescription())));
 		}
 
-		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
-				studentActionPlanTOs
-						.toArray(new StudentActionPlanTO[studentActionPlanTOs
-								.size()]));
-		final JRBeanArrayDataSource goalsDS = new JRBeanArrayDataSource(
-				goalsArray);
+		final JRBeanCollectionDataSource beanDs = new JRBeanCollectionDataSource(studentActionPlanTOs);
+	
+		final JRBeanCollectionDataSource goalsDS = new JRBeanCollectionDataSource(goals);
 		final Map<String, Object> parameters = Maps.newHashMap();
 		parameters.put("studentName",
 				person.getFirstName() + " " + person.getLastName());

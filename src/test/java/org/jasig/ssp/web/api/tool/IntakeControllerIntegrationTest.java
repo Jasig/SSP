@@ -214,7 +214,7 @@ public class IntakeControllerIntegrationTest {
 					.getChallengeChallengeReferrals()) {
 				assertTrue(
 						"All Referrals with !ShowInStudentIntake should not have been returned.",
-						referral.isShowInStudentIntake());
+						referral.getShowInStudentIntake());
 			}
 		}
 	}

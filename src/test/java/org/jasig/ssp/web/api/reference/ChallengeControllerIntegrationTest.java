@@ -11,15 +11,21 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -37,23 +43,32 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ChallengeControllerIntegrationTest {
 
-	@Autowired
-	private transient ChallengeController controller;
-
 	private static final UUID CHALLENGE_ID = UUID
 			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
 
 	private static final UUID CHALLENGE_DELETED_ID = UUID
 			.fromString("01bb0a62-1756-4ea2-857d-5821ee54a1b9");
 
-	private static final String CHALLENGE_NAME = "Test Challenge";
+	private static final UUID CHALLENGE_ID_WTH_REFERRAL = UUID
+			.fromString("43719c57-ec92-4e4a-9fb6-25208936fd18");
 
-	@Autowired
-	private transient SecurityServiceInTestEnvironment securityService;
+	private static final UUID CHALLENGE_REFERRAL_ID = UUID
+			.fromString("19fbec43-8c0b-478b-9d5f-00ec6ec57511");
+
+	private static final String CHALLENGE_NAME = "Test Challenge";
 
 	private static final String TEST_STRING1 = "testString1";
 
 	private static final String TEST_STRING2 = "testString1";
+
+	@Autowired
+	private transient ChallengeController controller;
+
+	@Autowired
+	private transient SessionFactory sessionFactory;
+
+	@Autowired
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	/**
 	 * Setup the security service with the administrator user for use by
@@ -233,5 +248,81 @@ public class ChallengeControllerIntegrationTest {
 			 * should _not_ throw that exception.
 			 */
 		}
+	}
+
+	@Test(expected = ValidationException.class)
+	public void testContollerSaveWithoutId() throws ValidationException,
+			ObjectNotFoundException {
+		final ChallengeTO challenge = controller.get(CHALLENGE_ID);
+		challenge.setDescription("New description");
+		challenge.setId(null); // set invalid ID
+		controller.save(null, challenge);
+		fail("Invalid ID should have thrown an exception.");
+	}
+
+	@Test
+	public void testContollerSave() throws ValidationException,
+			ObjectNotFoundException {
+		final ChallengeTO challenge = controller.get(CHALLENGE_ID);
+		challenge.setDescription("New description");
+		final ChallengeTO saved = controller.save(CHALLENGE_ID, challenge);
+		assertEquals("Description does not match.", "New description",
+				saved.getDescription());
+	}
+
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertNotNull("Logger should not have been null.", logger);
+	}
+
+	@Test
+	public void testGetChallengeReferralsForChallenge()
+			throws ObjectNotFoundException {
+		final PagedResponse<ChallengeReferralTO> referrals = controller
+				.getChallengeReferralsForChallenge(CHALLENGE_ID_WTH_REFERRAL,
+						null, null, null, null, null);
+		assertTrue("Referrals list should not have been empty.",
+				referrals.getResults() > 0);
+	}
+
+	@Test
+	public void testAddChallengeReferralsFromChallenge()
+			throws ObjectNotFoundException {
+		final Session session = sessionFactory.getCurrentSession();
+
+		final ServiceResponse response = controller
+				.addChallengeReferralToChallenge(CHALLENGE_ID,
+						CHALLENGE_REFERRAL_ID);
+		assertTrue("Add should have returned success.", response.isSuccess());
+
+		session.flush();
+		session.clear();
+
+		boolean found = false;
+		final PagedResponse<ChallengeReferralTO> addedList = controller
+				.getChallengeReferralsForChallenge(CHALLENGE_ID, null, null,
+						null, null, null);
+		assertTrue("Should have found results in list.",
+				addedList.getResults() > 0);
+		for (final ChallengeReferralTO to : addedList.getRows()) {
+			if (CHALLENGE_REFERRAL_ID.equals(to.getId())) {
+				found = true;
+			}
+		}
+
+		assertTrue("Could not find added challenge_challenge_referral.", found);
+	}
+
+	@Test
+	public void testAddAndDeleteChallengeReferralsFromChallenge()
+			throws ObjectNotFoundException {
+		// arrange, act
+		final ServiceResponse deletion = controller
+				.removeChallengeReferralFromChallenge(CHALLENGE_ID,
+						CHALLENGE_REFERRAL_ID);
+
+		// assert
+		assertTrue("Delete should have returned success.", deletion.isSuccess());
 	}
 }

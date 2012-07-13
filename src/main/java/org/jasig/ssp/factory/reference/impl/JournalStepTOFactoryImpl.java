@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * JournalStep transfer object factory implementation
+ */
 @Service
 @Transactional(readOnly = true)
 public class JournalStepTOFactoryImpl extends
@@ -34,8 +37,8 @@ public class JournalStepTOFactoryImpl extends
 		final JournalStep model = super.from(tObject);
 
 		model.setSortOrder(tObject.getSortOrder());
+		model.setUsedForTransition(tObject.isUsedForTransition());
 
 		return model;
 	}
-
 }

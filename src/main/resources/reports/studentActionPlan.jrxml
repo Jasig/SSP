@@ -8,7 +8,7 @@
 	<parameter name="initialDate" class="java.util.Date"/>
 	<parameter name="reviewDate" class="java.util.Date"/>
 	<parameter name="followupDate" class="java.util.Date"/>
-	<parameter name="goals" class="net.sf.jasperreports.engine.data.JRBeanArrayDataSource"/>
+	<parameter name="goals" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<queryString language="json">
 		<![CDATA[]]>
 	</queryString>
@@ -83,7 +83,7 @@
 				<text><![CDATA[Goal(s)]]></text>
 			</staticText>
 			<subreport>
-				<reportElement uuid="a03fafd2-be35-4d86-a0c9-034f81295b02" x="0" y="20" width="572" height="41"/>
+				<reportElement uuid="a03fafd2-be35-4d86-a0c9-034f81295b02" x="39" y="20" width="533" height="41"/>
 				<dataSourceExpression><![CDATA[$P{goals}]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/goals_subreport.jasper"]]></subreportExpression>
 			</subreport>

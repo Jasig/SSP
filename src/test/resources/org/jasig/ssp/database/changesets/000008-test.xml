@@ -40,7 +40,7 @@
 			<where>id = 'f549ecab-5110-4cc1-b2bb-369cac854dea'</where>
 		</update>
 	</changeSet>
-	
+
 	<changeSet id="another test appointment" author="daniel.bower">
 		<insert tableName="appointment">
 			<column name="id" value="2cdc7f78-cb78-11e1-b087-0026b9e7ff4c" />
@@ -53,7 +53,7 @@
 			<column name="start_time" valueDate="2016-03-20T00:00:00" />
 			<column name="end_time" valueDate="2016-03-20T01:00:00" />
 		</insert>
-		
+
 		<rollback>
 			<delete tableName="appointment">
 				<where>id='2cdc7f78-cb78-11e1-b087-0026b9e7ff4c'</where>
@@ -75,6 +75,25 @@
 		<rollback>
 			<delete tableName="journal_entry_detail">
 				<where>id='e8df3d54-af46-21e2-a742-1026b9e7ff5d'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+
+	<changeSet id="test journal_track_journal_step data" author="jon.adams">
+		<insert tableName="journal_track_journal_step">
+			<column name="id" value="68d1da33-152e-4848-9006-2fd2424054a9" />
+			<column name="created_date" valueDate="2012-07-12T00:00:00" />
+			<column name="modified_date" valueDate="2012-07-12T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="journal_step_id" value="aba1440c-ab5b-11e1-ba73-0026b9e7ff4c" />
+			<column name="journal_track_id" value="b2d07a7d-5056-a51a-80a8-96ae5188a188" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_track_journal_step">
+				<where>id='68d1da33-152e-4848-9006-2fd2424054a9'</where>
 			</delete>
 		</rollback>
 	</changeSet>

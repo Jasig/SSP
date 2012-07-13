@@ -175,7 +175,7 @@
 		<dependency>
 			<groupId>org.jasig.resourceserver</groupId>
 			<artifactId>resource-server-utils</artifactId>
-			<version>${resource-server.version}</version>            
+			<version>${resource-server.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework</groupId>
@@ -276,10 +276,13 @@
 			<version>9.1-901.jdbc4</version>
 		</dependency>
 
+		<!-- liquibase versions 2.0.4 through the latest version, 2.0.5, seem to 
+			have a regression bug with the SQL Server 2005 dialect. Once this is resolved 
+			by the liquibase team, we should be able to upgrade here. -->
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<version>2.0.5</version>
+			<version>2.0.3</version>
 		</dependency>
 
 		<dependency>
