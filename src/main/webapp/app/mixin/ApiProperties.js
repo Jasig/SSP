@@ -69,7 +69,6 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	makeRequest: function(args){
 		var contentType = "application/json";
 		var errorHandler = this.handleError;
-		var isUpload = false;
 		if (args.failure != null)
 		{
 			errorHandler = args.failure;
@@ -78,16 +77,11 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		{
 			contentType = args.contentType;
 		}
-		if ( args.isUpload != null )
-		{
-			isUpload = true;
-		}
 		Ext.Ajax.request({
 			url: args.url,
 			method: args.method,
 			headers: { 'Content-Type': contentType },
 			jsonData: args.jsonData || '',
-			isUpload: isUpload,
 			success: args.successFunc,
 			failure: errorHandler,
 			scope: ((args.scope != null)? args.scope : this)

@@ -28,10 +28,10 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     
     onViewHistoryClick: function(button){
 		var me=this;
-		me.apiProperties.getReporter().load({
-  		  url: me.personViewHistoryUrl,
-  		  params: ""
-  		});
+		me.apiProperties.getReporter().postReport({
+			url:me.personViewHistoryUrl,
+			params: ""
+		});
     },
 
     onStudentTransitionClick: function(button){

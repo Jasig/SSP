@@ -288,10 +288,11 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    {
 	    	url = me.apiProperties.createUrl( me.personPrintTaskUrl );
 
-	    	me.apiProperties.getReporter().load({
-	    		  url: url,
-	    		  params: jsonData
-	    		});
+			me.apiProperties.getReporter().postReport({
+				url: url,
+				params: jsonData
+			});
+			
 	    }else{
 	    	Ext.Msg.alert('Error','Please select the tasks and goals you would like to print.');
 	    }
