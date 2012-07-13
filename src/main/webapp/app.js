@@ -32,6 +32,7 @@ Ext.require([
     'Ssp.view.tools.profile.SpecialServiceGroups',
     'Ssp.view.tools.profile.ReferralSources',
     'Ssp.view.tools.profile.ServicesProvided',
+    'Ssp.view.tools.profile.ServiceReasons',
     'Ssp.view.tools.actionplan.ActionPlan',
     'Ssp.view.tools.actionplan.Tasks',
     'Ssp.view.tools.actionplan.AddTask',
@@ -443,6 +444,14 @@ Ext.onReady(function(){
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
 				            	model: 'Ssp.model.reference.ReferralSource'
+				            });
+				    	},
+				        singleton: true
+			        },
+			        profileServiceReasonsStore:{
+				        fn: function(){
+				            return Ext.create('Ext.data.Store',{
+				            	model: 'Ssp.model.reference.ServiceReason'
 				            });
 				    	},
 				        singleton: true

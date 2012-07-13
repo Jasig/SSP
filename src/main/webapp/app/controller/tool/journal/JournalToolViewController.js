@@ -31,10 +31,14 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		var personId = me.person.get('id');
 		var successFunc = function(response,view){
 	    	var r = Ext.decode(response.responseText);
+	    	
 	    	if (r.rows.length > 0)
 	    	{
 	    		me.journalEntriesStore.loadData(r.rows);
 	    	}
+
+	    	// hide the loader
+	    	me.getView().setLoading( false );	    	
 		};
 
 		// clear any existing journal entries
@@ -51,6 +55,9 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		me.personJournalUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personJournalEntry') );
 		me.personJournalUrl = me.personJournalUrl.replace('{id}',personId);		
 
+		// display loader
+		me.getView().setLoading( true );		
+		
 		me.apiProperties.makeRequest({
 			url: me.personJournalUrl,
 			method: 'GET',

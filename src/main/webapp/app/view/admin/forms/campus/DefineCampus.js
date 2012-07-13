@@ -9,7 +9,8 @@ Ext.define('Ssp.view.admin.forms.campus.DefineCampus',{
 	width: '100%',
 	layout:'card',
 	initComponent: function() {
-        Ext.applyIf(this, {
+		var me=this;
+        Ext.applyIf(me, {
         	activeItem: 0,
         	
         	dockedItems: [{
@@ -44,6 +45,6 @@ Ext.define('Ssp.view.admin.forms.campus.DefineCampus',{
         	    html: 'Step 3'
         	}]
         });
-        return this.callParent(arguments);
+        return me.callParent(arguments);
 	}
 });

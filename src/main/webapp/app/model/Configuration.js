@@ -47,7 +47,12 @@ Ext.define('Ssp.model.Configuration', {
               name: 'educationPlanSpecialNeedsLabel', 
               type: 'string', 
               defaultValue: 'Special needs or require special accomodation?'
-             }],
+             },
+    	     {
+              name: 'coachFieldLabel', 
+              type: 'string', 
+              defaultValue: 'Coach/Advisor'
+            }],
              
      	constructor: function(){
      		var me=this;

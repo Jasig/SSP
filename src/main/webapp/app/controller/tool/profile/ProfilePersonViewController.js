@@ -5,8 +5,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
         person: 'currentPerson',
-        profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         profileReferralSourcesStore: 'profileReferralSourcesStore',
+        profileServiceReasonsStore: 'profileServiceReasonsStore',
+        profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         sspConfig: 'sspConfig'
     },
     
@@ -36,8 +37,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		var fullName;
     		var studentTypeName;
     		var programStatusName;
-    		var coachName;
-	    	
+    		var coachName;   		
+    		
     		// load the person data
     		me.person.populateFromGenericObject(r);
     		
@@ -61,6 +62,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		}else{
     			me.profileReferralSourcesStore.removeAll();    			
     		}
+
+    		// load service reasons
+    		if (r.serviceReasons != null)
+    		{
+    			me.profileServiceReasonsStore.loadData( me.person.get('serviceReasons') );
+    		}else{
+    			me.profileServiceReasonsStore.removeAll();    			
+    		}    		
     		
     		// load general student record
     		me.getView().loadRecord( me.person );
@@ -72,10 +81,16 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		studentTypeField.setValue( studentTypeName );
     		programStatusField.setValue( programStatusName );
     		studentRecordComp.setTitle('Student Record - ' + fullName);
+    		
+	    	// hide the loader
+	    	me.getView().setLoading( false ); 
 		};
 
 		// Set defined configured label for the studentId field
 		studentIdField.setFieldLabel(studentIdAlias);		
+		
+		// display loader
+		me.getView().setLoading( true );
 		
 		// load the person record
 		me.apiProperties.makeRequest({

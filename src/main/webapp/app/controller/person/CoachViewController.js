@@ -36,7 +36,12 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 		var me=this;
 
 		me.studentTypesStore.load();
-		me.coachesStore.load();
+		me.coachesStore.load(function(records, operation, success) {
+	          if(!success)
+	          {
+	        	  Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
+	          }
+		 });
 		
 		me.initForm();
 		

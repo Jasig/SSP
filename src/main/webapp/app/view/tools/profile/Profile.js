@@ -36,10 +36,14 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 						    		  autoScroll: true,
 						    		  items: [{xtype: 'profilereferralsources'}]
 						    		},{ 
-							    		  title: 'Services Provided History',
-							    		  hidden: true,
-							    		  autoScroll: true,
-							    		  items: [{xtype: 'profileservicesprovided'}]
+						    		  title: 'Service Reasons',
+						    		  autoScroll: true,
+						    		  items: [{xtype: 'profileservicereasons'}]
+						    		},{ 
+						    		  title: 'Services Provided History',
+						    		  hidden: true,
+						    		  autoScroll: true,
+						    		  items: [{xtype: 'profileservicesprovided'}]
 							    	}]
 						})
 				    ],

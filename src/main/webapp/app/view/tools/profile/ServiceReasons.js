@@ -1,21 +1,21 @@
-Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
+Ext.define('Ssp.view.tools.profile.ServiceReasons', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.profilespecialservicegroups',
+	alias : 'widget.profileservicereasons',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	store: 'profileSpecialServiceGroupsStore'
+    	store: 'profileServiceReasonsStore'
     },
 	width: '100%',
 	height: '100%',
-	initComponent: function() {	
+	initComponent: function() {
 		var me=this;
 		Ext.apply(me, 
 				{
 			        hideHeaders: true,
-			        store: me.store,
-					autoScroll: true,
+			        autoScroll: true,
+		            store: me.store,
     		        columns: [
-    		                { header: 'Group',  
+    		                { header: 'Reason',  
     		                  dataIndex: 'name',
     		                  flex: 1,
     		                }],
