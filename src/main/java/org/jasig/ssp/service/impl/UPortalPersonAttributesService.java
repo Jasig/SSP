@@ -182,6 +182,12 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 		
 	}
 	
+	/**
+	 * <strong>NOTE:</strong>  This method probably belongs somewhere else.  
+	 * It's at a different level of abstraction verses the other methods on this 
+	 * class.  We should probably look to move it when we have more clarity as 
+	 * to where it could land. 
+	 */
 	@Override
 	public Collection<String> getCoaches() {
 
