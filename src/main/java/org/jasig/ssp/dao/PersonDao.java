@@ -136,6 +136,15 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if (addressLabelSearchTO.getProgramStatus() != null) {
 			// TODO
 			// criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
+			
+			criteria.createAlias("programStatuses",
+					"personProgramStatuses")
+					.add(Restrictions
+							.eq("personProgramStatuses.programStatus.id",
+									addressLabelSearchTO
+											.getProgramStatus()));
+			
+			
 		}
 
 		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {

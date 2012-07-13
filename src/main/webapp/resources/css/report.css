@@ -15,7 +15,6 @@
 }
 
 /* Form Screen */
-
 .report .alert-form {
     width: 600px
 }
@@ -26,7 +25,7 @@
 }
 
 .report .ea-required {
-    float: right;
+    float: left;
     margin: 3px 0 3px 6px;
     color: #F00;
 }

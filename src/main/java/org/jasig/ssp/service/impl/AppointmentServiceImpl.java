@@ -1,6 +1,7 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.AppointmentService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,4 +65,24 @@ public class AppointmentServiceImpl
 
 		return appts;
 	}
+
+	@Override
+	public Appointment create(final Appointment obj)
+			throws ObjectNotFoundException, ValidationException {
+
+		final Date now = new Date();
+
+		if (obj.getStartTime().before(now) || obj.getEndTime().before(now)) {
+			throw new ValidationException(
+					"Start time and end time must be in the future");
+		}
+
+		if (obj.getEndTime().before(obj.getStartTime())) {
+			throw new ValidationException(
+					"The start time must be before the end time.");
+		}
+
+		return super.create(obj);
+	}
+
 }

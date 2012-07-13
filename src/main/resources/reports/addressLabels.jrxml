@@ -25,7 +25,7 @@
 	<field name="userId" class="java.lang.String">
 		<fieldDescription><![CDATA[userId]]></fieldDescription>
 	</field>
-	<field name="studentType" class="java.lang.String">
+	<field name="studentType" class="org.jasig.ssp.model.reference.StudentType">
 		<fieldDescription><![CDATA[studentType]]></fieldDescription>
 	</field>
 	<field name="addressLine1" class="java.lang.String">
@@ -248,7 +248,7 @@
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{studentType} == null ? "" : $F{studentType})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{studentType}.getName() == null ? "" : $F{studentType}.getName())]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="3e72c5ae-a131-4ab6-bc2f-a904c7fed129" stretchType="RelativeToBandHeight" x="203" y="2" width="130" height="32"/>
