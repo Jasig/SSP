@@ -9,6 +9,8 @@ import liquibase.integration.spring.SpringLiquibase;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.ContextConfiguration;
@@ -23,6 +25,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration("dao-dropFirst-testConfig.xml")
 public class LiquibaseDropFirstTest {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(LiquibaseDropFirstTest.class);
+
 	@Autowired
 	private transient DataSource dataSource;
 
@@ -32,32 +37,42 @@ public class LiquibaseDropFirstTest {
 	@Test
 	public void test() {
 		// first run the prod master changelog
-		SpringLiquibase sl = newSpringLiquibase();
+		SpringLiquibase sl = newSpringLiquibaseWithDropFirst();
 		sl.setChangeLog("classpath:org/jasig/ssp/database/masterChangeLog.xml");
 
 		try {
-			sl.afterPropertiesSet();
-		} catch (LiquibaseException e) {
-			fail("Failed to run Prod changesets");
+			sl.afterPropertiesSet(); // run scripts
+		} catch (final LiquibaseException e) {
+			LOGGER.error(
+					"Failed to drop tables by liquibase scripts for production.",
+					e);
+			fail("Failed to run Prod changesets: " + e.getMessage());
 		}
 
 		// now run the test master changelog
-		sl = newSpringLiquibase();
+		sl = newSpringLiquibaseWithDropFirst();
 		sl.setChangeLog("classpath:org/jasig/ssp/database/masterChangeLog-test.xml");
 
 		try {
-			sl.afterPropertiesSet();
-		} catch (LiquibaseException e) {
-			fail("Failed to run Test changesets");
+			sl.afterPropertiesSet(); // run scripts
+		} catch (final LiquibaseException e) {
+			LOGGER.error(
+					"Failed to drop tables by liquibase scripts for test data.",
+					e);
+			fail("Failed to run Test changesets: " + e.getMessage());
 		}
 	}
 
-	private SpringLiquibase newSpringLiquibase() {
+	/**
+	 * Create Spring liquibase instance with drop first setting on.
+	 * 
+	 * @return
+	 */
+	private SpringLiquibase newSpringLiquibaseWithDropFirst() {
 		final SpringLiquibase sl = new SpringLiquibase();
 		sl.setDataSource(dataSource);
 		sl.setResourceLoader(resourceLoader);
 		sl.setDropFirst(true);
 		return sl;
 	}
-
 }
