@@ -258,7 +258,7 @@ Ext.onReady(function(){
 
     // load the authenticated user
 	Ext.Ajax.request({
-		url: Ssp.mixin.ApiProperties.getBaseAppUrl() + 'session/getAuthenticatedPerson',
+		url: Ssp.mixin.ApiProperties.getBaseApiUrl() + 'session/getAuthenticatedPerson',
 		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 		success: function(response){
