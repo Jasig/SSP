@@ -5,6 +5,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
     	person: 'currentPerson',
+    	earlyAlert: 'currentEarlyAlert',
     	model: 'currentEarlyAlertResponse'
     },
     config: {
@@ -34,14 +35,16 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     },
     
 	init: function() {
-		this.getView().getForm().loadRecord(this.model);
+		var me=this;
 		
-		this.showHideOtherOutcomeDescription();
+		me.getView().getForm().loadRecord(me.model);
+		me.showHideOtherOutcomeDescription();
 		
-		this.url = this.apiProperties.getItemUrl('personEarlyAlert');
-		this.url = this.url.replace('{id}',this.person.get('id'));
-		
-		return this.callParent(arguments);
+		me.url = me.apiProperties.getItemUrl('personEarlyAlertResponse');
+		me.url = me.url.replace('{personId}',me.person.get('id'));
+		me.url = me.url.replace('{earlyAlertId}',me.earlyAlert.get('id'));
+
+		return me.callParent(arguments);
     },
     
     onOutcomeComboSelect: function(comp, records, eOpts){
@@ -49,25 +52,42 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     },
     
     showHideOtherOutcomeDescription: function(){
-    	if (this.getOutcomeCombo().getValue()==Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID)
+    	var me=this;
+    	if (me.getOutcomeCombo().getValue()==Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID)
     	{
-    		this.getOtherOutcomeDescriptionText().show();
+    		me.getOtherOutcomeDescriptionText().show();
     	}else{
-    		this.getOtherOutcomeDescriptionText().hide();
+    		me.getOtherOutcomeDescriptionText().hide();
     	}
     },
     
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
-		url = this.url;
-		this.getView().getForm().updateRecord();
-		record = this.model;
-		id = record.get('id');
-		jsonData = record.data;
-		successFunc = function(response, view) {
+		// referrals view
+		var referralsItemSelector = Ext.ComponentQuery.query('#earlyAlertReferralsItemSelector')[0];	
+		var selectedReferrals = [];			
+		var successFunc = function(response, view) {
 			me.displayMain();
-		};
+		}
+		
+		url = me.url;
+		me.getView().getForm().updateRecord();
+		record = me.model;
+		id = record.get('id');	
+		
+		// referrals
+		selectedReferrals = referralsItemSelector.getValue();
+		if (selectedReferrals.length > 0)
+		{			
+		   record.set('earlyAlertReferralIds', selectedReferrals);
+		}else{
+		   record.data.referrals=null;
+		}		
+		
+		record.set( 'earlyAlertId', me.earlyAlert.get('id') ); 
+		
+		jsonData = record.data;
 		
 		console.log(jsonData);
 		
@@ -79,16 +99,19 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 				url: url+"/"+id,
 				method: 'PUT',
 				jsonData: jsonData,
-				successFunc: successFunc 
+				successFunc: successFunc,
+				scope: me 
 			});
 			
 		}else{
+		
 			// adding
 			this.apiProperties.makeRequest({
 				url: url,
 				method: 'POST',
 				jsonData: jsonData,
-				successFunc: successFunc 
+				successFunc: successFunc,
+				scope: me 
 			});		
 		}
 		*/

@@ -56,6 +56,7 @@ Ext.require([
     'Ssp.view.tools.journal.TrackTree',
     'Ssp.view.tools.earlyalert.EarlyAlert',
     'Ssp.view.tools.earlyalert.EarlyAlertResponse',
+    'Ssp.view.tools.earlyalert.EarlyAlertReferrals',
     'Ssp.view.tools.document.StudentDocuments',
     'Ssp.view.tools.document.EditDocument',
     'Ssp.view.tools.sis.StudentInformationSystem',
@@ -235,7 +236,7 @@ var apiUrls = [
   {name: 'personCoach', url: 'person/coach'},
   {name: 'personDocument', url: 'person/{id}/document'},
   {name: 'personEarlyAlert', url: 'person/{id}/earlyAlert'},
-  {name: 'personEarlyAlertResponse', url: 'person/{id}/earlyAlert/{id}/earlyAlertResponse'},
+  {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlert/{earlyId}/earlyAlertResponse'},
   {name: 'personGoal', url: 'person/{id}/goal'},
   {name: 'personJournalEntry', url: 'person/{id}/journalEntry'},
   {name: 'personTask', url: 'person/{id}/task'},
@@ -398,7 +399,7 @@ Ext.onReady(function(){
 			        },
 			        currentEarlyAlert:{
 				        fn: function(){
-				            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:"",courseTitle:'DEV-065-TC - Developmental Reading'});
+				            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:""});
 				    	},
 				        singleton: true
 			        },
@@ -483,6 +484,7 @@ Ext.onReady(function(){
 					earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
 					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
 					earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
+					earlyAlertReferralsBindStore: 'Ssp.store.reference.EarlyAlertReferralsBind',
 				    earlyAlertsStore: 'Ssp.store.EarlyAlerts',
 					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
 				    educationGoalsStore: 'Ssp.store.reference.EducationGoals',

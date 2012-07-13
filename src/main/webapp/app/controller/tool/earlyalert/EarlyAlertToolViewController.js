@@ -20,11 +20,12 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
 	},
 	
     constructor: function() {
-    	this.store.load();
-    	this.outcomesStore.load();
-    	this.outreachesStore.load();
-    	this.referralsStore.load();
-		return this.callParent(arguments);
+    	var me=this;
+    	me.store.load();
+    	me.outcomesStore.load();
+    	me.outreachesStore.load();
+    	me.referralsStore.load();
+		return me.callParent(arguments);
     },
     
     onRespondClick: function(button){
