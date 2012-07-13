@@ -37,8 +37,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		var fullName;
     		var studentTypeName;
     		var programStatusName;
-    		var coachName;
-	    	
+    		var coachName;   		
+    		
     		// load the person data
     		me.person.populateFromGenericObject(r);
     		
@@ -81,10 +81,16 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		studentTypeField.setValue( studentTypeName );
     		programStatusField.setValue( programStatusName );
     		studentRecordComp.setTitle('Student Record - ' + fullName);
+    		
+	    	// hide the loader
+	    	me.getView().setLoading( false ); 
 		};
 
 		// Set defined configured label for the studentId field
 		studentIdField.setFieldLabel(studentIdAlias);		
+		
+		// display loader
+		me.getView().setLoading( true );
 		
 		// load the person record
 		me.apiProperties.makeRequest({
