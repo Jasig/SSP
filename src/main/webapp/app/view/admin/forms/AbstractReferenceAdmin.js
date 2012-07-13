@@ -35,11 +35,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     		                  field: {
     		                      xtype: 'textfield'
     		                  }
-    		                },
-    		                { 
-    		                  header: 'Status',
-      		                  dataIndex: 'objectStatus' 
-      		                }
+    		                }
     		           ],
     		        
     		           dockedItems: [
@@ -78,33 +74,5 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     	});
     	
     	me.callParent(arguments);
-    },
-    
-    reconfigure: function(store, columns) {
-        var me = this,
-            headerCt = me.headerCt;
-
-        if (me.lockable) {
-            me.reconfigureLockable(store, columns);
-        } else {
-            if (columns) {
-                headerCt.suspendLayout = true;
-                headerCt.removeAll();
-                headerCt.add(columns);
-            }
-            if (store) {
-                store = Ext.StoreManager.lookup(store);
-                me.down('pagingtoolbar').bindStore(store);
-                me.bindStore(store);        
-            } else {
-                me.getView().refresh();
-            }
-            if (columns) {
-                headerCt.suspendLayout = false;
-                me.forceComponentLayout();
-            }
-        }
-        me.fireEvent('reconfigure', me);
     }
-
 });

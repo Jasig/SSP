@@ -6,7 +6,8 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
     controller: 'Ssp.controller.admin.campus.EditCampusViewController',
 	title: 'Edit Campus',
 	initComponent: function() {
-        Ext.applyIf(this, {
+		var me=this;
+        Ext.applyIf(me, {
             items: [
                 {
                     xtype: 'textfield',
@@ -37,6 +38,6 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
        		           }]
         });
 
-        return this.callParent(arguments);
+        return me.callParent(arguments);
     }	
 });

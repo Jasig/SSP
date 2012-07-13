@@ -70,13 +70,14 @@ Ext.define('Ssp.controller.AdminViewController', {
 	},
 
 	loadAdmin: function( title ,form, storeName, columns ) {
+		var me=this;
 		var comp = this.formUtils.loadDisplay('adminforms',form, true, {});
 		var store = null;
 		
 		// set a store if defined
 		if (storeName != "")
 		{
-			store = this[storeName+'Store'];
+			store = me[storeName+'Store'];
 			// If the store was set, then modify
 			// the component to use the store
 			if (store != null)
@@ -84,9 +85,11 @@ Ext.define('Ssp.controller.AdminViewController', {
 				// pass the columns for editing
 				if (columns != null)
 				{
-					comp.reconfigure(store, columns); // ,columns
+					// comp.reconfigure(store, columns); // ,columns
+					me.formUtils.reconfigureGridPanel(comp, store, columns);
 				}else{
-					comp.reconfigure(store);
+					// comp.reconfigure(store);
+					me.formUtils.reconfigureGridPanel(comp, store);
 				}
 				
 				comp.getStore().load();
