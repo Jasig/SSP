@@ -1,6 +1,8 @@
 package org.jasig.ssp.service;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +23,9 @@ public interface PersonAttributesService {
 
 	PersonAttributesResult getAttributes(String username)
 			throws ObjectNotFoundException;
+	
+	List<Map<String, Object>> searchForUsers(HttpServletRequest req, HttpServletResponse res, 
+			Map<String,String> query);
 
 	/*
 	 * @returns usernames of coaches
