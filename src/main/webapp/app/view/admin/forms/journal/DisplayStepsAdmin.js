@@ -6,19 +6,21 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.journal.DisplayStepsAdminViewController',
     inject: {
-        apiProperties: 'apiProperties'
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson'
     },
     height: '100%',
 	width: '100%',
 
     initComponent: function(){
-    	Ext.apply(this,
+    	var me=this;
+    	Ext.apply(me,
     			{
 		          viewConfig: {
 		        	  plugins: {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtotree',
-		                  enableDrag: true
+		                  enableDrag: me.authenticatedPerson.hasAccess('TRACKS_STEPS_ADMIN_ASSOCIATIONS')
 		        	  },
 		          },
     		      autoScroll: true,
@@ -39,7 +41,7 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
      		       			xtype: 'pagingtoolbar',
      		       		    dock: 'bottom',
      		       		    displayInfo: true,
-     		       		    pageSize: this.apiProperties.getPagingSize()
+     		       		    pageSize: me.apiProperties.getPagingSize()
      		       		},
      		              {
      		               xtype: 'toolbar',
@@ -47,18 +49,21 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
      		                   text: 'Add',
      		                   iconCls: 'icon-add',
      		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_STEP_ADMIN_ADD_BUTTON'),
      		                   action: 'add',
      		                   itemId: 'addButton'
      		               }, '-', {
      		                   text: 'Edit',
      		                   iconCls: 'icon-edit',
      		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_STEP_ADMIN_EDIT_BUTTON'),
      		                   action: 'edit',
      		                   itemId: 'editButton'
      		               }, '-' ,{
      		                   text: 'Delete',
      		                   iconCls: 'icon-delete',
      		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_STEP_ADMIN_DELETE_BUTTON'),
      		                   action: 'delete',
      		                   itemId: 'deleteButton'
      		               }]
@@ -72,7 +77,7 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
       		            }]    	
     	});
     	
-    	return this.callParent(arguments);
+    	return me.callParent(arguments);
     },
     
     reconfigure: function(store, columns) {

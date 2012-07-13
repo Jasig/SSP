@@ -35,16 +35,16 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				            defaults: {
 				                anchor: '95%'
 				            },
-				       items: [{
+				       items: [/*{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Intake Date',
 				        name: 'studentIntakeCreatedDate'
-				    },{
+				    },*/{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Intake Completion Date',
 				        name: 'studentIntakeCompleteDate',
 				        renderer: Ext.util.Format.dateRenderer('m/d/Y')
-				    },{
+				    }/*,{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Agreed to Confidentiality',
 				        name: 'confidentialityAgreement'
@@ -52,7 +52,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Date of Agreement',
 				        name: 'confidentialityAgreementDate'
-				    },{
+				    }*/,{
 				        fieldLabel: 'First Name',
 				        name: 'firstName',
 				        itemId: 'firstName',

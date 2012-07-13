@@ -21,11 +21,13 @@ Ext.define('Ssp.view.Main', {
 		    	        items: [{
 		    			            xtype: 'button',
 		    			            text: 'Students',
+		    			            hidden: !me.authenticatedPerson.hasAccess('STUDENTS_NAVIGATION_BUTTON'),
 		    			            itemId: 'studentViewNav',
 		    			            action: 'displayStudentRecord'
 		    			        }, {
 		    			            xtype: 'button',
 		    			            text: 'Admin',
+		    			            hidden: !me.authenticatedPerson.hasAccess('ADMIN_NAVIGATION_BUTTON'),
 		    			            itemId: 'adminViewNav',
 		    			            action: 'displayAdmin'
 		    			        },{

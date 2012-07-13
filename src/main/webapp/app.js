@@ -305,6 +305,7 @@ Ext.onReady(function(){
 				        fn: function(){
 				        	var p = new Ssp.model.AuthenticatedPerson();
 				        	p.populateFromGenericObject( user );
+				        	p.setObjectPermissions();
 				            return p;
 				        },
 				        singleton: true

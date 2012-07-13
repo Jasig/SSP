@@ -7,6 +7,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
     controller: 'Ssp.controller.admin.crg.DisplayChallengesAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
         columnRendererUtils: 'columnRendererUtils'
     },
     height: '100%',
@@ -20,7 +21,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
 		        	  plugins: {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtotree',
-		                  enableDrag: true
+		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_CATEGORIES_ADMIN_ASSOCIATIONS'),
 		        	  },
 		          },
     		      autoScroll: true,
@@ -51,18 +52,21 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
      		                   text: 'Add',
      		                   iconCls: 'icon-add',
      		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGES_ADMIN_ADD_BUTTON'),
      		                   action: 'add',
      		                   itemId: 'addButton'
      		               }, '-', {
      		                   text: 'Edit',
      		                   iconCls: 'icon-edit',
      		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGES_ADMIN_EDIT_BUTTON'),
      		                   action: 'edit',
      		                   itemId: 'editButton'
      		               }, '-' ,{
      		                   text: 'Delete',
      		                   iconCls: 'icon-delete',
      		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGES_ADMIN_DELETE_BUTTON'),
      		                   action: 'delete',
      		                   itemId: 'deleteButton'
      		               }]

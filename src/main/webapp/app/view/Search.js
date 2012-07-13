@@ -6,6 +6,7 @@ Ext.define('Ssp.view.Search', {
     controller: 'Ssp.controller.SearchViewController',
     inject: {
     	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
     	apiProperties: 'apiProperties',
     	columnRendererUtils: 'columnRendererUtils',
     	person: 'currentPerson',
@@ -37,6 +38,7 @@ Ext.define('Ssp.view.Search', {
 		       		},{
 		       			xtype: 'toolbar',
 		       			dock: 'top',
+	    	            hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
 		       			defaults: {
 		       				labelWidth: 50
 		       			},
@@ -71,6 +73,7 @@ Ext.define('Ssp.view.Search', {
 						    text: '',
 						    width: 25,
 						    height: 25,
+						    hidden: !me.authenticatedPerson.hasAccess('ADD_STUDENT_BUTTON'),
 						    cls: 'addPersonIcon',
 						    xtype: 'button',
 						    itemId: 'addPersonButton'
@@ -79,6 +82,7 @@ Ext.define('Ssp.view.Search', {
 						    text: '',
 						    width: 25,
 						    height: 25,
+						    hidden: !me.authenticatedPerson.hasAccess('EDIT_STUDENT_BUTTON'),
 						    cls: 'editPersonIcon',
 						    xtype: 'button',
 						    itemId: 'editPersonButton'
@@ -87,6 +91,7 @@ Ext.define('Ssp.view.Search', {
 						    text: '',
 						    width: 25,
 						    height: 25,
+						    hidden: !me.authenticatedPerson.hasAccess('DELETE_STUDENT_BUTTON'),
 						    cls: 'deletePersonIcon',
 						    xtype: 'button',
 						    itemId: 'deletePersonButton'

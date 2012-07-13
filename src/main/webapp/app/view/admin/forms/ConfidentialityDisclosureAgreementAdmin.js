@@ -6,11 +6,12 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewController',
     inject: {
-        apiProperties: 'apiProperties'
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson'
     },
-
-	initComponent: function() {	
-		Ext.apply(this, 
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
 				{
 		    		autoScroll: true,
 					width: '100%',
@@ -35,15 +36,18 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
 				       [{
 					        fieldLabel: 'Name',
 					        xtype: 'textfield',
+					        disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
 					        name: 'name'
 					    },{
 					        fieldLabel: 'Description',
 					        xtype: 'textfield',
+					        disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
 					        name: 'description'
 					    },{
 		    		          xtype: 'htmleditor',
 		    		          fieldLabel: 'Disclosure Agreement',
 		    		          enableColors: false,
+		    		          disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
 		    		          enableAlignments: false,
 		    		          height: '100%',
 		    		          width: '100%',
@@ -57,13 +61,14 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
      		               items: [{
      		                   text: 'Save',
      		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON'),
      		                   action: 'save',
      		                   itemId: 'saveButton'
      		               }]
      		           }]
 				});
 		
-	     return this.callParent(arguments);
+	     return me.callParent(arguments);
 	}
 
 });

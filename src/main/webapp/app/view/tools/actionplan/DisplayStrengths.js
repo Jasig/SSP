@@ -4,10 +4,14 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.DisplayStrengthsViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
     width: '100%',
 	height: '100%',
 	initComponent: function() {	
-		Ext.applyIf(this,{
+		var me=this;
+		Ext.applyIf(me,{
 	        title: 'Strengths',
 			items:[{
 		        xtype:'form',
@@ -28,6 +32,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
 		        items: [{
 		            tooltip: 'Save Strengths',
 		            text: 'Save',
+		            hidden: !me.authenticatedPerson.hasAccess('SAVE_STRENGTHS_BUTTON'),
 		            xtype: 'button',
 		            itemId: 'saveButton'
 		        }]
@@ -35,6 +40,6 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
 		
 		});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

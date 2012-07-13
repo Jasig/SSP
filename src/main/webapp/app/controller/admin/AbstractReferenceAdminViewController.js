@@ -2,10 +2,12 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	apiProperties: 'apiProperties'
+    	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson'
     },  
     control: {
 		view: {
+			beforeedit: 'onBeforeEdit',
 			edit: 'editRecord'
 		},
 		
@@ -22,11 +24,20 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		return this.callParent(arguments);
     },
 
+    onBeforeEdit: function(){
+		var me=this;
+		var access = me.authenticatedPerson.hasAccess('ABSTRACT_REFERENCE_ADMIN_EDIT');
+		if ( access == false)
+		{
+			me.authenticatedPerson.showUnauthorizedAccessAlert();
+		}
+    	return access;
+    },
+    
 	editRecord: function(editor, e, eOpts) {
 		var record = e.record;
 		var id = record.get('id');
 		var jsonData = record.data;
-		console.log( editor.grid.getStore().getProxy().url+"/"+id );
 		Ext.Ajax.request({
 			url: editor.grid.getStore().getProxy().url+"/"+id,
 			method: 'PUT',

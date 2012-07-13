@@ -3,6 +3,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
         appEventsController: 'appEventsController',
         currentPerson: 'currentPerson',
         challengesStore: 'challengesStore',
@@ -136,6 +137,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	        		},{
 	            		title: 'Challenges',
 	            		autoScroll: true,
+	            		hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CHALLENGE_TAB'),
 	            		items: [{xtype: 'studentintakechallenges'}]
 	        		}]
 		    })

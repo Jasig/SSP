@@ -6,14 +6,15 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.campus.CampusAdminViewController',
     inject: {
-        apiProperties: 'apiProperties'
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson'
     },
     height: '100%',
 	width: '100%',
 	layout: 'fit',
     initComponent: function(){
-
-    	Ext.apply(this,
+        var me=this;
+    	Ext.apply(me,
     			{
     		      
     		      autoScroll: true,
@@ -32,7 +33,7 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
      		       			xtype: 'pagingtoolbar',
      		       		    dock: 'bottom',
      		       		    displayInfo: true,
-     		       		    pageSize: this.apiProperties.getPagingSize()
+     		       		    pageSize: me.apiProperties.getPagingSize()
      		       		},
      		              {
      		               xtype: 'toolbar',
@@ -40,17 +41,20 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
      		                   text: 'Add',
      		                   iconCls: 'icon-add',
      		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CAMPUS_ADMIN_ADD_BUTTON'),
      		                   action: 'add',
      		                   itemId: 'addButton'
      		               }, '-', {
      		                   text: 'Edit',
      		                   iconCls: 'icon-edit',
      		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CAMPUS_ADMIN_EDIT_BUTTON'),
      		                   action: 'edit',
      		                   itemId: 'editButton'
      		               }, '-', {
      		                   text: 'Delete',
      		                   iconCls: 'icon-delete',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CAMPUS_ADMIN_DELETE_BUTTON'),
      		                   xtype: 'button',
      		                   action: 'delete',
      		                   itemId: 'deleteButton'
@@ -58,6 +62,6 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
      		           }]  	
     	});
 
-    	this.callParent(arguments);
+    	return me.callParent(arguments);
     }
 });
