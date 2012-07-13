@@ -8,20 +8,6 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<columnHeader>
-		<band height="24" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="3c48859a-c6b5-4e25-9b0d-0595de936f49" x="0" y="2" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="fb4bc4c7-0ca6-4748-9fea-e587c031b7d3" x="185" y="2" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[description]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
 	<detail>
 		<band height="41" splitType="Stretch">
 			<textField>

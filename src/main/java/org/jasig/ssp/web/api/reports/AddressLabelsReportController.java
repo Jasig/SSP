@@ -20,9 +20,11 @@ import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
+import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -30,6 +32,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.BaseController;
@@ -63,6 +66,9 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 
 	@Autowired
 	private transient PersonService personService;
+	@Autowired
+	private transient PersonTOFactory personTOFactory;	
+	
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
 	@Autowired
@@ -107,6 +113,7 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 		final List<Person> people = personService.peopleFromCriteria(
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
+		List<PersonTO> peopleTO = personTOFactory.asTOList(people);
 
 		// Get the actual names of the UUIDs for the special groups
 		final List<String> specialGroupsNames = new ArrayList<String>();
@@ -145,10 +152,9 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 		parameters.put("referralSourceNames", referralSourcesNames);
 		parameters.put("studentTypeIds", studentTypeIds);
 		parameters.put("reportDate", new Date());
-		parameters.put("studentCount", people.size());
+		parameters.put("studentCount", peopleTO.size());
 
-		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
-				people.toArray());
+		final JRBeanCollectionDataSource beanDs = new JRBeanCollectionDataSource(peopleTO);
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/addressLabels.jasper");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
