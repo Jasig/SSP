@@ -55,9 +55,6 @@ public class ChallengeControllerIntegrationTest {
 	private static final UUID CHALLENGE_REFERRAL_ID = UUID
 			.fromString("19fbec43-8c0b-478b-9d5f-00ec6ec57511");
 
-	private static final UUID CHALLENGE_CHALLENGE_REFERRAL_ID = UUID
-			.fromString("1bca626a-7c9a-46c3-9149-7d4e3ecf1831");
-
 	private static final String CHALLENGE_NAME = "Test Challenge";
 
 	private static final String TEST_STRING1 = "testString1";

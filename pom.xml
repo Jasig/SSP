@@ -276,13 +276,13 @@
 			<version>9.1-901.jdbc4</version>
 		</dependency>
 
+		<!-- liquibase versions 2.0.4 through the latest version, 2.0.5, seem to 
+			have a regression bug with the SQL Server 2005 dialect. Once this is resolved 
+			by the liquibase team, we should be able to upgrade here. -->
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 			<version>2.0.3</version>
-			<!-- liquibase versions 2.0.4 through the latest version, 2.0.5, seem 
-				to have a regression bug with the SQL Server 2005 dialect. Once this is resolved 
-				by the liquibase team, we should be able to upgrade here. -->
 		</dependency>
 
 		<dependency>
