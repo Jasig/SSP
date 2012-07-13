@@ -15,6 +15,8 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -153,12 +155,18 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 		parameters.put("studentTypeIds", studentTypeIds);
 		parameters.put("reportDate", new Date());
 		parameters.put("studentCount", peopleTO.size());
-
-		final JRBeanCollectionDataSource beanDs = new JRBeanCollectionDataSource(peopleTO);
+		
+		JRDataSource beanDS;
+		if (peopleTO == null || peopleTO.size()<=0){
+			beanDS = new JREmptyDataSource();
+		}
+		else{
+			beanDS = new JRBeanCollectionDataSource(peopleTO);
+		}
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/addressLabels.jasper");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
+		JasperFillManager.fillReportToStream(is, os, parameters, beanDS);
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
 

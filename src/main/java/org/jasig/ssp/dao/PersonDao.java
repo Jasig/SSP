@@ -113,7 +113,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return (Person) createCriteria().add(
 				Restrictions.eq("schoolId", studentId)).uniqueResult();
 	}
-
+ 
 	/**
 	 * Retrieves a List of People, likely used by the Address Labels Report
 	 * 
@@ -134,9 +134,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		final Criteria criteria = createCriteria(sAndP);
 
 		if (addressLabelSearchTO.getProgramStatus() != null) {
-			// TODO
-			// criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
-			
+		
 			criteria.createAlias("programStatuses",
 					"personProgramStatuses")
 					.add(Restrictions
@@ -188,6 +186,9 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			criteria.add(Restrictions.le("createdDate",
 					addressLabelSearchTO.getCreateDateTo()));
 		}
+		
+		//don't bring back any non-students, there will likely be a better way to do this later
+		criteria.add(Restrictions.isNotNull("studentType"));
 
 		return criteria.list();
 	}
@@ -217,6 +218,9 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									specialServiceGroups));
 		}
+		
+		//don't bring back any non-students, there will likely be a better way to do this later
+		criteria.add(Restrictions.isNotNull("studentType"));
 
 		return criteria.list();
 	}

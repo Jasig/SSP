@@ -16,6 +16,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -219,7 +221,14 @@ public class PersonTaskController extends
 									.getDescription())));
 		}
 
-		final JRBeanCollectionDataSource beanDs = new JRBeanCollectionDataSource(studentActionPlanTOs);
+		
+		JRDataSource beanDS;
+		if (studentActionPlanTOs == null || studentActionPlanTOs.size()<=0){
+			beanDS = new JREmptyDataSource();
+		}
+		else{
+			beanDS = new JRBeanCollectionDataSource(studentActionPlanTOs);
+		}
 	
 		final JRBeanCollectionDataSource goalsDS = new JRBeanCollectionDataSource(goals);
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -235,7 +244,7 @@ public class PersonTaskController extends
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/studentActionPlan.jasper");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
+		JasperFillManager.fillReportToStream(is, os, parameters, beanDS);
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
 		JasperExportManager.exportReportToPdfStream(decodedInput,
