@@ -14,6 +14,8 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.reference.JournalStepTO;
 import org.jasig.ssp.transferobject.reference.JournalTrackTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
@@ -47,6 +49,10 @@ public class JournalTrackControllerIntegrationTest {
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
+	private static final String TEST_STRING1 = "testString1";
+
+	private static final String TEST_STRING2 = "testString1";
+
 	/**
 	 * Setup the security service with the admin user for use by
 	 * {@link #testControllerCreateAndDelete()} that checks that the Auditable
@@ -60,11 +66,14 @@ public class JournalTrackControllerIntegrationTest {
 	/**
 	 * Test the {@link JournalTrackController#get(UUID)} action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -84,11 +93,14 @@ public class JournalTrackControllerIntegrationTest {
 	 * Test that the {@link JournalTrackController#get(UUID)} action returns the
 	 * correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -104,47 +116,63 @@ public class JournalTrackControllerIntegrationTest {
 	 * Test the {@link JournalTrackController#create(JournalTrackTO)} and
 	 * {@link JournalTrackController#delete(UUID)} actions.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             Expected exception.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
-	@Test
-	public void testControllerCreateAndDelete() throws Exception {
+	@Test(expected = ValidationException.class)
+	public void testControllerCreateInvalid() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final String testString1 = "testString1";
-		final String testString2 = "testString1";
-
 		// Check validation of 'no ID for create()'
-		JournalTrackTO obj = new JournalTrackTO(UUID.randomUUID(), testString1,
-				testString2);
-		try {
-			obj = controller.create(obj);
-			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
-		} catch (final ValidationException exc) {
-			/* expected */
-		}
+		final JournalTrackTO journalTrackInvalid = new JournalTrackTO(
+				UUID.randomUUID(),
+				TEST_STRING1,
+				TEST_STRING2);
+		controller.create(journalTrackInvalid);
+		fail("Calling create with an object with an ID should have thrown a validation excpetion.");
+	}
 
-		// Now create a valid JournalTrack
-		obj = new JournalTrackTO(null, testString1, testString2);
-		obj = controller.create(obj);
+	/**
+	 * Test the {@link JournalTrackController#create(JournalTrackTO)} and
+	 * {@link JournalTrackController#delete(UUID)} actions.
+	 * 
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
+	 */
+	@Test
+	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
+			ValidationException {
+		// arrange
+		final JournalTrackTO journalTrack = new JournalTrackTO(null,
+				TEST_STRING1,
+				TEST_STRING2);
 
+		// act
+		final JournalTrackTO saved = controller.create(journalTrack);
+
+		// assert
 		assertNotNull(
 				"Returned JournalTrackTO from the controller should not have been null.",
-				obj);
+				saved);
 		assertNotNull(
 				"Returned JournalTrackTO.ID from the controller should not have been null.",
-				obj.getId());
+				saved.getId());
 		assertEquals(
 				"Returned JournalTrackTO.Name from the controller did not match.",
-				testString1, obj.getName());
+				TEST_STRING1, saved.getName());
 		assertEquals(
 				"Returned JournalTrackTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
+				Person.SYSTEM_ADMINISTRATOR_ID, saved.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
-				controller.delete(obj.getId()).isSuccess());
+				controller.delete(saved.getId()).isSuccess());
 	}
 
 	/**
@@ -160,5 +188,25 @@ public class JournalTrackControllerIntegrationTest {
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
 				list.isEmpty());
+	}
+
+	/**
+	 * Test the
+	 * {@link JournalTrackController#getAllForJournalTrack(UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * action.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test.
+	 */
+	@Test
+	public void testControllerAllForJournalTrack()
+			throws ObjectNotFoundException {
+		final PagedResponse<JournalStepTO> list = controller
+				.getAllForJournalTrack(JOURNALTRACK_ID, ObjectStatus.ALL, 0,
+						10, null, null);
+
+		assertNotNull("List should not have been null.", list);
+		assertEquals("List action should have returned 1 item in the list.", 1,
+				list.getResults());
 	}
 }

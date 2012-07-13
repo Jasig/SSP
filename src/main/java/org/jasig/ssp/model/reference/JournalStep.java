@@ -26,6 +26,8 @@ public class JournalStep
 
 	private int sortOrder;
 
+	private boolean usedForTransition = false;
+
 	@OneToMany(mappedBy = "journalStep")
 	private Set<JournalTrackJournalStep> journalTrackJournalSteps = new HashSet<JournalTrackJournalStep>(
 			0);
@@ -65,27 +67,20 @@ public class JournalStep
 		super(id, name);
 	}
 
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 150 characters
-	 */
-	public JournalStep(final UUID id, final String name,
-			final String description) {
-		super(id, name, description);
-	}
-
 	public int getSortOrder() {
 		return sortOrder;
 	}
 
 	public void setSortOrder(final int sortOrder) {
 		this.sortOrder = sortOrder;
+	}
+
+	public boolean isUsedForTransition() {
+		return usedForTransition;
+	}
+
+	public void setUsedForTransition(final boolean usedForTransition) {
+		this.usedForTransition = usedForTransition;
 	}
 
 	public Set<JournalTrackJournalStep> getJournalTrackJournalSteps() {
@@ -120,6 +115,7 @@ public class JournalStep
 		result *= hashField("objectStatus", getObjectStatus());
 
 		result *= hashField("sortOrder", sortOrder);
+		result *= usedForTransition ? 3 : 5;
 
 		return result;
 	}

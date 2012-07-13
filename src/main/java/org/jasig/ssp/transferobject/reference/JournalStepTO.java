@@ -10,12 +10,17 @@ import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
+/**
+ * JournalStep transfer object
+ */
 public class JournalStepTO extends AbstractReferenceTO<JournalStep>
 		implements TransferObject<JournalStep>, Serializable {
 
 	private static final long serialVersionUID = 918093582949321351L;
 
 	private int sortOrder;
+
+	private boolean usedForTransition = false;
 
 	public JournalStepTO() {
 		super();
@@ -34,8 +39,8 @@ public class JournalStepTO extends AbstractReferenceTO<JournalStep>
 	public static List<JournalStepTO> toTOList(
 			final Collection<JournalStep> models) {
 		final List<JournalStepTO> tObjects = Lists.newArrayList();
-		for (JournalStep model : models) {
-			tObjects.add(new JournalStepTO(model));
+		for (final JournalStep model : models) {
+			tObjects.add(new JournalStepTO(model)); // NOPMD
 		}
 		return tObjects;
 	}
@@ -44,6 +49,7 @@ public class JournalStepTO extends AbstractReferenceTO<JournalStep>
 	public final void from(final JournalStep model) {
 		super.from(model);
 		sortOrder = model.getSortOrder();
+		usedForTransition = model.isUsedForTransition();
 	}
 
 	public int getSortOrder() {
@@ -52,5 +58,20 @@ public class JournalStepTO extends AbstractReferenceTO<JournalStep>
 
 	public void setSortOrder(final int sortOrder) {
 		this.sortOrder = sortOrder;
+	}
+
+	/**
+	 * @return the usedForTransition
+	 */
+	public boolean isUsedForTransition() {
+		return usedForTransition;
+	}
+
+	/**
+	 * @param usedForTransition
+	 *            the usedForTransition to set
+	 */
+	public void setUsedForTransition(final boolean usedForTransition) {
+		this.usedForTransition = usedForTransition;
 	}
 }

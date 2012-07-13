@@ -3,9 +3,6 @@ package org.jasig.ssp.dao.reference;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
@@ -21,15 +18,6 @@ public class SelfHelpGuideDao extends
 
 	public SelfHelpGuideDao() {
 		super(SelfHelpGuide.class);
-	}
-
-	public SelfHelpGuide getWithQuestions(final UUID id) {
-		final Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(SelfHelpGuide.class)
-				.add(Restrictions.eq("id", id))
-				.setFetchMode("selfHelpGuideQuestions", FetchMode.JOIN);
-
-		return (SelfHelpGuide) query.uniqueResult();
 	}
 
 	@SuppressWarnings(UNCHECKED)

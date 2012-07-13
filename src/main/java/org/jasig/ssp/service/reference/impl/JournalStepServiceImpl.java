@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * JournalStep service implementation
+ */
 @Service
 @Transactional
 public class JournalStepServiceImpl extends

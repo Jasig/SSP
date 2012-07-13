@@ -1,5 +1,6 @@
 package org.jasig.ssp.dao.reference;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -7,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jasig.ssp.TestUtils;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.JournalStep;
@@ -25,6 +27,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Test suites on the {@link JournalStepDao} class.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
@@ -52,56 +57,57 @@ public class JournalStepDaoTest {
 		JournalStep obj = new JournalStep();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setUsedForTransition(true);
 		dao.save(obj);
 
-		assertNotNull(obj.getId());
+		assertNotNull("Step should not have been null.", obj.getId());
 		saved = obj.getId();
 
 		LOGGER.debug(obj.toString());
 
 		obj = dao.get(saved);
-		assertNotNull(obj);
-		assertNotNull(obj.getId());
-		assertNotNull(obj.getName());
+		assertNotNull("Saved instance should not have been null.", obj);
+		assertNotNull("ID should not have been null.", obj.getId());
+		assertNotNull("Name should not have been null.", obj.getName());
+		assertTrue("UsedForTransition should have been true.",
+				obj.isUsedForTransition());
 
-		Collection<JournalStep> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<JournalStep> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
-		assertNotNull(all);
-		assertTrue(all.size() > 0);
-		assertList(all);
+		assertNotNull("List should not have been null.", all);
+		assertFalse("List should not have been empty.", all.isEmpty());
+		TestUtils.assertListDoesNotContainNullItems(all);
 
 		dao.delete(obj);
 	}
 
 	@Test
 	public void testGetAllForJournalTrack() {
-		PagingWrapper<JournalStep> all = dao.getAllForJournalTrack(
+		// arrange, act
+		final PagingWrapper<JournalStep> all = dao.getAllForJournalTrack(
 				UUID.randomUUID(), new SortingAndPaging(ObjectStatus.ACTIVE));
-		assertList(all.getRows());
+
+		// assert
+		assertNotNull("List should not have been null.", all);
+		TestUtils.assertListDoesNotContainNullItems(all.getRows());
 	}
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		JournalStep journalStep = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final JournalStep journalStep = dao.get(id);
 
-		assertNull(journalStep);
-	}
-
-	private void assertList(Collection<JournalStep> objects) {
-		for (JournalStep object : objects) {
-			assertNotNull(object.getId());
-		}
+		assertNull("JournalStep should not have been null.", journalStep);
 	}
 
 	@Test
 	public void uuidGeneration() {
-		JournalStep obj = new JournalStep();
+		final JournalStep obj = new JournalStep();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		JournalStep obj2 = new JournalStep();
+		final JournalStep obj2 = new JournalStep();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);
@@ -109,8 +115,7 @@ public class JournalStepDaoTest {
 		LOGGER.debug("obj1 id: " + obj.getId().toString() + ", obj2 id: "
 				+ obj2.getId().toString());
 
-		dao.delete(obj);
-		dao.delete(obj2);
+		assertNotNull("Obj should not have been null.", obj);
+		assertNotNull("Obj2 should not have been null.", obj2);
 	}
-
 }

@@ -12,6 +12,9 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
+/**
+ * JournalStep service
+ */
 public interface JournalStepService extends
 		AuditableCrudService<JournalStep> {
 
@@ -32,6 +35,15 @@ public interface JournalStepService extends
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;
 
+	/**
+	 * Get all Steps for the specified Track
+	 * 
+	 * @param journalTrack
+	 *            the track
+	 * @param sAndP
+	 *            sorting and paging parameters
+	 * @return All Steps for the specified Track
+	 */
 	PagingWrapper<JournalStep> getAllForJournalTrack(JournalTrack journalTrack,
 			SortingAndPaging sAndP);
 

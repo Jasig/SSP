@@ -5,6 +5,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/jasig/resourceserver/resource-server-content/1.0.23/resource-server-content-1.0.23.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=rs/jquery/1.6.1/;rs/jqueryui/1.8.13/;rs/fluid/1.4.0/&amp;excludes=META-INF/MANIFEST.MF">
         <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/jasig/resourceserver/resource-server-content/1.0.23/resource-server-content-1.0.23.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=rs/jquery/1.6.1/;rs/jqueryui/1.8.13/;rs/famfamfam/silk/1.3/add.png;rs/fluid/1.4.0/&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>

@@ -73,6 +73,27 @@ public class ChallengeController
 		return LOGGER;
 	}
 
+	/**
+	 * Get all {@link ChallengeReferralTO} associated with the specified
+	 * {@link ChallengeTO}.
+	 * 
+	 * @param id
+	 *            challenge id
+	 * @param status
+	 *            {@link ObjectStatus}
+	 * @param start
+	 *            Optional start (0-based)
+	 * @param limit
+	 *            Optional row limit
+	 * @param sort
+	 *            Optional sort column
+	 * @param sortDirection
+	 *            Optional sort direction
+	 * @return All {@link ChallengeReferralTO} associated with the specified
+	 *         {@link ChallengeTO}.
+	 * @throws ObjectNotFoundException
+	 *             If the specified challenge could not be found.
+	 */
 	@RequestMapping(value = "/{id}/challengeReferral", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
@@ -97,6 +118,17 @@ public class ChallengeController
 				challengeReferralTOFactory.asTOSet(data.getRows()));
 	}
 
+	/**
+	 * Adds an association between a challenge and a challenge referral.
+	 * 
+	 * @param id
+	 *            challenge id
+	 * @param challengeReferralId
+	 *            challenge referral id
+	 * @return ServiceResponse with appropriate status
+	 * @throws ObjectNotFoundException
+	 *             If one of the objects were not found
+	 */
 	@RequestMapping(value = "/{id}/challengeReferral", method = RequestMethod.POST)
 	public @ResponseBody
 	ServiceResponse addChallengeReferralToChallenge(
@@ -113,7 +145,18 @@ public class ChallengeController
 		return new ServiceResponse(true);
 	}
 
-	@RequestMapping(value = "/{id}/challenge", method = RequestMethod.DELETE)
+	/**
+	 * Remove an association between a challenge and a challenge referral.
+	 * 
+	 * @param id
+	 *            challenge id
+	 * @param challengeReferralId
+	 *            challenge referral id
+	 * @return ServiceResponse with appropriate status
+	 * @throws ObjectNotFoundException
+	 *             If one of the objects were not found
+	 */
+	@RequestMapping(value = "/{id}/challengeReferral", method = RequestMethod.DELETE)
 	public @ResponseBody
 	ServiceResponse removeChallengeReferralFromChallenge(
 			@PathVariable final UUID id,
