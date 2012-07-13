@@ -231,6 +231,7 @@ var apiUrls = [
   {name: 'person', url: 'person'},
   {name: 'personAppointment', url: '/ssp/api/1/person/{id}/appointment'},
   {name: 'personChallenge', url: 'person/{id}/challenge'},
+  {name: 'personCoach', url: 'person/coach'},
   {name: 'personDocument', url: 'person/{id}/document'},
   {name: 'personEarlyAlert', url: 'person/{id}/earlyAlert'},
   {name: 'personEarlyAlertResponse', url: 'person/{id}/earlyAlert/{id}/earlyAlertResponse'},
