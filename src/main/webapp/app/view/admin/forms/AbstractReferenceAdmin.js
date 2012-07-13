@@ -42,6 +42,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     		       		{
     		       			xtype: 'pagingtoolbar',
     		       		    dock: 'bottom',
+    		       		    itemId: 'recordPager',
     		       		    displayInfo: true,
     		       		    pageSize: me.apiProperties.getPagingSize()
     		       		},

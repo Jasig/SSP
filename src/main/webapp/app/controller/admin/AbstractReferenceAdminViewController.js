@@ -17,7 +17,9 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 
 		'deleteButton': {
 			click: 'deleteConfirmation'
-		}    	
+		},
+		
+		recordPager: '#recordPager'
     },
     
 	init: function() {
@@ -53,6 +55,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 	},
 	
 	addRecord: function(button){
+		var me=this;
 		var grid = button.up('grid');
 		var store = grid.getStore();
 		var item = Ext.create( store.model.modelName, {}); // new Ssp.model.reference.AbstractReference();
@@ -85,9 +88,12 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				store.insert(0, item );
 		       	grid.plugins[0].startEdit(0, 0);
 		       	grid.plugins[0].editor.items.getAt(0).selectText();
+		        //me.getRecordPager().refresh();
+		       	store.totalCount = store.totalCount+1;
+		       	me.getRecordPager().onLoad();
 			},
-			failure: this.apiProperties.handleError
-		}, this);
+			failure: me.apiProperties.handleError
+		}, me);
 	},
 
     deleteConfirmation: function( button ) {
@@ -128,6 +134,9 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
        			   if (r.success==true)
        			   {
        				store.remove( store.getById( id ) );
+       			    //me.getRecordPager().refresh();
+       				store.totalCount = store.totalCount-1;
+       			    me.getRecordPager().onLoad();
        			   }
        		   }
        	    });
