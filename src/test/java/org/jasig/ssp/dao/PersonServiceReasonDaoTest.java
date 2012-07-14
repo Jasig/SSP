@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Tests for the {@link PersonServiceReasonDao} class.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class PersonServiceReasonDaoTest {
@@ -105,8 +105,7 @@ public class PersonServiceReasonDaoTest {
 
 	/**
 	 * Test that invalid identifiers to {@link PersonServiceReasonDao#get(UUID)}
-	 * correctly
-	 * throw ObjectNotFound exception.
+	 * correctly throw ObjectNotFound exception.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             Expected to be thrown

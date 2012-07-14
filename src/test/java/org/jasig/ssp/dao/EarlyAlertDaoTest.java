@@ -35,7 +35,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class EarlyAlertDaoTest {
@@ -188,12 +188,12 @@ public class EarlyAlertDaoTest {
 	@Test
 	public void getCountOfActiveAlertsForPeopleIds()
 			throws ObjectNotFoundException {
-		EarlyAlert obj = createTestEarlyAlert();
+		final EarlyAlert obj = createTestEarlyAlert();
 		obj.setClosedDate(null);
 		obj.setClosedById(null);
 		dao.save(obj);
 
-		Collection<UUID> peopleIds = Lists.newArrayList();
+		final Collection<UUID> peopleIds = Lists.newArrayList();
 		peopleIds.add(PERSON_ID);
 
 		try {
@@ -206,7 +206,7 @@ public class EarlyAlertDaoTest {
 	@Test
 	public void getCountOfActiveAlertsForPeopleIdsTTEmpty()
 			throws ObjectNotFoundException {
-		Collection<UUID> peopleIds = Lists.newArrayList();
+		final Collection<UUID> peopleIds = Lists.newArrayList();
 		peopleIds.add(PERSON_ID);
 
 		dao.getCountOfActiveAlertsForPeopleIds(peopleIds);

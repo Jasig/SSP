@@ -9,10 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Term transfer object factory implementation
+ * 
+ * @author jon.adams
+ */
 @Service
 @Transactional(readOnly = true)
 public class TermTOFactoryImpl
-		extends AbstractExternalDataTOFactory<Term, TermTO>
+		extends AbstractExternalDataTOFactory<TermTO, Term>
 		implements TermTOFactory {
 
 	public TermTOFactoryImpl() {

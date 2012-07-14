@@ -26,7 +26,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class JournalStepDetailDaoTest {
@@ -64,7 +64,8 @@ public class JournalStepDetailDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<JournalStepDetail> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<JournalStepDetail> all = dao.getAll(
+				ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
@@ -75,33 +76,33 @@ public class JournalStepDetailDaoTest {
 
 	@Test
 	public void testGetAllForJournalStep() {
-		PagingWrapper<JournalStepDetail> all = dao.getAllForJournalStep(
+		final PagingWrapper<JournalStepDetail> all = dao.getAllForJournalStep(
 				UUID.randomUUID(), new SortingAndPaging(ObjectStatus.ACTIVE));
 		assertList(all.getRows());
 	}
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		JournalStepDetail journalStepDetail = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final JournalStepDetail journalStepDetail = dao.get(id);
 
 		assertNull(journalStepDetail);
 	}
 
-	private void assertList(Collection<JournalStepDetail> objects) {
-		for (JournalStepDetail object : objects) {
+	private void assertList(final Collection<JournalStepDetail> objects) {
+		for (final JournalStepDetail object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		JournalStepDetail obj = new JournalStepDetail();
+		final JournalStepDetail obj = new JournalStepDetail();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		JournalStepDetail obj2 = new JournalStepDetail();
+		final JournalStepDetail obj2 = new JournalStepDetail();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);

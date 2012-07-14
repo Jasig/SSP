@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class SelfHelpGuideGroupDaoTest {
@@ -62,7 +62,8 @@ public class SelfHelpGuideGroupDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<SelfHelpGuideGroup> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<SelfHelpGuideGroup> all = dao.getAll(
+				ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
@@ -73,26 +74,26 @@ public class SelfHelpGuideGroupDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		SelfHelpGuideGroup selfHelpGuideGroup = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final SelfHelpGuideGroup selfHelpGuideGroup = dao.get(id);
 
 		assertNull(selfHelpGuideGroup);
 	}
 
-	private void assertList(Collection<SelfHelpGuideGroup> objects) {
-		for (SelfHelpGuideGroup object : objects) {
+	private void assertList(final Collection<SelfHelpGuideGroup> objects) {
+		for (final SelfHelpGuideGroup object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		SelfHelpGuideGroup obj = new SelfHelpGuideGroup();
+		final SelfHelpGuideGroup obj = new SelfHelpGuideGroup();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		SelfHelpGuideGroup obj2 = new SelfHelpGuideGroup();
+		final SelfHelpGuideGroup obj2 = new SelfHelpGuideGroup();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);

@@ -26,7 +26,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class JournalStepDaoTest {
@@ -64,7 +64,7 @@ public class JournalStepDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<JournalStep> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<JournalStep> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
@@ -75,33 +75,33 @@ public class JournalStepDaoTest {
 
 	@Test
 	public void testGetAllForJournalTrack() {
-		PagingWrapper<JournalStep> all = dao.getAllForJournalTrack(
+		final PagingWrapper<JournalStep> all = dao.getAllForJournalTrack(
 				UUID.randomUUID(), new SortingAndPaging(ObjectStatus.ACTIVE));
 		assertList(all.getRows());
 	}
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		JournalStep journalStep = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final JournalStep journalStep = dao.get(id);
 
 		assertNull(journalStep);
 	}
 
-	private void assertList(Collection<JournalStep> objects) {
-		for (JournalStep object : objects) {
+	private void assertList(final Collection<JournalStep> objects) {
+		for (final JournalStep object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		JournalStep obj = new JournalStep();
+		final JournalStep obj = new JournalStep();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		JournalStep obj2 = new JournalStep();
+		final JournalStep obj2 = new JournalStep();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);

@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -7,6 +7,8 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,6 +42,10 @@ public class ChallengeServiceTest {
 		service.setDao(dao);
 	}
 
+	/**
+	 * Test the {@link ChallengeServiceImpl#getAll(SortingAndPaging)} action.
+	 * Assumes some test data items exist.
+	 */
 	@Test
 	public void testGetAll() {
 		final List<Challenge> daoAll = new ArrayList<Challenge>();
@@ -52,7 +58,7 @@ public class ChallengeServiceTest {
 
 		final Collection<Challenge> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertFalse(all.isEmpty());
+		assertFalse("GetAll list should not have been empty.", all.isEmpty());
 		verify(dao);
 	}
 
@@ -65,7 +71,7 @@ public class ChallengeServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.get(id));
+		assertNotNull("Get should not have returned null.", service.get(id));
 		verify(dao);
 	}
 
@@ -78,7 +84,8 @@ public class ChallengeServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		assertNotNull("Save result should not have been null.",
+				service.save(daoOne));
 		verify(dao);
 	}
 
@@ -96,15 +103,23 @@ public class ChallengeServiceTest {
 
 		service.delete(id);
 
-		boolean found = true;
 		try {
 			service.get(id);
-		} catch (final ObjectNotFoundException e) {
-			found = false;
+			fail("Exception should have been thrown."); // NOPMD
+		} catch (final ObjectNotFoundException e) { // NOPMD
+			/* expected */
 		}
 
-		assertFalse(found);
 		verify(dao);
 	}
 
+	@Test
+	public void testSearch() {
+		// arrange, act
+		final List<Challenge> challenges = service.challengeSearch("bad query");
+
+		// assert
+		assertTrue("List with a bad query should have returned an empty list.",
+				challenges.isEmpty());
+	}
 }

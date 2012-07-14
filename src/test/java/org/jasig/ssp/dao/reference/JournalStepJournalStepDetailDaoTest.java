@@ -26,7 +26,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class JournalStepJournalStepDetailDaoTest {
@@ -94,7 +94,7 @@ public class JournalStepJournalStepDetailDaoTest {
 
 	private void assertList(
 			final Collection<JournalStepJournalStepDetail> objects) {
-		for (JournalStepJournalStepDetail object : objects) {
+		for (final JournalStepJournalStepDetail object : objects) {
 			assertNotNull(object.getId());
 		}
 	}

@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 /**
  * Term external data object.
  */
-public class Term implements ExternalData, Serializable {
+public class Term implements Serializable {
 
 	private static final long serialVersionUID = 7709074056601029932L;
 
@@ -82,23 +82,4 @@ public class Term implements ExternalData, Serializable {
 	public void setReportYear(final int reportYear) {
 		this.reportYear = reportYear;
 	}
-
-	@Override
-	public String[] getId() {
-		final String[] id = { code };
-		return id;
-	}
-
-	@Override
-	public void setId(final String[] id) {
-		if (id != null) {
-			if (id.length == 1) {
-				code = id[0];
-			} else {
-				throw new IllegalArgumentException(
-						"Term id should be comprised of one string: code.");
-			}
-		}
-	}
-
 }
