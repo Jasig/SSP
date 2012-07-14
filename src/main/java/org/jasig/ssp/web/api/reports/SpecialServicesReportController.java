@@ -116,12 +116,14 @@ public class SpecialServicesReportController extends BaseController {
 				os.toByteArray());
 
 		if (reportType.equals("pdf")) {
+			response.setHeader("Content-disposition",
+					"attachment; filename=SpecialServicesReport.pdf");				
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
 		} else if (reportType.equals("csv")) {
 			response.setContentType("application/vnd.ms-excel");
 			response.setHeader("Content-disposition",
-					"attachment; filename=test.csv");
+					"attachment; filename=SpecialServicesReport.csv");
 
 			final JRCsvExporter exporter = new JRCsvExporter();
 			exporter.setParameter(JRExporterParameter.INPUT_STREAM,

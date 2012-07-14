@@ -21,7 +21,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
@@ -69,8 +68,7 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 	@Autowired
 	private transient PersonService personService;
 	@Autowired
-	private transient PersonTOFactory personTOFactory;	
-	
+	private transient PersonTOFactory personTOFactory;		
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
 	@Autowired
@@ -171,12 +169,14 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 				os.toByteArray());
 
 		if ("pdf".equals(reportType)) {
+			response.setHeader("Content-disposition",
+					"attachment; filename=AddressLabelReprt.pdf");			
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
 		} else if ("csv".equals(reportType)) {
 			response.setContentType("application/vnd.ms-excel");
 			response.setHeader("Content-disposition",
-					"attachment; filename=test.csv");
+					"attachment; filename=AddressLabelReprt.csv");
 
 			final JRCsvExporter exporter = new JRCsvExporter();
 			exporter.setParameter(JRExporterParameter.INPUT_STREAM,

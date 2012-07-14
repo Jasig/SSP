@@ -21,7 +21,6 @@ import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.jasig.ssp.factory.TaskTOFactory;
@@ -38,7 +37,6 @@ import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
 import org.jasig.ssp.transferobject.reports.StudentActionPlanTO;
-import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -247,6 +245,10 @@ public class PersonTaskController extends
 		JasperFillManager.fillReportToStream(is, os, parameters, beanDS);
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
+		
+		response.setHeader("Content-disposition",
+				"attachment; filename=StudentTaskReport-" + person.getLastName() + ".pdf");
+		
 		JasperExportManager.exportReportToPdfStream(decodedInput,
 				response.getOutputStream());
 		response.flushBuffer();
