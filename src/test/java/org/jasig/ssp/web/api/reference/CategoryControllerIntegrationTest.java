@@ -14,7 +14,9 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.reference.CategoryTO;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -170,6 +172,19 @@ public class CategoryControllerIntegrationTest {
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
 				list.isEmpty());
+	}
+
+	@Test(expected = ObjectNotFoundException.class)
+	public void testGetChallengesForInvalidCategory()
+			throws ObjectNotFoundException {
+		// arrange, act
+		final PagedResponse<ChallengeTO> challenges = controller
+				.getChallengesForCategory(UUID.randomUUID(), ObjectStatus.ALL,
+						0, 10, null, null);
+
+		// assert
+		assertEquals("No results should not have been returned.", 0,
+				challenges.getResults());
 	}
 
 	/**

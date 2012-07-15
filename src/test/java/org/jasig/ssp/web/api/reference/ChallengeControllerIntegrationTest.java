@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration("../../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration
 @Transactional
-public class ChallengeControllerIntegrationTest {
+public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 
 	private static final UUID CHALLENGE_ID = UUID
 			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");

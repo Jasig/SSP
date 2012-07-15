@@ -89,7 +89,7 @@ public class SpecialServicesReportController extends BaseController {
 				specialGroupsNames
 						.add(ssgService.get(ssgIter.next()).getName());
 			}
-		} 
+		}
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		parameters.put("ReportTitle", "Special Service Groups Report");
@@ -98,15 +98,17 @@ public class SpecialServicesReportController extends BaseController {
 		parameters.put("specialServiceGroupNames", specialGroupsNames);
 		parameters.put("reportDate", new Date());
 
-		List<SpecialServicesReportingTO> specialServicesReportingPeopleTO = getReportablePersons(people);
-		
+		final List<SpecialServicesReportingTO> specialServicesReportingPeopleTO = getReportablePersons(people);
+
 		JRDataSource beanDS;
-		if (specialServicesReportingPeopleTO == null || specialServicesReportingPeopleTO.size()<=0){
+		if (specialServicesReportingPeopleTO == null
+				|| specialServicesReportingPeopleTO.size() <= 0) {
 			beanDS = new JREmptyDataSource();
 		}
-		else{
-			beanDS = new JRBeanCollectionDataSource(specialServicesReportingPeopleTO);
-		}		
+		else {
+			beanDS = new JRBeanCollectionDataSource(
+					specialServicesReportingPeopleTO);
+		}
 
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/specialServiceGroups.jasper");
@@ -115,12 +117,12 @@ public class SpecialServicesReportController extends BaseController {
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
 
-		if (reportType.equals("pdf")) {
+		if ("pdf".equals(reportType)) {
 			response.setHeader("Content-disposition",
-					"attachment; filename=SpecialServicesReport.pdf");				
+					"attachment; filename=SpecialServicesReport.pdf");
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
-		} else if (reportType.equals("csv")) {
+		} else if ("csv".equals(reportType)) {
 			response.setContentType("application/vnd.ms-excel");
 			response.setHeader("Content-disposition",
 					"attachment; filename=SpecialServicesReport.csv");
@@ -146,20 +148,20 @@ public class SpecialServicesReportController extends BaseController {
 		return LOGGER;
 	}
 
-	List<SpecialServicesReportingTO> getReportablePersons(
+	public List<SpecialServicesReportingTO> getReportablePersons(
 			final List<Person> persons) {
 		final List<SpecialServicesReportingTO> retVal = new ArrayList<SpecialServicesReportingTO>();
-		
-		//handle a null or empty person list
-		if (persons == null || persons.size()<=0){
+
+		// handle a null or empty person list
+		if (persons == null || persons.size() <= 0) {
 			return retVal;
 		}
-		
+
 		final Iterator<Person> personIter = persons.iterator();
 		while (personIter.hasNext()) {
-			retVal.add(new SpecialServicesReportingTO(personIter.next()));
+			retVal.add(new SpecialServicesReportingTO(personIter.next())); // NOPMD
 		}
+
 		return retVal;
 	}
-
 }

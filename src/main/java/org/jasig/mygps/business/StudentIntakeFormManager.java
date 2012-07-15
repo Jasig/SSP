@@ -959,7 +959,8 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO childCareArrangementQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID);
 
-		if (childCareArrangementQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(childCareArrangementQuestion
+				.getValue())) {
 			demographics.setChildCareArrangement(null);
 		} else {
 			// get matching FormOption since IDs do not line up with database
@@ -979,7 +980,8 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO childCareNeededQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID);
 
-		if ((childCareNeededQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(childCareNeededQuestion
+				.getValue())
 				|| (childCareNeededQuestion.getValue() == null)) {
 			demographics.setChildCareNeeded(false);
 		} else {
@@ -992,7 +994,8 @@ public class StudentIntakeFormManager { // NOPMD
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID);
 
 		if ((citizenshipQuestion.getValue() == null)
-				|| (citizenshipQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)) {
+				|| DEFAULT_DROPDOWN_LIST_VALUE.equals(citizenshipQuestion
+						.getValue())) {
 			demographics.setCitizenship(null);
 		} else {
 			// get matching FormOption since IDs do not line up with database
@@ -1036,7 +1039,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO ethnicityQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID);
 
-		if ((ethnicityQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(ethnicityQuestion.getValue())
 				|| (ethnicityQuestion.getValue() == null)) {
 			demographics.setEthnicity(null);
 		} else {
@@ -1054,7 +1057,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO genderQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID);
 
-		if ((genderQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(genderQuestion.getValue())
 				|| (genderQuestion.getValue() == null)) {
 			demographics.setGender(null);
 		} else {
@@ -1070,7 +1073,8 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO maritalStatusQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
 
-		if ((maritalStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE
+				.equals(maritalStatusQuestion.getValue())
 				|| (maritalStatusQuestion.getValue() == null)) {
 			demographics.setMaritalStatus(null);
 		} else {
@@ -1097,7 +1101,8 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO primaryCaregiverQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID);
 
-		if ((primaryCaregiverQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(primaryCaregiverQuestion
+				.getValue())
 				|| (primaryCaregiverQuestion.getValue() == null)) {
 			demographics.setPrimaryCaregiver(false);
 		} else {
@@ -1109,7 +1114,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO shiftQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID);
 
-		if ((shiftQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(shiftQuestion.getValue())
 				|| (shiftQuestion.getValue() == null)) {
 			demographics.setShift(null);
 		} else {
@@ -1174,7 +1179,8 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO parentsHaveCollegeDegreeQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID);
 
-		if ((parentsHaveCollegeDegreeQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(parentsHaveCollegeDegreeQuestion
+				.getValue())
 				|| (parentsHaveCollegeDegreeQuestion.getValue() == null)) {
 			educationPlan.setCollegeDegreeForParents(false);
 		} else {
@@ -1195,7 +1201,8 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO requireSpecialAccomodationQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMMODATIONS_ID);
 
-		if ((requireSpecialAccomodationQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE
+				.equals(requireSpecialAccomodationQuestion.getValue())
 				|| (requireSpecialAccomodationQuestion.getValue() == null)) {
 			educationPlan.setSpecialNeeds(false);
 		} else {
@@ -1208,7 +1215,8 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO studentStatusQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID);
 
-		if ((studentStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE
+				.equals(studentStatusQuestion.getValue())
 				|| (studentStatusQuestion.getValue() == null)) {
 			educationPlan.setStudentStatus(null);
 		} else {
