@@ -15,6 +15,7 @@ import org.jasig.ssp.transferobject.reference.ConfigTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -120,5 +121,16 @@ public class ConfigControllerIntegrationTest {
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
 				list.isEmpty());
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

@@ -20,7 +20,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class CaseloadDaoTest {

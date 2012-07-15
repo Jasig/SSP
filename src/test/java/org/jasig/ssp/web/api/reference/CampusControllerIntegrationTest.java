@@ -1,5 +1,6 @@
 package org.jasig.ssp.web.api.reference;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -15,6 +16,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -80,5 +82,16 @@ public class CampusControllerIntegrationTest {
 				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

@@ -33,7 +33,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Challenge controller tests
+ * {@link ChallengeController} tests
  * 
  * @author daniel.bower
  */
@@ -270,10 +270,18 @@ public class ChallengeControllerIntegrationTest {
 				saved.getDescription());
 	}
 
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
 	@Test
 	public void testLogger() {
+		// arrange, act
 		final Logger logger = controller.getLogger();
-		assertNotNull("Logger should not have been null.", logger);
+
+		// assert
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 
 	@Test
