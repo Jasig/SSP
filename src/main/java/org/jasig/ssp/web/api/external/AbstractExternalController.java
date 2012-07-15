@@ -98,7 +98,6 @@ public abstract class AbstractExternalController<TO extends ExternalDataTO<T>, T
 	 *            <code>DESC</code>.
 	 * @return All entities in the database filtered by the supplied status.
 	 */
-
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
@@ -111,7 +110,7 @@ public abstract class AbstractExternalController<TO extends ExternalDataTO<T>, T
 		// Run getAll
 		final PagingWrapper<T> data = getService().getAll(
 				SortingAndPaging.createForSingleSort(ObjectStatus.ALL, start,
-						limit, sort, sortDirection, "name"));
+						limit, sort, sortDirection, null));
 
 		return new PagedResponse<TO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));

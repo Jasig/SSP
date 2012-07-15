@@ -36,9 +36,9 @@ public class TermControllerIntegrationTest {
 	@Autowired
 	private transient TermController controller;
 
-	private static final String TERM_ID = "Some term ID";
+	private static final String TERM_NAME = "Fall 2012";
 
-	private static final String TERM_NAME = "Test Term";
+	private static final String TERM_CODE = "FA12";
 
 	/**
 	 * Test the {@link TermController#get(Serializable)} action.
@@ -55,7 +55,7 @@ public class TermControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final TermTO obj = controller.get(TERM_ID);
+		final TermTO obj = controller.get(TERM_CODE);
 
 		assertNotNull(
 				"Returned TermTO from the controller should not have been null.",

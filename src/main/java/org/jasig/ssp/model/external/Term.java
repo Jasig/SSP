@@ -59,20 +59,20 @@ public class Term implements Serializable {
 	}
 
 	public Date getStartDate() {
-		return (startDate == null) ? null : new Date(startDate.getTime());
+		return startDate == null ? null : new Date(startDate.getTime());
 	}
 
 	public void setStartDate(final Date startDate) {
-		this.startDate = (startDate == null) ? null : new Date(
+		this.startDate = startDate == null ? null : new Date(
 				startDate.getTime());
 	}
 
 	public Date getEndDate() {
-		return (endDate == null) ? null : new Date(endDate.getTime());
+		return endDate == null ? null : new Date(endDate.getTime());
 	}
 
 	public void setEndDate(final Date endDate) {
-		this.endDate = (endDate == null) ? null : new Date(endDate.getTime());
+		this.endDate = endDate == null ? null : new Date(endDate.getTime());
 	}
 
 	public int getReportYear() {
