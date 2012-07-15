@@ -15,11 +15,12 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
@@ -67,8 +68,7 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 	@Autowired
 	private transient PersonService personService;
 	@Autowired
-	private transient PersonTOFactory personTOFactory;	
-	
+	private transient PersonTOFactory personTOFactory;		
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
 	@Autowired
@@ -153,22 +153,30 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 		parameters.put("studentTypeIds", studentTypeIds);
 		parameters.put("reportDate", new Date());
 		parameters.put("studentCount", peopleTO.size());
-
-		final JRBeanCollectionDataSource beanDs = new JRBeanCollectionDataSource(peopleTO);
+		
+		JRDataSource beanDS;
+		if (peopleTO == null || peopleTO.size()<=0){
+			beanDS = new JREmptyDataSource();
+		}
+		else{
+			beanDS = new JRBeanCollectionDataSource(peopleTO);
+		}
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/addressLabels.jasper");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
+		JasperFillManager.fillReportToStream(is, os, parameters, beanDS);
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
 
 		if ("pdf".equals(reportType)) {
+			response.setHeader("Content-disposition",
+					"attachment; filename=AddressLabelReprt.pdf");			
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
 		} else if ("csv".equals(reportType)) {
 			response.setContentType("application/vnd.ms-excel");
 			response.setHeader("Content-disposition",
-					"attachment; filename=test.csv");
+					"attachment; filename=AddressLabelReprt.csv");
 
 			final JRCsvExporter exporter = new JRCsvExporter();
 			exporter.setParameter(JRExporterParameter.INPUT_STREAM,

@@ -31,8 +31,8 @@ var ssp = ssp || {};
 		var reportsSelect = that.locate('reportsSelect');
 		reportsSelect.append('<option value="/ssp/forms/AddressLabel.jsp">Address Labels Report</option>');
 		reportsSelect.append('<option value="/ssp/forms/SpecialServices.jsp">Special Services Report</option>');
-//		reportsSelect.append('<option value="/ssp/forms/ConfidentialityAgreement.jsp">Confidentiality Agreement Form</option>');
-		reportsSelect.change(reportsSelectChange);		
+		reportsSelect.change(reportsSelectChange);	
+		reportsSelectChange();
 	}
 
 	// defaults
