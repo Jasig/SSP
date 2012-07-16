@@ -22,6 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
+/**
+ * Person service implementation
+ * 
+ * @author jon.adams
+ */
 @Service
 @Transactional
 public class PersonServiceImpl implements PersonService {
@@ -151,14 +156,14 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public PagingWrapper<Person> getAllCoaches(final SortingAndPaging sAndP) {
-		Collection<Person> coaches = Lists.newArrayList();
+		final Collection<Person> coaches = Lists.newArrayList();
 
-		Collection<String> coachUsernames = personAttributesService
+		final Collection<String> coachUsernames = personAttributesService
 				.getCoaches();
-		for (String coachUsername : coachUsernames) {
+		for (final String coachUsername : coachUsernames) {
 			try {
 				coaches.add(personFromUsername(coachUsername));
-			} catch (ObjectNotFoundException e) {
+			} catch (final ObjectNotFoundException e) {
 				LOGGER.debug("Coach {} not found", coachUsername);
 			}
 		}

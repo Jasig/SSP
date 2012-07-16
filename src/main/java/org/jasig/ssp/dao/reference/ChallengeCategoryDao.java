@@ -27,7 +27,7 @@ public class ChallengeCategoryDao extends
 			final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("category.id", categoryId));
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
 	public PagingWrapper<ChallengeCategory> getAllForChallengeAndCategory(
@@ -36,6 +36,6 @@ public class ChallengeCategoryDao extends
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("category.id", categoryId));
 		query.add(Restrictions.eq("challenge.id", challengeId));
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 }

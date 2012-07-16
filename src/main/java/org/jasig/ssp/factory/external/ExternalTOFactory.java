@@ -1,6 +1,5 @@
 package org.jasig.ssp.factory.external;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -40,17 +39,6 @@ public interface ExternalTOFactory<TO extends ExternalDataTO<M>, M> {
 	 *             storage
 	 */
 	M from(TO tObject) throws ObjectNotFoundException;
-
-	/**
-	 * Load model from storage based on the specified identifier.
-	 * 
-	 * @param id
-	 *            Load model for this identifier
-	 * 
-	 * @return Model loaded from persistent storage
-	 * @throws ObjectNotFoundException
-	 */
-	M from(Serializable id) throws ObjectNotFoundException;
 
 	/**
 	 * Copy the list of models to a new list of transfer objects.

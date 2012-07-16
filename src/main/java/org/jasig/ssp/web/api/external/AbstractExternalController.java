@@ -1,12 +1,12 @@
 package org.jasig.ssp.web.api.external;
 
-import java.io.Serializable;
+import java.util.Collection;
 
 import org.jasig.ssp.factory.external.ExternalTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.external.ExternalDataService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.external.ExternalDataTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -16,7 +16,6 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,7 +48,7 @@ public abstract class AbstractExternalController<TO extends ExternalDataTO<T>, T
 	/**
 	 * Service that handles the business logic for the implementing type for T.
 	 */
-	protected abstract ExternalDataService<T> getService();
+	protected abstract TermService getService();
 
 	/**
 	 * Transfer object factory to create new instances of the specific TO for
@@ -98,6 +97,7 @@ public abstract class AbstractExternalController<TO extends ExternalDataTO<T>, T
 	 *            <code>DESC</code>.
 	 * @return All entities in the database filtered by the supplied status.
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
@@ -108,39 +108,15 @@ public abstract class AbstractExternalController<TO extends ExternalDataTO<T>, T
 			final @RequestParam(required = false) String sortDirection) {
 
 		// Run getAll
-		final PagingWrapper<T> data = getService().getAll(
+		final PagingWrapper<Term> data = getService().getAll(
 				SortingAndPaging.createForSingleSort(ObjectStatus.ALL, start,
 						limit, sort, sortDirection, null));
 
 		return new PagedResponse<TO>(true, data.getResults(), getFactory()
-				.asTOList(data.getRows()));
+				.asTOList((Collection<T>) data.getRows()));
 	}
 
-	/**
-	 * Retrieves the specified instance from persistent storage.
-	 * 
-	 * @param id
-	 *            The specific id to use to lookup the associated data.
-	 * @return The specified instance if found.
-	 * @throws ObjectNotFoundException
-	 *             If specified object could not be found.
-	 * @throws ValidationException
-	 *             If that specified data is not invalid.
-	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
-	public @ResponseBody
-	TO get(final @PathVariable Serializable id) throws ObjectNotFoundException,
-			ValidationException {
-		final T model = getService().get(id);
-		if (model == null) {
-			return null;
-		}
-
-		return this.instantiateTO(model);
-	}
-
-	private TO instantiateTO(final T model) throws ValidationException {
+	protected TO instantiateTO(final T model) throws ValidationException {
 		TO out;
 		try {
 			out = this.transferObjectClass.newInstance();

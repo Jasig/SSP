@@ -124,7 +124,8 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * Get a list of all Coaches
 	 * 
 	 * @param sAndP
-	 * @return
+	 *            Sorting and paging parameters
+	 * @return List of all coaches
 	 */
 	PagingWrapper<Person> getAllCoaches(SortingAndPaging sAndP);
 }

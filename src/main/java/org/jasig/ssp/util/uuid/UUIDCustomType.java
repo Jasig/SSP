@@ -62,7 +62,7 @@ public final class UUIDCustomType extends
 	 *             If the dialect is not in the supported list.
 	 */
 	public static void initSettings(@NotNull final String dialect) {
-		if (StringUtils.isWhitespace(dialect)) {
+		if (!StringUtils.isNotBlank(dialect)) {
 			throw new IllegalArgumentException("Dialect must be specified.");
 		}
 

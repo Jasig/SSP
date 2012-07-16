@@ -495,7 +495,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			// since these will throw an error in the
 			// current API
 			delete intakeData.person.studentIntakeCompleteDate;
-			delete intakeData.person.currentAppointment;
+			// delete intakeData.person.currentAppointment;
 			delete intakeData.person.studentType;
 			delete intakeData.person.programStatuses;
 			delete intakeData.person.coach;

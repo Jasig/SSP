@@ -96,5 +96,5 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @param id
 	 *            The data instance to permanently delete.
 	 */
-	void delete(T obj);
+	void delete(T id);
 }

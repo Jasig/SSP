@@ -31,6 +31,6 @@ public class PersonServiceReasonDao
 		criteria.add(Restrictions.eq("person.id", personId));
 		criteria.add(Restrictions.eq("serviceReason.id",
 				serviceReasonId));
-		return processCriteriaWithPaging(criteria, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
 }
