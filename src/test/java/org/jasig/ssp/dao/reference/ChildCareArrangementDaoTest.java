@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class ChildCareArrangementDaoTest {
@@ -62,7 +62,8 @@ public class ChildCareArrangementDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<ChildCareArrangement> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<ChildCareArrangement> all = dao.getAll(
+				ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
@@ -73,26 +74,26 @@ public class ChildCareArrangementDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ChildCareArrangement childCareArrangement = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final ChildCareArrangement childCareArrangement = dao.get(id);
 
 		assertNull(childCareArrangement);
 	}
 
-	private void assertList(Collection<ChildCareArrangement> objects) {
-		for (ChildCareArrangement object : objects) {
+	private void assertList(final Collection<ChildCareArrangement> objects) {
+		for (final ChildCareArrangement object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		ChildCareArrangement obj = new ChildCareArrangement();
+		final ChildCareArrangement obj = new ChildCareArrangement();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		ChildCareArrangement obj2 = new ChildCareArrangement();
+		final ChildCareArrangement obj2 = new ChildCareArrangement();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);

@@ -21,8 +21,7 @@ public class EarlyAlertPortletController {
 	}
 
 	@RenderMapping(params = "confirm=true")
-	public ModelAndView confirm(@RequestParam String studentName) {
+	public ModelAndView confirm(@RequestParam final String studentName) {
 		return new ModelAndView("ea-roster", "studentName", studentName);
 	}
-
 }

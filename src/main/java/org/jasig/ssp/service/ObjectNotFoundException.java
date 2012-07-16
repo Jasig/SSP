@@ -1,7 +1,6 @@
 package org.jasig.ssp.service;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -16,7 +15,7 @@ public class ObjectNotFoundException extends Exception implements Serializable {
 	/**
 	 * Identifier that was used for the lookup that failed.
 	 */
-	private UUID objectId;
+	private Serializable objectId;
 
 	/**
 	 * Entity (class) name
@@ -32,7 +31,8 @@ public class ObjectNotFoundException extends Exception implements Serializable {
 	 * @param name
 	 *            Entity name that did not contain the specified objectId
 	 */
-	public ObjectNotFoundException(final UUID objectId, final String name) {
+	public ObjectNotFoundException(final Serializable objectId,
+			final String name) {
 		this(message(objectId, name));
 		this.objectId = objectId;
 		this.name = name;
@@ -70,7 +70,8 @@ public class ObjectNotFoundException extends Exception implements Serializable {
 	 *            {@link #getCause()} method). (A null value is permitted, and
 	 *            indicates that the cause is nonexistent or unknown.)
 	 */
-	public ObjectNotFoundException(final UUID objectId, final String name,
+	public ObjectNotFoundException(final Serializable objectId,
+			final String name,
 			final Throwable cause) {
 		this(message(objectId, name), cause);
 		this.objectId = objectId;
@@ -96,7 +97,8 @@ public class ObjectNotFoundException extends Exception implements Serializable {
 	 *            {@link #getCause()} method). (A null value is permitted, and
 	 *            indicates that the cause is nonexistent or unknown.)
 	 */
-	public ObjectNotFoundException(final UUID objectId, final String name,
+	public ObjectNotFoundException(final Serializable objectId,
+			final String name,
 			final String message, final Throwable cause) {
 		this(message(objectId, name) + ". " + message, cause);
 		this.objectId = objectId;
@@ -144,18 +146,19 @@ public class ObjectNotFoundException extends Exception implements Serializable {
 	 *            Entity name that did not contain the specified objectId
 	 * @return A user-readable object not found message string.
 	 */
-	private static String message(final UUID objectId,
+	private static String message(final Serializable objectId,
 			@NotNull final String name) {
 		return "Unable to load {" + name + "} with ID {"
 				+ (objectId == null ? "null" : objectId.toString() + "}");
 	}
 
 	@SuppressWarnings("unused")
-	private void setObjectId(final UUID objectId) { // NOPMD for serialization
+	private void setObjectId(final Serializable objectId) { // NOPMD for
+															// serialization
 		this.objectId = objectId;
 	}
 
-	public UUID getObjectId() {
+	public Serializable getObjectId() {
 		return objectId;
 	}
 

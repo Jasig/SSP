@@ -38,7 +38,7 @@ import com.google.common.collect.Lists;
  * @author jon.adams
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration
 @Transactional
 public class EarlyAlertSuggestionDaoTest {

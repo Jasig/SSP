@@ -2,14 +2,17 @@ package org.jasig.ssp.dao;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AbstractDao<T> {
+public abstract class AbstractDao<T> {
 
 	/**
 	 * String constant for unchecked casting warnings that occur all over the
@@ -22,12 +25,17 @@ public class AbstractDao<T> {
 
 	protected transient Class<T> persistentClass;
 
-	public AbstractDao(final Class<T> persistentClass) {
+	public AbstractDao(@NotNull final Class<T> persistentClass) {
 		this.persistentClass = persistentClass;
 	}
 
-	public void delete(final T obj) {
-		sessionFactory.getCurrentSession().delete(obj);
+	public PagingWrapper<T> getAll(final ObjectStatus status) {
+		return processCriteriaWithPaging(createCriteria(),
+				new SortingAndPaging(status));
+	}
+
+	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
+		return processCriteriaWithPaging(createCriteria(), sAndP);
 	}
 
 	/**
@@ -63,7 +71,7 @@ public class AbstractDao<T> {
 	 * the Restrictions twice
 	 */
 	protected PagingWrapper<T> processCriteriaWithPaging(
-			final Criteria query, final SortingAndPaging sAndP) {
+			@NotNull final Criteria query, final SortingAndPaging sAndP) {
 		if (sAndP != null) {
 			sAndP.addStatusFilterToCriteria(query);
 		}

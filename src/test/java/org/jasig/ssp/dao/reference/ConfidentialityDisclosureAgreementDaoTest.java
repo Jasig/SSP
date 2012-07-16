@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class ConfidentialityDisclosureAgreementDaoTest {
@@ -63,7 +63,7 @@ public class ConfidentialityDisclosureAgreementDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<ConfidentialityDisclosureAgreement> all = dao.getAll(
+		final Collection<ConfidentialityDisclosureAgreement> all = dao.getAll(
 				ObjectStatus.ACTIVE).getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
@@ -74,29 +74,29 @@ public class ConfidentialityDisclosureAgreementDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ConfidentialityDisclosureAgreement confidentialityDisclosureAgreement = dao
+		final UUID id = UUID.randomUUID();
+		final ConfidentialityDisclosureAgreement confidentialityDisclosureAgreement = dao
 				.get(id);
 
 		assertNull(confidentialityDisclosureAgreement);
 	}
 
 	private void assertList(
-			Collection<ConfidentialityDisclosureAgreement> objects) {
-		for (ConfidentialityDisclosureAgreement object : objects) {
+			final Collection<ConfidentialityDisclosureAgreement> objects) {
+		for (final ConfidentialityDisclosureAgreement object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		ConfidentialityDisclosureAgreement obj = new ConfidentialityDisclosureAgreement();
+		final ConfidentialityDisclosureAgreement obj = new ConfidentialityDisclosureAgreement();
 		obj.setName("new name");
 		obj.setText("text");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		ConfidentialityDisclosureAgreement obj2 = new ConfidentialityDisclosureAgreement();
+		final ConfidentialityDisclosureAgreement obj2 = new ConfidentialityDisclosureAgreement();
 		obj2.setName("new name");
 		obj2.setText("text");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);

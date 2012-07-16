@@ -27,7 +27,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class PersonChallengeDaoTest {
@@ -60,18 +60,18 @@ public class PersonChallengeDaoTest {
 	@Test
 	public void testGet() throws ObjectNotFoundException {
 		// test student = ken thompson
-		Person person = personService.get(UUID
+		final Person person = personService.get(UUID
 				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
 
-		Collection<PersonChallenge> modelsBefore = dao.getAllForPersonId(
+		final Collection<PersonChallenge> modelsBefore = dao.getAllForPersonId(
 				person.getId(), new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 
 		// save a new challenge for a person
-		PersonChallenge model = new PersonChallenge(person, testChallenge);
+		final PersonChallenge model = new PersonChallenge(person, testChallenge);
 		dao.save(model);
 
-		Collection<PersonChallenge> modelsAfter = dao.getAllForPersonId(
+		final Collection<PersonChallenge> modelsAfter = dao.getAllForPersonId(
 				person.getId(), new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 
@@ -82,11 +82,11 @@ public class PersonChallengeDaoTest {
 		assertEquals(model.getPerson().getId(), person.getId());
 
 		// fetch the saved one from the db
-		PersonChallenge byId = dao.get(model.getId());
+		final PersonChallenge byId = dao.get(model.getId());
 		assertEquals(byId.getId(), model.getId());
 
 		PersonChallenge found = null;
-		for (PersonChallenge pc : person.getChallenges()) {
+		for (final PersonChallenge pc : person.getChallenges()) {
 			if (pc.getId().equals(model.getId())) {
 				found = pc;
 				break;
@@ -100,23 +100,23 @@ public class PersonChallengeDaoTest {
 
 		try {
 			assertNull(dao.get(model.getId()));
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			// expected
 		}
 	}
 
 	@Test
 	public void testNull() {
-		UUID id = UUID.randomUUID();
+		final UUID id = UUID.randomUUID();
 		PersonChallenge model = null;
 		try {
 			model = dao.get(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			// expected
 		}
 		assertNull(model);
 
-		Collection<PersonChallenge> modelsAfter = dao.getAllForPersonId(
+		final Collection<PersonChallenge> modelsAfter = dao.getAllForPersonId(
 				id, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertEquals(0, modelsAfter.size());

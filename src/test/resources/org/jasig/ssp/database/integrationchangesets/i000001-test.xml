@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="externalUser" value="a9a337fc-c35e-4bcc-91a8-06de3b6b441e" />
+	<property name="check_for_manage_integration_database_config_sql"
+		value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+		value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+	<changeSet id="Add external_term table" author="daniel.bower">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<insert tableName="external_term">
+			<column name="name" value="Fall 2012" />
+			<column name="code" value="FA12" />
+			<column name="start_date" value="2012-06-20T00:00:00" />
+			<column name="end_date" value="2012-08-28T00:00:00" />
+			<column name="report_year" value="2013" />
+		</insert>
+		<insert tableName="external_term">
+			<column name="name" value="Spring 2013" />
+			<column name="code" value="SP13" />
+			<column name="start_date" value="2013-03-03T00:00:00" />
+			<column name="end_date" value="2013-05-15T00:00:00" />
+			<column name="report_year" value="2013" />
+		</insert>
+
+		<rollback>
+			<delete tableName="external_term">
+				<where>name = 'Fall 2012' AND code = 'FA12'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>name = 'Spring 2013' AND code = 'SP13'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

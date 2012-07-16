@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class JournalSourceDaoTest {
@@ -62,7 +62,7 @@ public class JournalSourceDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<JournalSource> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<JournalSource> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
@@ -73,26 +73,26 @@ public class JournalSourceDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		JournalSource journalSource = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final JournalSource journalSource = dao.get(id);
 
 		assertNull(journalSource);
 	}
 
-	private void assertList(Collection<JournalSource> objects) {
-		for (JournalSource object : objects) {
+	private void assertList(final Collection<JournalSource> objects) {
+		for (final JournalSource object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		JournalSource obj = new JournalSource();
+		final JournalSource obj = new JournalSource();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		JournalSource obj2 = new JournalSource();
+		final JournalSource obj2 = new JournalSource();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);

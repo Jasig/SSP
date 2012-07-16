@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class MessageTemplateDaoTest {
@@ -64,7 +64,7 @@ public class MessageTemplateDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<MessageTemplate> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<MessageTemplate> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
@@ -75,28 +75,28 @@ public class MessageTemplateDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		MessageTemplate messageTemplate = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final MessageTemplate messageTemplate = dao.get(id);
 
 		assertNull(messageTemplate);
 	}
 
-	private void assertList(Collection<MessageTemplate> objects) {
-		for (MessageTemplate object : objects) {
+	private void assertList(final Collection<MessageTemplate> objects) {
+		for (final MessageTemplate object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		MessageTemplate obj = new MessageTemplate();
+		final MessageTemplate obj = new MessageTemplate();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setSubject("test template subject");
 		obj.setBody("This body");
 		dao.save(obj);
 
-		MessageTemplate obj2 = new MessageTemplate();
+		final MessageTemplate obj2 = new MessageTemplate();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		obj2.setSubject("test template subject");

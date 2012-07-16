@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
@@ -72,23 +73,25 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 	 */
 	@SuppressWarnings(UNCHECKED)
 	public List<Challenge> searchByQuery(final String query) {
+		final String beginningHql = "select distinct c from Challenge c inner join c.challengeChallengeReferrals ccr where c.objectStatus = :objectStatus and c.showInSelfHelpSearch = true ";
+		final String endHql = " and exists (from ChallengeReferral where id = ccr.challengeReferral.id and showInSelfHelpGuide = true and objectStatus = :objectStatus) order by c.name";
+
+		if (StringUtils.isWhitespace(query)) {
+			// no query specified so don't bother filtering by a wildcard string
+			return sessionFactory
+					.getCurrentSession()
+					.createQuery(beginningHql + endHql)
+					.setParameter("objectStatus", ObjectStatus.ACTIVE).list();
+		}
+
 		return sessionFactory
 				.getCurrentSession()
-				.createQuery(
-						"select distinct c "
-								+ "from Challenge c "
-								+ "inner join c.challengeChallengeReferrals ccr "
-								+ "where c.objectStatus = :objectStatus "
-								+ "and c.showInSelfHelpSearch = true "
-								+ "and (upper(c.name) like :query "
-								+ "or upper(c.selfHelpGuideQuestion) like :query "
-								+ "or upper(c.selfHelpGuideDescription) like :query "
-								+ "or upper(c.tags) like :query) "
-								+ "and exists " + "(from ChallengeReferral "
-								+ "where id = ccr.challengeReferral.id "
-								+ "and showInSelfHelpGuide = true "
-								+ "and objectStatus = :objectStatus) "
-								+ "order by c.name")
+				.createQuery(beginningHql
+						+ "and (upper(c.name) like :query "
+						+ "or upper(c.selfHelpGuideQuestion) like :query "
+						+ "or upper(c.selfHelpGuideDescription) like :query "
+						+ "or upper(c.tags) like :query) "
+						+ endHql)
 				.setParameter("query",
 						"%" + query.toUpperCase(Locale.getDefault()) + "%")
 				.setParameter("objectStatus", ObjectStatus.ACTIVE).list();

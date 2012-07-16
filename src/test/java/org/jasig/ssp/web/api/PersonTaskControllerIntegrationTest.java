@@ -190,16 +190,6 @@ public class PersonTaskControllerIntegrationTest {
 				afterDeletion);
 	}
 
-	@Test
-	public void testLogger() {
-		final Logger logger = controller.getLogger();
-		logger.info("Test");
-		assertNotNull("logger should not have been null.", logger);
-		assertEquals("Logger name was not specific to the class.",
-				"org.jasig.ssp.web.api.PersonTaskController",
-				logger.getName());
-	}
-
 	public static TaskTO createTask() {
 		final TaskTO obj = new TaskTO();
 		obj.setPersonId(PERSON_ID);
@@ -208,5 +198,16 @@ public class PersonTaskControllerIntegrationTest {
 		obj.setConfidentialityLevel(new ConfidentialityLevelLiteTO(
 				ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE, "EVERYONE"));
 		return obj;
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

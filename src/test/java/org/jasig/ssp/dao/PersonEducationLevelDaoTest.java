@@ -27,7 +27,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class PersonEducationLevelDaoTest {
@@ -60,19 +60,19 @@ public class PersonEducationLevelDaoTest {
 	@Test
 	public void testGet() throws ObjectNotFoundException {
 		// test student = ken thompson
-		Person person = personService.get(UUID
+		final Person person = personService.get(UUID
 				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
 
-		Collection<PersonEducationLevel> modelsBefore = dao
+		final Collection<PersonEducationLevel> modelsBefore = dao
 				.getAllForPersonId(person.getId(),
 						new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 
 		// save a new challenge for a person
-		PersonEducationLevel model = new PersonEducationLevel(person,
+		final PersonEducationLevel model = new PersonEducationLevel(person,
 				testEducationLevel);
 		dao.save(model);
 
-		Collection<PersonEducationLevel> modelsAfter = dao
+		final Collection<PersonEducationLevel> modelsAfter = dao
 				.getAllForPersonId(person.getId(),
 						new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 
@@ -83,11 +83,11 @@ public class PersonEducationLevelDaoTest {
 		assertEquals(model.getPerson().getId(), person.getId());
 
 		// fetch the saved one from the db
-		PersonEducationLevel byId = dao.get(model.getId());
+		final PersonEducationLevel byId = dao.get(model.getId());
 		assertEquals(byId.getId(), model.getId());
 
 		PersonEducationLevel found = null;
-		for (PersonEducationLevel pc : person.getEducationLevels()) {
+		for (final PersonEducationLevel pc : person.getEducationLevels()) {
 			if (pc.getId().equals(model.getId())) {
 				found = pc;
 				break;
@@ -101,23 +101,23 @@ public class PersonEducationLevelDaoTest {
 
 		try {
 			assertNull(dao.get(model.getId()));
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			// expected
 		}
 	}
 
 	@Test
 	public void testNull() {
-		UUID id = UUID.randomUUID();
+		final UUID id = UUID.randomUUID();
 		PersonEducationLevel model = null;
 		try {
 			model = dao.get(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			// expected
 		}
 		assertNull(model);
 
-		Collection<PersonEducationLevel> modelsAfter = dao
+		final Collection<PersonEducationLevel> modelsAfter = dao
 				.getAllForPersonId(id,
 						new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertEquals(0, modelsAfter.size());

@@ -18,7 +18,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class ConfidentialityLevelDaoTest {
@@ -36,8 +36,8 @@ public class ConfidentialityLevelDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		ConfidentialityLevel confidentialityLevel = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final ConfidentialityLevel confidentialityLevel = dao.get(id);
 
 		assertNull(confidentialityLevel);
 	}

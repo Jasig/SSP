@@ -39,7 +39,7 @@ import com.google.common.collect.Lists;
  * Tests for the {@link GoalDao} class.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class GoalDaoTest {
@@ -137,7 +137,8 @@ public class GoalDaoTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void getAllForPersonIdWithoutRequestor() {
-		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(UUID.randomUUID(),
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(
+				UUID.randomUUID(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows());
 	}

@@ -27,7 +27,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class SelfHelpGuideResponseDaoTest {
@@ -62,8 +62,8 @@ public class SelfHelpGuideResponseDaoTest {
 		assertList(dao.forEarlyAlert());
 	}
 
-	private void assertList(List<SelfHelpGuideResponse> objects) {
-		for (SelfHelpGuideResponse object : objects) {
+	private void assertList(final List<SelfHelpGuideResponse> objects) {
+		for (final SelfHelpGuideResponse object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
@@ -84,7 +84,7 @@ public class SelfHelpGuideResponseDaoTest {
 	public void testSaveNew() throws ObjectNotFoundException {
 		UUID saved;
 
-		Person person = personDao.getAll(ObjectStatus.ACTIVE).getRows()
+		final Person person = personDao.getAll(ObjectStatus.ACTIVE).getRows()
 				.iterator().next();
 		assertNotNull(
 				"Needed random Person to use for testing, but none was found in the database.",
@@ -107,7 +107,7 @@ public class SelfHelpGuideResponseDaoTest {
 		assertNotNull(obj);
 		assertNotNull(obj.getId());
 
-		List<SelfHelpGuideResponse> all = (List<SelfHelpGuideResponse>) dao
+		final List<SelfHelpGuideResponse> all = (List<SelfHelpGuideResponse>) dao
 				.getAll(ObjectStatus.ACTIVE).getRows();
 		assertNotNull(all);
 		assertFalse(all.isEmpty());
@@ -117,10 +117,10 @@ public class SelfHelpGuideResponseDaoTest {
 	}
 
 	public void testSave() {
-		SelfHelpGuideResponse obj = new SelfHelpGuideResponse();
+		final SelfHelpGuideResponse obj = new SelfHelpGuideResponse();
 		obj.setEarlyAlertSent(false);
 		obj.setCompleted(false);
-		SelfHelpGuideResponse saved = dao.save(obj);
+		final SelfHelpGuideResponse saved = dao.save(obj);
 
 		assertNotNull("Saved instance should not have been null.", saved);
 		assertNotNull("Saved instance ID should not have been null.",
@@ -129,12 +129,12 @@ public class SelfHelpGuideResponseDaoTest {
 
 		saved.setCompleted(true);
 
-		SelfHelpGuideResponse completed = dao.save(saved);
+		final SelfHelpGuideResponse completed = dao.save(saved);
 		assertTrue(completed.isCompleted());
 	}
 
 	protected void assertList(final Collection<SelfHelpGuideResponse> objects) {
-		for (SelfHelpGuideResponse object : objects) {
+		for (final SelfHelpGuideResponse object : objects) {
 			assertNotNull(object.getId());
 		}
 	}

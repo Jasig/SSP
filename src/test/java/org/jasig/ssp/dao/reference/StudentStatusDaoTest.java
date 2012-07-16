@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class StudentStatusDaoTest {
@@ -62,7 +62,7 @@ public class StudentStatusDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<StudentStatus> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<StudentStatus> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
@@ -73,26 +73,26 @@ public class StudentStatusDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		StudentStatus studentStatus = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final StudentStatus studentStatus = dao.get(id);
 
 		assertNull(studentStatus);
 	}
 
-	private void assertList(Collection<StudentStatus> objects) {
-		for (StudentStatus object : objects) {
+	private void assertList(final Collection<StudentStatus> objects) {
+		for (final StudentStatus object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		StudentStatus obj = new StudentStatus();
+		final StudentStatus obj = new StudentStatus();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		StudentStatus obj2 = new StudentStatus();
+		final StudentStatus obj2 = new StudentStatus();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);
