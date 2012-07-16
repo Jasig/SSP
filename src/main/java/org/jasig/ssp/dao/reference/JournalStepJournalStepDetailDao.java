@@ -24,7 +24,7 @@ public class JournalStepJournalStepDetailDao extends
 			final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("journalStep.id", journalStepId));
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
 	public PagingWrapper<JournalStepJournalStepDetail> getAllForJournalStepDetailAndJournalStep(
@@ -33,6 +33,6 @@ public class JournalStepJournalStepDetailDao extends
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("journalStep.id", journalStepId));
 		query.add(Restrictions.eq("journalStepDetail.id", journalStepDetailId));
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 }

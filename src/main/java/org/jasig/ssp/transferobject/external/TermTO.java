@@ -1,6 +1,5 @@
 package org.jasig.ssp.transferobject.external;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -66,20 +65,20 @@ public class TermTO implements ExternalDataTO<Term> {
 	}
 
 	public Date getStartDate() {
-		return (startDate == null) ? null : new Date(startDate.getTime());
+		return startDate == null ? null : new Date(startDate.getTime());
 	}
 
 	public final void setStartDate(final Date startDate) {
-		this.startDate = (startDate == null) ? null : new Date(
+		this.startDate = startDate == null ? null : new Date(
 				startDate.getTime());
 	}
 
 	public Date getEndDate() {
-		return (endDate == null) ? null : new Date(endDate.getTime());
+		return endDate == null ? null : new Date(endDate.getTime());
 	}
 
 	public final void setEndDate(final Date endDate) {
-		this.endDate = (endDate == null) ? null : new Date(endDate.getTime());
+		this.endDate = endDate == null ? null : new Date(endDate.getTime());
 	}
 
 	public int getReportYear() {
@@ -88,26 +87,5 @@ public class TermTO implements ExternalDataTO<Term> {
 
 	public void setReportYear(final int reportYear) {
 		this.reportYear = reportYear;
-	}
-
-	@Override
-	public Serializable getId() {
-		return code;
-	}
-
-	/**
-	 * Sets the identifier.
-	 * 
-	 * @throws ClassCastException
-	 *             if the specified identifier is not of the expected type.
-	 */
-	@Override
-	public void setId(final Serializable id) {
-		if (!(id instanceof String)) {
-			throw new ClassCastException(
-					"Can not cast identifier to the expected type. Id: " + id);
-		}
-
-		code = (String) id;
 	}
 }

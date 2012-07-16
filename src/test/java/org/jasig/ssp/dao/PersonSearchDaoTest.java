@@ -1,5 +1,6 @@
 package org.jasig.ssp.dao;
 
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
@@ -37,8 +38,7 @@ public class PersonSearchDaoTest {
 				null, true,
 				"ennis", null, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
-		assertTrue("List should have one entity.",
-				!list.isEmpty());
+		assertNotEmpty("List should not have been empty.", list);
 	}
 
 	@Test
@@ -47,8 +47,7 @@ public class PersonSearchDaoTest {
 				null, true,
 				"ritch", null, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
-		assertTrue("List should have one entity.",
-				!list.isEmpty());
+		assertNotEmpty("List should not have been empty.", list);
 	}
 
 	@Test
@@ -57,8 +56,7 @@ public class PersonSearchDaoTest {
 				null, true,
 				"dmr.1", null, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
-		assertTrue("List should have one entity.",
-				!list.isEmpty());
+		assertNotEmpty("List should have had at least one entity.", list);
 	}
 
 	@Test
@@ -68,8 +66,17 @@ public class PersonSearchDaoTest {
 				"dennis ritchie", null,
 				new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
-		assertTrue("List should have one entity.",
-				!list.isEmpty());
+		assertNotEmpty("List should have one entity.", list);
+	}
+
+	@Test
+	public void testGetAllTTfullNameWithOutsideCaseLoad() {
+		final Collection<Person> list = dao.searchBy(
+				null, false,
+				"dennis ritchie", null,
+				new SortingAndPaging(ObjectStatus.ACTIVE))
+				.getRows();
+		assertTrue("List should have been empty.", list.isEmpty());
 	}
 
 	@Test
@@ -83,7 +90,6 @@ public class PersonSearchDaoTest {
 				new ProgramStatus(ProgramStatus.ACTIVE_ID), true,
 				"james", turing, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
-		assertTrue("List should have one entity.",
-				!list.isEmpty());
+		assertNotEmpty("List should have one entity.", list);
 	}
 }
