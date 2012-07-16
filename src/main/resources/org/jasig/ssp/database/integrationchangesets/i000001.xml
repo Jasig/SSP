@@ -113,4 +113,43 @@
 			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 	</changeSet>
+
+	<changeSet id="Add external_registration_status_by_term table" author="daniel.bower">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_registration_status_by_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createTable tableName="external_registration_status_by_term">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="term_code" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+			<column name="registered_course_count" type="integer">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_registration_status_by_term">
+			select school_id, term_code, registered_course_count from external_registration_status_by_term
+		</createView>
+
+		<sql>grant all on external_registration_status_by_term to ssp</sql>
+		<sql>grant all on v_external_registration_status_by_term to ssp</sql>
+		<rollback>
+			<dropView viewName="v_external_registration_status_by_term" />
+			<dropTable tableName="external_registration_status_by_term" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
 </databaseChangeLog>

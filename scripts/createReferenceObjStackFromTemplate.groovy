@@ -276,9 +276,9 @@ class Templater{
 
 
 class ReferenceDataTemplater {
-	String templateModel = "PersonSpecialServiceGroup"
-	List<String> subpackage = []
-	List<String> referenceDataModels = ["PersonServiceReason", "PersonReferralSource"]
+	String templateModel = "Term"
+	List<String> subpackage = ["external"]
+	List<String> referenceDataModels = ["RegistrationStatusByTerm"]
 
 	public void run(boolean create, boolean overwrite, boolean writeLiquibaseScript, boolean dryRun, boolean displayFileContents){
 		Templater templater = new Templater(create, overwrite, writeLiquibaseScript, dryRun, displayFileContents)
