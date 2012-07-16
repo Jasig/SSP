@@ -1,6 +1,9 @@
 Ext.define('Ssp.view.tools.sis.Transcript', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.sistranscript',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.sis.TranscriptViewController',
     width: '100%',
     height: '100%',
     autoScroll: true,

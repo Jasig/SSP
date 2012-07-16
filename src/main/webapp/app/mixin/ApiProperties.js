@@ -114,12 +114,11 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		},me);		
 	},
 	
-	handleError: function(response) {
-		console.log(this);
+	handleError: function( response ) {
 		var me=this;
 		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
-		var r = Ext.decode(response.responseText);
-		console.log(response.status);
+		var r;
+
 		if (response.status==403)
 		{
 			Ext.Msg.confirm({
@@ -129,7 +128,17 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	   		     fn: me.loginConfirmResult,
 	   		     scope: me
 	   		});
-		}else{
+		}
+		
+		// Handle call not found result
+		if (response.status==404)
+		{
+			Ext.Msg.alert('SSP Error', msg);
+		}
+		
+		// Handle responseText is json returned from SSP
+		if( response.responseText != null ){
+			r = Ext.decode(response.responseText);
 			if (r.message != null)
 			{
 				msg = msg + " " + r.message;
