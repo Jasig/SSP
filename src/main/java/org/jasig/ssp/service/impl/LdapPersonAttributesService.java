@@ -106,8 +106,8 @@ public class LdapPersonAttributesService implements PersonAttributesService {
 				"cn=" + groupId + ",ou=groups", "uniqueMember=*",
 				new ContextMapper() {
 					@Override
-					public Object mapFromContext(Object context) {
-						DirContextAdapter adapter = (DirContextAdapter) context;
+					public Object mapFromContext(final Object context) {
+						final DirContextAdapter adapter = (DirContextAdapter) context;
 
 						for (String val : adapter
 								.getStringAttributes("uniqueMember")) {
@@ -120,15 +120,15 @@ public class LdapPersonAttributesService implements PersonAttributesService {
 		return coaches;
 	}
 
-	private String extractUsername(String val) {
+	private String extractUsername(final String val) {
 		// cn=testuser1,ou=users,dc=springframework,dc=org
 		return val.substring(3, (val.length() - 35));
 	}
 
 	@Override
 	public List<Map<String, Object>> searchForUsers(
-			HttpServletRequest req, HttpServletResponse res,
-			Map<String, String> query) {
+			final HttpServletRequest req, final HttpServletResponse res,
+			final Map<String, String> query) {
 		throw new NotImplementedException();
 	}
 }
