@@ -1,18 +1,11 @@
 package org.jasig.ssp.dao.external;
 
-import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -21,64 +14,32 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TermDao extends AbstractExternalDataDao<Term> {
 
-	private static final String DATABASE_VIEW = "v_external_term";
-
-	protected RowMapper<Term> mapper;
-
 	public TermDao() {
 		super(Term.class);
-
-		mapper = new RowMapper<Term>() {
-			@Override
-			public Term mapRow(final ResultSet rs, final int rowNum)
-					throws SQLException {
-				final Term term = new Term();
-				term.setCode(rs.getString("code"));
-				term.setName(rs.getString("name"));
-				term.setStartDate(rs.getDate("start_date"));
-				term.setEndDate(rs.getDate("end_date"));
-				term.setReportYear(rs.getInt("report_year"));
-				return term;
-			}
-		};
-	}
-
-	@Override
-	protected String getDatabaseViewName() {
-		return DATABASE_VIEW;
-	}
-
-	@Override
-	protected RowMapper<Term> getMapper() {
-		return mapper;
 	}
 
 	/**
 	 * Retrieves the specified instance from persistent storage.
 	 * 
-	 * @param id
+	 * @param code
 	 *            the <code>{@link Term}.Code</code> value, must be a String
 	 * @return The specified instance if found
 	 * @throws ObjectNotFoundException
 	 *             If object was not found.
 	 */
-	@Override
-	public Term get(@NotNull final Serializable id)
+	public Term getByCode(@NotNull final String code)
 			throws ObjectNotFoundException {
-		if (!(id instanceof String) || StringUtils.isWhitespace((String) id)) {
-			throw new ObjectNotFoundException(id, Term.class.getName());
+		if (!StringUtils.isNotBlank(code)) {
+			throw new ObjectNotFoundException(code, Term.class.getName());
 		}
 
-		final SqlParameterSource namedParameters = new MapSqlParameterSource(
-				"code",
-				id);
+		final Term obj = (Term) createCriteria().add(
+				Restrictions.eq("code", code)).uniqueResult();
 
-		try {
-			return jdbcTemplate.queryForObject(
-					"select * from v_external_term  where code = :code",
-					namedParameters, mapper);
-		} catch (final EmptyResultDataAccessException exc) {
-			throw new ObjectNotFoundException(id, Term.class.getName(), exc);
+		if (obj == null) {
+			throw new ObjectNotFoundException(code, Term.class.getName());
 		}
+
+		return obj;
 	}
 }

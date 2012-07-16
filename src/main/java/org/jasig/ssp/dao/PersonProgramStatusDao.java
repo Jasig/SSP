@@ -67,6 +67,6 @@ public class PersonProgramStatusDao
 		criteria.add(Restrictions.eq("person.id", personId));
 		criteria.add(Restrictions.eq("programStatus.id",
 				serviceReasonId));
-		return processCriteriaWithPaging(criteria, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
 }

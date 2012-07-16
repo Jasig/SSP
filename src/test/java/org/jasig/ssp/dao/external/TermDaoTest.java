@@ -17,6 +17,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Term DAO
+ * 
+ * @author jon.adams
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
@@ -34,8 +39,8 @@ public class TermDaoTest {
 	}
 
 	@Test(expected = ObjectNotFoundException.class)
-	public void testNull() throws ObjectNotFoundException {
-		final Term term = dao.get(null);
+	public void testGetWithNull() throws ObjectNotFoundException {
+		final Term term = dao.getByCode(null);
 		assertNull(
 				"Invalid identifier passed to get() should have returned null.",
 				term);

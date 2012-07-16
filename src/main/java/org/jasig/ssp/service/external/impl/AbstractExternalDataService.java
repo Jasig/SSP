@@ -1,9 +1,6 @@
 package org.jasig.ssp.service.external.impl;
 
-import java.io.Serializable;
-
 import org.jasig.ssp.dao.external.ExternalDataDao;
-import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.ExternalDataService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -23,17 +20,12 @@ public abstract class AbstractExternalDataService<T> implements
 	/**
 	 * Need access to the data access instance, so make children provide it.
 	 * 
-	 * @return
+	 * @return the DAO
 	 */
 	protected abstract ExternalDataDao<T> getDao();
 
 	@Override
 	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
 		return getDao().getAll(sAndP);
-	}
-
-	@Override
-	public T get(final Serializable id) throws ObjectNotFoundException {
-		return getDao().get(id);
 	}
 }

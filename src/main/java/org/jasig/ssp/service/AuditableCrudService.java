@@ -26,7 +26,8 @@ public interface AuditableCrudService<T extends Auditable> {
 	 * @param sAndP
 	 *            SortingAndPaging
 	 * 
-	 * @return All entities in the database filtered by the supplied status.
+	 * @return All entities in the database filtered by the supplied status,
+	 *         sorting, and paging parameters.
 	 */
 	PagingWrapper<T> getAll(SortingAndPaging sAndP);
 

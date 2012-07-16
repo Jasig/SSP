@@ -1,6 +1,5 @@
 package org.jasig.ssp.factory.external.impl;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -51,11 +50,6 @@ public abstract class AbstractExternalDataTOFactory<TO extends ExternalDataTO<M>
 	@Override
 	public M from(final TO tObject) throws ObjectNotFoundException {
 		return newModel();
-	}
-
-	@Override
-	public M from(final Serializable id) throws ObjectNotFoundException {
-		return getDao().get(id);
 	}
 
 	protected abstract ExternalDataDao<M> getDao();
