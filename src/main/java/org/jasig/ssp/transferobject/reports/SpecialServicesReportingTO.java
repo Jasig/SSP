@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
-import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.web.api.reports.SpecialServicesReportController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,10 +49,10 @@ public class SpecialServicesReportingTO implements Serializable {
 	}
 
 	public String getStudentType() {
-		if(person.getStudentType()==null){
+		if (person.getStudentType() == null) {
 			return null;
 		}
-		else{
+		else {
 			return person.getStudentType().getName();
 		}
 	}

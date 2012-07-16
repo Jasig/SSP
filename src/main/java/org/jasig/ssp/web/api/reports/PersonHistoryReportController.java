@@ -186,8 +186,9 @@ public class PersonHistoryReportController extends BaseController {
 		return LOGGER;
 	}
 
-	public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(
-			"yyyy/MM/dd", Locale.US);
+	private static final SimpleDateFormat getDateFormatter() {
+		return new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+	}
 
 	public static List<StudentHistoryTO> sort(
 			final List<EarlyAlertTO> earlyAlerts,
@@ -202,7 +203,7 @@ public class PersonHistoryReportController extends BaseController {
 		final Iterator<EarlyAlertTO> alertIter = earlyAlerts.iterator();
 		while (alertIter.hasNext()) {
 			final EarlyAlertTO thisEarlyAlertTO = alertIter.next();
-			final String snewDate = DATE_FORMATTER.format(thisEarlyAlertTO
+			final String snewDate = getDateFormatter().format(thisEarlyAlertTO
 					.getCreatedDate());
 			if (studentHistoryMap.containsKey(snewDate)) {
 				final StudentHistoryTO studentHistoryTO = studentHistoryMap
@@ -220,8 +221,9 @@ public class PersonHistoryReportController extends BaseController {
 				.iterator();
 		while (journalEntryIter.hasNext()) {
 			final JournalEntryTO thisJournalEntryTO = journalEntryIter.next();
-			final String snewDate = DATE_FORMATTER.format(thisJournalEntryTO
-					.getCreatedDate());
+			final String snewDate = getDateFormatter().format(
+					thisJournalEntryTO
+							.getCreatedDate());
 			if (studentHistoryMap.containsKey(snewDate)) {
 				final StudentHistoryTO studentHistoryTO = studentHistoryMap
 						.get(snewDate);
@@ -244,7 +246,7 @@ public class PersonHistoryReportController extends BaseController {
 			final Iterator<TaskTO> taskIter = tasks.iterator();
 			while (taskIter.hasNext()) {
 				final TaskTO thisTask = taskIter.next();
-				final String snewDate = DATE_FORMATTER.format(thisTask
+				final String snewDate = getDateFormatter().format(thisTask
 						.getCreatedDate());
 				if (studentHistoryMap.containsKey(snewDate)) {
 					final StudentHistoryTO studentHistoryTO = studentHistoryMap
