@@ -34,4 +34,9 @@ public class TermServiceImpl extends AbstractExternalDataService<Term>
 	public Term getByCode(final String code) throws ObjectNotFoundException {
 		return getDao().getByCode(code);
 	}
+
+	@Override
+	public Term getCurrentTerm() throws ObjectNotFoundException {
+		return getDao().getCurrentTerm();
+	}
 }

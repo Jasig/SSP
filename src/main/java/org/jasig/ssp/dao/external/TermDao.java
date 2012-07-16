@@ -1,8 +1,11 @@
 package org.jasig.ssp.dao.external;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -41,5 +44,15 @@ public class TermDao extends AbstractExternalDataDao<Term> {
 		}
 
 		return obj;
+	}
+
+	public Term getCurrentTerm() {
+		final Date now = new Date();
+
+		final Criteria query = createCriteria();
+		query.add(Restrictions.gt("endDate", now));
+		query.add(Restrictions.lt("startDate", now));
+
+		return (Term) query.uniqueResult();
 	}
 }

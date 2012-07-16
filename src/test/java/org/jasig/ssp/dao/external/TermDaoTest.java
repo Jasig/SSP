@@ -1,5 +1,6 @@
 package org.jasig.ssp.dao.external;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 
@@ -9,6 +10,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +46,13 @@ public class TermDaoTest {
 		assertNull(
 				"Invalid identifier passed to get() should have returned null.",
 				term);
+	}
+
+	@Ignore
+	// otherwise would need to adjust this every term...
+	@Test
+	public void getCurrentTerm() {
+		final Term term = dao.getCurrentTerm();
+		assertEquals("expected Fall2012", "FA12", term.getCode());
 	}
 }
