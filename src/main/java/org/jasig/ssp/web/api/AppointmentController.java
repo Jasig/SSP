@@ -61,12 +61,12 @@ public class AppointmentController
 	@RequestMapping(value = "/current", method = RequestMethod.GET)
 	public @ResponseBody
 	AppointmentTO getCurrentAppointmentForPerson(
-			final @PathVariable UUID id) throws ObjectNotFoundException {
+			final @PathVariable UUID personId) throws ObjectNotFoundException {
 
 		checkPermissionForOp("READ");
 
 		final Appointment appt = service.getCurrentAppointmentForPerson(
-				personService.get(id));
+				personService.get(personId));
 		if (appt == null) {
 			return null;
 		}
