@@ -6,7 +6,6 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     	appointment: 'currentAppointment',
     	formUtils: 'formRendererUtils',
     	person: 'currentPerson',
-    	currentPersonAppointment: 'currentPersonAppointment',
     	studentTypesStore: 'studentTypesStore'
     },
     control: {
@@ -19,22 +18,13 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		var me=this;
 
 		me.appEventsController.assignEvent({eventName: 'studentTypeChange', callBackFunc: this.onStudentTypeChange, scope: this});
-    	
-    	// set the appointment from the current appointment
-		if ( me.currentPersonAppointment != null )
-		{
-		   me.appointment.populateFromGenericObject({
-			   "appointmentDate": me.currentPersonAppointment.startDate,
-			   "startTime": me.currentPersonAppointment.startDate,
-			   "endTime": me.currentPersonAppointment.endDate
-		   });
-		}
-    	
+		
+		me.getView().getForm().reset();
 		me.getView().loadRecord( me.appointment );
 
 		me.assignAppointmentRequiredFields();
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
     },
     
     destroy: function(){

@@ -11,11 +11,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
         personService: 'personService',
         currentPersonAppointment: 'currentPersonAppointment'
     },
-    config: {
-    	person: 'currentPerson',
-    	personAppointmentUrl: null,
-    	personUrl: null
-    },
     control: {
     	'saveButton':{
     		click: 'onSaveClick'
@@ -37,9 +32,11 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 	init: function() {
 		var me=this;
 		var id = me.person.get('id');
-			
-		//me.personUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
-		me.personAppointmentUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personAppointment') );	
+		// initialize the appointment and personAppointment
+		var personAppointment = new Ssp.model.PersonAppointment();
+		var appointment = new Ssp.model.Appointment();
+		me.appointment.data = appointment.data;
+		me.currentPersonAppointment.data = personAppointment.data;
 		
 		// load the person record and init the view
 		if (id.length > 0)
@@ -50,7 +47,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 	    									  failure:me.getPersonFailure, 
 	    									  scope: me} );
 		}else{
-			me.currentPersonAppointment = new Ssp.model.PersonAppointment();
 			me.initForms();
 			me.updateTitle();
 		}
@@ -104,10 +100,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     getPersonSuccess: function( r, scope ){
 		var me=scope;
 		me.getView().setLoading( false );
-		me.person.populateFromGenericObject(r);
-		me.getAppointment();
+		me.getCurrentAppointment();
 		me.updateTitle();
-		me.initForms();
     },
     
     getPersonFailure: function( response, scope ){
@@ -115,7 +109,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	me.getView().setLoading( false );
     },
 
-    getAppointment: function(){
+    getCurrentAppointment: function(){
 		var me=this;
 		var personId = me.person.get('id');
     	if (personId != null)
@@ -125,13 +119,15 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		    me.appointmentService.getCurrentAppointment( personId, {success:me.getAppointmentSuccess, 
 			    						                             failure:me.getAppointmentFailure, 
 			    						                             scope: me} );
+		}else{
+			me.initForms();
 		}    	
     },
     
     getAppointmentSuccess: function( r, scope ){
 		var me=scope;	
 		me.getView().setLoading( false );
-		me.currentPersonAppointment.populateFromGenericObject(r);
+		me.initForms();
     },
     
     getAppointmentFailure: function( response, scope ){
@@ -208,9 +204,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			model.setCoachId( coachForm.findField('coachId').getValue() );
 			model.setStudentTypeId( coachForm.findField('studentTypeId').getValue() );			
 			
-			// save the appointment dates and times
-			appointmentForm.updateRecord();	
-			me.currentPersonAppointment.setAppointment(me.appointment.getStartDate(), me.appointment.getEndDate() );			
+			// update the appointment
+			appointmentForm.updateRecord();
 						
 			// set special service groups
 			specialServiceGroupsFormValues = specialServiceGroupsItemSelector.getValue();
@@ -251,11 +246,16 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			
 			me.getView().setLoading( true );
 			
-	    	me.personService.savePerson( jsonData, 
+			jsonData = model.data;
+			
+			// TODO: Fix API to allow programStatus liteTO 
+			delete jsonData.programStatuses;			
+
+			me.personService.savePerson( jsonData, 
 	    			                    {success:me.savePersonSuccess, 
 				                         failure:me.savePersonFailure, 
 				                         scope: me} );
-			
+
 		}else{
 			me.formUtils.displayErrors( validateResult.fields );
 		}
@@ -263,14 +263,11 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     savePersonSuccess: function( r, scope ){
 		var me=scope;
-		me.getView().setLoading( false );
-    	
+		me.getView().setLoading( false );    	
     	if (r.id != "")
 		{
-    		// saveAppointment();
-    		
-    		// load students view
-			me.loadStudentToolsView();
+    		me.person.populateFromGenericObject( r );
+    		me.saveAppointment();
 		}else{
 			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.')
 		}    	
@@ -281,15 +278,36 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	me.getView().setLoading( false );   	
     },
 
+    saveAppointment: function(){
+    	var me=this;
+    	var jsonData, personId;
+    	if (me.appointment.get('appointmentDate') != null && me.appointment.get('startTime') != null && me.appointment.get('endTime') !=null)
+		{
+    		me.currentPersonAppointment.setAppointment( me.appointment.getStartDate() , 
+    				                                    me.appointment.getEndDate() );
+    		jsonData = me.currentPersonAppointment.data;
+    		personId = me.person.get('id');
+			
+    		// Fix startTime and endTime to represent appropriate date and time without GMT offset
+			jsonData.startTime = me.formUtils.fixDateOffsetWithTime( jsonData.startTime );
+			jsonData.endTime = me.formUtils.fixDateOffsetWithTime( jsonData.endTime );
+ 
+    		me.appointmentService.saveAppointment( personId, 
+    				                               jsonData, 
+    				                               {success: me.saveAppointmentSuccess,
+    			                                    failure: me.saveAppointmentFailure,
+    			                                    scope: me } );
+		}else{
+			// no appointment is required
+			// load students view
+			me.loadStudentToolsView();			
+		}
+    },
+    
     saveAppointmentSuccess: function( r, scope ){
 		var me=scope; 
-    	me.getView().setLoading( false );    	
-    	if (r.success == true)
-		{
-			//me.loadStudentToolsView();			
-		}else{
-			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.')
-		}    	
+    	me.getView().setLoading( false );
+		me.loadStudentToolsView();  	
     },    
     
     saveAppointmentFailure: function( response, scope ){
