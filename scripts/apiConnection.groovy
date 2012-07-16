@@ -62,7 +62,7 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	
 	result.personEducationPlan = new PersonEducationPlanTO(newOrientationComplete:false, registeredForClasses:false, collegeDegreeForParents:false, specialNeeds:false, gradeTypicallyEarned:"B")
 	
-	//subit the manipulated form
+	//submit the manipulated form
 	conn.put("api/1/tool/studentIntake/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194", toJson(result))
 	
 	//Retrieve the form once more
@@ -124,6 +124,10 @@ String getCoaches(ApiConnection conn){
 	return conn.get("api/1/person/coach/")
 }
 
+String getAllTerms(ApiConnection conn){
+	return conn.get("api/1/reference/term/")
+}
+
 /**
  * You can exercise the ssp api from within STS (eclipse) using this script
  */
@@ -140,7 +144,8 @@ ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0",
 //String output = getCaseload(conn)
 //String output = getAppointments(conn)
 //String output = getCoaches(conn)
-String output = getCurrentAppointment(conn)
+//String output = getCurrentAppointment(conn)
+String output = getAllTerms(conn)
 
 
 conn.formatAndPrintJson(output)
