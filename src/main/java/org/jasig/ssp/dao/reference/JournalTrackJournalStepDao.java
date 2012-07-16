@@ -23,7 +23,7 @@ public class JournalTrackJournalStepDao
 			final UUID journalTrackId, final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("journalTrack.id", journalTrackId));
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
 	public PagingWrapper<JournalTrackJournalStep> getAllForJournalTrackAndJournalStep(
@@ -32,7 +32,7 @@ public class JournalTrackJournalStepDao
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("journalTrack.id", journalTrackId));
 		query.add(Restrictions.eq("journalStep.id", journalStepId));
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
 }

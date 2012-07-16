@@ -50,7 +50,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable>
 
 		final Criteria criteria = createCriteria();
 		criteria.add(Restrictions.in("id", ids));
-		return processCriteriaWithPaging(criteria, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
 
 	@SuppressWarnings(UNCHECKED)

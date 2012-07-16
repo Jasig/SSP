@@ -29,13 +29,31 @@ public abstract class AbstractDao<T> {
 		this.persistentClass = persistentClass;
 	}
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Object status
+	 * 
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	public PagingWrapper<T> getAll(final ObjectStatus status) {
-		return processCriteriaWithPaging(createCriteria(),
+		return processCriteriaWithStatusSortingAndPaging(createCriteria(),
 				new SortingAndPaging(status));
 	}
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status,
+	 * sorting, and paging parameters.
+	 * 
+	 * @param sAndP
+	 *            SortingAndPaging
+	 * 
+	 * @return All entities in the database filtered by the supplied status.
+	 */
 	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
-		return processCriteriaWithPaging(createCriteria(), sAndP);
+		return processCriteriaWithStatusSortingAndPaging(createCriteria(),
+				sAndP);
 	}
 
 	/**
@@ -70,12 +88,8 @@ public abstract class AbstractDao<T> {
 	 * Run a query and get the total rows and results with out having to define
 	 * the Restrictions twice
 	 */
-	protected PagingWrapper<T> processCriteriaWithPaging(
+	protected PagingWrapper<T> processCriteriaWithSortingAndPaging(
 			@NotNull final Criteria query, final SortingAndPaging sAndP) {
-		if (sAndP != null) {
-			sAndP.addStatusFilterToCriteria(query);
-		}
-
 		// get the query results total count
 		Long totalRows = null; // NOPMD by jon on 5/20/12 4:42 PM
 
@@ -104,5 +118,18 @@ public abstract class AbstractDao<T> {
 		}
 
 		return new PagingWrapper<T>(totalRows, results);
+	}
+
+	/**
+	 * Run a query and get the total rows and results with out having to define
+	 * the Restrictions twice
+	 */
+	protected PagingWrapper<T> processCriteriaWithStatusSortingAndPaging(
+			@NotNull final Criteria query, final SortingAndPaging sAndP) {
+		if (sAndP != null) {
+			sAndP.addStatusFilterToCriteria(query);
+		}
+
+		return processCriteriaWithSortingAndPaging(query, sAndP);
 	}
 }
