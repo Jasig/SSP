@@ -37,6 +37,7 @@ public class RegistrationStatusByTermTOFactoryImpl
 	public RegistrationStatusByTerm from(
 			final RegistrationStatusByTermTO tObject)
 			throws ObjectNotFoundException {
+
 		final RegistrationStatusByTerm model = super.from(tObject);
 
 		model.setSchoolId(tObject.getSchoolId());

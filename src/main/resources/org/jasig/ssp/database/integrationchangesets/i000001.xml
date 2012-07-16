@@ -155,7 +155,7 @@
 		</createTable>
 
 		<createView viewName="v_external_registration_status_by_term">
-			select school_id, term_code, registered_course_count from external_registration_status_by_term
+			select ROW_NUMBER() OVER (ORDER BY school_id, term_code) as id, school_id, term_code, registered_course_count from external_registration_status_by_term
 		</createView>
 
 		<sql>grant all on external_registration_status_by_term to ssp</sql>
@@ -165,11 +165,6 @@
 			<dropTable tableName="external_registration_status_by_term" />
 		</rollback>
 
-		<!-- Theres a different assumption in the liquibase handling of timezones 
-			on postgres. Specifying "Without" timezone -->
-		<modifySql dbms="postgresql">
-			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
-		</modifySql>
 	</changeSet>
 
 
