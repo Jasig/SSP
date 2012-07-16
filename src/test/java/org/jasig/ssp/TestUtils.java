@@ -84,7 +84,7 @@ public final class TestUtils {
 	public static <T, TO, TS> TO loadJson(@NotNull final Class<TS> testClass,
 			@NotNull final String file, @NotNull final Class<TO> TOClass)
 			throws JsonParseException, JsonMappingException, IOException {
-		if (StringUtils.isWhitespace(file)) {
+		if (!StringUtils.isNotBlank(file)) {
 			throw new IOException("Missing file parameter.");
 		}
 

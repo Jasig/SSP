@@ -31,6 +31,6 @@ public abstract class AbstractReferenceAuditableCrudDao<T extends Auditable>
 
 	@Override
 	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
-		return processCriteriaWithPaging(createCriteria(), sAndP);
+		return processCriteriaWithStatusSortingAndPaging(createCriteria(), sAndP);
 	}
 }

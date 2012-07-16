@@ -46,7 +46,7 @@ public class SspAssert extends org.junit.Assert { // NOPMD by jon.adams
 	}
 
 	/**
-	 * Asserts that a Collection is non-null and non-empty. If not,
+	 * Asserts that a Collection is not null and not empty. If not,
 	 * {@link AssertionError} is thrown with the given message.
 	 * 
 	 * @param message
@@ -55,13 +55,13 @@ public class SspAssert extends org.junit.Assert { // NOPMD by jon.adams
 	 * @param actual
 	 *            actual Collection
 	 */
-	static public void assertNonEmpty(final String message,
-			final Collection<Object> actual) {
+	static public void assertNotEmpty(final String message,
+			final Collection<?> actual) {
 		if (actual != null && !actual.isEmpty()) {
 			return;
 		}
 
-		fail(format(message, "non-null and non-empty", actual == null ? "null"
+		fail(format(message, "not null and not empty", actual == null ? "null"
 				: "containing <" + actual.size() + "> item"
 						+ (actual.size() == 1 ? "" : "s")));
 	}

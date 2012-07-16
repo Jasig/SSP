@@ -31,6 +31,6 @@ public class JournalStepDetailDao extends
 				.createCriteria("journalStepJournalStepDetails");
 		subQuery.add(Restrictions.eq("journalStep.id", journalStepId));
 
-		return processCriteriaWithPaging(criteria, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
 }

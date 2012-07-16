@@ -1,12 +1,12 @@
 package org.jasig.ssp.web.api.external; // NOPMD
 
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -41,7 +41,7 @@ public class TermControllerIntegrationTest {
 	private static final String TERM_CODE = "FA12";
 
 	/**
-	 * Test the {@link TermController#get(Serializable)} action.
+	 * Test the {@link TermController#get(String)} action.
 	 * 
 	 * @throws ValidationException
 	 *             If validation error occurred.
@@ -66,7 +66,7 @@ public class TermControllerIntegrationTest {
 	}
 
 	/**
-	 * Test that the {@link TermController#get(Serializable)} action returns the
+	 * Test that the {@link TermController#get(String)} action returns the
 	 * correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws ValidationException
@@ -98,8 +98,7 @@ public class TermControllerIntegrationTest {
 				null).getRows();
 
 		assertNotNull("List should not have been null.", list);
-		assertFalse("List action should have returned some objects.",
-				list.isEmpty());
+		assertNotEmpty("List action should have returned some objects.", list);
 	}
 
 	/**
@@ -119,6 +118,38 @@ public class TermControllerIntegrationTest {
 
 		term = iter.next();
 		assertNotNull("EndDate should not have been null.", term.getEndDate());
+	}
+
+	/**
+	 * Test the {@link TermController#getAll(Integer, Integer, String, String)}
+	 * action results.
+	 */
+	@Test
+	public void testControllerGetAllLimits() {
+		// arrange, act
+		final Collection<TermTO> list = controller.getAll(null, null, null,
+				null).getRows();
+		final Collection<TermTO> filtered = controller.getAll(0, 1, null,
+				null).getRows();
+
+		// assert
+		assertTrue("List should have returned several data rows.",
+				list.size() > 1);
+
+		final Iterator<TermTO> iter = list.iterator();
+
+		TermTO term = iter.next();
+		assertTrue("Name should have been longer than 0 characters.", term
+				.getName().length() > 0);
+
+		term = iter.next();
+		assertNotNull("EndDate should not have been null.", term.getEndDate());
+
+		assertEquals("Limit didn't limit results correctly.", 1,
+				filtered.size());
+		assertNotEquals(
+				"GetAll and filtered lists should have been different sizes.",
+				list.size(), filtered.size());
 	}
 
 	/**

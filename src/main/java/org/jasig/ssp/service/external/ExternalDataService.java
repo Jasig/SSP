@@ -1,8 +1,5 @@
 package org.jasig.ssp.service.external;
 
-import java.io.Serializable;
-
-import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -15,7 +12,14 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
  */
 public interface ExternalDataService<T> {
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status,
+	 * sorting, and paging parameters.
+	 * 
+	 * @param sAndP
+	 *            SortingAndPaging
+	 * 
+	 * @return All entities filtered by the supplied parameters.
+	 */
 	PagingWrapper<T> getAll(final SortingAndPaging sAndP);
-
-	T get(final Serializable id) throws ObjectNotFoundException;
 }

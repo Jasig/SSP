@@ -1,10 +1,5 @@
 package org.jasig.ssp.dao.external;
 
-import java.io.Serializable;
-
-import javax.validation.constraints.NotNull;
-
-import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -18,15 +13,14 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
  */
 public interface ExternalDataDao<T> {
 
-	PagingWrapper<T> getAll(SortingAndPaging sAndP);
-
 	/**
-	 * Retrieves the specified instance from persistent storage.
+	 * Retrieve every instance in the database filtered by the supplied status,
+	 * sorting, and paging parameters.
 	 * 
-	 * @param id
-	 * @return The specified instance if found
-	 * @throws ObjectNotFoundException
-	 *             If object was not found.
+	 * @param sAndP
+	 *            SortingAndPaging
+	 * 
+	 * @return All entities in the database filtered by the supplied status.
 	 */
-	T get(@NotNull Serializable id) throws ObjectNotFoundException;
+	PagingWrapper<T> getAll(SortingAndPaging sAndP);
 }

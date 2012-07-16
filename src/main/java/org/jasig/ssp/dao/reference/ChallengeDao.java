@@ -73,10 +73,10 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 	 */
 	@SuppressWarnings(UNCHECKED)
 	public List<Challenge> searchByQuery(final String query) {
-		final String beginningHql = "select distinct c from Challenge c inner join c.challengeChallengeReferrals ccr where c.objectStatus = :objectStatus and c.showInSelfHelpSearch = true ";
-		final String endHql = " and exists (from ChallengeReferral where id = ccr.challengeReferral.id and showInSelfHelpGuide = true and objectStatus = :objectStatus) order by c.name";
+		final String beginningHql = "select distinct c from Challenge c inner join c.challengeChallengeReferrals ccr where c.objectStatus = :objectStatus and c.showInSelfHelpSearch = true "; // NOPMD
+		final String endHql = " and exists (from ChallengeReferral where id = ccr.challengeReferral.id and showInSelfHelpGuide = true and objectStatus = :objectStatus) order by c.name"; // NOPMD
 
-		if (StringUtils.isWhitespace(query)) {
+		if (!StringUtils.isNotBlank(query)) {
 			// no query specified so don't bother filtering by a wildcard string
 			return sessionFactory
 					.getCurrentSession()
@@ -110,7 +110,7 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 			final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("showInStudentIntake", true));
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
 	public PagingWrapper<Challenge> getAllForCategory(
@@ -121,7 +121,7 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		subQuery.add(Restrictions.eq("category.id", categoryId));
 		sAndP.addStatusFilterToCriteria(subQuery);
 
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
 	public PagingWrapper<Challenge> getAllForPerson(final UUID personId,
@@ -130,6 +130,6 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		final Criteria subQuery = query.createCriteria("peopleWithChallenge");
 		subQuery.add(Restrictions.eq("person.id", personId));
 		sAndP.addStatusFilterToCriteria(subQuery);
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 }

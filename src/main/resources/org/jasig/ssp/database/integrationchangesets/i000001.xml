@@ -113,4 +113,24 @@
 			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
 		</modifySql>
 	</changeSet>
+
+	<changeSet id="Update v_external_term view" author="jon.adams">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<dropView viewName="v_external_term" />
+		<createView viewName="v_external_term">
+			select ROW_NUMBER() OVER (ORDER BY code) as id, code, name, start_date, end_date, report_year from external_term
+		</createView>
+
+		<sql>grant all on v_external_term to ssp</sql>
+		<rollback>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

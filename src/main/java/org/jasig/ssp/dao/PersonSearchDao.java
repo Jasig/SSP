@@ -73,6 +73,6 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		}
 		query.add(terms);
 
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 }

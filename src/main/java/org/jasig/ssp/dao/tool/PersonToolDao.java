@@ -28,7 +28,7 @@ public class PersonToolDao
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("person.id", personId));
 		query.add(Restrictions.eq("tool", tool));
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
 }
