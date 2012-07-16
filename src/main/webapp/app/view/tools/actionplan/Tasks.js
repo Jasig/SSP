@@ -50,7 +50,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	            	// completed items cannot be edited 
 		    	            	// hide if completed or if user does not have permission to edit
 		    	            	var cls = 'x-hide-display';
-		    	            	if ( me.authenticatedPerson.hasPermission('ROLE_PERSON_TASK_WRITE') && record.get('completedDate') == null)
+		    	            	if ( me.authenticatedPerson.hasAccess('EDIT_TASK_BUTTON') && record.get('completedDate') == null)
 		    	            	{
 		    	            		cls = Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH;
 		    	            	}
@@ -72,7 +72,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	            	// completed items cannot be closed 
 		    	            	// hide if completed or if user does not have permission to edit
 		    	            	var cls = 'x-hide-display';
-		    	            	if ( me.authenticatedPerson.hasPermission('ROLE_PERSON_TASK_WRITE') && record.get('completedDate') == null)
+		    	            	if ( me.authenticatedPerson.hasAccess('CLOSE_TASK_BUTTON') && record.get('completedDate') == null)
 		    	            	{
 		    	            		cls = Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH;
 		    	            	}
@@ -94,7 +94,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	            	// completed items cannot be deleted 
 		    	            	// hide if completed or if user does not have permission to delete
 		    	            	var cls = 'x-hide-display';
-		    	            	if ( me.authenticatedPerson.hasPermission('ROLE_PERSON_TASK_DELETE') && record.get('completedDate') == null)
+		    	            	if ( me.authenticatedPerson.hasAccess('DELETE_TASK_BUTTON') && record.get('completedDate') == null)
 		    	            	{
 		    	            		cls = Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH;
 		    	            	}

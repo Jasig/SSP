@@ -1,7 +1,7 @@
 "use strict";
 var ssp = ssp || {};
-
-(function($, fluid) {
+ 
+(function($, fluid) { 
 	ssp.ReportSelector = function(container, options) {
 
                 
@@ -30,8 +30,9 @@ var ssp = ssp || {};
 		// Courses Select
 		var reportsSelect = that.locate('reportsSelect');
 		reportsSelect.append('<option value="/ssp/forms/AddressLabel.jsp">Address Labels Report</option>');
-		reportsSelect.append('<option name="test1" value="/ssp/forms/SpecialServices.jsp">Special Services Report</option>');
-		reportsSelect.change(reportsSelectChange);		
+		reportsSelect.append('<option value="/ssp/forms/SpecialServices.jsp">Special Services Report</option>');
+		reportsSelect.change(reportsSelectChange);	
+		reportsSelectChange();
 	}
 
 	// defaults

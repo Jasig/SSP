@@ -26,6 +26,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -58,7 +59,7 @@ public class PersonControllerIntegrationTest {
 
 	private static final String PERSON_SORTEDBY_FIRSTNAME_0 = "Alan";
 
-	private static final String PERSON_SORTEDBY_FIRSTNAME_3 = "James";
+	private static final String PERSON_SORTEDBY_FIRSTNAME_5 = "James";
 
 	private static final String TEST_SCHOOLID = "legacy school id";
 
@@ -188,9 +189,10 @@ public class PersonControllerIntegrationTest {
 				PERSON_SORTEDBY_FIRSTNAME_0, person.getFirstName());
 		iter.next(); // skip checking 2nd
 		iter.next(); // skip checking 3rd
-		final PersonTO person4 = iter.next(); // check 4th
-		assertEquals("4th",
-				PERSON_SORTEDBY_FIRSTNAME_3, person4.getFirstName());
+		iter.next(); // skip checking 4th
+		final PersonTO person5 = iter.next(); // check 5th
+		assertEquals("5th",
+				PERSON_SORTEDBY_FIRSTNAME_5, person5.getFirstName());
 	}
 
 	@Test(expected = ConstraintViolationException.class)
@@ -245,5 +247,16 @@ public class PersonControllerIntegrationTest {
 		person.setUsername("username");
 		person.setSchoolId("legacy id");
 		return person;
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

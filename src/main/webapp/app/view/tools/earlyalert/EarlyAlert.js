@@ -6,15 +6,17 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertToolViewController',
     inject: {
     	columnRendererUtils: 'columnRendererUtils',
+    	model: 'currentEarlyAlert',
         store: 'earlyAlertsStore'
     },
 	width: '100%',
 	height: '100%',
 	
 	initComponent: function() {	
-    	var sm = Ext.create('Ext.selection.CheckboxModel');
+    	var me=this;
+		var sm = Ext.create('Ext.selection.CheckboxModel');
 		
-		Ext.apply(this, 
+		Ext.apply(me, 
 				{
 		            autoScroll: true,
 		            title: 'Early Alerts',
@@ -24,25 +26,15 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 					    	        width:65,
 					    	        header: 'Action',
 					    	        items: [{
-					    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-					    	            tooltip: 'Edit Task',
+					    	            icon: Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH,
+					    	            tooltip: 'Respond to this Early Alert',
 					    	            handler: function(grid, rowIndex, colIndex) {
 					    	            	var rec = grid.getStore().getAt(rowIndex);
 					    	            	var panel = grid.up('panel');
 					    	                panel.model.data=rec.data;
-					    	                panel.appEventsController.getApplication().fireEvent('editJournalEntry');
+					    	                panel.appEventsController.getApplication().fireEvent('respondToEarlyAlert');
 					    	            },
-					    	            scope: this
-					    	        },{
-					    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-					    	            tooltip: 'Delete Task',
-					    	            handler: function(grid, rowIndex, colIndex) {
-					    	            	var rec = grid.getStore().getAt(rowIndex);
-					    	            	var panel = grid.up('panel');
-					    	                panel.model.data=rec.data;
-					    	            	panel.appEventsController.getApplication().fireEvent('deleteJournalEntry');
-					    	            },
-					    	            scope: this
+					    	            scope: me
 					    	        }]
 				                },
 	    		                { header: 'Name',  
@@ -71,6 +63,6 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 				    }]
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

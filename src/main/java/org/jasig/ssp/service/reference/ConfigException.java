@@ -13,6 +13,7 @@ public class ConfigException extends RuntimeException {
 	private static final long serialVersionUID = -8942382254216555779L;
 
 	public static final String CONFIG_TYPE = "Config";
+
 	public static final String TEMPLATE_TYPE = "Message Template";
 
 	public ConfigException(final String propertyName) {

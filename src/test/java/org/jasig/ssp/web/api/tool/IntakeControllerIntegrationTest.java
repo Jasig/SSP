@@ -214,18 +214,19 @@ public class IntakeControllerIntegrationTest {
 					.getChallengeChallengeReferrals()) {
 				assertTrue(
 						"All Referrals with !ShowInStudentIntake should not have been returned.",
-						referral.isShowInStudentIntake());
+						referral.getShowInStudentIntake());
 			}
 		}
 	}
 
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
 	@Test
 	public void testLogger() {
 		final Logger logger = controller.getLogger();
-		logger.info("Test");
-		assertNotNull("logger should not have been null.", logger);
-		assertEquals("Logger name was not specific to the class.",
-				"org.jasig.ssp.web.api.tool.IntakeController",
-				logger.getName());
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

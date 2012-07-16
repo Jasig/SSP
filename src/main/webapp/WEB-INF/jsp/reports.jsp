@@ -9,6 +9,7 @@
 <c:set var="n"><portlet:namespace/></c:set>
 
 <script src="<rs:resourceURL value="/rs/jquery/1.6.1/jquery-1.6.1.min.js"/>" type="text/javascript"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="<rs:resourceURL value="/rs/jqueryui/1.8.13/jquery-ui-1.8.13.min.js"/>" type="text/javascript"></script>
 <script src="<rs:resourceURL value="/rs/fluid/1.4.0/js/fluid-all-1.4.0.min.js"/>" type="text/javascript"></script>
 <script src="<c:url value="/js/reports.js" />" type="text/javascript"></script>
@@ -47,9 +48,6 @@
     
 
 	<div class="reports-form-body"> 
-
-
-  		
 	</div>
     
   </div> <!-- end: portlet-body -->

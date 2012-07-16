@@ -1,5 +1,6 @@
 package org.jasig.ssp.transferobject.external;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -8,12 +9,15 @@ import org.jasig.ssp.model.external.Term;
 
 import com.google.common.collect.Lists;
 
-public class TermTO
-		implements ExternalDataTO<Term> { // NOPMD by jon.adams
+public class TermTO implements ExternalDataTO<Term> {
 
-	private String code, name;
+	private String code;
 
-	private Date startDate, endDate;
+	private String name;
+
+	private Date startDate;
+
+	private Date endDate;
 
 	private int reportYear;
 
@@ -87,20 +91,23 @@ public class TermTO
 	}
 
 	@Override
-	public String[] getId() {
-		final String[] id = { code };
-		return id;
+	public Serializable getId() {
+		return code;
 	}
 
+	/**
+	 * Sets the identifier.
+	 * 
+	 * @throws ClassCastException
+	 *             if the specified identifier is not of the expected type.
+	 */
 	@Override
-	public void setId(final String[] id) {
-		if (id != null) {
-			if (id.length == 1) {
-				code = id[0];
-			} else {
-				throw new IllegalArgumentException(
-						"Term id should be comprised of one string: code.");
-			}
+	public void setId(final Serializable id) {
+		if (!(id instanceof String)) {
+			throw new ClassCastException(
+					"Can not cast identifier to the expected type. Id: " + id);
 		}
+
+		code = (String) id;
 	}
 }

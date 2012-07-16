@@ -32,6 +32,7 @@ Ext.require([
     'Ssp.view.tools.profile.SpecialServiceGroups',
     'Ssp.view.tools.profile.ReferralSources',
     'Ssp.view.tools.profile.ServicesProvided',
+    'Ssp.view.tools.profile.ServiceReasons',
     'Ssp.view.tools.actionplan.ActionPlan',
     'Ssp.view.tools.actionplan.Tasks',
     'Ssp.view.tools.actionplan.AddTask',
@@ -55,6 +56,7 @@ Ext.require([
     'Ssp.view.tools.journal.TrackTree',
     'Ssp.view.tools.earlyalert.EarlyAlert',
     'Ssp.view.tools.earlyalert.EarlyAlertResponse',
+    'Ssp.view.tools.earlyalert.EarlyAlertReferrals',
     'Ssp.view.tools.document.StudentDocuments',
     'Ssp.view.tools.document.EditDocument',
     'Ssp.view.tools.sis.StudentInformationSystem',
@@ -231,9 +233,10 @@ var apiUrls = [
   {name: 'person', url: 'person'},
   {name: 'personAppointment', url: '/ssp/api/1/person/{id}/appointment'},
   {name: 'personChallenge', url: 'person/{id}/challenge'},
+  {name: 'personCoach', url: 'person/coach'},
   {name: 'personDocument', url: 'person/{id}/document'},
   {name: 'personEarlyAlert', url: 'person/{id}/earlyAlert'},
-  {name: 'personEarlyAlertResponse', url: 'person/{id}/earlyAlert/{id}/earlyAlertResponse'},
+  {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlert/{earlyId}/earlyAlertResponse'},
   {name: 'personGoal', url: 'person/{id}/goal'},
   {name: 'personJournalEntry', url: 'person/{id}/journalEntry'},
   {name: 'personTask', url: 'person/{id}/task'},
@@ -256,7 +259,7 @@ Ext.onReady(function(){
 
     // load the authenticated user
 	Ext.Ajax.request({
-		url: Ssp.mixin.ApiProperties.getBaseAppUrl() + 'session/getAuthenticatedPerson',
+		url: Ssp.mixin.ApiProperties.getBaseApiUrl() + 'session/getAuthenticatedPerson',
 		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 		success: function(response){
@@ -305,6 +308,7 @@ Ext.onReady(function(){
 				        fn: function(){
 				        	var p = new Ssp.model.AuthenticatedPerson();
 				        	p.populateFromGenericObject( user );
+				        	p.setObjectPermissions();
 				            return p;
 				        },
 				        singleton: true
@@ -395,7 +399,7 @@ Ext.onReady(function(){
 			        },
 			        currentEarlyAlert:{
 				        fn: function(){
-				            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:"",courseTitle:'DEV-065-TC - Developmental Reading'});
+				            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:""});
 				    	},
 				        singleton: true
 			        },
@@ -445,6 +449,14 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        profileServiceReasonsStore:{
+				        fn: function(){
+				            return Ext.create('Ext.data.Store',{
+				            	model: 'Ssp.model.reference.ServiceReason'
+				            });
+				    	},
+				        singleton: true
+			        },
 			        errorsStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
@@ -472,6 +484,7 @@ Ext.onReady(function(){
 					earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
 					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
 					earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
+					earlyAlertReferralsBindStore: 'Ssp.store.reference.EarlyAlertReferralsBind',
 				    earlyAlertsStore: 'Ssp.store.EarlyAlerts',
 					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
 				    educationGoalsStore: 'Ssp.store.reference.EducationGoals',

@@ -1,7 +1,6 @@
 package org.jasig.ssp.service;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -71,7 +70,8 @@ public class ObjectNotFoundException extends Exception implements Serializable {
 	 *            {@link #getCause()} method). (A null value is permitted, and
 	 *            indicates that the cause is nonexistent or unknown.)
 	 */
-	public ObjectNotFoundException(final UUID objectId, final String name,
+	public ObjectNotFoundException(final Serializable objectId,
+			final String name,
 			final Throwable cause) {
 		this(message(objectId, name), cause);
 		this.objectId = objectId;
@@ -97,7 +97,8 @@ public class ObjectNotFoundException extends Exception implements Serializable {
 	 *            {@link #getCause()} method). (A null value is permitted, and
 	 *            indicates that the cause is nonexistent or unknown.)
 	 */
-	public ObjectNotFoundException(final UUID objectId, final String name,
+	public ObjectNotFoundException(final Serializable objectId,
+			final String name,
 			final String message, final Throwable cause) {
 		this(message(objectId, name) + ". " + message, cause);
 		this.objectId = objectId;

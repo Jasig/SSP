@@ -15,14 +15,17 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
+import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -30,6 +33,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.BaseController;
@@ -63,6 +67,8 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 
 	@Autowired
 	private transient PersonService personService;
+	@Autowired
+	private transient PersonTOFactory personTOFactory;
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
 	@Autowired
@@ -107,6 +113,7 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 		final List<Person> people = personService.peopleFromCriteria(
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
+		final List<PersonTO> peopleTO = personTOFactory.asTOList(people);
 
 		// Get the actual names of the UUIDs for the special groups
 		final List<String> specialGroupsNames = new ArrayList<String>();
@@ -129,10 +136,11 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 						referralSourceIter.next()).getName());
 			}
 		}
-		
-		//final String programStatusName = ((null!=programStatus && !programStatus.isEmpty())?programStatus.get(0)():"");
+
+		// final String programStatusName = ((null!=programStatus &&
+		// !programStatus.isEmpty())?programStatus.get(0)():"");
 		// Get the actual name of the UUID for the programStatus
-		final String programStatusName = (programStatus == null ? "" 
+		final String programStatusName = (programStatus == null ? ""
 				: programStatusService.get(programStatus).getName());
 
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -145,24 +153,31 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 		parameters.put("referralSourceNames", referralSourcesNames);
 		parameters.put("studentTypeIds", studentTypeIds);
 		parameters.put("reportDate", new Date());
-		parameters.put("studentCount", people.size());
+		parameters.put("studentCount", peopleTO == null ? 0 : peopleTO.size());
 
-		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
-				people.toArray());
+		JRDataSource beanDS;
+		if (peopleTO == null || peopleTO.size() <= 0) {
+			beanDS = new JREmptyDataSource();
+		} else {
+			beanDS = new JRBeanCollectionDataSource(peopleTO);
+		}
+
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/addressLabels.jasper");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
+		JasperFillManager.fillReportToStream(is, os, parameters, beanDS);
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
 
 		if ("pdf".equals(reportType)) {
+			response.setHeader("Content-disposition",
+					"attachment; filename=AddressLabelReprt.pdf");
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
 		} else if ("csv".equals(reportType)) {
 			response.setContentType("application/vnd.ms-excel");
 			response.setHeader("Content-disposition",
-					"attachment; filename=test.csv");
+					"attachment; filename=AddressLabelReprt.csv");
 
 			final JRCsvExporter exporter = new JRCsvExporter();
 			exporter.setParameter(JRExporterParameter.INPUT_STREAM,

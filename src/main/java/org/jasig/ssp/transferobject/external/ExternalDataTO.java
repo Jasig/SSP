@@ -1,12 +1,13 @@
 package org.jasig.ssp.transferobject.external;
 
-import org.jasig.ssp.model.external.ExternalData;
+import java.io.Serializable;
+
 import org.jasig.ssp.transferobject.TransferObject;
 
-public interface ExternalDataTO<M extends ExternalData> extends
+public interface ExternalDataTO<M> extends
 		TransferObject<M> {
 
-	String[] getId();
+	Serializable getId();
 
-	void setId(final String[] id);
+	void setId(final Serializable id);
 }

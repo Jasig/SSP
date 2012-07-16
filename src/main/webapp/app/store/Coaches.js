@@ -6,10 +6,11 @@ Ext.define('Ssp.store.Coaches', {
         apiProperties: 'apiProperties'
     },
 	constructor: function(){
-		Ext.apply(this, {
-							proxy: this.apiProperties.getProxy(this.apiProperties.getItemUrl('person')),
-							autoLoad: false
-						});
-		return this.callParent(arguments);
+		var me=this;
+		Ext.apply(me, {
+						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')),
+						autoLoad: false
+					});
+		return me.callParent(arguments);
 	}
 });

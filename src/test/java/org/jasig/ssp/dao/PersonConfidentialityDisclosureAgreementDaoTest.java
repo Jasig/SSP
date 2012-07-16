@@ -7,6 +7,12 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasig.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,15 +22,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.jasig.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class PersonConfidentialityDisclosureAgreementDaoTest {
@@ -52,7 +51,7 @@ public class PersonConfidentialityDisclosureAgreementDaoTest {
 		try {
 			agreements = dao
 					.forStudent(personService.personFromUsername("ken"));
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			// this is really not likely
 			fail("threw an Object not found exception");
 		}
@@ -69,7 +68,7 @@ public class PersonConfidentialityDisclosureAgreementDaoTest {
 							personService.personFromUsername("ken"),
 							confidentialityDao.get(UUID
 									.fromString("06919242-824c-11e1-af98-0026b9e7ff4c")));
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			// this is really not likely
 			fail("threw an Object not found exception");
 		}
@@ -78,8 +77,8 @@ public class PersonConfidentialityDisclosureAgreementDaoTest {
 	}
 
 	private void assertList(
-			List<PersonConfidentialityDisclosureAgreement> objects) {
-		for (PersonConfidentialityDisclosureAgreement object : objects) {
+			final List<PersonConfidentialityDisclosureAgreement> objects) {
+		for (final PersonConfidentialityDisclosureAgreement object : objects) {
 			assertNotNull(object.getId());
 		}
 	}

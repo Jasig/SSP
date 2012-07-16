@@ -33,7 +33,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
 		me.getView().getForm().loadRecord( me.model );
 		me.getSaveButton().disabled=true;
     	
-		me.getStrengthsField().setDisabled( !me.authenticatedPerson.hasPermission('ROLE_PERSON_WRITE') );
+		me.getStrengthsField().setDisabled( !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_FIELD') );
 
 		return me.callParent(arguments);
     },

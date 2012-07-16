@@ -7,18 +7,19 @@ Ext.define('Ssp.store.reference.AbstractReferences', {
     },
 
 	constructor: function(){
-		Ext.apply(this, { 
-						    proxy: this.apiProperties.getProxy(''), 
+		var me=this;
+		Ext.apply(me, { 
+						    proxy: me.apiProperties.getProxy(''), 
 							autoLoad: false,
 							autoSync: false,
-						    pageSize: this.apiProperties.getPagingSize(),
+						    pageSize: me.apiProperties.getPagingSize(),
 						    params : {
 								page : 0,
 								start : 0,
-								limit : this.apiProperties.getPagingSize()
+								limit : me.apiProperties.getPagingSize()
 							}						
 						}
 		);
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

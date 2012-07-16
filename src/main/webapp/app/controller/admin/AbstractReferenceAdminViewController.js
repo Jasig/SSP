@@ -2,10 +2,12 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	apiProperties: 'apiProperties'
+    	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson'
     },  
     control: {
 		view: {
+			beforeedit: 'onBeforeEdit',
 			edit: 'editRecord'
 		},
 		
@@ -15,18 +17,29 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 
 		'deleteButton': {
 			click: 'deleteConfirmation'
-		}    	
+		},
+		
+		recordPager: '#recordPager'
     },
     
 	init: function() {
 		return this.callParent(arguments);
     },
 
+    onBeforeEdit: function(){
+		var me=this;
+		var access = me.authenticatedPerson.hasAccess('ABSTRACT_REFERENCE_ADMIN_EDIT');
+		if ( access == false)
+		{
+			me.authenticatedPerson.showUnauthorizedAccessAlert();
+		}
+    	return access;
+    },
+    
 	editRecord: function(editor, e, eOpts) {
 		var record = e.record;
 		var id = record.get('id');
 		var jsonData = record.data;
-		console.log( editor.grid.getStore().getProxy().url+"/"+id );
 		Ext.Ajax.request({
 			url: editor.grid.getStore().getProxy().url+"/"+id,
 			method: 'PUT',
@@ -42,6 +55,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 	},
 	
 	addRecord: function(button){
+		var me=this;
 		var grid = button.up('grid');
 		var store = grid.getStore();
 		var item = Ext.create( store.model.modelName, {}); // new Ssp.model.reference.AbstractReference();
@@ -74,9 +88,12 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				store.insert(0, item );
 		       	grid.plugins[0].startEdit(0, 0);
 		       	grid.plugins[0].editor.items.getAt(0).selectText();
+		        //me.getRecordPager().refresh();
+		       	store.totalCount = store.totalCount+1;
+		       	me.getRecordPager().onLoad();
 			},
-			failure: this.apiProperties.handleError
-		}, this);
+			failure: me.apiProperties.handleError
+		}, me);
 	},
 
     deleteConfirmation: function( button ) {
@@ -117,6 +134,9 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
        			   if (r.success==true)
        			   {
        				store.remove( store.getById( id ) );
+       				//store.totalCount = store.totalCount-1;
+       				//me.getRecordPager().onLoad();
+       			    me.getRecordPager().refresh();
        			   }
        		   }
        	    });

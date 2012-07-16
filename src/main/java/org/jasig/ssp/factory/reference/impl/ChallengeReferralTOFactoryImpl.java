@@ -43,8 +43,8 @@ public class ChallengeReferralTOFactoryImpl extends
 		final ChallengeReferral model = super.from(tObject);
 
 		model.setPublicDescription(tObject.getPublicDescription());
-		model.setShowInSelfHelpGuide(tObject.isShowInSelfHelpGuide());
-		model.setShowInStudentIntake(tObject.isShowInStudentIntake());
+		model.setShowInSelfHelpGuide(tObject.getShowInSelfHelpGuide());
+		model.setShowInStudentIntake(tObject.getShowInStudentIntake());
 
 		return model;
 	}

@@ -26,7 +26,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class ChallengeCategoryDaoTest {
@@ -91,7 +91,7 @@ public class ChallengeCategoryDaoTest {
 	}
 
 	private void assertList(final Collection<ChallengeCategory> objects) {
-		for (ChallengeCategory object : objects) {
+		for (final ChallengeCategory object : objects) {
 			assertNotNull(object.getId());
 		}
 	}

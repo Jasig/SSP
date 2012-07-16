@@ -1,11 +1,15 @@
 Ext.define('Ssp.mixin.ApiProperties', {	
 	Extend: 'Ext.Component',
     mixins: [ 'Deft.mixin.Injectable' ],
+    config: {
+    	baseUrl: '',
+    	baseApiUrl: ''
+    },
     inject: {
     	apiUrlStore: 'apiUrlStore' 
     },
     statics: {
-    	getBaseAppUrl: function(){
+    	getBaseApiUrl: function(){
     		var apiVersion = "1";
     	    var base = document.getElementsByTagName('base')[0];
     	    if (base && base.href && (base.href.length > 0)) {
@@ -14,15 +18,31 @@ Ext.define('Ssp.mixin.ApiProperties', {
     	        base = document.URL;
     	    }
     	    return base.substr(0, base.indexOf("/", base.indexOf("//") + 2) + 1) + Ext.Loader.getPath('ContextName') + '/api/' + apiVersion + '/';
+    	},
+    	
+    	getBaseAppUrl: function(){
+    		var apiVersion = "1";
+    	    var base = document.getElementsByTagName('base')[0];
+    	    if (base && base.href && (base.href.length > 0)) {
+    	        base = base.href;
+    	    } else {
+    	        base = document.URL;
+    	    }
+    	    return base.substr(0, base.indexOf("/", base.indexOf("//") + 2) + 1) + Ext.Loader.getPath('ContextName');
     	}
     },
     
 	initComponent: function(){
+		var me=this;
+		
+		me.baseUrl = Ssp.mixin.ApiProperties.getBaseAppUrl();
+		me.baseApiUrl = Ssp.mixin.ApiProperties.getBaseApiUrl();
+			
 		this.callParent(arguments);
 	},
 	
 	getContext: function() {
-		return Ssp.mixin.ApiProperties.getBaseAppUrl();
+		return Ssp.mixin.ApiProperties.getBaseApiUrl();
 	},
 	
 	createUrl: function(value){
@@ -66,10 +86,11 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	 *    successFunc - success function
 	 *    scope - scope
 	 */
-	makeRequest: function(args){
+	makeRequest: function( args ){
+		var me=this;
 		var contentType = "application/json";
-		var errorHandler = this.handleError;
-		var isUpload = false;
+		var errorHandler = me.handleError;
+		var scope = me;
 		if (args.failure != null)
 		{
 			errorHandler = args.failure;
@@ -78,33 +99,56 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		{
 			contentType = args.contentType;
 		}
-		if ( args.isUpload != null )
+		if (args.scope != undefined && args.scope != null)
 		{
-			isUpload = true;
+			scope = args.scope;
 		}
 		Ext.Ajax.request({
 			url: args.url,
 			method: args.method,
 			headers: { 'Content-Type': contentType },
 			jsonData: args.jsonData || '',
-			isUpload: isUpload,
 			success: args.successFunc,
 			failure: errorHandler,
-			scope: ((args.scope != null)? args.scope : this)
-		},this);		
+			scope: scope
+		},me);		
 	},
 	
 	handleError: function(response) {
+		console.log(this);
+		var me=this;
 		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
 		var r = Ext.decode(response.responseText);
-
-		if (r.message != null)
+		console.log(response.status);
+		if (response.status==403)
 		{
-			msg = msg + " " + r.message;
+			Ext.Msg.confirm({
+	   		     title:'Access Denied Error',
+	   		     msg: "It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in SSP?",
+	   		     buttons: Ext.Msg.YESNO,
+	   		     fn: me.loginConfirmResult,
+	   		     scope: me
+	   		});
+		}else{
+			if (r.message != null)
+			{
+				msg = msg + " " + r.message;
+				Ext.Msg.alert('SSP Error', msg);
+			}
 		}
-		
-		Ext.Msg.alert('SSP Error', msg);								
 	},
+	
+    loginConfirmResult: function( btnId ){
+    	var me=this;
+    	if (btnId=="yes")
+    	{
+    		// force a login
+    		window.location.reload();
+    	}else{
+    		// force a login
+    		window.location.reload();
+    	}
+    },	
 	
 	/*
 	 * Returns the base url of an item in the system.

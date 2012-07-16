@@ -44,7 +44,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
                         {
 	    	            	// hide if user does not have permission to edit
 	    	            	var cls = 'x-hide-display';
-	    	            	if ( me.authenticatedPerson.hasPermission('ROLE_PERSON_GOAL_WRITE') )
+	    	            	if ( me.authenticatedPerson.hasAccess('EDIT_GOAL_BUTTON') )
 	    	            	{
 	    	            		cls = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
 	    	            	}
@@ -65,7 +65,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
                         {
 	    	            	// hide if user does not have permission to delete
 	    	            	var cls = 'x-hide-display';
-	    	            	if ( me.authenticatedPerson.hasPermission('ROLE_PERSON_GOAL_DELETE') )
+	    	            	if ( me.authenticatedPerson.hasAccess('DELETE_GOAL_BUTTON') )
 	    	            	{
 	    	            		cls = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
 	    	            	}
@@ -91,6 +91,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 			        items: [{
 			            tooltip: 'Add a Goal',
 			            text: 'Add',
+			            hidden: !me.authenticatedPerson.hasAccess('ADD_GOAL_BUTTON'),
 			            xtype: 'button',
 			            itemId: 'addGoalButton'
 			        }]

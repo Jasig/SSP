@@ -46,7 +46,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 				                 },{ 
 						        	xtype: 'tbspacer',
 						        	width: 50
-						         },{
+						         }/*,{
 							        xtype: 'checkbox',
 							        boxLabel: 'Send Student Intake Request', 
 							        name: 'sendStudentIntakeRequest'
@@ -61,7 +61,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 								 },{ 
 						        	xtype: 'tbspacer',
 						        	flex: 1
-						         },
+						         }*/,
 				                 {
 				            	   xtype: 'button',
 				            	   itemId: 'printButton',

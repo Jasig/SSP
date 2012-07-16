@@ -5,8 +5,10 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,6 +31,8 @@ public class JournalStepServiceTest {
 
 	private transient JournalStepDao dao;
 
+	public final static String TEST_STRING1 = "Test String 1";
+
 	@Before
 	public void setUp() {
 		service = new JournalStepServiceImpl();
@@ -49,7 +53,7 @@ public class JournalStepServiceTest {
 
 		final Collection<JournalStep> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertFalse(all.isEmpty());
+		assertFalse("Collection should not have been empty.", all.isEmpty());
 		verify(dao);
 	}
 
@@ -62,7 +66,26 @@ public class JournalStepServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.get(id));
+		final JournalStep journalStep = service.get(id);
+		assertNotNull("Object should not have been null.", journalStep);
+		assertFalse("Default bool value did match expected.",
+				journalStep.isUsedForTransition());
+		verify(dao);
+	}
+
+	@Test
+	public void testGetWithName() throws ObjectNotFoundException {
+		final UUID id = UUID.randomUUID();
+		final JournalStep daoOne = new JournalStep(id, TEST_STRING1);
+
+		expect(dao.get(id)).andReturn(daoOne);
+
+		replay(dao);
+
+		final JournalStep journalStep = service.get(id);
+		assertNotNull("Object should not have been null.", journalStep);
+		assertEquals("Names did not match.", TEST_STRING1,
+				journalStep.getName());
 		verify(dao);
 	}
 
@@ -75,7 +98,8 @@ public class JournalStepServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		assertNotNull("Save result should not have been null.",
+				service.save(daoOne));
 		verify(dao);
 	}
 
@@ -93,15 +117,13 @@ public class JournalStepServiceTest {
 
 		service.delete(id);
 
-		boolean found = true;
 		try {
 			service.get(id);
-		} catch (final ObjectNotFoundException e) {
-			found = false;
+			fail("Deleted item should have thrown an exception upon reloading."); // NOPMD
+		} catch (final ObjectNotFoundException e) { // NOPMD
+			/* expected */
 		}
 
-		assertFalse(found);
 		verify(dao);
 	}
-
 }

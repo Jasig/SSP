@@ -3,10 +3,12 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson',
         appEventsController: 'appEventsController',
+        confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
-    	person: 'currentPerson',
-    	model: 'currentJournalEntry'
+    	model: 'currentJournalEntry',
+    	person: 'currentPerson'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -47,14 +49,19 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     },
     
 	init: function() {
-		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personJournalEntry') );
-		this.url = this.url.replace('{id}',this.person.get('id'));
+		var me=this;
+
+		// apply confidentiality level filter
+		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );		
 		
-		this.initForm();
+		me.url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personJournalEntry') );
+		me.url = me.url.replace('{id}',me.person.get('id'));
 		
-		return this.callParent(arguments);
-    },
- 
+		me.initForm();
+		
+		return me.callParent(arguments);
+    },   
+    
 	initForm: function(){
 		var id = this.model.get("id");
 		this.getView().getForm().reset();
@@ -65,7 +72,16 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 
 		this.inited=true;
 	},    
-    
+	
+    destroy: function() {
+    	var me=this;  	
+
+    	// clear confidentiality level filter
+    	me.confidentialityLevelsStore.clearFilter();
+    	
+        return me.callParent( arguments );
+    },	
+	
 	onSaveClick: function(button) {
 		console.log( 'EditJournalViewController->onSaveClick' );
 		var me = this;

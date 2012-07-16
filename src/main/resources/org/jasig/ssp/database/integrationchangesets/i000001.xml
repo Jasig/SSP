@@ -9,20 +9,23 @@
 
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
-	<property name="externalDate" value="getDate()" dbms="postgresql" />
-	<property name="externalDate" value="getDate()" dbms="mssql" />
-	<property name="externalUser" value="a new UUID"/>
-	<property name="check_for_manage_integration_database_config_sql" value="select count(id) from config where name='manage_integration_database'" />
-	<property name="should_manage_integration_database_sql" value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+	<property name="externalUser" value="a new UUID" />
+	<property name="check_for_manage_integration_database_config_sql"
+		value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+		value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
 
-	<!-- If there is a config table and it does not already contain the 
-	manage_integration_database key then add it and set its value to true -->
+	<!-- If there is a config table and it does not already contain the manage_integration_database 
+		key then add it and set its value to true -->
 	<changeSet id="Add manage_integration_database key" author="daniel.bower">
-		<preConditions onFail="CONTINUE" onFailMessage="manage_integration_database key already exists in the config table, skipping creation">
-			<tableExists tableName="config"/>
-			<sqlCheck expectedResult="0">select count(id) from config where name='manage_integration_database'</sqlCheck>
+		<preConditions onFail="CONTINUE"
+			onFailMessage="manage_integration_database key already exists in the config table, skipping creation">
+			<tableExists tableName="config" />
+			<sqlCheck expectedResult="0">select count(id) from config where
+				name='manage_integration_database'
+			</sqlCheck>
 		</preConditions>
-		
+
 		<insert tableName="config">
 			<column name="id" value="333c4e98-ccef-11e1-8ff5-0026b9e7ff4c" />
 			<column name="name" value="manage_integration_database" />
@@ -37,24 +40,44 @@
 			<column name="sort_order" value="100" />
 			<column name="default_value" value="true" />
 		</insert>
-		
+
 		<rollback>
 			<delete tableName="config">
 				<where>id='333c4e98-ccef-11e1-8ff5-0026b9e7ff4c'</where>
 			</delete>
-			</rollback>
+		</rollback>
 	</changeSet>
-	
-	<changeSet id="create external data user" author="daniel.bower">
-		
+
+	<changeSet id="create external data user" author="jon.adams">
+		<insert tableName="person">
+			<column name="id" value="a9a337fc-c35e-4bcc-91a8-06de3b6b441e" />
+			<column name="first_name" value="External" />
+			<column name="last_name" value="Data" />
+			<column name="primary_email_address" value="test@sinclair.edu" />
+			<column name="username" value="_external" />
+			<column name="school_id" value="_external" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="person">
+				<where>id='a9a337fc-c35e-4bcc-91a8-06de3b6b441e'</where>
+			</delete>
+		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="Add external_term table" author="daniel.bower">
-		<preConditions onFail="CONTINUE" onFailMessage="Skip creating the external_term table for integration database">
-			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}</sqlCheck>
-			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
 		</preConditions>
-		
+
 		<createTable tableName="external_term">
 			<column name="name" type="${nvarchar.type}(80)">
 				<constraints nullable="false" />
@@ -72,15 +95,15 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
-		<createView viewName="term">
-			select name, code, start_date, end_date, report_year from external_term
+
+		<createView viewName="v_external_term">
+			select code, name, start_date, end_date, report_year from external_term
 		</createView>
 
 		<sql>grant all on external_term to ssp</sql>
-		<sql>grant all on term to ssp</sql>
+		<sql>grant all on v_external_term to ssp</sql>
 		<rollback>
-			<dropView viewName="term"/>
+			<dropView viewName="v_external_term" />
 			<dropTable tableName="external_term" />
 		</rollback>
 

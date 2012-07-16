@@ -58,7 +58,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	/**
 	 * @return the showInSelfHelpGuide
 	 */
-	public Boolean isShowInSelfHelpGuide() {
+	public Boolean getShowInSelfHelpGuide() {
 		return showInSelfHelpGuide;
 	}
 
@@ -73,7 +73,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	/**
 	 * @return the showInStudentIntake
 	 */
-	public Boolean isShowInStudentIntake() {
+	public Boolean getShowInStudentIntake() {
 		return showInStudentIntake;
 	}
 

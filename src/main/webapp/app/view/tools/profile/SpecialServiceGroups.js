@@ -8,10 +8,11 @@ Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
 	width: '100%',
 	height: '100%',
 	initComponent: function() {	
-		Ext.apply(this, 
+		var me=this;
+		Ext.apply(me, 
 				{
 			        hideHeaders: true,
-			        store: this.store,
+			        store: me.store,
 					autoScroll: true,
     		        columns: [
     		                { header: 'Group',  
@@ -20,6 +21,6 @@ Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
     		                }],
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

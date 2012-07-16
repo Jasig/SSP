@@ -8,7 +8,7 @@
 	<parameter name="initialDate" class="java.util.Date"/>
 	<parameter name="reviewDate" class="java.util.Date"/>
 	<parameter name="followupDate" class="java.util.Date"/>
-	<parameter name="goals" class="net.sf.jasperreports.engine.data.JRBeanArrayDataSource"/>
+	<parameter name="goals" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<queryString language="json">
 		<![CDATA[]]>
 	</queryString>
@@ -22,14 +22,9 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="60" splitType="Stretch">
+		<band height="91" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="3a5dca54-1006-4f21-a054-1f544849639d" x="10" y="30" width="100" height="13"/>
-				<textElement/>
-				<text><![CDATA[Initial Date:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="46" width="100" height="13"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="30" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Review Date:]]></text>
 			</staticText>
@@ -44,7 +39,7 @@
 				<text><![CDATA[Student ID:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="359" y="39" width="100" height="13"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="359" y="30" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Follow-up Date:]]></text>
 			</staticText>
@@ -59,26 +54,32 @@
 				<textFieldExpression><![CDATA[$P{studentId}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="c10214b9-e6f6-4931-b789-9ccb89670a1b" x="110" y="30" width="100" height="13"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{initialDate}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="a823e823-5bf8-4813-8611-c57ed09ca76b" x="110" y="46" width="100" height="13"/>
+				<reportElement uuid="a823e823-5bf8-4813-8611-c57ed09ca76b" x="110" y="30" width="100" height="13"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reviewDate}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="3234291d-9c1c-4a26-9a01-76820bc91e62" x="472" y="39" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{followupDate}]]></textFieldExpression>
-			</textField>
+			<line>
+				<reportElement uuid="81713ba5-eaed-45ea-8ff6-e4a110b9d06e" x="464" y="41" width="100" height="1"/>
+			</line>
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="56" width="572" height="35" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="210" y="65" width="152" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Student Action Plan]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="63" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="19f089d6-00fb-46ae-bc54-ef0012f8f77f" x="0" y="1" width="572" height="20" backcolor="#AFAAAA"/>
+			</rectangle>
 			<staticText>
-				<reportElement uuid="93bf8f38-92a2-4aa4-afa6-03f692c1da5c" x="10" y="0" width="100" height="20"/>
+				<reportElement uuid="93bf8f38-92a2-4aa4-afa6-03f692c1da5c" x="10" y="4" width="100" height="17"/>
 				<textElement/>
 				<text><![CDATA[Goal(s)]]></text>
 			</staticText>

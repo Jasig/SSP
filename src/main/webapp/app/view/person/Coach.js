@@ -6,6 +6,7 @@ Ext.define('Ssp.view.person.Coach', {
     controller: 'Ssp.controller.person.CoachViewController',
     inject: {
     	coachesStore: 'coachesStore',
+    	sspConfig: 'sspConfig',
     	studentTypesStore: 'studentTypesStore'
     },
 	initComponent: function() {	
@@ -32,7 +33,7 @@ Ext.define('Ssp.view.person.Coach', {
 				        xtype: 'combobox',
 				        name: 'coachId',
 				        itemId: 'coachCombo',
-				        fieldLabel: 'Assigned Coach',
+				        fieldLabel: me.sspConfig.get('coachFieldLabel'),
 				        emptyText: 'Select One',
 				        store: me.coachesStore,
 				        valueField: 'id',

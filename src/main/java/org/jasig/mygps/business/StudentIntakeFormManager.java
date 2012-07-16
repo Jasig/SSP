@@ -68,10 +68,12 @@ import com.google.common.collect.Sets;
 
 @Service
 @Transactional
-public class StudentIntakeFormManager {
+public class StudentIntakeFormManager { // NOPMD
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsStudentIntakeController.class);
+
+	private static final String DEFAULT_MAXIMUM_STRING_LENGTH = "255";
 
 	@Autowired
 	private transient ChallengeDao challengeDao;
@@ -316,7 +318,7 @@ public class StudentIntakeFormManager {
 	 *             If currently authenticated user data could not be refreshed.
 	 * @return A form transfer object filled with current user data.
 	 */
-	public FormTO populate() throws ObjectNotFoundException {
+	public FormTO populate() throws ObjectNotFoundException { // NOPMD
 		final FormTO formTO = create();
 		Person student = securityService.currentUser().getPerson();
 
@@ -832,7 +834,7 @@ public class StudentIntakeFormManager {
 		return formTO;
 	}
 
-	public Person save(final FormTO formTO) throws ObjectNotFoundException {
+	public Person save(final FormTO formTO) throws ObjectNotFoundException { // NOPMD
 
 		// Refresh Person from Hibernate so lazy-loading works in case the
 		// person instance was loaded in a previous request
@@ -957,7 +959,8 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO childCareArrangementQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID);
 
-		if (childCareArrangementQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE) {
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(childCareArrangementQuestion
+				.getValue())) {
 			demographics.setChildCareArrangement(null);
 		} else {
 			// get matching FormOption since IDs do not line up with database
@@ -977,7 +980,8 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO childCareNeededQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID);
 
-		if ((childCareNeededQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(childCareNeededQuestion
+				.getValue())
 				|| (childCareNeededQuestion.getValue() == null)) {
 			demographics.setChildCareNeeded(false);
 		} else {
@@ -990,7 +994,8 @@ public class StudentIntakeFormManager {
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID);
 
 		if ((citizenshipQuestion.getValue() == null)
-				|| (citizenshipQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)) {
+				|| DEFAULT_DROPDOWN_LIST_VALUE.equals(citizenshipQuestion
+						.getValue())) {
 			demographics.setCitizenship(null);
 		} else {
 			// get matching FormOption since IDs do not line up with database
@@ -1034,7 +1039,7 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO ethnicityQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID);
 
-		if ((ethnicityQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(ethnicityQuestion.getValue())
 				|| (ethnicityQuestion.getValue() == null)) {
 			demographics.setEthnicity(null);
 		} else {
@@ -1052,7 +1057,7 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO genderQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID);
 
-		if ((genderQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(genderQuestion.getValue())
 				|| (genderQuestion.getValue() == null)) {
 			demographics.setGender(null);
 		} else {
@@ -1068,7 +1073,8 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO maritalStatusQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
 
-		if ((maritalStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE
+				.equals(maritalStatusQuestion.getValue())
 				|| (maritalStatusQuestion.getValue() == null)) {
 			demographics.setMaritalStatus(null);
 		} else {
@@ -1095,7 +1101,8 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO primaryCaregiverQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID);
 
-		if ((primaryCaregiverQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(primaryCaregiverQuestion
+				.getValue())
 				|| (primaryCaregiverQuestion.getValue() == null)) {
 			demographics.setPrimaryCaregiver(false);
 		} else {
@@ -1107,7 +1114,7 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO shiftQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID);
 
-		if ((shiftQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(shiftQuestion.getValue())
 				|| (shiftQuestion.getValue() == null)) {
 			demographics.setShift(null);
 		} else {
@@ -1172,7 +1179,8 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO parentsHaveCollegeDegreeQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID);
 
-		if ((parentsHaveCollegeDegreeQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(parentsHaveCollegeDegreeQuestion
+				.getValue())
 				|| (parentsHaveCollegeDegreeQuestion.getValue() == null)) {
 			educationPlan.setCollegeDegreeForParents(false);
 		} else {
@@ -1193,7 +1201,8 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO requireSpecialAccomodationQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMMODATIONS_ID);
 
-		if ((requireSpecialAccomodationQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE
+				.equals(requireSpecialAccomodationQuestion.getValue())
 				|| (requireSpecialAccomodationQuestion.getValue() == null)) {
 			educationPlan.setSpecialNeeds(false);
 		} else {
@@ -1206,7 +1215,8 @@ public class StudentIntakeFormManager {
 		final FormQuestionTO studentStatusQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID);
 
-		if ((studentStatusQuestion.getValue() == DEFAULT_DROPDOWN_LIST_VALUE)
+		if (DEFAULT_DROPDOWN_LIST_VALUE
+				.equals(studentStatusQuestion.getValue())
 				|| (studentStatusQuestion.getValue() == null)) {
 			educationPlan.setStudentStatus(null);
 		} else {
@@ -1822,7 +1832,7 @@ public class StudentIntakeFormManager {
 		return personalSection;
 	}
 
-	private FormSectionTO buildDemographicsSection() {
+	private FormSectionTO buildDemographicsSection() { // NOPMD
 
 		final FormSectionTO demographicSection = new FormSectionTO();
 		final List<FormQuestionTO> demographicSectionQuestions = new ArrayList<FormQuestionTO>();
@@ -1929,7 +1939,7 @@ public class StudentIntakeFormManager {
 		final List<FormOptionTO> veteranStatusQuestionOptions = new ArrayList<FormOptionTO>();
 
 		for (final VeteranStatus veteranStatus : veteranStatusService.getAll(
-				new SortingAndPaging(ObjectStatus.ALL)).getRows()) {
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
 			veteranStatusQuestionOptions
 					.add(new FormOptionTO(veteranStatus.getId(), veteranStatus
 							.getName(), veteranStatus.getName()));
@@ -2149,7 +2159,7 @@ public class StudentIntakeFormManager {
 		final List<FormOptionTO> studentStatusQuestionOptions = new ArrayList<FormOptionTO>();
 
 		for (final StudentStatus studentStatus : studentStatusService.getAll(
-				new SortingAndPaging(ObjectStatus.ALL)).getRows()) {
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) { // NOPMD
 			studentStatusQuestionOptions
 					.add(new FormOptionTO(studentStatus.getId(), studentStatus
 							.getName(), studentStatus.getName()));
@@ -2493,7 +2503,7 @@ public class StudentIntakeFormManager {
 		bachelorsDegreeQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID);
 		bachelorsDegreeQuestion.setLabel("Bachelor's Degree Major");
-		bachelorsDegreeQuestion.setMaximumLength("255");
+		bachelorsDegreeQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		bachelorsDegreeQuestion.setType(FORM_TYPE_TEXTINPUT);
 		bachelorsDegreeQuestion.setRequired(true);
 		// DEPENDENCY -> bachelorsDegreeQuestion shown when
@@ -2510,7 +2520,7 @@ public class StudentIntakeFormManager {
 		militaryBranchQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID);
 		militaryBranchQuestion.setLabel("Military Branch");
-		militaryBranchQuestion.setMaximumLength("255");
+		militaryBranchQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		militaryBranchQuestion.setType(FORM_TYPE_TEXTINPUT);
 		militaryBranchQuestion.setRequired(true);
 		// DEPENDENCY -> militaryBranchQuestion shown when
@@ -2526,7 +2536,7 @@ public class StudentIntakeFormManager {
 
 		otherQuestion.setId(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID);
 		otherQuestion.setLabel("Other Goal");
-		otherQuestion.setMaximumLength("255");
+		otherQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		otherQuestion.setType(FORM_TYPE_TEXTINPUT);
 		otherQuestion.setRequired(true);
 		// DEPENDENCY -> otherQuestion shown when
@@ -2607,7 +2617,7 @@ public class StudentIntakeFormManager {
 
 		otherQuestion.setId(SECTION_FUNDING_QUESTION_OTHER_ID);
 		otherQuestion.setLabel("Other");
-		otherQuestion.setMaximumLength("255");
+		otherQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		otherQuestion.setType(FORM_TYPE_TEXTINPUT);
 		otherQuestion.setRequired(true);
 		// DEPENDENCY -> otherQuestion shown when fundingQuestionTO value is
@@ -2657,7 +2667,7 @@ public class StudentIntakeFormManager {
 
 		otherQuestion.setId(SECTION_CHALLENGE_QUESTION_OTHER_ID);
 		otherQuestion.setLabel("Other");
-		otherQuestion.setMaximumLength("255");
+		otherQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		otherQuestion.setType(FORM_TYPE_TEXTINPUT);
 		otherQuestion.setRequired(true);
 		// DEPENDENCY -> otherQuestion shown when challengeQuestionTO value is

@@ -2,6 +2,8 @@ package org.jasig.ssp.dao;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
@@ -23,7 +25,7 @@ public abstract class AbstractDao<T> {
 
 	protected transient Class<T> persistentClass;
 
-	public AbstractDao(final Class<T> persistentClass) {
+	public AbstractDao(@NotNull final Class<T> persistentClass) {
 		this.persistentClass = persistentClass;
 	}
 
@@ -69,7 +71,7 @@ public abstract class AbstractDao<T> {
 	 * the Restrictions twice
 	 */
 	protected PagingWrapper<T> processCriteriaWithPaging(
-			final Criteria query, final SortingAndPaging sAndP) {
+			@NotNull final Criteria query, final SortingAndPaging sAndP) {
 		if (sAndP != null) {
 			sAndP.addStatusFilterToCriteria(query);
 		}

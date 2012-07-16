@@ -3,7 +3,10 @@ Ext.define('Ssp.view.tools.profile.Person', {
 	alias : 'widget.profileperson',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',	
+    controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    inject: {
+    	sspConfig: 'sspConfig'
+    },
     width: '100%',
 	height: '100%',
     initComponent: function() {	
@@ -36,7 +39,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
 					        name: 'name',
 					        itemId: 'studentName'
 					    },,{
-					        fieldLabel: 'Coach',
+					        fieldLabel: me.sspConfig.get('coachFieldLabel'),
 					        name: 'coachName',
 					        itemId: 'coachName'
 					    },{

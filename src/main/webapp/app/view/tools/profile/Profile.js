@@ -4,6 +4,9 @@ Ext.define('Ssp.view.tools.profile.Profile', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
     width: '100%',
 	height: '100%',
     initComponent: function() {	
@@ -33,10 +36,14 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 						    		  autoScroll: true,
 						    		  items: [{xtype: 'profilereferralsources'}]
 						    		},{ 
-							    		  title: 'Services Provided History',
-							    		  hidden: true,
-							    		  autoScroll: true,
-							    		  items: [{xtype: 'profileservicesprovided'}]
+						    		  title: 'Service Reasons',
+						    		  autoScroll: true,
+						    		  items: [{xtype: 'profileservicereasons'}]
+						    		},{ 
+						    		  title: 'Services Provided History',
+						    		  hidden: true,
+						    		  autoScroll: true,
+						    		  items: [{xtype: 'profileservicesprovided'}]
 							    	}]
 						})
 				    ],
@@ -49,6 +56,7 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 				            text: '',
 				            width: 35,
 				            height: 35,
+				            hidden: !me.authenticatedPerson.hasAccess('TRANSITION_BUTTON'),
 				            cls: 'studentTransitionIcon',
 				            xtype: 'button',
 				            itemId: 'studentTransitionButton'
@@ -57,6 +65,7 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 					            text: '',
 					            width: 35,
 					            height: 35,
+					            hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
 					            cls: 'studentHistoryIcon',
 					            xtype: 'button',
 					            itemId: 'viewHistoryButton'
@@ -64,6 +73,6 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 				    }]
 				});	     
     	
-    	return this.callParent(arguments);
+    	return me.callParent(arguments);
 	}
 });

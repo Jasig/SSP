@@ -8,29 +8,15 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<columnHeader>
-		<band height="24" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="3c48859a-c6b5-4e25-9b0d-0595de936f49" x="0" y="2" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="fb4bc4c7-0ca6-4748-9fea-e587c031b7d3" x="185" y="2" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[description]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
 	<detail>
-		<band height="41" splitType="Stretch">
-			<textField>
-				<reportElement uuid="06a5695b-c2a5-4413-8fbd-480c362cdfbf" x="0" y="0" width="185" height="41"/>
+		<band height="17" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="06a5695b-c2a5-4413-8fbd-480c362cdfbf" stretchType="RelativeToTallestObject" x="0" y="0" width="185" height="15"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="c93c32b7-0491-4fc4-8f04-8f24048bece6" x="185" y="0" width="370" height="41"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c93c32b7-0491-4fc4-8f04-8f24048bece6" stretchType="RelativeToTallestObject" x="185" y="0" width="370" height="15"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>

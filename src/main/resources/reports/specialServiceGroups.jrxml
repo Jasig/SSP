@@ -24,7 +24,7 @@
 	<field name="userId" class="java.lang.String">
 		<fieldDescription><![CDATA[userId]]></fieldDescription>
 	</field>
-	<field name="studentType" class="org.jasig.ssp.model.reference.StudentType">
+	<field name="studentType" class="java.lang.String">
 		<fieldDescription><![CDATA[studentType]]></fieldDescription>
 	</field>
 	<variable name="rowIndex" class="java.lang.Integer">
@@ -126,7 +126,7 @@
 			<textField>
 				<reportElement uuid="d819ba88-7a04-430f-9fa0-0c90e5293930" x="407" y="1" width="102" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{studentType}.getName() == null ? "" : $F{studentType}.getName())]]></textFieldExpression>
+                <textFieldExpression><![CDATA[($F{studentType} == null? "" : $F{studentType})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="2477acef-4a84-48bc-877d-244b77fde610" x="5" y="1" width="102" height="20"/>

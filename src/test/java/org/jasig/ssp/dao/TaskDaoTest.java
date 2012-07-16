@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Lists;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class TaskDaoTest {
@@ -111,7 +111,8 @@ public class TaskDaoTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void getAllForPersonIdWithoutRequestor() {
-		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(UUID.randomUUID(),
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(
+				UUID.randomUUID(),
 				new SortingAndPaging(
 						ObjectStatus.ACTIVE)).getRows());
 	}
@@ -131,33 +132,38 @@ public class TaskDaoTest {
 
 	@Test
 	public void getAllForPersonIdComplete() {
-		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(ken.getId(), true,
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(
+				ken.getId(), true,
 				securityService.currentlyAuthenticatedUser(),
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForPersonIdIncomplete() {
-		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(ken.getId(), false,
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonId(
+				ken.getId(), false,
 				securityService.currentlyAuthenticatedUser(),
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionId() {
-		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionId("test session id",
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionId(
+				"test session id",
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionIdComplete() {
-		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionId("test session id", true,
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionId(
+				"test session id", true,
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionIdIncomplete() {
-		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionId("test session id", false,
+		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionId(
+				"test session id", false,
 				new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
@@ -170,19 +176,21 @@ public class TaskDaoTest {
 
 	@Test
 	public void getAllForPersonIdAndChallengeReferralId() {
-		TestUtils.assertListDoesNotContainNullItems(dao.getAllForPersonIdAndChallengeReferralId(
-				ken.getId(),
-				true, testChallengeReferral.getId(),
-				securityService.currentlyAuthenticatedUser(),
-				new SortingAndPaging(
-						ObjectStatus.ACTIVE)));
+		TestUtils.assertListDoesNotContainNullItems(dao
+				.getAllForPersonIdAndChallengeReferralId(
+						ken.getId(),
+						true, testChallengeReferral.getId(),
+						securityService.currentlyAuthenticatedUser(),
+						new SortingAndPaging(
+								ObjectStatus.ACTIVE)));
 	}
 
 	@Test
 	public void getAllForSessionIdAndChallengeReferralId() {
-		TestUtils.assertListDoesNotContainNullItems(dao.getAllForSessionIdAndChallengeReferralId(
-				"test sessionId", true, testChallengeReferral.getId(),
-				new SortingAndPaging(ObjectStatus.ACTIVE)));
+		TestUtils.assertListDoesNotContainNullItems(dao
+				.getAllForSessionIdAndChallengeReferralId(
+						"test sessionId", true, testChallengeReferral.getId(),
+						new SortingAndPaging(ObjectStatus.ACTIVE)));
 	}
 
 	@Test
