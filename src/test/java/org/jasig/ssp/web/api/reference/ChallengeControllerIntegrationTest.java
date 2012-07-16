@@ -33,7 +33,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Challenge controller tests
+ * {@link ChallengeController} tests
  * 
  * @author daniel.bower
  */
@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration("../../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration
 @Transactional
-public class ChallengeControllerIntegrationTest {
+public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 
 	private static final UUID CHALLENGE_ID = UUID
 			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
@@ -270,10 +270,18 @@ public class ChallengeControllerIntegrationTest {
 				saved.getDescription());
 	}
 
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
 	@Test
 	public void testLogger() {
+		// arrange, act
 		final Logger logger = controller.getLogger();
-		assertNotNull("Logger should not have been null.", logger);
+
+		// assert
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 
 	@Test

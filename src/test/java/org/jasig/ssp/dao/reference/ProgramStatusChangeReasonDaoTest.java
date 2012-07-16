@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class ProgramStatusChangeReasonDaoTest {
@@ -62,7 +62,8 @@ public class ProgramStatusChangeReasonDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<ProgramStatusChangeReason> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
+		final Collection<ProgramStatusChangeReason> all = dao.getAll(
+				ObjectStatus.ACTIVE).getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
 		assertList(all);
@@ -79,7 +80,7 @@ public class ProgramStatusChangeReasonDaoTest {
 	}
 
 	private void assertList(final Collection<ProgramStatusChangeReason> objects) {
-		for (ProgramStatusChangeReason object : objects) {
+		for (final ProgramStatusChangeReason object : objects) {
 			assertNotNull(object.getId());
 		}
 	}

@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class MaritalStatusDaoTest {
@@ -62,7 +62,7 @@ public class MaritalStatusDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<MaritalStatus> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<MaritalStatus> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
@@ -73,26 +73,26 @@ public class MaritalStatusDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		MaritalStatus maritalStatus = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final MaritalStatus maritalStatus = dao.get(id);
 
 		assertNull(maritalStatus);
 	}
 
-	private void assertList(Collection<MaritalStatus> objects) {
-		for (MaritalStatus object : objects) {
+	private void assertList(final Collection<MaritalStatus> objects) {
+		for (final MaritalStatus object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		MaritalStatus obj = new MaritalStatus();
+		final MaritalStatus obj = new MaritalStatus();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		MaritalStatus obj2 = new MaritalStatus();
+		final MaritalStatus obj2 = new MaritalStatus();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);

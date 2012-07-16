@@ -7,7 +7,8 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
     controller: 'Ssp.controller.admin.journal.DisplayStepsAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils'
     },
     height: '100%',
 	width: '100%',
@@ -32,6 +33,13 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
     		                  field: {
     		                      xtype: 'textfield'
     		                  },
+    		                  flex: 1 
+    		                },{ header: 'Used for Transition',  
+    		                  dataIndex: 'usedForTransition',
+    		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
+    		                  field: {
+      		                      xtype: 'checkbox'
+      		                  },
     		                  flex: 1 
     		                }
     		           ],

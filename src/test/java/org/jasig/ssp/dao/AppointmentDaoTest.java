@@ -29,7 +29,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class AppointmentDaoTest {
@@ -59,8 +59,8 @@ public class AppointmentDaoTest {
 
 	@Test
 	public void testSaveNew() throws ObjectNotFoundException {
-		Date startDate = new Date(1339419600000L); // "Mon JUN 11 09:00:00 EDT 2012"
-		Date endDate = new Date(1339423200000L); // "Mon JUN 11 09:00:00 EDT 2012"
+		final Date startDate = new Date(1339419600000L); // "Mon JUN 11 09:00:00 EDT 2012"
+		final Date endDate = new Date(1339423200000L); // "Mon JUN 11 09:00:00 EDT 2012"
 
 		Appointment obj = new Appointment();
 		obj.setEndTime(endDate);
@@ -70,7 +70,7 @@ public class AppointmentDaoTest {
 		obj = dao.save(obj);
 
 		assertNotNull("Saved obj should not have been null", obj.getId());
-		UUID saved = obj.getId();
+		final UUID saved = obj.getId();
 
 		// flush to storage, then clear out in-memory version
 		final Session session = sessionFactory.getCurrentSession();
@@ -101,8 +101,9 @@ public class AppointmentDaoTest {
 
 	@Test
 	public void getCurrentAppointmentForPerson() {
-		Appointment appt = dao.getCurrentAppointmentForPerson(securityService
-				.currentUser().getPerson());
+		final Appointment appt = dao
+				.getCurrentAppointmentForPerson(securityService
+						.currentUser().getPerson());
 		assertNotNull(appt);
 	}
 

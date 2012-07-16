@@ -19,6 +19,11 @@ Ext.define('Ssp.view.admin.forms.journal.EditStep',{
                     fieldLabel: 'Description',
                     anchor: '100%',
                     name: 'description'
+                },
+                {
+                    xtype: 'checkbox',
+                    fieldLabel: 'Used for Transition',
+                    name: 'usedForTransition'
                 }],
             
             dockedItems: [{

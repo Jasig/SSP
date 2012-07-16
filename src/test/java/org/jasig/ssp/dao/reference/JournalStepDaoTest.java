@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Test suites on the {@link JournalStepDao} class.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class JournalStepDaoTest {

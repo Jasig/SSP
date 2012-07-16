@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +14,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class SelfHelpGuideQuestionResponseDaoTest {
@@ -29,8 +29,8 @@ public class SelfHelpGuideQuestionResponseDaoTest {
 		assertList(dao.criticalResponsesForEarlyAlert());
 	}
 
-	private void assertList(List<SelfHelpGuideQuestionResponse> objects) {
-		for (SelfHelpGuideQuestionResponse object : objects) {
+	private void assertList(final List<SelfHelpGuideQuestionResponse> objects) {
+		for (final SelfHelpGuideQuestionResponse object : objects) {
 			assertNotNull(object.getId());
 		}
 		assertTrue(true);

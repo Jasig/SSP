@@ -68,7 +68,7 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 	@Autowired
 	private transient PersonService personService;
 	@Autowired
-	private transient PersonTOFactory personTOFactory;		
+	private transient PersonTOFactory personTOFactory;
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
 	@Autowired
@@ -113,7 +113,7 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 		final List<Person> people = personService.peopleFromCriteria(
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
-		List<PersonTO> peopleTO = personTOFactory.asTOList(people);
+		final List<PersonTO> peopleTO = personTOFactory.asTOList(people);
 
 		// Get the actual names of the UUIDs for the special groups
 		final List<String> specialGroupsNames = new ArrayList<String>();
@@ -136,10 +136,11 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 						referralSourceIter.next()).getName());
 			}
 		}
-		
-		//final String programStatusName = ((null!=programStatus && !programStatus.isEmpty())?programStatus.get(0)():"");
+
+		// final String programStatusName = ((null!=programStatus &&
+		// !programStatus.isEmpty())?programStatus.get(0)():"");
 		// Get the actual name of the UUID for the programStatus
-		final String programStatusName = (programStatus == null ? "" 
+		final String programStatusName = (programStatus == null ? ""
 				: programStatusService.get(programStatus).getName());
 
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -152,15 +153,15 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 		parameters.put("referralSourceNames", referralSourcesNames);
 		parameters.put("studentTypeIds", studentTypeIds);
 		parameters.put("reportDate", new Date());
-		parameters.put("studentCount", peopleTO.size());
-		
+		parameters.put("studentCount", peopleTO == null ? 0 : peopleTO.size());
+
 		JRDataSource beanDS;
-		if (peopleTO == null || peopleTO.size()<=0){
+		if (peopleTO == null || peopleTO.size() <= 0) {
 			beanDS = new JREmptyDataSource();
-		}
-		else{
+		} else {
 			beanDS = new JRBeanCollectionDataSource(peopleTO);
 		}
+
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/addressLabels.jasper");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -170,7 +171,7 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 
 		if ("pdf".equals(reportType)) {
 			response.setHeader("Content-disposition",
-					"attachment; filename=AddressLabelReprt.pdf");			
+					"attachment; filename=AddressLabelReprt.pdf");
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
 		} else if ("csv".equals(reportType)) {

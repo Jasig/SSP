@@ -35,7 +35,7 @@ import com.google.common.collect.Lists;
  * Tests for {@link ConfigDao}.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration
 @Transactional
 public class ConfigDaoTest {

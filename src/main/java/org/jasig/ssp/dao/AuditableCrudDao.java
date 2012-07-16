@@ -63,7 +63,8 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * @return Specified entities, filtered by the specified parameters, or
 	 *         empty List if null
 	 */
-	PagingWrapper<T> get(@NotNull List<UUID> ids, final SortingAndPaging sAndP);
+	PagingWrapper<T> get(@NotNull List<UUID> ids,
+			final SortingAndPaging sAndP);
 
 	/**
 	 * Lazily retrieves the specified instance from persistent storage.
@@ -93,7 +94,7 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * {@link ObjectStatus#INACTIVE}.
 	 * 
 	 * @param id
-	 *            The id of the data instance to permanently delete.
+	 *            The data instance to permanently delete.
 	 */
-	void delete(T id);
+	void delete(T obj);
 }

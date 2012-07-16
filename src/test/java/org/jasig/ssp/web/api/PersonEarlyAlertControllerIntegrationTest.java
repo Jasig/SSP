@@ -387,16 +387,6 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		return obj;
 	}
 
-	@Test
-	public void testLogger() {
-		final Logger logger = controller.getLogger();
-		logger.info("Test");
-		assertNotNull("logger should not have been null.", logger);
-		assertEquals("Logger name was not specific to the class.",
-				"org.jasig.ssp.web.api.PersonEarlyAlertController",
-				logger.getName());
-	}
-
 	/**
 	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
 	 * action and check that the appropriate {@link Message}s are created.
@@ -444,5 +434,16 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		final ServiceResponse response = controller.delete(savedId, PERSON_ID);
 		assertTrue("Deletion did not return success.",
 				response.isSuccess());
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

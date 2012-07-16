@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class EducationLevelDaoTest {
@@ -62,7 +62,7 @@ public class EducationLevelDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<EducationLevel> all = dao.getAll(ObjectStatus.ACTIVE)
+		final Collection<EducationLevel> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
@@ -73,26 +73,26 @@ public class EducationLevelDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		EducationLevel educationLevel = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final EducationLevel educationLevel = dao.get(id);
 
 		assertNull(educationLevel);
 	}
 
-	private void assertList(Collection<EducationLevel> objects) {
-		for (EducationLevel object : objects) {
+	private void assertList(final Collection<EducationLevel> objects) {
+		for (final EducationLevel object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		EducationLevel obj = new EducationLevel();
+		final EducationLevel obj = new EducationLevel();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		EducationLevel obj2 = new EducationLevel();
+		final EducationLevel obj2 = new EducationLevel();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);

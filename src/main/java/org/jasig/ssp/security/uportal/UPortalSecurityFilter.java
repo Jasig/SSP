@@ -64,16 +64,16 @@ public final class UPortalSecurityFilter implements RenderFilter {
 		final Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
 		// Check for DataPermissions
-		for (DataPermissions p : DataPermissions.values()) {
+		for (final DataPermissions p : DataPermissions.values()) {
 			if (req.isUserInRole(p.name())) {
-				authorities.add(new GrantedAuthorityImpl("ROLE_" + p.name()));
+				authorities.add(new GrantedAuthorityImpl("ROLE_" + p.name())); // NOPMD
 			}
 		}
 
 		// Check for ServicePermissions
-		for (ServicePermissions p : ServicePermissions.values()) {
+		for (final ServicePermissions p : ServicePermissions.values()) {
 			if (req.isUserInRole(p.name())) {
-				authorities.add(new GrantedAuthorityImpl("ROLE_" + p.name()));
+				authorities.add(new GrantedAuthorityImpl("ROLE_" + p.name())); // NOPMD
 			}
 		}
 
