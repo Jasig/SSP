@@ -85,9 +85,10 @@ public interface ConfigService extends
 	int getByNameExceptionOrDefaultAsInt(String name);
 
 	/**
-	 * Some databases don't accept ANSI SQL.
+	 * The database-specific CONCAT operator, because some databases don't
+	 * accept ANSI SQL.
 	 * 
-	 * @return
+	 * @return database-specific CONCAT operator
 	 */
 	String getDatabaseConcatOperator();
 }
