@@ -27,10 +27,8 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
-import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.EarlyAlertOutreachService;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
@@ -65,9 +63,6 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	private transient ConfidentialityLevelService confidentialityLevelService;
 
 	@Autowired
-	private transient ConfigService configService;
-
-	@Autowired
 	private transient EarlyAlertOutcomeService earlyAlertOutcomeService;
 
 	@Autowired
@@ -90,9 +85,6 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 	@Autowired
 	private transient MessageService messageService;
-
-	@Autowired
-	private transient PersonService personService;
 
 	@Autowired
 	private transient MessageTemplateService messageTemplateService;
