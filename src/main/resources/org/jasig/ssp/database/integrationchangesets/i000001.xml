@@ -132,6 +132,110 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="Add external_faculty_course table" author="jon.adams">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_faculty_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createTable tableName="external_faculty_course">
+			<column name="faculty_school_id" type="${nvarchar.type}(50)"
+				remarks="The school_id used to identify a faculty member.">
+				<constraints nullable="false" />
+			</column>
+			<column name="term_code" type="${nvarchar.type}(25)"
+				remarks="Specifies what term the course was taught by the faculty member. Equivalent to external_term.code value.">
+				<constraints nullable="false" />
+			</column>
+			<column name="formatted_course" type="${nvarchar.type}(35)"
+				remarks="The formatted course subject abbreviation and number">
+				<constraints nullable="false" />
+			</column>
+			<column name="title" type="${nvarchar.type}(100)" remarks="The title of the course.">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+			
+		<createView viewName="v_external_faculty_course">
+			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, term_code, formatted_course, title from external_faculty_course
+		</createView>
+
+		<sql>grant all on external_faculty_course to ssp</sql>
+		<sql>grant all on v_external_faculty_course to ssp</sql>
+		<rollback>
+			<dropView viewName="v_external_faculty_course" />
+			<dropTable tableName="external_faculty_course" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet id="Add external_faculty_course_roster table" author="jon.adams">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_faculty_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createTable tableName="external_faculty_course_roster">
+			<column name="faculty_school_id" type="${nvarchar.type}(50)"
+				remarks="The school_id used to identify a faculty member.">
+				<constraints nullable="false" />
+			</column>
+			<column name="school_id" type="${nvarchar.type}(50)" remarks="Student's school id.">
+				<constraints nullable="false" />
+			</column>
+			<column name="first_name" type="${nvarchar.type}(50)" remarks="Student's first name.">
+				<constraints nullable="false" />
+			</column>
+			<column name="middle_name" type="${nvarchar.type}(50)"
+				remarks="Student's middle name.">
+				<constraints nullable="true" />
+			</column>
+			<column name="last_name" type="${nvarchar.type}(50)" remarks="Student's last name.">
+				<constraints nullable="false" />
+			</column>
+			<column name="primary_email_address" type="${nvarchar.type}(50)"
+				remarks="Student's primary email address. Typically the institution-assigned email address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="term_code" type="${nvarchar.type}(25)"
+				remarks="Specifies what term the course was taught by the faculty member. Equivalent to external_term.code value.">
+				<constraints nullable="false" />
+			</column>
+			<column name="formatted_course" type="${nvarchar.type}(35)"
+				remarks="The formatted course subject abbreviation and number">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_faculty_course_roster">
+			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, school_id, first_name, middle_name, last_name, primary_email_address, term_code, formatted_course from external_faculty_course_roster
+		</createView>
+
+		<sql>grant all on external_faculty_course_roster to ssp</sql>
+		<sql>grant all on v_external_faculty_course_roster to ssp</sql>
+		<rollback>
+			<dropView viewName="v_external_faculty_course_roster" />
+			<dropTable tableName="external_faculty_course_roster" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+	
 	<changeSet id="Add external_registration_status_by_term table"
 		author="daniel.bower">
 		<preConditions onFail="CONTINUE"
@@ -166,6 +270,5 @@
 		</rollback>
 
 	</changeSet>
-
 
 </databaseChangeLog>

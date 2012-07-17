@@ -224,6 +224,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Maximum length of 50.
 	 */
+	@NotNull
+	@NotEmpty
 	@Column(length = 50)
 	@Size(max = 50)
 	private String schoolId;
@@ -593,10 +595,10 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Sets the SchoolID (a.k.a. Student ID given by the school)
 	 * 
 	 * @param schoolId
-	 *            the SchoolID (a.k.a. Student ID given by the school); maximum
-	 *            length of 50 characters
+	 *            the SchoolID (a.k.a. Student ID given by the school);
+	 *            required; maximum length of 50 characters
 	 */
-	public void setSchoolId(final String schoolId) {
+	public void setSchoolId(@NotNull final String schoolId) {
 		this.schoolId = schoolId;
 	}
 

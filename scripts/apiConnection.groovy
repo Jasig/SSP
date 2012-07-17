@@ -110,6 +110,7 @@ String search(ApiConnection conn){
 String getCaseload(ApiConnection conn){
 	//"/1/person/caseload"
 	return conn.get("api/1/person/caseload")
+	//return conn.get("api/1/person/caseload?programStatusId=b2d12527-5056-a51a-8054-113116baab88")
 }
 
 String getAppointments(ApiConnection conn){
@@ -141,11 +142,11 @@ ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0",
 //String output = getAllJournalEntriesForPerson(conn);
 //String output = getPerson(conn)
 //String output = search(conn)
-//String output = getCaseload(conn)
+String output = getCaseload(conn)
 //String output = getAppointments(conn)
 //String output = getCoaches(conn)
 //String output = getCurrentAppointment(conn)
-String output = getAllTerms(conn)
+//String output = getAllTerms(conn)
 
 
 conn.formatAndPrintJson(output)

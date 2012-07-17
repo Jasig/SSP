@@ -11,7 +11,7 @@ Ext.define('Ssp.store.Tools', {
            { group:'beta', name: "Journal", toolType: "Journal", active: true },
            { group:'rc1', name: "Early Alert", toolType: "EarlyAlert", active: true },
            { group:'rc1', name: "SIS", toolType: "StudentInformationSystem", active: true }
-           ],          
+           ]         
            
            /*
            { group:'rc1', name: "Documents", toolType: "StudentDocuments", active: false },
@@ -20,5 +20,5 @@ Ext.define('Ssp.store.Tools', {
            { group:'rc1', name: "Student Success", toolType: "StudentSuccess", active: false },
            */ 
            
-    groupField: 'group'
+    //groupField: 'group'
 });

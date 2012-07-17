@@ -115,8 +115,10 @@ Ext.require([
 	'Ssp.model.Person',
 	'Ssp.model.PersonAppointment',
 	'Ssp.model.Appointment',
+	'Ssp.model.CaseloadPerson',
 	'Ssp.model.PersonGoal',
 	'Ssp.model.PersonDocument',
+	'Ssp.model.PersonLite',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -142,6 +144,7 @@ Ext.require([
 	'Ssp.util.TreeRendererUtils',
 	'Ssp.util.Constants',
 	'Ssp.store.Coaches',
+	'Ssp.store.Caseload',
     'Ssp.store.Tasks',
     'Ssp.store.Goals',
     'Ssp.store.JournalEntries',
@@ -188,7 +191,10 @@ Ext.require([
     'Ssp.store.reference.YesNo',
     'Ssp.service.AbstractService',
     'Ssp.service.AppointmentService',
+    'Ssp.service.CaseloadService',
     'Ssp.service.PersonService',
+    'Ssp.service.ProgramStatusService',
+    'Ssp.service.SearchService',
     'Ssp.controller.ApplicationEventsController',
     'Ext.tab.*',
 	'Ext.util.Filter',
@@ -235,6 +241,8 @@ var apiUrls = [
   {name: 'person', url: 'person'},
   {name: 'personAppointment', url: 'person/{id}/appointment'},
   {name: 'personAssessment', url: 'person/{id}/test'},
+  {name: 'personCaseload', url: 'person/caseload'},
+  {name: 'personMasterCaseload', url: 'person/{id}/caseload'},
   {name: 'personChallenge', url: 'person/{id}/challenge'},
   {name: 'personCoach', url: 'person'},
   {name: 'personDocument', url: 'person/{id}/document'},
@@ -307,6 +315,12 @@ Ext.onReady(function(){
 				            return new Ssp.model.Person({id:""});
 				        },
 				        singleton: true
+				    },
+				    personLite: {
+				    	fn: function(){
+				    		return new Ssp.model.PersonLite({id:""});
+				    	},
+				    	singleton: true
 				    },
 				    authenticatedPerson: {
 				        fn: function(){
@@ -483,7 +497,8 @@ Ext.onReady(function(){
 				    anticipatedStartYearsStore: 'Ssp.store.reference.AnticipatedStartYears',
 					campusesStore: 'Ssp.store.reference.Campuses',
 					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
-				    challengesStore: 'Ssp.store.reference.Challenges',
+					caseloadStore: 'Ssp.store.Caseload',
+					challengesStore: 'Ssp.store.reference.Challenges',
 					challengeCategoriesStore: 'Ssp.store.reference.ChallengeCategories',
 					challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
 				    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
@@ -531,7 +546,10 @@ Ext.onReady(function(){
 			        	
 			        // SERVICES
 			        appointmentService: 'Ssp.service.AppointmentService',
-			        personService: 'Ssp.service.PersonService'
+			        caseloadService: 'Ssp.service.CaseloadService',
+			        personService: 'Ssp.service.PersonService',
+			        programStatusService: 'Ssp.service.ProgramStatusService',
+			        searchService: 'Ssp.service.SearchService'
 				});
 				
 				Ext.application({

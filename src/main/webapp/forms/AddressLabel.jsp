@@ -143,7 +143,7 @@
 			<input type="text" name="createDateFrom" id="createDateFrom" />
 		</div>
 		<div class="ea-label">
-			<span>Date Student Added From yyyy-MM-dd:</span>
+			<span>Added From (yyyy-MM-dd):</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -152,7 +152,7 @@
 			<input type="text" name="createDateTo" id="createDateTo" />
 		</div>
 		<div class="ea-label">
-			<span>Date Student Added To yyyy-MM-dd:</span>
+			<span>Added To (yyyy-MM-dd):</span>
 		</div>
 		<div class="ea-clear"></div>
 

@@ -62,8 +62,6 @@ Ext.define('Ssp.model.Person', {
     	{
         	if ( this.get('coach') != null)
         	{
-        		this.get('coach').id = value;
-        	}else{
         		this.set('coach',{"id":value});
         	}    		
     	}
@@ -80,13 +78,12 @@ Ext.define('Ssp.model.Person', {
     },    
     
     setStudentTypeId: function( value ){
+    	var me=this;
     	if (value != "")
     	{
-        	if ( this.get('studentType') != null)
+        	if ( me.get('studentType') != null)
         	{
-        		this.get('studentType').id = value;
-        	}else{
-        		this.set('studentType',{"id":value});
+        		me.set('studentType',{"id":value});
         	}    		
     	}
     },
