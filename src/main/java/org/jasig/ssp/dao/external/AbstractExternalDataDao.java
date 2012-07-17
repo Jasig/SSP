@@ -26,12 +26,12 @@ public abstract class AbstractExternalDataDao<T>
 	@Override
 	public PagingWrapper<T> getAll(final ObjectStatus status) {
 		return processCriteriaWithSortingAndPaging(createCriteria(),
-				new SortingAndPaging(status));
+				new SortingAndPaging(status), false);
 	}
 
 	@Override
 	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
 		return processCriteriaWithSortingAndPaging(createCriteria(),
-				sAndP);
+				sAndP, false);
 	}
 }
