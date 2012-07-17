@@ -26,31 +26,31 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Tests on the {@link PersonChallengeDao} class.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class PersonChallengeDaoTest {
 
-	// private static final Logger logger =
-	// LoggerFactory.getLogger(PersonChallengeDaoTest.class);
+	@Autowired
+	private transient PersonChallengeDao dao;
 
 	@Autowired
-	private PersonChallengeDao dao;
+	private transient ChallengeService challengeService;
 
 	@Autowired
-	private ChallengeService challengeService;
+	private transient PersonService personService;
 
 	@Autowired
-	private PersonService personService;
+	private transient SecurityServiceInTestEnvironment securityService;
 
-	@Autowired
-	private SecurityServiceInTestEnvironment securityService;
-
-	private Challenge testChallenge;
+	private transient Challenge testChallenge;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 		testChallenge = challengeService
 				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()
@@ -126,5 +126,4 @@ public class PersonChallengeDaoTest {
 	public void testGetAll() {
 		dao.getAll(ObjectStatus.ALL);
 	}
-
 }

@@ -1,4 +1,4 @@
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -25,7 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test the ChallengeReferral service implementation class
+ * Test the {@link ChallengeReferralServiceImpl} implementation class
  */
 public class ChallengeReferralServiceTest {
 
@@ -107,7 +107,8 @@ public class ChallengeReferralServiceTest {
 
 		final ChallengeReferral saved = service.save(daoOne);
 		assertNotNull("Saved instance should not have returned null.", saved);
-		assertTrue("Saved values did not match.", saved.getShowInSelfHelpGuide());
+		assertTrue("Saved values did not match.",
+				saved.getShowInSelfHelpGuide());
 		verify(dao);
 	}
 

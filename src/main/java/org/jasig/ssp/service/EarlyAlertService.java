@@ -30,4 +30,16 @@ public interface EarlyAlertService
 
 	Map<UUID, Number> getCountOfActiveAlertsForPeopleIds(
 			final Collection<UUID> peopleIds);
+
+	/**
+	 * Fills early alert parameters for messages.
+	 * 
+	 * <p>
+	 * Also used by early alert response since messages have similar template
+	 * parameters.
+	 * 
+	 * @param earlyAlert
+	 * @return Map of template parameters
+	 */
+	Map<String, Object> fillTemplateParameters(final EarlyAlert earlyAlert);
 }

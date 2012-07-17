@@ -1,12 +1,9 @@
 package org.jasig.ssp.web.api.external;
 
-import java.util.Collection;
-
 import org.jasig.ssp.factory.external.ExternalTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.external.ExternalDataService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.external.ExternalDataTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -48,7 +45,7 @@ public abstract class AbstractExternalController<TO extends ExternalDataTO<T>, T
 	/**
 	 * Service that handles the business logic for the implementing type for T.
 	 */
-	protected abstract TermService getService();
+	protected abstract ExternalDataService<T> getService();
 
 	/**
 	 * Transfer object factory to create new instances of the specific TO for
@@ -97,7 +94,6 @@ public abstract class AbstractExternalController<TO extends ExternalDataTO<T>, T
 	 *            <code>DESC</code>.
 	 * @return All entities in the database filtered by the supplied status.
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
@@ -108,12 +104,12 @@ public abstract class AbstractExternalController<TO extends ExternalDataTO<T>, T
 			final @RequestParam(required = false) String sortDirection) {
 
 		// Run getAll
-		final PagingWrapper<Term> data = getService().getAll(
+		final PagingWrapper<T> data = getService().getAll(
 				SortingAndPaging.createForSingleSort(ObjectStatus.ALL, start,
 						limit, sort, sortDirection, null));
 
 		return new PagedResponse<TO>(true, data.getResults(), getFactory()
-				.asTOList((Collection<T>) data.getRows()));
+				.asTOList(data.getRows()));
 	}
 
 	protected TO instantiateTO(final T model) throws ValidationException {

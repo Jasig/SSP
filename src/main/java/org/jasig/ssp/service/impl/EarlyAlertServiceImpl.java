@@ -107,8 +107,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 							+ student.getId());
 		}
 
-		if ((student.getCoach() == null)
-				|| student.getCoach().getId().equals(assignedAdvisor)) {
+		if (student.getCoach() == null
+				|| assignedAdvisor.equals(student.getCoach().getId())) {
 			student.setCoach(personService.get(assignedAdvisor));
 		}
 
@@ -386,8 +386,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
 	}
 
-	private Map<String, Object> fillTemplateParameters(
-			final EarlyAlert earlyAlert) {
+	@Override
+	public Map<String, Object> fillTemplateParameters(
+			@NotNull final EarlyAlert earlyAlert) {
 		if (earlyAlert == null) {
 			throw new IllegalArgumentException("EarlyAlert was missing.");
 		}
