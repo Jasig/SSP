@@ -89,21 +89,28 @@ public abstract class AbstractDao<T> {
 	 * the Restrictions twice
 	 */
 	protected PagingWrapper<T> processCriteriaWithSortingAndPaging(
-			@NotNull final Criteria query, final SortingAndPaging sAndP) {
+			@NotNull final Criteria query, final SortingAndPaging sAndP,
+			final boolean filterByStatus) {
+
 		// get the query results total count
 		Long totalRows = null; // NOPMD by jon on 5/20/12 4:42 PM
 
-		// Only query for total count if query is paged
-		if ((sAndP != null) && sAndP.isPaged()) {
-			totalRows = (Long) query.setProjection(
-					Projections.rowCount()).uniqueResult();
-
-			// clear the count projection from the query
-			query.setProjection(null);
-		}
-
-		// Add Sorting and Paging
 		if (sAndP != null) {
+			if (filterByStatus) {
+				sAndP.addStatusFilterToCriteria(query);
+			}
+
+			// Only query for total count if query is paged or filtered
+			if (sAndP.isPaged()
+					|| (filterByStatus && sAndP.isFilteredByStatus())) {
+				totalRows = (Long) query.setProjection(
+						Projections.rowCount()).uniqueResult();
+
+				// clear the count projection from the query
+				query.setProjection(null);
+			}
+
+			// Add Sorting and Paging
 			sAndP.addPagingToCriteria(query);
 			sAndP.addSortingToCriteria(query);
 		}
@@ -126,10 +133,6 @@ public abstract class AbstractDao<T> {
 	 */
 	protected PagingWrapper<T> processCriteriaWithStatusSortingAndPaging(
 			@NotNull final Criteria query, final SortingAndPaging sAndP) {
-		if (sAndP != null) {
-			sAndP.addStatusFilterToCriteria(query);
-		}
-
-		return processCriteriaWithSortingAndPaging(query, sAndP);
+		return processCriteriaWithSortingAndPaging(query, sAndP, true);
 	}
 }

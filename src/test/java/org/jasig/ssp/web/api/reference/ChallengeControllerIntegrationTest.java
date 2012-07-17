@@ -201,9 +201,17 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 	 */
 	@Test
 	public void testControllerGetAllResults() {
-		final Collection<ChallengeTO> list = controller.getAll(
-				ObjectStatus.ACTIVE,
-				null, null, null, null).getRows();
+		final PagedResponse<ChallengeTO> response = controller.getAll(
+				ObjectStatus.ACTIVE, 0, 10, null, null);
+		final Collection<ChallengeTO> list = response.getRows();
+
+		assertNotNull("List should not have been null.", response.getRows());
+		assertEquals(
+				"List action should have returned paged maximum limit of rows.",
+				10, response.getRows().size());
+		// there are 30 in the database, but only 29 active.
+		assertEquals("Non-page size did not match expected.", 29,
+				response.getResults());
 
 		final Iterator<ChallengeTO> iter = list.iterator();
 
