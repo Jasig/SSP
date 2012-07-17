@@ -22,4 +22,6 @@ public interface RegistrationStatusByTermService extends
 
 	PagingWrapper<RegistrationStatusByTerm> getAllForPerson(
 			final Person person, final SortingAndPaging sAndP);
+
+	Person applyRegistrationStatusForCurrentTerm(Person person);
 }

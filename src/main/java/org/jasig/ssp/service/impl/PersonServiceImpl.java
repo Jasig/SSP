@@ -10,6 +10,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -40,9 +41,14 @@ public class PersonServiceImpl implements PersonService {
 	@Autowired
 	private transient PersonAttributesService personAttributesService;
 
+	@Autowired
+	private transient RegistrationStatusByTermService registrationStatusByTermService;
+
 	@Override
 	public PagingWrapper<Person> getAll(final SortingAndPaging sAndP) {
-		return dao.getAll(sAndP);
+		final PagingWrapper<Person> people = dao.getAll(sAndP);
+		additionalAttribsForStudents(people);
+		return people;
 	}
 
 	/**
@@ -58,19 +64,24 @@ public class PersonServiceImpl implements PersonService {
 	 */
 	@Override
 	public Person get(final UUID id) throws ObjectNotFoundException {
-		return dao.get(id);
+		final Person person = dao.get(id);
+		return additionalAttribsForStudent(person);
 	}
 
 	@Override
 	public Person getByStudentId(final String studentId)
 			throws ObjectNotFoundException {
-		return dao.getByStudentId(studentId);
+		final Person person = dao.getByStudentId(studentId);
+		return additionalAttribsForStudent(person);
 	}
 
 	@Override
 	public Person personFromUsername(final String username)
 			throws ObjectNotFoundException {
+
 		final Person obj = dao.fromUsername(username);
+		additionalAttribsForStudent(obj);
+
 		if (null == obj) {
 			throw new ObjectNotFoundException(
 					"Could not find person with username: " + username,
@@ -87,7 +98,8 @@ public class PersonServiceImpl implements PersonService {
 	 */
 	@Override
 	public Person create(final Person obj) {
-		return dao.save(obj);
+		final Person person = dao.save(obj);
+		return additionalAttribsForStudent(person);
 	}
 
 	/**
@@ -97,7 +109,8 @@ public class PersonServiceImpl implements PersonService {
 	 */
 	@Override
 	public Person save(final Person obj) throws ObjectNotFoundException {
-		return dao.save(obj);
+		final Person person = dao.save(obj);
+		return additionalAttribsForStudent(person);
 	}
 
 	/**
@@ -123,13 +136,16 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public Person personFromUserId(final String userId)
 			throws ObjectNotFoundException {
-		return dao.fromUserId(userId);
+		final Person person = dao.fromUserId(userId);
+		return additionalAttribsForStudent(person);
 	}
 
 	@Override
 	public List<Person> peopleFromListOfIds(final List<UUID> personIds,
 			final SortingAndPaging sAndP) {
-		return dao.getPeopleInList(personIds, sAndP);
+		final List<Person> people = dao.getPeopleInList(personIds, sAndP);
+		additionalAttribsForStudents(people);
+		return people;
 	}
 
 	/**
@@ -140,18 +156,24 @@ public class PersonServiceImpl implements PersonService {
 			final AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
-		// TODO: use a TO here
-		return dao.getPeopleByCriteria(addressLabelSearchTO,
+		final List<Person> people = dao.getPeopleByCriteria(
+				addressLabelSearchTO,
 				sAndP);
+		additionalAttribsForStudents(people);
+		return people;
 	}
 
 	@Override
 	public List<Person> peopleFromSpecialServiceGroups(
 			final List<UUID> specialServiceGroupIDs,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		// TODO: use a TO here
-		return dao.getPeopleBySpecialServices(specialServiceGroupIDs,
+
+		final List<Person> people = dao.getPeopleBySpecialServices(
+				specialServiceGroupIDs,
 				sAndP);
+
+		additionalAttribsForStudents(people);
+		return people;
 	}
 
 	@Override
@@ -169,5 +191,23 @@ public class PersonServiceImpl implements PersonService {
 		}
 
 		return new PagingWrapper<Person>(coaches);
+	}
+
+	private Iterable<Person> additionalAttribsForStudents(
+			final Iterable<Person> people) {
+		if (people == null) {
+			return null;
+		}
+
+		for (Person person : people) {
+			additionalAttribsForStudent(person);
+		}
+		return people;
+	}
+
+	private Person additionalAttribsForStudent(final Person person) {
+		registrationStatusByTermService
+				.applyRegistrationStatusForCurrentTerm(person);
+		return person;
 	}
 }

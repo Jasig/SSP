@@ -9,6 +9,8 @@ import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegistrationStatusByTermServiceImpl extends
 		AbstractExternalDataService<RegistrationStatusByTerm>
 		implements RegistrationStatusByTermService {
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(RegistrationStatusByTermServiceImpl.class);
 
 	@Autowired
 	transient private RegistrationStatusByTermDao dao;
@@ -55,5 +60,20 @@ public class RegistrationStatusByTermServiceImpl extends
 	public RegistrationStatusByTerm getForTerm(final Person person,
 			final Term term) {
 		return dao.getForTerm(person, term);
+	}
+
+	@Override
+	public Person applyRegistrationStatusForCurrentTerm(final Person person) {
+
+		if (person == null) {
+			return null;
+		}
+
+		try {
+			person.setCurrentRegistrationStatus(getForCurrentTerm(person));
+		} catch (ObjectNotFoundException e) {
+			LOGGER.debug("term not found?", e);
+		}
+		return person;
 	}
 }
