@@ -8,6 +8,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
      	appointment: 'currentAppointment',
      	formUtils: 'formRendererUtils',
         person: 'currentPerson',
+        personLite: 'personLite',
         personService: 'personService',
         currentPersonAppointment: 'currentPersonAppointment'
     },
@@ -31,7 +32,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
 	init: function() {
 		var me=this;
-		var id = me.person.get('id');
+		var id = me.personLite.get('id');
 		// initialize the appointment and personAppointment
 		var personAppointment = new Ssp.model.PersonAppointment();
 		var appointment = new Ssp.model.Appointment();

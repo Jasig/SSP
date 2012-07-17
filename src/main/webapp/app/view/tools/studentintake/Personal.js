@@ -6,7 +6,6 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.studentintake.PersonalViewController',
     inject: {
-    	person: 'currentPerson',
         statesStore: 'statesStore'
     },
 	width: '100%',

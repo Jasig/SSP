@@ -3,7 +3,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	person: 'currentPerson'
+    	personLite: 'personLite'
     },
     config: {
     	personViewHistoryUrl: '',
@@ -19,12 +19,14 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     },
 	init: function() {
 		var me=this;
-		var personId = me.person.get('id');
+		var personId = me.personLite.get('id');
 		me.personViewHistoryUrl = me.apiProperties.getItemUrl('personViewHistory');
 		me.personViewHistoryUrl = me.personViewHistoryUrl.replace('{id}',personId);
 		
 		return this.callParent(arguments);
     },
+    
+    
     
     onViewHistoryClick: function(button){
 		var me=this;

@@ -79,7 +79,6 @@ Ext.define('Ssp.model.Person', {
     
     setStudentTypeId: function( value ){
     	var me=this;
-    	console.log( value );
     	if (value != "")
     	{
         	if ( me.get('studentType') != null)

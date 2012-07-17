@@ -125,7 +125,16 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	   		     title:'Access Denied Error',
 	   		     msg: "It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in SSP?",
 	   		     buttons: Ext.Msg.YESNO,
-	   		     fn: me.loginConfirmResult,
+	   		     fn: function( btnId ){
+	   		    	if (btnId=="yes")
+	   		    	{
+	   		    		// force a login
+	   		    		window.location.reload();
+	   		    	}else{
+	   		    		// force a login
+	   		    		window.location.reload();
+	   		    	}
+	   		    },
 	   		     scope: me
 	   		});
 		}
@@ -136,28 +145,27 @@ Ext.define('Ssp.mixin.ApiProperties', {
 			Ext.Msg.alert('SSP Error', msg);
 		}
 		
-		// Handle responseText is json returned from SSP
-		if( response.responseText != null ){
-			r = Ext.decode(response.responseText);
-			if (r.message != null)
+		if ( response.status==200 )
+		{
+			// Handle responseText is json returned from SSP
+			if( response.responseText != null )
 			{
-				msg = msg + " " + r.message;
-				Ext.Msg.alert('SSP Error', msg);
+				if ( response.responseText != "")
+				{
+					r = Ext.decode(response.responseText);
+					if (r.message != null)
+					{
+						if ( r.message != "")
+						{
+							msg = msg + " " + r.message;
+							Ext.Msg.alert('SSP Error', msg);							
+						}
+					}
+				}
 			}
 		}
+
 	},
-	
-    loginConfirmResult: function( btnId ){
-    	var me=this;
-    	if (btnId=="yes")
-    	{
-    		// force a login
-    		window.location.reload();
-    	}else{
-    		// force a login
-    		window.location.reload();
-    	}
-    },	
 	
 	/*
 	 * Returns the base url of an item in the system.

@@ -4,23 +4,32 @@ Ext.define('Ssp.controller.SearchViewController', {
     inject: {
     	apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
+        caseloadStore: 'caseloadStore',
+        caseloadService: 'caseloadService',
         columnRendererUtils: 'columnRendererUtils',
         formUtils: 'formRendererUtils',
         person: 'currentPerson',
+        personLite: 'personLite',
         preferences: 'preferences',
         programStatusesStore: 'programStatusesStore',
-        studentsStore: 'studentsStore',
+        programStatusService: 'programStatusService',
+        searchService: 'searchService',
         sspConfig: 'sspConfig'
     },
 
     config: {
     	personUrl: null,
-    	personSearchUrl: null
     },
     
     control: {
     	searchText: '#searchText',
     	searchCaseloadCheck: '#searchCaseloadCheck',
+    	caseloadStatusCombo: {
+    		selector: '#caseloadStatusCombo',
+    		listeners: {
+    			change: 'onCaseloadStatusComboSelect'
+    		}
+    	},
     	
     	view: {
     		selectionchange: 'onSelectionChange',
@@ -64,41 +73,118 @@ Ext.define('Ssp.controller.SearchViewController', {
 	init: function() {
 		var me=this;
 		
+		me.preferences.set('SEARCH_GRID_VIEW_TYPE',0);		
 		me.applyColumns();
 		
-		me.personUrl =  me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );		
-		me.personSearchUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personSearch') );		
-		
-		me.initializeStudents();
-
+		me.personUrl =  me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
+				
  		return me.callParent(arguments);
     },
     
 	onSelectionChange: function(selModel,records,eOpts){ 
+		var me=this;
 		if (records.length > 0)
 		{
-			this.person.data = records[0].data;
-			this.appEventsController.getApplication().fireEvent('loadPerson');			
+			if (records[0].data.id != null)
+			{
+				me.personLite.set('id', records[0].data.id);
+			}else{
+				me.personLite.set('id', records[0].data.personId);
+			}
+			me.appEventsController.getApplication().fireEvent('loadPerson');			
 		}
 	},
 
 	onViewReady: function(comp, eobj){
-		this.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: this.onCollapseStudentRecord, scope: this});
-	   	this.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: this.onExpandStudentRecord, scope: this});
+		var me=this;
+		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
+	   	me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
+	
+	   	// ensure the selected person is not loaded twice
+	   	me.personLite.set('id','');
 	   	
-		comp.getSelectionModel().select(0);
+	    me.programStatusesStore.removeAll();
+	    me.caseloadStore.removeAll();
+	    
+		me.initializeCaseload();	
 	},
 
     destroy: function() {
-    	this.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: this.onCollapseStudentRecord, scope: this});
-	   	this.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: this.onExpandStudentRecord, scope: this});
+    	var me=this;
+    	me.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
+	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 
-        return this.callParent( arguments );
+        return me.callParent( arguments );
     },	
 
-    initializeStudents: function(){
-    	this.studentsStore.load();
+    initializeCaseload: function(){
+    	var me=this;
+    	me.getProgramStatuses();
     },
+
+	onCaseloadStatusComboSelect: function(comp, value, eOpts){
+    	var me=this;
+		if (value.length > 0)
+    	{
+			me.getCaseload();
+     	}
+	},
+	
+	getProgramStatuses: function(){
+		var me=this;
+		me.programStatusService.getAll({
+			success:me.getProgramStatusesSuccess, 
+			failure:me.getProgramStatusesFailure, 
+			scope: me
+	    });
+	},
+
+    getProgramStatusesSuccess: function( r, scope){
+    	var me=scope;
+    	var activeProgramStatusId = "";
+    	var programStatus;
+    	if ( me.programStatusesStore.getCount() > 0)
+    	{
+    		programStatus = me.programStatusesStore.findRecord("name", "active");
+    		activeProgramStatusId = programStatus.get('id');
+    		me.getCaseloadStatusCombo().select( activeProgramStatusId );
+    	}
+    },	
+
+    getProgramStatusesFailure: function( r, scope){
+    	var me=scope;
+    },     
+    
+	getCaseload: function(){
+    	var me=this;
+		var pId = "";
+		if ( me.getCaseloadStatusCombo().value.length > 0)
+    	{
+			pId = me.getCaseloadStatusCombo().value;
+     	}
+		me.caseloadService.getCaseload( '', 
+    		{success:me.getCaseloadSuccess, 
+			 failure:me.getCaseloadFailure, 
+			 scope: me});		
+	},
+    
+    getCaseloadSuccess: function( r, scope){
+    	var me=scope;
+    	if ( me.caseloadStore.getCount() > 0)
+    	{
+    		me.getView().getSelectionModel().select(0);
+    	}else{
+    		// if no record is available, then cast event
+    		// to reset the profile tool fields
+    		me.personLite.set('id', "");
+    		me.appEventsController.getApplication().fireEvent('loadPerson');
+    	}
+    },
+
+    getCaseloadFailure: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading(false);
+    },    
     
     onCollapseStudentRecord: function(){
     	console.log('SearchViewController->onCollapseStudentRecord');
@@ -121,9 +207,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 	applyColumns: function(){
 		var me=this;
 		var grid = me.getView();
-		var store = me.studentsStore;
+		var store = me.caseloadStore;
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
-		if (me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1){
+		if (me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1)
+		{
 			columns = [
     	              { header: 'First', dataIndex: 'firstName', flex: 1 },		        
     	              { header: 'MI', dataIndex: 'middleInitial', flex: .2},
@@ -158,17 +245,19 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},	
 	
 	onAddPerson: function(){
-    	var model = new Ssp.model.Person();
-    	this.person.data = model.data;
-		this.loadCaseloadAssignment();
+		var me=this;
+		var model = new Ssp.model.Person();
+    	me.person.data = model.data;
+    	me.personLite.set('id','');
+		me.loadCaseloadAssignment();
 	},
 	
 	onEditPerson: function(){
-	    var records = this.getView().getSelectionModel().getSelection();
+		var me=this;
+		var records = this.getView().getSelectionModel().getSelection();
 		if (records.length>0)
 		{
-		   this.person.data=records[0].data;
-		   this.loadCaseloadAssignment();
+			me.loadCaseloadAssignment();
 		}else{
 			Ext.Msg.alert('Error','Please select a student to edit.');
 		}
@@ -178,7 +267,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	    var records = this.getView().getSelectionModel().getSelection();
 		if (records.length>0)
 		{
-			this.person.data=records[0].data;
 			this.deleteConfirmation();
 		}else{
 			Ext.Msg.alert('Error','Please select a student to delete.');
@@ -205,7 +293,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	deletePerson: function( btnId  ){
      	var me=this;
 		var store = me.studentsStore;
-     	var id = me.person.get('id');
+     	var id = me.personLite.get('id');
      	if (btnId=="yes")
      	{
          	me.apiProperties.makeRequest({
@@ -220,27 +308,12 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	onSearchClick: function(button){
 		var me=this;
-		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
-		var successFunc = function(response,view){
-	    	var r = Ext.decode(response.responseText);
-	    	if (r.rows.length > 0)
-	    	{
-	    		me.studentsStore.loadData(r.rows);
-	    	}else{
-	    		Ext.Msg.alert('Attention','No students match your search. Try a different search value.');
-	    	}
-		};
-		
+		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();		
 		if (me.getSearchText().value != undefined && me.getSearchText().value != "")
 		{
-			
-			me.apiProperties.makeRequest({
-				url: me.personSearchUrl+'/?outsideCaseload='+outsideCaseload+'&searchTerm='+me.getSearchText().value,
-				method: 'GET',
-				successFunc: successFunc
-			});			
+			me.searchService.search(me.getSearchText().value, outsideCaseload);		
 		}else{
-			me.initializeStudents();
+			me.getCaseload();
 		}	
 	},
 	
