@@ -162,6 +162,60 @@ public class EarlyAlertServiceTest {
 		fail("Should have thrown a ValidationException.");
 	}
 
+	/**
+	 * Test that a invalid coach (exists but no ID) and no EA Coordinator for
+	 * the campus, will throw a ValidationException.
+	 * 
+	 * <p>
+	 * Note: Once the default EA Coordinator (global setting) is enabled, this
+	 * test may need updated.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown for this test.
+	 * @throws ValidationException
+	 *             Expected exception for this test
+	 * @throws SendFailedException
+	 *             Should not be thrown for this test.
+	 */
+	@Test(expected = ValidationException.class)
+	public void testCreateEarlyAlertInvalidCoachAndEACoord()
+			throws ObjectNotFoundException, ValidationException,
+			SendFailedException {
+		// arrange
+		final EarlyAlert obj = arrangeEarlyAlert();
+		// coach w/o ID (doesn't make sense most of the time — for testing only)
+		final Person coachWithoutId = new Person();
+		coachWithoutId.setFirstName("1");
+		coachWithoutId.setLastName("2");
+		coachWithoutId.setUsername("3");
+		coachWithoutId.setPrimaryEmailAddress("4");
+		coachWithoutId.setSchoolId("5");
+		obj.getPerson().setCoach(coachWithoutId);
+		obj.getCampus().setEarlyAlertCoordinatorId(null);
+
+		// act
+		earlyAlertService.create(obj);
+
+		// assert
+		fail("Should have thrown a ValidationException. (Once default/global EA Coord enabled, this test may need updated.)");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateEarlyAlertMissingCampus()
+			throws ObjectNotFoundException, ValidationException,
+			SendFailedException {
+		// arrange
+		final EarlyAlert obj = arrangeEarlyAlert();
+		obj.getPerson().setCoach(new Person());
+		obj.setCampus(null);
+
+		// act
+		earlyAlertService.create(obj);
+
+		// assert
+		fail("Should have thrown a IllegalArgumentException.");
+	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateEarlyAlertInvalidEarlyAlert()
 			throws ObjectNotFoundException,

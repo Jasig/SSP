@@ -27,10 +27,8 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
-import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.EarlyAlertOutreachService;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
@@ -45,8 +43,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Maps;
 
 /**
  * EarlyAlertResponse service implementation
@@ -65,9 +61,6 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;
-
-	@Autowired
-	private transient ConfigService configService;
 
 	@Autowired
 	private transient EarlyAlertOutcomeService earlyAlertOutcomeService;
@@ -92,9 +85,6 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 	@Autowired
 	private transient MessageService messageService;
-
-	@Autowired
-	private transient PersonService personService;
 
 	@Autowired
 	private transient MessageTemplateService messageTemplateService;
@@ -285,56 +275,20 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	}
 
 	private Map<String, Object> fillTemplateParameters( // NOPMD by jon.adams
-			final EarlyAlertResponse earlyAlertResponse) {
+			@NotNull final EarlyAlertResponse earlyAlertResponse) {
 		if (earlyAlertResponse == null) {
 			throw new IllegalArgumentException(
 					"EarlyAlertResponse was missing.");
 		}
 
 		final EarlyAlert earlyAlert = earlyAlertResponse.getEarlyAlert();
-		if (earlyAlert == null) {
-			throw new IllegalArgumentException("EarlyAlert was missing.");
-		}
 
-		if (earlyAlert.getPerson() == null) {
-			throw new IllegalArgumentException("EarlyAlert.Person is missing.");
-		}
+		// get basic template parameters from the early alert
+		final Map<String, Object> templateParameters = earlyAlertService
+				.fillTemplateParameters(earlyAlert);
 
-		if (earlyAlert.getCreatedBy() == null) {
-			throw new IllegalArgumentException(
-					"EarlyAlert.CreatedBy is missing.");
-		}
-
-		if (earlyAlert.getCampus() == null) {
-			throw new IllegalArgumentException("EarlyAlert.Campus is missing.");
-		}
-
-		// ensure earlyAlert.createdBy is populated
-		if ((earlyAlert.getCreatedBy().getFirstName() == null)
-				|| (earlyAlert.getCreatedBy().getLastName() == null)) {
-			if (earlyAlert.getCreatedBy().getId() == null) {
-				throw new IllegalArgumentException(
-						"EarlyAlert.CreatedBy.Id is missing.");
-			}
-
-			try {
-				earlyAlert.setCreatedBy(personService.get(earlyAlert
-						.getCreatedBy().getId()));
-			} catch (final ObjectNotFoundException e) {
-				throw new IllegalArgumentException(
-						"EarlyAlert.CreatedBy.Id could not be loaded.", e);
-			}
-		}
-
-		final Map<String, Object> templateParameters = Maps.newHashMap();
-		templateParameters.put("earlyAlert", earlyAlert);
+		// add early alert response to the parameter list
 		templateParameters.put("earlyAlertResponse", earlyAlertResponse);
-		templateParameters.put("termToRepresentEarlyAlert",
-				configService.getByNameEmpty("term_to_represent_early_alert"));
-		templateParameters.put("applicationTitle",
-				configService.getByNameEmpty("app_title"));
-		templateParameters.put("institutionName",
-				configService.getByNameEmpty("inst_name"));
 
 		return templateParameters;
 	}
