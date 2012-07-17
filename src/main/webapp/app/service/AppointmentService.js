@@ -2,25 +2,43 @@ Ext.define('Ssp.service.AppointmentService', {
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties'
-    },
-    config: {
-    	personAppointmentUrl: null
+    	apiProperties: 'apiProperties',
+    	appointment: 'currentAppointment',
+    	currentPersonAppointment: 'currentPersonAppointment'
     },
     initComponent: function() {
 		return this.callParent( arguments );
     },
 
-    buildUrl: function( id ){
+    getBaseUrl: function( id ){
 		var me=this;
-    	me.personAppointmentUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personAppointment') );
-	    me.personAppointmentUrl = me.personAppointmentUrl.replace('{id}', id);	    
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personAppointment') );
+    	baseUrl = baseUrl.replace('{id}', id);
+    	return baseUrl;
     },
     
     getCurrentAppointment: function( personId, callbacks ){
 		var me=this;
+		var url = me.getBaseUrl( personId );
 	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
+	    	var r;
+	    	if (response.responseText != "")
+	    	{
+	    	   r = Ext.decode(response.responseText);
+		   		if (r != null)
+		   		{
+		   			me.currentPersonAppointment.populateFromGenericObject(r);
+		   			
+		   			if (me.currentPersonAppointment.get('id') != "")
+		   			{
+		   				me.appointment.populateFromGenericObject({
+		   				   "appointmentDate": Ext.Date.clearTime(me.currentPersonAppointment.get('startTime'), true),
+		   				   "startTime": me.currentPersonAppointment.get('startTime').getTime(),
+		   				   "endTime": me.currentPersonAppointment.get('endTime').getTime()
+		   			   });
+		   			}
+		   		}
+	    	}
 			callbacks.success( r, callbacks.scope );
 	    };
 
@@ -28,12 +46,10 @@ Ext.define('Ssp.service.AppointmentService', {
 	    	me.apiProperties.handleError( response );	    	
 	    	callbacks.failure( response, callbacks.scope );
 	    };
-
-	    me.buildUrl( personId );
 	    
 		// load the person to edit
 		me.apiProperties.makeRequest({
-			url: me.personAppointmentUrl+'/current',
+			url: url + '/current',
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
@@ -43,6 +59,7 @@ Ext.define('Ssp.service.AppointmentService', {
     
     saveAppointment: function( personId, jsonData, callbacks ){
 		var me=this;
+		var url = me.getBaseUrl( personId );
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
 			callbacks.success( r, callbacks.scope );
@@ -55,15 +72,13 @@ Ext.define('Ssp.service.AppointmentService', {
 		
     	if (personId != "")
     	{
-    	    me.buildUrl( personId );
-    		
     		id = jsonData.id;
 
     		// save the appointment
     		if (id=="")
     		{				
     			me.apiProperties.makeRequest({
-        			url: me.appointmentUrl,
+        			url: url,
         			method: 'POST',
         			jsonData: jsonData,
         			successFunc: success,
@@ -73,7 +88,7 @@ Ext.define('Ssp.service.AppointmentService', {
     		}else{
     			// update
         		me.apiProperties.makeRequest({
-        			url: me.appointmentUrl+"/"+id,
+        			url: url+"/"+id,
         			method: 'PUT',
         			jsonData: jsonData,
         			successFunc: success,

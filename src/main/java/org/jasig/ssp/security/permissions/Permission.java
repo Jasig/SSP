@@ -2,7 +2,7 @@ package org.jasig.ssp.security.permissions;
 
 /**
  * It is simple to mistype in an annotation. This class is an attempt to give
- * slightly more compile time protection. I'm open to better ideas.
+ * slightly more compile time protection.
  */
 public class Permission { // NOPMD enum won't work for these values in
 							// Annotations
@@ -28,10 +28,10 @@ public class Permission { // NOPMD enum won't work for these values in
 	public static final String PERSON_READ = ROLE_PREFIX + "PERSON_READ";
 	public static final String PERSON_WRITE = ROLE_PREFIX + "PERSON_WRITE";
 	public static final String PERSON_DELETE = ROLE_PREFIX + "PERSON_DELETE";
+	public static final String PERSON_INSTRUCTION_READ = ROLE_PREFIX
+			+ "PERSON_INSTRUCTION_READ";
 
-	//
-	// Just wraps the permission role in a hasRole
-	//
+	// Wrap the permission role in a hasRole
 	public static final String SECURITY_REFERENCE_WRITE = HAS_ROLE
 			+ REFERENCE_WRITE + END;
 
@@ -44,5 +44,6 @@ public class Permission { // NOPMD enum won't work for these values in
 			+ END;
 	public static final String SECURITY_PERSON_DELETE = HAS_ROLE
 			+ PERSON_DELETE + END;
-
+	public static final String SECURITY_PERSON_INSTRUCTION_READ = HAS_ROLE
+			+ PERSON_INSTRUCTION_READ + END;
 }

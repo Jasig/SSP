@@ -5,7 +5,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         apiProperties: 'apiProperties',
         authenticatedPerson: 'authenticatedPerson',
         appEventsController: 'appEventsController',
-        currentPerson: 'currentPerson',
         challengesStore: 'challengesStore',
     	childCareArrangementsStore: 'childCareArrangementsStore',
     	citizenshipsStore: 'citizenshipsStore',
@@ -17,6 +16,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	fundingSourcesStore: 'fundingSourcesStore',
     	gendersStore: 'gendersStore',
     	maritalStatusesStore: 'maritalStatusesStore',
+        personLite: 'personLite',
         statesStore: 'statesStore',
         studentStatusesStore: 'studentStatusesStore',
     	veteranStatusesStore: 'veteranStatusesStore'        
@@ -86,7 +86,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
 		// load the person record
 		me.apiProperties.makeRequest({
-			url: studentIntakeUrl+'/'+me.currentPerson.getId(),
+			url: studentIntakeUrl+'/'+me.personLite.get('id'),
 			method: 'GET',
 			successFunc: me.loadStudentIntakeResult,
 			scope: me
@@ -502,7 +502,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 						
 			// Save the intake
 			me.apiProperties.makeRequest({
-				url: me.apiProperties.createUrl(me.apiProperties.getItemUrl('studentIntakeTool') +"/"+ this.currentPerson.get('id')),
+				url: me.apiProperties.createUrl(me.apiProperties.getItemUrl('studentIntakeTool') +"/"+ this.personLite.get('id')),
 				method: 'PUT',
 				jsonData: intakeData,
 				successFunc: handleSuccess,

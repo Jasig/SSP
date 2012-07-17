@@ -4,19 +4,17 @@
 
 
 <script>
-function displayAgreement() {
-	$.getJSON('/ssp/api/1/reference/confidentialityDisclosureAgreement/', function(data) {
+	function displayAgreement() {
+		$.getJSON('/ssp/api/1/reference/confidentialityDisclosureAgreement/', function(data) {
 	
-		$.each(data.rows, function(i, row) {
-var newHTML = $('#ConfidentialityAgreement').html();		
-		swapOut(row.text);
-			
-		});
+			$.each(data.rows, function(i, row) {
+				$('.ConfidentialityAgreement').html(row.text);		
+			});
 
-	}).error(function(jqXHR, textStatus, errorThrown) {
-		swapOut(jqXHR + " " + textStatus + " " + errorThrown);
-	});
-}
+		}).error(function(jqXHR, textStatus, errorThrown) {
+			alert(jqXHR + " " + textStatus + " " + errorThrown);
+		});
+	}
 
 	
 	

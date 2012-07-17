@@ -9,7 +9,6 @@ Ext.define('Ssp.view.Search', {
     	authenticatedPerson: 'authenticatedPerson',
     	apiProperties: 'apiProperties',
     	columnRendererUtils: 'columnRendererUtils',
-    	person: 'currentPerson',
         store: 'studentsStore',
         programStatusesStore: 'programStatusesStore',
         sspConfig: 'sspConfig'
@@ -68,6 +67,31 @@ Ext.define('Ssp.view.Search', {
 		       		},{
 		       			xtype: 'toolbar',
 		       			dock: 'top',
+		       		    items: [
+		       		        {
+		    			        xtype: 'combobox',
+		    			        itemId: 'caseloadStatusCombo',
+		    			        name: 'programStatusId',
+		    			        fieldLabel: 'Retrieve my Caseload By Status',
+		    			        emptyText: 'Select One',
+		    			        store: me.programStatusesStore,
+		    			        valueField: 'id',
+		    			        displayField: 'name',
+		    			        mode: 'local',
+		    			        typeAhead: true,
+		    			        queryMode: 'local',
+		    			        allowBlank: true,
+		    			        forceSelection: false,
+		    			        labelWidth: 200
+		    				},{
+		       		        	xtype: 'tbspacer',
+		       		        	flex: 1
+		       		        }
+		       		    ]
+		       		    
+		       		},{
+		       			xtype: 'toolbar',
+		       			dock: 'top',
 		       			items: [{
 						    tooltip: 'Add Student',
 						    text: '',
@@ -115,32 +139,7 @@ Ext.define('Ssp.view.Search', {
 				            xtype: 'button',
 				            itemId: 'displayListButton'				        	
 				        }]
-		       		}/*,{
-		       			xtype: 'toolbar',
-		       			dock: 'top',
-		       		    items: [
-		       		        {
-		    			        xtype: 'combobox',
-		    			        itemId: 'caseloadStatusCombo',
-		    			        name: 'programStatusId',
-		    			        fieldLabel: 'Caseload Status',
-		    			        emptyText: 'Select One',
-		    			        store: me.programStatusesStore,
-		    			        valueField: 'id',
-		    			        displayField: 'name',
-		    			        mode: 'local',
-		    			        typeAhead: true,
-		    			        queryMode: 'local',
-		    			        allowBlank: true,
-		    			        forceSelection: false,
-		    			        labelWidth: 100
-		    				},{
-		       		        	xtype: 'tbspacer',
-		       		        	flex: 1
-		       		        }
-		       		    ]
-		       		    
-		       		}*/]
+		       		}]
 		    	    });
     	
     	return me.callParent(arguments);
