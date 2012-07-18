@@ -19,6 +19,9 @@ public class ProgramStatusChangeReason
 
 	private static final long serialVersionUID = -4811273185578231919L;
 
+	public static final UUID UNKNOWN_ID = UUID
+			.fromString("b2d1290F-5056-a51a-8094-3b321a901899");
+
 	/**
 	 * Constructor
 	 */
