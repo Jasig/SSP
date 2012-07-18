@@ -35,6 +35,6 @@ public class RegistrationStatusByTermDao extends
 		query.add(Restrictions.eq("schoolId", person.getSchoolId()));
 		query.add(Restrictions.gt("registeredCourseCount", 0));
 
-		return processCriteriaWithSortingAndPaging(query, sAndP);
+		return processCriteriaWithSortingAndPaging(query, sAndP, false);
 	}
 }
