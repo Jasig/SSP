@@ -48,6 +48,36 @@
 			</delete>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="Add external_registration_status_by_term example" author="daniel.bower">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip adding the external_registration_status_by_term example for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<insert tableName="external_registration_status_by_term">
+			<column name="school_id" value="ken.1" />
+			<column name="term_code" value="FA12" />
+			<column name="registered_course_count" value="2" />
+		</insert>
+		<insert tableName="external_registration_status_by_term">
+			<column name="school_id" value="ken.1" />
+			<column name="term_code" value="SP13" />
+			<column name="registered_course_count" value="0" />
+		</insert>
+
+		<rollback>
+			<delete tableName="external_registration_status_by_term">
+				<where>school_id = 'ken.1' AND term_code = 'FA12'</where>
+			</delete>
+			<delete tableName="external_registration_status_by_term">
+				<where>school_id = 'ken.1' AND term_code = 'SP13'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 
 	<changeSet id="Add external_faculty_course table" author="jon.adams">
 		<preConditions onFail="CONTINUE"

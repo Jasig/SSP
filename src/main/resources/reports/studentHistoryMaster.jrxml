@@ -8,8 +8,9 @@
 	<field name="dateDayOnly" class="java.lang.String"/>
 	<field name="journalEntries" class="java.util.List"/>
 	<field name="taskList" class="java.util.List"/>
+    <field name="earlyAlerts" class="java.util.List"/>
 	<background>
-		<band splitType="Stretch"/> 
+		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="85" splitType="Stretch">
@@ -96,9 +97,23 @@
 				<text><![CDATA[ACTION PLAN]]></text>
 			</staticText>
 		</band>
-		<band height="31">
+		<band height="40">
+			<staticText>
+				<reportElement uuid="b7b6e397-15cd-474a-bc44-2585d8216aa0" positionType="Float" mode="Opaque" x="0" y="2" width="572" height="15" backcolor="#87F1EE">
+					<printWhenExpression><![CDATA[!$F{earlyAlerts}.isEmpty();]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Early Alert]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="2f28ed7a-0c04-4584-bfc2-aee090764c3c" positionType="Float" x="13" y="17" width="558" height="20" isRemoveLineWhenBlank="true"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlerts})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["reports/earlyAlertHistory_subreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
 			<rectangle>
-				<reportElement uuid="942aff52-9d2c-4551-8098-69343f0d5370" x="0" y="5" width="572" height="2" backcolor="#7E7979"/>
+				<reportElement uuid="942aff52-9d2c-4551-8098-69343f0d5370" x="0" y="4" width="572" height="2" backcolor="#7E7979"/>
 			</rectangle>
 		</band>
 	</detail>

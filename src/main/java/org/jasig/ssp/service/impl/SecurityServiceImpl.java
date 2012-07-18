@@ -114,12 +114,8 @@ public class SecurityServiceImpl implements SecurityService {
 			}
 		} else if (!sessionFactory.getCurrentSession().contains(
 				sspUser.getPerson())) {
-			try {
-				sspUser.setPerson(personService
-						.get(sspUser.getPerson().getId()));
-			} catch (ObjectNotFoundException e) {
-				LOGGER.error("Unable to load the person from the db", e);
-			}
+			sspUser.setPerson(personService
+					.load(sspUser.getPerson().getId()));
 		}
 
 		return sspUser;

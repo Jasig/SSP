@@ -110,6 +110,8 @@ public class PersonTO // NOPMD
 
 	private Set<ReferenceLiteTO<ProgramStatus>> programStatuses;
 
+	private boolean registeredForCurrentTerm;
+
 	/**
 	 * Empty constructor
 	 */
@@ -216,6 +218,14 @@ public class PersonTO // NOPMD
 			}
 
 			programStatuses = ReferenceLiteTO.toTOSet(programStatusesFromModel);
+		}
+
+		if ((null == model.getCurrentRegistrationStatus())
+				|| (model.getCurrentRegistrationStatus()
+						.getRegisteredCourseCount() < 1)) {
+			registeredForCurrentTerm = false;
+		} else {
+			registeredForCurrentTerm = true;
 		}
 	}
 
@@ -544,4 +554,13 @@ public class PersonTO // NOPMD
 			final Set<ReferenceLiteTO<ProgramStatus>> programStatuses) {
 		this.programStatuses = programStatuses;
 	}
+
+	public boolean isRegisteredForCurrentTerm() {
+		return registeredForCurrentTerm;
+	}
+
+	public void setRegisteredForCurrentTerm(boolean registeredForCurrentTerm) {
+		this.registeredForCurrentTerm = registeredForCurrentTerm;
+	}
+
 }

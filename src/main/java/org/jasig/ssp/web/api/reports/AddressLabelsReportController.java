@@ -81,7 +81,7 @@ public class AddressLabelsReportController extends BaseController { // NOPMD
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",
+		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
 				Locale.US);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(

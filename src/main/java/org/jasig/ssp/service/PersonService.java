@@ -128,4 +128,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return List of all coaches
 	 */
 	PagingWrapper<Person> getAllCoaches(SortingAndPaging sAndP);
+
+	Person load(UUID id);
 }

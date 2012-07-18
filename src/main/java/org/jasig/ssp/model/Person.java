@@ -25,6 +25,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
 
@@ -393,7 +394,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private Set<EarlyAlert> earlyAlerts;
 
 	@Transient
-	private Appointment currentAppointment;
+	private RegistrationStatusByTerm currentRegistrationStatus;
 
 	/**
 	 * Initialize a Person.
@@ -815,12 +816,13 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.earlyAlerts = earlyAlerts;
 	}
 
-	public Appointment getCurrentAppointment() {
-		return currentAppointment;
+	public RegistrationStatusByTerm getCurrentRegistrationStatus() {
+		return currentRegistrationStatus;
 	}
 
-	public void setCurrentAppointment(final Appointment currentAppointment) {
-		this.currentAppointment = currentAppointment;
+	public void setCurrentRegistrationStatus(
+			final RegistrationStatusByTerm currentRegistrationStatus) {
+		this.currentRegistrationStatus = currentRegistrationStatus;
 	}
 
 	@Override

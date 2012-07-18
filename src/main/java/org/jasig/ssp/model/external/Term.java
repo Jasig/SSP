@@ -49,6 +49,14 @@ public class Term extends AbstractExternalData implements Serializable,
 	@Column(nullable = false, length = 25)
 	private int reportYear;
 
+	public Term() {
+		super();
+	}
+
+	public Term(final String code) {
+		this.code = code;
+	}
+
 	public String getName() {
 		return name;
 	}

@@ -6,4 +6,6 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 public interface TermService extends ExternalDataService<Term> {
 
 	Term getByCode(final String code) throws ObjectNotFoundException;
+
+	Term getCurrentTerm() throws ObjectNotFoundException;
 }

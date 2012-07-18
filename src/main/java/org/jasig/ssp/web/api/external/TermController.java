@@ -73,4 +73,17 @@ public class TermController extends AbstractExternalController<TermTO, Term> {
 
 		return super.instantiateTO(model);
 	}
+
+	@RequestMapping(value = "/current", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	TermTO currentTerm() throws ObjectNotFoundException,
+			ValidationException {
+		final Term model = getService().getCurrentTerm();
+		if (model == null) {
+			return null;
+		}
+
+		return super.instantiateTO(model);
+	}
 }
