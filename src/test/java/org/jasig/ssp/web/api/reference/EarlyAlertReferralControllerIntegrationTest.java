@@ -202,12 +202,14 @@ public class EarlyAlertReferralControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() {
-		final Collection<EarlyAlertReferralTO> list = controller.getAll(
-				ObjectStatus.ACTIVE, null, null, null, null).getRows();
+		final PagedResponse<EarlyAlertReferralTO> response = controller.getAll(
+				ObjectStatus.ACTIVE, 0, 50, null, null);
 
-		assertNotNull("List should not have been null.", list);
+		assertNotNull("List should not have been null.", response.getRows());
 		assertFalse("List action should have returned some objects.",
-				list.isEmpty());
+				response.getRows().isEmpty());
+		assertEquals("Non-page size did not match expected.", 10,
+				response.getResults());
 	}
 
 	/**

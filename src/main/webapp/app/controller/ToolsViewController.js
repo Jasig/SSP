@@ -4,7 +4,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
     inject: {
     	apiProperties: 'apiProperties',
     	authenticatedPerson: 'authenticatedPerson',
-    	person: 'currentPerson',
+    	personLite: 'personLite',
         formUtils: 'formRendererUtils',
         appEventsController: 'appEventsController'
     },
@@ -22,8 +22,8 @@ Ext.define('Ssp.controller.ToolsViewController', {
     
     onViewReady: function(comp, obj){
     	this.appEventsController.assignEvent({eventName: 'loadPerson', callBackFunc: this.onLoadPerson, scope: this});
-    
-    	if (this.person.get('id') != "")
+ 
+    	if (this.personLite.get('id') != "")
     	{
     		this.loadPerson();
     	}
@@ -51,7 +51,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 		}
 	},
 	
-	loadTool: function( toolType ) {	
+	loadTool: function( toolType ) {
 		var me=this;
 		var comp;
 		if ( me.authenticatedPerson.hasAccess(toolType.toUpperCase()+'_TOOL') )
