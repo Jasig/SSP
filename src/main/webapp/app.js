@@ -192,6 +192,8 @@ Ext.require([
     'Ssp.service.AbstractService',
     'Ssp.service.AppointmentService',
     'Ssp.service.CaseloadService',
+    'Ssp.service.EarlyAlertService',
+    'Ssp.service.EarlyAlertResponseService',
     'Ssp.service.PersonService',
     'Ssp.service.ProgramStatusService',
     'Ssp.service.SearchService',
@@ -208,7 +210,8 @@ Ext.require([
 	'Ext.ux.CheckColumn',
 	'Ext.ux.form.MultiSelect',
 	'Ext.ux.form.ItemSelector',
-	'Ext.util.MixedCollection'
+	'Ext.util.MixedCollection',
+	'Ext.tree.*'
 ]);
 
 var apiUrls = [
@@ -246,8 +249,8 @@ var apiUrls = [
   {name: 'personChallenge', url: 'person/{id}/challenge'},
   {name: 'personCoach', url: 'person'},
   {name: 'personDocument', url: 'person/{id}/document'},
-  {name: 'personEarlyAlert', url: 'person/{id}/earlyAlert'},
-  {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlert/{earlyId}/earlyAlertResponse'},
+  {name: 'personEarlyAlert', url: 'person/{personId}/earlyAlert'},
+  {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlertResponse'},
   {name: 'personGoal', url: 'person/{id}/goal'},
   {name: 'personJournalEntry', url: 'person/{id}/journalEntry'},
   {name: 'personTask', url: 'person/{id}/task'},
@@ -489,7 +492,6 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
-			        
 			        // STORES
 					abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 				    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
@@ -512,7 +514,7 @@ Ext.onReady(function(){
 					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
 					earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
 					earlyAlertReferralsBindStore: 'Ssp.store.reference.EarlyAlertReferralsBind',
-				    earlyAlertsStore: 'Ssp.store.EarlyAlerts',
+					earlyAlertsStore: 'Ssp.store.EarlyAlerts',
 					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
 				    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
 			    	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
@@ -547,6 +549,8 @@ Ext.onReady(function(){
 			        // SERVICES
 			        appointmentService: 'Ssp.service.AppointmentService',
 			        caseloadService: 'Ssp.service.CaseloadService',
+			        earlyAlertService: 'Ssp.service.EarlyAlertService',
+			        earlyAlertResponseService: 'Ssp.service.EarlyAlertResponseService',
 			        personService: 'Ssp.service.PersonService',
 			        programStatusService: 'Ssp.service.ProgramStatusService',
 			        searchService: 'Ssp.service.SearchService'

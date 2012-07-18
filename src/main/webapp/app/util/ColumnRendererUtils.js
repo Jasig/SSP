@@ -43,6 +43,10 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 
 	renderCreatedByDate: function(val, metaData, record) {
 	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y');		
+	},
+
+	renderCreatedByDateWithTime: function(val, metaData, record) {
+	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y h:m A');		
 	},	
 
 	renderCreatedBy: function(val, metaData, record) {

@@ -104,8 +104,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	me.personLite.set('id','');
 	   	
 	    me.programStatusesStore.removeAll();
-	    me.caseloadStore.removeAll();
-	    
 		me.initializeCaseload();	
 	},
 
@@ -162,7 +160,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	{
 			pId = me.getCaseloadStatusCombo().value;
      	}
-		me.caseloadService.getCaseload( '', 
+		me.caseloadService.getCaseload( pId, 
     		{success:me.getCaseloadSuccess, 
 			 failure:me.getCaseloadFailure, 
 			 scope: me});		
@@ -183,7 +181,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     getCaseloadFailure: function( r, scope){
     	var me=scope;
-    	me.getView().setLoading(false);
     },    
     
     onCollapseStudentRecord: function(){

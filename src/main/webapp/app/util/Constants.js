@@ -25,6 +25,7 @@ Ext.define('Ssp.util.Constants',{
         GRID_ITEM_DELETE_ICON_PATH: '/ssp/images/delete-icon.png',
         GRID_ITEM_EDIT_ICON_PATH: '/ssp/images/edit-icon.jpg',
         GRID_ITEM_CLOSE_ICON_PATH: '/ssp/images/close-icon.jpg',
+        GRID_ITEM_MAIL_REPLY_ICON_PATH: '/ssp/images/mail-reply-icon.png',
         
         REQUIRED_ASTERISK_DISPLAY: '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>'
     },

@@ -158,7 +158,7 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-			
+
 		<createView viewName="v_external_faculty_course">
 			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, term_code, formatted_course, title from external_faculty_course
 		</createView>

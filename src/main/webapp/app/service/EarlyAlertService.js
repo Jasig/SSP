@@ -1,27 +1,28 @@
-Ext.define('Ssp.service.ProgramStatusService', {  
+Ext.define('Ssp.service.EarlyAlertService', {  
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'programStatusesStore'
+    	store: 'earlyAlertsStore'
     },
     initComponent: function() {
 		return this.callParent( arguments );
     },
     
-    getBaseUrl: function( id ){
+    getBaseUrl: function( personId ){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('programStatus') );
-    	return baseUrl;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personEarlyAlert') );
+		baseUrl = baseUrl.replace( '{personId}', personId );
+		return baseUrl;
     },
 
-    getAll: function( callbacks ){
+    getAll: function( personId, callbacks ){
     	var me=this;
     	var success = function( response, view ){
     		var r = Ext.decode(response.responseText);
     		if (r.rows.length > 0)
 	    	{
-	    		me.store.loadData(r.rows);
+    			me.store.loadData(r.rows);
 	    	}
 	    	if (callbacks != null)
 	    	{
@@ -40,7 +41,7 @@ Ext.define('Ssp.service.ProgramStatusService', {
 	    me.store.removeAll();
 	    
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl(),
+			url: me.getBaseUrl(personId),
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
