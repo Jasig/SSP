@@ -88,7 +88,6 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				store.insert(0, item );
 		       	grid.plugins[0].startEdit(0, 0);
 		       	grid.plugins[0].editor.items.getAt(0).selectText();
-		        //me.getRecordPager().refresh();
 		       	store.totalCount = store.totalCount+1;
 		       	me.getRecordPager().onLoad();
 			},
@@ -134,9 +133,9 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
        			   if (r.success==true)
        			   {
        				store.remove( store.getById( id ) );
-       				//store.totalCount = store.totalCount-1;
-       				//me.getRecordPager().onLoad();
-       			    me.getRecordPager().refresh();
+       				store.totalCount = store.totalCount-1;
+       				me.getRecordPager().onLoad();
+       			    me.getRecordPager().doRefresh();
        			   }
        		   }
        	    });

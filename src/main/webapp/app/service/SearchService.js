@@ -3,7 +3,7 @@ Ext.define('Ssp.service.SearchService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'caseloadStore'
+    	store: 'searchStore'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -38,6 +38,8 @@ Ext.define('Ssp.service.SearchService', {
 	    		callbacks.failure( response, callbacks.scope );
 	    	}
 	    };
+	    
+	    me.store.removeAll();
 	    
 		me.apiProperties.makeRequest({
 			url: me.getBaseUrl()+'/?outsideCaseload='+outsideCaseload+'&searchTerm='+searchTerm,

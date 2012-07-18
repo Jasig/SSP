@@ -66,6 +66,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 				            	   xtype: 'button',
 				            	   itemId: 'printButton',
 				            	   tooltip: 'Print Appointment Form',
+				            	   hidden: true,
 				            	   width: 30,
 						           height: 30,
 						           cls: 'printIcon'
@@ -73,6 +74,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 				                 {
 				            	   xtype: 'button',
 				            	   itemId: 'emailButton',
+				            	   hidden: true,
 				            	   tooltip: 'Email Appointment Form',
 				            	   width: 30,
 						           height: 30,
