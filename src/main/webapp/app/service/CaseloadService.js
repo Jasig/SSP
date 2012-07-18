@@ -43,6 +43,8 @@ Ext.define('Ssp.service.CaseloadService', {
 	    	programStatusFilter = '/?programStatusId='+programStatusId;
 	    }
 	    
+	    me.store.removeAll();
+	    
 		me.apiProperties.makeRequest({
 			url: me.getBaseUrl()+'/caseload'+programStatusFilter,
 			method: 'GET',
@@ -73,6 +75,8 @@ Ext.define('Ssp.service.CaseloadService', {
 	    		callbacks.failure( response, callbacks.scope );
 	    	}
 	    };
+	    
+	    me.store.removeAll();
 	    
 		me.apiProperties.makeRequest({
 			url: me.getBaseUrl()+'/'+personId+'/caseload',
