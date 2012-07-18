@@ -13,6 +13,7 @@
 <script src="<rs:resourceURL value="/rs/jqueryui/1.8.13/jquery-ui-1.8.13.min.js"/>" type="text/javascript"></script>
 <script src="<rs:resourceURL value="/rs/fluid/1.4.0/js/fluid-all-1.4.0.min.js"/>" type="text/javascript"></script>
 <script src="<c:url value="/js/reports.js" />" type="text/javascript"></script>
+<script src="<c:url value="/js/libs/jquery.print.js" />" type="text/javascript"></script>
 
 <link href="<c:url value="/resources/css/report.css" />" rel="stylesheet" type="text/css">
 
@@ -38,7 +39,7 @@
   
   	<!-- Portlet Message -->
   	<div class="portlet-msg-info portlet-msg info loading-message" role="status" style="display: none;">
-    	<div class="titlebar">
+    	<div class="titlebar"><script type="text/javascript" src="jquery.print.js"></script>
         <h3 class="title"><spring:message code="loading"/> . . .</h3>
       </div>
       <div class="content">
@@ -72,7 +73,7 @@
 			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
 		</div>
 		<div class="ea-label">
-			<span>Student Type:</span>
+			<span>Stu<script type="text/javascript" src="jquery.print.js"></script>dent Type:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -210,7 +211,16 @@
 		</div>
 	</form>
 </div>
+<script type="text/javascript" src="jquery.print.js"></script>
+ 
+<div class="hideable-form confidentiality-agreement-form" style="width:800; display:none" >
+<h1>Confidentiality Agreement Form</h1>
+<p><a class='print-conf-form'>print</a></p>
 
+<div class="confidentiality-agreement-form-content" style="width:800;" ></div>
+</div>
+
+</div>
 
 
 
