@@ -44,13 +44,18 @@ public class CaseloadServiceImpl implements CaseloadService {
 			final Person coach, final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 
+		ProgramStatus programStatusOrDefault;
+
 		// programStatus : <programStatusId>, default to Active
 		if (programStatus == null) {
-			programStatusService.get(ProgramStatus.ACTIVE_ID);
+			programStatusOrDefault = programStatusService
+					.get(ProgramStatus.ACTIVE_ID);
+		} else {
+			programStatusOrDefault = programStatus;
 		}
 
 		final PagingWrapper<CaseloadRecord> records = dao.caseLoadFor(
-				programStatus, coach, sAndP);
+				programStatusOrDefault, coach, sAndP);
 
 		final List<UUID> peopleIds = Lists.newArrayList();
 		for (CaseloadRecord record : records) {

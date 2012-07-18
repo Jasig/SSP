@@ -29,19 +29,8 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'specialServiceGroups', type: 'auto'},
     		 {name: 'referralSources', type: 'auto'},
     		 {name: 'serviceReasons', type: 'auto'},
-             {name: 'currentAppointment', type: 'auto'},
     		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
     		 {name: 'programStatuses', type: 'auto'}],
-    
-             /*defaultValue:{"id" : "",
-             "startDate" : 1331269200000,
-             "endDate" : 1331269200000} */
-    		 
-    		 //'programStatus',
-    		 //'registrationStatus',
-    		 //'paymentStatus',
-    		 //'cumGPA',
-    		 //'academicPrograms'
     		 		 
     getFullName: function(){ 
     	var firstName = this.get('firstName') || "";
@@ -73,8 +62,6 @@ Ext.define('Ssp.model.Person', {
     	{
         	if ( this.get('coach') != null)
         	{
-        		this.get('coach').id = value;
-        	}else{
         		this.set('coach',{"id":value});
         	}    		
     	}
@@ -91,13 +78,12 @@ Ext.define('Ssp.model.Person', {
     },    
     
     setStudentTypeId: function( value ){
+    	var me=this;
     	if (value != "")
     	{
-        	if ( this.get('studentType') != null)
+        	if ( me.get('studentType') != null)
         	{
-        		this.get('studentType').id = value;
-        	}else{
-        		this.set('studentType',{"id":value});
+        		me.set('studentType',{"id":value});
         	}    		
     	}
     },
@@ -113,22 +99,5 @@ Ext.define('Ssp.model.Person', {
         	}
     	}
     	return programStatusName;   	
-    },  
-    
-    setAppointment: function( startDate, endDate ){
-    	if (startDate != null && endDate != null)
-    	{
-        	if ( this.get('currentAppointment') != null )
-    		{
-    		   this.get('currentAppointment').startDate = startDate;
-    		   this.get('currentAppointment').endDate = endDate;
-    		}else{
-    		   model.set('currentAppointment', {
-    			                                  "id":"",
-    			                                  "startDate":startDate,
-    			                                  "endDate":endDate
-    			                                 });
-    		}    		
-    	}
     }
 });

@@ -2,15 +2,15 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
+    	appointmentService: 'appointmentService',
     	appEventsController: 'appEventsController',
     	apiProperties: 'apiProperties',
      	appointment: 'currentAppointment',
      	formUtils: 'formRendererUtils',
-        person: 'currentPerson'
-    },
-    config: {
-    	person: 'currentPerson',
-    	personUrl: null
+        person: 'currentPerson',
+        personLite: 'personLite',
+        personService: 'personService',
+        currentPersonAppointment: 'currentPersonAppointment'
     },
     control: {
     	'saveButton':{
@@ -32,27 +32,41 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
 	init: function() {
 		var me=this;
-		var assignmentScreen, items, id;
-		var successFunc = function(response ,view){
-			var r = Ext.decode(response.responseText);
-			
-			me.getView().setLoading( false );
-			
-			// load the person record
-			me.person.populateFromGenericObject(r);
-			
-			me.updateTitle();
-			
-			// init the view
-			caseloadAssignmentView.add(items);
-		};
-
-		id = me.person.get('id');
-			
-		me.personUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
+		var id = me.personLite.get('id');
+		// initialize the appointment and personAppointment
+		var personAppointment = new Ssp.model.PersonAppointment();
+		var appointment = new Ssp.model.Appointment();
+		me.appointment.data = appointment.data;
+		me.currentPersonAppointment.data = personAppointment.data;
 		
+		// load the person record and init the view
+		if (id.length > 0)
+		{
+			me.getView().setLoading( true );
+			
+	    	me.personService.getPerson( id, {success:me.getPersonSuccess, 
+	    									  failure:me.getPersonFailure, 
+	    									  scope: me} );
+		}else{
+			me.initForms();
+			me.updateTitle();
+		}
+		
+		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
+		
+		return this.callParent(arguments);
+    },
+    
+    destroy: function(){
+		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
+    	
+    	return this.callParent( arguments );
+    },
+  
+    initForms: function(){
 		// retrieve the appointment screen and define items for the screen
-		caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
+    	var caseloadAssignmentView, items; 
+    	var caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
 		
 		items = [{ title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
         	       autoScroll: true,
@@ -78,36 +92,49 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
             		title: 'Ability to Benefit/Anticipated Start Date',
             		autoScroll: true,
             		items: [{xtype: 'personanticipatedstartdate'}]
-        		}];	
-		
-		// load the person record and init the view
-		if (id.length > 0)
-		{
-			me.getView().setLoading( true );
-			
-			// load the person to edit
-			me.apiProperties.makeRequest({
-				url: me.personUrl+'/'+id,
-				method: 'GET',
-				successFunc: successFunc
-			});
-		}else{
-			// adding a record, so simply init the view
-			caseloadAssignmentView.add(items);
+        		}];
+    	
+    	// adding a record, so simply init the view
+		caseloadAssignmentView.add(items);
+    },
 
-			me.updateTitle();
-		}
-		
-		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
-		
-		return this.callParent(arguments);
+    getPersonSuccess: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading( false );
+		me.getCurrentAppointment();
+		me.updateTitle();
     },
     
-    destroy: function(){
-		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
-    	
-    	return this.callParent( arguments );
+    getPersonFailure: function( response, scope ){
+    	var me=scope;  	
+    	me.getView().setLoading( false );
     },
+
+    getCurrentAppointment: function(){
+		var me=this;
+		var personId = me.person.get('id');
+    	if (personId != null)
+		{
+			
+			me.getView().setLoading( true );
+		    me.appointmentService.getCurrentAppointment( personId, {success:me.getAppointmentSuccess, 
+			    						                             failure:me.getAppointmentFailure, 
+			    						                             scope: me} );
+		}else{
+			me.initForms();
+		}    	
+    },
+    
+    getAppointmentSuccess: function( r, scope ){
+		var me=scope;	
+		me.getView().setLoading( false );
+		me.initForms();
+    },
+    
+    getAppointmentFailure: function( response, scope ){
+    	var me=scope;   	
+    	me.getView().setLoading( false );
+    },    
     
     onPersonNameChange: function(){
     	this.updateTitle();
@@ -123,7 +150,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var model=me.person;
 		var id = model.get('id');
 		var jsonData = new Object();
-		var currentAppointment;
+		var currentPersonAppointment;
 		
 		// edit person view
 		var personView = Ext.ComponentQuery.query('.editperson')[0];
@@ -167,17 +194,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 	                 referralSourcesForm];		
 
 		var validateResult = me.formUtils.validateForms( formsToValidate );
-
-		var personSuccessFunc = function(response,view){
-			var r = Ext.decode(response.responseText);
-			if (r.id != "")
-			{
-				// display the search screen
-				me.loadStudentToolsView();
-			}else{
-				Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.')
-			}
-		};
 		
 		// Validate all of the forms
 		if ( validateResult.valid ) 
@@ -189,10 +205,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			model.setCoachId( coachForm.findField('coachId').getValue() );
 			model.setStudentTypeId( coachForm.findField('studentTypeId').getValue() );			
 			
-			// save the appointment dates and times
+			// update the appointment
 			appointmentForm.updateRecord();
-			
-			model.setAppointment(me.appointment.getStartDate(), me.appointment.getEndDate() );			
 						
 			// set special service groups
 			specialServiceGroupsFormValues = specialServiceGroupsItemSelector.getValue();
@@ -223,45 +237,84 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			}else{
 				model.data.serviceReasons=null;
 			}
-			
-			jsonData = model.data;
-			
+						
 			// TODO: Handle username field
 			if (model.get("username") == "")
 				model.set('username',model.get('firstName')+'.'+model.get('lastName'));				
 
 			if (model.get("userId") == "")
-				model.set('userId',model.get('firstName')+'.'+model.get('lastName'));				
+				model.set('userId',model.get('firstName')+'.'+model.get('lastName'));		
 			
-			// TODO: handle unused fields from the json
-			// since these will throw an error in the
-			// current API
-			delete jsonData.currentAppointment;			
+			me.getView().setLoading( true );
 			
-			// save the person
-			if (id=="")
-			{				
-				// create
-				me.apiProperties.makeRequest({
-	    			url: me.personUrl,
-	    			method: 'POST',
-	    			jsonData: jsonData,
-	    			successFunc: personSuccessFunc
-	    		});				
-			}else{
-				// update
-	    		me.apiProperties.makeRequest({
-	    			url: me.personUrl+"/"+id,
-	    			method: 'PUT',
-	    			jsonData: jsonData,
-	    			successFunc: personSuccessFunc
-	    		});	
-			}
+			jsonData = model.data;
 			
+			// TODO: Fix API to allow programStatus liteTO 
+			delete jsonData.programStatuses;			
+
+			me.personService.savePerson( jsonData, 
+	    			                    {success:me.savePersonSuccess, 
+				                         failure:me.savePersonFailure, 
+				                         scope: me} );
+
 		}else{
 			me.formUtils.displayErrors( validateResult.fields );
 		}
     },
+    
+    savePersonSuccess: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading( false );    	
+    	if (r.id != "")
+		{
+    		me.person.populateFromGenericObject( r );
+    		me.saveAppointment();
+		}else{
+			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.')
+		}    	
+    },
+    
+    savePersonFailure: function( response, scope ){
+    	var me=scope;  	
+    	me.getView().setLoading( false );   	
+    },
+
+    saveAppointment: function(){
+    	var me=this;
+    	var jsonData, personId;
+    	if (me.appointment.get('appointmentDate') != null && me.appointment.get('startTime') != null && me.appointment.get('endTime') !=null)
+		{
+    		me.currentPersonAppointment.setAppointment( me.appointment.getStartDate() , 
+    				                                    me.appointment.getEndDate() );
+    		jsonData = me.currentPersonAppointment.data;
+    		personId = me.person.get('id');
+			
+    		// Fix startTime and endTime to represent appropriate date and time without GMT offset
+			jsonData.startTime = me.formUtils.fixDateOffsetWithTime( jsonData.startTime );
+			jsonData.endTime = me.formUtils.fixDateOffsetWithTime( jsonData.endTime );
+ 
+    		me.appointmentService.saveAppointment( personId, 
+    				                               jsonData, 
+    				                               {success: me.saveAppointmentSuccess,
+    			                                    failure: me.saveAppointmentFailure,
+    			                                    scope: me } );
+		}else{
+			// no appointment is required
+			// load students view
+			me.loadStudentToolsView();			
+		}
+    },
+    
+    saveAppointmentSuccess: function( r, scope ){
+		var me=scope; 
+    	me.getView().setLoading( false );
+		me.loadStudentToolsView();  	
+    },    
+    
+    saveAppointmentFailure: function( response, scope ){
+    	var me=scope;  	
+    	me.getView().setLoading( false );   	
+    },    
     
     getSelectedItemSelectorIdsForTransfer: function(values){
 		var selectedIds = new Array();
@@ -285,9 +338,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     },      
     
     loadStudentToolsView: function(){
-    	// Display the Student Record
-    	//var comp = this.formUtils.loadDisplay('studentrecord', 'toolsmenu', true, {flex:1});    	
-    	//comp = this.formUtils.loadDisplay('studentrecord', 'tools', false, {flex:4});
     	this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
     }
 });

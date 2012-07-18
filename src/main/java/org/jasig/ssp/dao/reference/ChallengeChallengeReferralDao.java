@@ -23,7 +23,7 @@ public class ChallengeChallengeReferralDao
 			final UUID challengeId, final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("challenge.id", challengeId));
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
 	public PagingWrapper<ChallengeChallengeReferral> getAllforChallengeReferralAndChallenge(
@@ -32,7 +32,7 @@ public class ChallengeChallengeReferralDao
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("challengeReferral.id", challengeReferralId));
 		query.add(Restrictions.eq("challenge.id", challengeId));
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
 }

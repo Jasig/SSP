@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Tests for the {@link PersonProgramStatusDao} class.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class PersonProgramStatusDaoTest {

@@ -62,7 +62,7 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	
 	result.personEducationPlan = new PersonEducationPlanTO(newOrientationComplete:false, registeredForClasses:false, collegeDegreeForParents:false, specialNeeds:false, gradeTypicallyEarned:"B")
 	
-	//subit the manipulated form
+	//submit the manipulated form
 	conn.put("api/1/tool/studentIntake/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194", toJson(result))
 	
 	//Retrieve the form once more
@@ -110,14 +110,23 @@ String search(ApiConnection conn){
 String getCaseload(ApiConnection conn){
 	//"/1/person/caseload"
 	return conn.get("api/1/person/caseload")
+	//return conn.get("api/1/person/caseload?programStatusId=b2d12527-5056-a51a-8054-113116baab88")
 }
 
 String getAppointments(ApiConnection conn){
 	return conn.get("api/1/person/1010e4a0-1001-0110-1011-4ffc02fe81ff/appointment/")
 }
 
+String getCurrentAppointment(ApiConnection conn){
+	return conn.get("api/1/person/1010e4a0-1001-0110-1011-4ffc02fe81ff/appointment/current/")
+}
+
 String getCoaches(ApiConnection conn){
 	return conn.get("api/1/person/coach/")
+}
+
+String getAllTerms(ApiConnection conn){
+	return conn.get("api/1/reference/term/")
 }
 
 /**
@@ -133,9 +142,12 @@ ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0",
 //String output = getAllJournalEntriesForPerson(conn);
 //String output = getPerson(conn)
 //String output = search(conn)
-//String output = getCaseload(conn)
+String output = getCaseload(conn)
 //String output = getAppointments(conn)
-String output = getCoaches(conn)
+//String output = getCoaches(conn)
+//String output = getCurrentAppointment(conn)
+//String output = getAllTerms(conn)
+
 
 conn.formatAndPrintJson(output)
 //println (output);

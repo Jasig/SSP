@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Tests for {@link ProgramStatusDao}.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration
 @Transactional
 public class ProgramStatusDaoTest {
@@ -114,7 +114,7 @@ public class ProgramStatusDaoTest {
 	private void assertList(final Collection<ProgramStatus> objects) {
 		assertFalse("List should not have been empty.", objects.isEmpty());
 
-		for (ProgramStatus object : objects) {
+		for (final ProgramStatus object : objects) {
 			assertNotNull("List item should not have a null id.",
 					object.getId());
 		}

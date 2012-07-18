@@ -5,6 +5,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
         person: 'currentPerson',
+        personLite: 'personLite',
         profileReferralSourcesStore: 'profileReferralSourcesStore',
         profileServiceReasonsStore: 'profileServiceReasonsStore',
         profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
@@ -29,7 +30,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var birthDateField = me.getBirthDateField();
 		var studentTypeField = me.getStudentTypeField();
 		var programStatusField = me.getProgramStatusField();
-		var id= me.person.get('id');
+		var id= me.personLite.get('id');
 		var personUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');			
 		var successFunc = function(response,view){
@@ -89,16 +90,19 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		// Set defined configured label for the studentId field
 		studentIdField.setFieldLabel(studentIdAlias);		
 		
-		// display loader
-		me.getView().setLoading( true );
+		if (id != "")
+		{
+			// display loader
+			me.getView().setLoading( true );
+			
+			// load the person record
+			me.apiProperties.makeRequest({
+				url: personUrl+'/'+id,
+				method: 'GET',
+				successFunc: successFunc 
+			});
+		}
 		
-		// load the person record
-		me.apiProperties.makeRequest({
-			url: personUrl+'/'+id,
-			method: 'GET',
-			successFunc: successFunc 
-		});
-		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
     }
 });

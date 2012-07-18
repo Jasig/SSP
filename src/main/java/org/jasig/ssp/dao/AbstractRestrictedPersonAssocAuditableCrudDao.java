@@ -65,7 +65,7 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
 
 		addConfidentialityLevelsRestriction(requestor, criteria);
 
-		return processCriteriaWithPaging(criteria, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
 
 	/**

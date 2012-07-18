@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author jon.adams
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration
 @Transactional
 public class CampusDaoTest {
@@ -120,7 +120,7 @@ public class CampusDaoTest {
 	private void assertList(final Collection<Campus> objects) {
 		assertFalse("List should not have been empty.", objects.isEmpty());
 
-		for (Campus object : objects) {
+		for (final Campus object : objects) {
 			assertNotNull("List item should not have a null id.",
 					object.getId());
 		}

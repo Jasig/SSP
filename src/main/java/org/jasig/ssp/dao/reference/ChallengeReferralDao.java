@@ -134,6 +134,6 @@ public class ChallengeReferralDao extends
 		subQuery.add(Restrictions.eq("challenge.id", challengeId));
 		sAndP.addStatusFilterToCriteria(subQuery);
 
-		return processCriteriaWithPaging(query, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 }

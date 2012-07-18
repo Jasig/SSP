@@ -63,7 +63,6 @@ Ext.require([
     'Ssp.view.tools.sis.Registration',
     'Ssp.view.tools.sis.Assessment',
     'Ssp.view.tools.sis.Transcript',
-    'Ssp.view.tools.sis.Act',
     'Ssp.view.tools.disability.DisabilityServices',
     'Ssp.view.tools.disability.General',
     'Ssp.view.tools.disability.AgencyContacts',
@@ -116,8 +115,10 @@ Ext.require([
 	'Ssp.model.Person',
 	'Ssp.model.PersonAppointment',
 	'Ssp.model.Appointment',
+	'Ssp.model.CaseloadPerson',
 	'Ssp.model.PersonGoal',
 	'Ssp.model.PersonDocument',
+	'Ssp.model.PersonLite',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -143,6 +144,7 @@ Ext.require([
 	'Ssp.util.TreeRendererUtils',
 	'Ssp.util.Constants',
 	'Ssp.store.Coaches',
+	'Ssp.store.Caseload',
     'Ssp.store.Tasks',
     'Ssp.store.Goals',
     'Ssp.store.JournalEntries',
@@ -187,6 +189,14 @@ Ext.require([
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
+    'Ssp.service.AbstractService',
+    'Ssp.service.AppointmentService',
+    'Ssp.service.CaseloadService',
+    'Ssp.service.EarlyAlertService',
+    'Ssp.service.EarlyAlertResponseService',
+    'Ssp.service.PersonService',
+    'Ssp.service.ProgramStatusService',
+    'Ssp.service.SearchService',
     'Ssp.controller.ApplicationEventsController',
     'Ext.tab.*',
 	'Ext.util.Filter',
@@ -200,7 +210,8 @@ Ext.require([
 	'Ext.ux.CheckColumn',
 	'Ext.ux.form.MultiSelect',
 	'Ext.ux.form.ItemSelector',
-	'Ext.util.MixedCollection'
+	'Ext.util.MixedCollection',
+	'Ext.tree.*'
 ]);
 
 var apiUrls = [
@@ -231,16 +242,20 @@ var apiUrls = [
   {name: 'studentStatus', url: 'reference/studentStatus'},
   {name: 'veteranStatus', url: 'reference/veteranStatus'},
   {name: 'person', url: 'person'},
-  {name: 'personAppointment', url: '/ssp/api/1/person/{id}/appointment'},
+  {name: 'personAppointment', url: 'person/{id}/appointment'},
+  {name: 'personAssessment', url: 'person/{id}/test'},
+  {name: 'personCaseload', url: 'person/caseload'},
+  {name: 'personMasterCaseload', url: 'person/{id}/caseload'},
   {name: 'personChallenge', url: 'person/{id}/challenge'},
-  {name: 'personCoach', url: 'person/coach'},
+  {name: 'personCoach', url: 'person'},
   {name: 'personDocument', url: 'person/{id}/document'},
-  {name: 'personEarlyAlert', url: 'person/{id}/earlyAlert'},
-  {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlert/{earlyId}/earlyAlertResponse'},
+  {name: 'personEarlyAlert', url: 'person/{personId}/earlyAlert'},
+  {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlertResponse'},
   {name: 'personGoal', url: 'person/{id}/goal'},
   {name: 'personJournalEntry', url: 'person/{id}/journalEntry'},
   {name: 'personTask', url: 'person/{id}/task'},
   {name: 'personTaskGroup', url: 'person/{id}/task/group'},
+  {name: 'personTranscript', url: 'person/{id}/transcript'},
   {name: 'personEmailTask', url: 'person/{id}/task/email'},
   {name: 'personViewHistory', url: 'person/{id}/history/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
@@ -304,6 +319,12 @@ Ext.onReady(function(){
 				        },
 				        singleton: true
 				    },
+				    personLite: {
+				    	fn: function(){
+				    		return new Ssp.model.PersonLite({id:""});
+				    	},
+				    	singleton: true
+				    },
 				    authenticatedPerson: {
 				        fn: function(){
 				        	var p = new Ssp.model.AuthenticatedPerson();
@@ -352,6 +373,12 @@ Ext.onReady(function(){
 					currentAppointment: {
 				        fn: function(){
 				            return new Ssp.model.Appointment({id:""});
+				        },
+				        singleton: true
+				    },
+					currentPersonAppointment: {
+				        fn: function(){
+				            return new Ssp.model.PersonAppointment({id:""});
 				        },
 				        singleton: true
 				    },
@@ -465,13 +492,15 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        // STORES
 					abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 				    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 				    anticipatedStartTermsStore: 'Ssp.store.reference.AnticipatedStartTerms',
 				    anticipatedStartYearsStore: 'Ssp.store.reference.AnticipatedStartYears',
 					campusesStore: 'Ssp.store.reference.Campuses',
 					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
-				    challengesStore: 'Ssp.store.reference.Challenges',
+					caseloadStore: 'Ssp.store.Caseload',
+					challengesStore: 'Ssp.store.reference.Challenges',
 					challengeCategoriesStore: 'Ssp.store.reference.ChallengeCategories',
 					challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
 				    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
@@ -485,7 +514,7 @@ Ext.onReady(function(){
 					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
 					earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
 					earlyAlertReferralsBindStore: 'Ssp.store.reference.EarlyAlertReferralsBind',
-				    earlyAlertsStore: 'Ssp.store.EarlyAlerts',
+					earlyAlertsStore: 'Ssp.store.EarlyAlerts',
 					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
 				    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
 			    	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
@@ -515,7 +544,16 @@ Ext.onReady(function(){
 				    tasksStore: 'Ssp.store.Tasks',
 				    toolsStore: 'Ssp.store.Tools',
 			    	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
-			        yesNoStore: 'Ssp.store.reference.YesNo'
+			        yesNoStore: 'Ssp.store.reference.YesNo',
+			        	
+			        // SERVICES
+			        appointmentService: 'Ssp.service.AppointmentService',
+			        caseloadService: 'Ssp.service.CaseloadService',
+			        earlyAlertService: 'Ssp.service.EarlyAlertService',
+			        earlyAlertResponseService: 'Ssp.service.EarlyAlertResponseService',
+			        personService: 'Ssp.service.PersonService',
+			        programStatusService: 'Ssp.service.ProgramStatusService',
+			        searchService: 'Ssp.service.SearchService'
 				});
 				
 				Ext.application({

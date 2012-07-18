@@ -1,13 +1,13 @@
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,19 +18,24 @@ import org.jasig.ssp.dao.reference.MaritalStatusDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.MaritalStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests on the {@link MaritalStatusService} class
+ */
 public class MaritalStatusServiceTest {
 
-	private MaritalStatusServiceImpl service;
-	private MaritalStatusDao dao;
+	private transient MaritalStatusServiceImpl service;
+
+	private transient MaritalStatusDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new MaritalStatusServiceImpl();
 		dao = createMock(MaritalStatusDao.class);
 
@@ -49,7 +54,7 @@ public class MaritalStatusServiceTest {
 
 		final Collection<MaritalStatus> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertTrue(all.size() > 0);
+		assertNotEmpty("List should not have been empty.", all);
 		verify(dao);
 	}
 
@@ -62,7 +67,7 @@ public class MaritalStatusServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.get(id));
+		assertNotNull("Get result should not have been null.", service.get(id));
 		verify(dao);
 	}
 
@@ -75,7 +80,8 @@ public class MaritalStatusServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		assertNotNull("Save result should not have been null.",
+				service.save(daoOne));
 		verify(dao);
 	}
 
@@ -100,8 +106,7 @@ public class MaritalStatusServiceTest {
 			found = false;
 		}
 
-		assertFalse(found);
+		assertFalse("Should have found the entity.", found);
 		verify(dao);
 	}
-
 }

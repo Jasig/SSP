@@ -284,12 +284,26 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 	}
 
 	@Test
+	public void testGetCurrent() throws ObjectNotFoundException,
+			ValidationException {
+		// arrange, act
+		final PersonProgramStatusTO programStatus = controller
+				.getCurrent(PERSON_ID);
+
+		// assert
+		assertNull(
+				"No PersonProgramStatus should have been returned as they are all currently expired.",
+				programStatus);
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
 	public void testLogger() {
 		final Logger logger = controller.getLogger();
-		logger.info("Test");
-		assertNotNull("logger should not have been null.", logger);
-		assertEquals("Logger name was not specific to the class.",
-				"org.jasig.ssp.web.api.PersonProgramStatusController",
-				logger.getName());
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

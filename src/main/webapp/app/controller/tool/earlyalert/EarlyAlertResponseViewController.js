@@ -3,15 +3,15 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	formUtils: 'formRendererUtils',
-    	person: 'currentPerson',
     	earlyAlert: 'currentEarlyAlert',
-    	model: 'currentEarlyAlertResponse'
+    	earlyAlertResponseService: 'earlyAlertResponseService',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentEarlyAlertResponse',
+    	personLite: 'personLite'
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalert',
-    	url: ''
+    	formToDisplay: 'earlyalert'
     },
     control: {
     	outcomeCombo: {
@@ -40,10 +40,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		me.getView().getForm().loadRecord(me.model);
 		me.showHideOtherOutcomeDescription();
 		
-		me.url = me.apiProperties.getItemUrl('personEarlyAlertResponse');
-		me.url = me.url.replace('{personId}',me.person.get('id'));
-		me.url = me.url.replace('{earlyAlertId}',me.earlyAlert.get('id'));
-
 		return me.callParent(arguments);
     },
     
@@ -64,19 +60,15 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
-		// referrals view
+		var personId = me.personLite.get('id');
+		var earlyAlertId = me.earlyAlert.get('id');
 		var referralsItemSelector = Ext.ComponentQuery.query('#earlyAlertReferralsItemSelector')[0];	
 		var selectedReferrals = [];			
-		var successFunc = function(response, view) {
-			me.displayMain();
-		}
 		
-		url = me.url;
 		me.getView().getForm().updateRecord();
 		record = me.model;
-		id = record.get('id');	
 		
-		// referrals
+		// populate referrals
 		selectedReferrals = referralsItemSelector.getValue();
 		if (selectedReferrals.length > 0)
 		{			
@@ -85,36 +77,28 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		   record.data.referrals=null;
 		}		
 		
-		record.set( 'earlyAlertId', me.earlyAlert.get('id') ); 
+		// set the early alert id for the response
+		record.set( 'earlyAlertId', earlyAlertId ); 
 		
+		// jsonData for the response
 		jsonData = record.data;
 		
 		console.log(jsonData);
 		
-		/*
-		if (id.length > 0)
-		{
-			// editing
-			this.apiProperties.makeRequest({
-				url: url+"/"+id,
-				method: 'PUT',
-				jsonData: jsonData,
-				successFunc: successFunc,
-				scope: me 
-			});
-			
-		}else{
-		
-			// adding
-			this.apiProperties.makeRequest({
-				url: url,
-				method: 'POST',
-				jsonData: jsonData,
-				successFunc: successFunc,
-				scope: me 
-			});		
-		}
-		*/
+		me.earlyAlertResponseService.save(personId, jsonData, {
+			success: me.saveEarlyAlertResponseSuccess,
+			failure: me.saveEarlyAlertResponseFailure,
+			scope: me
+		})
+	},
+	
+	saveEarlyAlertResponseSuccess: function( r, scope ) {
+		var me=scope;
+		me.displayMain();
+	},
+
+	saveEarlyAlertResponseFailure: function( r, scope ) {
+		var me=scope;
 	},
 	
 	onCancelClick: function(button){

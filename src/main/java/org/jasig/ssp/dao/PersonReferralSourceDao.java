@@ -28,6 +28,6 @@ public class PersonReferralSourceDao
 		criteria.add(Restrictions.eq("person.id", personId));
 		criteria.add(Restrictions.eq("referralSource.id",
 				referralSourceId));
-		return processCriteriaWithPaging(criteria, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
 }

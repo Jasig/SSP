@@ -35,7 +35,7 @@ public class Appointment extends AbstractAuditable
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD
 		int result = hashPrime();
 
 		// AbstractAuditable properties
@@ -61,21 +61,20 @@ public class Appointment extends AbstractAuditable
 	}
 
 	public Date getStartTime() {
-		return (startTime == null) ? null : new Date(startTime.getTime());
+		return startTime == null ? null : new Date(startTime.getTime());
 	}
 
 	public void setStartTime(final Date startTime) {
-		this.startTime = (startTime == null) ? null : new Date(
+		this.startTime = startTime == null ? null : new Date(
 				startTime.getTime());
 	}
 
 	public Date getEndTime() {
-		return (endTime == null) ? null : new Date(endTime.getTime());
+		return endTime == null ? null : new Date(endTime.getTime());
 	}
 
 	public void setEndTime(final Date endTime) {
-		this.endTime = (endTime == null) ? null : new Date(
-				endTime.getTime());
+		this.endTime = endTime == null ? null : new Date(endTime.getTime());
 	}
 
 	public boolean isAttended() {
@@ -85,5 +84,4 @@ public class Appointment extends AbstractAuditable
 	public void setAttended(final boolean attended) {
 		this.attended = attended;
 	}
-
 }

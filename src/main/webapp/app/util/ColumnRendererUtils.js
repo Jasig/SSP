@@ -43,6 +43,10 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 
 	renderCreatedByDate: function(val, metaData, record) {
 	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y');		
+	},
+
+	renderCreatedByDateWithTime: function(val, metaData, record) {
+	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y h:m A');		
 	},	
 
 	renderCreatedBy: function(val, metaData, record) {
@@ -72,7 +76,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		var strHtml = '<div>';
         strHtml += '<p>' + record.getFullName() + '</p>';
         strHtml += '<p>' + record.get('schoolId') + '</p>';
-        strHtml += '<p>' + record.getProgramStatusName() + '</p>';
+        /*strHtml += '<p>' + record.getProgramStatusName() + '</p>';*/
         strHtml += '</div>';
 	    return strHtml;
 	},

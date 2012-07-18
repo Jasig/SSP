@@ -5,8 +5,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.DisplayActionPlanViewController',
     inject: {
-    	authenticatedPerson: 'authenticatedPerson',
-    	person: 'currentPerson'
+    	authenticatedPerson: 'authenticatedPerson'
     },
     width: '100%',
 	height: '100%',

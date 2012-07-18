@@ -50,21 +50,6 @@ public class MaritalStatus
 		super(id, name);
 	}
 
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param description
-	 *            Description; max 150 characters
-	 */
-	public MaritalStatus(final UUID id, final String name,
-			final String description) {
-		super(id, name, description);
-	}
-
 	@Override
 	protected int hashPrime() {
 		return 109;

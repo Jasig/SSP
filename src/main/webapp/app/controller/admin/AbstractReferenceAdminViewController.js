@@ -134,9 +134,9 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
        			   if (r.success==true)
        			   {
        				store.remove( store.getById( id ) );
-       			    //me.getRecordPager().refresh();
-       				store.totalCount = store.totalCount-1;
-       			    me.getRecordPager().onLoad();
+       				//store.totalCount = store.totalCount-1;
+       				//me.getRecordPager().onLoad();
+       			    me.getRecordPager().refresh();
        			   }
        		   }
        	    });

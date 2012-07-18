@@ -53,6 +53,13 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 			.fromString("58ba5ee3-734e-4ae9-b9c5-943774b4de41");
 
 	/**
+	 * Static, "external" account identifier. Only used in Auditable properties
+	 * when data is imported from the views from external data sources.
+	 */
+	public static final UUID EXTERNAL_DATA_ID = UUID
+			.fromString("a9a337fc-c35e-4bcc-91a8-06de3b6b441e");
+
+	/**
 	 * First name; required.
 	 * 
 	 * Maximum length of 50.
@@ -216,6 +223,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Maximum length of 50.
 	 */
+	@NotNull
+	@NotEmpty
 	@Column(length = 50)
 	@Size(max = 50)
 	private String schoolId;
@@ -247,8 +256,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private Date studentIntakeRequestDate;
 
 	/**
-	 * Set when last someone completed the student intake tool for this
-	 * person.
+	 * Set when last someone completed the student intake tool for this person.
 	 */
 	private Date studentIntakeCompleteDate;
 
@@ -586,10 +594,10 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Sets the SchoolID (a.k.a. Student ID given by the school)
 	 * 
 	 * @param schoolId
-	 *            the SchoolID (a.k.a. Student ID given by the school); maximum
-	 *            length of 50 characters
+	 *            the SchoolID (a.k.a. Student ID given by the school);
+	 *            required; maximum length of 50 characters
 	 */
-	public void setSchoolId(final String schoolId) {
+	public void setSchoolId(@NotNull final String schoolId) {
 		this.schoolId = schoolId;
 	}
 
@@ -789,13 +797,13 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	}
 
 	public Date getStudentIntakeCompleteDate() {
-		return (studentIntakeCompleteDate == null) ? null : new Date(
+		return studentIntakeCompleteDate == null ? null : new Date(
 				studentIntakeCompleteDate.getTime());
 	}
 
 	public void setStudentIntakeCompleteDate(
 			final Date studentIntakeCompleteDate) {
-		this.studentIntakeCompleteDate = (studentIntakeCompleteDate == null) ? null
+		this.studentIntakeCompleteDate = studentIntakeCompleteDate == null ? null
 				: new Date(studentIntakeCompleteDate.getTime());
 	}
 

@@ -68,7 +68,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	}
 
 	public Person fromUsername(@NotNull final String username) {
-		if (StringUtils.isWhitespace(username)) {
+		if (!StringUtils.isNotBlank(username)) {
 			throw new IllegalArgumentException("username can not be empty.");
 		}
 
@@ -80,7 +80,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	}
 
 	public Person fromUserId(@NotNull final String userId) {
-		if (StringUtils.isWhitespace(userId)) {
+		if (!StringUtils.isNotBlank(userId)) {
 			throw new IllegalArgumentException("userId can not be empty.");
 		}
 
@@ -134,17 +134,14 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		final Criteria criteria = createCriteria(sAndP);
 
 		if (addressLabelSearchTO.getProgramStatus() != null) {
-			// TODO
-			// criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
-			
+
 			criteria.createAlias("programStatuses",
 					"personProgramStatuses")
 					.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
 									addressLabelSearchTO
 											.getProgramStatus()));
-			
-			
+
 		}
 
 		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
@@ -189,6 +186,10 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					addressLabelSearchTO.getCreateDateTo()));
 		}
 
+		// don't bring back any non-students, there will likely be a better way
+		// to do this later
+		criteria.add(Restrictions.isNotNull("studentType"));
+
 		return criteria.list();
 	}
 
@@ -217,6 +218,10 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									specialServiceGroups));
 		}
+
+		// don't bring back any non-students, there will likely be a better way
+		// to do this later
+		criteria.add(Restrictions.isNotNull("studentType"));
 
 		return criteria.list();
 	}

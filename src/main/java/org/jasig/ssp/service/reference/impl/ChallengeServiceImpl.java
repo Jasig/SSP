@@ -43,13 +43,15 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 		final List<Challenge> challenges = dao.searchByQuery(query);
 		final List<Challenge> results = Lists.newArrayList();
 
-		for (final Challenge challenge : challenges) {
-			final long count = challengeReferralService
-					.countByChallengeIdNotOnActiveTaskList(challenge,
-							securityService.currentUser().getPerson(),
-							securityService.getSessionId());
-			if (count > 0) {
-				results.add(challenge);
+		if (challenges != null) {
+			for (final Challenge challenge : challenges) {
+				final long count = challengeReferralService
+						.countByChallengeIdNotOnActiveTaskList(challenge,
+								securityService.currentUser().getPerson(),
+								securityService.getSessionId());
+				if (count > 0) {
+					results.add(challenge);
+				}
 			}
 		}
 

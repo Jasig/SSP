@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class CategoryDaoTest {
@@ -62,7 +62,8 @@ public class CategoryDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<Category> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
+		final Collection<Category> all = dao.getAll(ObjectStatus.ACTIVE)
+				.getRows();
 		assertNotNull(all);
 		assertFalse(all.isEmpty());
 		assertList(all);
@@ -73,25 +74,25 @@ public class CategoryDaoTest {
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
-		Category category = dao.get(id);
+		final Category category = dao.get(id);
 
 		assertNull(category);
 	}
 
-	private void assertList(Collection<Category> objects) {
-		for (Category object : objects) {
+	private void assertList(final Collection<Category> objects) {
+		for (final Category object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		Category obj = new Category();
+		final Category obj = new Category();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		Category obj2 = new Category();
+		final Category obj2 = new Category();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);

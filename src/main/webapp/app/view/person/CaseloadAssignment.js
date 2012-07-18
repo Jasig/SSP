@@ -58,10 +58,10 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 							        fieldLabel: 'Last Request Date',
 							        name: 'lastStudentIntakeRequestDate',
 							        value: ((me.model.getFormattedStudentIntakeRequestDate().length > 0) ? me.person.getFormattedStudentIntakeRequestDate() : 'No requests have been sent')
-								 },{ 
+								 }*/,{ 
 						        	xtype: 'tbspacer',
 						        	flex: 1
-						         }*/,
+						         },
 				                 {
 				            	   xtype: 'button',
 				            	   itemId: 'printButton',

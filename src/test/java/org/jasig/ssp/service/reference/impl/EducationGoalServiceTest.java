@@ -1,13 +1,13 @@
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference.impl; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,11 +26,12 @@ import org.junit.Test;
 
 public class EducationGoalServiceTest {
 
-	private EducationGoalServiceImpl service;
-	private EducationGoalDao dao;
+	private transient EducationGoalServiceImpl service;
+
+	private transient EducationGoalDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new EducationGoalServiceImpl();
 		dao = createMock(EducationGoalDao.class);
 
@@ -49,7 +50,7 @@ public class EducationGoalServiceTest {
 
 		final Collection<EducationGoal> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertTrue(all.size() > 0);
+		assertNotEmpty("GetAll result should not have been null.", all);
 		verify(dao);
 	}
 
@@ -62,7 +63,7 @@ public class EducationGoalServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.get(id));
+		assertNotNull("Get result should not have been null.", service.get(id));
 		verify(dao);
 	}
 
@@ -75,7 +76,7 @@ public class EducationGoalServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		assertNotNull("Save should not have been null.", service.save(daoOne));
 		verify(dao);
 	}
 
@@ -100,8 +101,7 @@ public class EducationGoalServiceTest {
 			found = false;
 		}
 
-		assertFalse(found);
+		assertFalse("Deleted instance should not have been found.", found);
 		verify(dao);
 	}
-
 }

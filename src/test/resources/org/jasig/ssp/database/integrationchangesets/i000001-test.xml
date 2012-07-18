@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="externalUser" value="a9a337fc-c35e-4bcc-91a8-06de3b6b441e" />
+	<property name="check_for_manage_integration_database_config_sql"
+		value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+		value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+	<changeSet id="Add external_term table" author="daniel.bower">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<insert tableName="external_term">
+			<column name="name" value="Fall 2012" />
+			<column name="code" value="FA12" />
+			<column name="start_date" value="2012-06-20T00:00:00" />
+			<column name="end_date" value="2012-08-28T00:00:00" />
+			<column name="report_year" value="2013" />
+		</insert>
+		<insert tableName="external_term">
+			<column name="name" value="Spring 2013" />
+			<column name="code" value="SP13" />
+			<column name="start_date" value="2013-03-03T00:00:00" />
+			<column name="end_date" value="2013-05-15T00:00:00" />
+			<column name="report_year" value="2013" />
+		</insert>
+
+		<rollback>
+			<delete tableName="external_term">
+				<where>name = 'Fall 2012' AND code = 'FA12'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>name = 'Spring 2013' AND code = 'SP13'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Add external_faculty_course table" author="jon.adams">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_faculty_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<insert tableName="external_faculty_course">
+			<column name="faculty_school_id" value="uf928711" />
+			<column name="term_code" value="FA12" />
+			<column name="formatted_course" value="MTH101" />
+			<column name="title" value="College Algebra" />
+		</insert>
+		<insert tableName="external_faculty_course">
+			<column name="faculty_school_id" value="uf928711" />
+			<column name="term_code" value="FA12" />
+			<column name="formatted_course" value="MTH505" />
+			<column name="title" value="Quantam Cryptography" />
+		</insert>
+		<insert tableName="external_faculty_course">
+			<column name="faculty_school_id" value="uf123456" />
+			<column name="term_code" value="FA12" />
+			<column name="formatted_course" value="MTH201" />
+			<column name="title" value="Calculus I" />
+		</insert>
+		<insert tableName="external_faculty_course">
+			<column name="faculty_school_id" value="uf123456" />
+			<column name="term_code" value="SP13" />
+			<column name="formatted_course" value="PYF101" />
+			<column name="title" value="Pyrotechnics" />
+		</insert>
+
+		<rollback>
+			<delete tableName="external_faculty_course">
+				<where>faculty_school_id = 'uf928711' AND term_code = 'FA12' AND
+					formatted_course = 'MTH101'
+				</where>
+			</delete>
+			<delete tableName="external_faculty_course">
+				<where>faculty_school_id = 'uf928711' AND term_code = 'FA12' AND
+					formatted_course = 'MTH505'
+				</where>
+			</delete>
+			<delete tableName="external_faculty_course">
+				<where>faculty_school_id = 'uf123456' AND term_code = 'FA12' AND
+					formatted_course = 'MTH201'
+				</where>
+			</delete>
+			<delete tableName="external_faculty_course">
+				<where>faculty_school_id = 'uf123456' AND term_code = 'SP13' AND
+					formatted_course = 'PYF101'
+				</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Add external_faculty_course_roster table"
+		author="jon.adams">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_faculty_course_roster table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<insert tableName="external_faculty_course_roster">
+			<column name="faculty_school_id" value="uf928711" />
+			<column name="school_id" value="uu351764" />
+			<column name="first_name" value="James" />
+			<column name="middle_name" value="Ryan" />
+			<column name="last_name" value="Doe" />
+			<column name="primary_email_address" value="james.ryan80@university.edu" />
+			<column name="term_code" value="FA12" />
+			<column name="formatted_course" value="MTH101" />
+		</insert>
+
+		<insert tableName="external_faculty_course_roster">
+			<column name="faculty_school_id" value="uf928711" />
+			<column name="school_id" value="uu358123" />
+			<column name="first_name" value="Mark" />
+			<column name="middle_name" value="Cuban" />
+			<column name="last_name" value="Galafrion" />
+			<column name="primary_email_address" value="mark.g@university.edu" />
+			<column name="term_code" value="FA12" />
+			<column name="formatted_course" value="MTH101" />
+		</insert>
+
+		<insert tableName="external_faculty_course_roster">
+			<column name="faculty_school_id" value="uf123456" />
+			<column name="school_id" value="uu462875" />
+			<column name="first_name" value="Bob" />
+			<column name="middle_name" value="Michael" />
+			<column name="last_name" value="Reynolds" />
+			<column name="primary_email_address" value="bob1@university.edu" />
+			<column name="term_code" value="FA12" />
+			<column name="formatted_course" value="MTH201" />
+		</insert>
+
+		<insert tableName="external_faculty_course_roster">
+			<column name="faculty_school_id" value="uf123456" />
+			<column name="school_id" value="uu112233" />
+			<column name="first_name" value="Kevin" />
+			<column name="middle_name" value="" />
+			<column name="last_name" value="Smith" />
+			<column name="primary_email_address" value="scene@unionleader.com" />
+			<column name="term_code" value="FA12" />
+			<column name="formatted_course" value="MTH201" />
+		</insert>
+
+		<rollback>
+			<delete tableName="external_faculty_course_roster">
+				<where>faculty_school_id = 'uf928711' AND school_id = 'uf928711' AND
+					term_code = 'FA12' AND formatted_course = 'MTH101'
+				</where>
+			</delete>
+			<delete tableName="external_faculty_course_roster">
+				<where>faculty_school_id = 'uf928711' AND school_id = 'uu358123' AND
+					term_code = 'FA12' AND formatted_course = 'MTH101'
+				</where>
+			</delete>
+			<delete tableName="external_faculty_course_roster">
+				<where>faculty_school_id = 'uf123456' AND school_id = 'uu462875' AND
+					term_code = 'FA12' AND formatted_course = 'MTH201'
+				</where>
+			</delete>
+			<delete tableName="external_faculty_course_roster">
+				<where>faculty_school_id = 'uf123456' AND school_id = 'uu112233' AND
+					term_code = 'FA12' AND formatted_course = 'MTH201'
+				</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

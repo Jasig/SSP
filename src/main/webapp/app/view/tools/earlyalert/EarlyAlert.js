@@ -5,6 +5,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertToolViewController',
     inject: {
+    	appEventsController: 'appEventsController',
     	columnRendererUtils: 'columnRendererUtils',
     	model: 'currentEarlyAlert',
         store: 'earlyAlertsStore'
@@ -15,7 +16,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 	initComponent: function() {	
     	var me=this;
 		var sm = Ext.create('Ext.selection.CheckboxModel');
-		
+
 		Ext.apply(me, 
 				{
 		            autoScroll: true,
@@ -26,7 +27,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 					    	        width:65,
 					    	        header: 'Action',
 					    	        items: [{
-					    	            icon: Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH,
+					    	            icon: Ssp.util.Constants.GRID_ITEM_MAIL_REPLY_ICON_PATH,
 					    	            tooltip: 'Respond to this Early Alert',
 					    	            handler: function(grid, rowIndex, colIndex) {
 					    	            	var rec = grid.getStore().getAt(rowIndex);
@@ -37,19 +38,28 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 					    	            scope: me
 					    	        }]
 				                },
-	    		                { header: 'Name',  
-	    		                  dataIndex: 'courseTitle',
+	    		                { header: 'Created By',  
+	    		                  dataIndex: 'createdBy',
+	    		                  renderer: me.columnRendererUtils.renderCreatedBy,
 	    		                  field: {
 	    		                      xtype: 'textfield'
 	    		                  },
 	    		                  flex: 50 },
-	    		                { header: 'Description',
-	    		                  dataIndex: 'description',
+	    		                { header: 'Created Date',  
+	    		                  dataIndex: 'createdBy',
+	    		                  renderer: me.columnRendererUtils.renderCreatedByDateWithTime,
+	    		                  field: {
+	    		                      xtype: 'textfield'
+	    		                  },
+	    		                  flex: 50 },
+	    		                { header: 'Course',
+	    		                  dataIndex: 'courseName',
 	    		                  field: {
 	    		                      xtype: 'textfield'
 	    		                  },
 	    		                  flex: 50 }
-	    		                  ],
+	    		                 ] 
+		/*,
 				    
 				    dockedItems: [{
 				        dock: 'top',
@@ -60,7 +70,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 				            xtype: 'button',
 				            itemId: 'respondButton'
 				        }]
-				    }]
+				    }]*/
 				});
 		
 		return me.callParent(arguments);

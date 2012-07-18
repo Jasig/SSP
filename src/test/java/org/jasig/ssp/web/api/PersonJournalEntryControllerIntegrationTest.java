@@ -410,4 +410,15 @@ public class PersonJournalEntryControllerIntegrationTest {
 				"The 2nd Journal Detail ID was not found in the returned list.",
 				found);
 	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
+	}
 }

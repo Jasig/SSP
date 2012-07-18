@@ -300,7 +300,7 @@ public class PersonTO // NOPMD
 	 *            instances
 	 */
 	public void setUsername(@NotNull final String username) {
-		if (StringUtils.isWhitespace(username)) {
+		if (!StringUtils.isNotBlank(username)) {
 			throw new IllegalArgumentException("username can not be empty.");
 		}
 

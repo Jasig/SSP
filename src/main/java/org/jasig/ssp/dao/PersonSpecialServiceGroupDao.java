@@ -28,6 +28,6 @@ public class PersonSpecialServiceGroupDao
 		criteria.add(Restrictions.eq("person.id", personId));
 		criteria.add(Restrictions.eq("specialServiceGroup.id",
 				specialServiceGroupId));
-		return processCriteriaWithPaging(criteria, sAndP);
+		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
 }
