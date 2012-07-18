@@ -47,6 +47,11 @@ var ssp = ssp || {};
 			container.append($(html));
 		}
 
+		$(document).ready(function(){
+			var calendarType = that.locate('calendarType');
+			$(calendarType).datepicker({ showOn: 'button', buttonImageOnly: true, buttonImage: '/ssp/images/calendar.gif' });
+		});
+
 
 
 		// construct the new component
@@ -64,6 +69,10 @@ var ssp = ssp || {};
 		reportsSelect.change(reportsSelectChange);
 		loadAddressesForm();
 		reportsSelectChange();
+
+		
+
+
 	}
 
 	// defaults
@@ -77,8 +86,12 @@ var ssp = ssp || {};
 	            studentTypeGroup: '.input-student-type-group',
 		    specialServiceGroup: '.input-special-service-group',
 		    referralSourceGroup: '.input-referral-source-group',
+		    calendarType: '.input-calendar-type',
 		    hideableform: '.hideable-form'
 		}
 	});
+
+
+
 	
 })(jQuery, fluid);

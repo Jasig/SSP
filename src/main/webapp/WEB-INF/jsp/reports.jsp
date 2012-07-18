@@ -100,7 +100,7 @@
 
 		<!-- Date From -->
 		<div class="ea-input">
-			<input type="text" name="createDateFrom" id="createDateFrom" />
+			<input class="input-calendar-type" type="textbox" name="createDateFrom" id="createDateFrom" />
 		</div>
 		<div class="ea-label">
 			<span>Added From (yyyy-MM-dd):</span>
@@ -109,7 +109,7 @@
 
 		<!-- Date To -->
 		<div class="ea-input">
-			<input type="text" name="createDateTo" id="createDateTo" />
+			<input class="input-calendar-type" type="textbox" name="createDateTo" id="createDateTo" />
 		</div>
 		<div class="ea-label">
 			<span>Added To (yyyy-MM-dd):</span>
