@@ -14,6 +14,7 @@ Ext.define('Ssp.controller.SearchViewController', {
         programStatusesStore: 'programStatusesStore',
         programStatusService: 'programStatusService',
         searchService: 'searchService',
+        searchStore: 'searchStore',
         sspConfig: 'sspConfig'
     },
 
@@ -39,6 +40,10 @@ Ext.define('Ssp.controller.SearchViewController', {
     	'searchButton': {
     		click: 'onSearchClick'
     	},
+
+    	'retrieveCaseloadButton': {
+    		click: 'onRetrieveCaseloadClick'
+    	},    	
     	
     	'displayPhotoButton': {
     		click: 'onDisplayPhotoClick'
@@ -73,7 +78,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	init: function() {
 		var me=this;
 		
-		me.preferences.set('SEARCH_GRID_VIEW_TYPE',0);		
 		me.applyColumns();
 		
 		me.personUrl =  me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
@@ -206,8 +210,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var grid = me.getView();
 		var store = me.caseloadStore;
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
-		if (me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1)
+		if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1 )
 		{
+			store = me.caseloadStore;
 			columns = [
     	              { header: 'First', dataIndex: 'firstName', flex: 1 },		        
     	              { header: 'MI', dataIndex: 'middleInitial', flex: .2},
@@ -217,6 +222,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              { header: 'Alerts', dataIndex: 'alerts', flex: .2}
     	              ];			
 		}else{
+			store = me.searchStore;
 			columns = [
     	              /* { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 }, */		        
     	              { text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderStudentDetails, flex: 50}
@@ -289,7 +295,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	deletePerson: function( btnId  ){
      	var me=this;
-		var store = me.studentsStore;
+		var store = me.searchStore;
      	var id = me.personLite.get('id');
      	if (btnId=="yes")
      	{
@@ -302,15 +308,24 @@ Ext.define('Ssp.controller.SearchViewController', {
       	    });    		
      	}	
 	},
+
+	onRetrieveCaseloadClick: function( button ){
+		var me=this;
+		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
+		me.applyColumns();
+		me.getCaseload();
+	},
 	
 	onSearchClick: function(button){
 		var me=this;
 		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();		
+		me.preferences.set('SEARCH_GRID_VIEW_TYPE',0);
+		me.applyColumns();		
 		if (me.getSearchText().value != undefined && me.getSearchText().value != "")
 		{
 			me.searchService.search(me.getSearchText().value, outsideCaseload);		
 		}else{
-			me.getCaseload();
+			me.searchStore.removeAll();
 		}	
 	},
 	

@@ -2,8 +2,10 @@
 background-image: url('/ssp/images/add-person-icon.png') !important;
 }
 
-.editPersonIcon {
-background-image: url('/ssp/images/edit-person-icon.png') !important;
+.addToolIcon {
+height: 10px;
+width: 10px;
+background-image: url('/ssp/images/add-tool-icon.png') !important;
 }
 
 .deletePersonIcon {
@@ -18,14 +20,8 @@ background-image: url('/ssp/images/photo-list-icon.png') !important;
 background-image: url('/ssp/images/list-icon.png') !important;
 }
 
-.searchIcon {
-background-image: url('/ssp/images/search-icon.png') !important;
-}
-
-.addToolIcon {
-height: 10px;
-width: 10px;
-background-image: url('/ssp/images/add-tool-icon.png') !important;
+.editPersonIcon {
+background-image: url('/ssp/images/edit-person-icon.png') !important;
 }
 
 .emailIcon {
@@ -34,6 +30,14 @@ background-image: url('/ssp/images/email-icon.png') !important;
 
 .printIcon {
 background-image: url('/ssp/images/print-icon.png') !important;
+}
+
+.retrieveCaseloadIcon {
+background-image: url('/ssp/images/retrieve-caseload-icon.png') !important;
+}
+
+.searchIcon {
+background-image: url('/ssp/images/search-icon.png') !important;
 }
 
 .studentHistoryIcon {

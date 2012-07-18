@@ -15,13 +15,17 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalertresponse'
+    	formToDisplay: 'earlyalerttree'
     },
     control: {
     	view: {
     		selectionchange: 'onSelectionChange',
     		viewready: 'onViewReady'
-    	}
+    	},
+    	
+		'displayTreeButton': {
+			click: 'onDisplayTreeClick'
+		}
     
         /*,
     	'respondButton': {
@@ -86,6 +90,10 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
 		}
 	},
     
+	onDisplayTreeClick: function(button){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+    },
+	
 	onRespondToEarlyAlert: function(button){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
     }

@@ -55,6 +55,7 @@ Ext.require([
     'Ssp.view.tools.journal.DisplayDetails',
     'Ssp.view.tools.journal.TrackTree',
     'Ssp.view.tools.earlyalert.EarlyAlert',
+    'Ssp.view.tools.earlyalert.EarlyAlertTree',
     'Ssp.view.tools.earlyalert.EarlyAlertResponse',
     'Ssp.view.tools.earlyalert.EarlyAlertReferrals',
     'Ssp.view.tools.document.StudentDocuments',
@@ -116,6 +117,7 @@ Ext.require([
 	'Ssp.model.PersonAppointment',
 	'Ssp.model.Appointment',
 	'Ssp.model.CaseloadPerson',
+	'Ssp.model.SearchPerson',
 	'Ssp.model.PersonGoal',
 	'Ssp.model.PersonDocument',
 	'Ssp.model.PersonLite',
@@ -125,6 +127,7 @@ Ext.require([
 	'Ssp.model.tool.studentintake.PersonEducationPlan',
 	'Ssp.model.tool.actionplan.Task',
 	'Ssp.model.tool.earlyalert.PersonEarlyAlert',
+	'Ssp.model.tool.earlyalert.PersonEarlyAlertTree',
 	'Ssp.model.tool.earlyalert.EarlyAlertResponse',
 	'Ssp.model.tool.journal.JournalEntry',
 	'Ssp.model.tool.journal.JournalEntryDetail',
@@ -184,6 +187,7 @@ Ext.require([
     'Ssp.store.reference.SpecialServiceGroups',
     'Ssp.store.reference.States', 
     'Ssp.store.Students',
+    'Ssp.store.Search',
     'Ssp.store.reference.StudentStatuses',
     'Ssp.store.reference.StudentTypes',
     'Ssp.store.Tools',
@@ -460,6 +464,18 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        earlyAlertsTreeStore:{
+				        fn: function(){
+				            return Ext.create('Ext.data.TreeStore',{
+				            	model: 'Ssp.model.tool.earlyalert.PersonEarlyAlertTree'
+				                ,proxy: {
+				                	type: 'ajax',
+				                	url: ''
+				                }
+				            });
+				    	},
+				        singleton: true
+			        },
 			        profileSpecialServiceGroupsStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
@@ -534,6 +550,7 @@ Ext.onReady(function(){
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
 				    referralSourcesStore: 'Ssp.store.reference.ReferralSources',
 				    referralSourcesBindStore: 'Ssp.store.reference.ReferralSourcesBind',
+				    searchStore: 'Ssp.store.Search',
 				    serviceReasonsStore: 'Ssp.store.reference.ServiceReasons',
 				    specialServiceGroupsStore: 'Ssp.store.reference.SpecialServiceGroups',
 				    specialServiceGroupsBindStore: 'Ssp.store.reference.SpecialServiceGroupsBind',
@@ -588,10 +605,31 @@ Ext.onReady(function(){
 				            {
 				                this.callOverridden([config]);
 				                this.addListener("exception",  function (proxy, response, operation) {
-				                    if (response.responseText != null)
-				                    {
-				                        Ext.Msg.alert('Error', response.responseText);
-				                    }
+				            		if (response.status==403)
+				            		{
+				            			Ext.Msg.confirm({
+				            	   		     title:'Access Denied Error',
+				            	   		     msg: "It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in SSP?",
+				            	   		     buttons: Ext.Msg.YESNO,
+				            	   		     fn: function( btnId ){
+				            	   		    	if (btnId=="yes")
+				            	   		    	{
+				            	   		    		// force a login
+				            	   		    		window.location.reload();
+				            	   		    	}else{
+				            	   		    		// force a login
+				            	   		    		window.location.reload();
+				            	   		    	}
+				            	   		    },
+				            	   		     scope: me
+				            	   		});
+				            		}
+				            		
+				            		// Handle call not found result
+				            		if (response.status==404)
+				            		{
+				            			Ext.Msg.alert('SSP Error', msg);
+				            		}
 				                });
 				            }
 				        });

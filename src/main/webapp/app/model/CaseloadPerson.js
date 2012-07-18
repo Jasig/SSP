@@ -8,7 +8,9 @@ Ext.define('Ssp.model.CaseloadPerson', {
              {name: 'studentTypeName', type: 'string'},
              {name: 'currentAppointmentStartDate', type: 'date', dateFormat: 'time'},
              {name: 'numberOfEarlyAlerts', type: 'string'},
-             {name: 'studentIntakeComplete', type: 'boolean'}],
+             {name: 'studentIntakeComplete', type: 'boolean'},
+             {name: 'currentAppointmentStartDate', type: 'date', dateFormat: 'time'},
+             {name: 'currentProgramStatusName', type: 'string'}],
 
      getFullName: function(){ 
      	var firstName = this.get('firstName') || "";

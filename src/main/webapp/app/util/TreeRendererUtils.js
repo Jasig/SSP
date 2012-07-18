@@ -48,7 +48,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     		nodeToAppendTo.removeAll();
     	}
     	
-    	// only append if their are children
+    	// only append if there are children
     	if (children.length > 0)
     	{
     		nodeToAppendTo.appendChild( children );

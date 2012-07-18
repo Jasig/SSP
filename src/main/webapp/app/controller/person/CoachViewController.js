@@ -75,10 +75,10 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 	
 	displayCoachDepartment: function( coach ){
 		var me=this;
-		me.getDepartmentField().setValue( coach.get('department') );
+		me.getDepartmentField().setValue( coach.get('departmentName') );
 		me.getPhoneField().setValue( coach.get('workPhone') );
 		me.getEmailAddressField().setValue( coach.get('primaryEmailAddress') );
-		me.getOfficeField().setValue( coach.get('office') );
+		me.getOfficeField().setValue( coach.get('officeLocation') );
 	},
 
 	onStudentTypeComboSelect: function(comp, records, eOpts){

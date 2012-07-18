@@ -9,7 +9,7 @@ Ext.define('Ssp.view.Search', {
     	authenticatedPerson: 'authenticatedPerson',
     	apiProperties: 'apiProperties',
     	columnRendererUtils: 'columnRendererUtils',
-        store: 'studentsStore',
+        store: 'searchStore',
         programStatusesStore: 'programStatusesStore',
         sspConfig: 'sspConfig'
     },
@@ -72,7 +72,7 @@ Ext.define('Ssp.view.Search', {
 		    			        xtype: 'combobox',
 		    			        itemId: 'caseloadStatusCombo',
 		    			        name: 'programStatusId',
-		    			        fieldLabel: 'Retrieve my Caseload By Status',
+		    			        fieldLabel: '',
 		    			        emptyText: 'Select One',
 		    			        store: me.programStatusesStore,
 		    			        valueField: 'id',
@@ -82,10 +82,15 @@ Ext.define('Ssp.view.Search', {
 		    			        queryMode: 'local',
 		    			        allowBlank: true,
 		    			        forceSelection: false,
-		    			        labelWidth: 200
+		    			        width: 200,
+		    			        labelWidth: 125
 		    				},{
-		       		        	xtype: 'tbspacer',
-		       		        	flex: 1
+		       		        	xtype: 'button',
+		       		        	tooltip: 'Retrieve My Caseload',
+		       		        	itemId: 'retrieveCaseloadButton',
+					            width: 32,
+					            height: 32,
+					            cls: 'retrieveCaseloadIcon'
 		       		        }
 		       		    ]
 		       		    
@@ -123,18 +128,20 @@ Ext.define('Ssp.view.Search', {
 	       		        	xtype: 'tbspacer',
 	       		        	flex: 1
 	       		        },{
-				            tooltip: 'Display with photo',
+				            tooltip: 'Display Search',
 				            text: '',
 				            width: 20,
 				            height: 20,
+				            hidden: true,
 				            cls: 'displayPhotoListIcon',
 				            xtype: 'button',
 				            itemId: 'displayPhotoButton'				        	
 				        },{
-				            tooltip: 'Display without photo',
+				            tooltip: 'Display Caseload',
 				            text: '',
 				            width: 20,
 				            height: 20,
+				            hidden: true,
 				            cls: 'displayListIcon',
 				            xtype: 'button',
 				            itemId: 'displayListButton'				        	

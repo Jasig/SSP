@@ -58,19 +58,23 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 	    		                      xtype: 'textfield'
 	    		                  },
 	    		                  flex: 50 }
-	    		                 ] 
-		/*,
+	    		                 ] ,
 				    
 				    dockedItems: [{
 				        dock: 'top',
 				        xtype: 'toolbar',
-				        items: [{
+				        items: [/*{
 				            tooltip: 'Respond to the selected Early Alert',
 				            text: 'Respond',
 				            xtype: 'button',
 				            itemId: 'respondButton'
+				        }*/{
+				            tooltip: 'Display Tree',
+				            text: 'Tree',
+				            xtype: 'button',
+				            itemId: 'displayTreeButton'
 				        }]
-				    }]*/
+				    }]
 				});
 		
 		return me.callParent(arguments);

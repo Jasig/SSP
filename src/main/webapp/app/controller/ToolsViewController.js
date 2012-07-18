@@ -45,7 +45,8 @@ Ext.define('Ssp.controller.ToolsViewController', {
     },
     
 	onItemClick: function(grid,record,item,index){ 
-		if (record.get('active'))
+		var me=this;
+		if (record.get('active') && me.personLite.get('id') != "")
 		{
 			this.loadTool( record.get('toolType') );
 		}
