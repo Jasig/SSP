@@ -217,7 +217,7 @@
 <h1>Confidentiality Agreement Form</h1>
 <p><a class='print-conf-form'>print</a></p>
 
-<div class="confidentiality-agreement-form-content" style="width:800;" ></div>
+<div class="confidentiality-agreement-form-content" style="width:800; padding: 5px; margin:25px; border-width:1px; border-style:solid;" ></div>
 </div>
 
 </div>
