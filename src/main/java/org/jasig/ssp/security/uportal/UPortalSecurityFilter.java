@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
@@ -13,8 +14,8 @@ import javax.portlet.filter.FilterChain;
 import javax.portlet.filter.FilterConfig;
 import javax.portlet.filter.RenderFilter;
 
-import org.jasig.ssp.security.permissions.DataPermissions;
-import org.jasig.ssp.security.permissions.ServicePermissions;
+import org.jasig.portal.api.permissions.Assignment;
+import org.jasig.portal.api.permissions.PermissionsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +32,7 @@ public final class UPortalSecurityFilter implements RenderFilter {
 
 	public static final String AUTHENTICATION_TOKEN_KEY =
 			UPortalSecurityFilter.class.getName() + ".GRANTED_AUTHORITIES_KEY";
+	private static final Object SSP_OWNER = "SSP";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UPortalSecurityFilter.class);
@@ -57,28 +59,27 @@ public final class UPortalSecurityFilter implements RenderFilter {
 		chain.doFilter(req, res);
 	}
 
-	private void populateAuthorites(final RenderRequest req,
-			final String principal) {
+	private void populateAuthorites(final RenderRequest req, final String principal) {
 
 		// But the user's access has not yet been established...
 		final Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
-		// Check for DataPermissions
-		for (final DataPermissions p : DataPermissions.values()) {
-			if (req.isUserInRole(p.name())) {
-				authorities.add(new GrantedAuthorityImpl("ROLE_" + p.name())); // NOPMD
+		PortletContext ctx = req.getPortletSession(true).getPortletContext();
+		PermissionsService permissionsService = (PermissionsService) 
+				ctx.getAttribute(PermissionsService.PORTLET_CONTEXT_ATTRIBUTE_NAME);
+
+		Set<Assignment> assignments = permissionsService.getAssignmentsForPerson(principal, true);
+
+		// Find SSP-related permissions in the assignments collection
+		for (Assignment a : assignments) {
+			if (a.getOwner().getKey().equals(SSP_OWNER)) {
+				// This one pertains to us...
+				String activity = a.getActivity().getKey();
+				authorities.add(new GrantedAuthorityImpl("ROLE_" + activity));
 			}
 		}
 
-		// Check for ServicePermissions
-		for (final ServicePermissions p : ServicePermissions.values()) {
-			if (req.isUserInRole(p.name())) {
-				authorities.add(new GrantedAuthorityImpl("ROLE_" + p.name())); // NOPMD
-			}
-		}
-
-		LOGGER.debug(
-				"Setting up GrantedAutorities for user '{}' -- {}",
+		LOGGER.debug("Setting up GrantedAutorities for user '{}' -- {}",
 				principal, authorities.toString());
 
 		// Create Authentication Token
@@ -95,7 +96,7 @@ public final class UPortalSecurityFilter implements RenderFilter {
 	}
 
 	@Override
-	public void init(final FilterConfig arg0) throws PortletException {
+	public void init(final FilterConfig config) throws PortletException {
 		// nothing to do
 	}
 
@@ -103,4 +104,5 @@ public final class UPortalSecurityFilter implements RenderFilter {
 	public void destroy() {
 		// nothing to do
 	}
+
 }
