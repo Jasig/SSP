@@ -69,6 +69,11 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
+	public Person load(final UUID id) {
+		return dao.load(id);
+	}
+
+	@Override
 	public Person getByStudentId(final String studentId)
 			throws ObjectNotFoundException {
 		final Person person = dao.getByStudentId(studentId);
@@ -131,6 +136,11 @@ public class PersonServiceImpl implements PersonService {
 
 	protected void setDao(final PersonDao dao) {
 		this.dao = dao;
+	}
+
+	protected void setRegistrationStatusByTermService(
+			final RegistrationStatusByTermService registrationStatusByTermService) {
+		this.registrationStatusByTermService = registrationStatusByTermService;
 	}
 
 	@Override

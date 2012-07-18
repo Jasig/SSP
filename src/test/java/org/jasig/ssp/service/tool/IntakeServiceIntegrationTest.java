@@ -26,6 +26,7 @@ import org.jasig.ssp.model.tool.IntakeForm;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.service.reference.StudentStatusService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,6 +57,9 @@ public class IntakeServiceIntegrationTest {
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
+	@Autowired
+	private transient StudentStatusService studentStatusService;
+
 	private static final String LASTNAME = "last";
 
 	private static final String TEST_STRING1 = "testString1";
@@ -67,6 +71,9 @@ public class IntakeServiceIntegrationTest {
 	private static final String EDUCATIONLEVEL_NAME = "Test Education Level";
 
 	private static final String CHALLENGE_NAME = "Test Challenge";
+
+	private static final UUID STUDENT_STATUS_ID = UUID
+			.fromString("0b150cea-c3de-40ef-8564-fc2f53847a43");
 
 	@Before
 	public void setUp() {
@@ -162,7 +169,7 @@ public class IntakeServiceIntegrationTest {
 
 		final PersonEducationPlan pep1 = new PersonEducationPlan();
 		pep1.setObjectStatus(ObjectStatus.INACTIVE);
-		final StudentStatus ss1 = new StudentStatus();
+		final StudentStatus ss1 = studentStatusService.get(STUDENT_STATUS_ID);
 		ss1.setName(TEST_STRING1);
 		ss1.setDescription(TEST_STRING2);
 		pep1.setStudentStatus(ss1);
