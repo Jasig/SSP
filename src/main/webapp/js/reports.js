@@ -8,11 +8,11 @@ var ssp = ssp || {};
 		var loadReportForm = function(containerId) {
 			// hide all forms
 			var hideableForms = that.locate('hideableform');
-			$(hideableForms).filter(":visible").toggle(1500);
+			$(hideableForms).filter(":visible").toggle(400);
 
 			// show the new form
 			var container = that.locate(containerId);
-			$(container).toggle(1500);
+			$(container).toggle(400);
 		}
 
 		var loadGroupInput = function(url, container) {
