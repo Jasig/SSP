@@ -1,5 +1,7 @@
 package org.jasig.ssp.dao;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -22,19 +24,20 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<CaseloadRecord> caseLoadFor(
-			final ProgramStatus programStatus,
-			final Person coach, final SortingAndPaging sAndP) {
+			final ProgramStatus programStatus, @NotNull final Person coach,
+			final SortingAndPaging sAndP) {
 
 		// This creation of the query is order sensitive as 2 queries are run
 		// with the same restrictions. The first query simply runs the query to
-		// find a count of the records. The second query returns the actual
-		// results.
+		// find a count of the records. The second query returns the row data.
 
 		final Criteria query = createCriteria();
 
 		// Restrict by program status if provided
 		if (programStatus != null) {
 			query.createAlias("programStatuses", "personProgramStatus")
+					.add(Restrictions
+							.isNull("personProgramStatus.expirationDate"))
 					.add(Restrictions.eq("personProgramStatus.programStatus",
 							programStatus));
 		}
@@ -42,19 +45,17 @@ public class CaseloadDao extends AbstractDao<Person> {
 		// restrict to coach
 		query.add(Restrictions.eq("coach", coach));
 
-		//
 		// item count
-		//
 		Long totalRows = 0L;
 		if ((sAndP != null) && sAndP.isPaged()) {
 			totalRows = (Long) query.setProjection(Projections.rowCount())
 					.uniqueResult();
 		}
-		// clear the rowcount projection
-		query.setProjection(null);
 
+		// clear the row count projection
+		query.setProjection(null);
 		//
-		// Add Properties to return in the caseload
+		// Add Properties to return in the case load
 		//
 		// Set Columns to Return: id, firstName, middleInitial, lastName,
 		// schoolId
