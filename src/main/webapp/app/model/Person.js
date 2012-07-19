@@ -30,7 +30,8 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'referralSources', type: 'auto'},
     		 {name: 'serviceReasons', type: 'auto'},
     		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
-    		 {name: 'programStatuses', type: 'auto'}],
+    		 {name: 'programStatuses', type: 'auto'},
+    		 {name: 'registeredForCurrentTerm', type: 'string'}],
     		 		 
     getFullName: function(){ 
     	var firstName = this.get('firstName') || "";

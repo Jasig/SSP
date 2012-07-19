@@ -2,6 +2,7 @@ Ext.define('Ssp.controller.admin.campus.DefineCampusViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
+    	campusService: 'campusService',
     	formUtils: 'formRendererUtils',
     	model: 'currentCampus',
     	store: 'campusesStore'
@@ -61,7 +62,39 @@ Ext.define('Ssp.controller.admin.campus.DefineCampusViewController', {
 	},
 	
 	onFinishClick: function(button){
+		var me=this;
 		console.log('DefineCampusViewController->onFinishClick');
+		var campusView = Ext.ComponentQuery.query('.editcampus')[0];
+		var campusForm = campusView.getForm();		
+		var formsToValidate = [campusForm];
+		var validateResult = me.formUtils.validateForms( formsToValidate );
+		
+		// validate the campus and save
+		if ( validateResult.valid ) 
+		{
+			campusForm.updateRecord();
+			console.log(me.model.data);
+			me.getView().setLoading( true );
+			me.campusService.saveCampus( me.model.data, {success:me.saveCampusSuccess, 
+				  failure:me.saveCampusFailure, 
+				  scope: me} );		
+		}else{
+			me.formUtils.displayErrors( validateResult.fields );
+		}
+	},
+
+    saveCampusSuccess: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading( false );
+		me.displayMain();
+    },
+    
+    saveCampusFailure: function( response, scope ){
+    	var me=scope;  	
+    	me.getView().setLoading( false );
+    },
+	
+	displayMain: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});	
 	}
 });

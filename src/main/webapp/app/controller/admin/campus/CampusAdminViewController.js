@@ -2,9 +2,10 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
+    	campusesStore: 'campusesStore',
+    	earlyAlertCoordinatorsStore: 'earlyAlertCoordinatorsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentCampus',
-    	store: 'campusesStore'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -24,7 +25,9 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
 		} 	
     },
 	init: function() {
-		this.store.load();	
+		var me=this;
+		me.campusesStore.load();
+		me.earlyAlertCoordinatorsStore.load();
 		return this.callParent(arguments);
     },
     

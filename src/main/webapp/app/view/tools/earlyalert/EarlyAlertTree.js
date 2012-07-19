@@ -48,7 +48,21 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertTree', {
     		            flex: 2,
     		            sortable: false,
     		            dataIndex: 'courseName'
-    		        }] 
+    		        }],
+    		        
+    		        dockedItems: [{
+				        dock: 'top',
+				        xtype: 'toolbar',
+				        items: [{
+				            tooltip: 'Respond to the selected Early Alert',
+				            text: '',
+				            xtype: 'button',
+			            	width: 28,
+					        height: 28,
+				            cls: 'earlyAlertResponseIcon',
+				            itemId: 'respondButton'
+				        }]
+				    }]
 				});
 		
 		return me.callParent(arguments);

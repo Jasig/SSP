@@ -1,18 +1,15 @@
-Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
+Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',{
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.campusadmin',
-	title: 'Campus Admin',
+	alias : 'widget.earlyalertroutingsadmin',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.campus.CampusAdminViewController',
+    controller: 'Ssp.controller.admin.campus.EarlyAlertRoutingsAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
-        authenticatedPerson: 'authenticatedPerson',
-        store: 'campusesStore'
+        store: 'campusEarlyAlertRoutingsStore'
     },
     height: '100%',
 	width: '100%',
-	layout: 'fit',
     initComponent: function(){
         var me=this;
     	Ext.apply(me,
@@ -20,16 +17,24 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
     		      autoScroll: true,
     		      store: me.store,
      		      columns: [
-    		                { header: 'Name',  
+    		                { header: 'Group Name',  
     		                  dataIndex: 'name',
-    		                  flex: 50 },
-    		                { header: 'Description',
-    		                  dataIndex: 'description', 
-    		                  flex: 50
-    		                }
+    		                  flex: 50 }
     		           ],
     		        
-    		           dockedItems: [
+    		           dockedItems: [{
+     		               xtype: 'toolbar',
+      		               dock: 'top',
+      		               items: [{
+     		                   text: '',
+     		                   tooltip: "Early Alert Routing Groups are used to route Early Alerts by the Referral Reason of the Early Alert. If you do not define a routing, the Early Alert Coordinator's email address will be used for Early Alert communication when no Counselor/Coach is assigned.",
+     		                   cls: 'helpIcon',
+	   			               width: 32,
+						       height: 32,
+     		                   xtype: 'button',
+     		                   itemId: 'helpButton'
+     		               }]  
+      		            },
      		       		{
      		       			xtype: 'pagingtoolbar',
      		       		    dock: 'bottom',
@@ -41,24 +46,21 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
      		               xtype: 'toolbar',
      		               items: [{
      		                   text: 'Add',
+     		                   tooltip: 'Add Early Alert Routing Group',
      		                   iconCls: 'icon-add',
      		                   xtype: 'button',
-     		                   hidden: !me.authenticatedPerson.hasAccess('CAMPUS_ADMIN_ADD_BUTTON'),
-     		                   action: 'add',
      		                   itemId: 'addButton'
      		               }, '-', {
      		                   text: 'Edit',
+     		                   tooltip: 'Edit Early Alert Routing Group',
      		                   iconCls: 'icon-edit',
      		                   xtype: 'button',
-     		                   hidden: !me.authenticatedPerson.hasAccess('CAMPUS_ADMIN_EDIT_BUTTON'),
-     		                   action: 'edit',
      		                   itemId: 'editButton'
      		               }, '-', {
      		                   text: 'Delete',
+     		                   tooltip: 'Delete Early Alert Routing Group',
      		                   iconCls: 'icon-delete',
-     		                   hidden: !me.authenticatedPerson.hasAccess('CAMPUS_ADMIN_DELETE_BUTTON'),
      		                   xtype: 'button',
-     		                   action: 'delete',
      		                   itemId: 'deleteButton'
      		               }]
      		           }]  	

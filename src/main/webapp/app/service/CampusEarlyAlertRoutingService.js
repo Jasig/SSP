@@ -1,9 +1,9 @@
-Ext.define('Ssp.service.PersonService', {  
+Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {  
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	person: 'currentPerson'
+    	model: 'currentEarlyAlertRouting'
     },
     config: {
     	personUrl: null
@@ -14,20 +14,21 @@ Ext.define('Ssp.service.PersonService', {
     
     getBaseUrl: function( id ){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('campusEarlyAlertRouting') );
     	return baseUrl;
     },
 
-    getPerson: function( id, callbacks ){
+    getCampusEarlyAlertRouting: function( campusId, id, callbacks ){
     	var me=this;
+    	var url = me.getBaseUrl();
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
-	    	var person = new Ssp.model.Person();
-	    	me.person.data = person.data;
+	    	var model = new Ssp.model.reference.CampusEarlyAlertRouting();
+	    	me.model.data = model.data;
 	    	if (response.responseText != "")
 	    	{
 		    	r = Ext.decode(response.responseText);
-		    	me.person.populateFromGenericObject(r);	    		
+		    	me.model.populateFromGenericObject(r);	    		
 	    	}
 	    	callbacks.success( r, callbacks.scope );
 	    };
@@ -37,17 +38,49 @@ Ext.define('Ssp.service.PersonService', {
 	    	callbacks.failure( response, callbacks.scope );
 	    };
 	    
-		// load the person to edit
+	    url = url.replace("{id}",campusId);
+	    
+		// load
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl()+'/'+id,
+			url: url+'/'+id,
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
 			scope: me
 		});
     },   
+
+    getAllCampusEarlyAlertRoutings: function( campusId, callbacks ){
+    	var me=this;
+    	var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	if (response.responseText != "")
+	    	{
+		    	r = Ext.decode(response.responseText);
+		    	me.store.loadData(r);	    		
+	    	}
+	    	callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+	    url = url.replace("{id}",campusId);
+	    
+		// load
+		me.apiProperties.makeRequest({
+			url: url,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },     
     
-    savePerson: function( jsonData, callbacks ){
+    saveCampusEarlyAlertRouting: function( campusId, jsonData, callbacks ){
     	var me=this;
     	var id=jsonData.id;
         var url = me.getBaseUrl();
@@ -61,7 +94,9 @@ Ext.define('Ssp.service.PersonService', {
 	    	callbacks.failure( response, callbacks.scope );
 	    };
         
-    	// save the person
+	    url = url.replace("{id}",campusId);
+	    
+    	// save
 		if (id=="")
 		{
 			// create

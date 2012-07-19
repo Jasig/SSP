@@ -1,4 +1,4 @@
 Ext.define('Ssp.model.reference.ProgramStatus', {
 	extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+    fields: [{name:'programStatusChangeReasonRequired',type:'boolean'}]
 });

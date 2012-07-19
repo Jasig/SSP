@@ -18,7 +18,7 @@
 <script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/form/ItemSelector.js" />"></script>   
 
 <!-- DEFT Lib -->
-<script type="text/javascript" src="<c:url value="/js/libs/deft/deft-0.6.3.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/libs/deft/deft-0.6.8pre.js" />"></script>
 
 <script type="text/javascript">
 	// setting renderSSPFullScreen to true will render the app 

@@ -22,7 +22,7 @@ Ext.define('Ssp.service.CaseloadService', {
     		var r = Ext.decode(response.responseText);
 	    	if (r.rows.length > 0)
 	    	{
-	    		me.store.loadData(r.rows);
+	    		me.store.loadData( r.rows );
 	    	}
 	    	if (callbacks != null)
 	    	{

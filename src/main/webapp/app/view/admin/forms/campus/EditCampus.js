@@ -4,6 +4,9 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.campus.EditCampusViewController',
+    inject: {
+    	store: 'earlyAlertCoordinatorsStore'
+    },
 	title: 'Edit Campus',
 	initComponent: function() {
 		var me=this;
@@ -14,28 +17,26 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
                     fieldLabel: 'Name',
                     anchor: '100%',
                     name: 'name'
-                },
-                {
+                },{
                     xtype: 'textareafield',
                     fieldLabel: 'Description',
                     anchor: '100%',
                     name: 'description'
-                }],
-            
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
+                },{
+			        xtype: 'combobox',
+			        name: 'earlyAlertCoordinatorId',
+			        itemId: 'earlyAlertCoordinatorCombo',
+			        fieldLabel: 'Early Alert Coordinator',
+			        emptyText: 'Select One',
+			        store: me.store,
+			        valueField: 'id',
+			        displayField: 'lastName',
+			        mode: 'local',
+			        typeAhead: true,
+			        queryMode: 'local',
+			        allowBlank: false,
+			        width: 300
+				}]
         });
 
         return me.callParent(arguments);

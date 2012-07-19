@@ -591,7 +591,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
             if (store) {
                 store = Ext.StoreManager.lookup(store);
                 me.down('pagingtoolbar').bindStore(store);
-                me.bindStore(store);        
+                me.bindStore(store);
             } else {
                 me.getView().refresh();
             }

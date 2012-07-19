@@ -54,6 +54,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
 
     getAllEarlyAlertResponses: function( personId, earlyAlertId, callbacks ){
     	var me=this;
+    	var url = "";
     	var node = me.cleanResponses( earlyAlertId );
     	var success = function( response, view ){
     		var r = Ext.decode(response.responseText);
@@ -75,8 +76,11 @@ Ext.define('Ssp.service.EarlyAlertService', {
 	    	}
 	    };
 	    
+	    url = me.getBaseUrl(personId);
+	    url = url.replace( '/earlyAlert', '/earlyAlertResponse' );
+	    
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl(personId)+'/'+earlyAlertId+'/earlyAlertResponse',
+			url: url,
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
@@ -87,7 +91,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
     populateEarlyAlerts: function( records ){
     	var me=this;
     	Ext.Array.each( records, function(record, index){
-    		//record.iconCls='iconFolder';
+    		record.iconCls='earlyAlertTreeIcon';
     		record.leaf=false;
     		record.nodeType='early alert';
     	});

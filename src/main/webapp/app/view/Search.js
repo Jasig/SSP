@@ -31,6 +31,7 @@ Ext.define('Ssp.view.Search', {
 		    	    dockedItems: [{
 		       			xtype: 'pagingtoolbar',
 		       		    store: me.store,
+		       		    itemId: 'searchGridPager',
 		       			dock: 'bottom',
 		       		    displayInfo: true,
 		       		    pageSize: me.apiProperties.getPagingSize()

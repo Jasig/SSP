@@ -23,14 +23,10 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
     
     control: {
+    	searchGridPager: '#searchGridPager',
     	searchText: '#searchText',
     	searchCaseloadCheck: '#searchCaseloadCheck',
-    	caseloadStatusCombo: {
-    		selector: '#caseloadStatusCombo',
-    		listeners: {
-    			change: 'onCaseloadStatusComboSelect'
-    		}
-    	},
+    	caseloadStatusCombo: '#caseloadStatusCombo',
     	
     	view: {
     		selectionchange: 'onSelectionChange',
@@ -77,9 +73,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     
 	init: function() {
 		var me=this;
-		
-		me.applyColumns();
-		
+				
 		me.personUrl =  me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
 				
  		return me.callParent(arguments);
@@ -106,9 +100,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	   	// ensure the selected person is not loaded twice
 	   	me.personLite.set('id','');
-	   	
+
+		me.initializeCaseload();
+		
 	    me.programStatusesStore.removeAll();
-		me.initializeCaseload();	
+    	me.getProgramStatuses();	
 	},
 
     destroy: function() {
@@ -121,16 +117,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     initializeCaseload: function(){
     	var me=this;
-    	me.getProgramStatuses();
+    	me.setGridView('caseload');
     },
-
-	onCaseloadStatusComboSelect: function(comp, value, eOpts){
-    	var me=this;
-		if (value.length > 0)
-    	{
-			me.getCaseload();
-     	}
-	},
 	
 	getProgramStatuses: function(){
 		var me=this;
@@ -149,7 +137,8 @@ Ext.define('Ssp.controller.SearchViewController', {
     	{
     		programStatus = me.programStatusesStore.findRecord("name", "active");
     		activeProgramStatusId = programStatus.get('id');
-    		me.getCaseloadStatusCombo().select( activeProgramStatusId );
+    		me.getCaseloadStatusCombo().setValue( activeProgramStatusId );
+    		me.getCaseload();
     	}
     },	
 
@@ -160,9 +149,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 	getCaseload: function(){
     	var me=this;
 		var pId = "";
-		if ( me.getCaseloadStatusCombo().value.length > 0)
+		if ( me.getCaseloadStatusCombo().getValue().length > 0)
     	{
-			pId = me.getCaseloadStatusCombo().value;
+			pId = me.getCaseloadStatusCombo().getValue();
      	}
 		me.caseloadService.getCaseload( pId, 
     		{success:me.getCaseloadSuccess, 
@@ -195,14 +184,25 @@ Ext.define('Ssp.controller.SearchViewController', {
 		console.log('SearchViewController->onExpandStudentRecord');
 	},  
 
+	setGridView: function( view ){
+		var me=this;
+		if (view=='search')
+		{
+			me.preferences.set('SEARCH_GRID_VIEW_TYPE',0);
+		}else{
+			me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
+		}
+		me.applyColumns();
+	},
+	
 	onDisplayPhotoClick: function( button ){
-		this.preferences.set('SEARCH_GRID_VIEW_TYPE',0);
-		this.applyColumns();
+		var me=this;
+		me.setGridView('search');
 	},
 	
 	onDisplayListClick: function( button ){
-		this.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
-		this.applyColumns();
+		var me=this;
+		me.setGridView('caseload');
 	},
 	
 	applyColumns: function(){
@@ -219,7 +219,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              { header: 'Last', dataIndex: 'lastName', flex: 1},
     	              { header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
     	              { header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
-    	              { header: 'Alerts', dataIndex: 'alerts', flex: .2}
+    	              { header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
     	              ];			
 		}else{
 			store = me.searchStore;
@@ -229,7 +229,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              ];		
 		}
 		
-		me.formUtils.reconfigureGridPanel(grid, store, columns);		
+		me.formUtils.reconfigureGridPanel(grid, store, columns);
 	},
 
     onAddPersonClick: function( button ){
@@ -311,19 +311,17 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	onRetrieveCaseloadClick: function( button ){
 		var me=this;
-		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
-		me.applyColumns();
+		me.setGridView('caseload');
 		me.getCaseload();
 	},
 	
 	onSearchClick: function(button){
 		var me=this;
 		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();		
-		me.preferences.set('SEARCH_GRID_VIEW_TYPE',0);
-		me.applyColumns();		
+		me.setGridView('search');
 		if (me.getSearchText().value != undefined && me.getSearchText().value != "")
 		{
-			me.searchService.search(me.getSearchText().value, outsideCaseload);		
+			me.searchService.search(me.getSearchText().value, outsideCaseload);
 		}else{
 			me.searchStore.removeAll();
 		}	

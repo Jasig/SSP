@@ -1,9 +1,9 @@
-Ext.define('Ssp.service.PersonService', {  
+Ext.define('Ssp.service.CampusService', {  
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	person: 'currentPerson'
+    	model: 'currentCampus'
     },
     config: {
     	personUrl: null
@@ -14,20 +14,20 @@ Ext.define('Ssp.service.PersonService', {
     
     getBaseUrl: function( id ){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('campus') );
     	return baseUrl;
     },
 
-    getPerson: function( id, callbacks ){
+    getCampus: function( id, callbacks ){
     	var me=this;
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
-	    	var person = new Ssp.model.Person();
-	    	me.person.data = person.data;
+	    	var model = new Ssp.model.reference.Campus();
+	    	me.model.data = model.data;
 	    	if (response.responseText != "")
 	    	{
 		    	r = Ext.decode(response.responseText);
-		    	me.person.populateFromGenericObject(r);	    		
+		    	me.model.populateFromGenericObject(r);	    		
 	    	}
 	    	callbacks.success( r, callbacks.scope );
 	    };
@@ -47,7 +47,7 @@ Ext.define('Ssp.service.PersonService', {
 		});
     },   
     
-    savePerson: function( jsonData, callbacks ){
+    saveCampus: function( jsonData, callbacks ){
     	var me=this;
     	var id=jsonData.id;
         var url = me.getBaseUrl();
@@ -61,7 +61,7 @@ Ext.define('Ssp.service.PersonService', {
 	    	callbacks.failure( response, callbacks.scope );
 	    };
         
-    	// save the person
+    	// save
 		if (id=="")
 		{
 			// create

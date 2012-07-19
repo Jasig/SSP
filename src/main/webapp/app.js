@@ -100,6 +100,9 @@ Ext.require([
     'Ssp.view.admin.forms.campus.CampusAdmin',
     'Ssp.view.admin.forms.campus.DefineCampus',
     'Ssp.view.admin.forms.campus.EditCampus',
+    'Ssp.view.admin.forms.campus.CampusEarlyAlertRoutingsAdmin',
+    'Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',
+    'Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
@@ -153,6 +156,7 @@ Ext.require([
     'Ssp.store.JournalEntries',
     'Ssp.store.JournalEntryDetails',
     'Ssp.store.EarlyAlerts',
+    'Ssp.store.EarlyAlertCoordinators',
     'Ssp.store.Documents',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
@@ -180,6 +184,7 @@ Ext.require([
     'Ssp.store.reference.JournalSteps',
     'Ssp.store.reference.JournalTracks',
     'Ssp.store.reference.MaritalStatuses',
+    'Ssp.store.People',
     'Ssp.store.reference.ProgramStatuses',
     'Ssp.store.reference.ProgramStatusChangeReasons',
     'Ssp.store.reference.ReferralSources',
@@ -196,6 +201,8 @@ Ext.require([
     'Ssp.service.AbstractService',
     'Ssp.service.AppointmentService',
     'Ssp.service.CaseloadService',
+    'Ssp.service.CampusService',
+    'Ssp.service.CampusEarlyAlertRoutingService',
     'Ssp.service.EarlyAlertService',
     'Ssp.service.EarlyAlertResponseService',
     'Ssp.service.PersonService',
@@ -215,7 +222,11 @@ Ext.require([
 	'Ext.ux.form.MultiSelect',
 	'Ext.ux.form.ItemSelector',
 	'Ext.util.MixedCollection',
-	'Ext.tree.*'
+	'Ext.tree.*',
+	'Ext.toolbar.Spacer',
+	'Ext.form.field.ComboBox',
+	'Ext.grid.column.Action',
+	'Ext.grid.feature.Grouping'
 ]);
 
 var apiUrls = [
@@ -452,6 +463,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        currentCampusEarlyAlertRouting:{
+				        fn: function(){
+				            return new Ssp.model.reference.CampusEarlyAlertRouting({id:""});
+				    	},
+				        singleton: true
+			        },
 			        treeStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.TreeStore',{
@@ -525,6 +542,7 @@ Ext.onReady(function(){
 				    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',		
 				    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
 				    documentsStore: 'Ssp.store.Documents',
+				    earlyAlertCoordinatorsStore: 'Ssp.store.EarlyAlertCoordinators',
 				    earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
 					earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
 					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
@@ -546,6 +564,7 @@ Ext.onReady(function(){
 			        journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
 			        journalTracksStore: 'Ssp.store.reference.JournalTracks',
 			    	maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
+			    	peopleStore: 'Ssp.store.People',
 			    	programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
 				    referralSourcesStore: 'Ssp.store.reference.ReferralSources',
@@ -565,6 +584,8 @@ Ext.onReady(function(){
 			        	
 			        // SERVICES
 			        appointmentService: 'Ssp.service.AppointmentService',
+			        campusService: 'Ssp.service.CampusService',
+			        campusEarlyAlertRoutingService: 'Ssp.service.CampusEarlyAlertRoutingService',
 			        caseloadService: 'Ssp.service.CaseloadService',
 			        earlyAlertService: 'Ssp.service.EarlyAlertService',
 			        earlyAlertResponseService: 'Ssp.service.EarlyAlertResponseService',
