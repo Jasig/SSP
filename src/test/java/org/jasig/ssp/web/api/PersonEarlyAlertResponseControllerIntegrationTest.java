@@ -18,6 +18,7 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,6 +53,9 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 
 	private static final UUID PERSON_ID = UUID
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
+
+	private static final UUID EARLY_ALERT_ID = UUID
+			.fromString("74891747-36aa-409c-8b1f-76d3eaf9028e");
 
 	private static final UUID EARLY_ALERT_OUTCOME_ID = UUID
 			.fromString("9A98FF78-92AF-4681-8111-ADB3300CBE1C");
@@ -100,25 +104,28 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link PersonEarlyAlertResponseController#getAll(UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * {@link PersonEarlyAlertResponseController#getAll(UUID,UUID, ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerAll() throws Exception { // NOPMD
+	public void testControllerAll() throws ObjectNotFoundException,
+			ValidationException {
 		final Collection<EarlyAlertResponseTO> list = controller.getAll(
-				PERSON_ID,
-				ObjectStatus.ACTIVE,
+				PERSON_ID, EARLY_ALERT_ID, ObjectStatus.ACTIVE,
 				null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
+		assertTrue("List should not have been null.", list.isEmpty());
 	}
 
 	/**
 	 * Test the
-	 * {@link PersonEarlyAlertResponseController#create(UUID, EarlyAlertResponseTO)}
+	 * {@link PersonEarlyAlertResponseController#create(UUID, UUID, EarlyAlertResponseTO)}
 	 * and {@link PersonEarlyAlertResponseController#delete(UUID, UUID)}
 	 * actions.
 	 * 
@@ -127,10 +134,8 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 	 */
 	@Test()
 	public void testControllerCreateAndDelete() throws Exception { // NOPMD
-		final EarlyAlertTO earlyAlert = earlyAlertController.create(
-				PERSON_ID,
-				PersonEarlyAlertControllerIntegrationTest
-						.createEarlyAlert());
+		final EarlyAlertTO earlyAlert = earlyAlertController.create(PERSON_ID,
+				PersonEarlyAlertControllerIntegrationTest.createEarlyAlert());
 
 		assertNotNull("Saved early alert should not have been null.",
 				earlyAlert);
@@ -147,7 +152,8 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 		earlyAlertReferralIds.add(EARLY_ALERT_REFERRAL_ID2);
 		obj.setEarlyAlertReferralIds(earlyAlertReferralIds);
 
-		final EarlyAlertResponseTO saved = controller.create(PERSON_ID, obj);
+		final EarlyAlertResponseTO saved = controller.create(PERSON_ID,
+				earlyAlert.getId(), obj);
 		final Session session = sessionFactory.getCurrentSession();
 		session.flush();
 

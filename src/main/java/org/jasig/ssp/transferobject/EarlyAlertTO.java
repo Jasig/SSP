@@ -16,11 +16,9 @@ import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
  * Early Alert transfer object
  * 
  * @author jon.adams
- * 
  */
-public class EarlyAlertTO
-		extends AbstractAuditableTO<EarlyAlert>
-		implements TransferObject<EarlyAlert>, Serializable {
+public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
+		TransferObject<EarlyAlert>, Serializable {
 
 	private static final long serialVersionUID = -3197180145189755870L;
 

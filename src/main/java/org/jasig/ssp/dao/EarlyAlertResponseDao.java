@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -29,28 +30,28 @@ public class EarlyAlertResponseDao extends
 	}
 
 	/**
-	 * Get all EarlyAlertResponses for the specified person.
+	 * Get all {@link EarlyAlertResponse} for the specified {@link EarlyAlert}.
 	 * 
-	 * @param personId
-	 *            Person identifier
+	 * @param earlyAlertId
+	 *            Early Alert identifier
 	 * @param sAndP
 	 *            Sorting and paging filters
 	 * @return All EarlyAlertResponses for the specified person.
 	 */
 	@SuppressWarnings(UNCHECKED)
-	public PagingWrapper<EarlyAlertResponse> getAllForPersonId(
-			final UUID personId,
+	public PagingWrapper<EarlyAlertResponse> getAllForEarlyAlertId(
+			final UUID earlyAlertId,
 			final SortingAndPaging sAndP) {
 		final long totalRows = (Long) createCriteria()
 				.createAlias("earlyAlert", "ea")
-				.add(Restrictions.eq("ea.person.id", personId))
+				.add(Restrictions.eq("ea.id", earlyAlertId))
 				.setProjection(Projections.rowCount())
 				.uniqueResult();
 
 		return new PagingWrapper<EarlyAlertResponse>(totalRows, createCriteria(
 				sAndP)
 				.createAlias("earlyAlert", "ea")
-				.add(Restrictions.eq("ea.person.id", personId))
+				.add(Restrictions.eq("ea.id", earlyAlertId))
 				.list());
 	}
 }

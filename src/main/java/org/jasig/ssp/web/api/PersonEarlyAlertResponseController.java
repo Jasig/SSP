@@ -1,14 +1,17 @@
-package org.jasig.ssp.web.api;
+package org.jasig.ssp.web.api; // NOPMD
 
 import java.util.UUID;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.factory.EarlyAlertResponseTOFactory;
+import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.EarlyAlertResponseService;
+import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
@@ -38,7 +41,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author jon.adams
  */
 @Controller
-@RequestMapping("/1/person/{personId}/earlyAlertResponse")
+@RequestMapping("/1/person/{personId}/earlyAlert/{earlyAlertId}/response")
 public class PersonEarlyAlertResponseController extends
 		BaseController {
 
@@ -50,6 +53,9 @@ public class PersonEarlyAlertResponseController extends
 
 	@Autowired
 	private transient EarlyAlertResponseTOFactory factory;
+
+	@Autowired
+	protected transient EarlyAlertService earlyAlertService;
 
 	@Autowired
 	protected transient PersonService personService;
@@ -66,20 +72,28 @@ public class PersonEarlyAlertResponseController extends
 	public @ResponseBody
 	PagedResponse<EarlyAlertResponseTO> getAll(
 			@PathVariable final UUID personId,
+			@PathVariable final UUID earlyAlertId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 		// Check permissions
 		checkPermissionForOp("READ");
 
 		// Run getAll for the specified person
 		final Person person = personService.get(personId);
+		final EarlyAlert earlyAlert = earlyAlertService.get(earlyAlertId);
+		if (earlyAlert == null || earlyAlert.getPerson() == null
+				|| !earlyAlert.getPerson().equals(person)) {
+			throw new ValidationException(
+					"Early Alert and Person ids do not match.");
+		}
+
 		final PagingWrapper<EarlyAlertResponse> data = service
-				.getAllForPerson(
-						person,
+				.getAllForEarlyAlert(
+						earlyAlert,
 						SortingAndPaging.createForSingleSort(status, start,
 								limit, sort, sortDirection, "createdDate"));
 
@@ -105,10 +119,10 @@ public class PersonEarlyAlertResponseController extends
 
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
-	EarlyAlertResponseTO create(@PathVariable final UUID personId,
-			@Valid @RequestBody final EarlyAlertResponseTO obj)
-			throws ValidationException,
-			ObjectNotFoundException {
+	EarlyAlertResponseTO create(@PathVariable @NotNull final UUID personId,
+			@PathVariable @NotNull final UUID earlyAlertId,
+			@Valid @NotNull @RequestBody final EarlyAlertResponseTO obj)
+			throws ValidationException, ObjectNotFoundException {
 
 		checkPermissionForOp("WRITE");
 
@@ -122,10 +136,12 @@ public class PersonEarlyAlertResponseController extends
 					"Person identifier is required.");
 		}
 
-		final EarlyAlertResponse model = factory.from(obj);
+		// ensure earlyAlertId is set to path variable
+		final EarlyAlertResponseTO earlyAlertResponseTO = obj;
+		earlyAlertResponseTO.setEarlyAlertId(earlyAlertId);
+		final EarlyAlertResponse model = factory.from(earlyAlertResponseTO);
 
 		if (null != model) {
-
 			final EarlyAlertResponse createdModel = service.create(model);
 			if (null != createdModel) {
 				return instantiateTO(createdModel);
@@ -143,6 +159,7 @@ public class PersonEarlyAlertResponseController extends
 	public @ResponseBody
 	EarlyAlertResponseTO save(@PathVariable final UUID id,
 			@PathVariable final UUID personId,
+			@PathVariable @NotNull final UUID earlyAlertId,
 			@Valid @RequestBody final EarlyAlertResponseTO obj)
 			throws ObjectNotFoundException, ValidationException {
 
@@ -153,7 +170,11 @@ public class PersonEarlyAlertResponseController extends
 					"You submitted without an id to the save method.  Did you mean to create?");
 		}
 
-		final EarlyAlertResponse model = factory.from(obj);
+		// ensure earlyAlertId is set to path variable
+		final EarlyAlertResponseTO earlyAlertResponseTO = obj;
+		earlyAlertResponseTO.setEarlyAlertId(earlyAlertId);
+
+		final EarlyAlertResponse model = factory.from(earlyAlertResponseTO);
 		model.setId(id);
 
 		final EarlyAlertResponse savedT = service.save(model);
@@ -181,5 +202,4 @@ public class PersonEarlyAlertResponseController extends
 			throw new AccessDeniedException("Access is denied.");
 		}
 	}
-
 }

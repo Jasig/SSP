@@ -187,10 +187,9 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	}
 
 	@Override
-	public PagingWrapper<EarlyAlertResponse> getAllForPerson(
-			final Person person,
-			final SortingAndPaging sAndP) {
-		return getDao().getAllForPersonId(person.getId(), sAndP);
+	public PagingWrapper<EarlyAlertResponse> getAllForEarlyAlert(
+			@NotNull final EarlyAlert earlyAlert, final SortingAndPaging sAndP) {
+		return getDao().getAllForEarlyAlertId(earlyAlert.getId(), sAndP);
 	}
 
 	/**
