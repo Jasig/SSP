@@ -2,36 +2,80 @@ package org.jasig.ssp.model;
 
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonProgramStatusService;
+import org.jasig.ssp.transferobject.PersonSearchResultTO;
+import org.jasig.ssp.web.api.PersonSearchController;
+
+/**
+ * PersonSearchResult model for use by {@link PersonSearchResultTO} and then
+ * {@link PersonSearchController}.
+ */
 public class PersonSearchResult {
 
 	// id of the student
 	private UUID id;
 
-	private String schoolId, firstName, middleInitial, lastName, photoUrl;
+	private String schoolId;
+
+	private String firstName;
+
+	private String middleInitial;
+
+	private String lastName;
+
+	private String photoUrl;
+
+	private String currentProgramStatusName;
+
+	private Person coach;
 
 	public PersonSearchResult() {
 		super();
 	}
 
-	public PersonSearchResult(final Person person) {
+	/**
+	 * Fill a new search result with the specified {@link Person}.
+	 * 
+	 * @param person
+	 *            the person
+	 * @param personProgramStatusService
+	 *            PersonProgramStatus for looking up data.
+	 * @throws ObjectNotFoundException
+	 *             If Person was not found when looking up data.
+	 */
+	public PersonSearchResult(@NotNull final Person person,
+			@NotNull final PersonProgramStatusService personProgramStatusService)
+			throws ObjectNotFoundException {
 		super();
+
 		if (null == person) {
 			return;
 		}
 
-		this.id = person.getId();
-		this.schoolId = person.getSchoolId();
-		this.firstName = person.getFirstName();
-		this.middleInitial = person.getMiddleInitial();
-		this.lastName = person.getLastName();
-		this.photoUrl = person.getPhotoUrl();
+		id = person.getId();
+		schoolId = person.getSchoolId();
+		firstName = person.getFirstName();
+		middleInitial = person.getMiddleInitial();
+		lastName = person.getLastName();
+		photoUrl = person.getPhotoUrl();
+
+		final PersonProgramStatus pps = personProgramStatusService
+				.getCurrent(id);
+		if (pps != null) {
+			currentProgramStatusName = pps.getProgramStatus().getName();
+		}
+
+		coach = person.getCoach();
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(final UUID id) {
+	public void setId(@NotNull final UUID id) {
 		this.id = id;
 	}
 
@@ -39,7 +83,7 @@ public class PersonSearchResult {
 		return schoolId;
 	}
 
-	public void setSchoolId(final String schoolId) {
+	public void setSchoolId(@NotNull final String schoolId) {
 		this.schoolId = schoolId;
 	}
 
@@ -47,7 +91,7 @@ public class PersonSearchResult {
 		return firstName;
 	}
 
-	public void setFirstName(final String firstName) {
+	public void setFirstName(@NotNull final String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -63,7 +107,7 @@ public class PersonSearchResult {
 		return lastName;
 	}
 
-	public void setLastName(final String lastName) {
+	public void setLastName(@NotNull final String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -75,4 +119,34 @@ public class PersonSearchResult {
 		this.photoUrl = photoUrl;
 	}
 
+	/**
+	 * @return the currentProgramStatusName
+	 */
+	public String getCurrentProgramStatusName() {
+		return currentProgramStatusName;
+	}
+
+	/**
+	 * @param currentProgramStatusName
+	 *            the currentProgramStatusName to set; optional
+	 */
+	public void setCurrentProgramStatusName(
+			final String currentProgramStatusName) {
+		this.currentProgramStatusName = currentProgramStatusName;
+	}
+
+	/**
+	 * @return the coach
+	 */
+	public Person getCoach() {
+		return coach;
+	}
+
+	/**
+	 * @param coach
+	 *            the coach to set; optional
+	 */
+	public void setCoach(final Person coach) {
+		this.coach = coach;
+	}
 }

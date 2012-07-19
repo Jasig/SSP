@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 import java.util.Locale;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -72,6 +73,10 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 		}
 		query.add(terms);
+
+		// eager load program status
+		query.setFetchMode("personProgramStatus", FetchMode.JOIN);
+		query.setFetchMode("personProgramStatus.programStatus", FetchMode.JOIN);
 
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}

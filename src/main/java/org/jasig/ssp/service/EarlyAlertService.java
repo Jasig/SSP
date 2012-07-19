@@ -51,7 +51,7 @@ public interface EarlyAlertService
 	 * @throws ValidationException
 	 *             If any data was invalid.
 	 */
-	public void sendMessageToStudent(@NotNull final EarlyAlert earlyAlert)
+	void sendMessageToStudent(@NotNull final EarlyAlert earlyAlert)
 			throws ObjectNotFoundException, SendFailedException,
 			ValidationException;
 
