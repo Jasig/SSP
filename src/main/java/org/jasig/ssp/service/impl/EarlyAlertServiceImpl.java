@@ -127,18 +127,6 @@ public class EarlyAlertServiceImpl extends // NOPMD
 					e);
 		}
 
-		// Send e-mail to student
-		try {
-			sendMessageToStudent(saved);
-		} catch (final SendFailedException e) {
-			LOGGER.warn(
-					"Could not send Early Alert confirmation to the student.",
-					e);
-			throw new ValidationException(
-					"Early Alert e-mail could not be sent to the student. Early Alert was NOT created.",
-					e);
-		}
-
 		// Send e-mail CONFIRMATION to faculty
 		try {
 			sendConfirmationMessageToFaculty(saved);
@@ -323,16 +311,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 	}
 
-	/**
-	 * Send e-mail ({@link Message}) to the student.
-	 * 
-	 * @param earlyAlert
-	 *            Early Alert
-	 * @throws ObjectNotFoundException
-	 * @throws SendFailedException
-	 * @throws ValidationException
-	 */
-	private void sendMessageToStudent(@NotNull final EarlyAlert earlyAlert)
+	@Override
+	public void sendMessageToStudent(@NotNull final EarlyAlert earlyAlert)
 			throws ObjectNotFoundException, SendFailedException,
 			ValidationException {
 		if (earlyAlert == null) {

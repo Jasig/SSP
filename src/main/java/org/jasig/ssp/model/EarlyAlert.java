@@ -102,7 +102,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	/**
 	 * @param courseName
-	 *            the courseName to set
+	 *            the courseName to set; optional; max length 80 characters
 	 */
 	public void setCourseName(final String courseName) {
 		this.courseName = courseName;
@@ -117,7 +117,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	/**
 	 * @param courseTitle
-	 *            the courseTitle to set
+	 *            the courseTitle to set; optional; max length 255 characters
 	 */
 	public void setCourseTitle(final String courseTitle) {
 		this.courseTitle = courseTitle;
@@ -132,7 +132,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	/**
 	 * @param emailCC
-	 *            the emailCC to set
+	 *            the emailCC to set; optional; max length 255 characters
 	 */
 	public void setEmailCC(final String emailCC) {
 		this.emailCC = emailCC;
@@ -162,7 +162,8 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	/**
 	 * @param earlyAlertReasonOtherDescription
-	 *            the earlyAlertReasonOtherDescription to set
+	 *            the earlyAlertReasonOtherDescription to set; optional; max
+	 *            length 64000 characters
 	 */
 	public void setEarlyAlertReasonOtherDescription(
 			final String earlyAlertReasonOtherDescription) {
@@ -178,7 +179,8 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	/**
 	 * @param earlyAlertSuggestionOtherDescription
-	 *            the earlyAlertSuggestionOtherDescription to set
+	 *            the earlyAlertSuggestionOtherDescription to set; optional; max
+	 *            length 64000 characters
 	 */
 	public void setEarlyAlertSuggestionOtherDescription(
 			final String earlyAlertSuggestionOtherDescription) {
@@ -194,7 +196,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	/**
 	 * @param comment
-	 *            the comment to set
+	 *            the comment; optional; max length 64000 characters
 	 */
 	public void setComment(final String comment) {
 		this.comment = comment;

@@ -131,7 +131,7 @@ public class EarlyAlertServiceTest {
 		messageService.sendQueuedMessages();
 
 		// assert
-		assertEquals("Sent message count did not match.", 3,
+		assertEquals("Sent message count did not match.", 2,
 				smtpServer.getReceivedEmailSize());
 		final SmtpMessage message = (SmtpMessage) smtpServer
 				.getReceivedEmail()
@@ -253,8 +253,8 @@ public class EarlyAlertServiceTest {
 
 		// assert
 		assertEquals(
-				"Sent message count should have contained the 3 main ones plus 2 routed messages.",
-				5, smtpServer.getReceivedEmailSize());
+				"Sent message count should have contained the 2 main ones plus 2 routed messages.",
+				4, smtpServer.getReceivedEmailSize());
 	}
 
 	@Test
@@ -279,8 +279,8 @@ public class EarlyAlertServiceTest {
 
 		// assert
 		assertEquals(
-				"Sent message count should have only been the 3 main ones, and no extra routes.",
-				3, smtpServer.getReceivedEmailSize());
+				"Sent message count should have only been the 2 main ones, and no extra routes.",
+				2, smtpServer.getReceivedEmailSize());
 	}
 
 	/**

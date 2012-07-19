@@ -19,6 +19,7 @@ import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -78,11 +79,15 @@ public class GoalControllerIntegrationTest {
 	 * Test that the {@link GoalController#get(UUID, UUID)} action returns the
 	 * correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
+	 * 
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception { // NOPMD
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -100,15 +105,13 @@ public class GoalControllerIntegrationTest {
 	 * {@link GoalController#getAll(UUID, ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerAll() throws Exception { // NOPMD
-		final Collection<GoalTO> list = controller.getAll(
-				PERSON_ID,
-				ObjectStatus.ACTIVE,
-				null, null, null, null).getRows();
+	public void testControllerAll() throws ObjectNotFoundException {
+		final Collection<GoalTO> list = controller.getAll(PERSON_ID,
+				ObjectStatus.ACTIVE, null, null, null, null).getRows();
 
 		assertNotNull("List should not have been null.", list);
 	}
@@ -117,11 +120,14 @@ public class GoalControllerIntegrationTest {
 	 * Test the {@link GoalController#create(UUID, GoalTO)} and
 	 * {@link GoalController#delete(UUID, UUID)} actions.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test()
-	public void testControllerCreateAndDelete() throws Exception { // NOPMD
+	public void testControllerCreateAndDelete() throws ValidationException,
+			ObjectNotFoundException {
 		// Now create Goal for testing
 		final GoalTO obj = new GoalTO();
 		obj.setName("NAME");

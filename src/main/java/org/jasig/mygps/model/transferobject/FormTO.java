@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Student Intake Form transfer object
+ */
 public class FormTO implements Serializable {
 
 	private static final long serialVersionUID = -1978459152865190470L;
@@ -14,8 +17,8 @@ public class FormTO implements Serializable {
 
 	private List<FormSectionTO> sections;
 
-	public FormSectionTO getFormSectionById(UUID formSectionId) {
-		for (FormSectionTO formSectionTO : getSections()) {
+	public FormSectionTO getFormSectionById(final UUID formSectionId) {
+		for (final FormSectionTO formSectionTO : getSections()) {
 			if (formSectionTO.getId().equals(formSectionId)) {
 				return formSectionTO;
 			}
@@ -27,7 +30,7 @@ public class FormTO implements Serializable {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(final UUID id) {
 		this.id = id;
 	}
 
@@ -35,7 +38,7 @@ public class FormTO implements Serializable {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(final String label) {
 		this.label = label;
 	}
 
@@ -43,7 +46,7 @@ public class FormTO implements Serializable {
 		return sections;
 	}
 
-	public void setSections(List<FormSectionTO> sections) {
+	public void setSections(final List<FormSectionTO> sections) {
 		this.sections = sections;
 	}
 }
