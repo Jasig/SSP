@@ -165,7 +165,7 @@ public class EarlyAlertResponseServiceTest {
 		messageService.sendQueuedMessages();
 
 		// assert
-		assertEquals("Sent message count did not match.", 4,
+		assertEquals("Sent message count did not match.", 3,
 				smtpServer.getReceivedEmailSize());
 		final SmtpMessage message = (SmtpMessage) smtpServer
 				.getReceivedEmail()

@@ -1,9 +1,10 @@
-package org.jasig.ssp.web.api;
+package org.jasig.ssp.web.api; // NOPMD
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Set;
@@ -123,6 +124,36 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 		assertTrue("List should not have been null.", list.isEmpty());
 	}
 
+	@Test(expected = ValidationException.class)
+	public void testControllerCreateWithInvalidDataGetId()
+			throws ValidationException, ObjectNotFoundException {
+		final EarlyAlertResponseTO obj = new EarlyAlertResponseTO();
+		obj.setId(UUID.randomUUID());
+		controller.create(UUID.randomUUID(), UUID.randomUUID(), obj);
+		fail("Create with invalid Person UUID should have thrown exception.");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerCreateWithNullPerson()
+			throws ValidationException, ObjectNotFoundException {
+		controller.create(null, null, new EarlyAlertResponseTO());
+		fail("Null values should have thrown an exception.");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerCreateWithNull()
+			throws ValidationException, ObjectNotFoundException {
+		controller.create(null, null, null);
+		fail("Null values should have thrown an exception.");
+	}
+
+	@Test(expected = ValidationException.class)
+	public void testControllerSaveWithNull()
+			throws ValidationException, ObjectNotFoundException {
+		controller.save(null, null, null, null);
+		fail("Null values should have thrown an exception.");
+	}
+
 	/**
 	 * Test the
 	 * {@link PersonEarlyAlertResponseController#create(UUID, UUID, EarlyAlertResponseTO)}
@@ -194,6 +225,52 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 		} catch (final ObjectNotFoundException exc) { // NOPMD by jon.adams
 			// expected
 		}
+	}
+
+	/**
+	 * Test the
+	 * {@link PersonEarlyAlertResponseController#save(UUID, UUID, UUID, EarlyAlertResponseTO)}
+	 * action.
+	 * 
+	 * @throws Exception
+	 *             Thrown if the controller throws any exceptions.
+	 */
+	@Test()
+	public void testControllerSmokeTestSave() throws Exception { // NOPMD
+		// arrange
+		final EarlyAlertTO earlyAlert = earlyAlertController.create(PERSON_ID,
+				PersonEarlyAlertControllerIntegrationTest.createEarlyAlert());
+
+		// Create EarlyAlertResponse for testing
+		final EarlyAlertResponseTO obj = new EarlyAlertResponseTO();
+		obj.setEarlyAlertId(earlyAlert.getId());
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setEarlyAlertOutcomeOtherDescription("some string");
+		obj.setEarlyAlertOutcomeId(EARLY_ALERT_OUTCOME_ID);
+
+		final Set<UUID> earlyAlertReferralIds = Sets.newHashSet();
+		earlyAlertReferralIds.add(EARLY_ALERT_REFERRAL_ID);
+		obj.setEarlyAlertReferralIds(earlyAlertReferralIds);
+
+		final EarlyAlertResponseTO saved = controller.create(PERSON_ID,
+				earlyAlert.getId(), obj);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		session.clear();
+
+		saved.setComment("new comment");
+
+		// act
+		final EarlyAlertResponseTO updated = controller.save(saved.getId(),
+				PERSON_ID, saved.getEarlyAlertId(), saved);
+		session.flush();
+		session.clear();
+		final EarlyAlertResponseTO reloaded = controller.get(updated.getId(),
+				PERSON_ID);
+
+		// assert
+		assertEquals("Updated data did not match.", "new comment",
+				reloaded.getComment());
 	}
 
 	/**

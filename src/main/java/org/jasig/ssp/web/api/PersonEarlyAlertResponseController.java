@@ -126,6 +126,11 @@ public class PersonEarlyAlertResponseController extends
 
 		checkPermissionForOp("WRITE");
 
+		if (obj == null) {
+			throw new IllegalArgumentException(
+					"EarlyAlertResponse is required.");
+		}
+
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send with an ID to the create method. Did you mean to use the save method instead?");

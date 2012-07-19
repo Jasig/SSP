@@ -126,7 +126,7 @@ public class EarlyAlertSuggestionTO extends
 	public static Set<EarlyAlertSuggestionTO> toTOSet(
 			@NotNull final Collection<EarlyAlertSuggestion> models) {
 		final Set<EarlyAlertSuggestionTO> tObjects = Sets.newHashSet();
-		for (EarlyAlertSuggestion model : models) {
+		for (final EarlyAlertSuggestion model : models) {
 			tObjects.add(new EarlyAlertSuggestionTO(model)); // NOPMD by jon
 		}
 

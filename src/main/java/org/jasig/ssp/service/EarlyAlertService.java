@@ -4,7 +4,11 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.EarlyAlert;
+import org.jasig.ssp.model.Message;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
@@ -30,6 +34,26 @@ public interface EarlyAlertService
 
 	Map<UUID, Number> getCountOfActiveAlertsForPeopleIds(
 			final Collection<UUID> peopleIds);
+
+	/**
+	 * Send e-mail ({@link Message}) to the student.
+	 * 
+	 * <p>
+	 * This method is not called during the {@link #create(EarlyAlert)} action.
+	 * It must be called by the calling code.
+	 * 
+	 * @param earlyAlert
+	 *            Early Alert
+	 * @throws ObjectNotFoundException
+	 *             If reference data could not be found.
+	 * @throws SendFailedException
+	 *             If message send action failed.
+	 * @throws ValidationException
+	 *             If any data was invalid.
+	 */
+	public void sendMessageToStudent(@NotNull final EarlyAlert earlyAlert)
+			throws ObjectNotFoundException, SendFailedException,
+			ValidationException;
 
 	/**
 	 * Fills early alert parameters for messages.
