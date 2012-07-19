@@ -19,10 +19,10 @@
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
 	<context:component-scan base-package="org.jasig.ssp" />
 
-	<sec:ldap-server 
+	<!-- sec:ldap-server 
 			ldif="classpath:org/jasig/ssp/security/users.ldif" 
 			root="dc=springframework,dc=org"
-			port="33389"/>
+			port="33389" -->
 
 	<bean id="securityService"
 		class="org.jasig.ssp.service.impl.SecurityServiceImpl" />
