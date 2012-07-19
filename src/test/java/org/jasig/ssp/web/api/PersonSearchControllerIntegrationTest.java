@@ -76,7 +76,7 @@ public class PersonSearchControllerIntegrationTest {
 	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerAll() throws ObjectNotFoundException {
+	public void testControllerSearch() throws ObjectNotFoundException {
 		final PagedResponse<PersonSearchResultTO> results = controller.search(
 				PERSON_LAST_NAME, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0,
 				10, null, null);
@@ -98,6 +98,22 @@ public class PersonSearchControllerIntegrationTest {
 		controller.search(PERSON_LAST_NAME, UUID.randomUUID(), Boolean.FALSE,
 				ObjectStatus.ACTIVE, 0, 10, null, null);
 		fail("Create with invalid ProgramStatus UUID should have thrown exception.");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerSearchWithNullTerm()
+			throws ObjectNotFoundException {
+		controller.search(null, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0, 10,
+				null, null);
+		fail("Invalid search should have thrown exception.");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testControllerSearchWithEmptyTerm()
+			throws ObjectNotFoundException {
+		controller.search(" ", null, Boolean.TRUE, ObjectStatus.ACTIVE, 0, 10,
+				null, null);
+		fail("Invalid search should have thrown exception.");
 	}
 
 	/**

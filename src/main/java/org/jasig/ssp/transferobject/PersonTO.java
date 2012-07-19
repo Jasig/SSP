@@ -80,7 +80,7 @@ public class PersonTO // NOPMD
 
 	private ReferenceLiteTO<StudentType> studentType;
 
-	private PersonLiteTO coach;
+	private CoachPersonLiteTO coach;
 
 	private String strengths;
 
@@ -159,9 +159,9 @@ public class PersonTO // NOPMD
 		if (coachPerson == null) {
 			coach = null; // NOPMD
 		} else {
-			coach = new PersonLiteTO(coachPerson.getId(),
-					coachPerson.getFirstName(),
-					coachPerson.getLastName());
+			coach = new CoachPersonLiteTO(coachPerson.getId(),
+					coachPerson.getFirstName(), coachPerson.getLastName(),
+					coachPerson.getPrimaryEmailAddress(), null, null);
 		}
 
 		strengths = model.getStrengths();
@@ -514,11 +514,11 @@ public class PersonTO // NOPMD
 		this.serviceReasons = serviceReasons;
 	}
 
-	public PersonLiteTO getCoach() {
+	public CoachPersonLiteTO getCoach() {
 		return coach;
 	}
 
-	public void setCoach(final PersonLiteTO coach) {
+	public void setCoach(final CoachPersonLiteTO coach) {
 		this.coach = coach;
 	}
 
@@ -559,7 +559,8 @@ public class PersonTO // NOPMD
 		return registeredForCurrentTerm;
 	}
 
-	public void setRegisteredForCurrentTerm(boolean registeredForCurrentTerm) {
+	public void setRegisteredForCurrentTerm(
+			final boolean registeredForCurrentTerm) {
 		this.registeredForCurrentTerm = registeredForCurrentTerm;
 	}
 

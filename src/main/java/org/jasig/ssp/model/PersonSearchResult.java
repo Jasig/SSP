@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
+import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.web.api.PersonSearchController;
 
@@ -30,7 +31,7 @@ public class PersonSearchResult {
 
 	private String currentProgramStatusName;
 
-	private Person coach;
+	private CoachPersonLiteTO coach;
 
 	public PersonSearchResult() {
 		super();
@@ -68,7 +69,7 @@ public class PersonSearchResult {
 			currentProgramStatusName = pps.getProgramStatus().getName();
 		}
 
-		coach = person.getCoach();
+		coach = new CoachPersonLiteTO(person.getCoach());
 	}
 
 	public UUID getId() {
@@ -138,7 +139,7 @@ public class PersonSearchResult {
 	/**
 	 * @return the coach
 	 */
-	public Person getCoach() {
+	public CoachPersonLiteTO getCoach() {
 		return coach;
 	}
 
@@ -146,7 +147,7 @@ public class PersonSearchResult {
 	 * @param coach
 	 *            the coach to set; optional
 	 */
-	public void setCoach(final Person coach) {
+	public void setCoach(final CoachPersonLiteTO coach) {
 		this.coach = coach;
 	}
 }
