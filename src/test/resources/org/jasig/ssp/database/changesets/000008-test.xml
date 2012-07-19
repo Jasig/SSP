@@ -79,7 +79,6 @@
 		</rollback>
 	</changeSet>
 
-
 	<changeSet id="test journal_track_journal_step data" author="jon.adams">
 		<insert tableName="journal_track_journal_step">
 			<column name="id" value="68d1da33-152e-4848-9006-2fd2424054a9" />
@@ -94,6 +93,44 @@
 		<rollback>
 			<delete tableName="journal_track_journal_step">
 				<where>id='68d1da33-152e-4848-9006-2fd2424054a9'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="test early_alert data" author="jon.adams">
+		<insert tableName="early_alert">
+			<column name="id" value="74891747-36aa-409c-8b1f-76d3eaf9028e" />
+			<column name="created_date" valueDate="2012-07-19T00:00:00" />
+			<column name="modified_date" valueDate="2012-07-19T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="course_name" value="Course Name" />
+			<column name="course_title" value="Course Title" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert">
+				<where>id='74891747-36aa-409c-8b1f-76d3eaf9028e'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add inactive early_alert_suggestion" author="jon.adams">
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="881DF3DD-1AA6-4CB8-8817-E95DAF49227A" />
+			<column name="name" value="Test deleted suggestion - should never be seen" />
+			<column name="description" value="TEST" />
+			<column name="created_date" valueDate="2012-07-19T12:00:00" />
+			<column name="modified_date" valueDate="2012-07-19T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="2" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert_suggestion">
+				<where>id='881DF3DD-1AA6-4CB8-8817-E95DAF49227A'</where>
 			</delete>
 		</rollback>
 	</changeSet>

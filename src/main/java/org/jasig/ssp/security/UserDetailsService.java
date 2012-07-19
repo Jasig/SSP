@@ -17,10 +17,8 @@ import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.ldap.userdetails.UserDetailsContextMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
  * ldap, uportal, etc...
  *
  */
-public class UserDetailsService implements AuthenticationUserDetailsService,
-		UserDetailsContextMapper {
+public class UserDetailsService implements SspUserDetailsService {
 
 	@Autowired
 	private transient PersonAttributesService personAttributesService;
@@ -65,7 +62,8 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 		return permission;
 	}
 
-	private UserDetails loadUserDetails(final String username,
+	@Override
+	public UserDetails loadUserDetails(final String username,
 			final Collection<GrantedAuthority> authorities) {
 		Person person = null;
 		try {
@@ -148,6 +146,12 @@ public class UserDetailsService implements AuthenticationUserDetailsService,
 	public void mapUserToContext(final UserDetails user,
 			final DirContextAdapter ctx) {
 		throw new UnsupportedOperationException("Not applicable");
+	}
+
+	@Override
+	public void setPersonAttributesService(
+			final PersonAttributesService personAttributesService) {
+		this.personAttributesService = personAttributesService;
 	}
 
 }

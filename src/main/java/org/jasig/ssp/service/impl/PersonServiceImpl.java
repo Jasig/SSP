@@ -76,7 +76,13 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public Person getByStudentId(final String studentId)
 			throws ObjectNotFoundException {
-		final Person person = dao.getByStudentId(studentId);
+
+		Person person = dao.getByStudentId(studentId);
+
+		if (person == null) {
+			// :TODO look up person in external_person table
+		}
+
 		return additionalAttribsForStudent(person);
 	}
 

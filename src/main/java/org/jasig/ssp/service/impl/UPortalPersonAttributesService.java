@@ -166,7 +166,7 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 		} catch (final Exception e) {
 			final String msg = "Failed to search for users with the specified query:  "
 					+ query;
-			throw new RuntimeException(msg, e);
+			throw new PersonAttributesSearchException(msg, e);
 		}
 
 		final List<Map<String, Object>> rslt = value
@@ -175,7 +175,7 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 			// Odd... should at least be an empty list
 			final String msg = "Search for users returned no list for the specified query:  "
 					+ query;
-			throw new RuntimeException(msg);
+			throw new PersonAttributesSearchException(msg);
 		}
 
 		LOGGER.debug("Retrieved the following people for query {}:  {}",

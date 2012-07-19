@@ -103,6 +103,20 @@ public class PersonController extends RestController<PersonTO, Person> {
 		return new PersonTO(model);
 	}
 
+	@RequestMapping(value = "/bySchoolId/{id}", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	public @ResponseBody
+	PersonTO bySchoolId(final @PathVariable String id)
+			throws ObjectNotFoundException {
+
+		final Person model = service.getByStudentId(id);
+		if (model == null) {
+			return null;
+		}
+
+		return new PersonTO(model);
+	}
+
 	@Override
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)

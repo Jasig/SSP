@@ -133,4 +133,25 @@
 		</addColumn>
 	</changeSet>
 
+	<changeSet
+		id="move sample deleted early_alert_suggestion to test scripts"
+		author="jon.adams">
+		<delete tableName="early_alert_suggestion">
+			<where>id='881DF3DD-1AA6-4CB8-8817-E95DAF49227A'</where>
+		</delete>
+		<rollback>
+			<insert tableName="early_alert_suggestion">
+				<column name="id" value="881DF3DD-1AA6-4CB8-8817-E95DAF49227A" />
+				<column name="name" value="Test deleted suggestion - should never be seen" />
+				<column name="description" value="TEST" />
+				<column name="created_date" valueDate="2012-07-19T12:00:00" />
+				<column name="modified_date" valueDate="2012-07-19T12:00:00" />
+				<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+				<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+				<column name="object_status" value="2" />
+				<column name="sort_order" value="100" />
+			</insert>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

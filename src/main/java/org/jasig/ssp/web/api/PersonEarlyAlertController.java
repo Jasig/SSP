@@ -2,7 +2,9 @@ package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
@@ -70,10 +72,16 @@ public class PersonEarlyAlertController extends
 	@Override
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	EarlyAlertTO get(final @PathVariable UUID id,
-			@PathVariable final UUID personId) throws ObjectNotFoundException,
+	EarlyAlertTO get(final @PathVariable @NotNull UUID id,
+			@PathVariable @NotNull final UUID personId)
+			throws ObjectNotFoundException,
 			ValidationException {
-		return super.get(id, personId);
+		if (personId == null) {
+			throw new ValidationException("Missing personId in path.");
+		}
+
+		final Person person = personService.get(personId);
+		return super.get(id, person.getId());
 	}
 
 	@Override
@@ -82,7 +90,27 @@ public class PersonEarlyAlertController extends
 	EarlyAlertTO create(@PathVariable final UUID personId,
 			@Valid @RequestBody final EarlyAlertTO obj)
 			throws ValidationException, ObjectNotFoundException {
-		return super.create(personId, obj);
+		final EarlyAlertTO earlyAlertTO = super.create(personId, obj);
+		if (obj.getSendEmailToStudent() != null
+				&& Boolean.TRUE.equals(obj.getSendEmailToStudent())) {
+			try {
+				service.sendMessageToStudent(factory.from(earlyAlertTO));
+			} catch (final SendFailedException exc) {
+				LOGGER.error(
+						"Send message failed when creating a new early alert. Early Alert was created, but message was not succesfully sent to student.",
+						exc);
+			} catch (final ObjectNotFoundException exc) {
+				LOGGER.error(
+						"Send message failed when creating a new early alert. Early Alert was created, but message was not succesfully sent to student.",
+						exc);
+			} catch (final ValidationException exc) {
+				LOGGER.error(
+						"Send message failed when creating a new early alert. Early Alert was created, but message was not succesfully sent to student.",
+						exc);
+			}
+		}
+
+		return earlyAlertTO;
 	}
 
 	@Override

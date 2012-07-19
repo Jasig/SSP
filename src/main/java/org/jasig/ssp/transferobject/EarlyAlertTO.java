@@ -16,11 +16,9 @@ import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
  * Early Alert transfer object
  * 
  * @author jon.adams
- * 
  */
-public class EarlyAlertTO
-		extends AbstractAuditableTO<EarlyAlert>
-		implements TransferObject<EarlyAlert>, Serializable {
+public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
+		TransferObject<EarlyAlert>, Serializable {
 
 	private static final long serialVersionUID = -3197180145189755870L;
 
@@ -47,6 +45,8 @@ public class EarlyAlertTO
 	private Set<EarlyAlertReasonTO> earlyAlertReasonIds;
 
 	private Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds;
+
+	private Boolean sendEmailToStudent = Boolean.FALSE;
 
 	/**
 	 * Empty constructor
@@ -298,5 +298,24 @@ public class EarlyAlertTO
 	public void setEarlyAlertSuggestionIds(
 			final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds) {
 		this.earlyAlertSuggestionIds = earlyAlertSuggestionIds;
+	}
+
+	/**
+	 * For the create API method, if true, will send a message to the student.
+	 * 
+	 * @return If true, will send a message to student for the created Early
+	 *         Alert.
+	 */
+	public Boolean getSendEmailToStudent() {
+		return sendEmailToStudent;
+	}
+
+	/**
+	 * @param sendEmailToStudent
+	 *            If true, will send a message to student for the created Early
+	 *            Alert. Null values will default to false.
+	 */
+	public void setSendEmailToStudent(final Boolean sendEmailToStudent) {
+		this.sendEmailToStudent = sendEmailToStudent;
 	}
 }

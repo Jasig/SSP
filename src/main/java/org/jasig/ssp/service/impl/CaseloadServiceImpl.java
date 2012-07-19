@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.dao.CaseloadDao;
 import org.jasig.ssp.model.Appointment;
 import org.jasig.ssp.model.CaseloadRecord;
@@ -40,9 +42,8 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 	@Override
 	public PagingWrapper<CaseloadRecord> caseLoadFor(
-			final ProgramStatus programStatus,
-			final Person coach, final SortingAndPaging sAndP)
-			throws ObjectNotFoundException {
+			final ProgramStatus programStatus, @NotNull final Person coach,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		ProgramStatus programStatusOrDefault;
 
@@ -58,7 +59,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 				programStatusOrDefault, coach, sAndP);
 
 		final List<UUID> peopleIds = Lists.newArrayList();
-		for (CaseloadRecord record : records) {
+		for (final CaseloadRecord record : records) {
 			peopleIds.add(record.getPersonId());
 		}
 
@@ -68,12 +69,13 @@ public class CaseloadServiceImpl implements CaseloadService {
 		final Map<UUID, Number> earlyAlertCounts = earlyAlertService
 				.getCountOfActiveAlertsForPeopleIds(peopleIds);
 
-		for (CaseloadRecord record : records) {
+		for (final CaseloadRecord record : records) {
 			if (appts.containsKey(record.getPersonId())) {
 				record.setCurrentAppointmentStartDate(appts
 						.get(record.getPersonId())
 						.getStartTime());
 			}
+
 			if (earlyAlertCounts.containsKey(record.getPersonId())) {
 				record.setNumberOfEarlyAlerts(earlyAlertCounts.get(record
 						.getPersonId()));
@@ -82,5 +84,4 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 		return records;
 	}
-
 }

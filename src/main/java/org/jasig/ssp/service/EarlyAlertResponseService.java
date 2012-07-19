@@ -1,7 +1,7 @@
 package org.jasig.ssp.service;
 
+import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -14,13 +14,15 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 public interface EarlyAlertResponseService
 		extends AuditableCrudService<EarlyAlertResponse> {
 	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
+	 * Retrieve every response in the database filtered by the supplied status
+	 * and early alert.
 	 * 
-	 * @param person
+	 * @param earlyAlert
 	 * @param sAndP
 	 *            Sorting and paging options
 	 * @return All entities in the database filtered by the supplied status.
 	 */
-	PagingWrapper<EarlyAlertResponse> getAllForPerson(Person person,
+	PagingWrapper<EarlyAlertResponse> getAllForEarlyAlert(
+			EarlyAlert earlyAlert,
 			SortingAndPaging sAndP);
 }
