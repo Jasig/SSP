@@ -14,25 +14,17 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
 		http://www.springframework.org/schema/util     http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 	
-	<tx:annotation-driven />
+	<import resource="classpath:test-config.xml"/>
 	
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
-	
+	<context:component-scan base-package="org.jasig.ssp" />
+
 	<sec:ldap-server 
 			ldif="classpath:org/jasig/ssp/security/users.ldif" 
 			root="dc=springframework,dc=org"
 			port="33389"/>
 
-	<bean id="ldapContextSource" class="org.springframework.ldap.core.support.LdapContextSource">
-		<property name="url" value="ldap://localhost:33389" />
-		<property name="base" value="dc=springframework,dc=org" />
-	</bean>
-
-	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
-		<constructor-arg ref="ldapContextSource" />
-	</bean>
-	
-	<bean id="ldapPersonAttributesService" 
-			class="org.jasig.ssp.service.impl.LdapPersonAttributesService"/>
+	<bean id="securityService"
+		class="org.jasig.ssp.service.impl.SecurityServiceImpl" />
 
 </beans>

@@ -9,10 +9,10 @@ import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.reference.ConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,40 +31,27 @@ public class SecurityServiceImpl implements SecurityService {
 	private transient PersonService personService;
 
 	@Override
-	public SspUser currentlyAuthenticatedUser() {
-		final SspUser sspUser = currentUser();
-
-		// Check for missing data or the anonymous user
-		return (sspUser == null)
-				|| SspUser.ANONYMOUS_PERSON_USERNAME.equals(sspUser
-						.getUsername()) || (sspUser.getPerson() == null) ? null
-				: sspUser;
-	}
-
-	@Override
 	public SspUser anonymousUser() {
+
+		LOGGER.debug("Using the Anonymous User");
+
 		final SspUser user = new SspUser(SspUser.ANONYMOUS_PERSON_USERNAME,
 				"", true, true, true, true,
 				new ArrayList<GrantedAuthority>(0));
-		try {
-			user.setPerson(personService
-					.personFromUsername(SspUser.ANONYMOUS_PERSON_USERNAME));
-		} catch (ObjectNotFoundException e) {
-			LOGGER.error("Anonymous User appears not to be configured");
-		}
+
+		user.setPerson(personService.load(SspUser.ANONYMOUS_PERSON_ID));
+
 		return user;
 	}
 
+	@Override
 	public SspUser noAuthAdminUser() {
+		LOGGER.debug("Using the No Authentication Admin User");
+
 		final SspUser user = new SspUser("no auth admin user", "", false,
 				false, false, false, new ArrayList<GrantedAuthority>(0));
 
-		try {
-			user.setPerson(personService.get(Person.SYSTEM_ADMINISTRATOR_ID));
-		} catch (ObjectNotFoundException e) {
-			throw new ConfigException(
-					"System Administrator not defined for Person Service", e);
-		}
+		user.setPerson(personService.load(Person.SYSTEM_ADMINISTRATOR_ID));
 
 		return user;
 	}
@@ -76,31 +63,39 @@ public class SecurityServiceImpl implements SecurityService {
 		// assumption: SecurityContext only returns null for Authentication when
 		// there is no actual web context
 
-		if (null == SecurityContextHolder.getContext().getAuthentication()) {
-			return noAuthAdminUser();
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		if (null == auth) {
+			// not authenticated, return null
+			return null;
 		}
 
-		if (SecurityContextHolder.getContext().getAuthentication()
-				.isAuthenticated()) {
-			final Object principal = SecurityContextHolder.getContext()
-					.getAuthentication().getPrincipal();
+		if (auth.isAuthenticated()) {
+			final Object principal = auth.getPrincipal();
 
 			if (principal instanceof SspUser) {
 				sspUser = (SspUser) principal;
+
 			} else if (principal instanceof String) {
+
 				if (SspUser.ANONYMOUS_PERSON_USERNAME.equals(principal)) {
 					sspUser = anonymousUser();
 				} else {
 					LOGGER.error("Just tried to get an sspUser object from a user that is "
 							+ principal);
+					// authenticated, but something is wrong with the principal
 					return null;
 				}
+
 			} else {
+				// authenticated, but something is wrong with the principal
 				LOGGER.error("Just tried to get an sspUser object from an object that is really a "
 						+ principal.toString());
 				return null;
 			}
 		} else {
+			// not authenticated, return null
 			return null;
 		}
 
@@ -122,21 +117,71 @@ public class SecurityServiceImpl implements SecurityService {
 	}
 
 	@Override
+	public SspUser currentFallingBackToAdmin() {
+		final SspUser user = currentUser();
+
+		if (null == user) {
+			return noAuthAdminUser();
+		} else {
+			return user;
+		}
+	}
+
+	@Override
+	public SspUser currentlyAuthenticatedUser() {
+		final SspUser sspUser = currentUser();
+
+		if (sspUser == null) {
+			LOGGER.trace("User is not authenticated");
+
+		} else if (SspUser.ANONYMOUS_PERSON_USERNAME.equals(sspUser
+				.getUsername())) {
+			LOGGER.trace("Is anonymous user");
+			return null;
+
+		} else if (sspUser.getPerson() == null) {
+			LOGGER.trace("User is not in the person table");
+			return null;
+
+		}
+
+		return sspUser;
+	}
+
+	@Override
 	public boolean isAuthenticated() {
-		return SecurityContextHolder.getContext().getAuthentication()
-				.isAuthenticated()
-				&& (currentUser() != null);
+		final boolean authenticated = (SecurityContextHolder.getContext()
+				.getAuthentication() != null)
+				&& SecurityContextHolder.getContext().getAuthentication()
+						.isAuthenticated();
+
+		final SspUser currentUser = currentUser();
+
+		if (authenticated) {
+			if ((currentUser == null)) {
+				LOGGER.trace("User is authenticated, but not in the person table");
+				return false;
+			} else {
+				LOGGER.trace("User is authenticated");
+				return true;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	@Override
 	public boolean hasAuthority(final String authority) {
-		final Collection<GrantedAuthority> authorities = currentUser()
-				.getAuthorities();
+
+		final Collection<GrantedAuthority> authorities = SecurityContextHolder
+				.getContext().getAuthentication().getAuthorities();
+
 		for (GrantedAuthority auth : authorities) {
 			if (auth.getAuthority().equalsIgnoreCase(authority)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 

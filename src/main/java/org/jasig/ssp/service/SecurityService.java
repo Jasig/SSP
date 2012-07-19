@@ -55,4 +55,18 @@ public interface SecurityService {
 	SspUser anonymousUser();
 
 	boolean hasAuthority(String authority);
+
+	/**
+	 * Explicitly return the Admin User with no permissions
+	 * 
+	 * @return System Admin User
+	 */
+	SspUser noAuthAdminUser();
+
+	/**
+	 * Return the current user, or if null, the admin
+	 * 
+	 * @return
+	 */
+	SspUser currentFallingBackToAdmin();
 }
