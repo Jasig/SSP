@@ -5,6 +5,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
     inject: {
+    	columnRendererUtils: 'columnRendererUtils',
     	sspConfig: 'sspConfig'
     },
     width: '100%',
@@ -22,7 +23,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
 				    fieldDefaults: {
 				        msgTarget: 'side',
 				        labelAlign: 'right',
-				        labelWidth: 125
+				        labelWidth: 200
 				    },
 				    defaultType: 'displayfield',
 				    items: [{
@@ -83,17 +84,21 @@ Ext.define('Ssp.view.tools.profile.Person', {
 					        name: 'programStatus',
 					        itemId: 'programStatus'
 					    }, {
-					        fieldLabel: 'Registration Status',
-					        name: 'registrationStatus'
+					        fieldLabel: 'Registered for Current Term',
+					        name: 'registeredForCurrentTerm',
+					        renderer: me.columnRendererUtils.renderFriendlyBoolean
 					    }, {
 					        fieldLabel: 'Payment Status',
-					        name: 'paymentStatus'
+					        name: 'paymentStatus',
+					        hidden: true
 					    }, {
 					        fieldLabel: 'CUM GPA',
-					        name: 'cumGPA'
+					        name: 'cumGPA',
+					        hidden: true
 					    },{
 					        fieldLabel: 'Academic Program',
-					        name: 'academicPrograms'
+					        name: 'academicPrograms',
+					        hidden: true
 					    }]
 					    }],
 				});

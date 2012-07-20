@@ -77,7 +77,8 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 
 		me.getView().loadRecord( this.person );
 		
-		me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );
+		// me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );
+		me.getRetrieveFromExternalButton().setVisible( false );
 		
 		return me.callParent(arguments);
     },
