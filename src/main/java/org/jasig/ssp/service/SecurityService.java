@@ -66,7 +66,7 @@ public interface SecurityService {
 	/**
 	 * Return the current user, or if null, the admin
 	 * 
-	 * @return
+	 * @return the current user, or if null, the admin
 	 */
 	SspUser currentFallingBackToAdmin();
 }
