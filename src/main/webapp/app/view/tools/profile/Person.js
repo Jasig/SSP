@@ -84,16 +84,19 @@ Ext.define('Ssp.view.tools.profile.Person', {
 					        itemId: 'programStatus'
 					    }, {
 					        fieldLabel: 'Registration Status',
-					        name: 'registrationStatus'
+					        name: 'registeredForCurrentTerm'
 					    }, {
 					        fieldLabel: 'Payment Status',
-					        name: 'paymentStatus'
+					        name: 'paymentStatus',
+					        hidden: true
 					    }, {
 					        fieldLabel: 'CUM GPA',
-					        name: 'cumGPA'
+					        name: 'cumGPA',
+					        hidden: true
 					    },{
 					        fieldLabel: 'Academic Program',
-					        name: 'academicPrograms'
+					        name: 'academicPrograms',
+					        hidden: true
 					    }]
 					    }],
 				});
