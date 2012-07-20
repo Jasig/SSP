@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/1/person/{personId}/earlyAlert/{earlyAlertId}/response")
 public class PersonEarlyAlertResponseController extends
-		BaseController {
+		AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonEarlyAlertResponseController.class);

@@ -23,7 +23,7 @@ import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.AbstractBaseController;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/1/mygps/task")
-public class MyGpsTaskController extends BaseController {
+public class MyGpsTaskController extends AbstractBaseController {
 
 	@Autowired
 	private transient SecurityService securityService;

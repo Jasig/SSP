@@ -1,4 +1,4 @@
-package org.jasig.ssp.web.api.reports;
+package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -46,7 +46,7 @@ import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.reports.StudentHistoryTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +68,7 @@ import com.google.common.collect.Maps;
 // TODO: Add PreAuthorize
 @Controller
 @RequestMapping("/1/report/{personId}/History")
-public class PersonHistoryReportController extends BaseController {
+public class PersonHistoryReportController extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonHistoryReportController.class);

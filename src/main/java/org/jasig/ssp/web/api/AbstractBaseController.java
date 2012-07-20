@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Base controller that provides basic exceptions and loggers, that all
  * controllers in the system must extend.
  */
-public abstract class BaseController {
+public abstract class AbstractBaseController {
 
 	private static final String ERROR_PREFIX = "Error: ";
 

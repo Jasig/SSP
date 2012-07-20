@@ -1,6 +1,6 @@
 package org.jasig.mygps.portlet;
 
-import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -10,7 +10,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @Controller
 @RequestMapping("VIEW")
 public class MyGpsSelfHelpGuidePortletController extends
-		BaseController {
+		AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsSelfHelpGuidePortletController.class);
