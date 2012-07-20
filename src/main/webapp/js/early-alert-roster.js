@@ -2,39 +2,79 @@
 var ssp = ssp || {};
 
 (function($, fluid) {
-	
-	// TODO:  replace w/ ajax...
-    var mockCourses = [
-        { title: 'ENGLISH - 124 - 001 - Academic Writing and Literature', id: '001' },
-        { title: 'ENGLISH - 125 - 012 - Writing and Academic Inquiry', id: '002' },
-        { title: 'ENGLISH - 223 - 003 - Creative Writing', id: '003' },
-        { title: 'ENGLISH - 225 - 010 - Academic Argumentation', id: '004' }
-    ];
-
-    // TODO:  replace w/ ajax...
-    var mockRoster = [
-        { firstName: 'James', middleInitial: 'K', lastName: 'Polk', studentType: 'ARC' },
-        { firstName: 'George', middleInitial: 'W', lastName: 'Bush', studentType: 'ARC' },
-        { firstName: 'Franklin', middleInitial: 'D', lastName: 'Roosevelt', studentType: 'ARC' },
-        { firstName: 'Warren', middleInitial: 'G', lastName: 'Harding', studentType: 'ARC' },
-        { firstName: 'Harry', middleInitial: 'S', lastName: 'Truman', studentType: 'ARC' },
-        { firstName: 'Dwight', middleInitial: 'D', lastName: 'Eisenhower', studentType: 'ARC' },
-        { firstName: 'Ulysses', middleInitial: 'S', lastName: 'Grant', studentType: 'ARC' },
-        { firstName: 'Chester', middleInitial: 'A', lastName: 'Arthur', studentType: 'ARC' },
-        { firstName: 'Lyndon', middleInitial: 'B', lastName: 'Johnson', studentType: 'ARC' },
-        { firstName: 'Gerald', middleInitial: 'R', lastName: 'Ford', studentType: 'ARC' },
-        { firstName: 'John', middleInitial: 'F', lastName: 'Kennedy', studentType: 'ARC' },
-        { firstName: 'Richard', middleInitial: 'M', lastName: 'Nixon', studentType: 'ARC' },
-        { firstName: 'William', middleInitial: 'J', lastName: 'Clinton', studentType: 'ARC' }
-    ];
 
     ssp.EarlyAlertRoster = function(container, options) {
-		
+    	
         // construct the new component
         var that = fluid.initView('ssp.EarlyAlertRoster', container, options);
 
+        /*
+         * Course List Data Function
+         */
+        var getCourseListData = function() {
+        	var rslt = [];
+            $.ajax({
+                url: options.urls.courseList,
+                async: false,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Display the error
+                    var response = $.parseJSON(jqXHR.responseText);
+                    showError(jqXHR.status + ': ' + errorThrown, response.message);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    rslt = data.rows;
+                },
+                type: 'GET'
+            });
+            return rslt;
+        };
+		
+        /*
+         * Roster Data Function
+         */
+        var getRosterData = function() {
+        	var rslt = [];
+        	var formattedCourse = that.locate('courseSelect').val();
+        	if (formattedCourse) {
+                $.ajax({
+                    url: options.urls.roster.replace('FORMATTEDCOURSE', formattedCourse),
+                    async: false,
+                    dataType: 'json',
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Display the error
+                        var response = $.parseJSON(jqXHR.responseText);
+                        showError(jqXHR.status + ': ' + errorThrown, response.message);
+                    },
+                    success: function(data, textStatus, jqXHR) {
+                        rslt = data.rows;
+                    },
+                    type: 'GET'
+                });
+        	}
+            return rslt;
+        };
+
+        /*
+         * Error Handling Functions
+         */
+        var showError = function(title, body) {
+            var err = that.locate('errorTemplate').clone();
+            err.removeClass('error-message-template').addClass('error-message');
+            err.find('.error-title').html(title);
+            err.find('.error-body').html(body);
+            err.appendTo(that.locate('errorsDiv'));
+            err.slideDown(1000);
+        };
+        var clearErrors = function() {
+            $(that.locate('errorsDiv')).html('');
+        };
+
+        /*
+         * Roster Management Functions
+         */
         var loadRoster = function() {
-            var data = that.options.dataFunction(that);
+            var data = getRosterData();
             var newModel = fluid.copy(that.pager.model);
             newModel.totalRange = data.length;
             newModel.pageIndex = 0;
@@ -47,6 +87,7 @@ var ssp = ssp || {};
         }
 
         var refreshRoster = function() {
+        	clearErrors();
         	var roster = that.locate('roster');
             var loadingMessage = that.locate('loadingMessage');
             roster.slideUp(500, function() {
@@ -59,29 +100,23 @@ var ssp = ssp || {};
             });
         };
         
-        // Courses Select
+        // Initialize the courseSelect
         var courseSelect = that.locate('courseSelect');
-        $(mockCourses).each(function(index, course) {
-            courseSelect.append('<option value="' + course.id  + '">' + course.title + '</option>');
+        var courses = getCourseListData();
+        $(courses).each(function(index, course) {
+            courseSelect.append('<option value="' + course.formattedCourse  + '">' + course.formattedCourse + ' - ' + course.title + '</option>');
         });
         courseSelect.change(refreshRoster);
-        
-        // Click event for selecting a student
-        $(container + ' ' + that.options.selectors.rosterTable + ' tr').live('click', function() {
-            var studentId = $(this).find('td:first').text();  // TODO:  Fix!
-            var courseId = $(this).find('td:first').text();  // TODO:  Fix!
-            var alertFormUrl = that.options.enterAlertUrl.replace('STUDENTID', studentId).replace('COURSEID', courseId);
-            window.location = alertFormUrl;
-        });
-        
-        // Pager
+
+        // Initialize the courseSelect
         var pagerOptions = {
-            dataModel: that.options.dataFunction(that),
+            dataModel: getRosterData(),
             columnDefs: [
                 { key: 'firstName', valuebinding: '*.firstName', sortable: true },
-                { key: 'middleInitial', valuebinding: '*.middleInitial', sortable: true },
+                { key: 'middleName', valuebinding: '*.middleName', sortable: true },
                 { key: 'lastName', valuebinding: '*.lastName', sortable: true },
-                { key: 'studentType', valuebinding: '*.studentType', sortable: true }
+                { key: 'studentType', valuebinding: '*.studentType', sortable: true },
+                { key: 'studentId', valuebinding: '*.id', sortable: true }
             ],
             bodyRenderer: {
                 type: 'fluid.pager.selfRender',
@@ -101,20 +136,26 @@ var ssp = ssp || {};
             }
         };
         that.pager = fluid.pager(container, pagerOptions);
+
+        // Click event for selecting a student
+        $(container + ' ' + that.options.selectors.rosterTable + ' tr').live('click', function() {
+            var studentId = $(this).find('.studentId').text();
+            var formattedCourse = that.locate('courseSelect').val();
+            var alertFormUrl = options.urls.enterAlert.replace('STUDENTID', studentId).replace('FORMATTEDCOURSE', formattedCourse);
+            window.location = alertFormUrl;
+        });
+
     }
 
     // defaults
     fluid.defaults('ssp.EarlyAlertRoster', {
-    	dataFunction: function(that) {
-    		var courseSelect = that.locate('courseSelect');
-    		var course = courseSelect.val();  // TODO:  Use this parameter    		
-    		return mockRoster.slice(0);
-    	},
     	selectors: {
-            courseSelect: '.course-select',
-            loadingMessage: '.loading-message',
-            roster: '.roster',
-            rosterTable: '.roster-table'
+            courseSelect:            '.course-select',
+            errorsDiv:               '.errors',
+            errorTemplate:           '.error-message-template',
+            loadingMessage:          '.loading-message',
+            roster:                  '.roster',
+            rosterTable:             '.roster-table'
         }
     });
 	

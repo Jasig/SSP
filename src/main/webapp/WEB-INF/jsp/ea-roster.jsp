@@ -3,7 +3,7 @@
 <portlet:renderURL var="enterAlertUrl" escapeXml="false">
     <portlet:param name="action" value="enterAlert"/>
     <portlet:param name="studentId" value="STUDENTID"/>
-    <portlet:param name="courseId" value="COURSEID"/>
+    <portlet:param name="formattedCourse" value="FORMATTEDCOURSE"/>
 </portlet:renderURL>
 
 <c:set var="n"><portlet:namespace/></c:set>
@@ -18,7 +18,11 @@
 <!-- Portlet -->
 <div id="${n}earlyAlert" class="fl-widget portlet early-alert" role="section">
   
-  	<!-- Portlet Message (success) -->
+  <!-- Errors -->
+  <div class="errors">
+  </div>
+
+  <!-- Portlet Message (success) -->
   <div class="portlet-msg-success portlet-msg success sent-message" role="status" style="display: none;">
     <div class="titlebar">
       <h3 class="title"><spring:message code="early.alert.sent"/></h3>
@@ -91,17 +95,19 @@
           <thead>
             <tr rsf:id="header:">
               <th id="${n}firstName" class="flc-pager-sort-header"><a rsf:id="firstName" title="Click to sort" href="javascript:;"><spring:message code="first.name"/></a></th>
-              <th id="${n}middleInitial" class="flc-pager-sort-header"><a rsf:id="middleInitial" title="Click to sort" href="javascript:;"><spring:message code="middle.initial"/></a></th>
+              <th id="${n}middleName" class="flc-pager-sort-header"><a rsf:id="middleName" title="Click to sort" href="javascript:;"><spring:message code="middle.name"/></a></th>
               <th id="${n}lastName" class="flc-pager-sort-header"><a rsf:id="lastName" title="Click to sort" href="javascript:;"><spring:message code="last.name"/></a></th>
               <th id="${n}studentType" class="flc-pager-sort-header"><a rsf:id="studentType" title="Click to sort" href="javascript:;"><spring:message code="student.type"/></a></th>
+              <th id="${n}schoolId" style="display: none;">schoolId</th>
             </tr>
           </thead>
           <tbody class="roster-body">
             <tr rsf:id="row:">
               <td headers="${n}firstName"><span rsf:id="firstName"></span></td>
-              <td headers="${n}middleInitial" rsf:id="middleInitial"></td>
+              <td headers="${n}middleName" rsf:id="middleName"></td>
               <td headers="${n}lastName" rsf:id="lastName"></td>
               <td headers="${n}studentType" rsf:id="studentType"></td>
+              <td headers="${n}schoolId" rsf:id="schoolId" class="schoolId"></td>
             </tr>
           </tbody>
         </table>
@@ -111,6 +117,16 @@
       </div>
     
   </div> <!-- end: portlet-body -->
+
+  	<!-- Error Message Template -->
+  	<div class="portlet-msg-error portlet-msg error error-message-template" role="status" style="display: none;">
+    	<div class="titlebar">
+        <h3 class="title"><span class="error-title"></span></h3>
+      </div>
+      <div class="content">
+    	  <p><span class="error-body"></span></p>
+      </div>
+    </div>
 
 </div> <!-- end: portlet -->
     	
@@ -125,7 +141,14 @@
         var $ = up.jQuery;
         var fluid = up.fluid;
 
-        ssp.EarlyAlertRoster('#${n}earlyAlert', { enterAlertUrl: '${enterAlertUrl}' });
+        var options = {
+        	urls: {
+        		courseList: '<c:url value="/api/1/person/${user.schoolId}/instruction/course"/>',
+        		enterAlert: '${enterAlertUrl}',
+        		roster: '<c:url value="/api/1/person/${user.schoolId}/instruction/course/FORMATTEDCOURSE/roster"/>'
+        	}
+        };
+        ssp.EarlyAlertRoster('#${n}earlyAlert', options);
         
         // Confirm submission
         if (${studentName != null ? 'true' : 'false'}) {
