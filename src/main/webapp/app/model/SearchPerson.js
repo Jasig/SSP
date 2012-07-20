@@ -10,9 +10,17 @@ Ext.define('Ssp.model.SearchPerson', {
              {name: 'coach', type: 'auto'}],
 
      getFullName: function(){ 
-     	var firstName = this.get('firstName') || "";
-     	var middleInitial = this.get('middleInitial') || "";
-     	var lastName = this.get('lastName') || "";
+    	var me=this;
+     	var firstName = me.get('firstName')? me.get('firstName') : "";
+     	var middleInitial = me.get('middleInitial')? me.get('middleInitial') : "";
+     	var lastName = me.get('lastName')? me.get('lastName') : "";
      	return firstName + " " + middleInitial + " " + lastName;
-     }      
+     },
+     
+     getCoachFullName: function(){
+    	var me=this;
+      	var firstName = me.get('coach')? me.get('coach').firstName : "";
+      	var lastName = me.get('coach')? me.get('coach').lastName : "";
+      	return firstName + " " + lastName;
+     }
 });

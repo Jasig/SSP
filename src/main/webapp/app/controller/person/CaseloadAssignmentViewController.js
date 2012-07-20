@@ -274,7 +274,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		if (me.person.get('id') == "")
     		{
     			// TODO: Get Active Program Status Id
-    			/*
     			personProgramStatus = new Ssp.model.PersonProgramStatus();
     			personProgramStatus.set('programStatusId','b2d12527-5056-a51a-8054-113116baab88');
     			personProgramStatus.set('effectiveDate', new Date());
@@ -288,7 +287,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
                     failure: me.saveProgramStatusFailure,
                     scope: me 
                 });
-                */
     		}
     		me.person.populateFromGenericObject( r );
     		me.saveAppointment();
