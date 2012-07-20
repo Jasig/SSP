@@ -326,16 +326,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 	onSearchClick: function(button){
 		var me=this;
 		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
-		var searchText = ((me.getSearchText().value)? me.getSearchText().value : "");
 		me.setGridView('search');
-		if ( searchText.length > 0 )
+		if ( me.getSearchText().value != "")
 		{
-			if (searchText > 1)
-			{
-				me.searchService.search(me.getSearchText().value, outsideCaseload);	
-			}else{
-				Ext.Msg.alert("Warning","Please provide more than 2 characters to limit your search results.");
-			}
+			me.searchService.search(me.getSearchText().value, outsideCaseload);	
 		}else{
 			me.searchStore.removeAll();
 		}	
