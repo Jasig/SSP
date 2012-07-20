@@ -7,6 +7,7 @@ Ext.define('Ssp.view.Report',{
     	downloadForm: null,
     	downloadFrame: null
     },
+    autoEl: {tag: 'iframe', cls: 'x-hidden', src: Ext.SSL_SECURE_URL},
     initComponent: function(){
     	var me=this;
     	me.downloadForm = Ext.getBody().createChild({
@@ -26,6 +27,11 @@ Ext.define('Ssp.view.Report',{
 
     	return me.callParent(arguments);
     },
+    
+    load: function(config){
+    	this.getEl().dom.src = config.url + (config.params ? '?' + Ext.urlEncode(config.params) : '');
+    },
+    
     postReport: function( args ){
 		var me=this;
     	Ext.Ajax.request({
@@ -35,7 +41,7 @@ Ext.define('Ssp.view.Report',{
 			isUpload: true,
 			headers: { 'Content-Type': 'application/json' },
 			success: function(response,responseText){
-	  			  Ext.Msg.alert('Notification','Please download your report.');
+	  			  //Ext.Msg.alert('Notification','Please download your report.');
 	  		},
 			failure: function(response, options) {
 				Ext.Msg.alert('Notification',response.responseText);

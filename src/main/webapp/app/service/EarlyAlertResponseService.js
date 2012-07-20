@@ -8,14 +8,15 @@ Ext.define('Ssp.service.EarlyAlertResponseService', {
 		return this.callParent( arguments );
     },
     
-    getBaseUrl: function( personId ){
+    getBaseUrl: function( personId, earlyAlertId ){
 		var me=this;
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personEarlyAlertResponse') );
 		baseUrl = baseUrl.replace( '{personId}', personId );
+		baseUrl = baseUrl.replace( '{earlyAlertId}', earlyAlertId );
 		return baseUrl;
     },
 
-    save: function( personId, jsonData, callbacks ){
+    save: function( personId, earlyAlertId, jsonData, callbacks ){
     	var me=this;
     	var id = jsonData.id;
     	var success = function( response, view ){
@@ -42,7 +43,7 @@ Ext.define('Ssp.service.EarlyAlertResponseService', {
 		{
 			// editing
 			this.apiProperties.makeRequest({
-				url: me.getBaseUrl( personId )+"/"+id,
+				url: me.getBaseUrl( personId, earlyAlertId )+"/"+id,
 				method: 'PUT',
 				jsonData: jsonData,
 				successFunc: success,
@@ -53,7 +54,7 @@ Ext.define('Ssp.service.EarlyAlertResponseService', {
 		}else{
 			// adding
 			this.apiProperties.makeRequest({
-				url: me.getBaseUrl( personId ),
+				url: me.getBaseUrl( personId, earlyAlertId ),
 				method: 'POST',
 				jsonData: jsonData,
 				successFunc: success,

@@ -1,5 +1,5 @@
 Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
-	extend: 'Ext.grid.Panel',
+	extend: 'Ext.tree.Panel',
 	alias : 'widget.earlyalert',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
@@ -8,71 +8,59 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
     	appEventsController: 'appEventsController',
     	columnRendererUtils: 'columnRendererUtils',
     	model: 'currentEarlyAlert',
-        store: 'earlyAlertsStore'
+        treeStore: 'earlyAlertsTreeStore'
     },
 	width: '100%',
-	height: '100%',
-	
+	height: '100%',	
 	initComponent: function() {	
     	var me=this;
-		var sm = Ext.create('Ext.selection.CheckboxModel');
-
 		Ext.apply(me, 
 				{
 		            autoScroll: true,
 		            title: 'Early Alerts',
-
-	    		      columns: [{
-					    	        xtype:'actioncolumn',
-					    	        width:65,
-					    	        header: 'Action',
-					    	        items: [{
-					    	            icon: Ssp.util.Constants.GRID_ITEM_MAIL_REPLY_ICON_PATH,
-					    	            tooltip: 'Respond to this Early Alert',
-					    	            handler: function(grid, rowIndex, colIndex) {
-					    	            	var rec = grid.getStore().getAt(rowIndex);
-					    	            	var panel = grid.up('panel');
-					    	                panel.model.data=rec.data;
-					    	                panel.appEventsController.getApplication().fireEvent('respondToEarlyAlert');
-					    	            },
-					    	            scope: me
-					    	        }]
-				                },
-	    		                { header: 'Created By',  
-	    		                  dataIndex: 'createdBy',
-	    		                  renderer: me.columnRendererUtils.renderCreatedBy,
-	    		                  field: {
-	    		                      xtype: 'textfield'
-	    		                  },
-	    		                  flex: 50 },
-	    		                { header: 'Created Date',  
-	    		                  dataIndex: 'createdBy',
-	    		                  renderer: me.columnRendererUtils.renderCreatedByDateWithTime,
-	    		                  field: {
-	    		                      xtype: 'textfield'
-	    		                  },
-	    		                  flex: 50 },
-	    		                { header: 'Course',
-	    		                  dataIndex: 'courseName',
-	    		                  field: {
-	    		                      xtype: 'textfield'
-	    		                  },
-	    		                  flex: 50 }
-	    		                 ] ,
-				    
-				    dockedItems: [{
+		            cls: 'early-alert-tree-panel',
+		            collapsible: false,
+		            useArrows: true,
+		            rootVisible: false,
+		            store: me.treeStore,
+		            multiSelect: false,
+		            singleExpand: true,
+    		        columns: [{
+    		            xtype: 'treecolumn',
+    		            text: 'Action',
+    		            flex: .5,
+    		            sortable: false,
+    		            dataIndex: 'text'
+    		        },{
+    		            text: 'Created By',
+    		            flex: 1,
+    		            dataIndex: 'createdBy',
+    		            renderer : me.columnRendererUtils.renderCreatedBy,
+    		            sortable: false
+    		        },{
+    		            text: 'Created Date',
+    		            flex: 1,
+    		            dataIndex: 'createdDate',
+    		            renderer : me.columnRendererUtils.renderCreatedByDateWithTime,
+    		            sortable: false
+    		        },{
+    		            text: 'Details',
+    		            flex: 2,
+    		            sortable: false,
+    		            dataIndex: 'gridDisplayDetails'
+    		        }],
+    		        
+    		        dockedItems: [{
 				        dock: 'top',
 				        xtype: 'toolbar',
-				        items: [/*{
+				        items: [{
 				            tooltip: 'Respond to the selected Early Alert',
-				            text: 'Respond',
+				            text: '',
 				            xtype: 'button',
+			            	width: 28,
+					        height: 28,
+				            cls: 'earlyAlertResponseIcon',
 				            itemId: 'respondButton'
-				        }*/{
-				            tooltip: 'Display Tree',
-				            text: 'Tree',
-				            xtype: 'button',
-				            itemId: 'displayTreeButton'
 				        }]
 				    }]
 				});

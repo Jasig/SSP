@@ -11,10 +11,16 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
              {name:'comment',type:'string'},
              {name:'closedDate',type:'time'},
              {name:'closedById',type:'string'},
-             /*{name:'iconCls',type:'string',defaultValue:'iconFolder'},*/
+             
+             /* props for tree manipulation */
+             {name:'iconCls',type:'string'},
              {name:'leaf',type:'boolean',defaultValue: false},
+             {name:'expanded',type:'boolean'},
              {name:'text',type: 'string'},
              {name:'nodeType',type:'string',defaultValue:'early alert'},
+             {name:'gridDisplayDetails', type:'string'},
+             /* end props for tree manipulation */
+             
              {name:'earlyAlertId',type:'string'},
              {name:'earlyAlertOutcomeId',type:'string'},
              {name:'earlyAlertOutcomeOtherDescription',type:'string'},

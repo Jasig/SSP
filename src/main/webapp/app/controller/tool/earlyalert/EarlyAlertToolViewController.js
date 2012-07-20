@@ -3,35 +3,32 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	appEventsController: 'appEventsController',
+    	confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	earlyAlertOutcomesStore: 'earlyAlertOutcomesStore',
     	earlyAlertsStore: 'earlyAlertsStore',
     	earlyAlertService: 'earlyAlertService',
+    	earlyAlertResponseService: 'earlyAlertResponseService',
     	earlyAlert: 'currentEarlyAlert',
     	formUtils: 'formRendererUtils',
         outcomesStore: 'earlyAlertOutcomesStore',
         outreachesStore: 'earlyAlertOutreachesStore',
     	personLite: 'personLite',
         referralsStore: 'earlyAlertReferralsStore',
-        confidentialityLevelsStore: 'confidentialityLevelsStore'
+    	treeStore: 'earlyAlertsTreeStore'
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalerttree'
+    	formToDisplay: 'earlyalertresponse'
     },
     control: {
     	view: {
-    		selectionchange: 'onSelectionChange',
-    		viewready: 'onViewReady'
+    		viewready: 'onViewReady',
+    		itemexpand: 'onItemExpand'
     	},
     	
-		'displayTreeButton': {
-			click: 'onDisplayTreeClick'
-		}
-    
-        /*,
     	'respondButton': {
 			click: 'onRespondClick'
 		}
-		*/
 	},
 	
 	init: function(){
@@ -39,23 +36,25 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
 	},
 
     onViewReady: function(comp, obj){
-		var me=this;
-		
-		me.appEventsController.assignEvent({eventName: 'respondToEarlyAlert', callBackFunc: me.onRespondToEarlyAlert, scope: me});
-		
+		var me=this;		
+		me.earlyAlertOutcomesStore.load();
 		me.confidentialityLevelsStore.load();
     	me.outcomesStore.load();
-    	me.outreachesStore.load();
-    	me.referralsStore.load();
-    	me.getEarlyAlerts();
+    	me.outreachesStore.load(); 	
+    	me.referralsStore.load({
+    		callback: function(r,options,success) {
+    	         if(success == true) {
+     	                 me.getEarlyAlerts(); 
+    	          }
+    	          else {
+    	              Ext.Msg.alert("Ssp Error","Failed to load referrals. See your system administrator for assitance.");
+    	          }
+    	     }
+    	});
     },	
 
     destroy: function() {
-    	var me=this;
-
-		me.appEventsController.removeEvent({eventName: 'respondToEarlyAlert', callBackFunc: me.onRespondToEarlyAlert, scope: me});
-
-        return me.callParent( arguments );
+         return this.callParent( arguments );
     },    
     
 	getEarlyAlerts: function(){
@@ -64,7 +63,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
 		me.earlyAlertService.getAll( pId, 
     		{success:me.getEarlyAlertsSuccess, 
 			 failure:me.getEarlyAlertsFailure, 
-			 scope: me});	
+			 scope: me});
 	},
     
     getEarlyAlertsSuccess: function( r, scope){
@@ -82,19 +81,46 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     	var me=scope;
     },
 
-	onSelectionChange: function(selModel,records,eOpts){ 
-		var me=this;
-		if (records.length > 0)
-		{
-			me.earlyAlert.data = records[0].data;
-		}
-	},
-    
-	onDisplayTreeClick: function(button){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+    onItemExpand: function(nodeInt, obj){
+    	console.log( 'EarlyAlertTreeViewController->onItemExpand');
+    	var me=this;
+    	var node = nodeInt;
+    	var nodeType = node.get('nodeType');
+    	var id = node.get('id' );
+    	var personId = me.personLite.get('id');
+    	if (node != null)
+    	{
+    		// use root here to prevent the expand from firing
+    		// when items are added to the root element in the tree
+        	if (nodeType == 'early alert' && id != "root" && id != "")
+        	{
+        		me.earlyAlertService.getAllEarlyAlertResponses(personId, id);
+        	}    		
+    	}
     },
+    
+	onRespondClick: function( button ){
+		var me=this;
+		var record = me.getView().getSelectionModel().getSelection()[0];
+		if (record != null)
+		{
+			if (record.get('nodeType')=='early alert')
+	    	{
+	        	for (prop in me.earlyAlert.data)
+	        	{
+	        		me.earlyAlert.data[prop] = record.data[prop];
+	        	}
+	        	
+	        	me.loadEditor();
+	    	}else{
+	    		Ext.Msg.alert('Notification','Please select an Early Alert to send a response.');
+	    	}	
+    	}else{
+    		Ext.Msg.alert('Notification','Please select an Early Alert to send a response.');
+    	}
+	},
 	
-	onRespondToEarlyAlert: function(button){
+	loadEditor: function(button){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
     }
 });

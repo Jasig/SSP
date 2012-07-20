@@ -30,7 +30,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
 			        emptyText: 'Select One',
 			        store: me.store,
 			        valueField: 'id',
-			        displayField: 'lastName',
+			        displayField: 'displayFullName',
 			        mode: 'local',
 			        typeAhead: true,
 			        queryMode: 'local',

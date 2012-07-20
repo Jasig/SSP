@@ -1,6 +1,6 @@
 Ext.define('Ssp.store.EarlyAlertCoordinators', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.Person',
+    model: 'Ssp.model.PersonLite',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties'

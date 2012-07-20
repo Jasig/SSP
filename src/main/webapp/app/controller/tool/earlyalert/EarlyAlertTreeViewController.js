@@ -4,7 +4,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertTreeViewController', {
     inject: {
     	appEventsController: 'appEventsController',
     	earlyAlertService: 'earlyAlertService',
-    	earlyAlertResponseService: 'earlyAlertResponseService',
+    	// earlyAlertResponseService: 'earlyAlertResponseService',
     	earlyAlert: 'currentEarlyAlert',
     	formUtils: 'formRendererUtils',
     	personLite: 'personLite',
@@ -25,8 +25,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertTreeViewController', {
     },
 	init: function(){
 		return this.callParent(arguments);		
-	},
-	
+	},   
+    
     onItemExpand: function(nodeInt, obj){
     	console.log( 'EarlyAlertTreeViewController->onItemExpand');
     	var me=this;
@@ -36,7 +36,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertTreeViewController', {
     	var personId = me.personLite.get('id');
     	if (nodeType == 'early alert' && id != "")
     	{
-    		me.earlyAlertService.getAllEarlyAlertResponses(personId, id);
+    		// me.earlyAlertService.getAllEarlyAlertResponses(personId, id);
     	}
     },
     

@@ -3,7 +3,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'earlyAlertsStore',
+    	earlyAlertOutcomesStore: 'earlyAlertOutcomesStore',
     	treeStore: 'earlyAlertsTreeStore',
     	treeUtils: 'treeRendererUtils'
     },
@@ -24,7 +24,6 @@ Ext.define('Ssp.service.EarlyAlertService', {
     		var r = Ext.decode(response.responseText);
     		if (r.rows.length > 0)
 	    	{
-    			me.store.loadData(r.rows);
     			me.populateEarlyAlerts( r.rows );
 	    	}
 	    	if (callbacks != null)
@@ -40,8 +39,6 @@ Ext.define('Ssp.service.EarlyAlertService', {
 	    		callbacks.failure( response, callbacks.scope );
 	    	}
 	    };
-	    
-	    me.store.removeAll();
 	    
 		me.apiProperties.makeRequest({
 			url: me.getBaseUrl(personId),
@@ -77,24 +74,29 @@ Ext.define('Ssp.service.EarlyAlertService', {
 	    };
 	    
 	    url = me.getBaseUrl(personId);
-	    url = url.replace( '/earlyAlert', '/earlyAlertResponse' );
-	    
-		me.apiProperties.makeRequest({
-			url: url,
-			method: 'GET',
-			successFunc: success,
-			failureFunc: failure,
-			scope: me
-		});
+	    if (earlyAlertId != null && earlyAlertId != "")
+	    {
+			me.apiProperties.makeRequest({
+				url: url + '/' + earlyAlertId + '/response',
+				method: 'GET',
+				successFunc: success,
+				failureFunc: failure,
+				scope: me
+			});	    	
+	    }
     },    
     
     populateEarlyAlerts: function( records ){
     	var me=this;
+
     	Ext.Array.each( records, function(record, index){
-    		record.iconCls='earlyAlertTreeIcon';
+    		//record.iconCls='earlyAlertTreeIcon';
     		record.leaf=false;
     		record.nodeType='early alert';
+    		record.gridDisplayDetails=record.courseName + " - " + record.courseTitle;
+    		record.expanded=false;
     	});
+    	
     	me.treeStore.setRootNode({
     	    text: 'EarlyAlerts',
     	    leaf: false,
@@ -106,11 +108,12 @@ Ext.define('Ssp.service.EarlyAlertService', {
     
     populateEarlyAlertResponses: function( node, records ){
     	var me=this;
-    	
+
     	Ext.Array.each( records, function(record, index){
-    		//record.iconCls='iconFolder';
+    		//record.iconCls='earlyAlertTreeIcon';
     		record.leaf=true;
     		record.nodeType='early alert response';
+    		record.gridDisplayDetails=me.earlyAlertOutcomesStore.getById(record.earlyAlertOutcomeId).get('name');
     	});
 
     	node.appendChild(records);

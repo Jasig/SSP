@@ -23,8 +23,8 @@ background-image: url('/ssp/images/list-icon.png') !important;
 .earlyAlertTreeIcon {
     /*background-image: url('/ssp/images/mail-reply-icon.png') !important;*/
     background: url('/ssp/images/early-alert-folder-icon.png') no-repeat;
-    height: 21px;
-    width: 24px;
+    height: 12px;
+    width: 14px;
 }
 
 .earlyAlertResponseIcon {
@@ -62,3 +62,27 @@ background-image: url('/ssp/images/student-history-report-icon.png') !important;
 .studentTransitionIcon {
 background-image: url('/ssp/images/student-transition-icon.png') !important;
 }
+
+.early-alert-tree-panel .x-tree-icon-parent
+{
+    background-image: url('/ssp/images/early-alert-folder-icon.png') !important;
+    background-repeat: no-repeat;
+    height: 16px;
+    width: 16px;
+}
+
+.early-alert-tree-panel .x-grid-tree-node-expanded .x-tree-icon-parent
+{
+    background-image: url('/ssp/images/early-alert-folder-icon.png') !important;
+    background-repeat: no-repeat;
+    height: 16px;
+    width: 16px;
+}
+
+
+.early-alert-tree-panel .x-tree-icon-leaf {    
+    background-image: url('/ssp/images/early-alert-folder-icon.png') !important;
+    height: 16px;
+    width: 16px;
+}
+

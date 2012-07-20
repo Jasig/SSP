@@ -56,7 +56,7 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 				            text: '',
 				            width: 35,
 				            height: 35,
-				            hidden: !me.authenticatedPerson.hasAccess('TRANSITION_BUTTON'),
+				            hidden: true, // !me.authenticatedPerson.hasAccess('TRANSITION_BUTTON'),
 				            cls: 'studentTransitionIcon',
 				            xtype: 'button',
 				            itemId: 'studentTransitionButton'

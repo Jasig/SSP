@@ -20,7 +20,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 	init: function() {
 		var me=this;
 		var personId = me.personLite.get('id');
-		me.personViewHistoryUrl = me.apiProperties.getItemUrl('personViewHistory');
+		me.personViewHistoryUrl = me.apiProperties.getContext() + me.apiProperties.getItemUrl('personViewHistory');
 		me.personViewHistoryUrl = me.personViewHistoryUrl.replace('{id}',personId);
 		
 		return this.callParent(arguments);
@@ -30,7 +30,8 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     
     onViewHistoryClick: function(button){
 		var me=this;
-		me.apiProperties.getReporter().postReport({
+		console.log(me.personViewHistoryUrl);
+		me.apiProperties.getReporter().load({
 			url:me.personViewHistoryUrl,
 			params: ""
 		});

@@ -36,7 +36,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     
 	init: function() {
 		var me=this;
-		
+		me.getView().getForm().reset();
 		me.getView().getForm().loadRecord(me.model);
 		me.showHideOtherOutcomeDescription();
 		
@@ -85,7 +85,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		
 		console.log(jsonData);
 		
-		me.earlyAlertResponseService.save(personId, jsonData, {
+		me.earlyAlertResponseService.save(personId, earlyAlertId, jsonData, {
 			success: me.saveEarlyAlertResponseSuccess,
 			failure: me.saveEarlyAlertResponseFailure,
 			scope: me

@@ -633,12 +633,12 @@ Ext.define('Ssp.util.FormRendererUtils',{
 				// find the first invalid field and display it
 				if (result.valid==true)
 				{
+					// flag the form invalid
+					result.valid=false;
 					f = form.findInvalid()[0];
 					if (f) 
 					{
 						f.ensureVisible();
-						// flag the form invalid
-						result.valid=false;
 					}
 				}
 			}

@@ -194,7 +194,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 	                 referralSourcesForm];		
 
 		var validateResult = me.formUtils.validateForms( formsToValidate );
-		
+		console.log( appointmentForm );
+		console.log( appointmentForm.isValid() );
 		// Validate all of the forms
 		if ( validateResult.valid ) 
 		{

@@ -101,8 +101,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	// ensure the selected person is not loaded twice
 	   	me.personLite.set('id','');
 
-		me.initializeCaseload();
-		
+		if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==0 )
+		{
+			me.setGridView('search');
+		}else{
+			me.setGridView('caseload');
+		}
+	   	
 	    me.programStatusesStore.removeAll();
     	me.getProgramStatuses();	
 	},
@@ -138,7 +143,6 @@ Ext.define('Ssp.controller.SearchViewController', {
     		programStatus = me.programStatusesStore.findRecord("name", "active");
     		activeProgramStatusId = programStatus.get('id');
     		me.getCaseloadStatusCombo().setValue( activeProgramStatusId );
-    		me.getCaseload();
     	}
     },	
 
@@ -208,7 +212,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	applyColumns: function(){
 		var me=this;
 		var grid = me.getView();
-		var store = me.caseloadStore;
+		var store;
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1 )
 		{
