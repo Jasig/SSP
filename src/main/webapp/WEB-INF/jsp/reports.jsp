@@ -104,7 +104,7 @@
 			<input class="input-calendar-type" type="textbox" name="createDateFrom" id="createDateFrom" />
 		</div>
 		<div class="ea-label">
-			<span>Added From (yyyy-MM-dd):</span>
+			<span>Student Added From:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -113,7 +113,7 @@
 			<input class="input-calendar-type" type="textbox" name="createDateTo" id="createDateTo" />
 		</div>
 		<div class="ea-label">
-			<span>Added To (yyyy-MM-dd):</span>
+			<span>Student Added To:</span>
 		</div>
 		<div class="ea-clear"></div>
 
