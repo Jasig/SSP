@@ -39,4 +39,18 @@ public class FacultyCourseDao extends AbstractExternalDataDao<FacultyCourse> {
 		return createCriteria().add(
 				Restrictions.eq("facultySchoolId", facultySchoolId)).list();
 	}
+	
+	public FacultyCourse getCourseByFacultySchoolIdAndFormattedCourse(
+			final String facultySchoolId, final String formattedCourse)
+			throws ObjectNotFoundException {
+		if (!StringUtils.isNotBlank(formattedCourse)) {
+			throw new ObjectNotFoundException(formattedCourse,
+					FacultyCourse.class.getName());
+		}
+		
+		return (FacultyCourse) createCriteria().add(
+				Restrictions.eq("facultySchoolId", facultySchoolId)).add(
+				Restrictions.eq("formattedCourse", formattedCourse))
+				.uniqueResult();
+	}
 }

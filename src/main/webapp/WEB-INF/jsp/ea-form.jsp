@@ -243,18 +243,18 @@
         
         var options = {
             urls: {
-                person: '<c:url value="/api/1/person/STUDENTID" />',
-                campus: '<c:url value="/api/1/reference/campus" />',
-                reason: '<c:url value="/api/1/reference/earlyAlertReason" />',
-                suggestions: '<c:url value="/api/1/reference/earlyAlertSuggestion" />',
-                submit: '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
-                done: '${doneUrl}'
+                person:       '<c:url value="/api/1/person/STUDENTID" />',
+                campus:       '<c:url value="/api/1/reference/campus" />',
+                reason:       '<c:url value="/api/1/reference/earlyAlertReason" />',
+                suggestions:  '<c:url value="/api/1/reference/earlyAlertSuggestion" />',
+                submit:       '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
+                done:         '${doneUrl}'
             },
             parameters: {
-                courseName: 'ENGLISH - 124 - 001',
-                courseTitle: 'Academic Writing and Literature',
-                term: '11/SD',
-                studentId: '${studentId}'
+                courseName:   '${course.formattedCourse}',
+                courseTitle:  '${course.title}',
+                term:         '${course.termCode}',
+                studentId:    '${studentId}'
             }
         };
         ssp.EarlyAlertForm('#${n}earlyAlert', options);

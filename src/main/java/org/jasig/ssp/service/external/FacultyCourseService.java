@@ -40,4 +40,19 @@ public interface FacultyCourseService extends
 	List<ExternalFacultyCourseRoster> getRosterByFacultySchoolIdAndCourse(
 			final String facultySchoolId, final String formattedCourse)
 			throws ObjectNotFoundException;
+	
+	/**
+	 * Gets the course with the specified id for the specified faculty.
+	 * 
+	 * @param facultySchoolId
+	 *            The faculty school id to use to lookup the associated data.
+	 * @param formattedCourse
+	 *            the course
+	 * @return The specified course if present in the system
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 */
+	FacultyCourse getCourseByFacultySchoolIdAndFormattedCourse(
+			String facultySchoolId, final String formattedCourse) 
+			throws ObjectNotFoundException;
 }
