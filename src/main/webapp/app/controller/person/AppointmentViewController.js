@@ -18,6 +18,13 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 
 		me.appEventsController.assignEvent({eventName: 'studentTypeChange', callBackFunc: this.onStudentTypeChange, scope: this});
 		
+		// require a date beyond today for all new appointments
+		if (me.appointment.get('id') == "")
+		{
+			today = Ext.Date.clearTime( new Date(), true );
+			me.getAppointmentDateField().setMinValue( today );
+		}
+		
 		me.getView().getForm().reset();
 		me.getView().loadRecord( me.appointment );
 

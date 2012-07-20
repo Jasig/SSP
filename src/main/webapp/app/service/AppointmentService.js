@@ -20,6 +20,8 @@ Ext.define('Ssp.service.AppointmentService', {
     getCurrentAppointment: function( personId, callbacks ){
 		var me=this;
 		var url = me.getBaseUrl( personId );
+		var appointment = new Ssp.model.Appointment();
+		var personAppointment = new Ssp.model.PersonAppointment();
 	    var success = function( response, view ){
 	    	var r;
 	    	if (response.responseText != "")
@@ -32,6 +34,7 @@ Ext.define('Ssp.service.AppointmentService', {
 		   			if (me.currentPersonAppointment.get('id') != "")
 		   			{
 		   				me.appointment.populateFromGenericObject({
+		   				   "id": me.currentPersonAppointment.get('id'),
 		   				   "appointmentDate": Ext.Date.clearTime(me.currentPersonAppointment.get('startTime'), true),
 		   				   "startTime": me.currentPersonAppointment.get('startTime').getTime(),
 		   				   "endTime": me.currentPersonAppointment.get('endTime').getTime()
@@ -46,6 +49,9 @@ Ext.define('Ssp.service.AppointmentService', {
 	    	me.apiProperties.handleError( response );	    	
 	    	callbacks.failure( response, callbacks.scope );
 	    };
+	    
+	    // reset the appointments
+	    me.appointment.data = appointment.data;
 	    
 		// load the person to edit
 		me.apiProperties.makeRequest({

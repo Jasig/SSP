@@ -254,7 +254,7 @@
                 courseName: 'ENGLISH - 124 - 001',
                 courseTitle: 'Academic Writing and Literature',
                 term: '11/SD',
-                studentId: '1010e4a0-1001-0110-1011-4ffc02fe81ff'
+                studentId: '${studentId}'
             }
         };
         ssp.EarlyAlertForm('#${n}earlyAlert', options);
