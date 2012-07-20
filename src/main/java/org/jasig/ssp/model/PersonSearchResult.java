@@ -69,7 +69,9 @@ public class PersonSearchResult {
 			currentProgramStatusName = pps.getProgramStatus().getName();
 		}
 
-		coach = new CoachPersonLiteTO(person.getCoach());
+		if (person.getCoach() != null) {
+			coach = new CoachPersonLiteTO(person.getCoach());
+		}
 	}
 
 	public UUID getId() {
