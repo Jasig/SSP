@@ -181,17 +181,17 @@ var ssp = ssp || {};
                 campusId: $(selectors.campus).val(),
                 earlyAlertReasonIds: [],  // Set below...
                 earlyAlertReasonOtherDescription: $(selectors.otherReasonText).val(),
+                earlyAlertSuggestionIds: [],  // Set below...
                 earlyAlertSuggestionOtherDescription: $(selectors.suggestionsOtherHidden).val(),
-                comment: $(selectors.comments).val()
+                comment: $(selectors.comments).val(),
+                sendEmailToStudent: sendNotice
             };
             if ($(selectors.reason).val() && $(selectors.reason).val() != 'other') {
                 postData.earlyAlertReasonIds.push({ id: $(selectors.reason).val() });
             }
-            var earlyAlertSuggestionIds = [];
             $(selectors.suggestionsId).each(function() {
-            	earlyAlertSuggestionIds.push({ id: $(this).val() });
+            	postData.earlyAlertSuggestionIds.push({ id: $(this).val() });
             });
-            postData.earlyAlertSuggestionIds = earlyAlertSuggestionIds;
             
             // Submit the alert
             $.ajax({
