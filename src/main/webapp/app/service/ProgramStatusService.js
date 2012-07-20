@@ -9,7 +9,7 @@ Ext.define('Ssp.service.ProgramStatusService', {
 		return this.callParent( arguments );
     },
     
-    getBaseUrl: function( id ){
+    getBaseUrl: function(){
 		var me=this;
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('programStatus') );
     	return baseUrl;
@@ -46,5 +46,5 @@ Ext.define('Ssp.service.ProgramStatusService', {
 			failureFunc: failure,
 			scope: me
 		});
-    }  
+    }
 });

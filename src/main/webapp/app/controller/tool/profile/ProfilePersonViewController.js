@@ -48,6 +48,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 	    	programStatusName = me.person.getProgramStatusName();
 	    	coachName = me.person.getCoachName();
     		
+	    	// console.log( me.person.get('programStatuses') );
+	    	
     		// load special service groups
     		if (r.specialServiceGroups != null)
     		{

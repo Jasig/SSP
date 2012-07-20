@@ -124,6 +124,7 @@ Ext.require([
 	'Ssp.model.PersonGoal',
 	'Ssp.model.PersonDocument',
 	'Ssp.model.PersonLite',
+	'Ssp.model.PersonProgramStatus',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -275,6 +276,7 @@ var apiUrls = [
   {name: 'personViewHistory', url: 'report/{id}/History'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
   {name: 'personSearch', url: 'person/search'},
+  {name: 'personProgramStatus', url: 'person/{id}/programStatus'},
   {name: 'programStatus', url: 'reference/programStatus'},
   {name: 'programStatusChangeReason', url: 'reference/programStatusChangeReason'},
   {name: 'referralSource', url: 'reference/referralSource'},
@@ -590,6 +592,7 @@ Ext.onReady(function(){
 			        earlyAlertService: 'Ssp.service.EarlyAlertService',
 			        earlyAlertResponseService: 'Ssp.service.EarlyAlertResponseService',
 			        personService: 'Ssp.service.PersonService',
+			        personProgramStatusService: 'Ssp.service.PersonProgramStatusService',
 			        programStatusService: 'Ssp.service.ProgramStatusService',
 			        searchService: 'Ssp.service.SearchService'
 				});

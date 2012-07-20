@@ -74,7 +74,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	
 	renderStudentDetails: function(val, metaData, record) {
 		var strHtml = '<div>';
-        strHtml += '<p>' + record.getFullName() + '</p>';
+		strHtml += '<p>' + record.getFullName() + '</p>';
         strHtml += '<p>' + record.get('schoolId') + '</p>';
         /*strHtml += '<p>' + record.getProgramStatusName() + '</p>';*/
         strHtml += '</div>';
