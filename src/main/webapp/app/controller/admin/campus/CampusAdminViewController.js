@@ -4,8 +4,10 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     inject: {
     	campusesStore: 'campusesStore',
     	earlyAlertCoordinatorsStore: 'earlyAlertCoordinatorsStore',
+    	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentCampus',
+    	peopleStore: 'peopleStore'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -28,6 +30,8 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
 		var me=this;
 		me.campusesStore.load();
 		me.earlyAlertCoordinatorsStore.load();
+		me.earlyAlertReasonsStore.load();
+		me.peopleStore.load();
 		return this.callParent(arguments);
     },
     

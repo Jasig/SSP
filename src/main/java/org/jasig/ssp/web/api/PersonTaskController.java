@@ -238,6 +238,7 @@ public class PersonTaskController extends
 				person.getFirstName() + " " + person.getLastName());
 		parameters.put("studentId", person.getSchoolId());
 		parameters.put("initialDate", person.getCreatedDate());
+		parameters.put("studentStrengths", person.getStrengths()); 
 		parameters.put("reviewDate", new Date());
 		parameters.put("goals", goalsDS);
 
