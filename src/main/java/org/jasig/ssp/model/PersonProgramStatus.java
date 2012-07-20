@@ -117,6 +117,17 @@ public class PersonProgramStatus
 				expirationDate.getTime());
 	}
 
+	/**
+	 * Determines if this program status entry for this person is expired.
+	 * 
+	 * @return true if this program status entry for this person is expired;
+	 *         false otherwise
+	 */
+	public boolean isExpired() {
+		return expirationDate != null
+				&& new Date().compareTo(expirationDate) >= 0;
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 337;

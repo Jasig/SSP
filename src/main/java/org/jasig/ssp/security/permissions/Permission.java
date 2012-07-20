@@ -29,6 +29,10 @@ public class Permission { // NOPMD enum won't work for these values in
 	public static final String PERSON_DELETE = ROLE_PREFIX + "PERSON_DELETE";
 	public static final String PERSON_INSTRUCTION_READ = ROLE_PREFIX
 			+ "PERSON_INSTRUCTION_READ";
+	public static final String PERSON_PROGRAM_STATUS_READ = ROLE_PREFIX
+			+ "PERSON_PROGRAM_STATUS_READ";
+	public static final String PERSON_PROGRAM_STATUS_WRITE = ROLE_PREFIX
+			+ "PERSON_PROGRAM_STATUS_WRITE";
 
 	// Wrap the permission role in a hasRole
 	public static final String SECURITY_REFERENCE_WRITE = HAS_ROLE

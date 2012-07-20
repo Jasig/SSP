@@ -102,4 +102,10 @@ public class ProgramStatus extends AbstractReference implements Auditable {
 		return hashPrime() * super.hashCode()
 				* (programStatusChangeReasonRequired ? 3 : 5);
 	}
+
+	@Override
+	public String toString() {
+		return "Program Status: \"" + super.getName() + " (" + super.toString()
+				+ ")";
+	}
 }

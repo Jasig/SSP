@@ -3,7 +3,6 @@ package org.jasig.ssp.transferobject; // NOPMD
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Max;
@@ -18,7 +17,6 @@ import org.jasig.ssp.model.PersonReferralSource;
 import org.jasig.ssp.model.PersonServiceReason;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
-import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.ReferralSource;
 import org.jasig.ssp.model.reference.ServiceReason;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
@@ -26,7 +24,6 @@ import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * Person transfer object
@@ -108,7 +105,7 @@ public class PersonTO // NOPMD
 
 	private List<String> permissions;
 
-	private Set<ReferenceLiteTO<ProgramStatus>> programStatuses;
+	private String currentProgramStatusName;
 
 	private boolean registeredForCurrentTerm;
 
@@ -211,13 +208,23 @@ public class PersonTO // NOPMD
 
 		if ((null != model.getProgramStatuses())
 				&& !(model.getProgramStatuses().isEmpty())) {
-			final Set<ProgramStatus> programStatusesFromModel = Sets
-					.newHashSet();
 			for (final PersonProgramStatus psr : model.getProgramStatuses()) {
-				programStatusesFromModel.add(psr.getProgramStatus());
-			}
+				if (!psr.isExpired()) {
+					if (StringUtils.isNotBlank(currentProgramStatusName)) {
+						// uh oh! found a second, non-expired program status
 
-			programStatuses = ReferenceLiteTO.toTOSet(programStatusesFromModel);
+						// TODO: create exception that can be thrown at runtime
+						// due to assertion-like errors (invalid business rules)
+						// because of a situation that indicate a bug in the
+						// system or database
+						throw new RuntimeException( // NOPMD
+								"Multiple non-expired program statuses were found for student (person_id) "
+										+ model.getId());
+					}
+
+					currentProgramStatusName = psr.getProgramStatus().getName();
+				}
+			}
 		}
 
 		if ((null == model.getCurrentRegistrationStatus())
@@ -540,19 +547,22 @@ public class PersonTO // NOPMD
 	}
 
 	/**
-	 * @return the "lite" version of the programStatuses
+	 * @return the current program status, if any
 	 */
-	public Set<ReferenceLiteTO<ProgramStatus>> getProgramStatuses() {
-		return programStatuses;
+	public String getCurrentProgramStatusName() {
+		return currentProgramStatusName;
 	}
 
 	/**
-	 * @param programStatuses
-	 *            the "lite" version of the programStatuses to set
+	 * Sets the current program status. Can be null. Changes here are ignored;
+	 * use the Program Status API instead.
+	 * 
+	 * @param currentProgramStatusName
+	 *            the current program status, if any
 	 */
-	public void setProgramStatuses(
-			final Set<ReferenceLiteTO<ProgramStatus>> programStatuses) {
-		this.programStatuses = programStatuses;
+	public void setCurrentProgramStatusName(
+			final String currentProgramStatusName) {
+		this.currentProgramStatusName = currentProgramStatusName;
 	}
 
 	public boolean isRegisteredForCurrentTerm() {
