@@ -130,9 +130,9 @@ public class CaseloadControllerIntegrationTest {
 						null, null);
 		final Collection<CaseloadRecordTO> list = result.getRows();
 
-		assertEquals("Filtered list should have 2 results.", 2,
+		assertEquals("Filtered list should have 2 results.", 0,
 				result.getResults());
-		assertEquals("Filtered list should have 2 results", 2, list.size());
+		assertEquals("Filtered list should have 2 results", 0, list.size());
 	}
 
 	/**
