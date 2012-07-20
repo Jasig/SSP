@@ -1,5 +1,7 @@
 package org.jasig.ssp.dao;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.Criteria;
@@ -35,11 +37,17 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 		// Restrict by program status if provided
 		if (programStatus != null) {
-			query.createAlias("programStatuses", "personProgramStatus")
-					.add(Restrictions
-							.isNull("personProgramStatus.expirationDate"))
-					.add(Restrictions.eq("personProgramStatus.programStatus",
-							programStatus));
+			final Criteria subquery = query.createAlias("programStatuses",
+					"personProgramStatus");
+			subquery.add(
+					Restrictions.or(
+							Restrictions
+									.isNull("personProgramStatus.expirationDate"),
+							Restrictions.ge(
+									"personProgramStatus.expirationDate",
+									new Date())));
+			subquery.add(Restrictions.eq("personProgramStatus.programStatus",
+					programStatus));
 		}
 
 		// restrict to coach
@@ -54,6 +62,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 		// clear the row count projection
 		query.setProjection(null);
+
 		//
 		// Add Properties to return in the case load
 		//
