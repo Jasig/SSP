@@ -273,6 +273,12 @@ objectClass: top
 cn: PERSON_TASK_DELETE
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
 
+dn: cn=PERSON_INSTRUCTION_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: PERSON_INSTRUCTION_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
 dn: cn=STUDENT_INTAKE_READ,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
