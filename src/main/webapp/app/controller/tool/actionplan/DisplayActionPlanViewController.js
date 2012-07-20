@@ -6,6 +6,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     	appEventsController: 'appEventsController',
     	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
+    	goalsStore: 'goalsStore',
     	person: 'currentPerson',
     	preferences: 'preferences',
     	store: 'tasksStore'
@@ -263,12 +264,37 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     
     onPrintTasksClick: function(button) {
     	var me=this;
-    	var grid, url, jsonData;	
+    	var msg = me.getTaskGoalCountNotificationMessage();
+		if (msg.length > 0)
+		{
+           Ext.Msg.confirm({
+     		     title:' Would you like to continue printing??',
+     		     msg: msg,
+     		     buttons: Ext.Msg.YESNO,
+     		     fn: me.printTasksConfirm,
+     		     scope: me
+     		   });
+		}else{
+			me.printTasks();
+		}
+    },
+ 
+    printTasksConfirm: function( btnId ){
+     	var me=this;
+     	if (btnId=="yes")
+     	{
+         	me.printTasks();    		
+     	}
+     },    
+    
+    printTasks: function() {
+    	var me=this;
+    	var url, jsonData;	
 		var jsonData = {
 				"taskIds": me.getSelectedTasks(),
 		        "goalIds": me.getSelectedGoals()
 		        };
-		
+ 
     	url = me.apiProperties.createUrl( me.personPrintTaskUrl );
 
 		me.apiProperties.getReporter().postReport({
@@ -277,6 +303,25 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		});
     },
     
+    getTaskGoalCountNotificationMessage: function(){
+		var me=this;
+    	// if no tasks or goals have been added to the student's record
+		// then display a notification to first add tasks and goals before
+		// printing
+		var notificationMsg = "";
+		if ( me.store.getCount() < 1 )
+		{
+			notificationMsg += "This student has " + me.store.getCount() + " assigned tasks.";
+		}
+		
+		if ( me.goalsStore.getCount() < 1 )
+		{
+			notificationMsg += "This student has " + me.goalsStore.getCount() + " assigned goals.";
+		}
+		
+		return notificationMsg;
+    },
+		
     getSelectedTasks: function(){
     	var me=this;
     	var activeTasksGrid = me.getActiveTasksGrid();

@@ -20,6 +20,10 @@ background-image: url('/ssp/images/photo-list-icon.png') !important;
 background-image: url('/ssp/images/list-icon.png') !important;
 }
 
+.earlyAlertResponseIcon {
+background-image: url('/ssp/images/mail-reply-icon.png') !important;
+}
+
 .early-alert-tree-panel .x-tree-icon-parent
 {
     background-image: url('/ssp/images/early-alert-folder-icon.png') !important;

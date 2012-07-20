@@ -5,8 +5,8 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanToolViewController', {
         store: 'confidentialityLevelsStore'
     },
     constructor: function() {
-    	var me=this;
-		
+    	var me=this;   	
+    	
     	// ensure loading of all confidentiality levels in the database
     	me.store.load({
     		params:{limit:50}
