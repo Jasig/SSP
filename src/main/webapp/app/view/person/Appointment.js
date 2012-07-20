@@ -29,7 +29,6 @@ Ext.define('Ssp.view.person.Appointment', {
 				    	fieldLabel: 'Appointment Date',
 				    	itemId: 'appointmentDateField',
 				    	altFormats: 'm/d/Y|m-d-Y',
-				    	minValue : Ext.Date.clearTime( new Date(), true ),
 				    	invalidText: '{0} is not a valid date - it must be in the format: 06/21/2012 or 06-21-2012',
 				    	name: 'appointmentDate',
 				        allowBlank: false
