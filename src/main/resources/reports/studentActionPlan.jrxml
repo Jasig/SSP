@@ -5,6 +5,7 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="studentName" class="java.lang.String"/>
 	<parameter name="studentId" class="java.lang.String"/>
+	<parameter name="studentStrengths" class="java.lang.String"/>
 	<parameter name="initialDate" class="java.util.Date"/>
 	<parameter name="reviewDate" class="java.util.Date"/>
 	<parameter name="followupDate" class="java.util.Date"/>
@@ -90,6 +91,28 @@
 			</subreport>
 		</band>
 	</pageHeader>
+	<columnHeader>
+		<band height="50">
+			<rectangle>
+				<reportElement uuid="19f089d6-00fb-46ae-bc54-ef0012f8f77f" x="1" y="0" width="572" height="20" backcolor="#AFAAAA"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="93bf8f38-92a2-4aa4-afa6-03f692c1da5c" x="10" y="3" width="100" height="17"/>
+				<textElement/>
+				<text><![CDATA[Strengths]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="89854de8-f1c7-4c8f-b2b5-691a837b4f01" x="2" y="27" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[My strengths are:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b75271d7-7da8-4c46-82b1-bc586091568f" x="102" y="27" width="470" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentStrengths}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
 	<detail>
 		<band height="91" splitType="Stretch">
 			<rectangle>

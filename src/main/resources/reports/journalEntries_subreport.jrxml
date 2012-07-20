@@ -14,7 +14,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="139" splitType="Stretch">
+		<band height="83" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="d1bceb54-0d86-4c55-922b-5e9794498d09" x="0" y="1" width="100" height="20"/>
 				<textElement/>
@@ -24,16 +24,6 @@
 				<reportElement uuid="98e77ac6-4b39-42e3-b2bc-fd5ab395c125" x="100" y="1" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{entryDate}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="f7b1223a-7d49-45c5-b2e1-c4cdb347bad3" x="0" y="101" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Comment:]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="5d7b5979-80ad-4adb-8790-ba8092b5b0b6" x="100" y="101" width="455" height="34"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="26836d1d-6a73-4a23-83d2-465d3a75162b" x="0" y="41" width="100" height="20"/>
@@ -65,16 +55,30 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{createdBy.firstName} + " " + $F{createdBy.lastName}]]></textFieldExpression>
 			</textField>
+		</band>
+		<band height="16">
 			<subreport>
-				<reportElement uuid="18003255-e953-4d75-90ce-03817fc92dd7" x="100" y="85" width="200" height="16"/>
+				<reportElement uuid="18003255-e953-4d75-90ce-03817fc92dd7" positionType="Float" stretchType="RelativeToTallestObject" x="100" y="0" width="455" height="16"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{journalEntryDetails})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/sessionDetails_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement uuid="3b089129-2012-4d70-96e1-fc7479c4e408" x="0" y="85" width="100" height="16"/>
+				<reportElement uuid="3b089129-2012-4d70-96e1-fc7479c4e408" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="16"/>
 				<textElement/>
 				<text><![CDATA[Session Details:]]></text>
 			</staticText>
+		</band>
+		<band height="38">
+			<staticText>
+				<reportElement uuid="f7b1223a-7d49-45c5-b2e1-c4cdb347bad3" x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Comment:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5d7b5979-80ad-4adb-8790-ba8092b5b0b6" x="100" y="0" width="455" height="38"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
