@@ -4,8 +4,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     inject: {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
-    	model: 'currentCampusEarlyAlertRouting',
-    	store: 'campusEarlyAlertRoutings'
+    	model: 'currentCampusEarlyAlertRouting'
     },
     config: {
     	containerToLoadInto: 'campusearlyalertroutingsadmin',
