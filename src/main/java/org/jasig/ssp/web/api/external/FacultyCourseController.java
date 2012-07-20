@@ -72,7 +72,7 @@ public class FacultyCourseController extends
 	 *             If that specified data is not invalid.
 	 */
 	@RequestMapping(value = "/course", method = RequestMethod.GET)
-	@PreAuthorize(Permission.PERSON_INSTRUCTION_READ)
+	@PreAuthorize(Permission.SECURITY_PERSON_INSTRUCTION_READ)
 	public @ResponseBody
 	PagedResponse<FacultyCourseTO> getAllCoursesForFaculty(
 			final @PathVariable String facultySchoolId)
@@ -98,7 +98,7 @@ public class FacultyCourseController extends
 	 *             If that specified data is not invalid.
 	 */
 	@RequestMapping(value = "/course/{formattedCourse}/roster", method = RequestMethod.GET)
-	@PreAuthorize(Permission.PERSON_INSTRUCTION_READ)
+	@PreAuthorize(Permission.SECURITY_PERSON_INSTRUCTION_READ)
 	public @ResponseBody
 	PagedResponse<ExternalPersonLiteTO> getRoster(
 			final @PathVariable String facultySchoolId,

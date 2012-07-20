@@ -5,9 +5,8 @@ package org.jasig.ssp.security.permissions;
  * slightly more compile time protection.
  */
 public class Permission { // NOPMD enum won't work for these values in
-							// Annotations
+							// annotations
 
-	//
 	private static final String HAS_ROLE = "hasRole('";
 	private static final String END = "')";
 	private static final String ROLE_PREFIX = "ROLE_";
