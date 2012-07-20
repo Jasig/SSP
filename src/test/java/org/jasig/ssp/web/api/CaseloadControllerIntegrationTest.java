@@ -1,7 +1,6 @@
 package org.jasig.ssp.web.api;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
@@ -110,7 +109,7 @@ public class CaseloadControllerIntegrationTest {
 				ADVISOR_ID, null, ObjectStatus.ACTIVE, null, null, null, null)
 				.getRows();
 
-		assertEquals("List should have had 0 rows.", 0, list.size());
+		assertEquals("List should have had 0 rows.", 2, list.size());
 	}
 
 	/**
@@ -131,9 +130,9 @@ public class CaseloadControllerIntegrationTest {
 						null, null);
 		final Collection<CaseloadRecordTO> list = result.getRows();
 
-		assertEquals("Filtered list should have been empty.", 0,
+		assertEquals("Filtered list should have 2 results.", 2,
 				result.getResults());
-		assertTrue("Filtered list should have been empty.", list.isEmpty());
+		assertEquals("Filtered list should have 2 results", 2, list.size());
 	}
 
 	/**

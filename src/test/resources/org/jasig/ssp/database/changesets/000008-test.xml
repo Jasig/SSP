@@ -135,4 +135,24 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="test program status for ken" author="daniel.bower">
+		<insert tableName="person_program_status">
+			<column name="id" value="3af3632e-d26c-11e1-b2df-0026b9e7ff4c" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_id" value="b2d12527-5056-a51a-8054-113116baab88" />
+			<column name="effective_date" valueDate="2012-03-20T00:00:00" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="person_program_status">
+				<where>id='3af3632e-d26c-11e1-b2df-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>
