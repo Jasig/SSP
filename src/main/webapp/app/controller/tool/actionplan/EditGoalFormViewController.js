@@ -3,6 +3,8 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson',
+    	confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentGoal',
     	person: 'currentPerson'
@@ -25,9 +27,15 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
 	},
   
 	init: function() {
-		this.getView().getForm().loadRecord( this.model );
-		this.getCombo().setValue( this.model.get('confidentialityLevel').id );
-		return this.callParent(arguments);
+		var me=this;
+		
+		// apply confidentiality level filter
+		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
+		
+		me.getView().getForm().loadRecord( me.model );
+		me.getCombo().setValue( this.model.get('confidentialityLevel').id );
+		
+		return me.callParent(arguments);
     },	
 	
 	constructor: function(){

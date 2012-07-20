@@ -63,8 +63,8 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 				        },{
 					            tooltip: 'View Student History',
 					            text: '',
-					            width: 35,
-					            height: 35,
+					            width: 32,
+					            height: 32,
 					            hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
 					            cls: 'studentHistoryIcon',
 					            xtype: 'button',
