@@ -10,6 +10,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
         person: 'currentPerson',
         personLite: 'personLite',
         personService: 'personService',
+        personProgramStatusService: 'personProgramStatusService',
         currentPersonAppointment: 'currentPersonAppointment'
     },
     control: {
@@ -265,9 +266,30 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     savePersonSuccess: function( r, scope ){
 		var me=scope;
+		var personProgramStatus;
 		me.getView().setLoading( false );    	
     	if (r.id != "")
 		{
+    		// new student save an Active program status
+    		if (me.person.get('id') == "")
+    		{
+    			// TODO: Get Active Program Status Id
+    			/*
+    			personProgramStatus = new Ssp.model.PersonProgramStatus();
+    			personProgramStatus.set('programStatusId','b2d12527-5056-a51a-8054-113116baab88');
+    			personProgramStatus.set('effectiveDate', new Date());
+    			console.log(r.id);
+    			console.log(personProgramStatus.data);
+    			me.personProgramStatusService.savePersonProgramStatus( 
+    					r.id, 
+    					personProgramStatus.data, 
+    					{
+    				success: me.saveProgramStatusSuccess,
+                    failure: me.saveProgramStatusFailure,
+                    scope: me 
+                });
+                */
+    		}
     		me.person.populateFromGenericObject( r );
     		me.saveAppointment();
 		}else{
