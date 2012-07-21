@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.exception.ConstraintViolationException;
+import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ServiceReason;
@@ -206,7 +206,7 @@ public class PersonControllerIntegrationTest {
 				PERSON_SORTEDBY_FIRSTNAME_5, person5.getFirstName());
 	}
 
-	@Test(expected = ConstraintViolationException.class)
+	@Test(expected = ObjectExistsException.class)
 	public void testUniqueSchoolId() throws ObjectNotFoundException,
 			ValidationException {
 		final Person person1 = createPerson();

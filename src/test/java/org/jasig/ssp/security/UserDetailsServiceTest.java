@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +38,9 @@ public class UserDetailsServiceTest {
 	@Autowired
 	private transient PersonDao personDao;
 
+	@Autowired
+	private transient PersonService personService;
+
 	@Before
 	public void setUp() {
 		SecurityContextHolder.clearContext();
@@ -59,8 +63,9 @@ public class UserDetailsServiceTest {
 				"adaLovelace", "Ada", "Lovelace", "ada@lovelace.com",
 				"112-358-1321");
 
-		final PersonAttributesService personAttributesService = createMock(PersonAttributesService.class);
-		userDetailsService.setPersonAttributesService(personAttributesService);
+		final PersonAttributesService personAttributesService =
+				createMock(PersonAttributesService.class);
+		personService.setPersonAttributesService(personAttributesService);
 		expect(personAttributesService.getAttributes(username)).andReturn(
 				adaAttribs);
 		replay(personAttributesService);
@@ -72,6 +77,7 @@ public class UserDetailsServiceTest {
 		assertNotNull(user);
 		assertEquals(username, user.getUsername());
 
-		// personDao.delete(user.getPerson());
+		personDao.delete(user.getPerson());
 	}
+
 }
