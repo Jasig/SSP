@@ -51,8 +51,8 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="b6d2a5e6-e868-4229-834f-391bc3a81f59" x="202" y="13" width="608" height="20"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="b6d2a5e6-e868-4229-834f-391bc3a81f59" stretchType="RelativeToBandHeight" x="202" y="13" width="548" height="20" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
 			</textField>
@@ -64,7 +64,7 @@
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="1" y="1" width="751" height="34" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="293" y="9" width="163" height="20"/>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="293" y="9" width="243" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -126,7 +126,7 @@
 			<textField>
 				<reportElement uuid="d819ba88-7a04-430f-9fa0-0c90e5293930" x="407" y="1" width="102" height="20"/>
 				<textElement/>
-                <textFieldExpression><![CDATA[($F{studentType} == null? "" : $F{studentType})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{studentType} == null? "" : $F{studentType})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="2477acef-4a84-48bc-877d-244b77fde610" x="5" y="1" width="102" height="20"/>
@@ -138,8 +138,8 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{middleInitial}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="ce9d2cd4-2571-4b65-b981-a04d2f862fee" x="507" y="1" width="243" height="31"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="ce9d2cd4-2571-4b65-b981-a04d2f862fee" stretchType="RelativeToBandHeight" x="507" y="1" width="243" height="31" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{specialServices}]]></textFieldExpression>
 			</textField>

@@ -88,7 +88,7 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 				dateFormat, true));
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public void getAddressLabels(
 			final HttpServletResponse response,

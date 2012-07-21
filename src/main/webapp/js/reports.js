@@ -3,16 +3,17 @@ var ssp = ssp || {};
 
 (function($, fluid) {
 	ssp.ReportSelector = function(container, options) {
+		var easeRate = 400;
 
 		// load the report form
 		var loadReportForm = function(containerId) {
 			// hide all forms
 			var hideableForms = that.locate('hideableform');
-			$(hideableForms).filter(":visible").toggle(400);
+			$(hideableForms).filter(":visible").toggle(easeRate);
 
 			// show the new form
 			var container = that.locate(containerId);
-			$(container).toggle(400);
+			$(container).toggle(easeRate);
 		}
 
 		var loadGroupInput = function(url, container) {
@@ -40,7 +41,7 @@ var ssp = ssp || {};
 		}
 
 		// load Addresses
-		var loadAddressesForm = function() {
+		var loadForm = function() {
 			// var addressesForm = that.locate('addressesForm');
 			loadGroupInput("/ssp/api/1/reference/programStatus/", that
 					.locate('programStatusGroup'));
@@ -93,8 +94,17 @@ var ssp = ssp || {};
 					return (false);
 				});
 
-		// Courses Select
+		var loadingMessage = that.locate('loadingMessage');
 		var reportsSelect = that.locate('reportsSelect');
+				
+    		loadingMessage.slideDown(easeRate, function() {
+    			loadForm();	
+        		loadingMessage.slideUp(easeRate);
+			reportsSelectChange();
+    		});
+        	
+		
+		
 		reportsSelect
 				.append('<option value="addressesForm">Address Labels Report</option>');
 		reportsSelect
@@ -102,9 +112,6 @@ var ssp = ssp || {};
 		reportsSelect
 				.append('<option value="confidentialityAgreementForm">Confidentiality Agreement</option>');
 		reportsSelect.change(reportsSelectChange);
-		loadAddressesForm();
-		reportsSelectChange();
-
 	}
 
 	// defaults
@@ -125,7 +132,8 @@ var ssp = ssp || {};
 							referralSourceGroup : '.input-referral-source-group',
 							calendarType : '.input-calendar-type',
 							hideableform : '.hideable-form',
-							printConfForm : '.print-conf-form'
+							printConfForm : '.print-conf-form',
+							loadingMessage: '.loading-message',
 						}
 					});
 
