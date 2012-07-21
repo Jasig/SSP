@@ -62,10 +62,10 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        xtype: "radiogroup",
 				        fieldLabel: 'Have you decided on a career/occupation?',
 				        columns: 1,
-				        itemId: 'decidedOnCareer',
+				        itemId: 'careerDecided',
 				        items: [
-				            {boxLabel: "Yes", name: "decidedOnCareer", inputValue:"true"},
-				            {boxLabel: "No", name: "decidedOnCareer", inputValue:"false"}]
+				            {boxLabel: "Yes", name: "careerDecided", inputValue:"true"},
+				            {boxLabel: "No", name: "careerDecided", inputValue:"false"}]
 					},{
 				        fieldLabel: 'What is your planned occupation?',
 				        name: 'plannedOccupation'
@@ -92,10 +92,10 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        xtype: "radiogroup",
 				        fieldLabel: 'Do you need additional information about which academic programs may lead to a future career?',
 				        columns: 1,
-				        itemId: 'decidedOnCareer',
+				        itemId: 'additionalAcademicProgramInformationNeeded',
 				        items: [
-				            {boxLabel: "Yes", name: "additionalCareerInformation", inputValue:"true"},
-				            {boxLabel: "No", name: "additionalCareerInformation", inputValue:"false"}]
+				            {boxLabel: "Yes", name: "additionalAcademicProgramInformationNeeded", inputValue:"true"},
+				            {boxLabel: "No", name: "additionalAcademicProgramInformationNeeded", inputValue:"false"}]
 					}]
 				    
 				    }]

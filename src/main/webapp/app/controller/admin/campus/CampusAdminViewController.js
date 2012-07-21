@@ -3,6 +3,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	appEventsController: 'appEventsController',
+    	campusEarlyAlertRouting: 'currentCampusEarlyAlertRouting',
     	campusesStore: 'campusesStore',
     	earlyAlertCoordinatorsStore: 'earlyAlertCoordinatorsStore',
     	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
@@ -12,9 +13,14 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     },
     config: {
     	containerToLoadInto: 'adminforms',
-    	campusEditorForm: 'definecampus'
+    	campusEditorForm: 'editcampus',
+    	campusEarlyAlertRoutingAdminForm: 'campusEarlyAlertRoutingsAdmin'
     },
     control: {
+    	view: {
+    		viewready: 'onViewReady'
+    	},
+    	
     	'editButton': {
 			click: 'onEditClick'
 		},
@@ -36,6 +42,26 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
 		return this.callParent(arguments);
     },
 
+    onViewReady: function(comp, obj){
+    	var me=this;
+    	me.appEventsController.assignEvent({eventName: 'editCampusEarlyAlertRoutings', callBackFunc: me.onEditCampusEarlyAlertRoutings, scope: me});
+    },    
+ 
+    destroy: function() {
+    	var me=this;
+    	
+    	me.appEventsController.removeEvent({eventName: 'editCampusEarlyAlertRoutings', callBackFunc: me.onEditCampusEarlyAlertRoutings, scope: me});
+
+    	return me.callParent( arguments );
+    },
+
+    onEditCampusEarlyAlertRoutings: function(){
+		var me=this;
+    	var model = new Ssp.model.reference.CampusEarlyAlertRouting();
+		me.campusEarlyAlertRouting.data = model.data;
+		me.displayCampusEarlyAlertRoutingAdmin();
+    }, 
+    
 	onEditClick: function(button) {
 		var grid, record;
 		grid = button.up('grid');
@@ -94,7 +120,11 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
         	    });
         }
  	},
-	
+
+	displayCampusEarlyAlertRoutingAdmin: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getCampusEarlyAlertRoutingAdminForm(), true, {});
+	},
+ 	
 	displayCampusEditor: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getCampusEditorForm(), true, {});
 	}

@@ -3,7 +3,8 @@ Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	model: 'currentEarlyAlertRouting'
+    	model: 'currentCampusEarlyAlertRouting',
+    	store: 'campusEarlyAlertRoutingsStore'
     },
     config: {
     	personUrl: null

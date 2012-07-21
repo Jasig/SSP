@@ -7,6 +7,7 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
     controller: 'Ssp.controller.admin.campus.CampusAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
+        appEventsController: 'appEventsController',
         authenticatedPerson: 'authenticatedPerson',
         model: 'currentCampus',
         store: 'campusesStore'
@@ -20,8 +21,22 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
     			{   
     		      autoScroll: true,
     		      store: me.store,
-     		      columns: [
-    		                { header: 'Name',  
+     		      columns: [{
+		    	        xtype:'actioncolumn',
+		    	        width:65,
+		    	        header: 'Action',
+		    	        items: [{
+			    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
+			    	            tooltip: 'Edit Campus Early Alert Routings',
+			    	            handler: function(grid, rowIndex, colIndex) {
+			    	            	var rec = grid.getStore().getAt(rowIndex);
+			    	            	var panel = grid.up('panel');
+			    	                panel.model.data=rec.data;
+			    	            	panel.appEventsController.getApplication().fireEvent('editCampusEarlyAlertRoutings');
+			    	            },
+			    	            scope: me
+			    	        }]
+     		              },{ header: 'Name',  
     		                  dataIndex: 'name',
     		                  flex: 50 },
     		                { header: 'Description',

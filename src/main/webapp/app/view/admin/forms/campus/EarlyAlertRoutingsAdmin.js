@@ -16,10 +16,14 @@ Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',{
     			{   
     		      autoScroll: true,
     		      store: me.store,
+    		      title: 'Early Alert Routing Groups',
      		      columns: [
     		                { header: 'Group Name',  
     		                  dataIndex: 'name',
-    		                  flex: 50 }
+    		                  flex: .5 },
+      		                { header: 'Group Email',  
+        		                  dataIndex: 'name',
+        		                  flex: .5 }
     		           ],
     		        
     		           dockedItems: [{
@@ -27,7 +31,7 @@ Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',{
       		               dock: 'top',
       		               items: [{
       		            	   xtype: "label",
-     		                   text: "Routing Groups define optional endpoints where an Early Alert will be delivered."
+     		                   text: "Early Alert Routing Groups define optional endpoints where an Early Alert will be delivered when it's entered in the system."
      		               }]  
       		            },
      		       		{

@@ -45,7 +45,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 				},{
 		            xtype: 'combo',
 		            store: me.peopleSearchLiteStore,
-		            displayField: 'firstName',
+		            displayField: 'displayFullName',
 		            emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
 		            valueField:'id',
 		            typeAhead: false,

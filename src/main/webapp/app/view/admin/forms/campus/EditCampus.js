@@ -7,7 +7,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
     inject: {
     	store: 'earlyAlertCoordinatorsStore'
     },
-	title: 'Step 1 - Campus Details',
+	title: 'Edit Campus',
 	initComponent: function() {
 		var me=this;
         Ext.applyIf(me, {
@@ -36,7 +36,22 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
 			        queryMode: 'local',
 			        allowBlank: false,
 			        width: 300
-				}]
+				}],
+	            
+	            dockedItems: [{
+	       		               xtype: 'toolbar',
+	       		               items: [{
+			       		                   text: 'Save',
+			       		                   xtype: 'button',
+			       		                   action: 'save',
+			       		                   itemId: 'saveButton'
+			       		               }, '-', {
+			       		                   text: 'Cancel',
+			       		                   xtype: 'button',
+			       		                   action: 'cancel',
+			       		                   itemId: 'cancelButton'
+			       		               }]
+	       		           }]
         });
 
         return me.callParent(arguments);
