@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *            Transfer object type that handles the model type T.
  */
 public abstract class AbstractPersonAssocController<T extends PersonAssocAuditable, TO extends AbstractAuditableTO<T>>
-		extends BaseController {
+		extends AbstractBaseController {
 
 	/**
 	 * Logger

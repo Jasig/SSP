@@ -3,12 +3,38 @@ package org.jasig.ssp.model;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
+/**
+ * Caseload record
+ * 
+ * <p>
+ * There isn't a 'Caseload' table/model, but this psuedo-model is used by the
+ * DAO layer to store aggregate data for use by the Caseload controller and
+ * service layers.
+ */
 public class CaseloadRecord {
 
+	@NotNull
 	private UUID personId;
-	private String schoolId, firstName, middleInitial, lastName,
-			studentTypeName;
-	private Date currentAppointmentStartDate, studentIntakeCompleteDate;
+
+	@NotNull
+	private String schoolId;
+
+	@NotNull
+	private String firstName;
+
+	private String middleInitial;
+
+	@NotNull
+	private String lastName;
+
+	private String studentTypeName;
+
+	private Date currentAppointmentStartTime;
+
+	private Date studentIntakeCompleteDate;
+
 	private int numberOfEarlyAlerts;
 
 	public UUID getPersonId() {
@@ -19,15 +45,15 @@ public class CaseloadRecord {
 		this.personId = personId;
 	}
 
-	public Date getCurrentAppointmentStartDate() {
-		return currentAppointmentStartDate == null ? null : new Date(
-				currentAppointmentStartDate.getTime());
+	public Date getCurrentAppointmentStartTime() {
+		return currentAppointmentStartTime == null ? null : new Date(
+				currentAppointmentStartTime.getTime());
 	}
 
-	public final void setCurrentAppointmentStartDate(
-			final Date currentAppointmentStartDate) {
-		this.currentAppointmentStartDate = currentAppointmentStartDate == null ? null
-				: new Date(currentAppointmentStartDate.getTime());
+	public final void setCurrentAppointmentStartTime(
+			final Date currentAppointmentStartTime) {
+		this.currentAppointmentStartTime = currentAppointmentStartTime == null ? null
+				: new Date(currentAppointmentStartTime.getTime());
 	}
 
 	public int getNumberOfEarlyAlerts() {
@@ -92,5 +118,4 @@ public class CaseloadRecord {
 	public void setStudentTypeName(final String studentTypeName) {
 		this.studentTypeName = studentTypeName;
 	}
-
 }

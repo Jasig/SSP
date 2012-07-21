@@ -19,7 +19,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
  *            The model that the TO type T works with.
  */
 public abstract class RestController<TO extends TransferObject<T>, T extends Auditable>
-		extends BaseController {
+		extends AbstractBaseController {
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.

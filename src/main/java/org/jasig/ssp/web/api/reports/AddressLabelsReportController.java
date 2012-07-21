@@ -36,7 +36,7 @@ import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ import com.google.common.collect.Maps;
 // TODO: Add PreAuthorize
 @Controller
 @RequestMapping("/1/report/AddressLabels")
-public class AddressLabelsReportController extends BaseController { // NOPMD
+public class AddressLabelsReportController extends AbstractBaseController { // NOPMD
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);

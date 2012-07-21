@@ -32,7 +32,7 @@ import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.SpecialServicesReportingTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/SpecialServices")
-public class SpecialServicesReportController extends BaseController {
+public class SpecialServicesReportController extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SpecialServicesReportController.class);

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @PreAuthorize("hasRole('ROLE_PERSON_CASELOAD_READ')")
 @RequestMapping("/1/person")
-public class CaseloadController extends BaseController {
+public class CaseloadController extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CaseloadController.class);

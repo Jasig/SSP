@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @PreAuthorize(Permission.SECURITY_REFERENCE_WRITE)
 @RequestMapping("/1/reference/campus/{id}/earlyAlertRouting")
 public class EarlyAlertRoutingController
-		extends BaseController {
+		extends AbstractBaseController {
 
 	/**
 	 * Empty constructor

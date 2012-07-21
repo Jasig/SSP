@@ -69,7 +69,7 @@ public class ExternalPersonLiteTO implements Serializable,
 					"Person required when construcing a new simple ExternalPersonLiteTO.");
 		}
 
-		schoolId = externalFacultyCourseRoster.getFacultySchoolId();
+		schoolId = externalFacultyCourseRoster.getSchoolId();
 		firstName = externalFacultyCourseRoster.getFirstName();
 		middleName = externalFacultyCourseRoster.getMiddleName();
 		lastName = externalFacultyCourseRoster.getLastName();
@@ -77,7 +77,7 @@ public class ExternalPersonLiteTO implements Serializable,
 
 	@Override
 	public final void from(final ExternalFacultyCourseRoster model) {
-		schoolId = model.getFacultySchoolId();
+		schoolId = model.getSchoolId();
 		firstName = model.getFirstName();
 		middleName = model.getMiddleName();
 		lastName = model.getLastName();
