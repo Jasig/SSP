@@ -5,11 +5,12 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
     	model: 'currentCampusEarlyAlertRouting',
-    	store: 'campusEarlyAlertRoutings'
+    	campus: 'currentCampus'
     },
     config: {
     	containerToLoadInto: 'campusearlyalertroutingsadmin',
-    	formToDisplay: 'earlyalertroutingsadmin'
+    	formToDisplay: 'earlyalertroutingsadmin',
+    	url: null
     },
     control: {
     	'saveButton': {
@@ -23,6 +24,9 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     
 	init: function() {
 		var me=this;
+		me.url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('campusEarlyAlertRouting') );
+		me.url = me.url.replace( "{id}", me.campus.get('id') );
+		
 		me.getView().getForm().reset();
 		me.getView().getForm().loadRecord( me.model );
 		return me.callParent(arguments);
@@ -31,7 +35,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
-		url = this.store.getProxy().url;
+		url = me.url;
 		this.getView().getForm().updateRecord();
 		record = this.model;
 		id = record.get('id');

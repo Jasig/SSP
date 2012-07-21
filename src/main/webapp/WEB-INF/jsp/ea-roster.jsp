@@ -2,7 +2,7 @@
 
 <portlet:renderURL var="enterAlertUrl" escapeXml="false">
     <portlet:param name="action" value="enterAlert"/>
-    <portlet:param name="studentId" value="STUDENTID"/>
+    <portlet:param name="schoolId" value="SCHOOLID"/>
     <portlet:param name="formattedCourse" value="FORMATTEDCOURSE"/>
 </portlet:renderURL>
 
@@ -103,11 +103,11 @@
           </thead>
           <tbody class="roster-body">
             <tr rsf:id="row:">
-              <td headers="${n}firstName"><span rsf:id="firstName"></span></td>
+              <td headers="${n}firstName" rsf:id="firstName"></td>
               <td headers="${n}middleName" rsf:id="middleName"></td>
               <td headers="${n}lastName" rsf:id="lastName"></td>
               <td headers="${n}studentType" rsf:id="studentType"></td>
-              <td headers="${n}schoolId" rsf:id="schoolId" class="schoolId"></td>
+              <td headers="${n}schoolId" rsf:id="schoolId" class="schoolId" style="display: none;"></td>
             </tr>
           </tbody>
         </table>

@@ -8,7 +8,7 @@ import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
-import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/1/mygps/challengereferral")
-public class MyGpsChallengeReferralController extends BaseController {
+public class MyGpsChallengeReferralController extends AbstractBaseController {
 
 	@Autowired
 	private transient ChallengeReferralService challengeReferralService;

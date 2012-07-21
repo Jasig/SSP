@@ -26,13 +26,8 @@ Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',{
      		               xtype: 'toolbar',
       		               dock: 'top',
       		               items: [{
-     		                   text: '',
-     		                   tooltip: "Early Alert Routing Groups are used to route Early Alerts by the Referral Reason of the Early Alert. If you do not define a routing, the Early Alert Coordinator's email address will be used for Early Alert communication when no Counselor/Coach is assigned.",
-     		                   cls: 'helpIcon',
-	   			               width: 32,
-						       height: 32,
-     		                   xtype: 'button',
-     		                   itemId: 'helpButton'
+      		            	   xtype: "label",
+     		                   text: "Routing Groups define optional endpoints where an Early Alert will be delivered."
      		               }]  
       		            },
      		       		{

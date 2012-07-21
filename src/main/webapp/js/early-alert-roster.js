@@ -116,7 +116,7 @@ var ssp = ssp || {};
                 { key: 'middleName', valuebinding: '*.middleName', sortable: true },
                 { key: 'lastName', valuebinding: '*.lastName', sortable: true },
                 { key: 'studentType', valuebinding: '*.studentType', sortable: true },
-                { key: 'studentId', valuebinding: '*.id', sortable: true }
+                { key: 'schoolId', valuebinding: '*.schoolId', sortable: true }
             ],
             bodyRenderer: {
                 type: 'fluid.pager.selfRender',
@@ -139,9 +139,9 @@ var ssp = ssp || {};
 
         // Click event for selecting a student
         $(container + ' ' + that.options.selectors.rosterTable + ' tr').live('click', function() {
-            var studentId = $(this).find('.studentId').text();
+            var schoolId = $(this).find('.schoolId').text();
             var formattedCourse = that.locate('courseSelect').val();
-            var alertFormUrl = options.urls.enterAlert.replace('STUDENTID', studentId).replace('FORMATTEDCOURSE', formattedCourse);
+            var alertFormUrl = options.urls.enterAlert.replace('SCHOOLID', schoolId).replace('FORMATTEDCOURSE', formattedCourse);
             window.location = alertFormUrl;
         });
 

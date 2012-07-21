@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *            Transfer object type that handles the model type T.
  */
 public abstract class AbstractPersonAssocController<T extends PersonAssocAuditable, TO extends AbstractAuditableTO<T>>
-		extends BaseController {
+		extends AbstractBaseController {
 
 	/**
 	 * Logger
@@ -78,12 +78,21 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 
 	public abstract String permissionBaseName();
 
-	public void checkPermissionForOp(final String op) {
-
-		if (!securityService.hasAuthority("ROLE_PERSON_"
-				+ permissionBaseName() + "_" + op)) {
-
-			throw new AccessDeniedException("Access is denied for Operation.");
+	/**
+	 * Check authorization for the specified operation.
+	 * 
+	 * @param operation
+	 *            check authorization to this operation
+	 */
+	public void checkPermissionForOp(final String operation) {
+		final String permission = "ROLE_PERSON_" + permissionBaseName() + "_"
+				+ operation;
+		if (!securityService.hasAuthority(permission)) {
+			LOGGER.warn("Access is denied for Operation. Role required: "
+					+ permission);
+			throw new AccessDeniedException(
+					"Access is denied for Operation. Role required: "
+							+ permission);
 		}
 	}
 

@@ -8,6 +8,7 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
     inject: {
         apiProperties: 'apiProperties',
         authenticatedPerson: 'authenticatedPerson',
+        model: 'currentCampus',
         store: 'campusesStore'
     },
     height: '100%',

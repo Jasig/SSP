@@ -6,22 +6,28 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
     controller: 'Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewController',
     inject: {
     	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
-    	peopleStore: 'peopleStore'
+    	peopleSearchLiteStore: 'peopleSearchLiteStore',
+    	sspConfig: 'sspConfig'
     },
-	title: 'Edit Step',
+	title: 'Edit Routing Group',
 	initComponent: function() {
         var me=this;
 		Ext.applyIf(me, {
             items: [{
                     xtype: 'textfield',
                     fieldLabel: 'Group Name',
-                    anchor: '100%',
-                    name: 'groupName'
+                    width: 300,
+                    name: 'groupName',
+                    allowBlank: false
                 },{
                     xtype: 'textfield',
                     fieldLabel: 'Group Email',
                     anchor: '100%',
-                    name: 'groupEmail'
+                    name: 'groupEmail',
+                    width: 300,
+                    vtype:'email',
+			        maxLength: 100,
+			        allowBlank:true
                 },{
 			        xtype: 'combobox',
 			        name: 'earlyAlertReasonId',
@@ -37,20 +43,27 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 			        allowBlank: false,
 			        width: 300
 				},{
-			        xtype: 'combobox',
-			        name: 'person',
-			        itemId: 'personCombo',
-			        fieldLabel: 'Person',
-			        emptyText: 'Select One',
-			        store: me.peopleStore,
-			        valueField: 'id',
-			        displayField: 'firstName',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: true,
-			        width: 300
-				}],
+		            xtype: 'combo',
+		            store: me.peopleSearchLiteStore,
+		            displayField: 'firstName',
+		            emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
+		            valueField:'id',
+		            typeAhead: false,
+		            fieldLabel: 'Person',
+		            hideTrigger:true,
+		            queryParam: 'searchTerm',
+		            allowBlank: true,
+		            width: 300,
+
+		            listConfig: {
+		                loadingText: 'Searching...',
+		                emptyText: 'No matching people found.',
+		                getInnerTpl: function() {
+		                    return '{firstName} {lastName}';
+		                }
+		            },
+		            pageSize: 10
+		        }],
             
             dockedItems: [{
        		               xtype: 'toolbar',

@@ -80,7 +80,17 @@ sn: Laforge
 mail: test@sinclair.edu
 telephonenumber: 111 867-5309
 
-
+dn: uid=faculty0,ou=users,dc=springframework,dc=org
+objectClass: uidObject
+objectClass: person
+objectClass: top
+objectClass: organizationalPerson
+uid: faculty0
+userPassword: faculty0
+cn: Jim
+sn: Faculty
+mail: test@sinclair.edu
+telephonenumber: 111 867-5309
 
 ####
 # Groups:
@@ -92,6 +102,12 @@ objectClass: top
 cn: COACH
 uniqueMember: cn=advisor0,ou=users,dc=springframework,dc=org
 
+dn: cn=FACULTY,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: FACULTY
+uniqueMember: cn=faculty0,ou=users,dc=springframework,dc=org
+
 dn: cn=REFERENCE_READ,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
@@ -100,6 +116,7 @@ uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
 uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 uniqueMember: uid=student0,ou=users,dc=springframework,dc=org
 uniqueMember: uid=student1,ou=users,dc=springframework,dc=org
+uniqueMember: uid=faculty0,ou=users,dc=springframework,dc=org
 
 dn: cn=REFERENCE_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -183,6 +200,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_EARLY_ALERT_WRITE
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=faculty0,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_EARLY_ALERT_DELETE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -317,6 +335,7 @@ objectClass: top
 cn: PERSON_INSTRUCTION_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
 uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
+uniqueMember: uid=faculty0,ou=users,dc=springframework,dc=org
 
 dn: cn=STUDENT_INTAKE_READ,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames

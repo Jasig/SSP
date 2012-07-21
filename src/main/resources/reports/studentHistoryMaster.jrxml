@@ -8,7 +8,7 @@
 	<field name="dateDayOnly" class="java.lang.String"/>
 	<field name="journalEntries" class="java.util.List"/>
 	<field name="taskList" class="java.util.List"/>
-    <field name="earlyAlerts" class="java.util.List"/>
+	<field name="earlyAlerts" class="java.util.List"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -111,7 +111,7 @@
 				<subreportExpression><![CDATA["reports/earlyAlertHistory_subreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="50">
+		<band height="13">
 			<rectangle>
 				<reportElement uuid="942aff52-9d2c-4551-8098-69343f0d5370" x="0" y="4" width="572" height="2" backcolor="#7E7979"/>
 			</rectangle>

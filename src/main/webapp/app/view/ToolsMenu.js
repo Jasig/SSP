@@ -33,6 +33,8 @@ Ext.define('Ssp.view.ToolsMenu', {
 	    			    	        xtype:'actioncolumn',
 	    			    	        width:18,
 	    			    	        header: '',
+	    			    	        sortable: false,
+	    			    	        hidden: true,
 	    			    	        items: [{
 	    			    	            tooltip: 'Add Tool',
 	    			    	            // icon: Ssp.util.Constants.ADD_TOOL_ICON_PATH,

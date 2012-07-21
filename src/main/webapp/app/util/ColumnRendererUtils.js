@@ -71,12 +71,27 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	renderPhotoIcon: function(val) {
 	    return '<img src="' + val + '">';
 	},
+
+	renderCoachName: function(val, metaData, record) {
+		var strHtml = '<div>';
+		strHtml += '<p>' + record.getCoachFullName() + '</p>';
+        strHtml += '</div>';
+	    return strHtml;
+	},
+	
+	renderSearchStudentName: function(val, metaData, record) {
+		var strHtml = '<div>';
+		strHtml += '<p>' + record.getFullName() + '</p>';
+        strHtml += '</div>';
+	    return strHtml;
+	},
 	
 	renderStudentDetails: function(val, metaData, record) {
 		var strHtml = '<div>';
 		strHtml += '<p>' + record.getFullName() + '</p>';
-        strHtml += '<p>' + record.get('schoolId') + '</p>';
-        /*strHtml += '<p>' + record.getProgramStatusName() + '</p>';*/
+		strHtml += '<p>COACH: ' + record.getCoachFullName() + '</p>';
+        strHtml += '<p>ID: ' + record.get('schoolId') + '</p>';
+        strHtml += '<p>STATUS: ' + record.get('currentProgramStatusName') + '</p>';
         strHtml += '</div>';
 	    return strHtml;
 	},

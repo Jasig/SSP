@@ -3,7 +3,7 @@ package org.jasig.mygps.web;
 import org.jasig.mygps.business.StudentIntakeFormManager;
 import org.jasig.mygps.model.transferobject.FormTO;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/1/mygps/intake")
-public class MyGpsStudentIntakeController extends BaseController {
+public class MyGpsStudentIntakeController extends AbstractBaseController {
 
 	@Autowired
 	private transient StudentIntakeFormManager studentIntakeFormManager;

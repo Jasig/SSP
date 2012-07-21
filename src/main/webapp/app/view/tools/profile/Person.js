@@ -19,6 +19,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
 				    layout: 'anchor',
 				    defaults: {
 				        anchor: '100%'
+				        
 				    },
 				    fieldDefaults: {
 				        msgTarget: 'side',
@@ -39,10 +40,6 @@ Ext.define('Ssp.view.tools.profile.Person', {
 					        fieldLabel: 'Student',
 					        name: 'name',
 					        itemId: 'studentName'
-					    },,{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel'),
-					        name: 'coachName',
-					        itemId: 'coachName'
 					    },{
 					        fieldLabel: 'Student Id',
 					        itemId: 'studentId',
@@ -99,6 +96,26 @@ Ext.define('Ssp.view.tools.profile.Person', {
 					        fieldLabel: 'Academic Program',
 					        name: 'academicPrograms',
 					        hidden: true
+					    },{
+					        fieldLabel: me.sspConfig.get('coachFieldLabel'),
+					        name: 'coachName',
+					        itemId: 'coachName'
+					    },{
+					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Phone',
+					        name: 'coachWorkPhone',
+					        itemId: 'coachWorkPhone'
+					    },{
+					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Department',
+					        name: 'coachDepartmentName',
+					        itemId: 'coachDepartmentName'
+					    },{
+					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Office',
+					        name: 'coachOfficeLocation',
+					        itemId: 'coachOfficeLocation'
+					    },{
+					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Email',
+					        name: 'coachPrimaryEmailAddress',
+					        itemId: 'coachPrimaryEmailAddress'
 					    }]
 					    }],
 				});

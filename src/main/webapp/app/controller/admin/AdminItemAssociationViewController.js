@@ -71,8 +71,8 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	treeRequest.set('callbackFunc', me.onLoadComplete);
     	treeRequest.set('callbackScope', me);
     	me.treeUtils.getItems( treeRequest );
-    	me.getView().setLoading( true );
-    },  
+    	// me.getView().setLoading( true );
+    }, 
     
     getAssociatedItems: function(node, id){
     	var me=this;
@@ -87,12 +87,12 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	treeRequest.set('callbackFunc', me.onLoadComplete);
     	treeRequest.set('callbackScope', me);
     	me.treeUtils.getItems( treeRequest );
-    	me.getView().setLoading( true );
+    	// me.getView().setLoading( true );
     },
 
 	onLoadComplete: function( scope ){
 		var me=scope;
-		me.getView().setLoading( false );
+		//me.getView().setLoading( false );
 	},
     
     onBeforeDrop: function(node, data, overModel, dropPosition, dropHandler, eOpts) {

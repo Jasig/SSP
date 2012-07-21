@@ -29,7 +29,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/session")
-public class SessionController extends BaseController {
+public class SessionController extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SessionController.class);

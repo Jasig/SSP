@@ -213,23 +213,27 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var me=this;
 		var grid = me.getView();
 		var store;
+		var sortableColumns = false;
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1 )
 		{
 			store = me.caseloadStore;
 			columns = [
-    	              { header: 'First', dataIndex: 'firstName', flex: 1 },		        
-    	              { header: 'MI', dataIndex: 'middleInitial', flex: .2},
-    	              { header: 'Last', dataIndex: 'lastName', flex: 1},
-    	              { header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
-    	              { header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
-    	              { header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
+    	              { sortable: sortableColumns, header: 'First', dataIndex: 'firstName', flex: 1 },		        
+    	              { sortable: sortableColumns, header: 'MI', dataIndex: 'middleInitial', flex: .2},
+    	              { sortable: sortableColumns, header: 'Last', dataIndex: 'lastName', flex: 1},
+    	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
+    	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
+    	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
     	              ];			
 		}else{
 			store = me.searchStore;
 			columns = [
     	              /* { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 }, */		        
-    	              { text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderStudentDetails, flex: 50}
+    	              { sortable: sortableColumns, header: 'Student', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: .25 },
+    	              { sortable: sortableColumns, header: 'Coach', dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: .25 },
+    	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: .25},
+    	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .25}
     	              ];		
 		}
 		
@@ -321,11 +325,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	onSearchClick: function(button){
 		var me=this;
-		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();		
+		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
 		me.setGridView('search');
-		if (me.getSearchText().value != undefined && me.getSearchText().value != "")
+		if ( me.getSearchText().value != "")
 		{
-			me.searchService.search(me.getSearchText().value, outsideCaseload);
+			me.searchService.search(me.getSearchText().value, outsideCaseload);	
 		}else{
 			me.searchStore.removeAll();
 		}	

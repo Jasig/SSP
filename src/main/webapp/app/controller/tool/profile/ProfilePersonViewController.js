@@ -15,6 +15,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     control: {
     	nameField: '#studentName',
     	coachNameField: '#coachName',
+    	coachWorkPhoneField: '#coachWorkPhone',
+    	coachDepartmentNameField: '#coachDepartmentName',
+    	coachOfficeLocationField: '#coachOfficeLocation',
+    	coachPrimaryEmailAddressField: '#coachPrimaryEmailAddress',
     	studentIdField: '#studentId',
     	birthDateField: '#birthDate',
     	studentTypeField: '#studentType',
@@ -27,6 +31,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var studentIdField = me.getStudentIdField();
 		var nameField = me.getNameField();
 		var coachNameField = me.getCoachNameField();
+		var coachWorkPhoneField = me.getCoachWorkPhoneField();
+		var coachDepartmentNameField = me.getCoachDepartmentNameField();
+		var coachOfficeLocationField = me.getCoachOfficeLocationField();
+		var coachPrimaryEmailAddressField = me.getCoachPrimaryEmailAddressField();
 		var birthDateField = me.getBirthDateField();
 		var studentTypeField = me.getStudentTypeField();
 		var programStatusField = me.getProgramStatusField();
@@ -35,19 +43,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');			
 		var successFunc = function(response,view){
 	    	var r = Ext.decode(response.responseText);
-    		var fullName;
-    		var studentTypeName;
-    		var programStatusName;
-    		var coachName;   		
+    		var fullName; 		
     		
     		// load the person data
     		me.person.populateFromGenericObject(r);
     		
 	    	fullName = me.person.getFullName();
-	    	studentTypeName = me.person.getStudentTypeName();
-	    	programStatusName = me.person.getProgramStatusName();
-	    	coachName = me.person.getCoachName();
-    		
+	    	
 	    	// console.log( me.person.get('programStatuses') );
 	    	
     		// load special service groups
@@ -79,10 +81,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     		
     		// load additional values
     		nameField.setValue( fullName );
-    		coachNameField.setValue( coachName );
+    		coachNameField.setValue( me.person.getCoachFullName() );
+    		coachWorkPhoneField.setValue( me.person.getCoachWorkPhone() );
+    		coachDepartmentNameField.setValue( me.person.getCoachDepartmentName() );
+    		coachOfficeLocationField.setValue( me.person.getCoachOfficeLocation() );
+    		coachPrimaryEmailAddressField.setValue( me.person.getCoachPrimaryEmailAddress() );
     		birthDateField.setValue( me.person.getFormattedBirthDate() );
-    		studentTypeField.setValue( studentTypeName );
-    		programStatusField.setValue( programStatusName );
+    		studentTypeField.setValue( me.person.getStudentTypeName() );
+    		programStatusField.setValue( me.person.getProgramStatusName() );
     		studentRecordComp.setTitle('Student Record - ' + fullName);
     		
 	    	// hide the loader

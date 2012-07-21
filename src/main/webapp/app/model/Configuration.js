@@ -51,7 +51,7 @@ Ext.define('Ssp.model.Configuration', {
     	     {
               name: 'coachFieldLabel', 
               type: 'string', 
-              defaultValue: 'Coach/Advisor'
+              defaultValue: 'Coach'
             }],
              
      	constructor: function(){

@@ -53,4 +53,12 @@ public class FacultyCourseServiceImpl extends
 				.getRosterByFacultySchoolIdAndCourse(facultySchoolId,
 						formattedCourse);
 	}
+
+	@Override
+	public FacultyCourse getCourseByFacultySchoolIdAndFormattedCourse(
+			String facultySchoolId, String formattedCourse) 
+			throws ObjectNotFoundException {
+		return dao.getCourseByFacultySchoolIdAndFormattedCourse(facultySchoolId, 
+				formattedCourse);
+	}
 }

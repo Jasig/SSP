@@ -3,18 +3,20 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="journalStepDetail" class="org.jasig.ssp.transferobject.reference.ReferenceLiteTO"/>
-	<field name="journalStepDetail.name" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/codynet/workspace/ssd/SSP-Open-Source-Project/src/main/resources/reports/"]]></defaultValueExpression>
+	</parameter>
+	<field name="journalStepDetails" class="java.util.Set"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement uuid="a2ab2788-bf8a-44b4-8086-e6bcfa018baf" x="0" y="0" width="555" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{journalStepDetail.name}]]></textFieldExpression>
-			</textField>
+		<band height="22" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="07669e9d-86c1-4720-9964-faa28f09be28" stretchType="RelativeToTallestObject" x="0" y="0" width="555" height="22"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{journalStepDetails})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 </jasperReport>

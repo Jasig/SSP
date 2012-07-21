@@ -5,10 +5,10 @@ Ext.define('Ssp.view.admin.forms.campus.CampusEarlyAlertRoutingsAdmin', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.campus.CampusEarlyAlertRoutingsAdminViewController',
-	title: 'Define Campus Early Alert Routing Groups',
 	height: '100%',
 	width: '100%',
 	layout: 'fit',
+	title: 'Step 2 - Configure Optional Routings',
     initComponent: function(){
         var me=this;
     	Ext.apply(me,

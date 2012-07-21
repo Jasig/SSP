@@ -30,7 +30,7 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'referralSources', type: 'auto'},
     		 {name: 'serviceReasons', type: 'auto'},
     		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
-    		 {name: 'programStatuses', type: 'auto'},
+    		 {name: 'currentProgramStatusName', type: 'auto'},
     		 {name: 'registeredForCurrentTerm', type: 'string'}],
     		 		 
     getFullName: function(){ 
@@ -53,11 +53,6 @@ Ext.define('Ssp.model.Person', {
     	return ((coach != null)? coach.id : "");   	
     },
 
-    getCoachName: function(){
-    	var coach = this.get('coach');
-    	return ((coach != null)? coach.firstName + ' ' + coach.lastName : "");   	
-    },     
-    
     setCoachId: function( value ){
     	if (value != "")
     	{
@@ -66,6 +61,31 @@ Ext.define('Ssp.model.Person', {
         		this.set('coach',{"id":value});
         	}    		
     	}
+    },    
+    
+    getCoachFullName: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.firstName + ' ' + coach.lastName : "");   	
+    },     
+
+    getCoachWorkPhone: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.workPhone : "");   	
+    },    
+
+    getCoachPrimaryEmailAddress: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.primaryEmailAddress : "");   	
+    },    
+
+    getCoachOfficeLocation: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.officeLocation : "");   	
+    },    
+    
+    getCoachDepartmentName: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.departmentName : "");   	
     },
     
     getStudentTypeId: function(){
@@ -90,15 +110,6 @@ Ext.define('Ssp.model.Person', {
     },
     
     getProgramStatusName: function(){
-    	var programStatus = this.get('programStatuses');
-    	var programStatusName = "";
-    	if (programStatus != null)
-    	{
-        	if (programStatus.length > 0)
-        	{
-        		programStatusName = programStatus[0].name;
-        	}
-    	}
-    	return programStatusName;   	
+    	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
     }
 });

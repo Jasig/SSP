@@ -10,7 +10,7 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
-import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/1/mygps/challenge")
-public class MyGpsChallengeController extends BaseController {
+public class MyGpsChallengeController extends AbstractBaseController {
 
 	@Autowired
 	private transient SecurityService securityService;
