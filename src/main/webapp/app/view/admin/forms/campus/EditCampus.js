@@ -7,7 +7,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
     inject: {
     	store: 'earlyAlertCoordinatorsStore'
     },
-	title: 'Edit Campus',
+	title: 'Step 1 - Campus Details',
 	initComponent: function() {
 		var me=this;
         Ext.applyIf(me, {

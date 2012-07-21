@@ -17,6 +17,10 @@ Ext.define('Ssp.view.admin.forms.campus.DefineCampus',{
 	               xtype: 'toolbar',
 	               dock: 'top',
 	               items: [{
+	                   text: 'Cancel',
+	                   xtype: 'button',
+	                   itemId: 'cancelCampusEditorButton'
+	               },{
 	                   text: 'Prev',
 	                   xtype: 'button',
 	                   action: 'prev',

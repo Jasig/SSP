@@ -2,6 +2,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
+    	appEventsController: 'appEventsController',
     	campusesStore: 'campusesStore',
     	earlyAlertCoordinatorsStore: 'earlyAlertCoordinatorsStore',
     	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
@@ -11,9 +12,9 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     },
     config: {
     	containerToLoadInto: 'adminforms',
-    	formToDisplay: 'definecampus'
+    	campusEditorForm: 'definecampus'
     },
-    control: {  	
+    control: {
     	'editButton': {
 			click: 'onEditClick'
 		},
@@ -34,7 +35,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
 		me.peopleStore.load();
 		return this.callParent(arguments);
     },
-    
+
 	onEditClick: function(button) {
 		var grid, record;
 		grid = button.up('grid');
@@ -42,7 +43,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
         if (record) 
         {		
         	this.model.data=record.data;
-        	this.displayEditor();
+        	this.displayCampusEditor();
         }else{
      	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
         }
@@ -51,7 +52,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
 	onAddClick: function(button){
 		var model = new Ssp.model.reference.Campus();
 		this.model.data = model.data;
-		this.displayEditor();
+		this.displayCampusEditor();
 	},
 	
     deleteConfirmation: function( button ) {
@@ -94,7 +95,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
         }
  	},
 	
-	displayEditor: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	displayCampusEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getCampusEditorForm(), true, {});
 	}
 });

@@ -7,11 +7,6 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
     	model: 'currentCampus',
     	store: 'campusesStore'
     },
-    config: {
-    	containerToLoadInto: 'adminforms',
-    	formToDisplay: 'campusadmin'
-    },
-    
 	init: function() {
 		this.getView().getForm().reset();
 		this.getView().getForm().loadRecord( this.model );

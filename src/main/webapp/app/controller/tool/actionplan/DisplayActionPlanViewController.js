@@ -227,7 +227,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		    	valid = this.validateEmailAddress( recipientEmailAddresses );
 		    	arrRecipientEmailAddresses.push( Ext.String.trim( recipientEmailAddresses ) );
 		    }
-
+		    
 		    // define data to email
 			jsonData = {
 	    			"taskIds": me.getSelectedTasks(),
@@ -242,7 +242,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 	    		url = this.apiProperties.createUrl( this.personEmailTaskUrl );
 		    	this.apiProperties.makeRequest({
 					url: url,
-					method: 'GET',
+					method: 'POST',
 					jsonData: jsonData,
 					successFunc: function(){
 						button.up('window').close();

@@ -9,7 +9,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
     	peopleSearchLiteStore: 'peopleSearchLiteStore',
     	sspConfig: 'sspConfig'
     },
-	title: 'Edit Step',
+	title: 'Edit Routing Group',
 	initComponent: function() {
         var me=this;
 		Ext.applyIf(me, {

@@ -9,7 +9,7 @@ Ext.define('Ssp.model.CaseloadPerson', {
              {name: 'currentAppointmentStartDate', type: 'date', dateFormat: 'time'},
              {name: 'numberOfEarlyAlerts', type: 'string'},
              {name: 'studentIntakeComplete', type: 'boolean'},
-             {name: 'currentAppointmentDate', type: 'date', dateFormat: 'time'},
+             {name: 'currentAppointmentStartTime', type: 'date', dateFormat: 'time'},
              {name: 'currentProgramStatusName', type: 'string'}],            
              
      getFullName: function(){ 

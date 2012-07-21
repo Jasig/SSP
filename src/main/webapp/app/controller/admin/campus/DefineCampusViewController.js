@@ -27,6 +27,10 @@ Ext.define('Ssp.controller.admin.campus.DefineCampusViewController', {
 		
 		'finishButton': {
 			click: 'onFinishClick'
+		},
+		
+		'cancelCampusEditorButton': {
+			click: 'onCancelClick'
 		}
     },
 	init: function() {
@@ -93,7 +97,11 @@ Ext.define('Ssp.controller.admin.campus.DefineCampusViewController', {
     	var me=scope;  	
     	me.getView().setLoading( false );
     },
-	
+
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+    
 	displayMain: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});	
 	}
