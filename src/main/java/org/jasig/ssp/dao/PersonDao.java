@@ -195,6 +195,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		// don't bring back any non-students, there will likely be a better way
 		// to do this later
 		criteria.add(Restrictions.isNotNull("studentType"));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
 
 		return criteria.list();
 	}
@@ -228,6 +230,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		// don't bring back any non-students, there will likely be a better way
 		// to do this later
 		criteria.add(Restrictions.isNotNull("studentType"));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		return criteria.list();
 	}
