@@ -10,7 +10,6 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +47,9 @@ public class TermDaoTest {
 				term);
 	}
 
-	@Ignore
 	// otherwise would need to adjust this every term...
 	@Test
-	public void getCurrentTerm() {
+	public void getCurrentTerm() throws ObjectNotFoundException {
 		final Term term = dao.getCurrentTerm();
 		assertEquals("expected Fall2012", "FA12", term.getCode());
 	}

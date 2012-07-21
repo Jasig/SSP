@@ -1,5 +1,6 @@
 package org.jasig.ssp.service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * Person service
@@ -130,4 +132,10 @@ public interface PersonService extends AuditableCrudService<Person> {
 	PagingWrapper<Person> getAllCoaches(SortingAndPaging sAndP);
 
 	Person load(UUID id);
+
+	Person createUserAccount(String username,
+			Collection<GrantedAuthority> authorities);
+
+	void setPersonAttributesService(
+			final PersonAttributesService personAttributesService);
 }

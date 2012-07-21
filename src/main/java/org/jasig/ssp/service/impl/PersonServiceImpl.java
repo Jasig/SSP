@@ -4,9 +4,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.security.PersonAttributesResult;
+import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
@@ -18,7 +22,9 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
@@ -32,6 +38,9 @@ import com.google.common.collect.Lists;
 @Transactional
 public class PersonServiceImpl implements PersonService {
 
+	public static final boolean ALL_AUTHENTICATED_USERS_CAN_CREATE_ACCOUNT = true;
+	public static final String PERMISSION_TO_CREATE_ACCOUNT = "ROLE_CAN_CREATE";
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonServiceImpl.class);
 
@@ -43,6 +52,86 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private transient RegistrationStatusByTermService registrationStatusByTermService;
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public Person createUserAccount(final String username,
+			final Collection<GrantedAuthority> authorities) {
+
+		Person person = null;
+
+		if (hasAccountCreationPermission(authorities)) {
+			person = new Person();
+			person.setEnabled(true);
+			person.setUsername(username);
+
+			try {
+				// Get the Person Attributes to create the person
+				final PersonAttributesResult attr = personAttributesService
+						.getAttributes(username);
+				person.setSchoolId(attr.getSchoolId());
+				person.setFirstName(attr.getFirstName());
+				person.setLastName(attr.getLastName());
+				person.setPrimaryEmailAddress(attr.getPrimaryEmailAddress());
+
+				// try to create the person
+				try {
+					person = create(person);
+					LOGGER.info("Successfully Created Account for {}",
+							username);
+				} catch (ObjectExistsException oee) {
+					person = personFromUsername(username);
+				}
+
+			} catch (ObjectNotFoundException onfe) {
+				// personAttributesService may throw this exception, if so,
+				// we can't create the user.
+				throw new UnableToCreateAccountException(// NOPMD
+						"Unable to pull required attributes", onfe);
+
+			} catch (ConstraintViolationException sqlException) {
+				// if we received a constraintViolationException of
+				// unique_person_username, then the user might have been
+				// added since we started.
+				if (sqlException.getConstraintName().equals(
+						"unique_person_username")) {
+					LOGGER.info("Tried to add a user that was already present");
+				}
+
+			} catch (Exception genException) {
+				// This exception seems to get swallowed... trying to reveal
+				// it.
+				throw new UnableToCreateAccountException( // NOPMD
+						"Unable to Create Account for login.", genException);
+			}
+
+		} else {
+			throw new UnableToCreateAccountException( // NOPMD
+					// already know the account was not found
+					"Insufficient Permissions to create Account");
+		}
+
+		return person;
+	}
+
+	private boolean hasAccountCreationPermission(
+			final Collection<GrantedAuthority> authorities) {
+		boolean permission = ALL_AUTHENTICATED_USERS_CAN_CREATE_ACCOUNT;
+
+		// if already true, skip permission check
+		if (permission) {
+			return true;
+		}
+
+		for (GrantedAuthority auth : authorities) {
+			if (auth.getAuthority().equals(PERMISSION_TO_CREATE_ACCOUNT)) {
+				permission = true;
+				break;
+			}
+		}
+
+		return permission;
+	}
 
 	@Override
 	public PagingWrapper<Person> getAll(final SortingAndPaging sAndP) {
@@ -106,10 +195,30 @@ public class PersonServiceImpl implements PersonService {
 	 * 
 	 * @param obj
 	 *            Model instance
+	 * @throws ObjectExistsException
 	 */
 	@Override
 	public Person create(final Person obj) {
-		final Person person = dao.save(obj);
+
+		LOGGER.debug("Creating User {}", obj);
+
+		if (obj.getUsername() != null) {
+			final Person existing = dao.fromUsername(obj.getUsername());
+			if (null != existing) {
+				throw new ObjectExistsException();
+			}
+		}
+
+		final Person person = dao.create(obj);
+
+		if (LOGGER.isDebugEnabled()) {
+			if (person == null) {
+				LOGGER.debug("Failed to create user");
+			} else {
+				LOGGER.debug("User successfully created");
+			}
+		}
+
 		return additionalAttribsForStudent(person);
 	}
 
@@ -225,5 +334,11 @@ public class PersonServiceImpl implements PersonService {
 		registrationStatusByTermService
 				.applyRegistrationStatusForCurrentTerm(person);
 		return person;
+	}
+
+	@Override
+	public void setPersonAttributesService(
+			final PersonAttributesService personAttributesService) {
+		this.personAttributesService = personAttributesService;
 	}
 }

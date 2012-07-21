@@ -35,6 +35,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		super(Person.class);
 	}
 
+	public Person create(final Person obj) {
+		final Person person = super.save(obj);
+		sessionFactory.getCurrentSession().flush();
+		return person;
+	}
+
 	/**
 	 * Return all entities in the database, filtered only by the specified
 	 * parameters. Sorted by <code>lastName</code> then <code>firstName</code>.

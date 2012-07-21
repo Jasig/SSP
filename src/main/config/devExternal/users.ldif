@@ -44,6 +44,18 @@ sn: Thompson
 mail: test@sinclair.edu
 telephonenumber: 111 867-5309
 
+dn: uid=student2,ou=users,dc=springframework,dc=org
+objectClass: uidObject
+objectClass: person
+objectClass: top
+objectClass: organizationalPerson
+uid: student2
+userPassword: student2
+cn: Test
+sn: Two
+mail: test@sinclair.edu
+telephonenumber: 111 867-5309
+
 dn: uid=advisor0,ou=users,dc=springframework,dc=org
 objectClass: uidObject
 objectClass: person
@@ -53,6 +65,18 @@ uid: advisor0
 userPassword: advisor0
 cn: Alan
 sn: Turing
+mail: test@sinclair.edu
+telephonenumber: 111 867-5309
+
+dn: uid=advisor1,ou=users,dc=springframework,dc=org
+objectClass: uidObject
+objectClass: person
+objectClass: top
+objectClass: organizationalPerson
+uid: advisor1
+userPassword: advisor1
+cn: Guillaume
+sn: Laforge
 mail: test@sinclair.edu
 telephonenumber: 111 867-5309
 
@@ -67,7 +91,6 @@ cn: Jim
 sn: Faculty
 mail: test@sinclair.edu
 telephonenumber: 111 867-5309
-
 
 ####
 # Groups:
@@ -90,6 +113,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: REFERENCE_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 uniqueMember: uid=student0,ou=users,dc=springframework,dc=org
 uniqueMember: uid=student1,ou=users,dc=springframework,dc=org
 uniqueMember: uid=faculty0,ou=users,dc=springframework,dc=org
@@ -105,6 +129,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_APPOINTMENT_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_APPOINTMENT_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -123,12 +148,14 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_CASELOAD_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_CHALLENGE_READ,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_CHALLENGE_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_CHALLENGE_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -147,6 +174,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_DOCUMENT_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_DOCUMENT_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -165,6 +193,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_EARLY_ALERT_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_EARLY_ALERT_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -184,6 +213,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_EARLY_ALERT_RESPONSE_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_EARLY_ALERT_RESPONSE_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -202,6 +232,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_GOAL_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_GOAL_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -220,6 +251,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_JOURNAL_ENTRY_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_JOURNAL_ENTRY_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -238,6 +270,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -256,12 +289,14 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_SEARCH_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_PROGRAM_STATUS_READ,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_PROGRAM_STATUS_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_PROGRAM_STATUS_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -280,6 +315,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_TASK_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=PERSON_TASK_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -298,6 +334,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: PERSON_INSTRUCTION_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 uniqueMember: uid=faculty0,ou=users,dc=springframework,dc=org
 
 dn: cn=STUDENT_INTAKE_READ,ou=groups,dc=springframework,dc=org
@@ -305,6 +342,7 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: STUDENT_INTAKE_READ
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=STUDENT_INTAKE_WRITE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
@@ -317,9 +355,11 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: DATA_STAFF
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
 
 dn: cn=DATA_EVERYONE,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: DATA_EVERYONE
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org

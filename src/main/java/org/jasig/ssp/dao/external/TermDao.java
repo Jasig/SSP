@@ -46,13 +46,20 @@ public class TermDao extends AbstractExternalDataDao<Term> {
 		return obj;
 	}
 
-	public Term getCurrentTerm() {
+	public Term getCurrentTerm() throws ObjectNotFoundException {
 		final Date now = new Date();
 
 		final Criteria query = createCriteria();
 		query.add(Restrictions.gt("endDate", now));
 		query.add(Restrictions.lt("startDate", now));
 
-		return (Term) query.uniqueResult();
+		final Term term = (Term) query.uniqueResult();
+
+		if (term == null) {
+			throw new ObjectNotFoundException("Current Term not Defined",
+					"Term");
+		} else {
+			return term;
+		}
 	}
 }
