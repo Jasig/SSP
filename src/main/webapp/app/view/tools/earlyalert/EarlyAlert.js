@@ -61,6 +61,11 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 					        height: 28,
 				            cls: 'earlyAlertResponseIcon',
 				            itemId: 'respondButton'
+				        },{
+				            tooltip: 'Display detail for the selected item',
+				            text: 'Details',
+				            xtype: 'button',
+				            itemId: 'displayDetailsButton'
 				        }]
 				    }]
 				});
