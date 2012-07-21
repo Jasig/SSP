@@ -39,11 +39,11 @@
   
   	<!-- Portlet Message -->
   	<div class="portlet-msg-info portlet-msg info loading-message" role="status" style="display: none;">
-    	<div class="titlebar"><script type="text/javascript" src="jquery.print.js"></script>
+    	<div class="titlebar"></script>
         <h3 class="title"><spring:message code="loading"/> . . .</h3>
       </div>
       <div class="content">
-    	  <p><spring:message code="please.wait.while.the.syst em.finishes.loading.roster"/></p>
+    	  <p>Please wait while the system finished loading forms...</p>
       </div>
     </div>
     
@@ -54,7 +54,7 @@
 
 <div class="hideable-form addresses-form" style="display:none">
 	<h1>Address labels</h1>
-	<form action="/ssp/api/1/report/AddressLabels/" method="get"
+	<form action="/ssp/api/1/report/AddressLabels/" method="post"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 		<!-- program Status -->
 		<div class="ea-input">
@@ -73,7 +73,7 @@
 			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
 		</div>
 		<div class="ea-label">
-			<span>Stu<script type="text/javascript" src="jquery.print.js"></script>dent Type:</span>
+			<span>Student Type:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -179,7 +179,7 @@
 
 <div class="hideable-form special-services-form" style="display:none">
 	<h1>Special Services</h1>
-	<form action="/ssp/api/1/report/SpecialServices/" method="get" class="alert-form">
+	<form action="/ssp/api/1/report/SpecialServices/" method="post" class="alert-form">
 
 
 		<!-- Special Service Groups -->
@@ -211,7 +211,7 @@
 		</div>
 	</form>
 </div>
-<script type="text/javascript" src="jquery.print.js"></script>
+
  
 <div class="hideable-form confidentiality-agreement-form" style="width:800; display:none" >
 <h1>Confidentiality Agreement Form</h1>

@@ -63,7 +63,7 @@ public class SpecialServicesReportController extends AbstractBaseController {
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	void getSpecialServices(
 			final HttpServletResponse response,

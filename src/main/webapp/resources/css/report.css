@@ -71,3 +71,7 @@
 .suggestions-dialog li input[type="text"] {
     width: 240px;
 }
+
+.hideable-form {
+	width: 800px;
+}
