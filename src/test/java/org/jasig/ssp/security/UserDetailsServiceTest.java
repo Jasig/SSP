@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("security-testConfig.xml")
-@TransactionConfiguration()
+@TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class UserDetailsServiceTest {
 
