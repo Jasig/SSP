@@ -8,6 +8,10 @@ width: 10px;
 background-image: url('/ssp/images/add-tool-icon.png') !important;
 }
 
+.confidentialityAgreementIcon{
+background-image: url('/ssp/images/confidentiality-agreement-icon.png') !important;
+}
+
 .deletePersonIcon {
 background-image: url('/ssp/images/delete-person-icon.png') !important;
 }

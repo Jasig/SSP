@@ -42,11 +42,15 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	},
 	
 	getContext: function() {
+		return Ssp.mixin.ApiProperties.getBaseAppUrl();
+	},
+
+	getAPIContext: function() {
 		return Ssp.mixin.ApiProperties.getBaseApiUrl();
 	},
 	
 	createUrl: function(value){
-		return this.getContext() + value;
+		return Ssp.mixin.ApiProperties.getBaseApiUrl() + value;
 	},
 	
 	getPagingSize: function(){

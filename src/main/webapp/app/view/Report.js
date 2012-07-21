@@ -32,6 +32,10 @@ Ext.define('Ssp.view.Report',{
     	this.getEl().dom.src = config.url + (config.params ? '?' + Ext.urlEncode(config.params) : '');
     },
     
+    loadBlankReport: function( url ){
+    	window.open(url,'_blank','');
+    },
+    
     postReport: function( args ){
 		var me=this;
     	Ext.Ajax.request({

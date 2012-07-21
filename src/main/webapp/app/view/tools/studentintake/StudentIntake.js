@@ -37,17 +37,7 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 					        	     text:'Cancel', 
 					        	     action: 'reset',
 					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CANCEL_BUTTON'),
-					        	    },
-					                { 
-					        	     xtype: 'tbspacer',
-					        	     flex: 1
-					               },{
-					            	   xtype: 'button',
-					            	   itemId: 'viewConfidentialityAgreementButton',
-					            	   text: 'View Confidentiality Agreement',
-					            	   action: 'viewConfidentialityAgreement',
-					            	   hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_PRINT_CONFIDENTIALITY_AGREEMENT_BUTTON'),
-					               }]
+					        	    }]
 					    }]
 
 			});

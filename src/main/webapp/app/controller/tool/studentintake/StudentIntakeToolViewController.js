@@ -32,11 +32,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
     	'cancelButton': {
     		click: 'onCancelClick'
-    	},
-		
-		'viewConfidentialityAgreementButton': {
-			click: 'viewConfidentialityAgreement'
-		}	
+    	}	
 	},
     
 	init: function() {
@@ -543,10 +539,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		if(r.success == true) {
 			console.log('student intake saved successfully');							
 		}								
-	},
-	
-	viewConfidentialityAgreement: function(button){
-		Ext.Msg.alert("Attention", "This feature is not yet available.");
 	},
 	
 	onCancelClick: function( button ){

@@ -7,6 +7,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     },
     config: {
     	personViewHistoryUrl: '',
+    	printConfidentialityAgreementUrl: ''
     },
     control: {
     	'viewHistoryButton': {
@@ -15,22 +16,28 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 		
 		'studentTransitionButton': {
 			click: 'onStudentTransitionClick'
+		},
+		
+		'printConfidentialityAgreementButton': {
+			click: 'printConfidentialityAgreement'
 		}
     },
 	init: function() {
 		var me=this;
 		var personId = me.personLite.get('id');
-		me.personViewHistoryUrl = me.apiProperties.getContext() + me.apiProperties.getItemUrl('personViewHistory');
+		me.personViewHistoryUrl = me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory');
 		me.personViewHistoryUrl = me.personViewHistoryUrl.replace('{id}',personId);
-		
+		me.printConfidentialityAgreementUrl = me.apiProperties.getContext() + me.apiProperties.getItemUrl('printConfidentialityDisclosureAgreement');
 		return this.callParent(arguments);
     },
     
-    
+	printConfidentialityAgreement: function(button){
+		var me=this;
+		me.apiProperties.getReporter().loadBlankReport( me.printConfidentialityAgreementUrl );
+	},   
     
     onViewHistoryClick: function(button){
 		var me=this;
-		console.log(me.personViewHistoryUrl);
 		me.apiProperties.getReporter().load({
 			url:me.personViewHistoryUrl,
 			params: ""

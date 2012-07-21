@@ -340,8 +340,10 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     getSelectedItemSelectorIdsForTransfer: function(values){
 		var selectedIds = new Array();
     	Ext.Array.each(values,function(name, index){
-    		if (name != undefined)
-    			selectedIds.push({"id":name});
+    		if ( name != undefined )
+    		{
+        		selectedIds.push({"id":name});    			
+    		}
 		});
     	return selectedIds;
     }, 

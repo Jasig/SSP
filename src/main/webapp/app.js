@@ -242,6 +242,7 @@ var apiUrls = [
   {name: 'childCareArrangement', url: 'reference/childCareArrangement'},
   {name: 'citizenship', url: 'reference/citizenship'},
   {name: 'confidentialityDisclosureAgreement', url: 'reference/confidentialityDisclosureAgreement'},
+  {name: 'printConfidentialityDisclosureAgreement', url: '/forms/ConfidentialityAgreement.jsp'},
   {name: 'confidentialityLevel', url: 'reference/confidentialityLevel'},
   {name: 'configuration', url: 'reference/configuration'},
   {name: 'earlyAlertOutcome', url: 'reference/earlyAlertOutcome'},
