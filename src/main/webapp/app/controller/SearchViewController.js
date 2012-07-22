@@ -10,16 +10,13 @@ Ext.define('Ssp.controller.SearchViewController', {
         formUtils: 'formRendererUtils',
         person: 'currentPerson',
         personLite: 'personLite',
+        personService: 'personService',
         preferences: 'preferences',
         programStatusesStore: 'programStatusesStore',
         programStatusService: 'programStatusService',
         searchService: 'searchService',
         searchStore: 'searchStore',
         sspConfig: 'sspConfig'
-    },
-
-    config: {
-    	personUrl: null,
     },
     
     control: {
@@ -72,10 +69,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
     
 	init: function() {
-		var me=this;
-				
-		me.personUrl =  me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
-				
+		var me=this;    	
  		return me.callParent(arguments);
     },
     
@@ -107,9 +101,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}else{
 			me.setGridView('caseload');
 		}
-	   	
-	    me.programStatusesStore.removeAll();
-    	me.getProgramStatuses();	
+		
+    	me.getProgramStatuses();
 	},
 
     destroy: function() {
@@ -118,11 +111,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 
         return me.callParent( arguments );
-    },	
-
-    initializeCaseload: function(){
-    	var me=this;
-    	me.setGridView('caseload');
     },
 	
 	getProgramStatuses: function(){
@@ -143,6 +131,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     		programStatus = me.programStatusesStore.findRecord("name", "active");
     		activeProgramStatusId = programStatus.get('id');
     		me.getCaseloadStatusCombo().setValue( activeProgramStatusId );
+    		me.getCaseload();
     	}
     },	
 
@@ -157,6 +146,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	{
 			pId = me.getCaseloadStatusCombo().getValue();
      	}
+		me.getView().setLoading( true );
 		me.caseloadService.getCaseload( pId, 
     		{success:me.getCaseloadSuccess, 
 			 failure:me.getCaseloadFailure, 
@@ -165,6 +155,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     
     getCaseloadSuccess: function( r, scope){
     	var me=scope;
+    	me.getView().setLoading( false );
     	if ( me.caseloadStore.getCount() > 0)
     	{
     		me.getView().getSelectionModel().select(0);
@@ -178,6 +169,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     getCaseloadFailure: function( r, scope){
     	var me=scope;
+    	me.getView().setLoading( false );
     },    
     
     onCollapseStudentRecord: function(){
@@ -303,18 +295,30 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	deletePerson: function( btnId  ){
      	var me=this;
-		var store = me.searchStore;
      	var id = me.personLite.get('id');
      	if (btnId=="yes")
      	{
-         	me.apiProperties.makeRequest({
-      		   url: me.personUrl+"/"+id,
-      		   method: 'DELETE',
-      		   successFunc: function(response,responseText){
-      			   store.remove( store.getById( id ) );
-      		   }
-      	    });    		
+     	   me.getView().setLoading( true );
+           me.personService.destroy( id,
+        		   {
+        	   success: me.deletePersonSuccess,
+        	   failure: me.deletePersonFailure,
+        	   scope: me
+           });	
      	}	
+	},
+	
+	deletePersonSuccess: function( r, scope ){
+		var me=scope;
+		var store = me.searchStore;
+		var id = me.personLite.get('id');
+		me.getView().setLoading( false );
+	    store.remove( store.getById( id ) );
+	},
+	
+	deletePersonFailure: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading( false );
 	},
 
 	onRetrieveCaseloadClick: function( button ){
@@ -329,11 +333,35 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.setGridView('search');
 		if ( me.getSearchText().value != "")
 		{
-			me.searchService.search(me.getSearchText().value, outsideCaseload);	
+			me.getView().setLoading( true );
+			me.searchService.search( 
+					me.getSearchText().value, 
+					outsideCaseload,
+					{
+					success: me.searchSuccess,
+					failure: me.searchFailure,
+					scope: me
+			});	
 		}else{
 			me.searchStore.removeAll();
 		}	
 	},
+
+    searchSuccess: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    	if ( r.rows.length > 0)
+    	{
+    		me.getView().getSelectionModel().select(0);
+    	}else{
+    		Ext.Msg.alert('Attention','No students match your search. Try a different search value.');
+    	}
+    },
+
+    searchFailure: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    }, 	
 	
     loadCaseloadAssignment: function(){
     	var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});    	

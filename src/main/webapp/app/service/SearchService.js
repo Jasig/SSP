@@ -22,8 +22,6 @@ Ext.define('Ssp.service.SearchService', {
 	    	if (r.rows.length > 0)
 	    	{
 	    		me.store.loadData(r.rows);
-	    	}else{
-	    		Ext.Msg.alert('Attention','No students match your search. Try a different search value.');
 	    	}
 	    	if (callbacks != null)
 	    	{

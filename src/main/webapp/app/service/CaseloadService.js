@@ -22,6 +22,7 @@ Ext.define('Ssp.service.CaseloadService', {
     		var r = Ext.decode(response.responseText);
 	    	if (r.rows.length > 0)
 	    	{
+	    		me.store.removeAll();
 	    		me.store.loadData( r.rows );
 	    	}
 	    	if (callbacks != null)
@@ -43,8 +44,6 @@ Ext.define('Ssp.service.CaseloadService', {
 	    	programStatusFilter = '/?programStatusId='+programStatusId;
 	    }
 	    
-	    me.store.removeAll();
-	    
 		me.apiProperties.makeRequest({
 			url: me.getBaseUrl()+'/caseload'+programStatusFilter,
 			method: 'GET',
@@ -60,6 +59,7 @@ Ext.define('Ssp.service.CaseloadService', {
     		var r = Ext.decode(response.responseText);
 	    	if (r.rows.length > 0)
 	    	{
+	    		me.store.removeAll();
 	    		me.store.loadData(r.rows);
 	    	}
 	    	if (callbacks != null)
@@ -75,8 +75,6 @@ Ext.define('Ssp.service.CaseloadService', {
 	    		callbacks.failure( response, callbacks.scope );
 	    	}
 	    };
-	    
-	    me.store.removeAll();
 	    
 		me.apiProperties.makeRequest({
 			url: me.getBaseUrl()+'/'+personId+'/caseload',

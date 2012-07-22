@@ -45,7 +45,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		{
 			me.getView().setLoading( true );
 			
-	    	me.personService.getPerson( id, {success:me.getPersonSuccess, 
+	    	me.personService.get( id, {success:me.getPersonSuccess, 
 	    									  failure:me.getPersonFailure, 
 	    									  scope: me} );
 		}else{
@@ -101,7 +101,10 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 
     getPersonSuccess: function( r, scope ){
 		var me=scope;
+    	var person = new Ssp.model.Person();
 		me.getView().setLoading( false );
+    	me.person.data = person.data;
+    	me.person.populateFromGenericObject(r);
 		me.getCurrentAppointment();
 		me.updateTitle();
     },
@@ -254,10 +257,10 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// TODO: Fix API to allow programStatus liteTO 
 			delete jsonData.programStatuses;			
 
-			me.personService.savePerson( jsonData, 
-	    			                    {success:me.savePersonSuccess, 
-				                         failure:me.savePersonFailure, 
-				                         scope: me} );
+			me.personService.save( jsonData, 
+	    			               {success:me.savePersonSuccess, 
+				                    failure:me.savePersonFailure, 
+				                    scope: me} );
 
 		}else{
 			me.formUtils.displayErrors( validateResult.fields );

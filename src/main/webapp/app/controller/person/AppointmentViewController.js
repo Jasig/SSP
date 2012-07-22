@@ -21,8 +21,8 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		// require a date beyond today for all new appointments
 		if (me.appointment.get('id') == "")
 		{
-			today = Ext.Date.clearTime( new Date(), true );
-			me.getAppointmentDateField().setMinValue( today );
+			today = new Date();
+			me.getAppointmentDateField().setMinValue( Ext.Date.clearTime( today ) );
 		}
 		
 		me.getView().getForm().reset();

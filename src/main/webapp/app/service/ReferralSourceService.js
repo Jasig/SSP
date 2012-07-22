@@ -1,53 +1,21 @@
-Ext.define('Ssp.service.PersonService', {  
+Ext.define('Ssp.service.ReferralSourceService', {  
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties',
-    	person: 'currentPerson'
-    },
-    config: {
-    	personUrl: null
+    	apiProperties: 'apiProperties'
     },
     initComponent: function() {
 		return this.callParent( arguments );
     },
     
-    getBaseUrl: function( id ){
+    getBaseUrl: function(){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
-    	return baseUrl;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('referralSource') );
+		return baseUrl;
     },
 
-    get: function( id, callbacks ){
+    getAll: function( callbacks ){
     	var me=this;
-	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-	    	if (response.responseText != "")
-	    	{
-		    	r = Ext.decode(response.responseText);	    		
-	    	}
-	    	callbacks.success( r, callbacks.scope );
-	    };
-
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
-	    };
-	    
-		// load the person to edit
-		me.apiProperties.makeRequest({
-			url: me.getBaseUrl()+'/'+id,
-			method: 'GET',
-			successFunc: success,
-			failureFunc: failure,
-			scope: me
-		});
-    },   
-    
-    save: function( jsonData, callbacks ){
-    	var me=this;
-    	var id=jsonData.id;
-        var url = me.getBaseUrl();
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
 			callbacks.success( r, callbacks.scope );
@@ -57,11 +25,34 @@ Ext.define('Ssp.service.PersonService', {
 	    	me.apiProperties.handleError( response );	    	
 	    	callbacks.failure( response, callbacks.scope );
 	    };
-        
-    	// save the person
+	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl(),
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },
+    
+    save: function( jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+		id = jsonData.id;
+
+		// save
 		if (id=="")
-		{
-			// create
+		{				
 			me.apiProperties.makeRequest({
     			url: url,
     			method: 'POST',
@@ -80,27 +71,6 @@ Ext.define('Ssp.service.PersonService', {
     			failureFunc: failure,
     			scope: me
     		});	
-		}   	
-    },
-    
-    destroy: function( id, callbacks ){
-    	var me=this;
-	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-			callbacks.success( r, callbacks.scope );
-	    };
-
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
-	    };
-	    
-    	me.apiProperties.makeRequest({
-   		   url: me.getBaseUrl()+"/"+id,
-   		   method: 'DELETE',
-   		   successFunc: success,
-   		   failureFunc: failure,
-   		   scope: me
-   	    }); 
-    }
+		}
+    }   
 });

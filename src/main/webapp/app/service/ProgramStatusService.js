@@ -21,7 +21,8 @@ Ext.define('Ssp.service.ProgramStatusService', {
     		var r = Ext.decode(response.responseText);
     		if (r.rows.length > 0)
 	    	{
-	    		me.store.loadData(r.rows);
+    		    me.store.removeAll();
+    			me.store.loadData(r.rows);
 	    	}
 	    	if (callbacks != null)
 	    	{
@@ -36,9 +37,7 @@ Ext.define('Ssp.service.ProgramStatusService', {
 	    		callbacks.failure( response, callbacks.scope );
 	    	}
 	    };
-	    
-	    me.store.removeAll();
-	    
+	    	    
 		me.apiProperties.makeRequest({
 			url: me.getBaseUrl(),
 			method: 'GET',

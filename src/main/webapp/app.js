@@ -211,7 +211,9 @@ Ext.require([
     'Ssp.service.EarlyAlertResponseService',
     'Ssp.service.PersonService',
     'Ssp.service.ProgramStatusService',
+    'Ssp.service.ReferralSourceService',
     'Ssp.service.SearchService',
+    'Ssp.service.SpecialServiceGroupService',
     'Ssp.controller.ApplicationEventsController',
     'Ext.tab.*',
 	'Ext.util.Filter',
@@ -599,7 +601,9 @@ Ext.onReady(function(){
 			        personService: 'Ssp.service.PersonService',
 			        personProgramStatusService: 'Ssp.service.PersonProgramStatusService',
 			        programStatusService: 'Ssp.service.ProgramStatusService',
-			        searchService: 'Ssp.service.SearchService'
+			        referralSourceService: 'Ssp.service.ReferralSourceService',
+			        searchService: 'Ssp.service.SearchService',
+			        specialServiceGroupService: 'Ssp.service.SpecialServiceGroupService'
 				});
 				
 				Ext.application({

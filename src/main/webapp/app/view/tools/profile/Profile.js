@@ -61,7 +61,7 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 				            xtype: 'button',
 				            itemId: 'studentTransitionButton'
 				        },{
-					            tooltip: 'View Student History',
+					            tooltip: 'Print Student History',
 					            text: '',
 					            width: 32,
 					            height: 32,
