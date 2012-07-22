@@ -13,47 +13,40 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
 		var me=this;
 		Ext.apply(me, 
 				{
+			        title: 'Confidentiality Disclosure Agreement Admin',
 		    		autoScroll: true,
 					width: '100%',
 		    		height: '100%',
-				    bodyPadding: 5,
-				    layout: 'auto',
+		    		bodyPadding: 5,
+				    layout: 'anchor',
 				    fieldDefaults: {
 				        msgTarget: 'side',
 				        labelAlign: 'right',
 				        labelWidth: 125
 				    },
 				    defaultType: 'displayfield',
-				    items: [{
-				            xtype: 'fieldset',
-				            title: 'Confidentiality Disclosure Agreement',
-				            border: 0,
-				            defaultType: 'displayfield',
-				            defaults: {
-				                anchor: '100%'
-				            },
 				       items: 
 				       [{
 					        fieldLabel: 'Name',
 					        xtype: 'textfield',
 					        disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
-					        name: 'name'
+					        name: 'name',
+					        anchor: '95%'
 					    },{
 					        fieldLabel: 'Description',
 					        xtype: 'textfield',
 					        disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
-					        name: 'description'
+					        name: 'description',
+					        anchor: '95%'
 					    },{
 		    		          xtype: 'htmleditor',
 		    		          fieldLabel: 'Disclosure Agreement',
 		    		          enableColors: false,
 		    		          disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
 		    		          enableAlignments: false,
-		    		          height: '100%',
-		    		          width: '100%',
+		    		          anchor: '95% 80%',
 		    		          name: 'text'
-		    		      }]
-					    }],
+		    		      }],
 					    
 		           dockedItems: [
      		              {

@@ -3,7 +3,8 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'confidentialityDisclosureAgreementsStore'
+    	store: 'confidentialityDisclosureAgreementsStore',
+    	service: 'confidentialityDisclosureAgreementService'
     },
     
     control: {
@@ -21,27 +22,34 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     loadConfidentialityDisclosureAgreementResult: function(records, operation, success){
     	var model = new Ssp.model.reference.ConfidentialityDisclosureAgreement();
     	model.populateFromGenericObject(records[0].data);
-    	this.getView().loadRecord(model);
+    	this.getView().loadRecord( model );
     },
     
 	save: function(button){
 		var record, id, jsonData;
-		this.getView().getForm().updateRecord();
-		record = this.getView().getRecord();
+		var me=this;
+		var view = me.getView();
+		view.getForm().updateRecord();
+		record = view.getRecord();
 		id = record.get('id');
 		jsonData = record.data;
 		
-		Ext.Ajax.request({
-			url: this.store.getProxy().url+"/"+id,
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json' },
-			jsonData: jsonData,
-			success: function(response, view) {
-				var r = Ext.decode(response.responseText);
-				record.commit();
-			},
-			failure: this.apiProperties.handleError
-		}, this);
+		view.setLoading(true);
 
-	}
+		me.service.save( jsonData, {
+			success: me.saveSuccess,
+			failure: me.saveFailure,
+			scope: me
+		});
+	},
+	
+	saveSuccess: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading(false);
+	},
+	
+    saveFailure: function( response, scope ){
+    	var me=scope;  
+		me.getView().setLoading(false);
+    }
 });
