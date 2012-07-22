@@ -14,10 +14,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 			click: 'onViewHistoryClick'
 		},
 		
-		'studentTransitionButton': {
-			click: 'onStudentTransitionClick'
-		},
-		
 		'printConfidentialityAgreementButton': {
 			click: 'printConfidentialityAgreement'
 		}
@@ -42,9 +38,5 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 			url:me.personViewHistoryUrl,
 			params: ""
 		});
-    },
-
-    onStudentTransitionClick: function(button){
-      	 Ext.Msg.alert('Attention','This feature is not yet active.');
-    },
+    }
 });

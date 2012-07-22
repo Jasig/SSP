@@ -2,11 +2,12 @@ Ext.define('Ssp.controller.ToolsViewController', {
 	extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
+        appEventsController: 'appEventsController',
     	apiProperties: 'apiProperties',
     	authenticatedPerson: 'authenticatedPerson',
-    	personLite: 'personLite',
         formUtils: 'formRendererUtils',
-        appEventsController: 'appEventsController'
+    	personLite: 'personLite',
+    	toolsStore: 'toolsStore'
     },
     control: {
 		view: {
@@ -21,27 +22,42 @@ Ext.define('Ssp.controller.ToolsViewController', {
     }, 
     
     onViewReady: function(comp, obj){
-    	this.appEventsController.assignEvent({eventName: 'loadPerson', callBackFunc: this.onLoadPerson, scope: this});
+    	var me=this;
+    	me.appEventsController.assignEvent({eventName: 'loadPerson', callBackFunc: me.onLoadPerson, scope: me});
+    	me.appEventsController.assignEvent({eventName: 'transitionStudent', callBackFunc: me.onTransitionStudent, scope: me});
  
-    	if (this.personLite.get('id') != "")
+    	if (me.personLite.get('id') != "")
     	{
-    		this.loadPerson();
+    		me.loadPerson();
     	}
     },
 
     destroy: function() {
-     	this.appEventsController.removeEvent({eventName: 'loadPerson', callBackFunc: this.onLoadPerson, scope: this});
+    	var me=this;
+     	
+    	me.appEventsController.removeEvent({eventName: 'loadPerson', callBackFunc: me.onLoadPerson, scope: me});
+    	me.appEventsController.assignEvent({eventName: 'transitionStudent', callBackFunc: me.onTransitionStudent, scope: me});
 
-        return this.callParent( arguments );
+        return me.callParent( arguments );
     },
     
     onLoadPerson: function(){
     	this.loadPerson();
     },
     
+    onTransitionStudent: function(){
+    	this.selectTool( 'journal' );
+    	this.loadTool('journal');
+    },
+    
     loadPerson: function(){
-		this.getView().getSelectionModel().select(0);
-		this.loadTool('profile');  
+    	this.selectTool( 'profile' );
+    	this.loadTool('profile');  
+    },
+    
+    selectTool: function( toolType ){
+    	var tool = this.toolsStore.find( 'toolType', toolType )
+		this.getView().getSelectionModel().select( tool );
     },
     
 	onItemClick: function(grid,record,item,index){ 

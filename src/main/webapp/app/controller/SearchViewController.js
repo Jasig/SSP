@@ -65,7 +65,19 @@ Ext.define('Ssp.controller.SearchViewController', {
     		listeners: {
     			click: 'onDeletePersonClick'
     		}
-    	}
+    	},
+    	
+		'transitionStudentButton': {
+			click: 'onTransitionStudentClick'
+		},
+		
+		'setNonParticipatingButton': {
+			click: 'onSetNonParticipatingClick'
+		},
+		
+		'setNoShowButton': {
+			click: 'onSetNoShowClick'
+		}
     },
     
 	init: function() {
@@ -83,6 +95,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 			}else{
 				me.personLite.set('id', records[0].data.personId);
 			}
+			me.personLite.set('firstName', records[0].data.firstName);
+			me.personLite.set('middleInitial', records[0].data.middleInitial);
+			me.personLite.set('lastName', records[0].data.lastName);
+			me.personLite.set('displayFullName', records[0].data.firstName + ' ' + records[0].data.lastName);
 			me.appEventsController.getApplication().fireEvent('loadPerson');			
 		}
 	},
@@ -365,5 +381,38 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
     loadCaseloadAssignment: function(){
     	var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});    	
+    },
+    
+    onTransitionStudentClick: function(button){
+     	 this.appEventsController.getApplication().fireEvent('transitionStudent');
+    },
+   
+    onSetNonParticipatingClick: function(button){
+		Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
+		    height: 150,
+		    width: 500
+		}).show();
+    },
+  
+    onSetNoShowClick: function(button){
+	   	var me=this;
+	   	var personId = me.personLite.get('id');
+	   	if (personId != "")
+	   	{
+	   		// TODO: Look-up No-Show Program Status Id
+	   		personProgramStatus = new Ssp.model.PersonProgramStatus();
+	   		personProgramStatus.set('programStatusId','b2d12640-5056-a51a-80cc-91264965731a');
+	   		personProgramStatus.set('effectiveDate', new Date());
+	   		me.personProgramStatusService.save( 
+	   				personId, 
+	   				personProgramStatus.data, 
+	   				{
+	   			success: me.saveProgramStatusSuccess,
+	               failure: me.saveProgramStatusFailure,
+	               scope: me 
+	           });    		
+	   	}else{
+	   		Ext.Msg.alert('SSP Error','Unable to determine student to set to No-Show status');
+	   	}
     }
 });

@@ -15,7 +15,7 @@ Ext.define('Ssp.service.PersonProgramStatusService', {
 		return baseUrl;
     },
 
-    savePersonProgramStatus: function( personId, jsonData, callbacks ){
+    save: function( personId, jsonData, callbacks ){
 		var me=this;
 		var url = me.getBaseUrl( personId );
 	    var success = function( response, view ){

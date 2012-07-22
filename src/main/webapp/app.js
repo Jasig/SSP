@@ -13,6 +13,7 @@ Ext.require([
     'Ssp.view.Main',
     'Ssp.view.Search',
     'Ssp.view.StudentRecord',
+    'Ssp.view.ProgramStatusChangeReasonWindow',
     'Ssp.view.person.CaseloadAssignment',
     'Ssp.view.person.EditPerson',
     'Ssp.view.person.Coach',

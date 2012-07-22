@@ -5,7 +5,8 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.CaseloadAssignmentViewController',
     inject: {
-    	model: 'currentPerson'
+    	model: 'currentPerson',
+    	sspConfig: 'sspConfig'
     },
     width: '100%',
 	height: '100%',   
@@ -35,7 +36,8 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
   		            },{
 				        dock: 'bottom',
 				        xtype: 'toolbar',
-				        items: [{xtype: 'button', 
+				        items: [{
+			                     xtype: 'button', 
 				        	     itemId: 'saveButton', 
 				        	     text:'Save'
 				        	    },
@@ -43,10 +45,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 				            	   xtype: 'button',
 				            	   itemId: 'cancelButton',
 				            	   text: 'Cancel',
-				                 },{ 
-						        	xtype: 'tbspacer',
-						        	width: 50
-						         }/*,{
+				                 }/*,{
 							        xtype: 'checkbox',
 							        boxLabel: 'Send Student Intake Request', 
 							        name: 'sendStudentIntakeRequest'
@@ -61,7 +60,14 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 								 }*/,{ 
 						        	xtype: 'tbspacer',
 						        	flex: 1
-						         },
+						         },{
+					        	     xtype: 'checkboxfield',
+				                     boxLabel: "Reset the student to Active status on the assigned " + me.sspConfig.get('coachFieldLabel') + "'s Caseload",
+				                     itemId: 'resetActiveStatusCheck',
+				                     name: 'setActiveStatus',
+				                     //hidden: (( me.model.get('currentProgramStatusName').toLowerCase() == 'active' && me.model.get('id') != "")? true : false),
+				                     inputValue: false
+				                  },
 				                 {
 				            	   xtype: 'button',
 				            	   itemId: 'printButton',

@@ -4,7 +4,7 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
              {name:'courseTitle',type:'string'},
              {name:'emailCC',type:'string'},
              {name:'campusId',type:'string'},
-             {name:'earlyAlertReasonIds',type:'auto'},
+             {name:'earlyAlertReasonId',type:'string'},
              {name:'earlyAlertReasonOtherDescription',type:'string'},
              {name:'earlyAlertSuggestionIds',type:'auto'},
              {name:'earlyAlertSuggestionOtherDescription',type:'string'},

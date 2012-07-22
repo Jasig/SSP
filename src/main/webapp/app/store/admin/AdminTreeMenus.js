@@ -13,18 +13,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     	    	form: '',
     	        expanded: true,
     	        children: [ {
-    	        	            text: 'Beta',
-    	        	            title: 'Beta',
-    	        	            form: '',
-    	        	            expanded: false,
-    	        	            children: [{
-							    	text: 'Campuses',
-									title: 'Campuses',
-									store: '',
-									form: 'CampusAdmin',
-									leaf: true
-								}]
-    	                    },{
     	        	            text: 'Caseload',
     	        	            title: 'Caseload',
     	        	            form: '',
@@ -234,6 +222,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     							form: '',
     							expanded: false,
     							children: [{
+							    	text: 'Campuses',
+									title: 'Campuses',
+									store: '',
+									form: 'CampusAdmin',
+									leaf: true
+								},{
 									text: 'Outcomes',
 									title: 'Outcomes',
 									store: 'earlyAlertOutcomes',

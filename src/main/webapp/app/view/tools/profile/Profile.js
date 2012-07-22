@@ -52,15 +52,6 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
-				            tooltip: 'Transition Student',
-				            text: '',
-				            width: 35,
-				            height: 35,
-				            hidden: true, // !me.authenticatedPerson.hasAccess('TRANSITION_BUTTON'),
-				            cls: 'studentTransitionIcon',
-				            xtype: 'button',
-				            itemId: 'studentTransitionButton'
-				        },{
 					            tooltip: 'Print Student History',
 					            text: '',
 					            width: 32,
@@ -69,16 +60,16 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 					            cls: 'studentHistoryIcon',
 					            xtype: 'button',
 					            itemId: 'viewHistoryButton'
-					        },{
-				            	   xtype: 'button',
-				            	   itemId: 'printConfidentialityAgreementButton',
-				                   text: '',
-				                   tooltip: 'Print Confidentiality Agreement',
-				            	   cls: 'confidentialityAgreementIcon',
-				            	   height: 32,
-				            	   width: 32,
-				            	   hidden: !me.authenticatedPerson.hasAccess('PROFILE_PRINT_CONFIDENTIALITY_AGREEMENT_BUTTON'),
-				               }]
+				        },{
+			            	   xtype: 'button',
+			            	   itemId: 'printConfidentialityAgreementButton',
+			                   text: '',
+			                   tooltip: 'Print Confidentiality Agreement',
+			            	   cls: 'confidentialityAgreementIcon',
+			            	   height: 32,
+			            	   width: 32,
+			            	   hidden: !me.authenticatedPerson.hasAccess('PROFILE_PRINT_CONFIDENTIALITY_AGREEMENT_BUTTON'),
+			            }]
 				    }]
 				});	     
     	

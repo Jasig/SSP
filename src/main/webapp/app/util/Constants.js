@@ -1,6 +1,23 @@
 Ext.define('Ssp.util.Constants',{
 	extend: 'Ext.Component',
     statics: {
+    	isRestrictedAdminItemId: function( id ){
+    		var restrictedIdsArray = [
+    		        	Ssp.util.Constants.EDUCATION_GOAL_OTHER_ID,
+    		        	Ssp.util.Constants.EDUCATION_GOAL_MILITARY_ID,
+    		        	Ssp.util.Constants.EDUCATION_GOAL_BACHELORS_DEGREE_ID,
+    		        	Ssp.util.Constants.EDUCATION_LEVEL_NO_DIPLOMA_GED_ID,
+    		        	Ssp.util.Constants.EDUCATION_LEVEL_GED_ID,
+    		        	Ssp.util.Constants.EDUCATION_LEVEL_HIGH_SCHOOL_GRADUATION_ID,
+    		        	Ssp.util.Constants.EDUCATION_LEVEL_SOME_COLLEGE_CREDITS_ID,
+    		        	Ssp.util.Constants.EDUCATION_LEVEL_OTHER_ID,
+    		        	Ssp.util.Constants.FUNDING_SOURCE_OTHER_ID,
+    		        	Ssp.util.Constants.CHALLENGE_OTHER_ID,
+    		        	Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID
+    		        ];
+    		return ((Ext.Array.indexOf( restrictedIdsArray, id ) != -1)? true : false);
+    	},
+    	
     	// EDUCATION GOALS
         EDUCATION_GOAL_OTHER_ID: '78b54da7-fb19-4092-bb44-f60485678d6b',
         EDUCATION_GOAL_MILITARY_ID: '6c466885-d3f8-44d1-a301-62d6fe2d3553',

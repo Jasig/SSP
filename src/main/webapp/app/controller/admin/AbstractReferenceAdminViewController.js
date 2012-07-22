@@ -103,15 +103,21 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
        var message;
        if ( selection.get('id') ) 
        {
-    	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
-    	      	   
-           Ext.Msg.confirm({
-   		     title:'Delete?',
-   		     msg: message,
-   		     buttons: Ext.Msg.YESNO,
-   		     fn: me.deleteRecord,
-   		     scope: me
-   		   });
+    	   if ( !Ssp.util.Constants.isRestrictedAdminItemId( selection.get('id')  ) )
+    	   {
+        	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+	      	   
+               Ext.Msg.confirm({
+       		     title:'Delete?',
+       		     msg: message,
+       		     buttons: Ext.Msg.YESNO,
+       		     fn: me.deleteRecord,
+       		     scope: me
+       		   });
+               
+    	   }else{
+    		   Ext.Msg.alert('WARNING', 'This item is related to core SSP functionality. Please see a developer to delete this item.'); 
+    	   }
         }else{
      	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
         }

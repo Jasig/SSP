@@ -28,7 +28,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	
     	'emailButton': {
     		click: 'onEmailClick'
-    	}
+    	},
+    	
+    	resetActiveStatusCheck: '#resetActiveStatusCheck'
     },
     
 	init: function() {
@@ -198,8 +200,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 	                 referralSourcesForm];		
 
 		var validateResult = me.formUtils.validateForms( formsToValidate );
-		console.log( appointmentForm );
-		console.log( appointmentForm.isValid() );
 		// Validate all of the forms
 		if ( validateResult.valid ) 
 		{
@@ -274,7 +274,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	if (r.id != "")
 		{
     		// new student save an Active program status
-    		if (me.person.get('id') == "")
+    		if (me.person.get('id') == "" || me.getResetActiveStatusCheck().checked == true)
     		{
     			// TODO: Get Active Program Status Id
     			personProgramStatus = new Ssp.model.PersonProgramStatus();
@@ -282,7 +282,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     			personProgramStatus.set('effectiveDate', new Date());
     			console.log(r.id);
     			console.log(personProgramStatus.data);
-    			me.personProgramStatusService.savePersonProgramStatus( 
+    			me.personProgramStatusService.save( 
     					r.id, 
     					personProgramStatus.data, 
     					{
@@ -291,6 +291,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
                     scope: me 
                 });
     		}
+    		
+    		// populate the person object with result
     		me.person.populateFromGenericObject( r );
     		me.saveAppointment();
 		}else{

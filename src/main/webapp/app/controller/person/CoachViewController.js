@@ -5,6 +5,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
     	appEventsController: 'appEventsController',
     	coachesStore: 'coachesStore',
     	person: 'currentPerson', 	
+    	sspConfig: 'sspConfig',
         studentTypesStore: 'studentTypesStore'
     },
     config: {
@@ -35,6 +36,12 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 	init: function() {
 		var me=this;
 
+		if ( me.person.get('id') != "")
+		{
+			me.getCoachCombo().setDisabled( me.sspConfig.get('syncCoachAssignmentWithExternalData') );
+			me.getStudentTypeCombo().setDisabled( me.sspConfig.get('syncStudentTypeAssignmentWithExternalData') );			
+		}
+		
 		me.studentTypesStore.load();
 		me.coachesStore.load(function(records, operation, success) {
 	          if(!success)

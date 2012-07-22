@@ -59,7 +59,7 @@ Ext.define('Ssp.view.Search', {
 		       		        	width: 5
 		       		        },{
 		       		        	xtype: 'checkboxfield',
-		                        boxLabel  : 'In My Caseload',
+		                        boxLabel  : 'My Caseload',
 		                        itemId: 'searchCaseloadCheck',
 		                        name      : 'searchInCaseload',
 		                        inputValue: false
@@ -128,6 +128,33 @@ Ext.define('Ssp.view.Search', {
 	       		        	xtype: 'tbspacer',
 	       		        	flex: 1
 	       		        },{
+						    tooltip: 'Transition Student',
+						    text: '',
+						    width: 25,
+						    height: 25,
+						    hidden: !me.authenticatedPerson.hasAccess('TRANSITION_STUDENT_BUTTON'),
+						    cls: 'transitionStudentIcon',
+						    xtype: 'button',
+						    itemId: 'transitionStudentButton'
+						},{
+						    tooltip: 'Set Student to Non-Participating status',
+						    text: '',
+						    width: 25,
+						    height: 25,
+						    hidden: !me.authenticatedPerson.hasAccess('SET_NON_PARTICIPATING_BUTTON'),
+						    cls: 'setNonParticipatingIcon',
+						    xtype: 'button',
+						    itemId: 'setNonParticipatingButton'
+						},{
+						    tooltip: 'Set Student to No-Show status',
+						    text: '',
+						    width: 25,
+						    height: 25,
+						    hidden: !me.authenticatedPerson.hasAccess('SET_NO_SHOW_BUTTON'),
+						    cls: 'setNoShowIcon',
+						    xtype: 'button',
+						    itemId: 'setNoShowButton'
+						},{
 				            tooltip: 'Display Search',
 				            text: '',
 				            width: 20,

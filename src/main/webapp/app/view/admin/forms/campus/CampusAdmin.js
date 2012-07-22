@@ -23,8 +23,8 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
     		      store: me.store,
      		      columns: [{
 		    	        xtype:'actioncolumn',
-		    	        width:65,
-		    	        header: 'Action',
+		    	        width: 100,
+		    	        header: 'Assign Routings',
 		    	        items: [{
 			    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
 			    	            tooltip: 'Edit Campus Early Alert Routings',

@@ -79,6 +79,14 @@ background-image: url('/ssp/images/search-icon.png') !important;
 background-image: url('/ssp/images/student-history-report-icon.png') !important;
 }
 
-.studentTransitionIcon {
-background-image: url('/ssp/images/student-transition-icon.png') !important;
+.setNonParticipatingIcon {
+background-image: url('/ssp/images/set-non-participating-status-icon.png') !important;
+}
+
+.setNoShowIcon {
+background-image: url('/ssp/images/set-no-show-status-icon.png') !important;
+}
+
+.transitionStudentIcon {
+background-image: url('/ssp/images/set-transition-status-icon.png') !important;
 }

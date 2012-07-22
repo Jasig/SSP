@@ -22,11 +22,6 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
                     name: 'courseName'
                 },{
                     xtype: 'displayfield',
-                    fieldLabel: 'Email CC',
-                    anchor: '100%',
-                    name: 'emailCC'
-                },{
-                    xtype: 'displayfield',
                     fieldLabel: 'Closed Date',
                     anchor: '100%',
                     name: 'closedDate',
@@ -48,16 +43,21 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
 			        anchor: '95%',
 			        disabled: true
 				},{
-		            xtype: 'multiselect',
-		            name: 'earlyAlertReasonIds',
-		            fieldLabel: 'Reasons',
-		            store: me.reasonsStore,
-		            displayField: 'name',
-		            valueField: 'id',
-		            allowBlank: false,
-		            minSelections: 0,
-		            anchor: '95%',
-		            disabled: true
+			        xtype: 'combobox',
+			        itemId: 'earlyAlertReasonCombo',
+			        name: 'earlyAlertReasonId',
+			        fieldLabel: 'Early Alert Reason',
+			        emptyText: 'Select One',
+			        store: me.reasonsStore,
+			        valueField: 'id',
+			        displayField: 'name',
+			        mode: 'local',
+			        typeAhead: true,
+			        queryMode: 'local',
+			        allowBlank: false,
+			        forceSelection: true,
+			        anchor: '95%',
+			        disabled: true
 		        },{
 		            xtype: 'multiselect',
 		            name: 'earlyAlertSuggestionIds',
@@ -70,6 +70,11 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
 		            anchor: '95%',
 		            disabled: true
 		        },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Email CC',
+                    anchor: '100%',
+                    name: 'emailCC'
+                },{
                     xtype: 'displayfield',
                     fieldLabel: 'Comment',
                     anchor: '100%',

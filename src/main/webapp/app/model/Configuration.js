@@ -1,9 +1,17 @@
 Ext.define('Ssp.model.Configuration', {
     extend: 'Ext.data.Model',
-    fields: [{name: 'syncStudentPersonalDataWithExternalSISData', 
+    fields: [{name: 'syncStudentPersonalDataWithExternalData', 
     	      type: 'boolean', 
     	      defaultValue: false
     	     },
+    	     {name: 'syncCoachAssignmentWithExternalData', 
+    	      type: 'boolean', 
+    	      defaultValue: false
+    	     },
+    	     {name: 'syncStudentTypeAssignmentWithExternalData', 
+       	      type: 'boolean', 
+       	      defaultValue: false
+       	     },
              {
     	      name: 'studentIdAlias', 
     	      type: 'string', 

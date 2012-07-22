@@ -45,7 +45,7 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     },  
 	init: function() {
 		var me=this;
-    	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalSISData');		
+    	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');		
 		// alias the studentId field and provide validation
 		var studentIdField = me.getStudentIdField();
 		studentIdField.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
