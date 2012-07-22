@@ -49,7 +49,7 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 	private transient RequestAndResponseAccessFilter requestAndResponseAccessFilter;
 
 	private Map<String, String> coachesQuery = Collections.singletonMap(
-			"SSP_ROLES", "COACH");
+			"SSP_ROLES", "SSP_COACH");
 
 	/**
 	 * Allows the <code>coachesQuery</code> to be configured in Spring XML. The
