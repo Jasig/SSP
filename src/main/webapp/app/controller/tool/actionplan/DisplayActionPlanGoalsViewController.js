@@ -8,6 +8,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     	formUtils: 'formRendererUtils',
     	model: 'currentGoal',
     	person: 'currentPerson',
+    	preferences: 'preferences',
     	store: 'goalsStore'
     },
     config: {
@@ -48,6 +49,14 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     	
     	me.appEventsController.assignEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});
     	me.appEventsController.assignEvent({eventName: 'deleteGoal', callBackFunc: this.deleteConfirmation, scope: this});
+    
+    	// display the goals pane if a goal was added to the student's record
+    	if ( me.preferences.ACTION_PLAN_ACTIVE_VIEW == 1 )
+    	{
+    		// reset to the tasks view
+    		me.preferences.ACTION_PLAN_ACTIVE_VIEW=0;
+    		me.getView().expand();
+    	}
     },
     
     destroy: function() {

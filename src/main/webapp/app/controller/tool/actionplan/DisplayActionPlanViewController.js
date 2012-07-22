@@ -8,7 +8,6 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     	formUtils: 'formRendererUtils',
     	goalsStore: 'goalsStore',
     	person: 'currentPerson',
-    	preferences: 'preferences',
     	store: 'tasksStore'
     },
     
@@ -81,7 +80,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		};
 	
     	me.getAddTaskButton().setDisabled( !me.authenticatedPerson.hasPermission('ROLE_PERSON_TASK_WRITE') );
-		
+    	
 		// clear any existing tasks
 		me.store.removeAll();
 
@@ -108,7 +107,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		
 		return me.callParent(arguments);
     },
-
+    
     destroy: function(){
     	this.appEventsController.removeEvent({eventName: 'filterTasks', callBackFunc: this.onFilterTasks, scope: this});    	
     },

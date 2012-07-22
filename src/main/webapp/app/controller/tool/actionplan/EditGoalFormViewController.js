@@ -7,7 +7,8 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
     	confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentGoal',
-    	person: 'currentPerson'
+    	person: 'currentPerson',
+    	preferences: 'preferences'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -60,6 +61,7 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
     		model.set('confidentialityLevel',{id: values.confidentialityLevelId});
     		
     		successFunc = function(response ,view){
+    			me.preferences.ACTION_PLAN_ACTIVE_VIEW=1;
     			me.loadDisplay();
 			};
 			
