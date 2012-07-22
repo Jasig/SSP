@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
@@ -114,9 +115,8 @@ public class PersonHistoryReportController extends AbstractBaseController {
 
 		// get all the early alerts for this person
 		final PagingWrapper<EarlyAlert> earlyAlert = earlyAlertService
-				.getAllForPerson(person, null);
-		final List<EarlyAlertTO> earlyAlertTOs = earlyAlertTOFactory
-				.asTOList(earlyAlert.getRows());
+				.getAllForPerson(person, null); 
+		final Set<EarlyAlertTO> earlyAlertTOs = earlyAlertTOFactory.asTOSet(earlyAlert.getRows());
 		LOGGER.debug("EarlyAlertTOs.size(): " + earlyAlertTOs.size());
 
 		// get all the tasks for this person
@@ -191,7 +191,7 @@ public class PersonHistoryReportController extends AbstractBaseController {
 	}
 
 	public static List<StudentHistoryTO> sort(
-			final List<EarlyAlertTO> earlyAlerts,
+			final Set<EarlyAlertTO> earlyAlerts,
 			final Map<String, List<TaskTO>> taskMap,
 			final List<JournalEntryTO> journalEntries) {
 
