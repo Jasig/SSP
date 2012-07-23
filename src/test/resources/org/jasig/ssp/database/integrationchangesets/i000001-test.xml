@@ -215,4 +215,57 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="Add more to external_faculty and _course tables" author="jon.adams">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_faculty_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<insert tableName="external_faculty_course">
+			<column name="faculty_school_id" value="ken.1" />
+			<column name="term_code" value="FA12" />
+			<column name="formatted_course" value="MTH101" />
+			<column name="title" value="College Algebra" />
+		</insert>
+		<insert tableName="external_faculty_course">
+			<column name="faculty_school_id" value="ken.1" />
+			<column name="term_code" value="SP13" />
+			<column name="formatted_course" value="PYF101" />
+			<column name="title" value="Pyrotechnics" />
+		</insert>
+
+		<insert tableName="external_faculty_course_roster">
+			<column name="faculty_school_id" value="ken.1" />
+			<column name="school_id" value="student0" />
+			<column name="first_name" value="James" />
+			<column name="middle_name" value="" />
+			<column name="last_name" value="Gosling" />
+			<column name="primary_email_address" value="test@sinclair.edu" />
+			<column name="term_code" value="FA12" />
+			<column name="formatted_course" value="MTH101" />
+		</insert>
+
+		<rollback>
+			<delete tableName="external_faculty_course">
+				<where>faculty_school_id = 'ken.1' AND term_code = 'FA12' AND
+					formatted_course = 'MTH101'
+				</where>
+			</delete>
+			<delete tableName="external_faculty_course">
+				<where>faculty_school_id = 'ken.1' AND term_code = 'SP13' AND
+					formatted_course = 'PYF101'
+				</where>
+			</delete>
+
+			<delete tableName="external_faculty_course_roster">
+				<where>faculty_school_id = 'ken.1' AND school_id = 'student0' AND
+					term_code = 'FA12' AND formatted_course = 'MTH101'
+				</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>
