@@ -36,7 +36,7 @@ import com.google.common.collect.Sets;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
-@TransactionConfiguration(defaultRollback = false)
+@TransactionConfiguration
 @Transactional
 public class EarlyAlertDaoTest {
 
@@ -108,9 +108,10 @@ public class EarlyAlertDaoTest {
 					all.isEmpty());
 			assertList(all);
 
-			dao.delete(obj);
 		} catch (final ObjectNotFoundException e) {
 			fail("Saved message could not be found to reload.");
+		} finally {
+			dao.delete(saved);
 		}
 	}
 
@@ -191,7 +192,7 @@ public class EarlyAlertDaoTest {
 		final EarlyAlert obj = createTestEarlyAlert();
 		obj.setClosedDate(null);
 		obj.setClosedById(null);
-		dao.save(obj);
+		final EarlyAlert saved = dao.save(obj);
 
 		final Collection<UUID> peopleIds = Lists.newArrayList();
 		peopleIds.add(PERSON_ID);
@@ -199,7 +200,7 @@ public class EarlyAlertDaoTest {
 		try {
 			dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
 		} finally {
-			dao.delete(obj);
+			dao.delete(saved);
 		}
 	}
 

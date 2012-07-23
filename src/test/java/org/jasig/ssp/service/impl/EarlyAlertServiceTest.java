@@ -44,7 +44,7 @@ import com.google.common.collect.Sets;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../service-testConfig.xml")
-@TransactionConfiguration()
+@TransactionConfiguration
 @Transactional
 public class EarlyAlertServiceTest {
 

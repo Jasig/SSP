@@ -87,10 +87,36 @@ public class PersonEarlyAlertController extends
 	@Override
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert", method = RequestMethod.POST)
 	public @ResponseBody
-	EarlyAlertTO create(@PathVariable final UUID personId,
-			@Valid @RequestBody final EarlyAlertTO obj)
+	EarlyAlertTO create(@PathVariable @NotNull final UUID personId,
+			@Valid @NotNull @RequestBody final EarlyAlertTO obj)
 			throws ValidationException, ObjectNotFoundException {
+		// validate incoming data
+		if (personId == null) {
+			throw new IllegalArgumentException(
+					"Missing or invalid person identifier in the path.");
+		}
+
+		if (obj == null) {
+			throw new IllegalArgumentException(
+					"Missing or invalid early alert data.");
+		}
+
+		if (!personId.equals(obj.getPersonId())) {
+			throw new ValidationException(
+					"Person identifier in path, did not match the person identifier in the early alert data.");
+		}
+
+		// TEMPORARY check until the issue in SSP-338 is fixed
+		if (obj.getEarlyAlertReasonIds() != null
+				&& obj.getEarlyAlertReasonIds().size() > 1) {
+			throw new ValidationException(
+					"Early alerts may not have more than one reason.");
+		}
+
+		// create
 		final EarlyAlertTO earlyAlertTO = super.create(personId, obj);
+
+		// send e-mail to student if requested
 		if (obj.getSendEmailToStudent() != null
 				&& Boolean.TRUE.equals(obj.getSendEmailToStudent())) {
 			try {
@@ -110,6 +136,7 @@ public class PersonEarlyAlertController extends
 			}
 		}
 
+		// return created EarlyAlert
 		return earlyAlertTO;
 	}
 
