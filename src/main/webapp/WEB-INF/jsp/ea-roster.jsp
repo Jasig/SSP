@@ -55,6 +55,8 @@
     <div style="clear:both"></div>
   </div>
 
+  <p><spring:message code="click.a.student.from.the.roster.to.send.an.early.alert"/></p>
+
   <!-- Portlet Content -->
   <div class="fl-widget-content content portlet-content" role="main">
   
@@ -120,8 +122,6 @@
             </tr>
           </tbody>
         </table>
-        
-        <p><spring:message code="click.a.student.from.the.roster.to.send.an.early.alert"/></p>
 
       </div>
     
