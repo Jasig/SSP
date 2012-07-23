@@ -22,6 +22,16 @@
   <div class="errors">
   </div>
 
+  <!-- Unrecognized user -->
+  <div class="portlet-msg-error portlet-msg error error-message unregognized-user" role="status" style="display: none;">
+    <div class="titlebar">
+      <h3 class="title"><spring:message code="unregognized.person"/>: ${renderRequest.remoteUser}</h3>
+    </div>
+    <div class="content">
+      <p><spring:message code="no.information.is.available.for.the.current.user.in.ssp"/></p>
+    </div>
+  </div>
+
   <!-- Portlet Message (success) -->
   <div class="portlet-msg-success portlet-msg success sent-message" role="status" style="display: none;">
     <div class="titlebar">
@@ -37,7 +47,6 @@
   	<h2 class="title" role="heading"><spring:message code="course.roster"/></h2>
     <div class="fl-col-flex2 toolbar" role="toolbar">
       <div class="fl-col">
-        <!--label for="courseSelect" class="course-label"><spring:message code="course"/>:</label-->
         <select class="course-select">
         </select>
       </div>
@@ -141,6 +150,8 @@
         var $ = up.jQuery;
         var fluid = up.fluid;
 
+  <c:choose>
+    <c:when test="${user != null}">
         var options = {
         	urls: {
         		courseList: '<c:url value="/api/1/person/${user.schoolId}/instruction/course"/>',
@@ -149,7 +160,12 @@
         	}
         };
         ssp.EarlyAlertRoster('#${n}earlyAlert', options);
-        
+    </c:when>
+    <c:otherwise>
+        $('#${n}earlyAlert .unregognized-user').slideDown(1000);
+    </c:otherwise>
+  </c:choose>
+
         // Confirm submission
         if (${studentName != null ? 'true' : 'false'}) {
             $('#${n}earlyAlert .sent-message').slideDown(1000);

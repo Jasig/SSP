@@ -493,7 +493,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			delete intakeData.person.studentIntakeCompleteDate;
 			// delete intakeData.person.currentAppointment;
 			delete intakeData.person.studentType;
-			delete intakeData.person.programStatuses;
+			delete intakeData.person.currentProgramStatusName;
 			delete intakeData.person.coach;
 						
 			// Save the intake
