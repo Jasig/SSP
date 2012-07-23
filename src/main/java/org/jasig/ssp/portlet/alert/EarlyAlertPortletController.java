@@ -10,6 +10,8 @@ import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.FacultyCourseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +26,8 @@ public final class EarlyAlertPortletController {
 	
 	private static final String KEY_STUDENT_ID = "studentId";
 	private static final String KEY_COURSE = "course";
+
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private PersonService personService;
@@ -83,7 +87,8 @@ public final class EarlyAlertPortletController {
 		try {
 			rslt = personService.personFromUsername(req.getRemoteUser());
 		} catch (ObjectNotFoundException e) {
-			throw new RuntimeException("Unrecognized person:  " + req.getRemoteUser());
+			// We'll return null... the JSP will have to act appropriately
+			log.debug("No person found in SSP for user '{}'", req.getRemoteUser());
 		}
 		return rslt;
 	}

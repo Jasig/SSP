@@ -103,47 +103,51 @@ var ssp = ssp || {};
         // Initialize the courseSelect
         var courseSelect = that.locate('courseSelect');
         var courses = getCourseListData();
-        $(courses).each(function(index, course) {
-            courseSelect.append('<option value="' + course.formattedCourse  + '">' + course.formattedCourse + ' - ' + course.title + '</option>');
-        });
-        courseSelect.change(refreshRoster);
+        if (courses && courses.length != 0) {
+            $(courses).each(function(index, course) {
+                courseSelect.append('<option value="' + course.formattedCourse  + '">' + course.formattedCourse + ' - ' + course.title + '</option>');
+            });
+            courseSelect.change(refreshRoster);
 
-        // Initialize the courseSelect
-        var pagerOptions = {
-            dataModel: getRosterData(),
-            columnDefs: [
-                { key: 'firstName', valuebinding: '*.firstName', sortable: true },
-                { key: 'middleName', valuebinding: '*.middleName', sortable: true },
-                { key: 'lastName', valuebinding: '*.lastName', sortable: true },
-                { key: 'studentType', valuebinding: '*.studentType', sortable: true },
-                { key: 'schoolId', valuebinding: '*.schoolId', sortable: true }
-            ],
-            bodyRenderer: {
-                type: 'fluid.pager.selfRender',
-                options: {
-                    selectors: { root: that.options.selectors.rosterTable },
-                    row: 'row:'
-                }
-            },
-            pagerBar: {
-                type: 'fluid.pager.pagerBar', 
-                options: {
-                    pageList: {
-                        type: 'fluid.pager.renderedPageList',
-                        options: { linkBody: 'a' }
+            // Initialize the courseSelect
+            var pagerOptions = {
+                dataModel: getRosterData(),
+                columnDefs: [
+                    { key: 'firstName', valuebinding: '*.firstName', sortable: true },
+                    { key: 'middleName', valuebinding: '*.middleName', sortable: true },
+                    { key: 'lastName', valuebinding: '*.lastName', sortable: true },
+                    { key: 'studentType', valuebinding: '*.studentType', sortable: true },
+                    { key: 'schoolId', valuebinding: '*.schoolId', sortable: true }
+                ],
+                bodyRenderer: {
+                    type: 'fluid.pager.selfRender',
+                    options: {
+                        selectors: { root: that.options.selectors.rosterTable },
+                        row: 'row:'
+                    }
+                },
+                pagerBar: {
+                    type: 'fluid.pager.pagerBar', 
+                    options: {
+                        pageList: {
+                            type: 'fluid.pager.renderedPageList',
+                            options: { linkBody: 'a' }
+                        }
                     }
                 }
-            }
-        };
-        that.pager = fluid.pager(container, pagerOptions);
+            };
+            that.pager = fluid.pager(container, pagerOptions);
 
-        // Click event for selecting a student
-        $(container + ' ' + that.options.selectors.rosterTable + ' tr').live('click', function() {
-            var schoolId = $(this).find('.schoolId').text();
-            var formattedCourse = that.locate('courseSelect').val();
-            var alertFormUrl = options.urls.enterAlert.replace('SCHOOLID', schoolId).replace('FORMATTEDCOURSE', formattedCourse);
-            window.location = alertFormUrl;
-        });
+            // Click event for selecting a student
+            $(container + ' ' + that.options.selectors.rosterTable + ' tr').live('click', function() {
+                var schoolId = $(this).find('.schoolId').text();
+                var formattedCourse = that.locate('courseSelect').val();
+                var alertFormUrl = options.urls.enterAlert.replace('SCHOOLID', schoolId).replace('FORMATTEDCOURSE', formattedCourse);
+                window.location = alertFormUrl;
+            });
+        } else {
+        	showError('No Available Courses', 'There are no courses available for this user in SSP.');
+        }
 
     }
 
