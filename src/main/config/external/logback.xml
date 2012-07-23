@@ -1,19 +1,10 @@
-<!--
-	This file configures logging for the SSP application.
-
-	It is necessary to include this file in the production config directory.
-
-
-
-	Add debug="true" to configuration element to debug logback configuration.
-
-	Adding scan="true" to configuration element allows logback to automatically
-	update itself from this config file without restarting the app.
-
-	If you modify this file while the app is running, and it appears not to load,
-	but also does not give you an error message, then you likely have an xml syntax error.
--->
-
+<!-- This file configures logging for the SSP application. It is necessary 
+	to include this file in the production config directory. Add debug="true" 
+	to configuration element to debug logback configuration. Adding scan="true" 
+	to configuration element allows logback to automatically update itself from 
+	this config file without restarting the app. If you modify this file while 
+	the app is running, and it appears not to load, but also does not give you 
+	an error message, then you likely have an xml syntax error. -->
 <configuration debug="true" scan="true">
 
 	<property file="/usr/local/etc/ssp/ssp-config.properties" />
@@ -23,7 +14,6 @@
 			<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
-
 
 	<appender name="rollingFileAppender"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -41,43 +31,49 @@
 		</encoder>
 	</appender>
 
+	<!-- ************************************************************************ -->
+	<!-- To enable logging to SMTP: 1. Ensure that the ssp-config.properties 
+		file path is set correctly above. 2. Check the username, password, to, and 
+		from fields in your ssp-config.properties environment configuration file. 
+		3. Uncomment the <appender> block below. 4. (optional) You may customize 
+		the subject field below. 5. Uncomment and set the level in the appropriate 
+		<root><appender-ref>...</root> tags at the end of this file. -->
+	<!-- ************************************************************************ -->
+	<!--appender name="smtpAppender" class="ch.qos.logback.classic.net.SMTPAppender"> 
+		<SMTPHost>${smtp_host}</SMTPHost> <SMTPPort>${smtp_port}</SMTPPort> <SSL>true</SSL> 
+		<Username>${smtp_username}</Username> <Password>${smtp_password}</Password> 
+		<To>${ssp_admins_email_addresses}</To> <From>${smtp_username}</From> <Subject>${system_id}: 
+		%logger{20} - %m</Subject> <layout class="ch.qos.logback.classic.PatternLayout"> 
+		<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - 
+		%msg%n</pattern> </layout> </appender -->
 
-	<!-- ************************************************************************ -->
-	<!-- ************************************************************************ -->
-	<!-- Be sure to set the username, password, to, from, and subject fields	  -->
-	<!-- ************************************************************************ -->
-	<!-- ************************************************************************ -->
-	<!--appender name="smtpAppender" class="ch.qos.logback.classic.net.SMTPAppender">
-		<SMTPHost>${smtp_host}</SMTPHost>
-		<SMTPPort>${smtp_port}</SMTPPort>
-		<SSL>true</SSL>
-		<Username>${smtp_username}</Username>
-		<Password>${smtp_password}</Password>
-		<To>${ssp_admins_email_addresses}</To>
-		<From>${smtp_username}</From>
-		<Subject>${system_id}: %logger{20} - %m</Subject>
-		<layout class="ch.qos.logback.classic.PatternLayout">
-			<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-		</layout>
-	</appender-->
-
-	<logger name="org.jasig.ssp" level="trace" />
-	<logger name="org.springframework.core" level="info" />
-	<logger name="org.springframework.beans" level="info" />
-	<logger name="org.springframework.context" level="info" />
-	<logger name="org.springframework.web" level="info" />
-	<logger name="org.springframework.orm" level="info" />
-	<logger name="org.springframework.security" level="info" />
-	<!--logger name="org.hibernate.SQL" level="debug" / -->
-	<logger name="org.jasig.ssp.security.uportal.UPortalPreAuthenticatedProcessingFilter" level="info" />
+	<!-- Adjust any of the levels below as desired. From least to most verbose 
+		reporting: FATAL->ERROR->WARN->INFO->DEBUG->TRACE. It is advised that production 
+		systems use WARN for most values, or INFO, or even DEBUG, if you are experiencing 
+		any startup or reoccurring issues you wish to troubleshoot further. -->
+	<logger name="org.jasig.ssp" level="warn" />
+	<logger name="org.springframework.core" level="warn" />
+	<logger name="org.springframework.beans" level="warn" />
+	<logger name="org.springframework.context" level="warn" />
+	<logger name="org.springframework.web" level="warn" />
+	<logger name="org.springframework.orm" level="warn" />
+	<logger name="org.springframework.security" level="warn" />
+	<!--logger name="org.hibernate.SQL" level="info" / -->
+	<logger
+		name="org.jasig.ssp.security.uportal.UPortalPreAuthenticatedProcessingFilter"
+		level="warn" />
 
 	<root level="info">
-		<!-- It might be prudent to turn the consoleAppender off in prod, as it is already being logged in the rolling File Appender -->
-		<appender-ref ref="consoleAppender" />
-		
-		<!-- Likewise from above, it would be fine to turn off the rolling File appender and the smtpAppender in DEV -->
-		<!-- appender-ref ref="rollingFileAppender" /> 
-		<appender-ref ref="smtpAppender"/ -->
+		<!-- Uncomment the line below to enable the consoleAppender. -->
+		<!-- <appender-ref ref="consoleAppender" /> -->
+
+		<!-- Comment the line below to disable the rollingFileAppender, for example 
+			when in development mode. -->
+		<appender-ref ref="rollingFileAppender" />
+
+		<!-- Uncomment the line below to enable the smtpAppender, and as long as 
+			it is configured above. -->
+		<!-- <appender-ref ref="smtpAppender"/> -->
 	</root>
 
 </configuration>
