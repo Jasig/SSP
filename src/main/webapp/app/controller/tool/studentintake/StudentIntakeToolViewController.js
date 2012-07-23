@@ -491,10 +491,16 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			// since these will throw an error in the
 			// current API
 			delete intakeData.person.studentIntakeCompleteDate;
-			// delete intakeData.person.currentAppointment;
 			delete intakeData.person.studentType;
 			delete intakeData.person.currentProgramStatusName;
 			delete intakeData.person.coach;
+			
+			// Temporarily Disable Educational Goal Fields
+			delete intakeData.personEducationGoal.careerDecided;
+			delete intakeData.personEducationGoal.plannedOccupation;
+			delete intakeData.personEducationGoal.howSureAboutOccupation;
+			delete intakeData.personEducationGoal.confidentInAbilities;
+			delete intakeData.personEducationGoal.additionalAcademicProgramInformationNeeded;
 						
 			// Save the intake
 			me.apiProperties.makeRequest({
