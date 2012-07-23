@@ -38,7 +38,7 @@ import com.google.common.collect.Sets;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
-@TransactionConfiguration(defaultRollback = false)
+@TransactionConfiguration
 @Transactional
 public class EarlyAlertResponseDaoTest {
 
