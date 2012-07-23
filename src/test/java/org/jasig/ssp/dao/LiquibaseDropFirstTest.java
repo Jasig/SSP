@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -34,10 +35,11 @@ public class LiquibaseDropFirstTest {
 	@Autowired
 	private transient ResourceLoader resourceLoader;
 
+	@Ignore(value = "Useful for development. But until a better process is ready, since it is desctructive, disable this test so it isn't accidentally run on a production database.")
 	@Test
-	public void test() {
-		// first run the prod master changelog
-		SpringLiquibase sl = newSpringLiquibaseWithDropFirst();
+	public void testProductionScripts() {
+		// run the prod master changelog
+		final SpringLiquibase sl = newSpringLiquibaseWithDropFirst();
 		sl.setChangeLog("classpath:org/jasig/ssp/database/masterChangeLog.xml");
 
 		try {
@@ -48,9 +50,13 @@ public class LiquibaseDropFirstTest {
 					e);
 			fail("Failed to run Prod changesets: " + e.getMessage());
 		}
+	}
 
-		// now run the test master changelog
-		sl = newSpringLiquibaseWithDropFirst();
+	@Ignore(value = "Useful for development. But until a better process is ready, since it is desctructive, disable this test so it isn't accidentally run on a production database.")
+	@Test
+	public void testProductionAndTestScripts() {
+		// run the test master changelog
+		final SpringLiquibase sl = newSpringLiquibaseWithDropFirst();
 		sl.setChangeLog("classpath:org/jasig/ssp/database/masterChangeLog-test.xml");
 
 		try {
