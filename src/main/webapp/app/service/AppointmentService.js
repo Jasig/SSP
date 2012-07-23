@@ -52,6 +52,7 @@ Ext.define('Ssp.service.AppointmentService', {
 	    
 	    // reset the appointments
 	    me.appointment.data = appointment.data;
+	    me.currentPersonAppointment.data = personAppointment.data;
 	    
 		// load the person to edit
 		me.apiProperties.makeRequest({

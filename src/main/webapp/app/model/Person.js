@@ -17,7 +17,6 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'secondaryEmailAddress', type: 'string'},
              {name: 'birthDate', type: 'date', dateFormat: 'time'},
     		 {name: 'username', type: 'string'},
-             {name: 'userId', type: 'string'},
     		 {name: 'enabled', type: 'boolean'},
              {name: 'coach', type: 'auto'},
     		 {name: 'strengths', type: 'string'},

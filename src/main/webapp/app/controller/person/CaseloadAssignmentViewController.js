@@ -246,9 +246,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// TODO: Handle username field
 			if (model.get("username") == "")
 				model.set('username',model.get('firstName')+'.'+model.get('lastName'));				
-
-			if (model.get("userId") == "")
-				model.set('userId',model.get('firstName')+'.'+model.get('lastName'));		
 			
 			me.getView().setLoading( true );
 			

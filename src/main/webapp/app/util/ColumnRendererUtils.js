@@ -6,7 +6,16 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
     },
 
 	renderFriendlyBoolean: function(val, metaData, record) {
-		return ((val==true)?'Yes':'No');
+		var result = "";
+        if (val != null )
+        {
+           if (val != "")
+           {
+        	   result = ((val==true)?'Yes':'No');
+           }
+        }
+        
+        return result;
 	},    
     
 	renderTaskName: function(val, metaData, record) {
