@@ -155,4 +155,105 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="add person references for external_faculty_course_roster" author="alexander.leader">
+		<insert tableName="person">
+			<column name="id" value="5eceefd1-257c-421f-99bf-a3622815bfee" />
+			<column name="first_name" value="Douglas" />
+			<column name="last_name" value="Toya" />
+			<column name="primary_email_address" value="douglas.toya@sinclair.edu" />
+			<column name="username" value="faculty0" />
+			<column name="school_id" value="uf928711" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="0d6163de-90fd-46d1-a9ca-7dbaa850924b" />
+			<column name="first_name" value="Mary" />
+			<column name="last_name" value="Webber" />
+			<column name="primary_email_address" value="mary.webber@sinclair.edu" />
+			<column name="username" value="faculty1" />
+			<column name="school_id" value="uf123456" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="d2320b58-4d54-4532-a0cd-1f4409c9fc38" />
+			<column name="first_name" value="James" />
+			<column name="last_name" value="Doe" />
+			<column name="primary_email_address" value="james.ryan80@university.edu" />
+			<column name="username" value="james.doe" />
+			<column name="school_id" value="uu351764" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="8005ad07-9111-457d-9896-f15a0dc8bbfb" />
+			<column name="first_name" value="Mark" />
+			<column name="last_name" value="Galafrion" />
+			<column name="primary_email_address" value="mark.g@university.edu" />
+			<column name="username" value="mark.galafrion" />
+			<column name="school_id" value="uu358123" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="a5a23d8a-f0d3-4ef6-9a75-21f3775bac0f" />
+			<column name="first_name" value="Bob" />
+			<column name="last_name" value="Reynolds" />
+			<column name="primary_email_address" value="bob1@university.edu" />
+			<column name="username" value="bob.reynolds" />
+			<column name="school_id" value="uu462875" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="f26d8f23-df20-40f1-bc98-83111be4a52a" />
+			<column name="first_name" value="Kevin" />
+			<column name="last_name" value="Smith" />
+			<column name="primary_email_address" value="ksmith12@university.edu" />
+			<column name="username" value="kevin.smith" />
+			<column name="school_id" value="uu112233" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="person">
+				<where>id='5eceefd1-257c-421f-99bf-a3622815bfee'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='0d6163de-90fd-46d1-a9ca-7dbaa850924b'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='d2320b58-4d54-4532-a0cd-1f4409c9fc38'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='8005ad07-9111-457d-9896-f15a0dc8bbfb'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='a5a23d8a-f0d3-4ef6-9a75-21f3775bac0f'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='f26d8f23-df20-40f1-bc98-83111be4a52a'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

@@ -87,9 +87,21 @@ objectClass: top
 objectClass: organizationalPerson
 uid: faculty0
 userPassword: faculty0
-cn: Jim
-sn: Faculty
-mail: test@sinclair.edu
+cn: Douglas
+sn: Toya
+mail: douglas.toya@sinclair.edu
+telephonenumber: 111 867-5309
+
+dn: uid=faculty1,ou=users,dc=springframework,dc=org
+objectClass: uidObject
+objectClass: person
+objectClass: top
+objectClass: organizationalPerson
+uid: faculty1
+userPassword: faculty1
+cn: Mary
+sn: Webber
+mail: mary.webber@sinclair.edu
 telephonenumber: 111 867-5309
 
 ####
