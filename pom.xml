@@ -31,6 +31,16 @@
 				</dependency>
 			</dependencies>
 		</profile>
+		<profile>
+			<id>MSSQL</id>
+			<dependencies>
+				<dependency>
+					<groupId>com.microsoft.sqlserver</groupId>
+					<artifactId>sqlserver-jdbc4</artifactId>
+					<version>3.0</version>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 
 	<dependencies>
