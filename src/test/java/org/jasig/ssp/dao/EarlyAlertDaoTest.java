@@ -191,7 +191,7 @@ public class EarlyAlertDaoTest {
 		final EarlyAlert obj = createTestEarlyAlert();
 		obj.setClosedDate(null);
 		obj.setClosedById(null);
-		dao.save(obj);
+		final EarlyAlert saved = dao.save(obj);
 
 		final Collection<UUID> peopleIds = Lists.newArrayList();
 		peopleIds.add(PERSON_ID);
@@ -199,7 +199,7 @@ public class EarlyAlertDaoTest {
 		try {
 			dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
 		} finally {
-			dao.delete(obj);
+			dao.delete(saved);
 		}
 	}
 
