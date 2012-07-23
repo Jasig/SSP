@@ -271,7 +271,7 @@ var apiUrls = [
   {name: 'personCaseload', url: 'person/caseload'},
   {name: 'personMasterCaseload', url: 'person/{id}/caseload'},
   {name: 'personChallenge', url: 'person/{id}/challenge'},
-  {name: 'personCoach', url: 'person/coach'},
+  {name: 'personCoach', url: 'person'},
   {name: 'personDocument', url: 'person/{id}/document'},
   {name: 'personEarlyAlert', url: 'person/{personId}/earlyAlert'},
   {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlert/{earlyAlertId}/response'},

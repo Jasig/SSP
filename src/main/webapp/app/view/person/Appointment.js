@@ -22,7 +22,7 @@ Ext.define('Ssp.view.person.Appointment', {
 			            title: '',
 			            defaultType: 'textfield',
 			            defaults: {
-			                anchor: '100%'
+			            	anchor: '50%'
 			            },
 			       items: [{
 				    	xtype: 'datefield',
@@ -39,8 +39,7 @@ Ext.define('Ssp.view.person.Appointment', {
 				        fieldLabel: 'Start Time',
 				        increment: 30,
 				        typeAhead: false,
-				        allowBlank: false,
-				        anchor: '100%'
+				        allowBlank: false
 				    },{
 				        xtype: 'timefield',
 				        name: 'endTime',
@@ -48,8 +47,7 @@ Ext.define('Ssp.view.person.Appointment', {
 				        fieldLabel: 'End Time',
 				        typeAhead: false,
 				        allowBlank: false,
-				        increment: 30,
-				        anchor: '100%'
+				        increment: 30
 				    }]
 			    }]
 			});

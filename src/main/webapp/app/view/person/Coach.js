@@ -27,7 +27,7 @@ Ext.define('Ssp.view.person.Coach', {
 			            title: '',
 			            defaultType: 'textfield',
 			            defaults: {
-			                anchor: '100%'
+			                anchor: '50%'
 			            },
 			       items: [{
 				        xtype: 'combobox',
