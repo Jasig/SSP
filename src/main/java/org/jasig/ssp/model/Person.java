@@ -118,7 +118,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private String secondaryEmailAddress;
 
 	/**
-	 * User name.
+	 * User name. Used to identify the user in secondary systems
+	 * like LDAP.
 	 * 
 	 * Maximum length of 25.
 	 */
@@ -127,16 +128,6 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Column(length = 25)
 	@Size(max = 25)
 	private String username;
-
-	/**
-	 * User Id Secondary Id for used to identify the user in secondary systems
-	 * like LDAP.
-	 * 
-	 * Maximum length of 25.
-	 */
-	@Column(length = 25)
-	@Size(max = 25)
-	private String userId;
 
 	/**
 	 * Home phone number.
@@ -667,19 +658,6 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.tools = tools;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(final String userId) {
-		if ((userId != null) && (userId.length() > 25)) {
-			throw new IllegalArgumentException(
-					"UserId must be 25 or fewer characters.");
-		}
-
-		this.userId = userId;
-	}
-
 	public Set<PersonConfidentialityDisclosureAgreement> getConfidentialityDisclosureAgreements() {
 		return confidentialityDisclosureAgreements;
 	}
@@ -846,7 +824,6 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		result *= hashField("primaryEmailAddress", primaryEmailAddress);
 		result *= hashField("secondaryEmailAddress", secondaryEmailAddress);
 		result *= hashField("primaryEmailAddress", primaryEmailAddress);
-		result *= hashField("userId", userId);
 		result *= hashField("homePhone", homePhone);
 		result *= hashField("workPhone", workPhone);
 		result *= hashField("cellPhone", cellPhone);

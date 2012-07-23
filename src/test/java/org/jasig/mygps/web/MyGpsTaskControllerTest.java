@@ -74,11 +74,12 @@ public class MyGpsTaskControllerTest {
 	@Test
 	public void createTaskForStudent() throws Exception { // NOPMD
 		final Person student = new Person();
-		student.setUserId("student id");
+		student.setUsername("student id");
 		final Task task = new Task();
 
-		expect(personService.personFromUserId(student.getUserId())).andReturn(
-				student);
+		expect(personService.personFromUsername(student.getUsername()))
+				.andReturn(
+						student);
 		securityService.setSessionId(TEST_TASK_SESSION_ID);
 		expect(
 				service.createCustomTaskForPerson(TEST_TASK_NAME,
@@ -93,7 +94,7 @@ public class MyGpsTaskControllerTest {
 				"Task creation should have returned success.",
 				controller.createTaskForStudent(TEST_TASK_NAME,
 						TEST_TASK_DESCRIPTION,
-						student.getUserId(), new Date()));
+						student.getUsername(), new Date()));
 
 		verify(personService);
 		verify(service);

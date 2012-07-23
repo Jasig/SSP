@@ -259,13 +259,6 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public Person personFromUserId(final String userId)
-			throws ObjectNotFoundException {
-		final Person person = dao.fromUserId(userId);
-		return additionalAttribsForStudent(person);
-	}
-
-	@Override
 	public List<Person> peopleFromListOfIds(final List<UUID> personIds,
 			final SortingAndPaging sAndP) {
 		final List<Person> people = dao.getPeopleInList(personIds, sAndP);

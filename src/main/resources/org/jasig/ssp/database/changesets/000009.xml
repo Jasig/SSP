@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="drop userid column" author="daniel.bower">
+		<dropColumn tableName="person" columnName="user_id" />
+
+		<rollback>
+			<addColumn tableName="person">
+				<column name="user_id" type="${nvarchar.type}(25)">
+				<constraints nullable="true" />
+			</column>
+			</addColumn>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add index to username" author="daniel.bower">
+		<createIndex tableName="person" indexName="idx_person_username">
+			<column name="username"/>
+		</createIndex>
+		
+		<rollback>
+			<dropIndex tableName="person" indexName="idx_person_username"/>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

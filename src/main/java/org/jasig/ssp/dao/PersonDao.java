@@ -85,17 +85,6 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return (Person) query.uniqueResult();
 	}
 
-	public Person fromUserId(@NotNull final String userId) {
-		if (!StringUtils.isNotBlank(userId)) {
-			throw new IllegalArgumentException("userId can not be empty.");
-		}
-
-		final Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(Person.class);
-		query.add(Restrictions.eq("userId", userId));
-		return (Person) query.uniqueResult();
-	}
-
 	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleInList(final List<UUID> personIds,
 			final SortingAndPaging sAndP) {
@@ -196,7 +185,6 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		// to do this later
 		criteria.add(Restrictions.isNotNull("studentType"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-
 
 		return criteria.list();
 	}

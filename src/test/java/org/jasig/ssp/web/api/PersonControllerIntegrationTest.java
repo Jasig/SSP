@@ -67,7 +67,7 @@ public class PersonControllerIntegrationTest {
 
 	private static final String PERSON_SORTEDBY_FIRSTNAME_0 = "Alan";
 
-	private static final String PERSON_SORTEDBY_FIRSTNAME_5 = "James";
+	private static final String PERSON_SORTEDBY_FIRSTNAME_7 = "James";
 
 	private static final String TEST_SCHOOLID = "legacy school id";
 
@@ -201,9 +201,11 @@ public class PersonControllerIntegrationTest {
 		iter.next(); // skip checking 2nd
 		iter.next(); // skip checking 3rd
 		iter.next(); // skip checking 4th
-		final PersonTO person5 = iter.next(); // check 5th
-		assertEquals("5th",
-				PERSON_SORTEDBY_FIRSTNAME_5, person5.getFirstName());
+		iter.next(); // skip checking 5th
+		iter.next(); // skip checking 6th
+		final PersonTO person7 = iter.next(); // check 7th
+		assertEquals("7th",
+				PERSON_SORTEDBY_FIRSTNAME_7, person7.getFirstName());
 	}
 
 	@Test(expected = ObjectExistsException.class)

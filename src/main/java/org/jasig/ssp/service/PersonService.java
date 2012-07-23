@@ -36,8 +36,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 
 	Person personFromUsername(String username) throws ObjectNotFoundException;
 
-	Person personFromUserId(String userId) throws ObjectNotFoundException;
-
 	/**
 	 * Creates a new Person instance based on the supplied model.
 	 * 

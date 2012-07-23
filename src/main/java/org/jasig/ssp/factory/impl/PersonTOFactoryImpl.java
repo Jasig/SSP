@@ -66,7 +66,6 @@ public class PersonTOFactoryImpl extends
 		model.setPrimaryEmailAddress(tObject.getPrimaryEmailAddress());
 		model.setSecondaryEmailAddress(tObject.getSecondaryEmailAddress());
 		model.setUsername(tObject.getUsername());
-		model.setUserId(tObject.getUserId());
 		model.setHomePhone(tObject.getHomePhone());
 		model.setWorkPhone(tObject.getWorkPhone());
 		model.setCellPhone(tObject.getCellPhone());
@@ -83,12 +82,12 @@ public class PersonTOFactoryImpl extends
 		model.setAnticipatedStartTerm(tObject.getAnticipatedStartTerm());
 		model.setAnticipatedStartYear(tObject.getAnticipatedStartYear());
 		model.setStudentIntakeRequestDate(tObject.getStudentIntakeRequestDate());
-		model.setStudentType(tObject.getStudentType() == null
-				|| tObject.getStudentType().getId() == null ? null // NOPMD
+		model.setStudentType((tObject.getStudentType() == null)
+				|| (tObject.getStudentType().getId() == null) ? null // NOPMD
 				: studentTypeService.get(tObject.getStudentType().getId()));
 
-		model.setCoach(tObject.getCoach() == null
-				|| tObject.getCoach().getId() == null ? null : personService // NOPMD
+		model.setCoach((tObject.getCoach() == null)
+				|| (tObject.getCoach().getId() == null) ? null : personService // NOPMD
 				.get(tObject.getCoach().getId()));
 
 		personSpecialServiceGroupTOFactory.updateSetFromLites(
