@@ -50,7 +50,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	private String emailCC;
 
 	@ManyToOne
-	@JoinColumn(name = "campus_id", nullable = true)
+	@JoinColumn(name = "campus_id", nullable = false)
 	private Campus campus;
 
 	@Column(nullable = true, length = 64000)
