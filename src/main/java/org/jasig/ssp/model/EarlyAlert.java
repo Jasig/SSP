@@ -80,13 +80,17 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	@JoinColumn(name = "person_id", nullable = false)
 	private Person person;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	// TODO: eager loading makes more sense, but causes cartesian results. so
+	// hold off optimizing performance until the performance pass of the system.
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "early_alert_early_alert_reason",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_reason_id"))
 	private Set<EarlyAlertReason> earlyAlertReasonIds = Sets.newHashSet();
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	// TODO: eager loading makes more sense, but causes cartesian results. so
+	// hold off optimizing performance until the performance pass of the system.
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "early_alert_early_alert_suggestion",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_suggestion_id"))
