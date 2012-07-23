@@ -254,8 +254,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			
 			jsonData = model.data;
 			
-			// TODO: Fix API to allow programStatus liteTO 
-			delete jsonData.programStatuses;			
+			// TODO: Fix API to exclude currentProgramStatusName from save 
+			delete jsonData.currentProgramStatusName;			
 
 			me.personService.save( jsonData, 
 	    			               {success:me.savePersonSuccess, 
@@ -276,6 +276,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		// new student save an Active program status
     		if (me.person.get('id') == "" || me.getResetActiveStatusCheck().checked == true)
     		{
+    			/*
     			// TODO: Get Active Program Status Id
     			personProgramStatus = new Ssp.model.PersonProgramStatus();
     			personProgramStatus.set('programStatusId','b2d12527-5056-a51a-8054-113116baab88');
@@ -290,6 +291,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
                     failure: me.saveProgramStatusFailure,
                     scope: me 
                 });
+                */
     		}
     		
     		// populate the person object with result
