@@ -31,5 +31,12 @@
 			<dropIndex tableName="person" indexName="idx_person_username"/>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="Set early_alert.campus_id to not nullable" author="alexander.leader">
+		<addNotNullConstraint tableName="early_alert" columnName="campus_id" />
+		<rollback>
+			<dropNotNullConstraint tableName="early_alert" columnName="campus_id" />
+		</rollback>
+	</changeSet>
 
 </databaseChangeLog>
