@@ -1,5 +1,6 @@
 package org.jasig.ssp.web.api; // NOPMD
 
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -22,7 +23,9 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.reference.EarlyAlertReasonTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -80,6 +83,12 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 
 	private static final UUID EARLY_ALERT_SUGGESTION_INACTIVE_ID = UUID
 			.fromString("881DF3DD-1AA6-4CB8-8817-E95DAF49227A");
+
+	private static final UUID EARLY_ALERT_REASON_ID1 = UUID
+			.fromString("B2D11335-5056-A51A-80EA-074F8FEF94EA");
+
+	private static final UUID EARLY_ALERT_REASON_ID2 = UUID
+			.fromString("B2D11316-5056-A51A-80F9-79421BDF08BF");
 
 	private static final UUID CAMPUS_ID = UUID
 			.fromString("901E104B-4DC7-43F5-A38E-581015E204E1");
@@ -500,6 +509,58 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		final ServiceResponse response = controller.delete(savedId, PERSON_ID);
 		assertTrue("Deletion did not return success.",
 				response.isSuccess());
+	}
+
+	/**
+	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
+	 * and
+	 * {@link PersonEarlyAlertController#getAll(UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * actions.
+	 * 
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
+	 */
+	@Test
+	public void testControllerCreateWithStudentIdAndMultipleReasons()
+			throws ObjectNotFoundException, ValidationException {
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setCampusId(CAMPUS_ID);
+
+		final Set<EarlyAlertReasonTO> earlyAlertReasonIds = Sets.newHashSet();
+		earlyAlertReasonIds.add(new EarlyAlertReasonTO(EARLY_ALERT_REASON_ID1,
+				""));
+		earlyAlertReasonIds.add(new EarlyAlertReasonTO(EARLY_ALERT_REASON_ID2,
+				""));
+		obj.setEarlyAlertReasonIds(earlyAlertReasonIds);
+		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
+				obj);
+		assertNotNull("Saved instance should not have been null.", saved);
+
+		final UUID savedId = saved.getId();
+		assertNotNull("Saved instance identifier should not have been null.",
+				savedId);
+
+		assertEquals("Saved instance Person ID values did not match.",
+				PERSON_ID,
+				saved.getPersonId());
+
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		session.clear();
+
+		final PagedResponse<EarlyAlertTO> earlyAlerts = controller.getAll(
+				PERSON_ID, ObjectStatus.ALL, null, null, null, null);
+
+		assertNotEmpty("Response should not have been empty.",
+				earlyAlerts.getRows());
+		assertEquals(
+				"Should have included 2 Early Alerts. (One existing, one new)",
+				2, earlyAlerts.getResults());
+		assertEquals(
+				"Should have included 2 Early Alerts. (One existing, one new)",
+				2, earlyAlerts.getRows().size());
 	}
 
 	/**
