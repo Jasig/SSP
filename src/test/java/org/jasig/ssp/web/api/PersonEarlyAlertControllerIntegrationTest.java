@@ -84,11 +84,14 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	private static final UUID EARLY_ALERT_SUGGESTION_INACTIVE_ID = UUID
 			.fromString("881DF3DD-1AA6-4CB8-8817-E95DAF49227A");
 
-	private static final UUID EARLY_ALERT_REASON_ID1 = UUID
+	private static final UUID EARLY_ALERT_REASON_ID = UUID
 			.fromString("B2D11335-5056-A51A-80EA-074F8FEF94EA");
 
-	private static final UUID EARLY_ALERT_REASON_ID2 = UUID
-			.fromString("B2D11316-5056-A51A-80F9-79421BDF08BF");
+	private static final UUID EARLY_ALERT_SUGGESTION_ID1 = UUID
+			.fromString("B2D11170-5056-A51A-8002-B5CE9F25E2BC");
+
+	private static final UUID EARLY_ALERT_SUGGESTION_ID2 = UUID
+			.fromString("B2D111ED-5056-A51A-8046-5291453E8720");
 
 	private static final UUID CAMPUS_ID = UUID
 			.fromString("901E104B-4DC7-43F5-A38E-581015E204E1");
@@ -175,11 +178,11 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 
 		final EarlyAlertTO saved = controller.create(PERSON_ID,
 				obj);
-		assertNotNull("Saved instance should not have been null.", saved);
+		assertNotNull("Saved data should not have been null.", saved);
 
 		final UUID savedId = saved.getId();
 		assertNotNull(
-				"Saved instance identifier should not have been null.",
+				"New identifier should not have been null.",
 				savedId);
 
 		assertEquals("Saved instance values did not match.", testEmailCC,
@@ -523,17 +526,26 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerCreateWithStudentIdAndMultipleReasons()
+	public void testControllerCreateWithStudentIdAndMultipleSuggestions()
 			throws ObjectNotFoundException, ValidationException {
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		obj.setCampusId(CAMPUS_ID);
 
 		final Set<EarlyAlertReasonTO> earlyAlertReasonIds = Sets.newHashSet();
-		earlyAlertReasonIds.add(new EarlyAlertReasonTO(EARLY_ALERT_REASON_ID1,
-				""));
-		earlyAlertReasonIds.add(new EarlyAlertReasonTO(EARLY_ALERT_REASON_ID2,
+		earlyAlertReasonIds.add(new EarlyAlertReasonTO(EARLY_ALERT_REASON_ID,
 				""));
 		obj.setEarlyAlertReasonIds(earlyAlertReasonIds);
+
+		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
+				.newHashSet();
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_ID1,
+				""));
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_ID2,
+				""));
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+
 		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
 				obj);
 		assertNotNull("Saved instance should not have been null.", saved);
