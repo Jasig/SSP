@@ -61,14 +61,15 @@
 		</layout>
 	</appender-->
 
-	<logger name="org.jasig.ssp" level="debug" />
+	<logger name="org.jasig.ssp" level="trace" />
 	<logger name="org.springframework.core" level="info" />
 	<logger name="org.springframework.beans" level="info" />
 	<logger name="org.springframework.context" level="info" />
 	<logger name="org.springframework.web" level="info" />
 	<logger name="org.springframework.orm" level="info" />
 	<logger name="org.springframework.security" level="info" />
-    <!--logger name="org.hibernate.SQL" level="debug" / -->
+	<!--logger name="org.hibernate.SQL" level="debug" / -->
+	<logger name="org.jasig.ssp.security.uportal.UPortalPreAuthenticatedProcessingFilter" level="info" />
 
 	<root level="info">
 		<!-- It might be prudent to turn the consoleAppender off in prod, as it is already being logged in the rolling File Appender -->
