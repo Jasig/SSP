@@ -37,6 +37,13 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 					        	     text:'Cancel', 
 					        	     action: 'reset',
 					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CANCEL_BUTTON'),
+					        	    },
+					        	    {
+					        	    	xtype: 'label',
+					        	    	html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,
+					        	    	itemId: 'saveSuccessMessage',
+					        	    	style: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE_STYLE,
+					        	    	hidden: true
 					        	    }]
 					    }]
 

@@ -44,7 +44,11 @@ Ext.define('Ssp.util.Constants',{
         GRID_ITEM_CLOSE_ICON_PATH: '/ssp/images/close-icon.jpg',
         GRID_ITEM_MAIL_REPLY_ICON_PATH: '/ssp/images/mail-reply-icon.png',
         
-        REQUIRED_ASTERISK_DISPLAY: '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>'
+        REQUIRED_ASTERISK_DISPLAY: '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>',
+        
+        DATA_SAVE_SUCCESS_MESSAGE_STYLE: "font-weight: 'bold'; color: rgb(0, 0, 0); padding-left: 2px;",
+        DATA_SAVE_SUCCESS_MESSAGE: '&#10003 Data was successfully saved',
+        DATA_SAVE_SUCCESS_MESSAGE_TIMEOUT: 2500
     },
 
 	initComponent: function() {

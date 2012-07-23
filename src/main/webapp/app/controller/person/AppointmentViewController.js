@@ -24,7 +24,7 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 			today = new Date();
 			me.getAppointmentDateField().setMinValue( Ext.Date.clearTime( today ) );
 		}
-		
+				
 		me.getView().getForm().reset();
 		me.getView().loadRecord( me.appointment );
 

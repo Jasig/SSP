@@ -32,7 +32,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
     	'cancelButton': {
     		click: 'onCancelClick'
-    	}	
+    	},
+    	
+    	saveSuccessMessage: '#saveSuccessMessage'
 	},
     
 	init: function() {
@@ -491,11 +493,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			// since these will throw an error in the
 			// current API
 			delete intakeData.person.studentIntakeCompleteDate;
-			delete intakeData.person.studentType;
 			delete intakeData.person.currentProgramStatusName;
-			delete intakeData.person.coach;
 			
 			// Temporarily Disable Educational Goal Fields
+			delete intakeData.personEducationGoal.plannedMajor;
 			delete intakeData.personEducationGoal.careerDecided;
 			delete intakeData.personEducationGoal.plannedOccupation;
 			delete intakeData.personEducationGoal.howSureAboutOccupation;
@@ -543,7 +544,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.getView().setLoading( false );
 		
 		if(r.success == true) {
-			console.log('student intake saved successfully');							
+			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );							
 		}								
 	},
 	

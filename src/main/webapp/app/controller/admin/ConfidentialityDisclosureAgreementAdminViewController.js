@@ -3,6 +3,7 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
     	store: 'confidentialityDisclosureAgreementsStore',
     	service: 'confidentialityDisclosureAgreementService'
     },
@@ -10,7 +11,9 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     control: {
 		'saveButton': {
 			click: 'save'
-		}
+		},
+		
+		saveSuccessMessage: '#saveSuccessMessage'
     },
     
 	init: function() {
@@ -46,6 +49,7 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
 	saveSuccess: function( r, scope ){
 		var me=scope;
 		me.getView().setLoading(false);
+		me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
 	},
 	
     saveFailure: function( response, scope ){

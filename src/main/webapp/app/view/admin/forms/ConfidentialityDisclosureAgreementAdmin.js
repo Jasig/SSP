@@ -57,7 +57,13 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
      		                   hidden: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON'),
      		                   action: 'save',
      		                   itemId: 'saveButton'
-     		               }]
+     		               },{
+		        	    	xtype: 'label',
+		        	    	html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,
+		        	    	itemId: 'saveSuccessMessage',
+		        	    	style: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE_STYLE,
+		        	    	hidden: true
+		        	    }]
      		           }]
 				});
 		

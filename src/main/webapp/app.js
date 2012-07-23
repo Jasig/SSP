@@ -230,6 +230,7 @@ Ext.require([
 	'Ext.ux.form.MultiSelect',
 	'Ext.ux.form.ItemSelector',
 	'Ext.util.MixedCollection',
+	'Ext.util.TaskRunner',
 	'Ext.tree.*',
 	'Ext.toolbar.Spacer',
 	'Ext.form.field.ComboBox',

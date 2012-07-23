@@ -682,6 +682,15 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		    width: 500
 		}).show();
 	},
+	
+	displaySaveSuccessMessage: function( scope ){
+		var me=scope;
+		var hideMessage = function () {
+			me.hide();
+		};
+		var id = setTimeout(hideMessage, Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE_TIMEOUT);
+		me.show();
+	},
     
 	/**
 	 * Fix a date to correct for the GMT Offset in ExtJS.

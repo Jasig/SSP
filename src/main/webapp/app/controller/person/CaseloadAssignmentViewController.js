@@ -309,14 +309,17 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	var jsonData, personId;
     	if (me.appointment.get('appointmentDate') != null && me.appointment.get('startTime') != null && me.appointment.get('endTime') !=null)
 		{
+    		
+    		console.log( me.appointment.getStartDate() );
+    		console.log( me.appointment.getEndDate() );
     		me.currentPersonAppointment.setAppointment( me.appointment.getStartDate() , 
     				                                    me.appointment.getEndDate() );
     		jsonData = me.currentPersonAppointment.data;
     		personId = me.person.get('id');
 			
     		// Fix startTime and endTime to represent appropriate date and time without GMT offset
-			jsonData.startTime = me.formUtils.fixDateOffsetWithTime( jsonData.startTime );
-			jsonData.endTime = me.formUtils.fixDateOffsetWithTime( jsonData.endTime );
+			//jsonData.startTime = me.formUtils.fixDateOffsetWithTime( jsonData.startTime );
+			//jsonData.endTime = me.formUtils.fixDateOffsetWithTime( jsonData.endTime );
  
     		me.appointmentService.saveAppointment( personId, 
     				                               jsonData, 

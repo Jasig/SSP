@@ -11,7 +11,7 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     	/*
     	 * To implement a required permission against an object in the interface:
     	 * 
-    	 * 1) Add an static property to this class with a name of
+    	 * 1) Add a static property to this class with a name of
     	 * 'REQUIRED_PERMISSIONS_' + the object name you would like to secure. (See props below)
     	 * 
     	 * 2) Set the permissions for that object in an array as the value for the
