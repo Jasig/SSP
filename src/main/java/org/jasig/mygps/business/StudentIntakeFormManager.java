@@ -157,8 +157,6 @@ public class StudentIntakeFormManager { // NOPMD
 			.fromString("c881a6c3-2f8f-4ad0-9596-6327982491eb");
 	public static final UUID SECTION_PERSONAL_QUESTION_LASTNAME_ID = UUID
 			.fromString("12487490-5206-4169-9d3f-1708fc6592dd");
-	public static final UUID SECTION_PERSONAL_QUESTION_STUDENTID_ID = UUID
-			.fromString("6647b9ab-27a2-4173-8c75-a21140f8e73b");
 	public static final UUID SECTION_PERSONAL_QUESTION_BIRTHDATE_ID = UUID
 			.fromString("1353f252-ddb4-40cf-bb4c-8da30d832722");
 	public static final UUID SECTION_PERSONAL_QUESTION_SCHOOLEMAIL_ID = UUID
@@ -355,11 +353,6 @@ public class StudentIntakeFormManager { // NOPMD
 		formSectionTO
 				.getFormQuestionById(SECTION_PERSONAL_QUESTION_LASTNAME_ID)
 				.setValue(student.getLastName());
-
-		// Student Id
-		formSectionTO.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_STUDENTID_ID).setValue(
-				student.getUserId());
 
 		// Birthdate
 		formSectionTO.getFormQuestionById(
@@ -879,10 +872,6 @@ public class StudentIntakeFormManager { // NOPMD
 		// Last Name
 		student.setLastName(personalSection.getFormQuestionById(
 				SECTION_PERSONAL_QUESTION_LASTNAME_ID).getValue());
-
-		// Student Id
-		student.setUserId(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_STUDENTID_ID).getValue());
 
 		// Birthdate
 		final FormQuestionTO birthDateQuestion = personalSection
@@ -1585,18 +1574,6 @@ public class StudentIntakeFormManager { // NOPMD
 		lastNameQuestionTO.setType(FORM_TYPE_TEXTINPUT);
 
 		personalSectionQuestions.add(lastNameQuestionTO);
-
-		// Student ID
-		final FormQuestionTO studentIdQuestion = new FormQuestionTO();
-
-		studentIdQuestion.setReadOnly(true);
-		studentIdQuestion.setId(SECTION_PERSONAL_QUESTION_STUDENTID_ID);
-		studentIdQuestion.setLabel("Student ID");
-		studentIdQuestion.setMaximumLength("50");
-		studentIdQuestion.setRequired(true);
-		studentIdQuestion.setType(FORM_TYPE_TEXTINPUT);
-
-		personalSectionQuestions.add(studentIdQuestion);
 
 		// Birthdate
 		final FormQuestionTO birthDateQuestion = new FormQuestionTO();

@@ -95,7 +95,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 			throws ObjectNotFoundException, ValidationException,
 			SendFailedException {
 
-		final Person student = personService.personFromUserId(studentId);
+		final Person student = personService.personFromUsername(studentId);
 		if (student == null) {
 			throw new ObjectNotFoundException(
 					"Unable to acquire person for supplied student id "

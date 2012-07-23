@@ -138,7 +138,6 @@ public class PersonTO // NOPMD
 		primaryEmailAddress = model.getPrimaryEmailAddress();
 		secondaryEmailAddress = model.getSecondaryEmailAddress();
 		username = model.getUsername();
-		userId = model.getUserId();
 		homePhone = model.getHomePhone();
 		workPhone = model.getWorkPhone();
 		cellPhone = model.getCellPhone();

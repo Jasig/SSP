@@ -52,7 +52,7 @@ public class EarlyAlertManager {
 			final Map<String, Object> params = new HashMap<String, Object>(); // NOPMD
 
 			params.put("studentId", selfHelpGuideQuestionResponse
-					.getSelfHelpGuideResponse().getPerson().getUserId());
+					.getSelfHelpGuideResponse().getPerson().getUsername());
 			// TODO Default campuId needs pulled from database
 			params.put("campusId", EARLY_ALERT_DEFAULT_CAMPUS_ID);
 			params.put(
@@ -71,7 +71,8 @@ public class EarlyAlertManager {
 				LOGGER.info("Sending Alert for student ID \""
 						+ selfHelpGuideQuestionResponse
 								.getSelfHelpGuideResponse().getPerson()
-								.getUserId() + "\" : generateCriticalAlerts()");
+								.getUsername()
+						+ "\" : generateCriticalAlerts()");
 
 				// :TODO post to early alert api
 				final String result = restTemplate.postForObject(
@@ -115,7 +116,7 @@ public class EarlyAlertManager {
 			final Map<String, Object> params = new HashMap<String, Object>(); // NOPMD
 
 			params.put("studentId", selfHelpGuideResponse.getPerson()
-					.getUserId());
+					.getUsername());
 			params.put("campusId", EARLY_ALERT_DEFAULT_CAMPUS_ID);
 			params.put(
 					"referralReason",
@@ -129,7 +130,7 @@ public class EarlyAlertManager {
 
 			try {
 				LOGGER.info("Sending Alert for student "
-						+ selfHelpGuideResponse.getPerson().getUserId()
+						+ selfHelpGuideResponse.getPerson().getUsername()
 						+ " : generateThresholdAlerts()");
 
 				// :TODO post early alert

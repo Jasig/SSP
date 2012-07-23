@@ -130,7 +130,7 @@ public class PersonServiceTest {
 	public void personFromUserId() throws ObjectNotFoundException {
 		final Person person = new Person();
 
-		expect(dao.fromUserId(TEST_USER_ID)).andReturn(person);
+		expect(dao.fromUsername(TEST_USER_ID)).andReturn(person);
 		expect(registrationStatusByTermService
 				.applyRegistrationStatusForCurrentTerm(person))
 				.andReturn(person).anyTimes();
@@ -138,7 +138,7 @@ public class PersonServiceTest {
 		replay(dao);
 		replay(registrationStatusByTermService);
 
-		final Person result = service.personFromUserId(TEST_USER_ID);
+		final Person result = service.personFromUsername(TEST_USER_ID);
 
 		verify(dao);
 		verify(registrationStatusByTermService);

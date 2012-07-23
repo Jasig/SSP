@@ -44,7 +44,7 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 	private static final UUID PERSON_ID = UUID
 			.fromString("F549ECAB-5110-4CC1-B2BB-369CAC854DEA");
 
-	private static final String PERSON_USER_ID = "userId ken.1";
+	private static final String PERSON_USER_ID = "ken";
 
 	@Autowired
 	private transient PersonDao dao;
@@ -97,7 +97,7 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 	@Test
 	public void testGetFromUserId() {
 		// act
-		final Person person = dao.fromUserId(PERSON_USER_ID);
+		final Person person = dao.fromUsername(PERSON_USER_ID);
 
 		// assert
 		assertNotNull("Person should not have been null.", person);

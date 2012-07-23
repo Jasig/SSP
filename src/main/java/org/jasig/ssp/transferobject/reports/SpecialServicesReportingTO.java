@@ -45,7 +45,7 @@ public class SpecialServicesReportingTO implements Serializable {
 	}
 
 	public String getUserId() {
-		return person.getUserId();
+		return person.getUsername();
 	}
 
 	public String getStudentType() {
