@@ -287,6 +287,58 @@ public class PersonJournalEntryControllerIntegrationTest {
 
 	/**
 	 * Test the
+	 * {@link PersonJournalEntryController#create(UUID, JournalEntryTO)} action
+	 * using a null JournalTrack.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown for this test.
+	 * @throws ValidationException
+	 *             Should not be thrown for this test.
+	 */
+	@Test()
+	public void testControllerCreateWithoutTrack()
+			throws ObjectNotFoundException,
+			ValidationException {
+		// Now create JournalEntry for testing
+		final JournalEntryTO obj = new JournalEntryTO();
+		obj.setPersonId(PERSON_ID);
+		obj.setEntryDate(new Date());
+		obj.setJournalSource(new ReferenceLiteTO<JournalSource>(UUID
+				.fromString("b2d07973-5056-a51a-8073-1d3641ce507f"), ""));
+		obj.setConfidentialityLevel(new ConfidentialityLevelLiteTO(
+				CONFIDENTIALITY_LEVEL_ID, ""));
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		/*
+		 * final Set<JournalEntryDetailTO> journalEntryDetails =
+		 * Sets.newHashSet(); final JournalEntryDetailTO journalEntryDetail =
+		 * new JournalEntryDetailTO(); journalEntryDetail.setJournalStep(new
+		 * ReferenceLiteTO<JournalStep>( JOURNAL_STEP_ID, "")); final
+		 * Set<ReferenceLiteTO<JournalStepDetail>> details = Sets .newHashSet();
+		 * details.add(new ReferenceLiteTO<JournalStepDetail>(
+		 * JOURNAL_STEP_DETAIL_ID, ""));
+		 * journalEntryDetail.setJournalStepDetails(details);
+		 * journalEntryDetails.add(journalEntryDetail);
+		 * obj.setJournalEntryDetails(journalEntryDetails);
+		 */
+		final JournalEntryTO saved = controller.create(PERSON_ID, obj);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		final UUID savedId = saved.getId();
+		assertNotNull("Saved instance identifier should not have been null.",
+				savedId);
+		assertEquals("PersonIds did not match.", PERSON_ID, saved.getPersonId());
+
+		session.flush();
+		session.clear();
+
+		final JournalEntryTO reloaded = controller.get(savedId, PERSON_ID);
+		assertNotNull("Reloaded entry should not have been null.", reloaded);
+		assertNull("Track should have been null.", reloaded.getJournalTrack());
+	}
+
+	/**
+	 * Test the
 	 * {@link PersonJournalEntryController#create(UUID, JournalEntryTO)} action.
 	 * 
 	 * @throws ObjectNotFoundException

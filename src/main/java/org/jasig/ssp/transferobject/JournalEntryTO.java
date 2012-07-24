@@ -37,7 +37,6 @@ public class JournalEntryTO
 	@NotNull
 	private ReferenceLiteTO<JournalSource> journalSource;
 
-	@NotNull
 	private ReferenceLiteTO<JournalTrack> journalTrack;
 
 	@NotNull
@@ -143,7 +142,7 @@ public class JournalEntryTO
 	}
 
 	public void setJournalSource(
-			final ReferenceLiteTO<JournalSource> journalSource) {
+			@NotNull final ReferenceLiteTO<JournalSource> journalSource) {
 		this.journalSource = journalSource;
 	}
 
@@ -161,7 +160,7 @@ public class JournalEntryTO
 	}
 
 	public void setConfidentialityLevel(
-			final ConfidentialityLevelLiteTO confidentialityLevel) {
+			@NotNull final ConfidentialityLevelLiteTO confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
 	}
 
