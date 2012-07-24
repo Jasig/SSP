@@ -38,5 +38,15 @@
 			<dropNotNullConstraint tableName="early_alert" columnName="campus_id" columnDataType="uuid"/>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="middle initial to middle name" author="daniel.bower">
+		<renameColumn tableName="person" oldColumnName="middle_initial" newColumnName="middle_name"/>
+		<modifyDataType tableName="person" columnName="middle_name" newDataType="${nvarchar.type}(50)"/>
+		
+		<rollback>
+			<modifyDataType tableName="person" columnName="middle_name" newDataType="char(1)"/>
+			<renameColumn tableName="person" oldColumnName="middle_name" newColumnName="middle_initial"/>	
+		</rollback>
+	</changeSet>
 
 </databaseChangeLog>

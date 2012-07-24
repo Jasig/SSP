@@ -40,8 +40,8 @@ public class SpecialServicesReportingTO implements Serializable {
 		return person.getLastName();
 	}
 
-	public String getMiddleInitial() {
-		return person.getMiddleInitial();
+	public String getMiddleName() {
+		return person.getMiddleName();
 	}
 
 	public String getUserId() {

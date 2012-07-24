@@ -23,7 +23,7 @@ public class PersonSearchResult {
 
 	private String firstName;
 
-	private String middleInitial;
+	private String middleName;
 
 	private String lastName;
 
@@ -59,7 +59,7 @@ public class PersonSearchResult {
 		id = person.getId();
 		schoolId = person.getSchoolId();
 		firstName = person.getFirstName();
-		middleInitial = person.getMiddleInitial();
+		middleName = person.getMiddleName();
 		lastName = person.getLastName();
 		photoUrl = person.getPhotoUrl();
 
@@ -98,12 +98,12 @@ public class PersonSearchResult {
 		this.firstName = firstName;
 	}
 
-	public String getMiddleInitial() {
-		return middleInitial;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public void setMiddleInitial(final String middleInitial) {
-		this.middleInitial = middleInitial;
+	public void setMiddleName(final String middleName) {
+		this.middleName = middleName;
 	}
 
 	public String getLastName() {

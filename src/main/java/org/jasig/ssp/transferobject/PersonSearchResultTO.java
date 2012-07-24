@@ -17,7 +17,7 @@ public class PersonSearchResultTO extends PersonSearchResult implements
 	public final void from(final PersonSearchResult model) {
 		setFirstName(model.getFirstName());
 		setLastName(model.getLastName());
-		setMiddleInitial(model.getMiddleInitial());
+		setMiddleName(model.getMiddleName());
 		setPhotoUrl(model.getPhotoUrl());
 		setSchoolId(model.getSchoolId());
 		setId(model.getId());

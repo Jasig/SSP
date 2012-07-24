@@ -153,7 +153,7 @@ public class StudentIntakeFormManager { // NOPMD
 			.fromString("ce8ddcd9-0bb4-4d54-b1bd-c0af72ee11ca");
 	public static final UUID SECTION_PERSONAL_QUESTION_FIRSTNAME_ID = UUID
 			.fromString("a68b0fcf-888e-46bd-b867-a664db93f57e");
-	public static final UUID SECTION_PERSONAL_QUESTION_MIDDLEINITIAL_ID = UUID
+	public static final UUID SECTION_PERSONAL_QUESTION_MIDDLENAME_ID = UUID
 			.fromString("c881a6c3-2f8f-4ad0-9596-6327982491eb");
 	public static final UUID SECTION_PERSONAL_QUESTION_LASTNAME_ID = UUID
 			.fromString("12487490-5206-4169-9d3f-1708fc6592dd");
@@ -346,8 +346,8 @@ public class StudentIntakeFormManager { // NOPMD
 
 		// Middle Initial
 		formSectionTO.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_MIDDLEINITIAL_ID).setValue(
-				student.getMiddleInitial());
+				SECTION_PERSONAL_QUESTION_MIDDLENAME_ID).setValue(
+				student.getMiddleName());
 
 		// Last Name
 		formSectionTO
@@ -866,8 +866,8 @@ public class StudentIntakeFormManager { // NOPMD
 				SECTION_PERSONAL_QUESTION_FIRSTNAME_ID).getValue());
 
 		// Middle Initial
-		student.setMiddleInitial(personalSection.getFormQuestionById(
-				SECTION_PERSONAL_QUESTION_MIDDLEINITIAL_ID).getValue());
+		student.setMiddleName(personalSection.getFormQuestionById(
+				SECTION_PERSONAL_QUESTION_MIDDLENAME_ID).getValue());
 
 		// Last Name
 		student.setLastName(personalSection.getFormQuestionById(
@@ -1545,23 +1545,23 @@ public class StudentIntakeFormManager { // NOPMD
 		firstNameQuestionTO.setReadOnly(true);
 		firstNameQuestionTO.setId(SECTION_PERSONAL_QUESTION_FIRSTNAME_ID);
 		firstNameQuestionTO.setLabel("First");
-		firstNameQuestionTO.setMaximumLength("30");
+		firstNameQuestionTO.setMaximumLength("50");
 		firstNameQuestionTO.setRequired(true);
 		firstNameQuestionTO.setType(FORM_TYPE_TEXTINPUT);
 
 		personalSectionQuestions.add(firstNameQuestionTO);
 
 		// Middle Initial
-		final FormQuestionTO middleInitialQuestionTO = new FormQuestionTO();
+		final FormQuestionTO middleNameQuestionTO = new FormQuestionTO();
 
-		middleInitialQuestionTO.setReadOnly(true);
-		middleInitialQuestionTO
-				.setId(SECTION_PERSONAL_QUESTION_MIDDLEINITIAL_ID);
-		middleInitialQuestionTO.setLabel("Middle Initial");
-		middleInitialQuestionTO.setMaximumLength("1");
-		middleInitialQuestionTO.setType(FORM_TYPE_TEXTINPUT);
+		middleNameQuestionTO.setReadOnly(true);
+		middleNameQuestionTO
+				.setId(SECTION_PERSONAL_QUESTION_MIDDLENAME_ID);
+		middleNameQuestionTO.setLabel("Middle Name");
+		middleNameQuestionTO.setMaximumLength("50");
+		middleNameQuestionTO.setType(FORM_TYPE_TEXTINPUT);
 
-		personalSectionQuestions.add(middleInitialQuestionTO);
+		personalSectionQuestions.add(middleNameQuestionTO);
 
 		// Last Name
 		final FormQuestionTO lastNameQuestionTO = new FormQuestionTO();
@@ -1569,7 +1569,7 @@ public class StudentIntakeFormManager { // NOPMD
 		lastNameQuestionTO.setReadOnly(true);
 		lastNameQuestionTO.setId(SECTION_PERSONAL_QUESTION_LASTNAME_ID);
 		lastNameQuestionTO.setLabel("Last");
-		lastNameQuestionTO.setMaximumLength("30");
+		lastNameQuestionTO.setMaximumLength("50");
 		lastNameQuestionTO.setRequired(true);
 		lastNameQuestionTO.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1592,7 +1592,7 @@ public class StudentIntakeFormManager { // NOPMD
 		schoolEmailQuestion.setReadOnly(true);
 		schoolEmailQuestion.setId(SECTION_PERSONAL_QUESTION_SCHOOLEMAIL_ID);
 		schoolEmailQuestion.setLabel("Email (School)");
-		schoolEmailQuestion.setMaximumLength("50");
+		schoolEmailQuestion.setMaximumLength("100");
 		schoolEmailQuestion.setType(FORM_TYPE_TEXTINPUT);
 
 		personalSectionQuestions.add(schoolEmailQuestion);
@@ -1602,7 +1602,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		homeEmailQuestion.setId(SECTION_PERSONAL_QUESTION_HOMEEMAIL_ID);
 		homeEmailQuestion.setLabel("Email (Home)");
-		homeEmailQuestion.setMaximumLength("50");
+		homeEmailQuestion.setMaximumLength("100");
 		homeEmailQuestion.setType(FORM_TYPE_TEXTINPUT);
 
 		personalSectionQuestions.add(homeEmailQuestion);

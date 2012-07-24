@@ -76,9 +76,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Optional; maximum length of 1.
 	 */
-	@Column(nullable = true, length = 1)
-	@Size(max = 1)
-	private String middleInitial;
+	@Column(nullable = true, length = 50)
+	@Size(max = 50)
+	private String middleName;
 
 	/**
 	 * Last name; required.
@@ -452,12 +452,12 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.firstName = firstName;
 	}
 
-	public String getMiddleInitial() {
-		return middleInitial;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public void setMiddleInitial(final String middleInitial) {
-		this.middleInitial = middleInitial;
+	public void setMiddleName(final String middleName) {
+		this.middleName = middleName;
 	}
 
 	public String getLastName() {
@@ -818,8 +818,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 		// Person
 		result *= hashField("firstName", firstName);
-		result *= hashField("middleInitial", middleInitial);
-		result *= hashField("middleInitial", lastName);
+		result *= hashField("middleName", middleName);
+		result *= hashField("lastName", lastName);
 		result *= hashField("birthDate", birthDate);
 		result *= hashField("primaryEmailAddress", primaryEmailAddress);
 		result *= hashField("secondaryEmailAddress", secondaryEmailAddress);
