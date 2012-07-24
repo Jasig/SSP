@@ -238,30 +238,37 @@ public class PersonTaskController extends
 				person.getFirstName() + " " + person.getLastName());
 		parameters.put("studentId", person.getSchoolId());
 		parameters.put("initialDate", person.getCreatedDate());
-		parameters.put("studentStrengths", person.getStrengths()); 
+		parameters.put("studentStrengths", person.getStrengths());
 		parameters.put("reviewDate", new Date());
 		parameters.put("goals", goalsDS);
 
 		response.addHeader("Content-Disposition", "attachment");
 		response.setContentType("application/pdf");
+
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/studentActionPlan.jasper");
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDS);
-		final InputStream decodedInput = new ByteArrayInputStream(
-				os.toByteArray());
+		try {
+			final ByteArrayOutputStream os = new ByteArrayOutputStream();
+			try {
+				JasperFillManager
+						.fillReportToStream(is, os, parameters, beanDS);
+				final InputStream decodedInput = new ByteArrayInputStream(
+						os.toByteArray());
 
-		response.setHeader(
-				"Content-disposition",
-				"attachment; filename=StudentTaskReport-"
-						+ person.getLastName() + ".pdf");
+				response.setHeader(
+						"Content-disposition",
+						"attachment; filename=StudentTaskReport-"
+								+ person.getLastName() + ".pdf");
 
-		JasperExportManager.exportReportToPdfStream(decodedInput,
-				response.getOutputStream());
-		response.flushBuffer();
-
-		is.close();
-		os.close();
+				JasperExportManager.exportReportToPdfStream(decodedInput,
+						response.getOutputStream());
+				response.flushBuffer();
+			} finally {
+				os.close();
+			}
+		} finally {
+			is.close();
+		}
 	}
 
 	/**

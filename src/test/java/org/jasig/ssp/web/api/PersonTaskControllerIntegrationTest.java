@@ -117,6 +117,44 @@ public class PersonTaskControllerIntegrationTest {
 		assertTrue("Send e-mail should have returned success.", result);
 	}
 
+	/**
+	 * Test the email action without recipientIds.
+	 * 
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
+	 */
+	@Test
+	public void testControllerEmailWithoutRecipientIds()
+			throws ObjectNotFoundException,
+			ValidationException {
+		// arrange, with null list
+		final List<String> recipientEmailAddresses = Lists.newArrayList();
+		recipientEmailAddresses.add(TEST_EMAIL);
+
+		final List<UUID> taskIds = Lists.newArrayList();
+		final List<UUID> goalIds = Lists.newArrayList();
+		goalIds.add(GOAL_ID);
+
+		final EmailPersonTasksForm emailForm = new EmailPersonTasksForm();
+		emailForm.setRecipientEmailAddresses(recipientEmailAddresses);
+		emailForm.setTaskIds(taskIds);
+		emailForm.setGoalIds(goalIds);
+
+		// act
+		final boolean result = controller.email(PERSON_ID, emailForm);
+
+		// assert
+		assertTrue("Send e-mail should have returned success.", result);
+
+		// try with empty list
+		final List<UUID> recipientIds = Lists.newArrayList();
+		emailForm.setRecipientIds(recipientIds);
+		final boolean result2 = controller.email(PERSON_ID, emailForm);
+		assertTrue("Send e-mail should have returned success.", result2);
+	}
+
 	@Test
 	public void testTOSetsCompletedByDate() {
 		// arrange

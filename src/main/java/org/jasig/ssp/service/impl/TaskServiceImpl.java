@@ -258,9 +258,9 @@ public class TaskServiceImpl
 
 	@Override
 	public void sendTasksForPersonToEmail(@NotNull final List<Task> tasks,
-			final List<Goal> goals,
-			final Person student, final List<String> emailAddresses,
-			final List<Person> recipients) throws ObjectNotFoundException {
+			final List<Goal> goals, final Person student,
+			final List<String> emailAddresses, final List<Person> recipients)
+			throws ObjectNotFoundException {
 
 		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
 		final List<GoalTO> goalTOs = GoalTO.toTOList(goals);

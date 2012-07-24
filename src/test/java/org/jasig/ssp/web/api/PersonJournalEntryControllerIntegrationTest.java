@@ -223,7 +223,8 @@ public class PersonJournalEntryControllerIntegrationTest {
 		final UUID savedId = saved.getId();
 		assertNotNull("Saved instance identifier should not have been null.",
 				savedId);
-		assertEquals("PersonIds did not match.", PERSON_ID, saved.getPersonId());
+		assertEquals("Person identifiers don't match.", PERSON_ID,
+				saved.getPersonId());
 		assertFalse("JournalEntryDetails should not have been empty.", saved
 				.getJournalEntryDetails().isEmpty());
 

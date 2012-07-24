@@ -19,6 +19,7 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -153,7 +154,7 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 	}
 
 	@Test
-	public void getPeopleInList() {
+	public void getPeopleInList() throws ValidationException {
 		final List<UUID> personIds = Lists.newArrayList();
 		personIds.add(UUID.randomUUID());
 		personIds.add(UUID.randomUUID());
