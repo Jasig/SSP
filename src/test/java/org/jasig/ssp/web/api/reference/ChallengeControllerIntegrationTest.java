@@ -55,11 +55,14 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 	private static final UUID CHALLENGE_REFERRAL_ID = UUID
 			.fromString("19fbec43-8c0b-478b-9d5f-00ec6ec57511");
 
+	private static final UUID CONFIDENTIALITY_LEVEL_ID = UUID
+			.fromString("B3D077A7-4055-0510-7967-4A09F93A0357");
+
 	private static final String CHALLENGE_NAME = "Test Challenge";
 
 	private static final String TEST_STRING1 = "testString1";
 
-	private static final String TEST_STRING2 = "testString1";
+	private static final String TEST_STRING2 = "testString 2 ";
 
 	@Autowired
 	private transient ChallengeController controller;
@@ -128,10 +131,44 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 				obj);
 	}
 
+	@Test(expected = ValidationException.class)
+	public void testControllerCreateOfInvalid() throws ObjectNotFoundException,
+			ValidationException {
+		assertNotNull(
+				"Controller under test was not initialized by the container correctly.",
+				controller);
+
+		// Check validation of 'no ID for create()'
+		final ChallengeTO invalid = new ChallengeTO(UUID.randomUUID(),
+				TEST_STRING1, TEST_STRING2);
+
+		controller.create(invalid);
+		fail("Calling create with an object with an ID should have thrown a validation excpetion.");
+	}
+
+	@Test(expected = ObjectNotFoundException.class)
+	public void testControllerCreateOfInvalidConfidentiality()
+			throws ObjectNotFoundException,
+			ValidationException {
+		assertNotNull(
+				"Controller under test was not initialized by the container correctly.",
+				controller);
+
+		// arrange
+		final ChallengeTO invalid = new ChallengeTO(null, TEST_STRING1,
+				TEST_STRING2);
+		invalid.setDefaultConfidentialityLevelId(UUID.randomUUID());
+
+		// act
+		controller.create(invalid);
+
+		// assert
+		fail("Calling create with an invalid confidentiality level id should have thrown an excpetion.");
+	}
+
 	/**
 	 * Test the {@link ChallengeController#create(ChallengeTO)} and
-	 * {@link ChallengeController#delete(UUID)} actions. * @throws
-	 * ValidationException If validation error occurred.
+	 * {@link ChallengeController#delete(UUID)} actions.
 	 * 
 	 * @throws ValidationException
 	 *             If validation error occurred.
@@ -141,26 +178,15 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 	@Test
 	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
 			ValidationException {
-		assertNotNull(
-				"Controller under test was not initialized by the container correctly.",
-				controller);
-
-		// Check validation of 'no ID for create()'
-		final ChallengeTO invalid = new ChallengeTO(UUID.randomUUID(),
-				TEST_STRING1,
-				TEST_STRING2);
-		try {
-			controller.create(invalid);
-			fail("Calling create with an object with an ID should have thrown a validation excpetion."); // NOPMD
-		} catch (final ValidationException exc) { // NOPMD
-			/* expected */
-		}
-
-		// Now create a valid Challenge
+		// arrange
 		final ChallengeTO challenge = new ChallengeTO(null, TEST_STRING1,
 				TEST_STRING2);
+		challenge.setDefaultConfidentialityLevelId(CONFIDENTIALITY_LEVEL_ID);
+
+		// act
 		final ChallengeTO saved = controller.create(challenge);
 
+		// assert
 		assertNotNull(
 				"Returned ChallengeTO from the controller should not have been null.",
 				saved);
@@ -273,9 +299,22 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 			ObjectNotFoundException {
 		final ChallengeTO challenge = controller.get(CHALLENGE_ID);
 		challenge.setDescription("New description");
+		challenge.setSelfHelpGuideQuestion(TEST_STRING1);
+		challenge.setDefaultConfidentialityLevelId(CONFIDENTIALITY_LEVEL_ID);
 		final ChallengeTO saved = controller.save(CHALLENGE_ID, challenge);
+
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		session.clear();
+
+		final ChallengeTO reloaded = controller.get(saved.getId());
 		assertEquals("Description does not match.", "New description",
-				saved.getDescription());
+				reloaded.getDescription());
+		assertEquals("Self-Help Guide Question does not match.", TEST_STRING1,
+				reloaded.getSelfHelpGuideQuestion());
+		assertEquals("Confidentiality Level does not match.",
+				CONFIDENTIALITY_LEVEL_ID,
+				reloaded.getDefaultConfidentialityLevelId());
 	}
 
 	/**

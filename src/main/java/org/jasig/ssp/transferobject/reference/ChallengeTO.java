@@ -16,6 +16,9 @@ import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
+/**
+ * Challenge transfer object
+ */
 @JsonIgnoreProperties(value = { "selfHelpGuideQuestions" })
 public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge>, Serializable {
@@ -82,8 +85,8 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 			final Collection<Challenge> models,
 			final boolean skipReferrals) {
 		final List<ChallengeTO> tObjects = Lists.newArrayList();
-		for (Challenge model : models) {
-			tObjects.add(new ChallengeTO(model, skipReferrals));
+		for (final Challenge model : models) {
+			tObjects.add(new ChallengeTO(model, skipReferrals)); // NOPMD
 		}
 		return tObjects;
 	}
@@ -101,10 +104,10 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 
 		selfHelpGuideQuestions = Lists.newArrayList();
 		if (model.getSelfHelpGuideQuestions() != null) {
-			for (SelfHelpGuideQuestion question : model
+			for (final SelfHelpGuideQuestion question : model
 					.getSelfHelpGuideQuestions()) {
 				selfHelpGuideQuestions
-						.add(new SelfHelpGuideQuestionTO(question));
+						.add(new SelfHelpGuideQuestionTO(question)); // NOPMD
 			}
 		}
 
@@ -125,9 +128,9 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 			challengeChallengeReferrals = new ArrayList<ChallengeReferralTO>();
 		} else {
 			final List<ChallengeReferralTO> referralTOs = Lists.newArrayList();
-			for (ChallengeChallengeReferral challengeReferral : model
+			for (final ChallengeChallengeReferral challengeReferral : model
 					.getChallengeChallengeReferrals()) {
-				referralTOs.add(new ChallengeReferralTO(challengeReferral
+				referralTOs.add(new ChallengeReferralTO(challengeReferral // NOPMD
 						.getChallengeReferral()));
 			}
 			challengeChallengeReferrals = referralTOs;

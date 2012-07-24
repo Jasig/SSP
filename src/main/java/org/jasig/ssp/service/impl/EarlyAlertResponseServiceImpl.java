@@ -267,10 +267,10 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		journalEntry.setConfidentialityLevel(confidentialityLevelService
 				.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
 
-		journalEntryService.create(journalEntry);
+		final JournalEntry saved = journalEntryService.create(journalEntry);
 
-		LOGGER.info("JournalEntry {} created for EarlyAlertResponse {}"
-				, journalEntry, earlyAlertResponse);
+		LOGGER.info("JournalEntry {} created for EarlyAlertResponse {}", saved,
+				earlyAlertResponse);
 	}
 
 	private Map<String, Object> fillTemplateParameters( // NOPMD by jon.adams
