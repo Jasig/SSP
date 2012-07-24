@@ -261,10 +261,6 @@
 			<column name="campus_id">901e104b-4dc7-43f5-a38e-581015e204e1</column>
 			<where>campus_id is null</where>
 		</update>
+		<rollback><!-- nothing to do --></rollback>
 	</changeSet>
-	
-	<changeSet id="Set early_alert.campus_id to not nullable" author="alexander.leader">
-		<addNotNullConstraint tableName="early_alert" columnName="campus_id" />
-	</changeSet>	
-
 </databaseChangeLog>

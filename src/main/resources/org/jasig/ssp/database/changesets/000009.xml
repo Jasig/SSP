@@ -33,9 +33,9 @@
 	</changeSet>
 	
 	<changeSet id="Set early_alert.campus_id to not nullable" author="alexander.leader">
-		<addNotNullConstraint tableName="early_alert" columnName="campus_id" />
+		<addNotNullConstraint tableName="early_alert" columnName="campus_id" columnDataType="uuid"/>
 		<rollback>
-			<dropNotNullConstraint tableName="early_alert" columnName="campus_id" />
+			<dropNotNullConstraint tableName="early_alert" columnName="campus_id" columnDataType="uuid"/>
 		</rollback>
 	</changeSet>
 
