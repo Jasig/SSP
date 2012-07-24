@@ -50,7 +50,23 @@ public class PersonEducationGoal
 
 	@Column()
 	private int howSureAboutMajor;
-
+	
+	@Column(length = 50)
+	@Size(max = 50)
+	private String plannedMajor;
+	
+	@Column()
+	private boolean careerDecided;
+	
+	@Column()
+	private int howSureAboutOccupation;
+	
+	@Column()
+	private boolean confidentInAbilities;
+	
+	@Column()
+	private boolean additionalAcademicProgramInformationNeeded;
+	
 	public PersonEducationGoal() {
 		super();
 	}
@@ -100,6 +116,47 @@ public class PersonEducationGoal
 			final String militaryBranchDescription) {
 		this.militaryBranchDescription = militaryBranchDescription;
 	}
+	
+	public String getPlannedMajor() {
+		return plannedMajor;
+	}
+
+	public void setPlannedMajor(final String plannedMajor) {
+		this.plannedMajor = plannedMajor;
+	}
+
+	public boolean isCareerDecided() {
+		return careerDecided;
+	}
+
+	public void setCareerDecided(final boolean careerDecided) {
+		this.careerDecided = careerDecided;
+	}
+
+	public int getHowSureAboutOccupation() {
+		return howSureAboutOccupation;
+	}
+
+	public void setHowSureAboutOccupation(final int howSureAboutOccupation) {
+		this.howSureAboutOccupation = howSureAboutOccupation;
+	}
+
+	public boolean isConfidentInAbilities() {
+		return confidentInAbilities;
+	}
+
+	public void setConfidentInAbilities(final boolean confidentInAbilities) {
+		this.confidentInAbilities = confidentInAbilities;
+	}
+
+	public boolean isAdditionalAcademicProgramInformationNeeded() {
+		return additionalAcademicProgramInformationNeeded;
+	}
+
+	public void setAdditionalAcademicProgramInformationNeeded(
+			final boolean additionalAcademicProgramInformationNeeded) {
+		this.additionalAcademicProgramInformationNeeded = additionalAcademicProgramInformationNeeded;
+	}
 
 	@Override
 	protected int hashPrime() {
@@ -121,7 +178,12 @@ public class PersonEducationGoal
 		result *= hashField("militaryBranchDescription",
 				militaryBranchDescription);
 		result *= hashField("howSureAboutMajor", howSureAboutMajor);
-
+		result *= hashField("plannedMajor", plannedMajor);
+		result *= careerDecided ? 3 : 5;
+		result *= hashField("howSureAboutOccupation", howSureAboutOccupation);
+		result *= confidentInAbilities ? 7 : 11;
+		result *= additionalAcademicProgramInformationNeeded ? 13 : 17;
+		
 		return result;
 	}
 }
