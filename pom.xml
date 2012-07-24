@@ -13,6 +13,8 @@
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<spring.security.version>3.0.7.RELEASE</spring.security.version>
 		<resource-server.version>1.0.23</resource-server.version>
+		<jasperreports.version>4.6.0</jasperreports.version>
+		<groovy.version>1.8.6</groovy.version>
 
 		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,7 +50,7 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>4.6.0</version>
+			<version>${jasperreports.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -401,10 +403,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<!-- Groovy used in test environment -->
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
-			<version>1.8.6</version>
+			<version>${groovy.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -429,12 +433,63 @@
 			<artifactId>properties-maven-plugin</artifactId>
 			<version>1.0-alpha-2</version>
 		</dependency>
-
+		
 	</dependencies>
 
 
 	<build>
+
 		<plugins>
+		
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jasperreports-maven-plugin</artifactId>
+				<version>1.0-beta-2</version>
+				<configuration>
+					<outputDirectory>${project.build.outputDirectory}/reports</outputDirectory>
+				</configuration>
+				
+				<executions>
+					<!-- We need to wait until after the java classes have been compiled to compile the reports -->
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile-reports</goal>
+						</goals>
+					</execution>
+				</executions>
+				
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>jasperreports-maven-plugin</artifactId>
+						<version>1.0-beta-2</version>
+						<exclusions>
+							<exclusion>
+								<groupId>jasperreports</groupId>
+								<artifactId>jasperreports</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>net.sf.jasperreports</groupId>
+						<artifactId>jasperreports</artifactId>
+						<version>${jasperreports.version}</version>
+						<exclusions>
+							<exclusion>
+								<groupId>commons-logging</groupId>
+								<artifactId>commons-logging</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>org.codehaus.groovy</groupId>
+						<artifactId>groovy-all</artifactId>
+						<version>${groovy.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			
 			<!-- Bundle licenses into deployed file -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -589,6 +644,19 @@
 										<execute>
 											<runOnIncremental>false</runOnIncremental>
 										</execute>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>jasperreports-maven-plugin</artifactId>
+										<versionRange>[1.0-beta-2,)</versionRange>
+										<goals>
+											<goal>compile-reports</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>

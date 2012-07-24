@@ -60,7 +60,7 @@ public class PersonTOFactoryImpl extends
 		final Person model = super.from(tObject);
 
 		model.setFirstName(tObject.getFirstName());
-		model.setMiddleInitial(tObject.getMiddleInitial());
+		model.setMiddleName(tObject.getMiddleName());
 		model.setLastName(tObject.getLastName());
 		model.setBirthDate(tObject.getBirthDate());
 		model.setPrimaryEmailAddress(tObject.getPrimaryEmailAddress());

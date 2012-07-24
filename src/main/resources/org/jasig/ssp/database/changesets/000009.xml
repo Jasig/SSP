@@ -38,7 +38,7 @@
 			<dropNotNullConstraint tableName="early_alert" columnName="campus_id" columnDataType="uuid"/>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="Add career questions to PersonEducationGoal" author="alexander.leader">
 		<addColumn tableName="person_education_goal">
 			<column name="planned_major" type="${nvarchar.type}(50)">
@@ -65,6 +65,16 @@
 			<dropColumn tableName="person_education_goal" columnName="how_sure_about_occupation" />
 			<dropColumn tableName="person_education_goal" columnName="confident_in_abilities" />
 			<dropColumn tableName="person_education_goal" columnName="additional_academic_program_information_needed" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="middle initial to middle name" author="daniel.bower">
+		<renameColumn tableName="person" oldColumnName="middle_initial" newColumnName="middle_name"/>
+		<modifyDataType tableName="person" columnName="middle_name" newDataType="${nvarchar.type}(50)"/>
+		
+		<rollback>
+			<modifyDataType tableName="person" columnName="middle_name" newDataType="char(1)"/>
+			<renameColumn tableName="person" oldColumnName="middle_name" newColumnName="middle_initial"/>
 		</rollback>
 	</changeSet>
 

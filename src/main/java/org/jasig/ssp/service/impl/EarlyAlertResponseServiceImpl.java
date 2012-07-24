@@ -254,7 +254,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlertResponse);
 
 		final JournalEntry journalEntry = new JournalEntry();
-		journalEntry.setPerson(earlyAlert.getPerson().getCoach());
+		journalEntry.setPerson(earlyAlert.getPerson());
 		journalEntry.setComment(velocityTemplateService
 				.generateContentFromTemplate(
 						messageTemplate.getBody(),

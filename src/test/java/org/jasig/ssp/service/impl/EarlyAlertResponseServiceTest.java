@@ -207,23 +207,23 @@ public class EarlyAlertResponseServiceTest {
 
 		// assert
 
-		// journal entries not attached to student but the coach (advisor)
-		final PagingWrapper<JournalEntry> entriesForStudent = journalEntryService
-				.getAllForPerson(obj.getEarlyAlert().getPerson(),
-						securityService.currentlyAuthenticatedUser(),
-						new SortingAndPaging(ObjectStatus.ACTIVE));
-		assertEquals("Journal Entry count did not match.", 0,
-				entriesForStudent.getResults());
-
 		// load all journal entries for the coach (advisor)
 		final PagingWrapper<JournalEntry> entries = journalEntryService
 				.getAllForPerson(obj.getEarlyAlert().getPerson().getCoach(),
 						securityService.currentlyAuthenticatedUser(),
 						new SortingAndPaging(ObjectStatus.ACTIVE));
+		assertEquals("Journal Entry count did not match.", 0,
+				entries.getResults());
+
+		// journal entries attached to student, not the coach (advisor)
+		final PagingWrapper<JournalEntry> entriesForStudent = journalEntryService
+				.getAllForPerson(obj.getEarlyAlert().getPerson(),
+						securityService.currentlyAuthenticatedUser(),
+						new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		JournalEntry journalEntry = null;
 
-		for (final JournalEntry entry : entries) {
+		for (final JournalEntry entry : entriesForStudent) {
 			if (entry.getJournalSource().getId() == JournalSource.JOURNALSOURCE_EARLYALERT_ID) {
 				journalEntry = entry;
 			}

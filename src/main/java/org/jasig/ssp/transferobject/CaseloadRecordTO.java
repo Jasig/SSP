@@ -21,7 +21,7 @@ public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 	@NotNull
 	private String firstName;
 
-	private String middleInitial;
+	private String middleName;
 
 	@NotNull
 	private String lastName;
@@ -43,7 +43,7 @@ public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 	public final void from(final CaseloadRecord model) {
 		setFirstName(model.getFirstName());
 		setLastName(model.getLastName());
-		setMiddleInitial(model.getMiddleInitial());
+		setMiddleName(model.getMiddleName());
 		setPersonId(model.getPersonId());
 		setSchoolId(model.getSchoolId());
 		setStudentTypeName(model.getStudentTypeName());
@@ -77,12 +77,12 @@ public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 		this.firstName = firstName;
 	}
 
-	public String getMiddleInitial() {
-		return middleInitial;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public final void setMiddleInitial(final String middleInitial) {
-		this.middleInitial = middleInitial;
+	public final void setMiddleName(final String middleName) {
+		this.middleName = middleName;
 	}
 
 	public String getLastName() {

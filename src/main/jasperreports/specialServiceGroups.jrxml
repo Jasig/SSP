@@ -12,8 +12,8 @@
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
-	<field name="middleInitial" class="java.lang.String">
-		<fieldDescription><![CDATA[middleInitial]]></fieldDescription>
+	<field name="middleName" class="java.lang.String">
+		<fieldDescription><![CDATA[middleName]]></fieldDescription>
 	</field>
 	<field name="lastName" class="java.lang.String">
 		<fieldDescription><![CDATA[lastName]]></fieldDescription>
@@ -97,7 +97,7 @@
 			<staticText>
 				<reportElement uuid="64fe9859-8248-41b1-9f33-b6777c98b182" x="202" y="3" width="100" height="20"/>
 				<textElement/>
-				<text><![CDATA[Middle Initial]]></text>
+				<text><![CDATA[Middle Name]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="89c526dd-df29-4208-8b49-5761bb61cc80" x="507" y="3" width="155" height="20"/>
@@ -136,7 +136,7 @@
 			<textField>
 				<reportElement uuid="f9d7ac8e-8e8d-4fc0-ac55-44439a70f823" x="202" y="1" width="102" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{middleInitial}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{middleName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement uuid="ce9d2cd4-2571-4b65-b981-a04d2f862fee" stretchType="RelativeToBandHeight" x="507" y="1" width="243" height="31" isPrintWhenDetailOverflows="true"/>

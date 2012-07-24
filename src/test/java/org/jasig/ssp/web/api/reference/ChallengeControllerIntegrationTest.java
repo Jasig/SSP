@@ -94,10 +94,6 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 	@Test
 	public void testControllerGet() throws ObjectNotFoundException,
 			ValidationException {
-		assertNotNull(
-				"Controller under test was not initialized by the container correctly.",
-				controller);
-
 		final ChallengeTO obj = controller.get(CHALLENGE_ID);
 
 		assertNotNull(
@@ -202,6 +198,35 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 
 		assertTrue("Delete action did not return success.",
 				controller.delete(saved.getId()).isSuccess());
+	}
+
+	/**
+	 * Test the {@link ChallengeController#create(ChallengeTO)} and
+	 * {@link ChallengeController#delete(UUID)} actions.
+	 * 
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
+	 */
+	@Test
+	public void testControllerCreateWithNullDefaultConfidentialityLevel()
+			throws ObjectNotFoundException,
+			ValidationException {
+		// arrange
+		final ChallengeTO challenge = new ChallengeTO(null, TEST_STRING1,
+				TEST_STRING2);
+
+		// act
+		final ChallengeTO saved = controller.create(challenge);
+
+		// assert
+		assertNull(
+				"Default Confidentiality Level ID should have been null.",
+				saved.getDefaultConfidentialityLevelId());
+
+		// cleanup
+		controller.delete(saved.getId());
 	}
 
 	/**

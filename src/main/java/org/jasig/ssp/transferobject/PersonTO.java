@@ -35,7 +35,7 @@ public class PersonTO // NOPMD
 	@NotNull
 	private String firstName;
 
-	private String middleInitial;
+	private String middleName;
 
 	@NotNull
 	private String lastName;
@@ -132,7 +132,7 @@ public class PersonTO // NOPMD
 		super.from(model);
 
 		firstName = model.getFirstName();
-		middleInitial = model.getMiddleInitial();
+		middleName = model.getMiddleName();
 		lastName = model.getLastName();
 		birthDate = model.getBirthDate();
 		primaryEmailAddress = model.getPrimaryEmailAddress();
@@ -260,12 +260,12 @@ public class PersonTO // NOPMD
 		this.firstName = firstName;
 	}
 
-	public String getMiddleInitial() {
-		return middleInitial;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public void setMiddleInitial(final String middleInitial) {
-		this.middleInitial = middleInitial;
+	public void setMiddleName(final String middleName) {
+		this.middleName = middleName;
 	}
 
 	public String getLastName() {

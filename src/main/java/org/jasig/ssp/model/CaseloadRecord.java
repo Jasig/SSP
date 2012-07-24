@@ -24,7 +24,7 @@ public class CaseloadRecord {
 	@NotNull
 	private String firstName;
 
-	private String middleInitial;
+	private String middleName;
 
 	@NotNull
 	private String lastName;
@@ -95,12 +95,12 @@ public class CaseloadRecord {
 		this.firstName = firstName;
 	}
 
-	public String getMiddleInitial() {
-		return middleInitial;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public void setMiddleInitial(final String middleInitial) {
-		this.middleInitial = middleInitial;
+	public void setMiddleName(final String middleName) {
+		this.middleName = middleName;
 	}
 
 	public String getLastName() {
