@@ -238,10 +238,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 			store = me.searchStore;
 			columns = [
     	              /* { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 }, */		        
-    	              { sortable: sortableColumns, header: 'Student', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: .25 },
+    	              /*{ sortable: sortableColumns, header: 'Student', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: .25 },*/
+    	              { sortable: sortableColumns, header: 'First', dataIndex: 'firstName', flex: .2},		        
+    	              { sortable: sortableColumns, header: 'MI', dataIndex: 'middleInitial', flex: .05},
+    	              { sortable: sortableColumns, header: 'Last', dataIndex: 'lastName', flex: .2},
     	              { sortable: sortableColumns, header: 'Coach', dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: .25 },
-    	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: .25},
-    	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .25}
+    	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: .15},
+    	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .15}
     	              ];		
 		}
 		
