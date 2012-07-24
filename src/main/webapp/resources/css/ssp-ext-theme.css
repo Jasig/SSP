@@ -90,3 +90,12 @@ background-image: url('/ssp/images/set-no-show-status-icon.png') !important;
 .transitionStudentIcon {
 background-image: url('/ssp/images/set-transition-status-icon.png') !important;
 }
+
+.caseload-early-alert-indicator > td { 
+background:#f6c8ba !important; 
+}
+
+.caseload-appointment-indicator > td { 
+background:#ffff00 !important; 
+}
+

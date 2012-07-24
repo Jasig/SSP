@@ -26,10 +26,9 @@ Ext.define('Ssp.view.Search', {
 		    	    columns: [
 		    	              { text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: 50}
 		    	              ],
-    	          
+        
 		    	    dockedItems: [{
 		       			xtype: 'pagingtoolbar',
-		       		    store: me.store,
 		       		    itemId: 'searchGridPager',
 		       			dock: 'bottom',
 		       		    displayInfo: true,

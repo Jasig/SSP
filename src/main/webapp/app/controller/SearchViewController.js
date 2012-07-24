@@ -189,6 +189,8 @@ Ext.define('Ssp.controller.SearchViewController', {
     		me.personLite.set('id', "");
     		me.appEventsController.getApplication().fireEvent('loadPerson');
     	}
+
+		me.refreshPagingToolBar();
     },
 
     getCaseloadFailure: function( r, scope){
@@ -241,7 +243,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
     	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
     	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
-    	              ];			
+    	              ];
 		}else{
 			store = me.searchStore;
 			columns = [
@@ -255,6 +257,33 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .15}
     	              ];		
 		}
+
+		grid.getView().getRowClass = function(row, index)
+	    {
+			var cls = "";
+			var today = Ext.Date.clearTime( new Date() );
+			var tomorrow = Ext.Date.clearTime( new Date() );
+			tomorrow.setDate( today.getDate() + 1 );
+			// set apppointment date color first. early alert will over-ride appointment color.
+			if (row.get('currentAppointmentStartTime') != null)
+			{
+				if ( me.formUtils.dateWithin(today, tomorrow, row.get('currentAppointmentStartTime') ) )
+				{
+					cls = 'caseload-appointment-indicator'
+				}
+			}
+			
+			// early alert color will over-ride the appointment date
+			if ( row.get('numberOfEarlyAlerts') != null)
+			{
+				if (row.get('numberOfEarlyAlerts') > 0)
+				{
+					cls = 'caseload-early-alert-indicator'
+				}				
+			}
+
+			return cls;
+	    };  		
 		
 		me.formUtils.reconfigureGridPanel(grid, store, columns);
 	},
@@ -383,13 +412,19 @@ Ext.define('Ssp.controller.SearchViewController', {
     	}else{
     		Ext.Msg.alert('Attention','No students match your search. Try a different search value.');
     	}
+
+		me.refreshPagingToolBar();
     },
 
     searchFailure: function( r, scope){
     	var me=scope;
     	me.getView().setLoading( false );
     }, 	
-	
+
+    refreshPagingToolBar: function(){
+    	this.getSearchGridPager().onLoad();
+    },
+    
     loadCaseloadAssignment: function(){
     	var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});    	
     },

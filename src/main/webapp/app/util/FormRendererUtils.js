@@ -704,6 +704,17 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	 */
 	fixDateOffsetWithTime: function( dateToFix ) {
 		return new Date(dateToFix.getUTCFullYear(), dateToFix.getUTCMonth(), dateToFix.getUTCDate(),  dateToFix.getUTCHours(), dateToFix.getUTCMinutes(), dateToFix.getUTCSeconds());
-	}
+	},
+	
+	dateWithin: function(beginDate,endDate,checkDate) {
+    	var b,e,c;
+    	b = Date.parse(beginDate);
+    	e = Date.parse(endDate);
+    	c = Date.parse(checkDate);
+    	if((c <= e && c >= b)) {
+    		return true;
+    	}
+    	return false;
+    }
 });
 
