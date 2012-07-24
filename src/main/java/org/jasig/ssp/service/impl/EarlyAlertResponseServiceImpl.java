@@ -254,7 +254,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		final Map<String, Object> templateParameters = fillTemplateParameters(earlyAlertResponse);
 
 		final JournalEntry journalEntry = new JournalEntry();
-		journalEntry.setPerson(earlyAlert.getPerson().getCoach());
+		journalEntry.setPerson(earlyAlert.getPerson());
 		journalEntry.setComment(velocityTemplateService
 				.generateContentFromTemplate(
 						messageTemplate.getBody(),
@@ -267,10 +267,10 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		journalEntry.setConfidentialityLevel(confidentialityLevelService
 				.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
 
-		journalEntryService.create(journalEntry);
+		final JournalEntry saved = journalEntryService.create(journalEntry);
 
-		LOGGER.info("JournalEntry {} created for EarlyAlertResponse {}"
-				, journalEntry, earlyAlertResponse);
+		LOGGER.info("JournalEntry {} created for EarlyAlertResponse {}", saved,
+				earlyAlertResponse);
 	}
 
 	private Map<String, Object> fillTemplateParameters( // NOPMD by jon.adams

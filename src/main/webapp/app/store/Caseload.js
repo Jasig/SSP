@@ -19,5 +19,10 @@ Ext.define('Ssp.store.Caseload', {
 							}
 						});
 		return me.callParent(arguments);
-	}
+	},
+
+	sorters: [{
+        property: 'lastName',
+        direction: 'ASC'
+    }]
 });

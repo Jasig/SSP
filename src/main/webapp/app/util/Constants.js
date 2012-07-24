@@ -48,7 +48,7 @@ Ext.define('Ssp.util.Constants',{
         
         DATA_SAVE_SUCCESS_MESSAGE_STYLE: "font-weight: 'bold'; color: rgb(0, 0, 0); padding-left: 2px;",
         DATA_SAVE_SUCCESS_MESSAGE: '&#10003 Data was successfully saved',
-        DATA_SAVE_SUCCESS_MESSAGE_TIMEOUT: 2500
+        DATA_SAVE_SUCCESS_MESSAGE_TIMEOUT: 3000
     },
 
 	initComponent: function() {

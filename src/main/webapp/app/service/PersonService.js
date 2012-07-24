@@ -43,6 +43,32 @@ Ext.define('Ssp.service.PersonService', {
 			scope: me
 		});
     },   
+
+    getBySchoolId: function( schoolId, callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	if (response.responseText != "")
+	    	{
+		    	r = Ext.decode(response.responseText);	    		
+	    	}
+	    	callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		// load the person to edit
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl()+'/bySchoolId/'+id,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },    
     
     save: function( jsonData, callbacks ){
     	var me=this;

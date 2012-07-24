@@ -64,6 +64,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	var successFunc;
     	var form = this.getView().getForm();
     	var model = this.model;
+    	var jsonData;
     	var id = model.get('id');
     	if ( form.isValid() )
     	{
@@ -84,7 +85,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
         		model.set('type','SSP');
         		model.set('personId', this.person.get('id') );    		
         		model.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
-
+     		
     			// add the task
     			this.apiProperties.makeRequest({
 	    			url: me.url,
@@ -98,9 +99,9 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     			// a TaskGroup item before it is saved
     			// as a Task. Task grouping is handled in the Tasks display.
         		if (model.data.group != null)
-        			delete model.data.group;    			
-    			
-    			// edit the task
+        			delete model.data.group;
+
+        		// edit the task
 	    		this.apiProperties.makeRequest({
 	    			url: me.url+"/"+id,
 	    			method: 'PUT',

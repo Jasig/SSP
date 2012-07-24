@@ -176,6 +176,11 @@ public class IntakeControllerIntegrationTest {
 		personEducationGoal.setMilitaryBranchDescription("mb");
 		personEducationGoal.setDescription("description");
 		personEducationGoal.setPlannedOccupation("fd");
+		personEducationGoal.setPlannedMajor("Computer Science");
+		personEducationGoal.setCareerDecided(false);
+		personEducationGoal.setHowSureAboutOccupation(2);
+		personEducationGoal.setConfidentInAbilities(true);
+		personEducationGoal.setAdditionalAcademicProgramInformationNeeded(false);
 
 		obj.setPersonEducationGoal(new PersonEducationGoalTO(
 				personEducationGoal));

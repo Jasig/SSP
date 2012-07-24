@@ -58,6 +58,11 @@ public class PersonEducationGoalServiceImpl implements
 		current.setDescription(obj.getDescription());
 		current.setPlannedOccupation(obj.getPlannedOccupation());
 		current.setHowSureAboutMajor(obj.getHowSureAboutMajor());
+		current.setPlannedMajor(obj.getPlannedMajor());
+		current.setCareerDecided(obj.isCareerDecided());
+		current.setHowSureAboutOccupation(obj.getHowSureAboutOccupation());
+		current.setConfidentInAbilities(obj.isConfidentInAbilities());
+		current.setAdditionalAcademicProgramInformationNeeded(obj.isAdditionalAcademicProgramInformationNeeded());		
 
 		if (obj.getEducationGoal() != null
 				&& obj.getEducationGoal().getId() != null) {

@@ -62,11 +62,13 @@ Ext.define('Ssp.view.Search', {
 		                        boxLabel  : 'My Caseload',
 		                        itemId: 'searchCaseloadCheck',
 		                        name      : 'searchInCaseload',
+		                        hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
 		                        inputValue: false
 		                    }]
 		       		},{
 		       			xtype: 'toolbar',
 		       			dock: 'top',
+		       			hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS'),
 		       		    items: [
 		       		        {
 		    			        xtype: 'combobox',

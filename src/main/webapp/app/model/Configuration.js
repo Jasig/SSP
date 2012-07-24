@@ -19,7 +19,7 @@ Ext.define('Ssp.model.Configuration', {
     	     },
     	     {name: 'studentIdMinValidationLength', 
     	      type: 'number', 
-    	      defaultValue: 7
+    	      defaultValue: 3
     	     },
        	     {name: 'studentIdMinValidationErrorText', 
        	      type: 'string', 
@@ -27,7 +27,7 @@ Ext.define('Ssp.model.Configuration', {
        	     },
     	     {name: 'studentIdMaxValidationLength', 
        	      type: 'number', 
-       	      defaultValue: 7
+       	      defaultValue: 8
        	     },
        	     {name: 'studentIdMaxValidationErrorText', 
       	      type: 'string', 
@@ -35,7 +35,7 @@ Ext.define('Ssp.model.Configuration', {
       	     },
     	     {name: 'studentIdAllowableCharacters', 
           	  type: 'string', 
-          	  defaultValue: '0-9'
+          	  defaultValue: 'a-zA-Z0-9'
           	 },
     	     {name: 'studentIdValidationErrorText', 
              	  type: 'string', 
