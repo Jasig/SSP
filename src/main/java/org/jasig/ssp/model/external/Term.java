@@ -54,6 +54,7 @@ public class Term extends AbstractExternalData implements Serializable,
 	}
 
 	public Term(final String code) {
+		super();
 		this.code = code;
 	}
 

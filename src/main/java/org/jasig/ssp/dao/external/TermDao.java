@@ -32,7 +32,7 @@ public class TermDao extends AbstractExternalDataDao<Term> {
 	 */
 	public Term getByCode(@NotNull final String code)
 			throws ObjectNotFoundException {
-		if (!StringUtils.isNotBlank(code)) {
+		if (StringUtils.isBlank(code)) {
 			throw new ObjectNotFoundException(code, Term.class.getName());
 		}
 
