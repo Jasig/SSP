@@ -84,7 +84,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        xtype: 'radiogroup',
 				        fieldLabel: 'Are you confident your abilities are compatible with the career field?',
 				        columns: 1,
-				        itemId: 'decidedOnCareer',
+				        itemId: 'confidentInAbilities',
 				        items: [
 				            {boxLabel: "Yes", name: "confidentInAbilities", inputValue:"true"},
 				            {boxLabel: "No", name: "confidentInAbilities", inputValue:"false"}]
