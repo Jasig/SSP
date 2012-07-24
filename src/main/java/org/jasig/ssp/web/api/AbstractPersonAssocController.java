@@ -3,6 +3,7 @@ package org.jasig.ssp.web.api;
 import java.util.UUID;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -171,11 +172,15 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
-	TO create(@PathVariable final UUID personId,
-			@Valid @RequestBody final TO obj) throws ValidationException,
-			ObjectNotFoundException {
+	TO create(@PathVariable @NotNull final UUID personId,
+			@Valid @RequestBody @NotNull final TO obj)
+			throws ValidationException, ObjectNotFoundException {
 
 		checkPermissionForOp("WRITE");
+
+		if (obj == null) {
+			throw new ValidationException("Missing data.");
+		}
 
 		if (obj.getId() != null) {
 			throw new ValidationException(
@@ -183,8 +188,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		}
 
 		if (personId == null) {
-			throw new IllegalArgumentException(
-					"Person identifier is required.");
+			throw new IllegalArgumentException("Person identifier is required.");
 		}
 
 		final T model = getFactory().from(obj);

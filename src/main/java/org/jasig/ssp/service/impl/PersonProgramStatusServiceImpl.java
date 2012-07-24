@@ -51,12 +51,13 @@ public class PersonProgramStatusServiceImpl extends
 	}
 
 	@Override
-	public PersonProgramStatus create(final PersonProgramStatus obj)
+	public PersonProgramStatus create(
+			final PersonProgramStatus personProgramStatus)
 			throws ObjectNotFoundException, ValidationException {
-		expireActive(obj.getPerson());
+		expireActive(personProgramStatus.getPerson());
 
 		try {
-			return getDao().save(obj);
+			return getDao().save(personProgramStatus);
 		} catch (final ConstraintViolationException exc) {
 			throw new ValidationException(
 					"Invalid data. See cause for list of violations.", exc);
