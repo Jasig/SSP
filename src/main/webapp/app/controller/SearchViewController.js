@@ -4,6 +4,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     inject: {
     	apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
+        authenticatedPerson: 'authenticatedPerson',
         caseloadStore: 'caseloadStore',
         caseloadService: 'caseloadService',
         columnRendererUtils: 'columnRendererUtils',
@@ -110,15 +111,22 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	   	// ensure the selected person is not loaded twice
 	   	me.personLite.set('id','');
-
+	   	
 		if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==0 )
 		{
 			me.setGridView('search');
 		}else{
-			me.setGridView('caseload');
+		   	if ( me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') )
+		   	{
+				me.setGridView('caseload');				
+		    	me.getProgramStatuses();		   		
+		   	}else{
+		   		// default to search grid if user does
+		   		// not have access to the caseload
+		   		me.setGridView('search');
+		   	}
 		}
-		
-    	me.getProgramStatuses();
+
 	},
 
     destroy: function() {

@@ -57,6 +57,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 					},{
 				    	xtype: 'datefield',
 				    	fieldLabel: 'Target Date',
+				    	altFormats: 'm/d/Y|m-d-Y',
 				        name: 'dueDate',
 				        allowBlank:false    	
 				    }]
