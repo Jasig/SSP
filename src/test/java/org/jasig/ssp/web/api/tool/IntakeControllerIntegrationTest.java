@@ -129,7 +129,7 @@ public class IntakeControllerIntegrationTest {
 		final PersonDemographics personDemographics = new PersonDemographics();
 		personDemographics.setAbilityToBenefit(true);
 		personDemographics.setAnticipatedStartTerm("spring");
-		personDemographics.setAnticipatedStartYear("fall");
+		personDemographics.setAnticipatedStartYear(2012);
 		personDemographics.setChildAges("age 1");
 		personDemographics.setChildCareArrangement(new ChildCareArrangement());
 		personDemographics.setChildCareNeeded(true);
@@ -180,7 +180,8 @@ public class IntakeControllerIntegrationTest {
 		personEducationGoal.setCareerDecided(false);
 		personEducationGoal.setHowSureAboutOccupation(2);
 		personEducationGoal.setConfidentInAbilities(true);
-		personEducationGoal.setAdditionalAcademicProgramInformationNeeded(false);
+		personEducationGoal
+				.setAdditionalAcademicProgramInformationNeeded(false);
 
 		obj.setPersonEducationGoal(new PersonEducationGoalTO(
 				personEducationGoal));

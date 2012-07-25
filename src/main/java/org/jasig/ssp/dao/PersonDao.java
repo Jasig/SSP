@@ -17,6 +17,7 @@ import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -86,8 +87,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	}
 
 	@SuppressWarnings(UNCHECKED)
-	public List<Person> getPeopleInList(final List<UUID> personIds,
-			final SortingAndPaging sAndP) {
+	public List<Person> getPeopleInList(@NotNull final List<UUID> personIds,
+			final SortingAndPaging sAndP) throws ValidationException {
+		if (personIds == null || personIds.isEmpty()) {
+			throw new ValidationException(
+					"Missing or empty list of Person identifiers.");
+		}
+
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.in("id", personIds));
 		return criteria.list();

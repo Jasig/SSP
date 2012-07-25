@@ -21,6 +21,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -146,7 +147,7 @@ public class PersonServiceTest {
 	}
 
 	@Test
-	public void peopleFromListOfIds() {
+	public void peopleFromListOfIds() throws ValidationException {
 		final List<UUID> personIds = Lists.newArrayList();
 		personIds.add(UUID.randomUUID());
 		personIds.add(UUID.randomUUID());

@@ -1,5 +1,7 @@
 package org.jasig.ssp.model; // NOPMD by jon.adams on 5/24/12 1:34 PM
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -42,13 +44,19 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Column
 	private boolean abilityToBenefit;
 
-	@Column(length = 25)
-	@Size(max = 25)
+	@Column(length = 20)
+	@Size(max = 20)
 	private String anticipatedStartTerm;
 
-	@Column(length = 4)
-	@Size(max = 4)
-	private String anticipatedStartYear;
+	private Integer anticipatedStartYear;
+
+	@Column(length = 20)
+	@Size(max = 20)
+	private String actualStartTerm;
+
+	private Integer actualStartYear;
+
+	private BigDecimal balanceOwed;
 
 	private boolean local;
 
@@ -138,12 +146,36 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.anticipatedStartTerm = anticipatedStartTerm;
 	}
 
-	public String getAnticipatedStartYear() {
+	public Integer getAnticipatedStartYear() {
 		return anticipatedStartYear;
 	}
 
-	public void setAnticipatedStartYear(final String anticipatedStartYear) {
+	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
 		this.anticipatedStartYear = anticipatedStartYear;
+	}
+
+	public String getActualStartTerm() {
+		return actualStartTerm;
+	}
+
+	public void setActualStartTerm(final String actualStartTerm) {
+		this.actualStartTerm = actualStartTerm;
+	}
+
+	public Integer getActualStartYear() {
+		return actualStartYear;
+	}
+
+	public void setActualStartYear(final Integer actualStartYear) {
+		this.actualStartYear = actualStartYear;
+	}
+
+	public BigDecimal getBalanceOwed() {
+		return balanceOwed;
+	}
+
+	public void setBalanceOwed(final BigDecimal balanceOwed) {
+		this.balanceOwed = balanceOwed;
 	}
 
 	public boolean isLocal() {
@@ -299,56 +331,6 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.totalHoursWorkedPerWeek = totalHoursWorkedPerWeek;
 	}
 
-	/**
-	 * Overwrites simple properties with the parameter's properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 * @param maritalStatus
-	 *            Marital status
-	 * @param ethnicity
-	 *            Ethnicity
-	 * @param citizenship
-	 *            Citizenship
-	 * @param veterenStatus
-	 *            Veteran status
-	 * @param coach
-	 *            Coach, if any
-	 * @param childCareArrangement
-	 *            Child Care Arrangements
-	 */
-	public void overwrite(final PersonDemographics source,
-			final MaritalStatus maritalStatus, final Ethnicity ethnicity,
-			final Citizenship citizenship, final VeteranStatus veterenStatus,
-			final Person coach,
-			final ChildCareArrangement childCareArrangement) {
-		setAbilityToBenefit(source.isAbilityToBenefit());
-		setAnticipatedStartTerm(source.getAnticipatedStartTerm());
-		setAnticipatedStartYear(source.getAnticipatedStartYear());
-		setLocal(source.isLocal());
-		setCountryOfResidence(source.getCountryOfResidence());
-		setPaymentStatus(source.getPaymentStatus());
-		setEthnicity(source.getEthnicity());
-		setGender(source.getGender());
-		setCitizenship(source.getCitizenship());
-		setCountryOfCitizenship(source.getCountryOfCitizenship());
-		setPrimaryCaregiver(source.isPrimaryCaregiver());
-		setNumberOfChildren(source.getNumberOfChildren());
-		setChildAges(source.getChildAges());
-		setChildCareNeeded(source.isChildCareNeeded());
-		setEmployed(source.isEmployed());
-		setPlaceOfEmployment(source.getPlaceOfEmployment());
-		setShift(source.getShift());
-		setWage(source.getWage());
-		setTotalHoursWorkedPerWeek(source.getTotalHoursWorkedPerWeek());
-
-		setMaritalStatus(maritalStatus);
-		setEthnicity(ethnicity);
-		setCitizenship(citizenship);
-		setVeteranStatus(veterenStatus);
-		setChildCareArrangement(childCareArrangement);
-	}
-
 	@Override
 	protected int hashPrime() {
 		return 11;
@@ -366,6 +348,9 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		result *= abilityToBenefit ? 7 : 11;
 		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
 		result *= hashField("anticipatedStartYear", anticipatedStartYear);
+		result *= hashField("actualStartTerm", actualStartTerm);
+		result *= hashField("actualStartYear", actualStartYear);
+		result *= hashField("balanceOwed", balanceOwed);
 		result *= local ? 3 : 5;
 		result *= hashField("countryOfResidence", countryOfResidence);
 		result *= hashField("paymentStatus", paymentStatus);

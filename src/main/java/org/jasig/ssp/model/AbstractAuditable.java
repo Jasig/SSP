@@ -125,6 +125,10 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 		return (value == 0 ? name.hashCode() : value);
 	}
 
+	protected final int hashField(final String name, final Number value) {
+		return (value == null ? name.hashCode() : value.hashCode());
+	}
+
 	@Deprecated
 	/**
 	 * Two boolean fields that have reversed true/false values between to objects

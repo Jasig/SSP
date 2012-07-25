@@ -45,7 +45,7 @@ public class JournalEntry
 	private JournalSource journalSource;
 
 	@ManyToOne
-	@JoinColumn(name = "journal_track_id", updatable = false, nullable = false)
+	@JoinColumn(name = "journal_track_id", updatable = false, nullable = true)
 	private JournalTrack journalTrack;
 
 	/**
@@ -106,7 +106,7 @@ public class JournalEntry
 		return journalTrack;
 	}
 
-	public void setJournalTrack(@NotNull final JournalTrack journalTrack) {
+	public void setJournalTrack(final JournalTrack journalTrack) {
 		this.journalTrack = journalTrack;
 	}
 

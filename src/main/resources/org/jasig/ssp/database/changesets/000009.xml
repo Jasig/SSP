@@ -16,30 +16,34 @@
 		<rollback>
 			<addColumn tableName="person">
 				<column name="user_id" type="${nvarchar.type}(25)">
-				<constraints nullable="true" />
-			</column>
+					<constraints nullable="true" />
+				</column>
 			</addColumn>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="add index to username" author="daniel.bower">
 		<createIndex tableName="person" indexName="idx_person_username">
-			<column name="username"/>
+			<column name="username" />
 		</createIndex>
-		
+
 		<rollback>
-			<dropIndex tableName="person" indexName="idx_person_username"/>
-		</rollback>
-	</changeSet>
-	
-	<changeSet id="Set early_alert.campus_id to not nullable" author="alexander.leader">
-		<addNotNullConstraint tableName="early_alert" columnName="campus_id" columnDataType="uuid"/>
-		<rollback>
-			<dropNotNullConstraint tableName="early_alert" columnName="campus_id" columnDataType="uuid"/>
+			<dropIndex tableName="person" indexName="idx_person_username" />
 		</rollback>
 	</changeSet>
 
-	<changeSet id="Add career questions to PersonEducationGoal" author="alexander.leader">
+	<changeSet id="Set early_alert.campus_id to not nullable"
+		author="alexander.leader">
+		<addNotNullConstraint tableName="early_alert"
+			columnName="campus_id" columnDataType="uuid" />
+		<rollback>
+			<dropNotNullConstraint tableName="early_alert"
+				columnName="campus_id" columnDataType="uuid" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Add career questions to PersonEducationGoal"
+		author="alexander.leader">
 		<addColumn tableName="person_education_goal">
 			<column name="planned_major" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
@@ -57,25 +61,70 @@
 			<column name="confident_in_abilities" type="boolean" />
 		</addColumn>
 		<addColumn tableName="person_education_goal">
-			<column name="additional_academic_program_information_needed" type="boolean" />
+			<column name="additional_academic_program_information_needed"
+				type="boolean" />
 		</addColumn>
 		<rollback>
 			<dropColumn tableName="person_education_goal" columnName="planned_major" />
 			<dropColumn tableName="person_education_goal" columnName="career_decided" />
 			<dropColumn tableName="person_education_goal" columnName="how_sure_about_occupation" />
 			<dropColumn tableName="person_education_goal" columnName="confident_in_abilities" />
-			<dropColumn tableName="person_education_goal" columnName="additional_academic_program_information_needed" />
+			<dropColumn tableName="person_education_goal"
+				columnName="additional_academic_program_information_needed" />
 		</rollback>
 	</changeSet>
 
 	<changeSet id="middle initial to middle name" author="daniel.bower">
-		<renameColumn tableName="person" oldColumnName="middle_initial" newColumnName="middle_name"/>
-		<modifyDataType tableName="person" columnName="middle_name" newDataType="${nvarchar.type}(50)"/>
+		<renameColumn tableName="person" oldColumnName="middle_initial"
+			newColumnName="middle_name" />
+		<modifyDataType tableName="person" columnName="middle_name"
+			newDataType="${nvarchar.type}(50)" />
+
+		<rollback>
+			<modifyDataType tableName="person" columnName="middle_name"
+				newDataType="char(1)" />
+			<renameColumn tableName="person" oldColumnName="middle_name"
+				newColumnName="middle_initial" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="actual start and balance owed to person demographics" author="daniel.bower">
+		<modifyDataType tableName="person_demographics" columnName="anticipated_start_term" newDataType="${nvarchar.type}(20)"/>
+		
+		<dropColumn tableName="person_demographics" columnName="anticipated_start_year"/>
+		
+		<addColumn tableName="person_demographics">
+			<column name="anticipated_start_year" type="integer">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_year" type="integer">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_term" type="${nvarchar.type}(20)">
+				<constraints nullable="true" />
+			</column>
+			<column name="balance_owed" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
 		
 		<rollback>
-			<modifyDataType tableName="person" columnName="middle_name" newDataType="char(1)"/>
-			<renameColumn tableName="person" oldColumnName="middle_name" newColumnName="middle_initial"/>
+			<addColumn tableName="person_demographics">
+				<column name="anticipated_start_year" type="${nvarchar.type}(4)">
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
+			<modifyDataType tableName="person_demographics" columnName="anticipated_start_term" newDataType="${nvarchar.type}(25)"/>
+			<dropColumn tableName="person_demographics" columnName="actual_start_year"/>
+			<dropColumn tableName="person_demographics" columnName="actual_start_term"/>
+			<dropColumn tableName="person_demographics" columnName="balance_owed"/>
 		</rollback>
+	</changeSet>
+
+	<changeSet id="allow nulls to Track in Journal entries"
+		author="jon.adams">
+		<dropNotNullConstraint tableName="journal_entry"
+			columnName="journal_track_id" columnDataType="uuid" />
 	</changeSet>
 
 </databaseChangeLog>
