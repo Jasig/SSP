@@ -362,7 +362,7 @@
 		<createView viewName="v_external_person">
 			select ROW_NUMBER() OVER (ORDER BY school_id) as id,
 			school_id, first_name, middle_name, last_name, birth_date, primary_email_address,
-			address_line_1, address_line_2, state, zip_code, home_phone, work_phone,
+			address_line_1, address_line_2, city, state, zip_code, home_phone, work_phone,
 			office_location, office_hours, department_name, actual_start_term, actual_start_year, 
 			marital_status, ethnicity, gender, is_local, balance_owed, coach_school_id 
 			from external_person
