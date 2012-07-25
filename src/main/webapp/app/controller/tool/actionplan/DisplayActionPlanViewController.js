@@ -164,6 +164,31 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 
     onEmailTasksClick: function(button) {
     	var me=this;
+    	var msg = me.getTaskGoalCountNotificationMessage();
+		if (msg.length > 0)
+		{
+	           Ext.Msg.confirm({
+	     		     title:' Would you like to continue emailing??',
+	     		     msg: msg,
+	     		     buttons: Ext.Msg.YESNO,
+	     		     fn: me.emailTasksConfirm,
+	     		     scope: me
+	     		   });
+		}else{
+			me.displayEmailAddressWindow();
+		}
+    },
+    
+    emailTasksConfirm: function( btnId ){
+     	var me=this;
+     	if (btnId=="yes")
+     	{
+         	me.displayEmailAddressWindow();    		
+     	}
+     }, 
+    
+    displayEmailAddressWindow: function(){
+    	var me=this;
     	Ext.create('Ext.window.Window', {
 		    title: 'To whom would you like to send this Action Plan',
 		    height: 200,
@@ -245,7 +270,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 					jsonData: jsonData,
 					successFunc: function(){
 						button.up('window').close();
-						Ext.Msg.alert('The task list has been sent to the listed recipient(s).');
+						Ext.Msg.alert('Success','The task list has been sent to the listed recipient(s).');
 					}
 				});
 		    }else{
