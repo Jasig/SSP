@@ -3,7 +3,7 @@ Ext.define('Ssp.model.Person', {
     fields: [{name: 'photoUrl', type: 'string'},
              {name: 'schoolId', type: 'string'},
     		 {name: 'firstName', type: 'string'},
-             {name: 'middleInitial', type: 'string'},
+             {name: 'middleName', type: 'string'},
     		 {name: 'lastName', type: 'string'},
              {name: 'homePhone', type: 'string'},
     		 {name: 'cellPhone', type: 'string'},
@@ -34,9 +34,9 @@ Ext.define('Ssp.model.Person', {
     		 		 
     getFullName: function(){ 
     	var firstName = this.get('firstName') || "";
-    	var middleInitial = this.get('middleInitial') || "";
+    	var middleName = this.get('middleName') || "";
     	var lastName = this.get('lastName') || "";
-    	return firstName + " " + middleInitial + " " + lastName;
+    	return firstName + " " + middleName + " " + lastName;
     },
     
     getFormattedBirthDate: function(){

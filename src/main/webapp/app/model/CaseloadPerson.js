@@ -2,9 +2,9 @@ Ext.define('Ssp.model.CaseloadPerson', {
     extend: 'Ext.data.Model',
     fields: [{name:'personId', type: 'string'},
              {name: 'schoolId', type: 'string'},
-             {name: 'firstName', type: 'string'},
-             {name: 'middleInitial', type: 'string'},
-             {name: 'lastName', type: 'string'},
+             {name:'firstName', type:'string'},
+             {name:'lastName', type: 'string'},
+             {name:'middleName',type:'string'},
              {name: 'studentTypeName', type: 'string'},
              {name: 'currentAppointmentStartDate', type: 'date', dateFormat: 'time'},
              {name: 'numberOfEarlyAlerts', type: 'string'},
@@ -13,10 +13,10 @@ Ext.define('Ssp.model.CaseloadPerson', {
              {name: 'currentProgramStatusName', type: 'string'}],            
              
      getFullName: function(){ 
-     	var firstName = this.get('firstName') || "";
-     	var middleInitial = this.get('middleInitial') || "";
-     	var lastName = this.get('lastName') || "";
-     	return firstName + " " + middleInitial + " " + lastName;
+      	var firstName = this.get('firstName') || "";
+      	var middleName = this.get('middleName') || "";
+      	var lastName = this.get('lastName') || "";
+      	return firstName + " " + middleName + " " + lastName;
      },
      
      getStudentTypeName: function(){

@@ -29,7 +29,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        width: 350
 			    },{
 			        fieldLabel: 'Middle Initial',
-			        name: 'middleInitial',
+			        name: 'middleName',
 			        itemId: 'middleName',
 			        id: 'editPersonMiddleName',
 			        maxLength: 1,

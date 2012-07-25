@@ -20,9 +20,10 @@ Ext.define('Ssp.service.CaseloadService', {
     	var programStatusFilter = "";
     	var success = function( response, view ){
     		var r = Ext.decode(response.responseText);
-	    	if (r.rows.length > 0)
+    		// clear the store
+    		me.store.removeAll();
+    		if (r.rows.length > 0)
 	    	{
-	    		me.store.removeAll();
 	    		me.store.loadData( r.rows );
 	    	}
 	    	if (callbacks != null)

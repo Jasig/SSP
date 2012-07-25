@@ -3,7 +3,7 @@ Ext.define('Ssp.model.SearchPerson', {
     fields: [{name:'id', type: 'string'},
              {name: 'schoolId', type: 'string'},
              {name: 'firstName', type: 'string'},
-             {name: 'middleInitial', type: 'string'},
+             {name: 'middleName', type: 'string'},
              {name: 'lastName', type: 'string'},
              {name: 'photoUrl', type: 'string'},
              {name: 'currentProgramStatusName', type: 'string'},
@@ -12,9 +12,9 @@ Ext.define('Ssp.model.SearchPerson', {
      getFullName: function(){ 
     	var me=this;
      	var firstName = me.get('firstName')? me.get('firstName') : "";
-     	var middleInitial = me.get('middleInitial')? me.get('middleInitial') : "";
+     	var middleName = me.get('middleName')? me.get('middleName') : "";
      	var lastName = me.get('lastName')? me.get('lastName') : "";
-     	return firstName + " " + middleInitial + " " + lastName;
+     	return firstName + " " + middleName + " " + lastName;
      },
      
      getCoachFullName: function(){

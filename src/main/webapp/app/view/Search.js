@@ -5,17 +5,15 @@ Ext.define('Ssp.view.Search', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.SearchViewController',
     inject: {
-    	appEventsController: 'appEventsController',
     	authenticatedPerson: 'authenticatedPerson',
     	apiProperties: 'apiProperties',
     	columnRendererUtils: 'columnRendererUtils',
-        store: 'searchStore',
-        programStatusesStore: 'programStatusesStore',
-        sspConfig: 'sspConfig'
+    	programStatusesStore: 'programStatusesStore',
+    	sspConfig: 'sspConfig'
     },
     initComponent: function(){
     	var me=this;
-    	Ext.apply(me,
+    	Ext.applyIf(me,
     			   {
     		        submitEmptyText: false,
     				title: 'Students',
@@ -23,9 +21,7 @@ Ext.define('Ssp.view.Search', {
     	            collapseDirection: 'left',
     	        	width: '100%',
     	        	height: '100%',
-		    	    columns: [
-		    	              { text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: 50}
-		    	              ],
+		    	    columns: [{ text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: 50}],
         
 		    	    dockedItems: [{
 		       			xtype: 'pagingtoolbar',
@@ -36,144 +32,159 @@ Ext.define('Ssp.view.Search', {
 		       		},{
 		       			xtype: 'toolbar',
 		       			dock: 'top',
+		       			itemId: 'searchBar',
 	    	            hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
-		       			defaults: {
-		       				labelWidth: 50
-		       			},
-		       		    items: [
-		       		        {
-		       		        	xtype: 'textfield',
-		       		        	itemId: 'searchText',
-		       		        	emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
-		       		        	width: 200
-		       		        },{
-		       		        	xtype: 'button',
-		       		        	tooltip: 'Find a Student',
-		       		        	itemId: 'searchButton',
-					            width: 30,
-					            height: 23,
-					            cls: 'searchIcon'
-		       		        },{
-		       		        	xtype: 'tbspacer',
-		       		        	width: 5
-		       		        },{
-		       		        	xtype: 'checkboxfield',
-		                        boxLabel  : 'My Caseload',
-		                        itemId: 'searchCaseloadCheck',
-		                        name      : 'searchInCaseload',
-		                        hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
-		                        inputValue: false
-		                    }]
+		       		    items: [{
+				        	xtype: 'textfield',
+		   		        	itemId: 'searchText',
+		   		        	emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
+		   		        	width: 200
+		   		        },{
+		   		        	xtype: 'button',
+		   		        	tooltip: 'Find a Student',
+		   		        	itemId: 'searchButton',
+				            width: 32,
+				            height: 32,
+				            cls: 'searchIcon'
+		   		        },{
+		   		        	xtype: 'tbspacer',
+		   		        	width: 5
+		   		        },{
+		   		        	xtype: 'checkboxfield',
+		                    boxLabel  : 'My Caseload',
+		                    itemId: 'searchCaseloadCheck',
+		                    name      : 'searchInCaseload',
+		                    hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
+		                    inputValue: false
+		                },{
+	    		        	xtype: 'tbspacer',
+	    		        	flex: 1
+		    		    },{
+		    	            tooltip: 'Display Caseload Filters',
+		    	            text: '',
+		    	            width: 25,
+		    	            height: 25,
+		    	            hidden: false,
+		    	            cls: 'displayCaseloadIcon',
+		    	            xtype: 'button',
+		    	            itemId: 'displayCaseloadBarButton'				        	
+		    	        }]
 		       		},{
 		       			xtype: 'toolbar',
 		       			dock: 'top',
+		       			itemId: 'caseloadBar',
 		       			hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS'),
-		       		    items: [
-		       		        {
-		    			        xtype: 'combobox',
-		    			        itemId: 'caseloadStatusCombo',
-		    			        name: 'programStatusId',
-		    			        fieldLabel: '',
-		    			        emptyText: 'Select One',
-		    			        store: me.programStatusesStore,
-		    			        valueField: 'id',
-		    			        displayField: 'name',
-		    			        mode: 'local',
-		    			        typeAhead: true,
-		    			        queryMode: 'local',
-		    			        allowBlank: true,
-		    			        forceSelection: false,
-		    			        width: 200,
-		    			        labelWidth: 125
-		    				},{
-		       		        	xtype: 'button',
-		       		        	tooltip: 'Retrieve My Caseload',
-		       		        	itemId: 'retrieveCaseloadButton',
-					            width: 32,
-					            height: 32,
-					            cls: 'retrieveCaseloadIcon'
-		       		        }
-		       		    ]
+		       		    items: [{
+					        xtype: 'combobox',
+					        itemId: 'caseloadStatusCombo',
+					        name: 'programStatusId',
+					        fieldLabel: '',
+					        emptyText: 'Select One',
+					        store: me.programStatusesStore,
+					        valueField: 'id',
+					        displayField: 'name',
+					        mode: 'local',
+					        typeAhead: true,
+					        queryMode: 'local',
+					        allowBlank: true,
+					        forceSelection: false,
+					        width: 200,
+					        labelWidth: 125
+						},{
+				        	xtype: 'button',
+				        	tooltip: 'Retrieve My Caseload',
+				        	itemId: 'retrieveCaseloadButton',
+				            width: 32,
+				            height: 32,
+				            cls: 'retrieveCaseloadIcon'
+				        },{
+	    		        	xtype: 'tbspacer',
+	    		        	flex: 1
+		    		    },{
+		    	            tooltip: 'Display Search Filters',
+		    	            text: '',
+		    	            width: 25,
+		    	            height: 25,
+		    	            hidden: false,
+		    	            cls: 'displaySearchIcon',
+		    	            xtype: 'button',
+		    	            itemId: 'displaySearchBarButton'				        	
+		    	        }]
 		       		    
 		       		},{
 		       			xtype: 'toolbar',
 		       			dock: 'top',
 		       			items: [{
-						    tooltip: 'Add Student',
-						    text: '',
-						    width: 25,
-						    height: 25,
-						    hidden: !me.authenticatedPerson.hasAccess('ADD_STUDENT_BUTTON'),
-						    cls: 'addPersonIcon',
-						    xtype: 'button',
-						    itemId: 'addPersonButton'
-						},{
-						    tooltip: 'Edit Student',
-						    text: '',
-						    width: 25,
-						    height: 25,
-						    hidden: !me.authenticatedPerson.hasAccess('EDIT_STUDENT_BUTTON'),
-						    cls: 'editPersonIcon',
-						    xtype: 'button',
-						    itemId: 'editPersonButton'
-						},{
-						    tooltip: 'Delete Student',
-						    text: '',
-						    width: 25,
-						    height: 25,
-						    hidden: !me.authenticatedPerson.hasAccess('DELETE_STUDENT_BUTTON'),
-						    cls: 'deletePersonIcon',
-						    xtype: 'button',
-						    itemId: 'deletePersonButton'
-						},{
-	       		        	xtype: 'tbspacer',
-	       		        	flex: 1
-	       		        },{
-						    tooltip: 'Transition Student',
-						    text: '',
-						    width: 25,
-						    height: 25,
-						    hidden: !me.authenticatedPerson.hasAccess('TRANSITION_STUDENT_BUTTON'),
-						    cls: 'transitionStudentIcon',
-						    xtype: 'button',
-						    itemId: 'transitionStudentButton'
-						},{
-						    tooltip: 'Set Student to Non-Participating status',
-						    text: '',
-						    width: 25,
-						    height: 25,
-						    hidden: !me.authenticatedPerson.hasAccess('SET_NON_PARTICIPATING_BUTTON'),
-						    cls: 'setNonParticipatingIcon',
-						    xtype: 'button',
-						    itemId: 'setNonParticipatingButton'
-						},{
-						    tooltip: 'Set Student to No-Show status',
-						    text: '',
-						    width: 25,
-						    height: 25,
-						    hidden: !me.authenticatedPerson.hasAccess('SET_NO_SHOW_BUTTON'),
-						    cls: 'setNoShowIcon',
-						    xtype: 'button',
-						    itemId: 'setNoShowButton'
-						},{
-				            tooltip: 'Display Search',
-				            text: '',
-				            width: 20,
-				            height: 20,
-				            hidden: true,
-				            cls: 'displayPhotoListIcon',
-				            xtype: 'button',
-				            itemId: 'displayPhotoButton'				        	
-				        },{
-				            tooltip: 'Display Caseload',
-				            text: '',
-				            width: 20,
-				            height: 20,
-				            hidden: true,
-				            cls: 'displayListIcon',
-				            xtype: 'button',
-				            itemId: 'displayListButton'				        	
-				        }]
+		    			    tooltip: 'Add Student',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('ADD_STUDENT_BUTTON'),
+		    			    cls: 'addPersonIcon',
+		    			    xtype: 'button',
+		    			    itemId: 'addPersonButton'
+		    			},{
+		    			    tooltip: 'Edit Student',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('EDIT_STUDENT_BUTTON'),
+		    			    cls: 'editPersonIcon',
+		    			    xtype: 'button',
+		    			    itemId: 'editPersonButton'
+		    			},{
+		    			    tooltip: 'Delete Student',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('DELETE_STUDENT_BUTTON'),
+		    			    cls: 'deletePersonIcon',
+		    			    xtype: 'button',
+		    			    itemId: 'deletePersonButton'
+		    			},{
+	    		        	xtype: 'tbspacer',
+	    		        	flex: 1
+		    		    },{
+		    			    tooltip: 'Set Student to Active status',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('SET_ACTIVE_STATUS_BUTTON'),
+		    			    cls: 'setActiveStatusIcon',
+		    			    xtype: 'button',
+		    			    action: 'active',
+		    			    itemId: 'setActiveStatusButton'
+			    		},{
+		    			    tooltip: 'Transition Student',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('SET_TRANSITION_STATUS_BUTTON'),
+		    			    cls: 'setTransitionStatusIcon',
+		    			    xtype: 'button',
+		    			    action: 'transition',
+		    			    itemId: 'setTransitionStatusButton'
+		    			},{
+		    			    tooltip: 'Set Student to Non-Participating status',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('SET_NON_PARTICIPATING_STATUS_BUTTON'),
+		    			    cls: 'setNonParticipatingStatusIcon',
+		    			    xtype: 'button',
+		    			    action: 'non-participating',
+		    			    itemId: 'setNonParticipatingStatusButton'
+		    			},{
+		    			    tooltip: 'Set Student to No-Show status',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('SET_NO_SHOW_STATUS_BUTTON'),
+		    			    cls: 'setNoShowStatusIcon',
+		    			    xtype: 'button',
+		    			    action: 'no-show',
+		    			    itemId: 'setNoShowStatusButton'
+		    			}]
 		       		}]
 		    	    });
     	
