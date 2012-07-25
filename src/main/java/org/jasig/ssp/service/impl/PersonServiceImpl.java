@@ -19,6 +19,7 @@ import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ import com.google.common.collect.Lists;
 public class PersonServiceImpl implements PersonService {
 
 	public static final boolean ALL_AUTHENTICATED_USERS_CAN_CREATE_ACCOUNT = true;
+
 	public static final String PERMISSION_TO_CREATE_ACCOUNT = "ROLE_CAN_CREATE";
 
 	private static final Logger LOGGER = LoggerFactory
@@ -79,17 +81,17 @@ public class PersonServiceImpl implements PersonService {
 					person = create(person);
 					LOGGER.info("Successfully Created Account for {}",
 							username);
-				} catch (ObjectExistsException oee) {
+				} catch (final ObjectExistsException oee) {
 					person = personFromUsername(username);
 				}
 
-			} catch (ObjectNotFoundException onfe) {
+			} catch (final ObjectNotFoundException onfe) {
 				// personAttributesService may throw this exception, if so,
 				// we can't create the user.
 				throw new UnableToCreateAccountException(// NOPMD
 						"Unable to pull required attributes", onfe);
 
-			} catch (ConstraintViolationException sqlException) {
+			} catch (final ConstraintViolationException sqlException) {
 				// if we received a constraintViolationException of
 				// unique_person_username, then the user might have been
 				// added since we started.
@@ -98,7 +100,7 @@ public class PersonServiceImpl implements PersonService {
 					LOGGER.info("Tried to add a user that was already present");
 				}
 
-			} catch (Exception genException) {
+			} catch (final Exception genException) {
 				// This exception seems to get swallowed... trying to reveal
 				// it.
 				throw new UnableToCreateAccountException( // NOPMD
@@ -123,7 +125,7 @@ public class PersonServiceImpl implements PersonService {
 			return true;
 		}
 
-		for (GrantedAuthority auth : authorities) {
+		for (final GrantedAuthority auth : authorities) {
 			if (auth.getAuthority().equals(PERMISSION_TO_CREATE_ACCOUNT)) {
 				permission = true;
 				break;
@@ -166,7 +168,7 @@ public class PersonServiceImpl implements PersonService {
 	public Person getByStudentId(final String studentId)
 			throws ObjectNotFoundException {
 
-		Person person = dao.getByStudentId(studentId);
+		final Person person = dao.getByStudentId(studentId);
 
 		if (person == null) {
 			// :TODO look up person in external_person table
@@ -196,6 +198,8 @@ public class PersonServiceImpl implements PersonService {
 	 * @param obj
 	 *            Model instance
 	 * @throws ObjectExistsException
+	 *             Thrown if any of the specified data has a unique key
+	 *             violation.
 	 */
 	@Override
 	public Person create(final Person obj) {
@@ -261,9 +265,13 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public List<Person> peopleFromListOfIds(final List<UUID> personIds,
 			final SortingAndPaging sAndP) {
-		final List<Person> people = dao.getPeopleInList(personIds, sAndP);
-		additionalAttribsForStudents(people);
-		return people;
+		try {
+			final List<Person> people = dao.getPeopleInList(personIds, sAndP);
+			additionalAttribsForStudents(people);
+			return people;
+		} catch (final ValidationException exc) {
+			return Lists.newArrayList();
+		}
 	}
 
 	/**
@@ -317,9 +325,10 @@ public class PersonServiceImpl implements PersonService {
 			return null;
 		}
 
-		for (Person person : people) {
+		for (final Person person : people) {
 			additionalAttribsForStudent(person);
 		}
+
 		return people;
 	}
 
