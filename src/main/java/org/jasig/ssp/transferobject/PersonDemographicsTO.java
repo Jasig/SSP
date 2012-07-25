@@ -17,10 +17,12 @@ public class PersonDemographicsTO
 			citizenshipId, veteranStatusId, childCareArrangementId;
 	private boolean abilityToBenefit, local, primaryCaregiver,
 			childCareNeeded, employed;
-	private int numberOfChildren;
-	private String anticipatedStartTerm, anticipatedStartYear,
+	private Integer numberOfChildren, anticipatedStartYear, actualStartYear;
+	private String anticipatedStartTerm, actualStartTerm,
 			countryOfResidence, paymentStatus, gender, countryOfCitizenship,
 			childAges, placeOfEmployment, shift, wage, totalHoursWorkedPerWeek;
+
+	private Number balanceOwed;
 
 	public PersonDemographicsTO() {
 		super();
@@ -63,6 +65,9 @@ public class PersonDemographicsTO
 		numberOfChildren = model.getNumberOfChildren();
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
 		anticipatedStartYear = model.getAnticipatedStartYear();
+		actualStartTerm = model.getActualStartTerm();
+		actualStartYear = model.getActualStartYear();
+		balanceOwed = model.getBalanceOwed();
 		countryOfResidence = model.getCountryOfResidence();
 		paymentStatus = model.getPaymentStatus();
 		if (model.getGender() != null) {
@@ -184,12 +189,36 @@ public class PersonDemographicsTO
 		this.anticipatedStartTerm = anticipatedStartTerm;
 	}
 
-	public String getAnticipatedStartYear() {
+	public Integer getAnticipatedStartYear() {
 		return anticipatedStartYear;
 	}
 
-	public void setAnticipatedStartYear(final String anticipatedStartYear) {
+	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
 		this.anticipatedStartYear = anticipatedStartYear;
+	}
+
+	public Integer getActualStartYear() {
+		return actualStartYear;
+	}
+
+	public void setActualStartYear(final Integer actualStartYear) {
+		this.actualStartYear = actualStartYear;
+	}
+
+	public String getActualStartTerm() {
+		return actualStartTerm;
+	}
+
+	public void setActualStartTerm(final String actualStartTerm) {
+		this.actualStartTerm = actualStartTerm;
+	}
+
+	public Number getBalanceOwed() {
+		return balanceOwed;
+	}
+
+	public void setBalanceOwed(final Number balanceOwed) {
+		this.balanceOwed = balanceOwed;
 	}
 
 	public String getCountryOfResidence() {
@@ -264,11 +293,11 @@ public class PersonDemographicsTO
 		this.totalHoursWorkedPerWeek = totalHoursWorkedPerWeek;
 	}
 
-	public int getNumberOfChildren() {
+	public Integer getNumberOfChildren() {
 		return numberOfChildren;
 	}
 
-	public void setNumberOfChildren(final int numberOfChildren) {
+	public void setNumberOfChildren(final Integer numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
 	}
 }

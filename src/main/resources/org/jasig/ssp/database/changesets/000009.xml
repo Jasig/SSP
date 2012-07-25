@@ -77,5 +77,30 @@
 			<renameColumn tableName="person" oldColumnName="middle_name" newColumnName="middle_initial"/>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="actual start and balance owed to person demographics" author="daniel.bower">
+		<modifyDataType tableName="person_demographics" columnName="anticipated_start_year" newDataType="integer"/>
+		<modifyDataType tableName="person_demographics" columnName="anticipated_start_term" newDataType="${nvarchar.type}(20)"/>
+		
+		<addColumn tableName="person_demographics">
+			<column name="actual_start_year" type="integer">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_term" type="${nvarchar.type}(20)">
+				<constraints nullable="true" />
+			</column>
+			<column name="balance_owed" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<rollback>
+			<modifyDataType tableName="person_demographics" columnName="anticipated_start_year" newDataType="${nvarchar.type}(4)"/>
+			<modifyDataType tableName="person_demographics" columnName="anticipated_start_term" newDataType="${nvarchar.type}(25)"/>
+			<dropColumn tableName="person_demographics" columnName="actual_start_year"/>
+			<dropColumn tableName="person_demographics" columnName="actual_start_term"/>
+			<dropColumn tableName="person_demographics" columnName="balance_owed"/>
+		</rollback>
+	</changeSet>
 
 </databaseChangeLog>
