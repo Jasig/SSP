@@ -57,6 +57,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 				            tooltip: 'Respond to the selected Early Alert',
 				            text: '',
 				            xtype: 'button',
+				            hidden: !me.authenticatedPerson.hasAccess('RESPOND_EARLY_ALERT_BUTTON'),
 			            	width: 28,
 					        height: 28,
 				            cls: 'earlyAlertResponseIcon',
@@ -65,6 +66,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 				            tooltip: 'Display detail for the selected item',
 				            text: 'Details',
 				            xtype: 'button',
+				            hidden: !me.authenticatedPerson.hasAccess('EARLY_ALERT_DETAILS_BUTTON'),
 				            itemId: 'displayDetailsButton'
 				        }]
 				    }]
