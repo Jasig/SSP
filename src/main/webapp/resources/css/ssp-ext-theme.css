@@ -16,12 +16,12 @@ background-image: url('/ssp/images/confidentiality-agreement-icon.png') !importa
 background-image: url('/ssp/images/delete-person-icon.png') !important;
 }
 
-.displayPhotoListIcon {
-background-image: url('/ssp/images/photo-list-icon.png') !important;
+.displaySearchIcon {
+background-image: url('/ssp/images/display-search-icon.png') !important;
 }
 
-.displayListIcon {
-background-image: url('/ssp/images/list-icon.png') !important;
+.displayCaseloadIcon {
+background-image: url('/ssp/images/display-caseload-icon.png') !important;
 }
 
 .earlyAlertResponseIcon {
@@ -79,15 +79,19 @@ background-image: url('/ssp/images/search-icon.png') !important;
 background-image: url('/ssp/images/student-history-report-icon.png') !important;
 }
 
-.setNonParticipatingIcon {
+.setNonParticipatingStatusIcon {
 background-image: url('/ssp/images/set-non-participating-status-icon.png') !important;
 }
 
-.setNoShowIcon {
+.setNoShowStatusIcon {
 background-image: url('/ssp/images/set-no-show-status-icon.png') !important;
 }
 
-.transitionStudentIcon {
+.setActiveStatusIcon {
+background-image: url('/ssp/images/set-active-status-icon.png') !important;
+}
+
+.setTransitionStatusIcon {
 background-image: url('/ssp/images/set-transition-status-icon.png') !important;
 }
 

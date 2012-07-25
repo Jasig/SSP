@@ -2,6 +2,7 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
 	extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
+    	appEventsController: 'appEventsController',
     	personLite: 'personLite',
     	programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
     	personProgramStatusService: 'personProgramStatusService'
@@ -42,9 +43,8 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
 	   	{
 		   	if (personId != "")
 		   	{
-		   		// TODO: Look-up Non-Participating Program Status Id
 		   		personProgramStatus = new Ssp.model.PersonProgramStatus();
-		   		personProgramStatus.set('programStatusId','b2d125c3-5056-a51a-8004-f1dbabde80c2');
+		   		personProgramStatus.set('programStatusId',Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_ID);
 		   		personProgramStatus.set('effectiveDate', new Date());
 		   		personProgramStatus.set('programStatusChangeReasonId', reasonId );
 			   	me.getView().setLoading( true );
@@ -52,7 +52,7 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
 		   				personId, 
 		   				personProgramStatus.data, 
 		   				{
-		   			success: me.saveProgramStatusSuccess,
+	   					success: me.saveProgramStatusSuccess,
 		               failure: me.saveProgramStatusFailure,
 		               scope: me 
 		        });
@@ -63,23 +63,24 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
 	   		Ext.Msg.alert('SSP Error','Please correct the hilited errors in the form');
 	   	}
     },
+
+    saveProgramStatusSuccess: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+		me.appEventsController.getApplication().fireEvent('setNonParticipatingProgramStatusComplete');
+		me.close();
+    },
+
+    saveProgramStatusFailure: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    },    
     
     onCancelClick: function( button ){
-    	me.close();
+    	this.close();
     },
     
     close: function(){
     	this.getView().close();
-    },
-    
-    saveProgramStatusSuccess: function( r, scope ){
-    	var me=scope;
-    	me.getView().setLoading( false );
-    	me.close();
-    },
-    
-    saveProgramStatusFailure: function( response, scope ){
-    	var me=scope;
-    	me.getView().setLoading( false );    	
     }
 });

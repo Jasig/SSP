@@ -9,9 +9,12 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonChallenge;
+import org.jasig.ssp.model.PersonStaffDetails;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -33,6 +36,9 @@ public class PersonServiceIntegrationTest {
 
 	@Autowired
 	private transient PersonService service;
+
+	@Autowired
+	private transient SessionFactory sessionFactory;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -98,5 +104,47 @@ public class PersonServiceIntegrationTest {
 		final Set<PersonChallenge> loadedChallenges = person.getChallenges();
 		assertEquals("Challenge associations count did not match expected.", 3,
 				loadedChallenges.size());
+	}
+
+	@Test
+	public void testCreateWithStaffDetails() throws ObjectNotFoundException {
+		// arrange
+		final Person person = createPerson();
+		final PersonStaffDetails staffDetails = new PersonStaffDetails();
+		staffDetails.setOfficeLocation("officeLocation");
+		staffDetails.setOfficeHours("officeHours");
+		staffDetails.setDepartmentName("departmentName");
+		person.setStaffDetails(staffDetails);
+
+		// act
+		final Person created = service.create(person);
+
+		// assert
+		assertNotNull("Created ID should not have been null.", created.getId());
+
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		session.clear();
+
+		final Person reloaded = service.get(created.getId());
+		assertNotNull("reloaded ID should not have been null.",
+				reloaded.getId());
+		final PersonStaffDetails reloadedDetails = reloaded.getStaffDetails();
+		assertEquals("Office location values did not match.", "officeLocation",
+				reloadedDetails.getOfficeLocation());
+		assertEquals("Office hours values did not match.", "officeHours",
+				reloadedDetails.getOfficeHours());
+		assertEquals("Department name values did not match.", "departmentName",
+				reloadedDetails.getDepartmentName());
+	}
+
+	private Person createPerson() {
+		final Person person = new Person();
+		person.setFirstName("first");
+		person.setLastName("last");
+		person.setPrimaryEmailAddress("email");
+		person.setUsername("username");
+		person.setSchoolId("legacy id");
+		return person;
 	}
 }

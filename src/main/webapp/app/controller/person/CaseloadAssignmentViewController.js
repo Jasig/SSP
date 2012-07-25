@@ -271,15 +271,11 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	if (r.id != "")
 		{
     		// new student save an Active program status
-    		if (me.person.get('id') == "" || me.getResetActiveStatusCheck().checked == true)
+    		if ( me.person.get('id') == "" || me.getResetActiveStatusCheck().checked == true)
     		{
-    			/*
-    			// TODO: Get Active Program Status Id
     			personProgramStatus = new Ssp.model.PersonProgramStatus();
-    			personProgramStatus.set('programStatusId','b2d12527-5056-a51a-8054-113116baab88');
+    			personProgramStatus.set('programStatusId',Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
     			personProgramStatus.set('effectiveDate', new Date());
-    			console.log(r.id);
-    			console.log(personProgramStatus.data);
     			me.personProgramStatusService.save( 
     					r.id, 
     					personProgramStatus.data, 
@@ -288,7 +284,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
                     failure: me.saveProgramStatusFailure,
                     scope: me 
                 });
-                */
     		}
     		
     		// populate the person object with result
@@ -304,6 +299,15 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	me.getView().setLoading( false );   	
     },
 
+    
+    saveProgramStatusSuccess: function( r, scope ){
+		var me=scope;	
+    },    
+    
+    saveProgramStatusFailure: function( response, scope ){
+    	var me=scope;  	
+    },       
+    
     saveAppointment: function(){
     	var me=this;
     	var jsonData, personId;

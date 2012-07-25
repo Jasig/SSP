@@ -35,33 +35,45 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
-		url = me.url;
-		this.getView().getForm().updateRecord();
-		record = this.model;
-		id = record.get('id');
-		jsonData = record.data;
-		successFunc = function(response, view) {
-			me.displayMain();
-		};
-		
-		if (id.length > 0)
+		url = me.url;	
+		if ( me.getView().getForm().isValid() )
 		{
-			// editing
-			this.apiProperties.makeRequest({
-				url: url+"/"+id,
-				method: 'PUT',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});
+			me.getView().getForm().updateRecord();
+			record = me.model;
+			id = record.get('id');
+			jsonData = record.data;
 			
+			// ensure null if person is not set
+			if (record.data.person == "")
+			{
+				jsonData.person=null;
+			}
+			
+			successFunc = function(response, view) {
+				me.displayMain();
+			};
+			
+			if (id.length > 0)
+			{
+				// editing
+				me.apiProperties.makeRequest({
+					url: url+"/"+id,
+					method: 'PUT',
+					jsonData: jsonData,
+					successFunc: successFunc 
+				});
+				
+			}else{
+				// adding
+				me.apiProperties.makeRequest({
+					url: url,
+					method: 'POST',
+					jsonData: jsonData,
+					successFunc: successFunc 
+				});		
+			}			
 		}else{
-			// adding
-			this.apiProperties.makeRequest({
-				url: url,
-				method: 'POST',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});		
+			Ext.Msg.alert('SSP Error', 'Please correct the errors before saving this item.');
 		}
 	},
 	

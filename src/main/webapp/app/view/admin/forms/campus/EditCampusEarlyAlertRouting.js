@@ -13,21 +13,25 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 	initComponent: function() {
         var me=this;
 		Ext.applyIf(me, {
+		    fieldDefaults: {
+		        msgTarget: 'side',
+		        labelAlign: 'right',
+		        labelWidth: 125
+		    },
             items: [{
                     xtype: 'textfield',
                     fieldLabel: 'Group Name',
-                    width: 300,
+                    width: 500,
                     name: 'groupName',
                     allowBlank: false
                 },{
                     xtype: 'textfield',
                     fieldLabel: 'Group Email',
-                    anchor: '100%',
                     name: 'groupEmail',
-                    width: 300,
+                    width: 500,
                     vtype:'email',
 			        maxLength: 100,
-			        allowBlank:true
+			        allowBlank: false
                 },{
 			        xtype: 'combobox',
 			        name: 'earlyAlertReasonId',
@@ -41,7 +45,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 			        typeAhead: true,
 			        queryMode: 'local',
 			        allowBlank: false,
-			        width: 300
+			        width: 500
 				},{
 		            xtype: 'combo',
 		            store: me.peopleSearchLiteStore,
@@ -53,7 +57,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 		            hideTrigger:true,
 		            queryParam: 'searchTerm',
 		            allowBlank: true,
-		            width: 300,
+		            width: 500,
 
 		            listConfig: {
 		                loadingText: 'Searching...',

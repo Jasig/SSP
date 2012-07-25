@@ -49,7 +49,7 @@ public class VelocityTemplateService {
 
 		// fill the velocity context with the parameters
 		final VelocityContext context = new VelocityContext();
-		for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+		for (final Map.Entry<String, Object> entry : parameters.entrySet()) {
 			context.put(entry.getKey(), entry.getValue());
 		}
 
@@ -59,7 +59,7 @@ public class VelocityTemplateService {
 		// Process the template, and extract string
 		final StringWriter writer = new StringWriter();
 		template.merge(context, writer);
-		return (writer.toString());
+		return writer.toString();
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class VelocityTemplateService {
 		Template template = null;
 		try {
 			template = velocityEngine.getTemplate(templateId);
-		} catch (ResourceNotFoundException e) {
+		} catch (final ResourceNotFoundException e) {
 			StringResourceLoader.getRepository().putStringResource(templateId,
 					templateText);
 			template = velocityEngine.getTemplate(templateId);

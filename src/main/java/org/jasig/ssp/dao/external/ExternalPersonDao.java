@@ -5,14 +5,13 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalPerson;
-import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 /**
- * Data access class for the Term reference entity.
+ * Data access class for the External Person entity
  */
 @Repository
 public class ExternalPersonDao extends AbstractExternalDataDao<ExternalPerson> {
@@ -24,8 +23,8 @@ public class ExternalPersonDao extends AbstractExternalDataDao<ExternalPerson> {
 	/**
 	 * Retrieves the specified instance from persistent storage.
 	 * 
-	 * @param code
-	 *            the <code>{@link Term}.Code</code> value, must be a String
+	 * @param schoolId
+	 *            the schoolId value
 	 * @return The specified instance if found
 	 * @throws ObjectNotFoundException
 	 *             If object was not found.

@@ -13,7 +13,12 @@ Ext.define('Ssp.util.Constants',{
     		        	Ssp.util.Constants.EDUCATION_LEVEL_OTHER_ID,
     		        	Ssp.util.Constants.FUNDING_SOURCE_OTHER_ID,
     		        	Ssp.util.Constants.CHALLENGE_OTHER_ID,
-    		        	Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID
+    		        	Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID,
+    		        	Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,
+    		        	Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID,
+    		        	Ssp.util.Constants.NON-PARTICIPATING_PROGRAM_STATUS_ID,
+    		        	Ssp.util.Constants.INACTIVE_PROGRAM_STATUS_ID,
+    		        	Ssp.util.Constants.TRANSITIONED_PROGRAM_STATUS_ID
     		        ];
     		return ((Ext.Array.indexOf( restrictedIdsArray, id ) != -1)? true : false);
     	},
@@ -38,6 +43,13 @@ Ext.define('Ssp.util.Constants',{
     
         // EARLY ALERT OUTCOME
         OTHER_EARLY_ALERT_OUTCOME_ID: '0a080114-3799-1bf5-8137-9a778e200004',
+        
+        // PROGRAM STATUS
+        ACTIVE_PROGRAM_STATUS_ID: 'b2d12527-5056-a51a-8054-113116baab88',
+        NON_PARTICIPATING_PROGRAM_STATUS_ID: 'b2d125c3-5056-a51a-8004-f1dbabde80c2',
+        NO_SHOW_PROGRAM_STATUS_ID: 'b2d12640-5056-a51a-80cc-91264965731a',
+        INACTIVE_PROGRAM_STATUS_ID: 'b2d125a4-5056-a51a-8042-d50b8eff0df1',
+        TRANSITIONED_PROGRAM_STATUS_ID: 'b2d125e3-5056-a51a-800f-6891bc7d1ddc',
         
         GRID_ITEM_DELETE_ICON_PATH: '/ssp/images/delete-icon.png',
         GRID_ITEM_EDIT_ICON_PATH: '/ssp/images/edit-icon.jpg',

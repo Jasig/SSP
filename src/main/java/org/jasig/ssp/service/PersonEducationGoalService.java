@@ -7,25 +7,27 @@ import org.jasig.ssp.model.PersonEducationGoal;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * PersonEducationGoal service
+ */
 public interface PersonEducationGoalService extends
 		AuditableCrudService<PersonEducationGoal> {
 
 	@Override
-	public PagingWrapper<PersonEducationGoal> getAll(SortingAndPaging sAndP);
+	PagingWrapper<PersonEducationGoal> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public PersonEducationGoal get(UUID id) throws ObjectNotFoundException;
+	PersonEducationGoal get(UUID id) throws ObjectNotFoundException;
 
-	public PersonEducationGoal forPerson(Person person);
-
-	@Override
-	public PersonEducationGoal create(PersonEducationGoal obj);
+	PersonEducationGoal forPerson(Person person);
 
 	@Override
-	public PersonEducationGoal save(PersonEducationGoal obj)
+	PersonEducationGoal create(PersonEducationGoal obj);
+
+	@Override
+	PersonEducationGoal save(PersonEducationGoal obj)
 			throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

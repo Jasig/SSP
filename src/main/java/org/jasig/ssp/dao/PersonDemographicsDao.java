@@ -1,7 +1,7 @@
 package org.jasig.ssp.dao;
 
-import org.springframework.stereotype.Repository;
 import org.jasig.ssp.model.PersonDemographics;
+import org.springframework.stereotype.Repository;
 
 /**
  * CRUD methods for the PersonDemographics model.
@@ -17,5 +17,4 @@ public class PersonDemographicsDao extends
 	public PersonDemographicsDao() {
 		super(PersonDemographics.class);
 	}
-
 }

@@ -7,25 +7,27 @@ import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * PersonDemographics service
+ */
 public interface PersonDemographicsService extends
 		AuditableCrudService<PersonDemographics> {
 
 	@Override
-	public PagingWrapper<PersonDemographics> getAll(SortingAndPaging sAndP);
+	PagingWrapper<PersonDemographics> getAll(SortingAndPaging sAndP);
 
 	@Override
-	public PersonDemographics get(UUID id) throws ObjectNotFoundException;
+	PersonDemographics get(UUID id) throws ObjectNotFoundException;
 
-	public PersonDemographics forPerson(Person person);
-
-	@Override
-	public PersonDemographics create(PersonDemographics obj);
+	PersonDemographics forPerson(Person person);
 
 	@Override
-	public PersonDemographics save(PersonDemographics obj)
+	PersonDemographics create(PersonDemographics obj);
+
+	@Override
+	PersonDemographics save(PersonDemographics obj)
 			throws ObjectNotFoundException;
 
 	@Override
-	public void delete(UUID id) throws ObjectNotFoundException;
-
+	void delete(UUID id) throws ObjectNotFoundException;
 }

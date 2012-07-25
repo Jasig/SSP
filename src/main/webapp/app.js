@@ -123,6 +123,8 @@ Ext.require([
 	'Ssp.model.Appointment',
 	'Ssp.model.CaseloadPerson',
 	'Ssp.model.SearchPerson',
+	'Ssp.model.SearchCriteria',
+	'Ssp.model.CaseloadFilterCriteria',
 	'Ssp.model.PersonGoal',
 	'Ssp.model.PersonDocument',
 	'Ssp.model.PersonLite',
@@ -536,6 +538,18 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+				    searchCriteria: {
+				    	fn: function(){
+				    		return new Ssp.model.SearchCriteria();
+				    	},
+				    	singleton: true
+				    },
+				    caseloadFilterCriteria: {
+				    	fn: function(){
+				    		return new Ssp.model.CaseloadFilterCriteria();
+				    	},
+				    	singleton: true
+				    },
 			        // STORES
 					abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 				    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',

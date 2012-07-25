@@ -59,8 +59,8 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:false
 				    },{
 				        fieldLabel: 'Middle Initial',
-				        name: 'middleInitial',
-				        itemId: 'middleInitial',
+				        name: 'middleName',
+				        itemId: 'middleName',
 				        maxLength: 1,
 				        allowBlank:true
 				    },{

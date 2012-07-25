@@ -1,7 +1,7 @@
 Ext.define('Ssp.model.Coach', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'firstName',type:'string'},
-             {name:'middleInitial',type:'string'},
+             {name:'middleName',type:'string'},
              {name:'lastName',type:'string'},
              {
                  name: 'fullName',

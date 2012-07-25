@@ -29,10 +29,25 @@ Ext.define('Ssp.controller.admin.campus.EarlyAlertRoutingsAdminViewController', 
 	init: function() {
 		var me=this;
 		var campusId = me.campus.get('id');
-		me.service.getAllCampusEarlyAlertRoutings( campusId );
+		me.getView().setLoading( true );
+		me.service.getAllCampusEarlyAlertRoutings( campusId, {
+			success: me.getAllCampusEarlyAlertRoutingsSuccess,
+			failure: me.getAllCampusEarlyAlertRoutingsFailure,
+			scope: me
+		});
 		return me.callParent(arguments);
     },
 
+    getAllCampusEarlyAlertRoutingsSuccess: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading( false );
+    },
+    
+    getAllCampusEarlyAlertRoutingsFailure: function( response, scope ){
+    	var me=scope;  	
+    	me.getView().setLoading( false );
+    },    
+    
 	onEditClick: function(button) {
 		var me=this;
 		var grid, record;
