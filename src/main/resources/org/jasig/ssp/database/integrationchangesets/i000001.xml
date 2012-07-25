@@ -7,6 +7,8 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 	<property name="externalUser" value="a new UUID" />
@@ -270,5 +272,120 @@
 		</rollback>
 
 	</changeSet>
+
+
+	<changeSet id="Add external_person table"
+		author="daniel.bower">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_person table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createTable tableName="external_person">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="first_name" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="middle_name" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="last_name" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="birth_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+			<column name="primary_email_address" type="${nvarchar.type}(100)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_line_1" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_line_2" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="city" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="state" type="char(2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="zip_code" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+			<column name="home_phone" type="${nvarchar.type}(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="work_phone" type="${nvarchar.type}(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="office_location" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="office_hours" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="department_name" type="${nvarchar.type}(100)">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_term" type="${nvarchar.type}(20)">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_year" type="integer">
+				<constraints nullable="true" />
+			</column>
+			<column name="marital_status" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+			<column name="ethnicity" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+			<column name="gender" type="char(1)">
+				<constraints nullable="true" />
+			</column>
+			<column name="is_local" type="char(1)">
+				<constraints nullable="true" />
+			</column>
+			<column name="balance_owed" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="coach_school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_person">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id,
+			school_id, first_name, middle_name, last_name, birth_date, primary_email_address,
+			address_line_1, address_line_2, state, zip_code, home_phone, work_phone,
+			office_location, office_hours, department_name, actual_start_term, actual_start_year, 
+			marital_status, ethnicity, gender, is_local, balance_owed, coach_school_id 
+			from external_person
+		</createView>
+
+		<sql>grant all on external_person to ssp</sql>
+		<sql>grant all on v_external_person to ssp</sql>
+		<rollback>
+			<dropView viewName="v_external_person" />
+			<dropTable tableName="external_person" />
+		</rollback>
+
+	</changeSet>
+	
+	<changeSet author="daniel.bower" id="Add school id index to external_person">
+		<createIndex tableName="external_person" indexName="idx_external_person_school_id">
+			<column name="school_id"></column>
+		</createIndex>
+		
+		<rollback>
+			<dropIndex tableName="external_person" indexName="idx_external_person_school_id" schemaName="${schema}"/>
+		</rollback>
+	</changeSet>
+	
 
 </databaseChangeLog>
