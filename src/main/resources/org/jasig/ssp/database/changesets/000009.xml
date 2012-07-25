@@ -87,12 +87,14 @@
 				newColumnName="middle_initial" />
 		</rollback>
 	</changeSet>
-	
-	<changeSet id="actual start and balance owed to person demographics" author="daniel.bower">
-		<modifyDataType tableName="person_demographics" columnName="anticipated_start_term" newDataType="${nvarchar.type}(20)"/>
-		
-		<dropColumn tableName="person_demographics" columnName="anticipated_start_year"/>
-		
+
+	<changeSet id="actual start and balance owed to person demographics"
+		author="daniel.bower">
+		<modifyDataType tableName="person_demographics"
+			columnName="anticipated_start_term" newDataType="${nvarchar.type}(20)" />
+
+		<dropColumn tableName="person_demographics" columnName="anticipated_start_year" />
+
 		<addColumn tableName="person_demographics">
 			<column name="anticipated_start_year" type="integer">
 				<constraints nullable="true" />
@@ -107,17 +109,18 @@
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
-		
+
 		<rollback>
 			<addColumn tableName="person_demographics">
 				<column name="anticipated_start_year" type="${nvarchar.type}(4)">
 					<constraints nullable="true" />
 				</column>
 			</addColumn>
-			<modifyDataType tableName="person_demographics" columnName="anticipated_start_term" newDataType="${nvarchar.type}(25)"/>
-			<dropColumn tableName="person_demographics" columnName="actual_start_year"/>
-			<dropColumn tableName="person_demographics" columnName="actual_start_term"/>
-			<dropColumn tableName="person_demographics" columnName="balance_owed"/>
+			<modifyDataType tableName="person_demographics"
+				columnName="anticipated_start_term" newDataType="${nvarchar.type}(25)" />
+			<dropColumn tableName="person_demographics" columnName="actual_start_year" />
+			<dropColumn tableName="person_demographics" columnName="actual_start_term" />
+			<dropColumn tableName="person_demographics" columnName="balance_owed" />
 		</rollback>
 	</changeSet>
 
@@ -125,6 +128,41 @@
 		author="jon.adams">
 		<dropNotNullConstraint tableName="journal_entry"
 			columnName="journal_track_id" columnDataType="uuid" />
+	</changeSet>
+
+	<changeSet id="add person_staff_details" author="jon.adams">
+		<createTable tableName="person_staff_details">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_staff_details_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_staff_details_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="office_location" type="${nvarchar.type}(50)" />
+			<column name="office_hours" type="${nvarchar.type}(50)" />
+			<column name="department_name" type="${nvarchar.type}(100)" />
+		</createTable>
+		<sql>grant all on person_staff_details to ssp</sql>
+		<addColumn tableName="person">
+			<column name="person_staff_details_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_person_staff_details_id"
+					references="person_staff_details(id)" />
+			</column>
+		</addColumn>
 	</changeSet>
 
 </databaseChangeLog>

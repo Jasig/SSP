@@ -118,8 +118,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private String secondaryEmailAddress;
 
 	/**
-	 * User name. Used to identify the user in secondary systems
-	 * like LDAP.
+	 * User name. Used to identify the user in secondary systems like LDAP.
 	 * 
 	 * Maximum length of 25.
 	 */
@@ -262,12 +261,23 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private String strengths;
 
 	/**
+	 * Information/details about a staff member.
+	 * 
+	 * Should be null for students.
+	 */
+	@Nullable
+	@ManyToOne
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "person_staff_details_id", unique = true, nullable = true)
+	private PersonStaffDetails staffDetails;
+
+	/**
 	 * Demographics about a student.
 	 * 
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@ManyToOne()
+	@ManyToOne
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_demographics_id", unique = true, nullable = true)
 	private PersonDemographics demographics;
@@ -278,7 +288,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@ManyToOne()
+	@ManyToOne
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_goal_id", unique = true, nullable = true)
 	private PersonEducationGoal educationGoal;
@@ -289,7 +299,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@ManyToOne()
+	@ManyToOne
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_plan_id", unique = true, nullable = true)
 	private PersonEducationPlan educationPlan;
@@ -599,6 +609,14 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	public void setEnabled(final Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public PersonStaffDetails getStaffDetails() {
+		return staffDetails;
+	}
+
+	public void setStaffDetails(final PersonStaffDetails staffDetails) {
+		this.staffDetails = staffDetails;
 	}
 
 	public PersonDemographics getDemographics() {

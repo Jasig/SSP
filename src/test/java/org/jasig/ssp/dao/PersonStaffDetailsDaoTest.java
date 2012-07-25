@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonDemographics;
+import org.jasig.ssp.model.PersonStaffDetails;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.junit.Before;
@@ -24,13 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
-public class PersonDemographicsDaoTest {
+public class PersonStaffDetailsDaoTest {
 
 	@Autowired
 	private transient PersonDao daoPerson;
 
 	@Autowired
-	private transient PersonDemographicsDao dao;
+	private transient PersonStaffDetailsDao dao;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -51,35 +51,35 @@ public class PersonDemographicsDaoTest {
 				"Sample data should have allowed the user Ken Thompson to be loaded for UUID f549ecab-5110-4cc1-b2bb-369cac854dea",
 				person);
 
-		PersonDemographics pd = person.getDemographics();
+		PersonStaffDetails psd = person.getStaffDetails();
 
-		if (null == pd) {
-			pd = new PersonDemographics();
-			pd.setWage(TEST_STRING1);
-			person.setDemographics(pd);
+		if (null == psd) {
+			psd = new PersonStaffDetails();
+			psd.setOfficeLocation(TEST_STRING1);
+			person.setStaffDetails(psd);
 			daoPerson.save(person);
 
 			// reload to check that save worked
 			person = daoPerson.get(person.getId());
-			pd = person.getDemographics();
+			psd = person.getStaffDetails();
 		} else {
-			pd.setWage(TEST_STRING1);
+			psd.setOfficeLocation(TEST_STRING1);
 			daoPerson.save(person);
 		}
 
-		assertEquals("Demographics wage values did not match.", TEST_STRING1,
-				pd.getWage());
+		assertEquals("Details location values did not match.", TEST_STRING1,
+				psd.getOfficeLocation());
 
-		final PersonDemographics byId = dao.get(pd.getId());
-		assertEquals("IDs did not match.", byId.getId(), pd.getId());
+		final PersonStaffDetails byId = dao.get(psd.getId());
+		assertEquals("IDs did not match.", byId.getId(), psd.getId());
 
-		final UUID oldId = pd.getId();
-		person.setDemographics(null);
+		final UUID oldId = psd.getId();
+		person.setStaffDetails(null);
 		daoPerson.save(person);
-		dao.delete(pd);
+		dao.delete(psd);
 
 		try {
-			assertNull("Demographic information was not correctly deleted.",
+			assertNull("Detail information was not correctly deleted.",
 					dao.get(oldId));
 		} catch (final ObjectNotFoundException e) { // NOPMD
 			// expected
@@ -89,10 +89,10 @@ public class PersonDemographicsDaoTest {
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();
-		final PersonDemographics pd = dao.get(id);
-		assertNull("PersonDemographics should not have been null.", pd);
-		assertNull("Person FK to demographics should not have been null.",
-				new Person(id).getDemographics());
+		final PersonStaffDetails pd = dao.get(id);
+		assertNull("PersonStaffDetails should not have been null.", pd);
+		assertNull("Person FK to staff details should not have been null.",
+				new Person(id).getStaffDetails());
 	}
 
 	@Test

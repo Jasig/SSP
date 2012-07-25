@@ -36,8 +36,7 @@ import org.jasig.ssp.model.reference.VeteranStatus;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
-		extends AbstractAuditable
-		implements Auditable {
+		extends AbstractAuditable implements Auditable {
 
 	private static final long serialVersionUID = 3252611289245443664L;
 
