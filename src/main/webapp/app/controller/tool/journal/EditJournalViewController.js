@@ -19,8 +19,12 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     },
 
     control: {
-    	'journalTrackCombo': {
-    		select: 'onJournalTrackComboSelect'
+    	journalTrackCombo: {
+    		selector: '#journalTrackCombo',
+    		listeners: {
+    			select: 'onJournalTrackComboSelect',
+        		blur: 'onJournalTrackComboBlur'
+    		} 
     	},
     	
     	'confidentialityLevelCombo': {
@@ -63,14 +67,20 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     },   
     
 	initForm: function(){
+		var me=this;
 		var id = this.model.get("id");
-		this.getView().getForm().reset();
-		this.getView().getForm().loadRecord( this.model );
-		Ext.ComponentQuery.query('#confidentialityLevelCombo')[0].setValue( this.model.getConfidentialityLevelId() );
-		Ext.ComponentQuery.query('#journalSourceCombo')[0].setValue( this.model.get('journalSource').id );
-		Ext.ComponentQuery.query('#journalTrackCombo')[0].setValue( this.model.get('journalTrack').id );			
+		var journalTrackId = "";
+		if ( me.model.get('journalTrack') != null )
+		{
+			journalTrackId = me.model.get('journalTrack').id;
+		}
+		me.getView().getForm().reset();
+		me.getView().getForm().loadRecord( this.model );
+		Ext.ComponentQuery.query('#confidentialityLevelCombo')[0].setValue( me.model.getConfidentialityLevelId() );
+		Ext.ComponentQuery.query('#journalSourceCombo')[0].setValue( me.model.get('journalSource').id );
+		Ext.ComponentQuery.query('#journalTrackCombo')[0].setValue( journalTrackId );			
 
-		this.inited=true;
+		me.inited=true;
 	},    
 	
     destroy: function() {
@@ -110,10 +120,11 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		
 		if (error == false)
 		{
+			console.log( record.data );
     		// if a journal track is selected then validate that the details are set
     		if ( (record.data.journalTrack.id != null && record.data.journalTrack.id != "") && record.data.journalEntryDetails.length == 0)
     		{
-    			Ext.Msg.alert('Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
+    			Ext.Msg.alert('SSP Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
     		}else{
     			
     			jsonData = record.data;
@@ -134,9 +145,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     				jsonData.journalEntryDetails = record.clearGroupedDetails( jsonData.journalEntryDetails );
     			}
     			
-    			console.log(jsonData.entryDate);
-    			
-    			// Fix entry date to represent appropriate date and time
+     			// Fix entry date to represent appropriate date and time
     			jsonData.entryDate = me.formUtils.fixDateOffsetWithTime( jsonData.entryDate );
     			
     			if (id == "")
@@ -201,6 +210,16 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     			this.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
     		}
      	}
+	},
+	
+	onJournalTrackComboBlur: function( comp, event, eOpts){
+		var me=this;
+    	if (comp.getValue() == "")
+    	{
+     		me.model.set("journalTrack","");
+     		me.model.removeAllJournalEntryDetails();
+     		me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
+     	}		
 	},
 	
 	onCommentChange: function(comp, newValue, oldValue, eOpts){
