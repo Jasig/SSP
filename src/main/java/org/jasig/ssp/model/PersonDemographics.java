@@ -1,5 +1,7 @@
 package org.jasig.ssp.model; // NOPMD by jon.adams on 5/24/12 1:34 PM
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -54,7 +56,7 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 
 	private Integer actualStartYear;
 
-	private Number balanceOwed;
+	private BigDecimal balanceOwed;
 
 	private boolean local;
 
@@ -168,11 +170,11 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.actualStartYear = actualStartYear;
 	}
 
-	public Number getBalanceOwed() {
+	public BigDecimal getBalanceOwed() {
 		return balanceOwed;
 	}
 
-	public void setBalanceOwed(final Number balanceOwed) {
+	public void setBalanceOwed(final BigDecimal balanceOwed) {
 		this.balanceOwed = balanceOwed;
 	}
 

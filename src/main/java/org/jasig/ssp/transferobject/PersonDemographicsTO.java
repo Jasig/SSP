@@ -1,5 +1,6 @@
 package org.jasig.ssp.transferobject; // NOPMD
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -22,7 +23,7 @@ public class PersonDemographicsTO
 			countryOfResidence, paymentStatus, gender, countryOfCitizenship,
 			childAges, placeOfEmployment, shift, wage, totalHoursWorkedPerWeek;
 
-	private Number balanceOwed;
+	private BigDecimal balanceOwed;
 
 	public PersonDemographicsTO() {
 		super();
@@ -213,11 +214,11 @@ public class PersonDemographicsTO
 		this.actualStartTerm = actualStartTerm;
 	}
 
-	public Number getBalanceOwed() {
+	public BigDecimal getBalanceOwed() {
 		return balanceOwed;
 	}
 
-	public void setBalanceOwed(final Number balanceOwed) {
+	public void setBalanceOwed(final BigDecimal balanceOwed) {
 		this.balanceOwed = balanceOwed;
 	}
 

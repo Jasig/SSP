@@ -89,10 +89,14 @@
 	</changeSet>
 	
 	<changeSet id="actual start and balance owed to person demographics" author="daniel.bower">
-		<modifyDataType tableName="person_demographics" columnName="anticipated_start_year" newDataType="integer"/>
 		<modifyDataType tableName="person_demographics" columnName="anticipated_start_term" newDataType="${nvarchar.type}(20)"/>
 		
+		<dropColumn tableName="person_demographics" columnName="anticipated_start_year"/>
+		
 		<addColumn tableName="person_demographics">
+			<column name="anticipated_start_year" type="integer">
+				<constraints nullable="true" />
+			</column>
 			<column name="actual_start_year" type="integer">
 				<constraints nullable="true" />
 			</column>
@@ -105,7 +109,11 @@
 		</addColumn>
 		
 		<rollback>
-			<modifyDataType tableName="person_demographics" columnName="anticipated_start_year" newDataType="${nvarchar.type}(4)"/>
+			<addColumn tableName="person_demographics">
+				<column name="anticipated_start_year" type="${nvarchar.type}(4)">
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
 			<modifyDataType tableName="person_demographics" columnName="anticipated_start_term" newDataType="${nvarchar.type}(25)"/>
 			<dropColumn tableName="person_demographics" columnName="actual_start_year"/>
 			<dropColumn tableName="person_demographics" columnName="actual_start_term"/>
