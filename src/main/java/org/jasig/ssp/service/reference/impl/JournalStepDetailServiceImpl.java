@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class JournalStepDetailServiceImpl extends
-		AbstractReferenceService<JournalStepDetail>
-		implements JournalStepDetailService {
+		AbstractReferenceService<JournalStepDetail> implements
+		JournalStepDetailService {
 
 	@Autowired
 	transient private JournalStepDetailDao dao;

@@ -9,11 +9,13 @@ import javax.persistence.ManyToOne;
 import org.jasig.ssp.model.AbstractAuditable;
 import org.jasig.ssp.model.Auditable;
 
+/**
+ * JournalStep JournalStepDetail model
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class JournalStepJournalStepDetail
-		extends AbstractAuditable
-		implements Auditable {
+public class JournalStepJournalStepDetail extends AbstractAuditable implements
+		Auditable {
 
 	private static final long serialVersionUID = -692899843955375605L;
 
