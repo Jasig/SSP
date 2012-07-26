@@ -489,11 +489,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			// display loader
 			me.getView().setLoading( true );
 			
-			// TODO: handle unused fields from the json
-			// since these will throw an error in the
-			// current API
-			delete intakeData.person.studentIntakeCompleteDate;
-			delete intakeData.person.currentProgramStatusName;
+			// cleans properties that will be unable to be saved if not null
+			intakeData.person = me.person.setPropsNullForSave( intakeData.person );
 			
 			// Save the intake
 			me.apiProperties.makeRequest({

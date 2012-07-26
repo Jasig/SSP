@@ -110,5 +110,19 @@ Ext.define('Ssp.model.Person', {
     
     getProgramStatusName: function(){
     	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
+    },
+    
+    /*
+     * cleans properties that will be unable to be saved if not null
+     */ 
+    setPropsNullForSave: function( jsonData ){
+		delete jsonData.studentIntakeCompleteDate;
+		delete jsonData.currentProgramStatusName;
+		if( jsonData.serviceReasons == "" )
+		{
+			jsonData.serviceReasons=null;
+		}
+		
+		return jsonData;
     }
 });
