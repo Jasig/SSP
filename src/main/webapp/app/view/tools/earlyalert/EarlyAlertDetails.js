@@ -5,6 +5,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController',
     inject: {
+    	model: 'currentEarlyAlert',
     	selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore'
     },
     title: 'Early Alert Details',
@@ -12,8 +13,20 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
 		var me=this;
         Ext.applyIf(me, {
         	autoScroll: true,
-            items: [
-                {
+            items: [{
+	                xtype: 'displayfield',
+	                fieldLabel: 'Created By',
+	                anchor: '100%',
+	                name: 'createdByPersonName',
+	                itemId: 'createdByField'
+	            },{
+	                xtype: 'displayfield',
+	                fieldLabel: 'Created Date',
+	                anchor: '100%',
+	                name: 'createdDate',
+	                itemId: 'createdDateField',
+	                renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+	            },{
                     xtype: 'displayfield',
                     fieldLabel: 'Course Name',
                     anchor: '100%',
@@ -26,10 +39,16 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
                     itemId: 'statusField'
                 },{
                     xtype: 'displayfield',
+                    fieldLabel: 'Closed By',
+                    anchor: '100%',
+                    name: 'closedByPersonName',
+                    itemId: 'closedByField'
+                },{
+                    xtype: 'displayfield',
                     fieldLabel: 'Closed Date',
                     anchor: '100%',
                     name: 'closedDate',
-                    renderer: Ext.util.Format.dateRenderer('m/d/Y')
+                    renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
                 },{
                     xtype: 'displayfield',
                     fieldLabel: 'Campus',

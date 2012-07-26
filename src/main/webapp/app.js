@@ -516,6 +516,24 @@ Ext.onReady(function(){
 				    	},
 				    	singleton: true
 				    },
+				    earlyAlertResponseDetailsOutreachesStore: {
+				    	fn: function(){
+				    		return Ext.create('Ext.data.Store', {
+							     model: 'Ssp.model.SimpleItemDisplay',
+							     storeId: 'earlyAlertResponseDetailsOutreachesStore'
+							 });
+				    	},
+				    	singleton: true
+				    },
+				    earlyAlertResponseDetailsReferralsStore: {
+				    	fn: function(){
+				    		return Ext.create('Ext.data.Store', {
+							     model: 'Ssp.model.SimpleItemDisplay',
+							     storeId: 'earlyAlertResponseDetailsReferralsStore'
+							 });
+				    	},
+				    	singleton: true
+				    },
 			        profileSpecialServiceGroupsStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{

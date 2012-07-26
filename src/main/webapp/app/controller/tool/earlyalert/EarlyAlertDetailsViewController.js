@@ -22,7 +22,9 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     	earlyAlertSuggestionsList: '#earlyAlertSuggestionsList',
     	campusField: '#campusField',
     	earlyAlertReasonField: '#earlyAlertReasonField',
-    	statusField: '#statusField'
+    	statusField: '#statusField',
+    	createdByField: '#createdByField',
+    	closedByField: '#closedByField'
     },
 	init: function() {
 		var me=this;
@@ -30,19 +32,26 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
 		var campus = me.campusesStore.getById( me.model.get('campusId') );
 		var reasonId = ((me.model.get('earlyAlertReasonIds') != null)?me.model.get('earlyAlertReasonIds')[0].id : me.model.get('earlyAlertReasonId') );
 		var reason = me.reasonsStore.getById( reasonId );
+		
+		// Reset and populate general fields comments, etc.
 		me.getView().getForm().reset();
 		me.getView().loadRecord( me.model );
+		
+		me.getCreatedByField().setValue( me.model.getCreatedByPersonName() );
+		
+		// Early Alert Status: 'Open', 'Closed'
 		me.getStatusField().setValue( ((me.model.get('closedDate'))? 'Closed' : 'Open') );
+		
+		// Campus
 		me.getCampusField().setValue( ((campus)? campus.get('name') : "No Campus Defined") );
+		
+		// Reason
 		me.getEarlyAlertReasonField().setValue( ((reason)? reason.get('name') : "No Reason Defined") );
-		Ext.Array.each( me.model.get('earlyAlertSuggestionIds'), function(id,index){
-			var suggestion = {name: me.suggestionsStore.getById(id).get('name')};
-			selectedSuggestions.push( suggestion );
-		});
+		
+		// Suggestions
+		selectedSuggestions = me.formUtils.getSimpleItemsForDisplay( me.suggestionsStore, me.model.get('earlyAlertSuggestionIds'), 'Suggestions' );
 		me.selectedSuggestionsStore.removeAll();
-		if (selectedSuggestions.length==0)
-			selectedSuggestions.push({name:'No Suggestions'});
-		me.selectedSuggestionsStore.loadData(selectedSuggestions);
+		me.selectedSuggestionsStore.loadData( selectedSuggestions );
 		return this.callParent(arguments);
     },
     

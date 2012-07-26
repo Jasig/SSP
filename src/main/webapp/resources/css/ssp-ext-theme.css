@@ -28,6 +28,7 @@ background-image: url('/ssp/images/display-caseload-icon.png') !important;
 background-image: url('/ssp/images/mail-reply-icon.png') !important;
 }
 
+/*
 .early-alert-tree-panel .x-tree-icon-parent
 {
     background-image: url('/ssp/images/early-alert-folder-icon.png') !important;
@@ -50,6 +51,7 @@ background-image: url('/ssp/images/mail-reply-icon.png') !important;
     height: 16px;
     width: 16px;
 }
+*/
 
 .editPersonIcon {
 background-image: url('/ssp/images/edit-person-icon.png') !important;
