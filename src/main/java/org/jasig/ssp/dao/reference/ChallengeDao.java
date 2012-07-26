@@ -113,9 +113,23 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
+	/**
+	 * Get all Challenges for the specified Category.
+	 * 
+	 * <p>
+	 * Filters out associations based on specified sAndP, but not any
+	 * associations that may point to deleted Categories or Challenges.
+	 * 
+	 * @param categoryId
+	 *            Category identifier
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return All specified associations. (Referenced Categories or Challenges
+	 *         may be {@link ObjectStatus#INACTIVE} though.)
+	 */
 	public PagingWrapper<Challenge> getAllForCategory(
-			final UUID categoryId,
-			final SortingAndPaging sAndP) {
+			@NotNull final UUID categoryId,
+			@NotNull final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 		final Criteria subQuery = query.createCriteria("challengeCategories");
 		subQuery.add(Restrictions.eq("category.id", categoryId));
@@ -124,6 +138,19 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
+	/**
+	 * Get all Challenges for the specified Person.
+	 * 
+	 * <p>
+	 * Filters out associations based on specified sAndP, but not any
+	 * associations that may point to deleted Categories or People.
+	 * 
+	 * @param personId
+	 *            Person identifier
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return All Challenges for the specified Person
+	 */
 	public PagingWrapper<Challenge> getAllForPerson(final UUID personId,
 			final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();

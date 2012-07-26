@@ -10,10 +10,13 @@ import static org.junit.Assert.fail;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -40,6 +43,9 @@ public class JournalStepControllerIntegrationTest {
 
 	@Autowired
 	private transient JournalStepController controller;
+
+	@Autowired
+	private transient SessionFactory sessionFactory;
 
 	private static final UUID JOURNALSTEP_ID = UUID
 			.fromString("aba1440c-ab5b-11e1-ba73-0026b9e7ff4c");
@@ -198,6 +204,42 @@ public class JournalStepControllerIntegrationTest {
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
 				list.isEmpty());
+	}
+
+	/**
+	 * Test the
+	 * {@link JournalStepController#getAllForJournalStep(UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * action.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test.
+	 */
+	@Test
+	public void testControllerDelete() throws ObjectNotFoundException {
+
+		final Collection<JournalStepDetailTO> beforeDelete = controller
+				.getAllForJournalStep(JOURNALSTEP_ID, ObjectStatus.ACTIVE, 0,
+						10,
+						null, null).getRows();
+		final long before = beforeDelete.size();
+
+		final ServiceResponse response = controller
+				.removeJournalStepDetailFromJournalStep(JOURNALSTEP_ID,
+						beforeDelete.iterator().next().getId());
+		assertTrue("Delete should have returned true.", response.isSuccess());
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		session.clear();
+
+		final Collection<JournalStepDetailTO> list = controller
+				.getAllForJournalStep(JOURNALSTEP_ID, ObjectStatus.ACTIVE, 0,
+						10, null, null).getRows();
+
+		assertNotNull("List should not have been null.", list);
+		assertFalse("List action should have returned some objects.",
+				list.isEmpty());
+		assertEquals("List should have included one less than before delete.",
+				before - 1, list.size());
 	}
 
 	/**

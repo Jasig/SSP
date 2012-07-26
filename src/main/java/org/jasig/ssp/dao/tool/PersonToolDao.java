@@ -12,6 +12,9 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
+/**
+ * PersonTool DAO
+ */
 @Repository
 public class PersonToolDao
 		extends AbstractPersonAssocAuditableCrudDao<PersonTool>
@@ -22,13 +25,10 @@ public class PersonToolDao
 	}
 
 	public PagingWrapper<PersonTool> getAllForPersonAndTool(
-			final UUID personId,
-			final Tools tool,
-			final SortingAndPaging sAndP) {
+			final UUID personId, final Tools tool, final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("person.id", personId));
 		query.add(Restrictions.eq("tool", tool));
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
-
 }

@@ -23,13 +23,13 @@ public class JournalStepDao extends
 	}
 
 	public PagingWrapper<JournalStep> getAllForJournalTrack(
-			final UUID journalTrackId,
-			final SortingAndPaging sAndP) {
+			final UUID journalTrackId, final SortingAndPaging sAndP) {
 
 		final Criteria criteria = createCriteria();
 		final Criteria subQuery = criteria
 				.createCriteria("journalTrackJournalSteps");
 		subQuery.add(Restrictions.eq("journalTrack.id", journalTrackId));
+		sAndP.addStatusFilterToCriteria(subQuery);
 
 		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
