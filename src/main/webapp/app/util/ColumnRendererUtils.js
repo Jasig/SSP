@@ -125,6 +125,14 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	    return strHtml;
 	},
 	
+	renderEarlyAlertStatus: function(val, metaData, record) {
+		var status = ((record.get('closedDate') != null)? 'Closed' : 'Open');
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + ((record.get('nodeType').toLowerCase() == 'early alert')? status : "N/A") + '</p>';
+		strHtml += '</div>';
+	    return strHtml;
+	},
+	
 	/**
 	 * This method is used to return an object with id values
 	 * an array format expected by the ExtJS multiSelect or itemSelect

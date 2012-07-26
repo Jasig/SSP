@@ -7,6 +7,8 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
@@ -28,7 +30,7 @@
 		</createIndex>
 
 		<rollback>
-			<dropIndex tableName="person" indexName="idx_person_username" />
+			<dropIndex tableName="person" indexName="idx_person_username" schemaName="${schema}"/>
 		</rollback>
 	</changeSet>
 
@@ -111,6 +113,7 @@
 		</addColumn>
 
 		<rollback>
+			<dropColumn tableName="person_demographics" columnName="anticipated_start_year" />
 			<addColumn tableName="person_demographics">
 				<column name="anticipated_start_year" type="${nvarchar.type}(4)">
 					<constraints nullable="true" />
@@ -163,6 +166,11 @@
 					references="person_staff_details(id)" />
 			</column>
 		</addColumn>
+		
+		<rollback>
+			<dropColumn tableName="person" columnName="person_staff_details_id"/>
+			<dropTable tableName="person_staff_details"/>
+		</rollback>
 	</changeSet>
 
 </databaseChangeLog>

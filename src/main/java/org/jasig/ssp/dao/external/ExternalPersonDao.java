@@ -11,7 +11,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 /**
- * Data access class for the Term reference entity.
+ * Data access class for the External Person entity
  */
 @Repository
 public class ExternalPersonDao extends AbstractExternalDataDao<ExternalPerson> {

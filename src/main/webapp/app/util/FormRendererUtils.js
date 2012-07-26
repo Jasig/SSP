@@ -715,6 +715,31 @@ Ext.define('Ssp.util.FormRendererUtils',{
     		return true;
     	}
     	return false;
+    },
+    
+    /*
+     * This method is available to return an array of simple items
+     * with a name property for display in a multiselect list when
+     * the list is for display purposes only. This method will
+     * return an array of items that have been compared against
+     * a reference store and assigned a name from the models in
+     * the store.
+     * 
+     * @params:
+     *  referenceStore - A store with reference data for defining the assigned name label.
+     *  selectedIdsArray - An array of selected id values to compare against.
+     *  noItemsPropertyLabel - A label to display if no items matched. For instance: 'Suggestions' will create a single record looking like: No Suggestions. 
+     */
+    getSimpleItemsForDisplay: function(referenceStore, selectedIdsArray, noItemsPropertyLabel){
+    	var me=this;
+    	var selectedItems=[];
+    	Ext.Array.each( selectedIdsArray, function(id,index){
+			var item = {name: referenceStore.getById( id ).get('name')};
+			selectedItems.push( item );
+		});
+		if (selectedItems.length==0)
+			selectedItems.push({name:'No ' + noItemsPropertyLabel});
+		return selectedItems;
     }
 });
 

@@ -267,5 +267,81 @@
 			</delete>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="test external people" author="daniel.bower">
+		<insert tableName="external_person">
+			<column name="school_id" value="ken.1"/>
+			<column name="first_name" value="Kenneth"/>
+			<column name="last_name" value="Thompson"/>
+			<column name="middle_name" value="Lane"/>
+			<column name="birth_date" valueDate="1943-02-04"/>
+			<column name="primary_email_address" value="test@sinclair.edu"/>
+			<column name="address_line_1" value="444 West Third Street"/>
+			<column name="city" value="Murray Hill"/>
+			<column name="state" value="NJ"/>
+			<column name="zip_code" value="07974"/>
+			<column name="home_phone" value="908-123-4567"/>
+			<column name="work_phone" value="123-456-7654"/>
+			<column name="actual_start_year" value="1961"/>
+			<column name="actual_start_term" value="AU"/>
+			<column name="gender" value="M"/>
+			<column name="is_local" value="N"/>
+			<column name="balance_owed" value="0.00"/>
+			<column name="coach_school_id" value="turing.1"/>
+		</insert>
+		<insert tableName="external_person">
+			<column name="school_id" value="turing.1"/>
+			<column name="first_name" value="Alan"/>
+			<column name="last_name" value="Turing"/>
+			<column name="middle_name" value="M"/>
+			<column name="birth_date" valueDate="1912-06-23"/>
+			<column name="primary_email_address" value="test@sinclair.edu"/>
+			<column name="address_line_1" value="444 West Third Street"/>
+			<column name="city" value="Wilmslow"/>
+			<column name="state" value="NJ"/>
+			<column name="zip_code" value="01010"/>
+			<column name="home_phone" value="908-123-4567"/>
+			<column name="work_phone" value="123-456-7654"/>
+			<column name="office_location" value="Kings College"/>
+			<column name="department_name" value="Mathematics"/>
+			<column name="actual_start_year" value="1931"/>
+			<column name="actual_start_term" value="AU"/>
+			<column name="gender" value="M"/>
+			<column name="is_local" value="N"/>
+			<column name="balance_owed" value="0.00"/>
+		</insert>
+		<insert tableName="external_person">
+			<column name="school_id" value="notInSsp"/>
+			<column name="first_name" value="Not"/>
+			<column name="last_name" value="Ssp"/>
+			<column name="middle_name" value="In"/>
+			<column name="birth_date" valueDate="1943-02-04"/>
+			<column name="primary_email_address" value="test@sinclair.edu"/>
+			<column name="address_line_1" value="444 West Third Street"/>
+			<column name="city" value="Newark"/>
+			<column name="state" value="NJ"/>
+			<column name="zip_code" value="07974"/>
+			<column name="home_phone" value="908-123-4567"/>
+			<column name="work_phone" value="123-456-7654"/>
+			<column name="actual_start_year" value="2012"/>
+			<column name="actual_start_term" value="AU"/>
+			<column name="gender" value="M"/>
+			<column name="is_local" value="N"/>
+			<column name="balance_owed" value="0.00"/>
+			<column name="coach_school_id" value="turing.1"/>
+		</insert>
+		
+		<rollback>
+			<delete tableName="external_person">
+				<where>school_id='ken.1'</where>
+			</delete>
+			<delete tableName="external_person">
+				<where>school_id='turing.1'</where>
+			</delete>
+			<delete tableName="external_person">
+				<where>school_id='notInSsp'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 
 </databaseChangeLog>

@@ -6,6 +6,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertToolViewController',
     inject: {
     	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
     	columnRendererUtils: 'columnRendererUtils',
     	model: 'currentEarlyAlert',
         treeStore: 'earlyAlertsTreeStore'
@@ -27,7 +28,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
 		            singleExpand: true,
     		        columns: [{
     		            xtype: 'treecolumn',
-    		            text: 'Action',
+    		            text: 'Responses',
     		            flex: .5,
     		            sortable: false,
     		            dataIndex: 'text'
@@ -43,6 +44,12 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
     		            dataIndex: 'createdDate',
     		            renderer : me.columnRendererUtils.renderCreatedByDateWithTime,
     		            sortable: false
+    		        },{
+    		            text: 'Status',
+    		            flex: .5,
+    		            sortable: false,
+    		            dataIndex: 'closedDate',
+    		            renderer: me.columnRendererUtils.renderEarlyAlertStatus
     		        },{
     		            text: 'Details',
     		            flex: 2,

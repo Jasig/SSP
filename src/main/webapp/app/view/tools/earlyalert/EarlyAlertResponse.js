@@ -18,8 +18,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
         	defaults:{
         		labelWidth: 200
         	},
-            items: [
-                {
+            items: [{
                 	xtype: 'displayfield',
                 	fieldLabel: 'Early Alert Response',
                 	value: me.earlyAlert.get('courseTitle'),

@@ -1,6 +1,7 @@
 package org.jasig.ssp.model.external;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -39,9 +40,17 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Size(max = 100)
 	private String primaryEmailAddress;
 
+	@Column(length = 50, name = "address_line_1")
+	@Size(max = 50)
+	private String addressLine1;
+
+	@Column(length = 50, name = "address_line_2")
+	@Size(max = 50)
+	private String addressLine2;
+
 	@Column(length = 50)
 	@Size(max = 50)
-	private String addressLine1, addressLine2, city;
+	private String city;
 
 	@Column(length = 2)
 	@Size(max = 2)
@@ -77,7 +86,7 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Size(max = 1)
 	private String gender, isLocal;
 
-	private Number balanceOwed;
+	private BigDecimal balanceOwed;
 
 	@Column(length = 50)
 	@Size(max = 50)
@@ -260,11 +269,11 @@ public class ExternalPerson extends AbstractExternalData implements
 		this.isLocal = isLocal;
 	}
 
-	public Number getBalanceOwed() {
+	public BigDecimal getBalanceOwed() {
 		return balanceOwed;
 	}
 
-	public void setBalanceOwed(final Number balanceOwed) {
+	public void setBalanceOwed(final BigDecimal balanceOwed) {
 		this.balanceOwed = balanceOwed;
 	}
 

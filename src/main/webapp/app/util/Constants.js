@@ -16,7 +16,7 @@ Ext.define('Ssp.util.Constants',{
     		        	Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID,
     		        	Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,
     		        	Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID,
-    		        	Ssp.util.Constants.NON-PARTICIPATING_PROGRAM_STATUS_ID,
+    		        	Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_ID,
     		        	Ssp.util.Constants.INACTIVE_PROGRAM_STATUS_ID,
     		        	Ssp.util.Constants.TRANSITIONED_PROGRAM_STATUS_ID
     		        ];

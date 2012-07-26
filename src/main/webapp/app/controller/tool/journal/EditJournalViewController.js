@@ -100,6 +100,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		var values = form.getValues();
 		var handleSuccess = me.saveSuccess;
 		var error = false;
+		var journalTrackId="";
 		url = this.url;
 		record = this.model;
 		id = record.get('id');
@@ -120,9 +121,12 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		
 		if (error == false)
 		{
-			console.log( record.data );
     		// if a journal track is selected then validate that the details are set
-    		if ( (record.data.journalTrack.id != null && record.data.journalTrack.id != "") && record.data.journalEntryDetails.length == 0)
+    		if ( record.data.journalTrack != null)
+    		{
+    			journalTrackId = record.data.journalTrack.id;
+    		}
+			if ( (journalTrackId != null && journalTrackId != "") && record.data.journalEntryDetails.length == 0)
     		{
     			Ext.Msg.alert('SSP Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
     		}else{

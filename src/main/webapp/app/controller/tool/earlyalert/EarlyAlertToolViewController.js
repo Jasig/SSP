@@ -165,7 +165,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
 	        		me.earlyAlert.data[prop] = record.data[prop];
 	        	}
 
-				console.log( me.earlyAlert.data );
 	        	me.displayEarlyAlertDetails();
 	    	}else{
 	    		
@@ -174,7 +173,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
 	        		me.earlyAlertResponse.data[prop] = record.data[prop];
 	        	}
 	        	
-	        	console.log( me.earlyAlertResponse.data );
 	        	me.displayEarlyAlertResponseDetails();	    		
 	    	}	
     	}else{

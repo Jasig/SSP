@@ -5,8 +5,8 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponseDetails',{
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertResponseDetailsViewController',
     inject: {
-    	outcomesStore: 'earlyAlertOutcomesStore',
-    	outreachesStore: 'earlyAlertOutreachesStore'
+    	selectedOutreachesStore: 'earlyAlertResponseDetailsOutreachesStore',
+    	selectedReferralsStore: 'earlyAlertResponseDetailsReferralsStore'
     },
     title: 'Early Alert Response Details',
 	initComponent: function() {
@@ -14,42 +14,46 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponseDetails',{
         Ext.applyIf(me, {
         	autoScroll: true,
             items: [{
-			        xtype: 'combobox',
-			        itemId: 'outcomeCombo',
-			        name: 'earlyAlertOutcomeId',
-			        fieldLabel: 'Outcome',
-			        emptyText: 'Select One',
-			        store: me.outcomesStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true,
-			        anchor: '95%',
-			        disabled: true
-				},{
+	                xtype: 'displayfield',
+	                fieldLabel: 'Created By',
+	                anchor: '100%',
+	                name: 'createdByPersonName',
+	                itemId: 'createdByField'
+	            },{
+	                xtype: 'displayfield',
+	                fieldLabel: 'Created Date',
+	                anchor: '100%',
+	                name: 'createdDate',
+	                itemId: 'createdDateField',
+	                renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+	            },{
+	                xtype: 'displayfield',
+	                fieldLabel: 'Outcome',
+	                anchor: '100%',
+	                itemId: 'outcomeField',
+	                name: 'outcome'
+	            },{
 		            xtype: 'multiselect',
 		            name: 'earlyAlertOutreachIds',
-		            fieldLabel: 'Outreach',
-		            store: me.outreachesStore,
+		            itemId: 'earlyAlertOutreachList',
+		            fieldLabel: 'Suggestions',
+		            store: me.selectedOutreachesStore,
 		            displayField: 'name',
-		            valueField: 'id',
-		            allowBlank: false,
-		            minSelections: 0,
-		            anchor: '95%',
-		            disabled: true
+		            anchor: '95%'
+		        },{
+		            xtype: 'multiselect',
+		            name: 'earlyAlertReferralIds',
+		            itemId: 'earlyAlertReferralsList',
+		            fieldLabel: 'Referrals',
+		            store: me.selectedReferralsStore,
+		            displayField: 'name',
+		            anchor: '95%'
 		        },{
                     xtype: 'displayfield',
                     fieldLabel: 'Comment',
                     anchor: '100%',
                     name: 'comment'
-                },{
-				   xtype:'earlyalertreferrals',
-				   flex: 1,
-				   disabled: true
-				}],
+                }],
             
             dockedItems: [{
        		               xtype: 'toolbar',
