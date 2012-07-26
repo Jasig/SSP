@@ -123,6 +123,15 @@ Ext.define('Ssp.model.Person', {
 			jsonData.serviceReasons=null;
 		}
 		
+		if( jsonData.specialServiceGroups == "" )
+		{
+			jsonData.specialServiceGroups=null;
+		}
+		
+		if( jsonData.referralSources == "" )
+		{
+			jsonData.referralSources=null;
+		}		
 		return jsonData;
     }
 });
