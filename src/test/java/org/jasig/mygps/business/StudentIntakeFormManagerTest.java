@@ -163,7 +163,7 @@ public class StudentIntakeFormManagerTest {
 		final Set<PersonConfidentialityDisclosureAgreement> agreements = person
 				.getConfidentialityDisclosureAgreements();
 		assertTrue("Person agreements should have been null or empty.",
-				agreements == null || agreements.isEmpty());
+				(agreements == null) || agreements.isEmpty());
 
 		final PersonDemographics demographics = person.getDemographics();
 		assertNotNull("Missing demographics.", demographics);
@@ -362,7 +362,7 @@ public class StudentIntakeFormManagerTest {
 		assertEquals("Miltary Branch option does not match.", "The Avengers",
 				goal.getMilitaryBranchDescription());
 
-		assertEquals("How Sure option does not match.", 3,
+		assertEquals("How Sure option does not match.", Integer.valueOf(3),
 				goal.getHowSureAboutMajor());
 
 		assertEquals("Planned Occupation option does not match.",
