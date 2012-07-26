@@ -28,7 +28,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
 		var me=this;
 		var selectedSuggestions=[];
 		var campus = me.campusesStore.getById( me.model.get('campusId') );
-		var reason = me.reasonsStore.getById( me.model.get('earlyAlertReasonId') );
+		var reasonId = ((me.model.get('earlyAlertReasonIds') != null)?me.model.get('earlyAlertReasonIds')[0].id : me.model.get('earlyAlertReasonId') );
+		var reason = me.reasonsStore.getById( reasonId );
 		me.getView().getForm().reset();
 		me.getView().loadRecord( me.model );
 		me.getStatusField().setValue( ((me.model.get('closedDate'))? 'Closed' : 'Open') );
