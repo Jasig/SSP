@@ -112,6 +112,7 @@ Ext.require([
     // REPORT DISPLAY
     'Ssp.view.Report',
     
+    'Ssp.model.SimpleItemDisplay',
     'Ssp.model.ObjectPermission',
     'Ssp.model.AuthenticatedPerson',
     'Ssp.model.Preferences',
@@ -506,6 +507,15 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+				    earlyAlertDetailsSuggestionsStore: {
+				    	fn: function(){
+				    		return Ext.create('Ext.data.Store', {
+							     model: 'Ssp.model.SimpleItemDisplay',
+							     storeId: 'earlyAlertDetailsSuggestionsStore'
+							 });
+				    	},
+				    	singleton: true
+				    },
 			        profileSpecialServiceGroupsStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{

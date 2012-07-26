@@ -5,9 +5,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController',
     inject: {
-    	campusesStore: 'campusesStore',
-    	reasonsStore: 'earlyAlertReasonsStore',
-    	suggestionsStore: 'earlyAlertSuggestionsStore'
+    	selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore'
     },
     title: 'Early Alert Details',
 	initComponent: function() {
@@ -22,53 +20,36 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
                     name: 'courseName'
                 },{
                     xtype: 'displayfield',
+                    fieldLabel: 'Status',
+                    anchor: '100%',
+                    name: 'status',
+                    itemId: 'statusField'
+                },{
+                    xtype: 'displayfield',
                     fieldLabel: 'Closed Date',
                     anchor: '100%',
                     name: 'closedDate',
                     renderer: Ext.util.Format.dateRenderer('m/d/Y')
                 },{
-			        xtype: 'combobox',
-			        itemId: 'campusCombo',
-			        name: 'campusId',
-			        fieldLabel: 'Campus',
-			        emptyText: 'Select One',
-			        store: me.campusesStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true,
-			        anchor: '95%',
-			        disabled: true
-				},{
-			        xtype: 'combobox',
-			        itemId: 'earlyAlertReasonCombo',
-			        name: 'earlyAlertReasonId',
-			        fieldLabel: 'Early Alert Reason',
-			        emptyText: 'Select One',
-			        store: me.reasonsStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true,
-			        anchor: '95%',
-			        disabled: true
-		        },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Campus',
+                    itemId: 'campusField',
+                    anchor: '100%',
+                    name: 'campus'
+                },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Reason',
+                    itemId: 'earlyAlertReasonField',
+                    anchor: '100%',
+                    name: 'earlyAlertReason'
+                },{
 		            xtype: 'multiselect',
 		            name: 'earlyAlertSuggestionIds',
+		            itemId: 'earlyAlertSuggestionsList',
 		            fieldLabel: 'Suggestions',
-		            store: me.suggestionsStore,
+		            store: me.selectedSuggestionsStore,
 		            displayField: 'name',
-		            valueField: 'id',
-		            allowBlank: false,
-		            minSelections: 0,
-		            anchor: '95%',
-		            disabled: true
+		            anchor: '95%'
 		        },{
                     xtype: 'displayfield',
                     fieldLabel: 'Email CC',

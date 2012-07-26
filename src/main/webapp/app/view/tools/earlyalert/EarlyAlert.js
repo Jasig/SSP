@@ -6,6 +6,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertToolViewController',
     inject: {
     	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
     	columnRendererUtils: 'columnRendererUtils',
     	model: 'currentEarlyAlert',
         treeStore: 'earlyAlertsTreeStore'

@@ -40,6 +40,13 @@ Ext.define('Ssp.service.EarlyAlertService', {
 	    	}
 	    };
 	    
+	    // clear the early alerts
+    	me.treeStore.setRootNode({
+    	    text: 'EarlyAlerts',
+    	    leaf: false,
+    	    expanded: false
+    	});
+	    
 		me.apiProperties.makeRequest({
 			url: me.getBaseUrl(personId),
 			method: 'GET',
@@ -95,12 +102,6 @@ Ext.define('Ssp.service.EarlyAlertService', {
     		record.nodeType='early alert';
     		record.gridDisplayDetails=record.courseName + " - " + record.courseTitle;
     		record.expanded=false;
-    	});
-    	
-    	me.treeStore.setRootNode({
-    	    text: 'EarlyAlerts',
-    	    leaf: false,
-    	    expanded: false
     	});
 
     	me.treeStore.getRootNode().appendChild(records);
