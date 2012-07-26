@@ -47,10 +47,13 @@ Ext.define('Ssp.service.PersonService', {
     getBySchoolId: function( schoolId, callbacks ){
     	var me=this;
 	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-	    	if (response.responseText != "")
+	    	var r;
+	    	if (response != null)
 	    	{
-		    	r = Ext.decode(response.responseText);	    		
+		    	if (response.responseText != "")
+		    	{
+		    		r = Ext.decode(response.responseText);
+		    	}		    		
 	    	}
 	    	callbacks.success( r, callbacks.scope );
 	    };
@@ -62,7 +65,7 @@ Ext.define('Ssp.service.PersonService', {
 	    
 		// load the person to edit
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl()+'/bySchoolId/'+id,
+			url: me.getBaseUrl()+'/bySchoolId/'+schoolId,
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,

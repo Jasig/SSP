@@ -125,5 +125,44 @@ Ext.define('Ssp.service.EarlyAlertService', {
     	node = me.treeStore.getNodeById( earlyAlertId );
     	node.removeAll();
     	return node;
+    },
+    
+    save: function( personId, jsonData, callbacks ){
+    	var me=this;
+    	var id=jsonData.id;
+        var url = me.getBaseUrl(personId);
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+        
+    	// save
+		if (id=="")
+		{
+			// create
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}   	
     }
 });

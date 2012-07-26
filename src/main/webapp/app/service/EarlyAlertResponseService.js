@@ -21,7 +21,6 @@ Ext.define('Ssp.service.EarlyAlertResponseService', {
     	var id = jsonData.id;
     	var success = function( response, view ){
     		var r = Ext.decode(response.responseText);
-    		console.log( response );
     		if (r.id.length > 0)
 	    	{
 		    	if (callbacks != null)

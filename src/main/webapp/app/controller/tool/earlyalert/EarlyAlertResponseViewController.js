@@ -5,6 +5,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	apiProperties: 'apiProperties',
     	earlyAlert: 'currentEarlyAlert',
     	earlyAlertResponseService: 'earlyAlertResponseService',
+    	earlyAlertService: 'earlyAlertService',
     	formUtils: 'formRendererUtils',
     	model: 'currentEarlyAlertResponse',
     	personLite: 'personLite'
@@ -83,8 +84,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		// jsonData for the response
 		jsonData = record.data;
 		
-		console.log(jsonData);
-		
+		me.getView().setLoading(true);
 		me.earlyAlertResponseService.save(personId, earlyAlertId, jsonData, {
 			success: me.saveEarlyAlertResponseSuccess,
 			failure: me.saveEarlyAlertResponseFailure,
@@ -94,11 +94,53 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 	
 	saveEarlyAlertResponseSuccess: function( r, scope ) {
 		var me=scope;
+		me.getView().setLoading(false);
+        Ext.Msg.confirm({
+		     title: 'Your response was saved.',
+		     msg: 'Would you like to close the Early Alert Notice',
+		     buttons: Ext.Msg.YESNO,
+		     fn: me.closeEarlyAlertConfirm,
+		     scope: me
+	    });
+	},
+
+	saveEarlyAlertResponseFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading(false);
+	},
+	
+	closeEarlyAlertConfirm: function( btnId ){
+     	var me=this;
+     	var jsonData;
+     	var personId = me.personLite.get('id');
+     	if (btnId=="yes")
+     	{
+     		if (me.earlyAlert.get('closedById') != "")
+     		{
+         		me.earlyAlert.set( 'closedDate', new Date() );
+         		me.earlyAlert.set( 'closedById', personId );    			
+     		}
+     		jsonData = me.earlyAlert.data;
+     		delete jsonData.earlyAlertReasonId;
+         	me.earlyAlertService.save( personId, jsonData,{
+         		success: me.closeEarlyAlertSuccess,
+         		failure: me.closeEarlyAlertFailure,
+         		scope: me
+         	});    		
+     	}else{
+     		me.displayMain();
+     	}
+     }, 
+
+ 	closeEarlyAlertSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading(false);
 		me.displayMain();
 	},
 
-	saveEarlyAlertResponseFailure: function( r, scope ) {
+	closeEarlyAlertFailure: function( response, scope ) {
 		var me=scope;
+		me.getView().setLoading(false);
 	},
 	
 	onCancelClick: function(button){

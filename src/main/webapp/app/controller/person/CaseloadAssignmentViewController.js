@@ -314,8 +314,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	if (me.appointment.get('appointmentDate') != null && me.appointment.get('startTime') != null && me.appointment.get('endTime') !=null)
 		{
     		
-    		console.log( me.appointment.getStartDate() );
-    		console.log( me.appointment.getEndDate() );
     		me.currentPersonAppointment.setAppointment( me.appointment.getStartDate() , 
     				                                    me.appointment.getEndDate() );
     		jsonData = me.currentPersonAppointment.data;

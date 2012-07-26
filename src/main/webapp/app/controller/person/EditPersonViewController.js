@@ -4,11 +4,17 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     inject: {
     	appEventsController: 'appEventsController',
         person: 'currentPerson',
+        personService: 'personService',
         sspConfig: 'sspConfig'
     },
     control: {
-    	retrieveFromExternalButton: '#retrieveFromExternalButton',
-    	
+    	retrieveFromExternalButton: {
+    		selector: '#retrieveFromExternalButton',
+    		listeners: {
+                click: 'onRetrieveFromExternalClick'
+            }       		
+    	},
+ 		
     	firstNameField: {
     		selector: '#firstName',
     		listeners: {
@@ -75,10 +81,11 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 			me.getSecondaryEmailAddressField().setDisabled(disabled);
 		}
 
-		me.getView().loadRecord( this.person );
+		me.getView().getForm().reset();
+		me.getView().loadRecord( me.person );
 		
-		// me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );
-		me.getRetrieveFromExternalButton().setVisible( false );
+		me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );
+		//me.getRetrieveFromExternalButton().setVisible( false );
 		
 		return me.callParent(arguments);
     },
@@ -96,5 +103,50 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     
     setRetrieveFromExternalButtonDisabled: function( enabled ){
     	this.getRetrieveFromExternalButton().setDisabled( enabled );
+    },
+    
+    onRetrieveFromExternalClick: function( button ){
+    	var me=this;
+    	var studentIdField = me.getStudentIdField();
+    	var schoolId = studentIdField.value;
+    	if ( studentIdField.isValid() )
+    	{
+    		if (schoolId != "")
+    		{
+    			me.getView().setLoading( true );
+    			me.personService.getBySchoolId( schoolId,{
+    				success: me.getBySchoolIdSuccess,
+    				failure: me.getBySchoolIdFailure,
+    				scope: me
+    			});
+    		}
+    	}else{
+    		Ext.Msg.alert('SSP Error','Please correct the errors in your form.');
+    	}
+    },
+    
+    getBySchoolIdSuccess: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading( false );
+		if ( r != null)
+		{
+			me.getView().getForm().reset();
+			delete r.id;
+			var person = new Ssp.model.Person();
+			delete r.createdBy;
+			delete r.modifiedBy;
+			delete r.username;
+			delete r.studentIntakeCompleteDate;
+			me.person.data = person.data;
+			me.person.populateFromGenericObject( r );	
+			me.getView().loadRecord( me.person );
+		}else{
+			Ext.Msg.alert('SSP Notification','There were no records found with the provided ID. Please try a different value.');
+		}
+    },    
+    
+    getBySchoolIdFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );
     }
 });
