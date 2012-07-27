@@ -263,7 +263,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		{
     			personProgramStatus = new Ssp.model.PersonProgramStatus();
     			personProgramStatus.set('programStatusId',Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
-    			personProgramStatus.set('effectiveDate', new Date());
+    			personProgramStatus.set('effectiveDate', new Date() );
     			me.personProgramStatusService.save( 
     					r.id, 
     					personProgramStatus.data, 
@@ -301,19 +301,13 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	var jsonData, personId;
     	if (me.appointment.get('appointmentDate') != null && me.appointment.get('startTime') != null && me.appointment.get('endTime') !=null)
 		{
-    		
-    		me.currentPersonAppointment.setAppointment( me.appointment.getStartDate() , 
-    				                                    me.appointment.getEndDate() );
-    		jsonData = me.currentPersonAppointment.data;
-    		jsonData.startTime = me.formUtils.fixDateOffsetWithTime( jsonData.startTime );
-    		jsonData.endTime = me.formUtils.fixDateOffsetWithTime( jsonData.endTime );
+    		// Fix dates for GMT offset to UTC
+    		me.currentPersonAppointment.set( 'startTime', me.formUtils.fixDateOffsetWithTime(me.appointment.getStartDate() ) );
+    		me.currentPersonAppointment.set( 'endTime', me.formUtils.fixDateOffsetWithTime( me.appointment.getEndDate() ) );
 
+    		jsonData = me.currentPersonAppointment.data;
     		personId = me.person.get('id');
 			
-    		// Fix startTime and endTime to represent appropriate date and time without GMT offset
-			//jsonData.startTime = me.formUtils.fixDateOffsetWithTime( jsonData.startTime );
-			//jsonData.endTime = me.formUtils.fixDateOffsetWithTime( jsonData.endTime );
- 
     		me.appointmentService.saveAppointment( personId, 
     				                               jsonData, 
     				                               {success: me.saveAppointmentSuccess,

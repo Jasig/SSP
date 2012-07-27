@@ -21,9 +21,8 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
         	items: [{
 			    	xtype: 'datefield',
 			    	fieldLabel: 'Entry Date',
-			    	itemId: 'entryDate',
+			    	itemId: 'entryDateField',
 			    	altFormats: 'm/d/Y|m-d-Y',
-			    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
 			        name: 'entryDate',
 			        allowBlank:false
 			     },{

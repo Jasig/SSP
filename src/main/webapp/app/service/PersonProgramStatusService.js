@@ -2,7 +2,8 @@ Ext.define('Ssp.service.PersonProgramStatusService', {
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties'
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -34,7 +35,10 @@ Ext.define('Ssp.service.PersonProgramStatusService', {
 
     		// save the program status
     		if (id=="")
-    		{				
+    		{
+    			// Fix dates for GMT offset to UTC
+    			jsonData.effectiveDate = me.formUtils.fixDateOffsetWithTime( jsonData.effectiveDate );
+    					
     			me.apiProperties.makeRequest({
         			url: url,
         			method: 'POST',
@@ -44,6 +48,7 @@ Ext.define('Ssp.service.PersonProgramStatusService', {
         			scope: me
         		});				
     		}else{
+    			
     			// update
         		me.apiProperties.makeRequest({
         			url: url+"/"+id,

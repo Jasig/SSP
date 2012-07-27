@@ -19,6 +19,8 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     },
 
     control: {
+    	entryDateField: '#entryDateField',
+    	
     	journalTrackCombo: {
     		selector: '#journalTrackCombo',
     		listeners: {
@@ -79,7 +81,11 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		me.getConfidentialityLevelCombo().setValue( me.model.getConfidentialityLevelId() );
 		me.getJournalSourceCombo().setValue( me.model.get('journalSource').id );
 		me.getJournalTrackCombo().setValue( journalTrackId );			
-
+		if ( me.model.get('entryDate') == null)
+		{
+			me.getEntryDateField().setValue( new Date() );
+		}
+		
 		me.inited=true;
 	},    
 	
@@ -99,7 +105,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		var values = form.getValues();
 		//var handleSuccess = me.saveSuccess;
 		var error = false;
-		var journalTrackId="";
+		var journalTrackId="";		
 		url = this.url;
 		record = this.model;
 		id = record.get('id');
@@ -129,7 +135,10 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     		{
     			Ext.Msg.alert('SSP Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
     		}else{
-    			
+
+    			// fix date from GMT to UTC
+        		record.set('entryDate', me.formUtils.fixDateOffsetWithTime( record.data.entryDate ) );
+
     			jsonData = record.data;
     			    			
     			// null out journalTrack.id prop to prevent failure
@@ -147,10 +156,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     			{
     				jsonData.journalEntryDetails = record.clearGroupedDetails( jsonData.journalEntryDetails );
     			}
-    			
-     			// Fix entry date to represent appropriate date and time
-    			jsonData.entryDate = me.formUtils.fixDateOffsetWithTime( jsonData.entryDate );
-    			
+    			    			
     			me.getView().setLoading( true );
     			
     			me.journalEntryService.save( me.personLite.get('id'), jsonData, {

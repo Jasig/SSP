@@ -80,7 +80,7 @@ Ext.define('Ssp.service.AppointmentService', {
     	if (personId != "")
     	{
     		id = jsonData.id;
-
+    		
     		// save the appointment
     		if (id=="")
     		{				
