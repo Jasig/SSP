@@ -42,7 +42,7 @@ import com.google.common.collect.Sets;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public final class Person extends AbstractAuditable implements Auditable { // NOPMD
 
-	private static final long serialVersionUID = 4122282021549627683L;
+	private static final long serialVersionUID = 4159658337332259029L;
 
 	private static final String DATABASE_TABLE_NAME = "person";
 
@@ -882,7 +882,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		// result *= hashField("studentType", studentType);
 		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
 		result *= hashField("anticipatedStartYear", anticipatedStartYear);
-		result *= hashField("actualStartTerm", actualStartTerm);
+		// result *= hashField("actualStartTerm", actualStartTerm);
 		result *= hashField("actualStartYear", actualStartYear);
 		result *= enabled == null ? "enabled".hashCode() : (enabled ? 3 : 2);
 		result *= abilityToBenefit == null ? "abilityToBenefit".hashCode()
