@@ -1,8 +1,8 @@
 package org.jasig.ssp.service.reference;
 
 import org.jasig.ssp.model.reference.Ethnicity;
-import org.jasig.ssp.service.AuditableCrudService;
+import org.jasig.ssp.service.ReferenceService;
 
 public interface EthnicityService
-		extends AuditableCrudService<Ethnicity> {
+		extends ReferenceService<Ethnicity> {
 }

@@ -1,37 +1,16 @@
 package org.jasig.ssp.service.reference;
 
-import java.util.UUID;
-
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalStepDetail;
-import org.jasig.ssp.service.AuditableCrudService;
-import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.ReferenceService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * JournalStepDetail service
  */
 public interface JournalStepDetailService extends
-		AuditableCrudService<JournalStepDetail> {
-
-	@Override
-	PagingWrapper<JournalStepDetail> getAll(SortingAndPaging sAndP);
-
-	@Override
-	JournalStepDetail get(UUID id) throws ObjectNotFoundException;
-
-	@Override
-	JournalStepDetail create(JournalStepDetail obj)
-			throws ObjectNotFoundException, ValidationException;
-
-	@Override
-	JournalStepDetail save(JournalStepDetail obj)
-			throws ObjectNotFoundException, ValidationException;
-
-	@Override
-	void delete(UUID id) throws ObjectNotFoundException;
+		ReferenceService<JournalStepDetail> {
 
 	PagingWrapper<JournalStepDetail> getAllForJournalStep(
 			final JournalStep journalStep,

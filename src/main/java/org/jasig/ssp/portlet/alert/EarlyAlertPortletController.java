@@ -56,7 +56,7 @@ public final class EarlyAlertPortletController {
 			 * UUID) at this point in the Early Alert process.  Previous APIs 
 			 * user the former where following APIs use the later.
 			 */
-			student = personService.getByStudentId(schoolId);  // TODO:  Handle error better??
+			student = personService.getBySchoolId(schoolId);  // TODO:  Handle error better??
 		} catch (ObjectNotFoundException e) {
 			throw new RuntimeException("Unrecognized entity", e);
 		}

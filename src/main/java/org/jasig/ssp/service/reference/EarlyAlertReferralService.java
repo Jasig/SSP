@@ -3,11 +3,7 @@ package org.jasig.ssp.service.reference;
 import java.util.UUID;
 
 import org.jasig.ssp.model.reference.EarlyAlertReferral;
-import org.jasig.ssp.service.AuditableCrudService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.validation.ValidationException;
+import org.jasig.ssp.service.ReferenceService;
 
 /**
  * EarlyAlertReferral service
@@ -15,13 +11,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
  * @author jon.adams
  */
 public interface EarlyAlertReferralService extends
-		AuditableCrudService<EarlyAlertReferral> {
-
-	@Override
-	PagingWrapper<EarlyAlertReferral> getAll(SortingAndPaging sAndP);
-
-	@Override
-	EarlyAlertReferral get(UUID id) throws ObjectNotFoundException;
+		ReferenceService<EarlyAlertReferral> {
 
 	/**
 	 * Loads the specified instance from persistent storage.
@@ -32,14 +22,4 @@ public interface EarlyAlertReferralService extends
 	 */
 	EarlyAlertReferral load(UUID id);
 
-	@Override
-	EarlyAlertReferral create(EarlyAlertReferral obj)
-			throws ObjectNotFoundException, ValidationException;
-
-	@Override
-	EarlyAlertReferral save(EarlyAlertReferral obj)
-			throws ObjectNotFoundException, ValidationException;
-
-	@Override
-	void delete(UUID id) throws ObjectNotFoundException;
 }

@@ -101,9 +101,11 @@ public class PersonEarlyAlertController extends
 					"Missing or invalid early alert data.");
 		}
 
-		if (!personId.equals(obj.getPersonId())) {
+		if (obj.getPersonId() != null && !personId.equals(obj.getPersonId())) {
 			throw new ValidationException(
-					"Person identifier in path, did not match the person identifier in the early alert data.");
+					"Person identifier in path, did not match the person"
+					+ " identifier in the early alert data. Those values must"
+					+ " match if a person identifier is set in the data.");
 		}
 
 		// TEMPORARY check until the issue in SSP-338 is fixed
@@ -111,6 +113,10 @@ public class PersonEarlyAlertController extends
 				&& obj.getEarlyAlertReasonIds().size() > 1) {
 			throw new ValidationException(
 					"Early alerts may not have more than one reason.");
+		}
+
+		if ( obj.getPersonId() == null ) {
+			obj.setPersonId(personId);
 		}
 
 		// create
@@ -208,7 +214,7 @@ public class PersonEarlyAlertController extends
 		try {
 			personId = UUID.fromString(studentId); // NOPMD by jon.adams
 		} catch (final IllegalArgumentException exc) {
-			final Person person = personService.getByStudentId(studentId);
+			final Person person = personService.getBySchoolId(studentId);
 
 			if (person == null) {
 				throw new ObjectNotFoundException(

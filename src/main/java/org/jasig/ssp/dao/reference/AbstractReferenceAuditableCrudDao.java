@@ -1,5 +1,7 @@
 package org.jasig.ssp.dao.reference;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AbstractAuditableCrudDao;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -31,6 +33,14 @@ public abstract class AbstractReferenceAuditableCrudDao<T extends Auditable>
 
 	@Override
 	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
-		return processCriteriaWithStatusSortingAndPaging(createCriteria(), sAndP);
+		return processCriteriaWithStatusSortingAndPaging(createCriteria(),
+				sAndP);
+	}
+
+	@SuppressWarnings("unchecked")
+	public T getByName(final String name) {
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("name", name));
+		return (T) query.uniqueResult();
 	}
 }

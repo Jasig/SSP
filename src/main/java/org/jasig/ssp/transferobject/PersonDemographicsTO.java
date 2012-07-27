@@ -16,7 +16,7 @@ public class PersonDemographicsTO
 
 	private UUID coachId, maritalStatusId, ethnicityId,
 			citizenshipId, veteranStatusId, childCareArrangementId;
-	private boolean abilityToBenefit, local, primaryCaregiver,
+	private Boolean local, primaryCaregiver,
 			childCareNeeded, employed;
 	private Integer numberOfChildren;
 	private String countryOfResidence, paymentStatus, gender,
@@ -58,11 +58,10 @@ public class PersonDemographicsTO
 			childCareArrangementId = model.getChildCareArrangement().getId();
 		}
 
-		abilityToBenefit = model.isAbilityToBenefit();
-		local = model.isLocal();
-		primaryCaregiver = model.isPrimaryCaregiver();
-		childCareNeeded = model.isChildCareNeeded();
-		employed = model.isEmployed();
+		local = model.getLocal();
+		primaryCaregiver = model.getPrimaryCaregiver();
+		childCareNeeded = model.getChildCareNeeded();
+		employed = model.getEmployed();
 		numberOfChildren = model.getNumberOfChildren();
 		balanceOwed = model.getBalanceOwed();
 		countryOfResidence = model.getCountryOfResidence();
@@ -138,43 +137,35 @@ public class PersonDemographicsTO
 		this.childCareArrangementId = childCareArrangementId;
 	}
 
-	public boolean isAbilityToBenefit() {
-		return abilityToBenefit;
-	}
-
-	public void setAbilityToBenefit(final boolean abilityToBenefit) {
-		this.abilityToBenefit = abilityToBenefit;
-	}
-
-	public boolean isLocal() {
+	public Boolean getLocal() {
 		return local;
 	}
 
-	public void setLocal(final boolean local) {
+	public void setLocal(final Boolean local) {
 		this.local = local;
 	}
 
-	public boolean isPrimaryCaregiver() {
+	public Boolean getPrimaryCaregiver() {
 		return primaryCaregiver;
 	}
 
-	public void setPrimaryCaregiver(final boolean primaryCaregiver) {
+	public void setPrimaryCaregiver(final Boolean primaryCaregiver) {
 		this.primaryCaregiver = primaryCaregiver;
 	}
 
-	public boolean isChildCareNeeded() {
+	public Boolean getChildCareNeeded() {
 		return childCareNeeded;
 	}
 
-	public void setChildCareNeeded(final boolean childCareNeeded) {
+	public void setChildCareNeeded(final Boolean childCareNeeded) {
 		this.childCareNeeded = childCareNeeded;
 	}
 
-	public boolean isEmployed() {
+	public Boolean getEmployed() {
 		return employed;
 	}
 
-	public void setEmployed(final boolean employed) {
+	public void setEmployed(final Boolean employed) {
 		this.employed = employed;
 	}
 

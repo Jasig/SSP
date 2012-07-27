@@ -1,8 +1,11 @@
 package org.jasig.ssp.dao.external;
 
+import java.util.Collection;
+
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -47,9 +50,13 @@ public class ExternalPersonDao extends AbstractExternalDataDao<ExternalPerson> {
 		return obj;
 	}
 
-	public PagingWrapper<ExternalPerson> pullUpdatedUsers(
+	public PagingWrapper<ExternalPerson> getBySchoolIds(
+			@NotNull final Collection<String> schoolIds,
 			final SortingAndPaging sAndP) {
 
-		return new PagingWrapper<ExternalPerson>(0, null);
+		final Criteria query = createCriteria()
+				.add(Restrictions.in("schoolId", schoolIds));
+
+		return processCriteriaWithSortingAndPaging(query, sAndP, false);
 	}
 }

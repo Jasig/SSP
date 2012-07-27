@@ -3,11 +3,7 @@ package org.jasig.ssp.service.reference;
 import java.util.UUID;
 
 import org.jasig.ssp.model.reference.EarlyAlertReason;
-import org.jasig.ssp.service.AuditableCrudService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.validation.ValidationException;
+import org.jasig.ssp.service.ReferenceService;
 
 /**
  * EarlyAlertReason service
@@ -15,13 +11,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
  * @author jon.adams
  */
 public interface EarlyAlertReasonService extends
-		AuditableCrudService<EarlyAlertReason> {
-
-	@Override
-	PagingWrapper<EarlyAlertReason> getAll(SortingAndPaging sAndP);
-
-	@Override
-	EarlyAlertReason get(UUID id) throws ObjectNotFoundException;
+		ReferenceService<EarlyAlertReason> {
 
 	/**
 	 * Lazily load an instance for the specified identifier.
@@ -32,14 +22,4 @@ public interface EarlyAlertReasonService extends
 	 */
 	EarlyAlertReason load(UUID id);
 
-	@Override
-	EarlyAlertReason create(EarlyAlertReason obj)
-			throws ObjectNotFoundException, ValidationException;
-
-	@Override
-	EarlyAlertReason save(EarlyAlertReason obj) throws ObjectNotFoundException,
-			ValidationException;
-
-	@Override
-	void delete(UUID id) throws ObjectNotFoundException;
 }

@@ -207,4 +207,54 @@
 			<dropColumn tableName="person" columnName="actual_start_year"/>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="add config for coachSetFromExternalData" author="daniel.bower">
+		<insert tableName="config">
+			<column name="id" value="1b5528d2-d789-11e1-9d78-0026b9e7ff4c" />
+			<column name="name" value="coachSetFromExternalData" />
+			<column name="description"
+				value="Coach is always set from external data if this is set to true.  It will overwrite any local changes for coach." />
+			<column name="default_value">true</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="config">
+				<where>id='1b5528d2-d789-11e1-9d78-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="drop defaults on personDemographics" author="daniel.bower">
+		<dropDefaultValue tableName="person_demographics" columnName="ability_to_benefit"/>
+		<dropDefaultValue tableName="person_demographics" columnName="local"/>
+		<dropDefaultValue tableName="person_demographics" columnName="primary_caregiver"/>
+		<dropDefaultValue tableName="person_demographics" columnName="child_care_needed"/>
+		<dropDefaultValue tableName="person_demographics" columnName="employed"/>
+		
+		<rollback>
+			<addDefaultValue columnName="ability_to_benefit" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="local" tableName="person_demographics" defaultValueBoolean="true"/>
+			<addDefaultValue columnName="primary_caregiver" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="child_care_needed" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="employed" tableName="person_demographics" defaultValueBoolean="false"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="remove abilityToBenefit from demographics" author="daniel.bower">
+		<dropColumn tableName="person_demographics" columnName="ability_to_benefit"/>
+		
+		<rollback>
+			<addColumn tableName="person_demographics">
+				<column name="ability_to_benefit" type="boolean" >
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

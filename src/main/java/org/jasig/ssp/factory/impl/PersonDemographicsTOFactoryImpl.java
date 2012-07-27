@@ -92,11 +92,10 @@ public class PersonDemographicsTOFactoryImpl extends
 		model.setShift(StringUtils.isEmpty(tObject.getShift()) ? null :
 				EmploymentShifts.valueOf(tObject.getShift()));
 
-		model.setAbilityToBenefit(tObject.isAbilityToBenefit());
-		model.setLocal(tObject.isLocal());
-		model.setPrimaryCaregiver(tObject.isPrimaryCaregiver());
-		model.setChildCareNeeded(tObject.isChildCareNeeded());
-		model.setEmployed(tObject.isEmployed());
+		model.setLocal(tObject.getLocal());
+		model.setPrimaryCaregiver(tObject.getPrimaryCaregiver());
+		model.setChildCareNeeded(tObject.getChildCareNeeded());
+		model.setEmployed(tObject.getEmployed());
 		model.setNumberOfChildren(tObject.getNumberOfChildren());
 		model.setBalanceOwed(tObject.getBalanceOwed());
 		model.setCountryOfResidence(tObject.getCountryOfResidence());

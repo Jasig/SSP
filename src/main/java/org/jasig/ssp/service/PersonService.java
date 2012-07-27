@@ -88,7 +88,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *                If the supplied identifier does not exist in the database.
 	 * @return The specified Person instance.
 	 */
-	Person getByStudentId(String studentId) throws ObjectNotFoundException;
+	Person getBySchoolId(String studentId) throws ObjectNotFoundException;
 
 	/**
 	 * Gets a list of {@link Person} objects based on specified criteria

@@ -1,13 +1,8 @@
 package org.jasig.ssp.service.reference;
 
-import java.util.UUID;
-
 import org.jasig.ssp.model.reference.Config;
-import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.validation.ValidationException;
+import org.jasig.ssp.service.ReferenceService;
 
 /**
  * Configuration (Config) service
@@ -15,13 +10,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
  * @author daniel.bower
  */
 public interface ConfigService extends
-		AuditableCrudService<Config> {
-
-	@Override
-	PagingWrapper<Config> getAll(SortingAndPaging sAndP);
-
-	@Override
-	Config get(UUID id) throws ObjectNotFoundException;
+		ReferenceService<Config> {
 
 	/**
 	 * Gets the specified configuration value, or return empty if not found.
@@ -53,16 +42,6 @@ public interface ConfigService extends
 	 * @return the specified configuration key, or null if not found.
 	 */
 	String getByNameNull(String name);
-
-	@Override
-	Config create(Config obj) throws ObjectNotFoundException,
-			ValidationException;
-
-	@Override
-	Config save(Config obj) throws ObjectNotFoundException, ValidationException;
-
-	@Override
-	void delete(UUID id) throws ObjectNotFoundException;
 
 	/**
 	 * Get a String Config Value by name.

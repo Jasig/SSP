@@ -30,6 +30,12 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Size(max = 50)
 	private String schoolId, firstName, lastName;
 
+	@NotNull
+	@NotEmpty
+	@Column(length = 25)
+	@Size(max = 25)
+	private String username;
+
 	@Column(length = 50)
 	@Size(max = 50)
 	private String middleName;
@@ -98,6 +104,14 @@ public class ExternalPerson extends AbstractExternalData implements
 
 	public void setSchoolId(final String schoolId) {
 		this.schoolId = schoolId;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(final String username) {
+		this.username = username;
 	}
 
 	public String getFirstName() {
