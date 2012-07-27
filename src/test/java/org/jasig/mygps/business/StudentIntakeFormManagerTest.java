@@ -310,7 +310,7 @@ public class StudentIntakeFormManagerTest {
 		assertTrue("Primary Caregiver option not match.",
 				demographics.getPrimaryCaregiver());
 
-		assertEquals("Number of children does not match.", 2,
+		assertEquals("Number of children does not match.", Integer.valueOf(2),
 				demographics.getNumberOfChildren());
 
 		assertEquals("Ages of children does not match.", "4,4",

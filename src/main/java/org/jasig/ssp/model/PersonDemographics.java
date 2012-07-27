@@ -197,11 +197,11 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.primaryCaregiver = primaryCaregiver;
 	}
 
-	public int getNumberOfChildren() {
+	public Integer getNumberOfChildren() {
 		return numberOfChildren;
 	}
 
-	public void setNumberOfChildren(final int numberOfChildren) {
+	public void setNumberOfChildren(final Integer numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
 	}
 
