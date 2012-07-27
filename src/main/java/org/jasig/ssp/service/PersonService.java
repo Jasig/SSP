@@ -84,6 +84,8 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @param studentId
 	 *            Required school identifier for the Person to retrieve. Can not
 	 *            be null.
+	 *            Also searches the External Database for the identifier,
+	 *            creating a Person if an ExternalPerson record exists..
 	 * @exception ObjectNotFoundException
 	 *                If the supplied identifier does not exist in the database.
 	 * @return The specified Person instance.

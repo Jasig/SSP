@@ -128,7 +128,7 @@ public class PersonServiceTest {
 	}
 
 	@Test
-	public void personFromUserId() throws ObjectNotFoundException {
+	public void personFromUsername() throws ObjectNotFoundException {
 		final Person person = new Person();
 
 		expect(dao.fromUsername(TEST_USER_ID)).andReturn(person);

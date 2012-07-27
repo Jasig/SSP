@@ -43,6 +43,11 @@ public class ExternalPersonDaoTest {
 		assertEquals("Incorrect coach", "turing.1", person.getCoachSchoolId());
 	}
 
+	@Test(expected = ObjectNotFoundException.class)
+	public void getBySchoolIdThrowException() throws ObjectNotFoundException {
+		dao.getBySchoolId("borkborkbork");
+	}
+
 	@Test
 	public void getBySchoolIds() {
 		final List<String> schoolIds = Lists.newArrayList();
