@@ -42,7 +42,7 @@ public class RegistrationStatusByTermDaoTest {
 	@Test
 	public void getAllForPerson() throws ObjectNotFoundException {
 		final Collection<RegistrationStatusByTerm> all = dao.getAllForPerson(
-				personService.getByStudentId("ken.1"),
+				personService.getBySchoolId("ken.1"),
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		assertFalse("GetAll should have returned some data.", all.isEmpty());
 	}
@@ -50,7 +50,7 @@ public class RegistrationStatusByTermDaoTest {
 	@Test
 	public void getForTerm() throws ObjectNotFoundException {
 		final RegistrationStatusByTerm rsbt = dao.getForTerm(
-				personService.getByStudentId("ken.1"), new Term("FA12"));
+				personService.getBySchoolId("ken.1"), new Term("FA12"));
 		assertEquals("should have found one reg status for ken", "ken.1",
 				rsbt.getSchoolId());
 		assertEquals("whould have found one reg status for autumn 12 for ken",
@@ -60,7 +60,7 @@ public class RegistrationStatusByTermDaoTest {
 	@Test
 	public void getForTermWhenZero() throws ObjectNotFoundException {
 		final RegistrationStatusByTerm rsbt = dao.getForTerm(
-				personService.getByStudentId("ken.1"), new Term("SP13"));
+				personService.getBySchoolId("ken.1"), new Term("SP13"));
 		assertNull(
 				"Should not find any values with a course_count greater than zero",
 				rsbt);

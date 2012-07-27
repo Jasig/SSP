@@ -109,7 +109,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 	PersonTO bySchoolId(final @PathVariable String id)
 			throws ObjectNotFoundException {
 
-		final Person model = service.getByStudentId(id);
+		final Person model = service.getBySchoolId(id);
 		if (model == null) {
 			return null;
 		}

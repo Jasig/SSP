@@ -89,7 +89,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleInList(@NotNull final List<UUID> personIds,
 			final SortingAndPaging sAndP) throws ValidationException {
-		if (personIds == null || personIds.isEmpty()) {
+		if ((personIds == null) || personIds.isEmpty()) {
 			throw new ValidationException(
 					"Missing or empty list of Person identifiers.");
 		}
@@ -100,7 +100,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	}
 
 	/**
-	 * Retrieves the specified Person by their Student ID (school_id).
+	 * Retrieves the specified Person by their school_id.
 	 * 
 	 * @param studentId
 	 *            Required school identifier for the Person to retrieve. Can not
@@ -109,10 +109,10 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 *                If the supplied identifier does not exist in the database.
 	 * @return The specified Person instance.
 	 */
-	public Person getByStudentId(final String studentId)
+	public Person getBySchoolId(final String schoolId)
 			throws ObjectNotFoundException {
 		return (Person) createCriteria().add(
-				Restrictions.eq("schoolId", studentId)).uniqueResult();
+				Restrictions.eq("schoolId", schoolId)).uniqueResult();
 	}
 
 	/**
