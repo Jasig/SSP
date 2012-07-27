@@ -24,6 +24,8 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'abilityToBenefit', type: 'boolean'},
     		 {name: 'anticipatedStartTerm', type: 'string'},
     		 {name: 'anticipatedStartYear', type: 'string'},
+    		 {name: 'actualStartTerm', type: 'string'},
+    		 {name: 'actualStartYear', type: 'string'},
     		 {name: 'studentIntakeRequestDate', type: 'date', dateFormat: 'time'},
     		 {name: 'specialServiceGroups', type: 'auto'},
     		 {name: 'referralSources', type: 'auto'},
