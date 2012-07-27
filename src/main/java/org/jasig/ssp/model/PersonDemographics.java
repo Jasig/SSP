@@ -43,18 +43,6 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Column
 	private boolean abilityToBenefit;
 
-	@Column(length = 20)
-	@Size(max = 20)
-	private String anticipatedStartTerm;
-
-	private Integer anticipatedStartYear;
-
-	@Column(length = 20)
-	@Size(max = 20)
-	private String actualStartTerm;
-
-	private Integer actualStartYear;
-
 	private BigDecimal balanceOwed;
 
 	private boolean local;
@@ -135,38 +123,6 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 
 	public void setAbilityToBenefit(final boolean abilityToBenefit) {
 		this.abilityToBenefit = abilityToBenefit;
-	}
-
-	public String getAnticipatedStartTerm() {
-		return anticipatedStartTerm;
-	}
-
-	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
-		this.anticipatedStartTerm = anticipatedStartTerm;
-	}
-
-	public Integer getAnticipatedStartYear() {
-		return anticipatedStartYear;
-	}
-
-	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
-		this.anticipatedStartYear = anticipatedStartYear;
-	}
-
-	public String getActualStartTerm() {
-		return actualStartTerm;
-	}
-
-	public void setActualStartTerm(final String actualStartTerm) {
-		this.actualStartTerm = actualStartTerm;
-	}
-
-	public Integer getActualStartYear() {
-		return actualStartYear;
-	}
-
-	public void setActualStartYear(final Integer actualStartYear) {
-		this.actualStartYear = actualStartYear;
 	}
 
 	public BigDecimal getBalanceOwed() {
@@ -345,10 +301,6 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 
 		// PersonDemographics
 		result *= abilityToBenefit ? 7 : 11;
-		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
-		result *= hashField("anticipatedStartYear", anticipatedStartYear);
-		result *= hashField("actualStartTerm", actualStartTerm);
-		result *= hashField("actualStartYear", actualStartYear);
 		result *= hashField("balanceOwed", balanceOwed);
 		result *= local ? 3 : 5;
 		result *= hashField("countryOfResidence", countryOfResidence);

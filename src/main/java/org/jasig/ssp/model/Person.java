@@ -42,7 +42,7 @@ import com.google.common.collect.Sets;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public final class Person extends AbstractAuditable implements Auditable { // NOPMD
 
-	private static final long serialVersionUID = 4122282021549627683L;
+	private static final long serialVersionUID = 4159658337332259029L;
 
 	private static final String DATABASE_TABLE_NAME = "person";
 
@@ -241,6 +241,15 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Max(2100)
 	@Min(2000)
 	private Integer anticipatedStartYear;
+
+	@Column(length = 20)
+	@Size(max = 20)
+	private String actualStartTerm;
+
+	@Nullable
+	@Max(2100)
+	@Min(2000)
+	private Integer actualStartYear;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, updatable = false)
@@ -766,6 +775,22 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
+	public String getActualStartTerm() {
+		return actualStartTerm;
+	}
+
+	public void setActualStartTerm(final String actualStartTerm) {
+		this.actualStartTerm = actualStartTerm;
+	}
+
+	public Integer getActualStartYear() {
+		return actualStartYear;
+	}
+
+	public void setActualStartYear(final Integer actualStartYear) {
+		this.actualStartYear = actualStartYear;
+	}
+
 	public Date getStudentIntakeRequestDate() {
 		return studentIntakeRequestDate == null ? null : new Date(
 				studentIntakeRequestDate.getTime());
@@ -857,6 +882,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		// result *= hashField("studentType", studentType);
 		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
 		result *= hashField("anticipatedStartYear", anticipatedStartYear);
+		// result *= hashField("actualStartTerm", actualStartTerm);
+		result *= hashField("actualStartYear", actualStartYear);
 		result *= enabled == null ? "enabled".hashCode() : (enabled ? 3 : 2);
 		result *= abilityToBenefit == null ? "abilityToBenefit".hashCode()
 				: (abilityToBenefit ? 3 : 2);

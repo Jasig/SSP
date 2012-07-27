@@ -173,4 +173,38 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="move start term and year to person" author="daniel.bower">
+		<dropColumn tableName="person_demographics" columnName="anticipated_start_term"/>
+		<dropColumn tableName="person_demographics" columnName="anticipated_start_year"/>
+		<dropColumn tableName="person_demographics" columnName="actual_start_term"/>
+		<dropColumn tableName="person_demographics" columnName="actual_start_year"/>
+		
+		<addColumn tableName="person">
+			<column name="actual_start_year" type="integer">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_term" type="${nvarchar.type}(20)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<rollback>
+			<addColumn tableName="person_demographics">
+				<column name="actual_start_year" type="integer">
+					<constraints nullable="true" />
+				</column>
+				<column name="actual_start_term" type="${nvarchar.type}(20)">
+					<constraints nullable="true" />
+				</column>
+				<column name="anticipated_start_year" type="integer">
+					<constraints nullable="true" />
+				</column>
+				<column name="anticipated_start_term" type="${nvarchar.type}(20)">
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
+			<dropColumn tableName="person" columnName="actual_start_term"/>
+			<dropColumn tableName="person" columnName="actual_start_year"/>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

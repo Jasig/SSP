@@ -93,6 +93,15 @@ public class PersonTO // NOPMD
 	@Min(2000)
 	private Integer anticipatedStartYear;
 
+	@Nullable
+	@Size(max = 20)
+	private String actualStartTerm;
+
+	@Nullable
+	@Max(2100)
+	@Min(2000)
+	private Integer actualStartYear;
+
 	private Date studentIntakeRequestDate;
 
 	private List<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroups;
@@ -164,6 +173,8 @@ public class PersonTO // NOPMD
 		abilityToBenefit = model.getAbilityToBenefit();
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
 		anticipatedStartYear = model.getAnticipatedStartYear();
+		actualStartTerm = model.getActualStartTerm();
+		actualStartYear = model.getActualStartYear();
 		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
 		studentType = model.getStudentType() == null ? null
 				: new ReferenceLiteTO<StudentType>(model.getStudentType());
@@ -472,6 +483,22 @@ public class PersonTO // NOPMD
 
 	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
 		this.anticipatedStartYear = anticipatedStartYear;
+	}
+
+	public Integer getActualStartYear() {
+		return actualStartYear;
+	}
+
+	public void setActualStartYear(final Integer actualStartYear) {
+		this.actualStartYear = actualStartYear;
+	}
+
+	public String getActualStartTerm() {
+		return actualStartTerm;
+	}
+
+	public void setActualStartTerm(final String actualStartTerm) {
+		this.actualStartTerm = actualStartTerm;
 	}
 
 	public Date getStudentIntakeRequestDate() {

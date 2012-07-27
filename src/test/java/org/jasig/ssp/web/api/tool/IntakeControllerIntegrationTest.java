@@ -126,10 +126,13 @@ public class IntakeControllerIntegrationTest {
 		final Person person = personService.get(STUDENT_ID);
 		obj.setPerson(personTOFactory.from(person));
 
+		person.setAnticipatedStartTerm("spring");
+		person.setAnticipatedStartYear(2012);
+		person.setActualStartTerm("spring");
+		person.setActualStartYear(2012);
+
 		final PersonDemographics personDemographics = new PersonDemographics();
 		personDemographics.setAbilityToBenefit(true);
-		personDemographics.setAnticipatedStartTerm("spring");
-		personDemographics.setAnticipatedStartYear(2012);
 		personDemographics.setChildAges("age 1");
 		personDemographics.setChildCareArrangement(new ChildCareArrangement());
 		personDemographics.setChildCareNeeded(true);
