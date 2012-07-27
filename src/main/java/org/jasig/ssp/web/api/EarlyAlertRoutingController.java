@@ -160,13 +160,16 @@ public class EarlyAlertRoutingController
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
-	EarlyAlertRoutingTO create(
-			final @PathVariable UUID campusId,
+	EarlyAlertRoutingTO create(final @PathVariable UUID campusId,
 			final @Valid @RequestBody EarlyAlertRoutingTO obj)
 			throws ObjectNotFoundException, ValidationException {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"You submitted a earlyAlertRouting with an id to the create method. Did you mean to save?");
+		}
+
+		if (obj.getCampusId() == null) {
+			obj.setCampusId(campusId);
 		}
 
 		final EarlyAlertRouting model = factory.from(obj);
@@ -212,6 +215,10 @@ public class EarlyAlertRoutingController
 		if (obj == null) {
 			throw new ValidationException(
 					"EarlyAlertRouting data is required.");
+		}
+
+		if (obj.getCampusId() == null) {
+			obj.setCampusId(campusId);
 		}
 
 		final EarlyAlertRouting model = factory.from(obj);
