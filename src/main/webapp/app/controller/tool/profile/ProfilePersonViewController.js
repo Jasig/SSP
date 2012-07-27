@@ -27,6 +27,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     },
 	init: function() {
 		var me=this;
+		var studentIdField = me.getStudentIdField();
+		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		var id =  me.personLite.get('id');
 		me.getView().getForm().reset();
 
 		// Set defined configured label for the studentId field
@@ -36,9 +39,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		{
 			// display loader
 			me.getView().setLoading( true );
-			me.personService.get( me.personLite.get('id'), {
-				success: getPersonSuccess,
-				failure: getPersonFailure,
+			me.personService.get( id, {
+				success: me.getPersonSuccess,
+				failure: me.getPersonFailure,
 				scope: me
 			});
 		}

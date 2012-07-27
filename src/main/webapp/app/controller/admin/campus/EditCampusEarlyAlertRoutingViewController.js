@@ -51,7 +51,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 			me.service.saveCampusEarlyAlertRouting( me.campus.get('id'), jsonData, {
 				success: saveSuccess,
 				failure: failureSuccess,
-				scope=me
+				scope: me
 			});
 			
 		}else{
