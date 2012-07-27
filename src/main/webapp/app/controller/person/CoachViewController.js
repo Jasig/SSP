@@ -38,8 +38,8 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 
 		if ( me.person.get('id') != "")
 		{
-			me.getCoachCombo().setDisabled( me.sspConfig.get('syncCoachAssignmentWithExternalData') );
-			me.getStudentTypeCombo().setDisabled( me.sspConfig.get('syncStudentTypeAssignmentWithExternalData') );			
+			me.getCoachCombo().setDisabled( me.sspConfig.get('coachSetFromExternalData') );
+			me.getStudentTypeCombo().setDisabled( me.sspConfig.get('studentTypeSetFromExternalData') );			
 		}
 		
 		me.studentTypesStore.load();

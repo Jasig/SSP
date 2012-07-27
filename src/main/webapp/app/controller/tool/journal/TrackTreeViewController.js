@@ -76,9 +76,10 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     },
     
     onItemExpand: function(nodeInt, obj){
+    	var me=this;
     	var node = nodeInt;
-    	var url = this.journalStepDetailUrl;
-    	var id = this.treeUtils.getIdFromNodeId( node.data.id );
+    	var url = me.journalStepDetailUrl;
+    	var id = me.treeUtils.getIdFromNodeId( node.data.id );
     	if (url != "")
     	{
         	var treeRequest = new Ssp.model.util.TreeRequest();
@@ -87,9 +88,9 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         	treeRequest.set('isLeaf', true);
         	treeRequest.set('nodeToAppendTo', node);
         	treeRequest.set('enableCheckedItems',true);
-	    	treeRequest.set('callbackFunc',this.afterJournalDetailsLoaded);
-	    	treeRequest.set('callbackScope',this);
-    		this.treeUtils.getItems( treeRequest );
+	    	treeRequest.set('callbackFunc',me.afterJournalDetailsLoaded);
+	    	treeRequest.set('callbackScope',me);
+    		me.treeUtils.getItems( treeRequest );
     	}
     },
 
@@ -100,10 +101,10 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     	if (journalEntryDetails != "" && journalEntryDetails != null)
     	{
 			Ext.Array.each(journalEntryDetails,function(item,index){
-				var journalStepDetails = item.journalStepDetail;
+				var journalStepDetails = item.journalStepDetails;
 				Ext.Array.each(journalStepDetails,function(innerItem,innerIndex){
 					var id = innerItem.id;
-					var detailNode = scope.getView().getView().getTreeStore().getNodeById(id+'_journalDetail');				
+					var detailNode = scope.getView().getView().getTreeStore().getNodeById(id+'_journalDetail');
 					if (detailNode != null)
 					{
 						detailNode.set('checked',true);

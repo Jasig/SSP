@@ -52,7 +52,8 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 	init: function() {
 		var me=this;
     	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');		
-		// alias the studentId field and provide validation
+		var displayRetrieveFromExternalButton = me.sspConfig.get('allowExternalRetrievalOfStudentDataFromCaseloadAssignment');
+    	// alias the studentId field and provide validation
 		var studentIdField = me.getStudentIdField();
 		studentIdField.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 		Ext.apply(studentIdField, {
@@ -80,12 +81,18 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 			me.getPrimaryEmailAddressField().setDisabled(disabled);
 			me.getSecondaryEmailAddressField().setDisabled(disabled);
 		}
-
-		me.getView().getForm().reset();
-		me.getView().loadRecord( me.person );
 		
+		me.getView().getForm().reset();
+		me.getView().loadRecord( me.person );	
+
+		// use config to determine if the retrieveFromExternalButton should be visible
+		me.getRetrieveFromExternalButton().setVisible( displayRetrieveFromExternalButton );		
+
+		// enable the retrieveFromExternalButton if the studentId field is valid
 		me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );
-		//me.getRetrieveFromExternalButton().setVisible( false );
+		
+		// clear validation messages on the studentId to begin data entry
+		studentIdField.reset();
 		
 		return me.callParent(arguments);
     },
