@@ -4,11 +4,11 @@ Ext.define('Ssp.model.Configuration', {
     	      type: 'boolean', 
     	      defaultValue: false
     	     },
-    	     {name: 'syncCoachAssignmentWithExternalData', 
+    	     {name: 'coachSetFromExternalData', 
     	      type: 'boolean', 
     	      defaultValue: false
     	     },
-    	     {name: 'syncStudentTypeAssignmentWithExternalData', 
+    	     {name: 'studentTypeSetFromExternalData', 
        	      type: 'boolean', 
        	      defaultValue: false
        	     },
