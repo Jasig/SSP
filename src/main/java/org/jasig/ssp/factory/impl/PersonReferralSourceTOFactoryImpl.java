@@ -71,8 +71,7 @@ public class PersonReferralSourceTOFactoryImpl
 
 		final PagingWrapper<PersonReferralSource> results = dao
 				.getAllForPersonIdAndReferralSourceId(person.getId(),
-						lite.getId(),
-						new SortingAndPaging(ObjectStatus.ACTIVE));
+						lite.getId(), new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		if (results.getResults() > 1) {
 			LOGGER.error("Multiple active PersonReferralSources found for Person: "

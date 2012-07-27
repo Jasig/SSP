@@ -118,7 +118,7 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     	REQUIRED_PERMISSIONS_STUDENT_INTAKE_CHALLENGE_TAB: ['ROLE_PERSON_CHALLENGE_READ'],
     	 	
     	/* ACTION PLAN TOOL */
-    	REQUIRED_PERMISSIONS_ACTIONPLAN_TOOL: ['ROLE_PERSON_READ'],
+    	REQUIRED_PERMISSIONS_ACTIONPLAN_TOOL: ['ROLE_PERSON_READ','ROLE_PERSON_TASK_READ','ROLE_PERSON_GOAL_READ'],
     	REQUIRED_PERMISSIONS_EMAIL_ACTION_PLAN_BUTTON: ['ROLE_PERSON_TASK_READ','ROLE_PERSON_GOAL_READ'],
     	REQUIRED_PERMISSIONS_PRINT_ACTION_PLAN_BUTTON: ['ROLE_PERSON_TASK_READ','ROLE_PERSON_GOAL_READ'],
     	REQUIRED_PERMISSIONS_ACTION_PLAN_TASKS_PANEL: ['ROLE_PERSON_TASK_READ'],
@@ -142,7 +142,7 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     	REQUIRED_PERMISSIONS_DELETE_JOURNAL_ENTRY_BUTTON: ['ROLE_PERSON_JOURNAL_ENTRY_DELETE'],
     	
     	/* EARLY ALERT TOOL */
-    	REQUIRED_PERMISSIONS_EARLYALERT_TOOL:['ROLE_PERSON_EARLY_ALERT_READ','ROLE_PERSON_EARLY_ALERT_RESPONSE_READ',],
+    	REQUIRED_PERMISSIONS_EARLYALERT_TOOL:['ROLE_PERSON_EARLY_ALERT_READ','ROLE_PERSON_EARLY_ALERT_RESPONSE_READ'],
     	REQUIRED_PERMISSIONS_RESPOND_EARLY_ALERT_BUTTON:['ROLE_PERSON_EARLY_ALERT_RESPONSE_WRITE'],
     	REQUIRED_PERMISSIONS_EARLY_ALERT_DETAILS_BUTTON:['ROLE_PERSON_EARLY_ALERT_READ','ROLE_PERSON_EARLY_ALERT_RESPONSE_READ'],
     	
@@ -211,14 +211,14 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
      */
     hasRequiredPermissions: function( arrRequiredPermissions ){
         var access = new Array();
-    	Ext.Array.every(arrRequiredPermissions,function(permission){
-   		   if ( this.hasPermission( permission ) == false )
+    	Ext.Array.each(arrRequiredPermissions,function(permission){
+    		if ( this.hasPermission( permission ) == true )
    		   {
-   			 access.push( false ); 
+   			 access.push( true ); 
    		   }
    	    },this);
     	
-        return ((access.length==0)? true : false); 
+        return ((access.length==arrRequiredPermissions.length)? true : false); 
     },
     
     /**

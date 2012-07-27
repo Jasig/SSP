@@ -70,9 +70,8 @@ public class CategoryServiceImpl extends AbstractReferenceService<Category>
 			final Challenge challenge, final Category category) {
 		// get current challenges for category
 		final PagingWrapper<ChallengeCategory> challengeCategories = challengeCategoryDao
-				.getAllForChallengeAndCategory(challenge.getId(),
-						category.getId(),
-						new SortingAndPaging(ObjectStatus.ACTIVE));
+				.getAllForChallengeAndCategory(challenge.getId(), category
+						.getId(), new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		ChallengeCategory challengeCategory = null;
 		// if this challenge is already there and ACTIVE, delete

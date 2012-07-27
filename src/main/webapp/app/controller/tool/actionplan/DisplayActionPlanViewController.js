@@ -168,7 +168,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		if (msg.length > 0)
 		{
 	           Ext.Msg.confirm({
-	     		     title:' Would you like to continue emailing??',
+	     		     title:' Would you like to continue emailing?',
 	     		     msg: msg,
 	     		     buttons: Ext.Msg.YESNO,
 	     		     fn: me.emailTasksConfirm,

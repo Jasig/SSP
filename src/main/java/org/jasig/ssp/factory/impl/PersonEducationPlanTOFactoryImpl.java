@@ -1,8 +1,5 @@
 package org.jasig.ssp.factory.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.PersonEducationPlanDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.PersonEducationPlanTOFactory;
@@ -12,7 +9,13 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.transferobject.PersonEducationPlanTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * PersonEducationPlan transfer object factory implementation
+ */
 @Service
 @Transactional(readOnly = true)
 public class PersonEducationPlanTOFactoryImpl extends
@@ -42,8 +45,8 @@ public class PersonEducationPlanTOFactoryImpl extends
 			throws ObjectNotFoundException {
 
 		if ((tObject.getId() == null) && (tObject.getPersonId() != null)) {
-			Person person = personService.get(tObject.getPersonId());
-			PersonEducationPlan unsetModel = person.getEducationPlan();
+			final Person person = personService.get(tObject.getPersonId());
+			final PersonEducationPlan unsetModel = person.getEducationPlan();
 			if (unsetModel != null) {
 				tObject.setId(unsetModel.getId());
 			}
@@ -57,8 +60,8 @@ public class PersonEducationPlanTOFactoryImpl extends
 		model.setSpecialNeeds(tObject.isSpecialNeeds());
 		model.setGradeTypicallyEarned(tObject.getGradeTypicallyEarned());
 
-		model.setStudentStatus((tObject.getStudentStatusId() == null) ? null :
-				studentStatusService.get(tObject.getStudentStatusId()));
+		model.setStudentStatus(tObject.getStudentStatusId() == null ? null
+				: studentStatusService.get(tObject.getStudentStatusId()));
 
 		return model;
 	}

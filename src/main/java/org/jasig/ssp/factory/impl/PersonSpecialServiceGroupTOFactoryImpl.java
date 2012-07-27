@@ -71,8 +71,7 @@ public class PersonSpecialServiceGroupTOFactoryImpl
 
 		final PagingWrapper<PersonSpecialServiceGroup> results = dao
 				.getAllForPersonIdAndSpecialServiceGroupId(person.getId(),
-						lite.getId(),
-						new SortingAndPaging(ObjectStatus.ACTIVE));
+						lite.getId(), new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		if (results.getResults() > 1) {
 			LOGGER.error("Multiple active PersonSpecialServiceGroups found for Person: "

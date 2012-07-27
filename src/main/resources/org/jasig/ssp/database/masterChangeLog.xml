@@ -33,4 +33,5 @@
 	<include file="org/jasig/ssp/database/integrationchangesets/i000001.xml" />
 
 	<include file="org/jasig/ssp/database/changesets/000009.xml" />
+
 </databaseChangeLog>

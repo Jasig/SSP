@@ -1,8 +1,5 @@
 package org.jasig.ssp.factory.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.PersonEducationLevelDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.PersonEducationLevelTOFactory;
@@ -11,6 +8,9 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.EducationLevelService;
 import org.jasig.ssp.transferobject.PersonEducationLevelTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,8 +44,8 @@ public class PersonEducationLevelTOFactoryImpl
 
 		model.setDescription(tObject.getDescription());
 
-		model.setEducationLevel((tObject.getEducationLevelId() == null) ? null :
-				educationLevelService.get(tObject.getEducationLevelId()));
+		model.setEducationLevel(tObject.getEducationLevelId() == null ? null
+				: educationLevelService.get(tObject.getEducationLevelId()));
 
 		model.setGraduatedYear(tObject.getGraduatedYear());
 		model.setHighestGradeCompleted(tObject.getHighestGradeCompleted());

@@ -39,8 +39,7 @@ public interface RestrictedPersonAssocAuditableDao<T extends RestrictedPersonAss
 	 * @return All data for the specified {@link Person}, filtered appropriately
 	 */
 	PagingWrapper<T> getAllForPersonId(final UUID personId,
-			final SspUser requestor,
-			final SortingAndPaging sAndP);
+			final SspUser requestor, final SortingAndPaging sAndP);
 
 	/**
 	 * Retrieves the specified instances from persistent storage.

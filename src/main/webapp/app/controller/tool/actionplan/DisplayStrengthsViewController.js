@@ -63,7 +63,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
 		me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
     },
 
-    savePersonFailure: function( r, scope){
+    savePersonFailure: function( response, scope ){
     	var me=scope;
     	me.getView().setLoading( false );
     },    

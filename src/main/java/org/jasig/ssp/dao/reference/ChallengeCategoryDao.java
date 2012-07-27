@@ -25,17 +25,17 @@ public class ChallengeCategoryDao extends
 	public PagingWrapper<ChallengeCategory> getAllForCategory(
 			final UUID categoryId,
 			final SortingAndPaging sAndP) {
-		final Criteria query = createCriteria();
-		query.add(Restrictions.eq("category.id", categoryId));
+		final Criteria query = createCriteria()
+				.add(Restrictions.eq("category.id", categoryId));
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
 	public PagingWrapper<ChallengeCategory> getAllForChallengeAndCategory(
 			final UUID challengeId, final UUID categoryId,
 			final SortingAndPaging sAndP) {
-		final Criteria query = createCriteria();
-		query.add(Restrictions.eq("category.id", categoryId));
-		query.add(Restrictions.eq("challenge.id", challengeId));
+		final Criteria query = createCriteria()
+				.add(Restrictions.eq("category.id", categoryId))
+				.add(Restrictions.eq("challenge.id", challengeId));
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 }

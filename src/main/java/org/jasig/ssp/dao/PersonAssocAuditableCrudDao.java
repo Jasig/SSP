@@ -6,6 +6,12 @@ import org.jasig.ssp.model.PersonAssocAuditable;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+/**
+ * Person association CRUD DAO
+ * 
+ * @param <T>
+ *            any Person association Auditable model
+ */
 public interface PersonAssocAuditableCrudDao<T extends PersonAssocAuditable>
 		extends AuditableCrudDao<T> {
 

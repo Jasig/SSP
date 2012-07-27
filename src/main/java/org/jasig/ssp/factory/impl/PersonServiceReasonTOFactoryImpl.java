@@ -71,8 +71,7 @@ public class PersonServiceReasonTOFactoryImpl
 
 		final PagingWrapper<PersonServiceReason> results = dao
 				.getAllForPersonIdAndServiceReasonId(person.getId(),
-						lite.getId(),
-						new SortingAndPaging(ObjectStatus.ACTIVE));
+						lite.getId(), new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		if (results.getResults() > 1) {
 			LOGGER.error("Multiple active PersonServiceReasons found for Person: "

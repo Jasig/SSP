@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.jasig.ssp.dao.reference.JournalStepDetailDao;
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.JournalStepDetailTOFactory;
 import org.jasig.ssp.factory.reference.JournalStepTOFactory;
@@ -43,6 +44,9 @@ public class JournalStepController
 
 	@Autowired
 	protected transient JournalStepDetailService journalStepDetailService;
+
+	@Autowired
+	protected transient JournalStepDetailDao journalStepDetailDao;
 
 	@Override
 	protected JournalStepService getService() {
@@ -121,8 +125,8 @@ public class JournalStepController
 			@RequestBody @NotNull final UUID journalStepDetailId)
 			throws ObjectNotFoundException {
 
-		final JournalStepDetail journalStepDetail = journalStepDetailService
-				.get(journalStepDetailId);
+		final JournalStepDetail journalStepDetail = journalStepDetailDao
+				.load(journalStepDetailId);
 		final JournalStep journalStep = service.get(id);
 
 		service.removeJournalStepDetailFromJournalStep(journalStepDetail,

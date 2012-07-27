@@ -35,8 +35,7 @@ public class TaskDao
 
 	@SuppressWarnings(UNCHECKED)
 	public List<Task> getAllForPersonId(final UUID personId,
-			final boolean complete,
-			final SspUser requestor,
+			final boolean complete, final SspUser requestor,
 			final SortingAndPaging sAndP) {
 
 		final Criteria criteria = createCriteria(sAndP);
@@ -82,9 +81,8 @@ public class TaskDao
 
 	@SuppressWarnings(UNCHECKED)
 	public List<Task> getAllForPersonIdAndChallengeReferralId(
-			final UUID personId,
-			final boolean complete, final UUID challengeReferralId,
-			final SspUser requestor,
+			final UUID personId, final boolean complete,
+			final UUID challengeReferralId, final SspUser requestor,
 			final SortingAndPaging sAndP) {
 
 		final Criteria criteria = createCriteria(sAndP);
