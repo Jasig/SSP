@@ -308,7 +308,7 @@ public class StudentIntakeFormManagerTest {
 						.getName());
 
 		assertTrue("Primary Caregiver option not match.",
-				demographics.isPrimaryCaregiver());
+				demographics.getPrimaryCaregiver());
 
 		assertEquals("Number of children does not match.", 2,
 				demographics.getNumberOfChildren());
@@ -317,13 +317,13 @@ public class StudentIntakeFormManagerTest {
 				demographics.getChildAges());
 
 		assertTrue("Childcare needed option not match.",
-				demographics.isChildCareNeeded());
+				demographics.getChildCareNeeded());
 
 		assertEquals("Childcare arrangements does not match.",
 				"Need to make arrangements", demographics
 						.getChildCareArrangement().getName());
 
-		assertTrue("Employment option not match.", demographics.isEmployed());
+		assertTrue("Employment option not match.", demographics.getEmployed());
 
 		assertEquals("Shift option does not match.", EmploymentShifts.SECOND,
 				demographics.getShift());

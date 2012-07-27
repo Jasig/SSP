@@ -130,9 +130,9 @@ public class IntakeControllerIntegrationTest {
 		person.setAnticipatedStartYear(2012);
 		person.setActualStartTerm("spring");
 		person.setActualStartYear(2012);
+		person.setAbilityToBenefit(true);
 
 		final PersonDemographics personDemographics = new PersonDemographics();
-		personDemographics.setAbilityToBenefit(true);
 		personDemographics.setChildAges("age 1");
 		personDemographics.setChildCareArrangement(new ChildCareArrangement());
 		personDemographics.setChildCareNeeded(true);

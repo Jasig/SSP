@@ -40,12 +40,9 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 
 	private static final long serialVersionUID = 3252611289245443664L;
 
-	@Column
-	private boolean abilityToBenefit;
+	private Boolean local;
 
 	private BigDecimal balanceOwed;
-
-	private boolean local;
 
 	@Column(length = 50)
 	@Size(max = 50)
@@ -82,11 +79,9 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@JoinColumn(name = "veteran_status_id", nullable = true)
 	private VeteranStatus veteranStatus;
 
-	@Column
-	private boolean primaryCaregiver;
+	private Boolean primaryCaregiver, childCareNeeded;
 
-	@Column
-	private int numberOfChildren;
+	private Integer numberOfChildren;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
@@ -97,10 +92,7 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Size(max = 50)
 	private String childAges;
 
-	@Column
-	private boolean childCareNeeded;
-
-	private boolean employed;
+	private Boolean employed;
 
 	@Column(length = 50)
 	@Size(max = 50)
@@ -117,14 +109,6 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Size(max = 3)
 	private String totalHoursWorkedPerWeek;
 
-	public boolean isAbilityToBenefit() {
-		return abilityToBenefit;
-	}
-
-	public void setAbilityToBenefit(final boolean abilityToBenefit) {
-		this.abilityToBenefit = abilityToBenefit;
-	}
-
 	public BigDecimal getBalanceOwed() {
 		return balanceOwed;
 	}
@@ -133,12 +117,12 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.balanceOwed = balanceOwed;
 	}
 
-	public boolean isLocal() {
+	public Boolean getLocal() {
 		return local;
 	}
 
-	public void setLocal(final boolean isLocal) {
-		local = isLocal;
+	public void setLocal(final Boolean local) {
+		this.local = local;
 	}
 
 	public String getCountryOfResidence() {
@@ -205,11 +189,11 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.veteranStatus = veteranStatus;
 	}
 
-	public boolean isPrimaryCaregiver() {
+	public Boolean getPrimaryCaregiver() {
 		return primaryCaregiver;
 	}
 
-	public void setPrimaryCaregiver(final boolean primaryCaregiver) {
+	public void setPrimaryCaregiver(final Boolean primaryCaregiver) {
 		this.primaryCaregiver = primaryCaregiver;
 	}
 
@@ -238,19 +222,19 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.childAges = childAges;
 	}
 
-	public boolean isChildCareNeeded() {
+	public Boolean getChildCareNeeded() {
 		return childCareNeeded;
 	}
 
-	public void setChildCareNeeded(final boolean childCareNeeded) {
+	public void setChildCareNeeded(final Boolean childCareNeeded) {
 		this.childCareNeeded = childCareNeeded;
 	}
 
-	public boolean isEmployed() {
+	public Boolean getEmployed() {
 		return employed;
 	}
 
-	public void setEmployed(final boolean employed) {
+	public void setEmployed(final Boolean employed) {
 		this.employed = employed;
 	}
 
@@ -300,9 +284,9 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		result *= hashField("objectStatus", getObjectStatus());
 
 		// PersonDemographics
-		result *= abilityToBenefit ? 7 : 11;
 		result *= hashField("balanceOwed", balanceOwed);
-		result *= local ? 3 : 5;
+		result *= local == null ? "local".hashCode()
+				: (local ? 3 : 5);
 		result *= hashField("countryOfResidence", countryOfResidence);
 		result *= hashField("paymentStatus", paymentStatus);
 		result *= hashField("maritalStatus", maritalStatus);
@@ -311,12 +295,15 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		result *= hashField("citizenship", citizenship);
 		result *= hashField("countryOfCitizenship", countryOfCitizenship);
 		result *= hashField("veteranStatus", veteranStatus);
-		result *= primaryCaregiver ? 13 : 17;
+		result *= primaryCaregiver == null ? "primaryCaregiver".hashCode()
+				: (primaryCaregiver ? 13 : 17);
 		result *= hashField("numberOfChildren", numberOfChildren);
 		result *= hashField("childCareArrangement", childCareArrangement);
 		result *= hashField("childAges", childAges);
-		result *= childCareNeeded ? 19 : 23;
-		result *= employed ? 29 : 31;
+		result *= childCareNeeded == null ? "childCareNeeded".hashCode()
+				: (childCareNeeded ? 19 : 23);
+		result *= employed == null ? "employed".hashCode()
+				: (employed ? 29 : 31);
 		result *= hashField("placeOfEmployment", placeOfEmployment);
 		result *= shift == null ? "shift".hashCode() : shift.hashCode();
 		result *= hashField("wage", wage);

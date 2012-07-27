@@ -229,4 +229,32 @@
 			</delete>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="drop defaults on personDemographics" author="daniel.bower">
+		<dropDefaultValue tableName="person_demographics" columnName="ability_to_benefit"/>
+		<dropDefaultValue tableName="person_demographics" columnName="local"/>
+		<dropDefaultValue tableName="person_demographics" columnName="primary_caregiver"/>
+		<dropDefaultValue tableName="person_demographics" columnName="child_care_needed"/>
+		<dropDefaultValue tableName="person_demographics" columnName="employed"/>
+		
+		<rollback>
+			<addDefaultValue columnName="ability_to_benefit" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="local" tableName="person_demographics" defaultValueBoolean="true"/>
+			<addDefaultValue columnName="primary_caregiver" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="child_care_needed" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="employed" tableName="person_demographics" defaultValueBoolean="false"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="remove abilityToBenefit from demographics" author="daniel.bower">
+		<dropColumn tableName="person_demographics" columnName="ability_to_benefit"/>
+		
+		<rollback>
+			<addColumn tableName="person_demographics">
+				<column name="ability_to_benefit" type="boolean" >
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>
