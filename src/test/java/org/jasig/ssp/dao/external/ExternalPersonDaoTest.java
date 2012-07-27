@@ -4,12 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../dao-testConfig.xml")
@@ -40,11 +43,17 @@ public class ExternalPersonDaoTest {
 		assertEquals("Incorrect coach", "turing.1", person.getCoachSchoolId());
 	}
 
-	@Ignore
 	@Test
-	public void pullUpdatedUsers() {
-		PagingWrapper<ExternalPerson> diff = dao
-				.pullUpdatedUsers(new SortingAndPaging(ObjectStatus.ACTIVE));
+	public void getBySchoolIds() {
+		final List<String> schoolIds = Lists.newArrayList();
+		schoolIds.add("ken.1");
+		schoolIds.add("turing.1");
 
+		final PagingWrapper<ExternalPerson> diff = dao
+				.getBySchoolIds(schoolIds, new SortingAndPaging(
+						ObjectStatus.ACTIVE));
+
+		assertEquals("Incorrect number of external_user entries", 2L,
+				diff.getResults());
 	}
 }
