@@ -877,6 +877,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		result *= hashField("zipCode", zipCode);
 		result *= hashField("photoUrl", photoUrl);
 		result *= hashField("schoolId", schoolId);
+		result *= hashField("username", username);
 		result *= hashField("strengths", strengths);
 		result *= hashField("coach", coach);
 		// result *= hashField("studentType", studentType);
