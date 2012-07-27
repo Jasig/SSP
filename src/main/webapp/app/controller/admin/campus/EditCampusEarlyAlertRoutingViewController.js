@@ -5,12 +5,12 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
     	model: 'currentCampusEarlyAlertRouting',
-    	campus: 'currentCampus'
+    	campus: 'currentCampus',
+    	service: 'campusEarlyAlertRoutingService'
     },
     config: {
     	containerToLoadInto: 'campusearlyalertroutingsadmin',
-    	formToDisplay: 'earlyalertroutingsadmin',
-    	url: null
+    	formToDisplay: 'earlyalertroutingsadmin'
     },
     control: {
     	'saveButton': {
@@ -24,9 +24,6 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     
 	init: function() {
 		var me=this;
-		me.url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('campusEarlyAlertRouting') );
-		me.url = me.url.replace( "{id}", me.campus.get('id') );
-		
 		me.getView().getForm().reset();
 		me.getView().getForm().loadRecord( me.model );
 		return me.callParent(arguments);
@@ -49,32 +46,28 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 				jsonData.person=null;
 			}
 			
-			successFunc = function(response, view) {
-				me.displayMain();
-			};
+			me.getView().setLoading( true );
 			
-			if (id.length > 0)
-			{
-				// editing
-				me.apiProperties.makeRequest({
-					url: url+"/"+id,
-					method: 'PUT',
-					jsonData: jsonData,
-					successFunc: successFunc 
-				});
-				
-			}else{
-				// adding
-				me.apiProperties.makeRequest({
-					url: url,
-					method: 'POST',
-					jsonData: jsonData,
-					successFunc: successFunc 
-				});		
-			}			
+			me.service.saveCampusEarlyAlertRouting( me.campus.get('id'), jsonData, {
+				success: saveSuccess,
+				failure: failureSuccess,
+				scope=me
+			});
+			
 		}else{
 			Ext.Msg.alert('SSP Error', 'Please correct the errors before saving this item.');
 		}
+	},
+
+	saveSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+		me.displayMain();
+	},
+
+	saveFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
 	},
 	
 	onCancelClick: function(button){

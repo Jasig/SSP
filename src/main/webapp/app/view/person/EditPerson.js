@@ -54,7 +54,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			    },{
 			    	xtype: 'button',
 			    	tooltip: 'Load record from external system',
-			    	text: 'Retrieve from SIS',
+			    	text: 'Retrieve from External',
 			    	itemId: 'retrieveFromExternalButton'
 			    },{
 			        fieldLabel: 'Home Phone',

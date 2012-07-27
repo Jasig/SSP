@@ -6,6 +6,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     	campusesStore: 'campusesStore',
     	formUtils: 'formRendererUtils',
         model: 'currentEarlyAlert',
+        personService: 'personService',
        	reasonsStore: 'earlyAlertReasonsStore',
         suggestionsStore: 'earlyAlertSuggestionsStore',
         selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore'
@@ -52,8 +53,35 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
 		selectedSuggestions = me.formUtils.getSimpleItemsForDisplay( me.suggestionsStore, me.model.get('earlyAlertSuggestionIds'), 'Suggestions' );
 		me.selectedSuggestionsStore.removeAll();
 		me.selectedSuggestionsStore.loadData( selectedSuggestions );
+		
+		if ( me.model.get('closedById') != null )
+		{
+			me.getView().setLoading( true );
+			me.personService.get( me.model.get('closedById'),{
+				success: me.getPersonSuccess,
+				failure: me.getPersonFailure,
+				scope: me
+			});
+		}
+		
 		return this.callParent(arguments);
     },
+    
+    getPersonSuccess: function( r, scope ){
+		var me=scope;
+		var fullName="";
+		me.getView().setLoading( false );
+		if (r != null )
+		{
+			fullName=r.firstName + " " + r.middleName + " " + r.lastName; 
+			me.getClosedByField().setValue( fullName );
+		}
+    },    
+    
+    getPersonFailure: function( response, scope ){
+    	var me=scope;  
+    	me.getView().setLoading( false );
+    },   
     
     onFinishButtonClick: function( button ){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	

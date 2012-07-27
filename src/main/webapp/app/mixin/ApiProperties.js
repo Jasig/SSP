@@ -95,9 +95,9 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		var contentType = "application/json";
 		var errorHandler = me.handleError;
 		var scope = me;
-		if (args.failure != null)
+		if (args.failureFunc != null)
 		{
-			errorHandler = args.failure;
+			errorHandler = args.failureFunc;
 		}
 		if ( args.contentType != null)
 		{
@@ -148,6 +148,28 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		{
 			Ext.Msg.alert('SSP Error', msg);
 		}
+
+		if ( response.status==500 )
+		{
+			// Handle responseText is json returned from SSP
+			if( response.responseText != null )
+			{
+				if ( response.responseText != "")
+				{
+					r = Ext.decode(response.responseText);
+					if (r.message != null)
+					{
+						if ( r.message != "")
+						{
+							msg = msg + " " + r.message;
+							Ext.Msg.alert('SSP Error', msg);							
+						}
+					}else{
+						Ext.Msg.alert('Internal Server Error - 500', 'Unable to determine the source of this error. See logs for additional details.');
+					}
+				}
+			}
+		}		
 		
 		if ( response.status==200 )
 		{

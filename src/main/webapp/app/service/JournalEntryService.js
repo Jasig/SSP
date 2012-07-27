@@ -1,56 +1,22 @@
-Ext.define('Ssp.service.CampusService', {  
+Ext.define('Ssp.service.JournalEntryService', {  
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties',
-    	model: 'currentCampus'
-    },
-    config: {
-    	personUrl: null
+    	apiProperties: 'apiProperties'
     },
     initComponent: function() {
 		return this.callParent( arguments );
     },
     
-    getBaseUrl: function( id ){
+    getBaseUrl: function( personId ){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('campus') );
-    	return baseUrl;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personJournalEntry') );
+		baseUrl = baseUrl.replace('{id}', personId );
+		return baseUrl;
     },
 
-    getCampus: function( id, callbacks ){
+    getAll: function( personId, callbacks ){
     	var me=this;
-	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-	    	var model = new Ssp.model.reference.Campus();
-	    	me.model.data = model.data;
-	    	if (response.responseText != "")
-	    	{
-		    	r = Ext.decode(response.responseText);
-		    	me.model.populateFromGenericObject(r);	    		
-	    	}
-	    	callbacks.success( r, callbacks.scope );
-	    };
-
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
-	    };
-	    
-		// load the person to edit
-		me.apiProperties.makeRequest({
-			url: me.getBaseUrl()+'/'+id,
-			method: 'GET',
-			successFunc: success,
-			failureFunc: failure,
-			scope: me
-		});
-    },   
-    
-    saveCampus: function( jsonData, callbacks ){
-    	var me=this;
-    	var id=jsonData.id;
-        var url = me.getBaseUrl();
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
 			callbacks.success( r, callbacks.scope );
@@ -60,11 +26,34 @@ Ext.define('Ssp.service.CampusService', {
 	    	me.apiProperties.handleError( response );	    	
 	    	callbacks.failure( response, callbacks.scope );
 	    };
-        
-    	// save
+	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl( personId ),
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },
+    
+    save: function( personId, jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl( personId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+		id = jsonData.id;
+
+		// save
 		if (id=="")
-		{
-			// create
+		{				
 			me.apiProperties.makeRequest({
     			url: url,
     			method: 'POST',
@@ -83,10 +72,10 @@ Ext.define('Ssp.service.CampusService', {
     			failureFunc: failure,
     			scope: me
     		});	
-		}   	
+		}
     },
     
-    destroy: function( id, callbacks ){
+    destroy: function( personId, id, callbacks ){
     	var me=this;
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
@@ -99,7 +88,7 @@ Ext.define('Ssp.service.CampusService', {
 	    };
 	    
     	me.apiProperties.makeRequest({
-   		   url: me.getBaseUrl()+"/"+id,
+   		   url: me.getBaseUrl( personId )+"/"+id,
    		   method: 'DELETE',
    		   successFunc: success,
    		   failureFunc: failure,

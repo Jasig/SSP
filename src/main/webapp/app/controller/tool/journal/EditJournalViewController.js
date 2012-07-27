@@ -7,14 +7,14 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
         appEventsController: 'appEventsController',
         confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
+    	journalEntryService: 'journalEntryService',
     	model: 'currentJournalEntry',
-    	person: 'currentPerson'
+    	personLite: 'personLite'
     },
     config: {
     	containerToLoadInto: 'tools',
     	mainFormToDisplay: 'journal',
     	sessionDetailsEditorDisplay: 'journaltracktree',
-    	url: '',
     	inited: false
     },
 
@@ -26,13 +26,19 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
         		blur: 'onJournalTrackComboBlur'
     		} 
     	},
-    	
-    	'confidentialityLevelCombo': {
-    		select: 'onConfidentialityLevelComboSelect'
-    	},
-    	
-    	'journalSourceCombo': {
-    		select: 'onJournalSourceComboSelect'
+
+    	confidentialityLevelCombo: {
+    		selector: '#confidentialityLevelCombo',
+    		listeners: {
+    			select: 'onConfidentialityLevelComboSelect'
+    		} 
+    	},    	
+
+    	journalSourceCombo: {
+    		selector: '#journalSourceCombo',
+    		listeners: {
+    			select: 'onJournalSourceComboSelect'
+    		} 
     	},
     	
     	'commentText': {
@@ -54,15 +60,9 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     
 	init: function() {
 		var me=this;
-
 		// apply confidentiality level filter
-		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );		
-		
-		me.url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personJournalEntry') );
-		me.url = me.url.replace('{id}',me.person.get('id'));
-		
-		me.initForm();
-		
+		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
+		me.initForm();	
 		return me.callParent(arguments);
     },   
     
@@ -76,9 +76,9 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		}
 		me.getView().getForm().reset();
 		me.getView().getForm().loadRecord( this.model );
-		Ext.ComponentQuery.query('#confidentialityLevelCombo')[0].setValue( me.model.getConfidentialityLevelId() );
-		Ext.ComponentQuery.query('#journalSourceCombo')[0].setValue( me.model.get('journalSource').id );
-		Ext.ComponentQuery.query('#journalTrackCombo')[0].setValue( journalTrackId );			
+		me.getConfidentialityLevelCombo().setValue( me.model.getConfidentialityLevelId() );
+		me.getJournalSourceCombo().setValue( me.model.get('journalSource').id );
+		me.getJournalTrackCombo().setValue( journalTrackId );			
 
 		me.inited=true;
 	},    
@@ -93,12 +93,11 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     },	
 	
 	onSaveClick: function(button) {
-		console.log( 'EditJournalViewController->onSaveClick' );
 		var me = this;
 		var record, id, jsonData, url;
 		var form = this.getView().getForm();
 		var values = form.getValues();
-		var handleSuccess = me.saveSuccess;
+		//var handleSuccess = me.saveSuccess;
 		var error = false;
 		var journalTrackId="";
 		url = this.url;
@@ -152,32 +151,26 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
      			// Fix entry date to represent appropriate date and time
     			jsonData.entryDate = me.formUtils.fixDateOffsetWithTime( jsonData.entryDate );
     			
-    			if (id == "")
-    			{	
-    				// adding
-    				this.apiProperties.makeRequest({
-    					url: url,
-    					method: 'POST',
-    					jsonData: jsonData,
-    					successFunc: handleSuccess,
-    					scope: me
-    				});
-    			}else{
-    				// editing
-    				this.apiProperties.makeRequest({
-    					url: url+"/"+id,
-    					method: 'PUT',
-    					jsonData: jsonData,
-    					successFunc: handleSuccess,
-    					scope: me
-    				});
-    			}
+    			me.getView().setLoading( true );
+    			
+    			me.journalEntryService.save( me.personLite.get('id'), jsonData, {
+    				success: me.saveSuccess,
+    				failure: me.saveFailure,
+    				scope: me
+    			});
     		}			
 		}
 	},
 	
-	saveSuccess: function(response, view) {
-		this.displayMain();
+	saveSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+		me.displayMain();
+	},
+
+	saveFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
 	},
 	
 	onCancelClick: function(button){

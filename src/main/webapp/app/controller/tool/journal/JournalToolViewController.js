@@ -6,11 +6,12 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     	appEventsController: 'appEventsController',
         confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
+    	service: 'journalEntryService',
         journalEntriesStore: 'journalEntriesStore',
         journalSourcesStore: 'journalSourcesStore',
     	journalTracksStore: 'journalTracksStore',
     	model: 'currentJournalEntry',
-    	person: 'currentPerson'
+    	personLite: 'personLite'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -28,21 +29,17 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 	},
     init: function() {
 		var me = this;
-		var personId = me.person.get('id');
-		var successFunc = function(response,view){
-	    	var r = Ext.decode(response.responseText);
-	    	
-	    	if (r.rows.length > 0)
-	    	{
-	    		me.journalEntriesStore.loadData(r.rows);
-	    	}
-
-	    	// hide the loader
-	    	me.getView().setLoading( false );	    	
-		};
-
+		
+		me.getView().setLoading( true );
+		
 		// clear any existing journal entries
-		me.journalEntriesStore.removeAll();		
+		me.journalEntriesStore.removeAll();
+		
+		me.service.getAll( me.personLite.get('id'), {
+			success: me.getAllJournalEntriesSuccess,
+			failure: me.getAllJournalEntriesFailure,
+			scope: me
+		});
 
     	// ensure loading of all confidentiality levels in the database
     	me.confidentialityLevelsStore.load({
@@ -52,21 +49,23 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		me.journalSourcesStore.load();
 		me.journalTracksStore.load();
 		
-		me.personJournalUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personJournalEntry') );
-		me.personJournalUrl = me.personJournalUrl.replace('{id}',personId);		
-
-		// display loader
-		me.getView().setLoading( true );		
-		
-		me.apiProperties.makeRequest({
-			url: me.personJournalUrl,
-			method: 'GET',
-			successFunc: successFunc
-		});
-    	
 		return me.callParent(arguments);
     },
  
+    getAllJournalEntriesSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+    	if (r.rows.length > 0)
+    	{
+    		me.journalEntriesStore.loadData(r.rows);
+    	}
+	},
+
+	getAllJournalEntriesFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+	},    
+    
     onViewReady: function(comp, obj){
     	this.appEventsController.assignEvent({eventName: 'editJournalEntry', callBackFunc: this.editJournalEntry, scope: this});
     	this.appEventsController.assignEvent({eventName: 'deleteJournalEntry', callBackFunc: this.deleteConfirmation, scope: this});
@@ -92,16 +91,17 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     },
  
     deleteConfirmation: function() {
-        var message = 'You are about to delete a Journal Entry. Would you like to continue?';
-    	var model = this.model;
+        var me=this;
+    	var message = 'You are about to delete a Journal Entry. Would you like to continue?';
+    	var model = me.model;
         if (model.get('id') != "") 
         {
            Ext.Msg.confirm({
    		     title:'Delete Journal Entry?',
    		     msg: message,
    		     buttons: Ext.Msg.YESNO,
-   		     fn: this.deleteJournalEntry,
-   		     scope: this
+   		     fn: me.deleteJournalEntry,
+   		     scope: me
    		   });
         }else{
      	   Ext.Msg.alert('SSP Error', 'Unable to delete Journal Entry.'); 
@@ -109,20 +109,32 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
      },
      
      deleteJournalEntry: function( btnId ){
-     	var store = this.journalEntriesStore;
-     	var id = this.model.get('id');
+     	var me=this;
+    	var store = me.journalEntriesStore;
+     	var id = me.model.get('id');
      	if (btnId=="yes")
      	{
-     		this.apiProperties.makeRequest({
-      		   url: this.personJournalUrl+"/"+id,
-      		   method: 'DELETE',
-      		   successFunc: function(response,responseText){
-      			   store.remove( store.getById( id ) );
-      		   }
-      	    });   		
+     		me.getView().setLoading( true );
+     		me.service.destroy( me.personLite.get('id'), id, {
+     			success: me.destroyJournalEntrySuccess,
+     			failure: me.destroyJournalEntryFailure,
+     			scope: me
+     		});  		
      	}
      },    
-    
+
+     destroyJournalEntrySuccess: function( r, id, scope ) {
+ 		var me=scope;
+ 		var store = me.journalEntriesStore;
+ 		me.getView().setLoading( false );
+ 		store.remove( store.getById( id ) );
+ 	},
+
+ 	destroyJournalEntryFailure: function( response, scope ) {
+ 		var me=scope;
+ 		me.getView().setLoading( false );
+ 	},      
+     
     loadEditor: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
     }
