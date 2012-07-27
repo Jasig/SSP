@@ -26,9 +26,16 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		return this.callParent(arguments);
     },
 
-    onBeforeEdit: function(){
+    onBeforeEdit: function( editor, e, eOpts ){
 		var me=this;
 		var access = me.authenticatedPerson.hasAccess('ABSTRACT_REFERENCE_ADMIN_EDIT');
+		// Test if the record is restricted content 
+		if ( me.authenticatedPerson.isDeveloperRestrictedContent( e.record ) )
+		{
+			me.authenticatedPerson.showDeveloperRestrictedContentAlert();
+			return false;
+		}		
+
 		if ( access == false)
 		{
 			me.authenticatedPerson.showUnauthorizedAccessAlert();
@@ -59,6 +66,13 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		var grid = button.up('grid');
 		var store = grid.getStore();
 		var item = Ext.create( store.model.modelName, {}); // new Ssp.model.reference.AbstractReference();
+		
+		// Test if the record is restricted content	
+		if ( me.authenticatedPerson.isDeveloperRestrictedContent( item ) )
+		{
+			me.authenticatedPerson.showDeveloperRestrictedContentAlert();
+			return false;
+		}
 		
 		// default the name property
 		item.set('name','default');
@@ -101,8 +115,16 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
        var store = grid.getStore();
        var selection = grid.getView().getSelectionModel().getSelection()[0];
        var message;
-       if ( selection.get('id') ) 
+
+       if (selection != null && selection.get('id') ) 
        {
+    	   // Test if the record is restricted content 
+           if ( me.authenticatedPerson.isDeveloperRestrictedContent( selection ) )
+    	   {
+    			me.authenticatedPerson.showDeveloperRestrictedContentAlert();
+    			return false;
+    	   }    	   
+    	   
     	   if ( !Ssp.util.Constants.isRestrictedAdminItemId( selection.get('id')  ) )
     	   {
         	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
@@ -119,7 +141,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
     		   Ext.Msg.alert('WARNING', 'This item is related to core SSP functionality. Please see a developer to delete this item.'); 
     	   }
         }else{
-     	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to delete.'); 
         }
      },	
 	
