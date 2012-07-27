@@ -325,11 +325,34 @@ public class PersonServiceImpl implements PersonService {
 		final Collection<String> coachUsernames = personAttributesService
 				.getCoaches();
 		for (final String coachUsername : coachUsernames) {
+			
+			Person coach = null;
+			
 			try {
-				coaches.add(personFromUsername(coachUsername));
+				coach = personFromUsername(coachUsername);
 			} catch (final ObjectNotFoundException e) {
 				LOGGER.debug("Coach {} not found", coachUsername);
 			}
+			
+			// Does coach exist in local SSP.person table?
+			if (coach == null) {
+
+				// Attempt to find coach in external data
+				try {
+					final ExternalPerson externalPerson = externalPersonService
+							.getByUsername(coachUsername);
+					
+					coach = new Person();
+					externalPersonService.updatePersonFromExternalPerson(
+							coach, externalPerson);
+					
+				} catch (final ObjectNotFoundException e) {
+					LOGGER.debug("Coach {} not found in external data", coachUsername);
+				}				
+			}
+
+			if (coach != null)
+				coaches.add(coach);
 		}
 
 		return new PagingWrapper<Person>(coaches);

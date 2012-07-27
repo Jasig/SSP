@@ -11,6 +11,9 @@ public interface ExternalPersonService extends
 	ExternalPerson getBySchoolId(String schoolId)
 			throws ObjectNotFoundException;
 
+	ExternalPerson getByUsername(String username)
+			throws ObjectNotFoundException;
+
 	void syncWithPerson(final SortingAndPaging sAndP);
 
 	void updatePersonFromExternalPerson(final Person person,

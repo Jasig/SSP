@@ -49,6 +49,33 @@ public class ExternalPersonDao extends AbstractExternalDataDao<ExternalPerson> {
 
 		return obj;
 	}
+	
+	/**
+	 * Retrieves the specified instance from persistent storage.
+	 * 
+	 * @param username
+	 *            the username value
+	 * @return The specified instance if found
+	 * @throws ObjectNotFoundException
+	 *             If object was not found.
+	 */
+	public ExternalPerson getByUsername(@NotNull final String username)
+			throws ObjectNotFoundException {
+		if (StringUtils.isBlank(username)) {
+			throw new ObjectNotFoundException(username,
+					ExternalPerson.class.getName());
+		}
+
+		final ExternalPerson obj = (ExternalPerson) createCriteria()
+				.add(Restrictions.eq("username", username)).uniqueResult();
+
+		if (obj == null) {
+			throw new ObjectNotFoundException(username,
+					ExternalPerson.class.getName());
+		}
+
+		return obj;
+	}
 
 	public PagingWrapper<ExternalPerson> getBySchoolIds(
 			@NotNull final Collection<String> schoolIds,

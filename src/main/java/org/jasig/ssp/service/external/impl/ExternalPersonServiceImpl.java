@@ -62,6 +62,12 @@ public class ExternalPersonServiceImpl
 	}
 
 	@Override
+	public ExternalPerson getByUsername(final String username)
+			throws ObjectNotFoundException {
+		return dao.getByUsername(username);
+	}
+
+	@Override
 	public void syncWithPerson(final SortingAndPaging sAndP) {
 		final PagingWrapper<Person> people = personService.getAll(sAndP);
 
@@ -94,63 +100,83 @@ public class ExternalPersonServiceImpl
 	public void updatePersonFromExternalPerson(final Person person,
 			final ExternalPerson externalPerson) {
 
-		if (!person.getFirstName().equals(externalPerson.getFirstName())) {
+		if (person.getSchoolId() == null)
+			person.setSchoolId(externalPerson.getSchoolId());
+		
+		if (person.getUsername() == null)
+			person.setUsername(externalPerson.getUsername());
+		
+		if ((person.getFirstName() == null) || 
+				(!person.getFirstName().equals(externalPerson.getFirstName()))) {
 			person.setFirstName(externalPerson.getFirstName());
 		}
 
-		if (!person.getLastName().equals(externalPerson.getLastName())) {
+		if ((person.getLastName() == null) || 
+				(!person.getLastName().equals(externalPerson.getLastName()))) {
 			person.setLastName(externalPerson.getLastName());
 		}
 
-		if (!person.getMiddleName().equals(externalPerson.getMiddleName())) {
+		if ((person.getMiddleName() == null) || 
+				(!person.getMiddleName().equals(externalPerson.getMiddleName()))) {
 			person.setMiddleName(externalPerson.getMiddleName());
 		}
 
-		if (!person.getBirthDate().equals(externalPerson.getBirthDate())) {
+		if ((person.getBirthDate() == null) || 
+				(!person.getBirthDate().equals(externalPerson.getBirthDate()))) {
 			person.setBirthDate(externalPerson.getBirthDate());
 		}
 
-		if (!person.getPrimaryEmailAddress().equals(
-				externalPerson.getPrimaryEmailAddress())) {
+		if ((person.getPrimaryEmailAddress() == null) ||
+				(!person.getPrimaryEmailAddress().equals(
+						externalPerson.getPrimaryEmailAddress()))) {
 			person.setPrimaryEmailAddress(externalPerson
 					.getPrimaryEmailAddress());
 		}
 
-		if (!person.getAddressLine1().equals(externalPerson.getAddressLine1())) {
+		if ((person.getAddressLine1() == null) ||
+				(!person.getAddressLine1().equals(externalPerson.getAddressLine1()))) {
 			person.setAddressLine1(externalPerson.getAddressLine1());
 		}
 
-		if (!person.getAddressLine2().equals(externalPerson.getAddressLine2())) {
+		if ((person.getAddressLine2() == null) ||
+				(!person.getAddressLine2().equals(externalPerson.getAddressLine2()))) {
 			person.setAddressLine2(externalPerson.getAddressLine2());
 		}
 
-		if (!person.getCity().equals(externalPerson.getCity())) {
+		if ((person.getCity() == null) ||
+				(!person.getCity().equals(externalPerson.getCity()))) {
 			person.setCity(externalPerson.getCity());
 		}
 
-		if (!person.getState().equals(externalPerson.getState())) {
+		if ((person.getState() == null) ||
+				(!person.getState().equals(externalPerson.getState()))) {
 			person.setState(externalPerson.getState());
 		}
 
-		if (!person.getZipCode().equals(externalPerson.getZipCode())) {
+		if ((person.getZipCode() == null) ||
+				(!person.getZipCode().equals(externalPerson.getZipCode()))) {
 			person.setZipCode(externalPerson.getZipCode());
 		}
 
-		if (!person.getHomePhone().equals(externalPerson.getHomePhone())) {
+		if ((person.getHomePhone() == null) ||
+				(!person.getHomePhone().equals(externalPerson.getHomePhone()))) {
 			person.setHomePhone(externalPerson.getHomePhone());
 		}
 
-		if (!person.getWorkPhone().equals(externalPerson.getWorkPhone())) {
+		if ((person.getWorkPhone() == null) ||
+				(!person.getWorkPhone().equals(externalPerson.getWorkPhone()))) {
 			person.setWorkPhone(externalPerson.getWorkPhone());
 		}
 
-		if (!person.getActualStartTerm().equals(
-				externalPerson.getActualStartTerm())) {
+		if ((person.getActualStartTerm() == null) ||
+				(!person.getActualStartTerm().equals(
+						externalPerson.getActualStartTerm()))) {
 			person.setActualStartTerm(externalPerson.getActualStartTerm());
 		}
 
-		if (!person.getActualStartYear().equals(
-				externalPerson.getActualStartYear())) {
+		if ((person.getActualStartYear() == null) ||
+				(!person.getActualStartYear().equals(
+						externalPerson.getActualStartYear()))) {
 			person.setActualStartYear(externalPerson.getActualStartYear());
 		}
 
@@ -177,20 +203,23 @@ public class ExternalPersonServiceImpl
 				person.setStaffDetails(new PersonStaffDetails());
 			}
 
-			if (!person.getStaffDetails().getOfficeHours()
-					.equals(externalPerson.getOfficeHours())) {
+			if ((person.getStaffDetails().getOfficeHours() == null) || 
+					(!person.getStaffDetails().getOfficeHours()
+							.equals(externalPerson.getOfficeHours()))) {
 				person.getStaffDetails().setOfficeHours(
 						externalPerson.getOfficeHours());
 			}
 
-			if (!person.getStaffDetails().getOfficeLocation()
-					.equals(externalPerson.getOfficeLocation())) {
+			if ((person.getStaffDetails().getOfficeLocation() == null) ||
+					(!person.getStaffDetails().getOfficeLocation()
+							.equals(externalPerson.getOfficeLocation()))) {
 				person.getStaffDetails().setOfficeLocation(
 						externalPerson.getOfficeLocation());
 			}
 
-			if (!person.getStaffDetails().getDepartmentName()
-					.equals(externalPerson.getDepartmentName())) {
+			if ((person.getStaffDetails().getDepartmentName() == null) ||
+					(!person.getStaffDetails().getDepartmentName()
+							.equals(externalPerson.getDepartmentName()))) {
 				person.getStaffDetails().setDepartmentName(
 						externalPerson.getDepartmentName());
 			}
@@ -257,10 +286,15 @@ public class ExternalPersonServiceImpl
 					"true"));
 		}
 
-		if (!demographics.getBalanceOwed()
-				.equals(externalPerson.getBalanceOwed())) {
-			demographics.setBalanceOwed(
-					externalPerson.getBalanceOwed());
+		if (externalPerson.getBalanceOwed() == null) {
+			demographics.setBalanceOwed(null);
+		} else {
+			if ((demographics.getBalanceOwed() == null) ||
+					(!demographics.getBalanceOwed()
+							.equals(externalPerson.getBalanceOwed()))) {
+				demographics.setBalanceOwed(
+						externalPerson.getBalanceOwed());
+			}
 		}
 
 		try {
