@@ -10,17 +10,17 @@ Ext.define('Ssp.model.Appointment', {
              
     getStartDate: function(){
 		var me=this;
-    	var startDate = me.formUtils.fixDateOffset( me.get('appointmentDate'), true );
+    	var startDate = me.get('appointmentDate');
     	startDate.setHours( me.get('startTime').getHours() );
 		startDate.setMinutes( me.get('startTime').getMinutes() );
-		return me.formUtils.fixDateOffsetWithTime( startDate );
+		return startDate;
     },
     
     getEndDate: function(){
     	var me=this;
-    	var endDate = me.formUtils.fixDateOffset( me.get('appointmentDate'), true );
+    	var endDate = me.get('appointmentDate');
 		endDate.setHours( me.get('endTime').getHours() );
 		endDate.setMinutes( me.get('endTime').getMinutes() );
-		return me.formUtils.fixDateOffsetWithTime( endDate );    	
+		return endDate;    	
     }
 });

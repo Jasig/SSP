@@ -82,7 +82,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     		
 			// fix timestamp due to GMT Date, set to UTC Date
     		model.set('dueDate', me.formUtils.fixDateOffsetWithTime( model.data.dueDate ) );
-  		
+
     		if (id == "")
     		{
         		model.set('type','SSP');

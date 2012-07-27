@@ -117,7 +117,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
      	{
      		if (me.earlyAlert.get('closedById') != "")
      		{
-         		me.earlyAlert.set( 'closedDate', new Date() );
+     			// fix for GMT to UTC
+         		me.earlyAlert.set('closedDate', me.formUtils.fixDateOffsetWithTime( new Date() ) );
          		me.earlyAlert.set( 'closedById', personId );    			
      		}
      		jsonData = me.earlyAlert.data;

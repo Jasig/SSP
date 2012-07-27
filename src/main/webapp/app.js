@@ -783,7 +783,7 @@ Ext.onReady(function(){
 				    	    }
 				    	    return r;
 				    	};
-				    	*/
+				    	*/    	
 				    	
 			   	    	// load the main view
 			    		Ext.apply(me,{
