@@ -250,8 +250,18 @@ public class ExternalPersonServiceImpl
 			}
 		}
 
-		// :TODO isLocal
-		// :TODO balanceowed
+		if (externalPerson.getIsLocal() == null) {
+			demographics.setLocal(null);
+		} else {
+			demographics.setLocal(externalPerson.getIsLocal().equalsIgnoreCase(
+					"true"));
+		}
+
+		if (!demographics.getBalanceOwed()
+				.equals(externalPerson.getBalanceOwed())) {
+			demographics.setBalanceOwed(
+					externalPerson.getBalanceOwed());
+		}
 
 		try {
 			personService.save(person);
