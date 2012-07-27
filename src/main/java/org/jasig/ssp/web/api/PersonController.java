@@ -71,7 +71,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 				factory.asTOList(people.getRows()));
 	}
 
-	@RequestMapping(value = "/coach/", method = RequestMethod.GET)
+	@RequestMapping(value = "/coach", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	PagedResponse<PersonLiteTO> getAllCoaches(
