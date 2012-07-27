@@ -195,4 +195,17 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 					object.getId());
 		}
 	}
+
+	@Test(expected = ObjectNotFoundException.class)
+	public void getBySchoolIdException() throws ObjectNotFoundException {
+		dao.getBySchoolId("borkborkbork");
+	}
+
+	@Test
+	public void getBySchoolId() throws ObjectNotFoundException {
+		final Person person = dao.getBySchoolId("ken.1");
+		assertNotNull("ken should have been found", person);
+		assertEquals("first name should be set", "Kenneth",
+				person.getFirstName());
+	}
 }
