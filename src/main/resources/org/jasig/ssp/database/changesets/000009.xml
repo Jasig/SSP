@@ -207,4 +207,26 @@
 			<dropColumn tableName="person" columnName="actual_start_year"/>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="add config for coachSetFromExternalData" author="daniel.bower">
+		<insert tableName="config">
+			<column name="id" value="1b5528d2-d789-11e1-9d78-0026b9e7ff4c" />
+			<column name="name" value="coachSetFromExternalData" />
+			<column name="description"
+				value="Coach is always set from external data if this is set to true.  It will overwrite any local changes for coach." />
+			<column name="default_value">true</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="config">
+				<where>id='1b5528d2-d789-11e1-9d78-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

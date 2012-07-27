@@ -9,11 +9,13 @@ import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
@@ -54,6 +56,9 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private transient RegistrationStatusByTermService registrationStatusByTermService;
+
+	@Autowired
+	private transient ExternalPersonService externalPersonService;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -165,13 +170,24 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public Person getByStudentId(final String studentId)
+	public Person getBySchoolId(final String schoolId)
 			throws ObjectNotFoundException {
 
-		final Person person = dao.getByStudentId(studentId);
+		Person person = dao.getBySchoolId(schoolId);
 
 		if (person == null) {
-			// :TODO look up person in external_person table
+
+			final ExternalPerson externalPerson = externalPersonService
+					.getBySchoolId(schoolId);
+			if (externalPerson == null) {
+				throw new ObjectNotFoundException(
+						"Unable to find person by schoolId: " + schoolId,
+						"Person");
+			}
+
+			person = new Person();
+			externalPersonService.updatePersonFromExternalPerson(person,
+					externalPerson);
 		}
 
 		return additionalAttribsForStudent(person);
