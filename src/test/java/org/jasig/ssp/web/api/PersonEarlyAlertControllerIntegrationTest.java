@@ -349,6 +349,42 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		fail("Create with invalid person UUID should have thrown exception.");
 	}
 
+	@Test(expected = ValidationException.class)
+	public void testControllerCreateWithMismatchedPersonIds()
+			throws ObjectNotFoundException, ValidationException {
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setPersonId(UUID.randomUUID());
+		controller.create(UUID.randomUUID(), obj);
+		fail("Create with mismatched path and TO person IDs should have"
+				+ " thrown exception.");
+	}
+
+	@Test
+	public void testControllerCreateWithNoPersonIdInTO()
+			throws ObjectNotFoundException, ValidationException {
+		final EarlyAlertTO obj = createEarlyAlert();
+		obj.setPersonId(null);
+		final EarlyAlertTO saved = controller.create(PERSON_ID, obj);
+		assertNotNull("Saved instance should not have been null.", saved);
+
+		final UUID savedId = saved.getId();
+		assertNotNull("Saved instance identifier should not have been null.",
+				savedId);
+
+		assertEquals("Saved instance Person ID values did not match.",
+				PERSON_ID,
+				saved.getPersonId());
+
+		sessionFactory.getCurrentSession().flush();
+
+		final ServiceResponse response = controller.delete(savedId, PERSON_ID);
+
+		assertNotNull("Deletion response should not have been null.",
+				response);
+		assertTrue("Deletion response did not return success.",
+				response.isSuccess());
+	}
+
 	/**
 	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
 	 * action.
