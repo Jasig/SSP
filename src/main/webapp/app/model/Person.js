@@ -129,11 +129,39 @@ Ext.define('Ssp.model.Person', {
 		{
 			jsonData.specialServiceGroups=null;
 		}
-		
+
 		if( jsonData.referralSources == "" )
 		{
 			jsonData.referralSources=null;
-		}		
+		}
+		
+		// TODO: Handle username field
+		if (jsonData.username == "")
+		{
+			jsonData.username = jsonData.firstName +'.'+jsonData.lastName;			
+		}
+
 		return jsonData;
+    },
+    
+    populateFromExternalData: function( jsonData ){
+    	var me=this;
+    	me.set('photoUrl',jsonData.photoUrl);
+    	me.set('schoolId',jsonData.schoolId);
+    	me.set('firstName',jsonData.firstName);
+    	me.set('middleName',jsonData.middleName);
+    	me.set('lastName', jsonData.lastName);	
+    	me.set('anticipatedStartTerm',jsonData.anticipatedStartTerm);
+    	me.set('anticipatedStartYear',jsonData.anticipatedStartYear);
+    	me.set('cellPhone', jsonData.cellPhone);
+    	me.set('workPhone', jsonData.workPhone);
+    	me.set('addressLine1', jsonData.addressLine1);
+    	me.set('addressLine2', jsonData.addressLine2);
+    	me.set('city', jsonData.city);
+    	me.set('state', jsonData.state);
+    	me.set('zipCode', jsonData.zipCode);
+    	me.set('primaryEmailAddress', jsonData.primaryEmailAddress);
+    	me.set('secondaryEmailAddress', jsonData.secondaryEmailAddress);
+    	me.set('birthDate', jsonData.birthDate);
     }
 });

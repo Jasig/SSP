@@ -219,8 +219,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			if (selectedSpecialServiceGroups.length > 0)
 			{
 				model.set('specialServiceGroups', selectedSpecialServiceGroups);
-			}else{
-				model.data.specialServiceGroups=null;
 			}
 
 			// referral sources
@@ -229,8 +227,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			if (selectedReferralSources.length > 0)
 			{			
 			   model.set('referralSources', selectedReferralSources);
-			}else{
-			   model.data.referralSources=null;
 			}
 			
 			// set the service reasons
@@ -239,20 +235,12 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			if (selectedServiceReasons.length > 0)
 			{
 				model.set('serviceReasons', selectedServiceReasons);
-			}else{
-				model.data.serviceReasons=null;
 			}
 						
-			// TODO: Handle username field
-			if (model.get("username") == "")
-				model.set('username',model.get('firstName')+'.'+model.get('lastName'));				
-			
 			me.getView().setLoading( true );
 			
-			jsonData = model.data;
-			
-			// TODO: Fix API to exclude currentProgramStatusName from save 
-			delete jsonData.currentProgramStatusName;			
+			// ensure props are null if necessary
+			jsonData = model.setPropsNullForSave( model.data );			
 
 			me.personService.save( jsonData, 
 	    			               {success:me.savePersonSuccess, 
@@ -295,8 +283,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     },
     
     savePersonFailure: function( response, scope ){
-    	var me=scope;  	
-    	me.getView().setLoading( false );   	
+    	var me=scope;
+    	me.getView().setLoading( false );
     },
 
     

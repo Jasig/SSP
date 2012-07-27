@@ -3,6 +3,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	appEventsController: 'appEventsController',
+    	campusService: 'campusService',
     	campusEarlyAlertRouting: 'currentCampusEarlyAlertRouting',
     	campusesStore: 'campusesStore',
     	earlyAlertCoordinatorsStore: 'earlyAlertCoordinatorsStore',
@@ -111,15 +112,27 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
       	var id = selection.get('id');
       	if (btnId=="yes")
       	{
-      		me.apiProperties.makeRequest({
-        		   url: store.getProxy().url+"/"+id,
-        		   method: 'DELETE',
-        		   successFunc: function(response,responseText){
-        			   store.remove( store.getById( id ) );
-        		   }
-        	    });
+     		me.getView().setLoading( true );
+     		me.campusService.destroy( id, {
+     			success: me.destroyCampusSuccess,
+     			failure: me.destroyCampusFailure,
+     			scope: me
+     		});
         }
  	},
+ 	
+    destroyCampusSuccess: function( r, id, scope ) {
+ 		var me=scope;
+ 		var grid=me.getView();
+ 		var store = grid.getStore();
+ 		me.getView().setLoading( false );
+ 		store.remove( store.getById( id ) );
+ 	},
+
+ 	destroyCampusFailure: function( response, scope ) {
+ 		var me=scope;
+ 		me.getView().setLoading( false );
+ 	}, 
 
 	displayCampusEarlyAlertRoutingAdmin: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getCampusEarlyAlertRoutingAdminForm(), true, {});

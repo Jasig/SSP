@@ -6,6 +6,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     	appEventsController: 'appEventsController',
         person: 'currentPerson',
         personLite: 'personLite',
+        personService: 'personService',
         profileReferralSourcesStore: 'profileReferralSourcesStore',
         profileServiceReasonsStore: 'profileServiceReasonsStore',
         profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
@@ -27,6 +28,26 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 	init: function() {
 		var me=this;
 		me.getView().getForm().reset();
+
+		// Set defined configured label for the studentId field
+		studentIdField.setFieldLabel(studentIdAlias);		
+		
+		if (id != "")
+		{
+			// display loader
+			me.getView().setLoading( true );
+			me.personService.get( me.personLite.get('id'), {
+				success: getPersonSuccess,
+				failure: getPersonFailure,
+				scope: me
+			});
+		}
+		
+		return me.callParent(arguments);
+    },
+    
+    getPersonSuccess: function( r, scope ){
+    	var me=scope;
 		var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
 		var studentIdField = me.getStudentIdField();
 		var nameField = me.getNameField();
@@ -39,78 +60,56 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var studentTypeField = me.getStudentTypeField();
 		var programStatusField = me.getProgramStatusField();
 		var id= me.personLite.get('id');
-		var personUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
-		var studentIdAlias = me.sspConfig.get('studentIdAlias');			
-		var successFunc = function(response,view){
-	    	var r = Ext.decode(response.responseText);
-    		var fullName; 		
-    		
-    		// load the person data
-    		me.person.populateFromGenericObject(r);
-    		
-	    	fullName = me.person.getFullName();
-	    	
-	    	// console.log( me.person.get('programStatuses') );
-	    	
-    		// load special service groups
-    		if (r.specialServiceGroups != null)
-    		{
-    			me.profileSpecialServiceGroupsStore.loadData( me.person.get('specialServiceGroups') );
-    		}else{
-    			me.profileSpecialServiceGroupsStore.removeAll();
-    		}
-    		
-    		// load referral sources
-    		if (r.referralSources != null)
-    		{
-    			me.profileReferralSourcesStore.loadData( me.person.get('referralSources') );
-    		}else{
-    			me.profileReferralSourcesStore.removeAll();    			
-    		}
-
-    		// load service reasons
-    		if (r.serviceReasons != null)
-    		{
-    			me.profileServiceReasonsStore.loadData( me.person.get('serviceReasons') );
-    		}else{
-    			me.profileServiceReasonsStore.removeAll();    			
-    		}    		
-    		
-    		// load general student record
-    		me.getView().loadRecord( me.person );
-    		
-    		// load additional values
-    		nameField.setValue( fullName );
-    		coachNameField.setValue( me.person.getCoachFullName() );
-    		coachWorkPhoneField.setValue( me.person.getCoachWorkPhone() );
-    		coachDepartmentNameField.setValue( me.person.getCoachDepartmentName() );
-    		coachOfficeLocationField.setValue( me.person.getCoachOfficeLocation() );
-    		coachPrimaryEmailAddressField.setValue( me.person.getCoachPrimaryEmailAddress() );
-    		birthDateField.setValue( me.person.getFormattedBirthDate() );
-    		studentTypeField.setValue( me.person.getStudentTypeName() );
-    		programStatusField.setValue( me.person.getProgramStatusName() );
-    		studentRecordComp.setTitle('Student Record - ' + fullName);
-    		
-	    	// hide the loader
-	    	me.getView().setLoading( false ); 
-		};
-
-		// Set defined configured label for the studentId field
-		studentIdField.setFieldLabel(studentIdAlias);		
+		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		var fullName; 		
 		
-		if (id != "")
+		// load the person data
+		me.person.populateFromGenericObject(r);
+		
+    	fullName = me.person.getFullName();
+   	
+		// load special service groups
+    	me.profileSpecialServiceGroupsStore.removeAll();
+		if (r.specialServiceGroups != null)
 		{
-			// display loader
-			me.getView().setLoading( true );
-			
-			// load the person record
-			me.apiProperties.makeRequest({
-				url: personUrl+'/'+id,
-				method: 'GET',
-				successFunc: successFunc 
-			});
+			me.profileSpecialServiceGroupsStore.loadData( me.person.get('specialServiceGroups') );
 		}
 		
-		return me.callParent(arguments);
+		// load referral sources
+		me.profileReferralSourcesStore.removeAll();  
+		if (r.referralSources != null)
+		{
+			me.profileReferralSourcesStore.loadData( me.person.get('referralSources') );
+		}
+
+		// load service reasons
+		me.profileServiceReasonsStore.removeAll();  
+		if (r.serviceReasons != null)
+		{
+			me.profileServiceReasonsStore.loadData( me.person.get('serviceReasons') );
+		}   		
+		
+		// load general student record
+		me.getView().loadRecord( me.person );
+		
+		// load additional values
+		nameField.setValue( fullName );
+		coachNameField.setValue( me.person.getCoachFullName() );
+		coachWorkPhoneField.setValue( me.person.getCoachWorkPhone() );
+		coachDepartmentNameField.setValue( me.person.getCoachDepartmentName() );
+		coachOfficeLocationField.setValue( me.person.getCoachOfficeLocation() );
+		coachPrimaryEmailAddressField.setValue( me.person.getCoachPrimaryEmailAddress() );
+		birthDateField.setValue( me.person.getFormattedBirthDate() );
+		studentTypeField.setValue( me.person.getStudentTypeName() );
+		programStatusField.setValue( me.person.getProgramStatusName() );
+		studentRecordComp.setTitle('Student Record - ' + fullName);
+		
+    	// hide the loader
+    	me.getView().setLoading( false ); 
+    },
+    
+    getPersonFailure: function( response, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
     }
 });

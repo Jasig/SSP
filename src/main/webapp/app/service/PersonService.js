@@ -3,7 +3,8 @@ Ext.define('Ssp.service.PersonService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	person: 'currentPerson'
+    	person: 'currentPerson',
+    	sspConfig: 'sspConfig'
     },
     config: {
     	personUrl: null
@@ -83,8 +84,23 @@ Ext.define('Ssp.service.PersonService', {
 	    };
 
 	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
+	    	var r;
+	    	// handle unique schoolId error display in a more
+	    	// user friendly fashion
+	    	/*
+	    	if ( response.responseText != null)
+	    	{
+	    		r = Ext.decode(response.responseText);
+	    		if (r.message.indexOf('ERROR: duplicate key value violates unique constraint \"uq_person_school_id\"') == 0)
+	    		{
+	    			Ext.Msg.alert("SSP Error","The " + me.sspConfig.get('studentIdAlias') + " you entered already exists in the system. Please double-check and try again.");
+	    		}
+	    	}else{
+		    	    		
+	    	}
+	    	*/
+	    	me.apiProperties.handleError( response );
+	    	callbacks.failure( response, callbacks.scope );	
 	    };
         
     	// save the person

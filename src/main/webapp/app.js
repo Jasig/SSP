@@ -214,6 +214,7 @@ Ext.require([
     'Ssp.service.ConfidentialityDisclosureAgreementService',
     'Ssp.service.EarlyAlertService',
     'Ssp.service.EarlyAlertResponseService',
+    'Ssp.service.JournalEntryService',
     'Ssp.service.PersonService',
     'Ssp.service.ProgramStatusService',
     'Ssp.service.ReferralSourceService',
@@ -644,6 +645,7 @@ Ext.onReady(function(){
 			        confidentialityDisclosureAgreementService: 'Ssp.service.ConfidentialityDisclosureAgreementService',
 			        earlyAlertService: 'Ssp.service.EarlyAlertService',
 			        earlyAlertResponseService: 'Ssp.service.EarlyAlertResponseService',
+			        journalEntryService: 'Ssp.service.JournalEntryService',
 			        personService: 'Ssp.service.PersonService',
 			        personProgramStatusService: 'Ssp.service.PersonProgramStatusService',
 			        programStatusService: 'Ssp.service.ProgramStatusService',
@@ -707,7 +709,7 @@ Ext.onReady(function(){
 				            		// Handle call not found result
 				            		if (response.status==404)
 				            		{
-				            			Ext.Msg.alert('SSP Error', msg);
+				            			Ext.Msg.alert('SSP Error', '404 Server Error. See logs for additional details');
 				            		}
 				                });
 				            }

@@ -134,18 +134,13 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     
     getBySchoolIdSuccess: function( r, scope ){
 		var me=scope;
+		var model = new Ssp.model.Person();
 		me.getView().setLoading( false );
 		if ( r != null)
 		{
 			me.getView().getForm().reset();
-			delete r.id;
-			var person = new Ssp.model.Person();
-			delete r.createdBy;
-			delete r.modifiedBy;
-			delete r.username;
-			delete r.studentIntakeCompleteDate;
-			me.person.data = person.data;
-			me.person.populateFromGenericObject( r );	
+			model.populateFromExternalData( r );
+			me.person.data = model.data;
 			me.getView().loadRecord( me.person );
 		}else{
 			Ext.Msg.alert('SSP Notification','There were no records found with the provided ID. Please try a different value.');
