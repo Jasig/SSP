@@ -3,11 +3,7 @@ package org.jasig.ssp.service.reference;
 import java.util.UUID;
 
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
-import org.jasig.ssp.service.AuditableCrudService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.validation.ValidationException;
+import org.jasig.ssp.service.ReferenceService;
 
 /**
  * EarlyAlertSuggestion service
@@ -15,13 +11,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
  * @author jon.adams
  */
 public interface EarlyAlertSuggestionService extends
-		AuditableCrudService<EarlyAlertSuggestion> {
-
-	@Override
-	PagingWrapper<EarlyAlertSuggestion> getAll(SortingAndPaging sAndP);
-
-	@Override
-	EarlyAlertSuggestion get(UUID id) throws ObjectNotFoundException;
+		ReferenceService<EarlyAlertSuggestion> {
 
 	/**
 	 * Lazily load an instance for the specified identifier.
@@ -32,14 +22,4 @@ public interface EarlyAlertSuggestionService extends
 	 */
 	EarlyAlertSuggestion load(UUID id);
 
-	@Override
-	EarlyAlertSuggestion create(EarlyAlertSuggestion obj)
-			throws ObjectNotFoundException, ValidationException;
-
-	@Override
-	EarlyAlertSuggestion save(EarlyAlertSuggestion obj)
-			throws ObjectNotFoundException, ValidationException;
-
-	@Override
-	void delete(UUID id) throws ObjectNotFoundException;
 }
