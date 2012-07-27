@@ -81,6 +81,8 @@ public class PersonTOFactoryImpl extends
 		model.setAbilityToBenefit(tObject.getAbilityToBenefit());
 		model.setAnticipatedStartTerm(tObject.getAnticipatedStartTerm());
 		model.setAnticipatedStartYear(tObject.getAnticipatedStartYear());
+		model.setActualStartTerm(tObject.getActualStartTerm());
+		model.setActualStartYear(tObject.getActualStartYear());
 		model.setStudentIntakeRequestDate(tObject.getStudentIntakeRequestDate());
 		model.setStudentType((tObject.getStudentType() == null)
 				|| (tObject.getStudentType().getId() == null) ? null // NOPMD

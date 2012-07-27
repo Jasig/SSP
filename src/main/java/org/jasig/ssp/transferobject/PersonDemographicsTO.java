@@ -18,9 +18,9 @@ public class PersonDemographicsTO
 			citizenshipId, veteranStatusId, childCareArrangementId;
 	private boolean abilityToBenefit, local, primaryCaregiver,
 			childCareNeeded, employed;
-	private Integer numberOfChildren, anticipatedStartYear, actualStartYear;
-	private String anticipatedStartTerm, actualStartTerm,
-			countryOfResidence, paymentStatus, gender, countryOfCitizenship,
+	private Integer numberOfChildren;
+	private String countryOfResidence, paymentStatus, gender,
+			countryOfCitizenship,
 			childAges, placeOfEmployment, shift, wage, totalHoursWorkedPerWeek;
 
 	private BigDecimal balanceOwed;
@@ -64,10 +64,6 @@ public class PersonDemographicsTO
 		childCareNeeded = model.isChildCareNeeded();
 		employed = model.isEmployed();
 		numberOfChildren = model.getNumberOfChildren();
-		anticipatedStartTerm = model.getAnticipatedStartTerm();
-		anticipatedStartYear = model.getAnticipatedStartYear();
-		actualStartTerm = model.getActualStartTerm();
-		actualStartYear = model.getActualStartYear();
 		balanceOwed = model.getBalanceOwed();
 		countryOfResidence = model.getCountryOfResidence();
 		paymentStatus = model.getPaymentStatus();
@@ -180,38 +176,6 @@ public class PersonDemographicsTO
 
 	public void setEmployed(final boolean employed) {
 		this.employed = employed;
-	}
-
-	public String getAnticipatedStartTerm() {
-		return anticipatedStartTerm;
-	}
-
-	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
-		this.anticipatedStartTerm = anticipatedStartTerm;
-	}
-
-	public Integer getAnticipatedStartYear() {
-		return anticipatedStartYear;
-	}
-
-	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
-		this.anticipatedStartYear = anticipatedStartYear;
-	}
-
-	public Integer getActualStartYear() {
-		return actualStartYear;
-	}
-
-	public void setActualStartYear(final Integer actualStartYear) {
-		this.actualStartYear = actualStartYear;
-	}
-
-	public String getActualStartTerm() {
-		return actualStartTerm;
-	}
-
-	public void setActualStartTerm(final String actualStartTerm) {
-		this.actualStartTerm = actualStartTerm;
 	}
 
 	public BigDecimal getBalanceOwed() {

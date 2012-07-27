@@ -98,10 +98,6 @@ public class PersonDemographicsTOFactoryImpl extends
 		model.setChildCareNeeded(tObject.isChildCareNeeded());
 		model.setEmployed(tObject.isEmployed());
 		model.setNumberOfChildren(tObject.getNumberOfChildren());
-		model.setAnticipatedStartTerm(tObject.getAnticipatedStartTerm());
-		model.setAnticipatedStartYear(tObject.getAnticipatedStartYear());
-		model.setActualStartTerm(tObject.getActualStartTerm());
-		model.setActualStartYear(tObject.getActualStartYear());
 		model.setBalanceOwed(tObject.getBalanceOwed());
 		model.setCountryOfResidence(tObject.getCountryOfResidence());
 		model.setPaymentStatus(tObject.getPaymentStatus());
