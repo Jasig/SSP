@@ -80,6 +80,9 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		    		});
 			};	
     		
+			// fix timestamp due to GMT Date, set to UTC Date
+    		model.set('dueDate', me.formUtils.fixDateOffsetWithTime( model.data.dueDate ) );
+  		
     		if (id == "")
     		{
         		model.set('type','SSP');
@@ -100,7 +103,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     			// as a Task. Task grouping is handled in the Tasks display.
         		if (model.data.group != null)
         			delete model.data.group;
-        		
+        		        		
         		// edit the task
 	    		this.apiProperties.makeRequest({
 	    			url: me.url+"/"+id,

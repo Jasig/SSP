@@ -240,8 +240,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			me.getView().setLoading( true );
 			
 			// ensure props are null if necessary
-			jsonData = model.setPropsNullForSave( model.data );			
-
+			jsonData = model.setPropsNullForSave( model.data );
+			
 			me.personService.save( jsonData, 
 	    			               {success:me.savePersonSuccess, 
 				                    failure:me.savePersonFailure, 
@@ -305,6 +305,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		me.currentPersonAppointment.setAppointment( me.appointment.getStartDate() , 
     				                                    me.appointment.getEndDate() );
     		jsonData = me.currentPersonAppointment.data;
+    		jsonData.startTime = me.formUtils.fixDateOffsetWithTime( jsonData.startTime );
+    		jsonData.endTime = me.formUtils.fixDateOffsetWithTime( jsonData.endTime );
+
     		personId = me.person.get('id');
 			
     		// Fix startTime and endTime to represent appropriate date and time without GMT offset
