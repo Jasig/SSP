@@ -120,12 +120,12 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	/**
 	 * User name. Used to identify the user in secondary systems like LDAP.
 	 * 
-	 * Maximum length of 25.
+	 * Maximum length of 50.
 	 */
 	@NotNull
 	@NotEmpty
-	@Column(length = 25)
-	@Size(max = 25)
+	@Column(length = 50)
+	@Size(max = 50)
 	private String username;
 
 	/**

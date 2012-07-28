@@ -32,8 +32,8 @@ public class ExternalPerson extends AbstractExternalData implements
 
 	@NotNull
 	@NotEmpty
-	@Column(length = 25)
-	@Size(max = 25)
+	@Column(length = 50)
+	@Size(max = 50)
 	private String username;
 
 	@Column(length = 50)
