@@ -77,11 +77,10 @@ public class PersonEarlyAlertController extends
 			throws ObjectNotFoundException,
 			ValidationException {
 		if (personId == null) {
-			throw new ValidationException("Missing personId in path.");
+			throw new ValidationException("Missing person identifier in path.");
 		}
 
-		final Person person = personService.get(personId);
-		return super.get(id, person.getId());
+		return super.get(id, personId);
 	}
 
 	@Override
@@ -104,8 +103,8 @@ public class PersonEarlyAlertController extends
 		if (obj.getPersonId() != null && !personId.equals(obj.getPersonId())) {
 			throw new ValidationException(
 					"Person identifier in path, did not match the person"
-					+ " identifier in the early alert data. Those values must"
-					+ " match if a person identifier is set in the data.");
+							+ " identifier in the early alert data. Those values must"
+							+ " match if a person identifier is set in the data.");
 		}
 
 		// TEMPORARY check until the issue in SSP-338 is fixed
@@ -115,7 +114,7 @@ public class PersonEarlyAlertController extends
 					"Early alerts may not have more than one reason.");
 		}
 
-		if ( obj.getPersonId() == null ) {
+		if (obj.getPersonId() == null) {
 			obj.setPersonId(personId);
 		}
 
@@ -190,6 +189,19 @@ public class PersonEarlyAlertController extends
 				getFactory().asTOList(data.getRows()));
 	}
 
+	/**
+	 * Create an early alert.
+	 * 
+	 * @param studentId
+	 *            student id (legacy school id, not the SSP person id)
+	 * @param obj
+	 *            early alert data
+	 * @return Created early alert, with assigned id.
+	 * @throws ObjectNotFoundException
+	 *             If any of the specified data could not be found.
+	 * @throws ValidationException
+	 *             If any of the data was not valid.
+	 */
 	@RequestMapping(value = "/1/person/earlyAlert", method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertTO create(@RequestParam final String studentId,
@@ -230,7 +242,9 @@ public class PersonEarlyAlertController extends
 					"Person");
 		}
 
-		obj.setPersonId(personId);
+		if (obj.getPersonId() == null) {
+			obj.setPersonId(personId);
+		}
 
 		return super.create(personId, obj);
 	}

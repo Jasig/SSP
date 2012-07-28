@@ -150,7 +150,9 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 					"You submitted without an id to the save method.  Did you mean to create?");
 		}
 
-		obj.setId(id);
+		if (obj.getId() == null) {
+			obj.setId(id);
+		}
 
 		final T model = getFactory().from(obj);
 

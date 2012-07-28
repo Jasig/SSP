@@ -197,7 +197,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 
 		assertNotNull("Deletion response should not have been null.",
 				response);
-		assertTrue("Deletion response did not return success.",
+		assertTrue("Response should have returned success.",
 				response.isSuccess());
 
 		final EarlyAlertTO afterDeletion = controller.get(savedId,
@@ -241,23 +241,6 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	}
 
 	/**
-	 * Test the {@link PersonEarlyAlertController#get(UUID, UUID)} action throws
-	 * correct exception for missing person.
-	 * 
-	 * @throws ValidationException
-	 *             If validation error occurred.
-	 * @throws ObjectNotFoundException
-	 *             If object could not be found.
-	 */
-	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetNotFoundPerson()
-			throws ObjectNotFoundException,
-			ValidationException {
-		controller.get(EARLY_ALERT_ID, UUID.randomUUID());
-		fail("Exception should have been thrown.");
-	}
-
-	/**
 	 * Test that the {@link PersonEarlyAlertController#get(UUID, UUID)} action
 	 * returns sets with {@link ObjectStatus#ACTIVE} and
 	 * {@link ObjectStatus#INACTIVE} reference data objects.
@@ -275,13 +258,10 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		final Session session = sessionFactory.getCurrentSession();
 		session.flush(); // flush to ensure the INSERT commands are run now
 
-		assertNotNull("Saved instance should not have been null.", saved);
 		assertEquals("Saved instance data did not match.", PERSON_ID,
 				saved.getClosedById());
 
 		final UUID savedId = saved.getId();
-		assertNotNull("Saved instance identifier should not have been null.",
-				savedId);
 
 		// now clear all entities from the session so reloading the instance by
 		// the identifier will run any mapping filter annotations
