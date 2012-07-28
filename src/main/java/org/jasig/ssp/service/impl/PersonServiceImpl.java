@@ -173,14 +173,16 @@ public class PersonServiceImpl implements PersonService {
 	public Person getBySchoolId(final String schoolId)
 			throws ObjectNotFoundException {
 
-		Person person = dao.getBySchoolId(schoolId);
+		Person person;
 
-		if (person == null) {
+		try {
+			person = dao.getBySchoolId(schoolId);
 
+		} catch (ObjectNotFoundException e) {
 			final ExternalPerson externalPerson = externalPersonService
 					.getBySchoolId(schoolId);
 			if (externalPerson == null) {
-				throw new ObjectNotFoundException(
+				throw new ObjectNotFoundException( // NOPMD
 						"Unable to find person by schoolId: " + schoolId,
 						"Person");
 			}
@@ -325,15 +327,15 @@ public class PersonServiceImpl implements PersonService {
 		final Collection<String> coachUsernames = personAttributesService
 				.getCoaches();
 		for (final String coachUsername : coachUsernames) {
-			
+
 			Person coach = null;
-			
+
 			try {
 				coach = personFromUsername(coachUsername);
 			} catch (final ObjectNotFoundException e) {
 				LOGGER.debug("Coach {} not found", coachUsername);
 			}
-			
+
 			// Does coach exist in local SSP.person table?
 			if (coach == null) {
 
@@ -341,18 +343,20 @@ public class PersonServiceImpl implements PersonService {
 				try {
 					final ExternalPerson externalPerson = externalPersonService
 							.getByUsername(coachUsername);
-					
+
 					coach = new Person();
 					externalPersonService.updatePersonFromExternalPerson(
 							coach, externalPerson);
-					
+
 				} catch (final ObjectNotFoundException e) {
-					LOGGER.debug("Coach {} not found in external data", coachUsername);
-				}				
+					LOGGER.debug("Coach {} not found in external data",
+							coachUsername);
+				}
 			}
 
-			if (coach != null)
+			if (coach != null) {
 				coaches.add(coach);
+			}
 		}
 
 		return new PagingWrapper<Person>(coaches);
