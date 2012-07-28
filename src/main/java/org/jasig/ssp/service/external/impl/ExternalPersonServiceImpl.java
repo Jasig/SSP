@@ -19,10 +19,12 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,8 +69,38 @@ public class ExternalPersonServiceImpl
 		return dao.getByUsername(username);
 	}
 
+	private transient int lastRecord = 0;
+	private transient int batchSizeForPersonSync = 1000;
+
+	@Scheduled(fixedDelay = 300000)
+	// run every 5 minutes
+	public void syncWithPerson() {
+		LOGGER.info(
+				"BEGIN : Person and ExternalPerson Sync.  Selecting {} records starting at {}",
+				batchSizeForPersonSync, lastRecord);
+
+		final SortingAndPaging sAndP = SortingAndPaging.createForSingleSort(
+				ObjectStatus.ACTIVE, lastRecord, batchSizeForPersonSync,
+				"username",
+				SortDirection.ASC.toString(), null);
+
+		Long totalRows = Long.valueOf(0L);
+		try {
+			totalRows = syncWithPerson(sAndP);
+		} catch (Exception e) {
+			LOGGER.error("Failed to sync Person table with ExternalPerson", e);
+		} finally {
+			lastRecord = lastRecord + batchSizeForPersonSync;
+			if (lastRecord > totalRows.intValue()) {
+				lastRecord = 0;
+			}
+		}
+
+		LOGGER.info("END :  Person and ExternalPerson Sync");
+	}
+
 	@Override
-	public void syncWithPerson(final SortingAndPaging sAndP) {
+	public long syncWithPerson(final SortingAndPaging sAndP) {
 		final PagingWrapper<Person> people = personService.getAll(sAndP);
 
 		// allow access to people by schoolId
@@ -89,6 +121,8 @@ public class ExternalPersonServiceImpl
 			// upate person from external person
 			updatePersonFromExternalPerson(person, externalPerson);
 		}
+
+		return people.getResults();
 	}
 
 	/**
@@ -100,28 +134,31 @@ public class ExternalPersonServiceImpl
 	public void updatePersonFromExternalPerson(final Person person,
 			final ExternalPerson externalPerson) {
 
-		if (person.getSchoolId() == null)
+		if (person.getSchoolId() == null) {
 			person.setSchoolId(externalPerson.getSchoolId());
-		
-		if (person.getUsername() == null)
+		}
+
+		if (person.getUsername() == null) {
 			person.setUsername(externalPerson.getUsername());
-		
-		if ((person.getFirstName() == null) || 
+		}
+
+		if ((person.getFirstName() == null) ||
 				(!person.getFirstName().equals(externalPerson.getFirstName()))) {
 			person.setFirstName(externalPerson.getFirstName());
 		}
 
-		if ((person.getLastName() == null) || 
+		if ((person.getLastName() == null) ||
 				(!person.getLastName().equals(externalPerson.getLastName()))) {
 			person.setLastName(externalPerson.getLastName());
 		}
 
-		if ((person.getMiddleName() == null) || 
+		if ((person.getMiddleName() == null)
+				||
 				(!person.getMiddleName().equals(externalPerson.getMiddleName()))) {
 			person.setMiddleName(externalPerson.getMiddleName());
 		}
 
-		if ((person.getBirthDate() == null) || 
+		if ((person.getBirthDate() == null) ||
 				(!person.getBirthDate().equals(externalPerson.getBirthDate()))) {
 			person.setBirthDate(externalPerson.getBirthDate());
 		}
@@ -133,13 +170,17 @@ public class ExternalPersonServiceImpl
 					.getPrimaryEmailAddress());
 		}
 
-		if ((person.getAddressLine1() == null) ||
-				(!person.getAddressLine1().equals(externalPerson.getAddressLine1()))) {
+		if ((person.getAddressLine1() == null)
+				||
+				(!person.getAddressLine1().equals(
+						externalPerson.getAddressLine1()))) {
 			person.setAddressLine1(externalPerson.getAddressLine1());
 		}
 
-		if ((person.getAddressLine2() == null) ||
-				(!person.getAddressLine2().equals(externalPerson.getAddressLine2()))) {
+		if ((person.getAddressLine2() == null)
+				||
+				(!person.getAddressLine2().equals(
+						externalPerson.getAddressLine2()))) {
 			person.setAddressLine2(externalPerson.getAddressLine2());
 		}
 
@@ -203,7 +244,7 @@ public class ExternalPersonServiceImpl
 				person.setStaffDetails(new PersonStaffDetails());
 			}
 
-			if ((person.getStaffDetails().getOfficeHours() == null) || 
+			if ((person.getStaffDetails().getOfficeHours() == null) ||
 					(!person.getStaffDetails().getOfficeHours()
 							.equals(externalPerson.getOfficeHours()))) {
 				person.getStaffDetails().setOfficeHours(
@@ -283,7 +324,7 @@ public class ExternalPersonServiceImpl
 			demographics.setLocal(null);
 		} else {
 			demographics.setLocal(externalPerson.getIsLocal().equalsIgnoreCase(
-					"true"));
+					"Y"));
 		}
 
 		if (externalPerson.getBalanceOwed() == null) {
