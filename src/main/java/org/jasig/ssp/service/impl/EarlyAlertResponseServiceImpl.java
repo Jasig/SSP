@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.mail.SendFailedException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.EarlyAlertResponseDao;
@@ -29,7 +27,6 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
@@ -64,15 +61,6 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 	@Autowired
 	private transient EarlyAlertResponseDao dao;
-
-	@Autowired
-	private transient PersonAttributesService personAttributeService;
-
-	@Autowired
-	private transient HttpServletRequest request;
-
-	@Autowired
-	private transient HttpServletResponse response;
 
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;

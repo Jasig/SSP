@@ -8,9 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
@@ -18,15 +15,12 @@ import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfigException;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.TaskTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,25 +32,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MessageTemplateServiceImpl extends
 		AbstractReferenceService<MessageTemplate> implements
-		MessageTemplateService { // NOPMD
-
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MessageTemplateServiceImpl.class);
+		MessageTemplateService {
 
 	@Autowired
 	transient private MessageTemplateDao dao;
 
 	@Autowired
 	private transient VelocityTemplateService velocityTemplateService;
-
-	@Autowired
-	private transient PersonAttributesService personAttributeService;
-
-	@Autowired
-	private transient HttpServletRequest request;
-
-	@Autowired
-	private transient HttpServletResponse response;
 
 	/**
 	 * Sets the DAO for use by the super class methods

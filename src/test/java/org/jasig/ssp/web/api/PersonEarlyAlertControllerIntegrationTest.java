@@ -33,6 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -51,6 +52,9 @@ import com.google.common.collect.Sets;
 @TransactionConfiguration()
 @Transactional
 public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonEarlyAlertControllerIntegrationTest.class);
 
 	@Autowired
 	private transient PersonEarlyAlertController controller;
@@ -514,11 +518,14 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		boolean found = false; // NOPMD by jon.adams on 5/20/12 10:06 PM
 		for (final Message msg : msgs) {
 			final String body = msg.getBody();
-			if (body.contains("<tr><th>Instructor</th><td>System Administrator</td></tr>")) {
+			if (body.contains("<tr><th>Instructor</th><td>System Administrator</td></tr>")
+					&& body.contains("000-000-0000")) { // test for workPhone
 				controller.getLogger().debug(
 						"Applicable message found. Body: {}", body);
 				found = true;
 				break;
+			} else {
+				LOGGER.info(body);
 			}
 		}
 
