@@ -291,7 +291,7 @@
 			<column name="zip_code" value="07974"/>
 			<column name="home_phone" value="908-123-4567"/>
 			<column name="work_phone" value="123-456-7654"/>
-			<column name="actual_start_year" value="1961"/>
+			<column name="actual_start_year" value="2012"/>
 			<column name="actual_start_term" value="AU"/>
 			<column name="gender" value="M"/>
 			<column name="is_local" value="N"/>
@@ -314,7 +314,7 @@
 			<column name="work_phone" value="123-456-7654"/>
 			<column name="office_location" value="Kings College"/>
 			<column name="department_name" value="Mathematics"/>
-			<column name="actual_start_year" value="1931"/>
+			<column name="actual_start_year" value="2001"/>
 			<column name="actual_start_term" value="AU"/>
 			<column name="gender" value="M"/>
 			<column name="is_local" value="N"/>
