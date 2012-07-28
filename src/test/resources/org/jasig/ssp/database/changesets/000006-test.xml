@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog 
-	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
-		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">	
-		
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
 	<changeSet id="test challenge category" author="daniel.bower">
 		<insert tableName="category">
 			<column name="id" value="5d24743a-a11e-11e1-a9a6-0026b9e7ff4c" />
@@ -25,12 +23,13 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="test special service group" author="daniel.bower">
 		<insert tableName="special_service_group">
 			<column name="id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
 			<column name="name" value="Test Special Service Group" />
-			<column name="description" value="This is the description of the Test Special Service Group." />
+			<column name="description"
+				value="This is the description of the Test Special Service Group." />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
 			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -43,12 +42,13 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="test service reason" author="daniel.bower">
 		<insert tableName="service_reason">
 			<column name="id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
 			<column name="name" value="Test Service Reason" />
-			<column name="description" value="This is the description of the Test Service Reason." />
+			<column name="description"
+				value="This is the description of the Test Service Reason." />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
 			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -61,12 +61,13 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="test referral source" author="daniel.bower">
 		<insert tableName="referral_source">
 			<column name="id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
 			<column name="name" value="Test Referral Source" />
-			<column name="description" value="This is the description of the Test Referral Source." />
+			<column name="description"
+				value="This is the description of the Test Referral Source." />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
 			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -84,7 +85,8 @@
 		<insert tableName="journal_step">
 			<column name="id" value="aba1440c-ab5b-11e1-ba73-0026b9e7ff4c" />
 			<column name="name" value="Test Journal Step" />
-			<column name="description" value="This is the description of the Test Journal Step." />
+			<column name="description"
+				value="This is the description of the Test Journal Step." />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
 			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -98,12 +100,13 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="test journalStepDetail" author="daniel.bower">
 		<insert tableName="journal_step_detail">
 			<column name="id" value="471afc02-ab5c-11e1-a997-0026b9e7ff4c" />
 			<column name="name" value="Test Journal Step Detail" />
-			<column name="description" value="This is the description of the Test Journal Step Detail." />
+			<column name="description"
+				value="This is the description of the Test Journal Step Detail." />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
 			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -117,7 +120,7 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="test journalStepJournalStepDetail" author="daniel.bower">
 		<insert tableName="journal_step_journal_step_detail">
 			<column name="id" value="1311c59c-af37-11e1-8624-0026b9e7ff4c" />
@@ -135,7 +138,39 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
+	<changeSet id="test journalStepDetail 2" author="jon.adams">
+		<insert tableName="journal_step_detail">
+			<column name="id" value="471afc02-ab5c-11f1-a997-0026b9e7ff5d" />
+			<column name="name" value="Another Test Journal Step Detail" />
+			<column name="description" value="This is the description." />
+			<column name="created_date" valueDate="2012-07-10T00:00:00" />
+			<column name="modified_date" valueDate="2012-07-10T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="101" />
+		</insert>
+		<insert tableName="journal_step_journal_step_detail">
+			<column name="id" value="1311c59d-af37-11f1-8624-0026b9e8ff5f" />
+			<column name="journal_step_id" value="aba1440c-ab5b-11e1-ba73-0026b9e7ff4c" />
+			<column name="journal_step_detail_id" value="471afc02-ab5c-11f1-a997-0026b9e7ff5d" />
+			<column name="created_date" valueDate="2012-07-10T00:00:00" />
+			<column name="modified_date" valueDate="2012-07-10T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_step_journal_step_detail">
+				<where>id='1311c59d-af37-11f1-8624-0026b9e8ff5f'</where>
+			</delete>
+			<delete tableName="journal_step_detail">
+				<where>id='471afc02-ab5c-11f1-a997-0026b9e7ff5d'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 	<changeSet id="test Journal entry" author="daniel.bower">
 		<insert tableName="journal_entry">
 			<column name="id" value="86ffcd52-af44-11e1-98f9-0026b9e7ff4c" />
@@ -157,7 +192,7 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="test JournalEntryDetail" author="daniel.bower">
 		<insert tableName="journal_entry_detail">
 			<column name="id" value="d8df3d54-af46-11e1-9742-0026b9e7ff4c" />
@@ -175,7 +210,7 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="test tasks" author="daniel.bower">
 		<insert tableName="task">
 			<column name="id" value="f42f4970-b566-11e1-a224-0026b9e7ff4c" />
@@ -207,7 +242,7 @@
 			<column name="name" value="Test Task Name 2" />
 			<column name="confidentiality_level_id" value="b3d077a7-4055-0510-7967-4a09f93a0357" />
 		</insert>
-		
+
 		<rollback>
 			<delete tableName="task">
 				<where>id='f42f4970-b566-11e1-a224-0026b9e7ff4c'</where>
@@ -230,7 +265,7 @@
 			</update>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="Enable all users" author="daniel.bower">
 		<update tableName="person">
 			<column name="enabled">true</column>
@@ -241,13 +276,14 @@
 			</update>
 		</rollback>
 	</changeSet>
-	
-	
+
+
 	<changeSet id="test special service group 2" author="Steve.Cody">
 		<insert tableName="special_service_group">
 			<column name="id" value="40b6b8aa-bca1-11e1-9344-037cb4088c72" />
 			<column name="name" value="Another Test Special Service Group" />
-			<column name="description" value="This is the description of the OTHER Test Special Service Group." />
+			<column name="description"
+				value="This is the description of the OTHER Test Special Service Group." />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
 			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -260,8 +296,8 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
-	
+
+
 	<changeSet id="Add Special Service to Person" author="Steve.Cody">
 		<insert tableName="person_special_service_group">
 			<column name="id" value="092b2680-bca8-11e1-a32c-634df1c33503" />
@@ -282,7 +318,7 @@
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
-		</insert>		
+		</insert>
 		<insert tableName="person_special_service_group">
 			<column name="id" value="0007d6ce-bca9-11e1-871c-9b24515cfd60" />
 			<column name="special_service_group_id" value="f6201a04-bb31-4ca5-b606-609f3ad09f87" />
@@ -302,7 +338,7 @@
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
-		</insert>			
+		</insert>
 		<rollback>
 			<delete tableName="special_service_group">
 				<where>id='092b2680-bca8-11e1-a32c-634df1c33503'</where>
@@ -315,33 +351,35 @@
 			</delete>
 			<delete tableName="special_service_group">
 				<where>id='094698a6-bca9-11e1-bd29-1b0d3186f2ab'</where>
-			</delete>									
+			</delete>
 		</rollback>
 	</changeSet>
-	
-	
-	
-<changeSet id="Add Person Referral Source" author="Steve.Cody">
-        <insert tableName="referral_source">
+
+
+
+	<changeSet id="Add Person Referral Source" author="Steve.Cody">
+		<insert tableName="referral_source">
 			<column name="id" value="ccadd634-bd7a-11e1-8d28-3368721922dc" />
 			<column name="name" value="Test Referral Source 2." />
-			<column name="description" value="This is the description of the 2nd Test Referral Source." />
+			<column name="description"
+				value="This is the description of the 2nd Test Referral Source." />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
 			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
 		</insert>
-        <insert tableName="referral_source">
+		<insert tableName="referral_source">
 			<column name="id" value="c54aa656-bd7a-11e1-9ced-5b723f71da43" />
 			<column name="name" value="Test Referral Source 3." />
-			<column name="description" value="This is the description of the 3rd Test Referral Source." />
+			<column name="description"
+				value="This is the description of the 3rd Test Referral Source." />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
 			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
-		</insert>		
+		</insert>
 
 
 
@@ -364,7 +402,7 @@
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
-		</insert>		
+		</insert>
 		<insert tableName="person_referral_source">
 			<column name="id" value="4bb31800-bd7a-11e1-aa28-c750156cf81e" />
 			<column name="referral_source_id" value="c54aa656-bd7a-11e1-9ced-5b723f71da43" />
@@ -384,7 +422,7 @@
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
-		</insert>			
+		</insert>
 		<rollback>
 			<delete tableName="person_referral_source">
 				<where>id='3a2f2894-bd7a-11e1-a480-bf286ff5250b'</where>
@@ -397,16 +435,16 @@
 			</delete>
 			<delete tableName="person_referral_source">
 				<where>id='53966fa4-bd7a-11e1-91d8-5fc3f348c857'</where>
-			</delete>	
+			</delete>
 			<delete tableName="referral_source">
 				<where>id='ccadd634-bd7a-11e1-8d28-3368721922dc'</where>
-			</delete>		
+			</delete>
 			<delete tableName="referral_source">
 				<where>id='c54aa656-bd7a-11e1-9ced-5b723f71da43'</where>
-			</delete>	
+			</delete>
 		</rollback>
-	</changeSet>	
-	
+	</changeSet>
+
 	<changeSet id="add test goal" author="daniel.bower">
 		<insert tableName="goal">
 			<column name="id" value="1b18bf52-bfc7-11e1-9cb8-0026b9e7ff4c" />
@@ -420,17 +458,12 @@
 			<column name="confidentiality_level_id" value="b3d077a7-4055-0510-7967-4a09f93a0357" />
 			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
 		</insert>
-		
+
 		<rollback>
 			<delete tableName="goal">
 				<where>id='1b18bf52-bfc7-11e1-9cb8-0026b9e7ff4c'</where>
 			</delete>
 		</rollback>
-	</changeSet>	
-	
-	
-	
-	
-	
-	
+	</changeSet>
+
 </databaseChangeLog>

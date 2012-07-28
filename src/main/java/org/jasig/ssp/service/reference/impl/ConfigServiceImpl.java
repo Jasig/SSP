@@ -59,7 +59,8 @@ public class ConfigServiceImpl extends
 		}
 	}
 
-	private Config getByName(final String name) {
+	@Override
+	public Config getByName(final String name) {
 		return dao.getByName(name);
 	}
 

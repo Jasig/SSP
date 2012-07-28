@@ -4,9 +4,11 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     inject: {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
     	model: 'currentGoal',
     	person: 'currentPerson',
+    	preferences: 'preferences',
     	store: 'goalsStore'
     },
     config: {
@@ -19,9 +21,12 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
 			viewready: 'onViewReady'
 		},
     	
-    	'addGoalButton': {
-			click: 'onAddGoalClick'
-		}
+    	addGoalButton:{
+    		selector: '#addGoalButton',
+    		listeners: {
+    			click: 'onAddGoalClick'
+    		}
+    	}
     },
     
     constructor: function() {
@@ -39,8 +44,19 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     },
 
     onViewReady: function(comp, obj){
-    	this.appEventsController.assignEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});
-    	this.appEventsController.assignEvent({eventName: 'deleteGoal', callBackFunc: this.deleteConfirmation, scope: this});
+    	var me=this;
+    	me.getAddGoalButton().setDisabled( !me.authenticatedPerson.hasPermission('ROLE_PERSON_GOAL_WRITE') );
+    	
+    	me.appEventsController.assignEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});
+    	me.appEventsController.assignEvent({eventName: 'deleteGoal', callBackFunc: this.deleteConfirmation, scope: this});
+    
+    	// display the goals pane if a goal was added to the student's record
+    	if ( me.preferences.ACTION_PLAN_ACTIVE_VIEW == 1 )
+    	{
+    		// reset to the tasks view
+    		me.preferences.ACTION_PLAN_ACTIVE_VIEW=0;
+    		me.getView().expand();
+    	}
     },
     
     destroy: function() {
@@ -81,7 +97,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     	if (btnId=="yes")
     	{
         	this.apiProperties.makeRequest({
-     		   url: this.url+id,
+     		   url: this.url+"/"+id,
      		   method: 'DELETE',
      		   successFunc: function(response,responseText){
      			  store.remove( store.getById( id ) );

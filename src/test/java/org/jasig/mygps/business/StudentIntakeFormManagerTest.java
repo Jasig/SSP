@@ -6,18 +6,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.mygps.model.transferobject.FormSectionTO;
 import org.jasig.mygps.model.transferobject.FormTO;
 import org.jasig.mygps.web.MyGpsChallengeController;
+import org.jasig.ssp.TestUtils;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonChallenge;
 import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
@@ -52,6 +50,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class StudentIntakeFormManagerTest {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(EarlyAlertManager.class);
+
 	private static final String STUDENTINTAKEFORM_EMPTY = "studentintakeform_empty.json";
 
 	private static final String STUDENTINTAKEFORM_COMPLETED = "studentintakeform_completed.json";
@@ -63,11 +64,6 @@ public class StudentIntakeFormManagerTest {
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
-
-	private transient static ObjectMapper objectMapper = new ObjectMapper();
-
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(EarlyAlertManager.class);
 
 	/**
 	 * Setup the security service with the administrator user.
@@ -167,7 +163,7 @@ public class StudentIntakeFormManagerTest {
 		final Set<PersonConfidentialityDisclosureAgreement> agreements = person
 				.getConfidentialityDisclosureAgreements();
 		assertTrue("Person agreements should have been null or empty.",
-				agreements == null || agreements.isEmpty());
+				(agreements == null) || agreements.isEmpty());
 
 		final PersonDemographics demographics = person.getDemographics();
 		assertNotNull("Missing demographics.", demographics);
@@ -246,28 +242,26 @@ public class StudentIntakeFormManagerTest {
 	 *                if test file could not be loaded
 	 */
 	@Test
-	public void testSaveCompleted() throws JsonParseException,
+	public void testSaveCompleted() throws JsonParseException, // NOPMD
 			JsonMappingException, IOException, ObjectNotFoundException {
 		// Setup
 		final FormTO form = loadJson(STUDENTINTAKEFORM_COMPLETED);
-		FormSectionTO section = null;
-		String value = null;
 
 		assertNotNull("FormTO should not have been null.", form);
 
-		section = form
+		final FormSectionTO sectionConfidentiality = form
 				.getFormSectionById(StudentIntakeFormManager.SECTION_CONFIDENTIALITY_ID);
 
 		assertNotNull("Confidentiality section should not have been null.",
-				section);
+				sectionConfidentiality);
 
-		section = form
+		final FormSectionTO sectionDemographics = form
 				.getFormSectionById(StudentIntakeFormManager.SECTION_DEMOGRAPHICS_ID);
 
 		assertNotNull("Demographics section should not have been null.",
-				section);
+				sectionDemographics);
 
-		value = section
+		final String value = sectionDemographics
 				.getFormQuestionById(
 						StudentIntakeFormManager.SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID)
 				.getValue();
@@ -314,22 +308,22 @@ public class StudentIntakeFormManagerTest {
 						.getName());
 
 		assertTrue("Primary Caregiver option not match.",
-				demographics.isPrimaryCaregiver());
+				demographics.getPrimaryCaregiver());
 
-		assertEquals("Number of children does not match.", 2,
+		assertEquals("Number of children does not match.", Integer.valueOf(2),
 				demographics.getNumberOfChildren());
 
 		assertEquals("Ages of children does not match.", "4,4",
 				demographics.getChildAges());
 
 		assertTrue("Childcare needed option not match.",
-				demographics.isChildCareNeeded());
+				demographics.getChildCareNeeded());
 
 		assertEquals("Childcare arrangements does not match.",
 				"Need to make arrangements", demographics
 						.getChildCareArrangement().getName());
 
-		assertTrue("Employment option not match.", demographics.isEmployed());
+		assertTrue("Employment option not match.", demographics.getEmployed());
 
 		assertEquals("Shift option does not match.", EmploymentShifts.SECOND,
 				demographics.getShift());
@@ -368,7 +362,7 @@ public class StudentIntakeFormManagerTest {
 		assertEquals("Miltary Branch option does not match.", "The Avengers",
 				goal.getMilitaryBranchDescription());
 
-		assertEquals("How Sure option does not match.", 3,
+		assertEquals("How Sure option does not match.", Integer.valueOf(3),
 				goal.getHowSureAboutMajor());
 
 		assertEquals("Planned Occupation option does not match.",
@@ -446,8 +440,8 @@ public class StudentIntakeFormManagerTest {
 
 	/**
 	 * 
-	 * @param path
-	 *            to the JSON file to load
+	 * @param file
+	 *            the JSON file to load
 	 * @return Loaded FormTO instance
 	 * @exception JsonParseException
 	 *                if test file could not be parsed
@@ -458,22 +452,7 @@ public class StudentIntakeFormManagerTest {
 	 */
 	private FormTO loadJson(final String file) throws JsonParseException,
 			JsonMappingException, IOException {
-		// Load file
-		final BufferedReader in = new BufferedReader(new InputStreamReader(
-				getClass()
-						.getResourceAsStream(file)));
-
-		final String json = in.readLine();
-		LOGGER.warn(json);
-
-		final FormTO form = objectMapper.readValue(json, FormTO.class);
-
-		if (in != null) {
-			in.close();
-		}
-
-		assertNotNull("File data could not be parsed: " + file, form);
-
-		return form;
+		LOGGER.debug("Loading and parsing JSON file {}...", file);
+		return TestUtils.loadJson(getClass(), file, FormTO.class);
 	}
 }

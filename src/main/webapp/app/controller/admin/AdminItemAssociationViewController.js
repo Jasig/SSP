@@ -34,24 +34,27 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     },
     
 	constructor: function( config ) {
-		this.initConfig(config);
-		return this.callParent(arguments);
+		var me=this;
+		me.initConfig(config);
+		return me.callParent(arguments);
     },
    
     onItemExpand: function( nodeInt, obj ){
+    	var me=this;
     	var node = nodeInt;
-    	var id = this.treeUtils.getIdFromNodeId(node.data.id);
-    	this.getAssociatedItems(node,id);
+    	var id = me.treeUtils.getIdFromNodeId(node.data.id);
+    	me.getAssociatedItems(node,id);
     },
 
     onItemCollapse: function( node, obj ){
-    	var tree = this.getView();
+    	var me=this;
+    	var tree = me.getView();
     	var records = tree.getView().getChecked();
     	if (records.length > 0)
     	{
         	Ext.Array.each(records, function(rec){
     	        rec.data.checked=false;
-    	    },this);    		
+    	    },me);    		
     	}
     },    
     
@@ -60,25 +63,38 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     },
     
     getParentItems: function(){
+    	var me=this;
     	var treeRequest = new Ssp.model.util.TreeRequest();
-    	treeRequest.set('url', this.apiProperties.getItemUrl( this.getParentItemType() ) );
-    	treeRequest.set('nodeType', this.getParentItemType() );
+    	treeRequest.set('url', me.apiProperties.getItemUrl( me.getParentItemType() ) );
+    	treeRequest.set('nodeType', me.getParentItemType() );
     	treeRequest.set('isLeaf', false);
-    	this.treeUtils.getItems( treeRequest );
-    },
-
+    	treeRequest.set('callbackFunc', me.onLoadComplete);
+    	treeRequest.set('callbackScope', me);
+    	me.treeUtils.getItems( treeRequest );
+    	// me.getView().setLoading( true );
+    }, 
+    
     getAssociatedItems: function(node, id){
-    	var parentUrl = this.apiProperties.getItemUrl( this.parentItemType );
-    	var url = parentUrl + id + '/' + this.getAssociatedItemType() + '/';
+    	var me=this;
+    	var parentUrl = me.apiProperties.getItemUrl( me.parentItemType );
+    	var url = parentUrl + '/' + id + '/' + me.getAssociatedItemType();
     	var treeRequest = new Ssp.model.util.TreeRequest();
     	treeRequest.set('url',url);
-    	treeRequest.set('nodeType', this.getAssociatedItemType);
+    	treeRequest.set('nodeType', me.getAssociatedItemType);
     	treeRequest.set('isLeaf', true);
     	treeRequest.set('nodeToAppendTo', node);
     	treeRequest.set('enableCheckedItems', true);
-    	this.treeUtils.getItems( treeRequest );
+    	treeRequest.set('callbackFunc', me.onLoadComplete);
+    	treeRequest.set('callbackScope', me);
+    	me.treeUtils.getItems( treeRequest );
+    	// me.getView().setLoading( true );
     },
 
+	onLoadComplete: function( scope ){
+		var me=scope;
+		//me.getView().setLoading( false );
+	},
+    
     onBeforeDrop: function(node, data, overModel, dropPosition, dropHandler, eOpts) {
     	var me=this;
     	var url, parentId, associatedItemId, node;
@@ -90,9 +106,9 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         if (!overModel.isLeaf() && dropPosition == 'append')
         {
         	node = overModel;
-        	parentId = this.treeUtils.getIdFromNodeId(node.data.id);
+        	parentId = me.treeUtils.getIdFromNodeId(node.data.id);
         	associatedItemId = data.records[0].get('id')
-        	parentUrl = this.apiProperties.getItemUrl( this.getParentItemType() ) + parentId + '/' + this.getAssociatedItemType() + '/'; 	
+        	parentUrl = me.apiProperties.getItemUrl( me.getParentItemType() ) + '/' + parentId + '/' + me.getAssociatedItemType(); 	
         	url = me.apiProperties.createUrl( parentUrl );
         	me.apiProperties.makeRequest({
 				url: url,
@@ -135,8 +151,9 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     },    
     
     onDeleteAssociationConfirm: function( btnId){
-    	var tree = this.getView();
-    	var treeUtils = this.treeUtils;
+    	var me=this;
+    	var tree = me.getView();
+    	var treeUtils = me.treeUtils;
     	var records = tree.getView().getChecked();
     	var parentId, parentNode;
      	if (btnId=="yes")
@@ -151,7 +168,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         	Ext.Array.each(records, function(rec){
     	        var associatedItemId = treeUtils.getIdFromNodeId( rec.data.id );
     	        this.deleteAssociation( parentId, associatedItemId, parentNode );
-    	    },this);   		
+    	    },me);   		
     	}
 	},
 	
@@ -160,7 +177,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	var url, parentId, associatedItemId;
     	if ( parentId != "" && associatedItemId != null)
     	{
-        	parentUrl = this.apiProperties.getItemUrl( this.getParentItemType() ) + parentId + '/' + this.getAssociatedItemType() + '/'; 	
+        	parentUrl = me.apiProperties.getItemUrl( me.getParentItemType() ) + '/' + parentId + '/' + me.getAssociatedItemType(); 	
 	    	url = me.apiProperties.createUrl( parentUrl );
 	    	me.apiProperties.makeRequest({
 				url: url,

@@ -13,6 +13,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -52,7 +53,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 	protected transient SecurityService securityService;
 
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	PagedResponse<PersonTO> getAll(
@@ -70,6 +71,25 @@ public class PersonController extends RestController<PersonTO, Person> {
 				factory.asTOList(people.getRows()));
 	}
 
+	@RequestMapping(value = "/coach", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	public @ResponseBody
+	PagedResponse<PersonLiteTO> getAllCoaches(
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection) {
+		final PagingWrapper<Person> coaches = service
+				.getAllCoaches(SortingAndPaging
+						.createForSingleSort(status, start, limit, sort,
+								sortDirection,
+								null));
+
+		return new PagedResponse<PersonLiteTO>(true, coaches.getResults(),
+				PersonLiteTO.toTOList(coaches.getRows()));
+	}
+
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
@@ -83,8 +103,22 @@ public class PersonController extends RestController<PersonTO, Person> {
 		return new PersonTO(model);
 	}
 
+	@RequestMapping(value = "/bySchoolId/{id}", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	public @ResponseBody
+	PersonTO bySchoolId(final @PathVariable String id)
+			throws ObjectNotFoundException {
+
+		final Person model = service.getBySchoolId(id);
+		if (model == null) {
+			return null;
+		}
+
+		return new PersonTO(model);
+	}
+
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
 	public @ResponseBody
 	PersonTO create(final @Valid @RequestBody PersonTO obj)
@@ -151,5 +185,4 @@ public class PersonController extends RestController<PersonTO, Person> {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-
 }

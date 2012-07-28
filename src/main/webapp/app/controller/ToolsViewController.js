@@ -2,13 +2,12 @@ Ext.define('Ssp.controller.ToolsViewController', {
 	extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
+        appEventsController: 'appEventsController',
     	apiProperties: 'apiProperties',
-    	person: 'currentPerson',
+    	authenticatedPerson: 'authenticatedPerson',
         formUtils: 'formRendererUtils',
-        appEventsController: 'appEventsController'
-    },
-    config: {
-    	personViewHistoryUrl: '',
+    	personLite: 'personLite',
+    	toolsStore: 'toolsStore'
     },
     control: {
 		view: {
@@ -18,66 +17,65 @@ Ext.define('Ssp.controller.ToolsViewController', {
 		
 	},
 	
-	init: function() {
-		// Retrieve the tools available to the current person
-		// this.person.get('tools') );
-
+	init: function() {	
 		return this.callParent(arguments);
     }, 
     
     onViewReady: function(comp, obj){
-    	var personId = this.person.get('id');
-    	this.personViewHistoryUrl = this.apiProperties.getItemUrl('personViewHistory');
-		this.personViewHistoryUrl = this.personViewHistoryUrl.replace('{id}',personId);
+    	var me=this;
+    	me.appEventsController.assignEvent({eventName: 'loadPerson', callBackFunc: me.onLoadPerson, scope: me});
+    	me.appEventsController.assignEvent({eventName: 'transitionStudent', callBackFunc: me.onTransitionStudent, scope: me});
  
-    	this.appEventsController.assignEvent({eventName: 'viewHistory', callBackFunc: this.onViewHistory, scope: this});		
-    	this.appEventsController.assignEvent({eventName: 'loadPerson', callBackFunc: this.onLoadPerson, scope: this});
-    
-    	if (this.person.get('id') != "")
+    	if (me.personLite.get('id') != "")
     	{
-    		this.loadPerson();
+    		me.loadPerson();
     	}
     },
 
     destroy: function() {
-    	this.appEventsController.removeEvent({eventName: 'viewHistory', callBackFunc: this.onViewHistory, scope: this});
-    	this.appEventsController.removeEvent({eventName: 'loadPerson', callBackFunc: this.onLoadPerson, scope: this});
+    	var me=this;
+     	
+    	me.appEventsController.removeEvent({eventName: 'loadPerson', callBackFunc: me.onLoadPerson, scope: me});
+    	me.appEventsController.assignEvent({eventName: 'transitionStudent', callBackFunc: me.onTransitionStudent, scope: me});
 
-        return this.callParent( arguments );
+        return me.callParent( arguments );
     },
     
     onLoadPerson: function(){
     	this.loadPerson();
     },
     
+    onTransitionStudent: function(){
+    	this.selectTool( 'journal' );
+    	this.loadTool('journal');
+    },
+    
     loadPerson: function(){
-		this.getView().getSelectionModel().select(0);
-		this.loadTool('profile');  
+    	this.selectTool( 'profile' );
+    	this.loadTool('profile');  
+    },
+    
+    selectTool: function( toolType ){
+    	var tool = this.toolsStore.find( 'toolType', toolType )
+		this.getView().getSelectionModel().select( tool );
     },
     
 	onItemClick: function(grid,record,item,index){ 
-		if (record.get('active'))
+		var me=this;
+		if (record.get('active') && me.personLite.get('id') != "")
 		{
 			this.loadTool( record.get('toolType') );
 		}
 	},
 	
-	loadTool: function( toolType ) {	
-		var comp = this.formUtils.loadDisplay('tools',toolType, true, {});
-	},
-
-    onViewHistory: function(button) {
-		Ext.Msg.alert('Attention','ToolsViewController->viewHistory. This item is completed in the ui. Uncomment to display the History Report when it is complete.');
-    	/*
-    	var url = this.apiProperties.createUrl( this.personViewHistoryUrl );
-        this.apiProperties.makeRequest({
-    		url: url,
-    		method: 'GET',
-    		jsonData: jsonData,
-    		successFunc: function(){
-    			// handle response here
-    		}
-    	});
-    	*/
-    }
+	loadTool: function( toolType ) {
+		var me=this;
+		var comp;
+		if ( me.authenticatedPerson.hasAccess(toolType.toUpperCase()+'_TOOL') )
+		{
+			comp = me.formUtils.loadDisplay('tools',toolType, true, {});
+		}else{
+			me.authenticatedPerson.showUnauthorizedAccessAlert();
+		}
+	}
 });

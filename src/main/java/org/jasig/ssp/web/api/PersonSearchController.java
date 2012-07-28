@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_PERSON_SEARCH_READ')")
-@RequestMapping("/1/person")
-public class PersonSearchController extends BaseController {
+@RequestMapping("/1/person/search")
+public class PersonSearchController extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonSearchController.class);
@@ -49,7 +49,7 @@ public class PersonSearchController extends BaseController {
 		return LOGGER;
 	}
 
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<PersonSearchResultTO> search(
 			final @RequestParam String searchTerm,

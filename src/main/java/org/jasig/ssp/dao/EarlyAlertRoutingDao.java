@@ -2,7 +2,6 @@ package org.jasig.ssp.dao;
 
 import java.util.UUID;
 
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.EarlyAlertRouting;
 import org.jasig.ssp.model.reference.Campus;
@@ -39,18 +38,9 @@ public class EarlyAlertRoutingDao
 	 * @return All instance for the specified Person with any specified filters
 	 *         applied.
 	 */
-	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<EarlyAlertRouting> getAllForCampusId(
-			final UUID campusId,
-			final SortingAndPaging sAndP) {
-		final long totalRows = (Long) createCriteria()
-				.add(Restrictions.eq("campus.id", campusId))
-				.setProjection(Projections.rowCount())
-				.uniqueResult();
-
-		return new PagingWrapper<EarlyAlertRouting>(totalRows,
-				createCriteria(sAndP)
-						.add(Restrictions.eq("campus.id", campusId))
-						.list());
+			final UUID campusId, final SortingAndPaging sAndP) {
+		return processCriteriaWithSortingAndPaging(createCriteria(sAndP).add(
+				Restrictions.eq("campus.id", campusId)), sAndP, true);
 	}
 }

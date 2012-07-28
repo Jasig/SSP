@@ -21,41 +21,22 @@ Ext.define('Ssp.view.Main', {
 		    	        items: [{
 		    			            xtype: 'button',
 		    			            text: 'Students',
+		    			            hidden: !me.authenticatedPerson.hasAccess('STUDENTS_NAVIGATION_BUTTON'),
 		    			            itemId: 'studentViewNav',
 		    			            action: 'displayStudentRecord'
 		    			        }, {
 		    			            xtype: 'button',
 		    			            text: 'Admin',
+		    			            hidden: !me.authenticatedPerson.hasAccess('ADMIN_NAVIGATION_BUTTON'),
 		    			            itemId: 'adminViewNav',
 		    			            action: 'displayAdmin'
 		    			        },{
 			       		        	xtype: 'tbspacer',
 			       		        	flex: 1
 			       		        },{
-								    tooltip: 'Add Student',
-								    text: '',
-								    width: 25,
-								    height: 25,
-								    cls: 'addPersonIcon',
-								    xtype: 'button',
-								    itemId: 'addPersonButton'
-								},{
-								    tooltip: 'Edit Student',
-								    text: '',
-								    width: 25,
-								    height: 25,
-								    cls: 'editPersonIcon',
-								    xtype: 'button',
-								    itemId: 'editPersonButton'
-								},{
-								    tooltip: 'Delete Student',
-								    text: '',
-								    width: 25,
-								    height: 25,
-								    cls: 'deletePersonIcon',
-								    xtype: 'button',
-								    itemId: 'deletePersonButton'
-								}]
+	    		    	    	  id: 'report',
+	    		    	    	  xtype: 'sspreport'
+	    		    	    	}]
 		    	    }    		
     			});
     	

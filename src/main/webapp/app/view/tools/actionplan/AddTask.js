@@ -7,16 +7,16 @@ Ext.define('Ssp.view.tools.actionplan.AddTask', {
     },
 	width: '100%',
     height: '100%',
-	autoScroll: true,
-    defaults: {
-        anchor: '100%'
-    },    
-	
     initComponent: function() {
 		Ext.apply(this,{
-						title: 'Add Action Plan Tasks',
-						items: [{ xtype: 'tasktree', flex:1 },
-						        { xtype: 'addtaskform', flex:1 }]
+			autoScroll: true,
+			layout: {
+				type: 'vbox',
+				align: 'stretch'
+			},
+			title: 'Add Action Plan Tasks',
+			items: [{ xtype: 'tasktree', flex: .5 },
+			        { xtype: 'addtaskform', flex: .5 }]
 		});
 		
 		return this.callParent(arguments);

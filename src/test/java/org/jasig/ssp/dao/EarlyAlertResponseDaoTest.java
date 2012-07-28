@@ -37,8 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Sets;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
-@TransactionConfiguration(defaultRollback = false)
+@ContextConfiguration("dao-testConfig.xml")
+@TransactionConfiguration
 @Transactional
 public class EarlyAlertResponseDaoTest {
 

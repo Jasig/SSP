@@ -26,10 +26,12 @@ Ext.define('Ssp.controller.admin.journal.DisplayDetailsAdminViewController', {
     },       
     
 	init: function() {
-		this.getView().reconfigure(this.store);
-		this.store.load();
+		var me=this;
 		
-		return this.callParent(arguments);
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		me.store.load();
+		
+		return me.callParent(arguments);
     },    
     
 	onEditClick: function(button) {
@@ -82,7 +84,7 @@ Ext.define('Ssp.controller.admin.journal.DisplayDetailsAdminViewController', {
       	if (btnId=="yes")
       	{
       		me.apiProperties.makeRequest({
-        		   url: store.getProxy().url+id,
+        		   url: store.getProxy().url+"/"+id,
         		   method: 'DELETE',
         		   successFunc: function(response,responseText){
         			   store.remove( store.getById( id ) );

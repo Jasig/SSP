@@ -16,7 +16,8 @@
 
 	<http use-expressions="true">
 		<custom-filter position="PRE_AUTH_FILTER" ref="uPortalFilter"/>
-		
+		<session-management session-fixation-protection="none" />
+
 		<intercept-url pattern="/images/**" access="permitAll" />
 		<intercept-url pattern="/scripts/**" access="permitAll" />
 		<intercept-url pattern="/styles/**" access="permitAll" />

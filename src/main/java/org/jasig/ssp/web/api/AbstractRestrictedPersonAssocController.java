@@ -27,6 +27,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * Base controller for models that have an association to the Person model and
+ * data restrictions via ConfidentialityLevels.
+ * 
+ * @param <T>
+ *            Restricted, person-associated, auditable model
+ * @param <TO>
+ *            Transfer object for the model
+ */
 public abstract class AbstractRestrictedPersonAssocController<T extends RestrictedPersonAssocAuditable, TO extends AbstractAuditableTO<T>>
 		extends AbstractPersonAssocController<T, TO> {
 
@@ -51,7 +60,7 @@ public abstract class AbstractRestrictedPersonAssocController<T extends Restrict
 	protected abstract RestrictedPersonAssocAuditableService<T> getService();
 
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<TO> getAll(@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
@@ -125,8 +134,16 @@ public abstract class AbstractRestrictedPersonAssocController<T extends Restrict
 					"You submitted without an id to the save method.  Did you mean to create?");
 		}
 
+		if (personId == null) {
+			throw new IllegalArgumentException("Person identifier is required.");
+		}
+
 		final T model = getFactory().from(obj);
 		model.setId(id);
+
+		if (model.getPerson() == null) {
+			model.setPerson(personService.get(personId));
+		}
 
 		restrictedPersonAssocPermissionService.checkPermissionForModel(model,
 				securityService.currentUser());
@@ -153,7 +170,7 @@ public abstract class AbstractRestrictedPersonAssocController<T extends Restrict
 					.checkPermissionForModel(model,
 							securityService.currentUser());
 			getService().delete(id);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			LOGGER.debug("Item was not found: {}", id.toString());
 		}
 

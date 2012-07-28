@@ -21,9 +21,11 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     		viewready: 'onViewReady'
     	},
    	
+    	/*
     	'searchButton': {
 			click: 'onSearchClick'
-		}   	
+		}
+		*/  	
     },
     
 	onViewReady: function() {
@@ -64,32 +66,33 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     },
     
     onItemExpand: function(nodeInt, obj){
+    	var me=this;
     	var node = nodeInt;
     	var url = "";
     	var nodeType = "";
     	var isLeaf = false;
-    	var nodeName =  this.treeUtils.getNameFromNodeId( node.data.id );
-    	var id = this.treeUtils.getIdFromNodeId( node.data.id );
+    	var nodeName =  me.treeUtils.getNameFromNodeId( node.data.id );
+    	var id = me.treeUtils.getIdFromNodeId( node.data.id );
  
     	switch ( nodeName )
     	{
     		case 'category':
-    			url = this.categoryUrl + id + '/challenge/';
+    			url = me.categoryUrl + '/' + id + '/challenge/';
     			nodeType = 'challenge';
     			break;
     			
     		case 'studentIntakeChallenge':
-    			url = this.personChallengeUrl;
+    			url = me.personChallengeUrl;
     			nodeType = 'challenge';
      			break;
 
     		case 'all':
-    			url = this.challengeUrl;
+    			url = me.challengeUrl;
     			nodeType = 'challenge';
      			break;     			
      			
     		case 'challenge':
-    			url = this.challengeUrl + id + '/challengeReferral/'; // this.challengeReferralUrl;
+    			url = me.challengeUrl + '/' + id + '/challengeReferral/';
     			nodeType = 'referral';
     			isLeaf = true;
     			break;
@@ -102,23 +105,32 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
         	treeRequest.set('nodeType', nodeType);
         	treeRequest.set('isLeaf', isLeaf);
         	treeRequest.set('nodeToAppendTo', node);
-        	treeRequest.set('enableCheckedItems',false);	
-    		console.log(treeRequest);
-        	this.treeUtils.getItems( treeRequest );
+        	treeRequest.set('enableCheckedItems',false);
+        	treeRequest.set('callbackFunc', me.onLoadComplete);
+        	treeRequest.set('callbackScope', me);
+        	me.treeUtils.getItems( treeRequest );
+
+        	me.getView().setLoading( true );        	
     	}
     },
     
+    onLoadComplete: function( scope ){
+    	scope.getView().setLoading( false );
+    },
+    
+    /*
     onSearchClick: function(){
     	console.log('TaskTreeViewController->onSearchClick');
     	Ext.Msg.alert('Attention', 'This is a beta item. Awaiting API methods to utilize for search.'); 
     },
+    */
     
     onItemClick: function(view, record, item, index, e, eOpts){
     	var me=this;
     	var successFunc;
-    	var name = this.treeUtils.getNameFromNodeId( record.data.id );
-    	var id = this.treeUtils.getIdFromNodeId( record.data.id );
-    	var challengeId = this.treeUtils.getIdFromNodeId( record.data.parentId );
+    	var name = me.treeUtils.getNameFromNodeId( record.data.id );
+    	var id = me.treeUtils.getIdFromNodeId( record.data.id );
+    	var challengeId = me.treeUtils.getIdFromNodeId( record.data.parentId );
     	var confidentialityLevelId = "afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c";
     	if (name=='referral')
     	{
@@ -135,8 +147,8 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 		    	}		
 			};
 	    	
-	    	this.apiProperties.makeRequest({
-				url: this.apiProperties.createUrl( this.challengeReferralUrl+id ),
+	    	me.apiProperties.makeRequest({
+				url: me.apiProperties.createUrl( me.challengeReferralUrl+'/'+id ),
 				method: 'GET',
 				jsonData: '',
 				successFunc: successFunc 

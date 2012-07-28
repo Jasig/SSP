@@ -3,8 +3,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
         appEventsController: 'appEventsController',
-        currentPerson: 'currentPerson',
         challengesStore: 'challengesStore',
     	childCareArrangementsStore: 'childCareArrangementsStore',
     	citizenshipsStore: 'citizenshipsStore',
@@ -16,6 +16,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	fundingSourcesStore: 'fundingSourcesStore',
     	gendersStore: 'gendersStore',
     	maritalStatusesStore: 'maritalStatusesStore',
+        personLite: 'personLite',
         statesStore: 'statesStore',
         studentStatusesStore: 'studentStatusesStore',
     	veteranStatusesStore: 'veteranStatusesStore'        
@@ -32,10 +33,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	'cancelButton': {
     		click: 'onCancelClick'
     	},
-		
-		'viewConfidentialityAgreementButton': {
-			click: 'viewConfidentialityAgreement'
-		}	
+    	
+    	saveSuccessMessage: '#saveSuccessMessage'
 	},
     
 	init: function() {
@@ -85,20 +84,11 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
 		// load the person record
 		me.apiProperties.makeRequest({
-			url: studentIntakeUrl+me.currentPerson.getId(),
+			url: studentIntakeUrl+'/'+me.personLite.get('id'),
 			method: 'GET',
 			successFunc: me.loadStudentIntakeResult,
 			scope: me
-		});		
-		
-		/*
-		// Load the Student Intake
-		Form = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
-		Form.load(me.currentPerson.getId(),{
-			success: me.loadStudentIntakeResult,
-			scope: me
 		});
-		*/
 		
 		// display loader
 		me.getView().setLoading( true );
@@ -145,6 +135,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	        		},{
 	            		title: 'Challenges',
 	            		autoScroll: true,
+	            		hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CHALLENGE_TAB'),
 	            		items: [{xtype: 'studentintakechallenges'}]
 	        		}]
 		    })
@@ -217,6 +208,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
 		
 		// LOAD RECORDS FOR EACH OF THE FORMS
+		
+		// format the dates
 		Ext.getCmp('StudentIntakePersonal').loadRecord( person );
 		
 		if ( personDemographics != null && personDemographics != undefined ){
@@ -385,6 +378,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	onSaveClick: function( button ) {
 		var me=this;
 		var handleSuccess = me.saveStudentIntakeSuccess;
+		var handleError = me.saveErrorHandler;
 		var formUtils = me.formUtils;
 		var personalForm = Ext.getCmp('StudentIntakePersonal').getForm();
 		var demographicsForm = Ext.getCmp('StudentIntakeDemographics').getForm();
@@ -444,6 +438,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 				personChallenges: []
 			};
 			
+			// account for date offset
+			intakeData.person.birthDate = me.formUtils.fixDateOffset( intakeData.person.birthDate );
+
 			intakeData.personDemographics.personId = personId;
 			intakeData.personEducationGoal.personId = personId;
 			intakeData.personEducationPlan.personId = personId;
@@ -487,22 +484,21 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			if (intakeData.personEducationGoal.educationGoalId=="")
 			{
 				intakeData.personEducationGoal.educationGoalId=null;
-			}			
+			}
 			
 			// display loader
 			me.getView().setLoading( true );
 			
-			// TODO: handle unused fields from the json
-			// since these will throw an error in the
-			// current API
-			delete intakeData.person.currentAppointment;
+			// cleans properties that will be unable to be saved if not null
+			intakeData.person = me.person.setPropsNullForSave( intakeData.person );
 			
 			// Save the intake
 			me.apiProperties.makeRequest({
-				url: me.apiProperties.createUrl(me.apiProperties.getItemUrl('studentIntakeTool') + this.currentPerson.get('id')),
+				url: me.apiProperties.createUrl(me.apiProperties.getItemUrl('studentIntakeTool') +"/"+ this.personLite.get('id')),
 				method: 'PUT',
 				jsonData: intakeData,
 				successFunc: handleSuccess,
+				failure: handleError,
 				scope: me
 			});
 
@@ -510,6 +506,23 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			me.formUtils.displayErrors( validateResult.fields );
 		}
 		
+	},
+	
+	saveErrorHandler: function(response) {
+		var me=this;
+		var r = Ext.decode(response.responseText);
+		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
+
+		// hide loader
+		me.getView().setLoading( false );		
+		
+		if (r.message != null)
+		{
+			msg = msg + " " + r.message;
+		}
+		
+		// display error message
+		Ext.Msg.alert('SSP Error', msg);								
 	},
 	
 	saveStudentIntakeSuccess: function(response) {
@@ -520,12 +533,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.getView().setLoading( false );
 		
 		if(r.success == true) {
-			console.log('student intake saved successfully');							
+			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );							
 		}								
-	},
-	
-	viewConfidentialityAgreement: function(button){
-		Ext.Msg.alert("Attention", "This feature is not yet available.");
 	},
 	
 	onCancelClick: function( button ){

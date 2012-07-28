@@ -22,6 +22,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -201,12 +202,14 @@ public class EarlyAlertReferralControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerAll() {
-		final Collection<EarlyAlertReferralTO> list = controller.getAll(
-				ObjectStatus.ACTIVE, null, null, null, null).getRows();
+		final PagedResponse<EarlyAlertReferralTO> response = controller.getAll(
+				ObjectStatus.ACTIVE, 0, 50, null, null);
 
-		assertNotNull("List should not have been null.", list);
+		assertNotNull("List should not have been null.", response.getRows());
 		assertFalse("List action should have returned some objects.",
-				list.isEmpty());
+				response.getRows().isEmpty());
+		assertEquals("Non-page size did not match expected.", 10,
+				response.getResults());
 	}
 
 	/**
@@ -243,5 +246,16 @@ public class EarlyAlertReferralControllerIntegrationTest {
 		assertFalse("CreatedBy id should not have been empty.",
 				earlyAlertReferral
 						.getCreatedBy().getId().equals(UUID.randomUUID()));
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

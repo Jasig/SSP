@@ -38,9 +38,9 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	
 	result.person.studentType = new ReferenceLiteTO(id:UUID.fromString("b2d05919-5056-a51a-80bd-03e5288de771"))
 	
-	List<ReferenceLiteTO<ProgramStatus>> programStatuses = Lists.newArrayList();
+	/*List<ReferenceLiteTO<ProgramStatus>> programStatuses = Lists.newArrayList();
 	programStatuses << new ReferenceLiteTO<ProgramStatus>(id:UUID.fromString("b2d12527-5056-a51a-8054-113116baab88"))
-	result.person.programStatuses = programStatuses
+	result.person.programStatuses = programStatuses*/
 	
 	//add a challenge
 	List<PersonChallengeTO> challenges = Lists.newArrayList();
@@ -62,7 +62,7 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	
 	result.personEducationPlan = new PersonEducationPlanTO(newOrientationComplete:false, registeredForClasses:false, collegeDegreeForParents:false, specialNeeds:false, gradeTypicallyEarned:"B")
 	
-	//subit the manipulated form
+	//submit the manipulated form
 	conn.put("api/1/tool/studentIntake/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194", toJson(result))
 	
 	//Retrieve the form once more
@@ -81,14 +81,14 @@ String addChallengeToCategory(ApiConnection conn){
 }
 
 String addGoalToPerson(ApiConnection conn){
-	String form = '{"id":"","createdDate":null,"name":"Get a 2.0 GPA","personId":"58ba5ee3-734e-4ae9-b9c5-943774b4de41","description":"Get a 2.0 GPA","createdBy":{"id":"","firstName":"","lastName":""},"modifiedBy":{"id":"","firstName":"","lastName":""},"confidentialityLevel":{"id":"afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c","name":null}}'
-	return conn.post("api/1/person/58ba5ee3-734e-4ae9-b9c5-943774b4de41/goal/", form)
+	String form = '{"id":"","createdDate":null,"name":"Get a 2.0 GPA","personId":"7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194","description":"Get a 2.0 GPA","createdBy":{"id":"","firstName":"","lastName":""},"modifiedBy":{"id":"","firstName":"","lastName":""},"confidentialityLevel":{"id":"afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c","name":null}}'
+	return conn.post("api/1/person/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194/goal/", form)
 }
 
 
 String getAllJournalEntriesForPerson(ApiConnection conn){
 	//"/1/person/{personId}/journalEntry"
-	return conn.get("api/1/person/58ba5ee3-734e-4ae9-b9c5-943774b4de41/journalEntry/")
+	return conn.get("api/1/person/7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194/journalEntry/")
 }
 
 String getPerson(ApiConnection conn){
@@ -110,6 +110,23 @@ String search(ApiConnection conn){
 String getCaseload(ApiConnection conn){
 	//"/1/person/caseload"
 	return conn.get("api/1/person/caseload")
+	//return conn.get("api/1/person/caseload?programStatusId=b2d12527-5056-a51a-8054-113116baab88")
+}
+
+String getAppointments(ApiConnection conn){
+	return conn.get("api/1/person/1010e4a0-1001-0110-1011-4ffc02fe81ff/appointment/")
+}
+
+String getCurrentAppointment(ApiConnection conn){
+	return conn.get("api/1/person/1010e4a0-1001-0110-1011-4ffc02fe81ff/appointment/current/")
+}
+
+String getCoaches(ApiConnection conn){
+	return conn.get("api/1/person/coach/")
+}
+
+String getAllTerms(ApiConnection conn){
+	return conn.get("api/1/reference/term/")
 }
 
 /**
@@ -119,13 +136,18 @@ String getCaseload(ApiConnection conn){
 JsonSlurper jsonParser = new JsonSlurper()
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0", "advisor0", false)
 
-//String output = getStudentIntakeForm(conn, jsonParser)
+String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
 //String output = addGoalToPerson(conn) 
 //String output = getAllJournalEntriesForPerson(conn);
 //String output = getPerson(conn)
 //String output = search(conn)
-String output = getCaseload(conn)
+//String output = getCaseload(conn)
+//String output = getAppointments(conn)
+//String output = getCoaches(conn)
+//String output = getCurrentAppointment(conn)
+//String output = getAllTerms(conn)
+
 
 conn.formatAndPrintJson(output)
 //println (output);

@@ -596,268 +596,271 @@
     </display>  
   </class>  
   <association id="75">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="76" name="defaultConfidentialityLevel"/>      
+    <end type="SOURCE" refId="58" navigable="false">      
+      <attribute id="76" name="person"/>      
       <multiplicity id="77" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="78">    
+    <end type="SOURCE" refId="51" navigable="false">      
+      <attribute id="79" name="journalSource"/>      
+      <multiplicity id="80" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="48" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="81">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="82" name="confidentialityLevel"/>      
+      <multiplicity id="83" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="26" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="78">    
-    <end type="SOURCE" refId="61" navigable="false">      
-      <attribute id="79" name="person"/>      
-      <multiplicity id="80" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="81">    
-    <end type="SOURCE" refId="63" navigable="false">      
-      <attribute id="82" name="person"/>      
-      <multiplicity id="83" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <association id="84">    
-    <end type="SOURCE" refId="61" navigable="false">      
-      <attribute id="85" name="specialServiceGroup"/>      
-      <multiplicity id="86" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="72" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="87">    
-    <end type="SOURCE" refId="22"/>    
-    <end type="TARGET" refId="66"/>  
-  </realization>  
-  <association id="88">    
     <end type="SOURCE" refId="45" navigable="false">      
-      <attribute id="89" name="journalTrackJournalSteps"/>      
-      <multiplicity id="90" minimum="0" maximum="2147483647"/>    
+      <attribute id="85" name="journalTrackJournalSteps"/>      
+      <multiplicity id="86" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="49" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="91">    
-    <end type="SOURCE" refId="59" navigable="false">      
-      <attribute id="92" name="person"/>      
-      <multiplicity id="93" minimum="0" maximum="1"/>    
+  <association id="87">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="88" name="educationGoal"/>      
+      <multiplicity id="89" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
+    <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="94">    
-    <end type="SOURCE" refId="22" navigable="false">      
-      <attribute id="95" name="challengeReferral"/>      
-      <multiplicity id="96" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="30" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="97">    
-    <end type="SOURCE" refId="37"/>    
-    <end type="TARGET" refId="64"/>  
-  </realization>  
-  <association id="98">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="99" name="coach"/>      
-      <multiplicity id="100" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="101">    
-    <end type="SOURCE" refId="51" navigable="false">      
-      <attribute id="102" name="journalTrack"/>      
-      <multiplicity id="103" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="45" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="104">    
-    <end type="SOURCE" refId="65" navigable="false">      
-      <attribute id="105" name="person"/>      
-      <multiplicity id="106" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="107">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="108" name="childCareArrangement"/>      
-      <multiplicity id="109" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="110">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="111" name="serviceReasons"/>      
-      <multiplicity id="112" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="63" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="113">    
+  <generalization id="90">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="91">    
+    <end type="SOURCE" refId="31"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="92">    
     <end type="SOURCE" refId="70"/>    
     <end type="TARGET" refId="25"/>  
   </generalization>  
-  <association id="114">    
-    <end type="SOURCE" refId="52" navigable="false">      
-      <attribute id="115" name="campus"/>      
-      <multiplicity id="116" minimum="0" maximum="1"/>    
+  <association id="93">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="94" name="demographics"/>      
+      <multiplicity id="95" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="56" navigable="true"/>    
+    <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="117">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="118" name="ethnicity"/>      
-      <multiplicity id="119" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="120">    
-    <end type="SOURCE" refId="29"/>    
+  <generalization id="96">    
+    <end type="SOURCE" refId="30"/>    
     <end type="TARGET" refId="25"/>  
   </generalization>  
-  <association id="121">    
-    <end type="SOURCE" refId="53" navigable="false">      
-      <attribute id="122" name="earlyAlert"/>      
-      <multiplicity id="123" minimum="0" maximum="1"/>    
+  <association id="97">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="98" name="peopleWithChallenge"/>      
+      <multiplicity id="99" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="100">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="101" name="confidentialityDisclosureAgreements"/>      
+      <multiplicity id="102" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="103">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="104" name="earlyAlerts"/>      
+      <multiplicity id="105" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="52" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="124">    
+  <realization id="106">    
+    <end type="SOURCE" refId="62"/>    
+    <end type="TARGET" refId="57"/>  
+  </realization>  
+  <association id="107">    
+    <end type="SOURCE" refId="49" navigable="false">      
+      <attribute id="108" name="journalTrack"/>      
+      <multiplicity id="109" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="45" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="110">    
+    <end type="SOURCE" refId="57"/>    
+    <end type="TARGET" refId="64"/>  
+  </generalization>  
+  <association id="111">    
+    <end type="SOURCE" refId="53" navigable="false">      
+      <attribute id="112" name="earlyAlertReferralIds"/>      
+      <multiplicity id="113" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="44" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="114">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="115" name="coach"/>      
+      <multiplicity id="116" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="117">    
+    <end type="SOURCE" refId="49" navigable="false">      
+      <attribute id="118" name="journalStep"/>      
+      <multiplicity id="119" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="47" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="120">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="121" name="selfHelpGuideQuestions"/>      
+      <multiplicity id="122" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="31" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="123">    
     <end type="SOURCE" refId="59" navigable="false">      
-      <attribute id="125" name="confidentialityLevel"/>      
-      <multiplicity id="126" minimum="0" maximum="1"/>    
+      <attribute id="124" name="confidentialityLevel"/>      
+      <multiplicity id="125" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="26" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="127">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="128" name="challengeChallengeReferrals"/>      
-      <multiplicity id="129" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="39" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="130">    
-    <end type="SOURCE" refId="60" navigable="false">      
-      <attribute id="131" name="journalEntry"/>      
-      <multiplicity id="132" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="51" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="133">    
-    <end type="SOURCE" refId="62"/>    
-    <end type="TARGET" refId="57"/>  
-  </realization>  
-  <association id="134">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="135" name="educationLevels"/>      
-      <multiplicity id="136" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="137">    
-    <end type="SOURCE" refId="62" navigable="false">      
-      <attribute id="138" name="person"/>      
-      <multiplicity id="139" minimum="0" maximum="1"/>    
+  <association id="126">    
+    <end type="SOURCE" refId="52" navigable="false">      
+      <attribute id="127" name="person"/>      
+      <multiplicity id="128" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="140">    
+  <realization id="129">    
     <end type="SOURCE" refId="11"/>    
     <end type="TARGET" refId="57"/>  
   </realization>  
-  <realization id="141">    
-    <end type="SOURCE" refId="58"/>    
-    <end type="TARGET" refId="57"/>  
-  </realization>  
+  <association id="130">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="131" name="tool"/>      
+      <multiplicity id="132" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="133">    
+    <end type="SOURCE" refId="53" navigable="false">      
+      <attribute id="134" name="earlyAlert"/>      
+      <multiplicity id="135" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="52" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="136">    
+    <end type="SOURCE" refId="51" navigable="false">      
+      <attribute id="137" name="journalTrack"/>      
+      <multiplicity id="138" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="45" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="139">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="140" name="gender"/>      
+      <multiplicity id="141" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <association id="142">    
-    <end type="SOURCE" refId="16" navigable="false">      
-      <attribute id="143" name="person"/>      
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="143" name="selfHelpGuide"/>      
       <multiplicity id="144" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
+    <end type="TARGET" refId="27" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="145">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="146" name="person"/>      
-      <multiplicity id="147" minimum="0" maximum="1"/>    
+  <realization id="145">    
+    <end type="SOURCE" refId="51"/>    
+    <end type="TARGET" refId="66"/>  
+  </realization>  
+  <generalization id="146">    
+    <end type="SOURCE" refId="73"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="147">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="148" name="tasks"/>      
+      <multiplicity id="149" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
+    <end type="TARGET" refId="22" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="148">    
-    <end type="SOURCE" refId="32" navigable="false">      
-      <attribute id="149" name="recipient"/>      
-      <multiplicity id="150" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
+  <generalization id="150">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
   <generalization id="151">    
-    <end type="SOURCE" refId="74"/>    
+    <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="25"/>  
   </generalization>  
   <association id="152">    
-    <end type="SOURCE" refId="15" navigable="false">      
+    <end type="SOURCE" refId="23" navigable="false">      
       <attribute id="153" name="person"/>      
       <multiplicity id="154" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="155">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="156" name="gender"/>      
-      <multiplicity id="157" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="158">    
-    <end type="SOURCE" refId="20"/>    
-    <end type="TARGET" refId="57"/>  
-  </realization>  
-  <association id="159">    
-    <end type="SOURCE" refId="50" navigable="false">      
-      <attribute id="160" name="journalStepDetail"/>      
-      <multiplicity id="161" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="46" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="162">    
-    <end type="SOURCE" refId="73"/>    
+  <generalization id="155">    
+    <end type="SOURCE" refId="42"/>    
     <end type="TARGET" refId="25"/>  
   </generalization>  
-  <realization id="163">    
-    <bendpoint x="4885" y="1553"/>    
-    <end type="SOURCE" refId="59"/>    
-    <end type="TARGET" refId="66"/>  
+  <association id="156">    
+    <end type="SOURCE" refId="65" navigable="false">      
+      <attribute id="157" name="earlyAlertReason"/>      
+      <multiplicity id="158" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="40" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="159">    
+    <end type="SOURCE" refId="66"/>    
+    <end type="TARGET" refId="57"/>  
+  </generalization>  
+  <realization id="160">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="57"/>  
   </realization>  
+  <association id="161">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="162" name="challenge"/>      
+      <multiplicity id="163" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <generalization id="164">    
-    <end type="SOURCE" refId="6"/>    
+    <end type="SOURCE" refId="46"/>    
     <end type="TARGET" refId="25"/>  
   </generalization>  
   <association id="165">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="166" name="maritalStatus"/>      
-      <multiplicity id="167" minimum="0" maximum="1"/>    
+    <end type="SOURCE" refId="47" navigable="false">      
+      <attribute id="166" name="journalStepJournalStepDetails"/>      
+      <multiplicity id="167" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
+    <end type="TARGET" refId="50" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="168">    
@@ -869,737 +872,742 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="171">    
-    <end type="SOURCE" refId="60" navigable="false">      
-      <attribute id="172" name="journalStepJournalStepDetail"/>      
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="172" name="studentType"/>      
       <multiplicity id="173" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="50" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="174">    
-    <end type="SOURCE" refId="28" navigable="false">      
-      <attribute id="175" name="challengeCategories"/>      
-      <multiplicity id="176" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="38" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="177">    
-    <end type="SOURCE" refId="51" navigable="false">      
-      <attribute id="178" name="person"/>      
-      <multiplicity id="179" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="180">    
-    <end type="SOURCE" refId="63"/>    
-    <end type="TARGET" refId="57"/>  
-  </realization>  
-  <association id="181">    
-    <end type="SOURCE" refId="53" navigable="false">      
-      <attribute id="182" name="earlyAlertOutcome"/>      
-      <multiplicity id="183" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="43" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="184">    
-    <end type="SOURCE" refId="51"/>    
-    <end type="TARGET" refId="66"/>  
-  </realization>  
-  <association id="185">    
-    <end type="SOURCE" refId="52" navigable="false">      
-      <attribute id="186" name="person"/>      
-      <multiplicity id="187" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="188">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="189" name="shift"/>      
-      <multiplicity id="190" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="18" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="191">    
-    <end type="SOURCE" refId="34" navigable="false">      
-      <attribute id="192" name="selfHelpGuideQuestionResponses"/>      
-      <multiplicity id="193" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="36" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="194">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="195" name="demographics"/>      
-      <multiplicity id="196" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="197">    
-    <end type="SOURCE" refId="56"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="198">    
-    <end type="SOURCE" refId="65" navigable="false">      
-      <attribute id="199" name="earlyAlertReason"/>      
-      <multiplicity id="200" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="40" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="201">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="202" name="challenge"/>      
-      <multiplicity id="203" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="204">    
-    <end type="SOURCE" refId="16"/>    
-    <end type="TARGET" refId="57"/>  
-  </realization>  
-  <generalization id="205">    
-    <end type="SOURCE" refId="42"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="206">    
-    <end type="SOURCE" refId="53" navigable="false">      
-      <attribute id="207" name="earlyAlertOutreachIds"/>      
-      <multiplicity id="208" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="42" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="209">    
-    <end type="SOURCE" refId="23"/>    
-    <end type="TARGET" refId="57"/>  
-  </realization>  
-  <association id="210">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="211" name="challengeCategories"/>      
-      <multiplicity id="212" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="38" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="213">    
-    <end type="SOURCE" refId="68"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <generalization id="214">    
-    <end type="SOURCE" refId="66"/>    
-    <end type="TARGET" refId="54"/>  
-  </generalization>  
-  <association id="215">    
-    <end type="SOURCE" refId="27" navigable="false">      
-      <attribute id="216" name="selfHelpGuideQuestions"/>      
-      <multiplicity id="217" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="31" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="218">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="219">    
-    <end type="SOURCE" refId="58" navigable="false">      
-      <attribute id="220" name="programStatus"/>      
-      <multiplicity id="221" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="70" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="222">    
-    <end type="SOURCE" refId="22" navigable="false">      
-      <attribute id="223" name="person"/>      
-      <multiplicity id="224" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="225">    
-    <end type="SOURCE" refId="63" navigable="false">      
-      <attribute id="226" name="serviceReason"/>      
-      <multiplicity id="227" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="73" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="228">    
-    <end type="SOURCE" refId="46"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="229">    
-    <end type="SOURCE" refId="22" navigable="false">      
-      <attribute id="230" name="confidentialityLevel"/>      
-      <multiplicity id="231" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="26" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="232">    
-    <end type="SOURCE" refId="52" navigable="false">      
-      <attribute id="233" name="earlyAlertReasonIds"/>      
-      <multiplicity id="234" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="40" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="235">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="236">    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="237" name="educationLevel"/>      
-      <multiplicity id="238" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="239">    
-    <end type="SOURCE" refId="36" navigable="false">      
-      <attribute id="240" name="selfHelpGuideResponse"/>      
-      <multiplicity id="241" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="34" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="242">    
-    <end type="SOURCE" refId="38" navigable="false">      
-      <attribute id="243" name="category"/>      
-      <multiplicity id="244" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="28" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="245">    
-    <end type="SOURCE" refId="40"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <generalization id="246">    
-    <end type="SOURCE" refId="43"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="247">    
-    <end type="SOURCE" refId="30" navigable="false">      
-      <attribute id="248" name="challengeChallengeReferrals"/>      
-      <multiplicity id="249" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="39" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="250">    
-    <end type="SOURCE" refId="47" navigable="false">      
-      <attribute id="251" name="journalStepJournalStepDetails"/>      
-      <multiplicity id="252" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="50" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="253">    
-    <end type="SOURCE" refId="57"/>    
-    <end type="TARGET" refId="64"/>  
-  </generalization>  
-  <association id="254">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="255" name="selfHelpGuideQuestions"/>      
-      <multiplicity id="256" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="31" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="257">    
-    <end type="SOURCE" refId="58" navigable="false">      
-      <attribute id="258" name="programStatusChangeReason"/>      
-      <multiplicity id="259" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="71" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="260">    
-    <end type="SOURCE" refId="48"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="261">    
-    <end type="SOURCE" refId="62" navigable="false">      
-      <attribute id="262" name="referralSource"/>      
-      <multiplicity id="263" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="74" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="264">    
-    <end type="SOURCE" refId="20" navigable="false">      
-      <attribute id="265" name="tool"/>      
-      <multiplicity id="266" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="21" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="267">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="268" name="educationGoal"/>      
-      <multiplicity id="269" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="270">    
-    <end type="SOURCE" refId="39" navigable="false">      
-      <attribute id="271" name="challengeReferral"/>      
-      <multiplicity id="272" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="30" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="273">    
-    <end type="SOURCE" refId="22" navigable="false">      
-      <attribute id="274" name="challenge"/>      
-      <multiplicity id="275" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="276">    
-    <end type="SOURCE" refId="65" navigable="false">      
-      <attribute id="277" name="campus"/>      
-      <multiplicity id="278" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="56" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="279">    
-    <end type="SOURCE" refId="24"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <generalization id="280">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="281">    
-    <end type="SOURCE" refId="27" navigable="false">      
-      <attribute id="282" name="selfHelpGuideGroups"/>      
-      <multiplicity id="283" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="29" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="284">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="285" name="referralSources"/>      
-      <multiplicity id="286" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="62" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="287">    
-    <end type="SOURCE" refId="52" navigable="false">      
-      <attribute id="288" name="earlyAlertSuggestionIds"/>      
-      <multiplicity id="289" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="41" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="290">    
-    <end type="SOURCE" refId="35"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="291">    
-    <end type="SOURCE" refId="49" navigable="false">      
-      <attribute id="292" name="journalStep"/>      
-      <multiplicity id="293" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="47" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="294">    
-    <end type="SOURCE" refId="66"/>    
-    <end type="TARGET" refId="57"/>  
-  </generalization>  
-  <association id="295">    
-    <end type="SOURCE" refId="58" navigable="false">      
-      <attribute id="296" name="person"/>      
-      <multiplicity id="297" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="298">    
-    <end type="SOURCE" refId="28"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="299">    
-    <end type="SOURCE" refId="46" navigable="false">      
-      <attribute id="300" name="journalStepJournalStepDetails"/>      
-      <multiplicity id="301" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="50" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="302">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="303" name="peopleWithChallenge"/>      
-      <multiplicity id="304" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="305">    
-    <end type="SOURCE" refId="71"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="306">    
-    <end type="SOURCE" refId="53" navigable="false">      
-      <attribute id="307" name="earlyAlertReferralIds"/>      
-      <multiplicity id="308" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="44" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="309">    
-    <end type="SOURCE" refId="45"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="310">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="311" name="fundingSources"/>      
-      <multiplicity id="312" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="313">    
-    <end type="SOURCE" refId="31" navigable="false">      
-      <attribute id="314" name="challenge"/>      
-      <multiplicity id="315" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="316">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="317" name="studentType"/>      
-      <multiplicity id="318" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="68" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="319">    
-    <end type="SOURCE" refId="41"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="320">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="321" name="confidentialityDisclosureAgreements"/>      
-      <multiplicity id="322" minimum="0" maximum="2147483647"/>    
+  <association id="174">    
+    <end type="SOURCE" refId="46" navigable="false">      
+      <attribute id="175" name="journalStepJournalStepDetails"/>      
+      <multiplicity id="176" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="23" navigable="true"/>    
+    <end type="TARGET" refId="50" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="323">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="324">    
-    <end type="SOURCE" refId="23" navigable="false">      
-      <attribute id="325" name="person"/>      
-      <multiplicity id="326" minimum="0" maximum="1"/>    
+  <association id="177">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="178" name="journalStepDetail"/>      
+      <multiplicity id="179" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
+    <end type="TARGET" refId="46" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="327">    
-    <end type="SOURCE" refId="32" navigable="false">      
-      <attribute id="328" name="sender"/>      
-      <multiplicity id="329" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="330">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="331" name="educationPlan"/>      
-      <multiplicity id="332" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="333">    
-    <end type="SOURCE" refId="36" navigable="false">      
-      <attribute id="334" name="selfHelpGuideQuestion"/>      
-      <multiplicity id="335" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="31" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="336">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <generalization id="337">    
-    <end type="SOURCE" refId="17"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="338">    
-    <end type="SOURCE" refId="16" navigable="false">      
-      <attribute id="339" name="fundingSource"/>      
-      <multiplicity id="340" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="341">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="342" name="specialServiceGroups"/>      
-      <multiplicity id="343" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="61" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="344">    
-    <end type="SOURCE" refId="37" navigable="false">      
-      <attribute id="345" name="person"/>      
-      <multiplicity id="346" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="347">    
-    <end type="SOURCE" refId="47" navigable="false">      
-      <attribute id="348" name="journalTrackJournalSteps"/>      
-      <multiplicity id="349" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="49" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="350">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="351" name="educationGoal"/>      
-      <multiplicity id="352" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="353">    
-    <end type="SOURCE" refId="20" navigable="false">      
-      <attribute id="354" name="person"/>      
-      <multiplicity id="355" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="356">    
-    <end type="SOURCE" refId="44"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="357">    
-    <end type="SOURCE" refId="51" navigable="false">      
-      <attribute id="358" name="journalEntryDetails"/>      
-      <multiplicity id="359" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="60" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="360">    
-    <end type="SOURCE" refId="61"/>    
+  <realization id="180">    
+    <end type="SOURCE" refId="23"/>    
     <end type="TARGET" refId="57"/>  
   </realization>  
-  <association id="361">    
+  <association id="181">    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="182" name="sender"/>      
+      <multiplicity id="183" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="184">    
     <end type="SOURCE" refId="23" navigable="false">      
-      <attribute id="362" name="confidentialityDisclosureAgreement"/>      
-      <multiplicity id="363" minimum="0" maximum="1"/>    
+      <attribute id="185" name="confidentialityDisclosureAgreement"/>      
+      <multiplicity id="186" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="24" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="364">    
-    <end type="SOURCE" refId="50" navigable="false">      
-      <attribute id="365" name="journalStep"/>      
-      <multiplicity id="366" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="47" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="367">    
-    <end type="SOURCE" refId="31" navigable="false">      
-      <attribute id="368" name="selfHelpGuide"/>      
-      <multiplicity id="369" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="27" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="370">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="25"/>  
+  <generalization id="187">    
+    <end type="SOURCE" refId="66"/>    
+    <end type="TARGET" refId="54"/>  
   </generalization>  
-  <association id="371">    
-    <end type="SOURCE" refId="31" navigable="false">      
-      <attribute id="372" name="selfHelpGuideQuestionResponses"/>      
-      <multiplicity id="373" minimum="0" maximum="2147483647"/>    
+  <realization id="188">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="66"/>  
+  </realization>  
+  <association id="189">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="190" name="selfHelpGuideQuestions"/>      
+      <multiplicity id="191" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="36" navigable="true"/>    
+    <end type="TARGET" refId="31" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="374">    
-    <end type="SOURCE" refId="26"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="375">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="376" name="programStatuses"/>      
-      <multiplicity id="377" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="58" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="378">    
-    <end type="SOURCE" refId="34" navigable="false">      
-      <attribute id="379" name="person"/>      
-      <multiplicity id="380" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="381">    
-    <end type="SOURCE" refId="31"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <realization id="382">    
-    <end type="SOURCE" refId="34"/>    
+  <realization id="192">    
+    <end type="SOURCE" refId="20"/>    
     <end type="TARGET" refId="57"/>  
   </realization>  
-  <association id="383">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="384" name="veteranStatus"/>      
-      <multiplicity id="385" minimum="0" maximum="1"/>    
+  <association id="193">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="194" name="educationLevel"/>      
+      <multiplicity id="195" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
+    <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="386">    
-    <end type="SOURCE" refId="2"/>    
+  <association id="196">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="197" name="challengeChallengeReferrals"/>      
+      <multiplicity id="198" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="39" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="199">    
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="200" name="challenge"/>      
+      <multiplicity id="201" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="202">    
+    <end type="SOURCE" refId="28"/>    
     <end type="TARGET" refId="25"/>  
   </generalization>  
-  <generalization id="387">    
-    <end type="SOURCE" refId="69"/>    
+  <generalization id="203">    
+    <end type="SOURCE" refId="27"/>    
     <end type="TARGET" refId="25"/>  
   </generalization>  
-  <association id="388">    
+  <realization id="204">    
+    <end type="SOURCE" refId="61"/>    
+    <end type="TARGET" refId="57"/>  
+  </realization>  
+  <association id="205">    
     <end type="SOURCE" refId="51" navigable="false">      
-      <attribute id="389" name="confidentialityLevel"/>      
-      <multiplicity id="390" minimum="0" maximum="1"/>    
+      <attribute id="206" name="confidentialityLevel"/>      
+      <multiplicity id="207" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="26" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="391">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="392">    
-    <end type="SOURCE" refId="34" navigable="false">      
-      <attribute id="393" name="selfHelpGuide"/>      
-      <multiplicity id="394" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="27" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="395">    
-    <end type="SOURCE" refId="38" navigable="false">      
-      <attribute id="396" name="challenge"/>      
-      <multiplicity id="397" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="398">    
+  <association id="208">    
     <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="399" name="tools"/>      
-      <multiplicity id="400" minimum="0" maximum="2147483647"/>    
+      <attribute id="209" name="tools"/>      
+      <multiplicity id="210" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="20" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="401">    
-    <end type="SOURCE" refId="52"/>    
-    <end type="TARGET" refId="57"/>  
-  </realization>  
-  <generalization id="402">    
-    <end type="SOURCE" refId="72"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="403">    
-    <end type="SOURCE" refId="51" navigable="false">      
-      <attribute id="404" name="journalSource"/>      
-      <multiplicity id="405" minimum="0" maximum="1"/>    
+  <association id="211">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="212" name="shift"/>      
+      <multiplicity id="213" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="48" navigable="true"/>    
+    <end type="TARGET" refId="18" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="406">    
+  <association id="214">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="215" name="fundingSource"/>      
+      <multiplicity id="216" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="217">    
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="218" name="selfHelpGuideQuestionResponses"/>      
+      <multiplicity id="219" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="36" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="220">    
+    <end type="SOURCE" refId="34" navigable="false">      
+      <attribute id="221" name="selfHelpGuide"/>      
+      <multiplicity id="222" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="223">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="224">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="225" name="ethnicity"/>      
+      <multiplicity id="226" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="227">    
+    <end type="SOURCE" refId="58" navigable="false">      
+      <attribute id="228" name="programStatusChangeReason"/>      
+      <multiplicity id="229" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="71" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="230">    
+    <end type="SOURCE" refId="65" navigable="false">      
+      <attribute id="231" name="person"/>      
+      <multiplicity id="232" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="233">    
+    <end type="SOURCE" refId="48"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="234">    
+    <end type="SOURCE" refId="52" navigable="false">      
+      <attribute id="235" name="earlyAlertReasonIds"/>      
+      <multiplicity id="236" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="40" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="237">    
+    <end type="SOURCE" refId="34" navigable="false">      
+      <attribute id="238" name="person"/>      
+      <multiplicity id="239" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="240">    
     <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="407" name="tasks"/>      
-      <multiplicity id="408" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="22" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="409">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="410">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="411" name="studentStatus"/>      
-      <multiplicity id="412" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="413">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="57"/>  
-  </realization>  
-  <generalization id="414">    
-    <end type="SOURCE" refId="27"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="415">    
-    <end type="SOURCE" refId="49" navigable="false">      
-      <attribute id="416" name="journalTrack"/>      
-      <multiplicity id="417" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="45" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="418">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="419" name="challenges"/>      
-      <multiplicity id="420" minimum="0" maximum="2147483647"/>    
+      <attribute id="241" name="challenges"/>      
+      <multiplicity id="242" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="11" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="421">    
-    <end type="SOURCE" refId="39" navigable="false">      
-      <attribute id="422" name="challenge"/>      
-      <multiplicity id="423" minimum="0" maximum="1"/>    
+  <association id="243">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="244" name="specialServiceGroups"/>      
+      <multiplicity id="245" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="61" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="246">    
+    <end type="SOURCE" refId="58" navigable="false">      
+      <attribute id="247" name="programStatus"/>      
+      <multiplicity id="248" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="70" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="249">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="64"/>  
+  </realization>  
+  <generalization id="250">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="251">    
+    <end type="SOURCE" refId="72"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="252">    
+    <end type="SOURCE" refId="28" navigable="false">      
+      <attribute id="253" name="challengeCategories"/>      
+      <multiplicity id="254" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="38" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="255">    
+    <end type="SOURCE" refId="59" navigable="false">      
+      <attribute id="256" name="person"/>      
+      <multiplicity id="257" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="258">    
+    <end type="SOURCE" refId="71"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="259">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="260">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="261" name="selfHelpGuideGroups"/>      
+      <multiplicity id="262" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="263">    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="264" name="person"/>      
+      <multiplicity id="265" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="266">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="267" name="referralSources"/>      
+      <multiplicity id="268" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="62" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="269">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="270" name="studentStatus"/>      
+      <multiplicity id="271" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="272">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="273" name="selfHelpGuideResponse"/>      
+      <multiplicity id="274" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="34" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="275">    
+    <end type="SOURCE" refId="68"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="276">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="277" name="person"/>      
+      <multiplicity id="278" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="279">    
+    <end type="SOURCE" refId="62" navigable="false">      
+      <attribute id="280" name="referralSource"/>      
+      <multiplicity id="281" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="74" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="282">    
+    <end type="SOURCE" refId="69"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="283">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="284" name="defaultConfidentialityLevel"/>      
+      <multiplicity id="285" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="286">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="287" name="veteranStatus"/>      
+      <multiplicity id="288" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="289">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="57"/>  
+  </realization>  
+  <association id="290">    
+    <end type="SOURCE" refId="52" navigable="false">      
+      <attribute id="291" name="earlyAlertSuggestionIds"/>      
+      <multiplicity id="292" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="41" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="293">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="294" name="person"/>      
+      <multiplicity id="295" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="296">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="297">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="298" name="challenge"/>      
+      <multiplicity id="299" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="424">    
+  <association id="300">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="301" name="person"/>      
+      <multiplicity id="302" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="303">    
+    <end type="SOURCE" refId="52"/>    
+    <end type="TARGET" refId="57"/>  
+  </realization>  
+  <generalization id="304">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="305">    
+    <end type="SOURCE" refId="43"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="306">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="307">    
+    <end type="SOURCE" refId="51" navigable="false">      
+      <attribute id="308" name="journalEntryDetails"/>      
+      <multiplicity id="309" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="60" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="310">    
+    <end type="SOURCE" refId="63" navigable="false">      
+      <attribute id="311" name="serviceReason"/>      
+      <multiplicity id="312" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="73" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="313">    
+    <end type="SOURCE" refId="51" navigable="false">      
+      <attribute id="314" name="person"/>      
+      <multiplicity id="315" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="316">    
+    <end type="SOURCE" refId="58"/>    
+    <end type="TARGET" refId="57"/>  
+  </realization>  
+  <realization id="317">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="57"/>  
+  </realization>  
+  <realization id="318">    
+    <end type="SOURCE" refId="63"/>    
+    <end type="TARGET" refId="57"/>  
+  </realization>  
+  <association id="319">    
+    <end type="SOURCE" refId="34" navigable="false">      
+      <attribute id="320" name="selfHelpGuideQuestionResponses"/>      
+      <multiplicity id="321" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="36" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="322">    
+    <end type="SOURCE" refId="47" navigable="false">      
+      <attribute id="323" name="journalTrackJournalSteps"/>      
+      <multiplicity id="324" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="49" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="325">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="326" name="educationGoal"/>      
+      <multiplicity id="327" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="328">    
+    <end type="SOURCE" refId="61" navigable="false">      
+      <attribute id="329" name="specialServiceGroup"/>      
+      <multiplicity id="330" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="331">    
+    <end type="SOURCE" refId="39" navigable="false">      
+      <attribute id="332" name="challenge"/>      
+      <multiplicity id="333" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="334">    
+    <end type="SOURCE" refId="56"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="335">    
+    <end type="SOURCE" refId="53" navigable="false">      
+      <attribute id="336" name="earlyAlertOutcome"/>      
+      <multiplicity id="337" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="43" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="338">    
+    <end type="SOURCE" refId="60" navigable="false">      
+      <attribute id="339" name="journalStepJournalStepDetail"/>      
+      <multiplicity id="340" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="50" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="341">    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="342" name="challengeChallengeReferrals"/>      
+      <multiplicity id="343" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="39" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="344">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="345">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="346" name="journalStep"/>      
+      <multiplicity id="347" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="47" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="348">    
     <end type="SOURCE" refId="47"/>    
     <end type="TARGET" refId="25"/>  
   </generalization>  
+  <association id="349">    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="350" name="recipient"/>      
+      <multiplicity id="351" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="352">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="353" name="educationPlan"/>      
+      <multiplicity id="354" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="355">    
+    <end type="SOURCE" refId="63" navigable="false">      
+      <attribute id="356" name="person"/>      
+      <multiplicity id="357" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="358">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="359">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="360">    
+    <end type="SOURCE" refId="44"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <realization id="361">    
+    <bendpoint x="4885" y="1553"/>    
+    <end type="SOURCE" refId="59"/>    
+    <end type="TARGET" refId="66"/>  
+  </realization>  
+  <association id="362">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="363" name="childCareArrangement"/>      
+      <multiplicity id="364" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="365">    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="366" name="challenge"/>      
+      <multiplicity id="367" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="368">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="369">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="370" name="programStatuses"/>      
+      <multiplicity id="371" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="58" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="372">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="373" name="person"/>      
+      <multiplicity id="374" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="375">    
+    <end type="SOURCE" refId="35"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="376">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="377" name="educationLevels"/>      
+      <multiplicity id="378" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="379">    
+    <end type="SOURCE" refId="53" navigable="false">      
+      <attribute id="380" name="earlyAlertOutreachIds"/>      
+      <multiplicity id="381" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="42" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="382">    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="383" name="category"/>      
+      <multiplicity id="384" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="385">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="386" name="maritalStatus"/>      
+      <multiplicity id="387" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="388">    
+    <end type="SOURCE" refId="39" navigable="false">      
+      <attribute id="389" name="challengeReferral"/>      
+      <multiplicity id="390" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="30" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="391">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="392" name="person"/>      
+      <multiplicity id="393" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="394">    
+    <end type="SOURCE" refId="61" navigable="false">      
+      <attribute id="395" name="person"/>      
+      <multiplicity id="396" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="397">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="398">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="399" name="selfHelpGuideQuestion"/>      
+      <multiplicity id="400" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="31" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="401">    
+    <end type="SOURCE" refId="74"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="402">    
+    <end type="SOURCE" refId="45"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="403">    
+    <end type="SOURCE" refId="62" navigable="false">      
+      <attribute id="404" name="person"/>      
+      <multiplicity id="405" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="406">    
+    <end type="SOURCE" refId="52" navigable="false">      
+      <attribute id="407" name="campus"/>      
+      <multiplicity id="408" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="56" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="409">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="410" name="challengeCategories"/>      
+      <multiplicity id="411" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="38" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="412">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="413" name="challengeReferral"/>      
+      <multiplicity id="414" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="30" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="415">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="416" name="serviceReasons"/>      
+      <multiplicity id="417" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="63" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="418">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="419" name="fundingSources"/>      
+      <multiplicity id="420" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="421">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="422">    
+    <end type="SOURCE" refId="65" navigable="false">      
+      <attribute id="423" name="campus"/>      
+      <multiplicity id="424" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="56" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="425">    
+    <end type="SOURCE" refId="60" navigable="false">      
+      <attribute id="426" name="journalEntry"/>      
+      <multiplicity id="427" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="51" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <classifier-display autosize="true" stereotype="false" package="true" initial-value="false" signature="true" 
     visibility="true">    
     <attributes public="true" package="true" protected="true" private="true"/>    

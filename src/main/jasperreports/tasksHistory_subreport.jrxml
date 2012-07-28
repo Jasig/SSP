@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="tasks_subreport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="51dbb813-035f-483a-9532-ecd7ac9cfc86">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="dueDate" class="java.util.Date"/>
+	<field name="completedDate" class="java.util.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="48" splitType="Stretch">
+			<textField>
+				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" stretchType="RelativeToTallestObject" x="39" y="20" width="259" height="19"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{name} + ": " + $F{description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="46f52ea4-2379-4e13-bf72-0673e49deb70" x="375" y="20" width="78" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dueDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bfe27127-c224-4b6a-b997-d01644e394d6" x="298" y="20" width="77" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{completedDate}==null?"not completed":"completed")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cf4f3994-f6ec-44bb-99a6-3b919293535d" x="453" y="20" width="78" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{completedDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2910e244-9689-4022-b894-845b897feb21" mode="Opaque" x="0" y="0" width="531" height="20" backcolor="#C2C7F8"/>
+				<textElement/>
+				<text><![CDATA[Action Step]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

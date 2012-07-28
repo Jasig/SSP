@@ -4,12 +4,9 @@ Ext.define('Ssp.view.person.Appointment', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.AppointmentViewController',
-    inject: {
-    	person: 'currentPerson'
-    },
 	initComponent: function() {	
 		var me=this;
-		Ext.apply(this, 
+		Ext.apply(me, 
 				{
 			    fieldDefaults: {
 			        msgTarget: 'side',
@@ -21,10 +18,11 @@ Ext.define('Ssp.view.person.Appointment', {
 				items: [{
 			            xtype: 'fieldset',
 			            border: 0,
+			            padding: 0,
 			            title: '',
 			            defaultType: 'textfield',
 			            defaults: {
-			                anchor: '100%'
+			            	anchor: '50%'
 			            },
 			       items: [{
 				    	xtype: 'datefield',
@@ -41,8 +39,7 @@ Ext.define('Ssp.view.person.Appointment', {
 				        fieldLabel: 'Start Time',
 				        increment: 30,
 				        typeAhead: false,
-				        allowBlank: false,
-				        anchor: '100%'
+				        allowBlank: false
 				    },{
 				        xtype: 'timefield',
 				        name: 'endTime',
@@ -50,20 +47,7 @@ Ext.define('Ssp.view.person.Appointment', {
 				        fieldLabel: 'End Time',
 				        typeAhead: false,
 				        allowBlank: false,
-				        increment: 30,
-				        anchor: '100%'
-				    },{
-				        xtype: 'checkboxgroup',
-				        fieldLabel: 'Send Student Intake Request',
-				        columns: 1,
-				        items: [
-				            {boxLabel: '', name: 'sendStudentIntakeRequest'},
-				        ]
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Last Student Intake Request Date',
-				        name: 'lastStudentIntakeRequestDate',
-				        value: ((me.person.getFormattedStudentIntakeRequestDate().length > 0) ? me.person.getFormattedStudentIntakeRequestDate() : 'No requests have been sent')
+				        increment: 30
 				    }]
 			    }]
 			});

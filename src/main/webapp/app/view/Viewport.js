@@ -29,12 +29,15 @@ Ext.define('Ssp.view.Viewport',{
         me.width = me.height = undefined;
 
         me.callParent(arguments);
-        Ext.fly(html).addCls(Ext.baseCSSPrefix + 'viewport');
-        if (me.autoScroll) {
-            delete me.autoScroll;
-            Ext.fly(html).setStyle('overflow', 'auto');
+        if (me.renderFullScreen==true)
+        {
+           Ext.fly(html).addCls(Ext.baseCSSPrefix + 'viewport');
         }
-        if (this.renderFullScreen==true)
+        if (me.autoScroll) {
+            //delete me.autoScroll;
+            //Ext.fly(html).setStyle('overflow', 'auto');
+        }
+        if (me.renderFullScreen==true)
         {
         	me.el = el = Ext.getBody();
         }else{
@@ -60,8 +63,8 @@ Ext.define('Ssp.view.Viewport',{
             me.width = Ext.Element.getViewportWidth();
             me.height = Ext.Element.getViewportHeight();
         }else{
-        	me.width = Ext.Element.getViewportWidth()-22; // me.el.getViewSize().width;
-            me.height = Ext.Element.getViewportHeight()-160; // me.el.getViewSize().height; 
+        	me.width = Ext.Element.getViewportWidth()-35; // me.el.getViewSize().width;
+            me.height = me.el.getViewSize().height; //Ext.Element.getViewportHeight()-160;  
         }
     },
 
@@ -88,8 +91,8 @@ Ext.define('Ssp.view.Viewport',{
     		newWidth = Ext.Element.getViewportWidth();
     		newHeight = Ext.Element.getViewportHeight();
     	}else{
-    		newWidth = me.width+(width-me.el.getWidth());
-    		newHeight = Ext.Element.getViewportHeight()-160; // me.height;
+    		newWidth = Ext.Element.getViewportWidth()-35; // me.width+(width-me.el.getWidth());
+    		newHeight = me.el.getViewSize().height; //Ext.Element.getViewportHeight()-160; // me.height;
     	}
     		
     	if (width != me.width || height != me.height) {

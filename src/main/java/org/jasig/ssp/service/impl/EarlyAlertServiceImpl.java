@@ -1,5 +1,6 @@
 package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -106,8 +107,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 							+ student.getId());
 		}
 
-		if ((student.getCoach() == null)
-				|| student.getCoach().getId().equals(assignedAdvisor)) {
+		if (student.getCoach() == null
+				|| assignedAdvisor.equals(student.getCoach().getId())) {
 			student.setCoach(personService.get(assignedAdvisor));
 		}
 
@@ -123,18 +124,6 @@ public class EarlyAlertServiceImpl extends // NOPMD
 					e);
 			throw new ValidationException(
 					"Early Alert notification e-mail could not be sent to advisor. Early Alert was NOT created.",
-					e);
-		}
-
-		// Send e-mail to student
-		try {
-			sendMessageToStudent(saved);
-		} catch (final SendFailedException e) {
-			LOGGER.warn(
-					"Could not send Early Alert confirmation to the student.",
-					e);
-			throw new ValidationException(
-					"Early Alert e-mail could not be sent to the student. Early Alert was NOT created.",
 					e);
 		}
 
@@ -322,16 +311,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 	}
 
-	/**
-	 * Send e-mail ({@link Message}) to the student.
-	 * 
-	 * @param earlyAlert
-	 *            Early Alert
-	 * @throws ObjectNotFoundException
-	 * @throws SendFailedException
-	 * @throws ValidationException
-	 */
-	private void sendMessageToStudent(@NotNull final EarlyAlert earlyAlert)
+	@Override
+	public void sendMessageToStudent(@NotNull final EarlyAlert earlyAlert)
 			throws ObjectNotFoundException, SendFailedException,
 			ValidationException {
 		if (earlyAlert == null) {
@@ -385,8 +366,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
 	}
 
-	private Map<String, Object> fillTemplateParameters(
-			final EarlyAlert earlyAlert) {
+	@Override
+	public Map<String, Object> fillTemplateParameters(
+			@NotNull final EarlyAlert earlyAlert) {
 		if (earlyAlert == null) {
 			throw new IllegalArgumentException("EarlyAlert was missing.");
 		}
@@ -433,5 +415,11 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				configService.getByNameEmpty("inst_name"));
 
 		return templateParameters;
+	}
+
+	@Override
+	public Map<UUID, Number> getCountOfActiveAlertsForPeopleIds(
+			final Collection<UUID> peopleIds) {
+		return dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
 	}
 }

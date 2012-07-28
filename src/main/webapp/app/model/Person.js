@@ -3,7 +3,7 @@ Ext.define('Ssp.model.Person', {
     fields: [{name: 'photoUrl', type: 'string'},
              {name: 'schoolId', type: 'string'},
     		 {name: 'firstName', type: 'string'},
-             {name: 'middleInitial', type: 'string'},
+             {name: 'middleName', type: 'string'},
     		 {name: 'lastName', type: 'string'},
              {name: 'homePhone', type: 'string'},
     		 {name: 'cellPhone', type: 'string'},
@@ -17,7 +17,6 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'secondaryEmailAddress', type: 'string'},
              {name: 'birthDate', type: 'date', dateFormat: 'time'},
     		 {name: 'username', type: 'string'},
-             {name: 'userId', type: 'string'},
     		 {name: 'enabled', type: 'boolean'},
              {name: 'coach', type: 'auto'},
     		 {name: 'strengths', type: 'string'},
@@ -25,27 +24,21 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'abilityToBenefit', type: 'boolean'},
     		 {name: 'anticipatedStartTerm', type: 'string'},
     		 {name: 'anticipatedStartYear', type: 'string'},
+    		 {name: 'actualStartTerm', type: 'string'},
+    		 {name: 'actualStartYear', type: 'string'},
     		 {name: 'studentIntakeRequestDate', type: 'date', dateFormat: 'time'},
     		 {name: 'specialServiceGroups', type: 'auto'},
     		 {name: 'referralSources', type: 'auto'},
     		 {name: 'serviceReasons', type: 'auto'},
-             {name: 'currentAppointment', type: 'auto'}],
-    
-             /*defaultValue:{"id" : "",
-             "startDate" : 1331269200000,
-             "endDate" : 1331269200000} */
-    		 
-    		 //'programStatus',
-    		 //'registrationStatus',
-    		 //'paymentStatus',
-    		 //'cumGPA',
-    		 //'academicPrograms'
+    		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
+    		 {name: 'currentProgramStatusName', type: 'auto'},
+    		 {name: 'registeredForCurrentTerm', type: 'string'}],
     		 		 
     getFullName: function(){ 
     	var firstName = this.get('firstName') || "";
-    	var middleInitial = this.get('middleInitial') || "";
+    	var middleName = this.get('middleName') || "";
     	var lastName = this.get('lastName') || "";
-    	return firstName + " " + middleInitial + " " + lastName;
+    	return firstName + " " + middleName + " " + lastName;
     },
     
     getFormattedBirthDate: function(){
@@ -61,21 +54,39 @@ Ext.define('Ssp.model.Person', {
     	return ((coach != null)? coach.id : "");   	
     },
 
-    getCoachName: function(){
-    	var coach = this.get('coach');
-    	return ((coach != null)? coach.firstName + ' ' + coach.lastName : "");   	
-    },     
-    
     setCoachId: function( value ){
     	if (value != "")
     	{
         	if ( this.get('coach') != null)
         	{
-        		this.get('coach').id = value;
-        	}else{
         		this.set('coach',{"id":value});
         	}    		
     	}
+    },    
+    
+    getCoachFullName: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.firstName + ' ' + coach.lastName : "");   	
+    },     
+
+    getCoachWorkPhone: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.workPhone : "");   	
+    },    
+
+    getCoachPrimaryEmailAddress: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.primaryEmailAddress : "");   	
+    },    
+
+    getCoachOfficeLocation: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.officeLocation : "");   	
+    },    
+    
+    getCoachDepartmentName: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.departmentName : "");   	
     },
     
     getStudentTypeId: function(){
@@ -89,31 +100,68 @@ Ext.define('Ssp.model.Person', {
     },    
     
     setStudentTypeId: function( value ){
+    	var me=this;
     	if (value != "")
     	{
-        	if ( this.get('studentType') != null)
+        	if ( me.get('studentType') != null)
         	{
-        		this.get('studentType').id = value;
-        	}else{
-        		this.set('studentType',{"id":value});
+        		me.set('studentType',{"id":value});
         	}    		
     	}
     },
     
-    setAppointment: function( startDate, endDate ){
-    	if (startDate != null && endDate != null)
-    	{
-        	if ( this.get('currentAppointment') != null )
-    		{
-    		   this.get('currentAppointment').startDate = startDate;
-    		   this.get('currentAppointment').endDate = endDate;
-    		}else{
-    		   model.set('currentAppointment', {
-    			                                  "id":"",
-    			                                  "startDate":startDate,
-    			                                  "endDate":endDate
-    			                                 });
-    		}    		
-    	}
+    getProgramStatusName: function(){
+    	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
+    },
+    
+    /*
+     * cleans properties that will be unable to be saved if not null
+     */ 
+    setPropsNullForSave: function( jsonData ){
+		delete jsonData.studentIntakeCompleteDate;
+		delete jsonData.currentProgramStatusName;
+		if( jsonData.serviceReasons == "" )
+		{
+			jsonData.serviceReasons=null;
+		}
+		
+		if( jsonData.specialServiceGroups == "" )
+		{
+			jsonData.specialServiceGroups=null;
+		}
+
+		if( jsonData.referralSources == "" )
+		{
+			jsonData.referralSources=null;
+		}
+		
+		// TODO: Handle username field
+		if (jsonData.username == "")
+		{
+			jsonData.username = jsonData.firstName +'.'+jsonData.lastName;			
+		}
+
+		return jsonData;
+    },
+    
+    populateFromExternalData: function( jsonData ){
+    	var me=this;
+    	me.set('photoUrl',jsonData.photoUrl);
+    	me.set('schoolId',jsonData.schoolId);
+    	me.set('firstName',jsonData.firstName);
+    	me.set('middleName',jsonData.middleName);
+    	me.set('lastName', jsonData.lastName);	
+    	me.set('anticipatedStartTerm',jsonData.anticipatedStartTerm);
+    	me.set('anticipatedStartYear',jsonData.anticipatedStartYear);
+    	me.set('cellPhone', jsonData.cellPhone);
+    	me.set('workPhone', jsonData.workPhone);
+    	me.set('addressLine1', jsonData.addressLine1);
+    	me.set('addressLine2', jsonData.addressLine2);
+    	me.set('city', jsonData.city);
+    	me.set('state', jsonData.state);
+    	me.set('zipCode', jsonData.zipCode);
+    	me.set('primaryEmailAddress', jsonData.primaryEmailAddress);
+    	me.set('secondaryEmailAddress', jsonData.secondaryEmailAddress);
+    	me.set('birthDate', jsonData.birthDate);
     }
 });

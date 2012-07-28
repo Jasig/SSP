@@ -6,7 +6,6 @@ package org.jasig.ssp.factory.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.UUID;
 
@@ -85,7 +84,6 @@ public class PersonDemographicsTOFactoryImplTest {
 		obj.setVeteranStatus(new VeteranStatus());
 		obj.setChildCareArrangement(new ChildCareArrangement());
 		obj.setShift(EmploymentShifts.FIRST);
-		obj.setAbilityToBenefit(true);
 
 		final PersonDemographicsTO to = toFactory.from(obj);
 		assertEquals("Genders did not match.", Genders.M.toString(),
@@ -93,6 +91,5 @@ public class PersonDemographicsTOFactoryImplTest {
 		assertEquals("Shifts did not match.",
 				EmploymentShifts.FIRST.toString(),
 				to.getShift());
-		assertTrue("AbilityToBenefit did not match.", to.isAbilityToBenefit());
 	}
 }

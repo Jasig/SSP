@@ -2,6 +2,8 @@ package org.jasig.ssp.service;
 
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -24,7 +26,8 @@ public interface AuditableCrudService<T extends Auditable> {
 	 * @param sAndP
 	 *            SortingAndPaging
 	 * 
-	 * @return All entities in the database filtered by the supplied status.
+	 * @return All entities in the database filtered by the supplied status,
+	 *         sorting, and paging parameters.
 	 */
 	PagingWrapper<T> getAll(SortingAndPaging sAndP);
 
@@ -32,11 +35,13 @@ public interface AuditableCrudService<T extends Auditable> {
 	 * Retrieves the specified instance from persistent storage.
 	 * 
 	 * @param id
-	 * @return The specified instance if found.
+	 *            the id; required
+	 * @return The specified instance if found and active,
+	 *         ObjectNotFoundException thrown otherwise.
 	 * @exception ObjectNotFoundException
 	 *                If instance not found or inactive.
 	 */
-	T get(UUID id) throws ObjectNotFoundException;
+	T get(@NotNull UUID id) throws ObjectNotFoundException;
 
 	/**
 	 * Save a new instance to persistent storage.

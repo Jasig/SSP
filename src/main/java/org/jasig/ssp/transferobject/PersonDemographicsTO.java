@@ -1,5 +1,6 @@
 package org.jasig.ssp.transferobject; // NOPMD
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -15,12 +16,14 @@ public class PersonDemographicsTO
 
 	private UUID coachId, maritalStatusId, ethnicityId,
 			citizenshipId, veteranStatusId, childCareArrangementId;
-	private boolean abilityToBenefit, local, primaryCaregiver,
+	private Boolean local, primaryCaregiver,
 			childCareNeeded, employed;
-	private int numberOfChildren;
-	private String anticipatedStartTerm, anticipatedStartYear,
-			countryOfResidence, paymentStatus, gender, countryOfCitizenship,
+	private Integer numberOfChildren;
+	private String countryOfResidence, paymentStatus, gender,
+			countryOfCitizenship,
 			childAges, placeOfEmployment, shift, wage, totalHoursWorkedPerWeek;
+
+	private BigDecimal balanceOwed;
 
 	public PersonDemographicsTO() {
 		super();
@@ -55,14 +58,12 @@ public class PersonDemographicsTO
 			childCareArrangementId = model.getChildCareArrangement().getId();
 		}
 
-		abilityToBenefit = model.isAbilityToBenefit();
-		local = model.isLocal();
-		primaryCaregiver = model.isPrimaryCaregiver();
-		childCareNeeded = model.isChildCareNeeded();
-		employed = model.isEmployed();
+		local = model.getLocal();
+		primaryCaregiver = model.getPrimaryCaregiver();
+		childCareNeeded = model.getChildCareNeeded();
+		employed = model.getEmployed();
 		numberOfChildren = model.getNumberOfChildren();
-		anticipatedStartTerm = model.getAnticipatedStartTerm();
-		anticipatedStartYear = model.getAnticipatedStartYear();
+		balanceOwed = model.getBalanceOwed();
 		countryOfResidence = model.getCountryOfResidence();
 		paymentStatus = model.getPaymentStatus();
 		if (model.getGender() != null) {
@@ -136,60 +137,44 @@ public class PersonDemographicsTO
 		this.childCareArrangementId = childCareArrangementId;
 	}
 
-	public boolean isAbilityToBenefit() {
-		return abilityToBenefit;
-	}
-
-	public void setAbilityToBenefit(final boolean abilityToBenefit) {
-		this.abilityToBenefit = abilityToBenefit;
-	}
-
-	public boolean isLocal() {
+	public Boolean getLocal() {
 		return local;
 	}
 
-	public void setLocal(final boolean local) {
+	public void setLocal(final Boolean local) {
 		this.local = local;
 	}
 
-	public boolean isPrimaryCaregiver() {
+	public Boolean getPrimaryCaregiver() {
 		return primaryCaregiver;
 	}
 
-	public void setPrimaryCaregiver(final boolean primaryCaregiver) {
+	public void setPrimaryCaregiver(final Boolean primaryCaregiver) {
 		this.primaryCaregiver = primaryCaregiver;
 	}
 
-	public boolean isChildCareNeeded() {
+	public Boolean getChildCareNeeded() {
 		return childCareNeeded;
 	}
 
-	public void setChildCareNeeded(final boolean childCareNeeded) {
+	public void setChildCareNeeded(final Boolean childCareNeeded) {
 		this.childCareNeeded = childCareNeeded;
 	}
 
-	public boolean isEmployed() {
+	public Boolean getEmployed() {
 		return employed;
 	}
 
-	public void setEmployed(final boolean employed) {
+	public void setEmployed(final Boolean employed) {
 		this.employed = employed;
 	}
 
-	public String getAnticipatedStartTerm() {
-		return anticipatedStartTerm;
+	public BigDecimal getBalanceOwed() {
+		return balanceOwed;
 	}
 
-	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
-		this.anticipatedStartTerm = anticipatedStartTerm;
-	}
-
-	public String getAnticipatedStartYear() {
-		return anticipatedStartYear;
-	}
-
-	public void setAnticipatedStartYear(final String anticipatedStartYear) {
-		this.anticipatedStartYear = anticipatedStartYear;
+	public void setBalanceOwed(final BigDecimal balanceOwed) {
+		this.balanceOwed = balanceOwed;
 	}
 
 	public String getCountryOfResidence() {
@@ -264,11 +249,11 @@ public class PersonDemographicsTO
 		this.totalHoursWorkedPerWeek = totalHoursWorkedPerWeek;
 	}
 
-	public int getNumberOfChildren() {
+	public Integer getNumberOfChildren() {
 		return numberOfChildren;
 	}
 
-	public void setNumberOfChildren(final int numberOfChildren) {
+	public void setNumberOfChildren(final Integer numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
 	}
 }

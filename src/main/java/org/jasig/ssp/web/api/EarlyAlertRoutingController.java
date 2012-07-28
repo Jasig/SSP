@@ -34,9 +34,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @PreAuthorize(Permission.SECURITY_REFERENCE_WRITE)
-@RequestMapping("/1/reference/campus/{id}/earlyAlertRouting")
+@RequestMapping("/1/reference/campus/{campusId}/earlyAlertRouting")
 public class EarlyAlertRoutingController
-		extends BaseController {
+		extends AbstractBaseController {
 
 	/**
 	 * Empty constructor
@@ -89,7 +89,7 @@ public class EarlyAlertRoutingController
 	 *             If any data could not be found
 	 * @return All entities in the database filtered by the supplied status.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagedResponse<EarlyAlertRoutingTO> getAll(
@@ -158,15 +158,18 @@ public class EarlyAlertRoutingController
 	 * @throws ObjectNotFoundException
 	 *             If the data could not be found.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
-	EarlyAlertRoutingTO create(
-			final @PathVariable UUID campusId,
+	EarlyAlertRoutingTO create(final @PathVariable UUID campusId,
 			final @Valid @RequestBody EarlyAlertRoutingTO obj)
 			throws ObjectNotFoundException, ValidationException {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"You submitted a earlyAlertRouting with an id to the create method. Did you mean to save?");
+		}
+
+		if (obj.getCampusId() == null) {
+			obj.setCampusId(campusId);
 		}
 
 		final EarlyAlertRouting model = factory.from(obj);
@@ -212,6 +215,10 @@ public class EarlyAlertRoutingController
 		if (obj == null) {
 			throw new ValidationException(
 					"EarlyAlertRouting data is required.");
+		}
+
+		if (obj.getCampusId() == null) {
+			obj.setCampusId(campusId);
 		}
 
 		final EarlyAlertRouting model = factory.from(obj);

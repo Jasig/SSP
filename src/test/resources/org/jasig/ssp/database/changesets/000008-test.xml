@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="test appointment" author="daniel.bower">
+		<insert tableName="appointment">
+			<column name="id" value="6c892a1c-ca07-11e1-8c61-0026b9e7ff4c" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="start_time" valueDate="2012-03-20T00:00:00" />
+			<column name="end_time" valueDate="2012-03-20T01:00:00" />
+		</insert>
+
+		<rollback>
+			<delete tableName="appointment">
+				<where>id='6c892a1c-ca07-11e1-8c61-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="set studentTypes" author="daniel.bower">
+		<update tableName="person">
+			<column name="student_type_id">b2d058eb-5056-a51a-80a7-8a20c30d1e91</column>
+			<where>id = '1010e4a0-1001-0110-1011-4ffc02fe81ff'</where>
+		</update>
+		<update tableName="person">
+			<column name="student_type_id">b2d05919-5056-a51a-80bd-03e5288de771</column>
+			<where>id = '7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194'</where>
+		</update>
+		<update tableName="person">
+			<column name="student_type_id">b2d05919-5056-a51a-80bd-03e5288de771</column>
+			<where>id = 'f549ecab-5110-4cc1-b2bb-369cac854dea'</where>
+		</update>
+	</changeSet>
+
+	<changeSet id="another test appointment" author="daniel.bower">
+		<insert tableName="appointment">
+			<column name="id" value="2cdc7f78-cb78-11e1-b087-0026b9e7ff4c" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="start_time" valueDate="2016-03-20T00:00:00" />
+			<column name="end_time" valueDate="2016-03-20T01:00:00" />
+		</insert>
+
+		<rollback>
+			<delete tableName="appointment">
+				<where>id='2cdc7f78-cb78-11e1-b087-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="test JournalEntryDetail" author="jon.adams">
+		<insert tableName="journal_entry_detail">
+			<column name="id" value="e8df3d54-af46-21e2-a742-1026b9e7ff5d" />
+			<column name="created_date" valueDate="2012-07-11T00:00:00" />
+			<column name="modified_date" valueDate="2012-07-11T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="journal_entry_id" value="86ffcd52-af44-11e1-98f9-0026b9e7ff4c" />
+			<column name="journal_step_journal_step_detail_id" value="1311c59d-af37-11f1-8624-0026b9e8ff5f" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_entry_detail">
+				<where>id='e8df3d54-af46-21e2-a742-1026b9e7ff5d'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="test journal_track_journal_step data" author="jon.adams">
+		<insert tableName="journal_track_journal_step">
+			<column name="id" value="68d1da33-152e-4848-9006-2fd2424054a9" />
+			<column name="created_date" valueDate="2012-07-12T00:00:00" />
+			<column name="modified_date" valueDate="2012-07-12T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="journal_step_id" value="aba1440c-ab5b-11e1-ba73-0026b9e7ff4c" />
+			<column name="journal_track_id" value="b2d07a7d-5056-a51a-80a8-96ae5188a188" />
+		</insert>
+		<rollback>
+			<delete tableName="journal_track_journal_step">
+				<where>id='68d1da33-152e-4848-9006-2fd2424054a9'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="test early_alert data" author="jon.adams">
+		<insert tableName="early_alert">
+			<column name="id" value="74891747-36aa-409c-8b1f-76d3eaf9028e" />
+			<column name="created_date" valueDate="2012-07-19T00:00:00" />
+			<column name="modified_date" valueDate="2012-07-19T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="course_name" value="Course Name" />
+			<column name="course_title" value="Course Title" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert">
+				<where>id='74891747-36aa-409c-8b1f-76d3eaf9028e'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add inactive early_alert_suggestion" author="jon.adams">
+		<insert tableName="early_alert_suggestion">
+			<column name="id" value="881DF3DD-1AA6-4CB8-8817-E95DAF49227A" />
+			<column name="name" value="Test deleted suggestion - should never be seen" />
+			<column name="description" value="TEST" />
+			<column name="created_date" valueDate="2012-07-19T12:00:00" />
+			<column name="modified_date" valueDate="2012-07-19T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="2" />
+			<column name="sort_order" value="100" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert_suggestion">
+				<where>id='881DF3DD-1AA6-4CB8-8817-E95DAF49227A'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="test program status for ken" author="daniel.bower">
+		<insert tableName="person_program_status">
+			<column name="id" value="3af3632e-d26c-11e1-b2df-0026b9e7ff4c" />
+			<column name="person_id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
+			<column name="created_date" valueDate="2012-03-20T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_id" value="b2d12527-5056-a51a-8054-113116baab88" />
+			<column name="effective_date" valueDate="2012-03-20T00:00:00" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="person_program_status">
+				<where>id='3af3632e-d26c-11e1-b2df-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add person references for external_faculty_course_roster" author="alexander.leader">
+		<insert tableName="person">
+			<column name="id" value="5eceefd1-257c-421f-99bf-a3622815bfee" />
+			<column name="first_name" value="Douglas" />
+			<column name="last_name" value="Toya" />
+			<column name="primary_email_address" value="douglas.toya@sinclair.edu" />
+			<column name="username" value="faculty0" />
+			<column name="school_id" value="uf928711" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="0d6163de-90fd-46d1-a9ca-7dbaa850924b" />
+			<column name="first_name" value="Mary" />
+			<column name="last_name" value="Webber" />
+			<column name="primary_email_address" value="mary.webber@sinclair.edu" />
+			<column name="username" value="faculty1" />
+			<column name="school_id" value="uf123456" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="d2320b58-4d54-4532-a0cd-1f4409c9fc38" />
+			<column name="first_name" value="James" />
+			<column name="last_name" value="Doe" />
+			<column name="primary_email_address" value="james.ryan80@university.edu" />
+			<column name="username" value="james.doe" />
+			<column name="school_id" value="uu351764" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="8005ad07-9111-457d-9896-f15a0dc8bbfb" />
+			<column name="first_name" value="Mark" />
+			<column name="last_name" value="Galafrion" />
+			<column name="primary_email_address" value="mark.g@university.edu" />
+			<column name="username" value="mark.galafrion" />
+			<column name="school_id" value="uu358123" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="a5a23d8a-f0d3-4ef6-9a75-21f3775bac0f" />
+			<column name="first_name" value="Bob" />
+			<column name="last_name" value="Reynolds" />
+			<column name="primary_email_address" value="bob1@university.edu" />
+			<column name="username" value="bob.reynolds" />
+			<column name="school_id" value="uu462875" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="person">
+			<column name="id" value="f26d8f23-df20-40f1-bc98-83111be4a52a" />
+			<column name="first_name" value="Kevin" />
+			<column name="last_name" value="Smith" />
+			<column name="primary_email_address" value="ksmith12@university.edu" />
+			<column name="username" value="kevin.smith" />
+			<column name="school_id" value="uu112233" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="person">
+				<where>id='5eceefd1-257c-421f-99bf-a3622815bfee'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='0d6163de-90fd-46d1-a9ca-7dbaa850924b'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='d2320b58-4d54-4532-a0cd-1f4409c9fc38'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='8005ad07-9111-457d-9896-f15a0dc8bbfb'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='a5a23d8a-f0d3-4ef6-9a75-21f3775bac0f'</where>
+			</delete>
+			<delete tableName="person">
+				<where>id='f26d8f23-df20-40f1-bc98-83111be4a52a'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="update any alerts to use a default campusId" author="alexander.leader">
+		<update tableName="early_alert">
+			<column name="campus_id">901e104b-4dc7-43f5-a38e-581015e204e1</column>
+			<where>campus_id is null</where>
+		</update>
+		<rollback><!-- nothing to do --></rollback>
+	</changeSet>
+</databaseChangeLog>

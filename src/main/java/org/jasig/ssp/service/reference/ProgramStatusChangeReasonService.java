@@ -1,7 +1,7 @@
 package org.jasig.ssp.service.reference;
 
 import org.jasig.ssp.model.reference.ProgramStatusChangeReason;
-import org.jasig.ssp.service.AuditableCrudService;
+import org.jasig.ssp.service.ReferenceService;
 
 /**
  * ProgramStatusChangeReason service
@@ -10,5 +10,5 @@ import org.jasig.ssp.service.AuditableCrudService;
  * 
  */
 public interface ProgramStatusChangeReasonService
-		extends AuditableCrudService<ProgramStatusChangeReason> {
+		extends ReferenceService<ProgramStatusChangeReason> {
 }

@@ -1,5 +1,7 @@
 package org.jasig.ssp.model; // NOPMD by jon.adams on 5/24/12 1:34 PM
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -34,23 +36,13 @@ import org.jasig.ssp.model.reference.VeteranStatus;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
-		extends AbstractAuditable
-		implements Auditable {
+		extends AbstractAuditable implements Auditable {
 
 	private static final long serialVersionUID = 3252611289245443664L;
 
-	@Column
-	private boolean abilityToBenefit;
+	private Boolean local;
 
-	@Column(length = 25)
-	@Size(max = 25)
-	private String anticipatedStartTerm;
-
-	@Column(length = 4)
-	@Size(max = 4)
-	private String anticipatedStartYear;
-
-	private boolean local;
+	private BigDecimal balanceOwed;
 
 	@Column(length = 50)
 	@Size(max = 50)
@@ -87,11 +79,9 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@JoinColumn(name = "veteran_status_id", nullable = true)
 	private VeteranStatus veteranStatus;
 
-	@Column
-	private boolean primaryCaregiver;
+	private Boolean primaryCaregiver, childCareNeeded;
 
-	@Column
-	private int numberOfChildren;
+	private Integer numberOfChildren;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
@@ -102,10 +92,7 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Size(max = 50)
 	private String childAges;
 
-	@Column
-	private boolean childCareNeeded;
-
-	private boolean employed;
+	private Boolean employed;
 
 	@Column(length = 50)
 	@Size(max = 50)
@@ -122,36 +109,20 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Size(max = 3)
 	private String totalHoursWorkedPerWeek;
 
-	public boolean isAbilityToBenefit() {
-		return abilityToBenefit;
+	public BigDecimal getBalanceOwed() {
+		return balanceOwed;
 	}
 
-	public void setAbilityToBenefit(final boolean abilityToBenefit) {
-		this.abilityToBenefit = abilityToBenefit;
+	public void setBalanceOwed(final BigDecimal balanceOwed) {
+		this.balanceOwed = balanceOwed;
 	}
 
-	public String getAnticipatedStartTerm() {
-		return anticipatedStartTerm;
-	}
-
-	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
-		this.anticipatedStartTerm = anticipatedStartTerm;
-	}
-
-	public String getAnticipatedStartYear() {
-		return anticipatedStartYear;
-	}
-
-	public void setAnticipatedStartYear(final String anticipatedStartYear) {
-		this.anticipatedStartYear = anticipatedStartYear;
-	}
-
-	public boolean isLocal() {
+	public Boolean getLocal() {
 		return local;
 	}
 
-	public void setLocal(final boolean isLocal) {
-		local = isLocal;
+	public void setLocal(final Boolean local) {
+		this.local = local;
 	}
 
 	public String getCountryOfResidence() {
@@ -218,19 +189,19 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.veteranStatus = veteranStatus;
 	}
 
-	public boolean isPrimaryCaregiver() {
+	public Boolean getPrimaryCaregiver() {
 		return primaryCaregiver;
 	}
 
-	public void setPrimaryCaregiver(final boolean primaryCaregiver) {
+	public void setPrimaryCaregiver(final Boolean primaryCaregiver) {
 		this.primaryCaregiver = primaryCaregiver;
 	}
 
-	public int getNumberOfChildren() {
+	public Integer getNumberOfChildren() {
 		return numberOfChildren;
 	}
 
-	public void setNumberOfChildren(final int numberOfChildren) {
+	public void setNumberOfChildren(final Integer numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
 	}
 
@@ -251,19 +222,19 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.childAges = childAges;
 	}
 
-	public boolean isChildCareNeeded() {
+	public Boolean getChildCareNeeded() {
 		return childCareNeeded;
 	}
 
-	public void setChildCareNeeded(final boolean childCareNeeded) {
+	public void setChildCareNeeded(final Boolean childCareNeeded) {
 		this.childCareNeeded = childCareNeeded;
 	}
 
-	public boolean isEmployed() {
+	public Boolean getEmployed() {
 		return employed;
 	}
 
-	public void setEmployed(final boolean employed) {
+	public void setEmployed(final Boolean employed) {
 		this.employed = employed;
 	}
 
@@ -299,56 +270,6 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.totalHoursWorkedPerWeek = totalHoursWorkedPerWeek;
 	}
 
-	/**
-	 * Overwrites simple properties with the parameter's properties.
-	 * 
-	 * @param source
-	 *            Source to use for overwrites.
-	 * @param maritalStatus
-	 *            Marital status
-	 * @param ethnicity
-	 *            Ethnicity
-	 * @param citizenship
-	 *            Citizenship
-	 * @param veterenStatus
-	 *            Veteran status
-	 * @param coach
-	 *            Coach, if any
-	 * @param childCareArrangement
-	 *            Child Care Arrangements
-	 */
-	public void overwrite(final PersonDemographics source,
-			final MaritalStatus maritalStatus, final Ethnicity ethnicity,
-			final Citizenship citizenship, final VeteranStatus veterenStatus,
-			final Person coach,
-			final ChildCareArrangement childCareArrangement) {
-		setAbilityToBenefit(source.isAbilityToBenefit());
-		setAnticipatedStartTerm(source.getAnticipatedStartTerm());
-		setAnticipatedStartYear(source.getAnticipatedStartYear());
-		setLocal(source.isLocal());
-		setCountryOfResidence(source.getCountryOfResidence());
-		setPaymentStatus(source.getPaymentStatus());
-		setEthnicity(source.getEthnicity());
-		setGender(source.getGender());
-		setCitizenship(source.getCitizenship());
-		setCountryOfCitizenship(source.getCountryOfCitizenship());
-		setPrimaryCaregiver(source.isPrimaryCaregiver());
-		setNumberOfChildren(source.getNumberOfChildren());
-		setChildAges(source.getChildAges());
-		setChildCareNeeded(source.isChildCareNeeded());
-		setEmployed(source.isEmployed());
-		setPlaceOfEmployment(source.getPlaceOfEmployment());
-		setShift(source.getShift());
-		setWage(source.getWage());
-		setTotalHoursWorkedPerWeek(source.getTotalHoursWorkedPerWeek());
-
-		setMaritalStatus(maritalStatus);
-		setEthnicity(ethnicity);
-		setCitizenship(citizenship);
-		setVeteranStatus(veterenStatus);
-		setChildCareArrangement(childCareArrangement);
-	}
-
 	@Override
 	protected int hashPrime() {
 		return 11;
@@ -363,10 +284,9 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		result *= hashField("objectStatus", getObjectStatus());
 
 		// PersonDemographics
-		result *= abilityToBenefit ? 7 : 11;
-		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
-		result *= hashField("anticipatedStartYear", anticipatedStartYear);
-		result *= local ? 3 : 5;
+		result *= hashField("balanceOwed", balanceOwed);
+		result *= local == null ? "local".hashCode()
+				: (local ? 3 : 5);
 		result *= hashField("countryOfResidence", countryOfResidence);
 		result *= hashField("paymentStatus", paymentStatus);
 		result *= hashField("maritalStatus", maritalStatus);
@@ -375,12 +295,15 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		result *= hashField("citizenship", citizenship);
 		result *= hashField("countryOfCitizenship", countryOfCitizenship);
 		result *= hashField("veteranStatus", veteranStatus);
-		result *= primaryCaregiver ? 13 : 17;
+		result *= primaryCaregiver == null ? "primaryCaregiver".hashCode()
+				: (primaryCaregiver ? 13 : 17);
 		result *= hashField("numberOfChildren", numberOfChildren);
 		result *= hashField("childCareArrangement", childCareArrangement);
 		result *= hashField("childAges", childAges);
-		result *= childCareNeeded ? 19 : 23;
-		result *= employed ? 29 : 31;
+		result *= childCareNeeded == null ? "childCareNeeded".hashCode()
+				: (childCareNeeded ? 19 : 23);
+		result *= employed == null ? "employed".hashCode()
+				: (employed ? 29 : 31);
 		result *= hashField("placeOfEmployment", placeOfEmployment);
 		result *= shift == null ? "shift".hashCode() : shift.hashCode();
 		result *= hashField("wage", wage);

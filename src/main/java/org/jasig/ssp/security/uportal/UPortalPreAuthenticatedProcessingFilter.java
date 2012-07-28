@@ -29,12 +29,15 @@ import org.springframework.util.Assert;
 import org.springframework.web.filter.GenericFilterBean;
 
 /**
+ * UPortal pre-authenticated processing filter.
+ * <p>
+ * Couldn't extend AbstractPreAuthenticatedProcessingFilter to the proper
+ * degree, so pulling a bunch of code from it.
+ * 
  * @see org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter
- * @author daniel Couldn't extend AbstractPreAuthenticatedProcessingFilter to
- *         the proper degree, so pulling a bunch of code from it.
+ * @author daniel.bower
  */
-public class UPortalPreAuthenticatedProcessingFilter
-		extends GenericFilterBean
+public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 		implements InitializingBean, ApplicationEventPublisherAware {
 
 	private ApplicationEventPublisher eventPublisher = null;
@@ -64,6 +67,7 @@ public class UPortalPreAuthenticatedProcessingFilter
 		}
 
 		final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+
 		final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
 		final PreAuthenticatedAuthenticationToken preAuthToken = getPreAuthenticatedToken(httpServletRequest);
@@ -246,6 +250,7 @@ public class UPortalPreAuthenticatedProcessingFilter
 	 * object. If a change is detected, the user will be reauthenticated.
 	 * 
 	 * @param checkForPrincipalChanges
+	 *            should principal changes be checked or not
 	 */
 	public void setCheckForPrincipalChanges(
 			final boolean checkForPrincipalChanges) {

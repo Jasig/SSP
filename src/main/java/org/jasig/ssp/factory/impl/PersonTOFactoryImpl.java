@@ -1,13 +1,15 @@
 package org.jasig.ssp.factory.impl;
 
+import java.util.HashSet;
+
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
-import org.jasig.ssp.factory.PersonProgramStatusTOFactory;
 import org.jasig.ssp.factory.PersonReferralSourceTOFactory;
 import org.jasig.ssp.factory.PersonServiceReasonTOFactory;
 import org.jasig.ssp.factory.PersonSpecialServiceGroupTOFactory;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.StudentTypeService;
@@ -47,9 +49,6 @@ public class PersonTOFactoryImpl extends
 	@Autowired
 	private transient PersonServiceReasonTOFactory personServiceReasonTOFactory;
 
-	@Autowired
-	private transient PersonProgramStatusTOFactory personProgramStatusTOFactory;
-
 	@Override
 	protected PersonDao getDao() {
 		return dao;
@@ -61,13 +60,12 @@ public class PersonTOFactoryImpl extends
 		final Person model = super.from(tObject);
 
 		model.setFirstName(tObject.getFirstName());
-		model.setMiddleInitial(tObject.getMiddleInitial());
+		model.setMiddleName(tObject.getMiddleName());
 		model.setLastName(tObject.getLastName());
 		model.setBirthDate(tObject.getBirthDate());
 		model.setPrimaryEmailAddress(tObject.getPrimaryEmailAddress());
 		model.setSecondaryEmailAddress(tObject.getSecondaryEmailAddress());
 		model.setUsername(tObject.getUsername());
-		model.setUserId(tObject.getUserId());
 		model.setHomePhone(tObject.getHomePhone());
 		model.setWorkPhone(tObject.getWorkPhone());
 		model.setCellPhone(tObject.getCellPhone());
@@ -83,13 +81,15 @@ public class PersonTOFactoryImpl extends
 		model.setAbilityToBenefit(tObject.getAbilityToBenefit());
 		model.setAnticipatedStartTerm(tObject.getAnticipatedStartTerm());
 		model.setAnticipatedStartYear(tObject.getAnticipatedStartYear());
+		model.setActualStartTerm(tObject.getActualStartTerm());
+		model.setActualStartYear(tObject.getActualStartYear());
 		model.setStudentIntakeRequestDate(tObject.getStudentIntakeRequestDate());
-		model.setStudentType(((tObject.getStudentType() == null) || (tObject
-				.getStudentType().getId() == null)) ? null
+		model.setStudentType((tObject.getStudentType() == null)
+				|| (tObject.getStudentType().getId() == null) ? null // NOPMD
 				: studentTypeService.get(tObject.getStudentType().getId()));
 
 		model.setCoach((tObject.getCoach() == null)
-				|| (tObject.getCoach().getId() == null) ? null : personService
+				|| (tObject.getCoach().getId() == null) ? null : personService // NOPMD
 				.get(tObject.getCoach().getId()));
 
 		personSpecialServiceGroupTOFactory.updateSetFromLites(
@@ -103,10 +103,13 @@ public class PersonTOFactoryImpl extends
 		personServiceReasonTOFactory.updateSetFromLites(
 				model.getServiceReasons(), tObject.getServiceReasons(), model);
 
-		personProgramStatusTOFactory
-				.updateSetFromLites(
-						model.getProgramStatuses(),
-						tObject.getProgramStatuses(), model);
+		// program statuses can not be overwritten here. always reload from db
+		if (tObject.getId() == null) {
+			model.setProgramStatuses(new HashSet<PersonProgramStatus>(0));
+		} else {
+			final Person person = personService.get(tObject.getId());
+			model.setProgramStatuses(person.getProgramStatuses());
+		}
 
 		return model;
 	}

@@ -152,7 +152,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements // N
 	 * @return The currently authenticated user
 	 */
 	public Person currentUser() {
-		final SspUser user = getSecurityService().currentUser();
+		final SspUser user = getSecurityService().currentFallingBackToAdmin();
 		return user.getPerson();
 	}
 

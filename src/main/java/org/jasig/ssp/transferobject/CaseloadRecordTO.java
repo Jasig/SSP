@@ -3,16 +3,36 @@ package org.jasig.ssp.transferobject;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.CaseloadRecord;
 
+/**
+ * Caseload record transfer object
+ */
 public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 
+	@NotNull
 	private UUID personId;
-	private String schoolId, firstName, middleInitial, lastName,
-			studentTypeName;
-	private Date currentAppointmentDate;
-	private int numberOfEarlyAlerts;
+
+	@NotNull
+	private String schoolId;
+
+	@NotNull
+	private String firstName;
+
+	private String middleName;
+
+	@NotNull
+	private String lastName;
+
+	private String studentTypeName;
+
+	private Date currentAppointmentStartTime;
+
 	private boolean studentIntakeComplete;
+
+	private int numberOfEarlyAlerts;
 
 	public CaseloadRecordTO(final CaseloadRecord record) {
 		super();
@@ -21,16 +41,16 @@ public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 
 	@Override
 	public final void from(final CaseloadRecord model) {
-		this.setFirstName(model.getFirstName());
-		this.setLastName(model.getLastName());
-		this.setMiddleInitial(model.getMiddleInitial());
-		this.setPersonId(model.getPersonId());
-		this.setSchoolId(model.getSchoolId());
-		this.setStudentTypeName(model.getStudentTypeName());
+		setFirstName(model.getFirstName());
+		setLastName(model.getLastName());
+		setMiddleName(model.getMiddleName());
+		setPersonId(model.getPersonId());
+		setSchoolId(model.getSchoolId());
+		setStudentTypeName(model.getStudentTypeName());
 
-		this.setNumberOfEarlyAlerts(model.getNumberOfEarlyAlerts());
-		this.setStudentIntakeComplete(model.isStudentIntakeComplete());
-		this.setCurrentAppointmentDate(model.getCurrentAppointmentDate());
+		setNumberOfEarlyAlerts(model.getNumberOfEarlyAlerts());
+		setStudentIntakeComplete(model.isStudentIntakeComplete());
+		setCurrentAppointmentStartTime(model.getCurrentAppointmentStartTime());
 	}
 
 	public UUID getPersonId() {
@@ -57,12 +77,12 @@ public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 		this.firstName = firstName;
 	}
 
-	public String getMiddleInitial() {
-		return middleInitial;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public final void setMiddleInitial(final String middleInitial) {
-		this.middleInitial = middleInitial;
+	public final void setMiddleName(final String middleName) {
+		this.middleName = middleName;
 	}
 
 	public String getLastName() {
@@ -81,14 +101,15 @@ public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 		this.studentTypeName = studentTypeName;
 	}
 
-	public Date getCurrentAppointmentDate() {
-		return currentAppointmentDate == null ? null : new Date(
-				currentAppointmentDate.getTime());
+	public Date getCurrentAppointmentStartTime() {
+		return currentAppointmentStartTime == null ? null : new Date(
+				currentAppointmentStartTime.getTime());
 	}
 
-	public final void setCurrentAppointmentDate(final Date currentAppointmentDate) {
-		this.currentAppointmentDate = currentAppointmentDate == null ? null
-				: new Date(currentAppointmentDate.getTime());
+	public final void setCurrentAppointmentStartTime(
+			final Date currentAppointmentStartTime) {
+		this.currentAppointmentStartTime = currentAppointmentStartTime == null ? null
+				: new Date(currentAppointmentStartTime.getTime());
 	}
 
 	public int getNumberOfEarlyAlerts() {

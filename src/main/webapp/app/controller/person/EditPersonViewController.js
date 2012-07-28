@@ -4,11 +4,17 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     inject: {
     	appEventsController: 'appEventsController',
         person: 'currentPerson',
+        personService: 'personService',
         sspConfig: 'sspConfig'
     },
     control: {
-    	retrieveFromExternalButton: '#retrieveFromExternalButton',
-    	
+    	retrieveFromExternalButton: {
+    		selector: '#retrieveFromExternalButton',
+    		listeners: {
+                click: 'onRetrieveFromExternalClick'
+            }       		
+    	},
+ 		
     	firstNameField: {
     		selector: '#firstName',
     		listeners: {
@@ -45,8 +51,9 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     },  
 	init: function() {
 		var me=this;
-    	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalSISData');		
-		// alias the studentId field and provide validation
+    	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');		
+		var displayRetrieveFromExternalButton = me.sspConfig.get('allowExternalRetrievalOfStudentDataFromCaseloadAssignment');
+    	// alias the studentId field and provide validation
 		var studentIdField = me.getStudentIdField();
 		studentIdField.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 		Ext.apply(studentIdField, {
@@ -74,10 +81,18 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 			me.getPrimaryEmailAddressField().setDisabled(disabled);
 			me.getSecondaryEmailAddressField().setDisabled(disabled);
 		}
-
-		me.getView().loadRecord( this.person );
 		
+		me.getView().getForm().reset();
+		me.getView().loadRecord( me.person );	
+
+		// use config to determine if the retrieveFromExternalButton should be visible
+		me.getRetrieveFromExternalButton().setVisible( displayRetrieveFromExternalButton );		
+
+		// enable the retrieveFromExternalButton if the studentId field is valid
 		me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );
+		
+		// clear validation messages on the studentId to begin data entry
+		studentIdField.reset();
 		
 		return me.callParent(arguments);
     },
@@ -95,5 +110,45 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     
     setRetrieveFromExternalButtonDisabled: function( enabled ){
     	this.getRetrieveFromExternalButton().setDisabled( enabled );
+    },
+    
+    onRetrieveFromExternalClick: function( button ){
+    	var me=this;
+    	var studentIdField = me.getStudentIdField();
+    	var schoolId = studentIdField.value;
+    	if ( studentIdField.isValid() )
+    	{
+    		if (schoolId != "")
+    		{
+    			me.getView().setLoading( true );
+    			me.personService.getBySchoolId( schoolId,{
+    				success: me.getBySchoolIdSuccess,
+    				failure: me.getBySchoolIdFailure,
+    				scope: me
+    			});
+    		}
+    	}else{
+    		Ext.Msg.alert('SSP Error','Please correct the errors in your form.');
+    	}
+    },
+    
+    getBySchoolIdSuccess: function( r, scope ){
+		var me=scope;
+		var model = new Ssp.model.Person();
+		me.getView().setLoading( false );
+		if ( r != null)
+		{
+			me.getView().getForm().reset();
+			model.populateFromExternalData( r );
+			me.person.data = model.data;
+			me.getView().loadRecord( me.person );
+		}else{
+			Ext.Msg.alert('SSP Notification','There were no records found with the provided ID. Please try a different value.');
+		}
+    },    
+    
+    getBySchoolIdFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );
     }
 });

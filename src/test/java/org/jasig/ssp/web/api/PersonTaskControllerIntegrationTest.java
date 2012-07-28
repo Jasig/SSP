@@ -117,6 +117,44 @@ public class PersonTaskControllerIntegrationTest {
 		assertTrue("Send e-mail should have returned success.", result);
 	}
 
+	/**
+	 * Test the email action without recipientIds.
+	 * 
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
+	 */
+	@Test
+	public void testControllerEmailWithoutRecipientIds()
+			throws ObjectNotFoundException,
+			ValidationException {
+		// arrange, with null list
+		final List<String> recipientEmailAddresses = Lists.newArrayList();
+		recipientEmailAddresses.add(TEST_EMAIL);
+
+		final List<UUID> taskIds = Lists.newArrayList();
+		final List<UUID> goalIds = Lists.newArrayList();
+		goalIds.add(GOAL_ID);
+
+		final EmailPersonTasksForm emailForm = new EmailPersonTasksForm();
+		emailForm.setRecipientEmailAddresses(recipientEmailAddresses);
+		emailForm.setTaskIds(taskIds);
+		emailForm.setGoalIds(goalIds);
+
+		// act
+		final boolean result = controller.email(PERSON_ID, emailForm);
+
+		// assert
+		assertTrue("Send e-mail should have returned success.", result);
+
+		// try with empty list
+		final List<UUID> recipientIds = Lists.newArrayList();
+		emailForm.setRecipientIds(recipientIds);
+		final boolean result2 = controller.email(PERSON_ID, emailForm);
+		assertTrue("Send e-mail should have returned success.", result2);
+	}
+
 	@Test
 	public void testTOSetsCompletedByDate() {
 		// arrange
@@ -190,16 +228,6 @@ public class PersonTaskControllerIntegrationTest {
 				afterDeletion);
 	}
 
-	@Test
-	public void testLogger() {
-		final Logger logger = controller.getLogger();
-		logger.info("Test");
-		assertNotNull("logger should not have been null.", logger);
-		assertEquals("Logger name was not specific to the class.",
-				"org.jasig.ssp.web.api.PersonTaskController",
-				logger.getName());
-	}
-
 	public static TaskTO createTask() {
 		final TaskTO obj = new TaskTO();
 		obj.setPersonId(PERSON_ID);
@@ -208,5 +236,16 @@ public class PersonTaskControllerIntegrationTest {
 		obj.setConfidentialityLevel(new ConfidentialityLevelLiteTO(
 				ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE, "EVERYONE"));
 		return obj;
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

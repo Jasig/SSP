@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="tasks_subreport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="51dbb813-035f-483a-9532-ecd7ac9cfc86">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/codynet/workspace/ssd/SSP-Open-Source-Project/src/main/resources/reports/"]]></defaultValueExpression>
+	</parameter>
+	<field name="createdBy.firstName" class="java.lang.String"/>
+	<field name="createdBy.lastName" class="java.lang.String"/>
+	<field name="courseName" class="java.lang.String"/>
+	<field name="courseTitle" class="java.lang.String"/>
+	<field name="earlyAlertReasonIds" class="java.util.Set"/>
+	<field name="earlyAlertSuggestionOtherDescription" class="java.lang.String"/>
+	<field name="comment" class="java.lang.String"/>
+	<field name="closedDate" class="java.util.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="99" splitType="Stretch">
+			<textField>
+				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" stretchType="RelativeToTallestObject" x="101" y="17" width="454" height="19"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{createdBy.firstName} + " " + $F{createdBy.lastName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2910e244-9689-4022-b894-845b897feb21" mode="Opaque" x="0" y="2" width="555" height="15" backcolor="#C2C7F8"/>
+				<textElement/>
+				<text><![CDATA[Early Alert]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="082b7371-c4bc-44ed-9d0d-ed4da09078b6" x="0" y="17" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Instructor Name:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f4d0005e-b505-4842-acba-d85c412f629f" x="0" y="37" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Course Name:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="f35887c5-0929-4ec4-b302-6e510b28c7f8" x="101" y="37" width="454" height="20">
+					<printWhenExpression><![CDATA[$F{courseName} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{courseName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3f71091c-8771-43a6-a708-46fb3955c647" x="0" y="57" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Course Title:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="afa58d0a-6061-4a76-810e-dc32f415eba6" x="101" y="57" width="454" height="20">
+					<printWhenExpression><![CDATA[$F{courseTitle} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{courseTitle}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a7432ae1-ff9e-474c-9eae-17a0a07d0182" x="0" y="78" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Reason:]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="f8a10acb-ebf6-47bf-ae69-2563d155e8a9" x="100" y="78" width="454" height="20"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlertReasonIds})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="63">
+			<staticText>
+				<reportElement uuid="0c8ebd89-a64b-4dd1-a2be-c7de77f4b037" x="1" y="3" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Suggestion:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6b2902aa-278d-4a7f-a368-cd04147965f1" x="0" y="23" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Faculty Comment:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="77a29c24-7b7a-45b7-bb62-1b8101a27ba6" x="101" y="23" width="454" height="20">
+					<printWhenExpression><![CDATA[$F{comment} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="97815147-4c82-4f31-a7d6-87bfde1e35ea" x="0" y="43" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Outcome:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="877ce208-aec0-4aea-a217-86bfe1e2da7d" x="101" y="43" width="454" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{closedDate}==null?"Pending":"Closed on " + $F{closedDate})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0c8ebd89-a64b-4dd1-a2be-c7de77f4b037" x="102" y="3" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Suggestion:]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

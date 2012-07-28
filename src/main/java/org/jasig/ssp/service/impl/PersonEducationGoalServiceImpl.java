@@ -52,20 +52,7 @@ public class PersonEducationGoalServiceImpl implements
 	@Override
 	public PersonEducationGoal save(final PersonEducationGoal obj)
 			throws ObjectNotFoundException {
-		final PersonEducationGoal current = get(obj.getId());
-
-		current.setObjectStatus(obj.getObjectStatus());
-		current.setDescription(obj.getDescription());
-		current.setPlannedOccupation(obj.getPlannedOccupation());
-		current.setHowSureAboutMajor(obj.getHowSureAboutMajor());
-
-		if (obj.getEducationGoal() != null
-				&& obj.getEducationGoal().getId() != null) {
-			current.setEducationGoal(educationGoalService.get(obj
-					.getEducationGoal().getId()));
-		}
-
-		return dao.save(current);
+		return dao.save(obj);
 	}
 
 	@Override

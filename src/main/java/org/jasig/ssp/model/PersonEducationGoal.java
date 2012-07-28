@@ -48,8 +48,19 @@ public class PersonEducationGoal
 	@Size(max = 128)
 	private String militaryBranchDescription;
 
-	@Column()
-	private int howSureAboutMajor;
+	private Integer howSureAboutMajor;
+
+	@Column(length = 50)
+	@Size(max = 50)
+	private String plannedMajor;
+
+	private Boolean careerDecided;
+
+	private Integer howSureAboutOccupation;
+
+	private Boolean confidentInAbilities;
+
+	private Boolean additionalAcademicProgramInformationNeeded;
 
 	public PersonEducationGoal() {
 		super();
@@ -76,11 +87,11 @@ public class PersonEducationGoal
 		this.description = description;
 	}
 
-	public int getHowSureAboutMajor() {
+	public Integer getHowSureAboutMajor() {
 		return howSureAboutMajor;
 	}
 
-	public void setHowSureAboutMajor(final int howSureAboutMajor) {
+	public void setHowSureAboutMajor(final Integer howSureAboutMajor) {
 		this.howSureAboutMajor = howSureAboutMajor;
 	}
 
@@ -99,6 +110,47 @@ public class PersonEducationGoal
 	public void setMilitaryBranchDescription(
 			final String militaryBranchDescription) {
 		this.militaryBranchDescription = militaryBranchDescription;
+	}
+
+	public String getPlannedMajor() {
+		return plannedMajor;
+	}
+
+	public void setPlannedMajor(final String plannedMajor) {
+		this.plannedMajor = plannedMajor;
+	}
+
+	public Boolean getCareerDecided() {
+		return careerDecided;
+	}
+
+	public void setCareerDecided(final Boolean careerDecided) {
+		this.careerDecided = careerDecided;
+	}
+
+	public Integer getHowSureAboutOccupation() {
+		return howSureAboutOccupation;
+	}
+
+	public void setHowSureAboutOccupation(final Integer howSureAboutOccupation) {
+		this.howSureAboutOccupation = howSureAboutOccupation;
+	}
+
+	public Boolean getConfidentInAbilities() {
+		return confidentInAbilities;
+	}
+
+	public void setConfidentInAbilities(final Boolean confidentInAbilities) {
+		this.confidentInAbilities = confidentInAbilities;
+	}
+
+	public Boolean getAdditionalAcademicProgramInformationNeeded() {
+		return additionalAcademicProgramInformationNeeded;
+	}
+
+	public void setAdditionalAcademicProgramInformationNeeded(
+			final boolean additionalAcademicProgramInformationNeeded) {
+		this.additionalAcademicProgramInformationNeeded = additionalAcademicProgramInformationNeeded;
 	}
 
 	@Override
@@ -121,6 +173,13 @@ public class PersonEducationGoal
 		result *= hashField("militaryBranchDescription",
 				militaryBranchDescription);
 		result *= hashField("howSureAboutMajor", howSureAboutMajor);
+		result *= hashField("plannedMajor", plannedMajor);
+		result *= ((careerDecided == null) || !careerDecided) ? 3 : 5;
+		result *= hashField("howSureAboutOccupation", howSureAboutOccupation);
+		result *= ((confidentInAbilities == null) || !confidentInAbilities) ? 7
+				: 11;
+		result *= ((additionalAcademicProgramInformationNeeded == null) || !additionalAcademicProgramInformationNeeded) ? 13
+				: 17;
 
 		return result;
 	}

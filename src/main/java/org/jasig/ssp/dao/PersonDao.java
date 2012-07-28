@@ -17,6 +17,7 @@ import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -33,6 +34,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	public PersonDao() {
 		super(Person.class);
+	}
+
+	public Person create(final Person obj) {
+		final Person person = super.save(obj);
+		sessionFactory.getCurrentSession().flush();
+		return person;
 	}
 
 	/**
@@ -68,7 +75,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	}
 
 	public Person fromUsername(@NotNull final String username) {
-		if (StringUtils.isWhitespace(username)) {
+		if (!StringUtils.isNotBlank(username)) {
 			throw new IllegalArgumentException("username can not be empty.");
 		}
 
@@ -79,39 +86,46 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return (Person) query.uniqueResult();
 	}
 
-	public Person fromUserId(@NotNull final String userId) {
-		if (StringUtils.isWhitespace(userId)) {
-			throw new IllegalArgumentException("userId can not be empty.");
+	@SuppressWarnings(UNCHECKED)
+	public List<Person> getPeopleInList(@NotNull final List<UUID> personIds,
+			final SortingAndPaging sAndP) throws ValidationException {
+		if ((personIds == null) || personIds.isEmpty()) {
+			throw new ValidationException(
+					"Missing or empty list of Person identifiers.");
 		}
 
-		final Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(Person.class);
-		query.add(Restrictions.eq("userId", userId));
-		return (Person) query.uniqueResult();
-	}
-
-	@SuppressWarnings(UNCHECKED)
-	public List<Person> getPeopleInList(final List<UUID> personIds,
-			final SortingAndPaging sAndP) {
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.in("id", personIds));
 		return criteria.list();
 	}
 
 	/**
-	 * Retrieves the specified Person by their Student ID (school_id).
+	 * Retrieves the specified Person by their school_id.
 	 * 
-	 * @param studentId
+	 * @param schoolId
 	 *            Required school identifier for the Person to retrieve. Can not
 	 *            be null.
 	 * @exception ObjectNotFoundException
 	 *                If the supplied identifier does not exist in the database.
 	 * @return The specified Person instance.
 	 */
-	public Person getByStudentId(final String studentId)
+	public Person getBySchoolId(final String schoolId)
 			throws ObjectNotFoundException {
-		return (Person) createCriteria().add(
-				Restrictions.eq("schoolId", studentId)).uniqueResult();
+
+		if (!StringUtils.isNotBlank(schoolId)) {
+			throw new IllegalArgumentException("schoolId can not be empty.");
+		}
+
+		final Person person = (Person) createCriteria().add(
+				Restrictions.eq("schoolId", schoolId)).uniqueResult();
+
+		if (person == null) {
+			throw new ObjectNotFoundException(
+					"Person not found with schoolId: " + schoolId,
+					Person.class.getName());
+		}
+
+		return person;
 	}
 
 	/**
@@ -127,16 +141,23 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 *             If any referenced data is not found.
 	 */
 	@SuppressWarnings(UNCHECKED)
-	public List<Person> getPeopleByCriteria(
+	public List<Person> getPeopleByCriteria( // NOPMD
 			final AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
 
 		if (addressLabelSearchTO.getProgramStatus() != null) {
-			// TODO
-			// criteria.add(Restrictions.eq("programStatus",addressLabelSearchTO.getProgramStatus()).ignoreCase());
+
+			criteria.createAlias("programStatuses",
+					"personProgramStatuses")
+					.add(Restrictions
+							.eq("personProgramStatuses.programStatus.id",
+									addressLabelSearchTO
+											.getProgramStatus()));
+
 		}
+
 		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
 			criteria.createAlias("specialServiceGroups",
 					"personSpecialServiceGroups")
@@ -145,31 +166,44 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 									addressLabelSearchTO
 											.getSpecialServiceGroupIds()));
 		}
+
 		if (addressLabelSearchTO.getReferralSourcesIds() != null) {
 			criteria.createAlias("referralSources", "personReferralSources")
 					.add(Restrictions.in(
 							"personReferralSources.referralSource.id",
 							addressLabelSearchTO.getReferralSourcesIds()));
 		}
+
 		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
 			criteria.add(Restrictions.eq("anticipatedStartTerm",
 					addressLabelSearchTO.getAnticipatedStartTerm())
 					.ignoreCase());
 		}
+
 		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
 			criteria.add(Restrictions.eq("anticipatedStartYear",
 					addressLabelSearchTO.getAnticipatedStartYear()));
 		}
+
 		if (addressLabelSearchTO.getStudentTypeIds() != null) {
 			criteria.add(Restrictions.in("studentType.id",
 					addressLabelSearchTO.getStudentTypeIds()));
 		}
+
 		if (addressLabelSearchTO.getCreateDateFrom() != null) {
-			criteria.add(Restrictions.ge("createdDate", addressLabelSearchTO.getCreateDateFrom()));			
+			criteria.add(Restrictions.ge("createdDate",
+					addressLabelSearchTO.getCreateDateFrom()));
 		}
+
 		if (addressLabelSearchTO.getCreateDateTo() != null) {
-			criteria.add(Restrictions.le("createdDate", addressLabelSearchTO.getCreateDateTo()));			
-		}		
+			criteria.add(Restrictions.le("createdDate",
+					addressLabelSearchTO.getCreateDateTo()));
+		}
+
+		// don't bring back any non-students, there will likely be a better way
+		// to do this later
+		criteria.add(Restrictions.isNotNull("studentType"));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		return criteria.list();
 	}
@@ -199,6 +233,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									specialServiceGroups));
 		}
+
+		// don't bring back any non-students, there will likely be a better way
+		// to do this later
+		criteria.add(Restrictions.isNotNull("studentType"));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		return criteria.list();
 	}

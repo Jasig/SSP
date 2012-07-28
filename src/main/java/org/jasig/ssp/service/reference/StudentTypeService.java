@@ -1,7 +1,7 @@
 package org.jasig.ssp.service.reference;
 
 import org.jasig.ssp.model.reference.StudentType;
-import org.jasig.ssp.service.AuditableCrudService;
+import org.jasig.ssp.service.ReferenceService;
 
 /**
  * StudentType service
@@ -10,5 +10,5 @@ import org.jasig.ssp.service.AuditableCrudService;
  * 
  */
 public interface StudentTypeService
-		extends AuditableCrudService<StudentType> {
+		extends ReferenceService<StudentType> {
 }

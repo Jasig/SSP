@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="drop userid column" author="daniel.bower">
+		<dropColumn tableName="person" columnName="user_id" />
+
+		<rollback>
+			<addColumn tableName="person">
+				<column name="user_id" type="${nvarchar.type}(25)">
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add index to username" author="daniel.bower">
+		<createIndex tableName="person" indexName="idx_person_username">
+			<column name="username" />
+		</createIndex>
+
+		<rollback>
+			<dropIndex tableName="person" indexName="idx_person_username" schemaName="${schema}"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Set early_alert.campus_id to not nullable"
+		author="alexander.leader">
+		<addNotNullConstraint tableName="early_alert"
+			columnName="campus_id" columnDataType="uuid" />
+		<rollback>
+			<dropNotNullConstraint tableName="early_alert"
+				columnName="campus_id" columnDataType="uuid" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Add career questions to PersonEducationGoal"
+		author="alexander.leader">
+		<addColumn tableName="person_education_goal">
+			<column name="planned_major" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<addColumn tableName="person_education_goal">
+			<column name="career_decided" type="boolean" />
+		</addColumn>
+		<addColumn tableName="person_education_goal">
+			<column name="how_sure_about_occupation" type="int">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<addColumn tableName="person_education_goal">
+			<column name="confident_in_abilities" type="boolean" />
+		</addColumn>
+		<addColumn tableName="person_education_goal">
+			<column name="additional_academic_program_information_needed"
+				type="boolean" />
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person_education_goal" columnName="planned_major" />
+			<dropColumn tableName="person_education_goal" columnName="career_decided" />
+			<dropColumn tableName="person_education_goal" columnName="how_sure_about_occupation" />
+			<dropColumn tableName="person_education_goal" columnName="confident_in_abilities" />
+			<dropColumn tableName="person_education_goal"
+				columnName="additional_academic_program_information_needed" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="middle initial to middle name" author="daniel.bower">
+		<renameColumn tableName="person" oldColumnName="middle_initial"
+			newColumnName="middle_name" />
+		<modifyDataType tableName="person" columnName="middle_name"
+			newDataType="${nvarchar.type}(50)" />
+
+		<rollback>
+			<modifyDataType tableName="person" columnName="middle_name"
+				newDataType="char(1)" />
+			<renameColumn tableName="person" oldColumnName="middle_name"
+				newColumnName="middle_initial" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="actual start and balance owed to person demographics"
+		author="daniel.bower">
+		<modifyDataType tableName="person_demographics"
+			columnName="anticipated_start_term" newDataType="${nvarchar.type}(20)" />
+
+		<dropColumn tableName="person_demographics" columnName="anticipated_start_year" />
+
+		<addColumn tableName="person_demographics">
+			<column name="anticipated_start_year" type="integer">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_year" type="integer">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_term" type="${nvarchar.type}(20)">
+				<constraints nullable="true" />
+			</column>
+			<column name="balance_owed" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="person_demographics" columnName="anticipated_start_year" />
+			<addColumn tableName="person_demographics">
+				<column name="anticipated_start_year" type="${nvarchar.type}(4)">
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
+			<modifyDataType tableName="person_demographics"
+				columnName="anticipated_start_term" newDataType="${nvarchar.type}(25)" />
+			<dropColumn tableName="person_demographics" columnName="actual_start_year" />
+			<dropColumn tableName="person_demographics" columnName="actual_start_term" />
+			<dropColumn tableName="person_demographics" columnName="balance_owed" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="allow nulls to Track in Journal entries"
+		author="jon.adams">
+		<dropNotNullConstraint tableName="journal_entry"
+			columnName="journal_track_id" columnDataType="uuid" />
+	</changeSet>
+
+	<changeSet id="add person_staff_details" author="jon.adams">
+		<createTable tableName="person_staff_details">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_staff_details_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_staff_details_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="office_location" type="${nvarchar.type}(50)" />
+			<column name="office_hours" type="${nvarchar.type}(50)" />
+			<column name="department_name" type="${nvarchar.type}(100)" />
+		</createTable>
+		<sql>grant all on person_staff_details to ssp</sql>
+		<addColumn tableName="person">
+			<column name="person_staff_details_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="person_person_staff_details_id"
+					references="person_staff_details(id)" />
+			</column>
+		</addColumn>
+		
+		<rollback>
+			<dropColumn tableName="person" columnName="person_staff_details_id"/>
+			<dropTable tableName="person_staff_details"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="move start term and year to person" author="daniel.bower">
+		<dropColumn tableName="person_demographics" columnName="anticipated_start_term"/>
+		<dropColumn tableName="person_demographics" columnName="anticipated_start_year"/>
+		<dropColumn tableName="person_demographics" columnName="actual_start_term"/>
+		<dropColumn tableName="person_demographics" columnName="actual_start_year"/>
+		
+		<addColumn tableName="person">
+			<column name="actual_start_year" type="integer">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_term" type="${nvarchar.type}(20)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<rollback>
+			<addColumn tableName="person_demographics">
+				<column name="actual_start_year" type="integer">
+					<constraints nullable="true" />
+				</column>
+				<column name="actual_start_term" type="${nvarchar.type}(20)">
+					<constraints nullable="true" />
+				</column>
+				<column name="anticipated_start_year" type="integer">
+					<constraints nullable="true" />
+				</column>
+				<column name="anticipated_start_term" type="${nvarchar.type}(20)">
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
+			<dropColumn tableName="person" columnName="actual_start_term"/>
+			<dropColumn tableName="person" columnName="actual_start_year"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add config for coachSetFromExternalData" author="daniel.bower">
+		<insert tableName="config">
+			<column name="id" value="1b5528d2-d789-11e1-9d78-0026b9e7ff4c" />
+			<column name="name" value="coachSetFromExternalData" />
+			<column name="description"
+				value="Coach is always set from external data if this is set to true.  It will overwrite any local changes for coach." />
+			<column name="default_value">true</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="config">
+				<where>id='1b5528d2-d789-11e1-9d78-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="drop defaults on personDemographics" author="daniel.bower">
+		<dropDefaultValue tableName="person_demographics" columnName="ability_to_benefit"/>
+		<dropDefaultValue tableName="person_demographics" columnName="local"/>
+		<dropDefaultValue tableName="person_demographics" columnName="primary_caregiver"/>
+		<dropDefaultValue tableName="person_demographics" columnName="child_care_needed"/>
+		<dropDefaultValue tableName="person_demographics" columnName="employed"/>
+		
+		<rollback>
+			<addDefaultValue columnName="ability_to_benefit" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="local" tableName="person_demographics" defaultValueBoolean="true"/>
+			<addDefaultValue columnName="primary_caregiver" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="child_care_needed" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="employed" tableName="person_demographics" defaultValueBoolean="false"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="remove abilityToBenefit from demographics" author="daniel.bower">
+		<dropColumn tableName="person_demographics" columnName="ability_to_benefit"/>
+		
+		<rollback>
+			<addColumn tableName="person_demographics">
+				<column name="ability_to_benefit" type="boolean" >
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
+		</rollback>
+	</changeSet>
+	
+	
+	<changeSet id="Updates to templates for moved faculty info" author="jon.adams">
+		<sql>
+			<![CDATA[
+			update message_template
+			set body = '<html><body>
+<p><b>$!termToRepresentEarlyAlert DETAILS</b></p>
+
+<table>
+<tr><th>Faculty Member</th><td>$earlyAlert.createdBy.fullName</td></tr>
+<tr><th>Faculty Office Location</th><td>$!earlyAlert.createdBy.staffDetails.officeLocation</td></tr>
+<tr><th>Faculty Phone Number</th><td>$!earlyAlert.createdBy.workPhone</td></tr>
+<tr><th>Course</th><td>$!earlyAlert.courseName</td></tr>
+<tr><th>Title</th><td>$!earlyAlert.courseTitle</td></tr>
+</table>
+
+<p><b>Referral Reasons:</b></p>
+<ul>
+#foreach( $earlyAlertReferral in $earlyAlertResponse.earlyAlertReferralIds )
+<li> $earlyAlertReferral.name </li>
+#end
+</ul>
+
+<p><b>Faculty suggestions:</b></p>
+<ul>
+#foreach( $earlyAlertSuggestion in $earlyAlert.earlyAlertSuggestionIds )
+<li> $earlyAlertSuggestion.name </li>
+#end
+</ul>
+
+#if( $earlyAlert.comment )
+<p>******************* INSTRUCTOR COMMENTS *******************
+<br />
+$earlyAlert.comment
+<br />
+******************* INSTRUCTOR COMMENTS *******************
+</p>
+#end
+
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-08eb4f7ee2f9';
+
+update message_template
+set body = '<html><body>
+<p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+
+<table>
+<tr><th>Student Name</th><td>$earlyAlert.person.firstName $earlyAlert.person.lastName</td></tr>
+<tr><th>Student ID</th><td>$!earlyAlert.person.schoolId</td></tr>
+<tr><th>Student Phone</th><td>$!earlyAlert.person.homePhone</td></tr>
+<tr><th>Student Email</th><td>$earlyAlert.person.primaryEmailAddress</td></tr>
+<tr><th>Address</th><td>#if( $earlyAlert.person.addressLine1 )$earlyAlert.person.addressLine1, #end#if( $earlyAlert.person.addressLine2 )$earlyAlert.person.addressLine2, #end#if( $earlyAlert.person.city )$earlyAlert.person.city, #end#if( $earlyAlert.person.state )$earlyAlert.person.state, #end$!earlyAlert.person.zipCode</td></tr>
+<tr><th>In the class</th><td>$!earlyAlert.courseName</td></tr>
+<tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName</td></tr>
+<tr><th>Campus</th><td>$earlyAlert.campus.name</td></tr>
+<tr><th>Instructor Office Location</th><td>$!earlyAlert.createdBy.staffDetails.officeLocation</td></tr>
+<tr><th>Instructor Email</th><td>$earlyAlert.createdBy.primaryEmailAddress</td></tr>
+<tr><th>Instructor Phone</th><td>$!earlyAlert.createdBy.workPhone</td></tr>
+<tr><th>Advisor</th><td>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName</td></tr>
+</table>
+
+<p><b>Student has been identified by his/her instructor for the following reason:</b></p>
+<ul>
+#foreach( $earlyAlertReason in $earlyAlert.earlyAlertReasonIds )
+<li>$earlyAlertReason.name</li>
+#end
+</ul>
+
+<p><b>The faculty suggestions are:</b></p>
+<ul>
+#foreach( $earlyAlertSuggestion in $earlyAlert.earlyAlertSuggestionIds )
+<li>$earlyAlertSuggestion.name</li>
+#end
+</ul>
+
+#if( $earlyAlert.comment )
+<p>
+******************* INSTRUCTOR COMMENTS *******************
+<br />
+$earlyAlert.comment
+<br />
+******************* INSTRUCTOR COMMENTS *******************
+<p>
+#end
+
+<p>To access additional information or respond to this alert, log-in#if( $applicationTitle ) to $applicationTitle#end#if( $termForEarlyAlert ) and view the student&apos;s $termForEarlyAlert Tool#end.  $!linkToSSP </p>
+
+<p>Email generated by $!applicationTitle $!termForEarlyAlert</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-08eb4f7ee3fc';
+
+update message_template
+set body = '<html><body>
+<p>Dear $earlyAlert.person.firstName $earlyAlert.person.lastName</p>
+
+<p>Your instructor for #if( $earlyAlert.courseName )$earlyAlert.courseName#else<COURSE NAME UNAVAILABLE>#end notified me that you are experiencing issues that might affect your success#if( $institutionName ) at $institutionName#end.  An academic advisor, counselor or coach will contact you soon to discuss your situation. In the meantime, here are a few resources which may help you find academic success.</p>
+
+<table><tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName#if( $earlyAlert.createdBy.workPhone )</td><tr>
+<tr><th>Phone</th><td>$earlyAlert.createdBy.workPhone#end</td><tr>
+<tr><th>Email</th><td>$earlyAlert.createdBy.primaryEmailAddress</td><tr>
+</table>
+
+<p>The Tutoring and Learning Center (Library: 512-4506) provides professional tutoring in the subject areas of English grammar and writing, basic math and study skills. The Center also provides additional quiet computer areas for students, online resources, and supplemental learning materials. Walk-ins are available during open hours. Call for schedule.</p>
+
+<p>Tutorial Services (Library: 512-2792) provides free educational assistance for students who are enrolled in most 100 level courses (including DEV and some 200 level classes). Student tutors provide individual tutoring sessions by appointment.</p>
+
+<p>The Writing Center (Library: 512-5106) provides a comfortable learning environment for classroom instruction and tutorial assistance for writing.</p>
+
+<p>The Math Lab (Building 1, Room 315: 512-2286) provides tutoring and homework help for students in MAT classes. Walk-ins are available during open hours.</p>
+
+<p>COPE is a unique series of workshops designed to help students Conquer some of the Obstacles that can Prevent the achievement of their Educational goals. A schedule of topics is available in 10-424 or online at http://www.sinclair.edu/stservices/cnsl/Cope/ Contact Anthony Webb at 512-2752 for handouts of past or future workshops.</p>
+
+<p>Information on Dropping: Before withdrawing from any or all classes, consult an academic advisor. If you are using financial aid to pay for your tuition or books, contact the Financial Aid & Scholarships Office: Building 10, 3rd Floor, (937) 512-3000.</p>
+
+<p>We value you as a student #if( $institutionName ) at $institutionName#end and want to support your success. If you have not been contacted by someone within a week, please feel free to speak with me.</p>
+
+<p>Sincerely,</p>
+
+<p>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName
+<br />$earlyAlert.person.coach.title#if( $earlyAlert.person.coach.staffDetails.officeLocation )
+<br />$earlyAlert.person.coach.officeLocation#end#if( $earlyAlert.person.coach.workPhone )
+<br />$earlyAlert.person.coach.workPhone#end
+<br />$earlyAlert.person.coach.primaryEmailAddress</p>
+
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+
+<p>This is a system generated email. Please do not reply to this confirmation.</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-08eb4f8ef40e';
+
+update message_template
+set body = '<html><body>
+<p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+<table>
+<tr><th>Student Name</th><td>$earlyAlert.person.firstName $earlyAlert.person.lastName</td></tr>
+<tr><th>Student ID</th><td>$!earlyAlert.person.schoolId</td></tr>
+<tr><th>Student Phone</th><td>$!earlyAlert.person.homePhone</td></tr>
+<tr><th>Student Email</th><td>$earlyAlert.person.primaryEmailAddress</td></tr>
+<tr><th>Address</th><td>#if( $earlyAlert.person.addressLine1 )$earlyAlert.person.addressLine1, #end#if( $earlyAlert.person.addressLine2 )$earlyAlert.person.addressLine2, #end#if( $earlyAlert.person.city )$earlyAlert.person.city, #end#if( $earlyAlert.person.state )$earlyAlert.person.state, #end$!earlyAlert.person.zipCode</td></tr>
+<tr><th>In the class</th><td>$!earlyAlert.courseName</td></tr>
+<tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName</td></tr>
+<tr><th>Campus</th><td>$!earlyAlert.campus.name</td></tr>
+<tr><th>Instructor Office Location</th><td>$!earlyAlert.createdBy.staffDetails.officeLocation</td></tr>
+<tr><th>Instructor Email</th><td>$earlyAlert.createdBy.primaryEmailAddress</td></tr>
+<tr><th>Instructor Phone</th><td>$!earlyAlert.createdBy.workPhone</td></tr>
+<tr><th>Advisor</th><td>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName</td></tr>
+</table>
+<p>Student has been identified by his/her instructor for the following reason:</ul>
+
+<ul>
+#foreach( $earlyAlertReason in $earlyAlert.earlyAlertReasonIds )
+<li>$earlyAlertReason.name</li>
+#end
+</ul>
+
+<p><b>The faculty suggestions are</b></p>
+<ul>
+#foreach( $earlyAlertSuggestion in $earlyAlert.earlyAlertSuggestionIds )
+<li>$earlyAlertSuggestion.name</li>
+#end
+</ul>
+
+#if( $earlyAlert.comment )
+<p>
+******************* INSTRUCTOR COMMENTS *******************
+<br />
+$earlyAlert.comment
+<br />
+******************* INSTRUCTOR COMMENTS *******************
+</p>
+#end
+
+
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+
+<p>This is a system generated email. Please do not reply to this confirmation.</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-09eb5f8ef55f';
+
+update message_template
+set body = '<html><body>
+<p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+
+<p>This email is in response to an early alert notice initiated on $earlyAlert.createdDate for the following student:</p>
+
+<table>
+<tr><th>Student Name</th><td>$earlyAlert.person.firstName $earlyAlert.person.lastName</td></tr>
+<tr><th>Student ID</th><td>$!earlyAlert.person.schoolId</td></tr>
+<tr><th>In the class</th><td>$!earlyAlert.courseName</td></tr>
+<tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName</td></tr>
+<tr><th>Advisor(s)</th><td>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName</td></tr>
+</table>
+
+<p>This incident was addressed and CLOSED on $earlyAlertResponse.closedDate.  The final outcome for this incident was:</p>
+
+<p>$!earlyAlertResponse.earlyAlertOutcome.name</p>
+
+#if( $earlyAlertResponse.earlyAlertOutcomeOtherDescription )
+<p>$earlyAlertResponse.earlyAlertOutcomeOtherDescription</p>
+#end
+
+<p>The student has been referred by his/her counselor to the following departments or services based upon early alert status:</p>
+<ul>
+#foreach( $earlyAlertReferral in $earlyAlertResponse.earlyAlertReferralIds )
+<li>$earlyAlertReferral.name</li>
+#end
+</ul>
+
+#if( $earlyAlertResponse.comment )
+<p>******************* INSTRUCTOR COMMENTS *******************
+<br />
+$earlyAlertResponse.comment
+<br />
+******************* INSTRUCTOR COMMENTS *******************</p>
+#end
+
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-09fb5f9ef680';
+
+			]]>
+		</sql>
+		<rollback>
+			<comment>Not rolling back to plain text</comment>
+		</rollback>
+	</changeSet>
+	
+</databaseChangeLog>

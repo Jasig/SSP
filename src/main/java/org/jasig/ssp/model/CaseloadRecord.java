@@ -3,12 +3,38 @@ package org.jasig.ssp.model;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
+/**
+ * Caseload record
+ * 
+ * <p>
+ * There isn't a 'Caseload' table/model, but this psuedo-model is used by the
+ * DAO layer to store aggregate data for use by the Caseload controller and
+ * service layers.
+ */
 public class CaseloadRecord {
 
+	@NotNull
 	private UUID personId;
-	private String schoolId, firstName, middleInitial, lastName,
-			studentTypeName;
-	private Date currentAppointmentDate, studentIntakeCompleteDate;
+
+	@NotNull
+	private String schoolId;
+
+	@NotNull
+	private String firstName;
+
+	private String middleName;
+
+	@NotNull
+	private String lastName;
+
+	private String studentTypeName;
+
+	private Date currentAppointmentStartTime;
+
+	private Date studentIntakeCompleteDate;
+
 	private int numberOfEarlyAlerts;
 
 	public UUID getPersonId() {
@@ -19,23 +45,23 @@ public class CaseloadRecord {
 		this.personId = personId;
 	}
 
-	public Date getCurrentAppointmentDate() {
-		return currentAppointmentDate == null ? null : new Date(
-				currentAppointmentDate.getTime());
+	public Date getCurrentAppointmentStartTime() {
+		return currentAppointmentStartTime == null ? null : new Date(
+				currentAppointmentStartTime.getTime());
 	}
 
-	public final void setCurrentAppointmentDate(
-			final Date currentAppointmentDate) {
-		this.currentAppointmentDate = currentAppointmentDate == null ? null
-				: new Date(currentAppointmentDate.getTime());
+	public final void setCurrentAppointmentStartTime(
+			final Date currentAppointmentStartTime) {
+		this.currentAppointmentStartTime = currentAppointmentStartTime == null ? null
+				: new Date(currentAppointmentStartTime.getTime());
 	}
 
 	public int getNumberOfEarlyAlerts() {
 		return numberOfEarlyAlerts;
 	}
 
-	public void setNumberOfEarlyAlerts(final int numberOfEarlyAlerts) {
-		this.numberOfEarlyAlerts = numberOfEarlyAlerts;
+	public void setNumberOfEarlyAlerts(final Number numberOfEarlyAlerts) {
+		this.numberOfEarlyAlerts = numberOfEarlyAlerts.intValue();
 	}
 
 	public boolean isStudentIntakeComplete() {
@@ -49,8 +75,8 @@ public class CaseloadRecord {
 
 	public void setStudentIntakeCompleteDate(
 			final Date studentIntakeCompleteDate) {
-		this.studentIntakeCompleteDate = studentIntakeCompleteDate == null ? null
-				: new Date(studentIntakeCompleteDate.getTime());
+		this.studentIntakeCompleteDate = (studentIntakeCompleteDate == null ? null
+				: new Date(studentIntakeCompleteDate.getTime()));
 	}
 
 	public String getSchoolId() {
@@ -69,12 +95,12 @@ public class CaseloadRecord {
 		this.firstName = firstName;
 	}
 
-	public String getMiddleInitial() {
-		return middleInitial;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public void setMiddleInitial(final String middleInitial) {
-		this.middleInitial = middleInitial;
+	public void setMiddleName(final String middleName) {
+		this.middleName = middleName;
 	}
 
 	public String getLastName() {
@@ -92,5 +118,4 @@ public class CaseloadRecord {
 	public void setStudentTypeName(final String studentTypeName) {
 		this.studentTypeName = studentTypeName;
 	}
-
 }

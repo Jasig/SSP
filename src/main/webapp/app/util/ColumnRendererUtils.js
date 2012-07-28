@@ -6,7 +6,16 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
     },
 
 	renderFriendlyBoolean: function(val, metaData, record) {
-		return ((val==true)?'Yes':'No');
+		var result = "";
+        if (val != null )
+        {
+           if (val != "")
+           {
+        	   result = ((val==true)?'Yes':'No');
+           }
+        }
+        
+        return result;
 	},    
     
 	renderTaskName: function(val, metaData, record) {
@@ -20,6 +29,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	renderTaskDueDate: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
         strHtml += '<p>' + Ext.util.Format.date( record.get('dueDate') ,'m/d/Y') + '</p>';
+        strHtml += '<p>' + ((record.get('completedDate') != null) ? 'COMPLETE' : 'ACTIVE' ) + '</p>';
 		strHtml += '<p>' + record.get('confidentialityLevel').name.toUpperCase() + '<br/>' + record.getCreatedByPersonName().toUpperCase() + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
@@ -42,6 +52,10 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 
 	renderCreatedByDate: function(val, metaData, record) {
 	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y');		
+	},
+
+	renderCreatedByDateWithTime: function(val, metaData, record) {
+	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y h:m A');		
 	},	
 
 	renderCreatedBy: function(val, metaData, record) {
@@ -66,11 +80,27 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	renderPhotoIcon: function(val) {
 	    return '<img src="' + val + '">';
 	},
+
+	renderCoachName: function(val, metaData, record) {
+		var strHtml = '<div>';
+		strHtml += '<p>' + record.getCoachFullName() + '</p>';
+        strHtml += '</div>';
+	    return strHtml;
+	},
+	
+	renderSearchStudentName: function(val, metaData, record) {
+		var strHtml = '<div>';
+		strHtml += '<p>' + record.getFullName() + '</p>';
+        strHtml += '</div>';
+	    return strHtml;
+	},
 	
 	renderStudentDetails: function(val, metaData, record) {
 		var strHtml = '<div>';
-        strHtml += '<p>' + record.getFullName() + '</p>';
-        strHtml += '<p>' + record.get('schoolId') + '</p>';
+		strHtml += '<p>' + record.getFullName() + '</p>';
+		strHtml += '<p>COACH: ' + record.getCoachFullName() + '</p>';
+        strHtml += '<p>ID: ' + record.get('schoolId') + '</p>';
+        strHtml += '<p>STATUS: ' + record.get('currentProgramStatusName') + '</p>';
         strHtml += '</div>';
 	    return strHtml;
 	},
@@ -91,6 +121,14 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	renderErrorMessage: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
         strHtml += '<p>' + record.get('errorMessage') + '</p>';
+		strHtml += '</div>';
+	    return strHtml;
+	},
+	
+	renderEarlyAlertStatus: function(val, metaData, record) {
+		var status = ((record.get('closedDate') != null)? 'Closed' : 'Open');
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + ((record.get('nodeType').toLowerCase() == 'early alert')? status : "N/A") + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
 	},

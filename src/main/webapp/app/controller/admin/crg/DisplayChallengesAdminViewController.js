@@ -25,10 +25,12 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
 		}    	
     },       
 	init: function() {
-		this.getView().reconfigure(this.store);
-		this.store.load();
+		var me=this;
 		
-		return this.callParent(arguments);
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		me.store.load();
+		
+		return me.callParent(arguments);
     }, 
     
 	onEditClick: function(button) {
@@ -58,15 +60,20 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
         var message;
         if ( selection.get('id') ) 
         {
-     	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
-     	      	   
-            Ext.Msg.confirm({
-    		     title:'Delete?',
-    		     msg: message,
-    		     buttons: Ext.Msg.YESNO,
-    		     fn: me.deleteRecord,
-    		     scope: me
-    		   });
+      	   if ( !Ssp.util.Constants.isRestrictedAdminItemId( selection.get('id')  ) )
+    	   {
+      		    message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+		     	      	   
+	            Ext.Msg.confirm({
+	    		     title:'Delete?',
+	    		     msg: message,
+	    		     buttons: Ext.Msg.YESNO,
+	    		     fn: me.deleteRecord,
+	    		     scope: me
+	    		   });
+	 	   }else{
+			   Ext.Msg.alert('WARNING', 'This item is related to core SSP functionality. Please see a developer to delete this item.'); 
+		   }
          }else{
       	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
          }
@@ -81,7 +88,7 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
       	if (btnId=="yes")
       	{
       		me.apiProperties.makeRequest({
-        		   url: store.getProxy().url+id,
+        		   url: store.getProxy().url+"/"+id,
         		   method: 'DELETE',
         		   successFunc: function(response,responseText){
         			   store.remove( store.getById( id ) );

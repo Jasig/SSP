@@ -7,7 +7,8 @@ Ext.define('Ssp.view.tools.profile.ServicesProvided', {
 	width: '100%',
 	height: '100%',
 	initComponent: function() {	
-		Ext.apply(this, 
+		var me=this;
+		Ext.apply(me, 
 				{        
 			        autoScroll: true,
     		        columns: [
@@ -20,6 +21,6 @@ Ext.define('Ssp.view.tools.profile.ServicesProvided', {
     		                }],
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

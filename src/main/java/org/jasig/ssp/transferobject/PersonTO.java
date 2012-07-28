@@ -3,7 +3,6 @@ package org.jasig.ssp.transferobject; // NOPMD
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Max;
@@ -18,7 +17,6 @@ import org.jasig.ssp.model.PersonReferralSource;
 import org.jasig.ssp.model.PersonServiceReason;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
-import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.ReferralSource;
 import org.jasig.ssp.model.reference.ServiceReason;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
@@ -26,7 +24,6 @@ import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * Person transfer object
@@ -38,7 +35,7 @@ public class PersonTO // NOPMD
 	@NotNull
 	private String firstName;
 
-	private String middleInitial;
+	private String middleName;
 
 	@NotNull
 	private String lastName;
@@ -80,7 +77,7 @@ public class PersonTO // NOPMD
 
 	private ReferenceLiteTO<StudentType> studentType;
 
-	private PersonLiteTO coach;
+	private CoachPersonLiteTO coach;
 
 	private String strengths;
 
@@ -96,6 +93,15 @@ public class PersonTO // NOPMD
 	@Min(2000)
 	private Integer anticipatedStartYear;
 
+	@Nullable
+	@Size(max = 20)
+	private String actualStartTerm;
+
+	@Nullable
+	@Max(2100)
+	@Min(2000)
+	private Integer actualStartYear;
+
 	private Date studentIntakeRequestDate;
 
 	private List<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroups;
@@ -108,7 +114,9 @@ public class PersonTO // NOPMD
 
 	private List<String> permissions;
 
-	private Set<ReferenceLiteTO<ProgramStatus>> programStatuses;
+	private String currentProgramStatusName;
+
+	private boolean registeredForCurrentTerm;
 
 	/**
 	 * Empty constructor
@@ -133,13 +141,12 @@ public class PersonTO // NOPMD
 		super.from(model);
 
 		firstName = model.getFirstName();
-		middleInitial = model.getMiddleInitial();
+		middleName = model.getMiddleName();
 		lastName = model.getLastName();
 		birthDate = model.getBirthDate();
 		primaryEmailAddress = model.getPrimaryEmailAddress();
 		secondaryEmailAddress = model.getSecondaryEmailAddress();
 		username = model.getUsername();
-		userId = model.getUserId();
 		homePhone = model.getHomePhone();
 		workPhone = model.getWorkPhone();
 		cellPhone = model.getCellPhone();
@@ -157,15 +164,17 @@ public class PersonTO // NOPMD
 		if (coachPerson == null) {
 			coach = null; // NOPMD
 		} else {
-			coach = new PersonLiteTO(coachPerson.getId(),
-					coachPerson.getFirstName(),
-					coachPerson.getLastName());
+			coach = new CoachPersonLiteTO(coachPerson.getId(),
+					coachPerson.getFirstName(), coachPerson.getLastName(),
+					coachPerson.getPrimaryEmailAddress(), null, null);
 		}
 
 		strengths = model.getStrengths();
 		abilityToBenefit = model.getAbilityToBenefit();
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
 		anticipatedStartYear = model.getAnticipatedStartYear();
+		actualStartTerm = model.getActualStartTerm();
+		actualStartYear = model.getActualStartYear();
 		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
 		studentType = model.getStudentType() == null ? null
 				: new ReferenceLiteTO<StudentType>(model.getStudentType());
@@ -209,13 +218,31 @@ public class PersonTO // NOPMD
 
 		if ((null != model.getProgramStatuses())
 				&& !(model.getProgramStatuses().isEmpty())) {
-			final Set<ProgramStatus> programStatusesFromModel = Sets
-					.newHashSet();
 			for (final PersonProgramStatus psr : model.getProgramStatuses()) {
-				programStatusesFromModel.add(psr.getProgramStatus());
-			}
+				if (!psr.isExpired()) {
+					if (StringUtils.isNotBlank(currentProgramStatusName)) {
+						// uh oh! found a second, non-expired program status
 
-			programStatuses = ReferenceLiteTO.toTOSet(programStatusesFromModel);
+						// TODO: create exception that can be thrown at runtime
+						// due to assertion-like errors (invalid business rules)
+						// because of a situation that indicate a bug in the
+						// system or database
+						throw new RuntimeException( // NOPMD
+								"Multiple non-expired program statuses were found for student (person_id) "
+										+ model.getId());
+					}
+
+					currentProgramStatusName = psr.getProgramStatus().getName();
+				}
+			}
+		}
+
+		if ((null == model.getCurrentRegistrationStatus())
+				|| (model.getCurrentRegistrationStatus()
+						.getRegisteredCourseCount() < 1)) {
+			registeredForCurrentTerm = false;
+		} else {
+			registeredForCurrentTerm = true;
 		}
 	}
 
@@ -244,12 +271,12 @@ public class PersonTO // NOPMD
 		this.firstName = firstName;
 	}
 
-	public String getMiddleInitial() {
-		return middleInitial;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public void setMiddleInitial(final String middleInitial) {
-		this.middleInitial = middleInitial;
+	public void setMiddleName(final String middleName) {
+		this.middleName = middleName;
 	}
 
 	public String getLastName() {
@@ -300,7 +327,7 @@ public class PersonTO // NOPMD
 	 *            instances
 	 */
 	public void setUsername(@NotNull final String username) {
-		if (StringUtils.isWhitespace(username)) {
+		if (!StringUtils.isNotBlank(username)) {
 			throw new IllegalArgumentException("username can not be empty.");
 		}
 
@@ -458,6 +485,22 @@ public class PersonTO // NOPMD
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
+	public Integer getActualStartYear() {
+		return actualStartYear;
+	}
+
+	public void setActualStartYear(final Integer actualStartYear) {
+		this.actualStartYear = actualStartYear;
+	}
+
+	public String getActualStartTerm() {
+		return actualStartTerm;
+	}
+
+	public void setActualStartTerm(final String actualStartTerm) {
+		this.actualStartTerm = actualStartTerm;
+	}
+
 	public Date getStudentIntakeRequestDate() {
 		return studentIntakeRequestDate == null ? null : new Date(
 				studentIntakeRequestDate.getTime());
@@ -504,11 +547,11 @@ public class PersonTO // NOPMD
 		this.serviceReasons = serviceReasons;
 	}
 
-	public PersonLiteTO getCoach() {
+	public CoachPersonLiteTO getCoach() {
 		return coach;
 	}
 
-	public void setCoach(final PersonLiteTO coach) {
+	public void setCoach(final CoachPersonLiteTO coach) {
 		this.coach = coach;
 	}
 
@@ -530,18 +573,31 @@ public class PersonTO // NOPMD
 	}
 
 	/**
-	 * @return the "lite" version of the programStatuses
+	 * @return the current program status, if any
 	 */
-	public Set<ReferenceLiteTO<ProgramStatus>> getProgramStatuses() {
-		return programStatuses;
+	public String getCurrentProgramStatusName() {
+		return currentProgramStatusName;
 	}
 
 	/**
-	 * @param programStatuses
-	 *            the "lite" version of the programStatuses to set
+	 * Sets the current program status. Can be null. Changes here are ignored;
+	 * use the Program Status API instead.
+	 * 
+	 * @param currentProgramStatusName
+	 *            the current program status, if any
 	 */
-	public void setProgramStatuses(
-			final Set<ReferenceLiteTO<ProgramStatus>> programStatuses) {
-		this.programStatuses = programStatuses;
+	public void setCurrentProgramStatusName(
+			final String currentProgramStatusName) {
+		this.currentProgramStatusName = currentProgramStatusName;
 	}
+
+	public boolean isRegisteredForCurrentTerm() {
+		return registeredForCurrentTerm;
+	}
+
+	public void setRegisteredForCurrentTerm(
+			final boolean registeredForCurrentTerm) {
+		this.registeredForCurrentTerm = registeredForCurrentTerm;
+	}
+
 }

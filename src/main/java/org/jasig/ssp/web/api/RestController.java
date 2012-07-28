@@ -19,7 +19,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
  *            The model that the TO type T works with.
  */
 public abstract class RestController<TO extends TransferObject<T>, T extends Auditable>
-		extends BaseController {
+		extends AbstractBaseController {
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -50,8 +50,7 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	public abstract PagedResponse<TO> getAll(ObjectStatus status,
-			Integer start,
-			Integer limit, String sort, String sortDirection);
+			Integer start, Integer limit, String sort, String sortDirection);
 
 	/**
 	 * Retrieves the specified instance from persistent storage.

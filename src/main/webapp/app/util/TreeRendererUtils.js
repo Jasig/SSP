@@ -48,7 +48,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     		nodeToAppendTo.removeAll();
     	}
     	
-    	// only append if their are children
+    	// only append if there are children
     	if (children.length > 0)
     	{
     		nodeToAppendTo.appendChild( children );
@@ -140,8 +140,8 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var callbackFunc = treeRequest.get('callbackFunc');
     	var callbackScope = treeRequest.get('callbackScope');
     	// retrieve items
-		this.apiProperties.makeRequest({
-			url: this.apiProperties.createUrl( url ),
+		me.apiProperties.makeRequest({
+			url: me.apiProperties.createUrl( url ),
 			method: 'GET',
 			jsonData: '',
 			successFunc: function(response,view){

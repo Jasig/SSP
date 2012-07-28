@@ -6,7 +6,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 @Controller
 @RequestMapping("VIEW")
-public class SspPortletController {
+public final class SspPortletController {
 
 	@RenderMapping
 	public String show() {

@@ -2,6 +2,9 @@ package org.jasig.ssp.transferobject;
 
 import org.jasig.ssp.model.PersonSearchResult;
 
+/**
+ * PersonSearchResult transfer object
+ */
 public class PersonSearchResultTO extends PersonSearchResult implements
 		TransferObject<PersonSearchResult> {
 
@@ -12,12 +15,13 @@ public class PersonSearchResultTO extends PersonSearchResult implements
 
 	@Override
 	public final void from(final PersonSearchResult model) {
-		this.setFirstName(model.getFirstName());
-		this.setLastName(model.getLastName());
-		this.setMiddleInitial(model.getMiddleInitial());
-		this.setPhotoUrl(model.getPhotoUrl());
-		this.setSchoolId(model.getSchoolId());
-		this.setId(model.getId());
+		setFirstName(model.getFirstName());
+		setLastName(model.getLastName());
+		setMiddleName(model.getMiddleName());
+		setPhotoUrl(model.getPhotoUrl());
+		setSchoolId(model.getSchoolId());
+		setId(model.getId());
+		setCurrentProgramStatusName(model.getCurrentProgramStatusName());
+		setCoach(model.getCoach());
 	}
-
 }

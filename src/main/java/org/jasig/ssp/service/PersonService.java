@@ -1,5 +1,6 @@
 package org.jasig.ssp.service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * Person service
@@ -33,8 +35,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 	Person get(UUID id) throws ObjectNotFoundException;
 
 	Person personFromUsername(String username) throws ObjectNotFoundException;
-
-	Person personFromUserId(String userId) throws ObjectNotFoundException;
 
 	/**
 	 * Creates a new Person instance based on the supplied model.
@@ -84,11 +84,13 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @param studentId
 	 *            Required school identifier for the Person to retrieve. Can not
 	 *            be null.
+	 *            Also searches the External Database for the identifier,
+	 *            creating a Person if an ExternalPerson record exists..
 	 * @exception ObjectNotFoundException
 	 *                If the supplied identifier does not exist in the database.
 	 * @return The specified Person instance.
 	 */
-	Person getByStudentId(String studentId) throws ObjectNotFoundException;
+	Person getBySchoolId(String studentId) throws ObjectNotFoundException;
 
 	/**
 	 * Gets a list of {@link Person} objects based on specified criteria
@@ -119,4 +121,21 @@ public interface PersonService extends AuditableCrudService<Person> {
 			List<UUID> specialServiceGroupIDs,
 			SortingAndPaging createForSingleSort)
 			throws ObjectNotFoundException;
+
+	/**
+	 * Get a list of all Coaches
+	 * 
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return List of all coaches
+	 */
+	PagingWrapper<Person> getAllCoaches(SortingAndPaging sAndP);
+
+	Person load(UUID id);
+
+	Person createUserAccount(String username,
+			Collection<GrantedAuthority> authorities);
+
+	void setPersonAttributesService(
+			final PersonAttributesService personAttributesService);
 }

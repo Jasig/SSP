@@ -7,7 +7,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,11 +25,12 @@ import org.junit.Test;
 
 public class StudentStatusServiceTest {
 
-	private StudentStatusServiceImpl service;
-	private StudentStatusDao dao;
+	private transient StudentStatusServiceImpl service;
+
+	private transient StudentStatusDao dao;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		service = new StudentStatusServiceImpl();
 		dao = createMock(StudentStatusDao.class);
 
@@ -49,7 +49,7 @@ public class StudentStatusServiceTest {
 
 		final Collection<StudentStatus> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
-		assertTrue(all.size() > 0);
+		assertFalse("List should not have been empty.", all.isEmpty());
 		verify(dao);
 	}
 
@@ -62,7 +62,7 @@ public class StudentStatusServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.get(id));
+		assertNotNull("Get result should not have been null.", service.get(id));
 		verify(dao);
 	}
 
@@ -75,7 +75,8 @@ public class StudentStatusServiceTest {
 
 		replay(dao);
 
-		assertNotNull(service.save(daoOne));
+		assertNotNull("Save result should not have been null.",
+				service.save(daoOne));
 		verify(dao);
 	}
 

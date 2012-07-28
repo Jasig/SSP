@@ -3,230 +3,244 @@ var ssp = ssp || {};
 
 (function($) {
 
-	var getPersonData = function(id) {
-		// TODO:  Replace mock data!
-		return {
-            "id" : "58ba5ee3-734e-4ae9-b9c5-943774b4de41",
-			 "createdDate" : 1331269200000,
-			 "createdBy" :
-			    {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-			     "firstName" : "John",
-			     "lastName" : "Doe"}, 
-			 "modifiedDate" : 1331269200000,
-			 "modifiedBy" :
-			    {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-			     "firstName" : "John",
-			     "lastName" : "Doe"}, 
-			 "objectStatus" : "ACTIVE",
-			 "firstName" : "Sally",
-			 "middleInitial" : null,
-			 "lastName" : "Student",
-			 "birthDate" : null,
-			 "primaryEmailAddress" : "sally.student@university.edu",
-			 "secondaryEmailAddress" : null,
-			 "username" : "sally.student",
-			 "userId" : null,
-			 "homePhone" : "123-456-7890",
-			 "workPhone" : null,
-			 "cellPhone" : null,
-			 "addressLine1" : "444 West Third Street",
-			 "addressLine2" : null,
-			 "city" : "Dayton",
-			 "state" : "OH",
-			 "zipCode" : "45402",
-			 "photoUrl" : null,
-			 "schoolId" : null,
-			 "enabled" : false,
-			 "coach" :
-			    {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-			     "firstName" : "Amy",
-			     "lastName" : "Advisor"}, 
-			 "strengths" : "Good test taker",
-			 "abilityToBenefit" : true,
-			 "anticipatedStartTerm" : "Fall",
-			 "anticipatedStartYear" : "2012",
-			 "studentType" :
-			    {"id" : "ce0d041d-d3ac-42a1-9085-7f744240e07e",
-			     "name" : "Early Alert"},
-			 "studentIntakeRequestDate" : 1331269200000,
-			 "currentAppointment" : 
-			    {"id" : "",
-			     "startDate" : 1331269200000,
-			     "endDate" : 1331269200000},
-			 "specialServiceGroupIds" : 
-			    [{"id" : "437f6f2b-7b1e-47b4-8603-9e1208605c0d"},
-			     {"id" : "7bf36968-ad48-4c5f-9838-ebf495713c08"}
-			    ],
-			 "referralSourceIds" : 
-			    [{"id" : "a8c83fd4-ee33-46ee-8d89-9b2956696f37"},
-			     {"id" : "55aebdf7-466b-49c4-a08c-6e01eaf101d7"}
-			    ],
-			 "serviceReasonIds" : 
-			    [{"id" : "d95ea029-90c1-4be0-b547-8054fc6914b7"},
-			     {"id" : "c9ff0ce6-aec6-4be2-b1d1-9ca385edc637"}
-			    ],
-			 "programStatus" :
-			    {"id" : "acf7d721-196f-4353-9508-fe86c61e3c1d",
-			     "name" : "Active"}
-			};
-	}
-
-    var getCampusData = function() {
-        // TODO:  replace w/ ajax...
-    	return [
-    	        {"id" : "6201b18d-9d1d-48d3-82d4-092e52ad676b",
-    	      "createdBy" : 
-    	         {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-    	          "firstName" : "John",
-    	          "lastName" : "Doe"},  
-    	      "createdDate" : "1332216000000",
-    	      "modifiedBy" : 
-    	         {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-    	          "firstName" : "John",
-    	          "lastName" : "Doe"},
-    	      "modifiedDate" : "1332216000000",
-    	      "objectStatus" : "ACTIVE",
-    	      "name" : "Main Campus",
-    	      "description" : "Main campus",
-    	      "earlyAlertCoordinatorId" : "91f46e39-cea8-422b-b215-00f6bcf5d280"},
-    	     {"id" : "c57f11e1-7ef2-4989-9ac2-7b0690563995",
-    	      "createdBy" : 
-    	         {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-    	          "firstName" : "John",
-    	          "lastName" : "Doe"},
-    	      "createdDate" : "1332216000000",
-    	      "modifiedBy" : 
-    	         {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-    	          "firstName" : "John",
-    	          "lastName" : "Doe"},  
-    	      "modifiedDate" : "1332216000000",
-    	      "objectStatus" : "ACTIVE",
-    	      "name" : "North Campus",
-    	      "description" : "North campus",
-    	      "earlyAlertCoordinatorId" : "91f46e39-cea8-422b-b215-00f6bcf5d280"}
-    	    ];
-    };
-    
-    var getReasonsData = function() {
-        // TODO:  replace w/ ajax...
-        return [
-                {"id" : "6201b18d-9d1d-48d3-82d4-092e52ad676b",
-            "createdBy" : 
-            {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-             "firstName" : "John",
-             "lastName" : "Doe"},  
-         "createdDate" : "1332216000000",
-         "modifiedBy" : 
-            {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-             "firstName" : "John",
-             "lastName" : "Doe"},  
-         "modifiedDate" : "1332216000000",
-         "objectStatus" : "ACTIVE",
-         "name" : "Academic Concern",
-         "description" : "Academic concern",
-         "sortOrder" : 1},
-        {"id" : "c57f11e1-7ef2-4989-9ac2-7b0690563995",
-         "createdBy" : 
-            {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-             "firstName" : "John",
-             "lastName" : "Doe"},  
-         "createdDate" : "1332216000000",
-         "modifiedBy" : 
-            {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-             "firstName" : "John",
-             "lastName" : "Doe"},  
-         "modifiedDate" : "1332216000000",
-         "objectStatus" : "ACTIVE",
-         "name" : "Excessive Absences",
-         "description" : "Excessive absences",
-         "sortOrder" : 2}
-       ]
-
-    };
-
-    var getSuggestionsData = function() {
-        // TODO:  replace w/ ajax...
-        return [
-            { "id" : "6201b18d-9d1d-48d3-82d4-092e52ad676b",
-            "createdBy" : 
-            {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-             "firstName" : "John",
-             "lastName" : "Doe"},  
-         "createdDate" : "1332216000000",
-         "modifiedBy" : 
-            {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-             "firstName" : "John",
-             "lastName" : "Doe"},  
-         "modifiedDate" : "1332216000000",
-         "objectStatus" : "ACTIVE",
-         "name" : "See Advisor or Coach",
-         "description" : "See advisor or coach",
-         "sortOrder" : 1},
-        {"id" : "c57f11e1-7ef2-4989-9ac2-7b0690563995",
-         "createdBy" : 
-            {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-             "firstName" : "John",
-             "lastName" : "Doe"},  
-         "createdDate" : "1332216000000",
-         "modifiedBy" : 
-            {"id" : "91f46e39-cea8-422b-b215-00f6bcf5d280",
-             "firstName" : "John",
-             "lastName" : "Doe"},  
-         "modifiedDate" : "1332216000000",
-         "objectStatus" : "ACTIVE",
-         "name" : "The Tutoring/Learning Center",
-         "description" : "See the Tutoring/Learning Center.",
-         "sortOrder" : 2}
-        ];
-    }
-
     var buildSelectors = function(container) {
         var rslt = {};
         $.each({
-            course:             '.field-course',
-            term:               '.field-term',
-            student:            '.field-student',
-            netId:              '.field-net-id',
-            studentEmail:       '.field-student-email',
-            studentType:        '.field-student-type',
-            assignedCounselor:  '.field-assigned-counselor',
-            office:             '.field-office',
-            phone:              '.field-phone',
-            department:         '.field-department',
-            campus:             '.field-campus',
-            reason:             '.field-reason',
-            suggestions:        '.field-suggestions',
-            suggestionsAddEdit: '.suggestions-add-edit',
-            suggestionsDialog:  '.suggestions-dialog'
+            errorsDiv:               '.errors',
+            errorTemplate:           '.error-message-template',
+            loadingMessage:          '.loading-message',
+            alertForm:               '.alert-form',
+            course:                  '.field-course',
+            term:                    '.field-term',
+            student:                 '.field-student',
+            netId:                   '.field-net-id',
+            studentEmail:            '.field-student-email',
+            studentType:             '.field-student-type',
+            assignedCounselor:       '.field-assigned-counselor',
+            office:                  '.field-office',
+            phone:                   '.field-phone',
+            department:              '.field-department',
+            emailCc:                 '.field-email-cc',
+            campus:                  '.field-campus',
+            reason:                  '.field-reason',
+            otherReasonText:         '.field-other-reason-text',
+            suggestions:             '.field-suggestions',
+            suggestionsId:           '.field-suggestions-id',
+            suggestionsOtherHidden:  '.field-suggestions-other-hidden',
+            suggestionsAddEdit:      '.suggestions-add-edit',
+            suggestionsDialog:       '.suggestions-dialog',
+            comments:                '.field-comments',
+            noticeDialog:            '.notice-dialog',
+            buttonSend:              '.button-send'
         }, function(name, value) {
             rslt[name] = container + ' ' + value;
         });
         return rslt;
     };
     
-    ssp.EarlyAlertForm = function(container, parameters) {
+    ssp.EarlyAlertForm = function(container, options) {
 
         var selectors = buildSelectors(container);
 
-        var student = getPersonData(parameters.studentId);
+        /*
+         * Person Data Function
+         */
+        var getPersonData = function(personId) {
+            var rslt = [];
+            $.ajax({
+                url: options.urls.person.replace('STUDENTID', personId),
+                async: false,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Display the error
+                    var response = $.parseJSON(jqXHR.responseText);
+                    showError(jqXHR.status + ': ' + errorThrown, response.message);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    rslt = data;
+                },
+                type: 'GET'
+            });
+            return rslt;
+        };
+        
+        /*
+         * Campus Data Function
+         */
+        var getCampusData = function() {
+        	var rslt = [];
+            $.ajax({
+                url: options.urls.campus,
+                async: false,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Display the error
+                    var response = $.parseJSON(jqXHR.responseText);
+                    showError(jqXHR.status + ': ' + errorThrown, response.message);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    rslt = data.rows;
+                },
+                type: 'GET'
+            });
+            return rslt;
+        };
+
+        /*
+         * Referral Reason Data Function
+         */
+        var getReasonsData = function() {
+            var rslt = [];
+            $.ajax({
+                url: options.urls.reason,
+                async: false,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Display the error
+                    var response = $.parseJSON(jqXHR.responseText);
+                    showError(jqXHR.status + ': ' + errorThrown, response.message);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    rslt = data.rows;
+                },
+                type: 'GET'
+            });
+            return rslt;
+        };
+
+        /*
+         * Suggestions Data Function
+         */
+        var getSuggestionsData = function() {
+            var rslt = [];
+            $.ajax({
+                url: options.urls.suggestions,
+                async: false,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Display the error
+                    var response = $.parseJSON(jqXHR.responseText);
+                    showError(jqXHR.status + ': ' + errorThrown, response.message);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    rslt = data.rows;
+                },
+                type: 'GET'
+            });
+            return rslt;
+        };
+
+        /*
+         * Error Handling Functions
+         */
+        var showError = function(title, body) {
+            var err = $(selectors.errorTemplate).clone();
+            err.removeClass('error-message-template').addClass('error-message');
+            err.find('.error-title').html(title);
+            err.find('.error-body').html(body);
+            err.appendTo(selectors.errorsDiv);
+            err.slideDown(1000);
+        };
+        var clearErrors = function() {
+            $(selectors.errorsDiv).html('');
+        };
+
+        /*
+         * Validation Function
+         */
+        var validate = function() {
+            var rslt = true;  // default
+            if (!$(selectors.campus).val()) {
+                rslt = false;
+            	$(selectors.campus).addClass('invalid');
+            } else {
+                $(selectors.campus).removeClass('invalid');
+            }
+            if (!$(selectors.reason).val()) {
+                rslt = false;
+            	$(selectors.reason).addClass('invalid');
+            } else {
+                $(selectors.reason).removeClass('invalid');
+            }
+            return rslt;
+        }
+
+        /*
+         * Submit Function
+         */
+        var submitEarlyAlert = function(sendNotice) {
+
+            // Start with a clean slate...
+        	clearErrors();
+
+            // Marshal the POST data
+            var postData = {
+                courseName: options.parameters.courseName,
+                courseTitle: options.parameters.courseTitle,
+                emailCC: $(selectors.emailCc).val(),
+                campusId: $(selectors.campus).val(),
+                earlyAlertReasonIds: [],  // Set below...
+                earlyAlertReasonOtherDescription: $(selectors.otherReasonText).val(),
+                earlyAlertSuggestionIds: [],  // Set below...
+                earlyAlertSuggestionOtherDescription: $(selectors.suggestionsOtherHidden).val(),
+                comment: $(selectors.comments).val(),
+                sendEmailToStudent: sendNotice
+            };
+            if ($(selectors.reason).val() && $(selectors.reason).val() != 'other') {
+                postData.earlyAlertReasonIds.push({ id: $(selectors.reason).val() });
+            }
+            $(selectors.suggestionsId).each(function() {
+            	postData.earlyAlertSuggestionIds.push({ id: $(this).val() });
+            });
+            
+            // Submit the alert
+            $.ajax({
+                url: options.urls.submit.replace('STUDENTID', options.parameters.studentId),
+                async: false,
+                contentType: 'application/json',
+                data: JSON.stringify(postData),
+                // processData: false,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Display the error
+                    var response = $.parseJSON(jqXHR.responseText);
+                    showError(jqXHR.status + ': ' + errorThrown, response.message);
+                },
+                success: function(data, textStatus, jqXHR) {
+                	// Return to the roster screen, with a message
+                    var url = options.urls.done.replace('STUDENTNAME', escape(studentName));
+                    window.location = url;
+                },
+                type: 'POST'
+            });
+
+        };
+
+        /*
+         * Core Variables...
+         */
+
+        var student = getPersonData(options.parameters.studentId);
         var campuses = getCampusData();
         var reasons = getReasonsData();
         var suggestions = getSuggestionsData();
+        
+        // studentName
+        var studentName = student.firstName + ' '
+                + (student.middleInitial ? ' ' + student.middleInitial + ' ' : ' ')
+                + student.lastName;
 
         /*
          * Populate the fields...
          */
 
         // course
-        $(selectors.course).text(parameters.course);
+        $(selectors.course).text(options.parameters.courseName + ' - ' + options.parameters.courseTitle);
 
         // term
-        $(selectors.term).text(parameters.term);
+        $(selectors.term).text(options.parameters.term);
 
         // student
-        var studentName = student.firstName + ' '
-                + (student.middleInitial ? ' ' + student.middleInitial + ' ' : ' ')
-                + student.lastName;
         $(selectors.student).text(studentName);
 
         // netId
@@ -236,10 +250,10 @@ var ssp = ssp || {};
         $(selectors.studentEmail).text(student.primaryEmailAddress);
 
         // studentType
-        $(selectors.studentType).text(student.studentType.name);
+        $(selectors.studentType).text(student.studentType && student.studentType.name);
 
         // assignedCounselor
-        $(selectors.assignedCounselor).text(student.coach.lastName + ', ' + student.coach.firstName);
+        $(selectors.assignedCounselor).text(student.coach && student.coach.lastName + ', ' + student.coach.firstName);
 
         // office
         // phone
@@ -256,13 +270,25 @@ var ssp = ssp || {};
         	var html = '<option value="' + value.id + '">' + value.name + '</option>';
             $(selectors.reason).append(html);
         });
+        $(selectors.reason).append('<option value="other">Other...</option>');
+        $(selectors.reason).change(function() {
+            if ($(this).val() === 'other') {
+                $(selectors.otherReasonText).slideDown(500);
+            } else {
+            	$(selectors.otherReasonText).val('');
+                $(selectors.otherReasonText).slideUp(500);
+            }
+        })
 
         // suggestions
         $.each(suggestions, function(index, value) {
         	var html = '<li><input type="checkbox" value="' + value.id + '">' + value.name + '</li>';
             $(selectors.suggestionsDialog).find('ul').append(html);
         });
-        var dialogOptions = {
+        $(selectors.suggestionsDialog).find('ul').append(
+                '<li><input type="checkbox" value="other">Other: <input type="text" name="earlyAlertSuggestionOtherDescription" value="" placeholder="Type a suggestion..." /></li>'
+        );
+        var suggestionsDlgOptions = {
             autoOpen: false,
             buttons: {
                 'OK': function() {
@@ -270,8 +296,10 @@ var ssp = ssp || {};
                     $(this).find('li').each(function() {
                         var chk = $(this).find('input');
                         if (chk.attr('checked')) {
-                            var html = '<li>' + $(this).text() + '</li>';
-                            $(selectors.suggestions).append(html);
+                            var html = chk.val() === 'other' 
+                                ? $(this).find(':text').val() + '<input type="hidden" class="field-suggestions-other-hidden" value="' + $(this).find(':text').val() + '" />'
+                                : $(this).text() + '<input type="hidden" class="field-suggestions-id" value="' + chk.val() + '" />';
+                            $(selectors.suggestions).append('<li>' + html + '</li>');
                         }
                     });
                     $(this).dialog('close');
@@ -281,10 +309,43 @@ var ssp = ssp || {};
             modal: true,
             title: 'Edit Faculty Suggestions'
         };
-        var dlg = $(selectors.suggestionsDialog).dialog(dialogOptions);
+        var suggestionsDlg = $(selectors.suggestionsDialog).dialog(suggestionsDlgOptions);
         $(selectors.suggestionsAddEdit).click(function() {
-            dlg.dialog('open');
+            suggestionsDlg.dialog('open');
         });
+        
+        // send button
+        var noticeDlgOptions = {
+            autoOpen: false,
+            buttons: {
+                'Yes': function() {
+                    noticeDlg.dialog('close');
+                    submitEarlyAlert(true);
+                },
+                'No': function() {
+                    noticeDlg.dialog('close');
+                    submitEarlyAlert(false);
+                }
+            },
+            modal: true,
+            title: 'Send Early Alert'
+        };
+        var noticeDlg = $(selectors.noticeDialog).dialog(noticeDlgOptions);
+        $(selectors.buttonSend).click(function() {
+            clearErrors();
+            if (validate()) {
+                noticeDlg.dialog('open');
+            } else {
+                showError('Validation Error', 'One or more required fields is not specified.');
+            }
+        });
+
+        /*
+         * The interface is ready to display...
+         */
+
+        $(selectors.loadingMessage).slideUp(500);
+        $(selectors.alertForm).slideDown(1000);
 
     };
 

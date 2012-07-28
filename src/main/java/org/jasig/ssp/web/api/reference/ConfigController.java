@@ -74,7 +74,7 @@ public class ConfigController
 	 * to insert new configuration entries instead.
 	 */
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	ConfigTO create(@Valid @RequestBody final ConfigTO obj)
 			throws ObjectNotFoundException,

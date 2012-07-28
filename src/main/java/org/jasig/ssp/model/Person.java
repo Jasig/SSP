@@ -1,7 +1,6 @@
 package org.jasig.ssp.model; // NOPMD
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -25,6 +25,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
 
@@ -41,7 +42,7 @@ import com.google.common.collect.Sets;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public final class Person extends AbstractAuditable implements Auditable { // NOPMD
 
-	private static final long serialVersionUID = 4122282021549627683L;
+	private static final long serialVersionUID = 4159658337332259029L;
 
 	private static final String DATABASE_TABLE_NAME = "person";
 
@@ -51,6 +52,13 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 */
 	public static final UUID SYSTEM_ADMINISTRATOR_ID = UUID
 			.fromString("58ba5ee3-734e-4ae9-b9c5-943774b4de41");
+
+	/**
+	 * Static, "external" account identifier. Only used in Auditable properties
+	 * when data is imported from the views from external data sources.
+	 */
+	public static final UUID EXTERNAL_DATA_ID = UUID
+			.fromString("a9a337fc-c35e-4bcc-91a8-06de3b6b441e");
 
 	/**
 	 * First name; required.
@@ -68,9 +76,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Optional; maximum length of 1.
 	 */
-	@Column(nullable = true, length = 1)
-	@Size(max = 1)
-	private String middleInitial;
+	@Column(nullable = true, length = 50)
+	@Size(max = 50)
+	private String middleName;
 
 	/**
 	 * Last name; required.
@@ -110,25 +118,15 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private String secondaryEmailAddress;
 
 	/**
-	 * User name.
+	 * User name. Used to identify the user in secondary systems like LDAP.
 	 * 
-	 * Maximum length of 25.
+	 * Maximum length of 50.
 	 */
 	@NotNull
 	@NotEmpty
-	@Column(length = 25)
-	@Size(max = 25)
+	@Column(length = 50)
+	@Size(max = 50)
 	private String username;
-
-	/**
-	 * User Id Secondary Id for used to identify the user in secondary systems
-	 * like LDAP.
-	 * 
-	 * Maximum length of 25.
-	 */
-	@Column(length = 25)
-	@Size(max = 25)
-	private String userId;
 
 	/**
 	 * Home phone number.
@@ -216,6 +214,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * 
 	 * Maximum length of 50.
 	 */
+	@NotNull
+	@NotEmpty
 	@Column(length = 50)
 	@Size(max = 50)
 	private String schoolId;
@@ -242,13 +242,21 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Min(2000)
 	private Integer anticipatedStartYear;
 
+	@Column(length = 20)
+	@Size(max = 20)
+	private String actualStartTerm;
+
+	@Nullable
+	@Max(2100)
+	@Min(2000)
+	private Integer actualStartYear;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, updatable = false)
 	private Date studentIntakeRequestDate;
 
 	/**
-	 * Set when last someone completed the student intake tool for this
-	 * person.
+	 * Set when last someone completed the student intake tool for this person.
 	 */
 	private Date studentIntakeCompleteDate;
 
@@ -262,12 +270,23 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private String strengths;
 
 	/**
+	 * Information/details about a staff member.
+	 * 
+	 * Should be null for students.
+	 */
+	@Nullable
+	@ManyToOne
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "person_staff_details_id", unique = true, nullable = true)
+	private PersonStaffDetails staffDetails;
+
+	/**
 	 * Demographics about a student.
 	 * 
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@ManyToOne()
+	@ManyToOne
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_demographics_id", unique = true, nullable = true)
 	private PersonDemographics demographics;
@@ -278,7 +297,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@ManyToOne()
+	@ManyToOne
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_goal_id", unique = true, nullable = true)
 	private PersonEducationGoal educationGoal;
@@ -289,7 +308,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Should be null for non-student users.
 	 */
 	@Nullable
-	@ManyToOne()
+	@ManyToOne
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_plan_id", unique = true, nullable = true)
 	private PersonEducationPlan educationPlan;
@@ -378,6 +397,15 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@JoinColumn(name = "student_type_id", nullable = true)
 	private StudentType studentType;
 
+	@Nullable
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME)
+	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.SAVE_UPDATE })
+	private Set<EarlyAlert> earlyAlerts;
+
+	@Transient
+	private RegistrationStatusByTerm currentRegistrationStatus;
+
 	/**
 	 * Initialize a Person.
 	 * 
@@ -385,16 +413,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 */
 	public Person() {
 		super();
-		challenges = Sets.newHashSet();
-		fundingSources = Sets.newHashSet();
-		educationLevels = Sets.newHashSet();
-		tools = Sets.newHashSet();
-		confidentialityDisclosureAgreements = Sets.newHashSet();
-		tasks = Sets.newHashSet();
-		serviceReasons = Sets.newHashSet();
-		specialServiceGroups = Sets.newHashSet();
-		referralSources = Sets.newHashSet();
-		programStatuses = Sets.newHashSet();
+		initializeSets();
 	}
 
 	/**
@@ -406,10 +425,22 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	public Person(final UUID id) {
 		super();
 		setId(id);
-		challenges = new HashSet<PersonChallenge>();
-		fundingSources = new HashSet<PersonFundingSource>();
-		educationLevels = new HashSet<PersonEducationLevel>();
+		initializeSets();
 
+	}
+
+	private void initializeSets() {
+		challenges = Sets.newHashSet();
+		fundingSources = Sets.newHashSet();
+		educationLevels = Sets.newHashSet();
+		tools = Sets.newHashSet();
+		confidentialityDisclosureAgreements = Sets.newHashSet();
+		tasks = Sets.newHashSet();
+		serviceReasons = Sets.newHashSet();
+		specialServiceGroups = Sets.newHashSet();
+		referralSources = Sets.newHashSet();
+		programStatuses = Sets.newHashSet();
+		earlyAlerts = Sets.newHashSet();
 	}
 
 	/**
@@ -440,12 +471,12 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.firstName = firstName;
 	}
 
-	public String getMiddleInitial() {
-		return middleInitial;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public void setMiddleInitial(final String middleInitial) {
-		this.middleInitial = middleInitial;
+	public void setMiddleName(final String middleName) {
+		this.middleName = middleName;
 	}
 
 	public String getLastName() {
@@ -574,10 +605,10 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * Sets the SchoolID (a.k.a. Student ID given by the school)
 	 * 
 	 * @param schoolId
-	 *            the SchoolID (a.k.a. Student ID given by the school); maximum
-	 *            length of 50 characters
+	 *            the SchoolID (a.k.a. Student ID given by the school);
+	 *            required; maximum length of 50 characters
 	 */
-	public void setSchoolId(final String schoolId) {
+	public void setSchoolId(@NotNull final String schoolId) {
 		this.schoolId = schoolId;
 	}
 
@@ -587,6 +618,14 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	public void setEnabled(final Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public PersonStaffDetails getStaffDetails() {
+		return staffDetails;
+	}
+
+	public void setStaffDetails(final PersonStaffDetails staffDetails) {
+		this.staffDetails = staffDetails;
 	}
 
 	public PersonDemographics getDemographics() {
@@ -644,19 +683,6 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	public void setTools(final Set<PersonTool> tools) {
 		this.tools = tools;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(final String userId) {
-		if ((userId != null) && (userId.length() > 25)) {
-			throw new IllegalArgumentException(
-					"UserId must be 25 or fewer characters.");
-		}
-
-		this.userId = userId;
 	}
 
 	public Set<PersonConfidentialityDisclosureAgreement> getConfidentialityDisclosureAgreements() {
@@ -749,6 +775,22 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
+	public String getActualStartTerm() {
+		return actualStartTerm;
+	}
+
+	public void setActualStartTerm(final String actualStartTerm) {
+		this.actualStartTerm = actualStartTerm;
+	}
+
+	public Integer getActualStartYear() {
+		return actualStartYear;
+	}
+
+	public void setActualStartYear(final Integer actualStartYear) {
+		this.actualStartYear = actualStartYear;
+	}
+
 	public Date getStudentIntakeRequestDate() {
 		return studentIntakeRequestDate == null ? null : new Date(
 				studentIntakeRequestDate.getTime());
@@ -777,12 +819,31 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	}
 
 	public Date getStudentIntakeCompleteDate() {
-		return studentIntakeCompleteDate;
+		return studentIntakeCompleteDate == null ? null : new Date(
+				studentIntakeCompleteDate.getTime());
 	}
 
 	public void setStudentIntakeCompleteDate(
 			final Date studentIntakeCompleteDate) {
-		this.studentIntakeCompleteDate = studentIntakeCompleteDate;
+		this.studentIntakeCompleteDate = studentIntakeCompleteDate == null ? null
+				: new Date(studentIntakeCompleteDate.getTime());
+	}
+
+	public Set<EarlyAlert> getEarlyAlerts() {
+		return earlyAlerts;
+	}
+
+	public void setEarlyAlerts(final Set<EarlyAlert> earlyAlerts) {
+		this.earlyAlerts = earlyAlerts;
+	}
+
+	public RegistrationStatusByTerm getCurrentRegistrationStatus() {
+		return currentRegistrationStatus;
+	}
+
+	public void setCurrentRegistrationStatus(
+			final RegistrationStatusByTerm currentRegistrationStatus) {
+		this.currentRegistrationStatus = currentRegistrationStatus;
 	}
 
 	@Override
@@ -800,13 +861,12 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 		// Person
 		result *= hashField("firstName", firstName);
-		result *= hashField("middleInitial", middleInitial);
-		result *= hashField("middleInitial", lastName);
+		result *= hashField("middleName", middleName);
+		result *= hashField("lastName", lastName);
 		result *= hashField("birthDate", birthDate);
 		result *= hashField("primaryEmailAddress", primaryEmailAddress);
 		result *= hashField("secondaryEmailAddress", secondaryEmailAddress);
 		result *= hashField("primaryEmailAddress", primaryEmailAddress);
-		result *= hashField("userId", userId);
 		result *= hashField("homePhone", homePhone);
 		result *= hashField("workPhone", workPhone);
 		result *= hashField("cellPhone", cellPhone);
@@ -817,11 +877,14 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		result *= hashField("zipCode", zipCode);
 		result *= hashField("photoUrl", photoUrl);
 		result *= hashField("schoolId", schoolId);
+		result *= hashField("username", username);
 		result *= hashField("strengths", strengths);
 		result *= hashField("coach", coach);
 		// result *= hashField("studentType", studentType);
 		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
 		result *= hashField("anticipatedStartYear", anticipatedStartYear);
+		// result *= hashField("actualStartTerm", actualStartTerm);
+		result *= hashField("actualStartYear", actualStartYear);
 		result *= enabled == null ? "enabled".hashCode() : (enabled ? 3 : 2);
 		result *= abilityToBenefit == null ? "abilityToBenefit".hashCode()
 				: (abilityToBenefit ? 3 : 2);

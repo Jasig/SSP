@@ -6,32 +6,36 @@ Ext.define('Ssp.view.person.Coach', {
     controller: 'Ssp.controller.person.CoachViewController',
     inject: {
     	coachesStore: 'coachesStore',
+    	sspConfig: 'sspConfig',
     	studentTypesStore: 'studentTypesStore'
     },
 	initComponent: function() {	
-		Ext.apply(this, 
+		var me=this;
+		Ext.apply(me, 
 				{
+			    border: 0,
+			    padding: 0,
 			    fieldDefaults: {
 			        msgTarget: 'side',
 			        labelAlign: 'right',
 			        labelWidth: 200
 			    },	
-			    border: 0,
 				items: [{
 			            xtype: 'fieldset',
 			            border: 0,
+			            padding: 0,
 			            title: '',
 			            defaultType: 'textfield',
 			            defaults: {
-			                anchor: '100%'
+			                anchor: '50%'
 			            },
 			       items: [{
 				        xtype: 'combobox',
 				        name: 'coachId',
 				        itemId: 'coachCombo',
-				        fieldLabel: 'Assigned Coach',
+				        fieldLabel: me.sspConfig.get('coachFieldLabel'),
 				        emptyText: 'Select One',
-				        store: this.coachesStore,
+				        store: me.coachesStore,
 				        valueField: 'id',
 				        displayField: 'fullName',
 				        mode: 'local',
@@ -65,7 +69,7 @@ Ext.define('Ssp.view.person.Coach', {
 				        id: 'studentTypeCombo',
 				        fieldLabel: 'Student Type',
 				        emptyText: 'Select One',
-				        store: this.studentTypesStore,
+				        store: me.studentTypesStore,
 				        valueField: 'id',
 				        displayField: 'name',
 				        mode: 'local',
@@ -76,6 +80,6 @@ Ext.define('Ssp.view.person.Coach', {
 			    }]
 			});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

@@ -24,7 +24,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("dao-testConfig.xml")
+@ContextConfiguration("../dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class CitizenshipDaoTest {
@@ -62,7 +62,8 @@ public class CitizenshipDaoTest {
 		assertNotNull(obj.getId());
 		assertNotNull(obj.getName());
 
-		Collection<Citizenship> all = dao.getAll(ObjectStatus.ACTIVE).getRows();
+		final Collection<Citizenship> all = dao.getAll(ObjectStatus.ACTIVE)
+				.getRows();
 		assertNotNull(all);
 		assertTrue(all.size() > 0);
 		assertList(all);
@@ -72,26 +73,26 @@ public class CitizenshipDaoTest {
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
-		UUID id = UUID.randomUUID();
-		Citizenship citizenship = dao.get(id);
+		final UUID id = UUID.randomUUID();
+		final Citizenship citizenship = dao.get(id);
 
 		assertNull(citizenship);
 	}
 
-	private void assertList(Collection<Citizenship> objects) {
-		for (Citizenship object : objects) {
+	private void assertList(final Collection<Citizenship> objects) {
+		for (final Citizenship object : objects) {
 			assertNotNull(object.getId());
 		}
 	}
 
 	@Test
 	public void uuidGeneration() {
-		Citizenship obj = new Citizenship();
+		final Citizenship obj = new Citizenship();
 		obj.setName("new name");
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj);
 
-		Citizenship obj2 = new Citizenship();
+		final Citizenship obj2 = new Citizenship();
 		obj2.setName("new name");
 		obj2.setObjectStatus(ObjectStatus.ACTIVE);
 		dao.save(obj2);

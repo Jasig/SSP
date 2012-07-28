@@ -31,11 +31,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
-@TransactionConfiguration(defaultRollback = false)
+@ContextConfiguration("dao-testConfig.xml")
+@TransactionConfiguration
 @Transactional
 public class EarlyAlertDaoTest {
 
@@ -107,9 +108,10 @@ public class EarlyAlertDaoTest {
 					all.isEmpty());
 			assertList(all);
 
-			dao.delete(obj);
 		} catch (final ObjectNotFoundException e) {
 			fail("Saved message could not be found to reload.");
+		} finally {
+			dao.delete(saved);
 		}
 	}
 
@@ -182,5 +184,32 @@ public class EarlyAlertDaoTest {
 		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 
 		return obj;
+	}
+
+	@Test
+	public void getCountOfActiveAlertsForPeopleIds()
+			throws ObjectNotFoundException {
+		final EarlyAlert obj = createTestEarlyAlert();
+		obj.setClosedDate(null);
+		obj.setClosedById(null);
+		final EarlyAlert saved = dao.save(obj);
+
+		final Collection<UUID> peopleIds = Lists.newArrayList();
+		peopleIds.add(PERSON_ID);
+
+		try {
+			dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
+		} finally {
+			dao.delete(saved);
+		}
+	}
+
+	@Test
+	public void getCountOfActiveAlertsForPeopleIdsTTEmpty()
+			throws ObjectNotFoundException {
+		final Collection<UUID> peopleIds = Lists.newArrayList();
+		peopleIds.add(PERSON_ID);
+
+		dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
 	}
 }

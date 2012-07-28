@@ -50,12 +50,16 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	private String emailCC;
 
 	@ManyToOne
-	@JoinColumn(name = "campus_id", nullable = true)
+	@JoinColumn(name = "campus_id", nullable = false)
 	private Campus campus;
 
 	@Column(nullable = true, length = 64000)
 	@Size(max = 64000)
 	private String earlyAlertReasonOtherDescription;
+
+	@Column(nullable = true, length = 64000)
+	@Size(max = 64000)
+	private String earlyAlertSuggestionOtherDescription;
 
 	@Column(nullable = true, length = 64000)
 	@Size(max = 64000)
@@ -76,13 +80,17 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	@JoinColumn(name = "person_id", nullable = false)
 	private Person person;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	// TODO: eager loading makes more sense, but causes cartesian results. so
+	// hold off optimizing performance until the performance pass of the system.
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "early_alert_early_alert_reason",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_reason_id"))
 	private Set<EarlyAlertReason> earlyAlertReasonIds = Sets.newHashSet();
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	// TODO: eager loading makes more sense, but causes cartesian results. so
+	// hold off optimizing performance until the performance pass of the system.
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "early_alert_early_alert_suggestion",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_suggestion_id"))
@@ -98,7 +106,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	/**
 	 * @param courseName
-	 *            the courseName to set
+	 *            the courseName to set; optional; max length 80 characters
 	 */
 	public void setCourseName(final String courseName) {
 		this.courseName = courseName;
@@ -113,7 +121,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	/**
 	 * @param courseTitle
-	 *            the courseTitle to set
+	 *            the courseTitle to set; optional; max length 255 characters
 	 */
 	public void setCourseTitle(final String courseTitle) {
 		this.courseTitle = courseTitle;
@@ -128,7 +136,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	/**
 	 * @param emailCC
-	 *            the emailCC to set
+	 *            the emailCC to set; optional; max length 255 characters
 	 */
 	public void setEmailCC(final String emailCC) {
 		this.emailCC = emailCC;
@@ -150,19 +158,37 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	}
 
 	/**
-	 * @return the earlyAlertSuggestionOtherDescription
+	 * @return the earlyAlertReasonOtherDescription
 	 */
 	public String getEarlyAlertReasonOtherDescription() {
 		return earlyAlertReasonOtherDescription;
 	}
 
 	/**
-	 * @param earlyAlertSuggestionOtherDescription
-	 *            the earlyAlertSuggestionOtherDescription to set
+	 * @param earlyAlertReasonOtherDescription
+	 *            the earlyAlertReasonOtherDescription to set; optional; max
+	 *            length 64000 characters
 	 */
 	public void setEarlyAlertReasonOtherDescription(
+			final String earlyAlertReasonOtherDescription) {
+		this.earlyAlertReasonOtherDescription = earlyAlertReasonOtherDescription;
+	}
+
+	/**
+	 * @return the earlyAlertSuggestionOtherDescription
+	 */
+	public String getEarlyAlertSuggestionOtherDescription() {
+		return earlyAlertSuggestionOtherDescription;
+	}
+
+	/**
+	 * @param earlyAlertSuggestionOtherDescription
+	 *            the earlyAlertSuggestionOtherDescription to set; optional; max
+	 *            length 64000 characters
+	 */
+	public void setEarlyAlertSuggestionOtherDescription(
 			final String earlyAlertSuggestionOtherDescription) {
-		earlyAlertReasonOtherDescription = earlyAlertSuggestionOtherDescription;
+		this.earlyAlertSuggestionOtherDescription = earlyAlertSuggestionOtherDescription;
 	}
 
 	/**
@@ -174,7 +200,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 
 	/**
 	 * @param comment
-	 *            the comment to set
+	 *            the comment; optional; max length 64000 characters
 	 */
 	public void setComment(final String comment) {
 		this.comment = comment;

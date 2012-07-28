@@ -4,6 +4,21 @@ public class PersonAttributesResult {
 
 	public String schoolId, firstName, lastName, primaryEmailAddress, phone;
 
+	public PersonAttributesResult() {
+		super();
+	}
+
+	public PersonAttributesResult(final String schoolId,
+			final String firstName, final String lastName,
+			final String primaryEmailAddress, final String phone) {
+		super();
+		this.schoolId = schoolId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.primaryEmailAddress = primaryEmailAddress;
+		this.phone = phone;
+	}
+
 	public String getSchoolId() {
 		return schoolId;
 	}

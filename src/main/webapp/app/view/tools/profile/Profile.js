@@ -4,6 +4,9 @@ Ext.define('Ssp.view.tools.profile.Profile', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
     width: '100%',
 	height: '100%',
     initComponent: function() {	
@@ -33,10 +36,14 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 						    		  autoScroll: true,
 						    		  items: [{xtype: 'profilereferralsources'}]
 						    		},{ 
-							    		  title: 'Services Provided History',
-							    		  hidden: true,
-							    		  autoScroll: true,
-							    		  items: [{xtype: 'profileservicesprovided'}]
+						    		  title: 'Service Reasons',
+						    		  autoScroll: true,
+						    		  items: [{xtype: 'profileservicereasons'}]
+						    		},{ 
+						    		  title: 'Services Provided History',
+						    		  hidden: true,
+						    		  autoScroll: true,
+						    		  items: [{xtype: 'profileservicesprovided'}]
 							    	}]
 						})
 				    ],
@@ -45,25 +52,27 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
-				            tooltip: 'Transition Student',
-				            text: '',
-				            width: 35,
-				            height: 35,
-				            cls: 'studentTransitionIcon',
-				            xtype: 'button',
-				            itemId: 'studentTransitionButton'
-				        },{
-					            tooltip: 'View Student History',
+					            tooltip: 'Print Student History',
 					            text: '',
-					            width: 35,
-					            height: 35,
+					            width: 32,
+					            height: 32,
+					            hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
 					            cls: 'studentHistoryIcon',
 					            xtype: 'button',
 					            itemId: 'viewHistoryButton'
-					        }]
+				        },{
+			            	   xtype: 'button',
+			            	   itemId: 'printConfidentialityAgreementButton',
+			                   text: '',
+			                   tooltip: 'Print Confidentiality Agreement',
+			            	   cls: 'confidentialityAgreementIcon',
+			            	   height: 32,
+			            	   width: 32,
+			            	   hidden: !me.authenticatedPerson.hasAccess('PROFILE_PRINT_CONFIDENTIALITY_AGREEMENT_BUTTON'),
+			            }]
 				    }]
 				});	     
     	
-    	return this.callParent(arguments);
+    	return me.callParent(arguments);
 	}
 });

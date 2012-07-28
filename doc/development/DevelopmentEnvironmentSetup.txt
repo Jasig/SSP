@@ -210,6 +210,10 @@ How to set up your development environment:
 		- You can run liquibase from maven to advance and rollback database versions:
 		mvn properties:read-project-properties liquibase:update
 		mvn properties:read-project-properties liquibase:rollback -Dliquibase.rollbackCount=1
+		
+		-- Update, but use MSSQL (if you already have the jar installed to your maven repository)
+		mvn properties:read-project-properties -P MSSQL liquibase:update
+		mvn properties:read-project-properties -P MSSQL liquibase:rollback -Dliquibase.rollbackCount=1
 	
 	- Cobertura:
 		- You can run cobertura from maven, but you will need to enable the cobertura

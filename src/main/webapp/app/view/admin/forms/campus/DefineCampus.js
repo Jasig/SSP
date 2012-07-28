@@ -9,13 +9,18 @@ Ext.define('Ssp.view.admin.forms.campus.DefineCampus',{
 	width: '100%',
 	layout:'card',
 	initComponent: function() {
-        Ext.applyIf(this, {
+		var me=this;
+        Ext.applyIf(me, {
         	activeItem: 0,
         	
         	dockedItems: [{
 	               xtype: 'toolbar',
-	               dock: 'bottom',
+	               dock: 'top',
 	               items: [{
+	                   text: 'Cancel',
+	                   xtype: 'button',
+	                   itemId: 'cancelCampusEditorButton'
+	               },{
 	                   text: 'Prev',
 	                   xtype: 'button',
 	                   action: 'prev',
@@ -34,16 +39,13 @@ Ext.define('Ssp.view.admin.forms.campus.DefineCampus',{
 	           }],
         	
         	items: [{
-        	    id: 'card-0',
-        	    html: 'Step 1'
+        	    xtype:'editcampus',
+        	    flex: 1
         	},{
-        	    id: 'card-1',
-        	    html: 'Step 2'
-        	},{
-        	    id: 'card-2',
-        	    html: 'Step 3'
+        		xtype:'campusearlyalertroutingsadmin',
+        	    flex: 1
         	}]
         });
-        return this.callParent(arguments);
+        return me.callParent(arguments);
 	}
 });

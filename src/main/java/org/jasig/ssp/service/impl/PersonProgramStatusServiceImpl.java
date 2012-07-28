@@ -4,14 +4,18 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.PersonProgramStatusDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,18 +39,25 @@ public class PersonProgramStatusServiceImpl extends
 	@Autowired
 	private transient PersonProgramStatusDao dao;
 
+	@Autowired
+	private transient PersonService personService;
+
+	@Autowired
+	private transient ProgramStatusService programStatusService;
+
 	@Override
 	protected PersonProgramStatusDao getDao() {
 		return dao;
 	}
 
 	@Override
-	public PersonProgramStatus create(final PersonProgramStatus obj)
+	public PersonProgramStatus create(
+			final PersonProgramStatus personProgramStatus)
 			throws ObjectNotFoundException, ValidationException {
-		expireActive(obj.getPerson());
+		expireActive(personProgramStatus.getPerson());
 
 		try {
-			return getDao().save(obj);
+			return getDao().save(personProgramStatus);
 		} catch (final ConstraintViolationException exc) {
 			throw new ValidationException(
 					"Invalid data. See cause for list of violations.", exc);
@@ -103,5 +114,32 @@ public class PersonProgramStatusServiceImpl extends
 			pps.setExpirationDate(new Date());
 			dao.save(pps);
 		}
+	}
+
+	@Override
+	public PersonProgramStatus getCurrent(final UUID personId)
+			throws ObjectNotFoundException {
+		return dao.getActive(personService.get(personId));
+	}
+
+	@Override
+	public void setTransitionForStudent(@NotNull final Person person)
+			throws ObjectNotFoundException, ValidationException {
+		final ProgramStatus transitioned = programStatusService
+				.get(ProgramStatus.TRANSITIONED_ID);
+
+		// check if transition needs done
+		final PersonProgramStatus current = getCurrent(person.getId());
+		if (current != null && transitioned.equals(current.getProgramStatus())) {
+			// current status is already "Transitioned" - nothing to be done
+			return;
+		}
+
+		final PersonProgramStatus ps = new PersonProgramStatus();
+		ps.setEffectiveDate(new Date());
+		ps.setPerson(person);
+		ps.setProgramStatus(transitioned);
+		ps.setProgramStatusChangeReason(null);
+		create(ps);
 	}
 }

@@ -1,76 +1,84 @@
 Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
-	extend: 'Ext.grid.Panel',
+	extend: 'Ext.tree.Panel',
 	alias : 'widget.earlyalert',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertToolViewController',
     inject: {
+    	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
     	columnRendererUtils: 'columnRendererUtils',
-        store: 'earlyAlertsStore'
+    	model: 'currentEarlyAlert',
+        treeStore: 'earlyAlertsTreeStore'
     },
 	width: '100%',
-	height: '100%',
-	
+	height: '100%',	
 	initComponent: function() {	
-    	var sm = Ext.create('Ext.selection.CheckboxModel');
-		
-		Ext.apply(this, 
+    	var me=this;
+		Ext.apply(me, 
 				{
 		            autoScroll: true,
 		            title: 'Early Alerts',
-
-	    		      columns: [{
-					    	        xtype:'actioncolumn',
-					    	        width:65,
-					    	        header: 'Action',
-					    	        items: [{
-					    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-					    	            tooltip: 'Edit Task',
-					    	            handler: function(grid, rowIndex, colIndex) {
-					    	            	var rec = grid.getStore().getAt(rowIndex);
-					    	            	var panel = grid.up('panel');
-					    	                panel.model.data=rec.data;
-					    	                panel.appEventsController.getApplication().fireEvent('editJournalEntry');
-					    	            },
-					    	            scope: this
-					    	        },{
-					    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-					    	            tooltip: 'Delete Task',
-					    	            handler: function(grid, rowIndex, colIndex) {
-					    	            	var rec = grid.getStore().getAt(rowIndex);
-					    	            	var panel = grid.up('panel');
-					    	                panel.model.data=rec.data;
-					    	            	panel.appEventsController.getApplication().fireEvent('deleteJournalEntry');
-					    	            },
-					    	            scope: this
-					    	        }]
-				                },
-	    		                { header: 'Name',  
-	    		                  dataIndex: 'courseTitle',
-	    		                  field: {
-	    		                      xtype: 'textfield'
-	    		                  },
-	    		                  flex: 50 },
-	    		                { header: 'Description',
-	    		                  dataIndex: 'description',
-	    		                  field: {
-	    		                      xtype: 'textfield'
-	    		                  },
-	    		                  flex: 50 }
-	    		                  ],
-				    
-				    dockedItems: [{
+		            cls: 'early-alert-tree-panel',
+		            collapsible: false,
+		            useArrows: true,
+		            rootVisible: false,
+		            store: me.treeStore,
+		            multiSelect: false,
+		            singleExpand: true,
+    		        columns: [{
+    		            xtype: 'treecolumn',
+    		            text: 'Responses',
+    		            flex: .5,
+    		            sortable: false,
+    		            dataIndex: 'text'
+    		        },{
+    		            text: 'Created By',
+    		            flex: 1,
+    		            dataIndex: 'createdBy',
+    		            renderer : me.columnRendererUtils.renderCreatedBy,
+    		            sortable: false
+    		        },{
+    		            text: 'Created Date',
+    		            flex: 1,
+    		            dataIndex: 'createdDate',
+    		            renderer : me.columnRendererUtils.renderCreatedByDateWithTime,
+    		            sortable: false
+    		        },{
+    		            text: 'Status',
+    		            flex: .5,
+    		            sortable: false,
+    		            dataIndex: 'closedDate',
+    		            renderer: me.columnRendererUtils.renderEarlyAlertStatus
+    		        },{
+    		            text: 'Details',
+    		            flex: 2,
+    		            sortable: false,
+    		            dataIndex: 'gridDisplayDetails'
+    		        }],
+    		        
+    		        dockedItems: [{
 				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
 				            tooltip: 'Respond to the selected Early Alert',
-				            text: 'Respond',
+				            text: '',
 				            xtype: 'button',
+				            hidden: !me.authenticatedPerson.hasAccess('RESPOND_EARLY_ALERT_BUTTON'),
+			            	width: 28,
+					        height: 28,
+				            cls: 'earlyAlertResponseIcon',
 				            itemId: 'respondButton'
+				        },{
+				            tooltip: 'Display detail for the selected item',
+				            text: 'Details',
+				            xtype: 'button',
+				            hidden: !me.authenticatedPerson.hasAccess('EARLY_ALERT_DETAILS_BUTTON'),
+				            itemId: 'displayDetailsButton'
 				        }]
 				    }]
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

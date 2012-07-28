@@ -29,7 +29,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        width: 350
 			    },{
 			        fieldLabel: 'Middle Initial',
-			        name: 'middleInitial',
+			        name: 'middleName',
 			        itemId: 'middleName',
 			        id: 'editPersonMiddleName',
 			        maxLength: 1,
@@ -54,7 +54,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			    },{
 			    	xtype: 'button',
 			    	tooltip: 'Load record from external system',
-			    	text: 'Retrieve from SIS',
+			    	text: 'Retrieve from External',
 			    	itemId: 'retrieveFromExternalButton'
 			    },{
 			        fieldLabel: 'Home Phone',

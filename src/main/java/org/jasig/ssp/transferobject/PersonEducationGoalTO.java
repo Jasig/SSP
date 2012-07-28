@@ -16,8 +16,10 @@ public class PersonEducationGoalTO
 
 	private UUID personId;
 
-	private String description, plannedOccupation;
-	private int howSureAboutMajor;
+	private String description, plannedOccupation, plannedMajor;
+	private Integer howSureAboutMajor, howSureAboutOccupation;
+	private Boolean additionalAcademicProgramInformationNeeded, careerDecided,
+			confidentInAbilities;
 
 	public PersonEducationGoalTO() {
 		super();
@@ -39,6 +41,13 @@ public class PersonEducationGoalTO
 				&& (model.getEducationGoal().getId() != null)) {
 			educationGoalId = model.getEducationGoal().getId();
 		}
+
+		plannedMajor = model.getPlannedMajor();
+		careerDecided = model.getCareerDecided();
+		howSureAboutOccupation = model.getHowSureAboutOccupation();
+		confidentInAbilities = model.getConfidentInAbilities();
+		additionalAcademicProgramInformationNeeded = model
+				.getAdditionalAcademicProgramInformationNeeded();
 	}
 
 	public static List<PersonEducationGoalTO> toTOList(
@@ -83,11 +92,52 @@ public class PersonEducationGoalTO
 		this.plannedOccupation = plannedOccupation;
 	}
 
-	public int getHowSureAboutMajor() {
+	public Integer getHowSureAboutMajor() {
 		return howSureAboutMajor;
 	}
 
-	public void setHowSureAboutMajor(final int howSureAboutMajor) {
+	public void setHowSureAboutMajor(final Integer howSureAboutMajor) {
 		this.howSureAboutMajor = howSureAboutMajor;
+	}
+
+	public String getPlannedMajor() {
+		return plannedMajor;
+	}
+
+	public void setPlannedMajor(final String plannedMajor) {
+		this.plannedMajor = plannedMajor;
+	}
+
+	public Integer getHowSureAboutOccupation() {
+		return howSureAboutOccupation;
+	}
+
+	public void setHowSureAboutOccupation(final Integer howSureAboutOccupation) {
+		this.howSureAboutOccupation = howSureAboutOccupation;
+	}
+
+	public Boolean getAdditionalAcademicProgramInformationNeeded() {
+		return additionalAcademicProgramInformationNeeded;
+	}
+
+	public void setAdditionalAcademicProgramInformationNeeded(
+			final Boolean additionalAcademicProgramInformationNeeded) {
+		this.additionalAcademicProgramInformationNeeded = additionalAcademicProgramInformationNeeded;
+	}
+
+	public Boolean getCareerDecided() {
+		return careerDecided;
+	}
+
+	public void setCareerDecided(final boolean careerDecided) {
+		this.careerDecided = careerDecided;
+	}
+
+	public Boolean getConfidentInAbilities() {
+		return confidentInAbilities;
+	}
+
+	public void setConfidentInAbilities(final Boolean confidentInAbilities) {
+		this.confidentInAbilities = confidentInAbilities;
 	}
 }

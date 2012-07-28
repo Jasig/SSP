@@ -2,7 +2,9 @@ package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
@@ -70,19 +72,77 @@ public class PersonEarlyAlertController extends
 	@Override
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	EarlyAlertTO get(final @PathVariable UUID id,
-			@PathVariable final UUID personId) throws ObjectNotFoundException,
+	EarlyAlertTO get(final @PathVariable @NotNull UUID id,
+			@PathVariable @NotNull final UUID personId)
+			throws ObjectNotFoundException,
 			ValidationException {
+		if (personId == null) {
+			throw new ValidationException("Missing person identifier in path.");
+		}
+
 		return super.get(id, personId);
 	}
 
 	@Override
-	@RequestMapping(value = "/1/person/{personId}/earlyAlert/", method = RequestMethod.POST)
+	@RequestMapping(value = "/1/person/{personId}/earlyAlert", method = RequestMethod.POST)
 	public @ResponseBody
-	EarlyAlertTO create(@PathVariable final UUID personId,
-			@Valid @RequestBody final EarlyAlertTO obj)
+	EarlyAlertTO create(@PathVariable @NotNull final UUID personId,
+			@Valid @NotNull @RequestBody final EarlyAlertTO obj)
 			throws ValidationException, ObjectNotFoundException {
-		return super.create(personId, obj);
+		// validate incoming data
+		if (personId == null) {
+			throw new IllegalArgumentException(
+					"Missing or invalid person identifier in the path.");
+		}
+
+		if (obj == null) {
+			throw new IllegalArgumentException(
+					"Missing or invalid early alert data.");
+		}
+
+		if (obj.getPersonId() != null && !personId.equals(obj.getPersonId())) {
+			throw new ValidationException(
+					"Person identifier in path, did not match the person"
+							+ " identifier in the early alert data. Those values must"
+							+ " match if a person identifier is set in the data.");
+		}
+
+		// TEMPORARY check until the issue in SSP-338 is fixed
+		if (obj.getEarlyAlertReasonIds() != null
+				&& obj.getEarlyAlertReasonIds().size() > 1) {
+			throw new ValidationException(
+					"Early alerts may not have more than one reason.");
+		}
+
+		if (obj.getPersonId() == null) {
+			obj.setPersonId(personId);
+		}
+
+		// create
+		final EarlyAlertTO earlyAlertTO = super.create(personId, obj);
+
+		// send e-mail to student if requested
+		if (obj.getSendEmailToStudent() != null
+				&& Boolean.TRUE.equals(obj.getSendEmailToStudent())) {
+			try {
+				service.sendMessageToStudent(factory.from(earlyAlertTO));
+			} catch (final SendFailedException exc) {
+				LOGGER.error(
+						"Send message failed when creating a new early alert. Early Alert was created, but message was not succesfully sent to student.",
+						exc);
+			} catch (final ObjectNotFoundException exc) {
+				LOGGER.error(
+						"Send message failed when creating a new early alert. Early Alert was created, but message was not succesfully sent to student.",
+						exc);
+			} catch (final ValidationException exc) {
+				LOGGER.error(
+						"Send message failed when creating a new early alert. Early Alert was created, but message was not succesfully sent to student.",
+						exc);
+			}
+		}
+
+		// return created EarlyAlert
+		return earlyAlertTO;
 	}
 
 	@Override
@@ -105,7 +165,7 @@ public class PersonEarlyAlertController extends
 
 	// Overriding because the default sort column needs to be unique
 	@Override
-	@RequestMapping(value = "/1/person/{personId}/earlyAlert/", method = RequestMethod.GET)
+	@RequestMapping(value = "/1/person/{personId}/earlyAlert", method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<EarlyAlertTO> getAll(
 			@PathVariable final UUID personId,
@@ -129,7 +189,20 @@ public class PersonEarlyAlertController extends
 				getFactory().asTOList(data.getRows()));
 	}
 
-	@RequestMapping(value = "/1/person/earlyAlert/", method = RequestMethod.POST)
+	/**
+	 * Create an early alert.
+	 * 
+	 * @param studentId
+	 *            student id (legacy school id, not the SSP person id)
+	 * @param obj
+	 *            early alert data
+	 * @return Created early alert, with assigned id.
+	 * @throws ObjectNotFoundException
+	 *             If any of the specified data could not be found.
+	 * @throws ValidationException
+	 *             If any of the data was not valid.
+	 */
+	@RequestMapping(value = "/1/person/earlyAlert", method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertTO create(@RequestParam final String studentId,
 			@Valid @RequestBody final EarlyAlertTO obj)
@@ -153,7 +226,7 @@ public class PersonEarlyAlertController extends
 		try {
 			personId = UUID.fromString(studentId); // NOPMD by jon.adams
 		} catch (final IllegalArgumentException exc) {
-			final Person person = personService.getByStudentId(studentId);
+			final Person person = personService.getBySchoolId(studentId);
 
 			if (person == null) {
 				throw new ObjectNotFoundException(
@@ -169,7 +242,9 @@ public class PersonEarlyAlertController extends
 					"Person");
 		}
 
-		obj.setPersonId(personId);
+		if (obj.getPersonId() == null) {
+			obj.setPersonId(personId);
+		}
 
 		return super.create(personId, obj);
 	}

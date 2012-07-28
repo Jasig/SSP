@@ -6,6 +6,7 @@ Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewController',
     inject: {
+    	authenticatedPerson: 'authenticatedPerson',
         store: 'treeStore'
     },
     viewConfig: {
@@ -16,10 +17,11 @@ Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
 	height: '100%',
 	width: '100%',
     initComponent: function(){
-    	Ext.apply(this,
+    	var me=this;
+    	Ext.apply(me,
     			{
     		     autoScroll: true,
-    			 store: this.store,
+    			 store: me.store,
     			 useArrows: true,
     			 rootVisible: false,
     			 singleExpand: true,
@@ -37,12 +39,13 @@ Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
      				            tooltip: 'Delete selected association',
      				            text: 'Delete Associations',
      				            xtype: 'button',
+     				            hidden: !me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ASSOCIATION_ADMIN_DELETE_BUTTON'),
      				            itemId: 'deleteAssociationButton'
      				        }]
      		    	    }]
      		       	
     	});
     	
-    	return this.callParent(arguments);
+    	return me.callParent(arguments);
     }
 });

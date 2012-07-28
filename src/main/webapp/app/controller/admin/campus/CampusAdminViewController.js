@@ -2,15 +2,26 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
+    	appEventsController: 'appEventsController',
+    	campusService: 'campusService',
+    	campusEarlyAlertRouting: 'currentCampusEarlyAlertRouting',
+    	campusesStore: 'campusesStore',
+    	earlyAlertCoordinatorsStore: 'earlyAlertCoordinatorsStore',
+    	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentCampus',
-    	store: 'campusesStore'
+    	peopleStore: 'peopleStore'
     },
     config: {
     	containerToLoadInto: 'adminforms',
-    	formToDisplay: 'definecampus'
+    	campusEditorForm: 'editcampus',
+    	campusEarlyAlertRoutingAdminForm: 'campusEarlyAlertRoutingsAdmin'
     },
-    control: {  	
+    control: {
+    	view: {
+    		viewready: 'onViewReady'
+    	},
+    	
     	'editButton': {
 			click: 'onEditClick'
 		},
@@ -24,9 +35,33 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
 		} 	
     },
 	init: function() {
-		this.store.load();	
+		var me=this;
+		me.campusesStore.load();
+		me.earlyAlertCoordinatorsStore.load();
+		me.earlyAlertReasonsStore.load();
+		me.peopleStore.load();
 		return this.callParent(arguments);
     },
+
+    onViewReady: function(comp, obj){
+    	var me=this;
+    	me.appEventsController.assignEvent({eventName: 'editCampusEarlyAlertRoutings', callBackFunc: me.onEditCampusEarlyAlertRoutings, scope: me});
+    },    
+ 
+    destroy: function() {
+    	var me=this;
+    	
+    	me.appEventsController.removeEvent({eventName: 'editCampusEarlyAlertRoutings', callBackFunc: me.onEditCampusEarlyAlertRoutings, scope: me});
+
+    	return me.callParent( arguments );
+    },
+
+    onEditCampusEarlyAlertRoutings: function(){
+		var me=this;
+    	var model = new Ssp.model.reference.CampusEarlyAlertRouting();
+		me.campusEarlyAlertRouting.data = model.data;
+		me.displayCampusEarlyAlertRoutingAdmin();
+    }, 
     
 	onEditClick: function(button) {
 		var grid, record;
@@ -35,7 +70,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
         if (record) 
         {		
         	this.model.data=record.data;
-        	this.displayEditor();
+        	this.displayCampusEditor();
         }else{
      	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
         }
@@ -44,7 +79,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
 	onAddClick: function(button){
 		var model = new Ssp.model.reference.Campus();
 		this.model.data = model.data;
-		this.displayEditor();
+		this.displayCampusEditor();
 	},
 	
     deleteConfirmation: function( button ) {
@@ -77,17 +112,33 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
       	var id = selection.get('id');
       	if (btnId=="yes")
       	{
-      		me.apiProperties.makeRequest({
-        		   url: store.getProxy().url+id,
-        		   method: 'DELETE',
-        		   successFunc: function(response,responseText){
-        			   store.remove( store.getById( id ) );
-        		   }
-        	    });
+     		me.getView().setLoading( true );
+     		me.campusService.destroy( id, {
+     			success: me.destroyCampusSuccess,
+     			failure: me.destroyCampusFailure,
+     			scope: me
+     		});
         }
  	},
-	
-	displayEditor: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+ 	
+    destroyCampusSuccess: function( r, id, scope ) {
+ 		var me=scope;
+ 		var grid=me.getView();
+ 		var store = grid.getStore();
+ 		me.getView().setLoading( false );
+ 		store.remove( store.getById( id ) );
+ 	},
+
+ 	destroyCampusFailure: function( response, scope ) {
+ 		var me=scope;
+ 		me.getView().setLoading( false );
+ 	}, 
+
+	displayCampusEarlyAlertRoutingAdmin: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getCampusEarlyAlertRoutingAdminForm(), true, {});
+	},
+ 	
+	displayCampusEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getCampusEditorForm(), true, {});
 	}
 });

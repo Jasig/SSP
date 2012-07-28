@@ -80,11 +80,6 @@ public class Campus extends AbstractReference implements Auditable {
 	 */
 	public void setEarlyAlertCoordinatorId(
 			@NotNull final UUID earlyAlertCoordinatorId) {
-		if (earlyAlertCoordinatorId == null) {
-			throw new IllegalArgumentException(
-					"EarlyAlertCoordinatorId can not be null.");
-		}
-
 		this.earlyAlertCoordinatorId = earlyAlertCoordinatorId;
 	}
 

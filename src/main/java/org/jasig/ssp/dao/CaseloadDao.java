@@ -1,5 +1,9 @@
 package org.jasig.ssp.dao;
 
+import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -22,41 +26,76 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<CaseloadRecord> caseLoadFor(
-			final ProgramStatus programStatus,
-			final Person coach, final SortingAndPaging sAndP) {
+			final ProgramStatus programStatus, @NotNull final Person coach,
+			final SortingAndPaging sAndP) {
+
+		// This creation of the query is order sensitive as 2 queries are run
+		// with the same restrictions. The first query simply runs the query to
+		// find a count of the records. The second query returns the row data.
 
 		final Criteria query = createCriteria();
 
-		query.add(Restrictions.eq("coach", coach));
-
+		// Restrict by program status if provided
 		if (programStatus != null) {
-			query.createAlias("programStatuses", "personProgramStatus")
-					.add(Restrictions.eq("personProgramStatus.programStatus",
-							programStatus));
+			final Criteria subquery = query.createAlias("programStatuses",
+					"personProgramStatus");
+			subquery.add(
+					Restrictions.or(
+							Restrictions
+									.isNull("personProgramStatus.expirationDate"),
+							Restrictions.ge(
+									"personProgramStatus.expirationDate",
+									new Date())));
+			subquery.add(Restrictions.eq("personProgramStatus.programStatus",
+					programStatus));
 		}
 
-		query.createAlias("studentType", "studentType",
-				JoinType.LEFT_OUTER_JOIN);
+		// restrict to coach
+		query.add(Restrictions.eq("coach", coach));
 
+		// item count
+		Long totalRows = 0L;
+		if ((sAndP != null) && sAndP.isPaged()) {
+			totalRows = (Long) query.setProjection(Projections.rowCount())
+					.uniqueResult();
+		}
+
+		// clear the row count projection
+		query.setProjection(null);
+
+		//
+		// Add Properties to return in the case load
+		//
+		// Set Columns to Return: id, firstName, middleName, lastName,
+		// schoolId
 		final ProjectionList projections = Projections.projectionList();
-		projections.add(Projections.id().as("personId"));
+		projections.add(Projections.property("id").as("personId"));
 		projections.add(Projections.property("firstName").as("firstName"));
-		projections.add(Projections.property("middleInitial").as(
-				"middleInitial"));
+		projections.add(Projections.property("middleName").as(
+				"middleName"));
 		projections.add(Projections.property("lastName").as("lastName"));
 		projections.add(Projections.property("schoolId").as("schoolId"));
+		projections.add(Projections.property("studentIntakeCompleteDate")
+				.as(
+						"studentIntakeCompleteDate"));
+
+		// Join to Student Type
+		query.createAlias("studentType", "studentType",
+				JoinType.LEFT_OUTER_JOIN);
+		// add StudentTypeName Column
 		projections.add(Projections.property("studentType.name").as(
 				"studentTypeName"));
-		// :TODO current AppointmentDate for Caseload
-		// projections.add(Projections.property("currentAppointmentDate").as("currentAppointmentDate"));
-		projections.add(Projections.property("studentIntakeCompleteDate").as(
-				"studentIntakeCompleteDate"));
+
 		query.setProjection(projections);
-		// :TODO EarlyAlert Count
 
 		query.setResultTransformer(new AliasToBeanResultTransformer(
 				CaseloadRecord.class));
 
-		return new PagingWrapper<CaseloadRecord>(0, query.list());
+		// Add Paging
+		if (sAndP != null) {
+			sAndP.addAll(query);
+		}
+
+		return new PagingWrapper<CaseloadRecord>(totalRows, query.list());
 	}
 }

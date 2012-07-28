@@ -13,6 +13,7 @@ Ext.require([
     'Ssp.view.Main',
     'Ssp.view.Search',
     'Ssp.view.StudentRecord',
+    'Ssp.view.ProgramStatusChangeReasonWindow',
     'Ssp.view.person.CaseloadAssignment',
     'Ssp.view.person.EditPerson',
     'Ssp.view.person.Coach',
@@ -32,6 +33,7 @@ Ext.require([
     'Ssp.view.tools.profile.SpecialServiceGroups',
     'Ssp.view.tools.profile.ReferralSources',
     'Ssp.view.tools.profile.ServicesProvided',
+    'Ssp.view.tools.profile.ServiceReasons',
     'Ssp.view.tools.actionplan.ActionPlan',
     'Ssp.view.tools.actionplan.Tasks',
     'Ssp.view.tools.actionplan.AddTask',
@@ -55,13 +57,15 @@ Ext.require([
     'Ssp.view.tools.journal.TrackTree',
     'Ssp.view.tools.earlyalert.EarlyAlert',
     'Ssp.view.tools.earlyalert.EarlyAlertResponse',
+    'Ssp.view.tools.earlyalert.EarlyAlertReferrals',
+    'Ssp.view.tools.earlyalert.EarlyAlertDetails',
+    'Ssp.view.tools.earlyalert.EarlyAlertResponseDetails',
     'Ssp.view.tools.document.StudentDocuments',
     'Ssp.view.tools.document.EditDocument',
     'Ssp.view.tools.sis.StudentInformationSystem',
     'Ssp.view.tools.sis.Registration',
     'Ssp.view.tools.sis.Assessment',
     'Ssp.view.tools.sis.Transcript',
-    'Ssp.view.tools.sis.Act',
     'Ssp.view.tools.disability.DisabilityServices',
     'Ssp.view.tools.disability.General',
     'Ssp.view.tools.disability.AgencyContacts',
@@ -98,9 +102,18 @@ Ext.require([
     'Ssp.view.admin.forms.campus.CampusAdmin',
     'Ssp.view.admin.forms.campus.DefineCampus',
     'Ssp.view.admin.forms.campus.EditCampus',
+    'Ssp.view.admin.forms.campus.CampusEarlyAlertRoutingsAdmin',
+    'Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',
+    'Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
+    
+    // REPORT DISPLAY
+    'Ssp.view.Report',
+    
+    'Ssp.model.SimpleItemDisplay',
+    'Ssp.model.ObjectPermission',
     'Ssp.model.AuthenticatedPerson',
     'Ssp.model.Preferences',
     'Ssp.model.FieldError',
@@ -109,14 +122,22 @@ Ext.require([
 	'Ssp.model.Person',
 	'Ssp.model.PersonAppointment',
 	'Ssp.model.Appointment',
+	'Ssp.model.CaseloadPerson',
+	'Ssp.model.SearchPerson',
+	'Ssp.model.SearchCriteria',
+	'Ssp.model.CaseloadFilterCriteria',
 	'Ssp.model.PersonGoal',
 	'Ssp.model.PersonDocument',
+	'Ssp.model.PersonLite',
+	'Ssp.model.PersonSearchLite',
+	'Ssp.model.PersonProgramStatus',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
 	'Ssp.model.tool.studentintake.PersonEducationPlan',
 	'Ssp.model.tool.actionplan.Task',
 	'Ssp.model.tool.earlyalert.PersonEarlyAlert',
+	'Ssp.model.tool.earlyalert.PersonEarlyAlertTree',
 	'Ssp.model.tool.earlyalert.EarlyAlertResponse',
 	'Ssp.model.tool.journal.JournalEntry',
 	'Ssp.model.tool.journal.JournalEntryDetail',
@@ -136,11 +157,13 @@ Ext.require([
 	'Ssp.util.TreeRendererUtils',
 	'Ssp.util.Constants',
 	'Ssp.store.Coaches',
+	'Ssp.store.Caseload',
     'Ssp.store.Tasks',
     'Ssp.store.Goals',
     'Ssp.store.JournalEntries',
     'Ssp.store.JournalEntryDetails',
     'Ssp.store.EarlyAlerts',
+    'Ssp.store.EarlyAlertCoordinators',
     'Ssp.store.Documents',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
@@ -168,6 +191,8 @@ Ext.require([
     'Ssp.store.reference.JournalSteps',
     'Ssp.store.reference.JournalTracks',
     'Ssp.store.reference.MaritalStatuses',
+    'Ssp.store.People',
+    'Ssp.store.PeopleSearchLite',
     'Ssp.store.reference.ProgramStatuses',
     'Ssp.store.reference.ProgramStatusChangeReasons',
     'Ssp.store.reference.ReferralSources',
@@ -175,11 +200,26 @@ Ext.require([
     'Ssp.store.reference.SpecialServiceGroups',
     'Ssp.store.reference.States', 
     'Ssp.store.Students',
+    'Ssp.store.Search',
     'Ssp.store.reference.StudentStatuses',
     'Ssp.store.reference.StudentTypes',
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
+    'Ssp.service.AbstractService',
+    'Ssp.service.AppointmentService',
+    'Ssp.service.CaseloadService',
+    'Ssp.service.CampusService',
+    'Ssp.service.CampusEarlyAlertRoutingService',
+    'Ssp.service.ConfidentialityDisclosureAgreementService',
+    'Ssp.service.EarlyAlertService',
+    'Ssp.service.EarlyAlertResponseService',
+    'Ssp.service.JournalEntryService',
+    'Ssp.service.PersonService',
+    'Ssp.service.ProgramStatusService',
+    'Ssp.service.ReferralSourceService',
+    'Ssp.service.SearchService',
+    'Ssp.service.SpecialServiceGroupService',
     'Ssp.controller.ApplicationEventsController',
     'Ext.tab.*',
 	'Ext.util.Filter',
@@ -192,65 +232,79 @@ Ext.require([
 	'Ext.form.FieldSet',
 	'Ext.ux.CheckColumn',
 	'Ext.ux.form.MultiSelect',
-	'Ext.ux.form.ItemSelector'
+	'Ext.ux.form.ItemSelector',
+	'Ext.util.MixedCollection',
+	'Ext.util.TaskRunner',
+	'Ext.tree.*',
+	'Ext.toolbar.Spacer',
+	'Ext.form.field.ComboBox',
+	'Ext.grid.column.Action',
+	'Ext.grid.feature.Grouping'
 ]);
 
 var apiUrls = [
-  {name: 'campus', url: 'reference/campus/'},
-  {name: 'campusEarlyAlertRouting', url: 'reference/campus/{id}/earlyAlertRouting/'},
-  {name: 'category', url: 'reference/category/'},
-  {name: 'challenge', url: 'reference/challenge/'},
-  {name: 'challengeReferral', url: 'reference/challengeReferral/'},
-  {name: 'childCareArrangement', url: 'reference/childCareArrangement/'},
-  {name: 'citizenship', url: 'reference/citizenship/'},
-  {name: 'confidentialityDisclosureAgreement', url: 'reference/confidentialityDisclosureAgreement/'},
-  {name: 'confidentialityLevel', url: 'reference/confidentialityLevel/'},
-  {name: 'configuration', url: 'reference/configuration/'},
-  {name: 'earlyAlertOutcome', url: 'reference/earlyAlertOutcome/'},
-  {name: 'earlyAlertOutreach', url: 'reference/earlyAlertOutreach/'},
-  {name: 'earlyAlertReason', url: 'reference/earlyAlertReason/'},
-  {name: 'earlyAlertReferral', url: 'reference/earlyAlertReferral/'},
-  {name: 'earlyAlertSuggestion', url: 'reference/earlyAlertSuggestion/'},
-  {name: 'educationGoal', url: 'reference/educationGoal/'},
-  {name: 'educationLevel', url: 'reference/educationLevel/'},
-  {name: 'ethnicity', url: 'reference/ethnicity/'},
-  {name: 'fundingSource', url: 'reference/fundingSource/'},
-  {name: 'journalSource', url: 'reference/journalSource/'},
-  {name: 'journalStep', url: 'reference/journalStep/'},
-  {name: 'journalTrack', url: 'reference/journalTrack/'},
-  {name: 'journalStepDetail', url: 'reference/journalStepDetail/'},
-  {name: 'maritalStatus', url: 'reference/maritalStatus/'},
-  {name: 'studentStatus', url: 'reference/studentStatus/'},
-  {name: 'veteranStatus', url: 'reference/veteranStatus/'},
-  {name: 'person', url: 'person/'},
-  {name: 'personAppointment', url: '/ssp/api/1/person/{id}/appointment/'},
-  {name: 'personChallenge', url: 'person/{id}/challenge/'},
-  {name: 'personDocument', url: 'person/{id}/document/'},
-  {name: 'personEarlyAlert', url: 'person/{id}/earlyAlert/'},
-  {name: 'personEarlyAlertResponse', url: 'person/{id}/earlyAlert/{id}/earlyAlertResponse/'},
-  {name: 'personGoal', url: 'person/{id}/goal/'},
-  {name: 'personJournalEntry', url: 'person/{id}/journalEntry/'},
-  {name: 'personTask', url: 'person/{id}/task/'},
-  {name: 'personTaskGroup', url: 'person/{id}/task/group/'},
-  {name: 'personEmailTask', url: 'person/{id}/task/email/'},
-  {name: 'personViewHistory', url: 'person/{id}/history/print/'},
-  {name: 'personPrintTask', url: 'person/{id}/task/print/'},
-  {name: 'personSearch', url: 'person/search/'},
-  {name: 'programStatus', url: 'reference/programStatus/'},
-  {name: 'programStatusChangeReason', url: 'reference/programStatusChangeReason/'},
-  {name: 'referralSource', url: 'reference/referralSource/'},
-  {name: 'serviceReasons', url: 'reference/serviceReason/'},
-  {name: 'session', url: 'session/'},
-  {name: 'specialServiceGroup', url: 'reference/specialServiceGroup/'},
-  {name: 'studentIntakeTool', url: 'tool/studentIntake/'},
-  {name: 'studentType', url: 'reference/studentType/'}
+  {name: 'campus', url: 'reference/campus'},
+  {name: 'campusEarlyAlertRouting', url: 'reference/campus/{id}/earlyAlertRouting'},
+  {name: 'category', url: 'reference/category'},
+  {name: 'challenge', url: 'reference/challenge'},
+  {name: 'challengeReferral', url: 'reference/challengeReferral'},
+  {name: 'childCareArrangement', url: 'reference/childCareArrangement'},
+  {name: 'citizenship', url: 'reference/citizenship'},
+  {name: 'confidentialityDisclosureAgreement', url: 'reference/confidentialityDisclosureAgreement'},
+  {name: 'printConfidentialityDisclosureAgreement', url: '/forms/ConfidentialityAgreement.jsp'},
+  {name: 'confidentialityLevel', url: 'reference/confidentialityLevel'},
+  {name: 'configuration', url: 'reference/configuration'},
+  {name: 'earlyAlertOutcome', url: 'reference/earlyAlertOutcome'},
+  {name: 'earlyAlertOutreach', url: 'reference/earlyAlertOutreach'},
+  {name: 'earlyAlertReason', url: 'reference/earlyAlertReason'},
+  {name: 'earlyAlertReferral', url: 'reference/earlyAlertReferral'},
+  {name: 'earlyAlertSuggestion', url: 'reference/earlyAlertSuggestion'},
+  {name: 'educationGoal', url: 'reference/educationGoal'},
+  {name: 'educationLevel', url: 'reference/educationLevel'},
+  {name: 'ethnicity', url: 'reference/ethnicity'},
+  {name: 'fundingSource', url: 'reference/fundingSource'},
+  {name: 'journalSource', url: 'reference/journalSource'},
+  {name: 'journalStep', url: 'reference/journalStep'},
+  {name: 'journalTrack', url: 'reference/journalTrack'},
+  {name: 'journalStepDetail', url: 'reference/journalStepDetail'},
+  {name: 'maritalStatus', url: 'reference/maritalStatus'},
+  {name: 'studentStatus', url: 'reference/studentStatus'},
+  {name: 'veteranStatus', url: 'reference/veteranStatus'},
+  {name: 'person', url: 'person'},
+  {name: 'personAppointment', url: 'person/{id}/appointment'},
+  {name: 'personAssessment', url: 'person/{id}/test'},
+  {name: 'personCaseload', url: 'person/caseload'},
+  {name: 'personMasterCaseload', url: 'person/{id}/caseload'},
+  {name: 'personChallenge', url: 'person/{id}/challenge'},
+  {name: 'personCoach', url: 'person/coach/'},
+  {name: 'personDocument', url: 'person/{id}/document'},
+  {name: 'personEarlyAlert', url: 'person/{personId}/earlyAlert'},
+  {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlert/{earlyAlertId}/response'},
+  {name: 'personGoal', url: 'person/{id}/goal'},
+  {name: 'personJournalEntry', url: 'person/{id}/journalEntry'},
+  {name: 'personTask', url: 'person/{id}/task'},
+  {name: 'personTaskGroup', url: 'person/{id}/task/group'},
+  {name: 'personTranscript', url: 'person/{id}/transcript'},
+  {name: 'personEmailTask', url: 'person/{id}/task/email'},
+  {name: 'personViewHistory', url: 'report/{id}/History'},
+  {name: 'personPrintTask', url: 'person/{id}/task/print'},
+  {name: 'personSearch', url: 'person/search'},
+  {name: 'personProgramStatus', url: 'person/{id}/programStatus'},
+  {name: 'programStatus', url: 'reference/programStatus'},
+  {name: 'programStatusChangeReason', url: 'reference/programStatusChangeReason'},
+  {name: 'referralSource', url: 'reference/referralSource'},
+  {name: 'serviceReasons', url: 'reference/serviceReason'},
+  {name: 'session', url: 'session'},
+  {name: 'specialServiceGroup', url: 'reference/specialServiceGroup'},
+  {name: 'studentIntakeTool', url: 'tool/studentIntake'},
+  {name: 'studentType', url: 'reference/studentType'}
 ];
 
 Ext.onReady(function(){	
 
     // load the authenticated user
 	Ext.Ajax.request({
-		url: Ssp.mixin.ApiProperties.getBaseAppUrl() + 'session/getAuthenticatedPerson',
+		url: Ssp.mixin.ApiProperties.getBaseApiUrl() + 'session/getAuthenticatedPerson',
 		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 		success: function(response){
@@ -295,10 +349,17 @@ Ext.onReady(function(){
 				        },
 				        singleton: true
 				    },
+				    personLite: {
+				    	fn: function(){
+				    		return new Ssp.model.PersonLite({id:""});
+				    	},
+				    	singleton: true
+				    },
 				    authenticatedPerson: {
 				        fn: function(){
 				        	var p = new Ssp.model.AuthenticatedPerson();
 				        	p.populateFromGenericObject( user );
+				        	p.setObjectPermissions();
 				            return p;
 				        },
 				        singleton: true
@@ -342,6 +403,12 @@ Ext.onReady(function(){
 					currentAppointment: {
 				        fn: function(){
 				            return new Ssp.model.Appointment({id:""});
+				        },
+				        singleton: true
+				    },
+					currentPersonAppointment: {
+				        fn: function(){
+				            return new Ssp.model.PersonAppointment({id:""});
 				        },
 				        singleton: true
 				    },
@@ -389,7 +456,7 @@ Ext.onReady(function(){
 			        },
 			        currentEarlyAlert:{
 				        fn: function(){
-				            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:"",courseTitle:'DEV-065-TC - Developmental Reading'});
+				            return new Ssp.model.tool.earlyalert.PersonEarlyAlert({id:""});
 				    	},
 				        singleton: true
 			        },
@@ -411,6 +478,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        currentCampusEarlyAlertRouting:{
+				        fn: function(){
+				            return new Ssp.model.reference.CampusEarlyAlertRouting({id:""});
+				    	},
+				        singleton: true
+			        },
 			        treeStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.TreeStore',{
@@ -423,6 +496,45 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        earlyAlertsTreeStore:{
+				        fn: function(){
+				            return Ext.create('Ext.data.TreeStore',{
+				            	model: 'Ssp.model.tool.earlyalert.PersonEarlyAlertTree'
+				                ,proxy: {
+				                	type: 'ajax',
+				                	url: ''
+				                }
+				            });
+				    	},
+				        singleton: true
+			        },
+				    earlyAlertDetailsSuggestionsStore: {
+				    	fn: function(){
+				    		return Ext.create('Ext.data.Store', {
+							     model: 'Ssp.model.SimpleItemDisplay',
+							     storeId: 'earlyAlertDetailsSuggestionsStore'
+							 });
+				    	},
+				    	singleton: true
+				    },
+				    earlyAlertResponseDetailsOutreachesStore: {
+				    	fn: function(){
+				    		return Ext.create('Ext.data.Store', {
+							     model: 'Ssp.model.SimpleItemDisplay',
+							     storeId: 'earlyAlertResponseDetailsOutreachesStore'
+							 });
+				    	},
+				    	singleton: true
+				    },
+				    earlyAlertResponseDetailsReferralsStore: {
+				    	fn: function(){
+				    		return Ext.create('Ext.data.Store', {
+							     model: 'Ssp.model.SimpleItemDisplay',
+							     storeId: 'earlyAlertResponseDetailsReferralsStore'
+							 });
+				    	},
+				    	singleton: true
+				    },
 			        profileSpecialServiceGroupsStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
@@ -439,6 +551,14 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        profileServiceReasonsStore:{
+				        fn: function(){
+				            return Ext.create('Ext.data.Store',{
+				            	model: 'Ssp.model.reference.ServiceReason'
+				            });
+				    	},
+				        singleton: true
+			        },
 			        errorsStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
@@ -447,13 +567,27 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+				    searchCriteria: {
+				    	fn: function(){
+				    		return new Ssp.model.SearchCriteria();
+				    	},
+				    	singleton: true
+				    },
+				    caseloadFilterCriteria: {
+				    	fn: function(){
+				    		return new Ssp.model.CaseloadFilterCriteria();
+				    	},
+				    	singleton: true
+				    },
+			        // STORES
 					abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 				    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 				    anticipatedStartTermsStore: 'Ssp.store.reference.AnticipatedStartTerms',
 				    anticipatedStartYearsStore: 'Ssp.store.reference.AnticipatedStartYears',
 					campusesStore: 'Ssp.store.reference.Campuses',
 					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
-				    challengesStore: 'Ssp.store.reference.Challenges',
+					caseloadStore: 'Ssp.store.Caseload',
+					challengesStore: 'Ssp.store.reference.Challenges',
 					challengeCategoriesStore: 'Ssp.store.reference.ChallengeCategories',
 					challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
 				    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
@@ -462,11 +596,13 @@ Ext.onReady(function(){
 				    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',		
 				    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
 				    documentsStore: 'Ssp.store.Documents',
+				    earlyAlertCoordinatorsStore: 'Ssp.store.EarlyAlertCoordinators',
 				    earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
 					earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
 					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
 					earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
-				    earlyAlertsStore: 'Ssp.store.EarlyAlerts',
+					earlyAlertReferralsBindStore: 'Ssp.store.reference.EarlyAlertReferralsBind',
+					earlyAlertsStore: 'Ssp.store.EarlyAlerts',
 					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
 				    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
 			    	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
@@ -482,10 +618,13 @@ Ext.onReady(function(){
 			        journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
 			        journalTracksStore: 'Ssp.store.reference.JournalTracks',
 			    	maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
+			        peopleSearchLiteStore: 'Ssp.store.PeopleSearchLite',			    	
+			    	peopleStore: 'Ssp.store.People',
 			    	programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
 				    referralSourcesStore: 'Ssp.store.reference.ReferralSources',
 				    referralSourcesBindStore: 'Ssp.store.reference.ReferralSourcesBind',
+				    searchStore: 'Ssp.store.Search',
 				    serviceReasonsStore: 'Ssp.store.reference.ServiceReasons',
 				    specialServiceGroupsStore: 'Ssp.store.reference.SpecialServiceGroups',
 				    specialServiceGroupsBindStore: 'Ssp.store.reference.SpecialServiceGroupsBind',
@@ -496,7 +635,23 @@ Ext.onReady(function(){
 				    tasksStore: 'Ssp.store.Tasks',
 				    toolsStore: 'Ssp.store.Tools',
 			    	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
-			        yesNoStore: 'Ssp.store.reference.YesNo'
+			        yesNoStore: 'Ssp.store.reference.YesNo',
+			        	
+			        // SERVICES
+			        appointmentService: 'Ssp.service.AppointmentService',
+			        campusService: 'Ssp.service.CampusService',
+			        campusEarlyAlertRoutingService: 'Ssp.service.CampusEarlyAlertRoutingService',
+			        caseloadService: 'Ssp.service.CaseloadService',
+			        confidentialityDisclosureAgreementService: 'Ssp.service.ConfidentialityDisclosureAgreementService',
+			        earlyAlertService: 'Ssp.service.EarlyAlertService',
+			        earlyAlertResponseService: 'Ssp.service.EarlyAlertResponseService',
+			        journalEntryService: 'Ssp.service.JournalEntryService',
+			        personService: 'Ssp.service.PersonService',
+			        personProgramStatusService: 'Ssp.service.PersonProgramStatusService',
+			        programStatusService: 'Ssp.service.ProgramStatusService',
+			        referralSourceService: 'Ssp.service.ReferralSourceService',
+			        searchService: 'Ssp.service.SearchService',
+			        specialServiceGroupService: 'Ssp.service.SpecialServiceGroupService'
 				});
 				
 				Ext.application({
@@ -531,10 +686,31 @@ Ext.onReady(function(){
 				            {
 				                this.callOverridden([config]);
 				                this.addListener("exception",  function (proxy, response, operation) {
-				                    if (response.responseText != null)
-				                    {
-				                        Ext.Msg.alert('Error', response.responseText);
-				                    }
+				            		if (response.status==403)
+				            		{
+				            			Ext.Msg.confirm({
+				            	   		     title:'Access Denied Error',
+				            	   		     msg: "It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in SSP?",
+				            	   		     buttons: Ext.Msg.YESNO,
+				            	   		     fn: function( btnId ){
+				            	   		    	if (btnId=="yes")
+				            	   		    	{
+				            	   		    		// force a login
+				            	   		    		window.location.reload();
+				            	   		    	}else{
+				            	   		    		// force a login
+				            	   		    		window.location.reload();
+				            	   		    	}
+				            	   		    },
+				            	   		     scope: me
+				            	   		});
+				            		}
+				            		
+				            		// Handle call not found result
+				            		if (response.status==404)
+				            		{
+				            			Ext.Msg.alert('SSP Error', '404 Server Error. See logs for additional details');
+				            		}
 				                });
 				            }
 				        });

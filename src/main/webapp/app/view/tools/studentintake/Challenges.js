@@ -4,8 +4,9 @@ Ext.define('Ssp.view.tools.studentintake.Challenges', {
 	id : 'StudentIntakeChallenges',
     width: '100%',
     height: '100%',
-	initComponent: function() {	
-		Ext.apply(this, 
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
 				{
 		    	    autoScroll: true,
 					border: 0,	
@@ -17,6 +18,6 @@ Ext.define('Ssp.view.tools.studentintake.Challenges', {
 				    defaultType: 'checkbox'
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

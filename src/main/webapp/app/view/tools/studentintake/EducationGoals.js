@@ -27,7 +27,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				            id: 'StudentIntakeEducationGoalsFieldSet',
 				            defaultType: "textfield",
 				            defaults: {
-				                anchor: "100%"
+				                anchor: "95%"
 				            },
 				       items: [{
 				            xtype: "radiogroup",
@@ -42,9 +42,12 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 			            title: '',
 			            defaultType: "textfield",
 			            defaults: {
-			                anchor: "100%"
+			                anchor: "95%"
 			            },
 			       items: [{
+				        fieldLabel: 'What is your planned major?',
+				        name: 'plannedMajor'
+				    },{
 			            xtype: "radiogroup",
 			            fieldLabel: "How sure are you about your major?",
 			            columns: 1,
@@ -56,9 +59,44 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 			                {boxLabel: "Very Sure", name: "howSureAboutMajor", inputValue: "5"}
 			        		]
 			        },{
+				        xtype: "radiogroup",
+				        fieldLabel: 'Have you decided on a career/occupation?',
+				        columns: 1,
+				        itemId: 'careerDecided',
+				        items: [
+				            {boxLabel: "Yes", name: "careerDecided", inputValue:"true"},
+				            {boxLabel: "No", name: "careerDecided", inputValue:"false"}]
+					},{
 				        fieldLabel: 'What is your planned occupation?',
 				        name: 'plannedOccupation'
-				    }]
+				    },{
+			            xtype: "radiogroup",
+			            fieldLabel: "How sure are you about your occupation?",
+			            columns: 1,
+			            items: [
+			                {boxLabel: "Very Unsure", name: "howSureAboutOccupation", inputValue: "1"},
+			                {boxLabel: "", name: "howSureAboutOccupation", inputValue: "2"},
+			                {boxLabel: "", name: "howSureAboutOccupation", inputValue: "3"},
+			                {boxLabel: "", name: "howSureAboutOccupation", inputValue: "4"},
+			                {boxLabel: "Very Sure", name: "howSureAboutOccupation", inputValue: "5"}
+			        		]
+			        },{
+				        xtype: 'radiogroup',
+				        fieldLabel: 'Are you confident your abilities are compatible with the career field?',
+				        columns: 1,
+				        itemId: 'confidentInAbilities',
+				        items: [
+				            {boxLabel: "Yes", name: "confidentInAbilities", inputValue:"true"},
+				            {boxLabel: "No", name: "confidentInAbilities", inputValue:"false"}]
+					},{
+				        xtype: "radiogroup",
+				        fieldLabel: 'Do you need additional information about which academic programs may lead to a future career?',
+				        columns: 1,
+				        itemId: 'additionalAcademicProgramInformationNeeded',
+				        items: [
+				            {boxLabel: "Yes", name: "additionalAcademicProgramInformationNeeded", inputValue:"true"},
+				            {boxLabel: "No", name: "additionalAcademicProgramInformationNeeded", inputValue:"false"}]
+					}]
 				    
 				    }]
 				});

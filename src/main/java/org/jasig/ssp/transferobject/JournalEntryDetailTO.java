@@ -26,7 +26,8 @@ public class JournalEntryDetailTO extends
 
 	private ReferenceLiteTO<JournalStep> journalStep;
 
-	private ReferenceLiteTO<JournalStepDetail> journalStepDetail;
+	private Set<ReferenceLiteTO<JournalStepDetail>> journalStepDetails = Sets
+			.newHashSet();
 
 	public JournalEntryDetailTO() {
 		super();
@@ -49,14 +50,20 @@ public class JournalEntryDetailTO extends
 				.getJournalStepJournalStepDetail();
 		if (jsJsDetail == null) {
 			journalStep = null; // NOPMD
-			journalStepDetail = null; // NOPMD
+			journalStepDetails = null; // NOPMD
 		} else {
 			journalStep = jsJsDetail.getJournalStep() == null ? null
 					: new ReferenceLiteTO<JournalStep>(
 							jsJsDetail.getJournalStep());
-			journalStepDetail = jsJsDetail.getJournalStepDetail() == null ? null
-					: new ReferenceLiteTO<JournalStepDetail>(
-							jsJsDetail.getJournalStepDetail());
+
+			final Set<ReferenceLiteTO<JournalStepDetail>> newSet = Sets
+					.newHashSet();
+			if (jsJsDetail.getJournalStepDetail() != null) {
+				newSet.add(new ReferenceLiteTO<JournalStepDetail>(jsJsDetail
+						.getJournalStepDetail()));
+			}
+
+			journalStepDetails = newSet;
 		}
 	}
 
@@ -65,7 +72,24 @@ public class JournalEntryDetailTO extends
 		final Set<JournalEntryDetailTO> tos = Sets.newHashSet();
 		if ((models != null) && !models.isEmpty()) {
 			for (final JournalEntryDetail model : models) {
-				tos.add(new JournalEntryDetailTO(model)); // NOPMD
+				boolean found = false;
+				final JournalEntryDetailTO jedTo = new JournalEntryDetailTO( // NOPMD
+						model);
+
+				// check for existing JournalEntryDetail in the set being built,
+				// so it can be combined in the TO
+				for (final JournalEntryDetailTO to : tos) {
+					if (to.getJournalStep().equals(jedTo.getJournalStep())) {
+						found = true;
+						to.getJournalStepDetails()
+								.add(jedTo.getJournalStepDetails().iterator()
+										.next());
+					}
+				}
+
+				if (!found) {
+					tos.add(jedTo);
+				}
 			}
 		}
 
@@ -88,12 +112,21 @@ public class JournalEntryDetailTO extends
 		this.journalStep = journalStep;
 	}
 
-	public ReferenceLiteTO<JournalStepDetail> getJournalStepDetail() {
-		return journalStepDetail;
+	/**
+	 * Combined JournalStepDetails per JournalStep. However, if created by
+	 * itself, then this Set will only ever contain one item. But if this
+	 * JournalEntryDetailTO was created with toTOSet, then it will combine all
+	 * JournalStepDetail instances with matching JournalSteps into one
+	 * JournalEntryDetailTO.
+	 * 
+	 * @return Combined JournalStepDetails
+	 */
+	public Set<ReferenceLiteTO<JournalStepDetail>> getJournalStepDetails() {
+		return journalStepDetails;
 	}
 
-	public void setJournalStepDetail(
-			final ReferenceLiteTO<JournalStepDetail> journalStepDetail) {
-		this.journalStepDetail = journalStepDetail;
+	public void setJournalStepDetails(
+			final Set<ReferenceLiteTO<JournalStepDetail>> journalStepDetails) {
+		this.journalStepDetails = journalStepDetails;
 	}
 }

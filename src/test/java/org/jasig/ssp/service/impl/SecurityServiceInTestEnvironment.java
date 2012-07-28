@@ -41,6 +41,23 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 				new ArrayList<GrantedAuthority>(0));
 	}
 
+	@Override
+	public SspUser noAuthAdminUser() {
+		return new SspUser("no auth admin user", "", false,
+				false, false, false, new ArrayList<GrantedAuthority>(0));
+	}
+
+	@Override
+	public SspUser currentFallingBackToAdmin() {
+		final SspUser user = currentUser();
+
+		if (null == user) {
+			return noAuthAdminUser();
+		} else {
+			return user;
+		}
+	}
+
 	/**
 	 * Set the current user.
 	 * 
@@ -145,4 +162,5 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 		}
 		return false;
 	}
+
 }

@@ -591,7 +591,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
             if (store) {
                 store = Ext.StoreManager.lookup(store);
                 me.down('pagingtoolbar').bindStore(store);
-                me.bindStore(store);        
+                me.bindStore(store);
             } else {
                 me.getView().refresh();
             }
@@ -633,12 +633,12 @@ Ext.define('Ssp.util.FormRendererUtils',{
 				// find the first invalid field and display it
 				if (result.valid==true)
 				{
+					// flag the form invalid
+					result.valid=false;
 					f = form.findInvalid()[0];
 					if (f) 
 					{
 						f.ensureVisible();
-						// flag the form invalid
-						result.valid=false;
 					}
 				}
 			}
@@ -681,6 +681,65 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		    height: 300,
 		    width: 500
 		}).show();
-	}
+	},
+	
+	displaySaveSuccessMessage: function( scope ){
+		var me=scope;
+		var hideMessage = function () {
+			me.hide();
+		};
+		var id = setTimeout(hideMessage, Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE_TIMEOUT);
+		me.show();
+	},
+    
+	/**
+	 * Fix a date to correct for the GMT Offset in ExtJS.
+	 */
+	fixDateOffset: function( dateToFix ) {
+		return new Date(dateToFix.toUTCString().substr(0, 25));
+	},
+	
+	/**
+	 * Fix a date to correct for the GMT Offset in ExtJS.
+	 */
+	fixDateOffsetWithTime: function( dateToFix ) {
+		return new Date(dateToFix.getUTCFullYear(), dateToFix.getUTCMonth(), dateToFix.getUTCDate(),  dateToFix.getUTCHours(), dateToFix.getUTCMinutes(), dateToFix.getUTCSeconds());
+	},
+	
+	dateWithin: function(beginDate,endDate,checkDate) {
+    	var b,e,c;
+    	b = Date.parse(beginDate);
+    	e = Date.parse(endDate);
+    	c = Date.parse(checkDate);
+    	if((c <= e && c >= b)) {
+    		return true;
+    	}
+    	return false;
+    },
+    
+    /*
+     * This method is available to return an array of simple items
+     * with a name property for display in a multiselect list when
+     * the list is for display purposes only. This method will
+     * return an array of items that have been compared against
+     * a reference store and assigned a name from the models in
+     * the store.
+     * 
+     * @params:
+     *  referenceStore - A store with reference data for defining the assigned name label.
+     *  selectedIdsArray - An array of selected id values to compare against.
+     *  noItemsPropertyLabel - A label to display if no items matched. For instance: 'Suggestions' will create a single record looking like: No Suggestions. 
+     */
+    getSimpleItemsForDisplay: function(referenceStore, selectedIdsArray, noItemsPropertyLabel){
+    	var me=this;
+    	var selectedItems=[];
+    	Ext.Array.each( selectedIdsArray, function(id,index){
+			var item = {name: referenceStore.getById( id ).get('name')};
+			selectedItems.push( item );
+		});
+		if (selectedItems.length==0)
+			selectedItems.push({name:'No ' + noItemsPropertyLabel});
+		return selectedItems;
+    }
 });
 

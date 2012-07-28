@@ -3,10 +3,12 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	model: 'currentTask',
-    	person: 'currentPerson',
+    	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
+    	confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
-    	appEventsController: 'appEventsController'
+    	model: 'currentTask',
+    	person: 'currentPerson'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -25,20 +27,30 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 	},
  
 	init: function(){
-		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personTask') );
-		this.url = this.url.replace('{id}',this.person.get('id'));
+		var me=this;
 		
-		this.initForm();
+		// apply confidentiality level filter
+		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
 		
-    	this.appEventsController.assignEvent({eventName: 'loadTask', callBackFunc: this.initForm, scope: this});
+		me.url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personTask') );
+		me.url = me.url.replace('{id}',me.person.get('id'));
 		
-		return this.callParent(arguments);
+		me.initForm();
+		
+    	me.appEventsController.assignEvent({eventName: 'loadTask', callBackFunc: me.initForm, scope: me});    	
+    	
+		return me.callParent(arguments);
 	},
 	
     destroy: function() {
-    	this.appEventsController.removeEvent({eventName: 'loadTask', callBackFunc: this.initForm, scope: this});
+    	var me=this;  	
 
-        return this.callParent( arguments );
+    	// clear confidentiality level filter
+    	me.confidentialityLevelsStore.clearFilter();
+    	
+    	me.appEventsController.removeEvent({eventName: 'loadTask', callBackFunc: me.initForm, scope: me});
+    	
+        return me.callParent( arguments );
     },	
 	
 	initForm: function(){
@@ -52,6 +64,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	var successFunc;
     	var form = this.getView().getForm();
     	var model = this.model;
+    	var jsonData;
     	var id = model.get('id');
     	if ( form.isValid() )
     	{
@@ -67,12 +80,15 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		    		});
 			};	
     		
+			// fix timestamp due to GMT Date, set to UTC Date
+    		model.set('dueDate', me.formUtils.fixDateOffsetWithTime( model.data.dueDate ) );
+
     		if (id == "")
     		{
         		model.set('type','SSP');
         		model.set('personId', this.person.get('id') );    		
         		model.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
-
+     		
     			// add the task
     			this.apiProperties.makeRequest({
 	    			url: me.url,
@@ -86,11 +102,11 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     			// a TaskGroup item before it is saved
     			// as a Task. Task grouping is handled in the Tasks display.
         		if (model.data.group != null)
-        			delete model.data.group;    			
-    			
-    			// edit the task
+        			delete model.data.group;
+        		        		
+        		// edit the task
 	    		this.apiProperties.makeRequest({
-	    			url: me.url+id,
+	    			url: me.url+"/"+id,
 	    			method: 'PUT',
 	    			jsonData: model.data,
 	    			successFunc: successFunc

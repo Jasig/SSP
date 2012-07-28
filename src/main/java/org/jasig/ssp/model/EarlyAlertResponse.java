@@ -53,13 +53,17 @@ public class EarlyAlertResponse
 	@JoinColumn(name = "early_alert_outcome_id", nullable = false)
 	private EarlyAlertOutcome earlyAlertOutcome;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	// TODO: eager loading makes more sense, but causes cartesian results. so
+	// hold off optimizing performance until the performance pass of the system.
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "early_alert_response_early_alert_outreach",
 			joinColumns = @JoinColumn(name = "early_alert_response_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_outreach_id"))
 	private Set<EarlyAlertOutreach> earlyAlertOutreachIds;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	// TODO: eager loading makes more sense, but causes cartesian results. so
+	// hold off optimizing performance until the performance pass of the system.
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "early_alert_response_early_alert_referral",
 			joinColumns = @JoinColumn(name = "early_alert_response_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_referral_id"))

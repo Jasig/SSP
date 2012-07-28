@@ -12,39 +12,23 @@ public class AddressLabelSearchTO
 		implements Serializable {
 
 	private static final long serialVersionUID = 3118831549819428989L;
+
 	private UUID programStatus;
+
 	private List<UUID> specialServiceGroupIds;
+
 	private List<UUID> referralSourcesIds;
+
 	private String anticipatedStartTerm;
+
 	private Integer anticipatedStartYear;
+
 	private List<UUID> studentTypeIds;
+
 	private Date createDateFrom;
+
 	private Date createDateTo;
 	
-	
-	public Date getCreateDateFrom() {
-		return createDateFrom;
-	}
-
-	public void setCreateDateFrom(Date createDateFrom) {
-		this.createDateFrom = createDateFrom;
-	}
-
-	public Date getCreateDateTo() {
-		return createDateTo;
-	}
-
-	public void setCreateDateTo(Date createDateTo) {
-		this.createDateTo = createDateTo;
-	}
-
-	public List<UUID> getStudentTypeIds() {
-		return studentTypeIds;
-	}
-
-	public void setStudentTypeIds(List<UUID> studentTypeIds) {
-		this.studentTypeIds = studentTypeIds;
-	}
 
 	public UUID getProgramStatus() {
 		return programStatus;
@@ -54,19 +38,48 @@ public class AddressLabelSearchTO
 		this.programStatus = programStatus;
 	}
 
+	public Date getCreateDateFrom() {
+		return createDateFrom == null ? null : new Date(
+				createDateFrom.getTime());
+	}
+
+	public void setCreateDateFrom(final Date createDateFrom) {
+		this.createDateFrom = createDateFrom == null ? null : new Date(
+				createDateFrom.getTime());
+	}
+
+	public Date getCreateDateTo() {
+		return createDateTo == null ? null : new Date(createDateTo.getTime());
+	}
+
+	public void setCreateDateTo(final Date createDateTo) {
+		this.createDateTo = createDateTo == null ? null : new Date(
+				createDateTo.getTime());
+	}
+
+	public List<UUID> getStudentTypeIds() {
+		return studentTypeIds;
+	}
+
+	public void setStudentTypeIds(final List<UUID> studentTypeIds) {
+		this.studentTypeIds = studentTypeIds;
+	}
+
+
 	public List<UUID> getSpecialServiceGroupIds() {
 		return specialServiceGroupIds;
 	}
 
-	public void setSpecialServiceGroupIds(List<UUID> specialServiceGroupIds) {
+	public void setSpecialServiceGroupIds(
+			final List<UUID> specialServiceGroupIds) {
 		this.specialServiceGroupIds = specialServiceGroupIds;
 	}
 
-	public List<UUID> getReferralSourcesIds() { 
+	public List<UUID> getReferralSourcesIds() {
 		return referralSourcesIds;
 	}
 
-	public void setReferralSourcesIds(List<UUID> referralSourcesIds) {
+	public void setReferralSourcesIds(final List<UUID> referralSourcesIds) {
 		this.referralSourcesIds = referralSourcesIds;
 	}
 
@@ -74,7 +87,7 @@ public class AddressLabelSearchTO
 		return anticipatedStartTerm;
 	}
 
-	public void setAnticipatedStartTerm(String anticipatedStartTerm) {
+	public void setAnticipatedStartTerm(final String anticipatedStartTerm) {
 		this.anticipatedStartTerm = anticipatedStartTerm;
 	}
 
@@ -82,24 +95,27 @@ public class AddressLabelSearchTO
 		return anticipatedStartYear;
 	}
 
-	public void setAnticipatedStartYear(Integer anticipatedStartYear) {
+	public void setAnticipatedStartYear(final Integer anticipatedStartYear) {
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
- 
-
-	public AddressLabelSearchTO(UUID programStatus, List<UUID> specialServiceGroupId,
-			List<UUID> referralSourcesId, String anticipatedStartTerm,
-			Integer anticipatedStartYear, List<UUID> studentTypeIds, Date createDateFrom, Date createDateTo) {
+	public AddressLabelSearchTO(final UUID programStatus,
+			final List<UUID> specialServiceGroupId,
+			final List<UUID> referralSourcesId,
+			final String anticipatedStartTerm,
+			final Integer anticipatedStartYear,
+			final List<UUID> studentTypeIds,
+			final Date createDateFrom, final Date createDateTo) {
 		super();
 		this.programStatus = programStatus;
-		this.specialServiceGroupIds = specialServiceGroupId;
-		this.referralSourcesIds = referralSourcesId;
+		specialServiceGroupIds = specialServiceGroupId;
+		referralSourcesIds = referralSourcesId;
 		this.anticipatedStartTerm = anticipatedStartTerm;
 		this.anticipatedStartYear = anticipatedStartYear;
 		this.studentTypeIds = studentTypeIds;
-		this.createDateFrom = createDateFrom;
-		this.createDateTo = createDateTo;
+		this.createDateFrom = createDateFrom == null ? null : new Date(
+				createDateFrom.getTime());
+		this.createDateTo = createDateTo == null ? null : new Date(
+				createDateTo.getTime());
 	}
-
 }

@@ -69,7 +69,7 @@ Ext.define('Ssp.controller.tool.document.EditDocumentViewController', {
 			{
 				// editing
 				this.apiProperties.makeRequest({
-					url: url+id,
+					url: url+"/"+id,
 					method: 'PUT',
 					jsonData: jsonData,
 					successFunc: successFunc 

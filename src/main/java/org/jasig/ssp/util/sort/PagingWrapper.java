@@ -11,6 +11,7 @@ import java.util.Iterator;
  * @author jon.adams
  * 
  * @param <T>
+ *            Auditable model
  */
 public class PagingWrapper<T> implements Serializable,
 		Iterable<T> {

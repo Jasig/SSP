@@ -1,6 +1,8 @@
 package org.jasig.ssp.service.impl;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -8,12 +10,17 @@ import javax.naming.directory.Attributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.ldap.core.ContextMapper;
+import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.LdapTemplate;
+
+import com.google.common.collect.Lists;
 
 public class LdapPersonAttributesService implements PersonAttributesService {
 
@@ -87,5 +94,41 @@ public class LdapPersonAttributesService implements PersonAttributesService {
 				return val.toString();
 			}
 		}
+	}
+
+	@Override
+	public Collection<String> getCoaches() {
+		final String groupId = "COACH";
+
+		final Collection<String> coaches = Lists.newArrayList();
+
+		ldapTemplate.search(
+				"cn=" + groupId + ",ou=groups", "uniqueMember=*",
+				new ContextMapper() {
+					@Override
+					public Object mapFromContext(final Object context) {
+						final DirContextAdapter adapter = (DirContextAdapter) context;
+
+						for (String val : adapter
+								.getStringAttributes("uniqueMember")) {
+							coaches.add(extractUsername(val));
+						}
+						return null;
+					}
+				});
+
+		return coaches;
+	}
+
+	private String extractUsername(final String val) {
+		// cn=testuser1,ou=users,dc=springframework,dc=org
+		return val.substring(3, (val.length() - 35));
+	}
+
+	@Override
+	public List<Map<String, Object>> searchForUsers(
+			final HttpServletRequest req, final HttpServletResponse res,
+			final Map<String, String> query) {
+		throw new NotImplementedException();
 	}
 }

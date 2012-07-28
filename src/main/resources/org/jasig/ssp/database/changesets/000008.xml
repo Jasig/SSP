@@ -52,4 +52,106 @@
 		</rollback>
 	</changeSet>
 
+	<changeSet id="Add Appointment Table" author="daniel.bower">
+		<createTable tableName="appointment">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="appointment_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="appointment_modified_by_person_id" references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="appointment_person_id_person_id"
+					references="person(id)" />
+			</column>
+			<column name="start_time" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="end_time" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="expiration_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on appointment to ssp</sql>
+		<rollback>
+			<dropTable tableName="appointment" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet author='jon.adams' id='Add missing field to early_alert table'>
+		<addColumn tableName="early_alert">
+			<column name="early_alert_suggestion_other_description" type="text">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
+
+	<changeSet id="modify appt table" author="daniel.bower">
+		<dropColumn tableName="appointment" columnName="expiration_date" />
+		<addColumn tableName="appointment">
+			<column name="attended" type="boolean" defaultValueBoolean="false" />
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="appointment" columnName="attended" />
+			<addColumn tableName="appointment">
+				<column name="expiration_date" type="datetime">
+					<constraints nullable="true" />
+				</column>
+			</addColumn>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Add usedForTransition to journal_step" author="jon.adams">
+		<addColumn tableName="journal_step">
+			<column name="used_for_transition" type="boolean"
+				defaultValueBoolean="false" valueBoolean="false"
+				remarks="whether a journal entry with this journal step defined is automatically transitioned to a transition status"></column>
+		</addColumn>
+	</changeSet>
+
+	<changeSet
+		id="move sample deleted early_alert_suggestion to test scripts"
+		author="jon.adams">
+		<delete tableName="early_alert_suggestion">
+			<where>id='881DF3DD-1AA6-4CB8-8817-E95DAF49227A'</where>
+		</delete>
+		<rollback>
+			<insert tableName="early_alert_suggestion">
+				<column name="id" value="881DF3DD-1AA6-4CB8-8817-E95DAF49227A" />
+				<column name="name" value="Test deleted suggestion - should never be seen" />
+				<column name="description" value="TEST" />
+				<column name="created_date" valueDate="2012-07-19T12:00:00" />
+				<column name="modified_date" valueDate="2012-07-19T12:00:00" />
+				<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+				<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+				<column name="object_status" value="2" />
+				<column name="sort_order" value="100" />
+			</insert>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>

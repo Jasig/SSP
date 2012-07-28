@@ -85,7 +85,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	}
 
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagedResponse<TO> getAll(
@@ -98,7 +98,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		// Run getAll
 		final PagingWrapper<T> data = getService().getAll(
 				SortingAndPaging.createForSingleSort(
-						status == null ? ObjectStatus.ALL : status, start,
+						status == null ? ObjectStatus.ACTIVE : status, start,
 						limit, sort, sortDirection, "name"));
 
 		return new PagedResponse<TO>(true, data.getResults(), getFactory()
@@ -120,7 +120,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	}
 
 	@Override
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	TO create(@Valid @RequestBody final TO obj) throws ObjectNotFoundException,
 			ValidationException {
@@ -150,7 +150,9 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 					"You submitted without an id to the save method.  Did you mean to create?");
 		}
 
-		obj.setId(id);
+		if (obj.getId() == null) {
+			obj.setId(id);
+		}
 
 		final T model = getFactory().from(obj);
 

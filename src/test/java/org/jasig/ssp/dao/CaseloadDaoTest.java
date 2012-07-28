@@ -1,6 +1,6 @@
 package org.jasig.ssp.dao;
 
-import static org.junit.Assert.assertFalse;
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
 
 import java.util.UUID;
 
@@ -19,8 +19,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Tests for the {@link CaseloadDao} class.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class CaseloadDaoTest {
@@ -39,8 +42,7 @@ public class CaseloadDaoTest {
 		final PagingWrapper<CaseloadRecord> caseload = dao.caseLoadFor(null,
 				turing, new SortingAndPaging(ObjectStatus.ACTIVE));
 
-		assertFalse("Unable to find any students in caseload", caseload
-				.getRows().isEmpty());
+		assertNotEmpty("Unable to find any students in caseload",
+				caseload.getRows());
 	}
-
 }

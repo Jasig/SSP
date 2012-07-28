@@ -8,24 +8,28 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
-import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.ServiceReason;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.PersonProgramStatusTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -33,7 +37,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * {@link PersonController} tests
@@ -49,6 +52,12 @@ public class PersonControllerIntegrationTest {
 	@Autowired
 	private transient PersonController controller;
 
+	@Autowired
+	private transient PersonProgramStatusController personProgramStatusController;
+
+	@Autowired
+	private transient SessionFactory sessionFactory;
+
 	private static final UUID PERSON_ID = UUID
 			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
 
@@ -58,9 +67,14 @@ public class PersonControllerIntegrationTest {
 
 	private static final String PERSON_SORTEDBY_FIRSTNAME_0 = "Alan";
 
-	private static final String PERSON_SORTEDBY_FIRSTNAME_3 = "James";
+	private static final String PERSON_SORTEDBY_FIRSTNAME_7 = "James";
 
 	private static final String TEST_SCHOOLID = "legacy school id";
+
+	private static final UUID PROGRAM_STATUS_ID = UUID
+			.fromString("b2d12527-5056-a51a-8054-113116baab88");
+
+	private static final String PROGRAM_STATUS_NAME = "Active";
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -71,9 +85,7 @@ public class PersonControllerIntegrationTest {
 	@Before
 	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
-				"ROLE_PERSON_EARLY_ALERT_READ",
-				"ROLE_PERSON_EARLY_ALERT_WRITE",
-				"ROLE_PERSON_EARLY_ALERT_DELETE");
+				Permission.PERSON_PROGRAM_STATUS_WRITE);
 	}
 
 	/**
@@ -188,12 +200,15 @@ public class PersonControllerIntegrationTest {
 				PERSON_SORTEDBY_FIRSTNAME_0, person.getFirstName());
 		iter.next(); // skip checking 2nd
 		iter.next(); // skip checking 3rd
-		final PersonTO person4 = iter.next(); // check 4th
-		assertEquals("4th",
-				PERSON_SORTEDBY_FIRSTNAME_3, person4.getFirstName());
+		iter.next(); // skip checking 4th
+		iter.next(); // skip checking 5th
+		iter.next(); // skip checking 6th
+		final PersonTO person7 = iter.next(); // check 7th
+		assertEquals("7th",
+				PERSON_SORTEDBY_FIRSTNAME_7, person7.getFirstName());
 	}
 
-	@Test(expected = ConstraintViolationException.class)
+	@Test(expected = ObjectExistsException.class)
 	public void testUniqueSchoolId() throws ObjectNotFoundException,
 			ValidationException {
 		final Person person1 = createPerson();
@@ -219,22 +234,37 @@ public class PersonControllerIntegrationTest {
 						"IGNORED"));
 		person1.setServiceReasons(serviceReasons);
 
-		final Set<ReferenceLiteTO<ProgramStatus>> programStatuses = Sets
-				.newHashSet();
-		programStatuses.add(new ReferenceLiteTO<ProgramStatus>(UUID
-				.fromString("b2d12527-5056-a51a-8054-113116baab88"), "ACTIVE"));
-		programStatuses
-				.add(new ReferenceLiteTO<ProgramStatus>(UUID
-						.fromString("b2d125a4-5056-a51a-8042-d50b8eff0df1"),
-						"INACTIVE"));
-		person1.setProgramStatuses(programStatuses);
-
 		// act
 		final PersonTO person = controller.create(person1);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		assertNull("Active program status should be empty at this point.",
+				person.getCurrentProgramStatusName());
+
+		// now add statuses
+		final PersonProgramStatusTO ps1 = new PersonProgramStatusTO();
+		ps1.setEffectiveDate(new Date());
+		ps1.setPersonId(person.getId());
+		ps1.setProgramStatusId(PROGRAM_STATUS_ID);
+		final PersonProgramStatusTO ps2 = new PersonProgramStatusTO();
+		ps2.setEffectiveDate(new Date());
+		ps2.setPersonId(person.getId());
+		ps2.setProgramStatusId(UUID
+				.fromString("b2d125a4-5056-a51a-8042-d50b8eff0df1"));
+
+		// insert one we want to expire
+		personProgramStatusController.create(person.getId(), ps2);
+		// now insert current (which expires the other)
+		personProgramStatusController.create(person.getId(), ps1);
+
+		session.flush();
+		session.clear();
+
+		final PersonTO reloaded = controller.get(person.getId());
 
 		// assert
-		assertEquals("Program status count did not match.", 2, person
-				.getProgramStatuses().size());
+		assertEquals("Active program status name did not match.",
+				PROGRAM_STATUS_NAME, reloaded.getCurrentProgramStatusName());
 	}
 
 	private Person createPerson() {
@@ -245,5 +275,16 @@ public class PersonControllerIntegrationTest {
 		person.setUsername("username");
 		person.setSchoolId("legacy id");
 		return person;
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

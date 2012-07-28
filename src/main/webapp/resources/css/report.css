@@ -1,0 +1,77 @@
+/* Roster Screen */
+
+.report .sent-message {
+    margin-bottom: 16px;
+}
+
+.report .course-label {
+	font-size: 14px;
+	padding: .5em;
+}
+.report .course-select {
+	border: 1px solid darkGray;
+	font-size: 14px;
+	padding: .5em;
+}
+
+/* Form Screen */
+.report .alert-form {
+    width: 600px
+}
+
+.report .ea-label {
+    float: right;
+    margin: 3px 0;
+}
+
+.report .ea-required {
+    float: left;
+    margin: 3px 0 3px 6px;
+    color: #F00;
+}
+
+.report .ea-input, .report .ea-buttons {
+    float: right;
+    margin: 3px 0 3px 4px;
+    width: 400px;
+}
+
+.report .ea-input input, .report .ea-input select, .report .ea-input textarea {
+    width: 300px;
+}
+
+.ea-input p {
+    margin: 3px 0 6px 0;
+}
+
+.ea-input textarea {
+    height: 100px;
+}
+
+.report .ea-input ul {
+    margin: 0;
+    padding-left: 20px;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-padding-start: 20px;
+}
+
+.report .ea-clear {
+    clear: both;
+}
+
+.suggestions-dialog {
+    width: 400px;
+}
+
+.suggestions-dialog ul li {
+    list-style-type: none;
+}
+
+.suggestions-dialog li input[type="text"] {
+    width: 240px;
+}
+
+.hideable-form {
+	width: 800px;
+}

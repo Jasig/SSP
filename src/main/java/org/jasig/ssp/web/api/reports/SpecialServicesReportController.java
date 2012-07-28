@@ -13,22 +13,26 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
+import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.SpecialServicesReportingTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +47,11 @@ import com.google.common.collect.Maps;
 /**
  * Service methods for manipulating data about people in the system.
  * <p>
- * Mapped to URI path <code>/1/person</code>
+ * Mapped to URI path <code>/1/report/SpecialServices</code>
  */
-
-// TODO: Add PreAuthorize
 @Controller
 @RequestMapping("/1/report/SpecialServices")
-public class SpecialServicesReportController extends BaseController {
+public class SpecialServicesReportController extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SpecialServicesReportController.class);
@@ -57,28 +59,32 @@ public class SpecialServicesReportController extends BaseController {
 	@Autowired
 	private transient PersonService personService;
 	@Autowired
+	private transient PersonTOFactory personTOFactory;
+	@Autowired
 	private transient SpecialServiceGroupService ssgService;
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	void getSpecialServices(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
-			final @RequestParam(required = false, defaultValue="pdf") String reportType)
+			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
-
-		// List<String> specialServiceGroupIDs;
 
 		final List<Person> people = personService
 				.peopleFromSpecialServiceGroups(specialServiceGroupIds,
 						SortingAndPaging.createForSingleSort(status, null,
 								null, null, null, null));
 
+		final List<PersonTO> personTOs = personTOFactory.asTOList(people);
+
+		LOGGER.debug("Number of personTOs: " + personTOs.size());
+
 		// Get the actual names of the UUIDs for the special groups
-		List<String> specialGroupsNames = new ArrayList<String>();
+		final List<String> specialGroupsNames = new ArrayList<String>();
 		if (specialServiceGroupIds != null && specialServiceGroupIds.size() > 0) {
-			Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
+			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
 			while (ssgIter.hasNext()) {
 				specialGroupsNames
 						.add(ssgService.get(ssgIter.next()).getName());
@@ -92,34 +98,46 @@ public class SpecialServicesReportController extends BaseController {
 		parameters.put("specialServiceGroupNames", specialGroupsNames);
 		parameters.put("reportDate", new Date());
 
-		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
-				getReportablePersons(people).toArray());
+		final List<SpecialServicesReportingTO> specialServicesReportingPeopleTO = getReportablePersons(people);
+
+		JRDataSource beanDS;
+		if (specialServicesReportingPeopleTO == null
+				|| specialServicesReportingPeopleTO.size() <= 0) {
+			beanDS = new JREmptyDataSource();
+		}
+		else {
+			beanDS = new JRBeanCollectionDataSource(
+					specialServicesReportingPeopleTO);
+		}
 
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/specialServiceGroups.jasper");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
+		JasperFillManager.fillReportToStream(is, os, parameters, beanDS);
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
-		
-		if(reportType.equals("pdf"))
-		{
+
+		if ("pdf".equals(reportType)) {
+			response.setHeader("Content-disposition",
+					"attachment; filename=SpecialServicesReport.pdf");
 			JasperExportManager.exportReportToPdfStream(decodedInput,
-					response.getOutputStream());	
-		}
-		else if(reportType.equals("csv"))
-		{
+					response.getOutputStream());
+		} else if ("csv".equals(reportType)) {
 			response.setContentType("application/vnd.ms-excel");
-			response.setHeader("Content-disposition","attachment; filename=test.csv"); 
-			
-			JRCsvExporter exporter = new JRCsvExporter();
-			exporter.setParameter(JRExporterParameter.INPUT_STREAM, decodedInput);
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
-			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
-			
+			response.setHeader("Content-disposition",
+					"attachment; filename=SpecialServicesReport.csv");
+
+			final JRCsvExporter exporter = new JRCsvExporter();
+			exporter.setParameter(JRExporterParameter.INPUT_STREAM,
+					decodedInput);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
+					response.getOutputStream());
+			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
+					Boolean.FALSE);
+
 			exporter.exportReport();
-		}		
-		
+		}
+
 		response.flushBuffer();
 		is.close();
 		os.close();
@@ -130,14 +148,20 @@ public class SpecialServicesReportController extends BaseController {
 		return LOGGER;
 	}
 
-	List<SpecialServicesReportingTO> getReportablePersons(List<Person> people) {
-		List<SpecialServicesReportingTO> retVal = new ArrayList<SpecialServicesReportingTO>();
-		Iterator<Person> personIter = people.iterator();
+	public List<SpecialServicesReportingTO> getReportablePersons(
+			final List<Person> persons) {
+		final List<SpecialServicesReportingTO> retVal = new ArrayList<SpecialServicesReportingTO>();
+
+		// handle a null or empty person list
+		if (persons == null || persons.size() <= 0) {
+			return retVal;
+		}
+
+		final Iterator<Person> personIter = persons.iterator();
 		while (personIter.hasNext()) {
-			retVal.add(new SpecialServicesReportingTO(personIter.next()));
+			retVal.add(new SpecialServicesReportingTO(personIter.next())); // NOPMD
 		}
 
 		return retVal;
 	}
-
 }

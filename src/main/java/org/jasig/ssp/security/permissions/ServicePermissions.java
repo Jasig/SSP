@@ -3,6 +3,9 @@ package org.jasig.ssp.security.permissions;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 
+/**
+ * Permissions
+ */
 public enum ServicePermissions {
 	PERSON_APPOINTMENT_READ,
 	PERSON_APPOINTMENT_WRITE,
@@ -36,6 +39,7 @@ public enum ServicePermissions {
 	PERSON_TASK_READ,
 	PERSON_TASK_WRITE,
 	PERSON_TASK_DELETE,
+	PERSON_INSTRUCTION_READ,
 
 	REFERENCE_READ,
 	REFERENCE_WRITE,

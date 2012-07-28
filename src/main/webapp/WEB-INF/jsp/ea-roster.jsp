@@ -2,8 +2,8 @@
 
 <portlet:renderURL var="enterAlertUrl" escapeXml="false">
     <portlet:param name="action" value="enterAlert"/>
-    <portlet:param name="studentId" value="STUDENTID"/>
-    <portlet:param name="courseId" value="COURSEID"/>
+    <portlet:param name="schoolId" value="SCHOOLID"/>
+    <portlet:param name="formattedCourse" value="FORMATTEDCOURSE"/>
 </portlet:renderURL>
 
 <c:set var="n"><portlet:namespace/></c:set>
@@ -18,12 +18,35 @@
 <!-- Portlet -->
 <div id="${n}earlyAlert" class="fl-widget portlet early-alert" role="section">
   
+  <!-- Errors -->
+  <div class="errors">
+  </div>
+
+  <!-- Unrecognized user -->
+  <div class="portlet-msg-error portlet-msg error error-message unregognized-user" role="status" style="display: none;">
+    <div class="titlebar">
+      <h3 class="title"><spring:message code="unregognized.person"/>: ${renderRequest.remoteUser}</h3>
+    </div>
+    <div class="content">
+      <p><spring:message code="no.information.is.available.for.the.current.user.in.ssp"/></p>
+    </div>
+  </div>
+
+  <!-- Portlet Message (success) -->
+  <div class="portlet-msg-success portlet-msg success sent-message" role="status" style="display: none;">
+    <div class="titlebar">
+      <h3 class="title"><spring:message code="early.alert.sent"/></h3>
+    </div>
+    <div class="content">
+      <p><spring:message code="alert.sent.prefix"/> <strong><c:out value="${studentName}"/></strong> <spring:message code="alert.sent.suffix"/></p>
+    </div>
+  </div>
+
   <!-- Portlet Titlebar -->
   <div class="fl-widget-titlebar titlebar portlet-titlebar" role="sectionhead">
   	<h2 class="title" role="heading"><spring:message code="course.roster"/></h2>
     <div class="fl-col-flex2 toolbar" role="toolbar">
       <div class="fl-col">
-        <!--label for="courseSelect" class="course-label"><spring:message code="course"/>:</label-->
         <select class="course-select">
         </select>
       </div>
@@ -32,10 +55,12 @@
     <div style="clear:both"></div>
   </div>
 
+  <p><spring:message code="click.a.student.from.the.roster.to.send.an.early.alert"/></p>
+
   <!-- Portlet Content -->
   <div class="fl-widget-content content portlet-content" role="main">
   
-  	<!-- Portlet Message -->
+  	<!-- Portlet Message (loading) -->
   	<div class="portlet-msg-info portlet-msg info loading-message" role="status" style="display: none;">
     	<div class="titlebar">
         <h3 class="title"><spring:message code="loading"/> . . .</h3>
@@ -44,7 +69,7 @@
     	  <p><spring:message code="please.wait.while.the.system.finishes.loading.roster"/></p>
       </div>
     </div>
-    
+
     <!-- Portlet Section -->
     <div class="fl-pager roster">   
         <div class="fl-col-flex2">
@@ -81,26 +106,36 @@
           <thead>
             <tr rsf:id="header:">
               <th id="${n}firstName" class="flc-pager-sort-header"><a rsf:id="firstName" title="Click to sort" href="javascript:;"><spring:message code="first.name"/></a></th>
-              <th id="${n}middleInitial" class="flc-pager-sort-header"><a rsf:id="middleInitial" title="Click to sort" href="javascript:;"><spring:message code="middle.initial"/></a></th>
+              <th id="${n}middleName" class="flc-pager-sort-header"><a rsf:id="middleName" title="Click to sort" href="javascript:;"><spring:message code="middle.name"/></a></th>
               <th id="${n}lastName" class="flc-pager-sort-header"><a rsf:id="lastName" title="Click to sort" href="javascript:;"><spring:message code="last.name"/></a></th>
               <th id="${n}studentType" class="flc-pager-sort-header"><a rsf:id="studentType" title="Click to sort" href="javascript:;"><spring:message code="student.type"/></a></th>
+              <th id="${n}schoolId" style="display: none;">schoolId</th>
             </tr>
           </thead>
           <tbody class="roster-body">
             <tr rsf:id="row:">
-              <td headers="${n}firstName"><span rsf:id="firstName"></span></td>
-              <td headers="${n}middleInitial" rsf:id="middleInitial"></td>
+              <td headers="${n}firstName" rsf:id="firstName"></td>
+              <td headers="${n}middleName" rsf:id="middleName"></td>
               <td headers="${n}lastName" rsf:id="lastName"></td>
               <td headers="${n}studentType" rsf:id="studentType"></td>
+              <td headers="${n}schoolId" rsf:id="schoolId" class="schoolId" style="display: none;"></td>
             </tr>
           </tbody>
         </table>
-        
-        <p><spring:message code="click.a.student.from.the.roster.to.send.an.early.alert"/></p>
 
       </div>
     
   </div> <!-- end: portlet-body -->
+
+  	<!-- Error Message Template -->
+  	<div class="portlet-msg-error portlet-msg error error-message-template" role="status" style="display: none;">
+    	<div class="titlebar">
+        <h3 class="title"><span class="error-title"></span></h3>
+      </div>
+      <div class="content">
+    	  <p><span class="error-body"></span></p>
+      </div>
+    </div>
 
 </div> <!-- end: portlet -->
     	
@@ -115,7 +150,26 @@
         var $ = up.jQuery;
         var fluid = up.fluid;
 
-        ssp.EarlyAlertRoster('#${n}earlyAlert', { enterAlertUrl: '${enterAlertUrl}' });
+  <c:choose>
+    <c:when test="${user != null}">
+        var options = {
+        	urls: {
+        		courseList: '<c:url value="/api/1/person/${user.schoolId}/instruction/course"/>',
+        		enterAlert: '${enterAlertUrl}',
+        		roster: '<c:url value="/api/1/person/${user.schoolId}/instruction/course/FORMATTEDCOURSE/roster"/>'
+        	}
+        };
+        ssp.EarlyAlertRoster('#${n}earlyAlert', options);
+    </c:when>
+    <c:otherwise>
+        $('#${n}earlyAlert .unregognized-user').slideDown(1000);
+    </c:otherwise>
+  </c:choose>
+
+        // Confirm submission
+        if (${studentName != null ? 'true' : 'false'}) {
+            $('#${n}earlyAlert .sent-message').slideDown(1000);
+        }
 
     });
 </script>

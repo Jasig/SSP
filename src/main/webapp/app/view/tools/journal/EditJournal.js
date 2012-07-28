@@ -18,8 +18,14 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
             	labelWidth: 150,
             	padding: 5
             },
-        	items: [
-                {
+        	items: [{
+			    	xtype: 'datefield',
+			    	fieldLabel: 'Entry Date',
+			    	itemId: 'entryDateField',
+			    	altFormats: 'm/d/Y|m-d-Y',
+			        name: 'entryDate',
+			        allowBlank:false
+			     },{
 			        xtype: 'combobox',
 			        itemId: 'confidentialityLevelCombo',
 			        name: 'confidentialityLevelId',
@@ -33,16 +39,8 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        queryMode: 'local',
 			        allowBlank: false,
 			        forceSelection: true,
-			        anchor: '100%'
+			        anchor: '95%'
 				},{
-			    	xtype: 'datefield',
-			    	fieldLabel: 'Entry Date',
-			    	itemId: 'entryDate',
-			    	altFormats: 'm/d/Y|m-d-Y',
-			    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
-			        name: 'entryDate',
-			        allowBlank:false
-			    },{
 			        xtype: 'combobox',
 			        itemId: 'journalSourceCombo',
 			        name: 'journalSourceId',
@@ -56,7 +54,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        queryMode: 'local',
 			        allowBlank: false,
 			        forceSelection: true,
-			        anchor: '100%'
+			        anchor: '95%'
 				},{
 			        xtype: 'combobox',
 			        itemId: 'journalTrackCombo',
@@ -71,7 +69,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        queryMode: 'local',
 			        allowBlank: true,
 			        forceSelection: false,
-			        anchor: '100%'
+			        anchor: '95%'
 				},{
 		        	xtype: 'label',
 		        	text: 'Session Details (Critical Components)'
@@ -84,12 +82,12 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 		            xtype: 'button',
 		            itemId: 'addSessionDetailsButton'
 	    	    },
-                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'100% 50%' }
+                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'95% 50%' }
 				,{
                     xtype: 'textareafield',
                     fieldLabel: 'Comment',
                     itemId: 'commentText',
-                    anchor: '100%',
+                    anchor: '95%',
                     name: 'comment'
                 }],
             

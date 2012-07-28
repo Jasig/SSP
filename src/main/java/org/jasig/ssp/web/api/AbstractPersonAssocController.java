@@ -3,6 +3,7 @@ package org.jasig.ssp.web.api;
 import java.util.UUID;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -41,7 +42,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *            Transfer object type that handles the model type T.
  */
 public abstract class AbstractPersonAssocController<T extends PersonAssocAuditable, TO extends AbstractAuditableTO<T>>
-		extends BaseController {
+		extends AbstractBaseController {
 
 	/**
 	 * Logger
@@ -78,12 +79,21 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 
 	public abstract String permissionBaseName();
 
-	public void checkPermissionForOp(final String op) {
-
-		if (!securityService.hasAuthority("ROLE_PERSON_"
-				+ permissionBaseName() + "_" + op)) {
-
-			throw new AccessDeniedException("Access is denied for Operation.");
+	/**
+	 * Check authorization for the specified operation.
+	 * 
+	 * @param operation
+	 *            check authorization to this operation
+	 */
+	public void checkPermissionForOp(final String operation) {
+		final String permission = "ROLE_PERSON_" + permissionBaseName() + "_"
+				+ operation;
+		if (!securityService.hasAuthority(permission)) {
+			LOGGER.warn("Access is denied for Operation. Role required: "
+					+ permission);
+			throw new AccessDeniedException(
+					"Access is denied for Operation. Role required: "
+							+ permission);
 		}
 	}
 
@@ -122,7 +132,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	 * @throws ObjectNotFoundException
 	 *             If specified person could not be found.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<TO> getAll(@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
@@ -160,13 +170,17 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		return instantiateTO(model);
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
-	TO create(@PathVariable final UUID personId,
-			@Valid @RequestBody final TO obj) throws ValidationException,
-			ObjectNotFoundException {
+	TO create(@PathVariable @NotNull final UUID personId,
+			@Valid @RequestBody @NotNull final TO obj)
+			throws ValidationException, ObjectNotFoundException {
 
 		checkPermissionForOp("WRITE");
+
+		if (obj == null) {
+			throw new ValidationException("Missing data.");
+		}
 
 		if (obj.getId() != null) {
 			throw new ValidationException(
@@ -174,11 +188,14 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		}
 
 		if (personId == null) {
-			throw new IllegalArgumentException(
-					"Person identifier is required.");
+			throw new IllegalArgumentException("Person identifier is required.");
 		}
 
 		final T model = getFactory().from(obj);
+
+		if (model.getPerson() == null) {
+			model.setPerson(personService.get(personId));
+		}
 
 		if (null != model) {
 
@@ -227,6 +244,10 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 
 		final T model = getFactory().from(obj);
 		model.setId(id);
+
+		if (model.getPerson() == null) {
+			model.setPerson(personService.get(personId));
+		}
 
 		final T savedT = getService().save(model);
 		if (null != savedT) {

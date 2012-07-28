@@ -17,7 +17,7 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 			if (item.journalStep.id == step.id){
 				// step exists. add the journal detail
 				stepExists=true;
-				item.journalStepDetail.push(detail);
+				item.journalStepDetails.push(detail);
 			}
 		});
 		if (stepExists==false){
@@ -28,15 +28,15 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 	removeJournalDetail: function( step, detail ){
 		Ext.Array.each(this.get("journalEntryDetails"),function(item,index){
 			if (item.journalStep.id == step.id){
-				Ext.Array.each( item.journalStepDetail, function(innerItem, innerIndex){
+				Ext.Array.each( item.journalStepDetails, function(innerItem, innerIndex){
 					// remove the detail
 					if ( innerItem.id == detail.id ){
-						Ext.Array.remove(item.journalStepDetail,innerItem);
+						Ext.Array.remove(item.journalStepDetails,innerItem);
 					}
 				},this);
 								
 				// no details remain, so remove the step
-				if (item.journalStepDetail.length<1)
+				if (item.journalStepDetails.length<1)
 				{
 					this.removeJournalStep( step );
 				}
@@ -45,7 +45,7 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 	},
 	
 	addJournalStep: function( step, detail ){
-		this.get("journalEntryDetails").push( {"journalStep":step, "journalStepDetail": [detail] } );
+		this.get("journalEntryDetails").push( {"journalStep":step, "journalStepDetails": [detail] } );
 	},
 	
 	removeJournalStep: function( step ){
@@ -59,5 +59,35 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 	
 	removeAllJournalEntryDetails: function(){
 		this.set('journalEntryDetails',[]);
+	},
+	
+	getGroupedDetails: function(){
+		var groupedDetails=[];
+		var journalEntryDetails = this.get('journalEntryDetails');
+		Ext.Array.each(journalEntryDetails,function(item,index){
+			var stepName=item.journalStep.name;
+    		var details = item.journalStepDetails;
+    		Ext.Array.each(details,function(detail,index){
+    			detail.group=stepName;
+    			groupedDetails.push( detail );
+    		},this);
+    	},this);
+		return groupedDetails;
+	},
+	
+	/**
+	 * Used to clean the group property from journalEntryDetails,
+	 * so that they save correctly. This method should only be
+	 * used against json data that is ready to be saved and not
+	 * against this object itself.
+	 */
+	clearGroupedDetails: function( journalEntryDetails ){
+		Ext.Array.each(journalEntryDetails,function(item,index){
+    		var details = item.journalStepDetails;
+    		Ext.Array.each(details,function(detail,index){
+    			delete detail.group;
+    		},this);
+    	},this);
+		return journalEntryDetails;		
 	}
 });

@@ -3,6 +3,7 @@ package org.jasig.ssp.service;
 import java.util.UUID;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.Auditable;
@@ -41,7 +42,7 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	}
 
 	@Override
-	public T get(final UUID id) throws ObjectNotFoundException {
+	public T get(@NotNull final UUID id) throws ObjectNotFoundException {
 		final T obj = getDao().get(id);
 		if (ObjectStatus.ACTIVE.equals(obj.getObjectStatus())) {
 			return obj;

@@ -6,14 +6,16 @@ Ext.define('Ssp.view.admin.forms.journal.AssociateTrackStepsAdmin', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.journal.AssociateTrackStepsAdminViewController',
     inject: {
+    	authenticatedPerson: 'authenticatedPerson',
         store: 'treeStore'
     },
 	height: '100%',
 	width: '100%',
     initComponent: function(){
-    	Ext.apply(this,
+    	var me=this;
+    	Ext.apply(me,
     			{
-    			 store: this.store,
+    			 store: me.store,
     			 useArrows: true,
     			 rootVisible: false,
     			 singleExpand: true,
@@ -31,12 +33,13 @@ Ext.define('Ssp.view.admin.forms.journal.AssociateTrackStepsAdmin', {
      				            tooltip: 'Delete selected association',
      				            text: 'Delete Associations',
      				            xtype: 'button',
+     				            hidden: !me.authenticatedPerson.hasAccess('TRACK_STEP_ASSOCIATION_ADMIN_DELETE_BUTTON'),
      				            itemId: 'deleteAssociationButton'
      				        }]
      		    	    }] 
      		       	
     	});
     	
-    	return this.callParent(arguments);
+    	return me.callParent(arguments);
     }
 });

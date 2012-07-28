@@ -5,6 +5,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
     	appEventsController: 'appEventsController',
     	coachesStore: 'coachesStore',
     	person: 'currentPerson', 	
+    	sspConfig: 'sspConfig',
         studentTypesStore: 'studentTypesStore'
     },
     config: {
@@ -35,8 +36,19 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 	init: function() {
 		var me=this;
 
+		if ( me.person.get('id') != "")
+		{
+			me.getCoachCombo().setDisabled( me.sspConfig.get('coachSetFromExternalData') );
+			me.getStudentTypeCombo().setDisabled( me.sspConfig.get('studentTypeSetFromExternalData') );			
+		}
+		
 		me.studentTypesStore.load();
-		me.coachesStore.load();
+		me.coachesStore.load(function(records, operation, success) {
+	          if(!success)
+	          {
+	        	  Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
+	          }
+		 });
 		
 		me.initForm();
 		
@@ -70,10 +82,10 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 	
 	displayCoachDepartment: function( coach ){
 		var me=this;
-		me.getDepartmentField().setValue( coach.get('department') );
+		me.getDepartmentField().setValue( coach.get('departmentName') );
 		me.getPhoneField().setValue( coach.get('workPhone') );
 		me.getEmailAddressField().setValue( coach.get('primaryEmailAddress') );
-		me.getOfficeField().setValue( coach.get('office') );
+		me.getOfficeField().setValue( coach.get('officeLocation') );
 	},
 
 	onStudentTypeComboSelect: function(comp, records, eOpts){

@@ -3,30 +3,44 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson',
         appEventsController: 'appEventsController',
+        confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
-    	person: 'currentPerson',
-    	model: 'currentJournalEntry'
+    	journalEntryService: 'journalEntryService',
+    	model: 'currentJournalEntry',
+    	personLite: 'personLite'
     },
     config: {
     	containerToLoadInto: 'tools',
     	mainFormToDisplay: 'journal',
     	sessionDetailsEditorDisplay: 'journaltracktree',
-    	url: '',
     	inited: false
     },
 
     control: {
-    	'journalTrackCombo': {
-    		select: 'onJournalTrackComboSelect'
-    	},
+    	entryDateField: '#entryDateField',
     	
-    	'confidentialityLevelCombo': {
-    		select: 'onConfidentialityLevelComboSelect'
+    	journalTrackCombo: {
+    		selector: '#journalTrackCombo',
+    		listeners: {
+    			select: 'onJournalTrackComboSelect',
+        		blur: 'onJournalTrackComboBlur'
+    		} 
     	},
-    	
-    	'journalSourceCombo': {
-    		select: 'onJournalSourceComboSelect'
+
+    	confidentialityLevelCombo: {
+    		selector: '#confidentialityLevelCombo',
+    		listeners: {
+    			select: 'onConfidentialityLevelComboSelect'
+    		} 
+    	},    	
+
+    	journalSourceCombo: {
+    		selector: '#journalSourceCombo',
+    		listeners: {
+    			select: 'onJournalSourceComboSelect'
+    		} 
     	},
     	
     	'commentText': {
@@ -47,85 +61,122 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     },
     
 	init: function() {
-		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personJournalEntry') );
-		this.url = this.url.replace('{id}',this.person.get('id'));
-		
-		this.initForm();
-		
-		return this.callParent(arguments);
-    },
- 
-	initForm: function(){
-		var id = this.model.get("id");
-		this.getView().getForm().reset();
-		this.getView().getForm().loadRecord( this.model );
-		Ext.ComponentQuery.query('#confidentialityLevelCombo')[0].setValue( this.model.getConfidentialityLevelId() );
-		Ext.ComponentQuery.query('#journalSourceCombo')[0].setValue( this.model.get('journalSource').id );
-		Ext.ComponentQuery.query('#journalTrackCombo')[0].setValue( this.model.get('journalTrack').id );			
-
-		this.inited=true;
-	},    
+		var me=this;
+		// apply confidentiality level filter
+		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
+		me.initForm();	
+		return me.callParent(arguments);
+    },   
     
+	initForm: function(){
+		var me=this;
+		var id = this.model.get("id");
+		var journalTrackId = "";
+		if ( me.model.get('journalTrack') != null )
+		{
+			journalTrackId = me.model.get('journalTrack').id;
+		}
+		me.getView().getForm().reset();
+		me.getView().getForm().loadRecord( this.model );
+		me.getConfidentialityLevelCombo().setValue( me.model.getConfidentialityLevelId() );
+		me.getJournalSourceCombo().setValue( me.model.get('journalSource').id );
+		me.getJournalTrackCombo().setValue( journalTrackId );			
+		if ( me.model.get('entryDate') == null)
+		{
+			me.getEntryDateField().setValue( new Date() );
+		}
+		
+		me.inited=true;
+	},    
+	
+    destroy: function() {
+    	var me=this;  	
+
+    	// clear confidentiality level filter
+    	me.confidentialityLevelsStore.clearFilter();
+    	
+        return me.callParent( arguments );
+    },	
+	
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
 		var form = this.getView().getForm();
 		var values = form.getValues();
-		var handleSuccess = me.saveSuccess;
+		//var handleSuccess = me.saveSuccess;
+		var error = false;
+		var journalTrackId="";		
 		url = this.url;
 		record = this.model;
 		id = record.get('id');
 		
-		if (form.isValid())
-		{			
-    		// if a journal track is selected then validate that the details are set
-    		if ( (record.data.journalTrack.id != null && record.data.journalTrack.id != "") && record.data.journalEntryDetails.length == 0)
-    		{
-    			Ext.Msg.alert('Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
-    		}else{
-    			
-    			jsonData = record.data;
-    			
-    			// null out journalTrack.id prop in case
-    			if ( record.data.journalTrack == "" )
-    			{
-    				record.data.journalTrack = null;
-    				record.data.journalEntryDetails = null;
-    			}
-    			
-    			console.log( 'EditJournalViewController->onSaveClick' );
-
-    			if (id == "")
-    			{	
-    				// Prevent tripping null errors
-    				// since no entry date will exist
-    				delete jsonData.entryDate;
-    				
-    				// adding
-    				this.apiProperties.makeRequest({
-    					url: url,
-    					method: 'POST',
-    					jsonData: jsonData,
-    					successFunc: handleSuccess 
-    				});
-    			}else{
-    				// editing
-    				this.apiProperties.makeRequest({
-    					url: url+id,
-    					method: 'PUT',
-    					jsonData: jsonData,
-    					successFunc: handleSuccess 
-    				});
-    			}
-    		}
-		}else{
+		// ensure all required fields are supplied
+		if ( !form.isValid() )
+		{	
+			error = true;
 			Ext.Msg.alert('Error','Please correct the errors in your Journal Entry.');
 		}
+		
+		// ensure a comment or journal track are supplied
+		if ( record.get('comment') == "" && (record.data.journalTrack.id == null || record.data.journalTrack.id == "") )
+		{
+			error = true;
+			Ext.Msg.alert('Error','You are required to supply a Comment or Journal Track Details for a Journal Entry.');			
+		}
+		
+		if (error == false)
+		{
+    		// if a journal track is selected then validate that the details are set
+    		if ( record.data.journalTrack != null)
+    		{
+    			journalTrackId = record.data.journalTrack.id;
+    		}
+			if ( (journalTrackId != null && journalTrackId != "") && record.data.journalEntryDetails.length == 0)
+    		{
+    			Ext.Msg.alert('SSP Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
+    		}else{
 
+    			// fix date from GMT to UTC
+        		record.set('entryDate', me.formUtils.fixDateOffsetWithTime( record.data.entryDate ) );
+
+    			jsonData = record.data;
+    			    			
+    			// null out journalTrack.id prop to prevent failure
+    			// from an empty string on null field
+    			if ( jsonData.journalTrack == "" )
+    			{
+    				jsonData.journalTrack = null;
+    				jsonData.journalEntryDetails = null;
+    			}
+    			
+    			// clean the group property from the journal
+    			// entry details. It was only used for display
+    			// of the details.
+    			if ( jsonData.journalEntryDetails != null )
+    			{
+    				jsonData.journalEntryDetails = record.clearGroupedDetails( jsonData.journalEntryDetails );
+    			}
+    			    			
+    			me.getView().setLoading( true );
+    			
+    			me.journalEntryService.save( me.personLite.get('id'), jsonData, {
+    				success: me.saveSuccess,
+    				failure: me.saveFailure,
+    				scope: me
+    			});
+    		}			
+		}
 	},
 	
-	saveSuccess: function(response, view) {
+	saveSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
 		me.displayMain();
+	},
+
+	saveFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
 	},
 	
 	onCancelClick: function(button){
@@ -162,6 +213,16 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     			this.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
     		}
      	}
+	},
+	
+	onJournalTrackComboBlur: function( comp, event, eOpts){
+		var me=this;
+    	if (comp.getValue() == "")
+    	{
+     		me.model.set("journalTrack","");
+     		me.model.removeAllJournalEntryDetails();
+     		me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
+     	}		
 	},
 	
 	onCommentChange: function(comp, newValue, oldValue, eOpts){

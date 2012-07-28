@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * PersonEducationGoal transfer object factory implementation
+ */
 @Service
 @Transactional(readOnly = true)
 public class PersonEducationGoalTOFactoryImpl extends
@@ -54,8 +57,8 @@ public class PersonEducationGoalTOFactoryImpl extends
 		model.setHowSureAboutMajor(tObject.getHowSureAboutMajor());
 		model.setDescription(tObject.getDescription());
 		model.setPlannedOccupation(tObject.getPlannedOccupation());
-		model.setEducationGoal((tObject.getEducationGoalId() == null) ? null :
-				educationGoalService.get(tObject.getEducationGoalId()));
+		model.setEducationGoal(tObject.getEducationGoalId() == null ? null
+				: educationGoalService.get(tObject.getEducationGoalId()));
 
 		return model;
 	}

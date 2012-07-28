@@ -126,10 +126,13 @@ public class IntakeControllerIntegrationTest {
 		final Person person = personService.get(STUDENT_ID);
 		obj.setPerson(personTOFactory.from(person));
 
+		person.setAnticipatedStartTerm("spring");
+		person.setAnticipatedStartYear(2012);
+		person.setActualStartTerm("spring");
+		person.setActualStartYear(2012);
+		person.setAbilityToBenefit(true);
+
 		final PersonDemographics personDemographics = new PersonDemographics();
-		personDemographics.setAbilityToBenefit(true);
-		personDemographics.setAnticipatedStartTerm("spring");
-		personDemographics.setAnticipatedStartYear("fall");
 		personDemographics.setChildAges("age 1");
 		personDemographics.setChildCareArrangement(new ChildCareArrangement());
 		personDemographics.setChildCareNeeded(true);
@@ -176,6 +179,12 @@ public class IntakeControllerIntegrationTest {
 		personEducationGoal.setMilitaryBranchDescription("mb");
 		personEducationGoal.setDescription("description");
 		personEducationGoal.setPlannedOccupation("fd");
+		personEducationGoal.setPlannedMajor("Computer Science");
+		personEducationGoal.setCareerDecided(false);
+		personEducationGoal.setHowSureAboutOccupation(2);
+		personEducationGoal.setConfidentInAbilities(true);
+		personEducationGoal
+				.setAdditionalAcademicProgramInformationNeeded(false);
 
 		obj.setPersonEducationGoal(new PersonEducationGoalTO(
 				personEducationGoal));
@@ -214,18 +223,19 @@ public class IntakeControllerIntegrationTest {
 					.getChallengeChallengeReferrals()) {
 				assertTrue(
 						"All Referrals with !ShowInStudentIntake should not have been returned.",
-						referral.isShowInStudentIntake());
+						referral.getShowInStudentIntake());
 			}
 		}
 	}
 
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
 	@Test
 	public void testLogger() {
 		final Logger logger = controller.getLogger();
-		logger.info("Test");
-		assertNotNull("logger should not have been null.", logger);
-		assertEquals("Logger name was not specific to the class.",
-				"org.jasig.ssp.web.api.tool.IntakeController",
-				logger.getName());
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

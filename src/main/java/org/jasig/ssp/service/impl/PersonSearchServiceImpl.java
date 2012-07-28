@@ -7,6 +7,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchResult;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -26,6 +27,9 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 	@Autowired
 	private transient PersonSearchDao dao;
+
+	@Autowired
+	private transient PersonProgramStatusService personProgramStatus;
 
 	@Autowired
 	private transient ProgramStatusService programStatusService;
@@ -49,7 +53,8 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		final Collection<PersonSearchResult> personSearchResults = Lists
 				.newArrayList();
 		for (final Person person : people) {
-			personSearchResults.add(new PersonSearchResult(person));
+			personSearchResults.add(new PersonSearchResult(person, // NOPMD
+					personProgramStatus));
 		}
 
 		return new PagingWrapper<PersonSearchResult>(people.getResults(),

@@ -1,5 +1,9 @@
 /* Roster Screen */
 
+.early-alert .sent-message, .early-alert .error-message {
+    margin-bottom: 16px;
+}
+
 .early-alert .course-label {
 	font-size: 14px;
 	padding: .5em;
@@ -55,4 +59,20 @@
 
 .early-alert .ea-clear {
     clear: both;
+}
+
+.suggestions-dialog {
+    width: 400px;
+}
+
+.suggestions-dialog ul li {
+    list-style-type: none;
+}
+
+.suggestions-dialog li input[type="text"] {
+    width: 240px;
+}
+
+.early-alert .invalid {
+    border: 1px red solid;
 }

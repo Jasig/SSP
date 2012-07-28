@@ -28,11 +28,6 @@ Ext.define('Ssp.view.tools.sis.StudentInformationSystem', {
 				            		autoScroll: true,
 				            		border: 0,
 				            		items: [{xtype: 'sisassessment'}]
-				        		},{
-				            		title: 'ACT',
-				            		autoScroll: true,
-				            		border: 0,
-				            		items: [{xtype: 'sisact'}]
 				        		}]
 				    })]
 			    

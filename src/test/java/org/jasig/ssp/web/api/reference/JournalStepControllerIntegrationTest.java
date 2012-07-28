@@ -10,15 +10,20 @@ import static org.junit.Assert.fail;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -39,6 +44,9 @@ public class JournalStepControllerIntegrationTest {
 	@Autowired
 	private transient JournalStepController controller;
 
+	@Autowired
+	private transient SessionFactory sessionFactory;
+
 	private static final UUID JOURNALSTEP_ID = UUID
 			.fromString("aba1440c-ab5b-11e1-ba73-0026b9e7ff4c");
 
@@ -46,6 +54,10 @@ public class JournalStepControllerIntegrationTest {
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
+
+	private static final String TEST_STRING1 = "testString1";
+
+	private static final String TEST_STRING2 = "testString1";
 
 	/**
 	 * Setup the security service with the admin user for use by
@@ -60,11 +72,14 @@ public class JournalStepControllerIntegrationTest {
 	/**
 	 * Test the {@link JournalStepController#get(UUID)} action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -84,11 +99,14 @@ public class JournalStepControllerIntegrationTest {
 	 * Test that the {@link JournalStepController#get(UUID)} action returns the
 	 * correct validation errors when an invalid ID is sent.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetOfInvalidId() throws Exception {
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -104,47 +122,53 @@ public class JournalStepControllerIntegrationTest {
 	 * Test the {@link JournalStepController#create(JournalStepTO)} and
 	 * {@link JournalStepController#delete(UUID)} actions.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerCreateAndDelete() throws Exception {
+	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
+			ValidationException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final String testString1 = "testString1";
-		final String testString2 = "testString1";
-
 		// Check validation of 'no ID for create()'
-		JournalStepTO obj = new JournalStepTO(UUID.randomUUID(), testString1,
-				testString2); // NOPMD
+		final JournalStepTO journalStep = new JournalStepTO(UUID.randomUUID(),
+				TEST_STRING1,
+				TEST_STRING2); // NOPMD
 		try {
-			obj = controller.create(obj);
-			fail("Calling create with an object with an ID should have thrown a validation excpetion.");
-		} catch (final ValidationException exc) {
+			controller.create(journalStep);
+			fail("Calling create with an object with an ID should have thrown a validation excpetion."); // NOPMD
+		} catch (final ValidationException exc) { // NOPMD
 			/* expected */
 		}
 
 		// Now create a valid JournalStep
-		obj = new JournalStepTO(null, testString1, testString2); // NOPMD
-		obj = controller.create(obj);
+		final JournalStepTO journalStep2 = new JournalStepTO(null,
+				TEST_STRING1,
+				TEST_STRING2); // NOPMD
+		journalStep2.setUsedForTransition(true);
+		final JournalStepTO saved = controller.create(journalStep2);
 
 		assertNotNull(
 				"Returned JournalStepTO from the controller should not have been null.",
-				obj);
+				saved);
 		assertNotNull(
 				"Returned JournalStepTO.ID from the controller should not have been null.",
-				obj.getId());
+				saved.getId());
 		assertEquals(
 				"Returned JournalStepTO.Name from the controller did not match.",
-				testString1, obj.getName());
+				TEST_STRING1, saved.getName());
 		assertEquals(
 				"Returned JournalStepTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
+				Person.SYSTEM_ADMINISTRATOR_ID, saved.getCreatedBy().getId());
+		assertTrue("UsedForTransition value did not match.",
+				saved.isUsedForTransition());
 
 		assertTrue("Delete action did not return success.",
-				controller.delete(obj.getId()).isSuccess());
+				controller.delete(saved.getId()).isSuccess());
 	}
 
 	/**
@@ -160,5 +184,75 @@ public class JournalStepControllerIntegrationTest {
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
 				list.isEmpty());
+	}
+
+	/**
+	 * Test the
+	 * {@link JournalStepController#getAllForJournalStep(UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * action.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test.
+	 */
+	@Test
+	public void testControllerAllForJournalTrack()
+			throws ObjectNotFoundException {
+		final Collection<JournalStepDetailTO> list = controller
+				.getAllForJournalStep(JOURNALSTEP_ID, ObjectStatus.ALL, 0, 10,
+						null, null).getRows();
+
+		assertNotNull("List should not have been null.", list);
+		assertFalse("List action should have returned some objects.",
+				list.isEmpty());
+	}
+
+	/**
+	 * Test the
+	 * {@link JournalStepController#getAllForJournalStep(UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * action.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             Should not be thrown in this test.
+	 */
+	@Test
+	public void testControllerDelete() throws ObjectNotFoundException {
+
+		final Collection<JournalStepDetailTO> beforeDelete = controller
+				.getAllForJournalStep(JOURNALSTEP_ID, ObjectStatus.ACTIVE, 0,
+						10,
+						null, null).getRows();
+		final long before = beforeDelete.size();
+
+		final ServiceResponse response = controller
+				.removeJournalStepDetailFromJournalStep(JOURNALSTEP_ID,
+						beforeDelete.iterator().next().getId());
+		assertTrue("Delete should have returned true.", response.isSuccess());
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		session.clear();
+
+		final Collection<JournalStepDetailTO> list = controller
+				.getAllForJournalStep(JOURNALSTEP_ID, ObjectStatus.ACTIVE, 0,
+						10, null, null).getRows();
+
+		assertNotNull("List should not have been null.", list);
+		assertFalse("List action should have returned some objects.",
+				list.isEmpty());
+		assertEquals("List should have included one less than before delete.",
+				before - 1, list.size());
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		// arrange, act
+		final Logger logger = controller.getLogger();
+
+		// assert
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

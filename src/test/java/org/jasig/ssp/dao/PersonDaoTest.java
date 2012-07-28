@@ -19,6 +19,7 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Lists;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("reference/dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class PersonDaoTest { // NOPMD Test suites love lots of methods!
@@ -44,7 +45,7 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 	private static final UUID PERSON_ID = UUID
 			.fromString("F549ECAB-5110-4CC1-B2BB-369CAC854DEA");
 
-	private static final String PERSON_USER_ID = "userId ken.1";
+	private static final String PERSON_USER_ID = "ken";
 
 	@Autowired
 	private transient PersonDao dao;
@@ -97,7 +98,7 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 	@Test
 	public void testGetFromUserId() {
 		// act
-		final Person person = dao.fromUserId(PERSON_USER_ID);
+		final Person person = dao.fromUsername(PERSON_USER_ID);
 
 		// assert
 		assertNotNull("Person should not have been null.", person);
@@ -153,7 +154,7 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 	}
 
 	@Test
-	public void getPeopleInList() {
+	public void getPeopleInList() throws ValidationException {
 		final List<UUID> personIds = Lists.newArrayList();
 		personIds.add(UUID.randomUUID());
 		personIds.add(UUID.randomUUID());
@@ -193,5 +194,18 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 			assertNotNull("List item should not have been null.",
 					object.getId());
 		}
+	}
+
+	@Test(expected = ObjectNotFoundException.class)
+	public void getBySchoolIdException() throws ObjectNotFoundException {
+		dao.getBySchoolId("borkborkbork");
+	}
+
+	@Test
+	public void getBySchoolId() throws ObjectNotFoundException {
+		final Person person = dao.getBySchoolId("ken.1");
+		assertNotNull("ken should have been found", person);
+		assertEquals("first name should be set", "Kenneth",
+				person.getFirstName());
 	}
 }

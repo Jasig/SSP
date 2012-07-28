@@ -11,7 +11,8 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 	width: '100%',
     height: '100%',    
 	initComponent: function() {
-		Ext.apply(this, 
+		var me=this;
+		Ext.apply(me, 
 				{
 					autoScroll: true,
     		        border: 0,	
@@ -31,13 +32,18 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				            title: '',
 				            defaultType: 'textfield',
 				            defaults: {
-				                anchor: '100%'
+				                anchor: '95%'
 				            },
-				       items: [{
+				       items: [/*{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Intake Date',
 				        name: 'studentIntakeCreatedDate'
-				    },{
+				    },*/{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Intake Completion Date',
+				        name: 'studentIntakeCompleteDate',
+				        renderer: Ext.util.Format.dateRenderer('m/d/Y')
+				    }/*,{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Agreed to Confidentiality',
 				        name: 'confidentialityAgreement'
@@ -45,7 +51,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Date of Agreement',
 				        name: 'confidentialityAgreementDate'
-				    },{
+				    }*/,{
 				        fieldLabel: 'First Name',
 				        name: 'firstName',
 				        itemId: 'firstName',
@@ -53,8 +59,8 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:false
 				    },{
 				        fieldLabel: 'Middle Initial',
-				        name: 'middleInitial',
-				        itemId: 'middleInitial',
+				        name: 'middleName',
+				        itemId: 'middleName',
 				        maxLength: 1,
 				        allowBlank:true
 				    },{
@@ -125,7 +131,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        name: 'state',
 				        fieldLabel: 'State',
 				        emptyText: 'Select a State',
-				        store: this.statesStore,
+				        store: me.statesStore,
 				        valueField: 'code',
 				        displayField: 'title',
 				        mode: 'local',
@@ -158,6 +164,6 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    }]
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

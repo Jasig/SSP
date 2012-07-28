@@ -11,6 +11,11 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
+		        fieldDefaults: {
+		        msgTarget: 'side',
+		        labelAlign: 'right',
+		        labelWidth: 125
+		    },
 			border: 0,
 			items: [{
 		        xtype: 'checkboxgroup',

@@ -15,9 +15,11 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 		Ext.apply(this, 
 				{
 					autoScroll: true,
-					bodyPadding: 5,
-					border: 0,
-				    layout: 'anchor',
+				    layout: {
+				    	type: 'vbox',
+				    	align: 'stretch'
+				    },
+				    border: 0,
 				    defaults: {
 				        anchor: '100%'
 				    },
@@ -30,10 +32,11 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				    items: [{
 				            xtype: 'fieldset',
 							border: 0,
+							padding: 10,
 				            title: '',
 				            defaultType: 'textfield',
 				            defaults: {
-				                anchor: '100%'
+				                anchor: '95%'
 				            },
 				       items: [{
 				        xtype: 'combobox',

@@ -47,7 +47,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
-public abstract class AbstractControllerHttpTestSupport<C extends BaseController, TO extends TransferObject<T>, T extends Auditable> { // NOPMD
+public abstract class AbstractControllerHttpTestSupport<C extends AbstractBaseController, TO extends TransferObject<T>, T extends Auditable> { // NOPMD
 	// Class needs to be abstract so it won't try to run tests on it
 
 	@Autowired

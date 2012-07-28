@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="externalUser" value="a new UUID" />
+	<property name="check_for_manage_integration_database_config_sql"
+		value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+		value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+	<!-- If there is a config table and it does not already contain the manage_integration_database 
+		key then add it and set its value to true -->
+	<changeSet id="Add manage_integration_database key" author="daniel.bower">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="manage_integration_database key already exists in the config table, skipping creation">
+			<tableExists tableName="config" />
+			<sqlCheck expectedResult="0">select count(id) from config where
+				name='manage_integration_database'
+			</sqlCheck>
+		</preConditions>
+
+		<insert tableName="config">
+			<column name="id" value="333c4e98-ccef-11e1-8ff5-0026b9e7ff4c" />
+			<column name="name" value="manage_integration_database" />
+			<column name="description"
+				value="Whether the system should manage the integration database.  If true the tables and views will be manipulated automatically as the application evolves (tables added/modified/dropped, views added/modified/dropped).  If false, the administrator must follow and apply the changes." />
+			<column name="value">true</column>
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="100" />
+			<column name="default_value" value="true" />
+		</insert>
+
+		<rollback>
+			<delete tableName="config">
+				<where>id='333c4e98-ccef-11e1-8ff5-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create external data user" author="jon.adams">
+		<insert tableName="person">
+			<column name="id" value="a9a337fc-c35e-4bcc-91a8-06de3b6b441e" />
+			<column name="first_name" value="External" />
+			<column name="last_name" value="Data" />
+			<column name="primary_email_address" value="test@sinclair.edu" />
+			<column name="username" value="_external" />
+			<column name="school_id" value="_external" />
+			<column name="created_date" valueDate="2012-07-13T20:00:00" />
+			<column name="modified_date" valueDate="2012-07-13T20:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="person">
+				<where>id='a9a337fc-c35e-4bcc-91a8-06de3b6b441e'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Add external_term table" author="daniel.bower">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createTable tableName="external_term">
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="code" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+			<column name="start_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="end_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="report_year" type="integer">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_term">
+			select code, name, start_date, end_date, report_year from external_term
+		</createView>
+
+		<sql>grant all on external_term to ssp</sql>
+		<sql>grant all on v_external_term to ssp</sql>
+		<rollback>
+			<dropView viewName="v_external_term" />
+			<dropTable tableName="external_term" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet id="Update v_external_term view" author="jon.adams">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<dropView viewName="v_external_term" />
+		<createView viewName="v_external_term">
+			select ROW_NUMBER() OVER (ORDER BY code) as id, code, name, start_date, end_date, report_year from external_term
+		</createView>
+
+		<sql>grant all on v_external_term to ssp</sql>
+		<rollback>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Add external_faculty_course table" author="jon.adams">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_faculty_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createTable tableName="external_faculty_course">
+			<column name="faculty_school_id" type="${nvarchar.type}(50)"
+				remarks="The school_id used to identify a faculty member.">
+				<constraints nullable="false" />
+			</column>
+			<column name="term_code" type="${nvarchar.type}(25)"
+				remarks="Specifies what term the course was taught by the faculty member. Equivalent to external_term.code value.">
+				<constraints nullable="false" />
+			</column>
+			<column name="formatted_course" type="${nvarchar.type}(35)"
+				remarks="The formatted course subject abbreviation and number">
+				<constraints nullable="false" />
+			</column>
+			<column name="title" type="${nvarchar.type}(100)" remarks="The title of the course.">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_faculty_course">
+			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, term_code, formatted_course, title from external_faculty_course
+		</createView>
+
+		<sql>grant all on external_faculty_course to ssp</sql>
+		<sql>grant all on v_external_faculty_course to ssp</sql>
+		<rollback>
+			<dropView viewName="v_external_faculty_course" />
+			<dropTable tableName="external_faculty_course" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+
+	<changeSet id="Add external_faculty_course_roster table" author="jon.adams">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_faculty_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createTable tableName="external_faculty_course_roster">
+			<column name="faculty_school_id" type="${nvarchar.type}(50)"
+				remarks="The school_id used to identify a faculty member.">
+				<constraints nullable="false" />
+			</column>
+			<column name="school_id" type="${nvarchar.type}(50)" remarks="Student's school id.">
+				<constraints nullable="false" />
+			</column>
+			<column name="first_name" type="${nvarchar.type}(50)" remarks="Student's first name.">
+				<constraints nullable="false" />
+			</column>
+			<column name="middle_name" type="${nvarchar.type}(50)"
+				remarks="Student's middle name.">
+				<constraints nullable="true" />
+			</column>
+			<column name="last_name" type="${nvarchar.type}(50)" remarks="Student's last name.">
+				<constraints nullable="false" />
+			</column>
+			<column name="primary_email_address" type="${nvarchar.type}(50)"
+				remarks="Student's primary email address. Typically the institution-assigned email address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="term_code" type="${nvarchar.type}(25)"
+				remarks="Specifies what term the course was taught by the faculty member. Equivalent to external_term.code value.">
+				<constraints nullable="false" />
+			</column>
+			<column name="formatted_course" type="${nvarchar.type}(35)"
+				remarks="The formatted course subject abbreviation and number">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_faculty_course_roster">
+			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, school_id, first_name, middle_name, last_name, primary_email_address, term_code, formatted_course from external_faculty_course_roster
+		</createView>
+
+		<sql>grant all on external_faculty_course_roster to ssp</sql>
+		<sql>grant all on v_external_faculty_course_roster to ssp</sql>
+		<rollback>
+			<dropView viewName="v_external_faculty_course_roster" />
+			<dropTable tableName="external_faculty_course_roster" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+	
+	<changeSet id="Add external_registration_status_by_term table"
+		author="daniel.bower">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_registration_status_by_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createTable tableName="external_registration_status_by_term">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="term_code" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+			<column name="registered_course_count" type="integer">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_registration_status_by_term">
+			select ROW_NUMBER() OVER (ORDER BY school_id, term_code) as id, school_id, term_code, registered_course_count from external_registration_status_by_term
+		</createView>
+
+		<sql>grant all on external_registration_status_by_term to ssp</sql>
+		<sql>grant all on v_external_registration_status_by_term to ssp</sql>
+		<rollback>
+			<dropView viewName="v_external_registration_status_by_term" />
+			<dropTable tableName="external_registration_status_by_term" />
+		</rollback>
+
+	</changeSet>
+
+
+	<changeSet id="Add external_person table"
+		author="daniel.bower">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_person table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createTable tableName="external_person">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="username" type="${nvarchar.type}(50)">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			<column name="first_name" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="middle_name" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="last_name" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="birth_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+			<column name="primary_email_address" type="${nvarchar.type}(100)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_line_1" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="address_line_2" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="city" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="state" type="char(2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="zip_code" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+			<column name="home_phone" type="${nvarchar.type}(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="work_phone" type="${nvarchar.type}(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="office_location" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="office_hours" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="department_name" type="${nvarchar.type}(100)">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_term" type="${nvarchar.type}(20)">
+				<constraints nullable="true" />
+			</column>
+			<column name="actual_start_year" type="integer">
+				<constraints nullable="true" />
+			</column>
+			<column name="marital_status" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+			<column name="ethnicity" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+			<column name="gender" type="char(1)">
+				<constraints nullable="true" />
+			</column>
+			<column name="is_local" type="char(1)">
+				<constraints nullable="true" />
+			</column>
+			<column name="balance_owed" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="coach_school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<createIndex tableName="external_person" indexName="idx_external_person_username">
+			<column name="username" />
+		</createIndex>
+		
+		<createIndex tableName="external_person" indexName="idx_external_person_school_id">
+			<column name="school_id"></column>
+		</createIndex>
+		
+		<createView viewName="v_external_person">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id,
+			school_id, username, first_name, middle_name, last_name, birth_date, primary_email_address,
+			address_line_1, address_line_2, city, state, zip_code, home_phone, work_phone,
+			office_location, office_hours, department_name, actual_start_term, actual_start_year, 
+			marital_status, ethnicity, gender, is_local, balance_owed, coach_school_id 
+			from external_person
+		</createView>
+
+		<sql>grant all on external_person to ssp</sql>
+		<sql>grant all on v_external_person to ssp</sql>
+		<rollback>
+			<dropView viewName="v_external_person" />
+			<dropTable tableName="external_person" />
+		</rollback>
+
+	</changeSet>
+	
+</databaseChangeLog>

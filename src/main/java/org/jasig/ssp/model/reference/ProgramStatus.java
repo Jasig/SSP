@@ -22,6 +22,9 @@ public class ProgramStatus extends AbstractReference implements Auditable {
 	public static final UUID ACTIVE_ID = UUID
 			.fromString("b2d12527-5056-a51a-8054-113116baab88");
 
+	public static final UUID TRANSITIONED_ID = UUID
+			.fromString("b2d125e3-5056-a51a-800f-6891bc7d1ddc");
+
 	@Column(nullable = false)
 	@NotNull
 	private boolean programStatusChangeReasonRequired = false;
@@ -98,5 +101,11 @@ public class ProgramStatus extends AbstractReference implements Auditable {
 	public int hashCode() { // NOPMD by jon.adams
 		return hashPrime() * super.hashCode()
 				* (programStatusChangeReasonRequired ? 3 : 5);
+	}
+
+	@Override
+	public String toString() {
+		return "Program Status: \"" + super.getName() + " (" + super.toString()
+				+ ")";
 	}
 }

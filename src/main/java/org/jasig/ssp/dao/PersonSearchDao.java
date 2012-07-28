@@ -1,9 +1,12 @@
 package org.jasig.ssp.dao;
 
-import java.security.InvalidParameterException;
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -16,6 +19,9 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+/**
+ * PersonSearch DAO
+ */
 @Repository
 public class PersonSearchDao extends AbstractDao<Person> {
 
@@ -26,10 +32,30 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	@Autowired
 	private transient ConfigService configService;
 
-	public PagingWrapper<Person> searchBy(
-			final ProgramStatus programStatus, final Boolean outsideCaseload,
-			final String searchTerm, final Person advisor,
-			final SortingAndPaging sAndP) {
+	/**
+	 * Search people by the specified terms.
+	 * 
+	 * @param programStatus
+	 *            program status filter
+	 * @param outsideCaseload
+	 *            false allows searches without checking the Coach (advisor)
+	 *            property; defaults to true
+	 * @param searchTerm
+	 *            Search term that search first and last name and school ID;
+	 *            required
+	 * @param advisor
+	 *            required if outsideCaseload is not {@link Boolean#FALSE}.
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return List of people that match the specified filters
+	 */
+	public PagingWrapper<Person> searchBy(final ProgramStatus programStatus,
+			final Boolean outsideCaseload, @NotNull final String searchTerm,
+			final Person advisor, final SortingAndPaging sAndP) {
+
+		if (!StringUtils.isNotBlank(searchTerm)) {
+			throw new IllegalArgumentException("search term must be specified");
+		}
 
 		final Criteria query = createCriteria();
 
@@ -39,37 +65,38 @@ public class PersonSearchDao extends AbstractDao<Person> {
 							programStatus));
 		}
 
-		if (!outsideCaseload) {
+		if (Boolean.FALSE.equals(outsideCaseload)) {
 			query.add(Restrictions.eq("coach", advisor));
 		}
 
 		// searchTerm : Can be firstName, lastName, studentId or firstName + ' '
 		// + lastName
 		final Disjunction terms = Restrictions.disjunction();
-		if (searchTerm == null) {
-			throw new InvalidParameterException("search term must be specified");
-		} else {
-			final String searchTermLowercase = searchTerm.toLowerCase(Locale
-					.getDefault());
-			terms.add(Restrictions.ilike("firstName", searchTermLowercase,
-					MatchMode.ANYWHERE));
-			terms.add(Restrictions.ilike("lastName", searchTermLowercase,
-					MatchMode.ANYWHERE));
-			terms.add(Restrictions.ilike("schoolId", searchTermLowercase,
-					MatchMode.ANYWHERE));
 
-			terms.add(Restrictions
-					.sqlRestriction(
-							"lower({alias}.first_name) "
-									+ configService.getDatabaseConcatOperator()
-									+ " ' ' "
-									+ configService.getDatabaseConcatOperator()
-									+ " lower({alias}.last_name) like ? ",
-							searchTermLowercase, new StringType()));
+		final String searchTermLowercase = searchTerm.toLowerCase(Locale
+				.getDefault());
+		terms.add(Restrictions.ilike("firstName", searchTermLowercase,
+				MatchMode.ANYWHERE));
+		terms.add(Restrictions.ilike("lastName", searchTermLowercase,
+				MatchMode.ANYWHERE));
+		terms.add(Restrictions.ilike("schoolId", searchTermLowercase,
+				MatchMode.ANYWHERE));
 
-		}
+		terms.add(Restrictions
+				.sqlRestriction(
+						"lower({alias}.first_name) "
+								+ configService.getDatabaseConcatOperator()
+								+ " ' ' "
+								+ configService.getDatabaseConcatOperator()
+								+ " lower({alias}.last_name) like ? ",
+						searchTermLowercase, new StringType()));
+
 		query.add(terms);
 
-		return processCriteriaWithPaging(query, sAndP);
+		// eager load program status
+		query.setFetchMode("personProgramStatus", FetchMode.JOIN);
+		query.setFetchMode("personProgramStatus.programStatus", FetchMode.JOIN);
+
+		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 }

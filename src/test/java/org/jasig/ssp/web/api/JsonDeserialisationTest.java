@@ -20,7 +20,6 @@ import com.google.common.collect.Lists;
  * @author jon.adams
  */
 public class JsonDeserialisationTest {
-	private final transient MappingJacksonHttpMessageConverter converter = new MappingJacksonHttpMessageConverter();
 
 	/**
 	 * Test that all the SSP transfer objects can be serialized.
@@ -43,6 +42,7 @@ public class JsonDeserialisationTest {
 	}
 
 	private void assertCanBeMapped(final Class<?> classToTest) {
+		final MappingJacksonHttpMessageConverter converter = new MappingJacksonHttpMessageConverter();
 		assertTrue(
 				classToTest.getSimpleName()
 						+ " is not deserialisable, check the swallowed exception in org.codehaus.jackson.map.deser.StdDeserializerProvider.hasValueDeserializerFor",

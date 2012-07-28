@@ -11,17 +11,17 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
         referralsStore: 'earlyAlertReferralsStore'
     },
     initComponent: function() {
-		Ext.applyIf(this, {
+    	var me=this;
+		Ext.applyIf(me, {
 			autoScroll: true,
         	title: 'Early Alert Response',
         	defaults:{
         		labelWidth: 200
         	},
-            items: [
-                {
+            items: [{
                 	xtype: 'displayfield',
                 	fieldLabel: 'Early Alert Response',
-                	value: this.earlyAlert.get('courseTitle'),
+                	value: me.earlyAlert.get('courseTitle'),
                 	anchor: '95%'
                 },{
 			        xtype: 'combobox',
@@ -29,7 +29,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
 			        name: 'earlyAlertOutcomeId',
 			        fieldLabel: 'Outcome',
 			        emptyText: 'Select One',
-			        store: this.outcomesStore,
+			        store: me.outcomesStore,
 			        valueField: 'id',
 			        displayField: 'name',
 			        mode: 'local',
@@ -48,29 +48,21 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
 		            xtype: 'multiselect',
 		            name: 'earlyAlertOutreachIds',
 		            fieldLabel: 'Outreach',
-		            store: this.outreachesStore,
+		            store: me.outreachesStore,
 		            displayField: 'name',
 		            valueField: 'id',
 		            allowBlank: false,
 		            minSelections: 0,
 		            anchor: '95%'
 		        },{
-		            xtype: 'multiselect',
-		            name: 'earlyAlertReferralIds',
-		            fieldLabel: 'Department and Service Referrals',
-		            store: this.referralsStore,
-		            displayField: 'name',
-		            valueField: 'id',
-		            allowBlank: true,
-		            minSelections: 0,
-		            anchor: '95%'
-		        },
-                {
                     xtype: 'textareafield',
                     fieldLabel: 'Comment',
                     anchor: '95%',
                     name: 'comment'
-                }],
+                },{
+				   xtype:'earlyalertreferrals',
+				   flex: 1
+				}],
             
             dockedItems: [{
        		               xtype: 'toolbar',
@@ -88,6 +80,6 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
        		           }]
         });
 
-        return this.callParent(arguments);
+        return me.callParent(arguments);
     }	
 });

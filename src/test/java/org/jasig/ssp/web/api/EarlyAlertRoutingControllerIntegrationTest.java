@@ -25,6 +25,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -177,5 +178,55 @@ public class EarlyAlertRoutingControllerIntegrationTest {
 		} catch (final ObjectNotFoundException exc) { // NOPMD by jon.adams
 			// expected
 		}
+	}
+
+	/**
+	 * Test the
+	 * {@link EarlyAlertRoutingController#create(UUID, EarlyAlertRoutingTO)}
+	 * action auto-fills the reference IDs from the path.
+	 * 
+	 * @throws ValidationException
+	 *             Thrown if data is not valid. Should not be thrown for this
+	 *             test.
+	 * @throws ObjectNotFoundException
+	 *             Thrown if lookup data could not be found. Should not be
+	 *             thrown for this test.
+	 */
+	@Test()
+	public void testControllerCreateWithMissingCampus()
+			throws ObjectNotFoundException,
+			ValidationException {
+		// Now create EarlyAlertRouting for testing
+		final EarlyAlertRoutingTO obj = new EarlyAlertRoutingTO();
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setEarlyAlertReasonId(EARLY_ALERT_REASON_ID);
+		obj.setPerson(new PersonLiteTO(PERSON_ID, "", ""));
+		obj.setGroupName("NAME");
+
+		final EarlyAlertRoutingTO saved = controller.create(CAMPUS_ID, obj);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		final UUID savedId = saved.getId();
+		assertNotNull("Saved instance identifier should not have been null.",
+				savedId);
+
+		session.clear();
+
+		final EarlyAlertRoutingTO reloaded = controller.get(CAMPUS_ID, savedId);
+
+		assertEquals("Campus was not filled automatically.", CAMPUS_ID,
+				reloaded.getCampusId());
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

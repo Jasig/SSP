@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="challenge category sample data" author="jon.adams">
+		<insert tableName="challenge_category">
+			<column name="id" value="fefc0948-a283-492d-8e6f-bc4cbc30a153" />
+			<column name="created_date" valueDate="2012-07-25T00:00:00" />
+			<column name="modified_date" valueDate="2012-07-25T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" valueDate="1" />
+			<column name="challenge_id">b9ac1cb5-d40a-4451-8ec2-08240698aaf3</column>
+			<column name="category_id">5d24743a-a11e-11e1-a9a6-0026b9e7ff4c</column>
+		</insert>
+		<insert tableName="challenge_category">
+			<column name="id" value="fefc0948-a283-492d-8e6f-cbc4cbc30a26" />
+			<column name="created_date" valueDate="2012-07-25T00:00:00" />
+			<column name="modified_date" valueDate="2012-07-25T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" valueDate="1" />
+			<column name="challenge_id">01bb0a62-1756-4ea2-857d-5821ee54a1b9</column>
+			<column name="category_id">5d24743a-a11e-11e1-a9a6-0026b9e7ff4c</column>
+		</insert>
+		<rollback>
+			<delete tableName="challenge_category">
+				<where>id = 'fefc0948-a283-492d-8e6f-bc4cbc30a153'</where>
+			</delete>
+			<delete tableName="challenge_category">
+				<where>id = 'fefc0948-a283-492d-8e6f-cbc4cbc30a26'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

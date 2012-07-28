@@ -2,10 +2,12 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	apiProperties: 'apiProperties'
+    	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson'
     },  
     control: {
 		view: {
+			beforeedit: 'onBeforeEdit',
 			edit: 'editRecord'
 		},
 		
@@ -15,19 +17,38 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 
 		'deleteButton': {
 			click: 'deleteConfirmation'
-		}    	
+		},
+		
+		recordPager: '#recordPager'
     },
     
 	init: function() {
 		return this.callParent(arguments);
     },
 
+    onBeforeEdit: function( editor, e, eOpts ){
+		var me=this;
+		var access = me.authenticatedPerson.hasAccess('ABSTRACT_REFERENCE_ADMIN_EDIT');
+		// Test if the record is restricted content 
+		if ( me.authenticatedPerson.isDeveloperRestrictedContent( e.record ) )
+		{
+			me.authenticatedPerson.showDeveloperRestrictedContentAlert();
+			return false;
+		}		
+
+		if ( access == false)
+		{
+			me.authenticatedPerson.showUnauthorizedAccessAlert();
+		}
+    	return access;
+    },
+    
 	editRecord: function(editor, e, eOpts) {
 		var record = e.record;
 		var id = record.get('id');
 		var jsonData = record.data;
 		Ext.Ajax.request({
-			url: editor.grid.getStore().getProxy().url+id,
+			url: editor.grid.getStore().getProxy().url+"/"+id,
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			jsonData: jsonData,
@@ -41,9 +62,17 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 	},
 	
 	addRecord: function(button){
+		var me=this;
 		var grid = button.up('grid');
 		var store = grid.getStore();
 		var item = Ext.create( store.model.modelName, {}); // new Ssp.model.reference.AbstractReference();
+		
+		// Test if the record is restricted content	
+		if ( me.authenticatedPerson.isDeveloperRestrictedContent( item ) )
+		{
+			me.authenticatedPerson.showDeveloperRestrictedContentAlert();
+			return false;
+		}
 		
 		// default the name property
 		item.set('name','default');
@@ -73,9 +102,11 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				store.insert(0, item );
 		       	grid.plugins[0].startEdit(0, 0);
 		       	grid.plugins[0].editor.items.getAt(0).selectText();
+		       	store.totalCount = store.totalCount+1;
+		       	me.getRecordPager().onLoad();
 			},
-			failure: this.apiProperties.handleError
-		}, this);
+			failure: me.apiProperties.handleError
+		}, me);
 	},
 
     deleteConfirmation: function( button ) {
@@ -84,19 +115,33 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
        var store = grid.getStore();
        var selection = grid.getView().getSelectionModel().getSelection()[0];
        var message;
-       if ( selection.get('id') ) 
+
+       if (selection != null && selection.get('id') ) 
        {
-    	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
-    	      	   
-           Ext.Msg.confirm({
-   		     title:'Delete?',
-   		     msg: message,
-   		     buttons: Ext.Msg.YESNO,
-   		     fn: me.deleteRecord,
-   		     scope: me
-   		   });
+    	   // Test if the record is restricted content 
+           if ( me.authenticatedPerson.isDeveloperRestrictedContent( selection ) )
+    	   {
+    			me.authenticatedPerson.showDeveloperRestrictedContentAlert();
+    			return false;
+    	   }    	   
+    	   
+    	   if ( !Ssp.util.Constants.isRestrictedAdminItemId( selection.get('id')  ) )
+    	   {
+        	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+	      	   
+               Ext.Msg.confirm({
+       		     title:'Delete?',
+       		     msg: message,
+       		     buttons: Ext.Msg.YESNO,
+       		     fn: me.deleteRecord,
+       		     scope: me
+       		   });
+               
+    	   }else{
+    		   Ext.Msg.alert('WARNING', 'This item is related to core SSP functionality. Please see a developer to delete this item.'); 
+    	   }
         }else{
-     	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to delete.'); 
         }
      },	
 	
@@ -109,13 +154,16 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
      	if (btnId=="yes")
      	{
      		me.apiProperties.makeRequest({
-       		   url: store.getProxy().url+id,
+       		   url: store.getProxy().url+"/"+id,
        		   method: 'DELETE',
        		   successFunc: function(response,responseText){
        			   var r = Ext.decode(response.responseText);
        			   if (r.success==true)
        			   {
        				store.remove( store.getById( id ) );
+       				store.totalCount = store.totalCount-1;
+       				me.getRecordPager().onLoad();
+       			    me.getRecordPager().doRefresh();
        			   }
        		   }
        	    });

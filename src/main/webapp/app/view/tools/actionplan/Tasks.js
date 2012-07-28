@@ -6,6 +6,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     controller: 'Ssp.controller.tool.actionplan.TasksViewController',
     inject: {
     	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
     	columnRendererUtils: 'columnRendererUtils',
     	model: 'currentTask',
         store: 'tasksStore',
@@ -14,18 +15,19 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 	width: '100%',
     height: '100%',
     initComponent: function(){
-    	
+    	var me=this;
     	var sm = Ext.create('Ext.selection.CheckboxModel');
     	
-    	Ext.apply(this,
+    	Ext.apply(me,
     			{
     		        scroll: 'vertical',
-    	    		store: this.store,    		
+    	    		store: me.store,    		
     	    		selModel: sm,
     	    		features: [{
 		    	        id: 'group',
 		    	        ftype: 'grouping',
 		    	        groupHeaderTpl: '{name}',
+		    	        depthToIndent: 0,
 		    	        hideGroupedHeader: false,
 		    	        enableGroupingMenu: false
 		    	    }],
@@ -43,7 +45,19 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	                panel.model.data=rec.data;
 		    	            	panel.appEventsController.getApplication().fireEvent('editTask');
 		    	            },
-		    	            scope: this
+		    	            getClass: function(value, metadata, record)
+                            {
+		    	            	// completed items cannot be edited 
+		    	            	// hide if completed or if user does not have permission to edit
+		    	            	var cls = 'x-hide-display';
+		    	            	if ( me.authenticatedPerson.hasAccess('EDIT_TASK_BUTTON') && record.get('completedDate') == null)
+		    	            	{
+		    	            		cls = Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH;
+		    	            	}
+		    	            	
+		    	            	return cls;                            
+		    	            },
+		    	            scope: me
 		    	        },{
 		    	            icon: Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH,
 		    	            tooltip: 'Close Task',
@@ -53,7 +67,19 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	                panel.model.data=rec.data;
 		    	            	panel.appEventsController.getApplication().fireEvent('closeTask');
 		    	            },
-		    	            scope: this
+		    	            getClass: function(value, metadata, record)
+                            {
+		    	            	// completed items cannot be closed 
+		    	            	// hide if completed or if user does not have permission to edit
+		    	            	var cls = 'x-hide-display';
+		    	            	if ( me.authenticatedPerson.hasAccess('CLOSE_TASK_BUTTON') && record.get('completedDate') == null)
+		    	            	{
+		    	            		cls = Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH;
+		    	            	}
+		    	            	
+		    	            	return cls;
+		    	            },
+		    	            scope: me
 		    	        },{
 		    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
 		    	            tooltip: 'Delete Task',
@@ -63,7 +89,19 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	                panel.model.data=rec.data;
 		    	            	panel.appEventsController.getApplication().fireEvent('deleteTask');
 		    	            },
-		    	            scope: this
+		    	            getClass: function(value, metadata, record)
+                            {
+		    	            	// completed items cannot be deleted 
+		    	            	// hide if completed or if user does not have permission to delete
+		    	            	var cls = 'x-hide-display';
+		    	            	if ( me.authenticatedPerson.hasAccess('DELETE_TASK_BUTTON') && record.get('completedDate') == null)
+		    	            	{
+		    	            		cls = Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH;
+		    	            	}
+		    	            	
+		    	            	return cls;
+                            },
+		    	            scope: me
 		    	        }]
 		    	    },{
 		    	        text: 'Description',
@@ -71,17 +109,17 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	        tdCls: 'task',
 		    	        sortable: true,
 		    	        dataIndex: 'name',
-		    	        renderer: this.columnRendererUtils.renderTaskName
+		    	        renderer: me.columnRendererUtils.renderTaskName
 		    	    },{
 		    	        header: 'Due Date',
-		    	        width: 100,
+		    	        width: 150,
 		    	        dataIndex: 'dueDate',
-		    	        renderer: this.columnRendererUtils.renderTaskDueDate
+		    	        renderer: me.columnRendererUtils.renderTaskDueDate
 		    	    }]
     	
 
     			});
     	
-    	return this.callParent(arguments);
+    	return me.callParent(arguments);
     }
 });

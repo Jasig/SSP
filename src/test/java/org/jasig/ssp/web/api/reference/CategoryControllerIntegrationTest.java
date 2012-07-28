@@ -10,15 +10,21 @@ import static org.junit.Assert.fail;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.CategoryTO;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -39,10 +45,16 @@ public class CategoryControllerIntegrationTest {
 	@Autowired
 	private transient CategoryController controller;
 
+	@Autowired
+	private transient SessionFactory sessionFactory;
+
 	private static final UUID CATEGORY_ID = UUID
 			.fromString("5d24743a-a11e-11e1-a9a6-0026b9e7ff4c");
 
 	private static final String CATEGORY_NAME = "Test Category";
+
+	private static final UUID CHALLENGE_WITHCATEGORY = UUID
+			.fromString("b9ac1cb5-d40a-4451-8ec2-08240698aaf3");
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -72,10 +84,6 @@ public class CategoryControllerIntegrationTest {
 	@Test
 	public void testControllerGet() throws ObjectNotFoundException,
 			ValidationException {
-		assertNotNull(
-				"Controller under test was not initialized by the container correctly.",
-				controller);
-
 		final CategoryTO obj = controller.get(CATEGORY_ID);
 
 		assertNotNull(
@@ -84,6 +92,21 @@ public class CategoryControllerIntegrationTest {
 
 		assertEquals("Returned Category.Name did not match.", CATEGORY_NAME,
 				obj.getName());
+	}
+
+	@Test(expected = ValidationException.class)
+	public void testControllerCreateOfInvalid() throws ObjectNotFoundException,
+			ValidationException {
+		assertNotNull(
+				"Controller under test was not initialized by the container correctly.",
+				controller);
+
+		// Check validation of 'no ID for create()'
+		final CategoryTO category = new CategoryTO(UUID.randomUUID(),
+				TEST_STRING1,
+				TEST_STRING2);
+		controller.create(category);
+		fail("Calling create with an object with an ID should have thrown a validation excpetion.");
 	}
 
 	/**
@@ -125,35 +148,26 @@ public class CategoryControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		// Check validation of 'no ID for create()'
-		CategoryTO obj = new CategoryTO(UUID.randomUUID(), TEST_STRING1,
+		// Create a valid Category
+		final CategoryTO category = new CategoryTO(null, TEST_STRING1,
 				TEST_STRING2);
-		try {
-			obj = controller.create(obj);
-			fail("Calling create with an object with an ID should have thrown a validation excpetion."); // NOPMD
-		} catch (final ValidationException exc) { // NOPMD
-			/* expected */
-		}
-
-		// Now create a valid Category
-		obj = new CategoryTO(null, TEST_STRING1, TEST_STRING2);
-		obj = controller.create(obj);
+		final CategoryTO reloaded = controller.create(category);
 
 		assertNotNull(
 				"Returned CategoryTO from the controller should not have been null.",
-				obj);
+				reloaded);
 		assertNotNull(
 				"Returned CategoryTO.ID from the controller should not have been null.",
-				obj.getId());
+				reloaded.getId());
 		assertEquals(
 				"Returned CategoryTO.Name from the controller did not match.",
-				TEST_STRING1, obj.getName());
+				TEST_STRING1, reloaded.getName());
 		assertEquals(
 				"Returned CategoryTO.CreatedBy was not correctly auto-filled for the current user (the administrator in this test suite).",
-				Person.SYSTEM_ADMINISTRATOR_ID, obj.getCreatedBy().getId());
+				Person.SYSTEM_ADMINISTRATOR_ID, reloaded.getCreatedBy().getId());
 
 		assertTrue("Delete action did not return success.",
-				controller.delete(obj.getId()).isSuccess());
+				controller.delete(reloaded.getId()).isSuccess());
 	}
 
 	/**
@@ -169,5 +183,64 @@ public class CategoryControllerIntegrationTest {
 		assertNotNull("List should not have been null.", list);
 		assertFalse("List action should have returned some objects.",
 				list.isEmpty());
+	}
+
+	@Test(expected = ObjectNotFoundException.class)
+	public void testGetChallengesForInvalidCategory()
+			throws ObjectNotFoundException {
+		// arrange, act
+		final PagedResponse<ChallengeTO> challenges = controller
+				.getChallengesForCategory(UUID.randomUUID(), ObjectStatus.ALL,
+						0, 10, null, null);
+
+		// assert
+		assertEquals("No results should not have been returned.", 0,
+				challenges.getResults());
+	}
+
+	@Test
+	public void testGetChallengesForCategory() throws ObjectNotFoundException {
+		// arrange, act
+		final PagedResponse<ChallengeTO> challenges = controller
+				.getChallengesForCategory(CATEGORY_ID, null, null,
+						null, null, null);
+
+		// assert
+		assertEquals("Category should have included 1 instance.", 1,
+				challenges.getResults());
+	}
+
+	@Test
+	public void testDeleteChallengeForCategory() throws ObjectNotFoundException {
+		// arrange, act
+		final ServiceResponse response = controller
+				.removeChallengeFromCategory(CATEGORY_ID,
+						CHALLENGE_WITHCATEGORY);
+
+		// assert
+		assertTrue("Deletion should have returned true.", response.isSuccess());
+
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		session.clear();
+
+		final PagedResponse<ChallengeTO> challenges = controller
+				.getChallengesForCategory(CATEGORY_ID, null, null, null, null,
+						null);
+
+		// assert
+		assertEquals("Category should have included 0 instance.", 0,
+				challenges.getResults());
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
 	}
 }

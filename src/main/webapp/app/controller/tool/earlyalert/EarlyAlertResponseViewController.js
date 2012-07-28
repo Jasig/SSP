@@ -3,14 +3,16 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
+    	earlyAlert: 'currentEarlyAlert',
+    	earlyAlertResponseService: 'earlyAlertResponseService',
+    	earlyAlertService: 'earlyAlertService',
     	formUtils: 'formRendererUtils',
-    	person: 'currentPerson',
-    	model: 'currentEarlyAlertResponse'
+    	model: 'currentEarlyAlertResponse',
+    	personLite: 'personLite'
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalert',
-    	url: ''
+    	formToDisplay: 'earlyalert'
     },
     control: {
     	outcomeCombo: {
@@ -34,14 +36,12 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     },
     
 	init: function() {
-		this.getView().getForm().loadRecord(this.model);
+		var me=this;
+		me.getView().getForm().reset();
+		me.getView().getForm().loadRecord(me.model);
+		me.showHideOtherOutcomeDescription();
 		
-		this.showHideOtherOutcomeDescription();
-		
-		this.url = this.apiProperties.getItemUrl('personEarlyAlert');
-		this.url = this.url.replace('{id}',this.person.get('id'));
-		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
     },
     
     onOutcomeComboSelect: function(comp, records, eOpts){
@@ -49,49 +49,99 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     },
     
     showHideOtherOutcomeDescription: function(){
-    	if (this.getOutcomeCombo().getValue()==Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID)
+    	var me=this;
+    	if (me.getOutcomeCombo().getValue()==Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID)
     	{
-    		this.getOtherOutcomeDescriptionText().show();
+    		me.getOtherOutcomeDescriptionText().show();
     	}else{
-    		this.getOtherOutcomeDescriptionText().hide();
+    		me.getOtherOutcomeDescriptionText().hide();
     	}
     },
     
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
-		url = this.url;
-		this.getView().getForm().updateRecord();
-		record = this.model;
-		id = record.get('id');
-		jsonData = record.data;
-		successFunc = function(response, view) {
-			me.displayMain();
-		};
+		var personId = me.personLite.get('id');
+		var earlyAlertId = me.earlyAlert.get('id');
+		var referralsItemSelector = Ext.ComponentQuery.query('#earlyAlertReferralsItemSelector')[0];	
+		var selectedReferrals = [];			
 		
-		console.log(jsonData);
+		me.getView().getForm().updateRecord();
+		record = me.model;
 		
-		/*
-		if (id.length > 0)
-		{
-			// editing
-			this.apiProperties.makeRequest({
-				url: url+id,
-				method: 'PUT',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});
-			
+		// populate referrals
+		selectedReferrals = referralsItemSelector.getValue();
+		if (selectedReferrals.length > 0)
+		{			
+		   record.set('earlyAlertReferralIds', selectedReferrals);
 		}else{
-			// adding
-			this.apiProperties.makeRequest({
-				url: url,
-				method: 'POST',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});		
-		}
-		*/
+		   record.data.referrals=null;
+		}		
+		
+		// set the early alert id for the response
+		record.set( 'earlyAlertId', earlyAlertId ); 
+		
+		// jsonData for the response
+		jsonData = record.data;
+		
+		me.getView().setLoading(true);
+		me.earlyAlertResponseService.save(personId, earlyAlertId, jsonData, {
+			success: me.saveEarlyAlertResponseSuccess,
+			failure: me.saveEarlyAlertResponseFailure,
+			scope: me
+		})
+	},
+	
+	saveEarlyAlertResponseSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading(false);
+        Ext.Msg.confirm({
+		     title: 'Your response was saved.',
+		     msg: 'Would you like to close the Early Alert Notice',
+		     buttons: Ext.Msg.YESNO,
+		     fn: me.closeEarlyAlertConfirm,
+		     scope: me
+	    });
+	},
+
+	saveEarlyAlertResponseFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading(false);
+	},
+	
+	closeEarlyAlertConfirm: function( btnId ){
+     	var me=this;
+     	var jsonData;
+     	var personId = me.personLite.get('id');
+     	if (btnId=="yes")
+     	{
+     		if (me.earlyAlert.get('closedById') != "")
+     		{
+     			// fix for GMT to UTC
+         		me.earlyAlert.set('closedDate', me.formUtils.fixDateOffsetWithTime( new Date() ) );
+         		me.earlyAlert.set( 'closedById', personId );    			
+     		}
+     		jsonData = me.earlyAlert.data;
+     		delete jsonData.earlyAlertReasonId;
+         	me.earlyAlertService.save( personId, jsonData,{
+         		success: me.closeEarlyAlertSuccess,
+         		failure: me.closeEarlyAlertFailure,
+         		scope: me
+         	});    		
+     	}else{
+     		me.displayMain();
+     	}
+     }, 
+
+ 	closeEarlyAlertSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading(false);
+		me.displayMain();
+	},
+
+	closeEarlyAlertFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading(false);
 	},
 	
 	onCancelClick: function(button){

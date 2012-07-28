@@ -18,8 +18,10 @@ import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,6 +39,8 @@ public class PersonServiceTest {
 
 	private transient PersonDao dao;
 
+	private transient RegistrationStatusByTermService registrationStatusByTermService;
+
 	private static final String TEST_USER_ID = "12345";
 
 	@Before
@@ -44,6 +48,8 @@ public class PersonServiceTest {
 		service = new PersonServiceImpl();
 		dao = createMock(PersonDao.class);
 		service.setDao(dao);
+		registrationStatusByTermService = createMock(RegistrationStatusByTermService.class);
+		service.setRegistrationStatusByTermService(registrationStatusByTermService);
 	}
 
 	@Test
@@ -69,12 +75,17 @@ public class PersonServiceTest {
 		final Person daoOne = new Person(id);
 
 		expect(dao.get(id)).andReturn(daoOne);
+		expect(registrationStatusByTermService
+				.applyRegistrationStatusForCurrentTerm(daoOne))
+				.andReturn(daoOne).anyTimes();
 
 		replay(dao);
+		replay(registrationStatusByTermService);
 
 		assertNotNull("Get() result should not have been null.",
 				service.get(id));
 		verify(dao);
+		verify(registrationStatusByTermService);
 	}
 
 	@Test
@@ -83,12 +94,17 @@ public class PersonServiceTest {
 		final Person daoOne = new Person(id);
 
 		expect(dao.save(daoOne)).andReturn(daoOne);
+		expect(registrationStatusByTermService
+				.applyRegistrationStatusForCurrentTerm(daoOne))
+				.andReturn(daoOne).anyTimes();
 
 		replay(dao);
+		replay(registrationStatusByTermService);
 
 		assertNotNull("Save() result should not have been null.",
 				service.save(daoOne));
 		verify(dao);
+		verify(registrationStatusByTermService);
 	}
 
 	@Test
@@ -98,30 +114,40 @@ public class PersonServiceTest {
 
 		expect(dao.get(id)).andReturn(daoOne);
 		expect(dao.save(daoOne)).andReturn(daoOne);
+		expect(registrationStatusByTermService
+				.applyRegistrationStatusForCurrentTerm(daoOne))
+				.andReturn(daoOne).anyTimes();
 
 		replay(dao);
+		replay(registrationStatusByTermService);
 
 		service.delete(id);
 
 		verify(dao);
+		verify(registrationStatusByTermService);
 	}
 
 	@Test
-	public void personFromUserId() throws ObjectNotFoundException {
+	public void personFromUsername() throws ObjectNotFoundException {
 		final Person person = new Person();
 
-		expect(dao.fromUserId(TEST_USER_ID)).andReturn(person);
+		expect(dao.fromUsername(TEST_USER_ID)).andReturn(person);
+		expect(registrationStatusByTermService
+				.applyRegistrationStatusForCurrentTerm(person))
+				.andReturn(person).anyTimes();
 
 		replay(dao);
+		replay(registrationStatusByTermService);
 
-		final Person result = service.personFromUserId(TEST_USER_ID);
+		final Person result = service.personFromUsername(TEST_USER_ID);
 
 		verify(dao);
+		verify(registrationStatusByTermService);
 		assertEquals("Lists do not match.", person, result);
 	}
 
 	@Test
-	public void peopleFromListOfIds() {
+	public void peopleFromListOfIds() throws ValidationException {
 		final List<UUID> personIds = Lists.newArrayList();
 		personIds.add(UUID.randomUUID());
 		personIds.add(UUID.randomUUID());

@@ -13,7 +13,7 @@ import org.jasig.ssp.service.reference.SelfHelpGuideQuestionService;
 import org.jasig.ssp.service.reference.SelfHelpGuideService;
 import org.jasig.ssp.transferobject.SelfHelpGuideResponseTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.BaseController;
+import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/1/mygps/selfhelpguideresponse")
 public class MyGpsSelfHelpGuideResponseController extends
-		BaseController {
+		AbstractBaseController {
 
 	@Autowired
 	private transient SelfHelpGuideService selfHelpGuideService;

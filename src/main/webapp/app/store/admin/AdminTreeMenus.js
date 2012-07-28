@@ -6,24 +6,13 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     },
 	autoLoad: false,
     constructor: function(){
+    	var me=this;
     	var items = {
     	    	text: 'Administrative Tools',
     	    	title: 'Administrative Tools',
     	    	form: '',
     	        expanded: true,
     	        children: [ {
-    	        	            text: 'Beta',
-    	        	            title: 'Beta',
-    	        	            form: '',
-    	        	            expanded: false,
-    	        	            children: [{
-							    	text: 'Campuses',
-									title: 'Campuses',
-									store: '',
-									form: 'CampusAdmin',
-									leaf: true
-								}]
-    	                    },{
     	        	            text: 'Caseload',
     	        	            title: 'Caseload',
     	        	            form: '',
@@ -85,7 +74,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     						    		                  required: true,
     						      		                  dataIndex: 'requireInitialAppointment', 
     						      		                  flex: .25,
-    						      		                  renderer: this.columnRendererUtils.renderFriendlyBoolean,
+    						      		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
     						      		                  field: {
     						      		                      xtype: 'checkbox'
     						      		                  }
@@ -233,6 +222,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     							form: '',
     							expanded: false,
     							children: [{
+							    	text: 'Campuses',
+									title: 'Campuses',
+									store: '',
+									form: 'CampusAdmin',
+									leaf: true
+								},{
 									text: 'Outcomes',
 									title: 'Outcomes',
 									store: 'earlyAlertOutcomes',
@@ -324,7 +319,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 
     	    };
     	
-    	Ext.apply(this,{
+    	Ext.apply(me,{
     		root: items,
     		folderSort: true,
     		sorters: [{
@@ -332,7 +327,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     		    direction: 'ASC'
     		}]
     	});
-		return this.callParent(arguments);
+		return me.callParent(arguments);
     }
 
 

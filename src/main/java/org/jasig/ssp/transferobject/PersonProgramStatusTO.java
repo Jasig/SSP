@@ -17,7 +17,7 @@ public class PersonProgramStatusTO
 		extends AbstractAuditableTO<PersonProgramStatus>
 		implements TransferObject<PersonProgramStatus> {
 
-	@NotNull
+	// Should be @NotNull, but some clients only pass this in via the API path.
 	private UUID personId;
 
 	@NotNull
@@ -52,7 +52,7 @@ public class PersonProgramStatusTO
 		return personId;
 	}
 
-	public final void setPersonId(final UUID personId) {
+	public final void setPersonId(@NotNull final UUID personId) {
 		this.personId = personId;
 	}
 
@@ -60,7 +60,7 @@ public class PersonProgramStatusTO
 		return programStatusId;
 	}
 
-	public final void setProgramStatusId(final UUID programStatusId) {
+	public final void setProgramStatusId(@NotNull final UUID programStatusId) {
 		this.programStatusId = programStatusId;
 	}
 

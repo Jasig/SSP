@@ -88,20 +88,6 @@ public class MessageTemplateServiceImpl extends
 		try {
 			final MessageTemplate messageTemplate = dao.get(messageTemplateId);
 
-			try {
-				templateParameters.put("officeLocation", personAttributeService
-						.getAttributes(request, response, "officeLocation"));
-			} catch (final ObjectNotFoundException e) {
-				LOGGER.info("Person attribute \"officeLocation\" could not be loaded.");
-			}
-
-			try {
-				templateParameters.put("workPhone", personAttributeService
-						.getAttributes(request, response, "workPhone"));
-			} catch (final ObjectNotFoundException e) {
-				LOGGER.info("Person attribute \"workPhone\" could not be loaded.");
-			}
-
 			final String subject = velocityTemplateService
 					.generateContentFromTemplate(messageTemplate.getSubject(),
 							messageTemplate.subjectTemplateId(),
