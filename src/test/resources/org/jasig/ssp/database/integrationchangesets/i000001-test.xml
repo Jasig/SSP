@@ -269,8 +269,17 @@
 	</changeSet>
 	
 	<changeSet id="test external people" author="daniel.bower">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip adding columns to external_person in integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		
 		<insert tableName="external_person">
 			<column name="school_id" value="ken.1"/>
+			<column name="username" value="ken"/>
 			<column name="first_name" value="Kenneth"/>
 			<column name="last_name" value="Thompson"/>
 			<column name="middle_name" value="Lane"/>
@@ -291,6 +300,7 @@
 		</insert>
 		<insert tableName="external_person">
 			<column name="school_id" value="turing.1"/>
+			<column name="username" value="advisor0"/>
 			<column name="first_name" value="Alan"/>
 			<column name="last_name" value="Turing"/>
 			<column name="middle_name" value="M"/>
@@ -312,6 +322,7 @@
 		</insert>
 		<insert tableName="external_person">
 			<column name="school_id" value="notInSsp"/>
+			<column name="username" value="notInSsp"/>
 			<column name="first_name" value="Not"/>
 			<column name="last_name" value="Ssp"/>
 			<column name="middle_name" value="In"/>

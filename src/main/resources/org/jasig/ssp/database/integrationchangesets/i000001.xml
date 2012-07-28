@@ -288,6 +288,9 @@
 			<column name="school_id" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
+			<column name="username" type="${nvarchar.type}(50)">
+				<constraints nullable="false" unique="true"/>
+			</column>
 			<column name="first_name" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
@@ -359,9 +362,17 @@
 			</column>
 		</createTable>
 
+		<createIndex tableName="external_person" indexName="idx_external_person_username">
+			<column name="username" />
+		</createIndex>
+		
+		<createIndex tableName="external_person" indexName="idx_external_person_school_id">
+			<column name="school_id"></column>
+		</createIndex>
+		
 		<createView viewName="v_external_person">
 			select ROW_NUMBER() OVER (ORDER BY school_id) as id,
-			school_id, first_name, middle_name, last_name, birth_date, primary_email_address,
+			school_id, username, first_name, middle_name, last_name, birth_date, primary_email_address,
 			address_line_1, address_line_2, city, state, zip_code, home_phone, work_phone,
 			office_location, office_hours, department_name, actual_start_term, actual_start_year, 
 			marital_status, ethnicity, gender, is_local, balance_owed, coach_school_id 
@@ -375,92 +386,6 @@
 			<dropTable tableName="external_person" />
 		</rollback>
 
-	</changeSet>
-	
-	<changeSet author="daniel.bower" id="Add school id index to external_person">
-		<createIndex tableName="external_person" indexName="idx_external_person_school_id">
-			<column name="school_id"></column>
-		</createIndex>
-		
-		<rollback>
-			<dropIndex tableName="external_person" indexName="idx_external_person_school_id" schemaName="${schema}"/>
-		</rollback>
-	</changeSet>
-	
-	<changeSet id="add username to external_person" author="daniel.bower">
-		<addColumn tableName="external_person">
-			<column name="username" type="${nvarchar.type}(25)">
-				<constraints nullable="true" />
-			</column>
-		</addColumn>
-		
-		<dropView viewName="v_external_person" />
-		<createView viewName="v_external_person">
-			select ROW_NUMBER() OVER (ORDER BY school_id) as id,
-			school_id, username, first_name, middle_name, last_name, birth_date, primary_email_address,
-			address_line_1, address_line_2, city, state, zip_code, home_phone, work_phone,
-			office_location, office_hours, department_name, actual_start_term, actual_start_year, 
-			marital_status, ethnicity, gender, is_local, balance_owed, coach_school_id 
-			from external_person
-		</createView>
-		
-		<sql>grant all on v_external_person to ssp</sql>
-		
-		<rollback>
-			<dropView viewName="v_external_person" />
-			<createView viewName="v_external_person">
-				select ROW_NUMBER() OVER (ORDER BY school_id) as id,
-				school_id, first_name, middle_name, last_name, birth_date, primary_email_address,
-				address_line_1, address_line_2, city, state, zip_code, home_phone, work_phone,
-				office_location, office_hours, department_name, actual_start_term, actual_start_year, 
-				marital_status, ethnicity, gender, is_local, balance_owed, coach_school_id 
-				from external_person
-			</createView>
-
-			<dropColumn tableName="external_person" columnName="username"/>
-		</rollback>
-	</changeSet>
-	
-	<changeSet author="alexander.leader" id="Modify length of external person username column">
-		<dropView viewName="v_external_person" />
-
-		<modifyDataType tableName="external_person" columnName="username" newDataType="${nvarchar.type}(50)" />
-
-		<createView viewName="v_external_person">
-			select ROW_NUMBER() OVER (ORDER BY school_id) as id,
-			school_id, username, first_name, middle_name, last_name, birth_date, primary_email_address,
-			address_line_1, address_line_2, city, state, zip_code, home_phone, work_phone,
-			office_location, office_hours, department_name, actual_start_term, actual_start_year, 
-			marital_status, ethnicity, gender, is_local, balance_owed, coach_school_id 
-			from external_person
-		</createView>
-		
-		<sql>grant all on v_external_person to ssp</sql>
-	
-		<rollback>
-			<dropView viewName="v_external_person" />
-
-			<modifyDataType tableName="external_person" columnName="username" newDataType="${nvarchar.type}(25)" />
-
-			<createView viewName="v_external_person">
-				select ROW_NUMBER() OVER (ORDER BY school_id) as id,
-				school_id, first_name, middle_name, last_name, birth_date, primary_email_address,
-				address_line_1, address_line_2, city, state, zip_code, home_phone, work_phone,
-				office_location, office_hours, department_name, actual_start_term, actual_start_year, 
-				marital_status, ethnicity, gender, is_local, balance_owed, coach_school_id 
-				from external_person
-			</createView>
-		</rollback>
-	</changeSet>
-	
-	<changeSet author="alexander.leader" id="Add username index to external_person">
-		<createIndex tableName="external_person" indexName="idx_external_person_username">
-			<column name="username" />
-		</createIndex>
-		
-		<rollback>
-			<dropIndex tableName="external_person" indexName="idx_external_person_username" schemaName="${schema}"/>
-		</rollback>
 	</changeSet>
 	
 </databaseChangeLog>
