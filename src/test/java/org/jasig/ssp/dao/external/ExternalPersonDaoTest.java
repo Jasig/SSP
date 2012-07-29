@@ -30,17 +30,24 @@ public class ExternalPersonDaoTest {
 	@Autowired
 	private transient ExternalPersonDao dao;
 
+	@SuppressWarnings("null")
 	@Test
 	public void getBySchoolId() {
 		ExternalPerson person = null;
 		try {
 			person = dao.getBySchoolId("notInSsp");
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			fail("external User not found");
 		}
+
 		assertNotNull("Person was not found", person);
 		assertEquals("Incorrect school id", "notInSsp", person.getSchoolId());
 		assertEquals("Incorrect coach", "turing.1", person.getCoachSchoolId());
+	}
+
+	@Test(expected = ObjectNotFoundException.class)
+	public void getBySchoolIdThrowException() throws ObjectNotFoundException {
+		dao.getBySchoolId("borkborkbork");
 	}
 
 	@Test

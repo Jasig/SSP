@@ -21,7 +21,7 @@ public class MessageTemplate
 	// Message Templates
 
 	public static final UUID JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID = UUID
-			.fromString("B528C1AC-6104-435B-AE62-08EB4F7EE2F9");
+			.fromString("b528c1ac-6104-435b-ae62-08eb4f7ee2f9");
 
 	public static final UUID EARLYALERT_MESSAGETOSTUDENT_ID = UUID
 			.fromString("b528c1ac-6104-435b-ae62-08eb4f8ef40e");

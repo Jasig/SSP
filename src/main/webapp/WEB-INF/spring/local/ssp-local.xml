@@ -20,7 +20,7 @@
 	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="#{configProperties.smtp_host}" />
 		<property name="port" value="#{configProperties.smtp_port}" />
-		<property name="protocol" value="smtps" />
+		<property name="protocol" value="#{configProperties.smtp_protocol}" />
 		<property name="username" value="#{configProperties.smtp_username}" />
 		<property name="password" value="#{configProperties.smtp_password}" />
 	</bean>

@@ -102,7 +102,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	/**
 	 * Retrieves the specified Person by their school_id.
 	 * 
-	 * @param studentId
+	 * @param schoolId
 	 *            Required school identifier for the Person to retrieve. Can not
 	 *            be null.
 	 * @exception ObjectNotFoundException
@@ -111,8 +111,21 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	public Person getBySchoolId(final String schoolId)
 			throws ObjectNotFoundException {
-		return (Person) createCriteria().add(
+
+		if (!StringUtils.isNotBlank(schoolId)) {
+			throw new IllegalArgumentException("schoolId can not be empty.");
+		}
+
+		final Person person = (Person) createCriteria().add(
 				Restrictions.eq("schoolId", schoolId)).uniqueResult();
+
+		if (person == null) {
+			throw new ObjectNotFoundException(
+					"Person not found with schoolId: " + schoolId,
+					Person.class.getName());
+		}
+
+		return person;
 	}
 
 	/**

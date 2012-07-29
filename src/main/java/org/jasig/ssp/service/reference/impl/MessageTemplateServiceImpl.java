@@ -31,8 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class MessageTemplateServiceImpl extends
-		AbstractReferenceService<MessageTemplate>
-		implements MessageTemplateService { // NOPMD
+		AbstractReferenceService<MessageTemplate> implements
+		MessageTemplateService {
 
 	@Autowired
 	transient private MessageTemplateDao dao;

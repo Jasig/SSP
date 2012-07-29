@@ -68,6 +68,29 @@ public class PersonEarlyAlertResponseController extends
 		return LOGGER;
 	}
 
+	/**
+	 * Get all early alert responses, filtered by the specified parameters.
+	 * 
+	 * @param personId
+	 *            person identifier
+	 * @param earlyAlertId
+	 *            early alert identifier
+	 * @param status
+	 *            Object status
+	 * @param start
+	 *            Start row
+	 * @param limit
+	 *            Row limit
+	 * @param sort
+	 *            Sort fields
+	 * @param sortDirection
+	 *            Sort direction
+	 * @return All early alert responses, filtered by the specified parameters.
+	 * @throws ObjectNotFoundException
+	 *             If any of the specified data was not found.
+	 * @throws ValidationException
+	 *             If any of the data is not valid.
+	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<EarlyAlertResponseTO> getAll(
@@ -177,10 +200,12 @@ public class PersonEarlyAlertResponseController extends
 
 		// ensure earlyAlertId is set to path variable
 		final EarlyAlertResponseTO earlyAlertResponseTO = obj;
-		earlyAlertResponseTO.setEarlyAlertId(earlyAlertId);
+
+		if (earlyAlertResponseTO.getEarlyAlertId() == null) {
+			earlyAlertResponseTO.setEarlyAlertId(earlyAlertId);
+		}
 
 		final EarlyAlertResponse model = factory.from(earlyAlertResponseTO);
-		model.setId(id);
 
 		final EarlyAlertResponse savedT = service.save(model);
 		if (null != savedT) {

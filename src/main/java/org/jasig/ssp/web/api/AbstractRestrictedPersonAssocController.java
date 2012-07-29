@@ -27,6 +27,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * Base controller for models that have an association to the Person model and
+ * data restrictions via ConfidentialityLevels.
+ * 
+ * @param <T>
+ *            Restricted, person-associated, auditable model
+ * @param <TO>
+ *            Transfer object for the model
+ */
 public abstract class AbstractRestrictedPersonAssocController<T extends RestrictedPersonAssocAuditable, TO extends AbstractAuditableTO<T>>
 		extends AbstractPersonAssocController<T, TO> {
 
@@ -125,8 +134,16 @@ public abstract class AbstractRestrictedPersonAssocController<T extends Restrict
 					"You submitted without an id to the save method.  Did you mean to create?");
 		}
 
+		if (personId == null) {
+			throw new IllegalArgumentException("Person identifier is required.");
+		}
+
 		final T model = getFactory().from(obj);
 		model.setId(id);
+
+		if (model.getPerson() == null) {
+			model.setPerson(personService.get(personId));
+		}
 
 		restrictedPersonAssocPermissionService.checkPermissionForModel(model,
 				securityService.currentUser());

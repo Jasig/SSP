@@ -33,6 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -51,6 +52,9 @@ import com.google.common.collect.Sets;
 @TransactionConfiguration()
 @Transactional
 public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonEarlyAlertControllerIntegrationTest.class);
 
 	@Autowired
 	private transient PersonEarlyAlertController controller;
@@ -197,7 +201,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 
 		assertNotNull("Deletion response should not have been null.",
 				response);
-		assertTrue("Deletion response did not return success.",
+		assertTrue("Response should have returned success.",
 				response.isSuccess());
 
 		final EarlyAlertTO afterDeletion = controller.get(savedId,
@@ -241,23 +245,6 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	}
 
 	/**
-	 * Test the {@link PersonEarlyAlertController#get(UUID, UUID)} action throws
-	 * correct exception for missing person.
-	 * 
-	 * @throws ValidationException
-	 *             If validation error occurred.
-	 * @throws ObjectNotFoundException
-	 *             If object could not be found.
-	 */
-	@Test(expected = ObjectNotFoundException.class)
-	public void testControllerGetNotFoundPerson()
-			throws ObjectNotFoundException,
-			ValidationException {
-		controller.get(EARLY_ALERT_ID, UUID.randomUUID());
-		fail("Exception should have been thrown.");
-	}
-
-	/**
 	 * Test that the {@link PersonEarlyAlertController#get(UUID, UUID)} action
 	 * returns sets with {@link ObjectStatus#ACTIVE} and
 	 * {@link ObjectStatus#INACTIVE} reference data objects.
@@ -275,13 +262,10 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		final Session session = sessionFactory.getCurrentSession();
 		session.flush(); // flush to ensure the INSERT commands are run now
 
-		assertNotNull("Saved instance should not have been null.", saved);
 		assertEquals("Saved instance data did not match.", PERSON_ID,
 				saved.getClosedById());
 
 		final UUID savedId = saved.getId();
-		assertNotNull("Saved instance identifier should not have been null.",
-				savedId);
 
 		// now clear all entities from the session so reloading the instance by
 		// the identifier will run any mapping filter annotations
@@ -534,11 +518,14 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		boolean found = false; // NOPMD by jon.adams on 5/20/12 10:06 PM
 		for (final Message msg : msgs) {
 			final String body = msg.getBody();
-			if (body.contains("<tr><th>Instructor</th><td>System Administrator</td></tr>")) {
+			if (body.contains("<tr><th>Instructor</th><td>System Administrator</td></tr>")
+					&& body.contains("000-000-0000")) { // test for workPhone
 				controller.getLogger().debug(
 						"Applicable message found. Body: {}", body);
 				found = true;
 				break;
+			} else {
+				LOGGER.info(body);
 			}
 		}
 

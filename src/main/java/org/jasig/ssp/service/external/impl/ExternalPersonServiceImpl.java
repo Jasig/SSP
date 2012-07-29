@@ -19,10 +19,12 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,8 @@ public class ExternalPersonServiceImpl
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExternalPersonServiceImpl.class);
+
+	private static final int BATCH_SIZE_FOR_PERSON_ = 1000;
 
 	@Autowired
 	private transient ExternalPersonDao dao;
@@ -62,12 +66,48 @@ public class ExternalPersonServiceImpl
 	}
 
 	@Override
-	public void syncWithPerson(final SortingAndPaging sAndP) {
+	public ExternalPerson getByUsername(final String username)
+			throws ObjectNotFoundException {
+		return dao.getByUsername(username);
+	}
+
+	private transient int lastRecord = 0;
+
+	@Override
+	@Scheduled(fixedDelay = 300000)
+	// run every 5 minutes
+	public void syncWithPerson() {
+		LOGGER.info(
+				"BEGIN : Person and ExternalPerson Sync.  Selecting {} records starting at {}",
+				BATCH_SIZE_FOR_PERSON_, lastRecord);
+
+		final SortingAndPaging sAndP = SortingAndPaging.createForSingleSort(
+				ObjectStatus.ACTIVE, lastRecord, BATCH_SIZE_FOR_PERSON_,
+				"username",
+				SortDirection.ASC.toString(), null);
+
+		Long totalRows = Long.valueOf(0L);
+		try {
+			totalRows = syncWithPerson(sAndP);
+		} catch (final Exception e) {
+			LOGGER.error("Failed to sync Person table with ExternalPerson", e);
+		} finally {
+			lastRecord = lastRecord + BATCH_SIZE_FOR_PERSON_;
+			if (lastRecord > totalRows.intValue()) {
+				lastRecord = 0;
+			}
+		}
+
+		LOGGER.info("END :  Person and ExternalPerson Sync");
+	}
+
+	@Override
+	public long syncWithPerson(final SortingAndPaging sAndP) {
 		final PagingWrapper<Person> people = personService.getAll(sAndP);
 
 		// allow access to people by schoolId
 		final Map<String, Person> peopleBySchoolId = Maps.newHashMap();
-		for (Person person : people) {
+		for (final Person person : people) {
 			peopleBySchoolId.put(person.getSchoolId(), person);
 		}
 
@@ -76,81 +116,111 @@ public class ExternalPersonServiceImpl
 				dao.getBySchoolIds(peopleBySchoolId.keySet(),
 						new SortingAndPaging(ObjectStatus.ACTIVE));
 
-		for (ExternalPerson externalPerson : externalPeople) {
+		for (final ExternalPerson externalPerson : externalPeople) {
 			// get the previously fetched person
 			final Person person = peopleBySchoolId.get(externalPerson
 					.getSchoolId());
 			// upate person from external person
 			updatePersonFromExternalPerson(person, externalPerson);
 		}
+
+		return people.getResults();
 	}
 
 	/**
 	 * Modifies state of Person for values of ExternalPerson that are different.
 	 * 
 	 * @param person
+	 *            person
 	 */
 	@Override
 	public void updatePersonFromExternalPerson(final Person person,
 			final ExternalPerson externalPerson) {
 
-		if (!person.getFirstName().equals(externalPerson.getFirstName())) {
+		if (person.getSchoolId() == null) {
+			person.setSchoolId(externalPerson.getSchoolId());
+		}
+
+		if (person.getUsername() == null) {
+			person.setUsername(externalPerson.getUsername());
+		}
+
+		if ((person.getFirstName() == null) ||
+				(!person.getFirstName().equals(externalPerson.getFirstName()))) {
 			person.setFirstName(externalPerson.getFirstName());
 		}
 
-		if (!person.getLastName().equals(externalPerson.getLastName())) {
+		if ((person.getLastName() == null) ||
+				(!person.getLastName().equals(externalPerson.getLastName()))) {
 			person.setLastName(externalPerson.getLastName());
 		}
 
-		if (!person.getMiddleName().equals(externalPerson.getMiddleName())) {
+		if ((person.getMiddleName() == null)
+				||
+				(!person.getMiddleName().equals(externalPerson.getMiddleName()))) {
 			person.setMiddleName(externalPerson.getMiddleName());
 		}
 
-		if (!person.getBirthDate().equals(externalPerson.getBirthDate())) {
+		if ((person.getBirthDate() == null) ||
+				(!person.getBirthDate().equals(externalPerson.getBirthDate()))) {
 			person.setBirthDate(externalPerson.getBirthDate());
 		}
 
-		if (!person.getPrimaryEmailAddress().equals(
-				externalPerson.getPrimaryEmailAddress())) {
+		if ((person.getPrimaryEmailAddress() == null) ||
+				(!person.getPrimaryEmailAddress().equals(
+						externalPerson.getPrimaryEmailAddress()))) {
 			person.setPrimaryEmailAddress(externalPerson
 					.getPrimaryEmailAddress());
 		}
 
-		if (!person.getAddressLine1().equals(externalPerson.getAddressLine1())) {
+		if ((person.getAddressLine1() == null)
+				||
+				(!person.getAddressLine1().equals(
+						externalPerson.getAddressLine1()))) {
 			person.setAddressLine1(externalPerson.getAddressLine1());
 		}
 
-		if (!person.getAddressLine2().equals(externalPerson.getAddressLine2())) {
+		if ((person.getAddressLine2() == null)
+				||
+				(!person.getAddressLine2().equals(
+						externalPerson.getAddressLine2()))) {
 			person.setAddressLine2(externalPerson.getAddressLine2());
 		}
 
-		if (!person.getCity().equals(externalPerson.getCity())) {
+		if ((person.getCity() == null) ||
+				(!person.getCity().equals(externalPerson.getCity()))) {
 			person.setCity(externalPerson.getCity());
 		}
 
-		if (!person.getState().equals(externalPerson.getState())) {
+		if ((person.getState() == null) ||
+				(!person.getState().equals(externalPerson.getState()))) {
 			person.setState(externalPerson.getState());
 		}
 
-		if (!person.getZipCode().equals(externalPerson.getZipCode())) {
+		if ((person.getZipCode() == null) ||
+				(!person.getZipCode().equals(externalPerson.getZipCode()))) {
 			person.setZipCode(externalPerson.getZipCode());
 		}
 
-		if (!person.getHomePhone().equals(externalPerson.getHomePhone())) {
+		if ((person.getHomePhone() == null) ||
+				(!person.getHomePhone().equals(externalPerson.getHomePhone()))) {
 			person.setHomePhone(externalPerson.getHomePhone());
 		}
 
-		if (!person.getWorkPhone().equals(externalPerson.getWorkPhone())) {
+		if ((person.getWorkPhone() == null) ||
+				(!person.getWorkPhone().equals(externalPerson.getWorkPhone()))) {
 			person.setWorkPhone(externalPerson.getWorkPhone());
 		}
 
-		if (!person.getActualStartTerm().equals(
-				externalPerson.getActualStartTerm())) {
+		if ((person.getActualStartTerm() == null) ||
+				(!person.getActualStartTerm().equals(
+						externalPerson.getActualStartTerm()))) {
 			person.setActualStartTerm(externalPerson.getActualStartTerm());
 		}
 
-		if (!person.getActualStartYear().equals(
-				externalPerson.getActualStartYear())) {
+		if ((person.getActualStartYear() == null) ||
+				(!person.getActualStartYear().equals(
+						externalPerson.getActualStartYear()))) {
 			person.setActualStartYear(externalPerson.getActualStartYear());
 		}
 
@@ -164,7 +234,7 @@ public class ExternalPersonServiceImpl
 				try {
 					staffDetailsService
 							.delete(person.getStaffDetails().getId());
-				} catch (ObjectNotFoundException e) {
+				} catch (final ObjectNotFoundException e) {
 					LOGGER.info(
 							"Strange that we found a staffDetails object a moment ago, but cannot find it again to delte it.",
 							e);
@@ -177,20 +247,23 @@ public class ExternalPersonServiceImpl
 				person.setStaffDetails(new PersonStaffDetails());
 			}
 
-			if (!person.getStaffDetails().getOfficeHours()
-					.equals(externalPerson.getOfficeHours())) {
+			if ((person.getStaffDetails().getOfficeHours() == null) ||
+					(!person.getStaffDetails().getOfficeHours()
+							.equals(externalPerson.getOfficeHours()))) {
 				person.getStaffDetails().setOfficeHours(
 						externalPerson.getOfficeHours());
 			}
 
-			if (!person.getStaffDetails().getOfficeLocation()
-					.equals(externalPerson.getOfficeLocation())) {
+			if ((person.getStaffDetails().getOfficeLocation() == null) ||
+					(!person.getStaffDetails().getOfficeLocation()
+							.equals(externalPerson.getOfficeLocation()))) {
 				person.getStaffDetails().setOfficeLocation(
 						externalPerson.getOfficeLocation());
 			}
 
-			if (!person.getStaffDetails().getDepartmentName()
-					.equals(externalPerson.getDepartmentName())) {
+			if ((person.getStaffDetails().getDepartmentName() == null) ||
+					(!person.getStaffDetails().getDepartmentName()
+							.equals(externalPerson.getDepartmentName()))) {
 				person.getStaffDetails().setDepartmentName(
 						externalPerson.getDepartmentName());
 			}
@@ -214,7 +287,7 @@ public class ExternalPersonServiceImpl
 			try {
 				demographics.setMaritalStatus(maritalStatusService
 						.getByName(externalPerson.getMaritalStatus()));
-			} catch (ObjectNotFoundException e) {
+			} catch (final ObjectNotFoundException e) {
 				LOGGER.error("Marital status with name "
 						+ externalPerson.getMaritalStatus() + " not found");
 			}
@@ -229,7 +302,7 @@ public class ExternalPersonServiceImpl
 			try {
 				demographics.setEthnicity(ethnicityService
 						.getByName(externalPerson.getEthnicity()));
-			} catch (ObjectNotFoundException e) {
+			} catch (final ObjectNotFoundException e) {
 				LOGGER.error("Ethnicity with name "
 						+ externalPerson.getEthnicity() + " not found");
 			}
@@ -244,7 +317,7 @@ public class ExternalPersonServiceImpl
 			try {
 				demographics.setGender(Genders.valueOf(externalPerson
 						.getGender()));
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				LOGGER.error("Gender with code "
 						+ externalPerson.getGender() + " not found");
 			}
@@ -254,18 +327,23 @@ public class ExternalPersonServiceImpl
 			demographics.setLocal(null);
 		} else {
 			demographics.setLocal(externalPerson.getIsLocal().equalsIgnoreCase(
-					"true"));
+					"Y"));
 		}
 
-		if (!demographics.getBalanceOwed()
-				.equals(externalPerson.getBalanceOwed())) {
-			demographics.setBalanceOwed(
-					externalPerson.getBalanceOwed());
+		if (externalPerson.getBalanceOwed() == null) {
+			demographics.setBalanceOwed(null);
+		} else {
+			if ((demographics.getBalanceOwed() == null) ||
+					(!demographics.getBalanceOwed()
+							.equals(externalPerson.getBalanceOwed()))) {
+				demographics.setBalanceOwed(
+						externalPerson.getBalanceOwed());
+			}
 		}
 
 		try {
 			personService.save(person);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			LOGGER.error("person failed to save", e);
 		}
 
@@ -293,7 +371,7 @@ public class ExternalPersonServiceImpl
 	private Person getCoach(final String coachId) {
 		try {
 			return personService.getBySchoolId(coachId);
-		} catch (ObjectNotFoundException e) {
+		} catch (final ObjectNotFoundException e) {
 			LOGGER.warn(
 					"Coach referenced in external table not available in system",
 					e);

@@ -38,9 +38,9 @@ String getStudentIntakeForm(ApiConnection conn, JsonSlurper jsonParser){
 	
 	result.person.studentType = new ReferenceLiteTO(id:UUID.fromString("b2d05919-5056-a51a-80bd-03e5288de771"))
 	
-	List<ReferenceLiteTO<ProgramStatus>> programStatuses = Lists.newArrayList();
+	/*List<ReferenceLiteTO<ProgramStatus>> programStatuses = Lists.newArrayList();
 	programStatuses << new ReferenceLiteTO<ProgramStatus>(id:UUID.fromString("b2d12527-5056-a51a-8054-113116baab88"))
-	result.person.programStatuses = programStatuses
+	result.person.programStatuses = programStatuses*/
 	
 	//add a challenge
 	List<PersonChallengeTO> challenges = Lists.newArrayList();
@@ -136,13 +136,13 @@ String getAllTerms(ApiConnection conn){
 JsonSlurper jsonParser = new JsonSlurper()
 ApiConnection conn = new ApiConnection("http://localhost:8080/ssp/", "advisor0", "advisor0", false)
 
-//String output = getStudentIntakeForm(conn, jsonParser)
+String output = getStudentIntakeForm(conn, jsonParser)
 //String output = addChallengeToCategory(conn) 
 //String output = addGoalToPerson(conn) 
 //String output = getAllJournalEntriesForPerson(conn);
 //String output = getPerson(conn)
 //String output = search(conn)
-String output = getCaseload(conn)
+//String output = getCaseload(conn)
 //String output = getAppointments(conn)
 //String output = getCoaches(conn)
 //String output = getCurrentAppointment(conn)

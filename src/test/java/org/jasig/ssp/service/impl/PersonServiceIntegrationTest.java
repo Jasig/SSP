@@ -1,6 +1,7 @@
 package org.jasig.ssp.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
@@ -15,8 +16,10 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonChallenge;
 import org.jasig.ssp.model.PersonStaffDetails;
+import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
@@ -136,6 +139,49 @@ public class PersonServiceIntegrationTest {
 				reloadedDetails.getOfficeHours());
 		assertEquals("Department name values did not match.", "departmentName",
 				reloadedDetails.getDepartmentName());
+	}
+
+	@Test
+	public void getBySchoolIdKen() throws ObjectNotFoundException {
+		final Person person = service.getBySchoolId("ken.1");
+		assertNotNull("should have found ken", person);
+		assertEquals("schoolid should be ken", "ken.1", person.getSchoolId());
+	}
+
+	@Test(expected = ObjectNotFoundException.class)
+	public void getBySchoolIdNotInSystem() throws ObjectNotFoundException {
+		service.getBySchoolId("borkborkbork");
+	}
+
+	@Test
+	public void getBySchoolIdNewUser() throws ObjectNotFoundException {
+		final PagingWrapper<Person> before = service
+				.getAll(new SortingAndPaging(
+						ObjectStatus.ACTIVE));
+
+		final Person person = service.getBySchoolId("notInSsp");
+
+		final PagingWrapper<Person> after = service
+				.getAll(new SortingAndPaging(
+						ObjectStatus.ACTIVE));
+
+		assertTrue("Should have added 1 person record",
+				(before.getResults() + 1) == after.getResults());
+
+		assertNotNull("should have created new user notInSsp", person);
+		assertEquals("schoolid should be notInSsp", "notInSsp",
+				person.getSchoolId());
+		assertEquals("Firstname should match", "Not", person.getFirstName());
+		assertEquals("middlename should match", "In", person.getMiddleName());
+		assertEquals("lastname should match", "Ssp", person.getLastName());
+		assertEquals("username should match", "notInSsp", person.getUsername());
+		assertEquals("primaryemailaddress should match", "test@sinclair.edu",
+				person.getPrimaryEmailAddress());
+		assertEquals("coach should be set to advisor0", "advisor0", person
+				.getCoach().getUsername());
+		assertEquals("Gender should be set to male", Genders.M, person
+				.getDemographics().getGender());
+		assertFalse("Should not be local", person.getDemographics().getLocal());
 	}
 
 	private Person createPerson() {

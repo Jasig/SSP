@@ -56,6 +56,9 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		AbstractAuditableCrudService<EarlyAlertResponse>
 		implements EarlyAlertResponseService {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(EarlyAlertResponseServiceImpl.class);
+
 	@Autowired
 	private transient EarlyAlertResponseDao dao;
 
@@ -91,9 +94,6 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 	@Autowired
 	private transient VelocityTemplateService velocityTemplateService;
-
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(EarlyAlertResponseServiceImpl.class);
 
 	@Override
 	protected EarlyAlertResponseDao getDao() {
@@ -288,6 +288,12 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 		// add early alert response to the parameter list
 		templateParameters.put("earlyAlertResponse", earlyAlertResponse);
+		templateParameters.put("workPhone", earlyAlert.getPerson()
+				.getWorkPhone());
+		if (earlyAlert.getPerson().getStaffDetails() != null) {
+			templateParameters.put("officeLocation", earlyAlert.getPerson()
+					.getStaffDetails().getOfficeLocation());
+		}
 
 		return templateParameters;
 	}

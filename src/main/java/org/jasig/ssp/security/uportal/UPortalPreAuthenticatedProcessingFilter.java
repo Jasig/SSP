@@ -231,9 +231,17 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 		this.authenticationManager = authenticationManager;
 	}
 
+	public boolean isContinueFilterChainOnUnsuccessfulAuthentication() {
+		return continueFilterChainOnUnsuccessfulAuthentication;
+	}
+
 	public void setContinueFilterChainOnUnsuccessfulAuthentication(
 			final boolean shouldContinue) {
 		continueFilterChainOnUnsuccessfulAuthentication = shouldContinue;
+	}
+
+	public boolean isCheckForPrincipalChanges() {
+		return checkForPrincipalChanges;
 	}
 
 	/**
@@ -247,6 +255,10 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 	public void setCheckForPrincipalChanges(
 			final boolean checkForPrincipalChanges) {
 		this.checkForPrincipalChanges = checkForPrincipalChanges;
+	}
+
+	public boolean isInvalidateSessionOnPrincipalChange() {
+		return invalidateSessionOnPrincipalChange;
 	}
 
 	/**
