@@ -1,6 +1,7 @@
 Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
     extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'courseName',type:'string'},
+    fields: [{name:'personId', type: 'string'},
+             {name:'courseName',type:'string'},
              {name:'courseTitle',type:'string'},
              {name:'emailCC',type:'string'},
              {name:'campusId',type:'string'},
@@ -12,6 +13,7 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
              {name:'comment',type:'string'},
              {name:'closedDate',type:'time'},
              {name:'closedById',type:'string'},
+             {name:'sendEmailToStudent', type:'boolean'},
              
              /* props for tree manipulation */
              {name:'iconCls',type:'string'},
