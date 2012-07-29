@@ -1,4 +1,4 @@
-Ext.define('Ssp.service.JournalEntryService', {  
+Ext.define('Ssp.service.EarlyAlertReferralService', {  
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
@@ -8,20 +8,17 @@ Ext.define('Ssp.service.JournalEntryService', {
 		return this.callParent( arguments );
     },
     
-    getBaseUrl: function( personId ){
+    getBaseUrl: function(){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personJournalEntry') );
-		baseUrl = baseUrl.replace('{id}', personId );
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('earlyAlertReferral') );
 		return baseUrl;
     },
 
-    getAll: function( personId, callbacks ){
+    getAll: function( callbacks ){
     	var me=this;
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
-	    	// filter the inactive items returned in the result
-    		r.rows = me.superclass.filterInactiveChildren( r.rows );
-	    	callbacks.success( r, callbacks.scope );
+			callbacks.success( r, callbacks.scope );
 	    };
 
 	    var failure = function( response ){
@@ -30,7 +27,7 @@ Ext.define('Ssp.service.JournalEntryService', {
 	    };
 	    
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl( personId ),
+			url: me.getBaseUrl(),
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
@@ -38,9 +35,9 @@ Ext.define('Ssp.service.JournalEntryService', {
 		});
     },
     
-    save: function( personId, jsonData, callbacks ){
+    save: function( jsonData, callbacks ){
 		var me=this;
-		var url = me.getBaseUrl( personId );
+		var url = me.getBaseUrl();
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
 			callbacks.success( r, callbacks.scope );
@@ -75,26 +72,5 @@ Ext.define('Ssp.service.JournalEntryService', {
     			scope: me
     		});	
 		}
-    },
-    
-    destroy: function( personId, id, callbacks ){
-    	var me=this;
-	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-			callbacks.success( r, id, callbacks.scope );
-	    };
-
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
-	    };
-	    
-    	me.apiProperties.makeRequest({
-   		   url: me.getBaseUrl( personId )+"/"+id,
-   		   method: 'DELETE',
-   		   successFunc: success,
-   		   failureFunc: failure,
-   		   scope: me
-   	    }); 
-    }
+    }   
 });

@@ -208,18 +208,22 @@ Ext.require([
     'Ssp.store.reference.YesNo',
     'Ssp.service.AbstractService',
     'Ssp.service.AppointmentService',
+    'Ssp.service.AssessmentService',
     'Ssp.service.CaseloadService',
     'Ssp.service.CampusService',
     'Ssp.service.CampusEarlyAlertRoutingService',
     'Ssp.service.ConfidentialityDisclosureAgreementService',
     'Ssp.service.EarlyAlertService',
     'Ssp.service.EarlyAlertResponseService',
+    'Ssp.service.EarlyAlertReferralService',
     'Ssp.service.JournalEntryService',
     'Ssp.service.PersonService',
     'Ssp.service.ProgramStatusService',
     'Ssp.service.ReferralSourceService',
     'Ssp.service.SearchService',
     'Ssp.service.SpecialServiceGroupService',
+    'Ssp.service.StudentIntakeService',
+    'Ssp.service.TranscriptService',
     'Ssp.controller.ApplicationEventsController',
     'Ext.tab.*',
 	'Ext.util.Filter',
@@ -639,11 +643,13 @@ Ext.onReady(function(){
 			        	
 			        // SERVICES
 			        appointmentService: 'Ssp.service.AppointmentService',
+			        assessmentService: 'Ssp.service.AssessmentService',
 			        campusService: 'Ssp.service.CampusService',
 			        campusEarlyAlertRoutingService: 'Ssp.service.CampusEarlyAlertRoutingService',
 			        caseloadService: 'Ssp.service.CaseloadService',
 			        confidentialityDisclosureAgreementService: 'Ssp.service.ConfidentialityDisclosureAgreementService',
 			        earlyAlertService: 'Ssp.service.EarlyAlertService',
+			        earlyAlertReferralService: 'Ssp.service.EarlyAlertReferralService',
 			        earlyAlertResponseService: 'Ssp.service.EarlyAlertResponseService',
 			        journalEntryService: 'Ssp.service.JournalEntryService',
 			        personService: 'Ssp.service.PersonService',
@@ -651,7 +657,9 @@ Ext.onReady(function(){
 			        programStatusService: 'Ssp.service.ProgramStatusService',
 			        referralSourceService: 'Ssp.service.ReferralSourceService',
 			        searchService: 'Ssp.service.SearchService',
-			        specialServiceGroupService: 'Ssp.service.SpecialServiceGroupService'
+			        specialServiceGroupService: 'Ssp.service.SpecialServiceGroupService',
+			        studentIntakeService: 'Ssp.service.StudentIntakeService',
+			        transcriptService: 'Ssp.service.TranscriptService'
 				});
 				
 				Ext.application({

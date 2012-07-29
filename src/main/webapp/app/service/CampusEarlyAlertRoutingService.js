@@ -13,15 +13,16 @@ Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {
 		return this.callParent( arguments );
     },
     
-    getBaseUrl: function( id ){
+    getBaseUrl: function( campusId ){
 		var me=this;
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('campusEarlyAlertRouting') );
-    	return baseUrl;
+		baseUrl = baseUrl.replace("{id}",campusId);
+		return baseUrl;
     },
 
     getCampusEarlyAlertRouting: function( campusId, id, callbacks ){
     	var me=this;
-    	var url = me.getBaseUrl();
+    	var url = me.getBaseUrl( campusId );
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
 	    	var model = new Ssp.model.reference.CampusEarlyAlertRouting();
@@ -39,8 +40,6 @@ Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {
 	    	callbacks.failure( response, callbacks.scope );
 	    };
 	    
-	    url = url.replace("{id}",campusId);
-	    
 		// load
 		me.apiProperties.makeRequest({
 			url: url+'/'+id,
@@ -53,7 +52,7 @@ Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {
 
     getAllCampusEarlyAlertRoutings: function( campusId, callbacks ){
     	var me=this;
-    	var url = me.getBaseUrl();
+    	var url = me.getBaseUrl( campusId );
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
 	    	if (response.responseText != "")
@@ -69,8 +68,6 @@ Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {
 	    	callbacks.failure( response, callbacks.scope );
 	    };
 	    
-	    url = url.replace("{id}",campusId);
-	    
 		// load
 		me.apiProperties.makeRequest({
 			url: url,
@@ -84,7 +81,7 @@ Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {
     saveCampusEarlyAlertRouting: function( campusId, jsonData, callbacks ){
     	var me=this;
     	var id=jsonData.id;
-        var url = me.getBaseUrl();
+        var url = me.getBaseUrl( campusId );
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
 			callbacks.success( r, callbacks.scope );
@@ -94,8 +91,6 @@ Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {
 	    	me.apiProperties.handleError( response );	    	
 	    	callbacks.failure( response, callbacks.scope );
 	    };
-        
-	    url = url.replace("{id}",campusId);
 	    
     	// save
 		if (id=="")
@@ -120,5 +115,27 @@ Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {
     			scope: me
     		});	
 		}   	
+    },
+    
+    destroy: function( campusId, id, callbacks ){
+    	var me=this;
+        var url = me.getBaseUrl( campusId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, id, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+    	me.apiProperties.makeRequest({
+   		   url: url+"/"+id,
+   		   method: 'DELETE',
+   		   successFunc: success,
+   		   failureFunc: failure,
+   		   scope: me
+   	    }); 
     }
 });
