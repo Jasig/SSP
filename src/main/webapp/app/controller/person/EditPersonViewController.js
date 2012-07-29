@@ -91,9 +91,6 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 		// enable the retrieveFromExternalButton if the studentId field is valid
 		me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );
 		
-		// clear validation messages on the studentId to begin data entry
-		studentIdField.reset();
-		
 		return me.callParent(arguments);
     },
     

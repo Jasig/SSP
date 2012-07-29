@@ -58,10 +58,10 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        maxLength: 50,
 				        allowBlank:false
 				    },{
-				        fieldLabel: 'Middle Initial',
+				        fieldLabel: 'Middle Name',
 				        name: 'middleName',
 				        itemId: 'middleName',
-				        maxLength: 1,
+				        maxLength: 50,
 				        allowBlank:true
 				    },{
 				        fieldLabel: 'Last Name',
