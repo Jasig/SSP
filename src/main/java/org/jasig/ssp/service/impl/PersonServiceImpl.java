@@ -172,13 +172,9 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public Person getBySchoolId(final String schoolId)
 			throws ObjectNotFoundException {
-
-		Person person;
-
 		try {
-			person = dao.getBySchoolId(schoolId);
-
-		} catch (ObjectNotFoundException e) {
+			return additionalAttribsForStudent(dao.getBySchoolId(schoolId));
+		} catch (final ObjectNotFoundException e) {
 			final ExternalPerson externalPerson = externalPersonService
 					.getBySchoolId(schoolId);
 			if (externalPerson == null) {
@@ -187,12 +183,11 @@ public class PersonServiceImpl implements PersonService {
 						"Person");
 			}
 
-			person = new Person();
+			final Person person = new Person();
 			externalPersonService.updatePersonFromExternalPerson(person,
 					externalPerson);
+			return additionalAttribsForStudent(person);
 		}
-
-		return additionalAttribsForStudent(person);
 	}
 
 	@Override
@@ -344,7 +339,7 @@ public class PersonServiceImpl implements PersonService {
 					final ExternalPerson externalPerson = externalPersonService
 							.getByUsername(coachUsername);
 
-					coach = new Person();
+					coach = new Person(); // NOPMD
 					externalPersonService.updatePersonFromExternalPerson(
 							coach, externalPerson);
 

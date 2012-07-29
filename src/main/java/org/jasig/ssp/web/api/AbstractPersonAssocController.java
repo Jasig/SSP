@@ -193,10 +193,6 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 
 		final T model = getFactory().from(obj);
 
-		if (model.getPerson() == null) {
-			model.setPerson(personService.get(personId));
-		}
-
 		if (null != model) {
 
 			// associate with person here.

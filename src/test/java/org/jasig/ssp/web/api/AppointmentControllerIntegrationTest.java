@@ -1,0 +1,221 @@
+package org.jasig.ssp.web.api; // NOPMD by jon.adams because integration test can have many imports
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.UUID;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.AppointmentTO;
+import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.web.api.validation.ValidationException;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * {@link AppointmentController} tests
+ * 
+ * @author jon.adams
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("../ControllerIntegrationTests-context.xml")
+@TransactionConfiguration()
+@Transactional
+public class AppointmentControllerIntegrationTest {
+
+	private static final UUID PERSON_ID = UUID
+			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
+
+	@Autowired
+	private transient AppointmentController controller;
+
+	@Autowired
+	protected transient SessionFactory sessionFactory;
+
+	@Autowired
+	protected transient PersonService personService;
+
+	@Autowired
+	private transient SecurityServiceInTestEnvironment securityService;
+
+	/**
+	 * Setup the security service with the administrator user.
+	 */
+	@Before
+	public void setUp() {
+		securityService
+				.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
+						"ROLE_PERSON_APPOINTMENT_READ",
+						"ROLE_PERSON_APPOINTMENT_WRITE",
+						"ROLE_PERSON_APPOINTMENT_DELETE");
+	}
+
+	/**
+	 * Test that the {@link AppointmentController#get(UUID, UUID)} action
+	 * returns the correct validation errors when an invalid ID is sent.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             If data could not be loaded; expected for this test.
+	 * @throws ValidationException
+	 *             If any data is invalid. Should not be thrown for this test.
+	 */
+	@Test(expected = ObjectNotFoundException.class)
+	public void testControllerGetOfInvalidId() throws ObjectNotFoundException,
+			ValidationException {
+		assertNotNull(
+				"Controller under test was not initialized by the container correctly.",
+				controller);
+
+		final AppointmentTO obj = controller.get(PERSON_ID,
+				UUID.randomUUID());
+
+		assertNull(
+				"Returned AppointmentTO from the controller should have been null.",
+				obj);
+	}
+
+	/**
+	 * Test the
+	 * {@link AppointmentController#getAll(UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * action.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             If referenced Person could not be found. Should not be thrown
+	 *             for this test.
+	 */
+	@Test
+	public void testControllerAll() throws ObjectNotFoundException {
+		final Collection<AppointmentTO> list = controller.getAll(
+				PERSON_ID, ObjectStatus.ACTIVE, null, null, null, null)
+				.getRows();
+
+		assertNotNull("List should not have been null.", list);
+	}
+
+	/**
+	 * Test the {@link AppointmentController#create(UUID, AppointmentTO)} and
+	 * {@link AppointmentController#delete(UUID, UUID)} actions.
+	 * 
+	 * @throws ValidationException
+	 *             Thrown if data is not valid. Should not be thrown for this
+	 *             test.
+	 * @throws ObjectNotFoundException
+	 *             Thrown if lookup data could not be found. Should not be
+	 *             thrown for this test.
+	 */
+	@Test()
+	public void testControllerCreateAndDelete() throws ObjectNotFoundException,
+			ValidationException {
+		// arrange
+		final Calendar start = Calendar.getInstance();
+		final Calendar end = Calendar.getInstance();
+		start.add(Calendar.DAY_OF_YEAR, 1);
+		end.add(Calendar.DAY_OF_YEAR, 2);
+
+		final AppointmentTO obj = new AppointmentTO();
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setPersonId(PERSON_ID);
+		obj.setStartTime(start.getTime());
+		obj.setEndTime(end.getTime());
+
+		final AppointmentTO saved = controller.create(PERSON_ID, obj);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		final UUID savedId = saved.getId();
+		assertNotNull("Saved instance identifier should not have been null.",
+				savedId);
+		assertEquals("PersonIds did not match.", PERSON_ID, saved.getPersonId());
+
+		session.clear();
+
+		final ServiceResponse response = controller.delete(savedId, PERSON_ID);
+
+		assertNotNull("Deletion response should not have been null.",
+				response);
+		assertTrue("Deletion response did not return success.",
+				response.isSuccess());
+
+		try {
+			// ObjectNotFoundException expected at this point
+			final AppointmentTO afterDeletion = controller.get(savedId,
+					PERSON_ID);
+			assertNull(
+					"Instance should not be able to get loaded after it has been deleted.",
+					afterDeletion);
+		} catch (final ObjectNotFoundException exc) { // NOPMD by jon.adams
+			// expected
+		}
+	}
+
+	/**
+	 * Test the {@link AppointmentController#create(UUID, AppointmentTO)} action
+	 * auto-fills the reference IDs from the path.
+	 * 
+	 * @throws ValidationException
+	 *             Thrown if data is not valid. Should not be thrown for this
+	 *             test.
+	 * @throws ObjectNotFoundException
+	 *             Thrown if lookup data could not be found. Should not be
+	 *             thrown for this test.
+	 */
+	@Test()
+	public void testControllerCreateWithMissingCampus()
+			throws ObjectNotFoundException,
+			ValidationException {
+		// arrange
+		final Calendar start = Calendar.getInstance();
+		final Calendar end = Calendar.getInstance();
+		start.add(Calendar.DAY_OF_YEAR, 1);
+		end.add(Calendar.DAY_OF_YEAR, 2);
+
+		final AppointmentTO obj = new AppointmentTO();
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setPersonId(PERSON_ID);
+		obj.setStartTime(start.getTime());
+		obj.setEndTime(end.getTime());
+
+		final AppointmentTO saved = controller.create(PERSON_ID, obj);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		final UUID savedId = saved.getId();
+		assertNotNull("Saved instance identifier should not have been null.",
+				savedId);
+
+		session.clear();
+
+		final AppointmentTO reloaded = controller.get(savedId, PERSON_ID);
+
+		assertEquals("Person ID was not filled automatically.", PERSON_ID,
+				reloaded.getPersonId());
+	}
+
+	/**
+	 * Test that getLogger() returns the matching log class name for the current
+	 * class under test.
+	 */
+	@Test
+	public void testLogger() {
+		final Logger logger = controller.getLogger();
+		assertEquals("Log class name did not match.", controller.getClass()
+				.getName(), logger.getName());
+	}
+}
