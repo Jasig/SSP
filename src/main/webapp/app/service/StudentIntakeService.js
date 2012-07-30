@@ -1,4 +1,4 @@
-Ext.define('Ssp.service.JournalEntryService', {  
+Ext.define('Ssp.service.StudentIntakeService', {  
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
@@ -7,21 +7,21 @@ Ext.define('Ssp.service.JournalEntryService', {
     initComponent: function() {
 		return this.callParent( arguments );
     },
-    
-    getBaseUrl: function( personId ){
-		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personJournalEntry') );
-		baseUrl = baseUrl.replace('{id}', personId );
-		return baseUrl;
-    },
 
-    getAll: function( personId, callbacks ){
-    	var me=this;
+    getBaseUrl: function(){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('studentIntakeTool') );
+    	return baseUrl;
+    },
+    
+    get: function( personId, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
-	    	// filter the inactive items returned in the result
-    		r.rows = me.superclass.filterInactiveChildren( r.rows );
-	    	callbacks.success( r, callbacks.scope );
+	    	// filter inactive items
+    		r.rows = me.superclass.filterInactiveChildren( r.rows );	    	
+			callbacks.success( r, callbacks.scope );
 	    };
 
 	    var failure = function( response ){
@@ -30,17 +30,17 @@ Ext.define('Ssp.service.JournalEntryService', {
 	    };
 	    
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl( personId ),
+			url: url+'/'+personId,
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
 			scope: me
-		});
+		});    	
     },
     
     save: function( personId, jsonData, callbacks ){
 		var me=this;
-		var url = me.getBaseUrl( personId );
+		var url = me.getBaseUrl();
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
 			callbacks.success( r, callbacks.scope );
@@ -51,10 +51,8 @@ Ext.define('Ssp.service.JournalEntryService', {
 	    	callbacks.failure( response, callbacks.scope );
 	    };
 		
-		id = jsonData.id;
-
 		// save
-		if (id=="")
+		if (personId=="")
 		{				
 			me.apiProperties.makeRequest({
     			url: url,
@@ -67,34 +65,13 @@ Ext.define('Ssp.service.JournalEntryService', {
 		}else{
 			// update
     		me.apiProperties.makeRequest({
-    			url: url+"/"+id,
+    			url: url+"/"+personId,
     			method: 'PUT',
     			jsonData: jsonData,
     			successFunc: success,
     			failureFunc: failure,
     			scope: me
     		});	
-		}
-    },
-    
-    destroy: function( personId, id, callbacks ){
-    	var me=this;
-	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-			callbacks.success( r, id, callbacks.scope );
-	    };
-
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
-	    };
-	    
-    	me.apiProperties.makeRequest({
-   		   url: me.getBaseUrl( personId )+"/"+id,
-   		   method: 'DELETE',
-   		   successFunc: success,
-   		   failureFunc: failure,
-   		   scope: me
-   	    }); 
+		}	
     }
 });

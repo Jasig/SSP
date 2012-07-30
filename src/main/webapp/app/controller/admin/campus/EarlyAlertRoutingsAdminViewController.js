@@ -98,22 +98,31 @@ Ext.define('Ssp.controller.admin.campus.EarlyAlertRoutingsAdminViewController', 
   	
   	deleteRecord: function( btnId ){
   		var me=this;
-  		var url = me.baseUrl;
+  		var campusId = me.campus.get('id');
   		var grid=me.getView();
   		var store = grid.getStore();
   	    var selection = grid.getView().getSelectionModel().getSelection()[0];
        	var id = selection.get('id');
        	if (btnId=="yes")
        	{
-       		me.apiProperties.makeRequest({
-         		   url: url+"/"+id,
-         		   method: 'DELETE',
-         		   successFunc: function(response,responseText){
-         			   store.remove( store.getById( id ) );
-         		   }
-         	    });
+       		me.service.destroy( campusId, id, {
+       			success: me.destroySuccess,
+       			failure: me.destroyFailure,
+       			scope: me
+       		});
          }
-  	},	
+  	},
+  	
+  	destroySuccess: function( r, id, scope ){
+  		var me=scope;
+  		var grid=me.getView();
+  		var store = grid.getStore();
+  		store.remove( store.getById( id ) );
+  	},
+  	
+  	destroyFailure: function( response, scope ){
+  		var me=scope;
+  	},
 	
 	displayEditor: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});

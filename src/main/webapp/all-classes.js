@@ -1,35 +1,6 @@
 /*
 Copyright(c) 2012 Sinclair Community College
 */
-Ext.define('Ssp.view.admin.AdminTreeMenu', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.admintreemenu',
-	id: 'AdminTreeMenu',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.AdminViewController',
-    inject: {
-    	store: 'adminTreeMenusStore'
-    },    
-	initComponent: function() {	
-		Ext.apply(this, 
-				{
-					store: this.store,
-					singleExpand: true,
-					fields: ['title','form','text'],	
-				});
-		
-	     this.callParent(arguments);
-	}	
-}); 
-Ext.define('Ssp.view.admin.AdminForms', {
-	extend: 'Ext.container.Container',
-	alias : 'widget.adminforms',
-    id: 'AdminForms',
-	width: '100%',
-	height: '100%',
-	layout: 'fit'
-});
 Ext.define('Ssp.view.admin.AdminMain', {
 	extend: 'Ext.panel.Panel',
     alias: 'widget.adminmain',
@@ -49,632 +20,13 @@ Ext.define('Ssp.view.admin.AdminMain', {
 	     this.callParent(arguments);
 	}
 });
-Ext.define('Ssp.view.Search', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.search',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.SearchViewController',
-    inject: {
-    	appEventsController: 'appEventsController',
-    	apiProperties: 'apiProperties',
-    	columnRendererUtils: 'columnRendererUtils',
-    	person: 'currentPerson',
-        store: 'studentsStore',
-        programStatusesStore: 'programStatusesStore'
-    },
-    initComponent: function(){
-    	Ext.apply(this,
-    			   {
-    				title: 'Students',
-    	            collapsible: true,
-    	            collapseDirection: 'left',
-    	        	width: '100%',
-    	        	height: '100%',
-		    	    columns: [
-		    	              { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 },		        
-		    	              { text: 'Name', dataIndex: 'lastName', renderer: this.columnRendererUtils.renderStudentDetails, flex: 50},
-		    	              ],
-    	          
-		    	    dockedItems: [{
-		       			xtype: 'pagingtoolbar',
-		       		    store: this.store,
-		       			dock: 'bottom',
-		       		    displayInfo: true,
-		       		    pageSize: this.apiProperties.getPagingSize()
-		       		},{
-		       			xtype: 'toolbar',
-		       			dock: 'top',
-		       			defaults: {
-		       				labelWidth: 50
-		       			},
-		       		    items: [
-		       		        {
-		       		        	xtype: 'textfield',
-		       		        	itemId: 'searchText'
-		       		        },{
-		       		        	xtype: 'button',
-		       		        	tooltip: 'Find a student',
-		       		        	itemId: 'searchButton',
-					            width: 30,
-					            height: 23,
-					            cls: 'searchIcon'
-		       		        },{
-		       		        	xtype: 'tbspacer',
-		       		        	flex: 1
-		       		        },{
-					            tooltip: 'Display with photo',
-					            text: '',
-					            width: 20,
-					            height: 20,
-					            cls: 'displayPhotoListIcon',
-					            xtype: 'button',
-					            itemId: 'displayPhotoButton'				        	
-					        },{
-					            tooltip: 'Display without photo',
-					            text: '',
-					            width: 20,
-					            height: 20,
-					            cls: 'displayListIcon',
-					            xtype: 'button',
-					            itemId: 'displayListButton'				        	
-					        }
-		       		    ]
-		       		}/*,{
-		       			xtype: 'toolbar',
-		       			dock: 'top',
-		       		    items: [
-		       		        {
-		    			        xtype: 'combobox',
-		    			        itemId: 'caseloadStatusCombo',
-		    			        name: 'programStatusId',
-		    			        fieldLabel: 'Caseload Status',
-		    			        emptyText: 'Select One',
-		    			        store: this.programStatusesStore,
-		    			        valueField: 'id',
-		    			        displayField: 'name',
-		    			        mode: 'local',
-		    			        typeAhead: true,
-		    			        queryMode: 'local',
-		    			        allowBlank: true,
-		    			        forceSelection: false,
-		    			        labelWidth: 100
-		    				},{
-		       		        	xtype: 'tbspacer',
-		       		        	flex: 1
-		       		        }
-		       		    ]
-		       		    
-		       		}*/]
-		    	    });
-    	
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.Main', {
-	extend: 'Ext.panel.Panel',
-    alias: 'widget.mainview',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    inject: {
-    	authenticatedPerson: 'authenticatedPerson'
-    },
-    controller: 'Ssp.controller.MainViewController',
-    initComponent: function(){
-    	var me=this;
-    	Ext.apply(me,
-		    			{
-		    	    layout: {
-		    	    	type: 'hbox',
-		    	    	align: 'stretch'
-		    	    },
-
-		    	    dockedItems: {
-		    	        xtype: 'toolbar',
-		    	        items: [{
-		    			            xtype: 'button',
-		    			            text: 'Students',
-		    			            itemId: 'studentViewNav',
-		    			            action: 'displayStudentRecord'
-		    			        }, {
-		    			            xtype: 'button',
-		    			            text: 'Admin',
-		    			            itemId: 'adminViewNav',
-		    			            action: 'displayAdmin'
-		    			        },{
-			       		        	xtype: 'tbspacer',
-			       		        	flex: 1
-			       		        },{
-								    tooltip: 'Add Student',
-								    text: '',
-								    width: 25,
-								    height: 25,
-								    cls: 'addPersonIcon',
-								    xtype: 'button',
-								    itemId: 'addPersonButton'
-								},{
-								    tooltip: 'Edit Student',
-								    text: '',
-								    width: 25,
-								    height: 25,
-								    cls: 'editPersonIcon',
-								    xtype: 'button',
-								    itemId: 'editPersonButton'
-								},{
-								    tooltip: 'Delete Student',
-								    text: '',
-								    width: 25,
-								    height: 25,
-								    cls: 'deletePersonIcon',
-								    xtype: 'button',
-								    itemId: 'deletePersonButton'
-								}]
-		    	    }    		
-    			});
-    	
-    	return me.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.StudentRecord', {
-	extend: 'Ext.panel.Panel',
-    alias: 'widget.studentrecord',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.StudentRecordViewController',
-    width: '100%',
-    height: '100%',
-    initComponent: function(){
-    	Ext.apply(this,{
-    		title: 'Student Record',
-    	    collapsible: true,
-    	    collapseDirection: 'left',
-    		layout: {
-    	    	type: 'hbox',
-    	    	align: 'stretch'
-    	    },
-			
-    	    items: [{xtype:'toolsmenu',flex:1},
-			        {xtype: 'tools', flex:4}]		        
-    	});
-    	return this.callParent(arguments);
-    }
-});	
-Ext.define('Ssp.view.person.CaseloadAssignment', {
-	extend: 'Ext.panel.Panel',
-	alias : 'widget.caseloadassignment',
-	mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.person.CaseloadAssignmentViewController',
-    inject: {
-    	model: 'currentPerson'
-    },
-    width: '100%',
-	height: '100%',   
-	initComponent: function() {
-		Ext.apply(this, 
-				{
-			        title: "Caseload Assignment",
-		    		autoScroll: true,
-		    	    defaults: {
-		    	        bodyStyle: 'padding:15px'
-		    	    },
-		    	    layout: {
-		    	        type: 'accordion',
-		    	        titleCollapse: true,
-		    	        animate: true,
-		    	        activeOnTop: true
-		    	    },		    		
-		    		
-		    		dockedItems: [{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [{xtype: 'button', 
-				        	     itemId: 'saveButton', 
-				        	     text:'Save'
-				        	    },
-				                 {
-				            	   xtype: 'button',
-				            	   itemId: 'cancelButton',
-				            	   text: 'Cancel',
-				                 },{ 
-						        	xtype: 'tbspacer',
-						        	flex: 1
-						         },
-				                 {
-				            	   xtype: 'button',
-				            	   itemId: 'printButton',
-				            	   tooltip: 'Print Appointment Form',
-				            	   width: 30,
-						           height: 30,
-						           cls: 'printIcon'
-				                 },
-				                 {
-				            	   xtype: 'button',
-				            	   itemId: 'emailButton',
-				            	   tooltip: 'Email Appointment Form',
-				            	   width: 30,
-						           height: 30,
-						           cls: 'emailIcon'
-				                 }]
-				    }],
-				    
-				    items: [ ]
-			});
-	
-		return this.callParent(arguments);
-	}
-
-});
-Ext.define('Ssp.view.person.EditPerson', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.editperson',
-	mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.person.EditPersonViewController',
-	initComponent: function() {	
-		Ext.apply(this, 
-				{
-					border: 0,	    
-				    fieldDefaults: {
-				        msgTarget: 'side',
-				        labelAlign: 'right',
-				        labelWidth: 100
-				    },
-					items: [{
-			            xtype: 'fieldset',
-			            border: 0,
-			            title: '',
-			            defaultType: 'textfield',
-
-			       items: [{
-			        fieldLabel: 'First Name',
-			        name: 'firstName',
-			        itemId: 'firstName',
-			        id: 'editPersonFirstName',
-			        maxLength: 50,
-			        allowBlank:false,
-			        width: 350
-			    },{
-			        fieldLabel: 'Middle Initial',
-			        name: 'middleInitial',
-			        itemId: 'middleName',
-			        id: 'editPersonMiddleName',
-			        maxLength: 1,
-			        allowBlank:true,
-			        width: 350
-			    },{
-			        fieldLabel: 'Last Name',
-			        name: 'lastName',
-			        itemId: 'lastName',
-			        id: 'editPersonLastName',
-			        maxLength: 50,
-			        allowBlank:false,
-			        width: 350
-			    },{
-			        fieldLabel: 'Student ID',
-			        name: 'schoolId',
-			        minLength: 7,
-			        maxLength: 7,
-			        itemId: 'studentId',
-			        allowBlank:false,
-			        width: 350
-			    },{
-			    	xtype: 'button',
-			    	tooltip: 'Load record from external system',
-			    	text: 'Retrieve from SIS',
-			    	itemId: 'retrieveFromExternalButton'
-			    },{
-			        fieldLabel: 'Home Phone',
-			        name: 'homePhone',
-			        emptyText: 'xxx-xxx-xxxx',
-			        maskRe: /[\d\-]/,
-			        regex: /^\d{3}-\d{3}-\d{4}$/,
-			        regexText: 'Must be in the format xxx-xxx-xxxx',
-			        maxLength: 12,
-			        allowBlank:true,
-			        itemId: 'homePhone',
-			        width: 350
-			    },{
-			        fieldLabel: 'Work Phone',
-			        name: 'workPhone',
-			        emptyText: 'xxx-xxx-xxxx',
-			        maskRe: /[\d\-]/,
-			        regex: /^\d{3}-\d{3}-\d{4}$/,
-			        regexText: 'Must be in the format xxx-xxx-xxxx',
-			        maxLength: 12,
-			        allowBlank:true,
-			        itemId: 'workPhone',
-			        width: 350
-			    },{
-			        fieldLabel: 'School Email',
-			        name: 'primaryEmailAddress',
-			        vtype:'email',
-			        maxLength: 100,
-			        allowBlank:true,
-			        itemId: 'primaryEmailAddress',
-			        width: 350
-			    },{
-			        fieldLabel: 'Home Email',
-			        name: 'secondaryEmailAddress',
-			        vtype:'email',
-			        maxLength: 100,
-			        allowBlank:true,
-			        itemId: 'secondaryEmailAddress',
-			        width: 350
-			    }]
-			}]
-		});
-		
-		return this.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.person.Coach', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.personcoach',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.person.CoachViewController',
-    inject: {
-    	coachesStore: 'coachesStore',
-    	studentTypesStore: 'studentTypesStore'
-    },
-	initComponent: function() {	
-		Ext.apply(this, 
-				{
-			    fieldDefaults: {
-			        msgTarget: 'side',
-			        labelAlign: 'right',
-			        labelWidth: 200
-			    },	
-			    border: 0,
-				items: [{
-			            xtype: 'fieldset',
-			            border: 0,
-			            title: '',
-			            defaultType: 'textfield',
-			            defaults: {
-			                anchor: '100%'
-			            },
-			       items: [{
-				        xtype: 'combobox',
-				        name: 'coachId',
-				        itemId: 'coachCombo',
-				        fieldLabel: 'Assigned Coach',
-				        emptyText: 'Select One',
-				        store: this.coachesStore,
-				        valueField: 'id',
-				        displayField: 'fullName',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: false
-					},{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Office',
-				        itemId: 'officeField',
-				        name: 'coachOffice'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Phone',
-				        itemId: 'phoneField',
-				        name: 'coachPhone'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Email',
-				        itemId: 'emailAddressField',
-				        name: 'coachEmailAddress'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Department',
-				        itemId: 'departmentField',
-				        name: 'coachDepartment'
-				    },{
-				        xtype: 'combobox',
-				        name: 'studentTypeId',
-				        itemId: 'studentTypeCombo',
-				        id: 'studentTypeCombo',
-				        fieldLabel: 'Student Type',
-				        emptyText: 'Select One',
-				        store: this.studentTypesStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: false
-					}]
-			    }]
-			});
-		
-		return this.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.person.Appointment', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.personappointment',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.person.AppointmentViewController',
-    inject: {
-    	person: 'currentPerson'
-    },
-	initComponent: function() {	
-		var me=this;
-		Ext.apply(this, 
-				{
-			    fieldDefaults: {
-			        msgTarget: 'side',
-			        labelAlign: 'right',
-			        labelWidth: 200
-			    },	
-			    border: 0,
-			    padding: 0,
-				items: [{
-			            xtype: 'fieldset',
-			            border: 0,
-			            title: '',
-			            defaultType: 'textfield',
-			            defaults: {
-			                anchor: '100%'
-			            },
-			       items: [{
-				    	xtype: 'datefield',
-				    	fieldLabel: 'Appointment Date',
-				    	itemId: 'appointmentDateField',
-				        name: 'appointmentDate',
-				        allowBlank: false
-				    },{
-				        xtype: 'timefield',
-				        name: 'startTime',
-				        itemId: 'startTimeField',
-				        fieldLabel: 'Start Time',
-				        increment: 30,
-				        typeAhead: false,
-				        allowBlank: false,
-				        anchor: '100%'
-				    },{
-				        xtype: 'timefield',
-				        name: 'endTime',
-				        itemId: 'endTimeField',
-				        fieldLabel: 'End Time',
-				        typeAhead: false,
-				        allowBlank: false,
-				        increment: 30,
-				        anchor: '100%'
-				    },{
-				        xtype: 'checkboxgroup',
-				        fieldLabel: 'Send Student Intake Request',
-				        columns: 1,
-				        items: [
-				            {boxLabel: '', name: 'sendStudentIntakeRequest'},
-				        ]
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Last Student Intake Request Date',
-				        name: 'lastStudentIntakeRequestDate',
-				        value: ((me.person.getFormattedStudentIntakeRequestDate().length > 0) ? me.person.getFormattedStudentIntakeRequestDate() : 'No requests have been sent')
-				    }]
-			    }]
-			});
-		
-		return me.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.person.SpecialServiceGroups', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.personspecialservicegroups',
-	mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.person.SpecialServiceGroupsViewController',
+Ext.define('Ssp.view.admin.AdminForms', {
+	extend: 'Ext.container.Container',
+	alias : 'widget.adminforms',
+    id: 'AdminForms',
 	width: '100%',
-    height: '100%',
-    autoScroll: true,
-	initComponent: function() {	
-		var me=this;
-		Ext.apply(me, 
-				{
-				    bodyPadding: 5,
-				    layout: 'anchor'
-				});
-		
-		return me.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.person.ReferralSources', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.personreferralsources',
-	mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.person.ReferralSourcesViewController',
-	width: '100%',
-    height: '100%',
-    autoScroll: true,
-	initComponent: function() {	
-		var me=this;
-		Ext.apply(this, 
-				{
-				    bodyPadding: 5,
-				    layout: 'anchor'
-				});
-		
-		return me.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.person.ServiceReasons', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.personservicereasons',
-	id: 'personservicereasons',
-	mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.person.ServiceReasonsViewController',
-    width: '100%',
-    height: '100%',
-    autoScroll: true,
-	initComponent: function() {	
-		Ext.apply(this, 
-				{
-				    bodyPadding: 0,
-				    border: 0,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    defaultType: 'checkbox'
-				});
-		
-		return this.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.person.AnticipatedStartDate', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.personanticipatedstartdate',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.person.AnticipatedStartDateViewController',
-    inject: {
-    	anticipatedStartTermsStore: 'anticipatedStartTermsStore',
-    	anticipatedStartYearsStore: 'anticipatedStartYearsStore'
-    },
-	initComponent: function() {	
-		Ext.apply(this, 
-				{
-			border: 0,
-			items: [{
-		        xtype: 'checkboxgroup',
-		        fieldLabel: 'Ability to Benefit',
-		        columns: 1,
-		        items: [
-		            {boxLabel: '', name: 'abilityToBenefit'}
-		        ]
-		    },{
-		        xtype: 'combobox',
-		        name: 'anticipatedStartTerm',
-		        fieldLabel: 'Anticipated Start Term',
-		        emptyText: 'Select One',
-		        store: this.anticipatedStartTermsStore,
-		        valueField: 'name',
-		        displayField: 'name',
-		        mode: 'local',
-		        typeAhead: true,
-		        queryMode: 'local',
-		        allowBlank: true
-			},{
-		        xtype: 'combobox',
-		        name: 'anticipatedStartYear',
-		        fieldLabel: 'Anticipated Start Year',
-		        emptyText: 'Select One',
-		        store: this.anticipatedStartYearsStore,
-		        valueField: 'name',
-		        displayField: 'name',
-		        mode: 'local',
-		        typeAhead: true,
-		        queryMode: 'local',
-		        allowBlank: true
-			}]
-		});
-		
-		return this.callParent(arguments);
-	}
+	height: '100%',
+	layout: 'fit'
 });
 Ext.define('Ssp.view.component.MappedTextField', {
 	extend: 'Ext.form.field.Text',
@@ -719,60 +71,6 @@ Ext.define('Ssp.view.component.MappedRadioButton', {
 		return this.callParent(arguments);
 	}
 });
-Ext.define('Ssp.view.ToolsMenu', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.toolsmenu',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.ToolsViewController',
-    inject: {
-    	appEventsController: 'appEventsController',
-    	columnRendererUtils: 'columnRendererUtils',
-        store: 'toolsStore'
-    },
-    initComponent: function(){
-    	Ext.apply(this,
-    			   {
-		    		width: '100%',
-		    		height: '100%',
-    				store: this.store,
-
-    	    		features: [{
-		    	        id: 'group',
-		    	        ftype: 'grouping',
-		    	        groupHeaderTpl: '{name}',
-		    	        hideGroupedHeader: false,
-		    	        enableGroupingMenu: false
-		    	    }],
-		    	    
-    				columns:[{
-    				           header: "Tools", 
-    				           dataIndex: "name",
-    				           sortable: false,
-    				           menuDisabled: true,
-    				           flex:1 },{
-	    			    	        xtype:'actioncolumn',
-	    			    	        width:18,
-	    			    	        header: '',
-	    			    	        items: [{
-	    			    	            tooltip: 'Add Tool',
-	    			    	            // icon: Ssp.util.Constants.ADD_TOOL_ICON_PATH,
-	    			    	            getClass: this.columnRendererUtils.renderAddToolIcon,
-	    			    	            handler: function(grid, rowIndex, colIndex) {
-	    			    	            	var rec = grid.getStore().getAt(rowIndex);
-	    			    	            	var panel = grid.up('panel');
-	    			    	                //panel.toolId.data=rec.data.toolId;
-	    			    	                panel.appEventsController.getApplication().fireEvent('addTool');
-	    			    	                Ext.Msg.alert('Attention','This feature is not yet active');
-	    			    	            },
-	    			    	            scope: this
-	    			    	        }]
-	    		                }]
-		    	    });
-    	
-    	return this.callParent(arguments);
-    }
-});
 Ext.define('Ssp.view.Tools', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.tools',
@@ -780,169 +78,6 @@ Ext.define('Ssp.view.Tools', {
 	width: '100%',
 	height: '100%',
 	layout: 'fit'
-});
-Ext.define('Ssp.view.tools.profile.Profile', {
-	extend: 'Ext.form.Panel',
-	alias : 'widget.profile',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
-    width: '100%',
-	height: '100%',
-    initComponent: function() {	
-		var me=this;
-    	Ext.apply(me, 
-				{
-		    	    layout: 'fit',
-		            title: 'Profile',
-		            padding: 0,
-		            border: 0,
-					items: [
-						Ext.createWidget('tabpanel', {
-						    width: '100%',
-						    height: '100%',
-						    activeTab: 0,
-						    itemId: 'profileTabs',
-						    items: [{ 
-						    	      title: 'Personal',
-						    	      autoScroll: true,
-						    		  items: [{xtype: 'profileperson'}]
-						    		},{ 
-						    		  title: 'Special Service Groups',
-						    		  autoScroll: true,
-						    		  items: [{xtype: 'profilespecialservicegroups'}]
-						    		},{ 
-						    		  title: 'Referral Sources',
-						    		  autoScroll: true,
-						    		  items: [{xtype: 'profilereferralsources'}]
-						    		},{ 
-							    		  title: 'Services Provided History',
-							    		  autoScroll: true,
-							    		  items: [{xtype: 'profileservicesprovided'}]
-							    	}]
-						})
-				    ],
-				    
-				    dockedItems: [{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [{
-				            tooltip: 'Transition Student',
-				            text: '',
-				            width: 35,
-				            height: 35,
-				            cls: 'studentTransitionIcon',
-				            xtype: 'button',
-				            itemId: 'studentTransitionButton'
-				        },{
-					            tooltip: 'View Student History',
-					            text: '',
-					            width: 35,
-					            height: 35,
-					            cls: 'studentHistoryIcon',
-					            xtype: 'button',
-					            itemId: 'viewHistoryButton'
-					        }]
-				    }]
-				});	     
-    	
-    	return this.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.tools.profile.Person', {
-	extend: 'Ext.form.Panel',
-	alias : 'widget.profileperson',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',	
-    width: '100%',
-	height: '100%',
-    initComponent: function() {	
-		var me=this;
-    	Ext.apply(me, 
-				{
-    		        border: 0,	
-				    bodyPadding: 5,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    fieldDefaults: {
-				        msgTarget: 'side',
-				        labelAlign: 'right',
-				        labelWidth: 125
-				    },
-				    defaultType: 'displayfield',
-				    items: [{
-				            xtype: 'fieldset',
-				            border: 0,
-				            title: '',
-				            defaultType: 'displayfield',
-				            defaults: {
-				                anchor: '100%'
-				            },
-				       items: 
-				       [{
-					        fieldLabel: 'Student',
-					        name: 'name',
-					        itemId: 'studentName'
-					    }, {
-					        fieldLabel: 'Student Id',
-					        itemId: 'studentId',
-					        name: 'schoolId'
-					    }, {
-					        fieldLabel: 'Birth Date',
-					        name: 'birthDate',
-					        itemId: 'birthDate'
-					    }, {
-					        fieldLabel: 'Home Phone',
-					        name: 'homePhone'
-					    }, {
-					        fieldLabel: 'Cell Phone',
-					        name: 'cellPhone'
-					    }, {
-					        fieldLabel: 'Address',
-					        name: 'addressLine1'
-					    }, {
-					        fieldLabel: 'City',
-					        name: 'city'
-					    }, {
-					        fieldLabel: 'State',
-					        name: 'state'
-					    }, {
-					        fieldLabel: 'Zip Code',
-					        name: 'zipCode'
-					    }, {
-					        fieldLabel: 'School Email',
-					        name: 'primaryEmailAddress'
-					    }, {
-					        fieldLabel: 'Alternate Email',
-					        name: 'secondaryEmailAddress'
-					    }, {
-					        fieldLabel: 'Student Type',
-					        name: 'studentType'
-					    }, {
-					        fieldLabel: 'SSP Program Status',
-					        name: 'programStatus'
-					    }, {
-					        fieldLabel: 'Registration Status',
-					        name: 'registrationStatus'
-					    }, {
-					        fieldLabel: 'Payment Status',
-					        name: 'paymentStatus'
-					    }, {
-					        fieldLabel: 'CUM GPA',
-					        name: 'cumGPA'
-					    }, {
-					        fieldLabel: 'Academic Program',
-					        name: 'academicPrograms'
-					    }]
-					    }],
-				});
-		
-	     return me.callParent(arguments);
-	}
-	
 });
 Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
 	extend: 'Ext.grid.Panel',
@@ -954,10 +89,11 @@ Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
 	width: '100%',
 	height: '100%',
 	initComponent: function() {	
-		Ext.apply(this, 
+		var me=this;
+		Ext.apply(me, 
 				{
 			        hideHeaders: true,
-			        store: this.store,
+			        store: me.store,
 					autoScroll: true,
     		        columns: [
     		                { header: 'Group',  
@@ -966,7 +102,7 @@ Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
     		                }],
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });
 Ext.define('Ssp.view.tools.profile.ReferralSources', {
@@ -978,12 +114,13 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
     },
 	width: '100%',
 	height: '100%',
-	initComponent: function() {	
-		Ext.apply(this, 
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
 				{
 			        hideHeaders: true,
 			        autoScroll: true,
-		            store: this.store,
+		            store: me.store,
     		        columns: [
     		                { header: 'Source',  
     		                  dataIndex: 'name',
@@ -991,133 +128,34 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
     		                }],
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });
-Ext.define('Ssp.view.tools.profile.ServicesProvided', {
+Ext.define('Ssp.view.tools.profile.ServiceReasons', {
 	extend: 'Ext.grid.Panel',
-	alias : 'widget.profileservicesprovided',
+	alias : 'widget.profileservicereasons',
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	store: 'profileServiceReasonsStore'
+    },
 	width: '100%',
 	height: '100%',
-	initComponent: function() {	
-		Ext.apply(this, 
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
 				{
-		            autoScroll: true,
+			        hideHeaders: true,
+			        autoScroll: true,
+		            store: me.store,
     		        columns: [
-    		                { header: 'Provided By',  
-    		                  dataIndex: 'createdBy',
-    		                  flex: .50,
-    		                },{ header: 'Date Provided',  
-    		                  dataIndex: 'createdDate',
-    		                  flex: .50,
+    		                { header: 'Reason',  
+    		                  dataIndex: 'name',
+    		                  flex: 1,
     		                }],
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
-});
-Ext.define('Ssp.view.tools.actionplan.ActionPlan', {
-	extend: 'Ext.container.Container',
-	alias : 'widget.actionplan',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.actionplan.ActionPlanToolViewController',
-    width: '100%',
-	height: '100%',   
-	layout: 'fit',
-	initComponent: function() {	
-		Ext.apply(this,{items: [{xtype: 'displayactionplan'}]});
-
-		return this.callParent(arguments);
-	}
-		
-});
-Ext.define('Ssp.view.tools.actionplan.Tasks', {
-	extend: 'Ext.grid.Panel',
-	alias: 'widget.tasks',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.actionplan.TasksViewController',
-    inject: {
-    	appEventsController: 'appEventsController',
-    	columnRendererUtils: 'columnRendererUtils',
-    	model: 'currentTask',
-        store: 'tasksStore',
-    },
-    layout: 'auto',
-	width: '100%',
-    height: '100%',
-    initComponent: function(){
-    	
-    	var sm = Ext.create('Ext.selection.CheckboxModel');
-    	
-    	Ext.apply(this,
-    			{
-    		        scroll: 'vertical',
-    	    		store: this.store,    		
-    	    		selModel: sm,
-    	    		features: [{
-		    	        id: 'group',
-		    	        ftype: 'grouping',
-		    	        groupHeaderTpl: '{name}',
-		    	        hideGroupedHeader: false,
-		    	        enableGroupingMenu: false
-		    	    }],
-		
-		    	    columns: [{
-		    	        xtype:'actioncolumn',
-		    	        width:65,
-		    	        header: 'Action',
-		    	        items: [{
-		    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-		    	            tooltip: 'Edit Task',
-		    	            handler: function(grid, rowIndex, colIndex) {
-		    	            	var rec = grid.getStore().getAt(rowIndex);
-		    	            	var panel = grid.up('panel');
-		    	                panel.model.data=rec.data;
-		    	            	panel.appEventsController.getApplication().fireEvent('editTask');
-		    	            },
-		    	            scope: this
-		    	        },{
-		    	            icon: Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH,
-		    	            tooltip: 'Close Task',
-		    	            handler: function(grid, rowIndex, colIndex) {
-		    	            	var rec = grid.getStore().getAt(rowIndex);
-		    	            	var panel = grid.up('panel');
-		    	                panel.model.data=rec.data;
-		    	            	panel.appEventsController.getApplication().fireEvent('closeTask');
-		    	            },
-		    	            scope: this
-		    	        },{
-		    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-		    	            tooltip: 'Delete Task',
-		    	            handler: function(grid, rowIndex, colIndex) {
-		    	            	var rec = grid.getStore().getAt(rowIndex);
-		    	            	var panel = grid.up('panel');
-		    	                panel.model.data=rec.data;
-		    	            	panel.appEventsController.getApplication().fireEvent('deleteTask');
-		    	            },
-		    	            scope: this
-		    	        }]
-		    	    },{
-		    	        text: 'Description',
-		    	        flex: 1,
-		    	        tdCls: 'task',
-		    	        sortable: true,
-		    	        dataIndex: 'name',
-		    	        renderer: this.columnRendererUtils.renderTaskName
-		    	    },{
-		    	        header: 'Due Date',
-		    	        width: 100,
-		    	        dataIndex: 'dueDate',
-		    	        renderer: this.columnRendererUtils.renderTaskDueDate
-		    	    }]
-    	
-
-    			});
-    	
-    	return this.callParent(arguments);
-    }
 });
 Ext.define('Ssp.view.tools.actionplan.AddTask', {
 	extend: 'Ext.panel.Panel',
@@ -1128,468 +166,31 @@ Ext.define('Ssp.view.tools.actionplan.AddTask', {
     },
 	width: '100%',
     height: '100%',
-	autoScroll: true,
-    defaults: {
-        anchor: '100%'
-    },    
-	
     initComponent: function() {
 		Ext.apply(this,{
-						title: 'Add Action Plan Tasks',
-						items: [{ xtype: 'tasktree', flex:1 },
-						        { xtype: 'addtaskform', flex:1 }]
+			autoScroll: true,
+			layout: {
+				type: 'vbox',
+				align: 'stretch'
+			},
+			title: 'Add Action Plan Tasks',
+			items: [{ xtype: 'tasktree', flex: .5 },
+			        { xtype: 'addtaskform', flex: .5 }]
 		});
 		
 		return this.callParent(arguments);
 	}
 });
 
-Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.addtaskform',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.actionplan.AddTasksFormViewController',
-    inject: {
-        store: 'confidentialityLevelsStore'
-    },
-	width: '100%',
-    height: '100%',
-	autoScroll: true,
-	padding: 0,
-    fieldDefaults: {
-        msgTarget: 'side',
-        labelAlign: 'right',
-        labelWidth: 150
-    },    
-	initComponent: function() {
-		Ext.apply(this, 
-				{
-				    items: [{
-				            xtype: 'fieldset',
-				            title: 'Add Task',
-				            defaultType: 'textfield',
-				            defaults: {
-				                anchor: '100%'
-				            },
-				       items: [{
-					    	xtype: 'displayfield',
-					        fieldLabel: 'Name',
-					        name: 'name'
-					    },{
-				    	xtype: 'textarea',
-				        fieldLabel: 'Description',
-				        name: 'description',
-				        maxLength: 1000,
-				        allowBlank:false
-				    },{
-				        xtype: 'combobox',
-				        itemId: 'confidentialityLevel',
-				        name: 'confidentialityLevelId',
-				        fieldLabel: 'Confidentiality Level',
-				        emptyText: 'Select One',
-				        store: this.store,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: false,
-				        forceSelection: true
-					},{
-				    	xtype: 'datefield',
-				    	fieldLabel: 'Target Date',
-				        name: 'dueDate',
-				        allowBlank:false    	
-				    }]
-				    }],
-				    
-				    dockedItems: [{
-				        dock: 'bottom',
-				        xtype: 'toolbar',
-				        items: [{xtype: 'button', 
-				        	     itemId: 'addButton', 
-				        	     text:'Save', 
-				        	     action: 'add' },
-				        	     {
-				            	   xtype: 'button',
-				            	   itemId: 'closeButton',
-				            	   text: 'Finished',
-				            	   action: 'close'}]
-				    }]
-				});
-		
-		return this.callParent(arguments);
-	}
-});
-
-Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.editgoalform',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.actionplan.EditGoalFormViewController',
-    inject: {
-        store: 'confidentialityLevelsStore'
-    },
-	initComponent: function() {
-        Ext.applyIf(this, {
-        	title: 'Add Goal',
-            fieldDefaults: {
-                msgTarget: 'side',
-                labelAlign: 'right',
-                labelWidth: 150
-            },            
-        	items: [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Name',
-                    anchor: '100%',
-                    name: 'name'
-                },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'Description',
-                    anchor: '100%',
-                    name: 'description'
-                },{
-			        xtype: 'combobox',
-			        itemId: 'confidentialityLevel',
-			        name: 'confidentialityLevelId',
-			        fieldLabel: 'Confidentiality Level',
-			        emptyText: 'Select One',
-			        store: this.store,
-			        valueField: 'id',
-			        displayField: 'acronym',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true
-				}],
-            
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
-        });
-
-        return this.callParent(arguments);
-    }	
-});
-Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
-	extend: 'Ext.panel.Panel',
-	alias : 'widget.displayactionplan',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.actionplan.DisplayActionPlanViewController',
-    inject: {
-    	person: 'currentPerson'
-    },
-    width: '100%',
-	height: '100%',
-	padding: 0,
-	initComponent: function() {	
-		Ext.apply(this, 
-				{
-		    	    layout: {
-		    	        type: 'accordion',
-		    	        titleCollapse: true,
-		    	        animate: true,
-		    	        activeOnTop: true
-		    	    },
-		            title: 'Action Plan',
-		            autoScroll: true,
-		            padding: 0,
-					items: [
-						Ext.createWidget('tabpanel', {
-						    width: '100%',
-						    height: '100%',
-						    activeTab: 0,
-						    title: 'Tasks',
-						    itemId: 'taskStatusTabs',
-						    items: [{ 
-						    	      title: 'Active',
-						    		  autoScroll: true,
-						    		  action: 'active',
-						    		  items: [{xtype: 'tasks'}]
-						    		},{ 
-						    		  title: 'Complete',
-						    		  autoScroll: true,
-						    		  action: 'complete',
-						    		  items: [{xtype: 'tasks'}]
-						    		},{ 
-						    		  title: 'All',
-						    		  autoScroll: true,
-						    		  action: 'all',
-						    		  items: [{xtype: 'tasks'}]
-						    		}],
-						    	    
-						    	    dockedItems: [{
-								        dock: 'top',
-								        xtype: 'toolbar',
-								        items: [{
-								            tooltip: 'Add a Task',
-								            text: 'Add',
-								            xtype: 'button',
-								            itemId: 'addTaskButton'
-								        }]
-						    	    }]
-						})
-						,{xtype: 'displayactionplangoals', itemId: 'goalsPanel', flex: 1}
-						,{xtype: 'displaystrengths', itemId: 'strengthsPanel'}
-				    ],
-				    
-				    dockedItems: [{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [{
-					            tooltip: 'Email Action Plan',
-					            text: '',
-					            width: 30,
-					            height: 30,
-					            cls: 'emailIcon',
-					            xtype: 'button',
-					            itemId: 'emailTasksButton'
-					        },{
-					            tooltip: 'Print Action Plan',
-					            text: '',
-					            width: 30,
-					            height: 30,
-					            cls: 'printIcon',
-					            xtype: 'button',
-					            itemId: 'printTasksButton'
-					        },{ 
-					        	xtype: 'tbspacer',
-					        	flex: 1
-					        },{
-					            xtype: 'checkbox',
-					            boxLabel: 'Display only tasks that I created',
-					            itemId: 'filterTasksBySelfCheck'
-					        }]
-				    }]
-				});
-	
-		return this.callParent(arguments);
-	}
-		
-});
-Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.displayactionplangoals',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController',
-    inject: {
-    	appEventsController: 'appEventsController',
-    	columnRendererUtils: 'columnRendererUtils',
-    	model: 'currentGoal',
-        store: 'goalsStore'
-    },
-    width: '100%',
-	height: '100%',   
-    layout: 'anchor',
-    itemId: 'goalsPanel',
-    defaults: {
-        anchor: '100%'
-    },	
-	initComponent: function() {	
-		
-    	var sm = Ext.create('Ext.selection.CheckboxModel');
-		
-		Ext.apply(this, {
-
-				title: 'Goals',
-				store: this.store,
-				selModel: sm,
-			    columns: [{
-	    	        xtype:'actioncolumn',
-	    	        width:65,
-	    	        header: 'Action',
-	    	        items: [{
-	    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-	    	            tooltip: 'Edit Goal',
-	    	            handler: function(grid, rowIndex, colIndex) {
-	    	            	var rec = grid.getStore().getAt(rowIndex);
-	    	                var panel = grid.up('panel');
-	    	                panel.model.data=rec.data;
-	    	            	panel.appEventsController.getApplication().fireEvent('editGoal');
-	    	            },
-	    	            scope: this
-	    	        },{
-	    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-	    	            tooltip: 'Delete Goal',
-	    	            handler: function(grid, rowIndex, colIndex) {
-	    	            	var rec = grid.getStore().getAt(rowIndex);
-	    	            	var panel = grid.up('panel');
-	    	                panel.model.data=rec.data;
-	    	            	panel.appEventsController.getApplication().fireEvent('deleteGoal');
-	    	            },
-	    	            scope: this
-	    	        }]
-	    	    },{
-	    	        header: 'Name',
-	    	        flex: 1,
-	    	        dataIndex: 'name',
-	    	        renderer: this.columnRendererUtils.renderGoalName
-	    	    },{
-	    	        header: 'Confidentiality',
-	    	        dataIndex: 'confidentialityLevel',
-	    	        renderer: this.columnRendererUtils.renderConfidentialityLevelName
-	    	    }],
-	    	    
-	    	    dockedItems: [{
-			        dock: 'top',
-			        xtype: 'toolbar',
-			        items: [{
-			            tooltip: 'Add a Goal',
-			            text: 'Add',
-			            xtype: 'button',
-			            itemId: 'addGoalButton'
-			        }]
-	    	    }]
-		});
-		
-		return this.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
-	extend: 'Ext.form.Panel',
-	alias : 'widget.displaystrengths',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.actionplan.DisplayStrengthsViewController',
-    width: '100%',
-	height: '100%',
-	initComponent: function() {	
-		Ext.applyIf(this,{
-	        title: 'Strengths',
-			items:[{
-		        xtype:'form',
-		        layout:'anchor',
-		        items :[{
-		            xtype: 'textarea',
-		            anchor: '100%',
-		            height: 50,
-		            fieldLabel: 'Strengths',
-		            itemId: 'strengths',
-		            name: 'strengths'
-		        }]
-			}],
-			
-    	    dockedItems: [{
-		        dock: 'top',
-		        xtype: 'toolbar',
-		        items: [{
-		            tooltip: 'Save Strengths',
-		            text: 'Save',
-		            xtype: 'button',
-		            itemId: 'saveButton'
-		        }]
-    	    }]
-		
-		});
-		
-		return this.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.tools.actionplan.TaskTree', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.tasktree',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.actionplan.TaskTreeViewController',
-    inject: {
-        store: 'treeStore'
-    },
-	height: 250,
-	width: '100%',
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-    			 store: this.store,
-    			 useArrows: true,
-    			 rootVisible: false,
-    			 dockedItems: [
-     		              {
-     		               xtype: 'toolbar',
-     		               items: [{
-     	                      xtype: 'textfield',
-     	                      fieldLabel: 'Search'
-     	                     },
-     	                      {
-     	                    	  xtype: 'button',
-     	                    	  text: 'GO',
-     	                    	  action: 'search',
-     	                    	  itemId: 'searchButton'
-     	                      }]
-     		           } ] 
-     		       	
-    	});
-    	
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
-	extend: 'Ext.panel.Panel',
-	alias : 'widget.studentintake',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.studentintake.StudentIntakeToolViewController',
-    inject: {
-        store: 'studentsStore'
-    },
-	title: 'Student Intake',	
-	width: '100%',
-	height: '100%',   
-	initComponent: function() {	
-		Ext.apply(this, 
-				{
-		    		store: this.store,
-		    		layout: 'fit',
-		    		padding: 0,
-		    		border: 0,
-		    		items: [],
-						
-			    		dockedItems: [{
-					        dock: 'top',
-					        xtype: 'toolbar',
-					        items: [{xtype: 'button', itemId: 'saveButton', text:'Save', action: 'save' },
-					                {xtype: 'button', itemId: 'cancelButton', text:'Cancel', action: 'reset' },
-					                { 
-					        	     xtype: 'tbspacer',
-					        	     flex: 1
-					               },{
-					            	   xtype: 'button',
-					            	   itemId: 'viewConfidentialityAgreementButton',
-					            	   text: 'View Confidentiality Agreement',
-					            	   action: 'viewConfidentialityAgreement'}]
-					    }]
-
-			});
-						
-		return this.callParent(arguments);
-	}
-
-});
 Ext.define('Ssp.view.tools.studentintake.Challenges', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.studentintakechallenges',
 	id : 'StudentIntakeChallenges',
     width: '100%',
     height: '100%',
-	initComponent: function() {	
-		Ext.apply(this, 
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
 				{
 		    	    autoScroll: true,
 					border: 0,	
@@ -1601,7 +202,7 @@ Ext.define('Ssp.view.tools.studentintake.Challenges', {
 				    defaultType: 'checkbox'
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });
 Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
@@ -1633,7 +234,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				            id: 'StudentIntakeEducationGoalsFieldSet',
 				            defaultType: "textfield",
 				            defaults: {
-				                anchor: "100%"
+				                anchor: "95%"
 				            },
 				       items: [{
 				            xtype: "radiogroup",
@@ -1648,9 +249,12 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 			            title: '',
 			            defaultType: "textfield",
 			            defaults: {
-			                anchor: "100%"
+			                anchor: "95%"
 			            },
 			       items: [{
+				        fieldLabel: 'What is your planned major?',
+				        name: 'plannedMajor'
+				    },{
 			            xtype: "radiogroup",
 			            fieldLabel: "How sure are you about your major?",
 			            columns: 1,
@@ -1662,205 +266,50 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 			                {boxLabel: "Very Sure", name: "howSureAboutMajor", inputValue: "5"}
 			        		]
 			        },{
+				        xtype: "radiogroup",
+				        fieldLabel: 'Have you decided on a career/occupation?',
+				        columns: 1,
+				        itemId: 'careerDecided',
+				        items: [
+				            {boxLabel: "Yes", name: "careerDecided", inputValue:"true"},
+				            {boxLabel: "No", name: "careerDecided", inputValue:"false"}]
+					},{
 				        fieldLabel: 'What is your planned occupation?',
 				        name: 'plannedOccupation'
-				    }]
+				    },{
+			            xtype: "radiogroup",
+			            fieldLabel: "How sure are you about your occupation?",
+			            columns: 1,
+			            items: [
+			                {boxLabel: "Very Unsure", name: "howSureAboutOccupation", inputValue: "1"},
+			                {boxLabel: "", name: "howSureAboutOccupation", inputValue: "2"},
+			                {boxLabel: "", name: "howSureAboutOccupation", inputValue: "3"},
+			                {boxLabel: "", name: "howSureAboutOccupation", inputValue: "4"},
+			                {boxLabel: "Very Sure", name: "howSureAboutOccupation", inputValue: "5"}
+			        		]
+			        },{
+				        xtype: 'radiogroup',
+				        fieldLabel: 'Are you confident your abilities are compatible with the career field?',
+				        columns: 1,
+				        itemId: 'confidentInAbilities',
+				        items: [
+				            {boxLabel: "Yes", name: "confidentInAbilities", inputValue:"true"},
+				            {boxLabel: "No", name: "confidentInAbilities", inputValue:"false"}]
+					},{
+				        xtype: "radiogroup",
+				        fieldLabel: 'Do you need additional information about which academic programs may lead to a future career?',
+				        columns: 1,
+				        itemId: 'additionalAcademicProgramInformationNeeded',
+				        items: [
+				            {boxLabel: "Yes", name: "additionalAcademicProgramInformationNeeded", inputValue:"true"},
+				            {boxLabel: "No", name: "additionalAcademicProgramInformationNeeded", inputValue:"false"}]
+					}]
 				    
 				    }]
 				});
 		
 		return this.callParent(arguments);
 	}	
-});
-Ext.define('Ssp.view.tools.studentintake.Demographics', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.studentintakedemographics',
-	id : 'StudentIntakeDemographics',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.studentintake.DemographicsViewController',
-    inject: {
-    	childCareArrangementsStore: 'childCareArrangementsStore',
-    	citizenshipsStore: 'citizenshipsStore',
-    	educationGoalsStore: 'educationGoalsStore',
-    	educationLevelsStore: 'educationLevelsStore',
-    	employmentShiftsStore: 'employmentShiftsStore',
-    	ethnicitiesStore: 'ethnicitiesStore',
-    	gendersStore: 'gendersStore',
-    	maritalStatusesStore: 'maritalStatusesStore',
-    	veteranStatusesStore: 'veteranStatusesStore'
-    },    
-	width: '100%',
-    height: '100%',
-
-	initComponent: function() {	
-		Ext.apply(this, 
-				{
-					autoScroll: true,
-				    layout: 'anchor',
-				    border: 0,
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    fieldDefaults: {
-				        msgTarget: 'side',
-				        labelAlign: 'right',
-				        labelWidth: 280
-				    },
-				    defaultType: 'displayfield',
-				    items: [{
-				            xtype: 'fieldset',
-							border: 0,
-				            title: '',
-				            defaultType: 'textfield',
-				            defaults: {
-				                anchor: '100%'
-				            },
-				       items: [{
-				        xtype: 'combobox',
-				        name: 'maritalStatusId',
-				        fieldLabel: 'Marital Status',
-				        emptyText: 'Select One',
-				        store: this.maritalStatusesStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
-					},{
-				        xtype: 'combobox',
-				        name: 'ethnicityId',
-				        fieldLabel: 'Ethnicity',
-				        emptyText: 'Select One',
-				        store: this.ethnicitiesStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
-					},{
-				        xtype: 'combobox',
-				        name: 'gender',
-				        fieldLabel: 'Gender',
-				        emptyText: 'Select One',
-				        store: this.gendersStore,
-				        valueField: 'code',
-				        displayField: 'title',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
-					},{
-				        xtype: 'combobox',
-				        itemId: 'citizenship',
-				        name: 'citizenshipId',
-				        fieldLabel: 'Citizenship',
-				        emptyText: 'Select One',
-				        store: this.citizenshipsStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
-					},{
-				        fieldLabel: 'Country of citizenship',
-				        itemId: 'countryOfCitizenship',
-				        name: 'countryOfCitizenship'
-				    },{
-				        xtype: 'combobox',
-				        name: 'veteranStatusId',
-				        fieldLabel: 'Veteran Status',
-				        emptyText: 'Select One',
-				        store: this.veteranStatusesStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
-					},{
-				        xtype: "radiogroup",
-				        fieldLabel: "Are you a Primary Caregiver?",
-				        columns: 1,
-				        items: [
-				            {boxLabel: "Yes", name: "primaryCaregiver", inputValue:"true"},
-				            {boxLabel: "No", name: "primaryCaregiver", inputValue:"false"}]
-				    },{
-				        xtype: 'displayfield',
-				        fieldLabel: 'If you have children, please indicate below'
-				    },{
-				        xtype: 'numberfield',
-				        name: 'numberOfChildren',
-				        fieldLabel: 'How many?',
-				        value: 0,
-				        minValue: 0,
-				        maxValue: 50
-				    },{
-				        fieldLabel: 'Ages? Separate each age with a comma. (1,5,12)',
-				        name: 'childAges'
-				    },{
-				        xtype: "radiogroup",
-				        fieldLabel: "Childcare Needed?",
-				        itemId: 'childcareNeeded',
-				        columns: 1,
-				        items: [
-				            {boxLabel: "Yes", name: "childCareNeeded", inputValue:"true"},
-				            {boxLabel: "No", name: "childCareNeeded", inputValue:"false"}]
-				    },{
-				        xtype: 'combobox',
-				        itemId: 'childcareArrangement',
-				        name: 'childCareArrangementId',
-				        fieldLabel: 'If yes, what are your childcare arrangements?',
-				        emptyText: 'Select One',
-				        store: this.childCareArrangementsStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
-					},{
-				        xtype: "radiogroup",
-				        itemId: 'isEmployed',
-				        fieldLabel: "Are you employed?",
-				        columns: 1,
-				        items: [
-				            {boxLabel: "Yes", name: "employed", inputValue:"true"},
-				            {boxLabel: "No", name: "employed", inputValue:"false"}]
-				    },{
-				        fieldLabel: 'Place of employment',
-				        itemId: 'placeOfEmployment',
-				        name: 'placeOfEmployment'
-				    },{
-				        xtype: 'combobox',
-				        name: 'shift',
-				        itemId: 'shift',
-				        fieldLabel: 'Shift',
-				        emptyText: 'Select One',
-				        store: this.employmentShiftsStore,
-				        valueField: 'code',
-				        displayField: 'title',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
-					},{
-				        fieldLabel: 'Wage',
-				        itemId: 'wage',
-				        name: 'wage'
-				    },{
-				        fieldLabel: 'Total hours worked weekly while attending school',
-				        itemId: 'totalHoursWorkedPerWeek',
-				        name: 'totalHoursWorkedPerWeek'
-				    }]
-				    }]
-				});
-		
-		return this.callParent(arguments);
-	}
 });
 Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 	extend: 'Ext.form.Panel',
@@ -1884,101 +333,6 @@ Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 		return this.callParent(arguments);
 	}
 });
-Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.studentintakeeducationplans',
-	id : 'StudentIntakeEducationPlans',   
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.studentintake.EducationPlansViewController',
-    inject: {
-        studentStatusesStore: 'studentStatusesStore'
-    },
-	width: '100%',
-    height: '100%',
-	
-    initComponent: function() {	
-		Ext.apply(this, 
-				{
-					autoScroll: true,
-					bodyPadding: 5,
-					border: 0,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    fieldDefaults: {
-				        msgTarget: 'side',
-				        labelAlign: 'left',
-				        labelWidth: 225
-				    },
-				    defaultType: 'displayfield',
-				    items: [{
-				            xtype: 'fieldset',
-							border: 0,
-				            title: '',
-				            defaultType: 'textfield',
-				            defaults: {
-				                anchor: '100%'
-				            },
-				       items: [{
-				        xtype: 'combobox',
-				        name: 'studentStatusId',
-				        fieldLabel: 'Student Status',
-				        emptyText: 'Select One',
-				        store: this.studentStatusesStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
-					},{
-				        xtype: 'checkboxgroup',
-				        fieldLabel: 'Check all that you have completed',
-				        columns: 1,
-				        items: [
-				            {boxLabel: 'New Student Orientation', name: 'newOrientationComplete'},
-				            {boxLabel: 'Registered for Classes', name: 'registeredForClasses'}
-				        ]
-				    },{
-				        xtype: "radiogroup",
-				        fieldLabel: "Have your parents obtained a college degree?",
-				        columns: 1,
-				        itemId: 'parentsDegree',
-				        items: [
-				            {boxLabel: "Yes", name: "collegeDegreeForParents", inputValue:"true"},
-				            {boxLabel: "No", name: "collegeDegreeForParents", inputValue:"false"}]
-				    },{
-				        xtype: "radiogroup",
-				        fieldLabel: "Require special accommodations?",
-				        columns: 1,
-				        itemId: 'specialNeeds',
-				        items: [
-				            {boxLabel: "Yes", name: "specialNeeds", inputValue:"true"},
-				            {boxLabel: "No", name: "specialNeeds", inputValue:"false"}]
-				    },{
-				        xtype: 'radiogroup',
-				        fieldLabel: 'What grade did you typically earn at your highest level of education?',
-				        columns: 1,
-				        items: [
-				            {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "A"},
-				            {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "A-B"},
-				            {boxLabel: 'B', name: 'gradeTypicallyEarned', inputValue: "B"},
-				            {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "B-C"},
-				            {boxLabel: 'C', name: 'gradeTypicallyEarned', inputValue: "C"},
-				            {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "C-D"},
-				            {boxLabel: 'D', name: 'gradeTypicallyEarned', inputValue: "D"},
-				            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "D-F"},
-				            {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
-				    		]
-				        }]
-				    }]
-				});
-		
-		return this.callParent(arguments);
-	}	
-});
 Ext.define('Ssp.view.tools.studentintake.Funding', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.studentintakefunding',
@@ -2000,765 +354,6 @@ Ext.define('Ssp.view.tools.studentintake.Funding', {
 		
 		return this.callParent(arguments);
 	}
-});
-Ext.define('Ssp.view.tools.studentintake.Personal', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.studentintakepersonal',
-	id: 'StudentIntakePersonal',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.studentintake.PersonalViewController',
-    inject: {
-        statesStore: 'statesStore'
-    },
-	width: '100%',
-    height: '100%',    
-	initComponent: function() {
-		Ext.apply(this, 
-				{
-					autoScroll: true,
-    		        border: 0,	
-				    bodyPadding: 5,				    
-					layout: 'anchor',
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    fieldDefaults: {
-				        msgTarget: 'side',
-				        labelAlign: 'right',
-				        labelWidth: 150
-				    },
-				    items: [{
-				            xtype: 'fieldset',
-				            border: 0,
-				            title: '',
-				            defaultType: 'textfield',
-				            defaults: {
-				                anchor: '100%'
-				            },
-				       items: [{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Intake Date',
-				        name: 'studentIntakeCreatedDate'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Agreed to Confidentiality',
-				        name: 'confidentialityAgreement'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Date of Agreement',
-				        name: 'confidentialityAgreementDate'
-				    },{
-				        fieldLabel: 'First Name',
-				        name: 'firstName',
-				        itemId: 'firstName',
-				        maxLength: 50,
-				        allowBlank:false
-				    },{
-				        fieldLabel: 'Middle Initial',
-				        name: 'middleInitial',
-				        itemId: 'middleInitial',
-				        maxLength: 1,
-				        allowBlank:true
-				    },{
-				        fieldLabel: 'Last Name',
-				        name: 'lastName',
-				        itemId: 'lastName',
-				        maxLength: 50,
-				        allowBlank:false
-				    },{
-				        fieldLabel: 'Student ID',
-				        name: 'schoolId',
-				        minLength: 0,
-				        maxLength: 7,
-				        itemId: 'studentId',
-				        allowBlank:false
-				    },{
-				    	xtype: 'datefield',
-				    	fieldLabel: 'Birth Date',
-				    	itemId: 'birthDate',
-				    	altFormats: 'm/d/Y|m-d-Y',
-				    	invalidText: '{0} is not a valid date - it must be in the format: 06/21/2012 or 06-21-2012',
-				        name: 'birthDate',
-				        allowBlank:false
-				    },{
-				        fieldLabel: 'Home Phone',
-				        name: 'homePhone',
-				        emptyText: 'xxx-xxx-xxxx',
-				        maskRe: /[\d\-]/,
-				        regex: /^\d{3}-\d{3}-\d{4}$/,
-				        regexText: 'Must be in the format xxx-xxx-xxxx',
-				        maxLength: 12,
-				        allowBlank:true,
-				        itemId: 'homePhone' 
-				    },{
-				        fieldLabel: 'Work Phone',
-				        name: 'workPhone',
-				        emptyText: 'xxx-xxx-xxxx',
-				        maskRe: /[\d\-]/,
-				        regex: /^\d{3}-\d{3}-\d{4}$/,
-				        regexText: 'Must be in the format xxx-xxx-xxxx',
-				        maxLength: 12,
-				        allowBlank:true,
-				        itemId: 'workPhone'
-				    },{
-				        fieldLabel: 'Cell Phone',
-				        name: 'cellPhone',
-				        emptyText: 'xxx-xxx-xxxx',
-				        maskRe: /[\d\-]/,
-				        regex: /^\d{3}-\d{3}-\d{4}$/,
-				        regexText: 'Must be in the format xxx-xxx-xxxx',
-				        maxLength: 12,
-				        allowBlank:true,
-				        itemId: 'cellPhone'
-				    },{
-				        fieldLabel: 'Address',
-				        name: 'addressLine1',
-				        maxLength: 50,
-				        allowBlank:true,
-				        itemId: 'address'
-				    },{
-				        fieldLabel: 'City',
-				        name: 'city',
-				        maxLength: 50,
-				        allowBlank:true,
-				        itemId: 'city'
-				    },{
-				        xtype: 'combobox',
-				        name: 'state',
-				        fieldLabel: 'State',
-				        emptyText: 'Select a State',
-				        store: this.statesStore,
-				        valueField: 'code',
-				        displayField: 'title',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true,
-				        forceSelection: true,
-				        itemId: 'state'
-					},{
-				        fieldLabel: 'Zip Code',
-				        name: 'zipCode',
-				        maxLength: 10,
-				        allowBlank:true,
-				        itemId: 'zipCode'
-				    },{
-				        fieldLabel: 'Primary Email (School)',
-				        name: 'primaryEmailAddress',
-				        vtype:'email',
-				        maxLength: 100,
-				        allowBlank:false,
-				        itemId: 'primaryEmailAddress'
-				    },{
-				        fieldLabel: 'Alternate Email',
-				        name: 'secondaryEmailAddress',
-				        vtype:'email',
-				        maxLength: 100,
-				        allowBlank:true,
-				        itemId: 'secondaryEmailAddress'
-				    }]
-				    }]
-				});
-		
-		return this.callParent(arguments);
-	}
-});
-
-Ext.define('Ssp.view.tools.journal.Journal', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.journal',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.journal.JournalToolViewController',
-    inject: {
-    	appEventsController: 'appEventsController',
-    	columnRendererUtils: 'columnRendererUtils',
-    	model: 'currentJournalEntry',
-        store: 'journalEntriesStore'
-    },
-	width: '100%',
-	height: '100%',
-	initComponent: function() {	
-    	var sm = Ext.create('Ext.selection.CheckboxModel');
-
-		Ext.apply(this, 
-				{
-		            autoScroll: true,
-		            title: 'Journal',
-		            store: this.store,
-	    		      columns: [{
-					    	        xtype:'actioncolumn',
-					    	        width:65,
-					    	        header: 'Action',
-					    	        items: [{
-					    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-					    	            tooltip: 'Edit Task',
-					    	            handler: function(grid, rowIndex, colIndex) {
-					    	            	var rec = grid.getStore().getAt(rowIndex);
-					    	            	var panel = grid.up('panel');
-					    	                panel.model.data=rec.data;
-					    	                panel.appEventsController.getApplication().fireEvent('editJournalEntry');
-					    	            },
-					    	            scope: this
-					    	        },{
-					    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-					    	            tooltip: 'Delete Task',
-					    	            handler: function(grid, rowIndex, colIndex) {
-					    	            	var rec = grid.getStore().getAt(rowIndex);
-					    	            	var panel = grid.up('panel');
-					    	                panel.model.data=rec.data;
-					    	            	panel.appEventsController.getApplication().fireEvent('deleteJournalEntry');
-					    	            },
-					    	            scope: this
-					    	        }]
-				                },
-	    		                { header: 'Date',  
-		    		                  dataIndex: 'createdBy',
-		    		                  flex: 1,
-		    		                  renderer: this.columnRendererUtils.renderCreatedByDate
-	    		                },
-	    		                { header: 'Entered By',  
-	    		                  dataIndex: 'createdBy',
-	    		                  flex: 1,
-	    		                  renderer: this.columnRendererUtils.renderCreatedBy
-	    		                },
-	      		                { header: 'Source',
-	      		                  dataIndex: 'journalSource', 
-	      		                  flex: 1,
-	      		                  renderer: this.columnRendererUtils.renderJournalSourceName
-	    		                },
-	      		                { header: 'Confidentiality',
-	      		                  dataIndex: 'confidentialityLevel', 
-	      		                  flex: 1,
-	      		                  renderer: this.columnRendererUtils.renderConfidentialityLevelName
-	    		                }],
-				    
-				    dockedItems: [{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [{
-				            tooltip: 'Add Journal Note',
-				            text: 'Add',
-				            xtype: 'button',
-				            itemId: 'addButton'
-				        }]
-				    }]
-				});
-		
-		return this.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.tools.journal.EditJournal',{
-	extend: 'Ext.form.Panel',
-	alias : 'widget.editjournal',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.journal.EditJournalViewController',
-    inject: {
-        confidentialityLevelsStore: 'confidentialityLevelsStore',
-        journalSourcesStore: 'journalSourcesStore',
-        journalTracksStore: 'journalTracksStore',
-        model: 'currentJournalEntry'
-    },	
-    initComponent: function() {
-    	Ext.applyIf(this, {
-        	title: ((this.model.get('id') == "") ? "Add Journal" : "Edit Journal"),
-        	autoScroll: true,
-        	defaults: {
-            	labelWidth: 150,
-            	padding: 5
-            },
-        	items: [
-                {
-			        xtype: 'combobox',
-			        itemId: 'confidentialityLevelCombo',
-			        name: 'confidentialityLevelId',
-			        fieldLabel: 'Confidentiality Level',
-			        emptyText: 'Select One',
-			        store: this.confidentialityLevelsStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true,
-			        anchor: '100%'
-				},{
-			        xtype: 'combobox',
-			        itemId: 'journalSourceCombo',
-			        name: 'journalSourceId',
-			        fieldLabel: 'Source',
-			        emptyText: 'Select One',
-			        store: this.journalSourcesStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true,
-			        anchor: '100%'
-				},{
-			        xtype: 'combobox',
-			        itemId: 'journalTrackCombo',
-			        name: 'journalTrackId',
-			        fieldLabel: 'Journal Track',
-			        emptyText: 'Select One',
-			        store: this.journalTracksStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: true,
-			        forceSelection: false,
-			        anchor: '100%'
-				},{
-		        	xtype: 'label',
-		        	text: 'Session Details (Critical Components)'
-				},{
-					xtype: 'tbspacer',
-					flex: 1
-				},{
-		            tooltip: 'Add Journal Session Details',
-		            text: 'Add/Edit Session Details',
-		            xtype: 'button',
-		            itemId: 'addSessionDetailsButton'
-	    	    },
-                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'100% 50%' }
-				,{
-                    xtype: 'textareafield',
-                    fieldLabel: 'Comment',
-                    itemId: 'commentText',
-                    anchor: '100%',
-                    name: 'comment'
-                }],
-            
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
-        });
-
-        return this.callParent(arguments);
-    }	
-});
-Ext.define('Ssp.view.tools.journal.DisplayDetails', {
-	extend: 'Ext.grid.Panel',
-	alias: 'widget.displayjournaldetails',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.journal.DisplayDetailsViewController',
-    inject: {
-        store: 'journalEntryDetailsStore'
-    },
-    layout:'fit',
-	width: '100%',
-	height: '100%',
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-    	    		store: this.store,
-    	    		hideHeaders: true,
-    	    		
-    	    		features: [{
-		    	        id: 'group',
-		    	        ftype: 'grouping',
-		    	        groupHeaderTpl: '{name}',
-		    	        hideGroupedHeader: false,
-		    	        enableGroupingMenu: false
-		    	    }],
-		    	    
-		    	    columns: [{
-		    	        text: '',
-		    	        flex: 1,
-		    	        sortable: false,
-		    	        dataIndex: 'name'
-		    	    }]
-    			});
-    	
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.tools.journal.TrackTree', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.journaltracktree',
-	mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.journal.TrackTreeViewController',
-    inject: {
-        store: 'treeStore'
-    },
-	height: 200,
-	width: '100%',
-	
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-   		     singleExpand: false,
-			 store: this.store,
-			 useArrows: true,
-			 rootVisible: false ,
-			 hideCollapseTool: true,
-
-			 dockedItems: [{
-		               xtype: 'toolbar',
-		               items: [{
-     		                   text: 'Save Details',
-     		                   xtype: 'button',
-     		                   action: 'save',
-     		                   itemId: 'saveButton'
-     		               }, '-', {
-     		                   text: 'Cancel',
-     		                   xtype: 'button',
-     		                   action: 'cancel',
-     		                   itemId: 'cancelButton'
-     		               }]
-		           },{
- 		               xtype: 'toolbar',
-  		               dock: 'top',
-  		               items: [{
-  		                         xtype: 'label',
-  		                         text: 'Select the details for this Journal Session'
-  		                       }]  
-  		            }]			 
-			 
-    });   	
-    	
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.earlyalert',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.earlyalert.EarlyAlertToolViewController',
-    inject: {
-    	columnRendererUtils: 'columnRendererUtils',
-        store: 'earlyAlertsStore'
-    },
-	width: '100%',
-	height: '100%',
-	
-	initComponent: function() {	
-    	var sm = Ext.create('Ext.selection.CheckboxModel');
-		
-		Ext.apply(this, 
-				{
-		            autoScroll: true,
-		            title: 'Early Alerts',
-
-	    		      columns: [{
-					    	        xtype:'actioncolumn',
-					    	        width:65,
-					    	        header: 'Action',
-					    	        items: [{
-					    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-					    	            tooltip: 'Edit Task',
-					    	            handler: function(grid, rowIndex, colIndex) {
-					    	            	var rec = grid.getStore().getAt(rowIndex);
-					    	            	var panel = grid.up('panel');
-					    	                panel.model.data=rec.data;
-					    	                panel.appEventsController.getApplication().fireEvent('editJournalEntry');
-					    	            },
-					    	            scope: this
-					    	        },{
-					    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-					    	            tooltip: 'Delete Task',
-					    	            handler: function(grid, rowIndex, colIndex) {
-					    	            	var rec = grid.getStore().getAt(rowIndex);
-					    	            	var panel = grid.up('panel');
-					    	                panel.model.data=rec.data;
-					    	            	panel.appEventsController.getApplication().fireEvent('deleteJournalEntry');
-					    	            },
-					    	            scope: this
-					    	        }]
-				                },
-	    		                { header: 'Name',  
-	    		                  dataIndex: 'courseTitle',
-	    		                  field: {
-	    		                      xtype: 'textfield'
-	    		                  },
-	    		                  flex: 50 },
-	    		                { header: 'Description',
-	    		                  dataIndex: 'description',
-	    		                  field: {
-	    		                      xtype: 'textfield'
-	    		                  },
-	    		                  flex: 50 }
-	    		                  ],
-				    
-				    dockedItems: [{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [{
-				            tooltip: 'Respond to the selected Early Alert',
-				            text: 'Respond',
-				            xtype: 'button',
-				            itemId: 'respondButton'
-				        }]
-				    }]
-				});
-		
-		return this.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
-	extend: 'Ext.form.Panel',
-	alias : 'widget.earlyalertresponse',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController',
-    inject: {
-    	earlyAlert: 'currentEarlyAlert',
-        outcomesStore: 'earlyAlertOutcomesStore',
-        outreachesStore: 'earlyAlertOutreachesStore',
-        referralsStore: 'earlyAlertReferralsStore'
-    },
-    initComponent: function() {
-		Ext.applyIf(this, {
-			autoScroll: true,
-        	title: 'Early Alert Response',
-        	defaults:{
-        		labelWidth: 200
-        	},
-            items: [
-                {
-                	xtype: 'displayfield',
-                	fieldLabel: 'Early Alert Response',
-                	value: this.earlyAlert.get('courseTitle'),
-                	anchor: '95%'
-                },{
-			        xtype: 'combobox',
-			        itemId: 'outcomeCombo',
-			        name: 'earlyAlertOutcomeId',
-			        fieldLabel: 'Outcome',
-			        emptyText: 'Select One',
-			        store: this.outcomesStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true,
-			        anchor: '95%'
-				},{
-					xtype: 'textfield',
-					itemId: 'otherOutcomeDescriptionText',
-					name: 'earlyAlertOutcomeOtherDescription',
-					fieldLabel: 'Other Outcome Description',
-					anchor: '95%'
-				},{
-		            xtype: 'multiselect',
-		            name: 'earlyAlertOutreachIds',
-		            fieldLabel: 'Outreach',
-		            store: this.outreachesStore,
-		            displayField: 'name',
-		            valueField: 'id',
-		            allowBlank: false,
-		            minSelections: 0,
-		            anchor: '95%'
-		        },{
-		            xtype: 'multiselect',
-		            name: 'earlyAlertReferralIds',
-		            fieldLabel: 'Department and Service Referrals',
-		            store: this.referralsStore,
-		            displayField: 'name',
-		            valueField: 'id',
-		            allowBlank: true,
-		            minSelections: 0,
-		            anchor: '95%'
-		        },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'Comment',
-                    anchor: '95%',
-                    name: 'comment'
-                }],
-            
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
-        });
-
-        return this.callParent(arguments);
-    }	
-});
-Ext.define('Ssp.view.tools.document.StudentDocuments', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.studentdocuments',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.document.StudentDocumentToolViewController',
-    inject: {
-    	appEventsController: 'appEventsController',
-    	columnRendererUtils: 'columnRendererUtils',
-    	model: 'currentDocument',
-        store: 'documentsStore'
-    },
-	title: 'Student Documents',	
-	width: '100%',
-	height: '100%',   
-	autoScroll: true,
-    initComponent: function() {
-        var me = this;
-
-        Ext.applyIf(me, {
-			border: 0,
-			store: this.store,
-			dockedItems: [{
-		        dock: 'top',
-		        xtype: 'toolbar',
-		        items: [{
-		        			xtype: 'button', 
-		        			itemId: 'addButton', 
-		        			text:'Add', 
-		        			action: 'add'
-		        	   },{
-		        			xtype: 'button', 
-		        			itemId: 'downloadButton', 
-		        			text:'Download', 
-		        			action: 'download'
-		        	   }]
-			}],
-			
-        	columns: [
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'createdDate',
-                    text: 'Date Entered'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'name',
-                    text: 'Name'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'note',
-                    text: 'Note',
-                    flex: 1
-                },{
-	    	        xtype:'actioncolumn',
-	    	        width:65,
-	    	        header: 'Action',
-	    	        items: [{
-	    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-	    	            tooltip: 'Edit Task',
-	    	            handler: function(grid, rowIndex, colIndex) {
-	    	            	var rec = grid.getStore().getAt(rowIndex);
-	    	            	var panel = grid.up('panel');
-	    	                panel.model.data=rec.data;
-	    	                panel.appEventsController.getApplication().fireEvent('editDocument');
-	    	            },
-	    	            scope: this
-	    	        },{
-	    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-	    	            tooltip: 'Delete Task',
-	    	            handler: function(grid, rowIndex, colIndex) {
-	    	            	var rec = grid.getStore().getAt(rowIndex);
-	    	            	var panel = grid.up('panel');
-	    	                panel.model.data=rec.data;
-	    	            	panel.appEventsController.getApplication().fireEvent('deleteDocument');
-	    	            },
-	    	            scope: this
-	    	        }]
-                }],
-                
-            viewConfig: {
-
-            }
-        });
-
-        me.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.tools.document.EditDocument',{
-	extend: 'Ext.form.Panel',
-	alias : 'widget.editdocument',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.document.EditDocumentViewController',
-    initComponent: function() {
-		Ext.applyIf(this, {
-        	title: 'Edit Document',
-            defaults: {
-            	labelWidth: 150
-            },
-        	items: [
-                {
-			        xtype: 'combobox',
-			        itemId: 'confidentialityLevelCombo',
-			        name: 'confidentialityLevelId',
-			        fieldLabel: 'Confidentiality Level',
-			        emptyText: 'Select One',
-			        store: this.confidentialityLevelsStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true,
-			        anchor: '95%'
-				},{
-                    xtype: 'textfield',
-                    fieldLabel: 'Name',
-                    anchor: '100%',
-                    name: 'name',
-                    anchor: '95%',
-                    allowBlank: false
-                },{
-                    xtype: 'textareafield',
-                    fieldLabel: 'Note',
-                    anchor: '100%',
-                    name: 'note',
-                    anchor: '95%'
-                }],
-            
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
-        });
-
-        return this.callParent(arguments);
-    }	
 });
 Ext.define('Ssp.view.tools.sis.StudentInformationSystem', {
 	extend: 'Ext.panel.Panel',
@@ -2790,11 +385,6 @@ Ext.define('Ssp.view.tools.sis.StudentInformationSystem', {
 				            		autoScroll: true,
 				            		border: 0,
 				            		items: [{xtype: 'sisassessment'}]
-				        		},{
-				            		title: 'ACT',
-				            		autoScroll: true,
-				            		border: 0,
-				            		items: [{xtype: 'sisact'}]
 				        		}]
 				    })]
 			    
@@ -2843,96 +433,6 @@ Ext.define('Ssp.view.tools.sis.Registration', {
 Ext.define('Ssp.view.tools.sis.Assessment', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.sisassessment',
-    width: '100%',
-    height: '100%',
-    autoScroll: true,
-    initComponent: function() {
-        var me = this;
-
-        Ext.applyIf(me, {
-            columns: [
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Type'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Score'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Status'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Date'
-                }
-            ],
-            viewConfig: {
-
-            }
-        });
-
-        me.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.tools.sis.Transcript', {
-	extend: 'Ext.grid.Panel',
-	alias: 'widget.sistranscript',
-    width: '100%',
-    height: '100%',
-    autoScroll: true,
-    initComponent: function() {
-        var me = this;
-
-        Ext.applyIf(me, {
-            columns: [
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Course'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Section'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Credit'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Title'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Grade'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Term'
-                }
-            ],
-            viewConfig: {
-
-            }
-        });
-
-        me.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.tools.sis.Act', {
-	extend: 'Ext.grid.Panel',
-	alias: 'widget.sisact',
     width: '100%',
     height: '100%',
     autoScroll: true,
@@ -3254,1269 +754,6 @@ Ext.define('Ssp.view.tools.studentsuccess.StudentSuccess', {
 		return this.callParent(arguments);
 	}
 });
-Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.abstractreferenceadmin',
-	title: 'Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.AbstractReferenceAdminViewController',
-    inject: {
-        apiProperties: 'apiProperties'
-    },
-	height: '100%',
-	width: '100%',
-	autoScroll: true,
-
-    initComponent: function(){
-    	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing',
-		                             { clicksToEdit: 2 });
-    	Ext.apply(this,
-    			{
-    		      plugins:cellEditor,
-    		      selType: 'rowmodel',
-    		      columns: [
-    		                { header: 'Name',  
-    		                  dataIndex: 'name',
-    		                  field: {
-    		                      xtype: 'textfield'
-    		                  },
-    		                  flex: 50 
-    		                 },
-    		                { header: 'Description',
-    		                  dataIndex: 'description', 
-    		                  flex: 50,
-    		                  field: {
-    		                      xtype: 'textfield'
-    		                  }
-    		                },
-    		                { 
-    		                  header: 'Status',
-      		                  dataIndex: 'objectStatus' 
-      		                }
-    		           ],
-    		        
-    		           dockedItems: [
-    		       		{
-    		       			xtype: 'pagingtoolbar',
-    		       		    dock: 'bottom',
-    		       		    displayInfo: true,
-    		       		    pageSize: this.apiProperties.getPagingSize()
-    		       		},
-    		              {
-    		               xtype: 'toolbar',
-    		               dock: 'top',
-    		               items: [{
-    		                   text: 'Add',
-    		                   iconCls: 'icon-add',
-    		                   xtype: 'button',
-    		                   action: 'add',
-    		                   itemId: 'addButton'
-    		               }, '-', {
-    		                   text: 'Delete',
-    		                   iconCls: 'icon-delete',
-    		                   xtype: 'button',
-    		                   action: 'delete',
-    		                   itemId: 'deleteButton'
-    		               }]
-    		           },{
-    		               xtype: 'toolbar',
-    		               dock: 'top',
-    		               items: [{
-    	                      xtype: 'label',
-    	                       text: 'Double-click to edit an item.'
-    	                     }]
-    		           }]    	
-    	});
-    	
-    	this.callParent(arguments);
-    },
-    
-    reconfigure: function(store, columns) {
-        var me = this,
-            headerCt = me.headerCt;
-
-        if (me.lockable) {
-            me.reconfigureLockable(store, columns);
-        } else {
-            if (columns) {
-                headerCt.suspendLayout = true;
-                headerCt.removeAll();
-                headerCt.add(columns);
-            }
-            if (store) {
-                store = Ext.StoreManager.lookup(store);
-                me.down('pagingtoolbar').bindStore(store);
-                me.bindStore(store);        
-            } else {
-                me.getView().refresh();
-            }
-            if (columns) {
-                headerCt.suspendLayout = false;
-                me.forceComponentLayout();
-            }
-        }
-        me.fireEvent('reconfigure', me);
-    }
-
-});
-Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
-	extend: 'Ext.form.Panel',
-	alias : 'widget.confidentialitydisclosureagreementadmin',
-	id: 'ConfidentialityDisclosureAgreementAdmin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewController',
-    inject: {
-        apiProperties: 'apiProperties'
-    },
-
-	initComponent: function() {	
-		Ext.apply(this, 
-				{
-		    		width: '100%',
-		    		height: '100%',
-				    bodyPadding: 5,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    fieldDefaults: {
-				        msgTarget: 'side',
-				        labelAlign: 'right',
-				        labelWidth: 125
-				    },
-				    defaultType: 'displayfield',
-				    items: [{
-				            xtype: 'fieldset',
-				            title: 'Confidentiality Disclosure Agreement',
-				            defaultType: 'displayfield',
-				            defaults: {
-				                anchor: '100%'
-				            },
-				       items: 
-				       [{
-					        fieldLabel: 'Name',
-					        xtype: 'textfield',
-					        name: 'name'
-					    },{
-					        fieldLabel: 'Description',
-					        xtype: 'textfield',
-					        name: 'description'
-					    },{
-		    		          xtype: 'htmleditor',
-		    		          fieldLabel: 'Disclosure Agreement',
-		    		          enableColors: false,
-		    		          enableAlignments: false,
-		    		          height: '100%',
-		    		          width: '100%',
-		    		          name: 'text'
-		    		      }]
-					    }],
-					    
-		           dockedItems: [
-     		              {
-     		               xtype: 'toolbar',
-     		               items: [{
-     		                   text: 'Save',
-     		                   xtype: 'button',
-     		                   action: 'save',
-     		                   itemId: 'saveButton'
-     		               }]
-     		           }]
-				});
-		
-	     return this.callParent(arguments);
-	}
-
-});
-Ext.define('Ssp.view.admin.forms.crg.ChallengeAdmin', {
-	extend: 'Ext.container.Container',
-	alias : 'widget.challengeadmin',
-	title: 'Challenge Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.ChallengeAdminViewController',
-	height: '100%',
-	width: '100%',
-	layout: {
-        type: 'hbox',
-        align: 'stretch'
-    },
-    initComponent: function(){
-		Ext.apply(this,{
-	          items: [
-	                  {
-	                  	xtype: 'displaychallengesadmin', 
-	                  	flex: 1
-	                  },{
-	                  	xtype: 'displaychallengecategoriesadmin', 
-	                  	flex: 1
-	                  }
-	                 ]});
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.admin.forms.crg.ChallengeReferralAdmin', {
-	extend: 'Ext.container.Container',
-	alias : 'widget.challengereferraladmin',
-	title: 'Challenge Referral Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.ChallengeReferralAdminViewController',
-	height: '100%',
-	width: '100%',
-	layout: {
-        type: 'hbox',
-        align: 'stretch'
-    },
-    initComponent: function(){
-		Ext.apply(this,{
-	          items: [
-	                  {
-	                  	xtype: 'displayreferralsadmin', 
-	                  	flex: 1
-	                  },{
-		                  	xtype: 'displaychallengereferralsadmin', 
-		                  	flex: 1
-		                  }
-	                 ]});
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeCategoriesAdmin', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.displaychallengecategoriesadmin',
-	title: 'Challenge Category Associations',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController',
-    inject: {
-        store: 'treeStore'
-    },
-	height: '100%',
-	width: '100%',
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-    		     singleExpand: true,
-    			 store: this.store,
-    			 useArrows: true,
-    			 rootVisible: false,
-    			 singleExpand: true,
-			     viewConfig: {
-			        plugins: {
-			            ptype: 'treeviewdragdrop',
-			            dropGroup: 'gridtotree',
-			            enableDrop: true
-			        }
-			     },
-    			 dockedItems: [{
-     				        dock: 'top',
-     				        xtype: 'toolbar',
-     				        items: [{
-     				            tooltip: 'Delete selected association',
-     				            text: 'Delete Associations',
-     				            xtype: 'button',
-     				            itemId: 'deleteAssociationButton'
-     				        }]
-     		    	    }] 
-     		       	
-    	});
-    	
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.displaychallengereferralsadmin',
-	title: 'Challenge Referral Associations',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewController',
-    inject: {
-        store: 'treeStore'
-    },
-    viewConfig: {
-        plugins: {
-            ptype: 'treeviewdragdrop'
-        }
-    },
-	height: '100%',
-	width: '100%',
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-    		     autoScroll: true,
-    			 store: this.store,
-    			 useArrows: true,
-    			 rootVisible: false,
-    			 singleExpand: true,
-			     viewConfig: {
-				        plugins: {
-				            ptype: 'treeviewdragdrop',
-				            dropGroup: 'gridtotree',
-				            enableDrop: true
-				        }
-				 },    			 
-    		     dockedItems: [{
-     				        dock: 'top',
-     				        xtype: 'toolbar',
-     				        items: [{
-     				            tooltip: 'Delete selected association',
-     				            text: 'Delete Associations',
-     				            xtype: 'button',
-     				            itemId: 'deleteAssociationButton'
-     				        }]
-     		    	    }]
-     		       	
-    	});
-    	
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.displaychallengesadmin',
-	title: 'Challenges Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.DisplayChallengesAdminViewController',
-    inject: {
-        apiProperties: 'apiProperties',
-        columnRendererUtils: 'columnRendererUtils'
-    },
-    height: '100%',
-	width: '100%',
-
-    initComponent: function(){
-    	var me=this;
-    	Ext.apply(me,
-    			{
-		          viewConfig: {
-		        	  plugins: {
-		                  ptype: 'gridviewdragdrop',
-		                  dragGroup: 'gridtotree',
-		                  enableDrag: true
-		        	  },
-		          },
-    		      autoScroll: true,
-    		      selType: 'rowmodel',
-    		      enableDragDrop: false,
-    		      columns: [
-    		                { header: 'Name',  
-    		                  dataIndex: 'name',
-    		                  flex: 1 
-    		                },
-    		                { header: 'Show On Intake',  
-      		                  dataIndex: 'showInStudentIntake',
-      		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
-      		                  flex: 1 
-      		                }
-    		           ],
-    		        
-    		           dockedItems: [
-     		       		{
-     		       			xtype: 'pagingtoolbar',
-     		       		    dock: 'bottom',
-     		       		    displayInfo: true,
-     		       		    pageSize: me.apiProperties.getPagingSize()
-     		       		},
-     		              {
-     		               xtype: 'toolbar',
-     		               items: [{
-     		                   text: 'Add',
-     		                   iconCls: 'icon-add',
-     		                   xtype: 'button',
-     		                   action: 'add',
-     		                   itemId: 'addButton'
-     		               }, '-', {
-     		                   text: 'Edit',
-     		                   iconCls: 'icon-edit',
-     		                   xtype: 'button',
-     		                   action: 'edit',
-     		                   itemId: 'editButton'
-     		               }, '-' ,{
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   xtype: 'button',
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
-     		               }]
-     		           },{
-     		               xtype: 'toolbar',
-     		               dock: 'top',
-     		               items: [{
-     	                      xtype: 'label',
-     	                       text: 'Associate items by dragging a Challenge onto a Category folder'
-     	                     }]
-     		           }]    	
-    	});
-    	
-    	return me.callParent(arguments);
-    },
-    
-    reconfigure: function(store, columns) {
-        var me = this,
-            headerCt = me.headerCt;
-
-        if (me.lockable) {
-            me.reconfigureLockable(store, columns);
-        } else {
-            if (columns) {
-                headerCt.suspendLayout = true;
-                headerCt.removeAll();
-                headerCt.add(columns);
-            }
-            if (store) {
-                store = Ext.StoreManager.lookup(store);
-                me.down('pagingtoolbar').bindStore(store);
-                me.bindStore(store);        
-            } else {
-                me.getView().refresh();
-            }
-            if (columns) {
-                headerCt.suspendLayout = false;
-                me.forceComponentLayout();
-            }
-        }
-        me.fireEvent('reconfigure', me);
-    }
-});
-Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.displayreferralsadmin',
-	title: 'Referrals Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.DisplayReferralsAdminViewController',
-    inject: {
-        apiProperties: 'apiProperties'
-    },
-	height: '100%',
-	width: '100%',
-
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-		          viewConfig: {
-		        	  plugins: {
-		                  ptype: 'gridviewdragdrop',
-		                  dragGroup: 'gridtotree',
-		                  enableDrag: true
-		        	  },
-		          },
-    		      autoScroll: true,
-    		      selType: 'rowmodel',
-    		      columns: [
-    		                { header: 'Name',  
-    		                  dataIndex: 'name',
-    		                  field: {
-    		                      xtype: 'textfield'
-    		                  },
-    		                  flex: 1 
-    		                }
-    		           ],
-    		        
-    		           dockedItems: [
-     		       		{
-     		       			xtype: 'pagingtoolbar',
-     		       		    dock: 'bottom',
-     		       		    displayInfo: true,
-     		       		    pageSize: this.apiProperties.getPagingSize()
-     		       		},
-     		              {
-     		               xtype: 'toolbar',
-     		               items: [{
-     		                   text: 'Add',
-     		                   iconCls: 'icon-add',
-     		                   xtype: 'button',
-     		                   action: 'add',
-     		                   itemId: 'addButton'
-     		               }, '-', {
-     		                   text: 'Edit',
-     		                   iconCls: 'icon-edit',
-     		                   xtype: 'button',
-     		                   action: 'edit',
-     		                   itemId: 'editButton'
-     		               }, '-' ,{
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   xtype: 'button',
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
-     		               }]
-     		           },{
-     		               xtype: 'toolbar',
-      		              dock: 'top',
-      		               items: [{
-      		                         xtype: 'label',
-      		                         text: 'Associate items by dragging a Referral onto a Challenge folder'
-      		                       }]  
-      		           }]    	
-    	});
-    	
-    	return this.callParent(arguments);
-    },
-    
-    reconfigure: function(store, columns) {
-        var me = this,
-            headerCt = me.headerCt;
-
-        if (me.lockable) {
-            me.reconfigureLockable(store, columns);
-        } else {
-            if (columns) {
-                headerCt.suspendLayout = true;
-                headerCt.removeAll();
-                headerCt.add(columns);
-            }
-            if (store) {
-                store = Ext.StoreManager.lookup(store);
-                me.down('pagingtoolbar').bindStore(store);
-                me.bindStore(store);        
-            } else {
-                me.getView().refresh();
-            }
-            if (columns) {
-                headerCt.suspendLayout = false;
-                me.forceComponentLayout();
-            }
-        }
-        me.fireEvent('reconfigure', me);
-    }
-});
-Ext.define('Ssp.view.admin.forms.crg.EditChallenge',{
-	extend: 'Ext.form.Panel',
-	alias : 'widget.editchallenge',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.EditChallengeViewController',
-    inject: {
-        confidentialityLevelsStore: 'confidentialityLevelsStore'
-    },
-	title: 'Edit Challenge',
-	initComponent: function() {
-        Ext.applyIf(this, {
-            items: [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Challenge Name',
-                    anchor: '100%',
-                    name: 'name'
-                },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'Description',
-                    anchor: '100%',
-                    name: 'description'
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Tags',
-                    anchor: '100%',
-                    name: 'tags'
-                },{
-                    xtype: 'combobox',
-                    name: 'defaultConfidentialityLevelId',
-                    fieldLabel: 'Confidentiality Level',
-                    emptyText: 'Select One',
-                    store: this.confidentialityLevelsStore,
-                    valueField: 'id',
-                    displayField: 'acronym',
-                    mode: 'local',
-                    typeAhead: true,
-                    queryMode: 'local',
-                    allowBlank: false,
-                    forceSelection: true
-            	},{
-                    xtype: 'textareafield',
-                    fieldLabel: 'Self Help Guide Description',
-                    anchor: '100%',
-                    name: 'selfHelpGuideDescription'
-                },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'Self Help Guide Question',
-                    anchor: '100%',
-                    name: 'selfHelpGuideQuestion'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Show in Student Intake',
-                    anchor: '100%',
-                    name: 'showInStudentIntake'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Show in Self Help Search',
-                    anchor: '100%',
-                    name: 'showInSelfHelpSearch'
-                }
-            ],
-            
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
-        });
-
-        return this.callParent(arguments);
-    }	
-});
-Ext.define('Ssp.view.admin.forms.crg.EditReferral',{
-	extend: 'Ext.form.Panel',
-	alias : 'widget.editreferral',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.EditReferralViewController',
-	title: 'Edit Referral',
-	initComponent: function() {
-        Ext.applyIf(this, {
-            items: [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Referral Name',
-                    anchor: '100%',
-                    name: 'name'
-                },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'Description',
-                    anchor: '100%',
-                    name: 'description'
-                },{
-                    xtype: 'textareafield',
-                    fieldLabel: 'Public Description',
-                    anchor: '100%',
-                    name: 'publicDescription'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Show in Self Help Guide',
-                    anchor: '100%',
-                    name: 'showInSelfHelpGuide'
-                }
-            ],
-            
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
-        });
-
-        return this.callParent(arguments);
-    }	
-});
-Ext.define('Ssp.view.admin.forms.journal.JournalStepAdmin', {
-	extend: 'Ext.container.Container',
-	alias : 'widget.journalstepadmin',
-	title: 'Challenge Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.journal.JournalStepAdminViewController',
-	height: '100%',
-	width: '100%',
-	layout: {
-        type: 'hbox',
-        align: 'stretch'
-    },
-    initComponent: function(){
-		Ext.apply(this,{
-	          items: [
-	                  {
-	                  	xtype: 'displaystepsadmin', 
-	                  	flex: 1
-	                  },{
-	                  	xtype: 'associatetrackstepsadmin', 
-	                  	flex: 1
-	                  }
-	                 ]});
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.admin.forms.journal.JournalStepDetailAdmin', {
-	extend: 'Ext.container.Container',
-	alias : 'widget.journalstepdetailadmin',
-	title: 'Journal Step Detail Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.journal.JournalStepDetailAdminViewController',
-	height: '100%',
-	width: '100%',
-	layout: {
-        type: 'hbox',
-        align: 'stretch'
-    },
-    initComponent: function(){
-		Ext.apply(this,{
-	          items: [
-	                  {
-	                  	xtype: 'displaydetailsadmin', 
-	                  	flex: 1
-	                  },{
-		                  	xtype: 'associatestepdetailsadmin', 
-		                  	flex: 1
-		                  }
-	                 ]});
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.admin.forms.journal.AssociateTrackStepsAdmin', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.associatetrackstepsadmin',
-	title: 'Track Steps Associations',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.journal.AssociateTrackStepsAdminViewController',
-    inject: {
-        store: 'treeStore'
-    },
-	height: '100%',
-	width: '100%',
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-    			 store: this.store,
-    			 useArrows: true,
-    			 rootVisible: false,
-    			 singleExpand: true,
-			     viewConfig: {
-			        plugins: {
-			            ptype: 'treeviewdragdrop',
-			            dropGroup: 'gridtotree',
-			            enableDrop: true
-			        }
-			     },
-    			 dockedItems: [{
-     				        dock: 'top',
-     				        xtype: 'toolbar',
-     				        items: [{
-     				            tooltip: 'Delete selected association',
-     				            text: 'Delete Associations',
-     				            xtype: 'button',
-     				            itemId: 'deleteAssociationButton'
-     				        }]
-     		    	    }] 
-     		       	
-    	});
-    	
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.admin.forms.journal.AssociateStepDetailsAdmin', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.associatestepdetailsadmin',
-	title: 'Step Details Associations',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.journal.AssociateStepDetailsAdminViewController',
-    inject: {
-        store: 'treeStore'
-    },
-    viewConfig: {
-        plugins: {
-            ptype: 'treeviewdragdrop'
-        }
-    },
-	height: '100%',
-	width: '100%',
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-    		     autoScroll: true,
-    			 store: this.store,
-    			 useArrows: true,
-    			 rootVisible: false,
-    			 singleExpand: true,
-			     viewConfig: {
-				        plugins: {
-				            ptype: 'treeviewdragdrop',
-				            dropGroup: 'gridtotree',
-				            enableDrop: true
-				        }
-				 },    			 
-    		     dockedItems: [{
-     				        dock: 'top',
-     				        xtype: 'toolbar',
-     				        items: [{
-     				            tooltip: 'Delete selected association',
-     				            text: 'Delete Associations',
-     				            xtype: 'button',
-     				            itemId: 'deleteAssociationButton'
-     				        }]
-     		    	    }]
-     		       	
-    	});
-    	
-    	return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.admin.forms.journal.DisplayDetailsAdmin', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.displaydetailsadmin',
-	title: 'Details Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.journal.DisplayDetailsAdminViewController',
-    inject: {
-        apiProperties: 'apiProperties'
-    },
-	height: '100%',
-	width: '100%',
-
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-		          viewConfig: {
-		        	  plugins: {
-		                  ptype: 'gridviewdragdrop',
-		                  dragGroup: 'gridtotree',
-		                  enableDrag: true
-		        	  },
-		          },
-    		      autoScroll: true,
-    		      selType: 'rowmodel',
-    		      columns: [
-    		                { header: 'Name',  
-    		                  dataIndex: 'name',
-    		                  field: {
-    		                      xtype: 'textfield'
-    		                  },
-    		                  flex: 1 
-    		                }
-    		           ],
-    		        
-    		           dockedItems: [
-     		       		{
-     		       			xtype: 'pagingtoolbar',
-     		       		    dock: 'bottom',
-     		       		    displayInfo: true,
-     		       		    pageSize: this.apiProperties.getPagingSize()
-     		       		},
-     		              {
-     		               xtype: 'toolbar',
-     		               items: [{
-     		                   text: 'Add',
-     		                   iconCls: 'icon-add',
-     		                   xtype: 'button',
-     		                   action: 'add',
-     		                   itemId: 'addButton'
-     		               }, '-', {
-     		                   text: 'Edit',
-     		                   iconCls: 'icon-edit',
-     		                   xtype: 'button',
-     		                   action: 'edit',
-     		                   itemId: 'editButton'
-     		               }, '-' ,{
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   xtype: 'button',
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
-     		               }]
-     		           },{
-     		               xtype: 'toolbar',
-      		               dock: 'top',
-      		               items: [{
-      		                         xtype: 'label',
-      		                         text: 'Associate items by dragging a Detail onto a Step folder'
-      		                       }]  
-      		            }]    	
-    	});
-    	
-    	return this.callParent(arguments);
-    },
-    
-    reconfigure: function(store, columns) {
-        var me = this,
-            headerCt = me.headerCt;
-
-        if (me.lockable) {
-            me.reconfigureLockable(store, columns);
-        } else {
-            if (columns) {
-                headerCt.suspendLayout = true;
-                headerCt.removeAll();
-                headerCt.add(columns);
-            }
-            if (store) {
-                store = Ext.StoreManager.lookup(store);
-                me.down('pagingtoolbar').bindStore(store);
-                me.bindStore(store);        
-            } else {
-                me.getView().refresh();
-            }
-            if (columns) {
-                headerCt.suspendLayout = false;
-                me.forceComponentLayout();
-            }
-        }
-        me.fireEvent('reconfigure', me);
-    }
-});
-Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.displaystepsadmin',
-	title: 'Steps Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.journal.DisplayStepsAdminViewController',
-    inject: {
-        apiProperties: 'apiProperties'
-    },
-    height: '100%',
-	width: '100%',
-
-    initComponent: function(){
-    	Ext.apply(this,
-    			{
-		          viewConfig: {
-		        	  plugins: {
-		                  ptype: 'gridviewdragdrop',
-		                  dragGroup: 'gridtotree',
-		                  enableDrag: true
-		        	  },
-		          },
-    		      autoScroll: true,
-    		      selType: 'rowmodel',
-    		      enableDragDrop: false,
-    		      columns: [
-    		                { header: 'Name',  
-    		                  dataIndex: 'name',
-    		                  field: {
-    		                      xtype: 'textfield'
-    		                  },
-    		                  flex: 1 
-    		                }
-    		           ],
-    		        
-    		           dockedItems: [
-     		       		{
-     		       			xtype: 'pagingtoolbar',
-     		       		    dock: 'bottom',
-     		       		    displayInfo: true,
-     		       		    pageSize: this.apiProperties.getPagingSize()
-     		       		},
-     		              {
-     		               xtype: 'toolbar',
-     		               items: [{
-     		                   text: 'Add',
-     		                   iconCls: 'icon-add',
-     		                   xtype: 'button',
-     		                   action: 'add',
-     		                   itemId: 'addButton'
-     		               }, '-', {
-     		                   text: 'Edit',
-     		                   iconCls: 'icon-edit',
-     		                   xtype: 'button',
-     		                   action: 'edit',
-     		                   itemId: 'editButton'
-     		               }, '-' ,{
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   xtype: 'button',
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
-     		               }]
-     		           },{
-    		               xtype: 'toolbar',
-      		               dock: 'top',
-      		               items: [{
-      		                         xtype: 'label',
-      		                         text: 'Associate items by dragging a Step onto a Track folder'
-      		                       }]  
-      		            }]    	
-    	});
-    	
-    	return this.callParent(arguments);
-    },
-    
-    reconfigure: function(store, columns) {
-        var me = this,
-            headerCt = me.headerCt;
-
-        if (me.lockable) {
-            me.reconfigureLockable(store, columns);
-        } else {
-            if (columns) {
-                headerCt.suspendLayout = true;
-                headerCt.removeAll();
-                headerCt.add(columns);
-            }
-            if (store) {
-                store = Ext.StoreManager.lookup(store);
-                me.down('pagingtoolbar').bindStore(store);
-                me.bindStore(store);        
-            } else {
-                me.getView().refresh();
-            }
-            if (columns) {
-                headerCt.suspendLayout = false;
-                me.forceComponentLayout();
-            }
-        }
-        me.fireEvent('reconfigure', me);
-    }
-});
-Ext.define('Ssp.view.admin.forms.journal.EditStep',{
-	extend: 'Ext.form.Panel',
-	alias : 'widget.editjournalstep',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.journal.EditStepViewController',
-	title: 'Edit Step',
-	initComponent: function() {
-        Ext.applyIf(this, {
-            items: [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Step Name',
-                    anchor: '100%',
-                    name: 'name'
-                },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'Description',
-                    anchor: '100%',
-                    name: 'description'
-                }],
-            
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
-        });
-
-        return this.callParent(arguments);
-    }	
-});
-Ext.define('Ssp.view.admin.forms.journal.EditStepDetail',{
-	extend: 'Ext.form.Panel',
-	alias : 'widget.editjournalstepdetail',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.journal.EditStepDetailViewController',
-	title: 'Edit Detail',
-	initComponent: function() {
-        Ext.applyIf(this, {
-            items: [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Detail Name',
-                    anchor: '100%',
-                    name: 'name'
-                },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'Description',
-                    anchor: '100%',
-                    name: 'description'
-                }],
-            
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
-        });
-
-        return this.callParent(arguments);
-    }	
-});
-Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.campusadmin',
-	title: 'Campus Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.campus.CampusAdminViewController',
-    inject: {
-        apiProperties: 'apiProperties'
-    },
-    height: '100%',
-	width: '100%',
-	layout: 'fit',
-    initComponent: function(){
-
-    	Ext.apply(this,
-    			{
-    		      
-    		      autoScroll: true,
-     		      columns: [
-    		                { header: 'Name',  
-    		                  dataIndex: 'name',
-    		                  flex: 50 },
-    		                { header: 'Description',
-    		                  dataIndex: 'description', 
-    		                  flex: 50
-    		                }
-    		           ],
-    		        
-    		           dockedItems: [
-     		       		{
-     		       			xtype: 'pagingtoolbar',
-     		       		    dock: 'bottom',
-     		       		    displayInfo: true,
-     		       		    pageSize: this.apiProperties.getPagingSize()
-     		       		},
-     		              {
-     		               xtype: 'toolbar',
-     		               items: [{
-     		                   text: 'Add',
-     		                   iconCls: 'icon-add',
-     		                   xtype: 'button',
-     		                   action: 'add',
-     		                   itemId: 'addButton'
-     		               }, '-', {
-     		                   text: 'Edit',
-     		                   iconCls: 'icon-edit',
-     		                   xtype: 'button',
-     		                   action: 'edit',
-     		                   itemId: 'editButton'
-     		               }, '-', {
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   xtype: 'button',
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
-     		               }]
-     		           }]  	
-    	});
-
-    	this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.view.admin.forms.campus.DefineCampus',{
-	extend: 'Ext.panel.Panel',
-	alias : 'widget.definecampus',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.campus.DefineCampusViewController',
-	title: 'Define a Campus',
-	height: '100%',
-	width: '100%',
-	layout:'card',
-	initComponent: function() {
-        Ext.applyIf(this, {
-        	activeItem: 0,
-        	
-        	dockedItems: [{
-	               xtype: 'toolbar',
-	               dock: 'bottom',
-	               items: [{
-	                   text: 'Prev',
-	                   xtype: 'button',
-	                   action: 'prev',
-	                   itemId: 'prevButton'
-	               }, '-', {
-	                   text: 'Next',
-	                   xtype: 'button',
-	                   action: 'next',
-	                   itemId: 'nextButton'
-	               }, '-', {
-	                   text: 'Finish',
-	                   xtype: 'button',
-	                   action: 'finish',
-	                   itemId: 'finishButton'
-	               }]
-	           }],
-        	
-        	items: [{
-        	    id: 'card-0',
-        	    html: 'Step 1'
-        	},{
-        	    id: 'card-1',
-        	    html: 'Step 2'
-        	},{
-        	    id: 'card-2',
-        	    html: 'Step 3'
-        	}]
-        });
-        return this.callParent(arguments);
-	}
-});
-Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
-	extend: 'Ext.form.Panel',
-	alias : 'widget.editcampus',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.campus.EditCampusViewController',
-	title: 'Edit Campus',
-	initComponent: function() {
-        Ext.applyIf(this, {
-            items: [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Name',
-                    anchor: '100%',
-                    name: 'name'
-                },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'Description',
-                    anchor: '100%',
-                    name: 'description'
-                }],
-            
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
-        });
-
-        return this.callParent(arguments);
-    }	
-});
 Ext.define('Ssp.view.ErrorWindow', {
 	extend: 'Ext.window.Window',
 	alias : 'widget.ssperrorwindow',
@@ -4565,11 +802,76 @@ Ext.define('Ssp.view.ErrorWindow', {
     	return me.callParent(arguments);
     }
 });
+Ext.define('Ssp.view.Report',{
+	extend: 'Ext.Component',
+	alias: 'widget.sspreport',
+	height: 0,
+	width: 0,
+    config: {
+    	downloadForm: null,
+    	downloadFrame: null
+    },
+    autoEl: {tag: 'iframe', cls: 'x-hidden', src: Ext.SSL_SECURE_URL},
+    initComponent: function(){
+    	var me=this;
+    	me.downloadForm = Ext.getBody().createChild({
+    		tag: 'form'
+    		, cls: 'x-hidden'
+    		, id: 'sspPortletReportform'
+    		, target: 'sspPortletIFrame'
+    		});
+    	
+    	me.downloadFrame = Ext.getBody().createChild({
+    		tag: 'iframe'
+    		, cls: 'x-hidden'
+    		, id: 'sspPortletIFrame'
+    		, name: 'iframe'
+    		, src: Ext.SSL_SECURE_URL
+    		});
+
+    	return me.callParent(arguments);
+    },
+    
+    load: function(config){
+    	this.getEl().dom.src = config.url + (config.params ? '?' + Ext.urlEncode(config.params) : '');
+    },
+    
+    loadBlankReport: function( url ){
+    	window.open(url,'_blank','');
+    },
+    
+    postReport: function( args ){
+		var me=this;
+    	Ext.Ajax.request({
+			url: args.url,
+			form: me.downloadForm,
+			params: args.params,
+			isUpload: true,
+			headers: { 'Content-Type': 'application/json' },
+			success: function(response,responseText){
+	  			  //Ext.Msg.alert('Notification','Please download your report.');
+	  		},
+			failure: function(response, options) {
+				Ext.Msg.alert('Notification',response.responseText);
+	  	    },
+			scope: me
+		},me);
+    }
+});
+Ext.define('Ssp.model.SimpleItemDisplay', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'name', type: 'string'}]
+});
+Ext.define('Ssp.model.ObjectPermission', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'name',type:'string'},
+             {name:'hasAccess',type:'boolean'}]
+});
 Ext.define('Ssp.model.Preferences', {
     extend: 'Ext.data.Model',
-    fields: [{name:'SEARCH_GRID_VIEW_TYPE',type:'int', defaultValue:0}, // 0 display photo, 1 display grid
-    		 {name:'ACTION_PLAN_ACTIVE_VIEW',type:'int',defaultValue:0} // 0 for Tasks, 1 for Goals
-    		]
+    fields: [{name:'SEARCH_GRID_VIEW_TYPE',type:'int', defaultValue:1}, // 0 display search, 1 display caseload
+    		 {name:'ACTION_PLAN_ACTIVE_VIEW',type:'int',defaultValue:0}, // 0 for Tasks, 1 for Goals
+    		 {name:'EARLY_ALERT_SELECTED_NODE',type:'auto', defaultValue:""}]
 });
 Ext.define('Ssp.model.FieldError', {
     extend: 'Ext.data.Model',
@@ -4591,54 +893,137 @@ Ext.define('Ssp.model.util.TreeRequest', {
 });
 Ext.define('Ssp.model.Configuration', {
     extend: 'Ext.data.Model',
-    fields: [{name: 'syncStudentPersonalDataWithExternalSISData', 
+	fields: [
+	         /*
+		      * Set this option to true to lock editing on fields that relate to the external_data
+		      * source. This will restrict you from editing any data that relates to external after
+		      * you have first added a record to the system. All editing will be disabled for personal
+		      * data, including changing a studentId/schoolId after the record has been added to the
+		      * system.  
+		      */
+             {name: 'syncStudentPersonalDataWithExternalData', 
     	      type: 'boolean', 
     	      defaultValue: false
     	     },
+    	     /*
+    	      * Set this option to true to display the retrieveFromExternalDataButton on the Caseload
+    	      * Assignment Screen when adding a new record. This will allow you to populate a student's record
+    	      * from the external_data source while adding a new record to the system.
+    	      */
+    	     {
+    	    	name: 'allowExternalRetrievalOfStudentDataFromCaseloadAssignment',
+    	    	type: 'boolean',
+    	    	defaultValue: true
+    	     },
+    	     /*
+    	      * Set this option to true to lock editing of Coach Assignments for records in the system.
+    	      * When this option is set to true, all Coach Assignments will be populated from an external system
+    	      * through the external_data tables/views of this application.
+    	      */
+    	     {name: 'coachSetFromExternalData', 
+    	      type: 'boolean', 
+    	      defaultValue: false
+    	     },
+    	     /*
+    	      * Set this option to true to lock editing of Student Type Assignments for records in the system.
+    	      * When this option is set to true, all Student Type Assignments will be populated from an external system
+    	      * through the external_data tables/views of this application.
+    	      */
+    	     {name: 'studentTypeSetFromExternalData', 
+       	      type: 'boolean', 
+       	      defaultValue: false
+       	     },
+    	     /*
+    	      * Set this option to the label you would like to see for the studentId values in the system.
+    	      * For instance: Use this to label your studentId for your institution's naming convention.
+    	      */
              {
     	      name: 'studentIdAlias', 
     	      type: 'string', 
     	      defaultValue: 'Tartan ID'
     	     },
+    	     /*
+    	      * Minimum data length for a studentId/schoolId in the application.
+    	      */
     	     {name: 'studentIdMinValidationLength', 
     	      type: 'number', 
-    	      defaultValue: 7
+    	      defaultValue: 3
     	     },
+    	     /*
+    	      * Error message for a studentId/schoolId that exceeds the specified minimum validation length.
+    	      */
        	     {name: 'studentIdMinValidationErrorText', 
        	      type: 'string', 
        	      defaultValue: 'The entered value is not long enough.'
        	     },
+    	     /*
+    	      * Maximum data length for a studentId/schoolId in the application.
+    	      */
     	     {name: 'studentIdMaxValidationLength', 
        	      type: 'number', 
-       	      defaultValue: 7
+       	      defaultValue: 8
        	     },
+    	     /*
+    	      * Error message for a studentId/schoolId that exceeds the specified maximum validation length.
+    	      */
        	     {name: 'studentIdMaxValidationErrorText', 
       	      type: 'string', 
       	      defaultValue: 'The entered value is too long.'
       	     },
+    	     /*
+    	      * Values to validate for the allowable characters in a studentId/schoolId. This value will
+    	      * be converted and applied as a regular expression, so all regular expressions values should be
+    	      * available to this value.
+    	      * 
+    	      * For example: 
+    	      * 
+    	      * Only digits use "0-9".  
+    	      * Only alphabetical characters use: "a-zA-Z".
+    	      * Alphabetical characters and digits use: "a-zA-Z0-9"
+    	      */
     	     {name: 'studentIdAllowableCharacters', 
           	  type: 'string', 
-          	  defaultValue: '0-9'
+          	  defaultValue: 'a-zA-Z0-9'
           	 },
+    	     /*
+    	      * Error message for a studentId/schoolId validation error.
+    	      */
     	     {name: 'studentIdValidationErrorText', 
              	  type: 'string', 
              	  defaultValue: 'Not a valid Student Id'
              },
+    	     /*
+    	      * Set to 1 to display the Employment Shift option on the Student Intake Tool.
+    	      */
     	     {
               name: 'displayStudentIntakeDemographicsEmploymentShift', 
               type: 'boolean', 
-              defaultValue: '1'
+              defaultValue: true
              },
+    	     /*
+    	      * Label to use for the Parent's Degree question on the Education Plan tab of the Student Intake Tool.
+    	      */
     	     {
               name: 'educationPlanParentsDegreeLabel', 
               type: 'string', 
               defaultValue: 'Have your parents obtained a college degree?'
              },
+    	     /*
+    	      * Label to use for the Special Needs question on the Education Plan tab of the Student Intake Tool.
+    	      */
     	     {
               name: 'educationPlanSpecialNeedsLabel', 
               type: 'string', 
               defaultValue: 'Special needs or require special accomodation?'
-             }],
+             },
+    	     /*
+    	      * Label to use for the Coach field displays across the application.
+    	      */
+    	     {
+              name: 'coachFieldLabel', 
+              type: 'string', 
+              defaultValue: 'Coach'
+            }],
              
      	constructor: function(){
      		var me=this;
@@ -4667,6 +1052,90 @@ Ext.define('Ssp.model.Configuration', {
             
     		return me;
     	}
+});
+Ext.define('Ssp.model.CaseloadPerson', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'personId', type: 'string'},
+             {name: 'schoolId', type: 'string'},
+             {name:'firstName', type:'string'},
+             {name:'lastName', type: 'string'},
+             {name:'middleName',type:'string'},
+             {name: 'studentTypeName', type: 'string'},
+             {name: 'currentAppointmentStartDate', type: 'date', dateFormat: 'time'},
+             {name: 'numberOfEarlyAlerts', type: 'string'},
+             {name: 'studentIntakeComplete', type: 'boolean'},
+             {name: 'currentAppointmentStartTime', type: 'date', dateFormat: 'time'},
+             {name: 'currentProgramStatusName', type: 'string'}],            
+             
+     getFullName: function(){ 
+      	var firstName = this.get('firstName') || "";
+      	var middleName = this.get('middleName') || "";
+      	var lastName = this.get('lastName') || "";
+      	return firstName + " " + middleName + " " + lastName;
+     },
+     
+     getStudentTypeName: function(){
+     	return ((this.get('studentTypeName') != null)? this.get('studentTypeName') : "");   	
+     }       
+});
+Ext.define('Ssp.model.SearchPerson', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'id', type: 'string'},
+             {name: 'schoolId', type: 'string'},
+             {name: 'firstName', type: 'string'},
+             {name: 'middleName', type: 'string'},
+             {name: 'lastName', type: 'string'},
+             {name: 'photoUrl', type: 'string'},
+             {name: 'currentProgramStatusName', type: 'string'},
+             {name: 'coach', type: 'auto'}],
+
+     getFullName: function(){ 
+    	var me=this;
+     	var firstName = me.get('firstName')? me.get('firstName') : "";
+     	var middleName = me.get('middleName')? me.get('middleName') : "";
+     	var lastName = me.get('lastName')? me.get('lastName') : "";
+     	return firstName + " " + middleName + " " + lastName;
+     },
+     
+     getCoachFullName: function(){
+    	var me=this;
+      	var firstName = me.get('coach')? me.get('coach').firstName : "";
+      	var lastName = me.get('coach')? me.get('coach').lastName : "";
+      	return firstName + " " + lastName;
+     }
+});
+Ext.define('Ssp.model.SearchCriteria', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'searchTerm', type: 'string'},
+             {name: 'outsideCaseload', type: 'boolean', defaultValue: true}]
+});
+Ext.define('Ssp.model.CaseloadFilterCriteria', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'programStatusId', type: 'string'}]
+});
+Ext.define('Ssp.model.PersonLite', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'id',type:'string'},
+             {name:'firstName', type:'string'},
+             {name:'lastName', type: 'string'},
+             {name:'middleName',type:'string'},
+             {name: 'displayFullName', 
+	          convert: function(value, record) {
+	        	  return record.get('firstName') + " " + record.get('lastName');
+		      }
+             }]
+});
+Ext.define('Ssp.model.PersonSearchLite', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'id',type:'string'},
+             {name:'firstName', type:'string'},
+             {name:'lastName', type: 'string'},
+             {name:'middleName',type:'string'},
+             {name: 'displayFullName', 
+   	          convert: function(value, record) {
+   	        	  return record.get('firstName') + " " + record.get('lastName');
+   		      }
+             }]        
 });
 Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
 	extend: 'Ext.data.Model',
@@ -4741,11 +1210,15 @@ Ext.define('Ssp.model.ApiUrl', {
 Ext.define('Ssp.mixin.ApiProperties', {	
 	Extend: 'Ext.Component',
     mixins: [ 'Deft.mixin.Injectable' ],
+    config: {
+    	baseUrl: '',
+    	baseApiUrl: ''
+    },
     inject: {
     	apiUrlStore: 'apiUrlStore' 
     },
     statics: {
-    	getBaseAppUrl: function(){
+    	getBaseApiUrl: function(){
     		var apiVersion = "1";
     	    var base = document.getElementsByTagName('base')[0];
     	    if (base && base.href && (base.href.length > 0)) {
@@ -4754,19 +1227,39 @@ Ext.define('Ssp.mixin.ApiProperties', {
     	        base = document.URL;
     	    }
     	    return base.substr(0, base.indexOf("/", base.indexOf("//") + 2) + 1) + Ext.Loader.getPath('ContextName') + '/api/' + apiVersion + '/';
+    	},
+    	
+    	getBaseAppUrl: function(){
+    		var apiVersion = "1";
+    	    var base = document.getElementsByTagName('base')[0];
+    	    if (base && base.href && (base.href.length > 0)) {
+    	        base = base.href;
+    	    } else {
+    	        base = document.URL;
+    	    }
+    	    return base.substr(0, base.indexOf("/", base.indexOf("//") + 2) + 1) + Ext.Loader.getPath('ContextName');
     	}
     },
     
 	initComponent: function(){
+		var me=this;
+		
+		me.baseUrl = Ssp.mixin.ApiProperties.getBaseAppUrl();
+		me.baseApiUrl = Ssp.mixin.ApiProperties.getBaseApiUrl();
+			
 		this.callParent(arguments);
 	},
 	
 	getContext: function() {
 		return Ssp.mixin.ApiProperties.getBaseAppUrl();
 	},
+
+	getAPIContext: function() {
+		return Ssp.mixin.ApiProperties.getBaseApiUrl();
+	},
 	
 	createUrl: function(value){
-		return this.getContext() + value;
+		return Ssp.mixin.ApiProperties.getBaseApiUrl() + value;
 	},
 	
 	getPagingSize: function(){
@@ -4806,21 +1299,107 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	 *    successFunc - success function
 	 *    scope - scope
 	 */
-	makeRequest: function(args){
+	makeRequest: function( args ){
+		var me=this;
+		var contentType = "application/json";
+		var errorHandler = me.handleError;
+		var scope = me;
+		if (args.failureFunc != null)
+		{
+			errorHandler = args.failureFunc;
+		}
+		if ( args.contentType != null)
+		{
+			contentType = args.contentType;
+		}
+		if (args.scope != undefined && args.scope != null)
+		{
+			scope = args.scope;
+		}
 		Ext.Ajax.request({
 			url: args.url,
 			method: args.method,
-			headers: { 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': contentType },
 			jsonData: args.jsonData || '',
 			success: args.successFunc,
-			failure: this.handleError,
-			scope: ((args.scope != null)? args.scope : this)
-		},this);		
+			failure: errorHandler,
+			scope: scope
+		},me);		
 	},
 	
-	handleError: function(response) {
+	handleError: function( response ) {
+		var me=this;
 		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
-		Ext.Msg.alert('SSP Error', msg);								
+		var r;
+
+		if (response.status==403)
+		{
+			Ext.Msg.confirm({
+	   		     title:'Access Denied Error',
+	   		     msg: "It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in SSP?",
+	   		     buttons: Ext.Msg.YESNO,
+	   		     fn: function( btnId ){
+	   		    	if (btnId=="yes")
+	   		    	{
+	   		    		// force a login
+	   		    		window.location.reload();
+	   		    	}else{
+	   		    		// force a login
+	   		    		window.location.reload();
+	   		    	}
+	   		    },
+	   		     scope: me
+	   		});
+		}
+		
+		// Handle call not found result
+		if (response.status==404)
+		{
+			Ext.Msg.alert('SSP Error', msg);
+		}
+
+		if ( response.status==500 )
+		{
+			// Handle responseText is json returned from SSP
+			if( response.responseText != null )
+			{
+				if ( response.responseText != "")
+				{
+					r = Ext.decode(response.responseText);
+					if (r.message != null)
+					{
+						if ( r.message != "")
+						{
+							msg = msg + " " + r.message;
+							Ext.Msg.alert('SSP Error', msg);							
+						}
+					}else{
+						Ext.Msg.alert('Internal Server Error - 500', 'Unable to determine the source of this error. See logs for additional details.');
+					}
+				}
+			}
+		}		
+		
+		if ( response.status==200 )
+		{
+			// Handle responseText is json returned from SSP
+			if( response.responseText != null )
+			{
+				if ( response.responseText != "")
+				{
+					r = Ext.decode(response.responseText);
+					if (r.message != null)
+					{
+						if ( r.message != "")
+						{
+							msg = msg + " " + r.message;
+							Ext.Msg.alert('SSP Error', msg);							
+						}
+					}
+				}
+			}
+		}
+
 	},
 	
 	/*
@@ -4834,6 +1413,10 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		if (record != null)
 			url = record.get('url');
 		return url;
+	},
+	
+	getReporter: function(){
+		return Ext.ComponentQuery.query('sspreport')[0];
 	}
 });
 Ext.define('Ssp.util.FormRendererUtils',{	
@@ -5429,7 +2012,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
             if (store) {
                 store = Ext.StoreManager.lookup(store);
                 me.down('pagingtoolbar').bindStore(store);
-                me.bindStore(store);        
+                me.bindStore(store);
             } else {
                 me.getView().refresh();
             }
@@ -5471,12 +2054,12 @@ Ext.define('Ssp.util.FormRendererUtils',{
 				// find the first invalid field and display it
 				if (result.valid==true)
 				{
+					// flag the form invalid
+					result.valid=false;
 					f = form.findInvalid()[0];
 					if (f) 
 					{
 						f.ensureVisible();
-						// flag the form invalid
-						result.valid=false;
 					}
 				}
 			}
@@ -5519,7 +2102,66 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		    height: 300,
 		    width: 500
 		}).show();
-	}
+	},
+	
+	displaySaveSuccessMessage: function( scope ){
+		var me=scope;
+		var hideMessage = function () {
+			me.hide();
+		};
+		var id = setTimeout(hideMessage, Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE_TIMEOUT);
+		me.show();
+	},
+    
+	/**
+	 * Fix a date to correct for the GMT Offset in ExtJS.
+	 */
+	fixDateOffset: function( dateToFix ) {
+		return new Date(dateToFix.toUTCString().substr(0, 25));
+	},
+	
+	/**
+	 * Fix a date to correct for the GMT Offset in ExtJS.
+	 */
+	fixDateOffsetWithTime: function( dateToFix ) {
+		return new Date(dateToFix.getUTCFullYear(), dateToFix.getUTCMonth(), dateToFix.getUTCDate(),  dateToFix.getUTCHours(), dateToFix.getUTCMinutes(), dateToFix.getUTCSeconds());
+	},
+	
+	dateWithin: function(beginDate,endDate,checkDate) {
+    	var b,e,c;
+    	b = Date.parse(beginDate);
+    	e = Date.parse(endDate);
+    	c = Date.parse(checkDate);
+    	if((c <= e && c >= b)) {
+    		return true;
+    	}
+    	return false;
+    },
+    
+    /*
+     * This method is available to return an array of simple items
+     * with a name property for display in a multiselect list when
+     * the list is for display purposes only. This method will
+     * return an array of items that have been compared against
+     * a reference store and assigned a name from the models in
+     * the store.
+     * 
+     * @params:
+     *  referenceStore - A store with reference data for defining the assigned name label.
+     *  selectedIdsArray - An array of selected id values to compare against.
+     *  noItemsPropertyLabel - A label to display if no items matched. For instance: 'Suggestions' will create a single record looking like: No Suggestions. 
+     */
+    getSimpleItemsForDisplay: function(referenceStore, selectedIdsArray, noItemsPropertyLabel){
+    	var me=this;
+    	var selectedItems=[];
+    	Ext.Array.each( selectedIdsArray, function(id,index){
+			var item = {name: referenceStore.getById( id ).get('name')};
+			selectedItems.push( item );
+		});
+		if (selectedItems.length==0)
+			selectedItems.push({name:'No ' + noItemsPropertyLabel});
+		return selectedItems;
+    }
 });
 
 
@@ -5531,7 +2173,16 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
     },
 
 	renderFriendlyBoolean: function(val, metaData, record) {
-		return ((val==true)?'Yes':'No');
+		var result = "";
+        if (val != null )
+        {
+           if (val != "")
+           {
+        	   result = ((val==true)?'Yes':'No');
+           }
+        }
+        
+        return result;
 	},    
     
 	renderTaskName: function(val, metaData, record) {
@@ -5545,6 +2196,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	renderTaskDueDate: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
         strHtml += '<p>' + Ext.util.Format.date( record.get('dueDate') ,'m/d/Y') + '</p>';
+        strHtml += '<p>' + ((record.get('completedDate') != null) ? 'COMPLETE' : 'ACTIVE' ) + '</p>';
 		strHtml += '<p>' + record.get('confidentialityLevel').name.toUpperCase() + '<br/>' + record.getCreatedByPersonName().toUpperCase() + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
@@ -5567,6 +2219,10 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 
 	renderCreatedByDate: function(val, metaData, record) {
 	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y');		
+	},
+
+	renderCreatedByDateWithTime: function(val, metaData, record) {
+	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y h:m A');		
 	},	
 
 	renderCreatedBy: function(val, metaData, record) {
@@ -5591,11 +2247,34 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	renderPhotoIcon: function(val) {
 	    return '<img src="' + val + '">';
 	},
+
+	renderCoachName: function(val, metaData, record) {
+		var strHtml = '<div>';
+		strHtml += '<p>' + record.getCoachFullName() + '</p>';
+        strHtml += '</div>';
+	    return strHtml;
+	},
+	
+	renderSearchStudentName: function(val, metaData, record) {
+		var strHtml = '<div>';
+		strHtml += '<p>' + record.getFullName() + '</p>';
+        strHtml += '</div>';
+	    return strHtml;
+	},
 	
 	renderStudentDetails: function(val, metaData, record) {
 		var strHtml = '<div>';
-        strHtml += '<p>' + record.getFullName() + '</p>';
-        strHtml += '<p>' + record.get('schoolId') + '</p>';
+		strHtml += '<p>' + record.getFullName() + '</p>';
+		strHtml += '<p>COACH: ' + record.getCoachFullName() + '</p>';
+        strHtml += '<p>ID: ' + record.get('schoolId') + '</p>';
+        strHtml += '<p>STATUS: ' + record.get('currentProgramStatusName') + '</p>';
+        strHtml += '</div>';
+	    return strHtml;
+	},
+	
+	renderStudentType: function(val, metaData, record) {
+		var strHtml = '<div>';
+        strHtml += '<p>' + record.getStudentTypeName() + '</p>';
         strHtml += '</div>';
 	    return strHtml;
 	},
@@ -5609,6 +2288,14 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	renderErrorMessage: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
         strHtml += '<p>' + record.get('errorMessage') + '</p>';
+		strHtml += '</div>';
+	    return strHtml;
+	},
+	
+	renderEarlyAlertStatus: function(val, metaData, record) {
+		var status = ((record.get('closedDate') != null)? 'Closed' : 'Open');
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + ((record.get('nodeType').toLowerCase() == 'early alert')? status : "N/A") + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
 	},
@@ -5682,7 +2369,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     		nodeToAppendTo.removeAll();
     	}
     	
-    	// only append if their are children
+    	// only append if there are children
     	if (children.length > 0)
     	{
     		nodeToAppendTo.appendChild( children );
@@ -5774,8 +2461,8 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var callbackFunc = treeRequest.get('callbackFunc');
     	var callbackScope = treeRequest.get('callbackScope');
     	// retrieve items
-		this.apiProperties.makeRequest({
-			url: this.apiProperties.createUrl( url ),
+		me.apiProperties.makeRequest({
+			url: me.apiProperties.createUrl( url ),
 			method: 'GET',
 			jsonData: '',
 			successFunc: function(response,view){
@@ -5800,6 +2487,28 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 Ext.define('Ssp.util.Constants',{
 	extend: 'Ext.Component',
     statics: {
+    	isRestrictedAdminItemId: function( id ){
+    		var restrictedIdsArray = [
+    		        	Ssp.util.Constants.EDUCATION_GOAL_OTHER_ID,
+    		        	Ssp.util.Constants.EDUCATION_GOAL_MILITARY_ID,
+    		        	Ssp.util.Constants.EDUCATION_GOAL_BACHELORS_DEGREE_ID,
+    		        	Ssp.util.Constants.EDUCATION_LEVEL_NO_DIPLOMA_GED_ID,
+    		        	Ssp.util.Constants.EDUCATION_LEVEL_GED_ID,
+    		        	Ssp.util.Constants.EDUCATION_LEVEL_HIGH_SCHOOL_GRADUATION_ID,
+    		        	Ssp.util.Constants.EDUCATION_LEVEL_SOME_COLLEGE_CREDITS_ID,
+    		        	Ssp.util.Constants.EDUCATION_LEVEL_OTHER_ID,
+    		        	Ssp.util.Constants.FUNDING_SOURCE_OTHER_ID,
+    		        	Ssp.util.Constants.CHALLENGE_OTHER_ID,
+    		        	Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID,
+    		        	Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,
+    		        	Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID,
+    		        	Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_ID,
+    		        	Ssp.util.Constants.INACTIVE_PROGRAM_STATUS_ID,
+    		        	Ssp.util.Constants.TRANSITIONED_PROGRAM_STATUS_ID
+    		        ];
+    		return ((Ext.Array.indexOf( restrictedIdsArray, id ) != -1)? true : false);
+    	},
+    	
     	// EDUCATION GOALS
         EDUCATION_GOAL_OTHER_ID: '78b54da7-fb19-4092-bb44-f60485678d6b',
         EDUCATION_GOAL_MILITARY_ID: '6c466885-d3f8-44d1-a301-62d6fe2d3553',
@@ -5821,21 +2530,77 @@ Ext.define('Ssp.util.Constants',{
         // EARLY ALERT OUTCOME
         OTHER_EARLY_ALERT_OUTCOME_ID: '0a080114-3799-1bf5-8137-9a778e200004',
         
+        // PROGRAM STATUS
+        ACTIVE_PROGRAM_STATUS_ID: 'b2d12527-5056-a51a-8054-113116baab88',
+        NON_PARTICIPATING_PROGRAM_STATUS_ID: 'b2d125c3-5056-a51a-8004-f1dbabde80c2',
+        NO_SHOW_PROGRAM_STATUS_ID: 'b2d12640-5056-a51a-80cc-91264965731a',
+        INACTIVE_PROGRAM_STATUS_ID: 'b2d125a4-5056-a51a-8042-d50b8eff0df1',
+        TRANSITIONED_PROGRAM_STATUS_ID: 'b2d125e3-5056-a51a-800f-6891bc7d1ddc',
+        
         GRID_ITEM_DELETE_ICON_PATH: '/ssp/images/delete-icon.png',
         GRID_ITEM_EDIT_ICON_PATH: '/ssp/images/edit-icon.jpg',
         GRID_ITEM_CLOSE_ICON_PATH: '/ssp/images/close-icon.jpg',
+        GRID_ITEM_MAIL_REPLY_ICON_PATH: '/ssp/images/mail-reply-icon.png',
         
-        REQUIRED_ASTERISK_DISPLAY: '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>'
+        REQUIRED_ASTERISK_DISPLAY: '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>',
+        
+        DATA_SAVE_SUCCESS_MESSAGE_STYLE: "font-weight: 'bold'; color: rgb(0, 0, 0); padding-left: 2px;",
+        DATA_SAVE_SUCCESS_MESSAGE: '&#10003 Data was successfully saved',
+        DATA_SAVE_SUCCESS_MESSAGE_TIMEOUT: 3000
     },
 
 	initComponent: function() {
 		return this.callParent( arguments );
     }
 });
+Ext.define('Ssp.store.Caseload', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.CaseloadPerson',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
+	constructor: function(){
+		var me=this;
+		Ext.apply(me, {
+							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCaseload')),
+							autoLoad: false,
+							autoSync: false,
+						    pageSize: me.apiProperties.getPagingSize(),
+						    params : {
+								page : 0,
+								start : 0,
+								limit : me.apiProperties.getPagingSize()
+							}
+						});
+		return me.callParent(arguments);
+	},
+
+	sorters: [{
+        property: 'lastName',
+        direction: 'ASC'
+    }]
+});
 Ext.define('Ssp.store.JournalEntryDetails', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.tool.journal.JournalEntryDetail',
 	groupField: 'group'
+});
+Ext.define('Ssp.store.EarlyAlertCoordinators', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.PersonLite',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
+	constructor: function(){
+		var me=this;
+		Ext.apply(me, {
+						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('person')),
+						autoLoad: false
+					});
+		return me.callParent(arguments);
+	}
 });
 Ext.define('Ssp.store.admin.AdminTreeMenus',{
 	extend: 'Ext.data.TreeStore',
@@ -5845,25 +2610,31 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     },
 	autoLoad: false,
     constructor: function(){
+    	var me=this;
     	var items = {
     	    	text: 'Administrative Tools',
     	    	title: 'Administrative Tools',
     	    	form: '',
     	        expanded: true,
-    	        children: [
+    	        children: [ {
+    	        	            text: 'Caseload',
+    	        	            title: 'Caseload',
+    	        	            form: '',
+    	        	            expanded: false,
+    	        	            children: [{
+									text: 'Program Status Change Reasons',
+									title: 'Program Status Change Reasons',
+									store: 'programStatusChangeReasons',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    }]
+    	                    },
     						{
-    							text: 'Beta',
-    							title: 'Beta',
+    							text: 'Caseload Assignment',
+    							title: 'Caseload Assignment',
     							form: '',
     							expanded: false,
-    							children: [
-    									{
-    										text: 'Program Status Change Reasons',
-    										title: 'Program Status Change Reasons',
-    										store: 'programStatusChangeReasons',
-    								        form: 'AbstractReferenceAdmin',
-    										leaf: true
-    								    },{
+    							children: [{
     										text: 'Referral Sources',
     										title: 'Referral Sources',
     										store: 'referralSources',
@@ -5907,18 +2678,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     						    		                  required: true,
     						      		                  dataIndex: 'requireInitialAppointment', 
     						      		                  flex: .25,
-    						      		                  renderer: this.columnRendererUtils.renderFriendlyBoolean,
+    						      		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
     						      		                  field: {
     						      		                      xtype: 'checkbox'
     						      		                  }
     						    		                }
     						    		           ]
-    									},{
-    								    	text: 'Campuses',
-    										title: 'Campuses',
-    										store: '',
-    										form: 'CampusAdmin',
-    										leaf: true
     									}
     							]
     						},{
@@ -6061,6 +2826,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     							form: '',
     							expanded: false,
     							children: [{
+							    	text: 'Campuses',
+									title: 'Campuses',
+									store: '',
+									form: 'CampusAdmin',
+									leaf: true
+								},{
 									text: 'Outcomes',
 									title: 'Outcomes',
 									store: 'earlyAlertOutcomes',
@@ -6152,7 +2923,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 
     	    };
     	
-    	Ext.apply(this,{
+    	Ext.apply(me,{
     		root: items,
     		folderSort: true,
     		sorters: [{
@@ -6160,10 +2931,1601 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     		    direction: 'ASC'
     		}]
     	});
-		return this.callParent(arguments);
+		return me.callParent(arguments);
     }
 
 
+});
+Ext.define('Ssp.store.PeopleSearchLite', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.PersonSearchLite',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
+	constructor: function(){
+		var me=this;
+		Ext.apply(me, {
+							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personSearch')+'/?outsideCaseload=true'),
+							autoLoad: false,
+							autoSync: false,
+						    pageSize: me.apiProperties.getPagingSize(),
+						    params : {
+								page : 0,
+								start : 0,
+								limit : me.apiProperties.getPagingSize()
+							}
+						});
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.store.Search', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.SearchPerson',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
+	constructor: function(){
+		var me=this;
+		Ext.apply(me, {
+							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personSearch')),
+							autoLoad: false,
+							autoSync: false,
+						    pageSize: me.apiProperties.getPagingSize(),
+						    params : {
+								page : 0,
+								start : 0,
+								limit : me.apiProperties.getPagingSize()
+							}
+						});
+		return me.callParent(arguments);
+	},
+	
+	sorters: [{
+        property: 'lastName',
+        direction: 'ASC'
+    }]
+});
+Ext.define('Ssp.service.AbstractService', {  
+    extend: 'Ext.Component',	
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    /**
+     * Remove all inactive objects from an array
+     * of items 
+     */
+    filterInactiveChildren: function( arr ){
+    	var me=this;
+    	var itemsToErase = new Array();
+    	if (arr != null)
+    	{
+    		itemsToErase = me.collectInactiveChildren( arr );
+    	}
+  
+    	Ext.Array.forEach(itemsToErase,function(item,idx){
+    		// Erase each inactive steps
+			Ext.Array.remove(item.array, item.inactiveItem);
+    	});
+
+    	return arr;
+    },
+    
+    /**
+     * Method to determine if a collection of objects
+     * and their children are inactive
+     */
+    collectInactiveChildren: function( arr ){
+		var me=this;
+    	var itemsToErase = [];
+    	Ext.Array.each( arr, function( item, s){
+    		// determine inactive
+    		if ( me.isItemInactive( item ) )
+    		{
+    			itemsToErase.push({array:arr, inactiveItem: item}); 			
+    		}else{
+    			// recurse children
+    			for (prop in item)
+    			{
+    				if (item[prop] instanceof Array)
+    				{
+    					var items = me.collectInactiveChildren( item[prop] );
+    					itemsToErase = Ext.Array.merge(itemsToErase, items);
+    				}
+    			} 
+    		}
+    	});
+    	return itemsToErase;
+    },
+    
+    /**
+     * Determine if an object is Inactive
+     */
+    isItemInactive: function( item ){
+    	var isInactive = false;
+    	for (prop in item)
+    	{
+    		if (prop == "objectStatus")
+    		{
+    			if (item[prop].toLowerCase()=="inactive")
+    			{
+    				isInactive=true;
+    			}
+    		}
+    	} 
+    	return isInactive;
+    }
+});
+Ext.define('Ssp.service.AppointmentService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appointment: 'currentAppointment',
+    	currentPersonAppointment: 'currentPersonAppointment'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+
+    getBaseUrl: function( id ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personAppointment') );
+    	baseUrl = baseUrl.replace('{id}', id);
+    	return baseUrl;
+    },
+    
+    getCurrentAppointment: function( personId, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl( personId );
+		var appointment = new Ssp.model.Appointment();
+		var personAppointment = new Ssp.model.PersonAppointment();
+	    var success = function( response, view ){
+	    	var r;
+	    	if (response.responseText != "")
+	    	{
+	    	   r = Ext.decode(response.responseText);
+		   		if (r != null)
+		   		{
+		   			me.currentPersonAppointment.populateFromGenericObject(r);
+		   			
+		   			if (me.currentPersonAppointment.get('id') != "")
+		   			{
+		   				me.appointment.populateFromGenericObject({
+		   				   "id": me.currentPersonAppointment.get('id'),
+		   				   "appointmentDate": Ext.Date.clearTime(me.currentPersonAppointment.get('startTime'), true),
+		   				   "startTime": me.currentPersonAppointment.get('startTime').getTime(),
+		   				   "endTime": me.currentPersonAppointment.get('endTime').getTime()
+		   			   });
+		   			}
+		   		}
+	    	}
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+	    // reset the appointments
+	    me.appointment.data = appointment.data;
+	    me.currentPersonAppointment.data = personAppointment.data;
+	    
+		// load the person to edit
+		me.apiProperties.makeRequest({
+			url: url + '/current',
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    },
+    
+    saveAppointment: function( personId, jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl( personId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+    	if (personId != "")
+    	{
+    		id = jsonData.id;
+    		
+    		// save the appointment
+    		if (id=="")
+    		{				
+    			me.apiProperties.makeRequest({
+        			url: url,
+        			method: 'POST',
+        			jsonData: jsonData,
+        			successFunc: success,
+        			failureFunc: failure,
+        			scope: me
+        		});				
+    		}else{
+    			// update
+        		me.apiProperties.makeRequest({
+        			url: url+"/"+id,
+        			method: 'PUT',
+        			jsonData: jsonData,
+        			successFunc: success,
+        			failureFunc: failure,
+        			scope: me
+        		});	
+    		}     		
+    	}else{
+    		Ext.Msg.alert('SSP Error', 'Error determining student to which to save an appointment. Unable to save to appointment.');
+    	}  	
+    }
+});
+Ext.define('Ssp.service.AssessmentService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+
+    getBaseUrl: function( id ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personAssessment') );
+    	baseUrl = baseUrl.replace('{id}', id);
+    	return baseUrl;
+    },
+    
+    getAll: function( personId, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl( personId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    }
+});
+Ext.define('Ssp.service.CaseloadService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'caseloadStore'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function( id ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
+    	return baseUrl;
+    },
+
+    getCaseload: function( programStatusId, callbacks ){
+    	var me=this;
+    	var programStatusFilter = "";
+    	var success = function( response, view ){
+    		var r = Ext.decode(response.responseText);
+    		// clear the store
+    		me.store.removeAll();
+    		if (r.rows.length > 0)
+	    	{
+	    		me.store.loadData( r.rows );
+	    	}
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.success( r, callbacks.scope );
+	    	}	
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.failure( response, callbacks.scope );
+	    	}
+	    };
+	    
+	    if (programStatusId != "")
+	    {
+	    	programStatusFilter = '/?programStatusId='+programStatusId;
+	    }
+	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl()+'/caseload'+programStatusFilter,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },
+    
+    getCaseloadById: function( personId, callbacks ){
+    	var me=this;
+    	var success = function( response, view ){
+    		var r = Ext.decode(response.responseText);
+	    	if (r.rows.length > 0)
+	    	{
+	    		me.store.removeAll();
+	    		me.store.loadData(r.rows);
+	    	}
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.success( r, callbacks.scope );
+	    	}	
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.failure( response, callbacks.scope );
+	    	}
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl()+'/'+personId+'/caseload',
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    }    
+});
+Ext.define('Ssp.service.CampusService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	model: 'currentCampus'
+    },
+    config: {
+    	personUrl: null
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function( id ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('campus') );
+    	return baseUrl;
+    },
+
+    getCampus: function( id, callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	var model = new Ssp.model.reference.Campus();
+	    	me.model.data = model.data;
+	    	if (response.responseText != "")
+	    	{
+		    	r = Ext.decode(response.responseText);
+		    	me.model.populateFromGenericObject(r);	    		
+	    	}
+	    	callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		// load the person to edit
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl()+'/'+id,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },   
+    
+    saveCampus: function( jsonData, callbacks ){
+    	var me=this;
+    	var id=jsonData.id;
+        var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+        
+    	// save
+		if (id=="")
+		{
+			// create
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}   	
+    },
+    
+    destroy: function( id, callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, id, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+    	me.apiProperties.makeRequest({
+   		   url: me.getBaseUrl()+"/"+id,
+   		   method: 'DELETE',
+   		   successFunc: success,
+   		   failureFunc: failure,
+   		   scope: me
+   	    }); 
+    }
+});
+Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	model: 'currentCampusEarlyAlertRouting',
+    	store: 'campusEarlyAlertRoutingsStore'
+    },
+    config: {
+    	personUrl: null
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function( campusId ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('campusEarlyAlertRouting') );
+		baseUrl = baseUrl.replace("{id}",campusId);
+		return baseUrl;
+    },
+
+    getCampusEarlyAlertRouting: function( campusId, id, callbacks ){
+    	var me=this;
+    	var url = me.getBaseUrl( campusId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	var model = new Ssp.model.reference.CampusEarlyAlertRouting();
+	    	me.model.data = model.data;
+	    	if (response.responseText != "")
+	    	{
+		    	r = Ext.decode(response.responseText);
+		    	me.model.populateFromGenericObject(r);	    		
+	    	}
+	    	callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		// load
+		me.apiProperties.makeRequest({
+			url: url+'/'+id,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },   
+
+    getAllCampusEarlyAlertRoutings: function( campusId, callbacks ){
+    	var me=this;
+    	var url = me.getBaseUrl( campusId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	if (response.responseText != "")
+	    	{
+		    	r = Ext.decode(response.responseText);
+		    	me.store.loadData(r);	    		
+	    	}
+	    	callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		// load
+		me.apiProperties.makeRequest({
+			url: url,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },     
+    
+    saveCampusEarlyAlertRouting: function( campusId, jsonData, callbacks ){
+    	var me=this;
+    	var id=jsonData.id;
+        var url = me.getBaseUrl( campusId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+    	// save
+		if (id=="")
+		{
+			// create
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}   	
+    },
+    
+    destroy: function( campusId, id, callbacks ){
+    	var me=this;
+        var url = me.getBaseUrl( campusId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, id, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+    	me.apiProperties.makeRequest({
+   		   url: url+"/"+id,
+   		   method: 'DELETE',
+   		   successFunc: success,
+   		   failureFunc: failure,
+   		   scope: me
+   	    }); 
+    }
+});
+Ext.define('Ssp.service.ConfidentialityDisclosureAgreementService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function(){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('confidentialityDisclosureAgreement') );
+		return baseUrl;
+    },
+    
+    save: function( jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+		id = jsonData.id;
+
+		// save
+		if (id=="")
+		{				
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}
+    }   
+});
+Ext.define('Ssp.service.EarlyAlertService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	earlyAlertOutcomesStore: 'earlyAlertOutcomesStore',
+    	treeStore: 'earlyAlertsTreeStore',
+    	treeUtils: 'treeRendererUtils'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function( personId ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personEarlyAlert') );
+		baseUrl = baseUrl.replace( '{personId}', personId );
+		return baseUrl;
+    },
+
+    getAll: function( personId, callbacks ){
+    	var me=this;
+    	var success = function( response, view ){
+    		var r = Ext.decode(response.responseText);
+    		if (r.rows.length > 0)
+	    	{
+    			me.populateEarlyAlerts( r.rows );
+	    	}
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.success( r, callbacks.scope );
+	    	}	
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.failure( response, callbacks.scope );
+	    	}
+	    };
+	    
+	    // clear the early alerts
+    	me.treeStore.setRootNode({
+    	    text: 'EarlyAlerts',
+    	    leaf: false,
+    	    expanded: false
+    	});
+	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl(personId),
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },
+
+    getAllEarlyAlertResponses: function( personId, earlyAlertId, callbacks ){
+    	var me=this;
+    	var url = "";
+    	var node = me.cleanResponses( earlyAlertId );
+    	var success = function( response, view ){
+    		var r = Ext.decode(response.responseText);
+    		if (r.rows.length > 0)
+	    	{
+    			me.populateEarlyAlertResponses( node, r.rows );
+	    	}
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.success( r, callbacks.scope );
+	    	}	
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.failure( response, callbacks.scope );
+	    	}
+	    };
+	    
+	    url = me.getBaseUrl(personId);
+	    if (earlyAlertId != null && earlyAlertId != "")
+	    {
+			me.apiProperties.makeRequest({
+				url: url + '/' + earlyAlertId + '/response',
+				method: 'GET',
+				successFunc: success,
+				failureFunc: failure,
+				scope: me
+			});	    	
+	    }
+    },    
+    
+    populateEarlyAlerts: function( records ){
+    	var me=this;
+
+    	Ext.Array.each( records, function(record, index){
+    		//record.iconCls='earlyAlertTreeIcon';
+    		record.leaf=false;
+    		record.nodeType='early alert';
+    		record.gridDisplayDetails=record.courseName + " - " + record.courseTitle;
+    		record.expanded=false;
+    	});
+
+    	me.treeStore.getRootNode().appendChild(records);
+    },
+    
+    populateEarlyAlertResponses: function( node, records ){
+    	var me=this;
+
+    	Ext.Array.each( records, function(record, index){
+    		//record.iconCls='earlyAlertTreeIcon';
+    		record.leaf=true;
+    		record.nodeType='early alert response';
+    		record.gridDisplayDetails=me.earlyAlertOutcomesStore.getById(record.earlyAlertOutcomeId).get('name');
+    	});
+
+    	node.appendChild(records);
+    },
+    
+    cleanResponses: function( earlyAlertId ){
+    	var me=this;
+    	node = me.treeStore.getNodeById( earlyAlertId );
+    	node.removeAll();
+    	return node;
+    },
+    
+    save: function( personId, jsonData, callbacks ){
+    	var me=this;
+    	var id=jsonData.id;
+        var url = me.getBaseUrl(personId);
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+        
+    	// save
+		if (id=="")
+		{
+			// create
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}   	
+    }
+});
+Ext.define('Ssp.service.EarlyAlertResponseService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function( personId, earlyAlertId ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personEarlyAlertResponse') );
+		baseUrl = baseUrl.replace( '{personId}', personId );
+		baseUrl = baseUrl.replace( '{earlyAlertId}', earlyAlertId );
+		return baseUrl;
+    },
+
+    save: function( personId, earlyAlertId, jsonData, callbacks ){
+    	var me=this;
+    	var id = jsonData.id;
+    	var success = function( response, view ){
+    		var r = Ext.decode(response.responseText);
+    		if (r.id.length > 0)
+	    	{
+		    	if (callbacks != null)
+		    	{
+		    		callbacks.success( r, callbacks.scope );
+		    	}
+	    	}
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.failure( response, callbacks.scope );
+	    	}
+	    };
+	    
+		if ( id.length > 0 )
+		{
+			// editing
+			this.apiProperties.makeRequest({
+				url: me.getBaseUrl( personId, earlyAlertId )+"/"+id,
+				method: 'PUT',
+				jsonData: jsonData,
+				successFunc: success,
+				failureFunc: failure,
+				scope: me
+			});
+			
+		}else{
+			// adding
+			this.apiProperties.makeRequest({
+				url: me.getBaseUrl( personId, earlyAlertId ),
+				method: 'POST',
+				jsonData: jsonData,
+				successFunc: success,
+				failureFunc: failure,
+				scope: me
+			});		
+		}
+    }  
+});
+Ext.define('Ssp.service.EarlyAlertReferralService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function(){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('earlyAlertReferral') );
+		return baseUrl;
+    },
+
+    getAll: function( callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl(),
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },
+    
+    save: function( jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+		id = jsonData.id;
+
+		// save
+		if (id=="")
+		{				
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}
+    }   
+});
+Ext.define('Ssp.service.JournalEntryService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function( personId ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personJournalEntry') );
+		baseUrl = baseUrl.replace('{id}', personId );
+		return baseUrl;
+    },
+
+    getAll: function( personId, callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	// filter the inactive items returned in the result
+    		r.rows = me.superclass.filterInactiveChildren( r.rows );
+	    	callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl( personId ),
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },
+    
+    save: function( personId, jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl( personId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+		id = jsonData.id;
+
+		// save
+		if (id=="")
+		{				
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}
+    },
+    
+    destroy: function( personId, id, callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, id, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+    	me.apiProperties.makeRequest({
+   		   url: me.getBaseUrl( personId )+"/"+id,
+   		   method: 'DELETE',
+   		   successFunc: success,
+   		   failureFunc: failure,
+   		   scope: me
+   	    }); 
+    }
+});
+Ext.define('Ssp.service.PersonService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	person: 'currentPerson',
+    	sspConfig: 'sspConfig'
+    },
+    config: {
+    	personUrl: null
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function( id ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
+    	return baseUrl;
+    },
+
+    get: function( id, callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	if (response.responseText != "")
+	    	{
+		    	r = Ext.decode(response.responseText);	    		
+	    	}
+	    	callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		// load the person to edit
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl()+'/'+id,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },   
+
+    getBySchoolId: function( schoolId, callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r;
+	    	if (response != null)
+	    	{
+		    	if (response.responseText != "")
+		    	{
+		    		r = Ext.decode(response.responseText);
+		    	}		    		
+	    	}
+	    	callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		// load the person to edit
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl()+'/bySchoolId/'+schoolId,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },    
+    
+    save: function( jsonData, callbacks ){
+    	var me=this;
+    	var id=jsonData.id;
+        var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	var r;
+	    	// handle unique schoolId error display in a more
+	    	// user friendly fashion
+	    	/*
+	    	if ( response.responseText != null)
+	    	{
+	    		r = Ext.decode(response.responseText);
+	    		if (r.message.indexOf('ERROR: duplicate key value violates unique constraint \"uq_person_school_id\"') == 0)
+	    		{
+	    			Ext.Msg.alert("SSP Error","The " + me.sspConfig.get('studentIdAlias') + " you entered already exists in the system. Please double-check and try again.");
+	    		}
+	    	}else{
+		    	    		
+	    	}
+	    	*/
+	    	me.apiProperties.handleError( response );
+	    	callbacks.failure( response, callbacks.scope );	
+	    };
+        
+    	// save the person
+		if (id=="")
+		{
+			// create
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}   	
+    },
+    
+    destroy: function( id, callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+    	me.apiProperties.makeRequest({
+   		   url: me.getBaseUrl()+"/"+id,
+   		   method: 'DELETE',
+   		   successFunc: success,
+   		   failureFunc: failure,
+   		   scope: me
+   	    }); 
+    }
+});
+Ext.define('Ssp.service.ProgramStatusService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'programStatusesStore'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function(){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('programStatus') );
+    	return baseUrl;
+    },
+
+    getAll: function( callbacks ){
+    	var me=this;
+    	var success = function( response, view ){
+    		var r = Ext.decode(response.responseText);
+    		if (r.rows.length > 0)
+	    	{
+    		    me.store.removeAll();
+    			me.store.loadData(r.rows);
+	    	}
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.success( r, callbacks.scope );
+	    	}	
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.failure( response, callbacks.scope );
+	    	}
+	    };
+	    	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl(),
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    }
+});
+Ext.define('Ssp.service.ReferralSourceService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function(){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('referralSource') );
+		return baseUrl;
+    },
+
+    getAll: function( callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl(),
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },
+    
+    save: function( jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+		id = jsonData.id;
+
+		// save
+		if (id=="")
+		{				
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}
+    }   
+});
+Ext.define('Ssp.service.SearchService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'searchStore'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function( id ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personSearch') );
+    	return baseUrl;
+    },
+
+    search: function( searchTerm, outsideCaseload, callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	if (r.rows.length > 0)
+	    	{
+	    		me.store.loadData(r.rows);
+	    	}
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.success( r, callbacks.scope );
+	    	}	
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	if (callbacks != null)
+	    	{
+	    		callbacks.failure( response, callbacks.scope );
+	    	}
+	    };
+	    
+	    me.store.removeAll();
+	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl()+'/?outsideCaseload='+outsideCaseload+'&searchTerm='+searchTerm,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    }
+});
+Ext.define('Ssp.service.SpecialServiceGroupService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function(){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('specialServiceGroup') );
+		return baseUrl;
+    },
+
+    getAll: function( callbacks ){
+    	var me=this;
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl(),
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});
+    },
+    
+    save: function( jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+		id = jsonData.id;
+
+		// save
+		if (id=="")
+		{				
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}
+    }   
+});
+Ext.define('Ssp.service.StudentIntakeService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+
+    getBaseUrl: function(){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('studentIntakeTool') );
+    	return baseUrl;
+    },
+    
+    get: function( personId, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	// filter inactive items
+    		r.rows = me.superclass.filterInactiveChildren( r.rows );	    	
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url+'/'+personId,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    },
+    
+    save: function( personId, jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+		// save
+		if (personId=="")
+		{				
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+personId,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}	
+    }
+});
+Ext.define('Ssp.service.TranscriptService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+
+    getBaseUrl: function( id ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personTranscript') );
+    	baseUrl = baseUrl.replace('{id}', id);
+    	return baseUrl;
+    },
+    
+    getFull: function( personId, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl( personId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url+'/full',
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    }
 });
 Ext.define('Ssp.controller.ApplicationEventsController', {
 	extend: 'Ext.Base',
@@ -6210,6 +4572,6707 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 		}
 	}
 });
+Ext.define('Ssp.controller.AdminViewController', {
+	extend: 'Deft.mvc.ViewController',    
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	campusesStore: 'campusesStore',
+    	challengeCategoriesStore: 'challengeCategoriesStore',
+        challengesStore: 'challengesStore',
+    	challengeReferralsStore: 'challengeReferralsStore',
+    	childCareArrangementsStore: 'childCareArrangementsStore',
+    	citizenshipsStore: 'citizenshipsStore',
+    	confidentialityLevelsStore: 'confidentialityLevelsStore',
+		earlyAlertOutcomesStore: 'earlyAlertOutcomesStore',
+		earlyAlertOutreachesStore: 'earlyAlertOutreachesStore',
+		earlyAlertReasonsStore: 'earlyAlertReasonsStore',
+		earlyAlertReferralsStore: 'earlyAlertReferralsStore',
+		earlyAlertSuggestionsStore: 'earlyAlertSuggestionsStore',
+    	educationGoalsStore: 'educationGoalsStore',
+    	educationLevelsStore: 'educationLevelsStore',
+    	employmentShiftsStore: 'employmentShiftsStore',
+    	ethnicitiesStore: 'ethnicitiesStore',
+    	formUtils: 'formRendererUtils',
+    	fundingSourcesStore: 'fundingSourcesStore',
+    	gendersStore: 'gendersStore',
+        journalSourcesStore: 'journalSourcesStore',
+        journalStepsStore: 'journalStepsStore',
+        journalTracksStore: 'journalTracksStore',
+    	maritalStatusesStore: 'maritalStatusesStore',
+    	programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
+    	referralSourcesStore: 'referralSourcesStore',
+    	serviceReasonsStore: 'serviceReasonsStore',
+    	specialServiceGroupsStore: 'specialServiceGroupsStore',
+        statesStore: 'statesStore',
+        studentStatusesStore: 'studentStatusesStore',
+        studentTypesStore: 'studentTypesStore',
+    	veteranStatusesStore: 'veteranStatusesStore'
+    },
+
+    control: {
+		view: {
+			itemclick: 'onItemClick'
+		}
+		
+	},
+	
+	init: function() {
+		return this.callParent(arguments);
+    }, 
+    
+	/*
+	 * Handle selecting an item in the tree grid
+	 */
+	onItemClick: function(view,record,item,index,eventObj) {
+		var storeName = "";
+		var columns = null;
+		if (record.raw != undefined )
+		{
+			if ( record.raw.form != "")
+			{
+				if (record.raw.store != "")
+				{
+					storeName = record.raw.store;
+				}
+				if (record.raw.columns != null)
+				{
+					columns = record.raw.columns;
+				}
+				this.loadAdmin( record.raw.title, record.raw.form, storeName, columns );         
+			}
+		}
+	},
+
+	loadAdmin: function( title ,form, storeName, columns ) {
+		var me=this;
+		var comp = this.formUtils.loadDisplay('adminforms',form, true, {});
+		var store = null;
+		
+		// set a store if defined
+		if (storeName != "")
+		{
+			store = me[storeName+'Store'];
+			// If the store was set, then modify
+			// the component to use the store
+			if (store != null)
+			{
+				// pass the columns for editing
+				if (columns != null)
+				{
+					// comp.reconfigure(store, columns); // ,columns
+					me.formUtils.reconfigureGridPanel(comp, store, columns);
+				}else{
+					// comp.reconfigure(store);
+					me.formUtils.reconfigureGridPanel(comp, store);
+				}
+				
+				comp.getStore().load();
+			}
+		}
+		
+		if (Ext.isFunction(comp.setTitle))
+			comp.setTitle(title + ' Admin');
+	}
+});
+Ext.define('Ssp.controller.MainViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	appEventsController: 'appEventsController',
+        formUtils: 'formRendererUtils'
+    },
+    config: {
+    	personButtonsVisible: true
+    },
+    control: {
+    	view: {
+    		add: 'setListeners'
+    	},
+    	
+    	'studentViewNav': {
+			click: 'onStudentRecordViewNavClick'
+		},
+
+		'adminViewNav': {
+			click: 'onAdminViewNavClick'
+		}
+	},
+	
+	init: function() {
+		this.displayStudentRecordView();
+		
+		return this.callParent(arguments);
+    },
+    
+    setListeners: function(container, component, index, obj){
+    	/**
+		 * TODO: Figure out a better workaround than this for loading
+		 * the listener that allows the display to be reset after
+		 * saving the caseload assignment. This works because the Profile
+		 * tool is dynamically added to the tools display after the interface
+		 * is rendered. This event has to be assigned to the application after
+		 * the application's onLaunch method has already fired.
+		 * The issue with using the profile instance is that there may later
+		 * be a requirement to load a different tool than the Profile first in the stack.
+		 */
+		if(component instanceof Ext.ClassManager.get('Ssp.view.tools.profile.Profile'))
+		{
+	       this.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});			
+		}
+    },
+    
+    destroy: function() {
+	   	this.appEventsController.removeEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
+
+        return this.callParent( arguments );
+    },
+    
+    onDisplayStudentRecordView: function(){
+    	this.displayStudentRecordView();
+    },
+    
+    onStudentRecordViewNavClick: function(obj, eObj){ 
+		this.displayStudentRecordView();
+	},
+	
+	onAdminViewNavClick: function(obj, eObj){ 
+		this.displayAdminView();
+	},
+    
+    displayStudentRecordView: function(){
+    	var me=this;
+    	var mainView = Ext.ComponentQuery.query('mainview')[0];
+    	var arrViewItems;
+    	
+    	if (mainView.items.length > 0)
+		{
+			mainView.removeAll();
+		}
+		
+		arrViewItems = [{xtype:'search',flex: 2},
+					    {xtype: 'studentrecord', flex: 4}];
+		
+		mainView.add( arrViewItems );
+    },
+    
+    displayAdminView: function() { 
+    	var me=this;
+    	var mainView = Ext.ComponentQuery.query('mainview')[0];
+    	var arrViewItems;	
+    	
+    	if (mainView.items.length > 0)
+		{
+			mainView.removeAll();
+		}
+		
+		arrViewItems = [{xtype:'adminmain',
+					     items:[{xtype: 'admintreemenu', flex:1 }, 
+					            {xtype: 'adminforms', flex: 3 }],
+					     flex:5}];
+		
+		mainView.add( arrViewItems );
+    }
+});
+Ext.define('Ssp.controller.StudentRecordViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable'],
+	inject: {
+		appEventsController: 'appEventsController'
+	},
+	
+    control: {
+		view: {
+			collapse: 'onCollapsed',
+			expand: 'onExpanded'
+		}
+	},
+	
+    init: function() {
+ 		return this.callParent(arguments);
+    },
+    
+    onCollapsed: function(){
+    	this.appEventsController.getApplication().fireEvent('collapseStudentRecord');
+    },
+    
+    onExpanded: function(){
+    	this.appEventsController.getApplication().fireEvent('expandStudentRecord');
+    }
+});
+Ext.define('Ssp.controller.SearchViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+        appEventsController: 'appEventsController',
+        authenticatedPerson: 'authenticatedPerson',
+        caseloadFilterCriteria: 'caseloadFilterCriteria',
+        caseloadStore: 'caseloadStore',
+        caseloadService: 'caseloadService',
+        columnRendererUtils: 'columnRendererUtils',
+        formUtils: 'formRendererUtils',
+        person: 'currentPerson',
+        personLite: 'personLite',
+        personService: 'personService',
+        personProgramStatusService: 'personProgramStatusService',
+        preferences: 'preferences',
+        programStatusesStore: 'programStatusesStore',
+        programStatusService: 'programStatusService',
+        searchCriteria: 'searchCriteria',
+        searchService: 'searchService',
+        searchStore: 'searchStore',
+        sspConfig: 'sspConfig'
+    },
+    
+    control: {
+    	view: {
+    		selectionchange: 'onSelectionChange',
+			viewready: 'onViewReady'
+    	},    	
+ 
+    	caseloadStatusCombo: {
+    		selector: '#caseloadStatusCombo',
+    		listeners: {
+    			select: 'onCaseloadStatusComboSelect'
+    		} 
+    	},
+
+    	'retrieveCaseloadButton': {
+    		click: 'onRetrieveCaseloadClick'
+    	},    	
+    	
+    	searchGridPager: '#searchGridPager',
+    	searchText: '#searchText',
+    	searchCaseloadCheck: '#searchCaseloadCheck',
+    	searchBar: '#searchBar',
+    	caseloadBar: '#caseloadBar',
+
+    	'searchButton': {
+    		click: 'onSearchClick'
+    	},
+    	
+    	'displaySearchBarButton': {
+    		click: 'onDisplaySearchBarClick'
+    	},
+    	
+    	'displayCaseloadBarButton': {
+    		click: 'onDisplayCaseloadBarClick'
+    	},
+
+    	addPersonButton: {
+    		selector: '#addPersonButton',
+    		listeners: {
+    			click: 'onAddPersonClick'
+    		}
+    	},
+    	
+    	editPersonButton: {
+    		selector: '#editPersonButton',
+    		listeners: {
+    			click: 'onEditPersonClick'
+    		}
+    	},
+    	
+    	deletePersonButton: {
+    		selector: '#deletePersonButton',
+    		listeners: {
+    			click: 'onDeletePersonClick'
+    		}
+    	},
+    	
+		'setTransitionStatusButton': {
+			click: 'onSetProgramStatusClick'
+		},
+		
+		'setNonParticipatingStatusButton': {
+			click: 'onSetProgramStatusClick'
+		},
+		
+		'setNoShowStatusButton': {
+			click: 'onSetProgramStatusClick'
+		},
+		
+		'setActiveStatusButton': {
+			click: 'onSetProgramStatusClick'
+		}
+    },
+    
+	init: function() {
+		var me=this;    	
+
+	   	// ensure the selected person is not loaded twice
+		// once on load and once on selection
+	   	me.personLite.set('id','');
+
+    	// set the search results to the stored
+	   	// search results
+		me.getSearchText().setValue( me.searchCriteria.get('searchTerm') );
+	   	me.getSearchCaseloadCheck().setValue( !me.searchCriteria.get('outsideCaseload') );
+		
+		return me.callParent(arguments);
+    },
+    
+	onSelectionChange: function(selModel,records,eOpts){ 
+		var me=this;
+		var person = new Ssp.model.Person();
+		// clear the person record
+		me.person.data = person.data;
+		if (records.length > 0)
+		{
+			if (records[0].data.id != null)
+			{
+				me.personLite.set('id', records[0].data.id);
+			}else{
+				me.personLite.set('id', records[0].data.personId);
+			}
+			me.personLite.set('firstName', records[0].data.firstName);
+			me.personLite.set('middleName', records[0].data.middleName);
+			me.personLite.set('lastName', records[0].data.lastName);
+			me.personLite.set('displayFullName', records[0].data.firstName + ' ' + records[0].data.lastName);
+			me.appEventsController.getApplication().fireEvent('loadPerson');			
+		}
+	},
+
+	onViewReady: function(comp, eobj){
+		var me=this;
+		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
+	   	me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
+	   	me.appEventsController.assignEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
+	
+	   	me.initSearchGrid();
+
+	   	// load program statuses
+		me.getProgramStatuses();	
+	},
+
+    destroy: function() {
+    	var me=this;
+    	me.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
+	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
+	   	me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
+	   	return me.callParent( arguments );
+    },
+    
+    initSearchGrid: function(){
+	   	var me=this;
+    	// load search if preference is set
+	   	if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==0 )
+		{
+			me.search();
+			me.displaySearchBar();
+		}else{
+			// otherwise load caseload if caseload is
+			// available to user. this will ensure
+			// caseload will load on first entrance into
+			// the program
+			if ( me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') )
+			{
+				me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
+				// default caseload to Active students if no program status is defined
+				if ( me.caseloadFilterCriteria.get('programStatusId') == "")
+				{
+					me.caseloadFilterCriteria.set('programStatusId', Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID );
+				}
+				me.getCaseload();
+				me.displayCaseloadBar();
+			}else{
+				me.search();
+				me.displaySearchBar();
+			}
+		}	
+    },
+    
+    selectFirstItem: function(){
+    	var me=this;
+    	if ( me.getView().getStore().getCount() > 0)
+    	{
+        	me.getView().getSelectionModel().select(0);
+    	}else{
+    		// if no record is available, then cast event
+    		// to reset the profile tool fields
+    		me.personLite.set('id', "");
+    		me.appEventsController.getApplication().fireEvent('loadPerson');
+    	}
+    	
+    	me.refreshPagingToolBar();    	
+    },
+    
+    onCollapseStudentRecord: function(){
+    	console.log('SearchViewController->onCollapseStudentRecord');
+	},
+	
+	onExpandStudentRecord: function(){
+		console.log('SearchViewController->onExpandStudentRecord');
+	},  
+
+	setGridView: function( view ){
+		var me=this;
+		me.applyColumns();
+	},
+	
+	onDisplaySearchBarClick: function( button ){
+		this.displaySearchBar();
+	},
+	
+	onDisplayCaseloadBarClick: function( button ){
+		this.displayCaseloadBar();
+	},
+	
+	displaySearchBar: function(){
+		var me=this;
+		me.preferences.set('SEARCH_GRID_VIEW_TYPE',0);
+		me.getCaseloadBar().hide();
+		me.getSearchBar().show();
+		me.setGridView();
+	},
+
+	displayCaseloadBar: function(){
+		var me=this;
+		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
+		me.getCaseloadBar().show();
+		me.getSearchBar().hide();
+		me.setGridView();
+	},
+	
+	applyColumns: function(){
+		var me=this;
+		var grid = me.getView();
+		var store;
+		var sortableColumns = false;
+		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1 )
+		{
+			store = me.caseloadStore;
+			columns = [
+    	              { sortable: sortableColumns, header: 'First', dataIndex: 'firstName', flex: 1 },		        
+    	              { sortable: sortableColumns, header: 'MI', dataIndex: 'middleName', flex: .2},
+    	              { sortable: sortableColumns, header: 'Last', dataIndex: 'lastName', flex: 1},
+    	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
+    	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
+    	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
+    	              ];
+		}else{
+			store = me.searchStore;
+			columns = [
+    	              /* { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 }, */		        
+    	              /*{ sortable: sortableColumns, header: 'Student', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: .25 },*/
+    	              { sortable: sortableColumns, header: 'First', dataIndex: 'firstName', flex: .2},		        
+    	              { sortable: sortableColumns, header: 'MI', dataIndex: 'middleName', flex: .05},
+    	              { sortable: sortableColumns, header: 'Last', dataIndex: 'lastName', flex: .2},
+    	              { sortable: sortableColumns, header: 'Coach', dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: .25 },
+    	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: .15},
+    	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .15}
+    	              ];		
+		}
+
+		grid.getView().getRowClass = function(row, index)
+	    {
+			var cls = "";
+			var today = Ext.Date.clearTime( new Date() );
+			var tomorrow = Ext.Date.clearTime( new Date() );
+			tomorrow.setDate( today.getDate() + 1 );
+			// set apppointment date color first. early alert will over-ride appointment color.
+			if (row.get('currentAppointmentStartTime') != null)
+			{
+				if ( me.formUtils.dateWithin(today, tomorrow, row.get('currentAppointmentStartTime') ) )
+				{
+					cls = 'caseload-appointment-indicator'
+				}
+			}
+			
+			// early alert color will over-ride the appointment date
+			if ( row.get('numberOfEarlyAlerts') != null)
+			{
+				if (row.get('numberOfEarlyAlerts') > 0)
+				{
+					cls = 'caseload-early-alert-indicator'
+				}				
+			}
+
+			return cls;
+	    };  		
+		
+		me.formUtils.reconfigureGridPanel(grid, store, columns);
+	},
+
+    onAddPersonClick: function( button ){
+    	var me=this;
+    	me.onAddPerson();
+	},
+	
+	onEditPersonClick: function( button ){
+    	var me=this;
+    	me.onEditPerson();
+	},
+
+	onDeletePersonClick: function( button ){
+    	var me=this;
+    	me.onDeletePerson();
+	},	
+	
+	onAddPerson: function(){
+		var me=this;
+		var model = new Ssp.model.Person();
+    	me.person.data = model.data;
+    	me.personLite.set('id','');
+		me.loadCaseloadAssignment();
+	},
+	
+	onEditPerson: function(){
+		var me=this;
+		var records = this.getView().getSelectionModel().getSelection();
+		if (records.length>0)
+		{
+			me.loadCaseloadAssignment();
+		}else{
+			Ext.Msg.alert('Error','Please select a student to edit.');
+		}
+	},
+
+	onDeletePerson: function(){
+	    var records = this.getView().getSelectionModel().getSelection();
+		if (records.length>0)
+		{
+			this.deleteConfirmation();
+		}else{
+			Ext.Msg.alert('Error','Please select a student to delete.');
+		}
+	},	
+	
+    deleteConfirmation: function() {
+    	var message = 'You are about to delete the student: "'+ this.person.getFullName() + '". Would you like to continue?';
+    	var model = this.person;
+        if (model.get('id') != "") 
+        {  
+           Ext.Msg.confirm({
+   		     title:'Delete Student?',
+   		     msg: message,
+   		     buttons: Ext.Msg.YESNO,
+   		     fn: this.deletePerson,
+   		     scope: this
+   		   });
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Unable to delete student.'); 
+        }
+     },	
+	
+	deletePerson: function( btnId  ){
+     	var me=this;
+     	var id = me.personLite.get('id');
+     	if (btnId=="yes")
+     	{
+     	   me.getView().setLoading( true );
+           me.personService.destroy( id,
+        		   {
+        	   success: me.deletePersonSuccess,
+        	   failure: me.deletePersonFailure,
+        	   scope: me
+           });	
+     	}	
+	},
+	
+	deletePersonSuccess: function( r, scope ){
+		var me=scope;
+		var store = me.searchStore;
+		var id = me.personLite.get('id');
+		me.getView().setLoading( false );
+	    store.remove( store.getById( id ) );
+	},
+	
+	deletePersonFailure: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading( false );
+	},
+
+    refreshPagingToolBar: function(){
+    	this.getSearchGridPager().onLoad();
+    },
+    
+    loadCaseloadAssignment: function(){
+    	var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});    	
+    },
+  
+    onSetProgramStatusClick: function( button ){
+    	var me=this;
+    	var action = button.action;
+    	switch ( action )
+    	{
+    		case 'active':
+    			me.setProgramStatus( action );
+    			break;
+    		
+    		case 'no-show':
+    			me.setProgramStatus( action );
+    			break;
+    			
+    		case 'transition':
+    	     	 me.appEventsController.getApplication().fireEvent('transitionStudent');
+    	     	 break;
+    	     	 
+    		case 'non-participating':
+    			Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
+    			    height: 150,
+    			    width: 500
+    			}).show();
+    			break;
+    	}
+    },
+    
+    setProgramStatus: function( action ){
+	   	var me=this;
+	   	var personId = me.personLite.get('id');
+	   	var programStatusId = "";
+	   	if (personId != "")
+	   	{
+	   		if (action=='active')
+	   		{
+	   			programStatusId = Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
+	   		}
+	   		
+	   		if (action=='no-show')
+	   		{
+	   			programStatusId = Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID;
+	   		}
+	   		personProgramStatus = new Ssp.model.PersonProgramStatus();
+	   		personProgramStatus.set('programStatusId', programStatusId );
+	   		personProgramStatus.set('effectiveDate', new Date());
+	   		me.personProgramStatusService.save( 
+	   				personId, 
+	   				personProgramStatus.data, 
+	   				{
+	   			success: me.saveProgramStatusSuccess,
+	               failure: me.saveProgramStatusFailure,
+	               scope: me 
+	           });    		
+	   	}else{
+	   		Ext.Msg.alert('SSP Error','Unable to determine student to set to No-Show status');
+	   	}
+    },
+    
+    saveProgramStatusSuccess: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+		//me.getCaseload();
+    	me.initSearchGrid();
+    },
+
+    saveProgramStatusFailure: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    },
+    
+    onSetNonParticipatingProgramStatusComplete: function(){
+    	this.initSearchGrid();
+    },
+    
+    /*********** SEARCH BAR ***************/
+    
+	onSearchClick: function(button){
+		var me=this;
+		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
+		var searchTerm = me.getSearchText().value;
+		// store search term
+		me.searchCriteria.set('searchTerm', searchTerm);
+		me.searchCriteria.set('outsideCaseload', outsideCaseload);
+		if ( searchTerm != "")
+		{
+			me.search();
+		}else{
+			me.searchStore.removeAll();
+		}	
+	},
+	
+	search: function(){
+		var me=this;
+		me.preferences.set('SEARCH_GRID_VIEW_TYPE',0);
+		me.setGridView();
+		if ( me.searchCriteria.get('searchTerm') != "")
+		{
+			me.getView().setLoading( true );
+			me.searchService.search( 
+					me.searchCriteria.get('searchTerm'), 
+					me.searchCriteria.get('outsideCaseload'),
+					{
+					success: me.searchSuccess,
+					failure: me.searchFailure,
+					scope: me
+			});				
+		}
+	},
+
+    searchSuccess: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+		me.selectFirstItem();
+    },
+
+    searchFailure: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    },
+    
+    
+    /**************** CASELOAD FILTERS *********************/
+    
+	onRetrieveCaseloadClick: function( button ){
+		var me=this;
+		me.getCaseload();
+	},
+	
+	onCaseloadStatusComboSelect: function( comp, records, eOpts ){
+		var me=this;
+		if ( records.length > 0)
+    	{
+			me.caseloadFilterCriteria.set('programStatusId', records[0].get('id') );
+     	}
+	},
+    
+	getProgramStatuses: function(){
+		var me=this;
+		me.programStatusService.getAll({
+			success:me.getProgramStatusesSuccess, 
+			failure:me.getProgramStatusesFailure, 
+			scope: me
+	    });
+	},
+
+    getProgramStatusesSuccess: function( r, scope){
+    	var me=scope;
+    	var activeProgramStatusId = "";
+    	var programStatus;
+    	if ( me.programStatusesStore.getCount() > 0)
+    	{
+    		me.getCaseloadStatusCombo().setValue( me.caseloadFilterCriteria.get('programStatusId') );
+    	   	/*
+    		if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1 )
+    		{
+    	   		me.getCaseload();
+    		}
+    		*/
+    	}
+    },	
+
+    getProgramStatusesFailure: function( r, scope){
+    	var me=scope;
+    },     
+    
+	getCaseload: function(){
+    	var me=this;
+		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
+		me.setGridView();
+		me.getView().setLoading( true );
+		me.caseloadService.getCaseload( me.caseloadFilterCriteria.get( 'programStatusId' ), 
+    		{success:me.getCaseloadSuccess, 
+			 failure:me.getCaseloadFailure, 
+			 scope: me});		
+	},
+    
+    getCaseloadSuccess: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+		me.selectFirstItem();
+    },
+
+    getCaseloadFailure: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    }
+});
+Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
+	extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	appEventsController: 'appEventsController',
+    	personLite: 'personLite',
+    	programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
+    	personProgramStatusService: 'personProgramStatusService'
+    },
+    control: {
+		view: {
+			show: 'onShow'
+		},
+		
+		'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		},
+		
+		programStatusChangeReasonCombo: '#programStatusChangeReasonCombo'
+	},
+	
+	init: function() {	
+    	var me=this;
+		return me.callParent(arguments);
+    },
+    
+    onShow: function(){
+    	var me=this;
+		me.getProgramStatusChangeReasonCombo().reset();
+    	me.programStatusChangeReasonsStore.load({params:{start:0, limit:50}});
+    },
+    
+    onSaveClick: function( button ){
+	   	var me=this;
+	   	var personId = me.personLite.get('id');
+	   	var valid = me.getProgramStatusChangeReasonCombo().isValid();
+	   	var reasonId = me.getProgramStatusChangeReasonCombo().value;
+	   	if (valid && reasonId != "")
+	   	{
+		   	if (personId != "")
+		   	{
+		   		personProgramStatus = new Ssp.model.PersonProgramStatus();
+		   		personProgramStatus.set('programStatusId',Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_ID);
+		   		personProgramStatus.set('effectiveDate', new Date());
+		   		personProgramStatus.set('programStatusChangeReasonId', reasonId );
+			   	me.getView().setLoading( true );
+		   		me.personProgramStatusService.save( 
+		   				personId, 
+		   				personProgramStatus.data, 
+		   				{
+	   					success: me.saveProgramStatusSuccess,
+		               failure: me.saveProgramStatusFailure,
+		               scope: me 
+		        });
+		   	}else{
+		   		Ext.Msg.alert('SSP Error','Unable to determine student to set to No-Show status');
+		   	}	   		
+	   	}else{
+	   		Ext.Msg.alert('SSP Error','Please correct the hilited errors in the form');
+	   	}
+    },
+
+    saveProgramStatusSuccess: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+		me.appEventsController.getApplication().fireEvent('setNonParticipatingProgramStatusComplete');
+		me.close();
+    },
+
+    saveProgramStatusFailure: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    },    
+    
+    onCancelClick: function( button ){
+    	this.close();
+    },
+    
+    close: function(){
+    	this.getView().close();
+    }
+});
+Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	appointmentService: 'appointmentService',
+    	appEventsController: 'appEventsController',
+    	apiProperties: 'apiProperties',
+     	appointment: 'currentAppointment',
+     	formUtils: 'formRendererUtils',
+        person: 'currentPerson',
+        personLite: 'personLite',
+        personService: 'personService',
+        personProgramStatusService: 'personProgramStatusService',
+        currentPersonAppointment: 'currentPersonAppointment'
+    },
+    control: {
+    	'saveButton':{
+    		click: 'onSaveClick'
+    	},
+    	
+    	'cancelButton': {
+    		click: 'onCancelClick'
+    	},
+
+    	'printButton':{
+    		click: 'onPrintClick'
+    	},
+    	
+    	'emailButton': {
+    		click: 'onEmailClick'
+    	},
+    	
+    	resetActiveStatusCheck: '#resetActiveStatusCheck'
+    },
+    
+	init: function() {
+		var me=this;
+		var id = me.personLite.get('id');
+		// initialize the appointment and personAppointment
+		var personAppointment = new Ssp.model.PersonAppointment();
+		var appointment = new Ssp.model.Appointment();
+		me.appointment.data = appointment.data;
+		me.currentPersonAppointment.data = personAppointment.data;
+		
+		// load the person record and init the view
+		if (id.length > 0)
+		{
+			me.getView().setLoading( true );
+			
+	    	me.personService.get( id, {success:me.getPersonSuccess, 
+	    									  failure:me.getPersonFailure, 
+	    									  scope: me} );
+		}else{
+			me.initForms();
+			me.updateTitle();
+		}
+		
+		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
+		
+		return this.callParent(arguments);
+    },
+    
+    destroy: function(){
+		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
+    	
+    	return this.callParent( arguments );
+    },
+  
+    initForms: function(){
+		// retrieve the appointment screen and define items for the screen
+    	var caseloadAssignmentView, items; 
+    	var caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
+		
+		items = [{ title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+        	       autoScroll: true,
+        		   items: [{xtype: 'editperson'}]
+        		},{
+            		title: 'Appointment'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+            		autoScroll: true,
+            		items: [{xtype: 'personcoach'},
+            		        {xtype:'personappointment'}]
+        		},{
+            		title: 'Special Service Groups',
+            		autoScroll: true,
+            		items: [{xtype: 'personspecialservicegroups'}]
+        		},{
+            		title: 'Referral Sources',
+            		autoScroll: true,
+            		items: [{xtype: 'personreferralsources'}]
+        		},{
+            		title: 'Reasons for Service',
+            		autoScroll: true,
+            		items: [{xtype: 'personservicereasons'}]
+        		},{
+            		title: 'Ability to Benefit/Anticipated Start Date',
+            		autoScroll: true,
+            		items: [{xtype: 'personanticipatedstartdate'}]
+        		}];
+    	
+    	// adding a record, so simply init the view
+		caseloadAssignmentView.add(items);
+    },
+
+    getPersonSuccess: function( r, scope ){
+		var me=scope;
+    	var person = new Ssp.model.Person();
+		me.getView().setLoading( false );
+    	me.person.data = person.data;
+    	me.person.populateFromGenericObject(r);
+		me.getCurrentAppointment();
+		me.updateTitle();
+    },
+    
+    getPersonFailure: function( response, scope ){
+    	var me=scope;  	
+    	me.getView().setLoading( false );
+    },
+
+    getCurrentAppointment: function(){
+		var me=this;
+		var personId = me.person.get('id');
+    	if (personId != null)
+		{
+			
+			me.getView().setLoading( true );
+		    me.appointmentService.getCurrentAppointment( personId, {success:me.getAppointmentSuccess, 
+			    						                             failure:me.getAppointmentFailure, 
+			    						                             scope: me} );
+		}else{
+			me.initForms();
+		}    	
+    },
+    
+    getAppointmentSuccess: function( r, scope ){
+		var me=scope;	
+		me.getView().setLoading( false );
+		me.initForms();
+    },
+    
+    getAppointmentFailure: function( response, scope ){
+    	var me=scope;   	
+    	me.getView().setLoading( false );
+    },    
+    
+    onPersonNameChange: function(){
+    	this.updateTitle();
+    },
+    
+    updateTitle: function(){
+    	var me=this;
+    	me.getView().setTitle( 'Caseload Assignment ' + ((me.person.get('id') != "")?"Edit":"Add") + ' - ' + me.person.getFullName());
+    },
+    
+    onSaveClick: function(button){
+		var me=this;
+		var model=me.person;
+		var id = model.get('id');
+		var jsonData = new Object();
+		var currentPersonAppointment;
+		
+		// edit person view
+		var personView = Ext.ComponentQuery.query('.editperson')[0];
+		var personForm = personView.getForm();
+
+		// coach view
+		var coachView = Ext.ComponentQuery.query('.personcoach')[0];
+		var coachForm = coachView.getForm();		
+		
+		// appointment view
+		var appointmentView = Ext.ComponentQuery.query('.personappointment')[0];
+		var appointmentForm = appointmentView.getForm();
+		
+		// special service groups view
+		var specialServiceGroupsView = Ext.ComponentQuery.query('.personspecialservicegroups')[0];
+		var specialServiceGroupsForm = specialServiceGroupsView.getForm();
+		var specialServiceGroupsItemSelector = Ext.ComponentQuery.query('#specialServiceGroupsItemSelector')[0];
+		var selectedSpecialServiceGroups = [];
+		
+		// referral sources view
+		var referralSourcesView = Ext.ComponentQuery.query('.personreferralsources')[0];
+		var referralSourcesForm = referralSourcesView.getForm();
+		var referralSourcesItemSelector = Ext.ComponentQuery.query('#referralSourcesItemSelector')[0];	
+		var selectedReferralSources = [];
+		
+		// service reasons view
+		var serviceReasonsView = Ext.ComponentQuery.query('.personservicereasons')[0];
+		var serviceReasonsForm = serviceReasonsView.getForm();
+		var selectedServiceReasons = [];
+
+		// anticipated start date view
+		var anticipatedStartDateView = Ext.ComponentQuery.query('.personanticipatedstartdate')[0];
+		var anticipatedStartDateForm = anticipatedStartDateView.getForm();
+
+		var formsToValidate = [personForm,
+	                 coachForm,
+	                 appointmentForm,
+	                 anticipatedStartDateForm,
+	                 serviceReasonsForm,
+	                 specialServiceGroupsForm,
+	                 referralSourcesForm];		
+
+		var validateResult = me.formUtils.validateForms( formsToValidate );
+		// Validate all of the forms
+		if ( validateResult.valid ) 
+		{
+			personForm.updateRecord();	
+			anticipatedStartDateForm.updateRecord();
+
+			//set coach and student type
+			model.setCoachId( coachForm.findField('coachId').getValue() );
+			model.setStudentTypeId( coachForm.findField('studentTypeId').getValue() );			
+			
+			// update the appointment
+			appointmentForm.updateRecord();
+						
+			// set special service groups
+			specialServiceGroupsFormValues = specialServiceGroupsItemSelector.getValue();
+			selectedSpecialServiceGroups = me.getSelectedItemSelectorIdsForTransfer(specialServiceGroupsFormValues);
+			if (selectedSpecialServiceGroups.length > 0)
+			{
+				model.set('specialServiceGroups', selectedSpecialServiceGroups);
+			}
+
+			// referral sources
+			referralSourcesFormValues = referralSourcesItemSelector.getValue();
+			selectedReferralSources = me.getSelectedItemSelectorIdsForTransfer(referralSourcesFormValues);
+			if (selectedReferralSources.length > 0)
+			{			
+			   model.set('referralSources', selectedReferralSources);
+			}
+			
+			// set the service reasons
+			serviceReasonsFormValues = serviceReasonsForm.getValues();
+			selectedServiceReasons = me.formUtils.getSelectedIdsAsArray( serviceReasonsFormValues );
+			if (selectedServiceReasons.length > 0)
+			{
+				model.set('serviceReasons', selectedServiceReasons);
+			}
+						
+			me.getView().setLoading( true );
+			
+			// ensure props are null if necessary
+			jsonData = model.setPropsNullForSave( model.data );
+			
+			me.personService.save( jsonData, 
+	    			               {success:me.savePersonSuccess, 
+				                    failure:me.savePersonFailure, 
+				                    scope: me} );
+
+		}else{
+			me.formUtils.displayErrors( validateResult.fields );
+		}
+    },
+    
+    savePersonSuccess: function( r, scope ){
+		var me=scope;
+		var personProgramStatus;
+		me.getView().setLoading( false );    	
+    	if (r.id != "")
+		{
+    		// new student save an Active program status
+    		if ( me.person.get('id') == "" || me.getResetActiveStatusCheck().checked == true)
+    		{
+    			personProgramStatus = new Ssp.model.PersonProgramStatus();
+    			personProgramStatus.set('programStatusId',Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
+    			personProgramStatus.set('effectiveDate', new Date() );
+    			me.personProgramStatusService.save( 
+    					r.id, 
+    					personProgramStatus.data, 
+    					{
+    				success: me.saveProgramStatusSuccess,
+                    failure: me.saveProgramStatusFailure,
+                    scope: me 
+                });
+    		}
+    		
+    		// populate the person object with result
+    		me.person.populateFromGenericObject( r );
+    		me.saveAppointment();
+		}else{
+			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.')
+		}    	
+    },
+    
+    savePersonFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    },
+
+    
+    saveProgramStatusSuccess: function( r, scope ){
+		var me=scope;	
+    },    
+    
+    saveProgramStatusFailure: function( response, scope ){
+    	var me=scope;  	
+    },       
+    
+    saveAppointment: function(){
+    	var me=this;
+    	var jsonData, personId;
+    	if (me.appointment.get('appointmentDate') != null && me.appointment.get('startTime') != null && me.appointment.get('endTime') !=null)
+		{
+    		// Fix dates for GMT offset to UTC
+    		me.currentPersonAppointment.set( 'startTime', me.formUtils.fixDateOffsetWithTime(me.appointment.getStartDate() ) );
+    		me.currentPersonAppointment.set( 'endTime', me.formUtils.fixDateOffsetWithTime( me.appointment.getEndDate() ) );
+
+    		jsonData = me.currentPersonAppointment.data;
+    		personId = me.person.get('id');
+			
+    		me.appointmentService.saveAppointment( personId, 
+    				                               jsonData, 
+    				                               {success: me.saveAppointmentSuccess,
+    			                                    failure: me.saveAppointmentFailure,
+    			                                    scope: me } );
+		}else{
+			// no appointment is required
+			// load students view
+			me.loadStudentToolsView();			
+		}
+    },
+    
+    saveAppointmentSuccess: function( r, scope ){
+		var me=scope; 
+    	me.getView().setLoading( false );
+		me.loadStudentToolsView();  	
+    },    
+    
+    saveAppointmentFailure: function( response, scope ){
+    	var me=scope;  	
+    	me.getView().setLoading( false );   	
+    },    
+    
+    getSelectedItemSelectorIdsForTransfer: function(values){
+		var selectedIds = new Array();
+    	Ext.Array.each(values,function(name, index){
+    		if ( name != undefined )
+    		{
+        		selectedIds.push({"id":name});    			
+    		}
+		});
+    	return selectedIds;
+    }, 
+    
+    onCancelClick: function(button){
+		this.loadStudentToolsView();
+    },
+ 
+    onPrintClick: function(button){
+		Ext.Msg.alert('Attention','This feature is not yet implemented');
+    },    
+
+    onEmailClick: function(button){
+		Ext.Msg.alert('Attention','This feature is not yet implemented');
+    },      
+    
+    loadStudentToolsView: function(){
+    	this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
+    }
+});
+Ext.define('Ssp.controller.person.CoachViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	appEventsController: 'appEventsController',
+    	coachesStore: 'coachesStore',
+    	person: 'currentPerson', 	
+    	sspConfig: 'sspConfig',
+        studentTypesStore: 'studentTypesStore'
+    },
+    config: {
+    	inited: false
+    },
+    control: {
+    	departmentField: '#departmentField',
+    	phoneField: '#phoneField',
+    	officeField: '#officeField',
+    	emailAddressField: '#emailAddressField',
+
+    	coachCombo: {
+    		selector: '#coachCombo',
+    		listeners: {
+        		change: 'onCoachComboChange',
+        		select: 'onCoachComboSelect'
+    		} 
+    	},
+    	
+    	studentTypeCombo: {
+    		selector: '#studentTypeCombo',
+    		listeners: {
+        		select: 'onStudentTypeComboSelect'
+    		}     		
+    	}
+    },
+    
+	init: function() {
+		var me=this;
+
+		if ( me.person.get('id') != "")
+		{
+			me.getCoachCombo().setDisabled( me.sspConfig.get('coachSetFromExternalData') );
+			me.getStudentTypeCombo().setDisabled( me.sspConfig.get('studentTypeSetFromExternalData') );			
+		}
+		
+		me.studentTypesStore.load();
+		me.coachesStore.load(function(records, operation, success) {
+	          if(!success)
+	          {
+	        	  Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
+	          }
+		 });
+		
+		me.initForm();
+		
+		return this.callParent(arguments);
+    },
+
+	initForm: function(){
+		var me=this;
+		me.getView().getForm().reset();
+		me.getCoachCombo().setValue( me.person.getCoachId() );
+		me.getStudentTypeCombo().setValue( me.person.getStudentTypeId() );
+		me.inited=true;
+	},    
+    
+	onCoachComboSelect: function(comp, records, eOpts){
+		var me=this;
+		var coach;
+		if(records.length>0){
+			coach=records[0];
+			me.displayCoachDepartment( coach );
+		}
+	},
+	
+	onCoachComboChange: function(comp, newValue, oldValue, eOpts){
+		var me=this;
+		var coach = me.coachesStore.getById(newValue);
+		if(coach != null){
+			me.displayCoachDepartment( coach );
+		}
+	},
+	
+	displayCoachDepartment: function( coach ){
+		var me=this;
+		me.getDepartmentField().setValue( coach.get('departmentName') );
+		me.getPhoneField().setValue( coach.get('workPhone') );
+		me.getEmailAddressField().setValue( coach.get('primaryEmailAddress') );
+		me.getOfficeField().setValue( coach.get('officeLocation') );
+	},
+
+	onStudentTypeComboSelect: function(comp, records, eOpts){
+		var me=this;
+		var studentType, requireInitialAppointment;
+		if(records.length>0){
+			me.appEventsController.getApplication().fireEvent('studentTypeChange');
+		}
+	},
+	
+	onStudentTypeComboChange: function(comp, newValue, oldValue, eOpts){
+		var me=this;
+		var studentType, requireInitialAppointment;
+		studentType = me.studentTypesStore.getById(newValue);
+		if(studentType != null){
+			me.appEventsController.getApplication().fireEvent('studentTypeChange');
+		}
+	}
+});
+Ext.define('Ssp.controller.person.EditPersonViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	appEventsController: 'appEventsController',
+        person: 'currentPerson',
+        personService: 'personService',
+        sspConfig: 'sspConfig'
+    },
+    control: {
+    	retrieveFromExternalButton: {
+    		selector: '#retrieveFromExternalButton',
+    		listeners: {
+                click: 'onRetrieveFromExternalClick'
+            }       		
+    	},
+ 		
+    	firstNameField: {
+    		selector: '#firstName',
+    		listeners: {
+                change: 'onStudentNameChange'
+            }
+    	},
+    	
+    	middleNameField: {
+    		selector: '#middleName',
+    		listeners: {
+                change: 'onStudentNameChange'
+            }    		
+    	},
+    	
+    	lastNameField: {
+    		selector: '#lastName',
+    		listeners: {
+                change: 'onStudentNameChange'
+            }
+    	}, 
+    	
+    	studentIdField: {
+    		selector: '#studentId',
+    		listeners: {
+                validityChange: 'onStudentIdValidityChange'
+            }
+    	},
+    	
+    	homePhoneField: '#homePhone',
+    	workPhoneField: '#workPhone',
+    	homePhoneField: '#homePhone',
+    	primaryEmailAddressField: '#primaryEmailAddress',
+    	secondaryEmailAddressField: '#secondaryEmailAddress'
+    },  
+	init: function() {
+		var me=this;
+    	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');		
+		var displayRetrieveFromExternalButton = me.sspConfig.get('allowExternalRetrievalOfStudentDataFromCaseloadAssignment');
+    	// alias the studentId field and provide validation
+		var studentIdField = me.getStudentIdField();
+		studentIdField.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+		Ext.apply(studentIdField, {
+	                  minLength: me.sspConfig.get('studentIdMinValidationLength'),
+	                  minLengthText: me.sspConfig.get('studentIdMinValidationErrorText'),
+	                  maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
+	                  maxLengthText: me.sspConfig.get('studentIdMaxValidationErrorText'),
+	                  vtype: 'studentIdValidator',
+	                  vtypeText: me.sspConfig.get('studentIdValidationErrorText')
+                     });		
+		
+		// when editing a student, 
+		if (me.person.get('id') != "")
+		{
+			// set the retrieve from SSI button visbility
+			me.getRetrieveFromExternalButton().setVisible( false );
+		
+			// disable fields if the external configuration mode is enabled
+			me.getFirstNameField().setDisabled(disabled);
+			me.getMiddleNameField().setDisabled(disabled);
+			me.getLastNameField().setDisabled(disabled);
+			studentIdField.setDisabled(disabled);
+			me.getHomePhoneField().setDisabled(disabled);
+			me.getWorkPhoneField().setDisabled(disabled);
+			me.getPrimaryEmailAddressField().setDisabled(disabled);
+			me.getSecondaryEmailAddressField().setDisabled(disabled);
+		}
+		
+		me.getView().getForm().reset();
+		me.getView().loadRecord( me.person );	
+
+		// use config to determine if the retrieveFromExternalButton should be visible
+		me.getRetrieveFromExternalButton().setVisible( displayRetrieveFromExternalButton );		
+
+		// enable the retrieveFromExternalButton if the studentId field is valid
+		me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );
+		
+		return me.callParent(arguments);
+    },
+    
+    onStudentNameChange: function( comp, newValue, oldValue, eOpts){
+    	var me=this;
+    	me.person.set(comp.name,newValue);
+    	me.appEventsController.getApplication().fireEvent('studentNameChange');
+    },
+    
+    onStudentIdValidityChange: function(comp, isValid, eOpts){
+    	var me=this;
+        me.setRetrieveFromExternalButtonDisabled( !isValid );
+    },
+    
+    setRetrieveFromExternalButtonDisabled: function( enabled ){
+    	this.getRetrieveFromExternalButton().setDisabled( enabled );
+    },
+    
+    onRetrieveFromExternalClick: function( button ){
+    	var me=this;
+    	var studentIdField = me.getStudentIdField();
+    	var schoolId = studentIdField.value;
+    	if ( studentIdField.isValid() )
+    	{
+    		if (schoolId != "")
+    		{
+    			me.getView().setLoading( true );
+    			me.personService.getBySchoolId( schoolId,{
+    				success: me.getBySchoolIdSuccess,
+    				failure: me.getBySchoolIdFailure,
+    				scope: me
+    			});
+    		}
+    	}else{
+    		Ext.Msg.alert('SSP Error','Please correct the errors in your form.');
+    	}
+    },
+    
+    getBySchoolIdSuccess: function( r, scope ){
+		var me=scope;
+		var model = new Ssp.model.Person();
+		me.getView().setLoading( false );
+		if ( r != null)
+		{
+			me.getView().getForm().reset();
+			model.populateFromExternalData( r );
+			me.person.data = model.data;
+			me.getView().loadRecord( me.person );
+		}else{
+			Ext.Msg.alert('SSP Notification','There were no records found with the provided ID. Please try a different value.');
+		}
+    },    
+    
+    getBySchoolIdFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    }
+});
+Ext.define('Ssp.controller.person.AppointmentViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	appEventsController: 'appEventsController',
+    	appointment: 'currentAppointment',
+    	formUtils: 'formRendererUtils',
+    	studentTypesStore: 'studentTypesStore'
+    },
+    control: {
+    	appointmentDateField: '#appointmentDateField',
+    	startTimeField: '#startTimeField',
+    	endTimeField: '#endTimeField'
+    },
+    
+	init: function() {
+		var me=this;
+
+		me.appEventsController.assignEvent({eventName: 'studentTypeChange', callBackFunc: this.onStudentTypeChange, scope: this});
+		
+		// require a date beyond today for all new appointments
+		if (me.appointment.get('id') == "")
+		{
+			today = new Date();
+			me.getAppointmentDateField().setMinValue( Ext.Date.clearTime( today ) );
+		}
+				
+		me.getView().getForm().reset();
+		me.getView().loadRecord( me.appointment );
+
+		me.assignAppointmentRequiredFields();
+		
+		return me.callParent(arguments);
+    },
+    
+    destroy: function(){
+    	this.appEventsController.removeEvent({eventName: 'studentTypeChange', callBackFunc: this.onStudentTypeChange, scope: this});    	
+    	
+    	return this.callParent( arguments );
+    },
+    
+    onStudentTypeChange: function(){
+    	this.assignAppointmentRequiredFields();
+    },
+    
+    assignAppointmentRequiredFields: function(){
+    	// TODO: Decouple this interaction from
+    	// the Coach.js screen
+    	var me=this;
+    	var studentTypeCombo = Ext.ComponentQuery.query('#studentTypeCombo')[0];
+    	var newValue = studentTypeCombo.getValue();
+    	var studentType, requireAppointment, appendToLabelValue;
+    	var appointmentField = me.getAppointmentDateField();
+    	var startTimeField = me.getStartTimeField();
+    	var endTimeField = me.getEndTimeField();
+    	studentType = me.studentTypesStore.getById(newValue);
+    	if (studentType != null)
+    	{
+    		requireAppointment = studentType.get('requireInitialAppointment');
+			appendToLabelValue = "";
+			// enable requirement of appointment
+    		if (requireAppointment==true)
+    		{
+    			appendToLabelValue = Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY;
+    		}
+
+    		appointmentField.setFieldLabel( appointmentField.fieldLabel.replace(Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,"","gi")+appendToLabelValue );
+    		appointmentField.allowBlank=!requireAppointment;
+    		appointmentField.validate();
+    		
+    		startTimeField.setFieldLabel( startTimeField.fieldLabel.replace(Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,"","gi")+appendToLabelValue );
+    		startTimeField.allowBlank=!requireAppointment;
+    		startTimeField.validate();
+    		
+    		endTimeField.setFieldLabel( endTimeField.fieldLabel.replace(Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,"","gi")+appendToLabelValue );
+    		endTimeField.allowBlank=!requireAppointment;
+    		endTimeField.validate();
+    	}
+    }
+});
+Ext.define('Ssp.controller.person.SpecialServiceGroupsViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	columnRendererUtils: 'columnRendererUtils',
+    	person: 'currentPerson',
+    	store: 'specialServiceGroupsBindStore',
+    	service: 'specialServiceGroupService'
+    },
+	init: function() {
+		var me=this;
+				
+		me.service.getAll({
+			success: me.getAllSuccess,
+			failure: me.getAllFailure,
+			scope: me
+		});
+		
+		return me.callParent(arguments);
+    },
+    
+	getAllSuccess: function( r, scope ){
+		var me=scope;
+    	var items;
+    	var view = me.getView();
+    	var selectedSpecialServiceGroups = me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('specialServiceGroups') );
+    	if (r.rows.length > 0)
+    	{
+    		me.store.loadData(r.rows);
+    		
+    		items = [{
+	            xtype: 'itemselectorfield',
+	            itemId: 'specialServiceGroupsItemSelector',
+	            name: 'specialServiceGroups',
+	            anchor: '100%',
+	            height: 250,
+	            fieldLabel: 'Service Groups',
+	            store: me.store,
+	            displayField: 'name',
+	            valueField: 'id',
+	            value: ((selectedSpecialServiceGroups.length>0) ? selectedSpecialServiceGroups : [] ),
+	            allowBlank: true,
+	            buttons: ["add", "remove"]
+	        }];
+    		
+    		view.add(items);
+    	}
+	},
+	
+    getAllFailure: function( response, scope ){
+    	var me=scope;  	
+    }
+});
+Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	columnRendererUtils: 'columnRendererUtils',
+    	person: 'currentPerson',
+        store: 'referralSourcesBindStore',
+        service: 'referralSourceService'
+    },
+	init: function() {
+		var me=this;
+		
+		me.service.getAll({
+			success: me.getAllSuccess,
+			failure: me.getAllFailure,
+			scope: me
+		});
+		
+		return me.callParent(arguments);
+    },
+    
+	getAllSuccess: function( r, scope ){
+		var me=scope;
+    	var items;
+    	var view = me.getView();
+    	var selectedReferralSources = me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('referralSources') );
+    	if (r.rows.length > 0)
+    	{
+    		me.store.loadData(r.rows);
+    		
+    		items = [{
+	            xtype: 'itemselectorfield',
+	            itemId: 'referralSourcesItemSelector',
+	            name: 'referralSources',
+	            anchor: '100%',
+	            height: 250,
+	            fieldLabel: 'Referral Sources',
+	            store: me.store,
+	            displayField: 'name',
+	            valueField: 'id',
+	            value: ((selectedReferralSources.length>0) ? selectedReferralSources : [] ),
+	            allowBlank: true,
+	            buttons: ["add", "remove"]
+	        }];
+    		
+    		view.add(items);
+    	}
+	},
+	
+    getAllFailure: function( response, scope ){
+    	var me=scope;  	
+    }
+});
+Ext.define('Ssp.controller.person.ServiceReasonsViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	formUtils: 'formRendererUtils',
+        person: 'currentPerson',
+        serviceReasonsStore: 'serviceReasonsStore'
+    },
+    
+	init: function() {
+		var me=this;
+
+		var serviceReasonsSuccessFunc = function(records,operation,success){
+			if (records.length > 0)
+	    	{
+	    		var items = [];
+				Ext.Array.each(records,function(item,index){
+	    			items.push(item.raw);
+	    		});
+				var serviceReasonsFormProps = {
+	    				mainComponentType: 'checkbox',
+	    				formId: 'personservicereasons', 
+	                    fieldSetTitle: 'Select all that apply:',
+	                    itemsArr: items, 
+	                    selectedItemsArr: me.person.get('serviceReasons'), 
+	                    idFieldName: 'id', 
+	                    selectedIdFieldName: 'id',
+	                    additionalFieldsMap: [] };
+	    		
+	    		me.formUtils.createForm( serviceReasonsFormProps );	    		
+	    	}
+		};
+		
+		me.serviceReasonsStore.load({scope: me, callback: serviceReasonsSuccessFunc});
+		
+		return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.person.AnticipatedStartDateViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        person: 'currentPerson'
+    },
+    
+	init: function() {
+		this.getView().loadRecord( this.person );
+		
+		return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.ToolsViewController', {
+	extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+        appEventsController: 'appEventsController',
+    	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson',
+        formUtils: 'formRendererUtils',
+    	personLite: 'personLite',
+    	toolsStore: 'toolsStore'
+    },
+    control: {
+		view: {
+			itemclick: 'onItemClick',
+			viewready: 'onViewReady'
+		}
+		
+	},
+	
+	init: function() {	
+		return this.callParent(arguments);
+    }, 
+    
+    onViewReady: function(comp, obj){
+    	var me=this;
+    	me.appEventsController.assignEvent({eventName: 'loadPerson', callBackFunc: me.onLoadPerson, scope: me});
+    	me.appEventsController.assignEvent({eventName: 'transitionStudent', callBackFunc: me.onTransitionStudent, scope: me});
+ 
+    	if (me.personLite.get('id') != "")
+    	{
+    		me.loadPerson();
+    	}
+    },
+
+    destroy: function() {
+    	var me=this;
+     	
+    	me.appEventsController.removeEvent({eventName: 'loadPerson', callBackFunc: me.onLoadPerson, scope: me});
+    	me.appEventsController.assignEvent({eventName: 'transitionStudent', callBackFunc: me.onTransitionStudent, scope: me});
+
+        return me.callParent( arguments );
+    },
+    
+    onLoadPerson: function(){
+    	this.loadPerson();
+    },
+    
+    onTransitionStudent: function(){
+    	this.selectTool( 'journal' );
+    	this.loadTool('journal');
+    },
+    
+    loadPerson: function(){
+    	this.selectTool( 'profile' );
+    	this.loadTool('profile');  
+    },
+    
+    selectTool: function( toolType ){
+    	var tool = this.toolsStore.find( 'toolType', toolType )
+		this.getView().getSelectionModel().select( tool );
+    },
+    
+	onItemClick: function(grid,record,item,index){ 
+		var me=this;
+		if (record.get('active') && me.personLite.get('id') != "")
+		{
+			this.loadTool( record.get('toolType') );
+		}
+	},
+	
+	loadTool: function( toolType ) {
+		var me=this;
+		var comp;
+		if ( me.authenticatedPerson.hasAccess(toolType.toUpperCase()+'_TOOL') )
+		{
+			comp = me.formUtils.loadDisplay('tools',toolType, true, {});
+		}else{
+			me.authenticatedPerson.showUnauthorizedAccessAlert();
+		}
+	}
+});
+Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	personLite: 'personLite'
+    },
+    config: {
+    	personViewHistoryUrl: '',
+    	printConfidentialityAgreementUrl: ''
+    },
+    control: {
+    	'viewHistoryButton': {
+			click: 'onViewHistoryClick'
+		},
+		
+		'printConfidentialityAgreementButton': {
+			click: 'printConfidentialityAgreement'
+		}
+    },
+	init: function() {
+		var me=this;
+		var personId = me.personLite.get('id');
+		me.personViewHistoryUrl = me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory');
+		me.personViewHistoryUrl = me.personViewHistoryUrl.replace('{id}',personId);
+		me.printConfidentialityAgreementUrl = me.apiProperties.getContext() + me.apiProperties.getItemUrl('printConfidentialityDisclosureAgreement');
+		return this.callParent(arguments);
+    },
+    
+	printConfidentialityAgreement: function(button){
+		var me=this;
+		me.apiProperties.getReporter().loadBlankReport( me.printConfidentialityAgreementUrl );
+	},   
+    
+    onViewHistoryClick: function(button){
+		var me=this;
+		me.apiProperties.getReporter().load({
+			url:me.personViewHistoryUrl,
+			params: ""
+		});
+    }
+});
+Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController',
+        person: 'currentPerson',
+        personLite: 'personLite',
+        personService: 'personService',
+        profileReferralSourcesStore: 'profileReferralSourcesStore',
+        profileServiceReasonsStore: 'profileServiceReasonsStore',
+        profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
+        sspConfig: 'sspConfig'
+    },
+    
+    control: {
+    	nameField: '#studentName',
+    	coachNameField: '#coachName',
+    	coachWorkPhoneField: '#coachWorkPhone',
+    	coachDepartmentNameField: '#coachDepartmentName',
+    	coachOfficeLocationField: '#coachOfficeLocation',
+    	coachPrimaryEmailAddressField: '#coachPrimaryEmailAddress',
+    	studentIdField: '#studentId',
+    	birthDateField: '#birthDate',
+    	studentTypeField: '#studentType',
+    	programStatusField: '#programStatus'
+    },
+	init: function() {
+		var me=this;
+		var studentIdField = me.getStudentIdField();
+		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		var id =  me.personLite.get('id');
+		me.getView().getForm().reset();
+
+		// Set defined configured label for the studentId field
+		studentIdField.setFieldLabel(studentIdAlias);		
+		
+		if (id != "")
+		{
+			// display loader
+			me.getView().setLoading( true );
+			me.personService.get( id, {
+				success: me.getPersonSuccess,
+				failure: me.getPersonFailure,
+				scope: me
+			});
+		}
+		
+		return me.callParent(arguments);
+    },
+    
+    getPersonSuccess: function( r, scope ){
+    	var me=scope;
+		var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
+		var studentIdField = me.getStudentIdField();
+		var nameField = me.getNameField();
+		var coachNameField = me.getCoachNameField();
+		var coachWorkPhoneField = me.getCoachWorkPhoneField();
+		var coachDepartmentNameField = me.getCoachDepartmentNameField();
+		var coachOfficeLocationField = me.getCoachOfficeLocationField();
+		var coachPrimaryEmailAddressField = me.getCoachPrimaryEmailAddressField();
+		var birthDateField = me.getBirthDateField();
+		var studentTypeField = me.getStudentTypeField();
+		var programStatusField = me.getProgramStatusField();
+		var id= me.personLite.get('id');
+		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		var fullName; 		
+		
+		// load the person data
+		me.person.populateFromGenericObject(r);
+		
+    	fullName = me.person.getFullName();
+   	
+		// load special service groups
+    	me.profileSpecialServiceGroupsStore.removeAll();
+		if (r.specialServiceGroups != null)
+		{
+			me.profileSpecialServiceGroupsStore.loadData( me.person.get('specialServiceGroups') );
+		}
+		
+		// load referral sources
+		me.profileReferralSourcesStore.removeAll();  
+		if (r.referralSources != null)
+		{
+			me.profileReferralSourcesStore.loadData( me.person.get('referralSources') );
+		}
+
+		// load service reasons
+		me.profileServiceReasonsStore.removeAll();  
+		if (r.serviceReasons != null)
+		{
+			me.profileServiceReasonsStore.loadData( me.person.get('serviceReasons') );
+		}   		
+		
+		// load general student record
+		me.getView().loadRecord( me.person );
+		
+		// load additional values
+		nameField.setValue( fullName );
+		coachNameField.setValue( me.person.getCoachFullName() );
+		coachWorkPhoneField.setValue( me.person.getCoachWorkPhone() );
+		coachDepartmentNameField.setValue( me.person.getCoachDepartmentName() );
+		coachOfficeLocationField.setValue( me.person.getCoachOfficeLocation() );
+		coachPrimaryEmailAddressField.setValue( me.person.getCoachPrimaryEmailAddress() );
+		birthDateField.setValue( me.person.getFormattedBirthDate() );
+		studentTypeField.setValue( me.person.getStudentTypeName() );
+		programStatusField.setValue( me.person.getProgramStatusName() );
+		studentRecordComp.setTitle('Student Record - ' + fullName);
+		
+    	// hide the loader
+    	me.getView().setLoading( false ); 
+    },
+    
+    getPersonFailure: function( response, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    }
+});
+Ext.define('Ssp.controller.tool.profile.ServicesProvidedViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+        person: 'currentPerson'
+    },
+
+	init: function() {
+		var me=this;
+
+		return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.tool.actionplan.ActionPlanToolViewController', {
+    extend: 'Deft.mvc.ViewController',	
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+        store: 'confidentialityLevelsStore'
+    },
+    constructor: function() {
+    	var me=this;   	
+    	
+    	// ensure loading of all confidentiality levels in the database
+    	me.store.load({
+    		params:{limit:50}
+    	});
+    	
+		return me.callParent(arguments);
+    }  
+});
+Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentTask',
+    	person: 'currentPerson',
+    	store: 'tasksStore' 
+    },
+    
+    config: {
+    	appEventsController: 'appEventsController',
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'addtask',
+    	url: ''
+    },
+    
+    control: {
+    	view: {
+    		viewready: 'onViewReady'
+    	}
+	},
+	
+	init: function() {
+		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personTask') );
+		this.url = this.url.replace('{id}',this.person.get('id'));
+
+		return this.callParent(arguments);
+    },
+
+    onViewReady: function(comp, obj){
+    	this.appEventsController.assignEvent({eventName: 'addTask', callBackFunc: this.onAddTask, scope: this});
+    	this.appEventsController.assignEvent({eventName: 'editTask', callBackFunc: this.onEditTask, scope: this});
+    	this.appEventsController.assignEvent({eventName: 'closeTask', callBackFunc: this.onCloseTask, scope: this});
+    	this.appEventsController.assignEvent({eventName: 'deleteTask', callBackFunc: this.deleteConfirmation, scope: this});
+    },    
+ 
+    destroy: function() {
+    	this.appEventsController.removeEvent({eventName: 'addTask', callBackFunc: this.onAddTask, scope: this});
+    	this.appEventsController.removeEvent({eventName: 'editTask', callBackFunc: this.onEditTask, scope: this});
+    	this.appEventsController.removeEvent({eventName: 'closeTask', callBackFunc: this.onCloseTask, scope: this});
+    	this.appEventsController.removeEvent({eventName: 'deleteTask', callBackFunc: this.deleteConfirmation, scope: this});
+
+        return this.callParent( arguments );
+    },
+    
+    onAddTask: function() {
+    	var task = new Ssp.model.tool.actionplan.Task();
+    	this.model.data = task.data;
+    	this.loadEditor();
+    },    
+    
+    onEditTask: function(){
+ 	   console.log('TaskViewController->editTask');
+ 	   //Ext.Msg.alert("NOTIFICATION","This functionality is disabled until I can figure out why the tree component renders it's init method twice on edit from the grid.")
+ 	   this.loadEditor();
+    },
+    
+    onCloseTask: function() {
+	   console.log('TaskViewController->closeTask');
+       var me=this;
+	   var store, id, model, groupName;
+       model = me.model;
+       id = model.get('id');
+	   store = me.store;
+       if (id != "") 
+       {
+           model.set('completed',true);
+           model.set('completedDate', new Date() );
+           // remove group property before save, since
+           // the group property was added dynamically for
+           // sorting and will invalidate the model on the
+           // server side.
+           groupName = model.data.group;
+           delete model.data.group;
+		   this.apiProperties.makeRequest({
+			   url: this.url+"/"+id,
+			   method: 'PUT',
+			   jsonData: model.data,
+			   successFunc: function(response,responseText){
+				   var r = Ext.decode(response.responseText);
+				   // ensure proper save
+				   if ( r.id != "" )
+				   {
+					   model.set( "completedDate", r.completedDate );
+					   model.set( "completed", r.completed );
+					   // reset the group for sorting purposes
+					   model.set('group',groupName);
+					   model.commit();
+					   store.sync();
+					   // filter the tasks, so the completed task is no longer
+					   // listed
+					   me.appEventsController.getApplication().fireEvent('filterTasks');					   
+				   }
+			   },
+			   scope: me
+		   });
+       }else{
+    	   Ext.Msg.alert('SSP Error', 'Unable to delete. No id was specified to delete.'); 
+       }
+    },    
+    
+    deleteConfirmation: function() {
+        var message = 'You are about to delete the task: "'+ this.model.get('name') + '". Would you like to continue?';
+    	var model = this.model;
+        if (model.get('id') != "") 
+        {
+    		// test if this is a student task
+     	   if ( model.get('createdBy').id == this.person.get('id') )
+     	   {
+     		   message = "WARNING: You are about to delete a task created by this student. Would you like to continue?"; 
+     	   }
+     	   
+           Ext.Msg.confirm({
+   		     title:'Delete Task?',
+   		     msg: message,
+   		     buttons: Ext.Msg.YESNO,
+   		     fn: this.deleteTask,
+   		     scope: this
+   		   });
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Unable to delete task.'); 
+        }
+     },
+     
+     deleteTask: function( btnId ){
+     	var store = this.store;
+     	var id = this.model.get('id');
+     	if (btnId=="yes")
+     	{
+         	this.apiProperties.makeRequest({
+      		   url: this.url+"/"+id,
+      		   method: 'DELETE',
+      		   successFunc: function(response,responseText){
+      			   store.remove( store.getById( id ) );
+      		   }
+      	    });    		
+     	}
+     },    
+     
+     loadEditor: function(){
+     	var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+     }
+});
+Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
+    extend: 'Deft.mvc.ViewController',	
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
+    	confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentTask',
+    	person: 'currentPerson'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'actionplan',
+    	model: 'currentTask',
+    	url: ''
+    },    
+    control: {  
+    	'addButton': {
+			click: 'onAddClick'
+		},
+		
+		'closeButton': {
+			click: 'onCloseClick'
+		}
+	},
+ 
+	init: function(){
+		var me=this;
+		
+		// apply confidentiality level filter
+		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
+		
+		me.url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personTask') );
+		me.url = me.url.replace('{id}',me.person.get('id'));
+		
+		me.initForm();
+		
+    	me.appEventsController.assignEvent({eventName: 'loadTask', callBackFunc: me.initForm, scope: me});    	
+    	
+		return me.callParent(arguments);
+	},
+	
+    destroy: function() {
+    	var me=this;  	
+
+    	// clear confidentiality level filter
+    	me.confidentialityLevelsStore.clearFilter();
+    	
+    	me.appEventsController.removeEvent({eventName: 'loadTask', callBackFunc: me.initForm, scope: me});
+    	
+        return me.callParent( arguments );
+    },	
+	
+	initForm: function(){
+		this.getView().getForm().reset();
+		this.getView().getForm().loadRecord( this.model );
+		Ext.ComponentQuery.query('#confidentialityLevel')[0].setValue( this.model.get('confidentialityLevel').id );
+	},
+    
+    onAddClick: function(button){
+    	var me=this;
+    	var successFunc;
+    	var form = this.getView().getForm();
+    	var model = this.model;
+    	var jsonData;
+    	var id = model.get('id');
+    	if ( form.isValid() )
+    	{
+    		form.updateRecord();
+    		
+			successFunc = function(response ,view){
+		    	   Ext.Msg.confirm({
+		    		     title:'Success',
+		    		     msg: 'The task was saved successfully. Would you like to create another task?',
+		    		     buttons: Ext.Msg.YESNO,
+		    		     fn: me.createTaskConfirmResult,
+		    		     scope: me
+		    		});
+			};	
+    		
+			// fix timestamp due to GMT Date, set to UTC Date
+    		model.set('dueDate', me.formUtils.fixDateOffsetWithTime( model.data.dueDate ) );
+
+    		if (id == "")
+    		{
+        		model.set('type','SSP');
+        		model.set('personId', this.person.get('id') );    		
+        		model.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
+     		
+    			// add the task
+    			this.apiProperties.makeRequest({
+	    			url: me.url,
+	    			method: 'POST',
+	    			jsonData: model.data,
+	    			successFunc: successFunc
+	    		});
+    		}else{
+    			
+    			// This removes the group property from
+    			// a TaskGroup item before it is saved
+    			// as a Task. Task grouping is handled in the Tasks display.
+        		if (model.data.group != null)
+        			delete model.data.group;
+        		        		
+        		// edit the task
+	    		this.apiProperties.makeRequest({
+	    			url: me.url+"/"+id,
+	    			method: 'PUT',
+	    			jsonData: model.data,
+	    			successFunc: successFunc
+	    		});    			
+    		}
+    	}else{
+    		Ext.Msg.alert('Error', 'Please correct the errors in your form before continuing.');
+    	}
+    },
+
+    createTaskConfirmResult: function( btnId ){
+    	if (btnId=="yes")
+    	{
+    		var task = new Ssp.model.tool.actionplan.Task();
+    		this.model.data = task.data;
+    		this.initForm();
+    	}else{
+    		this.loadDisplay();
+    	}
+    },    
+    
+    onCloseClick: function(button){
+    	this.loadDisplay();
+    },
+    
+    loadDisplay: function(){
+    	var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    }
+});
+Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
+    extend: 'Deft.mvc.ViewController',	
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson',
+    	confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentGoal',
+    	person: 'currentPerson',
+    	preferences: 'preferences'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'actionplan',
+    	url: ''
+    },    
+    control: {
+    	combo: '#confidentialityLevel',
+    	
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}
+	},
+  
+	init: function() {
+		var me=this;
+		
+		// apply confidentiality level filter
+		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
+		
+		me.getView().getForm().loadRecord( me.model );
+		me.getCombo().setValue( this.model.get('confidentialityLevel').id );
+		
+		return me.callParent(arguments);
+    },	
+	
+	constructor: function(){
+		this.url = this.apiProperties.getItemUrl('personGoal');
+		this.url = this.url.replace('{id}',this.person.get('id'));
+    	this.url = this.apiProperties.createUrl( this.url );
+	
+		return this.callParent(arguments);
+	},
+    
+    onSaveClick: function(button){
+    	var me=this;
+    	var model = this.model;
+    	var form, url, goalId, successFunc;
+    	form = this.getView().getForm();
+    	id = model.get('id');
+    	if ( form.isValid() )
+    	{
+    		var values = form.getValues();
+    		model.set('name',values.name);
+    		model.set('description',values.description);
+    		model.set('confidentialityLevel',{id: values.confidentialityLevelId});
+    		
+    		successFunc = function(response ,view){
+    			me.preferences.ACTION_PLAN_ACTIVE_VIEW=1;
+    			me.loadDisplay();
+			};
+			
+    		if (id == "")
+    		{
+    			// add
+    			this.apiProperties.makeRequest({
+	    			url: this.url,
+	    			method: 'POST',
+	    			jsonData: model.data,
+	    			successFunc: successFunc
+	    		});
+    		}else{
+    			// edit
+	    		this.apiProperties.makeRequest({
+	    			url: this.url+"/"+id,
+	    			method: 'PUT',
+	    			jsonData: model.data,
+	    			successFunc: successFunc
+	    		});    			
+    		}
+    	}else{
+    		Ext.Msg.alert('Error', 'Please correct the errors in your form before continuing.');
+    	}
+    },
+    
+    onCancelClick: function(button){
+    	this.loadDisplay();
+    },
+    
+    loadDisplay: function(){
+    	var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+    }
+});
+Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
+    	formUtils: 'formRendererUtils',
+    	goalsStore: 'goalsStore',
+    	person: 'currentPerson',
+    	store: 'tasksStore'
+    },
+    
+    config: {
+    	filteredTaskStatus: null,
+    	filterAuthenticated: false,
+    	personTaskUrl: '',
+    	personTaskGroupUrl: '',
+    	personEmailTaskUrl: '',
+    	personPrintTaskUrl: ''
+    },
+    
+    control: {
+    	'taskStatusTabs': {
+    		tabchange: 'onTaskStatusTabChange'
+    	},
+		
+		'emailTasksButton': {
+			click: 'onEmailTasksClick'
+		},
+
+		'printTasksButton': {
+			click: 'onPrintTasksClick'
+		},
+		
+		'filterTasksBySelfCheck': {
+			change: 'onFilterTasksBySelfChange'
+		},
+    	
+		addTaskButton: {
+			selector: '#addTaskButton',
+			listeners: {
+				click: 'onAddTaskClick'
+			}
+		},
+		
+		goalsPanel: '#goalsPanel',
+		activeTasksGrid: '#activeTasksGrid',
+		completeTasksGrid: '#completeTasksGrid',
+		allTasksGrid: '#allTasksGrid'
+	},
+	
+	init: function() {
+		var me = this;
+		var personId;
+		var child;
+		var successFunc = function(response,view){
+	    	var r, records;
+	    	var groupedTasks=[];
+	    	r = Ext.decode(response.responseText);
+	    	
+	    	// hide the loader
+	    	me.getView().setLoading( false );
+	    	
+	    	if (r != null)
+	    	{
+	    		Ext.Object.each(r,function(key,value){
+		    		var taskGroup = key;
+		    		var tasks = value;
+		    		Ext.Array.each(tasks,function(task,index){
+		    			task.group=taskGroup;
+		    			groupedTasks.push(task);
+		    		},this);
+		    	},this);		    		
+
+	    		me.store.loadData(groupedTasks);
+	    		me.filteredTaskStatus="ACTIVE";
+	    		me.filterTasks();
+	    	}
+		};
+	
+    	me.getAddTaskButton().setDisabled( !me.authenticatedPerson.hasPermission('ROLE_PERSON_TASK_WRITE') );
+    	
+		// clear any existing tasks
+		me.store.removeAll();
+
+		// display loader
+		me.getView().setLoading( true );
+		
+		personId = me.person.get('id');
+		me.personTaskUrl = me.apiProperties.getItemUrl('personTask');
+		me.personTaskUrl = me.personTaskUrl.replace('{id}',personId);
+		me.personTaskGroupUrl = me.apiProperties.getItemUrl('personTaskGroup');
+		me.personTaskGroupUrl = me.personTaskGroupUrl.replace('{id}',personId);
+		me.personEmailTaskUrl = me.apiProperties.getItemUrl('personEmailTask');
+		me.personEmailTaskUrl = me.personEmailTaskUrl.replace('{id}',personId);	
+		me.personPrintTaskUrl = me.apiProperties.getItemUrl('personPrintTask');
+		me.personPrintTaskUrl = me.personPrintTaskUrl.replace('{id}',personId);
+		
+		me.apiProperties.makeRequest({
+			url: me.apiProperties.createUrl(me.personTaskGroupUrl),
+			method: 'GET',
+			successFunc: successFunc 
+		});
+			
+    	me.appEventsController.assignEvent({eventName: 'filterTasks', callBackFunc: this.onFilterTasks, scope: this});		
+		
+		return me.callParent(arguments);
+    },
+    
+    destroy: function(){
+    	this.appEventsController.removeEvent({eventName: 'filterTasks', callBackFunc: this.onFilterTasks, scope: this});    	
+    },
+    
+    onFilterTasks: function(){
+    	this.filterTasks();
+    },
+    
+    onFilterTasksBySelfChange: function(comp, newComp, oldComp, eOpts){
+		this.filterAuthenticated=!this.filterAuthenticated;
+		this.filterTasks();
+	},
+    
+    onTaskStatusTabChange: function(panel, newComp, oldComp, eOpts) {
+		this.filteredTaskStatus = newComp.action.toUpperCase();
+		this.filterTasks();
+    },
+    
+    filterTasks: function(){
+    	var me=this;
+    	var filtersArr = [];
+		var filterStatusFunc = null;
+		var authenticatedId = me.authenticatedPerson.get('id');
+		var filterAuthenticatedFunc = new Ext.util.Filter({
+		    filterFn: function(item) {
+				return (item.get('createdBy').id == authenticatedId); 
+			},
+			scope: me
+		});
+
+		switch (me.filteredTaskStatus)
+		{
+			case 'ACTIVE':
+				filterStatusFunc = function(item) { return (item.get('completed') == false); };
+				break;
+			
+			case 'COMPLETE':
+				filterStatusFunc = function(item) { return (item.get('completed') == true); };
+				break;
+		}
+		
+		if (filterStatusFunc != null)
+			filtersArr.push(filterStatusFunc);
+		
+		if (me.filterAuthenticated == true)
+			filtersArr.push(filterAuthenticatedFunc);
+		
+		// reset filter
+		me.store.clearFilter();
+		
+		// apply new filters
+		me.store.filter(filtersArr);
+    },
+
+    onEmailTasksClick: function(button) {
+    	var me=this;
+    	var msg = me.getTaskGoalCountNotificationMessage();
+		if (msg.length > 0)
+		{
+	           Ext.Msg.confirm({
+	     		     title:' Would you like to continue emailing?',
+	     		     msg: msg,
+	     		     buttons: Ext.Msg.YESNO,
+	     		     fn: me.emailTasksConfirm,
+	     		     scope: me
+	     		   });
+		}else{
+			me.displayEmailAddressWindow();
+		}
+    },
+    
+    emailTasksConfirm: function( btnId ){
+     	var me=this;
+     	if (btnId=="yes")
+     	{
+         	me.displayEmailAddressWindow();    		
+     	}
+     }, 
+    
+    displayEmailAddressWindow: function(){
+    	var me=this;
+    	Ext.create('Ext.window.Window', {
+		    title: 'To whom would you like to send this Action Plan',
+		    height: 200,
+		    width: 400,
+		    layout: 'fit',
+		    modal: true,
+		    items:[{
+		        xtype:'form',
+		        layout:'anchor',
+		        items :[{
+		            xtype: 'label',
+		            text: 'Enter recipient email addresses separated by a comma'
+		            
+		        },{
+		            xtype: 'textarea',
+		            anchor: '100%',
+		            name: 'recipientEmailAddresses'
+		        }]
+			}],
+			dockedItems: [{
+		        dock: 'bottom',
+		        xtype: 'toolbar',
+		        items: [{
+		            text: 'Send',
+		            xtype: 'button',
+		            handler: me.emailTaskList,
+		            scope: me
+		        },{
+		            text: 'Cancel',
+		            xtype: 'button',
+		            handler: function(button){
+		            	button.up('window').close();
+		            }
+		        }]
+    	    }]
+		}).show();
+    },
+    
+    emailTaskList: function( button ){
+	    var me=this;
+    	var valid = false;
+	    var jsonData;
+	    var emailTestArr;
+	    var arrRecipientEmailAddresses = [];
+	    var recipientEmailAddresses = button.up('panel').down('form').getValues().recipientEmailAddresses;
+	    if (recipientEmailAddresses != null)
+	    {
+	    	// validate email addresses
+		    if ( recipientEmailAddresses.indexOf(",") )
+		    {
+		    	emailTestArr = recipientEmailAddresses.split(',');
+		    	// handle a list of email addresses
+		    	Ext.each(emailTestArr,function(emailAddress,index){
+		    		valid = this.validateEmailAddress( emailAddress );
+		    		arrRecipientEmailAddresses.push( Ext.String.trim(emailAddress) );
+		    		if (valid != true)
+		    			return;
+		    	}, this);
+		    }else{
+		    	valid = this.validateEmailAddress( recipientEmailAddresses );
+		    	arrRecipientEmailAddresses.push( Ext.String.trim( recipientEmailAddresses ) );
+		    }
+		    
+		    // define data to email
+			jsonData = {
+	    			"taskIds": me.getSelectedTasks(),
+	    		    "goalIds": me.getSelectedGoals(),
+	    		    "recipientIds": [],
+					"recipientEmailAddresses": arrRecipientEmailAddresses
+			};
+
+		    if (valid==true)
+		    {
+		    	// email the task list
+	    		url = this.apiProperties.createUrl( this.personEmailTaskUrl );
+		    	this.apiProperties.makeRequest({
+					url: url,
+					method: 'POST',
+					jsonData: jsonData,
+					successFunc: function(){
+						button.up('window').close();
+						Ext.Msg.alert('Success','The task list has been sent to the listed recipient(s).');
+					}
+				});
+		    }else{
+		    	Ext.Msg.alert('Error','1 or more of the addresses you entered are invalid. Please correct the form and try again.');		    	
+		    }	
+	    }else{
+	    	Ext.Msg.alert('Error','Unable to determine an email address please enter a valid email address.');
+	    }
+    },
+    
+    validateEmailAddress: function( value ){
+    	var emailExpression = filter = new RegExp('^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$');
+    	return emailExpression.test( value );
+    },
+    
+    onPrintTasksClick: function(button) {
+    	var me=this;
+    	var msg = me.getTaskGoalCountNotificationMessage();
+		if (msg.length > 0)
+		{
+           Ext.Msg.confirm({
+     		     title:' Would you like to continue printing??',
+     		     msg: msg,
+     		     buttons: Ext.Msg.YESNO,
+     		     fn: me.printTasksConfirm,
+     		     scope: me
+     		   });
+		}else{
+			me.printTasks();
+		}
+    },
+ 
+    printTasksConfirm: function( btnId ){
+     	var me=this;
+     	if (btnId=="yes")
+     	{
+         	me.printTasks();    		
+     	}
+     },    
+    
+    printTasks: function() {
+    	var me=this;
+    	var url, jsonData;	
+		var jsonData = {
+				"taskIds": me.getSelectedTasks(),
+		        "goalIds": me.getSelectedGoals()
+		        };
+ 
+    	url = me.apiProperties.createUrl( me.personPrintTaskUrl );
+
+		me.apiProperties.getReporter().postReport({
+			url: url,
+			params: jsonData
+		});
+    },
+    
+    getTaskGoalCountNotificationMessage: function(){
+		var me=this;
+    	// if no tasks or goals have been added to the student's record
+		// then display a notification to first add tasks and goals before
+		// printing
+		var notificationMsg = "";
+		if ( me.store.getCount() < 1 )
+		{
+			notificationMsg += "This student has " + me.store.getCount() + " assigned tasks.";
+		}
+		
+		if ( me.goalsStore.getCount() < 1 )
+		{
+			notificationMsg += "This student has " + me.goalsStore.getCount() + " assigned goals.";
+		}
+		
+		return notificationMsg;
+    },
+		
+    getSelectedTasks: function(){
+    	var me=this;
+    	var activeTasksGrid = me.getActiveTasksGrid();
+		var completeTasksGrid = me.getCompleteTasksGrid();
+		var allTasksGrid = me.getAllTasksGrid();
+		var activeTaskIds = me.getSelectedIdsArray( activeTasksGrid.getView().getSelectionModel().getSelection() );
+		var completeTaskIds = me.getSelectedIdsArray( completeTasksGrid.getView().getSelectionModel().getSelection() );
+		var allTaskIds = me.getSelectedIdsArray( allTasksGrid.getView().getSelectionModel().getSelection() );
+		var taskIds = Ext.Array.merge( activeTaskIds, completeTaskIds, allTaskIds);
+		return taskIds;    	
+    },
+    
+    getSelectedGoals: function(){
+		var me=this;
+    	var goalsPanel = me.getGoalsPanel();
+		return me.getSelectedIdsArray( goalsPanel.getView().getSelectionModel().getSelection() );
+    },
+    
+    getSelectedIdsArray: function(arr){
+		var selectedIds = [];
+		Ext.each(arr, function(item, index) {
+			selectedIds.push( item.get('id') );
+		});
+		
+		return selectedIds;
+    },
+    
+    onAddTaskClick: function(button) {
+    	this.appEventsController.getApplication().fireEvent('addTask');
+    },  
+});
+Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController', {
+    extend: 'Deft.mvc.ViewController',	
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentGoal',
+    	person: 'currentPerson',
+    	preferences: 'preferences',
+    	store: 'goalsStore'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'editgoalform',
+    	url: ''
+    },
+    control: {
+		view: {
+			viewready: 'onViewReady'
+		},
+    	
+    	addGoalButton:{
+    		selector: '#addGoalButton',
+    		listeners: {
+    			click: 'onAddGoalClick'
+    		}
+    	}
+    },
+    
+    constructor: function() {
+    	// reconfigure the url for the current person
+    	this.url = this.apiProperties.createUrl(this.apiProperties.getItemUrl('personGoal'));
+    	this.url = this.url.replace('{id}',this.person.get('id'));
+    	
+    	// apply the person url to the store proxy
+    	Ext.apply(this.store.getProxy(), { url: this.url });
+
+    	// load records
+    	this.store.load();
+
+		return this.callParent(arguments);
+    },
+
+    onViewReady: function(comp, obj){
+    	var me=this;
+    	me.getAddGoalButton().setDisabled( !me.authenticatedPerson.hasPermission('ROLE_PERSON_GOAL_WRITE') );
+    	
+    	me.appEventsController.assignEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});
+    	me.appEventsController.assignEvent({eventName: 'deleteGoal', callBackFunc: this.deleteConfirmation, scope: this});
+    
+    	// display the goals pane if a goal was added to the student's record
+    	if ( me.preferences.ACTION_PLAN_ACTIVE_VIEW == 1 )
+    	{
+    		// reset to the tasks view
+    		me.preferences.ACTION_PLAN_ACTIVE_VIEW=0;
+    		me.getView().expand();
+    	}
+    },
+    
+    destroy: function() {
+    	this.appEventsController.removeEvent({eventName: 'editGoal', callBackFunc: this.editGoal, scope: this});
+    	this.appEventsController.removeEvent({eventName: 'deleteGoal', callBackFunc: this.deleteConfirmation, scope: this});
+
+        return this.callParent( arguments );
+    },
+    
+    onAddGoalClick: function( button ){
+		var goal = new Ssp.model.PersonGoal();
+		this.model.data = goal.data;
+		this.loadEditor();
+    },
+ 
+    editGoal: function(){
+  	   this.loadEditor();
+    },
+
+    deleteConfirmation: function() {
+       if (this.model.get('id') != "") 
+       {
+    	   Ext.Msg.confirm({
+    		     title:'Delete Goal?',
+    		     msg: 'You are about to delete the goal: "'+ this.model.get('name') + '". Would you like to continue?',
+    		     buttons: Ext.Msg.YESNO,
+    		     fn: this.deleteGoal,
+    		     scope: this
+    		});
+       }else{
+    	   Ext.Msg.alert('SSP Error', 'Unable to delete goal.'); 
+       }
+    },
+    
+    deleteGoal: function( btnId ){
+    	var store = this.store;
+    	var id = this.model.get('id');
+    	if (btnId=="yes")
+    	{
+        	this.apiProperties.makeRequest({
+     		   url: this.url+"/"+id,
+     		   method: 'DELETE',
+     		   successFunc: function(response,responseText){
+     			  store.remove( store.getById( id ) );
+     		   }
+     	    });    		
+    	}
+    },
+    
+    loadEditor: function(){
+    	var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    }
+});
+Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentPerson',
+    	service: 'personService'
+    },
+    
+    control: {  	
+    	saveButton: {
+    		selector: '#saveButton',
+    		listeners: {
+    			click: 'onSaveClick'
+    		}
+    	},
+    	
+    	strengthsField: {
+    		selector: '#strengths',
+    		listeners: {
+    			change: 'onStrengthsChange'
+    		}
+    	},
+    	
+    	saveSuccessMessage: '#saveSuccessMessage'
+	},
+	
+	init: function() {
+		var me=this;
+		me.getView().getForm().loadRecord( me.model );
+		me.getSaveButton().disabled=true;  	
+		me.getStrengthsField().setDisabled( !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_FIELD') );
+		return me.callParent(arguments);
+    },
+    
+    onSaveClick: function(button) {
+		var me=this;
+		var form = me.getView().getForm();
+		var jsonData;
+		if (form.isValid())
+		{
+			form.updateRecord();
+			jsonData = me.model.data;
+			jsonData = me.model.setPropsNullForSave( me.model.data );
+			console.log(jsonData);
+			me.getView().setLoading('true');
+			me.service.save( jsonData , {
+				success: me.savePersonSuccess,
+				failure: me.savePersonFailure,
+				scope: me
+			});	
+		}else{
+			Ext.Msg.alert('Unable to save strengths. Please correct the errors in the form.');
+		}	
+    },
+
+    savePersonSuccess: function( r, scope){
+    	var me=scope;
+    	me.getView().setLoading( false );
+		me.model.commit();
+		me.setSaveButtonState();
+		me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
+    },
+
+    savePersonFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    },    
+    
+    onStrengthsChange: function(comp, oldValue, newValue, eOpts){
+    	this.setSaveButtonState();
+    },
+    
+    setSaveButtonState: function(){
+    	this.getSaveButton().disabled = !this.getView().getForm().isDirty();
+    }
+});
+Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+        appEventsController: 'appEventsController',
+        person: 'currentPerson',
+        task: 'currentTask',
+    	treeUtils: 'treeRendererUtils'
+    },
+    config: {
+    	categoryUrl: '',
+    	challengeUrl: '',
+    	challengeReferralUrl: '',
+    	personChallengeUrl: ''
+    },
+    control: {
+    	view: {
+    		itemexpand: 'onItemExpand',
+    		itemClick: 'onItemClick',
+    		viewready: 'onViewReady'
+    	},
+   	
+    	/*
+    	'searchButton': {
+			click: 'onSearchClick'
+		}
+		*/  	
+    },
+    
+	onViewReady: function() {
+		var rootNode = null;
+		
+		this.categoryUrl = this.apiProperties.getItemUrl('category');
+		this.challengeUrl = this.apiProperties.getItemUrl('challenge');
+		this.challengeReferralUrl = this.apiProperties.getItemUrl('challengeReferral');
+		this.personChallengeUrl = this.apiProperties.getItemUrl('personChallenge');
+		this.personChallengeUrl = this.personChallengeUrl.replace('{id}',this.person.get('id'));
+
+		// clear the categories
+		this.treeUtils.clearRootCategories();
+
+    	// load student intake challenges
+     	this.treeUtils.appendChildren(null,[{
+	        text: 'Student Intake Challenges',
+	        id: '0'+'_studentIntakeChallenge',
+	        leaf: false,
+	        destroyBeforeAppend: false
+	      }]);
+   
+    	// load "all" challenges category
+     	this.treeUtils.appendChildren(null,[{
+	        text: 'All',
+	        id: '0'+'_all',
+	        leaf: false,
+	        destroyBeforeAppend: false
+	      }]);     	
+     	
+    	// load the categories
+    	var treeRequest = new Ssp.model.util.TreeRequest();
+    	treeRequest.set('url', this.categoryUrl);
+    	treeRequest.set('nodeType','category');
+    	treeRequest.set('isLeaf', false);
+    	treeRequest.set('enableCheckedItems', false);	
+    	this.treeUtils.getItems( treeRequest );
+    },
+    
+    onItemExpand: function(nodeInt, obj){
+    	var me=this;
+    	var node = nodeInt;
+    	var url = "";
+    	var nodeType = "";
+    	var isLeaf = false;
+    	var nodeName =  me.treeUtils.getNameFromNodeId( node.data.id );
+    	var id = me.treeUtils.getIdFromNodeId( node.data.id );
+ 
+    	switch ( nodeName )
+    	{
+    		case 'category':
+    			url = me.categoryUrl + '/' + id + '/challenge/';
+    			nodeType = 'challenge';
+    			break;
+    			
+    		case 'studentIntakeChallenge':
+    			url = me.personChallengeUrl;
+    			nodeType = 'challenge';
+     			break;
+
+    		case 'all':
+    			url = me.challengeUrl;
+    			nodeType = 'challenge';
+     			break;     			
+     			
+    		case 'challenge':
+    			url = me.challengeUrl + '/' + id + '/challengeReferral/';
+    			nodeType = 'referral';
+    			isLeaf = true;
+    			break;
+    	}
+    	
+    	if (url != "")
+    	{
+        	var treeRequest = new Ssp.model.util.TreeRequest();
+        	treeRequest.set('url', url);
+        	treeRequest.set('nodeType', nodeType);
+        	treeRequest.set('isLeaf', isLeaf);
+        	treeRequest.set('nodeToAppendTo', node);
+        	treeRequest.set('enableCheckedItems',false);
+        	treeRequest.set('callbackFunc', me.onLoadComplete);
+        	treeRequest.set('callbackScope', me);
+        	me.treeUtils.getItems( treeRequest );
+
+        	me.getView().setLoading( true );        	
+    	}
+    },
+    
+    onLoadComplete: function( scope ){
+    	scope.getView().setLoading( false );
+    },
+    
+    /*
+    onSearchClick: function(){
+    	console.log('TaskTreeViewController->onSearchClick');
+    	Ext.Msg.alert('Attention', 'This is a beta item. Awaiting API methods to utilize for search.'); 
+    },
+    */
+    
+    onItemClick: function(view, record, item, index, e, eOpts){
+    	var me=this;
+    	var successFunc;
+    	var name = me.treeUtils.getNameFromNodeId( record.data.id );
+    	var id = me.treeUtils.getIdFromNodeId( record.data.id );
+    	var challengeId = me.treeUtils.getIdFromNodeId( record.data.parentId );
+    	var confidentialityLevelId = "afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c";
+    	if (name=='referral')
+    	{
+	    	successFunc = function(response,view){
+		    	var r = Ext.decode(response.responseText);
+		    	if (r)
+		    	{
+		    		me.task.set('name', r.name);
+		    		me.task.set('description', r.description);
+		    		me.task.set('challengeReferralId', r.id);
+		    		me.task.set('challengeId', challengeId);
+		    		me.task.set('confidentialityLevel', {id: confidentialityLevelId});
+		    		me.appEventsController.getApplication().fireEvent('loadTask');
+		    	}		
+			};
+	    	
+	    	me.apiProperties.makeRequest({
+				url: me.apiProperties.createUrl( me.challengeReferralUrl+'/'+id ),
+				method: 'GET',
+				jsonData: '',
+				successFunc: successFunc 
+			});
+    	
+    	}
+    }
+});
+Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
+        appEventsController: 'appEventsController',
+        challengesStore: 'challengesStore',
+    	childCareArrangementsStore: 'childCareArrangementsStore',
+    	citizenshipsStore: 'citizenshipsStore',
+    	educationGoalsStore: 'educationGoalsStore',
+    	educationLevelsStore: 'educationLevelsStore',
+    	employmentShiftsStore: 'employmentShiftsStore',
+    	ethnicitiesStore: 'ethnicitiesStore',
+    	formUtils: 'formRendererUtils',
+    	fundingSourcesStore: 'fundingSourcesStore',
+    	gendersStore: 'gendersStore',
+    	maritalStatusesStore: 'maritalStatusesStore',
+        personLite: 'personLite',
+        person: 'currentPerson',
+        statesStore: 'statesStore',
+        service: 'studentIntakeService',
+        studentStatusesStore: 'studentStatusesStore',
+    	veteranStatusesStore: 'veteranStatusesStore'        
+    }, 
+    config: {
+    	studentIntakeForm: null
+    },
+    control: {
+		'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+    	'cancelButton': {
+    		click: 'onCancelClick'
+    	},
+    	
+    	saveSuccessMessage: '#saveSuccessMessage'
+	},
+    
+	init: function() {
+		var me=this;	
+		
+		// Load the views dynamically
+		// otherwise duplicate id's will be registered
+		// on cancel
+		me.initStudentIntakeViews();
+	
+		// This enables mapped text fields and mapped text areas
+		// to be shown or hidden upon selection from a parent object
+		// such as a dynamic check box.
+		me.appEventsController.getApplication().addListener('dynamicCompChange', function( comp ){
+			var tfArr = Ext.ComponentQuery.query('.mappedtextfield');
+			var taArr = Ext.ComponentQuery.query('.mappedtextarea');
+			
+			// show or hide mapped text fields
+			Ext.each(tfArr,function(item, index){
+				if (comp.id==item.parentId)
+				{
+					if(comp.checked)
+					{
+						item.show();
+						Ext.apply(item,{allowBlank:false});
+					}else{
+						item.hide();
+						Ext.apply(item,{allowBlank:true});
+					}
+				}	
+			},this);
+			
+			// show or hide mapped text area components
+			Ext.each(taArr,function(item, index){
+				if (comp.id==item.parentId)
+				{
+					if(comp.checked)
+					{
+						item.show();
+					}else{
+						item.hide();
+					}
+				}	
+			},this);
+		},me);
+		
+		// display loader
+		me.getView().setLoading( true );
+		
+		me.service.get(me.personLite.get('id'),{
+			success: me.getStudentIntakeSuccess,
+			failure: me.getStudentIntakeFailure,
+			scope: me
+		});
+		
+		return me.callParent(arguments);
+    },
+
+    destroy: function() {
+    	//this.appEventsController.removeEvent({eventName: 'dynamicCompChange', callBackFunc: this.onDynamicCompChange, scope: this});
+
+        return this.callParent( arguments );
+    },     
+    
+    initStudentIntakeViews: function(){
+    	var me=this;
+    	var items = [ Ext.createWidget('tabpanel', {
+	        width: '100%',
+	        height: '100%',
+	        activeTab: 0,
+			border: 0,
+	        items: [ { title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+	        		   autoScroll: true,
+	        		   items: [{xtype: 'studentintakepersonal'}]
+	        		},{
+	            		title: 'Demographics',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakedemographics'}]
+	        		},{
+	            		title: 'EduPlan',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakeeducationplans'}]
+	        		},{
+	            		title: 'EduLevel',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakeeducationlevels'}]
+	        		},{
+	            		title: 'EduGoal',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakeeducationgoals'}]
+	        		},{
+	            		title: 'Funding',
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakefunding'}]
+	        		},{
+	            		title: 'Challenges',
+	            		autoScroll: true,
+	            		hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CHALLENGE_TAB'),
+	            		items: [{xtype: 'studentintakechallenges'}]
+	        		}]
+		    })
+	    
+		];
+    	
+    	me.getView().add( items );
+    },
+    
+    getStudentIntakeSuccess: function( r, scope ){
+    	var me=scope;
+    	var studentIntakeModel;
+		
+    	// hide the loader
+    	me.getView().setLoading( false );
+    	
+    	if ( r != null )
+    	{  		
+        	studentIntakeModel = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
+    		me.studentIntakeForm = studentIntakeModel.getProxy().getReader().read( r ).records[0];		
+    		me.buildStudentIntake( me.studentIntakeForm );    		
+    	}else{
+    		Ext.Msg.alert('Error','There was an error loading the Student Intake form for this student.');
+    	}
+	},
+	
+	getStudentIntakeFailure: function( response, scope){
+		var me=scope;
+		me.getView().setLoading( false );
+	},
+    
+	buildStudentIntake: function( formData ){
+		var me=this;
+		
+    	// PERSON RECORD
+		var person = formData.data.person;
+		var personDemographics = formData.data.personDemographics;
+		var personEducationPlan = formData.data.personEducationPlan;
+		var personEducationGoal = formData.data.personEducationGoal;
+		var personEducationLevels = formData.data.personEducationLevels;
+		var personFundingSources = formData.data.personFundingSources;
+		var personChallenges = formData.data.personChallenges;
+		var personEducationGoalId = "";
+		
+		var educationGoalFormProps;
+		var educationGoalsAdditionalFieldsMap;
+		var educationLevelFormProps;
+		var educationLevelsAdditionalFieldsMap;
+		var fundingSourceFormProps;
+		var fundingSourcesAdditionalFieldsMap;
+		var challengeFormProps;
+		var challengesAdditionalFieldsMap;
+		var defaultLabelWidth;
+
+		// REFERENCE OBJECTS
+		var challenges = me.formUtils.alphaSortByField( formData.data.referenceData.challenges, 'name' );
+		var educationGoals = me.formUtils.alphaSortByField( formData.data.referenceData.educationGoals, 'name' );
+		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
+		var fundingSources = me.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
+		var studentStatuses =  me.formUtils.alphaSortByField( formData.data.referenceData.studentStatuses, 'name' );
+		
+		me.challengesStore.loadData( challenges );
+		me.childCareArrangementsStore.loadData( formData.data.referenceData.childCareArrangements );
+		me.citizenshipsStore.loadData( formData.data.referenceData.citizenships );
+		me.educationGoalsStore.loadData( educationGoals );
+		me.educationLevelsStore.loadData( educationLevels );
+		me.employmentShiftsStore.loadData( formData.data.referenceData.employmentShifts );
+		me.ethnicitiesStore.loadData( formData.data.referenceData.ethnicities );
+		me.fundingSourcesStore.loadData( fundingSources );
+		me.gendersStore.loadData( formData.data.referenceData.genders );
+		me.maritalStatusesStore.loadData( formData.data.referenceData.maritalStatuses );
+		me.statesStore.loadData( formData.data.referenceData.states );
+		me.studentStatusesStore.loadData( studentStatuses );
+		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
+		
+		// LOAD RECORDS FOR EACH OF THE FORMS
+		
+		// format the dates
+		Ext.getCmp('StudentIntakePersonal').loadRecord( person );
+		
+		if ( personDemographics != null && personDemographics != undefined ){
+			Ext.getCmp('StudentIntakeDemographics').loadRecord( personDemographics );
+		}
+		
+		if ( personEducationPlan != null && personEducationPlan != undefined )
+		{
+			Ext.getCmp('StudentIntakeEducationPlans').loadRecord( personEducationPlan );
+		}
+		
+		if ( personEducationGoal != null && personEducationGoal != undefined )
+		{
+			Ext.getCmp('StudentIntakeEducationGoals').loadRecord( personEducationGoal );
+			if (personEducationGoal.get('educationGoalId') != null)
+			{
+				personEducationGoalId = personEducationGoal.get('educationGoalId')
+			}			 
+		}
+
+		defaultLabelWidth = 150;
+
+		educationGoalsAdditionalFieldsMap = [
+		     {
+		      parentId: Ssp.util.Constants.EDUCATION_GOAL_BACHELORS_DEGREE_ID, 
+			  parentName: "bachelor",
+			  name: "description", 
+			  label: "Describe bachelor's goal", 
+			  fieldType: "mappedtextfield",
+			  labelWidth: 200
+			 },
+		     {
+			      parentId: Ssp.util.Constants.EDUCATION_GOAL_MILITARY_ID, 
+				  parentName: "military",
+				  name: "description", 
+				  label: "Describe military goal", 
+				  fieldType: "mappedtextfield",
+				  labelWidth: 200
+			 },
+			 {
+		      parentId: Ssp.util.Constants.EDUCATION_GOAL_OTHER_ID, 
+			  parentName: "other",
+			  name: "description", 
+			  label: "Decribe your other goal", 
+			  fieldType: "mappedtextfield",
+			  labelWidth: 200
+			 }
+		];
+		
+		educationGoalFormProps = {
+				mainComponentType: 'radio',
+			    formId: 'StudentIntakeEducationGoals',
+                itemsArr: educationGoals,
+                selectedItemId: personEducationGoalId,
+                idFieldName: 'id',
+                selectedItemsArr: [ personEducationGoal.data ],
+                selectedIdFieldName: 'educationGoalId',
+                additionalFieldsMap: educationGoalsAdditionalFieldsMap,
+                radioGroupId: 'StudentIntakeEducationGoalsRadioGroup',
+                radioGroupFieldSetId: 'StudentIntakeEducationGoalsFieldSet'};		
+		
+		me.formUtils.createForm( educationGoalFormProps );	
+
+		educationLevelsAdditionalFieldsMap = [{parentId: Ssp.util.Constants.EDUCATION_LEVEL_NO_DIPLOMA_GED_ID, 
+			                                   parentName: "no diploma/no ged", 
+			                                   name: "lastYearAttended", 
+			                                   label: "Last Year Attended",
+			                                   fieldType: "mappedtextfield", 
+			                                   labelWidth: defaultLabelWidth,
+			                                   validationExpression: '^(19|20)\\d{2}$',
+			                                   validationErrorMessage: "This field requires a valid year."},
+		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_NO_DIPLOMA_GED_ID, 
+			                                   parentName: "no diploma/no ged", 
+			                                   name: "highestGradeCompleted", 
+			                                   label: "Highest Grade Completed", 
+			                                   fieldType: "mappedtextfield", 
+			                                   labelWidth: defaultLabelWidth},
+		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_GED_ID, 
+			                                   parentName: "ged", 
+			                                   name: "graduatedYear", 
+			                                   label: "Year of GED", 
+			                                   fieldType: "mappedtextfield",
+			                                   labelWidth: defaultLabelWidth,
+			                                   validationExpression: '^(19|20)\\d{2}$',
+			                                   validationErrorMessage: "This field requires a valid year."},
+		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_HIGH_SCHOOL_GRADUATION_ID, 
+			                                   parentName: "high school graduation", 
+			                                   name: "graduatedYear", 
+			                                   label: "Year Graduated", 
+			                                   fieldType: "mappedtextfield",
+			                                   labelWidth: defaultLabelWidth,
+			                                   validationExpression: '^(19|20)\\d{2}$',
+			                                   validationErrorMessage: "This field requires a valid year."},
+		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_HIGH_SCHOOL_GRADUATION_ID, 
+			                                 parentName: "high school graduation", 
+			                                 name: "schoolName", 
+			                                 label: "High School Attended", 
+			                                 fieldType: "mappedtextfield",
+			                                 labelWidth: defaultLabelWidth},
+		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_SOME_COLLEGE_CREDITS_ID, 
+			                                 parentName: "some college credits", 
+			                                 name: "lastYearAttended", 
+			                                 label: "Last Year Attended", 
+			                                 fieldType: "mappedtextfield",
+			                                 labelWidth: defaultLabelWidth,
+			                                 validationExpression: '^(19|20)\\d{2}$',
+			                                 validationErrorMessage: "This field requires a valid year."},
+		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_OTHER_ID, 
+			                                 parentName: "other", 
+			                                 name: "description", 
+			                                 label: "Please Explain", 
+			                                 fieldType: "mappedtextarea",
+			                                 labelWidth: defaultLabelWidth}];		
+		
+		educationLevelFormProps = {
+				mainComponentType: 'checkbox',
+			    formId: 'StudentIntakeEducationLevels', 
+                fieldSetTitle: 'Education level completed: Select all that apply',
+                itemsArr: educationLevels, 
+                selectedItemsArr: personEducationLevels, 
+                idFieldName: 'id', 
+                selectedIdFieldName: 'educationLevelId',
+                additionalFieldsMap: educationLevelsAdditionalFieldsMap };
+		
+		me.formUtils.createForm( educationLevelFormProps );
+
+		fundingSourcesAdditionalFieldsMap = [{parentId: Ssp.util.Constants.FUNDING_SOURCE_OTHER_ID, 
+											  parentName: "other",
+											  name: "description", 
+											  label: "Please Explain", 
+											  fieldType: "mappedtextarea",
+											  labelWidth: defaultLabelWidth}];
+		
+		fundingSourceFormProps = {
+				mainComponentType: 'checkbox',
+				formId: 'StudentIntakeFunding', 
+                fieldSetTitle: 'How will you pay for college?',
+                itemsArr: fundingSources, 
+                selectedItemsArr: personFundingSources, 
+                idFieldName: 'id', 
+                selectedIdFieldName: 'fundingSourceId',
+                additionalFieldsMap: fundingSourcesAdditionalFieldsMap };
+		
+		me.formUtils.createForm( fundingSourceFormProps );	
+		
+		challengesAdditionalFieldsMap = [{parentId: Ssp.util.Constants.CHALLENGE_OTHER_ID,
+			                              parentName: "other",
+			                              name: "description", 
+			                              label: "Please Explain", 
+			                              fieldType: "mappedtextarea",
+			                              labelWidth: defaultLabelWidth}];
+		
+		challengeFormProps = {
+				mainComponentType: 'checkbox',
+				formId: 'StudentIntakeChallenges', 
+                fieldSetTitle: 'Select all challenges that may be barriers to your academic success:',
+                itemsArr: challenges, 
+                selectedItemsArr: personChallenges, 
+                idFieldName: 'id', 
+                selectedIdFieldName: 'challengeId',
+                additionalFieldsMap: challengesAdditionalFieldsMap };
+		
+		me.formUtils.createForm( challengeFormProps );
+	},
+	
+	onSaveClick: function( button ) {
+		var me=this;
+		var formUtils = me.formUtils;
+		var personalForm = Ext.getCmp('StudentIntakePersonal').getForm();
+		var demographicsForm = Ext.getCmp('StudentIntakeDemographics').getForm();
+		var educationPlansForm = Ext.getCmp('StudentIntakeEducationPlans').getForm();
+		var educationGoalForm = Ext.getCmp('StudentIntakeEducationGoals').getForm();
+		var educationLevelsForm = Ext.getCmp('StudentIntakeEducationLevels').getForm();
+		var fundingForm = Ext.getCmp('StudentIntakeFunding').getForm();
+		var challengesForm = Ext.getCmp('StudentIntakeChallenges').getForm();
+		
+		var personalFormModel = null;
+		var demographicsFormModel = null;
+		var educationPlansFormModel = null;
+		var educationGoalFormModel = null;
+		var educationGoalDescription = "";
+		var educationGoalFormValues = null;
+		var educationLevelFormValues = null;
+		var fundingFormValues = null;
+		var challengesFormValues = null;
+		
+		var studentIntakeFormModel = null;
+		var personId = "";
+		var intakeData = {};
+		
+		var formsToValidate = [personalForm,
+		             demographicsForm,
+		             educationPlansForm,
+		             educationLevelsForm,
+		             educationGoalForm,
+		             fundingForm,
+		             challengesForm];
+		
+		// validate and save the model
+		var validateResult = me.formUtils.validateForms( formsToValidate );
+		if ( validateResult.valid )
+		{
+			// retrieve the models
+			personalFormModel = personalForm.getRecord();
+			demographicsFormModel = demographicsForm.getRecord();
+			educationPlansFormModel = educationPlansForm.getRecord();
+			educationGoalFormModel = educationGoalForm.getRecord();
+			
+			// update the model with changes from the forms
+			personalForm.updateRecord( personalFormModel );
+			demographicsForm.updateRecord( demographicsFormModel );
+			educationPlansForm.updateRecord( educationPlansFormModel );
+			educationGoalForm.updateRecord( educationGoalFormModel );
+			
+			// save the full model
+			personId = personalFormModel.data.id;
+			intakeData = {
+				person: personalFormModel.data,
+				personDemographics: demographicsFormModel.data,
+				personEducationGoal: educationGoalFormModel.data,
+				personEducationPlan: educationPlansFormModel.data,
+				personEducationLevels: [],
+				personFundingSources: [],
+				personChallenges: []
+			};
+			
+			// account for date offset
+			intakeData.person.birthDate = me.formUtils.fixDateOffset( intakeData.person.birthDate );
+
+			intakeData.personDemographics.personId = personId;
+			intakeData.personEducationGoal.personId = personId;
+			intakeData.personEducationPlan.personId = personId;
+
+			educationGoalFormValues = educationGoalForm.getValues();
+			educationGoalDescription = formUtils.getMappedFieldValueFromFormValuesByIdKey( educationGoalFormValues, educationGoalFormModel.data.educationGoalId );
+			intakeData.personEducationGoal.description = educationGoalDescription;
+			
+			educationLevelFormValues = educationLevelsForm.getValues();
+			intakeData.personEducationLevels = formUtils.createTransferObjectsFromSelectedValues('educationLevelId', educationLevelFormValues, personId);	
+	
+			fundingFormValues = fundingForm.getValues();
+			intakeData.personFundingSources = formUtils.createTransferObjectsFromSelectedValues('fundingSourceId', fundingFormValues, personId);	
+			
+			challengesFormValues = challengesForm.getValues();
+			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);		
+
+			// cleans properties that will be unable to be saved if not null
+			// arrays set to strings should be null rather than string in saved
+			// json
+			intakeData.person = me.person.setPropsNullForSave( intakeData.person );
+			
+			// display loader
+			me.getView().setLoading( true );
+			
+			me.service.save(me.personLite.get('id'), intakeData, {
+				success: me.saveStudentIntakeSuccess,
+				failure: me.saveStudentIntakeFailure,
+				scope: me
+			});
+
+		}else{
+			me.formUtils.displayErrors( validateResult.fields );
+		}
+		
+	},
+	
+	saveStudentIntakeSuccess: function(r, scope) {
+		var me=scope;
+
+		me.getView().setLoading( false );
+		
+		if( r.success == true ) {
+			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );							
+		}								
+	},
+	
+	saveStudentIntakeFailure: function(response, scope) {
+		var me=scope;
+		me.getView().setLoading( false );							
+	},	
+	
+	onCancelClick: function( button ){
+		var me=this;
+		me.getView().removeAll();
+		me.initStudentIntakeViews();
+		me.buildStudentIntake( me.studentIntakeForm );	
+	}
+});
+Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	citizenshipsStore: 'citizenshipsStore',
+    	sspConfig: 'sspConfig'
+    },
+    config: {
+    	displayEmploymentShift: 1
+    },
+    control: {
+		'citizenship': {
+			change: 'onCitizenshipChange'
+		},
+		
+		'childcareNeeded': {
+			change: 'onChildcareNeededChange'
+		},
+		
+		'isEmployed': {
+			change: 'onIsEmployedChange'
+		},
+		
+		'countryOfCitizenship': {
+			hide: 'onFieldHidden'
+		},
+		
+		'childcareArrangement': {
+			hide: 'onFieldHidden'
+		},
+		
+		'placeOfEmployment': {
+			hide: 'onFieldHidden'
+		},
+		
+		'shift': {
+			hide: 'onFieldHidden'
+		},
+		
+		'wage': {
+			hide: 'onFieldHidden'
+		},
+		
+		'totalHoursWorkedPerWeek': {
+			hide: 'onFieldHidden'
+		}
+	},
+
+	init: function() {
+		var citizenship = Ext.ComponentQuery.query('#citizenship')[0];
+		var childcareNeeded = Ext.ComponentQuery.query('#childcareNeeded')[0];
+		var isEmployed = Ext.ComponentQuery.query('#isEmployed')[0];
+		
+		this.displayStudentIntakeDemographicsEmploymentShift = this.sspConfig.get('displayStudentIntakeDemographicsEmploymentShift');
+		
+		this.showHideCountryOfCitizenship( citizenship.getValue() );
+        this.showHideChildcareArrangement( childcareNeeded.getValue() );
+        this.showHideEmploymentFields( isEmployed.getValue() );
+        
+		return this.callParent(arguments);
+    },
+    
+    onCitizenshipChange: function(combo, newValue, oldValue, eOpts) {
+    	this.showHideCountryOfCitizenship( newValue );
+    },
+    
+    showHideCountryOfCitizenship: function( value ){
+    	var field = Ext.ComponentQuery.query('#countryOfCitizenship')[0];
+		var record = this['citizenshipsStore'].findRecord('name', 'International');
+		if ( value==record.get( 'id' ) )
+		{
+			field.show();
+		}else{
+			field.hide();
+		}    
+    },
+
+    onChildcareNeededChange: function(radiogroup, newValue, oldValue, eOpts) {
+    	this.showHideChildcareArrangement( newValue );
+    },
+    
+    showHideChildcareArrangement: function( value ){
+    	var field = Ext.ComponentQuery.query('#childcareArrangement')[0];
+    	if(value.childCareNeeded=="true")
+    	{
+    		field.show();
+    	}else{
+    		field.hide();
+    	}
+    },
+ 
+    onIsEmployedChange: function(radiogroup, newValue, oldValue, eOpts) {
+    	this.showHideEmploymentFields( newValue );
+    },    
+    
+    showHideEmploymentFields: function( value ){
+    	var placeOfEmployment = Ext.ComponentQuery.query('#placeOfEmployment')[0];
+    	var shift = Ext.ComponentQuery.query('#shift')[0];
+    	var wage = Ext.ComponentQuery.query('#wage')[0];
+    	var totalHoursWorkedPerWeek = Ext.ComponentQuery.query('#totalHoursWorkedPerWeek')[0];
+    	if(value.employed=="true")
+    	{
+    		placeOfEmployment.show();
+    		if (this.displayStudentIntakeDemographicsEmploymentShift)
+    		{
+    		    shift.show();
+    		}else{
+    			shift.hide();
+    		}
+    		wage.show();
+    		totalHoursWorkedPerWeek.show();
+    	}else{
+    		placeOfEmployment.hide();
+    		shift.hide();
+    		wage.hide();
+    		totalHoursWorkedPerWeek.hide();
+    	}
+    },    
+
+    onFieldHidden: function( comp, eOpts){
+    	comp.setValue("");
+    }
+    
+});
+Ext.define('Ssp.controller.tool.studentintake.EducationPlansViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	sspConfig: 'sspConfig'
+    },
+
+	init: function() {
+		var parentsDegreeLabel = this.sspConfig.get('educationPlanParentsDegreeLabel');
+		var specialNeedsLabel = this.sspConfig.get('educationPlanSpecialNeedsLabel');
+		var parentsDegree = Ext.ComponentQuery.query('#parentsDegree')[0].setFieldLabel(parentsDegreeLabel);
+		var specialNeeds = Ext.ComponentQuery.query('#specialNeeds')[0].setFieldLabel(specialNeedsLabel);
+        
+		return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	citizenshipsStore: 'citizenshipsStore',
+    	sspConfig: 'sspConfig'
+    },  
+	init: function() {
+		var me=this;
+    	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');
+    	firstName = Ext.ComponentQuery.query('#firstName')[0].setDisabled(disabled);
+		middleName = Ext.ComponentQuery.query('#middleName')[0].setDisabled(disabled);
+		lastName = Ext.ComponentQuery.query('#lastName')[0].setDisabled(disabled);
+		studentId = Ext.ComponentQuery.query('#studentId')[0];
+		studentId.setDisabled(disabled);
+		// set the field label and supply an asterisk for required
+		studentId.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+		Ext.apply(studentId, {
+	                  minLength: me.sspConfig.get('studentIdMinValidationLength'),
+	                  minLengthText: '',
+	                  maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
+	                  maxLengthText: '',
+	                  vtype: 'studentIdValidator',
+	                  vtypeText: me.sspConfig.get('studentIdValidationErrorText')
+                     });
+		birthDate = Ext.ComponentQuery.query('#birthDate')[0].setDisabled(disabled);
+		homePhone = Ext.ComponentQuery.query('#homePhone')[0].setDisabled(disabled);
+		workPhone = Ext.ComponentQuery.query('#workPhone')[0].setDisabled(disabled);
+		address = Ext.ComponentQuery.query('#address')[0].setDisabled(disabled);
+		city = Ext.ComponentQuery.query('#city')[0].setDisabled(disabled);
+		state = Ext.ComponentQuery.query('#state')[0].setDisabled(disabled);
+		zipCode = Ext.ComponentQuery.query('#zipCode')[0].setDisabled(disabled);
+		primaryEmailAddress = Ext.ComponentQuery.query('#primaryEmailAddress')[0].setDisabled(disabled);
+
+		return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
+    extend: 'Deft.mvc.ViewController',	
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController',
+        confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	formUtils: 'formRendererUtils',
+    	service: 'journalEntryService',
+        journalEntriesStore: 'journalEntriesStore',
+        journalSourcesStore: 'journalSourcesStore',
+    	journalTracksStore: 'journalTracksStore',
+    	model: 'currentJournalEntry',
+    	personLite: 'personLite'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'editjournal',
+    	personJournalUrl: ''
+    },
+    control: {
+    	view: {
+    		viewready: 'onViewReady'
+    	},
+    	
+    	'addButton': {
+			click: 'onAddClick'
+		}
+	},
+    init: function() {
+		var me = this;
+		
+		me.getView().setLoading( true );
+		
+		// clear any existing journal entries
+		me.journalEntriesStore.removeAll();
+		
+		me.service.getAll( me.personLite.get('id'), {
+			success: me.getAllJournalEntriesSuccess,
+			failure: me.getAllJournalEntriesFailure,
+			scope: me
+		});
+
+    	// ensure loading of all confidentiality levels in the database
+    	me.confidentialityLevelsStore.load({
+    		params:{limit:50}
+    	});
+    	
+		me.journalSourcesStore.load();
+		me.journalTracksStore.load();
+		
+		return me.callParent(arguments);
+    },
+ 
+    getAllJournalEntriesSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+    	if (r.rows.length > 0)
+    	{
+    		me.journalEntriesStore.loadData(r.rows);
+    	}
+	},
+
+	getAllJournalEntriesFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+	},    
+    
+    onViewReady: function(comp, obj){
+    	this.appEventsController.assignEvent({eventName: 'editJournalEntry', callBackFunc: this.editJournalEntry, scope: this});
+    	this.appEventsController.assignEvent({eventName: 'deleteJournalEntry', callBackFunc: this.deleteConfirmation, scope: this});
+    },    
+ 
+    destroy: function() {
+    	var me=this;
+    	
+    	me.appEventsController.removeEvent({eventName: 'editJournalEntry', callBackFunc: me.editJournalEntry, scope: me});
+    	me.appEventsController.removeEvent({eventName: 'deleteJournalEntry', callBackFunc: me.deleteConfirmation, scope: me});
+
+        return me.callParent( arguments );
+    },    
+    
+    onAddClick: function(button){
+    	var je = new Ssp.model.tool.journal.JournalEntry();
+    	this.model.data = je.data;
+    	this.loadEditor();
+    },
+    
+    editJournalEntry: function(){
+    	this.loadEditor();
+    },
+ 
+    deleteConfirmation: function() {
+        var me=this;
+    	var message = 'You are about to delete a Journal Entry. Would you like to continue?';
+    	var model = me.model;
+        if (model.get('id') != "") 
+        {
+           Ext.Msg.confirm({
+   		     title:'Delete Journal Entry?',
+   		     msg: message,
+   		     buttons: Ext.Msg.YESNO,
+   		     fn: me.deleteJournalEntry,
+   		     scope: me
+   		   });
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Unable to delete Journal Entry.'); 
+        }
+     },
+     
+     deleteJournalEntry: function( btnId ){
+     	var me=this;
+    	var store = me.journalEntriesStore;
+     	var id = me.model.get('id');
+     	if (btnId=="yes")
+     	{
+     		me.getView().setLoading( true );
+     		me.service.destroy( me.personLite.get('id'), id, {
+     			success: me.destroyJournalEntrySuccess,
+     			failure: me.destroyJournalEntryFailure,
+     			scope: me
+     		});  		
+     	}
+     },    
+
+     destroyJournalEntrySuccess: function( r, id, scope ) {
+ 		var me=scope;
+ 		var store = me.journalEntriesStore;
+ 		me.getView().setLoading( false );
+ 		store.remove( store.getById( id ) );
+ 	},
+
+ 	destroyJournalEntryFailure: function( response, scope ) {
+ 		var me=scope;
+ 		me.getView().setLoading( false );
+ 	},      
+     
+    loadEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    }
+});
+Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson',
+        appEventsController: 'appEventsController',
+        confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	formUtils: 'formRendererUtils',
+    	journalEntryService: 'journalEntryService',
+    	model: 'currentJournalEntry',
+    	personLite: 'personLite'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	mainFormToDisplay: 'journal',
+    	sessionDetailsEditorDisplay: 'journaltracktree',
+    	inited: false
+    },
+
+    control: {
+    	entryDateField: '#entryDateField',
+    	
+    	journalTrackCombo: {
+    		selector: '#journalTrackCombo',
+    		listeners: {
+    			select: 'onJournalTrackComboSelect',
+        		blur: 'onJournalTrackComboBlur'
+    		} 
+    	},
+
+    	confidentialityLevelCombo: {
+    		selector: '#confidentialityLevelCombo',
+    		listeners: {
+    			select: 'onConfidentialityLevelComboSelect'
+    		} 
+    	},    	
+
+    	journalSourceCombo: {
+    		selector: '#journalSourceCombo',
+    		listeners: {
+    			select: 'onJournalSourceComboSelect'
+    		} 
+    	},
+    	
+    	'commentText': {
+    		change: 'onCommentChange'
+    	},
+    	
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		},
+		
+		'addSessionDetailsButton': {
+			click: 'onAddSessionDetailsClick'
+		}
+    },
+    
+	init: function() {
+		var me=this;
+		// apply confidentiality level filter
+		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
+		me.initForm();	
+		return me.callParent(arguments);
+    },   
+    
+	initForm: function(){
+		var me=this;
+		var id = this.model.get("id");
+		var journalTrackId = "";
+		if ( me.model.get('journalTrack') != null )
+		{
+			journalTrackId = me.model.get('journalTrack').id;
+		}
+		me.getView().getForm().reset();
+		me.getView().getForm().loadRecord( this.model );
+		me.getConfidentialityLevelCombo().setValue( me.model.getConfidentialityLevelId() );
+		me.getJournalSourceCombo().setValue( me.model.get('journalSource').id );
+		me.getJournalTrackCombo().setValue( journalTrackId );			
+		if ( me.model.get('entryDate') == null)
+		{
+			me.getEntryDateField().setValue( new Date() );
+		}
+		
+		me.inited=true;
+	},    
+	
+    destroy: function() {
+    	var me=this;  	
+
+    	// clear confidentiality level filter
+    	me.confidentialityLevelsStore.clearFilter();
+    	
+        return me.callParent( arguments );
+    },	
+	
+	onSaveClick: function(button) {
+		var me = this;
+		var record, id, jsonData, url;
+		var form = this.getView().getForm();
+		var values = form.getValues();
+		//var handleSuccess = me.saveSuccess;
+		var error = false;
+		var journalTrackId="";		
+		url = this.url;
+		record = this.model;
+		id = record.get('id');
+		
+		// ensure all required fields are supplied
+		if ( !form.isValid() )
+		{	
+			error = true;
+			Ext.Msg.alert('Error','Please correct the errors in your Journal Entry.');
+		}
+		
+		// ensure a comment or journal track are supplied
+		if ( record.get('comment') == "" && (record.data.journalTrack.id == null || record.data.journalTrack.id == "") )
+		{
+			error = true;
+			Ext.Msg.alert('Error','You are required to supply a Comment or Journal Track Details for a Journal Entry.');			
+		}
+		
+		if (error == false)
+		{
+    		// if a journal track is selected then validate that the details are set
+    		if ( record.data.journalTrack != null)
+    		{
+    			journalTrackId = record.data.journalTrack.id;
+    		}
+			if ( (journalTrackId != null && journalTrackId != "") && record.data.journalEntryDetails.length == 0)
+    		{
+    			Ext.Msg.alert('SSP Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
+    		}else{
+
+    			// fix date from GMT to UTC
+        		record.set('entryDate', me.formUtils.fixDateOffsetWithTime( record.data.entryDate ) );
+
+    			jsonData = record.data;
+    			    			
+    			// null out journalTrack.id prop to prevent failure
+    			// from an empty string on null field
+    			if ( jsonData.journalTrack == "" )
+    			{
+    				jsonData.journalTrack = null;
+    				jsonData.journalEntryDetails = null;
+    			}
+    			
+    			// clean the group property from the journal
+    			// entry details. It was only used for display
+    			// of the details.
+    			if ( jsonData.journalEntryDetails != null )
+    			{
+    				jsonData.journalEntryDetails = record.clearGroupedDetails( jsonData.journalEntryDetails );
+    			}
+    			    			
+    			me.getView().setLoading( true );
+    			
+    			me.journalEntryService.save( me.personLite.get('id'), jsonData, {
+    				success: me.saveSuccess,
+    				failure: me.saveFailure,
+    				scope: me
+    			});
+    		}			
+		}
+	},
+	
+	saveSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+		me.displayMain();
+	},
+
+	saveFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+
+	onConfidentialityLevelComboSelect: function(comp, records, eOpts){
+    	if (records.length > 0)
+    	{
+    		this.model.set('confidentialityLevel',{id: records[0].get('id')});
+     	}
+	},	
+	
+	onJournalSourceComboSelect: function(comp, records, eOpts){
+    	if (records.length > 0)
+    	{
+    		this.model.set('journalSource',{id: records[0].get('id')});
+     	}
+	},	
+	
+	onJournalTrackComboSelect: function(comp, records, eOpts){
+    	if (records.length > 0)
+    	{
+    		this.model.set('journalTrack',{"id": records[0].get('id')});
+    		
+    		// the inited property prevents the
+    		// Journal Entry Details from clearing
+    		// when the ViewController loads, so the details only 
+    		// clear when a new journal track is selected
+    		// because the init for the view sets the combo
+    		if (this.inited==true)
+    		{
+    	   		this.model.removeAllJournalEntryDetails();
+    			this.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
+    		}
+     	}
+	},
+	
+	onJournalTrackComboBlur: function( comp, event, eOpts){
+		var me=this;
+    	if (comp.getValue() == "")
+    	{
+     		me.model.set("journalTrack","");
+     		me.model.removeAllJournalEntryDetails();
+     		me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
+     	}		
+	},
+	
+	onCommentChange: function(comp, newValue, oldValue, eOpts){
+		this.model.set('comment',newValue);
+	},
+	
+	onAddSessionDetailsClick: function( button ){
+		if( this.model.get('journalTrack') != null && this.model.get('journalTrack') != "")
+		{
+			this.displaySessionDetails();
+		}else{
+			Ext.Msg.alert('Error', 'A Journal Track is required before selecting details.')
+		}
+	},
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getMainFormToDisplay(), true, {});
+	},
+	
+	displaySessionDetails: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getSessionDetailsEditorDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.tool.journal.DisplayDetailsViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	appEventsController: 'appEventsController',
+    	model: 'currentJournalEntry',
+    	store: 'journalEntryDetailsStore'
+    },   
+	
+    control: {
+		view: {
+			viewready: 'onViewReady'
+		}
+	},
+	
+    init: function() {
+    	var me=this;
+    	console.log( 'DisplayDetailsViewController->init' );
+		me.store.loadData( me.model.getGroupedDetails() );		
+		return me.callParent( arguments );
+    },
+    
+    onViewReady: function(){
+    	this.appEventsController.assignEvent({eventName: 'refreshJournalEntryDetails', callBackFunc: this.onRefreshJournalEntryDetails, scope: this});
+    },
+    
+    destroy: function(){
+    	this.appEventsController.removeEvent({eventName: 'refreshJournalEntryDetails', callBackFunc: this.onRefreshJournalEntryDetails, scope: this});    	
+    },
+    
+    onRefreshJournalEntryDetails: function(){
+    	this.init();
+    }
+});
+Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+        formUtils: 'formRendererUtils',
+        journalEntry: 'currentJournalEntry',
+        person: 'currentPerson',
+    	treeUtils: 'treeRendererUtils'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'editjournal',
+    	journalTrackUrl: '',
+    	journalStepUrl: '',
+    	journalStepDetailUrl: ''
+    },
+    control: {
+    	view: {
+    		itemexpand: 'onItemExpand',
+    		itemClick: 'onItemClick'
+    	},
+    	
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+    	'cancelButton': {
+			click: 'onCancelClick'
+		}
+    },
+    
+	init: function() {
+		var rootNode = null;
+		this.journalTrackUrl = this.apiProperties.getItemUrl('journalTrack');
+		this.journalStepUrl = this.apiProperties.getItemUrl('journalStep');
+		this.journalStepDetailUrl = this.apiProperties.getItemUrl('journalStep');
+
+		this.loadSteps();
+		
+		return this.callParent(arguments);
+    },
+    
+    destroy: function() {
+    	// clear the categories
+		this.treeUtils.clearRootCategories();
+    	
+        return this.callParent( arguments );
+    },    
+    
+    loadSteps: function(){
+		// clear the categories
+		this.treeUtils.clearRootCategories();
+		
+		var journalTrackId = this.journalEntry.get('journalTrack').id;
+		
+    	// load the steps
+		if (journalTrackId != null && journalTrackId != "")
+		{
+			var treeRequest = new Ssp.model.util.TreeRequest();
+	    	treeRequest.set('url', this.journalTrackUrl + '/'+ journalTrackId + '/journalStep');
+	    	treeRequest.set('nodeType','journalStep');
+	    	treeRequest.set('isLeaf', false);
+	    	treeRequest.set('enableCheckedItems', false);
+	    	treeRequest.set('expanded',false);
+	    	treeRequest.set('callbackFunc',this.afterJournalStepsLoaded);
+	    	treeRequest.set('callbackScope',this);
+	    	this.treeUtils.getItems( treeRequest );			
+		}
+    },
+    
+    afterJournalStepsLoaded: function( scope ){
+    	// after the journal steps load expand them to
+    	// display the details under each step
+    	scope.getView().getView().getTreeStore().getRootNode().expandChildren();
+    },
+    
+    onItemExpand: function(nodeInt, obj){
+    	var me=this;
+    	var node = nodeInt;
+    	var url = me.journalStepDetailUrl;
+    	var id = me.treeUtils.getIdFromNodeId( node.data.id );
+    	if (url != "")
+    	{
+        	var treeRequest = new Ssp.model.util.TreeRequest();
+        	treeRequest.set('url', url + '/' + id + '/journalStepDetail');
+        	treeRequest.set('nodeType', 'journalDetail');
+        	treeRequest.set('isLeaf', true);
+        	treeRequest.set('nodeToAppendTo', node);
+        	treeRequest.set('enableCheckedItems',true);
+	    	treeRequest.set('callbackFunc',me.afterJournalDetailsLoaded);
+	    	treeRequest.set('callbackScope',me);
+    		me.treeUtils.getItems( treeRequest );
+    	}
+    },
+
+    afterJournalDetailsLoaded: function( scope ){
+    	// after the journal details load select each detail
+    	// that is selected in the journal
+    	var journalEntryDetails = scope.journalEntry.get("journalEntryDetails");
+    	if (journalEntryDetails != "" && journalEntryDetails != null)
+    	{
+			Ext.Array.each(journalEntryDetails,function(item,index){
+				var journalStepDetails = item.journalStepDetails;
+				Ext.Array.each(journalStepDetails,function(innerItem,innerIndex){
+					var id = innerItem.id;
+					var detailNode = scope.getView().getView().getTreeStore().getNodeById(id+'_journalDetail');
+					if (detailNode != null)
+					{
+						detailNode.set('checked',true);
+					}
+				});				
+			});    		
+    	}
+    },    
+   
+
+    onItemClick: function(view, record, item, index, e, eOpts){
+    	/*
+    	var me=this;
+    	var journalEntry = me.journalEntry;
+    	var name = me.treeUtils.getNameFromNodeId( record.data.id );
+    	var checked = !record.data.checked;
+    	var id = me.treeUtils.getIdFromNodeId( record.data.id );
+    	var childText = record.data.text;
+    	var parentId = me.treeUtils.getIdFromNodeId( record.data.parentId );
+    	var parentText = record.parentNode.data.text;
+    	var step = null;
+    	var detail = null;
+    	// add/remove the detail from the Journal Entry
+    	if (name=='journalDetail')
+    	{
+    		step = {"id":parentId,"name":parentText};
+    		detail = {"id":id,"name":childText};
+    		if ( checked==true )
+        	{
+    			// add journal detail
+    			journalEntry.addJournalDetail( step, detail );
+        	}else{
+        		// remove journal detail
+        		journalEntry.removeJournalDetail( step, detail );
+        	}
+    	}
+    	*/
+    },
+    
+    onSaveClick: function( button ){
+    	var me=this;
+    	var journalEntry = me.journalEntry;
+    	var tree = me.getView();
+    	var treeUtils = me.treeUtils;
+    	var records = tree.getView().getChecked();
+    	
+    	journalEntry.removeAllJournalEntryDetails();
+    	
+    	// add/remove the detail from the Journal Entry
+    	Ext.Array.each(records,function(record,index){
+        	var id = me.treeUtils.getIdFromNodeId( record.data.id );
+        	var childText = record.data.text;
+        	var parentId = me.treeUtils.getIdFromNodeId( record.data.parentId );
+        	var parentText = record.parentNode.data.text;
+        	var step = null;
+        	var detail = null;
+
+    		step = {"id":parentId,"name":parentText};
+    		detail = {"id":id,"name":childText};
+    		// add journal detail
+    		journalEntry.addJournalDetail( step, detail );
+    	},this);
+    	// load the editor
+    	this.displayJournalEditor();
+    },
+    
+    onCancelClick: function( button ){
+    	this.displayJournalEditor();
+    },
+
+    displayJournalEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+    } 
+    
+});
+Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
+    extend: 'Deft.mvc.ViewController',	
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	appEventsController: 'appEventsController',
+    	confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	campusesStore: 'campusesStore',
+    	earlyAlertsStore: 'earlyAlertsStore',
+    	earlyAlertService: 'earlyAlertService',
+    	earlyAlertResponseService: 'earlyAlertResponseService',
+    	earlyAlert: 'currentEarlyAlert',
+    	earlyAlertResponse: 'currentEarlyAlertResponse',
+    	formUtils: 'formRendererUtils',
+        outcomesStore: 'earlyAlertOutcomesStore',
+        outreachesStore: 'earlyAlertOutreachesStore',
+        reasonsStore: 'earlyAlertReasonsStore',
+    	personLite: 'personLite',
+        referralsStore: 'earlyAlertReferralsStore',
+        suggestionsStore: 'earlyAlertSuggestionsStore',
+    	treeStore: 'earlyAlertsTreeStore'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'earlyalertresponse',
+    	earlyAlertDetailsDisplay: 'earlyalertdetails',
+    	earlyAlertResponseDetailsDisplay: 'earlyalertresponsedetails'
+    },
+    control: {
+    	view: {
+    		viewready: 'onViewReady',
+    		itemexpand: 'onItemExpand'
+    	},
+    	
+    	'respondButton': {
+			click: 'onRespondClick'
+		},
+		
+    	'displayDetailsButton': {
+			click: 'onDisplayDetailsClick'
+		}
+	},
+	
+	init: function(){
+		return this.callParent(arguments);		
+	},
+
+    onViewReady: function(comp, obj){
+		var me=this;
+		me.campusesStore.load();
+		me.confidentialityLevelsStore.load();
+    	me.outcomesStore.load();
+    	me.outreachesStore.load();
+    	me.reasonsStore.load();
+    	me.suggestionsStore.load();
+    	me.referralsStore.load({
+    		callback: function(r,options,success) {
+    	         if(success == true) {
+     	                 me.getEarlyAlerts(); 
+    	          }
+    	          else {
+    	              Ext.Msg.alert("Ssp Error","Failed to load referrals. See your system administrator for assitance.");
+    	          }
+    	     }
+    	});
+    },	
+
+    destroy: function() {
+         return this.callParent( arguments );
+    },    
+    
+	getEarlyAlerts: function(){
+    	var me=this;
+		var pId = me.personLite.get('id');
+		me.getView().setLoading(true);
+		me.earlyAlertService.getAll( pId, 
+    		{success:me.getEarlyAlertsSuccess, 
+			 failure:me.getEarlyAlertsFailure, 
+			 scope: me});
+	},
+    
+    getEarlyAlertsSuccess: function( r, scope){
+    	var me=scope;
+    	var personEarlyAlert;
+		me.getView().setLoading(false);
+    	if ( me.earlyAlertsStore.getCount() > 0)
+    	{
+    		me.getView().getSelectionModel().select(0);
+    	}else{
+    		// if no record is available then set the selected early alert to null
+    		personEarlyAlert = new Ssp.model.tool.earlyalert.PersonEarlyAlert();
+    		me.earlyAlert.data = personEarlyAlert.data;
+    	}
+    },
+
+    getEarlyAlertsFailure: function( r, scope){
+    	var me=scope;
+		me.getView().setLoading(false);
+    },
+
+    onItemExpand: function(nodeInt, obj){
+    	var me=this;
+    	var node = nodeInt;
+    	var nodeType = node.get('nodeType');
+    	var id = node.get('id' );
+    	var personId = me.personLite.get('id');
+    	if (node != null)
+    	{
+    		// use root here to prevent the expand from firing
+    		// when items are added to the root element in the tree
+        	if (nodeType == 'early alert' && id != "root" && id != "")
+        	{
+        		me.getView().setLoading(true);
+        		me.earlyAlertService.getAllEarlyAlertResponses(personId, id,
+        				{success:me.getEarlyAlertResponsesSuccess, 
+       			 failure:me.getEarlyAlertResponsesFailure, 
+       			 scope: me}	
+        		);
+        	}    		
+    	}
+    },
+  
+    getEarlyAlertResponsesSuccess: function( r, scope){
+    	var me=scope;
+    	// clear the current Early Alert Response
+    	var earlyAlertResponse = new Ssp.model.tool.earlyalert.EarlyAlertResponse();
+		me.earlyAlertResponse.data = earlyAlertResponse.data;
+		me.getView().setLoading(false);
+    },
+
+    getEarlyAlertResponsesFailure: function( r, scope){
+    	var me=scope;
+		me.getView().setLoading(false);
+    },    
+    
+	onRespondClick: function( button ){
+		var me=this;
+		var record = me.getView().getSelectionModel().getSelection()[0];
+		if (record != null)
+		{
+			if (record.get('nodeType')=='early alert')
+	    	{
+	        	for (prop in me.earlyAlert.data)
+	        	{
+	        		me.earlyAlert.data[prop] = record.data[prop];
+	        	}
+	        	
+	        	me.loadEditor();
+	    	}else{
+	    		Ext.Msg.alert('Notification','Please select an Early Alert to send a response.');
+	    	}	
+    	}else{
+    		Ext.Msg.alert('Notification','Please select an Early Alert to send a response.');
+    	}
+	},
+
+	onDisplayDetailsClick: function( button ){
+		var me=this;
+		var record = me.getView().getSelectionModel().getSelection()[0];
+		if (record != null)
+		{
+			if (record.get('nodeType')=='early alert')
+	    	{
+				for (prop in me.earlyAlert.data)
+	        	{
+	        		me.earlyAlert.data[prop] = record.data[prop];
+	        	}
+
+	        	me.displayEarlyAlertDetails();
+	    	}else{
+	    		
+	        	for (prop in me.earlyAlertResponse.data)
+	        	{
+	        		me.earlyAlertResponse.data[prop] = record.data[prop];
+	        	}
+	        	
+	        	me.displayEarlyAlertResponseDetails();	    		
+	    	}	
+    	}else{
+    		Ext.Msg.alert('Notification','Please select an item to view.');
+    	}
+	},	
+	
+	loadEditor: function(button){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+    },
+    
+	displayEarlyAlertDetails: function(button){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertDetailsDisplay(), true, {});
+    },
+    
+	displayEarlyAlertResponseDetails: function(button){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertResponseDetailsDisplay(), true, {});
+    }
+});
+Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	earlyAlert: 'currentEarlyAlert',
+    	earlyAlertResponseService: 'earlyAlertResponseService',
+    	earlyAlertService: 'earlyAlertService',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentEarlyAlertResponse',
+    	personLite: 'personLite'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'earlyalert'
+    },
+    control: {
+    	outcomeCombo: {
+            selector: '#outcomeCombo',
+            listeners: {
+                select: 'onOutcomeComboSelect'
+            }
+        },
+
+    	otherOutcomeDescriptionText: {
+            selector: '#otherOutcomeDescriptionText'
+        },
+        
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}   	
+    },
+    
+	init: function() {
+		var me=this;
+		me.getView().getForm().reset();
+		me.getView().getForm().loadRecord(me.model);
+		me.showHideOtherOutcomeDescription();
+		
+		return me.callParent(arguments);
+    },
+    
+    onOutcomeComboSelect: function(comp, records, eOpts){
+    	this.showHideOtherOutcomeDescription();
+    },
+    
+    showHideOtherOutcomeDescription: function(){
+    	var me=this;
+    	if (me.getOutcomeCombo().getValue()==Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID)
+    	{
+    		me.getOtherOutcomeDescriptionText().show();
+    	}else{
+    		me.getOtherOutcomeDescriptionText().hide();
+    	}
+    },
+    
+	onSaveClick: function(button) {
+		var me = this;
+		var record, id, jsonData, url;
+		var personId = me.personLite.get('id');
+		var earlyAlertId = me.earlyAlert.get('id');
+		var referralsItemSelector = Ext.ComponentQuery.query('#earlyAlertReferralsItemSelector')[0];	
+		var selectedReferrals = [];			
+		
+		me.getView().getForm().updateRecord();
+		record = me.model;
+		
+		// populate referrals
+		selectedReferrals = referralsItemSelector.getValue();
+		if (selectedReferrals.length > 0)
+		{			
+		   record.set('earlyAlertReferralIds', selectedReferrals);
+		}else{
+		   record.data.referrals=null;
+		}		
+		
+		// set the early alert id for the response
+		record.set( 'earlyAlertId', earlyAlertId ); 
+		
+		// jsonData for the response
+		jsonData = record.data;
+		
+		me.getView().setLoading(true);
+		me.earlyAlertResponseService.save(personId, earlyAlertId, jsonData, {
+			success: me.saveEarlyAlertResponseSuccess,
+			failure: me.saveEarlyAlertResponseFailure,
+			scope: me
+		})
+	},
+	
+	saveEarlyAlertResponseSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading(false);
+        Ext.Msg.confirm({
+		     title: 'Your response was saved.',
+		     msg: 'Would you like to close the Early Alert Notice',
+		     buttons: Ext.Msg.YESNO,
+		     fn: me.closeEarlyAlertConfirm,
+		     scope: me
+	    });
+	},
+
+	saveEarlyAlertResponseFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading(false);
+	},
+	
+	closeEarlyAlertConfirm: function( btnId ){
+     	var me=this;
+     	var jsonData;
+     	var personId = me.personLite.get('id');
+     	if (btnId=="yes")
+     	{
+     		if (me.earlyAlert.get('closedById') != "")
+     		{
+     			// fix for GMT to UTC
+         		me.earlyAlert.set('closedDate', me.formUtils.fixDateOffsetWithTime( new Date() ) );
+         		me.earlyAlert.set( 'closedById', personId );    			
+     		}
+     		jsonData = me.earlyAlert.data;
+     		delete jsonData.earlyAlertReasonId;
+         	me.earlyAlertService.save( personId, jsonData,{
+         		success: me.closeEarlyAlertSuccess,
+         		failure: me.closeEarlyAlertFailure,
+         		scope: me
+         	});    		
+     	}else{
+     		me.displayMain();
+     	}
+     }, 
+
+ 	closeEarlyAlertSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading(false);
+		me.displayMain();
+	},
+
+	closeEarlyAlertFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading(false);
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertReferralsViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	columnRendererUtils: 'columnRendererUtils',
+    	earlyAlertResponse: 'currentEarlyAlertResponse',
+    	service: 'earlyAlertReferralService',
+        store: 'earlyAlertReferralsBindStore'
+    },
+	init: function() {
+		var me=this;
+		
+		me.service.getAll({
+			success: me.getAllSuccess,
+			failure: me.getAllFailure,
+			scope: me
+		});
+		
+		return this.callParent(arguments);
+    },
+
+	getAllSuccess: function( r, scope ){
+    	var me=scope;
+    	var items;
+    	var view = me.getView();
+    	var selectedReferrals = me.earlyAlertResponse.get('earlyAlertReferralIds');
+    	if (r.rows.length > 0)
+    	{
+    		me.store.loadData(r.rows);
+    		
+    		items = [{
+	            xtype: 'itemselectorfield',
+	            itemId: 'earlyAlertReferralsItemSelector',
+	            name: 'earlyAlertReferrals',
+	            anchor: '100%',
+	            height: 250,
+	            fieldLabel: 'Department Referrals',
+	            store: me.store,
+	            displayField: 'name',
+	            valueField: 'id',
+	            value: ((selectedReferrals.length>0) ? selectedReferrals : [] ),
+	            allowBlank: true,
+	            buttons: ["add", "remove"]
+	        }];
+    		
+    		view.add(items);
+    	}
+	},
+	
+    getAllFailure: function( response, scope ){
+    	var me=scope;  	
+    }   
+});
+Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	campusesStore: 'campusesStore',
+    	formUtils: 'formRendererUtils',
+        model: 'currentEarlyAlert',
+        personService: 'personService',
+       	reasonsStore: 'earlyAlertReasonsStore',
+        suggestionsStore: 'earlyAlertSuggestionsStore',
+        selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'earlyalert'
+    },
+    control: {
+    	'finishButton': {
+    		click: 'onFinishButtonClick'
+    	},
+    	
+    	earlyAlertSuggestionsList: '#earlyAlertSuggestionsList',
+    	campusField: '#campusField',
+    	earlyAlertReasonField: '#earlyAlertReasonField',
+    	statusField: '#statusField',
+    	createdByField: '#createdByField',
+    	closedByField: '#closedByField'
+    },
+	init: function() {
+		var me=this;
+		var selectedSuggestions=[];
+		var campus = me.campusesStore.getById( me.model.get('campusId') );
+		var reasonId = ((me.model.get('earlyAlertReasonIds') != null)?me.model.get('earlyAlertReasonIds')[0].id : me.model.get('earlyAlertReasonId') );
+		var reason = me.reasonsStore.getById( reasonId );
+		
+		// Reset and populate general fields comments, etc.
+		me.getView().getForm().reset();
+		me.getView().loadRecord( me.model );
+		
+		me.getCreatedByField().setValue( me.model.getCreatedByPersonName() );
+		
+		// Early Alert Status: 'Open', 'Closed'
+		me.getStatusField().setValue( ((me.model.get('closedDate'))? 'Closed' : 'Open') );
+		
+		// Campus
+		me.getCampusField().setValue( ((campus)? campus.get('name') : "No Campus Defined") );
+		
+		// Reason
+		me.getEarlyAlertReasonField().setValue( ((reason)? reason.get('name') : "No Reason Defined") );
+		
+		// Suggestions
+		selectedSuggestions = me.formUtils.getSimpleItemsForDisplay( me.suggestionsStore, me.model.get('earlyAlertSuggestionIds'), 'Suggestions' );
+		me.selectedSuggestionsStore.removeAll();
+		me.selectedSuggestionsStore.loadData( selectedSuggestions );
+		
+		if ( me.model.get('closedById') != null )
+		{
+			me.getView().setLoading( true );
+			me.personService.get( me.model.get('closedById'),{
+				success: me.getPersonSuccess,
+				failure: me.getPersonFailure,
+				scope: me
+			});
+		}
+		
+		return this.callParent(arguments);
+    },
+    
+    getPersonSuccess: function( r, scope ){
+		var me=scope;
+		var fullName="";
+		me.getView().setLoading( false );
+		if (r != null )
+		{
+			fullName=r.firstName + " " + r.middleName + " " + r.lastName; 
+			me.getClosedByField().setValue( fullName );
+		}
+    },    
+    
+    getPersonFailure: function( response, scope ){
+    	var me=scope;  
+    	me.getView().setLoading( false );
+    },   
+    
+    onFinishButtonClick: function( button ){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    }
+});
+Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseDetailsViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	outcomesStore: 'earlyAlertOutcomesStore',
+    	outreachesStore: 'earlyAlertOutreachesStore',
+    	referralsStore: 'earlyAlertReferralsStore',
+    	formUtils: 'formRendererUtils',
+        model: 'currentEarlyAlertResponse',
+        selectedOutreachesStore: 'earlyAlertResponseDetailsOutreachesStore',
+        selectedReferralsStore: 'earlyAlertResponseDetailsReferralsStore'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'earlyalert'
+    },
+    control: {
+    	'finishButton': {
+    		click: 'onFinishButtonClick'
+    	},
+    	
+    	outcomeField: '#outcomeField',
+    	createdByField: '#createdByField'
+    },
+	init: function() {
+		var me=this;
+		var me=this;
+		var selectedOutreaches=[];
+		var selectedReferrals=[];
+		var outcome = me.outcomesStore.getById( me.model.get('earlyAlertOutcomeId') );
+		
+		// reset and populate general fields comments, etc.
+		me.getView().getForm().reset();
+		me.getView().loadRecord( me.model );
+
+		me.getCreatedByField().setValue( me.model.getCreatedByPersonName() );
+		
+		// display outcome
+		me.getOutcomeField().setValue( outcome.get('name') );
+
+		// Outreaches
+		selectedOutreaches = me.formUtils.getSimpleItemsForDisplay( me.outreachesStore, me.model.get('earlyAlertOutreachIds'), 'Outreaches' );
+		me.selectedOutreachesStore.removeAll();
+		me.selectedOutreachesStore.loadData( selectedOutreaches );
+
+		// Referrals
+		selectedReferrals = me.formUtils.getSimpleItemsForDisplay( me.referralsStore, me.model.get('earlyAlertReferralIds'), 'Referrals' );
+		me.selectedReferralsStore.removeAll();
+		me.selectedReferralsStore.loadData( selectedReferrals );		
+
+		return this.callParent(arguments);
+    },
+    
+    onFinishButtonClick: function( button ){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    }
+});
+Ext.define('Ssp.controller.tool.document.StudentDocumentToolViewController', {
+    extend: 'Deft.mvc.ViewController',	
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController',
+    	formUtils: 'formRendererUtils',
+    	person: 'currentPerson',
+    	model: 'currentDocument',
+    	documentsStore: 'documentsStore',
+        confidentialityLevelsStore: 'confidentialityLevelsStore'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'editdocument',
+    	personDocumentUrl: ''
+    },
+    control: {
+    	view: {
+    		viewready: 'onViewReady'
+    	},
+    	
+    	'addButton': {
+			click: 'onAddClick'
+		}
+	},
+    init: function() {
+		var me = this;
+		var personId = this.person.get('id');
+		var successFunc = function(response,view){
+	    	var r = Ext.decode(response.responseText);
+	    	if (r.rows.length > 0)
+	    	{
+	    		me.documentsStore.loadData(r.rows);
+	    	}
+		};
+
+    	this.confidentialityLevelsStore.load();
+
+		this.personDocumentUrl = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personDocument') );
+		this.personDocumentUrl = this.personDocumentUrl.replace('{id}',personId);		
+
+		this.apiProperties.makeRequest({
+			url: this.personDocumentUrl,
+			method: 'GET',
+			successFunc: successFunc
+		});
+    	
+    	var json = {"success":true,"results":0,"rows":[]};
+    	var rows = [{
+    		"id":"240e97c0-7fe5-11e1-b0c4-0800200c9a66",
+    		"name":"My Document",
+    		"note":"This is my document",
+    		"confidentialityLevel":{"id":"afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c","name":"EVERYONE"},
+    		"createdBy":{"id":"58ba5ee3-734e-4ae9-b9c5-943774b4de41","firstName":"System","lastName":"Administrator"},
+    		"modifiedBy":{"id":"58ba5ee3-734e-4ae9-b9c5-943774b4de41","firstName":"System","lastName":"Administrator"},
+    		"createdDate":1331269200000
+    	}];
+    	json.rows = rows;
+
+		this.documentsStore.loadData(json.rows);
+		
+		return this.callParent(arguments);
+    },
+ 
+    onViewReady: function(comp, obj){
+    	this.appEventsController.assignEvent({eventName: 'editDocument', callBackFunc: this.editDocument, scope: this});
+    	this.appEventsController.assignEvent({eventName: 'deleteDocument', callBackFunc: this.deleteConfirmation, scope: this});
+    },    
+ 
+    destroy: function() {
+    	this.appEventsController.removeEvent({eventName: 'editDocument', callBackFunc: this.editDocument, scope: this});
+    	this.appEventsController.removeEvent({eventName: 'deleteDocument', callBackFunc: this.deleteConfirmation, scope: this});
+
+        return this.callParent( arguments );
+    },    
+    
+    onAddClick: function(button){
+    	var document = new Ssp.model.PersonDocument();
+    	this.model.data = document.data;
+    	this.loadEditor();
+    },
+    
+    editDocument: function(){
+    	this.loadEditor();
+    },
+ 
+    deleteConfirmation: function() {
+        var message = 'You are about to delete a document. Would you like to continue?';
+    	var model = this.model;
+        if (model.get('id') != "") 
+        {
+           Ext.Msg.confirm({
+   		     title:'Delete Document?',
+   		     msg: message,
+   		     buttons: Ext.Msg.YESNO,
+   		     fn: this.deleteDocument,
+   		     scope: this
+   		   });
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Unable to delete document.'); 
+        }
+     },
+     
+     deleteDocument: function( btnId ){
+     	var store = this.documentsStore;
+     	var id = this.model.get('id');
+     	if (btnId=="yes")
+     	{
+     		this.apiProperties.makeRequest({
+      		   url: this.personDocumentUrl+"/"+id,
+      		   method: 'DELETE',
+      		   successFunc: function(response,responseText){
+      			   store.remove( store.getById( id ) );
+      		   }
+      	    });   		
+     	}
+     },    
+    
+    loadEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    }
+});
+Ext.define('Ssp.controller.tool.document.EditDocumentViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+        appEventsController: 'appEventsController',
+    	formUtils: 'formRendererUtils',
+    	person: 'currentPerson',
+    	model: 'currentDocument'
+    },
+    config: {
+    	containerToLoadInto: 'tools',
+    	formToDisplay: 'studentdocuments',
+    	url: '',
+    	inited: false
+    },
+
+    control: {
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}   	
+    },
+    
+	init: function() {
+		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personDocument') );
+		this.url = this.url.replace('{id}',this.person.get('id'));
+		
+		this.initForm();
+		
+		return this.callParent(arguments);
+    },
+ 
+	initForm: function(){
+		var id = this.model.get("id");
+		this.getView().getForm().reset();
+		this.getView().getForm().loadRecord( this.model );
+		if (id != null && id != "")
+		{
+			Ext.ComponentQuery.query('#confidentialityLevelCombo')[0].setValue( this.model.get('confidentialityLevel').id );
+		}
+		this.inited=true;
+	},    
+    
+	onSaveClick: function(button) {
+		var me = this;
+		var record, id, jsonData, url;
+		var form = this.getView().getForm();
+		var values = form.getValues();
+		url = this.url;
+		record = this.model;
+		id = record.get('id');
+		
+		successFunc = function(response, view) {
+			me.displayMain();
+		};
+		
+		if (form.isValid())
+		{
+			form.updateRecord();    		
+    		record.set('confidentialityLevel',{"id": form.getValues().confidentialityLevelId});
+
+			jsonData = record.data;
+			
+			if (id.length > 0)
+			{
+				// editing
+				this.apiProperties.makeRequest({
+					url: url+"/"+id,
+					method: 'PUT',
+					jsonData: jsonData,
+					successFunc: successFunc 
+				});		
+			}else{
+				// adding
+				this.apiProperties.makeRequest({
+					url: url,
+					method: 'POST',
+					jsonData: jsonData,
+					successFunc: successFunc 
+				});		
+			}
+		
+		}else{
+			Ext.Msg.alert('Error','Please correct the errors in your document.');
+		}
+
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	service: 'transcriptService',
+        personLite: 'personLite'
+    },
+	init: function() {
+		var me=this;
+		var personId = me.personLite.get('id');
+
+    	// hide the loader
+    	me.getView().setLoading( true );
+    	
+		me.service.getAll( personId, {
+			success: me.getTranscriptSuccess,
+			failure: me.getTranscriptFailure,
+			scope: me			
+		});
+		
+		return this.callParent(arguments);
+    },
+    
+    getTranscriptSuccess: function( r, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );
+    	
+    },
+    
+    getTranscriptFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );  	
+    }
+});
+Ext.define('Ssp.controller.admin.crg.ChallengeReferralAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+	init: function() {
+		return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.admin.crg.ChallengeAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	confidentialityLevelsStore: 'confidentialityLevelsStore'
+    },
+	init: function() {
+		this.confidentialityLevelsStore.load();	
+		return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	authenticatedPerson: 'authenticatedPerson'
+    },  
+    control: {
+		view: {
+			beforeedit: 'onBeforeEdit',
+			edit: 'editRecord'
+		},
+		
+		'addButton': {
+			click: 'addRecord'
+		},
+
+		'deleteButton': {
+			click: 'deleteConfirmation'
+		},
+		
+		recordPager: '#recordPager'
+    },
+    
+	init: function() {
+		return this.callParent(arguments);
+    },
+
+    onBeforeEdit: function( editor, e, eOpts ){
+		var me=this;
+		var access = me.authenticatedPerson.hasAccess('ABSTRACT_REFERENCE_ADMIN_EDIT');
+		// Test if the record is restricted content 
+		if ( me.authenticatedPerson.isDeveloperRestrictedContent( e.record ) )
+		{
+			me.authenticatedPerson.showDeveloperRestrictedContentAlert();
+			return false;
+		}		
+
+		if ( access == false)
+		{
+			me.authenticatedPerson.showUnauthorizedAccessAlert();
+		}
+    	return access;
+    },
+    
+	editRecord: function(editor, e, eOpts) {
+		var record = e.record;
+		var id = record.get('id');
+		var jsonData = record.data;
+		Ext.Ajax.request({
+			url: editor.grid.getStore().getProxy().url+"/"+id,
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			jsonData: jsonData,
+			success: function(response, view) {
+				var r = Ext.decode(response.responseText);
+				record.commit();
+				editor.grid.getStore().sync();
+			},
+			failure: this.apiProperties.handleError
+		}, this);
+	},
+	
+	addRecord: function(button){
+		var me=this;
+		var grid = button.up('grid');
+		var store = grid.getStore();
+		var item = Ext.create( store.model.modelName, {}); // new Ssp.model.reference.AbstractReference();
+		
+		// Test if the record is restricted content	
+		if ( me.authenticatedPerson.isDeveloperRestrictedContent( item ) )
+		{
+			me.authenticatedPerson.showDeveloperRestrictedContentAlert();
+			return false;
+		}
+		
+		// default the name property
+		item.set('name','default');
+		//additional required columns defined in the Admin Tree Menus Store
+		Ext.Array.each(grid.columns,function(col,index){
+       		if (col.required==true)
+       			item.set(col.dataIndex,'default');
+       	});
+		
+		// If the object type has a sort order prop
+		// then set the sort order to the next available
+		// item in the database
+		if (item.sortOrder != null)
+		{
+			item.set('sortOrder',store.getTotalCount()+1);
+		}
+
+		// Save the item
+		Ext.Ajax.request({
+			url: grid.getStore().getProxy().url,
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			jsonData: item.data,
+			success: function(response, view) {
+				var r = Ext.decode(response.responseText);
+				item.populateFromGenericObject(r);
+				store.insert(0, item );
+		       	grid.plugins[0].startEdit(0, 0);
+		       	grid.plugins[0].editor.items.getAt(0).selectText();
+		       	store.totalCount = store.totalCount+1;
+		       	me.getRecordPager().onLoad();
+			},
+			failure: me.apiProperties.handleError
+		}, me);
+	},
+
+    deleteConfirmation: function( button ) {
+ 	   var me=this;
+       var grid = button.up('grid');
+       var store = grid.getStore();
+       var selection = grid.getView().getSelectionModel().getSelection()[0];
+       var message;
+
+       if (selection != null && selection.get('id') ) 
+       {
+    	   // Test if the record is restricted content 
+           if ( me.authenticatedPerson.isDeveloperRestrictedContent( selection ) )
+    	   {
+    			me.authenticatedPerson.showDeveloperRestrictedContentAlert();
+    			return false;
+    	   }    	   
+    	   
+    	   if ( !Ssp.util.Constants.isRestrictedAdminItemId( selection.get('id')  ) )
+    	   {
+        	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+	      	   
+               Ext.Msg.confirm({
+       		     title:'Delete?',
+       		     msg: message,
+       		     buttons: Ext.Msg.YESNO,
+       		     fn: me.deleteRecord,
+       		     scope: me
+       		   });
+               
+    	   }else{
+    		   Ext.Msg.alert('WARNING', 'This item is related to core SSP functionality. Please see a developer to delete this item.'); 
+    	   }
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to delete.'); 
+        }
+     },	
+	
+	deleteRecord: function( btnId ){
+		var me=this;
+		var grid=me.getView();
+		var store = grid.getStore();
+	    var selection = grid.getView().getSelectionModel().getSelection()[0];
+     	var id = selection.get('id');
+     	if (btnId=="yes")
+     	{
+     		me.apiProperties.makeRequest({
+       		   url: store.getProxy().url+"/"+id,
+       		   method: 'DELETE',
+       		   successFunc: function(response,responseText){
+       			   var r = Ext.decode(response.responseText);
+       			   if (r.success==true)
+       			   {
+       				store.remove( store.getById( id ) );
+       				store.totalCount = store.totalCount-1;
+       				me.getRecordPager().onLoad();
+       			    me.getRecordPager().doRefresh();
+       			   }
+       		   }
+       	    });
+       }
+	}
+});
+Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
+    	store: 'confidentialityDisclosureAgreementsStore',
+    	service: 'confidentialityDisclosureAgreementService'
+    },
+    
+    control: {
+		'saveButton': {
+			click: 'save'
+		},
+		
+		saveSuccessMessage: '#saveSuccessMessage'
+    },
+    
+	init: function() {
+		this.store.load({scope: this, callback: this.loadConfidentialityDisclosureAgreementResult});
+		
+		return this.callParent(arguments);
+    }, 
+    
+    loadConfidentialityDisclosureAgreementResult: function(records, operation, success){
+    	var model = new Ssp.model.reference.ConfidentialityDisclosureAgreement();
+    	model.populateFromGenericObject(records[0].data);
+    	this.getView().loadRecord( model );
+    },
+    
+	save: function(button){
+		var record, id, jsonData;
+		var me=this;
+		var view = me.getView();
+		view.getForm().updateRecord();
+		record = view.getRecord();
+		id = record.get('id');
+		jsonData = record.data;
+		
+		view.setLoading(true);
+
+		me.service.save( jsonData, {
+			success: me.saveSuccess,
+			failure: me.saveFailure,
+			scope: me
+		});
+	},
+	
+	saveSuccess: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading(false);
+		me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
+	},
+	
+    saveFailure: function( response, scope ){
+    	var me=scope;  
+		me.getView().setLoading(false);
+    }
+});
+Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'challengesStore',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentChallenge'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'editchallenge'
+    },
+    control: {
+    	'editButton': {
+			click: 'onEditClick'
+		},
+		
+		'addButton': {
+			click: 'onAddClick'
+		},
+
+		'deleteButton': {
+			click: 'deleteConfirmation'
+		}    	
+    },       
+	init: function() {
+		var me=this;
+		
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		me.store.load();
+		
+		return me.callParent(arguments);
+    }, 
+    
+	onEditClick: function(button) {
+		var grid, record;
+		grid = button.up('grid');
+		record = grid.getView().getSelectionModel().getSelection()[0];
+        if (record) 
+        {		
+        	this.model.data=record.data;
+        	this.displayEditor();
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+        }
+	},
+	
+	onAddClick: function(button){
+		var model = new Ssp.model.reference.Challenge();
+		this.model.data = model.data;
+		this.displayEditor();
+	},
+	
+    deleteConfirmation: function( button ) {
+  	   var me=this;
+        var grid = button.up('grid');
+        var store = grid.getStore();
+        var selection = grid.getView().getSelectionModel().getSelection()[0];
+        var message;
+        if ( selection.get('id') ) 
+        {
+      	   if ( !Ssp.util.Constants.isRestrictedAdminItemId( selection.get('id')  ) )
+    	   {
+      		    message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+		     	      	   
+	            Ext.Msg.confirm({
+	    		     title:'Delete?',
+	    		     msg: message,
+	    		     buttons: Ext.Msg.YESNO,
+	    		     fn: me.deleteRecord,
+	    		     scope: me
+	    		   });
+	 	   }else{
+			   Ext.Msg.alert('WARNING', 'This item is related to core SSP functionality. Please see a developer to delete this item.'); 
+		   }
+         }else{
+      	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+         }
+      },	
+ 	
+ 	deleteRecord: function( btnId ){
+ 		var me=this;
+ 		var grid=me.getView();
+ 		var store = grid.getStore();
+ 	    var selection = grid.getView().getSelectionModel().getSelection()[0];
+      	var id = selection.get('id');
+      	if (btnId=="yes")
+      	{
+      		me.apiProperties.makeRequest({
+        		   url: store.getProxy().url+"/"+id,
+        		   method: 'DELETE',
+        		   successFunc: function(response,responseText){
+        			   store.remove( store.getById( id ) );
+        		   }
+        	    });
+        }
+ 	},
+	
+	displayEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentChallenge',
+    	store: 'challengesStore'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'challengeadmin'
+    },
+    control: {
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}   	
+    },
+    
+	init: function() {
+		this.getView().getForm().loadRecord(this.model);
+		return this.callParent(arguments);
+    },
+    
+	onSaveClick: function(button) {
+		var me = this;
+		var record, id, jsonData, url;
+		url = this.store.getProxy().url;
+		this.getView().getForm().updateRecord();
+		record = this.model;
+		id = record.get('id');
+		jsonData = record.data;
+		successFunc = function(response, view) {
+			me.displayMain();
+		};
+		
+		if (id.length > 0)
+		{
+			// editing
+			this.apiProperties.makeRequest({
+				url: url+"/"+id,
+				method: 'PUT',
+				jsonData: jsonData,
+				successFunc: successFunc 
+			});
+			
+		}else{
+			// adding
+			this.apiProperties.makeRequest({
+				url: url,
+				method: 'POST',
+				jsonData: jsonData,
+				successFunc: successFunc 
+			});		
+		}
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.crg.DisplayReferralsAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'challengeReferralsStore',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentChallengeReferral'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'editreferral'
+    },
+    control: {
+		'editButton': {
+			click: 'onEditClick'
+		},
+		
+		'addButton': {
+			click: 'onAddClick'
+		},
+
+		'deleteButton': {
+			click: 'deleteConfirmation'
+		}    	
+    },       
+	init: function() {
+		var me=this;
+		
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		me.store.load();
+		
+		return me.callParent(arguments);
+    },
+
+	onEditClick: function(button) {
+		var grid, record;
+		grid = button.up('grid');
+		record = grid.getView().getSelectionModel().getSelection()[0];
+        if (record) 
+        {		
+        	this.model.data=record.data;
+        	this.displayEditor();
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+        }
+	},
+	
+	onAddClick: function(button){
+		var model = new Ssp.model.reference.ChallengeReferral();
+		this.model.data = model.data;
+		this.displayEditor();
+	},
+	
+    deleteConfirmation: function( button ) {
+  	   var me=this;
+        var grid = button.up('grid');
+        var store = grid.getStore();
+        var selection = grid.getView().getSelectionModel().getSelection()[0];
+        var message;
+        if ( selection.get('id') ) 
+        {
+     	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+     	      	   
+            Ext.Msg.confirm({
+    		     title:'Delete?',
+    		     msg: message,
+    		     buttons: Ext.Msg.YESNO,
+    		     fn: me.deleteRecord,
+    		     scope: me
+    		   });
+         }else{
+      	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+         }
+      },	
+ 	
+ 	deleteRecord: function( btnId ){
+ 		var me=this;
+ 		var grid=me.getView();
+ 		var store = grid.getStore();
+ 	    var selection = grid.getView().getSelectionModel().getSelection()[0];
+      	var id = selection.get('id');
+      	if (btnId=="yes")
+      	{
+      		me.apiProperties.makeRequest({
+        		   url: store.getProxy().url+"/"+id,
+        		   method: 'DELETE',
+        		   successFunc: function(response,responseText){
+        			   store.remove( store.getById( id ) );
+        		   }
+        	    });
+        }
+ 	},
+	
+	displayEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentChallengeReferral',
+    	store: 'challengeReferralsStore'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'challengereferraladmin'
+    },
+    control: {
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}   	
+    },
+    
+	init: function() {
+		this.getView().getForm().loadRecord(this.model);
+		return this.callParent(arguments);
+    },
+    
+	onSaveClick: function(button) {
+		var me = this;
+		var record, id, jsonData, url;
+		url = this.store.getProxy().url;
+		this.getView().getForm().updateRecord();
+		record = this.model;
+		id = record.get('id');
+		jsonData = record.data;
+		successFunc = function(response, view) {
+			me.displayMain();
+		};
+		
+		if (id.length > 0)
+		{
+			// editing
+			this.apiProperties.makeRequest({
+				url: url+"/"+id,
+				method: 'PUT',
+				jsonData: jsonData,
+				successFunc: successFunc 
+			});
+			
+		}else{
+			// adding
+			this.apiProperties.makeRequest({
+				url: url,
+				method: 'POST',
+				jsonData: jsonData,
+				successFunc: successFunc 
+			});		
+		}
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.journal.JournalStepAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+	init: function() {	
+		return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.admin.journal.JournalStepDetailAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+	init: function() {	
+		return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.admin.journal.DisplayDetailsAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'journalDetailsStore',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentJournalStepDetail'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'editjournalstepdetail'
+    },
+    control: {  	
+    	'editButton': {
+			click: 'onEditClick'
+		},
+		
+		'addButton': {
+			click: 'onAddClick'
+		},
+
+		'deleteButton': {
+			click: 'deleteConfirmation'
+		}    	
+    },       
+    
+	init: function() {
+		var me=this;
+		
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		me.store.load();
+		
+		return me.callParent(arguments);
+    },    
+    
+	onEditClick: function(button) {
+		var grid, record;
+		grid = button.up('grid');
+		record = grid.getView().getSelectionModel().getSelection()[0];
+        if (record) 
+        {		
+        	this.model.data=record.data;
+        	this.displayEditor();
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+        }
+	},
+	
+	onAddClick: function(button){
+		var model = new Ssp.model.reference.JournalStepDetail();
+		this.model.data = model.data;
+		this.displayEditor();
+	},
+
+    deleteConfirmation: function( button ) {
+  	   var me=this;
+        var grid = button.up('grid');
+        var store = grid.getStore();
+        var selection = grid.getView().getSelectionModel().getSelection()[0];
+        var message;
+        if ( selection.get('id') ) 
+        {
+     	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+     	      	   
+            Ext.Msg.confirm({
+    		     title:'Delete?',
+    		     msg: message,
+    		     buttons: Ext.Msg.YESNO,
+    		     fn: me.deleteRecord,
+    		     scope: me
+    		   });
+         }else{
+      	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+         }
+      },	
+ 	
+ 	deleteRecord: function( btnId ){
+ 		var me=this;
+ 		var grid=me.getView();
+ 		var store = grid.getStore();
+ 	    var selection = grid.getView().getSelectionModel().getSelection()[0];
+      	var id = selection.get('id');
+      	if (btnId=="yes")
+      	{
+      		me.apiProperties.makeRequest({
+        		   url: store.getProxy().url+"/"+id,
+        		   method: 'DELETE',
+        		   successFunc: function(response,responseText){
+        			   store.remove( store.getById( id ) );
+        		   }
+        	    });
+        }
+ 	},
+	
+	displayEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.journal.DisplayStepsAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'journalStepsStore',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentJournalStep'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'editjournalstep'
+    },
+    control: {  	
+    	'editButton': {
+			click: 'onEditClick'
+		},
+		
+		'addButton': {
+			click: 'onAddClick'
+		},
+
+		'deleteButton': {
+			click: 'deleteConfirmation'
+		}    	
+    },       
+    
+	init: function() {
+		var me=this;
+		
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		me.store.load();
+		
+		return me.callParent(arguments);
+    },    
+    
+	onEditClick: function(button) {
+		var grid, record;
+		grid = button.up('grid');
+		record = grid.getView().getSelectionModel().getSelection()[0];
+        if (record) 
+        {		
+        	this.model.data=record.data;
+        	this.displayEditor();
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+        }
+	},
+	
+	onAddClick: function(button){
+		var model = new Ssp.model.reference.JournalStep();
+		this.model.data = model.data;
+		this.displayEditor();
+	},
+	
+    deleteConfirmation: function( button ) {
+  	   var me=this;
+        var grid = button.up('grid');
+        var store = grid.getStore();
+        var selection = grid.getView().getSelectionModel().getSelection()[0];
+        var message;
+        if ( selection.get('id') ) 
+        {
+     	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+     	      	   
+            Ext.Msg.confirm({
+    		     title:'Delete?',
+    		     msg: message,
+    		     buttons: Ext.Msg.YESNO,
+    		     fn: me.deleteRecord,
+    		     scope: me
+    		   });
+         }else{
+      	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+         }
+      },	
+ 	
+ 	deleteRecord: function( btnId ){
+ 		var me=this;
+ 		var grid=me.getView();
+ 		var store = grid.getStore();
+ 	    var selection = grid.getView().getSelectionModel().getSelection()[0];
+      	var id = selection.get('id');
+      	if (btnId=="yes")
+      	{
+      		me.apiProperties.makeRequest({
+        		   url: store.getProxy().url+"/"+id,
+        		   method: 'DELETE',
+        		   successFunc: function(response,responseText){
+        			   store.remove( store.getById( id ) );
+        		   }
+        	    });
+        }
+ 	},
+	
+	displayEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.journal.EditStepViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentJournalStep',
+    	store: 'journalStepsStore'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'journalstepadmin'
+    },
+    control: {
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}   	
+    },
+    
+	init: function() {
+		this.getView().getForm().loadRecord(this.model);
+		return this.callParent(arguments);
+    },
+    
+	onSaveClick: function(button) {
+		var me = this;
+		var record, id, jsonData, url;
+		url = this.store.getProxy().url;
+		this.getView().getForm().updateRecord();
+		record = this.model;
+		id = record.get('id');
+		jsonData = record.data;
+		successFunc = function(response, view) {
+			me.displayMain();
+		};
+		
+		if (id.length > 0)
+		{
+			// editing
+			this.apiProperties.makeRequest({
+				url: url+"/"+id,
+				method: 'PUT',
+				jsonData: jsonData,
+				successFunc: successFunc 
+			});
+			
+		}else{
+			// adding
+			this.apiProperties.makeRequest({
+				url: url,
+				method: 'POST',
+				jsonData: jsonData,
+				successFunc: successFunc 
+			});		
+		}
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.journal.EditStepDetailViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentJournalStepDetail',
+    	store: 'journalDetailsStore'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'journalstepdetailadmin'
+    },
+    control: {
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}   	
+    },
+    
+	init: function() {
+		this.getView().getForm().loadRecord(this.model);
+		return this.callParent(arguments);
+    },
+    
+	onSaveClick: function(button) {
+		var me = this;
+		var record, id, jsonData, url;
+		url = this.store.getProxy().url;
+		this.getView().getForm().updateRecord();
+		record = this.model;
+		id = record.get('id');
+		jsonData = record.data;
+		successFunc = function(response, view) {
+			me.displayMain();
+		};
+		
+		if (id.length > 0)
+		{
+			// editing
+			this.apiProperties.makeRequest({
+				url: url+"/"+id,
+				method: 'PUT',
+				jsonData: jsonData,
+				successFunc: successFunc 
+			});
+			
+		}else{
+			// adding
+			this.apiProperties.makeRequest({
+				url: url,
+				method: 'POST',
+				jsonData: jsonData,
+				successFunc: successFunc 
+			});		
+		}
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	appEventsController: 'appEventsController',
+    	campusService: 'campusService',
+    	campusEarlyAlertRouting: 'currentCampusEarlyAlertRouting',
+    	campusesStore: 'campusesStore',
+    	earlyAlertCoordinatorsStore: 'earlyAlertCoordinatorsStore',
+    	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentCampus',
+    	peopleStore: 'peopleStore'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	campusEditorForm: 'editcampus',
+    	campusEarlyAlertRoutingAdminForm: 'campusEarlyAlertRoutingsAdmin'
+    },
+    control: {
+    	view: {
+    		viewready: 'onViewReady'
+    	},
+    	
+    	'editButton': {
+			click: 'onEditClick'
+		},
+		
+		'addButton': {
+			click: 'onAddClick'
+		},
+
+		'deleteButton': {
+			click: 'deleteConfirmation'
+		} 	
+    },
+	init: function() {
+		var me=this;
+		me.campusesStore.load();
+		me.earlyAlertCoordinatorsStore.load();
+		me.earlyAlertReasonsStore.load();
+		me.peopleStore.load();
+		return this.callParent(arguments);
+    },
+
+    onViewReady: function(comp, obj){
+    	var me=this;
+    	me.appEventsController.assignEvent({eventName: 'editCampusEarlyAlertRoutings', callBackFunc: me.onEditCampusEarlyAlertRoutings, scope: me});
+    },    
+ 
+    destroy: function() {
+    	var me=this;
+    	
+    	me.appEventsController.removeEvent({eventName: 'editCampusEarlyAlertRoutings', callBackFunc: me.onEditCampusEarlyAlertRoutings, scope: me});
+
+    	return me.callParent( arguments );
+    },
+
+    onEditCampusEarlyAlertRoutings: function(){
+		var me=this;
+    	var model = new Ssp.model.reference.CampusEarlyAlertRouting();
+		me.campusEarlyAlertRouting.data = model.data;
+		me.displayCampusEarlyAlertRoutingAdmin();
+    }, 
+    
+	onEditClick: function(button) {
+		var grid, record;
+		grid = button.up('grid');
+		record = grid.getView().getSelectionModel().getSelection()[0];
+        if (record) 
+        {		
+        	this.model.data=record.data;
+        	this.displayCampusEditor();
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+        }
+	},
+	
+	onAddClick: function(button){
+		var model = new Ssp.model.reference.Campus();
+		this.model.data = model.data;
+		this.displayCampusEditor();
+	},
+	
+    deleteConfirmation: function( button ) {
+  	   var me=this;
+        var grid = button.up('grid');
+        var store = grid.getStore();
+        var selection = grid.getView().getSelectionModel().getSelection()[0];
+        var message;
+        if ( selection.get('id') ) 
+        {
+     	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+     	      	   
+            Ext.Msg.confirm({
+    		     title:'Delete?',
+    		     msg: message,
+    		     buttons: Ext.Msg.YESNO,
+    		     fn: me.deleteRecord,
+    		     scope: me
+    		   });
+         }else{
+      	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+         }
+      },	
+ 	
+ 	deleteRecord: function( btnId ){
+ 		var me=this;
+ 		var grid=me.getView();
+ 		var store = grid.getStore();
+ 	    var selection = grid.getView().getSelectionModel().getSelection()[0];
+      	var id = selection.get('id');
+      	if (btnId=="yes")
+      	{
+     		me.getView().setLoading( true );
+     		me.campusService.destroy( id, {
+     			success: me.destroyCampusSuccess,
+     			failure: me.destroyCampusFailure,
+     			scope: me
+     		});
+        }
+ 	},
+ 	
+    destroyCampusSuccess: function( r, id, scope ) {
+ 		var me=scope;
+ 		var grid=me.getView();
+ 		var store = grid.getStore();
+ 		me.getView().setLoading( false );
+ 		store.remove( store.getById( id ) );
+ 	},
+
+ 	destroyCampusFailure: function( response, scope ) {
+ 		var me=scope;
+ 		me.getView().setLoading( false );
+ 	}, 
+
+	displayCampusEarlyAlertRoutingAdmin: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getCampusEarlyAlertRoutingAdminForm(), true, {});
+	},
+ 	
+	displayCampusEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getCampusEditorForm(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.campus.DefineCampusViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	campusService: 'campusService',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentCampus',
+    	store: 'campusesStore'
+    },
+    config: {
+    	panelLayout: null,
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'campusadmin'
+    },
+    control: {  	
+    	prevBtn: '#prevButton',
+    	nextBtn: '#nextButton',
+    	finishBtn: '#finishButton',
+    	
+    	'nextButton': {
+			click: 'onNextClick'
+		},
+		
+		'prevButton': {
+			click: 'onPrevClick'
+		},
+		
+		'finishButton': {
+			click: 'onFinishClick'
+		},
+		
+		'cancelCampusEditorButton': {
+			click: 'onCancelClick'
+		}
+    },
+	init: function() {
+		this.store.load();
+		this.panelLayout = this.getView().getLayout();
+		this.enableButtons();
+		return this.callParent(arguments);
+    },
+
+    navigate: function( direction ){
+        this.panelLayout[direction]();
+        this.enableButtons();
+    },
+    
+    enableButtons: function(){
+    	var layout = this.panelLayout;
+    	this.getPrevBtn().setDisabled(!layout.getPrev());
+        this.getNextBtn().setDisabled(!layout.getNext());
+        if (!layout.getNext())
+        {
+        	this.getFinishBtn().setDisabled(false);
+        }else{
+        	this.getFinishBtn().setDisabled(true);
+        }
+    },
+    
+	onNextClick: function(button) {
+		this.navigate("next");
+	},
+	
+	onPrevClick: function(button){
+		this.navigate("prev");
+	},
+	
+	onFinishClick: function(button){
+		var me=this;
+		console.log('DefineCampusViewController->onFinishClick');
+		var campusView = Ext.ComponentQuery.query('.editcampus')[0];
+		var campusForm = campusView.getForm();		
+		var formsToValidate = [campusForm];
+		var validateResult = me.formUtils.validateForms( formsToValidate );
+		
+		// validate the campus and save
+		if ( validateResult.valid ) 
+		{
+			campusForm.updateRecord();
+			console.log(me.model.data);
+			me.getView().setLoading( true );
+			me.campusService.saveCampus( me.model.data, {success:me.saveCampusSuccess, 
+				  failure:me.saveCampusFailure, 
+				  scope: me} );		
+		}else{
+			me.formUtils.displayErrors( validateResult.fields );
+		}
+	},
+
+    saveCampusSuccess: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading( false );
+		me.displayMain();
+    },
+    
+    saveCampusFailure: function( response, scope ){
+    	var me=scope;  	
+    	me.getView().setLoading( false );
+    },
+
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+    
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});	
+	}
+});
+Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	campusService: 'campusService',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentCampus',
+    	store: 'campusesStore'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'campusadmin',
+    	url: null
+    },
+    control: {
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}   	
+    },
+	init: function() {
+		this.getView().getForm().reset();
+		this.getView().getForm().loadRecord( this.model );
+		return this.callParent(arguments);
+    },
+	onSaveClick: function(button) {
+		var me = this; 
+		me.getView().getForm().updateRecord();
+		me.getView().setLoading( true );
+		me.campusService.saveCampus( me.model.data, {
+			success: me.saveSuccess,
+			failure: me.saveFailure,
+			scope: me
+		} );
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+
+    saveSuccess: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading( false );
+		me.displayMain();
+    },
+    
+    saveFailure: function( response, scope ){
+    	var me=scope;  	
+    	me.getView().setLoading( false );
+    },	
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.campus.CampusEarlyAlertRoutingsAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	formUtils: 'formRendererUtils'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	campusEditorForm: 'campusadmin'
+    },
+    control: {
+    	'finishButton': {
+			click: 'onFinishClick'
+		}
+    },	
+    init: function() {
+		return this.callParent(arguments);
+    },
+    
+	onFinishClick: function( button ){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getCampusEditorForm(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.campus.EarlyAlertRoutingsAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'campusEarlyAlertRoutingsStore',
+    	service: 'campusEarlyAlertRoutingService',
+    	formUtils: 'formRendererUtils',
+    	campus: 'currentCampus',
+    	model: 'currentCampusEarlyAlertRouting'
+    },
+    config: {
+    	containerToLoadInto: 'campusearlyalertroutingsadmin',
+    	formToDisplay: 'editcampusearlyalertrouting'
+    },
+    control: {  	
+    	'editButton': {
+			click: 'onEditClick'
+		},
+		
+		'addButton': {
+			click: 'onAddClick'
+		},
+
+		'deleteButton': {
+			click: 'deleteConfirmation'
+		} 	
+    },
+	init: function() {
+		var me=this;
+		var campusId = me.campus.get('id');
+		me.getView().setLoading( true );
+		me.service.getAllCampusEarlyAlertRoutings( campusId, {
+			success: me.getAllCampusEarlyAlertRoutingsSuccess,
+			failure: me.getAllCampusEarlyAlertRoutingsFailure,
+			scope: me
+		});
+		return me.callParent(arguments);
+    },
+
+    getAllCampusEarlyAlertRoutingsSuccess: function( r, scope ){
+		var me=scope;
+		me.getView().setLoading( false );
+    },
+    
+    getAllCampusEarlyAlertRoutingsFailure: function( response, scope ){
+    	var me=scope;  	
+    	me.getView().setLoading( false );
+    },    
+    
+	onEditClick: function(button) {
+		var me=this;
+		var grid, record;
+		grid = button.up('grid');
+		record = grid.getView().getSelectionModel().getSelection()[0];
+        if (record) 
+        {		
+        	me.model.data=record.data;
+        	me.displayEditor();
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+        }
+	},
+	
+	onAddClick: function(button){
+		var me=this;
+		var model = new Ssp.model.reference.CampusEarlyAlertRouting();
+		me.model.data = model.data;
+		me.displayEditor();
+	},    
+ 
+    deleteConfirmation: function( button ) {
+   	   var me=this;
+         var grid = button.up('grid');
+         var store = grid.getStore();
+         var selection = grid.getView().getSelectionModel().getSelection()[0];
+         var message;
+         if(selection != null)
+         {
+             if ( selection.get('id') ) 
+             {
+          	   message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+          	      	   
+                 Ext.Msg.confirm({
+         		     title:'Delete?',
+         		     msg: message,
+         		     buttons: Ext.Msg.YESNO,
+         		     fn: me.deleteRecord,
+         		     scope: me
+         		   });
+              }else{
+           	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+              }        	 
+         }else{
+        	Ext.Msg.alert('SSP Error', 'Select an item to delete.'); 
+         }
+       },	
+  	
+  	deleteRecord: function( btnId ){
+  		var me=this;
+  		var campusId = me.campus.get('id');
+  		var grid=me.getView();
+  		var store = grid.getStore();
+  	    var selection = grid.getView().getSelectionModel().getSelection()[0];
+       	var id = selection.get('id');
+       	if (btnId=="yes")
+       	{
+       		me.service.destroy( campusId, id, {
+       			success: me.destroySuccess,
+       			failure: me.destroyFailure,
+       			scope: me
+       		});
+         }
+  	},
+  	
+  	destroySuccess: function( r, id, scope ){
+  		var me=scope;
+  		var grid=me.getView();
+  		var store = grid.getStore();
+  		store.remove( store.getById( id ) );
+  	},
+  	
+  	destroyFailure: function( response, scope ){
+  		var me=scope;
+  	},
+	
+	displayEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentCampusEarlyAlertRouting',
+    	campus: 'currentCampus',
+    	service: 'campusEarlyAlertRoutingService'
+    },
+    config: {
+    	containerToLoadInto: 'campusearlyalertroutingsadmin',
+    	formToDisplay: 'earlyalertroutingsadmin'
+    },
+    control: {
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}   	
+    },
+    
+	init: function() {
+		var me=this;
+		me.getView().getForm().reset();
+		me.getView().getForm().loadRecord( me.model );
+		return me.callParent(arguments);
+    },
+    
+	onSaveClick: function(button) {
+		var me = this;
+		var record, id, jsonData, url;
+		url = me.url;	
+		if ( me.getView().getForm().isValid() )
+		{
+			me.getView().getForm().updateRecord();
+			record = me.model;
+			id = record.get('id');
+			jsonData = record.data;
+			
+			// ensure null if person is not set
+			if (record.data.person == "")
+			{
+				jsonData.person=null;
+			}
+			
+			me.getView().setLoading( true );
+			
+			me.service.saveCampusEarlyAlertRouting( me.campus.get('id'), jsonData, {
+				success: saveSuccess,
+				failure: failureSuccess,
+				scope: me
+			});
+			
+		}else{
+			Ext.Msg.alert('SSP Error', 'Please correct the errors before saving this item.');
+		}
+	},
+
+	saveSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+		me.displayMain();
+	},
+
+	saveFailure: function( response, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
 Ext.define('Ssp.model.AbstractBase', {
     extend: 'Ext.data.Model',
     fields: [{name: 'id', type: 'string'},
@@ -6230,7 +11293,7 @@ Ext.define('Ssp.model.AbstractBase', {
  		      }
              }
              ,{name: 'createdDate', type: 'date', dateFormat: 'time'}
-             ,{name: 'objectStatus', type: 'string'}
+             /*,{name: 'objectStatus', type: 'string'}*/
              /*,
              {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
              */],
@@ -6252,12 +11315,16 @@ Ext.define('Ssp.model.AbstractBase', {
     	return this.get('createdBy').firstName + ' ' + this.get('createdBy').lastName;
     },
 
+    getCreatedById: function(){
+    	return this.get('createdBy').id + ' ' + this.get('createdBy').id;
+    },
+
 });
 
 Ext.define('Ssp.model.Coach', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'firstName',type:'string'},
-             {name:'middleInitial',type:'string'},
+             {name:'middleName',type:'string'},
              {name:'lastName',type:'string'},
              {
                  name: 'fullName',
@@ -6265,10 +11332,10 @@ Ext.define('Ssp.model.Coach', {
                      return record.get('firstName') + ' '+ record.get('lastName');
                  }
              },
-             {name:'department',type:'string', defaultValue:'Web Systems'},
+             {name:'departmentName',type:'string', defaultValue:'Web Systems'},
              {name: 'workPhone', type:'string'},
              {name: 'primaryEmailAddress', type:'string'},
-             {name: 'office', type:'string', defaultValue:'13023S'}]
+             {name: 'officeLocation', type:'string', defaultValue:'13023S'}]
 });
 Ext.define('Ssp.model.reference.Gender', {
     extend: 'Ext.data.Model',
@@ -6287,12 +11354,4793 @@ Ext.define('Ssp.model.Tool', {
              {name:'active',type:'boolean'},
              {name:'group',type:'string'}]
 });
+Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
+    	treeUtils: 'treeRendererUtils'
+    },
+
+    config: {
+        associatedItemType: "",
+        parentItemType: "",
+        parentIdAttribute: "",
+        associatedItemIdAttribute: ""
+    },
+    
+    control: {
+    	view: {
+    		itemexpand: 'onItemExpand',
+    		itemcollapse: 'onItemCollapse'
+    	},
+    	
+        treeView: {
+            selector: '.treeview',
+            listeners: {
+                beforedrop: 'onBeforeDrop'
+            }
+        },
+        
+        'deleteAssociationButton': {
+            click: 'deleteConfirmation'
+        }
+        	
+    },
+    
+	constructor: function( config ) {
+		var me=this;
+		me.initConfig(config);
+		return me.callParent(arguments);
+    },
+   
+    onItemExpand: function( nodeInt, obj ){
+    	var me=this;
+    	var node = nodeInt;
+    	var id = me.treeUtils.getIdFromNodeId(node.data.id);
+    	me.getAssociatedItems(node,id);
+    },
+
+    onItemCollapse: function( node, obj ){
+    	var me=this;
+    	var tree = me.getView();
+    	var records = tree.getView().getChecked();
+    	if (records.length > 0)
+    	{
+        	Ext.Array.each(records, function(rec){
+    	        rec.data.checked=false;
+    	    },me);    		
+    	}
+    },    
+    
+    clear: function(){
+    	this.treeUtils.clearRootCategories();
+    },
+    
+    getParentItems: function(){
+    	var me=this;
+    	var treeRequest = new Ssp.model.util.TreeRequest();
+    	treeRequest.set('url', me.apiProperties.getItemUrl( me.getParentItemType() ) );
+    	treeRequest.set('nodeType', me.getParentItemType() );
+    	treeRequest.set('isLeaf', false);
+    	treeRequest.set('callbackFunc', me.onLoadComplete);
+    	treeRequest.set('callbackScope', me);
+    	me.treeUtils.getItems( treeRequest );
+    	// me.getView().setLoading( true );
+    }, 
+    
+    getAssociatedItems: function(node, id){
+    	var me=this;
+    	var parentUrl = me.apiProperties.getItemUrl( me.parentItemType );
+    	var url = parentUrl + '/' + id + '/' + me.getAssociatedItemType();
+    	var treeRequest = new Ssp.model.util.TreeRequest();
+    	treeRequest.set('url',url);
+    	treeRequest.set('nodeType', me.getAssociatedItemType);
+    	treeRequest.set('isLeaf', true);
+    	treeRequest.set('nodeToAppendTo', node);
+    	treeRequest.set('enableCheckedItems', true);
+    	treeRequest.set('callbackFunc', me.onLoadComplete);
+    	treeRequest.set('callbackScope', me);
+    	me.treeUtils.getItems( treeRequest );
+    	// me.getView().setLoading( true );
+    },
+
+	onLoadComplete: function( scope ){
+		var me=scope;
+		//me.getView().setLoading( false );
+	},
+    
+    onBeforeDrop: function(node, data, overModel, dropPosition, dropHandler, eOpts) {
+    	var me=this;
+    	var url, parentId, associatedItemId, node;
+    	
+    	// ensure the drop handler waits for the drop
+    	dropHandler.wait=true;
+
+    	// handle drop on a folder
+        if (!overModel.isLeaf() && dropPosition == 'append')
+        {
+        	node = overModel;
+        	parentId = me.treeUtils.getIdFromNodeId(node.data.id);
+        	associatedItemId = data.records[0].get('id')
+        	parentUrl = me.apiProperties.getItemUrl( me.getParentItemType() ) + '/' + parentId + '/' + me.getAssociatedItemType(); 	
+        	url = me.apiProperties.createUrl( parentUrl );
+        	me.apiProperties.makeRequest({
+				url: url,
+				method: 'POST',
+				jsonData: '"' + associatedItemId + '"',
+				successFunc: function(response, view) {
+					me.getAssociatedItems(node, parentId);
+				}
+			});
+        }
+
+        // handle drop inside a folder
+        if (dropPosition=='before' || dropPosition=='after')
+        	console.log("You can't do that. Drop it on a folder instead.");
+        
+        dropHandler.cancelDrop;
+        
+        return 1;
+    },
+ 
+    deleteConfirmation: function( button ) {
+    	var me=this;
+    	var tree = me.getView();
+    	var treeUtils = me.treeUtils;
+    	var records = tree.getView().getChecked();
+    	if (records.length > 0)
+    	{
+     	   message = 'You are about to delete the selected item associations. Would you like to continue?';
+     	      	   
+            Ext.Msg.confirm({
+    		     title:'Delete?',
+    		     msg: message,
+    		     buttons: Ext.Msg.YESNO,
+    		     fn: me.onDeleteAssociationConfirm,
+    		     scope: me
+    		   });
+    	}else{
+    		Ext.Msg.alert('Error', 'Please select an item to delete.');
+    	}
+    },    
+    
+    onDeleteAssociationConfirm: function( btnId){
+    	var me=this;
+    	var tree = me.getView();
+    	var treeUtils = me.treeUtils;
+    	var records = tree.getView().getChecked();
+    	var parentId, parentNode;
+     	if (btnId=="yes")
+     	{
+        	parentId = treeUtils.getIdFromNodeId( records[0].data.parentId );
+        	// To set the parentNode use the full parentId, while the previously set parentId attribute
+        	// used the treeUtils.getIdFromNodeId() method to trim the id of the category description
+        	// so the id from the database could be ascertained. The actual parentId attribute in the data
+        	// from the record is separated by a character like this: 'guid_category'
+        	parentNode = tree.getView().getStore().findRecord('id', records[0].data.parentId ); 
+
+        	Ext.Array.each(records, function(rec){
+    	        var associatedItemId = treeUtils.getIdFromNodeId( rec.data.id );
+    	        this.deleteAssociation( parentId, associatedItemId, parentNode );
+    	    },me);   		
+    	}
+	},
+	
+    deleteAssociation: function( parentId, associatedItemId, node ){
+    	var me=this;
+    	var url, parentId, associatedItemId;
+    	if ( parentId != "" && associatedItemId != null)
+    	{
+        	parentUrl = me.apiProperties.getItemUrl( me.getParentItemType() ) + '/' + parentId + '/' + me.getAssociatedItemType(); 	
+	    	url = me.apiProperties.createUrl( parentUrl );
+	    	me.apiProperties.makeRequest({
+				url: url,
+				method: 'DELETE',
+				jsonData: '"' + associatedItemId + '"',
+				successFunc: successFunc = function(response, view) {
+					me.getAssociatedItems(node, parentId);
+				} 
+			});
+    	}
+    }
+});
+Ext.define('Ssp.view.admin.AdminTreeMenu', {
+	extend: 'Ext.tree.Panel',
+	alias : 'widget.admintreemenu',
+	id: 'AdminTreeMenu',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.AdminViewController',
+    inject: {
+    	store: 'adminTreeMenusStore'
+    },    
+	initComponent: function() {	
+		Ext.apply(this, 
+				{
+					store: this.store,
+					singleExpand: true,
+					fields: ['title','form','text'],	
+				});
+		
+	     this.callParent(arguments);
+	}	
+}); 
+Ext.define('Ssp.view.Main', {
+	extend: 'Ext.panel.Panel',
+    alias: 'widget.mainview',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
+    controller: 'Ssp.controller.MainViewController',
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+		    			{
+		    	    layout: {
+		    	    	type: 'hbox',
+		    	    	align: 'stretch'
+		    	    },
+
+		    	    dockedItems: {
+		    	        xtype: 'toolbar',
+		    	        items: [{
+		    			            xtype: 'button',
+		    			            text: 'Students',
+		    			            hidden: !me.authenticatedPerson.hasAccess('STUDENTS_NAVIGATION_BUTTON'),
+		    			            itemId: 'studentViewNav',
+		    			            action: 'displayStudentRecord'
+		    			        }, {
+		    			            xtype: 'button',
+		    			            text: 'Admin',
+		    			            hidden: !me.authenticatedPerson.hasAccess('ADMIN_NAVIGATION_BUTTON'),
+		    			            itemId: 'adminViewNav',
+		    			            action: 'displayAdmin'
+		    			        },{
+			       		        	xtype: 'tbspacer',
+			       		        	flex: 1
+			       		        },{
+	    		    	    	  id: 'report',
+	    		    	    	  xtype: 'sspreport'
+	    		    	    	}]
+		    	    }    		
+    			});
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.StudentRecord', {
+	extend: 'Ext.panel.Panel',
+    alias: 'widget.studentrecord',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.StudentRecordViewController',
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+    	Ext.apply(this,{
+    		title: 'Student Record',
+    	    collapsible: true,
+    	    collapseDirection: 'left',
+    		layout: {
+    	    	type: 'hbox',
+    	    	align: 'stretch'
+    	    },
+			
+    	    items: [{xtype:'toolsmenu',flex:1},
+			        {xtype: 'tools', flex:4}]		        
+    	});
+    	return this.callParent(arguments);
+    }
+});	
+Ext.define('Ssp.view.Search', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.search',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.SearchViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson',
+    	apiProperties: 'apiProperties',
+    	columnRendererUtils: 'columnRendererUtils',
+    	programStatusesStore: 'programStatusesStore',
+    	sspConfig: 'sspConfig'
+    },
+    initComponent: function(){
+    	var me=this;
+    	Ext.applyIf(me,
+    			   {
+    		        submitEmptyText: false,
+    				title: 'Students',
+    	            collapsible: true,
+    	            collapseDirection: 'left',
+    	        	width: '100%',
+    	        	height: '100%',
+		    	    columns: [{ text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: 50}],
+        
+		    	    dockedItems: [{
+		       			xtype: 'pagingtoolbar',
+		       		    itemId: 'searchGridPager',
+		       			dock: 'bottom',
+		       		    displayInfo: true,
+		       		    pageSize: me.apiProperties.getPagingSize()
+		       		},{
+		       			xtype: 'toolbar',
+		       			dock: 'top',
+		       			itemId: 'searchBar',
+	    	            hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
+		       		    items: [{
+				        	xtype: 'textfield',
+		   		        	itemId: 'searchText',
+		   		        	emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
+		   		        	width: 200
+		   		        },{
+		   		        	xtype: 'button',
+		   		        	tooltip: 'Find a Student',
+		   		        	itemId: 'searchButton',
+				            width: 32,
+				            height: 32,
+				            cls: 'searchIcon'
+		   		        },{
+		   		        	xtype: 'tbspacer',
+		   		        	width: 5
+		   		        },{
+		   		        	xtype: 'checkboxfield',
+		                    boxLabel  : 'My Caseload',
+		                    itemId: 'searchCaseloadCheck',
+		                    name      : 'searchInCaseload',
+		                    hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
+		                    inputValue: false
+		                },{
+	    		        	xtype: 'tbspacer',
+	    		        	flex: 1
+		    		    },{
+		    	            tooltip: 'Display Caseload Filters',
+		    	            text: '',
+		    	            width: 25,
+		    	            height: 25,
+		    	            hidden: false,
+		    	            cls: 'displayCaseloadIcon',
+		    	            xtype: 'button',
+		    	            itemId: 'displayCaseloadBarButton'				        	
+		    	        }]
+		       		},{
+		       			xtype: 'toolbar',
+		       			dock: 'top',
+		       			itemId: 'caseloadBar',
+		       			hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS'),
+		       		    items: [{
+					        xtype: 'combobox',
+					        itemId: 'caseloadStatusCombo',
+					        name: 'programStatusId',
+					        fieldLabel: '',
+					        emptyText: 'Select One',
+					        store: me.programStatusesStore,
+					        valueField: 'id',
+					        displayField: 'name',
+					        mode: 'local',
+					        typeAhead: true,
+					        queryMode: 'local',
+					        allowBlank: true,
+					        forceSelection: false,
+					        width: 200,
+					        labelWidth: 125
+						},{
+				        	xtype: 'button',
+				        	tooltip: 'Retrieve My Caseload',
+				        	itemId: 'retrieveCaseloadButton',
+				            width: 32,
+				            height: 32,
+				            cls: 'retrieveCaseloadIcon'
+				        },{
+	    		        	xtype: 'tbspacer',
+	    		        	flex: 1
+		    		    },{
+		    	            tooltip: 'Display Search Filters',
+		    	            text: '',
+		    	            width: 25,
+		    	            height: 25,
+		    	            hidden: false,
+		    	            cls: 'displaySearchIcon',
+		    	            xtype: 'button',
+		    	            itemId: 'displaySearchBarButton'				        	
+		    	        }]
+		       		    
+		       		},{
+		       			xtype: 'toolbar',
+		       			dock: 'top',
+		       			items: [{
+		    			    tooltip: 'Add Student',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('ADD_STUDENT_BUTTON'),
+		    			    cls: 'addPersonIcon',
+		    			    xtype: 'button',
+		    			    itemId: 'addPersonButton'
+		    			},{
+		    			    tooltip: 'Edit Student',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('EDIT_STUDENT_BUTTON'),
+		    			    cls: 'editPersonIcon',
+		    			    xtype: 'button',
+		    			    itemId: 'editPersonButton'
+		    			},{
+		    			    tooltip: 'Delete Student',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('DELETE_STUDENT_BUTTON'),
+		    			    cls: 'deletePersonIcon',
+		    			    xtype: 'button',
+		    			    itemId: 'deletePersonButton'
+		    			},{
+	    		        	xtype: 'tbspacer',
+	    		        	flex: 1
+		    		    },{
+		    			    tooltip: 'Set Student to Active status',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('SET_ACTIVE_STATUS_BUTTON'),
+		    			    cls: 'setActiveStatusIcon',
+		    			    xtype: 'button',
+		    			    action: 'active',
+		    			    itemId: 'setActiveStatusButton'
+			    		},{
+		    			    tooltip: 'Transition Student',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('SET_TRANSITION_STATUS_BUTTON'),
+		    			    cls: 'setTransitionStatusIcon',
+		    			    xtype: 'button',
+		    			    action: 'transition',
+		    			    itemId: 'setTransitionStatusButton'
+		    			},{
+		    			    tooltip: 'Set Student to Non-Participating status',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('SET_NON_PARTICIPATING_STATUS_BUTTON'),
+		    			    cls: 'setNonParticipatingStatusIcon',
+		    			    xtype: 'button',
+		    			    action: 'non-participating',
+		    			    itemId: 'setNonParticipatingStatusButton'
+		    			},{
+		    			    tooltip: 'Set Student to No-Show status',
+		    			    text: '',
+		    			    width: 25,
+		    			    height: 25,
+		    			    hidden: !me.authenticatedPerson.hasAccess('SET_NO_SHOW_STATUS_BUTTON'),
+		    			    cls: 'setNoShowStatusIcon',
+		    			    xtype: 'button',
+		    			    action: 'no-show',
+		    			    itemId: 'setNoShowStatusButton'
+		    			}]
+		       		}]
+		    	    });
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
+	extend: 'Ext.window.Window',
+	alias : 'widget.programstatuschangereasonwindow',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.ProgramStatusChangeReasonWindowViewController',
+    inject: {
+    	personLite: 'personLite',
+    	store: 'programStatusChangeReasonsStore'
+    },
+	width: '100%',
+	height: '100%',
+	title: 'Please provide a reason the student will no longer be participating:',
+    initComponent: function(){
+    	var me=this;
+    	Ext.applyIf(me,
+    			   {
+				    modal: true, 
+		    		layout: 'anchor',
+    				items: [{
+                    	xtype: 'displayfield',
+                    	fieldLabel: 'Student',
+                    	value: me.personLite.get('displayFullName'),
+                    	anchor: '95%'
+                    },{
+    			        xtype: 'combobox',
+    			        itemId: 'programStatusChangeReasonCombo',
+    			        name: 'programStatusChangeReasonId',
+    			        fieldLabel: 'Reason',
+    			        emptyText: 'Select One',
+    			        store: me.store,
+    			        valueField: 'id',
+    			        displayField: 'name',
+    			        mode: 'local',
+    			        typeAhead: true,
+    			        queryMode: 'local',
+    			        allowBlank: false,
+    			        forceSelection: true,
+    			        anchor: '95%'
+    		        }],
+    	            dockedItems: [{
+    		               xtype: 'toolbar',
+    		               dock: 'bottom',
+    		               items: [{
+		       		                   text: 'Save',
+		       		                   xtype: 'button',
+		       		                   action: 'save',
+		       		                   itemId: 'saveButton'
+		       		               }, '-', {
+		       		                   text: 'Cancel',
+		       		                   xtype: 'button',
+		       		                   action: 'cancel',
+		       		                   itemId: 'cancelButton'
+		       		               }]
+    		           }]
+		    	    });
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.person.CaseloadAssignment', {
+	extend: 'Ext.panel.Panel',
+	alias : 'widget.caseloadassignment',
+	mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.CaseloadAssignmentViewController',
+    inject: {
+    	model: 'currentPerson',
+    	sspConfig: 'sspConfig'
+    },
+    width: '100%',
+	height: '100%',   
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
+				{
+			        title: "Caseload Assignment",
+		    		autoScroll: true,
+		    	    defaults: {
+		    	        bodyStyle: 'padding:5px'
+		    	    },
+		    	    layout: {
+		    	        type: 'accordion',
+		    	        align: 'stretch',
+		    	        titleCollapse: true,
+		    	        animate: true,
+		    	        activeOnTop: true
+		    	    },		    		
+		    		dockedItems: [{
+  		               xtype: 'toolbar',
+  		               dock: 'top',
+  		               items: [{
+  		                         xtype: 'label',
+  		                         text: 'Fill out the following forms with assigned coach details and appointment information'
+  		                       }]  
+  		            },{
+				        dock: 'bottom',
+				        xtype: 'toolbar',
+				        items: [{
+			                     xtype: 'button', 
+				        	     itemId: 'saveButton', 
+				        	     text:'Save'
+				        	    },
+				                 {
+				            	   xtype: 'button',
+				            	   itemId: 'cancelButton',
+				            	   text: 'Cancel',
+				                 }/*,{
+							        xtype: 'checkbox',
+							        boxLabel: 'Send Student Intake Request', 
+							        name: 'sendStudentIntakeRequest'
+								 },{ 
+						        	xtype: 'tbspacer',
+						        	width: 25
+						         },{
+							    	xtype: 'displayfield',
+							        fieldLabel: 'Last Request Date',
+							        name: 'lastStudentIntakeRequestDate',
+							        value: ((me.model.getFormattedStudentIntakeRequestDate().length > 0) ? me.person.getFormattedStudentIntakeRequestDate() : 'No requests have been sent')
+								 }*/,{ 
+						        	xtype: 'tbspacer',
+						        	flex: 1
+						         },{
+					        	     xtype: 'checkboxfield',
+				                     boxLabel: "Reset the student to Active status on the assigned " + me.sspConfig.get('coachFieldLabel') + "'s Caseload",
+				                     itemId: 'resetActiveStatusCheck',
+				                     name: 'setActiveStatus',
+				                     //hidden: (( me.model.get('currentProgramStatusName').toLowerCase() == 'active' && me.model.get('id') != "")? true : false),
+				                     inputValue: false
+				                  },
+				                 {
+				            	   xtype: 'button',
+				            	   itemId: 'printButton',
+				            	   tooltip: 'Print Appointment Form',
+				            	   hidden: true,
+				            	   width: 30,
+						           height: 30,
+						           cls: 'printIcon'
+				                 },
+				                 {
+				            	   xtype: 'button',
+				            	   itemId: 'emailButton',
+				            	   hidden: true,
+				            	   tooltip: 'Email Appointment Form',
+				            	   width: 30,
+						           height: 30,
+						           cls: 'emailIcon'
+				                 }]
+				    }],
+				    
+				    items: [ ]
+			});
+	
+		return me.callParent(arguments);
+	}
+
+});
+Ext.define('Ssp.view.person.Coach', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.personcoach',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.CoachViewController',
+    inject: {
+    	coachesStore: 'coachesStore',
+    	sspConfig: 'sspConfig',
+    	studentTypesStore: 'studentTypesStore'
+    },
+	initComponent: function() {	
+		var me=this;
+		Ext.apply(me, 
+				{
+			    border: 0,
+			    padding: 0,
+			    fieldDefaults: {
+			        msgTarget: 'side',
+			        labelAlign: 'right',
+			        labelWidth: 200
+			    },	
+				items: [{
+			            xtype: 'fieldset',
+			            border: 0,
+			            padding: 0,
+			            title: '',
+			            defaultType: 'textfield',
+			            defaults: {
+			                anchor: '50%'
+			            },
+			       items: [{
+				        xtype: 'combobox',
+				        name: 'coachId',
+				        itemId: 'coachCombo',
+				        fieldLabel: me.sspConfig.get('coachFieldLabel'),
+				        emptyText: 'Select One',
+				        store: me.coachesStore,
+				        valueField: 'id',
+				        displayField: 'fullName',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: false
+					},{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Office',
+				        itemId: 'officeField',
+				        name: 'coachOffice'
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Phone',
+				        itemId: 'phoneField',
+				        name: 'coachPhone'
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Email',
+				        itemId: 'emailAddressField',
+				        name: 'coachEmailAddress'
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Department',
+				        itemId: 'departmentField',
+				        name: 'coachDepartment'
+				    },{
+				        xtype: 'combobox',
+				        name: 'studentTypeId',
+				        itemId: 'studentTypeCombo',
+				        id: 'studentTypeCombo',
+				        fieldLabel: 'Student Type',
+				        emptyText: 'Select One',
+				        store: me.studentTypesStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: false
+					}]
+			    }]
+			});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.person.EditPerson', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.editperson',
+	mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.EditPersonViewController',
+	initComponent: function() {	
+		Ext.apply(this, 
+				{
+					border: 0,	    
+				    fieldDefaults: {
+				        msgTarget: 'side',
+				        labelAlign: 'right',
+				        labelWidth: 100
+				    },
+					items: [{
+			            xtype: 'fieldset',
+			            border: 0,
+			            title: '',
+			            defaultType: 'textfield',
+
+			       items: [{
+			        fieldLabel: 'First Name',
+			        name: 'firstName',
+			        itemId: 'firstName',
+			        id: 'editPersonFirstName',
+			        maxLength: 50,
+			        allowBlank:false,
+			        width: 350
+			    },{
+			        fieldLabel: 'Middle Name',
+			        name: 'middleName',
+			        itemId: 'middleName',
+			        id: 'editPersonMiddleName',
+			        maxLength: 50,
+			        allowBlank:true,
+			        width: 350
+			    },{
+			        fieldLabel: 'Last Name',
+			        name: 'lastName',
+			        itemId: 'lastName',
+			        id: 'editPersonLastName',
+			        maxLength: 50,
+			        allowBlank:false,
+			        width: 350
+			    },{
+			        fieldLabel: 'Student ID',
+			        name: 'schoolId',
+			        minLength: 7,
+			        maxLength: 7,
+			        itemId: 'studentId',
+			        allowBlank:false,
+			        width: 350
+			    },{
+			    	xtype: 'button',
+			    	tooltip: 'Load record from external system',
+			    	text: 'Retrieve from External',
+			    	itemId: 'retrieveFromExternalButton'
+			    },{
+			        fieldLabel: 'Home Phone',
+			        name: 'homePhone',
+			        emptyText: 'xxx-xxx-xxxx',
+			        maskRe: /[\d\-]/,
+			        regex: /^\d{3}-\d{3}-\d{4}$/,
+			        regexText: 'Must be in the format xxx-xxx-xxxx',
+			        maxLength: 12,
+			        allowBlank:true,
+			        itemId: 'homePhone',
+			        width: 350
+			    },{
+			        fieldLabel: 'Work Phone',
+			        name: 'workPhone',
+			        emptyText: 'xxx-xxx-xxxx',
+			        maskRe: /[\d\-]/,
+			        regex: /^\d{3}-\d{3}-\d{4}$/,
+			        regexText: 'Must be in the format xxx-xxx-xxxx',
+			        maxLength: 12,
+			        allowBlank:true,
+			        itemId: 'workPhone',
+			        width: 350
+			    },{
+			        fieldLabel: 'School Email',
+			        name: 'primaryEmailAddress',
+			        vtype:'email',
+			        maxLength: 100,
+			        allowBlank:true,
+			        itemId: 'primaryEmailAddress',
+			        width: 350
+			    },{
+			        fieldLabel: 'Home Email',
+			        name: 'secondaryEmailAddress',
+			        vtype:'email',
+			        maxLength: 100,
+			        allowBlank:true,
+			        itemId: 'secondaryEmailAddress',
+			        width: 350
+			    }]
+			}]
+		});
+		
+		return this.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.person.Appointment', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.personappointment',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.AppointmentViewController',
+	initComponent: function() {	
+		var me=this;
+		Ext.apply(me, 
+				{
+			    fieldDefaults: {
+			        msgTarget: 'side',
+			        labelAlign: 'right',
+			        labelWidth: 200
+			    },	
+			    border: 0,
+			    padding: 0,
+				items: [{
+			            xtype: 'fieldset',
+			            border: 0,
+			            padding: 0,
+			            title: '',
+			            defaultType: 'textfield',
+			            defaults: {
+			            	anchor: '50%'
+			            },
+			       items: [{
+				    	xtype: 'datefield',
+				    	fieldLabel: 'Appointment Date',
+				    	itemId: 'appointmentDateField',
+				    	altFormats: 'm/d/Y|m-d-Y',
+				    	invalidText: '{0} is not a valid date - it must be in the format: 06/21/2012 or 06-21-2012',
+				    	name: 'appointmentDate',
+				        allowBlank: false
+				    },{
+				        xtype: 'timefield',
+				        name: 'startTime',
+				        itemId: 'startTimeField',
+				        fieldLabel: 'Start Time',
+				        increment: 30,
+				        typeAhead: false,
+				        allowBlank: false
+				    },{
+				        xtype: 'timefield',
+				        name: 'endTime',
+				        itemId: 'endTimeField',
+				        fieldLabel: 'End Time',
+				        typeAhead: false,
+				        allowBlank: false,
+				        increment: 30
+				    }]
+			    }]
+			});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.person.SpecialServiceGroups', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.personspecialservicegroups',
+	mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.SpecialServiceGroupsViewController',
+	width: '100%',
+    height: '100%',
+    autoScroll: true,
+	initComponent: function() {	
+		var me=this;
+		Ext.apply(me, 
+				{
+				    bodyPadding: 5,
+				    layout: 'anchor'
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.person.ReferralSources', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.personreferralsources',
+	mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.ReferralSourcesViewController',
+	width: '100%',
+    height: '100%',
+    autoScroll: true,
+	initComponent: function() {	
+		var me=this;
+		Ext.apply(this, 
+				{
+				    bodyPadding: 5,
+				    layout: 'anchor'
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.person.ServiceReasons', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.personservicereasons',
+	id: 'personservicereasons',
+	mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.ServiceReasonsViewController',
+    width: '100%',
+    height: '100%',
+    autoScroll: true,
+	initComponent: function() {	
+		Ext.apply(this, 
+				{
+				    bodyPadding: 0,
+				    border: 0,
+				    layout: 'anchor',
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    defaultType: 'checkbox'
+				});
+		
+		return this.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.person.AnticipatedStartDate', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.personanticipatedstartdate',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.AnticipatedStartDateViewController',
+    inject: {
+    	anticipatedStartTermsStore: 'anticipatedStartTermsStore',
+    	anticipatedStartYearsStore: 'anticipatedStartYearsStore'
+    },
+	initComponent: function() {	
+		Ext.apply(this, 
+				{
+		        fieldDefaults: {
+		        msgTarget: 'side',
+		        labelAlign: 'right',
+		        labelWidth: 125
+		    },
+			border: 0,
+			items: [{
+		        xtype: 'checkboxgroup',
+		        fieldLabel: 'Ability to Benefit',
+		        columns: 1,
+		        items: [
+		            {boxLabel: '', name: 'abilityToBenefit'}
+		        ]
+		    },{
+		        xtype: 'combobox',
+		        name: 'anticipatedStartTerm',
+		        fieldLabel: 'Anticipated Start Term',
+		        emptyText: 'Select One',
+		        store: this.anticipatedStartTermsStore,
+		        valueField: 'name',
+		        displayField: 'name',
+		        mode: 'local',
+		        typeAhead: true,
+		        queryMode: 'local',
+		        allowBlank: true
+			},{
+		        xtype: 'combobox',
+		        name: 'anticipatedStartYear',
+		        fieldLabel: 'Anticipated Start Year',
+		        emptyText: 'Select One',
+		        store: this.anticipatedStartYearsStore,
+		        valueField: 'name',
+		        displayField: 'name',
+		        mode: 'local',
+		        typeAhead: true,
+		        queryMode: 'local',
+		        allowBlank: true
+			}]
+		});
+		
+		return this.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.ToolsMenu', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.toolsmenu',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.ToolsViewController',
+    inject: {
+    	appEventsController: 'appEventsController',
+    	columnRendererUtils: 'columnRendererUtils',
+        store: 'toolsStore'
+    },
+    initComponent: function(){
+    	Ext.apply(this,
+    			   {
+		    		width: '100%',
+		    		height: '100%',
+    				store: this.store,
+
+    	    		features: [{
+		    	        id: 'group',
+		    	        ftype: 'grouping',
+		    	        groupHeaderTpl: '{name}',
+		    	        hideGroupedHeader: false,
+		    	        enableGroupingMenu: false
+		    	    }],
+		    	    
+    				columns:[{
+    				           header: "Tools", 
+    				           dataIndex: "name",
+    				           sortable: false,
+    				           menuDisabled: true,
+    				           flex:1 },{
+	    			    	        xtype:'actioncolumn',
+	    			    	        width:18,
+	    			    	        header: '',
+	    			    	        sortable: false,
+	    			    	        hidden: true,
+	    			    	        items: [{
+	    			    	            tooltip: 'Add Tool',
+	    			    	            // icon: Ssp.util.Constants.ADD_TOOL_ICON_PATH,
+	    			    	            getClass: this.columnRendererUtils.renderAddToolIcon,
+	    			    	            handler: function(grid, rowIndex, colIndex) {
+	    			    	            	var rec = grid.getStore().getAt(rowIndex);
+	    			    	            	var panel = grid.up('panel');
+	    			    	                //panel.toolId.data=rec.data.toolId;
+	    			    	                panel.appEventsController.getApplication().fireEvent('addTool');
+	    			    	                Ext.Msg.alert('Attention','This feature is not yet active');
+	    			    	            },
+	    			    	            scope: this
+	    			    	        }]
+	    		                }]
+		    	    });
+    	
+    	return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.tools.profile.Profile', {
+	extend: 'Ext.form.Panel',
+	alias : 'widget.profile',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
+    width: '100%',
+	height: '100%',
+    initComponent: function() {	
+		var me=this;
+    	Ext.apply(me, 
+				{
+		    	    layout: 'fit',
+		            title: 'Profile',
+		            padding: 0,
+		            border: 0,
+					items: [
+						Ext.createWidget('tabpanel', {
+						    width: '100%',
+						    height: '100%',
+						    activeTab: 0,
+						    itemId: 'profileTabs',
+						    items: [{ 
+						    	      title: 'Personal',
+						    	      autoScroll: true,
+						    		  items: [{xtype: 'profileperson'}]
+						    		},{ 
+						    		  title: 'Special Service Groups',
+						    		  autoScroll: true,
+						    		  items: [{xtype: 'profilespecialservicegroups'}]
+						    		},{ 
+						    		  title: 'Referral Sources',
+						    		  autoScroll: true,
+						    		  items: [{xtype: 'profilereferralsources'}]
+						    		},{ 
+						    		  title: 'Service Reasons',
+						    		  autoScroll: true,
+						    		  items: [{xtype: 'profileservicereasons'}]
+						    		},{ 
+						    		  title: 'Services Provided History',
+						    		  hidden: true,
+						    		  autoScroll: true,
+						    		  items: [{xtype: 'profileservicesprovided'}]
+							    	}]
+						})
+				    ],
+				    
+				    dockedItems: [{
+				        dock: 'top',
+				        xtype: 'toolbar',
+				        items: [{
+					            tooltip: 'Print Student History',
+					            text: '',
+					            width: 32,
+					            height: 32,
+					            hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
+					            cls: 'studentHistoryIcon',
+					            xtype: 'button',
+					            itemId: 'viewHistoryButton'
+				        },{
+			            	   xtype: 'button',
+			            	   itemId: 'printConfidentialityAgreementButton',
+			                   text: '',
+			                   tooltip: 'Print Confidentiality Agreement',
+			            	   cls: 'confidentialityAgreementIcon',
+			            	   height: 32,
+			            	   width: 32,
+			            	   hidden: !me.authenticatedPerson.hasAccess('PROFILE_PRINT_CONFIDENTIALITY_AGREEMENT_BUTTON'),
+			            }]
+				    }]
+				});	     
+    	
+    	return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.tools.profile.Person', {
+	extend: 'Ext.form.Panel',
+	alias : 'widget.profileperson',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    inject: {
+    	columnRendererUtils: 'columnRendererUtils',
+    	sspConfig: 'sspConfig'
+    },
+    width: '100%',
+	height: '100%',
+    initComponent: function() {	
+		var me=this;
+    	Ext.apply(me, 
+				{
+    		        border: 0,	
+				    bodyPadding: 5,
+				    layout: 'anchor',
+				    defaults: {
+				        anchor: '100%'
+				        
+				    },
+				    fieldDefaults: {
+				        msgTarget: 'side',
+				        labelAlign: 'right',
+				        labelWidth: 200
+				    },
+				    defaultType: 'displayfield',
+				    items: [{
+				            xtype: 'fieldset',
+				            border: 0,
+				            title: '',
+				            defaultType: 'displayfield',
+				            defaults: {
+				                anchor: '100%'
+				            },
+				       items: 
+				       [{
+					        fieldLabel: 'Student',
+					        name: 'name',
+					        itemId: 'studentName'
+					    },{
+					        fieldLabel: 'Student Id',
+					        itemId: 'studentId',
+					        name: 'schoolId'
+					    }, {
+					        fieldLabel: 'Birth Date',
+					        name: 'birthDate',
+					        itemId: 'birthDate'
+					    }, {
+					        fieldLabel: 'Home Phone',
+					        name: 'homePhone'
+					    }, {
+					        fieldLabel: 'Cell Phone',
+					        name: 'cellPhone'
+					    }, {
+					        fieldLabel: 'Address',
+					        name: 'addressLine1'
+					    }, {
+					        fieldLabel: 'City',
+					        name: 'city'
+					    }, {
+					        fieldLabel: 'State',
+					        name: 'state'
+					    }, {
+					        fieldLabel: 'Zip Code',
+					        name: 'zipCode'
+					    }, {
+					        fieldLabel: 'School Email',
+					        name: 'primaryEmailAddress'
+					    }, {
+					        fieldLabel: 'Alternate Email',
+					        name: 'secondaryEmailAddress'
+					    }, {
+					        fieldLabel: 'Student Type',
+					        name: 'studentType',
+					        itemId: 'studentType'
+					    }, {
+					        fieldLabel: 'SSP Program Status',
+					        name: 'programStatus',
+					        itemId: 'programStatus'
+					    }, {
+					        fieldLabel: 'Registered for Current Term',
+					        name: 'registeredForCurrentTerm',
+					        renderer: me.columnRendererUtils.renderFriendlyBoolean
+					    }, {
+					        fieldLabel: 'Payment Status',
+					        name: 'paymentStatus',
+					        hidden: true
+					    }, {
+					        fieldLabel: 'CUM GPA',
+					        name: 'cumGPA',
+					        hidden: true
+					    },{
+					        fieldLabel: 'Academic Program',
+					        name: 'academicPrograms',
+					        hidden: true
+					    },{
+					        fieldLabel: me.sspConfig.get('coachFieldLabel'),
+					        name: 'coachName',
+					        itemId: 'coachName'
+					    },{
+					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Phone',
+					        name: 'coachWorkPhone',
+					        itemId: 'coachWorkPhone'
+					    },{
+					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Department',
+					        name: 'coachDepartmentName',
+					        itemId: 'coachDepartmentName'
+					    },{
+					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Office',
+					        name: 'coachOfficeLocation',
+					        itemId: 'coachOfficeLocation'
+					    },{
+					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Email',
+					        name: 'coachPrimaryEmailAddress',
+					        itemId: 'coachPrimaryEmailAddress'
+					    }]
+					    }],
+				});
+		
+	     return me.callParent(arguments);
+	}
+	
+});
+Ext.define('Ssp.view.tools.profile.ServicesProvided', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.profileservicesprovided',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.profile.ServicesProvidedViewController',	
+	width: '100%',
+	height: '100%',
+	initComponent: function() {	
+		var me=this;
+		Ext.apply(me, 
+				{        
+			        autoScroll: true,
+    		        columns: [
+    		                { header: 'Provided By',  
+    		                  dataIndex: 'createdBy',
+    		                  flex: .50,
+    		                },{ header: 'Date Provided',  
+    		                  dataIndex: 'createdDate',
+    		                  flex: .50,
+    		                }],
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.tools.actionplan.ActionPlan', {
+	extend: 'Ext.container.Container',
+	alias : 'widget.actionplan',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.actionplan.ActionPlanToolViewController',
+    width: '100%',
+	height: '100%',   
+	layout: 'fit',
+	initComponent: function() {	
+		Ext.apply(this,{items: [{xtype: 'displayactionplan'}]});
+
+		return this.callParent(arguments);
+	}
+		
+});
+Ext.define('Ssp.view.tools.actionplan.Tasks', {
+	extend: 'Ext.grid.Panel',
+	alias: 'widget.tasks',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.actionplan.TasksViewController',
+    inject: {
+    	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
+    	columnRendererUtils: 'columnRendererUtils',
+    	model: 'currentTask',
+        store: 'tasksStore',
+    },
+    layout: 'auto',
+	width: '100%',
+    height: '100%',
+    initComponent: function(){
+    	var me=this;
+    	var sm = Ext.create('Ext.selection.CheckboxModel');
+    	
+    	Ext.apply(me,
+    			{
+    		        scroll: 'vertical',
+    	    		store: me.store,    		
+    	    		selModel: sm,
+    	    		features: [{
+		    	        id: 'group',
+		    	        ftype: 'grouping',
+		    	        groupHeaderTpl: '{name}',
+		    	        depthToIndent: 0,
+		    	        hideGroupedHeader: false,
+		    	        enableGroupingMenu: false
+		    	    }],
+		
+		    	    columns: [{
+		    	        xtype:'actioncolumn',
+		    	        width:65,
+		    	        header: 'Action',
+		    	        items: [{
+		    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
+		    	            tooltip: 'Edit Task',
+		    	            handler: function(grid, rowIndex, colIndex) {
+		    	            	var rec = grid.getStore().getAt(rowIndex);
+		    	            	var panel = grid.up('panel');
+		    	                panel.model.data=rec.data;
+		    	            	panel.appEventsController.getApplication().fireEvent('editTask');
+		    	            },
+		    	            getClass: function(value, metadata, record)
+                            {
+		    	            	// completed items cannot be edited 
+		    	            	// hide if completed or if user does not have permission to edit
+		    	            	var cls = 'x-hide-display';
+		    	            	if ( me.authenticatedPerson.hasAccess('EDIT_TASK_BUTTON') && record.get('completedDate') == null)
+		    	            	{
+		    	            		cls = Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH;
+		    	            	}
+		    	            	
+		    	            	return cls;                            
+		    	            },
+		    	            scope: me
+		    	        },{
+		    	            icon: Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH,
+		    	            tooltip: 'Close Task',
+		    	            handler: function(grid, rowIndex, colIndex) {
+		    	            	var rec = grid.getStore().getAt(rowIndex);
+		    	            	var panel = grid.up('panel');
+		    	                panel.model.data=rec.data;
+		    	            	panel.appEventsController.getApplication().fireEvent('closeTask');
+		    	            },
+		    	            getClass: function(value, metadata, record)
+                            {
+		    	            	// completed items cannot be closed 
+		    	            	// hide if completed or if user does not have permission to edit
+		    	            	var cls = 'x-hide-display';
+		    	            	if ( me.authenticatedPerson.hasAccess('CLOSE_TASK_BUTTON') && record.get('completedDate') == null)
+		    	            	{
+		    	            		cls = Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH;
+		    	            	}
+		    	            	
+		    	            	return cls;
+		    	            },
+		    	            scope: me
+		    	        },{
+		    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
+		    	            tooltip: 'Delete Task',
+		    	            handler: function(grid, rowIndex, colIndex) {
+		    	            	var rec = grid.getStore().getAt(rowIndex);
+		    	            	var panel = grid.up('panel');
+		    	                panel.model.data=rec.data;
+		    	            	panel.appEventsController.getApplication().fireEvent('deleteTask');
+		    	            },
+		    	            getClass: function(value, metadata, record)
+                            {
+		    	            	// completed items cannot be deleted 
+		    	            	// hide if completed or if user does not have permission to delete
+		    	            	var cls = 'x-hide-display';
+		    	            	if ( me.authenticatedPerson.hasAccess('DELETE_TASK_BUTTON') && record.get('completedDate') == null)
+		    	            	{
+		    	            		cls = Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH;
+		    	            	}
+		    	            	
+		    	            	return cls;
+                            },
+		    	            scope: me
+		    	        }]
+		    	    },{
+		    	        text: 'Description',
+		    	        flex: 1,
+		    	        tdCls: 'task',
+		    	        sortable: true,
+		    	        dataIndex: 'name',
+		    	        renderer: me.columnRendererUtils.renderTaskName
+		    	    },{
+		    	        header: 'Due Date',
+		    	        width: 150,
+		    	        dataIndex: 'dueDate',
+		    	        renderer: me.columnRendererUtils.renderTaskDueDate
+		    	    }]
+    	
+
+    			});
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.addtaskform',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.actionplan.AddTasksFormViewController',
+    inject: {
+        store: 'confidentialityLevelsStore'
+    },
+	width: '100%',
+    height: '100%',    
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
+				{
+			        autoScroll: true,
+			        border: 0,
+			        padding: 0,
+		            fieldDefaults: {
+		                msgTarget: 'side',
+		                labelAlign: 'right',
+		                labelWidth: 150
+		            },
+				    items: [{
+				            xtype: 'fieldset',
+				            title: 'Add Task',
+				            defaultType: 'textfield',
+					        border: 0,
+					        padding: 0,
+				            defaults: {
+				                anchor: '95%'
+				            },
+				       items: [{
+					    	xtype: 'displayfield',
+					        fieldLabel: 'Task Name',
+					        name: 'name'
+					    },{
+				    	xtype: 'textarea',
+				        fieldLabel: 'Description',
+				        name: 'description',
+				        maxLength: 1000,
+				        allowBlank:false
+				    },{
+				        xtype: 'combobox',
+				        itemId: 'confidentialityLevel',
+				        name: 'confidentialityLevelId',
+				        fieldLabel: 'Confidentiality Level',
+				        emptyText: 'Select One',
+				        store: me.store,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: false,
+				        forceSelection: true
+					},{
+				    	xtype: 'datefield',
+				    	fieldLabel: 'Target Date',
+				    	altFormats: 'm/d/Y|m-d-Y',
+				        name: 'dueDate',
+				        allowBlank:false    	
+				    }]
+				    }],
+				    
+				    dockedItems: [{
+				        dock: 'bottom',
+				        xtype: 'toolbar',
+				        items: [{xtype: 'button', 
+				        	     itemId: 'addButton', 
+				        	     text:'Save', 
+				        	     action: 'add' },
+				        	     {
+				            	   xtype: 'button',
+				            	   itemId: 'closeButton',
+				            	   text: 'Finished',
+				            	   action: 'close'}]
+				    }]
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+
+Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.editgoalform',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.actionplan.EditGoalFormViewController',
+    inject: {
+        store: 'confidentialityLevelsStore'
+    },
+	initComponent: function() {
+        Ext.applyIf(this, {
+        	title: 'Add Goal',
+            fieldDefaults: {
+                msgTarget: 'side',
+                labelAlign: 'right',
+                labelWidth: 150
+            },            
+        	items: [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Name',
+                    anchor: '100%',
+                    name: 'name'
+                },
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Description',
+                    anchor: '100%',
+                    name: 'description'
+                },{
+			        xtype: 'combobox',
+			        itemId: 'confidentialityLevel',
+			        name: 'confidentialityLevelId',
+			        fieldLabel: 'Confidentiality Level',
+			        emptyText: 'Select One',
+			        store: this.store,
+			        valueField: 'id',
+			        displayField: 'acronym',
+			        mode: 'local',
+			        typeAhead: true,
+			        queryMode: 'local',
+			        allowBlank: false,
+			        forceSelection: true
+				}],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Save',
+		       		                   xtype: 'button',
+		       		                   action: 'save',
+		       		                   itemId: 'saveButton'
+		       		               }, '-', {
+		       		                   text: 'Cancel',
+		       		                   xtype: 'button',
+		       		                   action: 'cancel',
+		       		                   itemId: 'cancelButton'
+		       		               }]
+       		           }]
+        });
+
+        return this.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
+	extend: 'Ext.panel.Panel',
+	alias : 'widget.displayactionplan',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.actionplan.DisplayActionPlanViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
+    width: '100%',
+	height: '100%',
+	padding: 0,
+	initComponent: function() {	
+		var me=this;
+		Ext.apply(me, 
+				{
+		    	    layout: {
+		    	        type: 'accordion',
+		    	        titleCollapse: true,
+		    	        animate: true,
+		    	        activeOnTop: true
+		    	    },
+		            title: 'Action Plan',
+		            autoScroll: true,
+		            padding: 0,
+					items: [
+						Ext.createWidget('tabpanel', {
+						    width: '100%',
+						    height: '100%',
+						    activeTab: 0,
+						    hidden: !me.authenticatedPerson.hasAccess('ACTION_PLAN_TASKS_PANEL'),
+						    title: 'Tasks',
+						    itemId: 'taskStatusTabs',
+						    items: [{ 
+						    	      title: 'Active',
+						    		  autoScroll: true,
+						    		  action: 'active',
+						    		  items: [{xtype: 'tasks', itemId:'activeTasksGrid'}]
+						    		},{ 
+						    		  title: 'Complete',
+						    		  autoScroll: true,
+						    		  action: 'complete',
+						    		  items: [{xtype: 'tasks', itemId:'completeTasksGrid'}]
+						    		},{ 
+						    		  title: 'All',
+						    		  autoScroll: true,
+						    		  action: 'all',
+						    		  items: [{xtype: 'tasks', itemId:'allTasksGrid'}]
+						    		}],
+						    	    
+						    	    dockedItems: [{
+								        dock: 'top',
+								        xtype: 'toolbar',
+								        items: [{
+								            tooltip: 'Add a Task',
+								            text: 'Add',
+								            hidden: !me.authenticatedPerson.hasAccess('ADD_TASK_BUTTON'),
+								            xtype: 'button',
+								            itemId: 'addTaskButton'
+								        }]
+						    	    }]
+						})
+						,{
+						  xtype: 'displayactionplangoals',
+						  itemId: 'goalsPanel',
+						  flex: 1,
+						  hidden: !me.authenticatedPerson.hasAccess('ACTION_PLAN_GOALS_PANEL')
+						 }
+						,{
+						   xtype: 'displaystrengths', 
+						   itemId: 'strengthsPanel',
+						   hidden: !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_PANEL')
+						 }
+				    ],
+				    
+				    dockedItems: [{
+				        dock: 'top',
+				        xtype: 'toolbar',
+				        items: [{
+					            tooltip: 'Email Action Plan',
+					            text: '',
+					            width: 30,
+					            height: 30,
+					            hidden: !me.authenticatedPerson.hasAccess('EMAIL_ACTION_PLAN_BUTTON'),
+					            cls: 'emailIcon',
+					            xtype: 'button',
+					            itemId: 'emailTasksButton'
+					        },{
+					            tooltip: 'Print Action Plan',
+					            text: '',
+					            width: 30,
+					            height: 30,
+					            hidden: !me.authenticatedPerson.hasAccess('PRINT_ACTION_PLAN_BUTTON'),
+					            cls: 'printIcon',
+					            xtype: 'button',
+					            itemId: 'printTasksButton'
+					        },{ 
+					        	xtype: 'tbspacer',
+					        	flex: 1
+					        },{
+					            xtype: 'checkbox',
+					            boxLabel: 'Display only tasks that I created',
+					            hidden: !me.authenticatedPerson.hasAccess('FILTER_TASKS_BY_AUTHENTICATED_USER_CHECKBOX'),
+					            itemId: 'filterTasksBySelfCheck'
+					        }]
+				    }]
+				});
+	
+		return me.callParent(arguments);
+	}
+		
+});
+Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.displayactionplangoals',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController',
+    inject: {
+    	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
+    	columnRendererUtils: 'columnRendererUtils',
+    	model: 'currentGoal',
+        store: 'goalsStore'
+    },
+    width: '100%',
+	height: '100%',   
+    layout: 'anchor',
+    itemId: 'goalsPanel',
+    defaults: {
+        anchor: '100%'
+    },	
+	initComponent: function() {	
+		var me=this;
+    	var sm = Ext.create('Ext.selection.CheckboxModel');
+		
+		Ext.apply(me, {
+
+				title: 'Goals',
+				store: me.store,
+				selModel: sm,
+			    columns: [{
+	    	        xtype:'actioncolumn',
+	    	        width:65,
+	    	        header: 'Action',
+	    	        items: [{
+	    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
+	    	            tooltip: 'Edit Goal',
+	    	            handler: function(grid, rowIndex, colIndex) {
+	    	            	var rec = grid.getStore().getAt(rowIndex);
+	    	                var panel = grid.up('panel');
+	    	                panel.model.data=rec.data;
+	    	            	panel.appEventsController.getApplication().fireEvent('editGoal');
+	    	            },
+	    	            getClass: function(value, metadata, record)
+                        {
+	    	            	// hide if user does not have permission to edit
+	    	            	var cls = 'x-hide-display';
+	    	            	if ( me.authenticatedPerson.hasAccess('EDIT_GOAL_BUTTON') )
+	    	            	{
+	    	            		cls = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
+	    	            	}
+	    	            	
+	    	            	return cls;                            
+	    	            },
+	    	            scope: me
+	    	        },{
+	    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
+	    	            tooltip: 'Delete Goal',
+	    	            handler: function(grid, rowIndex, colIndex) {
+	    	            	var rec = grid.getStore().getAt(rowIndex);
+	    	            	var panel = grid.up('panel');
+	    	                panel.model.data=rec.data;
+	    	            	panel.appEventsController.getApplication().fireEvent('deleteGoal');
+	    	            },
+	    	            getClass: function(value, metadata, record)
+                        {
+	    	            	// hide if user does not have permission to delete
+	    	            	var cls = 'x-hide-display';
+	    	            	if ( me.authenticatedPerson.hasAccess('DELETE_GOAL_BUTTON') )
+	    	            	{
+	    	            		cls = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
+	    	            	}
+	    	            	
+	    	            	return cls;                            
+	    	            },
+	    	            scope: me
+	    	        }]
+	    	    },{
+	    	        header: 'Name',
+	    	        flex: 1,
+	    	        dataIndex: 'name',
+	    	        renderer: me.columnRendererUtils.renderGoalName
+	    	    },{
+	    	        header: 'Confidentiality',
+	    	        dataIndex: 'confidentialityLevel',
+	    	        renderer: me.columnRendererUtils.renderConfidentialityLevelName
+	    	    }],
+	    	    
+	    	    dockedItems: [{
+			        dock: 'top',
+			        xtype: 'toolbar',
+			        items: [{
+			            tooltip: 'Add a Goal',
+			            text: 'Add',
+			            hidden: !me.authenticatedPerson.hasAccess('ADD_GOAL_BUTTON'),
+			            xtype: 'button',
+			            itemId: 'addGoalButton'
+			        }]
+	    	    }]
+		});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
+	extend: 'Ext.form.Panel',
+	alias : 'widget.displaystrengths',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.actionplan.DisplayStrengthsViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
+    width: '100%',
+	height: '100%',
+	initComponent: function() {	
+		var me=this;
+		Ext.applyIf(me,{
+	        title: 'Strengths',
+			items:[{
+		        xtype:'form',
+		        layout:'anchor',
+		        items :[{
+		            xtype: 'textarea',
+		            anchor: '100%',
+		            height: 50,
+		            fieldLabel: 'Strengths',
+		            itemId: 'strengths',
+		            name: 'strengths'
+		        }]
+			}],
+			
+    	    dockedItems: [{
+		        dock: 'top',
+		        xtype: 'toolbar',
+		        items: [{
+		            tooltip: 'Save Strengths',
+		            text: 'Save',
+		            hidden: !me.authenticatedPerson.hasAccess('SAVE_STRENGTHS_BUTTON'),
+		            xtype: 'button',
+		            itemId: 'saveButton'
+		        },{
+        	    	xtype: 'label',
+        	    	html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,
+        	    	itemId: 'saveSuccessMessage',
+        	    	style: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE_STYLE,
+        	    	hidden: true
+        	    }]
+    	    }]
+		
+		});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.tools.actionplan.TaskTree', {
+	extend: 'Ext.tree.Panel',
+	alias : 'widget.tasktree',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.actionplan.TaskTreeViewController',
+    inject: {
+        store: 'treeStore'
+    },
+	height: 250,
+	width: '100%',
+    initComponent: function(){
+    	Ext.apply(this,
+    			{
+    			 store: this.store,
+    			 useArrows: true,
+    			 rootVisible: false,
+    			 dockedItems: [
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [/*{
+     	                      xtype: 'textfield',
+     	                      fieldLabel: 'Search'
+     	                     },
+     	                      {
+     	                    	  xtype: 'button',
+     	                    	  text: 'GO',
+     	                    	  action: 'search',
+     	                    	  itemId: 'searchButton'
+     	                      }*/
+	                       {
+	                         xtype: "label",
+	                         text: "Select a task to add to the Student's Action Plan:"
+	                       }]
+     		           }]
+     		       	
+    	});
+    	
+    	return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
+	extend: 'Ext.panel.Panel',
+	alias : 'widget.studentintake',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.studentintake.StudentIntakeToolViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson',
+        store: 'studentsStore'
+    },
+	title: 'Student Intake',	
+	width: '100%',
+	height: '100%',   
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
+				{
+		    		store: me.store,
+		    		layout: 'fit',
+		    		padding: 0,
+		    		border: 0,
+		    		items: [],
+						
+			    		dockedItems: [{
+					        dock: 'top',
+					        xtype: 'toolbar',
+					        items: [{
+					        	     xtype: 'button', 
+					        	     itemId: 'saveButton', 
+					        	     text:'Save', 
+					        	     action: 'save',
+					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_SAVE_BUTTON'),
+					        	    },
+					                {
+					        	     xtype: 'button', 
+					        	     itemId: 'cancelButton', 
+					        	     text:'Cancel', 
+					        	     action: 'reset',
+					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CANCEL_BUTTON'),
+					        	    },
+					        	    {
+					        	    	xtype: 'label',
+					        	    	html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,
+					        	    	itemId: 'saveSuccessMessage',
+					        	    	style: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE_STYLE,
+					        	    	hidden: true
+					        	    }]
+					    }]
+
+			});
+						
+		return me.callParent(arguments);
+	}
+
+});
+Ext.define('Ssp.view.tools.studentintake.Demographics', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.studentintakedemographics',
+	id : 'StudentIntakeDemographics',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.studentintake.DemographicsViewController',
+    inject: {
+    	childCareArrangementsStore: 'childCareArrangementsStore',
+    	citizenshipsStore: 'citizenshipsStore',
+    	educationGoalsStore: 'educationGoalsStore',
+    	educationLevelsStore: 'educationLevelsStore',
+    	employmentShiftsStore: 'employmentShiftsStore',
+    	ethnicitiesStore: 'ethnicitiesStore',
+    	gendersStore: 'gendersStore',
+    	maritalStatusesStore: 'maritalStatusesStore',
+    	veteranStatusesStore: 'veteranStatusesStore'
+    },    
+	width: '100%',
+    height: '100%',
+	initComponent: function() {	
+		var me=this;
+		Ext.apply(me, 
+				{
+					autoScroll: true,
+				    layout: {
+				    	type: 'vbox',
+				    	align: 'stretch'
+				    },
+				    border: 0,
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    fieldDefaults: {
+				        msgTarget: 'side',
+				        labelAlign: 'right',
+				        labelWidth: 280
+				    },
+				    defaultType: 'displayfield',
+				    items: [{
+				            xtype: 'fieldset',
+							border: 0,
+							padding: 10,
+				            title: '',
+				            defaultType: 'textfield',
+				            defaults: {
+				                anchor: '95%'
+				            },
+				       items: [{
+				        xtype: 'combobox',
+				        name: 'maritalStatusId',
+				        fieldLabel: 'Marital Status',
+				        emptyText: 'Select One',
+				        store: me.maritalStatusesStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        xtype: 'combobox',
+				        name: 'ethnicityId',
+				        fieldLabel: 'Ethnicity',
+				        emptyText: 'Select One',
+				        store: me.ethnicitiesStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        xtype: 'combobox',
+				        name: 'gender',
+				        fieldLabel: 'Gender',
+				        emptyText: 'Select One',
+				        store: me.gendersStore,
+				        valueField: 'code',
+				        displayField: 'title',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        xtype: 'combobox',
+				        itemId: 'citizenship',
+				        name: 'citizenshipId',
+				        fieldLabel: 'Citizenship',
+				        emptyText: 'Select One',
+				        store: me.citizenshipsStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        fieldLabel: 'Country of citizenship',
+				        itemId: 'countryOfCitizenship',
+				        name: 'countryOfCitizenship'
+				    },{
+				        xtype: 'combobox',
+				        name: 'veteranStatusId',
+				        fieldLabel: 'Veteran Status',
+				        emptyText: 'Select One',
+				        store: me.veteranStatusesStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        xtype: "radiogroup",
+				        fieldLabel: "Are you a Primary Caregiver?",
+				        columns: 1,
+				        items: [
+				            {boxLabel: "Yes", name: "primaryCaregiver", inputValue:"true"},
+				            {boxLabel: "No", name: "primaryCaregiver", inputValue:"false"}]
+				    },{
+				        xtype: 'displayfield',
+				        fieldLabel: 'If you have children, please indicate below'
+				    },{
+				        xtype: 'numberfield',
+				        name: 'numberOfChildren',
+				        fieldLabel: 'How many?',
+				        value: 0,
+				        minValue: 0,
+				        maxValue: 50
+				    },{
+				        fieldLabel: 'Ages? Separate each age with a comma. (1,5,12)',
+				        name: 'childAges'
+				    },{
+				        xtype: "radiogroup",
+				        fieldLabel: "Childcare Needed?",
+				        itemId: 'childcareNeeded',
+				        columns: 1,
+				        items: [
+				            {boxLabel: "Yes", name: "childCareNeeded", inputValue:"true"},
+				            {boxLabel: "No", name: "childCareNeeded", inputValue:"false"}]
+				    },{
+				        xtype: 'combobox',
+				        itemId: 'childcareArrangement',
+				        name: 'childCareArrangementId',
+				        fieldLabel: 'If yes, what are your childcare arrangements?',
+				        emptyText: 'Select One',
+				        store: me.childCareArrangementsStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        xtype: "radiogroup",
+				        itemId: 'isEmployed',
+				        fieldLabel: "Are you employed?",
+				        columns: 1,
+				        items: [
+				            {boxLabel: "Yes", name: "employed", inputValue:"true"},
+				            {boxLabel: "No", name: "employed", inputValue:"false"}]
+				    },{
+				        fieldLabel: 'Place of employment',
+				        itemId: 'placeOfEmployment',
+				        name: 'placeOfEmployment'
+				    },{
+				        xtype: 'combobox',
+				        name: 'shift',
+				        itemId: 'shift',
+				        fieldLabel: 'Shift',
+				        emptyText: 'Select One',
+				        store: me.employmentShiftsStore,
+				        valueField: 'code',
+				        displayField: 'title',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        fieldLabel: 'Wage',
+				        itemId: 'wage',
+				        name: 'wage'
+				    },{
+				        fieldLabel: 'Total hours worked weekly while attending school',
+				        itemId: 'totalHoursWorkedPerWeek',
+				        name: 'totalHoursWorkedPerWeek'
+				    }]
+				    }]
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.studentintakeeducationplans',
+	id : 'StudentIntakeEducationPlans',   
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.studentintake.EducationPlansViewController',
+    inject: {
+        studentStatusesStore: 'studentStatusesStore'
+    },
+	width: '100%',
+    height: '100%',
+	
+    initComponent: function() {	
+		Ext.apply(this, 
+				{
+					autoScroll: true,
+				    layout: {
+				    	type: 'vbox',
+				    	align: 'stretch'
+				    },
+				    border: 0,
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    fieldDefaults: {
+				        msgTarget: 'side',
+				        labelAlign: 'left',
+				        labelWidth: 225
+				    },
+				    defaultType: 'displayfield',
+				    items: [{
+				            xtype: 'fieldset',
+							border: 0,
+							padding: 10,
+				            title: '',
+				            defaultType: 'textfield',
+				            defaults: {
+				                anchor: '95%'
+				            },
+				       items: [{
+				        xtype: 'combobox',
+				        name: 'studentStatusId',
+				        fieldLabel: 'Student Status',
+				        emptyText: 'Select One',
+				        store: this.studentStatusesStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        xtype: 'checkboxgroup',
+				        fieldLabel: 'Check all that you have completed',
+				        columns: 1,
+				        items: [
+				            {boxLabel: 'New Student Orientation', name: 'newOrientationComplete'},
+				            {boxLabel: 'Registered for Classes', name: 'registeredForClasses'}
+				        ]
+				    },{
+				        xtype: "radiogroup",
+				        fieldLabel: "Have your parents obtained a college degree?",
+				        columns: 1,
+				        itemId: 'parentsDegree',
+				        items: [
+				            {boxLabel: "Yes", name: "collegeDegreeForParents", inputValue:"true"},
+				            {boxLabel: "No", name: "collegeDegreeForParents", inputValue:"false"}]
+				    },{
+				        xtype: "radiogroup",
+				        fieldLabel: "Require special accommodations?",
+				        columns: 1,
+				        itemId: 'specialNeeds',
+				        items: [
+				            {boxLabel: "Yes", name: "specialNeeds", inputValue:"true"},
+				            {boxLabel: "No", name: "specialNeeds", inputValue:"false"}]
+				    },{
+				        xtype: 'radiogroup',
+				        fieldLabel: 'What grade did you typically earn at your highest level of education?',
+				        columns: 1,
+				        items: [
+				            {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "A"},
+				            {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "A-B"},
+				            {boxLabel: 'B', name: 'gradeTypicallyEarned', inputValue: "B"},
+				            {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "B-C"},
+				            {boxLabel: 'C', name: 'gradeTypicallyEarned', inputValue: "C"},
+				            {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "C-D"},
+				            {boxLabel: 'D', name: 'gradeTypicallyEarned', inputValue: "D"},
+				            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "D-F"},
+				            {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
+				    		]
+				        }]
+				    }]
+				});
+		
+		return this.callParent(arguments);
+	}	
+});
+Ext.define('Ssp.view.tools.studentintake.Personal', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.studentintakepersonal',
+	id: 'StudentIntakePersonal',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.studentintake.PersonalViewController',
+    inject: {
+        statesStore: 'statesStore'
+    },
+	width: '100%',
+    height: '100%',    
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
+				{
+					autoScroll: true,
+    		        border: 0,	
+				    bodyPadding: 5,				    
+					layout: 'anchor',
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    fieldDefaults: {
+				        msgTarget: 'side',
+				        labelAlign: 'right',
+				        labelWidth: 150
+				    },
+				    items: [{
+				            xtype: 'fieldset',
+				            border: 0,
+				            title: '',
+				            defaultType: 'textfield',
+				            defaults: {
+				                anchor: '95%'
+				            },
+				       items: [/*{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Intake Date',
+				        name: 'studentIntakeCreatedDate'
+				    },*/{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Intake Completion Date',
+				        name: 'studentIntakeCompleteDate',
+				        renderer: Ext.util.Format.dateRenderer('m/d/Y')
+				    }/*,{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Agreed to Confidentiality',
+				        name: 'confidentialityAgreement'
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Date of Agreement',
+				        name: 'confidentialityAgreementDate'
+				    }*/,{
+				        fieldLabel: 'First Name',
+				        name: 'firstName',
+				        itemId: 'firstName',
+				        maxLength: 50,
+				        allowBlank:false
+				    },{
+				        fieldLabel: 'Middle Name',
+				        name: 'middleName',
+				        itemId: 'middleName',
+				        maxLength: 50,
+				        allowBlank:true
+				    },{
+				        fieldLabel: 'Last Name',
+				        name: 'lastName',
+				        itemId: 'lastName',
+				        maxLength: 50,
+				        allowBlank:false
+				    },{
+				        fieldLabel: 'Student ID',
+				        name: 'schoolId',
+				        minLength: 0,
+				        maxLength: 7,
+				        itemId: 'studentId',
+				        allowBlank:false
+				    },{
+				    	xtype: 'datefield',
+				    	fieldLabel: 'Birth Date',
+				    	itemId: 'birthDate',
+				    	altFormats: 'm/d/Y|m-d-Y',
+				    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
+				        name: 'birthDate',
+				        allowBlank:false
+				    },{
+				        fieldLabel: 'Home Phone',
+				        name: 'homePhone',
+				        emptyText: 'xxx-xxx-xxxx',
+				        maskRe: /[\d\-]/,
+				        regex: /^\d{3}-\d{3}-\d{4}$/,
+				        regexText: 'Must be in the format xxx-xxx-xxxx',
+				        maxLength: 12,
+				        allowBlank:true,
+				        itemId: 'homePhone' 
+				    },{
+				        fieldLabel: 'Work Phone',
+				        name: 'workPhone',
+				        emptyText: 'xxx-xxx-xxxx',
+				        maskRe: /[\d\-]/,
+				        regex: /^\d{3}-\d{3}-\d{4}$/,
+				        regexText: 'Must be in the format xxx-xxx-xxxx',
+				        maxLength: 12,
+				        allowBlank:true,
+				        itemId: 'workPhone'
+				    },{
+				        fieldLabel: 'Cell Phone',
+				        name: 'cellPhone',
+				        emptyText: 'xxx-xxx-xxxx',
+				        maskRe: /[\d\-]/,
+				        regex: /^\d{3}-\d{3}-\d{4}$/,
+				        regexText: 'Must be in the format xxx-xxx-xxxx',
+				        maxLength: 12,
+				        allowBlank:true,
+				        itemId: 'cellPhone'
+				    },{
+				        fieldLabel: 'Address',
+				        name: 'addressLine1',
+				        maxLength: 50,
+				        allowBlank:true,
+				        itemId: 'address'
+				    },{
+				        fieldLabel: 'City',
+				        name: 'city',
+				        maxLength: 50,
+				        allowBlank:true,
+				        itemId: 'city'
+				    },{
+				        xtype: 'combobox',
+				        name: 'state',
+				        fieldLabel: 'State',
+				        emptyText: 'Select a State',
+				        store: me.statesStore,
+				        valueField: 'code',
+				        displayField: 'title',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true,
+				        forceSelection: true,
+				        itemId: 'state'
+					},{
+				        fieldLabel: 'Zip Code',
+				        name: 'zipCode',
+				        maxLength: 10,
+				        allowBlank:true,
+				        itemId: 'zipCode'
+				    },{
+				        fieldLabel: 'Primary Email (School)',
+				        name: 'primaryEmailAddress',
+				        vtype:'email',
+				        maxLength: 100,
+				        allowBlank:true,
+				        itemId: 'primaryEmailAddress'
+				    },{
+				        fieldLabel: 'Alternate Email',
+				        name: 'secondaryEmailAddress',
+				        vtype:'email',
+				        maxLength: 100,
+				        allowBlank:true,
+				        itemId: 'secondaryEmailAddress'
+				    }]
+				    }]
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+
+Ext.define('Ssp.view.tools.journal.Journal', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.journal',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.journal.JournalToolViewController',
+    inject: {
+    	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
+    	columnRendererUtils: 'columnRendererUtils',
+    	model: 'currentJournalEntry',
+        store: 'journalEntriesStore'
+    },
+	width: '100%',
+	height: '100%',
+	initComponent: function() {	
+		var me=this;
+    	var sm = Ext.create('Ext.selection.CheckboxModel');
+		Ext.apply(me, 
+				{
+		            autoScroll: true,
+		            title: 'Journal',
+		            store: me.store,
+	    		      columns: [{
+					    	        xtype:'actioncolumn',
+					    	        width:65,
+					    	        header: 'Action',
+					    	        items: [{
+					    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
+					    	            tooltip: 'Edit Task',
+					    	            handler: function(grid, rowIndex, colIndex) {
+					    	            	var rec = grid.getStore().getAt(rowIndex);
+					    	            	var panel = grid.up('panel');
+					    	                panel.model.data=rec.data;
+					    	                panel.appEventsController.getApplication().fireEvent('editJournalEntry');
+					    	            },
+					    	            getClass: function(value, metadata, record)
+			                            {
+					    	            	// hide user does not have permission to edit
+					    	            	var cls = 'x-hide-display';
+					    	            	if ( me.authenticatedPerson.hasAccess('EDIT_JOURNAL_ENTRY_BUTTON') )
+					    	            	{
+					    	            		cls = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
+					    	            	}
+					    	            	
+					    	            	return cls;                            
+					    	            },
+					    	            scope: me
+					    	        },{
+					    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
+					    	            tooltip: 'Delete Task',
+					    	            handler: function(grid, rowIndex, colIndex) {
+					    	            	var rec = grid.getStore().getAt(rowIndex);
+					    	            	var panel = grid.up('panel');
+					    	                panel.model.data=rec.data;
+					    	            	panel.appEventsController.getApplication().fireEvent('deleteJournalEntry');
+					    	            },
+					    	            getClass: function(value, metadata, record)
+			                            {
+					    	            	// hide user does not have permission to delete
+					    	            	var cls = 'x-hide-display';
+					    	            	if ( me.authenticatedPerson.hasAccess('DELETE_JOURNAL_ENTRY_BUTTON') )
+					    	            	{
+					    	            		cls = Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH;
+					    	            	}
+					    	            	
+					    	            	return cls;                            
+					    	            },
+					    	            scope: me
+					    	        }]
+				                },
+	    		                { header: 'Date',  
+		    		                  dataIndex: 'entryDate',
+		    		                  flex: 1,
+		    		                  renderer: Ext.util.Format.dateRenderer('m/d/Y')
+	    		                },
+	    		                { header: 'Entered By',  
+	    		                  dataIndex: 'createdBy',
+	    		                  flex: 1,
+	    		                  renderer: me.columnRendererUtils.renderCreatedBy
+	    		                },
+	      		                { header: 'Source',
+	      		                  dataIndex: 'journalSource', 
+	      		                  flex: 1,
+	      		                  renderer: me.columnRendererUtils.renderJournalSourceName
+	    		                },
+	      		                { header: 'Confidentiality',
+	      		                  dataIndex: 'confidentialityLevel', 
+	      		                  flex: 1,
+	      		                  renderer: me.columnRendererUtils.renderConfidentialityLevelName
+	    		                }],
+				    
+				    dockedItems: [{
+				        dock: 'top',
+				        xtype: 'toolbar',
+				        items: [{
+				            tooltip: 'Add Journal Note',
+				            text: 'Add',
+				            xtype: 'button',
+				            hidden: !me.authenticatedPerson.hasAccess('ADD_JOURNAL_ENTRY_BUTTON'),
+				            itemId: 'addButton'
+				        }]
+				    }]
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.tools.journal.EditJournal',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editjournal',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.journal.EditJournalViewController',
+    inject: {
+        confidentialityLevelsStore: 'confidentialityLevelsStore',
+        journalSourcesStore: 'journalSourcesStore',
+        journalTracksStore: 'journalTracksStore',
+        model: 'currentJournalEntry'
+    },	
+    initComponent: function() {
+    	Ext.applyIf(this, {
+        	title: ((this.model.get('id') == "") ? "Add Journal" : "Edit Journal"),
+        	autoScroll: true,
+        	defaults: {
+            	labelWidth: 150,
+            	padding: 5
+            },
+        	items: [{
+			    	xtype: 'datefield',
+			    	fieldLabel: 'Entry Date',
+			    	itemId: 'entryDateField',
+			    	altFormats: 'm/d/Y|m-d-Y',
+			        name: 'entryDate',
+			        allowBlank:false
+			     },{
+			        xtype: 'combobox',
+			        itemId: 'confidentialityLevelCombo',
+			        name: 'confidentialityLevelId',
+			        fieldLabel: 'Confidentiality Level',
+			        emptyText: 'Select One',
+			        store: this.confidentialityLevelsStore,
+			        valueField: 'id',
+			        displayField: 'name',
+			        mode: 'local',
+			        typeAhead: true,
+			        queryMode: 'local',
+			        allowBlank: false,
+			        forceSelection: true,
+			        anchor: '95%'
+				},{
+			        xtype: 'combobox',
+			        itemId: 'journalSourceCombo',
+			        name: 'journalSourceId',
+			        fieldLabel: 'Source',
+			        emptyText: 'Select One',
+			        store: this.journalSourcesStore,
+			        valueField: 'id',
+			        displayField: 'name',
+			        mode: 'local',
+			        typeAhead: true,
+			        queryMode: 'local',
+			        allowBlank: false,
+			        forceSelection: true,
+			        anchor: '95%'
+				},{
+			        xtype: 'combobox',
+			        itemId: 'journalTrackCombo',
+			        name: 'journalTrackId',
+			        fieldLabel: 'Journal Track',
+			        emptyText: 'Select One',
+			        store: this.journalTracksStore,
+			        valueField: 'id',
+			        displayField: 'name',
+			        mode: 'local',
+			        typeAhead: true,
+			        queryMode: 'local',
+			        allowBlank: true,
+			        forceSelection: false,
+			        anchor: '95%'
+				},{
+		        	xtype: 'label',
+		        	text: 'Session Details (Critical Components)'
+				},{
+					xtype: 'tbspacer',
+					flex: 1
+				},{
+		            tooltip: 'Add Journal Session Details',
+		            text: 'Add/Edit Session Details',
+		            xtype: 'button',
+		            itemId: 'addSessionDetailsButton'
+	    	    },
+                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'95% 50%' }
+				,{
+                    xtype: 'textareafield',
+                    fieldLabel: 'Comment',
+                    itemId: 'commentText',
+                    anchor: '95%',
+                    name: 'comment'
+                }],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Save',
+		       		                   xtype: 'button',
+		       		                   action: 'save',
+		       		                   itemId: 'saveButton'
+		       		               }, '-', {
+		       		                   text: 'Cancel',
+		       		                   xtype: 'button',
+		       		                   action: 'cancel',
+		       		                   itemId: 'cancelButton'
+		       		               }]
+       		           }]
+        });
+
+        return this.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.tools.journal.DisplayDetails', {
+	extend: 'Ext.grid.Panel',
+	alias: 'widget.displayjournaldetails',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.journal.DisplayDetailsViewController',
+    inject: {
+        store: 'journalEntryDetailsStore'
+    },
+    layout:'fit',
+	width: '100%',
+	height: '100%',
+    initComponent: function(){
+    	Ext.apply(this,
+    			{
+    	    		store: this.store,
+    	    		hideHeaders: true,
+    	    		
+    	    		features: [{
+		    	        id: 'group',
+		    	        ftype: 'grouping',
+		    	        groupHeaderTpl: '{name}',
+		    	        hideGroupedHeader: false,
+		    	        enableGroupingMenu: false
+		    	    }],
+		    	    
+		    	    columns: [{
+		    	        text: '',
+		    	        flex: 1,
+		    	        sortable: false,
+		    	        dataIndex: 'name'
+		    	    }]
+    			});
+    	
+    	return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.tools.journal.TrackTree', {
+	extend: 'Ext.tree.Panel',
+	alias : 'widget.journaltracktree',
+	mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.journal.TrackTreeViewController',
+    inject: {
+        store: 'treeStore'
+    },
+	height: 200,
+	width: '100%',
+	
+    initComponent: function(){
+    	Ext.apply(this,
+    			{
+   		     singleExpand: false,
+			 store: this.store,
+			 useArrows: true,
+			 rootVisible: false ,
+			 hideCollapseTool: true,
+
+			 dockedItems: [{
+		               xtype: 'toolbar',
+		               items: [{
+     		                   text: 'Save Details',
+     		                   xtype: 'button',
+     		                   action: 'save',
+     		                   itemId: 'saveButton'
+     		               }, '-', {
+     		                   text: 'Cancel',
+     		                   xtype: 'button',
+     		                   action: 'cancel',
+     		                   itemId: 'cancelButton'
+     		               }]
+		           },{
+ 		               xtype: 'toolbar',
+  		               dock: 'top',
+  		               items: [{
+  		                         xtype: 'label',
+  		                         text: 'Select the details for this Journal Session'
+  		                       }]  
+  		            }]			 
+			 
+    });   	
+    	
+    	return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
+	extend: 'Ext.tree.Panel',
+	alias : 'widget.earlyalert',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.earlyalert.EarlyAlertToolViewController',
+    inject: {
+    	appEventsController: 'appEventsController',
+    	authenticatedPerson: 'authenticatedPerson',
+    	columnRendererUtils: 'columnRendererUtils',
+    	model: 'currentEarlyAlert',
+        treeStore: 'earlyAlertsTreeStore'
+    },
+	width: '100%',
+	height: '100%',	
+	initComponent: function() {	
+    	var me=this;
+		Ext.apply(me, 
+				{
+		            autoScroll: true,
+		            title: 'Early Alerts',
+		            cls: 'early-alert-tree-panel',
+		            collapsible: false,
+		            useArrows: true,
+		            rootVisible: false,
+		            store: me.treeStore,
+		            multiSelect: false,
+		            singleExpand: true,
+    		        columns: [{
+    		            xtype: 'treecolumn',
+    		            text: 'Responses',
+    		            flex: .5,
+    		            sortable: false,
+    		            dataIndex: 'text'
+    		        },{
+    		            text: 'Created By',
+    		            flex: 1,
+    		            dataIndex: 'createdBy',
+    		            renderer : me.columnRendererUtils.renderCreatedBy,
+    		            sortable: false
+    		        },{
+    		            text: 'Created Date',
+    		            flex: 1,
+    		            dataIndex: 'createdDate',
+    		            renderer : me.columnRendererUtils.renderCreatedByDateWithTime,
+    		            sortable: false
+    		        },{
+    		            text: 'Status',
+    		            flex: .5,
+    		            sortable: false,
+    		            dataIndex: 'closedDate',
+    		            renderer: me.columnRendererUtils.renderEarlyAlertStatus
+    		        },{
+    		            text: 'Details',
+    		            flex: 2,
+    		            sortable: false,
+    		            dataIndex: 'gridDisplayDetails'
+    		        }],
+    		        
+    		        dockedItems: [{
+				        dock: 'top',
+				        xtype: 'toolbar',
+				        items: [{
+				            tooltip: 'Respond to the selected Early Alert',
+				            text: '',
+				            xtype: 'button',
+				            hidden: !me.authenticatedPerson.hasAccess('RESPOND_EARLY_ALERT_BUTTON'),
+			            	width: 28,
+					        height: 28,
+				            cls: 'earlyAlertResponseIcon',
+				            itemId: 'respondButton'
+				        },{
+				            tooltip: 'Display detail for the selected item',
+				            text: 'Details',
+				            xtype: 'button',
+				            hidden: !me.authenticatedPerson.hasAccess('EARLY_ALERT_DETAILS_BUTTON'),
+				            itemId: 'displayDetailsButton'
+				        }]
+				    }]
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.earlyalertresponse',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController',
+    inject: {
+    	earlyAlert: 'currentEarlyAlert',
+        outcomesStore: 'earlyAlertOutcomesStore',
+        outreachesStore: 'earlyAlertOutreachesStore',
+        referralsStore: 'earlyAlertReferralsStore'
+    },
+    initComponent: function() {
+    	var me=this;
+		Ext.applyIf(me, {
+			autoScroll: true,
+        	title: 'Early Alert Response',
+        	defaults:{
+        		labelWidth: 200
+        	},
+            items: [{
+                	xtype: 'displayfield',
+                	fieldLabel: 'Early Alert Response',
+                	value: me.earlyAlert.get('courseTitle'),
+                	anchor: '95%'
+                },{
+			        xtype: 'combobox',
+			        itemId: 'outcomeCombo',
+			        name: 'earlyAlertOutcomeId',
+			        fieldLabel: 'Outcome',
+			        emptyText: 'Select One',
+			        store: me.outcomesStore,
+			        valueField: 'id',
+			        displayField: 'name',
+			        mode: 'local',
+			        typeAhead: true,
+			        queryMode: 'local',
+			        allowBlank: false,
+			        forceSelection: true,
+			        anchor: '95%'
+				},{
+					xtype: 'textfield',
+					itemId: 'otherOutcomeDescriptionText',
+					name: 'earlyAlertOutcomeOtherDescription',
+					fieldLabel: 'Other Outcome Description',
+					anchor: '95%'
+				},{
+		            xtype: 'multiselect',
+		            name: 'earlyAlertOutreachIds',
+		            fieldLabel: 'Outreach',
+		            store: me.outreachesStore,
+		            displayField: 'name',
+		            valueField: 'id',
+		            allowBlank: false,
+		            minSelections: 0,
+		            anchor: '95%'
+		        },{
+                    xtype: 'textareafield',
+                    fieldLabel: 'Comment',
+                    anchor: '95%',
+                    name: 'comment'
+                },{
+				   xtype:'earlyalertreferrals',
+				   flex: 1
+				}],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Save',
+		       		                   xtype: 'button',
+		       		                   action: 'save',
+		       		                   itemId: 'saveButton'
+		       		               }, '-', {
+		       		                   text: 'Cancel',
+		       		                   xtype: 'button',
+		       		                   action: 'cancel',
+		       		                   itemId: 'cancelButton'
+		       		               }]
+       		           }]
+        });
+
+        return me.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.tools.earlyalert.EarlyAlertReferrals', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.earlyalertreferrals',
+	mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.earlyalert.EarlyAlertReferralsViewController',
+	width: '100%',
+    height: '100%',
+    autoScroll: true,
+	initComponent: function() {	
+		var me=this;
+		Ext.apply(this, 
+				{
+				    bodyPadding: 5,
+				    layout: 'anchor'
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.earlyalertdetails',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController',
+    inject: {
+    	model: 'currentEarlyAlert',
+    	selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore'
+    },
+    title: 'Early Alert Details',
+	initComponent: function() {
+		var me=this;
+        Ext.applyIf(me, {
+        	autoScroll: true,
+            items: [{
+	                xtype: 'displayfield',
+	                fieldLabel: 'Created By',
+	                anchor: '100%',
+	                name: 'createdByPersonName',
+	                itemId: 'createdByField'
+	            },{
+	                xtype: 'displayfield',
+	                fieldLabel: 'Created Date',
+	                anchor: '100%',
+	                name: 'createdDate',
+	                itemId: 'createdDateField',
+	                renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+	            },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Course Name',
+                    anchor: '100%',
+                    name: 'courseName'
+                },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Status',
+                    anchor: '100%',
+                    name: 'status',
+                    itemId: 'statusField'
+                },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Closed By',
+                    anchor: '100%',
+                    name: 'closedByPersonName',
+                    itemId: 'closedByField'
+                },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Closed Date',
+                    anchor: '100%',
+                    name: 'closedDate',
+                    renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+                },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Campus',
+                    itemId: 'campusField',
+                    anchor: '100%',
+                    name: 'campus'
+                },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Reason',
+                    itemId: 'earlyAlertReasonField',
+                    anchor: '100%',
+                    name: 'earlyAlertReason'
+                },{
+		            xtype: 'multiselect',
+		            name: 'earlyAlertSuggestionIds',
+		            itemId: 'earlyAlertSuggestionsList',
+		            fieldLabel: 'Suggestions',
+		            store: me.selectedSuggestionsStore,
+		            displayField: 'name',
+		            anchor: '95%'
+		        },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Email CC',
+                    anchor: '100%',
+                    name: 'emailCC'
+                },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Comment',
+                    anchor: '100%',
+                    name: 'comment'
+                }],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Return to Early Alert List',
+		       		                   xtype: 'button',
+		       		                   itemId: 'finishButton'
+		       		               }]
+       		           }]
+        });
+
+        return me.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponseDetails',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.earlyalertresponsedetails',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.earlyalert.EarlyAlertResponseDetailsViewController',
+    inject: {
+    	selectedOutreachesStore: 'earlyAlertResponseDetailsOutreachesStore',
+    	selectedReferralsStore: 'earlyAlertResponseDetailsReferralsStore'
+    },
+    title: 'Early Alert Response Details',
+	initComponent: function() {
+		var me=this;
+        Ext.applyIf(me, {
+        	autoScroll: true,
+            items: [{
+	                xtype: 'displayfield',
+	                fieldLabel: 'Created By',
+	                anchor: '100%',
+	                name: 'createdByPersonName',
+	                itemId: 'createdByField'
+	            },{
+	                xtype: 'displayfield',
+	                fieldLabel: 'Created Date',
+	                anchor: '100%',
+	                name: 'createdDate',
+	                itemId: 'createdDateField',
+	                renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+	            },{
+	                xtype: 'displayfield',
+	                fieldLabel: 'Outcome',
+	                anchor: '100%',
+	                itemId: 'outcomeField',
+	                name: 'outcome'
+	            },{
+		            xtype: 'multiselect',
+		            name: 'earlyAlertOutreachIds',
+		            itemId: 'earlyAlertOutreachList',
+		            fieldLabel: 'Suggestions',
+		            store: me.selectedOutreachesStore,
+		            displayField: 'name',
+		            anchor: '95%'
+		        },{
+		            xtype: 'multiselect',
+		            name: 'earlyAlertReferralIds',
+		            itemId: 'earlyAlertReferralsList',
+		            fieldLabel: 'Referrals',
+		            store: me.selectedReferralsStore,
+		            displayField: 'name',
+		            anchor: '95%'
+		        },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Comment',
+                    anchor: '100%',
+                    name: 'comment'
+                }],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Return to Early Alert List',
+		       		                   xtype: 'button',
+		       		                   itemId: 'finishButton'
+		       		               }]
+       		           }]
+        });
+
+        return me.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.tools.document.StudentDocuments', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.studentdocuments',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.document.StudentDocumentToolViewController',
+    inject: {
+    	appEventsController: 'appEventsController',
+    	columnRendererUtils: 'columnRendererUtils',
+    	model: 'currentDocument',
+        store: 'documentsStore'
+    },
+	title: 'Student Documents',	
+	width: '100%',
+	height: '100%',   
+	autoScroll: true,
+    initComponent: function() {
+        var me = this;
+
+        Ext.applyIf(me, {
+			border: 0,
+			store: this.store,
+			dockedItems: [{
+		        dock: 'top',
+		        xtype: 'toolbar',
+		        items: [{
+		        			xtype: 'button', 
+		        			itemId: 'addButton', 
+		        			text:'Add', 
+		        			action: 'add'
+		        	   },{
+		        			xtype: 'button', 
+		        			itemId: 'downloadButton', 
+		        			text:'Download', 
+		        			action: 'download'
+		        	   }]
+			}],
+			
+        	columns: [
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'createdDate',
+                    text: 'Date Entered'
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'name',
+                    text: 'Name'
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'note',
+                    text: 'Note',
+                    flex: 1
+                },{
+	    	        xtype:'actioncolumn',
+	    	        width:65,
+	    	        header: 'Action',
+	    	        items: [{
+	    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
+	    	            tooltip: 'Edit Task',
+	    	            handler: function(grid, rowIndex, colIndex) {
+	    	            	var rec = grid.getStore().getAt(rowIndex);
+	    	            	var panel = grid.up('panel');
+	    	                panel.model.data=rec.data;
+	    	                panel.appEventsController.getApplication().fireEvent('editDocument');
+	    	            },
+	    	            scope: this
+	    	        },{
+	    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
+	    	            tooltip: 'Delete Task',
+	    	            handler: function(grid, rowIndex, colIndex) {
+	    	            	var rec = grid.getStore().getAt(rowIndex);
+	    	            	var panel = grid.up('panel');
+	    	                panel.model.data=rec.data;
+	    	            	panel.appEventsController.getApplication().fireEvent('deleteDocument');
+	    	            },
+	    	            scope: this
+	    	        }]
+                }],
+                
+            viewConfig: {
+
+            }
+        });
+
+        me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.tools.document.EditDocument',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editdocument',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.document.EditDocumentViewController',
+    initComponent: function() {
+		Ext.applyIf(this, {
+        	title: 'Edit Document',
+            defaults: {
+            	labelWidth: 150
+            },
+        	items: [
+                {
+			        xtype: 'combobox',
+			        itemId: 'confidentialityLevelCombo',
+			        name: 'confidentialityLevelId',
+			        fieldLabel: 'Confidentiality Level',
+			        emptyText: 'Select One',
+			        store: this.confidentialityLevelsStore,
+			        valueField: 'id',
+			        displayField: 'name',
+			        mode: 'local',
+			        typeAhead: true,
+			        queryMode: 'local',
+			        allowBlank: false,
+			        forceSelection: true,
+			        anchor: '95%'
+				},{
+                    xtype: 'textfield',
+                    fieldLabel: 'Name',
+                    anchor: '100%',
+                    name: 'name',
+                    anchor: '95%',
+                    allowBlank: false
+                },{
+                    xtype: 'textareafield',
+                    fieldLabel: 'Note',
+                    anchor: '100%',
+                    name: 'note',
+                    anchor: '95%'
+                }],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Save',
+		       		                   xtype: 'button',
+		       		                   action: 'save',
+		       		                   itemId: 'saveButton'
+		       		               }, '-', {
+		       		                   text: 'Cancel',
+		       		                   xtype: 'button',
+		       		                   action: 'cancel',
+		       		                   itemId: 'cancelButton'
+		       		               }]
+       		           }]
+        });
+
+        return this.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.tools.sis.Transcript', {
+	extend: 'Ext.grid.Panel',
+	alias: 'widget.sistranscript',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.sis.TranscriptViewController',
+    width: '100%',
+    height: '100%',
+    autoScroll: true,
+    initComponent: function() {
+        var me = this;
+
+        Ext.applyIf(me, {
+            columns: [
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'string',
+                    text: 'Course'
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'string',
+                    text: 'Section'
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'string',
+                    text: 'Credit'
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'string',
+                    text: 'Title'
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'string',
+                    text: 'Grade'
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'string',
+                    text: 'Term'
+                }
+            ],
+            viewConfig: {
+
+            }
+        });
+
+        me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.abstractreferenceadmin',
+	title: 'Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.AbstractReferenceAdminViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson'
+    },
+	height: '100%',
+	width: '100%',
+	autoScroll: true,
+
+    initComponent: function(){
+    	var me=this;
+    	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing',
+		                             { clicksToEdit: 2 });
+    	Ext.apply(me,
+    			{
+    		      plugins:cellEditor,
+    		      selType: 'rowmodel',
+    		      columns: [
+    		                { header: 'Name',  
+    		                  dataIndex: 'name',
+    		                  field: {
+    		                      xtype: 'textfield'
+    		                  },
+    		                  flex: 50 
+    		                 },
+    		                { header: 'Description',
+    		                  dataIndex: 'description', 
+    		                  flex: 50,
+    		                  field: {
+    		                      xtype: 'textfield'
+    		                  }
+    		                }
+    		           ],
+    		        
+    		           dockedItems: [
+    		       		{
+    		       			xtype: 'pagingtoolbar',
+    		       		    dock: 'bottom',
+    		       		    itemId: 'recordPager',
+    		       		    displayInfo: true,
+    		       		    pageSize: me.apiProperties.getPagingSize()
+    		       		},
+    		              {
+    		               xtype: 'toolbar',
+    		               dock: 'top',
+    		               items: [{
+    		                   text: 'Add',
+    		                   iconCls: 'icon-add',
+    		                   xtype: 'button',
+    		                   hidden: !me.authenticatedPerson.hasAccess('ABSTRACT_REFERENCE_ADMIN_ADD_BUTTON'),
+    		                   action: 'add',
+    		                   itemId: 'addButton'
+    		               }, '-', {
+    		                   text: 'Delete',
+    		                   iconCls: 'icon-delete',
+    		                   xtype: 'button',
+    		                   hidden: !me.authenticatedPerson.hasAccess('ABSTRACT_REFERENCE_ADMIN_DELETE_BUTTON'),
+    		                   action: 'delete',
+    		                   itemId: 'deleteButton'
+    		               }]
+    		           },{
+    		               xtype: 'toolbar',
+    		               dock: 'top',
+    		               items: [{
+    	                      xtype: 'label',
+    	                       text: 'Double-click to edit an item.'
+    	                     }]
+    		           }]    	
+    	});
+    	
+    	me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
+	extend: 'Ext.form.Panel',
+	alias : 'widget.confidentialitydisclosureagreementadmin',
+	id: 'ConfidentialityDisclosureAgreementAdmin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson'
+    },
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
+				{
+			        title: 'Confidentiality Disclosure Agreement Admin',
+		    		autoScroll: true,
+					width: '100%',
+		    		height: '100%',
+		    		bodyPadding: 5,
+				    layout: 'anchor',
+				    fieldDefaults: {
+				        msgTarget: 'side',
+				        labelAlign: 'right',
+				        labelWidth: 125
+				    },
+				    defaultType: 'displayfield',
+				       items: 
+				       [{
+					        fieldLabel: 'Name',
+					        xtype: 'textfield',
+					        disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
+					        name: 'name',
+					        anchor: '95%'
+					    },{
+					        fieldLabel: 'Description',
+					        xtype: 'textfield',
+					        disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
+					        name: 'description',
+					        anchor: '95%'
+					    },{
+		    		          xtype: 'htmleditor',
+		    		          fieldLabel: 'Disclosure Agreement',
+		    		          enableColors: false,
+		    		          disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
+		    		          enableAlignments: false,
+		    		          anchor: '95% 80%',
+		    		          name: 'text'
+		    		      }],
+					    
+		           dockedItems: [
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Save',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON'),
+     		                   action: 'save',
+     		                   itemId: 'saveButton'
+     		               },{
+		        	    	xtype: 'label',
+		        	    	html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,
+		        	    	itemId: 'saveSuccessMessage',
+		        	    	style: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE_STYLE,
+		        	    	hidden: true
+		        	    }]
+     		           }]
+				});
+		
+	     return me.callParent(arguments);
+	}
+
+});
+Ext.define('Ssp.view.admin.forms.crg.ChallengeAdmin', {
+	extend: 'Ext.container.Container',
+	alias : 'widget.challengeadmin',
+	title: 'Challenge Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.crg.ChallengeAdminViewController',
+	height: '100%',
+	width: '100%',
+	layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
+    initComponent: function(){
+		Ext.apply(this,{
+	          items: [
+	                  {
+	                  	xtype: 'displaychallengesadmin', 
+	                  	flex: 1
+	                  },{
+	                  	xtype: 'displaychallengecategoriesadmin', 
+	                  	flex: 1
+	                  }
+	                 ]});
+    	return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.crg.ChallengeReferralAdmin', {
+	extend: 'Ext.container.Container',
+	alias : 'widget.challengereferraladmin',
+	title: 'Challenge Referral Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.crg.ChallengeReferralAdminViewController',
+	height: '100%',
+	width: '100%',
+	layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
+    initComponent: function(){
+		Ext.apply(this,{
+	          items: [
+	                  {
+	                  	xtype: 'displayreferralsadmin', 
+	                  	flex: 1
+	                  },{
+		                  	xtype: 'displaychallengereferralsadmin', 
+		                  	flex: 1
+		                  }
+	                 ]});
+    	return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.displaychallengesadmin',
+	title: 'Challenges Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.crg.DisplayChallengesAdminViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils'
+    },
+    height: '100%',
+	width: '100%',
+
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+		          viewConfig: {
+		        	  plugins: {
+		                  ptype: 'gridviewdragdrop',
+		                  dragGroup: 'gridtotree',
+		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_CATEGORIES_ADMIN_ASSOCIATIONS'),
+		        	  },
+		          },
+    		      autoScroll: true,
+    		      selType: 'rowmodel',
+    		      enableDragDrop: false,
+    		      columns: [
+    		                { header: 'Name',  
+    		                  dataIndex: 'name',
+    		                  flex: 1 
+    		                },
+    		                { header: 'Show On Intake',  
+      		                  dataIndex: 'showInStudentIntake',
+      		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
+      		                  flex: 1 
+      		                }
+    		           ],
+    		        
+    		           dockedItems: [
+     		       		{
+     		       			xtype: 'pagingtoolbar',
+     		       		    dock: 'bottom',
+     		       		    displayInfo: true,
+     		       		    pageSize: me.apiProperties.getPagingSize()
+     		       		},
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Add',
+     		                   iconCls: 'icon-add',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGES_ADMIN_ADD_BUTTON'),
+     		                   action: 'add',
+     		                   itemId: 'addButton'
+     		               }, '-', {
+     		                   text: 'Edit',
+     		                   iconCls: 'icon-edit',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGES_ADMIN_EDIT_BUTTON'),
+     		                   action: 'edit',
+     		                   itemId: 'editButton'
+     		               }, '-' ,{
+     		                   text: 'Delete',
+     		                   iconCls: 'icon-delete',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGES_ADMIN_DELETE_BUTTON'),
+     		                   action: 'delete',
+     		                   itemId: 'deleteButton'
+     		               }]
+     		           },{
+     		               xtype: 'toolbar',
+     		               dock: 'top',
+     		               items: [{
+     	                      xtype: 'label',
+     	                       text: 'Associate items by dragging a Challenge onto a Category folder'
+     	                     }]
+     		           }]    	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.displayreferralsadmin',
+	title: 'Referrals Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.crg.DisplayReferralsAdminViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson'
+    },
+	height: '100%',
+	width: '100%',
+
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+		          viewConfig: {
+		        	  plugins: {
+		                  ptype: 'gridviewdragdrop',
+		                  dragGroup: 'gridtotree',
+		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ADMIN_ASSOCIATIONS'),
+		        	  },
+		          },
+    		      autoScroll: true,
+    		      selType: 'rowmodel',
+    		      columns: [
+    		                { header: 'Name',  
+    		                  dataIndex: 'name',
+    		                  field: {
+    		                      xtype: 'textfield'
+    		                  },
+    		                  flex: 1 
+    		                }
+    		           ],
+    		        
+    		           dockedItems: [
+     		       		{
+     		       			xtype: 'pagingtoolbar',
+     		       		    dock: 'bottom',
+     		       		    displayInfo: true,
+     		       		    pageSize: me.apiProperties.getPagingSize()
+     		       		},
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Add',
+     		                   iconCls: 'icon-add',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ADMIN_ADD_BUTTON'),
+     		                   action: 'add',
+     		                   itemId: 'addButton'
+     		               }, '-', {
+     		                   text: 'Edit',
+     		                   iconCls: 'icon-edit',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ADMIN_EDIT_BUTTON'),
+     		                   action: 'edit',
+     		                   itemId: 'editButton'
+     		               }, '-' ,{
+     		                   text: 'Delete',
+     		                   iconCls: 'icon-delete',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ADMIN_DELETE_BUTTON'),
+     		                   xtype: 'button',
+     		                   action: 'delete',
+     		                   itemId: 'deleteButton'
+     		               }]
+     		           },{
+     		               xtype: 'toolbar',
+      		              dock: 'top',
+      		               items: [{
+      		                         xtype: 'label',
+      		                         text: 'Associate items by dragging a Referral onto a Challenge folder'
+      		                       }]  
+      		           }]    	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.crg.EditChallenge',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editchallenge',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.crg.EditChallengeViewController',
+    inject: {
+        confidentialityLevelsStore: 'confidentialityLevelsStore'
+    },
+	title: 'Edit Challenge',
+	initComponent: function() {
+        Ext.applyIf(this, {
+            items: [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Challenge Name',
+                    anchor: '100%',
+                    name: 'name'
+                },
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Description',
+                    anchor: '100%',
+                    name: 'description'
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Tags',
+                    anchor: '100%',
+                    name: 'tags'
+                },{
+                    xtype: 'combobox',
+                    name: 'defaultConfidentialityLevelId',
+                    fieldLabel: 'Confidentiality Level',
+                    emptyText: 'Select One',
+                    store: this.confidentialityLevelsStore,
+                    valueField: 'id',
+                    displayField: 'acronym',
+                    mode: 'local',
+                    typeAhead: true,
+                    queryMode: 'local',
+                    allowBlank: false,
+                    forceSelection: true
+            	},{
+                    xtype: 'textareafield',
+                    fieldLabel: 'Self Help Guide Description',
+                    anchor: '100%',
+                    name: 'selfHelpGuideDescription'
+                },
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Self Help Guide Question',
+                    anchor: '100%',
+                    name: 'selfHelpGuideQuestion'
+                },
+                {
+                    xtype: 'checkboxfield',
+                    fieldLabel: 'Show in Student Intake',
+                    anchor: '100%',
+                    name: 'showInStudentIntake'
+                },
+                {
+                    xtype: 'checkboxfield',
+                    fieldLabel: 'Show in Self Help Search',
+                    anchor: '100%',
+                    name: 'showInSelfHelpSearch'
+                }
+            ],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Save',
+		       		                   xtype: 'button',
+		       		                   action: 'save',
+		       		                   itemId: 'saveButton'
+		       		               }, '-', {
+		       		                   text: 'Cancel',
+		       		                   xtype: 'button',
+		       		                   action: 'cancel',
+		       		                   itemId: 'cancelButton'
+		       		               }]
+       		           }]
+        });
+
+        return this.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.admin.forms.crg.EditReferral',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editreferral',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.crg.EditReferralViewController',
+	title: 'Edit Referral',
+	initComponent: function() {
+        Ext.applyIf(this, {
+            items: [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Referral Name',
+                    anchor: '100%',
+                    name: 'name'
+                },
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Description',
+                    anchor: '100%',
+                    name: 'description'
+                },{
+                    xtype: 'textareafield',
+                    fieldLabel: 'Public Description',
+                    anchor: '100%',
+                    name: 'publicDescription'
+                },
+                {
+                    xtype: 'checkboxfield',
+                    fieldLabel: 'Show in Self Help Guide',
+                    anchor: '100%',
+                    name: 'showInSelfHelpGuide'
+                }
+            ],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Save',
+		       		                   xtype: 'button',
+		       		                   action: 'save',
+		       		                   itemId: 'saveButton'
+		       		               }, '-', {
+		       		                   text: 'Cancel',
+		       		                   xtype: 'button',
+		       		                   action: 'cancel',
+		       		                   itemId: 'cancelButton'
+		       		               }]
+       		           }]
+        });
+
+        return this.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.admin.forms.journal.JournalStepAdmin', {
+	extend: 'Ext.container.Container',
+	alias : 'widget.journalstepadmin',
+	title: 'Challenge Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.journal.JournalStepAdminViewController',
+	height: '100%',
+	width: '100%',
+	layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
+    initComponent: function(){
+		Ext.apply(this,{
+	          items: [
+	                  {
+	                  	xtype: 'displaystepsadmin', 
+	                  	flex: 1
+	                  },{
+	                  	xtype: 'associatetrackstepsadmin', 
+	                  	flex: 1
+	                  }
+	                 ]});
+    	return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.journal.JournalStepDetailAdmin', {
+	extend: 'Ext.container.Container',
+	alias : 'widget.journalstepdetailadmin',
+	title: 'Journal Step Detail Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.journal.JournalStepDetailAdminViewController',
+	height: '100%',
+	width: '100%',
+	layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
+    initComponent: function(){
+		Ext.apply(this,{
+	          items: [
+	                  {
+	                  	xtype: 'displaydetailsadmin', 
+	                  	flex: 1
+	                  },{
+		                  	xtype: 'associatestepdetailsadmin', 
+		                  	flex: 1
+		                  }
+	                 ]});
+    	return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.journal.DisplayDetailsAdmin', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.displaydetailsadmin',
+	title: 'Details Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.journal.DisplayDetailsAdminViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson'
+    },
+	height: '100%',
+	width: '100%',
+
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+		          viewConfig: {
+		        	  plugins: {
+		                  ptype: 'gridviewdragdrop',
+		                  dragGroup: 'gridtotree',
+		                  enableDrag: me.authenticatedPerson.hasAccess('STEP_DETAILS_ADMIN_ASSOCIATIONS')
+		        	  },
+		          },
+    		      autoScroll: true,
+    		      selType: 'rowmodel',
+    		      columns: [
+    		                { header: 'Name',  
+    		                  dataIndex: 'name',
+    		                  field: {
+    		                      xtype: 'textfield'
+    		                  },
+    		                  flex: 1 
+    		                }
+    		           ],
+    		        
+    		           dockedItems: [
+     		       		{
+     		       			xtype: 'pagingtoolbar',
+     		       		    dock: 'bottom',
+     		       		    displayInfo: true,
+     		       		    pageSize: me.apiProperties.getPagingSize()
+     		       		},
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Add',
+     		                   iconCls: 'icon-add',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_DETAIL_ADMIN_ADD_BUTTON'),
+     		                   action: 'add',
+     		                   itemId: 'addButton'
+     		               }, '-', {
+     		                   text: 'Edit',
+     		                   iconCls: 'icon-edit',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_DETAIL_ADMIN_EDIT_BUTTON'),
+     		                   action: 'edit',
+     		                   itemId: 'editButton'
+     		               }, '-' ,{
+     		                   text: 'Delete',
+     		                   iconCls: 'icon-delete',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_DETAIL_ADMIN_DELETE_BUTTON'),
+     		                   action: 'delete',
+     		                   itemId: 'deleteButton'
+     		               }]
+     		           },{
+     		               xtype: 'toolbar',
+      		               dock: 'top',
+      		               items: [{
+      		                         xtype: 'label',
+      		                         text: 'Associate items by dragging a Detail onto a Step folder'
+      		                       }]  
+      		            }]    	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.displaystepsadmin',
+	title: 'Steps Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.journal.DisplayStepsAdminViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils'
+    },
+    height: '100%',
+	width: '100%',
+
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+		          viewConfig: {
+		        	  plugins: {
+		                  ptype: 'gridviewdragdrop',
+		                  dragGroup: 'gridtotree',
+		                  enableDrag: me.authenticatedPerson.hasAccess('TRACKS_STEPS_ADMIN_ASSOCIATIONS')
+		        	  },
+		          },
+    		      autoScroll: true,
+    		      selType: 'rowmodel',
+    		      enableDragDrop: false,
+    		      columns: [
+    		                { header: 'Name',  
+    		                  dataIndex: 'name',
+    		                  field: {
+    		                      xtype: 'textfield'
+    		                  },
+    		                  flex: 1 
+    		                },{ header: 'Used for Transition',  
+    		                  dataIndex: 'usedForTransition',
+    		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
+    		                  field: {
+      		                      xtype: 'checkbox'
+      		                  },
+    		                  flex: 1 
+    		                }
+    		           ],
+    		        
+    		           dockedItems: [
+     		       		{
+     		       			xtype: 'pagingtoolbar',
+     		       		    dock: 'bottom',
+     		       		    displayInfo: true,
+     		       		    pageSize: me.apiProperties.getPagingSize()
+     		       		},
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Add',
+     		                   iconCls: 'icon-add',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_STEP_ADMIN_ADD_BUTTON'),
+     		                   action: 'add',
+     		                   itemId: 'addButton'
+     		               }, '-', {
+     		                   text: 'Edit',
+     		                   iconCls: 'icon-edit',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_STEP_ADMIN_EDIT_BUTTON'),
+     		                   action: 'edit',
+     		                   itemId: 'editButton'
+     		               }, '-' ,{
+     		                   text: 'Delete',
+     		                   iconCls: 'icon-delete',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_STEP_ADMIN_DELETE_BUTTON'),
+     		                   action: 'delete',
+     		                   itemId: 'deleteButton'
+     		               }]
+     		           },{
+    		               xtype: 'toolbar',
+      		               dock: 'top',
+      		               items: [{
+      		                         xtype: 'label',
+      		                         text: 'Associate items by dragging a Step onto a Track folder'
+      		                       }]  
+      		            }]    	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.journal.EditStep',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editjournalstep',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.journal.EditStepViewController',
+	title: 'Edit Step',
+	initComponent: function() {
+        Ext.applyIf(this, {
+            items: [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Step Name',
+                    anchor: '100%',
+                    name: 'name'
+                },
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Description',
+                    anchor: '100%',
+                    name: 'description'
+                },
+                {
+                    xtype: 'checkbox',
+                    fieldLabel: 'Used for Transition',
+                    name: 'usedForTransition'
+                }],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Save',
+		       		                   xtype: 'button',
+		       		                   action: 'save',
+		       		                   itemId: 'saveButton'
+		       		               }, '-', {
+		       		                   text: 'Cancel',
+		       		                   xtype: 'button',
+		       		                   action: 'cancel',
+		       		                   itemId: 'cancelButton'
+		       		               }]
+       		           }]
+        });
+
+        return this.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.admin.forms.journal.EditStepDetail',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editjournalstepdetail',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.journal.EditStepDetailViewController',
+	title: 'Edit Detail',
+	initComponent: function() {
+        Ext.applyIf(this, {
+            items: [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Detail Name',
+                    anchor: '100%',
+                    name: 'name'
+                },
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Description',
+                    anchor: '100%',
+                    name: 'description'
+                }],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Save',
+		       		                   xtype: 'button',
+		       		                   action: 'save',
+		       		                   itemId: 'saveButton'
+		       		               }, '-', {
+		       		                   text: 'Cancel',
+		       		                   xtype: 'button',
+		       		                   action: 'cancel',
+		       		                   itemId: 'cancelButton'
+		       		               }]
+       		           }]
+        });
+
+        return this.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.campusadmin',
+	title: 'Campus Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.campus.CampusAdminViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        appEventsController: 'appEventsController',
+        authenticatedPerson: 'authenticatedPerson',
+        model: 'currentCampus',
+        store: 'campusesStore'
+    },
+    height: '100%',
+	width: '100%',
+	layout: 'fit',
+    initComponent: function(){
+        var me=this;
+    	Ext.apply(me,
+    			{   
+    		      autoScroll: true,
+    		      store: me.store,
+     		      columns: [{
+		    	        xtype:'actioncolumn',
+		    	        width: 100,
+		    	        header: 'Assign Routings',
+		    	        items: [{
+			    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
+			    	            tooltip: 'Edit Campus Early Alert Routings',
+			    	            handler: function(grid, rowIndex, colIndex) {
+			    	            	var rec = grid.getStore().getAt(rowIndex);
+			    	            	var panel = grid.up('panel');
+			    	                panel.model.data=rec.data;
+			    	            	panel.appEventsController.getApplication().fireEvent('editCampusEarlyAlertRoutings');
+			    	            },
+			    	            scope: me
+			    	        }]
+     		              },{ header: 'Name',  
+    		                  dataIndex: 'name',
+    		                  flex: 50 },
+    		                { header: 'Description',
+    		                  dataIndex: 'description', 
+    		                  flex: 50
+    		                }
+    		           ],
+    		        
+    		           dockedItems: [
+     		       		{
+     		       			xtype: 'pagingtoolbar',
+     		       		    dock: 'bottom',
+     		       		    displayInfo: true,
+     		       		    store: me.store,
+     		       		    pageSize: me.apiProperties.getPagingSize()
+     		       		},
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Add',
+     		                   iconCls: 'icon-add',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CAMPUS_ADMIN_ADD_BUTTON'),
+     		                   action: 'add',
+     		                   itemId: 'addButton'
+     		               }, '-', {
+     		                   text: 'Edit',
+     		                   iconCls: 'icon-edit',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CAMPUS_ADMIN_EDIT_BUTTON'),
+     		                   action: 'edit',
+     		                   itemId: 'editButton'
+     		               }, '-', {
+     		                   text: 'Delete',
+     		                   iconCls: 'icon-delete',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CAMPUS_ADMIN_DELETE_BUTTON'),
+     		                   xtype: 'button',
+     		                   action: 'delete',
+     		                   itemId: 'deleteButton'
+     		               }]
+     		           }]  	
+    	});
+
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.campus.DefineCampus',{
+	extend: 'Ext.panel.Panel',
+	alias : 'widget.definecampus',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.campus.DefineCampusViewController',
+	title: 'Define a Campus',
+	height: '100%',
+	width: '100%',
+	layout:'card',
+	initComponent: function() {
+		var me=this;
+        Ext.applyIf(me, {
+        	activeItem: 0,
+        	
+        	dockedItems: [{
+	               xtype: 'toolbar',
+	               dock: 'top',
+	               items: [{
+	                   text: 'Cancel',
+	                   xtype: 'button',
+	                   itemId: 'cancelCampusEditorButton'
+	               },{
+	                   text: 'Prev',
+	                   xtype: 'button',
+	                   action: 'prev',
+	                   itemId: 'prevButton'
+	               }, '-', {
+	                   text: 'Next',
+	                   xtype: 'button',
+	                   action: 'next',
+	                   itemId: 'nextButton'
+	               }, '-', {
+	                   text: 'Finish',
+	                   xtype: 'button',
+	                   action: 'finish',
+	                   itemId: 'finishButton'
+	               }]
+	           }],
+        	
+        	items: [{
+        	    xtype:'editcampus',
+        	    flex: 1
+        	},{
+        		xtype:'campusearlyalertroutingsadmin',
+        	    flex: 1
+        	}]
+        });
+        return me.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editcampus',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.campus.EditCampusViewController',
+    inject: {
+    	store: 'earlyAlertCoordinatorsStore'
+    },
+	title: 'Edit Campus',
+	initComponent: function() {
+		var me=this;
+        Ext.applyIf(me, {
+            items: [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Name',
+                    anchor: '100%',
+                    name: 'name'
+                },{
+                    xtype: 'textareafield',
+                    fieldLabel: 'Description',
+                    anchor: '100%',
+                    name: 'description'
+                },{
+			        xtype: 'combobox',
+			        name: 'earlyAlertCoordinatorId',
+			        itemId: 'earlyAlertCoordinatorCombo',
+			        fieldLabel: 'Early Alert Coordinator',
+			        emptyText: 'Select One',
+			        store: me.store,
+			        valueField: 'id',
+			        displayField: 'displayFullName',
+			        mode: 'local',
+			        typeAhead: true,
+			        queryMode: 'local',
+			        allowBlank: false,
+			        width: 300
+				}],
+	            
+	            dockedItems: [{
+	       		               xtype: 'toolbar',
+	       		               items: [{
+			       		                   text: 'Save',
+			       		                   xtype: 'button',
+			       		                   action: 'save',
+			       		                   itemId: 'saveButton'
+			       		               }, '-', {
+			       		                   text: 'Cancel',
+			       		                   xtype: 'button',
+			       		                   action: 'cancel',
+			       		                   itemId: 'cancelButton'
+			       		               }]
+	       		           }]
+        });
+
+        return me.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.view.admin.forms.campus.CampusEarlyAlertRoutingsAdmin', {
+	extend: 'Ext.panel.Panel',
+	alias : 'widget.campusearlyalertroutingsadmin',
+	title: 'Campus Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.campus.CampusEarlyAlertRoutingsAdminViewController',
+	inject: {
+		campus: 'currentCampus'
+	},
+    height: '100%',
+	width: '100%',
+	layout: 'fit',
+    initComponent: function(){
+        var me=this;
+    	Ext.apply(me,
+    			{  
+    			  title: 'Campuses Admin - ' + me.campus.get('name'),
+    		      items: [{
+    		    	xtype:'earlyalertroutingsadmin',
+    		    	flex: 1
+    		      }],
+  	            
+    		      dockedItems: [{
+		               xtype: 'toolbar',
+		               items: [{
+	       		                   text: 'Finished',
+	       		                   xtype: 'button',
+	       		                   itemId: 'finishButton'
+	       		               }]
+		           }]
+    	});
+
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',{
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.earlyalertroutingsadmin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.campus.EarlyAlertRoutingsAdminViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        store: 'campusEarlyAlertRoutingsStore'
+    },
+    height: '100%',
+	width: '100%',
+    initComponent: function(){
+        var me=this;
+    	Ext.apply(me,
+    			{   
+    		      autoScroll: true,
+    		      store: me.store,
+    		      title: 'Early Alert Routing Groups',
+     		      columns: [
+    		                { header: 'Group Name',  
+    		                  dataIndex: 'name',
+    		                  flex: .5 },
+      		                { header: 'Group Email',  
+        		                  dataIndex: 'name',
+        		                  flex: .5 }
+    		           ],
+    		        
+    		           dockedItems: [{
+     		               xtype: 'toolbar',
+      		               dock: 'top',
+      		               items: [{
+      		            	   xtype: "label",
+     		                   text: "Early Alert Routing Groups define optional endpoints where an Early Alert will be delivered when it's entered in the system."
+     		               }]  
+      		            },
+     		       		{
+     		       			xtype: 'pagingtoolbar',
+     		       		    dock: 'bottom',
+     		       		    displayInfo: true,
+     		       		    store: me.store,
+     		       		    pageSize: me.apiProperties.getPagingSize()
+     		       		},
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Add',
+     		                   tooltip: 'Add Early Alert Routing Group',
+     		                   iconCls: 'icon-add',
+     		                   xtype: 'button',
+     		                   itemId: 'addButton'
+     		               }, '-', {
+     		                   text: 'Edit',
+     		                   tooltip: 'Edit Early Alert Routing Group',
+     		                   iconCls: 'icon-edit',
+     		                   xtype: 'button',
+     		                   itemId: 'editButton'
+     		               }, '-', {
+     		                   text: 'Delete',
+     		                   tooltip: 'Delete Early Alert Routing Group',
+     		                   iconCls: 'icon-delete',
+     		                   xtype: 'button',
+     		                   itemId: 'deleteButton'
+     		               }]
+     		           }]  	
+    	});
+
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editcampusearlyalertrouting',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewController',
+    inject: {
+    	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
+    	peopleSearchLiteStore: 'peopleSearchLiteStore',
+    	sspConfig: 'sspConfig'
+    },
+	title: 'Edit Routing Group',
+	initComponent: function() {
+        var me=this;
+		Ext.applyIf(me, {
+		    fieldDefaults: {
+		        msgTarget: 'side',
+		        labelAlign: 'right',
+		        labelWidth: 125
+		    },
+            items: [{
+                    xtype: 'textfield',
+                    fieldLabel: 'Group Name',
+                    width: 500,
+                    name: 'groupName',
+                    allowBlank: false
+                },{
+                    xtype: 'textfield',
+                    fieldLabel: 'Group Email',
+                    name: 'groupEmail',
+                    width: 500,
+                    vtype:'email',
+			        maxLength: 100,
+			        allowBlank: false
+                },{
+			        xtype: 'combobox',
+			        name: 'earlyAlertReasonId',
+			        itemId: 'earlyAlertReasonCombo',
+			        fieldLabel: 'Early Alert Reason',
+			        emptyText: 'Select One',
+			        store: me.earlyAlertReasonsStore,
+			        valueField: 'id',
+			        displayField: 'name',
+			        mode: 'local',
+			        typeAhead: true,
+			        queryMode: 'local',
+			        allowBlank: false,
+			        width: 500
+				},{
+		            xtype: 'combo',
+		            store: me.peopleSearchLiteStore,
+		            displayField: 'displayFullName',
+		            emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
+		            valueField:'id',
+		            typeAhead: false,
+		            fieldLabel: 'Person',
+		            hideTrigger:true,
+		            queryParam: 'searchTerm',
+		            allowBlank: true,
+		            width: 500,
+
+		            listConfig: {
+		                loadingText: 'Searching...',
+		                emptyText: 'No matching people found.',
+		                getInnerTpl: function() {
+		                    return '{firstName} {lastName}';
+		                }
+		            },
+		            pageSize: 10
+		        }],
+            
+            dockedItems: [{
+       		               xtype: 'toolbar',
+       		               items: [{
+		       		                   text: 'Save',
+		       		                   xtype: 'button',
+		       		                   action: 'save',
+		       		                   itemId: 'saveButton'
+		       		               }, '-', {
+		       		                   text: 'Cancel',
+		       		                   xtype: 'button',
+		       		                   action: 'cancel',
+		       		                   itemId: 'cancelButton'
+		       		               }]
+       		           }]
+        });
+
+        return me.callParent(arguments);
+    }	
+});
+Ext.define('Ssp.model.AuthenticatedPerson', {
+    extend: 'Ssp.model.AbstractBase',
+    config: {
+    	unauthorizedAccessAlertTitle: 'Unauthorized Access',
+    	unauthorizedAccessAlertMessage: 'You do not have permission to access this item. Please see your system administrator if you require access to this information!'    	
+    },
+    fields: [{name:'permissions', type:'auto', defaultValue: null},
+    		 {name:'confidentialityLevels', type:'auto', defaultValue: null},
+    		 {name:'objectPermissionsCollection', type:'auto'}],  
+    statics: {
+    	/*
+    	 * To implement a required permission against an object in the interface:
+    	 * 
+    	 * 1) Add a static property to this class with a name of
+    	 * 'REQUIRED_PERMISSIONS_' + the object name you would like to secure. (See props below)
+    	 * 
+    	 * 2) Set the permissions for that object in an array as the value for the
+    	 * assigned property.
+    	 * 
+    	 * 3) In the interface classes, determine the object access by calling the hasAccess 
+    	 * method of this class and passing the object name as the sole argument, without
+    	 * the appended 'REQUIRED_PERMISSIONS_' on the name.
+    	 * 
+    	 * For example: In a view you could assign the hidden property of a button like so:
+    	 *  
+    	 *  {
+    	 *    xtype: 'button',
+    	 *    hidden: !authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
+    	 *    text: 'Print History'
+    	 *  }
+    	 * 
+    	 * The hasAccess method will return a boolean for use in securing the interface based
+    	 * upon the permissions array you've defined by object name when you defined your required
+    	 * permissions for the associated object.
+    	 */
+    	
+    	/* MAIN NAVIGATION */
+    	REQUIRED_PERMISSIONS_STUDENTS_NAVIGATION_BUTTON: ['ROLE_PERSON_READ'],
+    	REQUIRED_PERMISSIONS_ADMIN_NAVIGATION_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	
+    	/* SEARCH */  	
+    	REQUIRED_PERMISSIONS_STUDENT_SEARCH: ['ROLE_PERSON_SEARCH_READ'], 
+    	REQUIRED_PERMISSIONS_CASELOAD_SEARCH: ['ROLE_PERSON_CASELOAD_READ'],
+    	REQUIRED_PERMISSIONS_CASELOAD_FILTERS: ['ROLE_PERSON_CASELOAD_READ'],
+    	REQUIRED_PERMISSIONS_SET_ACTIVE_STATUS_BUTTON: ['ROLE_PERSON_PROGRAM_STATUS_WRITE'],
+    	REQUIRED_PERMISSIONS_SET_TRANSITION_STATUS_BUTTON: ['ROLE_PERSON_PROGRAM_STATUS_WRITE'],
+    	REQUIRED_PERMISSIONS_SET_NON_PARTICIPATING_STATUS_BUTTON: ['ROLE_PERSON_PROGRAM_STATUS_WRITE'],
+    	REQUIRED_PERMISSIONS_SET_NO_SHOW_STATUS_BUTTON: ['ROLE_PERSON_PROGRAM_STATUS_WRITE'],
+    	
+    	/* STUDENTS */  	
+    	REQUIRED_PERMISSIONS_ADD_STUDENT_BUTTON: ['ROLE_PERSON_WRITE'],
+    	REQUIRED_PERMISSIONS_EDIT_STUDENT_BUTTON: ['ROLE_PERSON_WRITE'],
+    	REQUIRED_PERMISSIONS_DELETE_STUDENT_BUTTON: ['ROLE_PERSON_DELETE'],
+    	
+    	/* ADMIN TOOLS */
+    	REQUIRED_PERMISSIONS_ABSTRACT_REFERENCE_ADMIN_ADD_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_ABSTRACT_REFERENCE_ADMIN_EDIT: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_ABSTRACT_REFERENCE_ADMIN_DELETE_BUTTON: ['ROLE_REFERENCE_WRITE'],
+
+    	REQUIRED_PERMISSIONS_CAMPUS_ADMIN_ADD_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_CAMPUS_ADMIN_EDIT_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_CAMPUS_ADMIN_DELETE_BUTTON: ['ROLE_REFERENCE_WRITE'],    	
+
+    	REQUIRED_PERMISSIONS_CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON: ['ROLE_REFERENCE_WRITE'],    	
+    	
+    	/* counseling reference guide admin */ 
+    	
+    	// delete associations
+    	REQUIRED_PERMISSIONS_CHALLENGE_CATEGORIES_ASSOCIATION_ADMIN_DELETE_BUTTON: ['ROLE_REFERENCE_WRITE'],   	
+    	REQUIRED_PERMISSIONS_CHALLENGE_REFERRALS_ASSOCIATION_ADMIN_DELETE_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	
+    	// enable drag and drop associations
+    	REQUIRED_PERMISSIONS_CHALLENGE_CATEGORIES_ADMIN_ASSOCIATIONS: ['ROLE_REFERENCE_WRITE'], 
+    	REQUIRED_PERMISSIONS_CHALLENGE_REFERRALS_ADMIN_ASSOCIATIONS: ['ROLE_REFERENCE_WRITE'],
+    	
+    	REQUIRED_PERMISSIONS_CHALLENGES_ADMIN_ADD_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_CHALLENGES_ADMIN_EDIT_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_CHALLENGES_ADMIN_DELETE_BUTTON: ['ROLE_REFERENCE_WRITE'],  
+
+    	REQUIRED_PERMISSIONS_CHALLENGE_REFERRALS_ADMIN_ADD_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_CHALLENGE_REFERRALS_ADMIN_EDIT_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_CHALLENGE_REFERRALS_ADMIN_DELETE_BUTTON: ['ROLE_REFERENCE_WRITE'],     	
+
+    	/* journal admin */ 
+    	
+    	// delete associations
+    	REQUIRED_PERMISSIONS_TRACK_STEP_ASSOCIATION_ADMIN_DELETE_BUTTON: ['ROLE_REFERENCE_WRITE'],   	
+    	REQUIRED_PERMISSIONS_STEP_DETAIL_ASSOCIATION_ADMIN_DELETE_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	
+    	// enable drag and drop associations
+    	REQUIRED_PERMISSIONS_TRACKS_STEPS_ADMIN_ASSOCIATIONS: ['ROLE_REFERENCE_WRITE'], 
+    	REQUIRED_PERMISSIONS_STEP_DETAILS_ADMIN_ASSOCIATIONS: ['ROLE_REFERENCE_WRITE'],
+    	
+    	REQUIRED_PERMISSIONS_JOURNAL_STEP_ADMIN_ADD_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_JOURNAL_STEP_ADMIN_EDIT_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_JOURNAL_STEP_ADMIN_DELETE_BUTTON: ['ROLE_REFERENCE_WRITE'],  
+
+    	REQUIRED_PERMISSIONS_JOURNAL_DETAIL_ADMIN_ADD_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_JOURNAL_DETAIL_ADMIN_EDIT_BUTTON: ['ROLE_REFERENCE_WRITE'],
+    	REQUIRED_PERMISSIONS_JOURNAL_DETAIL_ADMIN_DELETE_BUTTON: ['ROLE_REFERENCE_WRITE'],      	
+    	
+    	
+    	/* PROFILE TOOL */
+    	REQUIRED_PERMISSIONS_PROFILE_TOOL: ['ROLE_PERSON_READ'],
+    	REQUIRED_PERMISSIONS_PRINT_HISTORY_BUTTON: ['ROLE_PERSON_READ',
+    	                                            'ROLE_PERSON_JOURNAL_ENTRY_READ',
+    	                                            'ROLE_PERSON_TASK_READ',
+    	                                            'ROLE_PERSON_EARLY_ALERT_READ',
+    	                                            'ROLE_PERSON_EARLY_ALERT_RESPONSE_READ'],
+        
+    	REQUIRED_PERMISSIONS_PROFILE_PRINT_CONFIDENTIALITY_AGREEMENT_BUTTON: ['ROLE_REFERENCE_READ'],
+    	                                        	
+        /* STUDENT INTAKE TOOL */
+    	REQUIRED_PERMISSIONS_STUDENTINTAKE_TOOL: ['ROLE_STUDENT_INTAKE_READ'],
+    	REQUIRED_PERMISSIONS_STUDENT_INTAKE_SAVE_BUTTON: ['ROLE_STUDENT_INTAKE_WRITE'],
+    	REQUIRED_PERMISSIONS_STUDENT_INTAKE_CANCEL_BUTTON: ['ROLE_STUDENT_INTAKE_WRITE'],
+    	REQUIRED_PERMISSIONS_STUDENT_INTAKE_CHALLENGE_TAB: ['ROLE_PERSON_CHALLENGE_READ'],
+    	 	
+    	/* ACTION PLAN TOOL */
+    	REQUIRED_PERMISSIONS_ACTIONPLAN_TOOL: ['ROLE_PERSON_READ','ROLE_PERSON_TASK_READ','ROLE_PERSON_GOAL_READ'],
+    	REQUIRED_PERMISSIONS_EMAIL_ACTION_PLAN_BUTTON: ['ROLE_PERSON_TASK_READ','ROLE_PERSON_GOAL_READ'],
+    	REQUIRED_PERMISSIONS_PRINT_ACTION_PLAN_BUTTON: ['ROLE_PERSON_TASK_READ','ROLE_PERSON_GOAL_READ'],
+    	REQUIRED_PERMISSIONS_ACTION_PLAN_TASKS_PANEL: ['ROLE_PERSON_TASK_READ'],
+    	REQUIRED_PERMISSIONS_FILTER_TASKS_BY_AUTHENTICATED_USER_CHECKBOX: ['ROLE_PERSON_TASK_READ'],
+    	REQUIRED_PERMISSIONS_ADD_TASK_BUTTON: ['ROLE_PERSON_TASK_WRITE'],
+    	REQUIRED_PERMISSIONS_EDIT_TASK_BUTTON: ['ROLE_PERSON_TASK_WRITE'],
+    	REQUIRED_PERMISSIONS_CLOSE_TASK_BUTTON: ['ROLE_PERSON_TASK_WRITE'],
+    	REQUIRED_PERMISSIONS_DELETE_TASK_BUTTON: ['ROLE_PERSON_TASK_DELETE'],
+    	REQUIRED_PERMISSIONS_ACTION_PLAN_GOALS_PANEL: ['ROLE_PERSON_TASK_READ'],
+    	REQUIRED_PERMISSIONS_ADD_GOAL_BUTTON: ['ROLE_PERSON_GOAL_WRITE'],
+    	REQUIRED_PERMISSIONS_EDIT_GOAL_BUTTON: ['ROLE_PERSON_GOAL_WRITE'],
+    	REQUIRED_PERMISSIONS_DELETE_GOAL_BUTTON: ['ROLE_PERSON_GOAL_DELETE'],
+    	REQUIRED_PERMISSIONS_ACTION_PLAN_STRENGTHS_PANEL: ['ROLE_PERSON_READ'],
+    	REQUIRED_PERMISSIONS_ACTION_PLAN_STRENGTHS_FIELD: ['ROLE_PERSON_WRITE'],
+    	REQUIRED_PERMISSIONS_SAVE_STRENGTHS_BUTTON: ['ROLE_PERSON_WRITE'],
+    	                                            
+    	/* JOURNAL TOOL */
+    	REQUIRED_PERMISSIONS_JOURNAL_TOOL:['ROLE_PERSON_JOURNAL_ENTRY_READ'],
+    	REQUIRED_PERMISSIONS_ADD_JOURNAL_ENTRY_BUTTON: ['ROLE_PERSON_JOURNAL_ENTRY_WRITE'],
+    	REQUIRED_PERMISSIONS_EDIT_JOURNAL_ENTRY_BUTTON: ['ROLE_PERSON_JOURNAL_ENTRY_WRITE'],
+    	REQUIRED_PERMISSIONS_DELETE_JOURNAL_ENTRY_BUTTON: ['ROLE_PERSON_JOURNAL_ENTRY_DELETE'],
+    	
+    	/* EARLY ALERT TOOL */
+    	REQUIRED_PERMISSIONS_EARLYALERT_TOOL:['ROLE_PERSON_EARLY_ALERT_READ','ROLE_PERSON_EARLY_ALERT_RESPONSE_READ'],
+    	REQUIRED_PERMISSIONS_RESPOND_EARLY_ALERT_BUTTON:['ROLE_PERSON_EARLY_ALERT_RESPONSE_WRITE'],
+    	REQUIRED_PERMISSIONS_EARLY_ALERT_DETAILS_BUTTON:['ROLE_PERSON_EARLY_ALERT_READ','ROLE_PERSON_EARLY_ALERT_RESPONSE_READ'],
+    	
+    	/* STUDENT INFORMATION SYSTEM TOOL */
+     	REQUIRED_PERMISSIONS_STUDENTINFORMATIONSYSTEM_TOOL:['ROLE_PERSON_READ']
+    },
+    
+    /**
+     * Returns true if the user has access permissions 
+     * for a specified object type.
+     * Example use case:
+     * 
+     *    if ( authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON') )
+     *    {
+     *       // User can access the print history button
+     *    }
+     * 
+     */
+    hasAccess: function( objectName ){
+    	var col = this.get('objectPermissionsCollection');
+    	var permission = col.findBy(function(item,key){
+    		if(objectName==item.get('name'))
+    		{
+    			return true;
+    		}
+    	});
+    	return ((permission != null)? permission.get('hasAccess') : false);
+    },
+ 
+    /**
+     * Creates a MixedCollection of ObjectPermission records containing the names
+     * of view items to secure in the system. Each object contains a hasAccess property
+     * set to true/false depending on whether or not the required permissions exist in the users
+     * granted permissions. The objects reference the names of the static properties in 
+     * this class and can be used to determine if view items are available in the system.
+     * See the hasAccess method of this class for additional details regarding use of 
+     * the ObjectPermissions MixedCollection. 
+     */
+    setObjectPermissions: function(){
+    	var me=this;
+    	var col = new Ext.util.MixedCollection();
+    	var re = new RegExp(/REQUIRED_PERMISSIONS/);
+    	var objectPermission, hasAccess, requiredPermissions;
+    	for (prop in Ssp.model.AuthenticatedPerson)
+    	{
+    		if( prop.search(re) != -1)
+    		{
+    			requiredPermissions = Ssp.model.AuthenticatedPerson[prop];
+    			hasAccess = me.hasRequiredPermissions(requiredPermissions);
+    			objectPermission = new Ssp.model.ObjectPermission;
+    			objectPermission.set('name',prop.replace('REQUIRED_PERMISSIONS_',""));
+    			objectPermission.set('hasAccess',hasAccess);
+    			col.add( objectPermission );
+    		}	
+    	}
+    	me.set('objectPermissionsCollection',col);
+    },    
+    
+    /**
+     * Determines if a user has access to a provided array of permissions.
+     * 
+     * @arguments
+     *  arrRequiredPermissions - an array of permissions to test against the granted permissions for this user.
+     *  
+     *  return true if all of the permissions exist in the user's record
+     */
+    hasRequiredPermissions: function( arrRequiredPermissions ){
+        var access = new Array();
+    	Ext.Array.each(arrRequiredPermissions,function(permission){
+    		if ( this.hasPermission( permission ) == true )
+   		   {
+   			 access.push( true ); 
+   		   }
+   	    },this);
+    	
+        return ((access.length==arrRequiredPermissions.length)? true : false); 
+    },
+    
+    /**
+     * Determines if a user has access to the provided permission.
+     * Tests against the granted permissions for this user.
+     * 
+     * @arguments
+     *  - permission - a permission
+     *  
+     *  return true if the permission exists in the user's record
+     */
+    hasPermission: function( permission ){
+   	 return Ext.Array.contains( this.get('permissions'), permission );
+    },
+
+    /**
+     * Determines if a user has a supplied confidentiality level by id.
+     * Tests against the granted confidentiality levels for this user.
+     *      
+     * @arguments
+     *  id - confidentialityLevelId
+     *  
+     *  return true if the confidentiality level exists in the user's record
+     */
+    hasConfidentialityLevel: function( id ){
+    	var me=this;
+    	var levels = new Array();
+    	var confidentialityLevels = me.get('confidentialityLevels');
+    	Ext.Array.each(confidentialityLevels ,function( item ){
+    	   if ( item.id == id )
+		   {
+			 levels.push(id); 
+		   }
+	    },me);
+   	 	return ((levels.length==0)? false : true);
+    },    
+    
+    /**
+     * Apply a filter function to a supplied store
+     * to limit the available items to the confidentiality levels within
+     * a users authenticated level of confidentiality.
+     */
+    applyConfidentialityLevelsFilter: function( store ){
+		var me=this;
+    	var filtersArr = [];
+		var filterAuthenticatedFunc;
+		filterAuthenticatedFunc = new Ext.util.Filter({
+		    filterFn: function(item) {
+				return this.hasConfidentialityLevel( item.get('id') ); 
+			},
+			scope: me
+		});
+		filtersArr.push( filterAuthenticatedFunc );
+		store.filter( filtersArr );
+    },
+    
+    /**
+     * Provides an unauthorized access alert message.
+     */
+    showUnauthorizedAccessAlert: function(){
+    	Ext.Msg.alert(this.getUnauthorizedAccessAlertTitle(), this.getUnauthorizedAccessAlertMessage() );
+    },
+    
+    /**
+     * Provides a warning if a user attempts to modify data that is critical to system operation.
+     */
+    showDeveloperRestrictedContentAlert: function(){
+		Ext.Msg.alert("WARNING", "Access to this information has been restricted due to the sensitive nature of the information and it's impact on the SSP System. Please see your system administrator if you need to make changes to this information." );
+    },
+    
+    isDeveloperRestrictedContent: function( item ){
+		var restricted = false;
+		// Restricting Adding Confidentiality Levels in the system
+		if (item instanceof Ssp.model.reference.ConfidentialityLevel)
+		{
+			restricted = true;
+		}
+		return restricted;
+    }
+});
 Ext.define('Ssp.model.Person', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name: 'photoUrl', type: 'string'},
              {name: 'schoolId', type: 'string'},
     		 {name: 'firstName', type: 'string'},
-             {name: 'middleInitial', type: 'string'},
+             {name: 'middleName', type: 'string'},
     		 {name: 'lastName', type: 'string'},
              {name: 'homePhone', type: 'string'},
     		 {name: 'cellPhone', type: 'string'},
@@ -6306,33 +16154,28 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'secondaryEmailAddress', type: 'string'},
              {name: 'birthDate', type: 'date', dateFormat: 'time'},
     		 {name: 'username', type: 'string'},
-             {name: 'userId', type: 'string'},
     		 {name: 'enabled', type: 'boolean'},
-             {name: 'coachId', type: 'string'},
+             {name: 'coach', type: 'auto'},
     		 {name: 'strengths', type: 'string'},
-    		 {name: 'studentTypeId',type:'string'},
+    		 {name: 'studentType',type:'auto'},
     		 {name: 'abilityToBenefit', type: 'boolean'},
     		 {name: 'anticipatedStartTerm', type: 'string'},
     		 {name: 'anticipatedStartYear', type: 'string'},
-    		 {name: 'studentIntakeRequestDate', type: 'time'},
+    		 {name: 'actualStartTerm', type: 'string'},
+    		 {name: 'actualStartYear', type: 'string'},
+    		 {name: 'studentIntakeRequestDate', type: 'date', dateFormat: 'time'},
     		 {name: 'specialServiceGroups', type: 'auto'},
     		 {name: 'referralSources', type: 'auto'},
     		 {name: 'serviceReasons', type: 'auto'},
-    		 {name:'permissions', type:'auto', defaultValue: null},
-    		 {name:'confidentialityLevels', type:'auto', defaultValue: null}],
-    
-    		 //'programStatus',
-    		 //'registrationStatus',
-    		 //'paymentStatus',
-    		 //'cumGPA',
-    		 //'academicPrograms'
-    		 
-    		 
+    		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
+    		 {name: 'currentProgramStatusName', type: 'auto'},
+    		 {name: 'registeredForCurrentTerm', type: 'string'}],
+    		 		 
     getFullName: function(){ 
     	var firstName = this.get('firstName') || "";
-    	var middleInitial = this.get('middleInitial') || "";
+    	var middleName = this.get('middleName') || "";
     	var lastName = this.get('lastName') || "";
-    	return firstName + " " + middleInitial + " " + lastName;
+    	return firstName + " " + middleName + " " + lastName;
     },
     
     getFormattedBirthDate: function(){
@@ -6342,55 +16185,161 @@ Ext.define('Ssp.model.Person', {
     getFormattedStudentIntakeRequestDate: function(){
     	return Ext.util.Format.date( this.get('studentIntakeRequestDate'),'m/d/Y');   	
     },
+    
+    getCoachId: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.id : "");   	
+    },
 
-    /**
-     * Determines if a user has access to a provided array of permissions.
-     * 
-     * @arguments
-     *  arrPermissions - an array of permissions to test against the granted permissions for this user.
-     *  
-     *  return true if all of the permissionsToTest exist in the user's record
-     */
-    hasPermissions: function( arrPermissions ){
-   	   return Ext.Array.every(arrPermissions,function(permission){
-   		   return this.hasPermission( permission );
-   	   },this);
+    setCoachId: function( value ){
+    	if (value != "")
+    	{
+        	if ( this.get('coach') != null)
+        	{
+        		this.set('coach',{"id":value});
+        	}    		
+    	}
+    },    
+    
+    getCoachFullName: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.firstName + ' ' + coach.lastName : "");   	
+    },     
+
+    getCoachWorkPhone: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.workPhone : "");   	
+    },    
+
+    getCoachPrimaryEmailAddress: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.primaryEmailAddress : "");   	
+    },    
+
+    getCoachOfficeLocation: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.officeLocation : "");   	
+    },    
+    
+    getCoachDepartmentName: function(){
+    	var coach = this.get('coach');
+    	return ((coach != null)? coach.departmentName : "");   	
     },
     
-    /**
-     * Determines if a user has access to the provided permission.
-     * @arguments
-     *  - permission - a permission
-     *  to test against the granted permissions for this user.
-     *  
-     *  return true if the permission exists in the user's record
-     */
-    hasPermission: function( permission ){
-   	 return Ext.Array.contains( this.get('permissions'), permission );
-    }    
+    getStudentTypeId: function(){
+    	var studentType = this.get('studentType');
+    	return ((studentType != null)? studentType.id : "");   	
+    },
+ 
+    getStudentTypeName: function(){
+    	var studentType = this.get('studentType');
+    	return ((studentType != null)? studentType.name : "");   	
+    },    
+    
+    setStudentTypeId: function( value ){
+    	var me=this;
+    	if (value != "")
+    	{
+        	if ( me.get('studentType') != null)
+        	{
+        		me.set('studentType',{"id":value});
+        	}    		
+    	}
+    },
+    
+    getProgramStatusName: function(){
+    	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
+    },
+    
+    /*
+     * cleans properties that will be unable to be saved if not null
+     */ 
+    setPropsNullForSave: function( jsonData ){
+		delete jsonData.studentIntakeCompleteDate;
+		delete jsonData.currentProgramStatusName;
+		
+		if( jsonData.serviceReasons == "" )
+		{
+			jsonData.serviceReasons=null;
+		}
+		
+		if( jsonData.specialServiceGroups == "" )
+		{
+			jsonData.specialServiceGroups=null;
+		}
+
+		if( jsonData.referralSources == "" )
+		{
+			jsonData.referralSources=null;
+		}
+		
+		// TODO: Handle username field
+		if (jsonData.username == "")
+		{
+			jsonData.username = jsonData.firstName +'.'+jsonData.lastName;			
+		}
+
+		return jsonData;
+    },
+    
+    populateFromExternalData: function( jsonData ){
+    	var me=this;
+    	me.set('photoUrl',jsonData.photoUrl);
+    	me.set('schoolId',jsonData.schoolId);
+    	me.set('firstName',jsonData.firstName);
+    	me.set('middleName',jsonData.middleName);
+    	me.set('lastName', jsonData.lastName);	
+    	me.set('anticipatedStartTerm',jsonData.anticipatedStartTerm);
+    	me.set('anticipatedStartYear',jsonData.anticipatedStartYear);
+    	me.set('cellPhone', jsonData.cellPhone);
+    	me.set('workPhone', jsonData.workPhone);
+    	me.set('addressLine1', jsonData.addressLine1);
+    	me.set('addressLine2', jsonData.addressLine2);
+    	me.set('city', jsonData.city);
+    	me.set('state', jsonData.state);
+    	me.set('zipCode', jsonData.zipCode);
+    	me.set('primaryEmailAddress', jsonData.primaryEmailAddress);
+    	me.set('secondaryEmailAddress', jsonData.secondaryEmailAddress);
+    	me.set('birthDate', jsonData.birthDate);
+    }
 });
 Ext.define('Ssp.model.PersonAppointment', {
     extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'startDate', type: 'date', dateFormat: 'time'},
-             {name: 'endDate', type: 'date', dateFormat: 'time'}]
+    fields: [{name:'startTime', type: 'date', dateFormat: 'time'},
+             {name: 'endTime', type: 'date', dateFormat: 'time'},
+             {name: 'attended', type: 'boolean'}],  
+
+	setAppointment: function( startDate, endDate ){
+		var me=this;
+		if (startDate != null && endDate != null)
+		{
+		   me.set('startTime', startDate);
+		   me.set('endTime', endDate);  		
+		}
+	}
+
 });
 Ext.define('Ssp.model.Appointment', {
     extend: 'Ssp.model.AbstractBase',
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	formUtils: 'formRendererUtils'
+    },    
     fields: [{name:'appointmentDate', type: 'date', dateFormat: 'time'},
              {name: 'startTime', type: 'date', dateFormat: 'time'},
-             {name: 'endTime', type: 'date', dateFormat: 'time'}],
-
+             {name: 'endTime', type: 'date', dateFormat: 'time'}],        
+             
     getStartDate: function(){
 		var me=this;
-    	var startDate = new Date( me.get('appointmentDate') );
-		startDate.setHours( me.get('startTime').getHours() );
+    	var startDate = me.get('appointmentDate');
+    	startDate.setHours( me.get('startTime').getHours() );
 		startDate.setMinutes( me.get('startTime').getMinutes() );
 		return startDate;
     },
     
     getEndDate: function(){
     	var me=this;
-    	var endDate = new Date( me.get('appointmentDate') );
+    	var endDate = me.get('appointmentDate');
 		endDate.setHours( me.get('endTime').getHours() );
 		endDate.setMinutes( me.get('endTime').getMinutes() );
 		return endDate;    	
@@ -6408,6 +16357,13 @@ Ext.define('Ssp.model.PersonDocument', {
              {name:'note',type:'string'},
              {name: 'confidentialityLevel',type: 'auto'}]
 });
+Ext.define('Ssp.model.PersonProgramStatus', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name:'programStatusId', type: 'string'},
+             {name: 'effectiveDate', type: 'date', dateFormat: 'time'},
+             {name: 'expirationDate', type: 'date', dateFormat: 'time', defaultValue: null},
+             {name: 'programStatusChangeReasonId', type: 'string', defaultValue: null}]
+});
 Ext.define('Ssp.model.tool.studentintake.PersonDemographics', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name: 'personId', type: 'string'},
@@ -6416,13 +16372,10 @@ Ext.define('Ssp.model.tool.studentintake.PersonDemographics', {
              {name: 'citizenshipId', type: 'string'},
              {name: 'ethnicityId', type: 'string'},
              {name: 'veteranStatusId', type: 'string'},
-             {name: 'abilityToBenefit', type: 'boolean'},
              {name: 'primaryCaregiver', type: 'boolean'},
              {name: 'childCareNeeded', type: 'boolean'},
              {name: 'employed', type: 'boolean'},
-             {name: 'numberOfChildren', type: 'int'},
-             {name: 'anticipatedStartTerm', type: 'string'},
-             {name: 'anticipatedStartYear', type: 'int'}, 		 
+             {name: 'numberOfChildren', type: 'int'},	 
              {name: 'countryOfResidence', type: 'string'},
              {name: 'paymentStatus', type: 'string'},
              {name: 'gender', type: 'string'},
@@ -6440,8 +16393,13 @@ Ext.define('Ssp.model.tool.studentintake.PersonEducationGoal', {
     fields: [{name: 'personId', type: 'string'},
     		 {name: 'educationGoalId', type: 'string'},
     		 {name: 'description', type: 'string'},
+    		 {name: 'plannedMajor', type: 'string'},
+    		 {name: 'howSureAboutMajor', type: 'int'},
+    		 {name: 'careerDecided', type:'boolean'},
     		 {name: 'plannedOccupation', type: 'string'},
-    		 {name: 'howSureAboutMajor', type: 'int'}]
+    		 {name: 'howSureAboutOccupation', type:'int'},
+    		 {name: 'confidentInAbilities', type: 'boolean'},
+    		 {name: 'additionalAcademicProgramInformationNeeded', type: 'boolean'}]
 });
 Ext.define('Ssp.model.tool.studentintake.PersonEducationPlan', {
 	extend: 'Ssp.model.AbstractBase',
@@ -6457,7 +16415,7 @@ Ext.define('Ssp.model.tool.actionplan.Task', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'name',type:'string'},
              {name:'description',type:'string'},
-             {name:'dueDate', type:'date', dateFormat:'time'},
+             {name:'dueDate', type:'date', dateFormat: 'time'},
              {name:'reminderSentDate', type:'date', dateFormat:'time'},
              {name: 'confidentialityLevel',
                  convert: function(value, record) {
@@ -6480,22 +16438,57 @@ Ext.define('Ssp.model.tool.actionplan.Task', {
 });
 Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlert', {
     extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'courseName',type:'string'},
+    fields: [{name:'personId', type: 'string'},
+             {name:'courseName', type:'string'},
+             {name:'courseTitle', type:'string'},
+             {name:'emailCC', type:'string'},
+             {name:'campusId', type:'string'},
+             {name:'earlyAlertReasonId', type:'string'},
+             {name:'earlyAlertReasonIds', type:'string'},
+             {name:'earlyAlertReasonOtherDescription', type:'string'},
+             {name:'earlyAlertSuggestionIds', type:'auto'},
+             {name:'earlyAlertSuggestionOtherDescription', type:'string'},
+             {name:'comment', type:'string'},
+             {name:'closedDate', type: 'date', dateFormat: 'time'},
+             {name:'closedById', type:'string'}, 
+             {name:'sendEmailToStudent', type:'boolean'}]
+});
+Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name:'personId', type: 'string'},
+             {name:'courseName',type:'string'},
              {name:'courseTitle',type:'string'},
              {name:'emailCC',type:'string'},
              {name:'campusId',type:'string'},
+             {name:'earlyAlertReasonId',type:'string'},
              {name:'earlyAlertReasonIds',type:'auto'},
              {name:'earlyAlertReasonOtherDescription',type:'string'},
              {name:'earlyAlertSuggestionIds',type:'auto'},
              {name:'earlyAlertSuggestionOtherDescription',type:'string'},
              {name:'comment',type:'string'},
              {name:'closedDate',type:'time'},
-             {name:'closedById',type:'string'}]
+             {name:'closedById',type:'string'},
+             {name:'sendEmailToStudent', type:'boolean'},
+             
+             /* props for tree manipulation */
+             {name:'iconCls',type:'string'},
+             {name:'leaf',type:'boolean',defaultValue: false},
+             {name:'expanded',type:'boolean'},
+             {name:'text',type: 'string'},
+             {name:'nodeType',type:'string',defaultValue:'early alert'},
+             {name:'gridDisplayDetails', type:'string'},
+             /* end props for tree manipulation */
+             
+             {name:'earlyAlertId',type:'string'},
+             {name:'earlyAlertOutcomeId',type:'string'},
+             {name:'earlyAlertOutcomeOtherDescription',type:'string'},
+             {name:'earlyAlertReferralIds',type:'auto'},
+             {name:'earlyAlertOutreachIds',type:'auto'},
+             {name:'comment',type:'string'}]
 });
 Ext.define('Ssp.model.tool.earlyalert.EarlyAlertResponse', {
     extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'name',type:'string'},
-             {name:'earlyAlertId',type:'string'},
+    fields: [{name:'earlyAlertId',type:'string'},
              {name:'earlyAlertOutcomeId',type:'string'},
              {name:'earlyAlertOutcomeOtherDescription',type:'string'},
              {name:'earlyAlertReferralIds',type:'auto'},
@@ -6505,7 +16498,8 @@ Ext.define('Ssp.model.tool.earlyalert.EarlyAlertResponse', {
 Ext.define('Ssp.model.tool.journal.JournalEntry', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'comment',type:'string'},
-             {name: 'confidentialityLevel', type:'auto'},
+             {name:'entryDate',type: 'date',dateFormat:'time', defaultValue: new Date()},
+             {name:'confidentialityLevel', type:'auto'},
 			 {name:'journalSource', type:'auto'},
 			 {name:'journalTrack', type:'auto'},
 			 {name:'journalEntryDetails',type:'auto',defaultValue:[]}],
@@ -6520,7 +16514,7 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 			if (item.journalStep.id == step.id){
 				// step exists. add the journal detail
 				stepExists=true;
-				item.journalStepDetail.push(detail);
+				item.journalStepDetails.push(detail);
 			}
 		});
 		if (stepExists==false){
@@ -6531,15 +16525,15 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 	removeJournalDetail: function( step, detail ){
 		Ext.Array.each(this.get("journalEntryDetails"),function(item,index){
 			if (item.journalStep.id == step.id){
-				Ext.Array.each( item.journalStepDetail, function(innerItem, innerIndex){
+				Ext.Array.each( item.journalStepDetails, function(innerItem, innerIndex){
 					// remove the detail
 					if ( innerItem.id == detail.id ){
-						Ext.Array.remove(item.journalStepDetail,innerItem);
+						Ext.Array.remove(item.journalStepDetails,innerItem);
 					}
 				},this);
 								
 				// no details remain, so remove the step
-				if (item.journalStepDetail.length<1)
+				if (item.journalStepDetails.length<1)
 				{
 					this.removeJournalStep( step );
 				}
@@ -6548,7 +16542,7 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 	},
 	
 	addJournalStep: function( step, detail ){
-		this.get("journalEntryDetails").push( {"journalStep":step, "journalStepDetail": [detail] } );
+		this.get("journalEntryDetails").push( {"journalStep":step, "journalStepDetails": [detail] } );
 	},
 	
 	removeJournalStep: function( step ){
@@ -6562,6 +16556,36 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
 	
 	removeAllJournalEntryDetails: function(){
 		this.set('journalEntryDetails',[]);
+	},
+	
+	getGroupedDetails: function(){
+		var groupedDetails=[];
+		var journalEntryDetails = this.get('journalEntryDetails');
+		Ext.Array.each(journalEntryDetails,function(item,index){
+			var stepName=item.journalStep.name;
+    		var details = item.journalStepDetails;
+    		Ext.Array.each(details,function(detail,index){
+    			detail.group=stepName;
+    			groupedDetails.push( detail );
+    		},this);
+    	},this);
+		return groupedDetails;
+	},
+	
+	/**
+	 * Used to clean the group property from journalEntryDetails,
+	 * so that they save correctly. This method should only be
+	 * used against json data that is ready to be saved and not
+	 * against this object itself.
+	 */
+	clearGroupedDetails: function( journalEntryDetails ){
+		Ext.Array.each(journalEntryDetails,function(item,index){
+    		var details = item.journalStepDetails;
+    		Ext.Array.each(details,function(detail,index){
+    			delete detail.group;
+    		},this);
+    	},this);
+		return journalEntryDetails;		
 	}
 });
 Ext.define('Ssp.model.reference.AbstractReference', {
@@ -6599,7 +16623,7 @@ Ext.define('Ssp.model.reference.JournalTrack', {
 });
 Ext.define('Ssp.model.reference.JournalStep', {
 	extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+    fields: [{name:'usedForTransition',type:'boolean'}]
 });
 Ext.define('Ssp.model.reference.JournalStepDetail', {
 	extend: 'Ssp.model.reference.AbstractReference',
@@ -6686,25 +16710,13 @@ Ext.define('Ssp.store.Coaches', {
         apiProperties: 'apiProperties'
     },
 	constructor: function(){
-		Ext.apply(this, {
-							proxy: this.apiProperties.getProxy(this.apiProperties.getItemUrl('person')),
-							autoLoad: false
-						});
-		return this.callParent(arguments);
+		var me=this;
+		Ext.apply(me, {
+						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')),
+						autoLoad: false
+					});
+		return me.callParent(arguments);
 	}
-});
-Ext.define('Ssp.store.Goals', {
-    extend: 'Ext.data.Store',
-    model: 'Ssp.model.PersonGoal',
-    mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	apiProperties: 'apiProperties'
-    },    
-	constructor: function(){
-		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personGoal') ),
-						  autoLoad: false });
-		return this.callParent(arguments);
-	},
 });
 Ext.define('Ssp.store.JournalEntries', {
     extend: 'Ext.data.Store',
@@ -6716,6 +16728,19 @@ Ext.define('Ssp.store.JournalEntries', {
     },    
 	constructor: function(){
 		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personJournalEntry') ),
+						  autoLoad: false });
+		return this.callParent(arguments);
+	},
+});
+Ext.define('Ssp.store.Goals', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.PersonGoal',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },    
+	constructor: function(){
+		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personGoal') ),
 						  autoLoad: false });
 		return this.callParent(arguments);
 	},
@@ -6755,19 +16780,20 @@ Ext.define('Ssp.store.reference.AbstractReferences', {
     },
 
 	constructor: function(){
-		Ext.apply(this, { 
-						    proxy: this.apiProperties.getProxy(''), 
+		var me=this;
+		Ext.apply(me, { 
+						    proxy: me.apiProperties.getProxy(''), 
 							autoLoad: false,
 							autoSync: false,
-						    pageSize: this.apiProperties.getPagingSize(),
+						    pageSize: me.apiProperties.getPagingSize(),
 						    params : {
 								page : 0,
 								start : 0,
-								limit : this.apiProperties.getPagingSize()
+								limit : me.apiProperties.getPagingSize()
 							}						
 						}
 		);
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });
 Ext.define('Ssp.store.reference.AnticipatedStartTerms', {
@@ -6857,6 +16883,21 @@ Ext.define('Ssp.store.reference.JournalTracks', {
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('journalTrack')});
     }
 });
+Ext.define('Ssp.store.People', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.Person',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
+	constructor: function(){
+		Ext.apply(this, {
+							proxy: this.apiProperties.getProxy(this.apiProperties.getItemUrl('person')),
+							autoLoad: false
+						});
+		return this.callParent(arguments);
+	}
+});
 Ext.define('Ssp.store.reference.States', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.reference.State',
@@ -6879,24 +16920,53 @@ Ext.define('Ssp.store.Students', {
 });
 Ext.define('Ssp.store.Tools', {
     extend: 'Ext.data.Store',
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
     model: 'Ssp.model.Tool',
     autoLoad: false,
+    
     constructor: function(){
-		return this.callParent(arguments);
+    	var me=this;
+    	me.callParent( arguments );
+    	
+    	var sspTools = [{ group:'beta', name: "Profile", toolType: "profile", active: true },
+    	                { group:'beta', name: "Student Intake", toolType: "studentintake", active: true },
+    	                { group:'beta', name: "Action Plan", toolType: "actionplan", active: true },
+    	                { group:'beta', name: "Journal", toolType: "journal", active: true },
+    	                { group:'rc1', name: "Early Alert", toolType: "earlyalert", active: true }]         
+    	                
+    	                /*
+    	                { group:'rc1', name: "SIS", toolType: "StudentInformationSystem", active: true },
+    	                { group:'rc1', name: "Documents", toolType: "StudentDocuments", active: false },
+    	                { group:'rc1', name: "Disability Services", toolType: "DisabilityServices", active: false },
+    	                { group:'rc1', name: "Displaced Workers", toolType: "DisplacedWorker", active: false },
+    	                { group:'rc1', name: "Student Success", toolType: "StudentSuccess", active: false },
+    	                */
+     	
+     	// set the model
+     	me.loadData( me.applySecurity( sspTools ) )
+  
+    	return me;
     },
-    data: [{ group:'alpha', name: "Profile", toolType: "Profile", active: true },
-           { group:'alpha', name: "Student Intake", toolType: "StudentIntake", active: true },
-           { group:'alpha', name: "Action Plan", toolType: "ActionPlan", active: true },
-           { group:'alpha', name: "Journal", toolType: "Journal", active: true },
-           { group:'beta', name: "Early Alert", toolType: "EarlyAlert", active: true },
-           { group:'beta', name: "SIS", toolType: "StudentInformationSystem", active: true },
-           { group:'rc1', name: "Documents", toolType: "StudentDocuments", active: false },
-           { group:'rc1', name: "Disability Services", toolType: "DisabilityServices", active: false },
-           { group:'rc1', name: "Displaced Workers", toolType: "DisplacedWorker", active: false },
-           { group:'rc1', name: "Student Success", toolType: "StudentSuccess", active: false },
-           ],
+    
+    applySecurity: function( tools ){
+    	var me=this;
+    	var sspSecureTools = [];
+    	
+    	Ext.Array.each( tools, function( tool, index){
+    		var toolSecurityIdentifier = tool.toolType.toUpperCase() + '_TOOL';
+    		if ( me.authenticatedPerson.hasAccess( toolSecurityIdentifier ) )
+    		{
+    			sspSecureTools.push( tool );
+    		}
+    	});
+    	
+    	return sspSecureTools;
+    }
            
-    groupField: 'group'
+    //groupField: 'group'
 });
 Ext.define('Ssp.store.reference.YesNo', {
     extend: 'Ext.data.Store',
@@ -6910,6 +16980,265 @@ Ext.define('Ssp.store.reference.YesNo', {
     	});
     	Ext.apply(this, {autoLoad: false});
 		this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewController', {
+	extend: 'Ssp.controller.admin.AdminItemAssociationViewController',
+    config: {
+        associatedItemType: 'challengeReferral',
+        parentItemType: 'challenge',
+        parentIdAttribute: 'challengeId',
+        associatedItemIdAttribute: 'challengeReferralId'
+    },
+	constructor: function(){
+		var me=this;
+		me.callParent(arguments);
+		me.clear();
+		me.getParentItems();		
+		return me;
+	}	
+});
+Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
+	extend: 'Ext.tree.Panel',
+	alias : 'widget.displaychallengereferralsadmin',
+	title: 'Challenge Referral Associations',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson',
+        store: 'treeStore'
+    },
+    viewConfig: {
+        plugins: {
+            ptype: 'treeviewdragdrop'
+        }
+    },
+	height: '100%',
+	width: '100%',
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+    		     autoScroll: true,
+    			 store: me.store,
+    			 useArrows: true,
+    			 rootVisible: false,
+    			 singleExpand: true,
+			     viewConfig: {
+				        plugins: {
+				            ptype: 'treeviewdragdrop',
+				            dropGroup: 'gridtotree',
+				            enableDrop: true
+				        }
+				 },    			 
+    		     dockedItems: [{
+     				        dock: 'top',
+     				        xtype: 'toolbar',
+     				        items: [{
+     				            tooltip: 'Delete selected association',
+     				            text: 'Delete Associations',
+     				            xtype: 'button',
+     				            hidden: !me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ASSOCIATION_ADMIN_DELETE_BUTTON'),
+     				            itemId: 'deleteAssociationButton'
+     				        }]
+     		    	    }]
+     		       	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController', {
+	extend: 'Ssp.controller.admin.AdminItemAssociationViewController',
+    config: {
+        associatedItemType: 'challenge',
+        parentItemType: 'category',
+        parentIdAttribute: 'categoryId',
+        associatedItemIdAttribute: 'challengeId'
+    },
+	constructor: function(){
+		this.callParent(arguments);
+
+		this.clear();
+		this.getParentItems();
+		
+		return this;
+	}
+});
+Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeCategoriesAdmin', {
+	extend: 'Ext.tree.Panel',
+	alias : 'widget.displaychallengecategoriesadmin',
+	title: 'Challenge Category Associations',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson',
+        store: 'treeStore'
+    },
+	height: '100%',
+	width: '100%',
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+    		     singleExpand: true,
+    			 store: me.store,
+    			 useArrows: true,
+    			 rootVisible: false,
+    			 singleExpand: true,
+			     viewConfig: {
+			        plugins: {
+			            ptype: 'treeviewdragdrop',
+			            dropGroup: 'gridtotree',
+			            enableDrop: true
+			        }
+			     },
+    			 dockedItems: [{
+     				        dock: 'top',
+     				        xtype: 'toolbar',
+     				        items: [{
+     				            tooltip: 'Delete selected association',
+     				            text: 'Delete Associations',
+     				            hidden: !me.authenticatedPerson.hasAccess('CHALLENGE_CATEGORIES_ASSOCIATION_ADMIN_DELETE_BUTTON'),
+     				            xtype: 'button',
+     				            itemId: 'deleteAssociationButton'
+     				        }]
+     		    	    }] 
+     		       	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.admin.journal.AssociateTrackStepsAdminViewController', {
+	extend: 'Ssp.controller.admin.AdminItemAssociationViewController',
+    config: {
+        associatedItemType: 'journalStep',
+        parentItemType: 'journalTrack',
+        parentIdAttribute: 'journalTrackId',
+        associatedItemIdAttribute: 'journalStepId'
+    },
+	constructor: function(){
+		this.callParent(arguments);
+		
+		this.clear();
+		this.getParentItems();
+		
+		return this;
+	}	
+});
+Ext.define('Ssp.view.admin.forms.journal.AssociateTrackStepsAdmin', {
+	extend: 'Ext.tree.Panel',
+	alias : 'widget.associatetrackstepsadmin',
+	title: 'Track Steps Associations',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.journal.AssociateTrackStepsAdminViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson',
+        store: 'treeStore'
+    },
+	height: '100%',
+	width: '100%',
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+    			 store: me.store,
+    			 useArrows: true,
+    			 rootVisible: false,
+    			 singleExpand: true,
+			     viewConfig: {
+			        plugins: {
+			            ptype: 'treeviewdragdrop',
+			            dropGroup: 'gridtotree',
+			            enableDrop: true
+			        }
+			     },
+    			 dockedItems: [{
+     				        dock: 'top',
+     				        xtype: 'toolbar',
+     				        items: [{
+     				            tooltip: 'Delete selected association',
+     				            text: 'Delete Associations',
+     				            xtype: 'button',
+     				            hidden: !me.authenticatedPerson.hasAccess('TRACK_STEP_ASSOCIATION_ADMIN_DELETE_BUTTON'),
+     				            itemId: 'deleteAssociationButton'
+     				        }]
+     		    	    }] 
+     		       	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.admin.journal.AssociateStepDetailsAdminViewController', {
+	extend: 'Ssp.controller.admin.AdminItemAssociationViewController',
+    config: {
+        associatedItemType: 'journalStepDetail',
+        parentItemType: 'journalStep',
+        parentIdAttribute: 'journalStepId',
+        associatedItemIdAttribute: 'journalStepDetailId'
+    },
+	constructor: function(){
+		var me=this;
+		me.callParent(arguments);
+		me.clear();
+		me.getParentItems();	
+		return me;
+	}
+});
+Ext.define('Ssp.view.admin.forms.journal.AssociateStepDetailsAdmin', {
+	extend: 'Ext.tree.Panel',
+	alias : 'widget.associatestepdetailsadmin',
+	title: 'Step Details Associations',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.journal.AssociateStepDetailsAdminViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson',
+        store: 'treeStore'
+    },
+    viewConfig: {
+        plugins: {
+            ptype: 'treeviewdragdrop'
+        }
+    },
+	height: '100%',
+	width: '100%',
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+    		     autoScroll: true,
+    			 store: me.store,
+    			 useArrows: true,
+    			 rootVisible: false,
+    			 singleExpand: true,
+			     viewConfig: {
+				        plugins: {
+				            ptype: 'treeviewdragdrop',
+				            dropGroup: 'gridtotree',
+				            enableDrop: true
+				        }
+				 },    			 
+    		     dockedItems: [{
+     				        dock: 'top',
+     				        xtype: 'toolbar',
+     				        items: [{
+     				            tooltip: 'Delete selected association',
+     				            text: 'Delete Associations',
+     				            xtype: 'button',
+     				            hidden: !me.authenticatedPerson.hasAccess('STEP_DETAIL_ASSOCIATION_ADMIN_DELETE_BUTTON'),
+     				            itemId: 'deleteAssociationButton'
+     				        }]
+     		    	    }]
+     		       	
+    	});
+    	
+    	return me.callParent(arguments);
     }
 });
 Ext.define('Ssp.model.tool.actionplan.TaskGroup', {
@@ -6941,16 +17270,16 @@ Ext.define('Ssp.store.reference.EmploymentShifts', {
     model: 'Ssp.model.reference.EmploymentShift',
 	autoLoad: false
 });
-Ext.define('Ssp.model.reference.Campus', {
-    extend: 'Ssp.model.reference.AbstractReference',
-    fields: [{name:'earlyAlertCoordinatorId', type: 'string'}]
-});
 Ext.define('Ssp.model.reference.CampusEarlyAlertRouting', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'earlyAlertReasonId',type:'string'},
              {name:'person',type:'auto'},
              {name:'groupName',type:'string'},
              {name:'groupEmail',type:'string'}]
+});
+Ext.define('Ssp.model.reference.Campus', {
+    extend: 'Ssp.model.reference.AbstractReference',
+    fields: [{name:'earlyAlertCoordinatorId', type: 'string'}]
 });
 Ext.define('Ssp.model.reference.ChildCareArrangement', {
 	extend: 'Ssp.model.reference.AbstractReference',
@@ -6999,7 +17328,7 @@ Ext.define('Ssp.model.reference.MaritalStatus', {
 });
 Ext.define('Ssp.model.reference.ProgramStatus', {
 	extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+    fields: [{name:'programStatusChangeReasonRequired',type:'boolean'}]
 });
 Ext.define('Ssp.model.reference.ProgramStatusChangeReason', {
 	extend: 'Ssp.model.reference.AbstractReference',
@@ -7017,7 +17346,7 @@ Ext.define('Ssp.model.reference.SpecialServiceGroup', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: []
 });
-Ext.define('Ssp.model.reference.VeteranStatus', {
+Ext.define('Ssp.model.reference.StudentStatus', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: []
 });
@@ -7025,7 +17354,7 @@ Ext.define('Ssp.model.reference.StudentType', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: [{name:'requireInitialAppointment',type:'boolean'}]
 });
-Ext.define('Ssp.model.reference.StudentStatus', {
+Ext.define('Ssp.model.reference.VeteranStatus', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: []
 });

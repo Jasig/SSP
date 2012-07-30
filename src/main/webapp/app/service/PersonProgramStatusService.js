@@ -37,8 +37,8 @@ Ext.define('Ssp.service.PersonProgramStatusService', {
     		if (id=="")
     		{
     			// Fix dates for GMT offset to UTC
-    			jsonData.effectiveDate = me.formUtils.fixDateOffsetWithTime( jsonData.effectiveDate );
-    					
+    			jsonData.effectiveDate = me.formUtils.fixDateOffset( jsonData.effectiveDate );
+	
     			me.apiProperties.makeRequest({
         			url: url,
         			method: 'POST',
@@ -46,7 +46,7 @@ Ext.define('Ssp.service.PersonProgramStatusService', {
         			successFunc: success,
         			failureFunc: failure,
         			scope: me
-        		});				
+        		});		
     		}else{
     			
     			// update
