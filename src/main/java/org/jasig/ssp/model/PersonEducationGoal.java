@@ -48,18 +48,23 @@ public class PersonEducationGoal
 	@Size(max = 128)
 	private String militaryBranchDescription;
 
+	@Column
 	private Integer howSureAboutMajor;
 
 	@Column(length = 50)
 	@Size(max = 50)
 	private String plannedMajor;
 
+	@Column
 	private Boolean careerDecided;
 
+	@Column
 	private Integer howSureAboutOccupation;
 
+	@Column
 	private Boolean confidentInAbilities;
 
+	@Column
 	private Boolean additionalAcademicProgramInformationNeeded;
 
 	public PersonEducationGoal() {

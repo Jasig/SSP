@@ -57,9 +57,15 @@ public class PersonEducationGoalTOFactoryImpl extends
 		model.setHowSureAboutMajor(tObject.getHowSureAboutMajor());
 		model.setDescription(tObject.getDescription());
 		model.setPlannedOccupation(tObject.getPlannedOccupation());
+		model.setPlannedMajor(tObject.getPlannedMajor());
+		model.setCareerDecided(tObject.getCareerDecided());
+		model.setHowSureAboutOccupation(tObject.getHowSureAboutOccupation());
+		model.setConfidentInAbilities(tObject.getConfidentInAbilities());
+		model.setAdditionalAcademicProgramInformationNeeded(tObject.getAdditionalAcademicProgramInformationNeeded());
+		
 		model.setEducationGoal(tObject.getEducationGoalId() == null ? null
 				: educationGoalService.get(tObject.getEducationGoalId()));
-
+		
 		return model;
 	}
 }
