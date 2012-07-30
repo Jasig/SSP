@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.service.PersonService;
@@ -286,6 +287,14 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 	@Test
 	public void testGetCurrent() throws ObjectNotFoundException,
 			ValidationException {
+
+		final PersonProgramStatus status = personProgramStatusService
+				.getCurrent(PERSON_ID);
+
+		final Date yesterday = new Date(new Date().getTime()
+				- (24 * 60 * 60 * 1000));
+		status.setExpirationDate(yesterday);
+
 		// arrange, act
 		final PersonProgramStatusTO programStatus = controller
 				.getCurrent(PERSON_ID);

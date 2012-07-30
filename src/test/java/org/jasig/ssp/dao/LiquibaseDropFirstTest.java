@@ -2,12 +2,13 @@ package org.jasig.ssp.dao;
 
 import static org.junit.Assert.fail;
 
+import java.util.Properties;
+
 import javax.sql.DataSource;
 
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -26,8 +27,24 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration("dao-dropFirst-testConfig.xml")
 public class LiquibaseDropFirstTest {
 
+	/**
+	 * Add this key to ssp-config.properties with a value of false to drop the
+	 * database and run the production changelog. Otherwise the test will be
+	 * skipped.
+	 */
+	public static final String RUN_PRODUCTION_CHANGELOG = "test.liquibase_drop_first.skip_production_changelog";
+
+	/**
+	 * Add this key to ssp-config.properties with a value of false to drop the
+	 * database and run the test changelog. Otherwise the test will be skipped.
+	 */
+	public static final String RUN_TEST_CHANGELOG = "test.liquibase_drop_first.skip_test_changelog";
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(LiquibaseDropFirstTest.class);
+
+	@Autowired
+	private transient Properties configProperties;
 
 	@Autowired
 	private transient DataSource dataSource;
@@ -35,9 +52,25 @@ public class LiquibaseDropFirstTest {
 	@Autowired
 	private transient ResourceLoader resourceLoader;
 
-	@Ignore(value = "Useful for development. But until a better process is ready, since it is desctructive, disable this test so it isn't accidentally run on a production database.")
+	private boolean skipIt(final String changeLogName) {
+		final String config = configProperties.getProperty(changeLogName);
+
+		final boolean skip = (config == null)
+				|| (config.equalsIgnoreCase("true"));
+
+		if (skip) {
+			LOGGER.info("Skipping {}", changeLogName);
+		}
+
+		return skip;
+	}
+
 	@Test
 	public void testProductionScripts() {
+		if (skipIt(RUN_PRODUCTION_CHANGELOG)) {
+			return;
+		}
+
 		// run the prod master changelog
 		final SpringLiquibase sl = newSpringLiquibaseWithDropFirst();
 		sl.setChangeLog("classpath:org/jasig/ssp/database/masterChangeLog.xml");
@@ -52,9 +85,12 @@ public class LiquibaseDropFirstTest {
 		}
 	}
 
-	@Ignore(value = "Useful for development. But until a better process is ready, since it is desctructive, disable this test so it isn't accidentally run on a production database.")
 	@Test
 	public void testProductionAndTestScripts() {
+		if (skipIt(RUN_TEST_CHANGELOG)) {
+			return;
+		}
+
 		// run the test master changelog
 		final SpringLiquibase sl = newSpringLiquibaseWithDropFirst();
 		sl.setChangeLog("classpath:org/jasig/ssp/database/masterChangeLog-test.xml");

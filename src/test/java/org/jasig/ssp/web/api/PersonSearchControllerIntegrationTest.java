@@ -3,7 +3,6 @@ package org.jasig.ssp.web.api; // NOPMD
 import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.UUID;
@@ -86,8 +85,6 @@ public class PersonSearchControllerIntegrationTest {
 				results.getRows());
 
 		final PersonSearchResultTO result = results.getRows().iterator().next();
-		assertNull("Gosling has no non-expired program statuses.",
-				result.getCurrentProgramStatusName());
 		assertNotNull("Gosling should have had a coach.", result.getCoach()
 				.getId());
 	}

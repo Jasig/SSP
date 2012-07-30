@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -88,7 +87,7 @@ public abstract class AbstractDao<T> {
 	 * Run a query and get the total rows and results with out having to define
 	 * the Restrictions twice
 	 */
-	protected PagingWrapper<T> processCriteriaWithSortingAndPaging(
+	protected <Q> PagingWrapper<Q> processCriteriaWithSortingAndPaging(
 			@NotNull final Criteria query, final SortingAndPaging sAndP,
 			final boolean filterByStatus) {
 
@@ -96,35 +95,20 @@ public abstract class AbstractDao<T> {
 		Long totalRows = null; // NOPMD by jon on 5/20/12 4:42 PM
 
 		if (sAndP != null) {
-			if (filterByStatus) {
-				sAndP.addStatusFilterToCriteria(query);
-			}
-
-			// Only query for total count if query is paged or filtered
-			if (sAndP.isPaged()
-					|| (filterByStatus && sAndP.isFilteredByStatus())) {
-				totalRows = (Long) query.setProjection(
-						Projections.rowCount()).uniqueResult();
-
-				// clear the count projection from the query
-				query.setProjection(null);
-			}
-
-			// Add Sorting and Paging
-			sAndP.addPagingToCriteria(query);
-			sAndP.addSortingToCriteria(query);
+			totalRows = sAndP.applySortingAndPagingToPagedQuery(query,
+					filterByStatus);
 		}
 
 		// Query results
 		@SuppressWarnings(UNCHECKED)
-		final List<T> results = query.list();
+		final List<Q> results = query.list();
 
 		// If there is no total yet, take it from the size of the results
 		if (null == totalRows) {
 			totalRows = Long.valueOf(results.size());
 		}
 
-		return new PagingWrapper<T>(totalRows, results);
+		return new PagingWrapper<Q>(totalRows, results);
 	}
 
 	/**

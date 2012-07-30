@@ -36,4 +36,17 @@
 			</delete>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="" author="daniel.bower">
+		<update tableName="person_program_status">
+			<column name="expiration_date"></column>
+			<where>id='c0403da8-c6a6-11e1-af59-0026b9e7ff4c'</where>
+		</update>
+		<rollback>
+			<update tableName="person_program_status">
+				<column name="expiration_date" valueDate="2014-03-20T00:00:00" />
+				<where>id='c0403da8-c6a6-11e1-af59-0026b9e7ff4c'</where>
+			</update>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

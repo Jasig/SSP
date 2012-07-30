@@ -41,12 +41,15 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 
+		ProgramStatus searchByStatus;
 		// programStatus : <programStatusId>, default to Active
 		if (programStatus == null) {
-			programStatusService.get(ProgramStatus.ACTIVE_ID);
+			searchByStatus = programStatusService.get(ProgramStatus.ACTIVE_ID);
+		} else {
+			searchByStatus = programStatus;
 		}
 
-		final PagingWrapper<Person> people = dao.searchBy(programStatus,
+		final PagingWrapper<Person> people = dao.searchBy(searchByStatus,
 				(outsideCaseload == null ? Boolean.FALSE : outsideCaseload),
 				searchTerm, advisor, sAndP);
 
