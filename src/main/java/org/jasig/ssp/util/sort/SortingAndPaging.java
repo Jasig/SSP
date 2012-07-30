@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.collections.Pair;
@@ -92,8 +93,8 @@ public final class SortingAndPaging { // NOPMD
 			final String defaultSortProperty,
 			final SortDirection defaultSortDirection) {
 		this.status = status;
-		this.firstResult = firstResult == null
-				|| firstResult < Integer.valueOf(0) ? Integer.valueOf(0)
+		this.firstResult = (firstResult == null)
+				|| (firstResult < Integer.valueOf(0)) ? Integer.valueOf(0)
 				: firstResult;
 		this.maxResults = maxResults == null
 				? DEFAULT_MAXIMUM_RESULTS
@@ -233,6 +234,31 @@ public final class SortingAndPaging { // NOPMD
 			criteria.setFirstResult(firstResult);
 			criteria.setMaxResults(maxResults);
 		}
+	}
+
+	public Long applySortingAndPagingToPagedQuery(final Criteria query,
+			final boolean filterByStatus) {
+
+		if (filterByStatus) {
+			addStatusFilterToCriteria(query);
+		}
+
+		Long totalRows = null;
+		// Only query for total count if query is paged or filtered
+		if (isPaged()
+				|| (filterByStatus && isFilteredByStatus())) {
+			totalRows = (Long) query.setProjection(
+					Projections.rowCount()).uniqueResult();
+
+			// clear the count projection from the query
+			query.setProjection(null);
+		}
+
+		// Add Sorting and Paging
+		addPagingToCriteria(query);
+		addSortingToCriteria(query);
+
+		return totalRows;
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package org.jasig.ssp.dao;
 
+import java.util.List;
 import java.util.Locale;
 
 import javax.validation.constraints.NotNull;
@@ -18,6 +19,8 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.google.common.collect.Lists;
 
 /**
  * PersonSearch DAO
@@ -49,21 +52,24 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	 *            Sorting and paging parameters
 	 * @return List of people that match the specified filters
 	 */
-	public PagingWrapper<Person> searchBy(final ProgramStatus programStatus,
+	public PagingWrapper<Person> searchBy(
+			@NotNull final ProgramStatus programStatus,
 			final Boolean outsideCaseload, @NotNull final String searchTerm,
 			final Person advisor, final SortingAndPaging sAndP) {
 
 		if (!StringUtils.isNotBlank(searchTerm)) {
 			throw new IllegalArgumentException("search term must be specified");
 		}
+		if (programStatus == null) {
+			throw new IllegalArgumentException(
+					"program status must be specified");
+		}
 
 		final Criteria query = createCriteria();
 
-		if (programStatus != null) {
-			query.createAlias("programStatuses", "personProgramStatus")
-					.add(Restrictions.eq("personProgramStatus.programStatus",
-							programStatus));
-		}
+		query.createAlias("programStatuses", "personProgramStatus")
+				.add(Restrictions.eq("personProgramStatus.programStatus",
+						programStatus));
 
 		if (Boolean.FALSE.equals(outsideCaseload)) {
 			query.add(Restrictions.eq("coach", advisor));
@@ -97,6 +103,21 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		query.setFetchMode("personProgramStatus", FetchMode.JOIN);
 		query.setFetchMode("personProgramStatus.programStatus", FetchMode.JOIN);
 
-		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
+		final PagingWrapper<Object[]> results = processCriteriaWithSortingAndPaging(
+				query, sAndP, true);
+
+		final List<Person> people = Lists.newArrayList();
+		for (Object[] personAndProgramStatus : results) {
+			if ((personAndProgramStatus != null)
+					&& (personAndProgramStatus.length > 0)) {
+				if (personAndProgramStatus[0] instanceof Person) {
+					people.add((Person) personAndProgramStatus[0]);
+				} else if (personAndProgramStatus[1] instanceof Person) {
+					people.add((Person) personAndProgramStatus[1]);
+				}
+			}
+		}
+
+		return new PagingWrapper<Person>(results.getResults(), people);
 	}
 }
