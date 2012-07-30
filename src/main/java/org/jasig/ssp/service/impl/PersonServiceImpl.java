@@ -87,6 +87,10 @@ public class PersonServiceImpl implements PersonService {
 					LOGGER.info("Successfully Created Account for {}",
 							username);
 				} catch (final ObjectExistsException oee) {
+					// Don't have to give up in the same way do in the
+					// ConstraintViolationException catch below b/c we happen to
+					// know an insert hasn't been attempted yet under the
+					// current create() impl.
 					person = personFromUsername(username);
 				}
 
@@ -103,7 +107,20 @@ public class PersonServiceImpl implements PersonService {
 				if (sqlException.getConstraintName().equals(
 						"unique_person_username")) {
 					LOGGER.info("Tried to add a user that was already present");
+
+					// SSP-397. Have to throw something to rollback the
+					// transaction, else Spring/Hib will attempt a commit when
+					// this method returns, which Postgres will refuse with a
+					// "current transaction is aborted" message and the caller
+					// will get an opaque HibernateJdbcException. With an
+					// ObjectExistsException the client has at least some
+					// clue as to a reasonable recovery path.
+					throw new ObjectExistsException("Account with user name "
+							+ username + " already exists.");
 				}
+
+				// Also SSP-397
+				throw sqlException;
 
 			} catch (final Exception genException) {
 				// This exception seems to get swallowed... trying to reveal
