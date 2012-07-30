@@ -3,6 +3,8 @@ package org.jasig.ssp.transferobject;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 
@@ -45,19 +47,41 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 
 	private ObjectStatus objectStatus;
 
+	/**
+	 * Get the identifier
+	 * 
+	 * @return the identifier
+	 */
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(final UUID id) {
+	/**
+	 * Sets the identifier
+	 * 
+	 * @param id
+	 *            the identifier; required
+	 */
+	public void setId(@NotNull final UUID id) {
 		this.id = id;
 	}
 
+	/**
+	 * Get the created date
+	 * 
+	 * @return the created date
+	 */
 	public Date getCreatedDate() {
 		return createdDate == null ? null : new Date(createdDate.getTime());
 	}
 
-	public void setCreatedDate(final Date createdDate) {
+	/**
+	 * Sets the created date
+	 * 
+	 * @param createdDate
+	 *            the created date; required
+	 */
+	public void setCreatedDate(@NotNull final Date createdDate) {
 		this.createdDate = createdDate == null ? null : new Date(
 				createdDate.getTime());
 	}
@@ -66,7 +90,7 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		return createdBy;
 	}
 
-	public void setCreatedBy(final PersonLiteTO createdBy) {
+	public void setCreatedBy(@NotNull final PersonLiteTO createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -74,7 +98,7 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		return modifiedDate == null ? null : new Date(modifiedDate.getTime());
 	}
 
-	public void setModifiedDate(final Date modifiedDate) {
+	public void setModifiedDate(@NotNull final Date modifiedDate) {
 		this.modifiedDate = modifiedDate == null ? null : new Date(
 				modifiedDate.getTime());
 	}
@@ -83,8 +107,7 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(
-			final PersonLiteTO modifiedBy) {
+	public void setModifiedBy(@NotNull final PersonLiteTO modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -92,7 +115,7 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		return objectStatus;
 	}
 
-	public void setObjectStatus(final ObjectStatus objectStatus) {
+	public void setObjectStatus(@NotNull final ObjectStatus objectStatus) {
 		this.objectStatus = objectStatus;
 	}
 
@@ -111,5 +134,4 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		modifiedDate = model.getModifiedDate();
 		objectStatus = model.getObjectStatus();
 	}
-
 }

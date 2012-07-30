@@ -1,4 +1,4 @@
-package org.jasig.ssp.security;
+package org.jasig.ssp.security; // NOPMD
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -10,7 +10,6 @@ import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,9 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDetailsServiceTest {
 
 	@Autowired
-	private transient SecurityService securityService;
-
-	@Autowired
 	private transient SspUserDetailsService userDetailsService;
 
 	@Autowired
@@ -40,6 +36,8 @@ public class UserDetailsServiceTest {
 
 	@Autowired
 	private transient PersonService personService;
+
+	private static final String TEST_USERNAME = "adaLovelace";
 
 	@Before
 	public void setUp() {
@@ -52,13 +50,12 @@ public class UserDetailsServiceTest {
 				"ken", "password");
 		final SspUser user = (SspUser) userDetailsService
 				.loadUserDetails(token);
-		assertNotNull(user);
-		assertEquals("ken", user.getUsername());
+		assertNotNull("User should not have been null.", user);
+		assertEquals("Usernames did not match.", "ken", user.getUsername());
 	}
 
 	@Test
 	public void loadUserDetailsForNewUser() throws ObjectNotFoundException {
-		final String username = "adaLovelace";
 		final PersonAttributesResult adaAttribs = new PersonAttributesResult(
 				"adaLovelace", "Ada", "Lovelace", "ada@lovelace.com",
 				"112-358-1321");
@@ -66,18 +63,18 @@ public class UserDetailsServiceTest {
 		final PersonAttributesService personAttributesService =
 				createMock(PersonAttributesService.class);
 		personService.setPersonAttributesService(personAttributesService);
-		expect(personAttributesService.getAttributes(username)).andReturn(
+		expect(personAttributesService.getAttributes(TEST_USERNAME)).andReturn(
 				adaAttribs);
 		replay(personAttributesService);
 
 		final Authentication token = new UsernamePasswordAuthenticationToken(
-				username, "password");
+				TEST_USERNAME, "password");
 		final SspUser user = (SspUser) userDetailsService
 				.loadUserDetails(token);
-		assertNotNull(user);
-		assertEquals(username, user.getUsername());
+		assertNotNull("User should not have been null.", user);
+		assertEquals("Usernames did not match.", TEST_USERNAME,
+				user.getUsername());
 
 		personDao.delete(user.getPerson());
 	}
-
 }

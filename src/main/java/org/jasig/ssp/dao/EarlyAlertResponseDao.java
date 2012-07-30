@@ -41,7 +41,8 @@ public class EarlyAlertResponseDao extends
 			final UUID earlyAlertId,
 			final SortingAndPaging sAndP) {
 		return processCriteriaWithSortingAndPaging(
-				createCriteria().createAlias("earlyAlert", "ea").add(
-						Restrictions.eq("ea.id", earlyAlertId)), sAndP, true);
+				createCriteria().add(
+						Restrictions.eq("earlyAlert.id", earlyAlertId)), sAndP,
+				true);
 	}
 }

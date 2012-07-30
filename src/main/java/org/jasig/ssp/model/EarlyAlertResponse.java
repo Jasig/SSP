@@ -24,9 +24,7 @@ import org.jasig.ssp.model.reference.EarlyAlertReferral;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class EarlyAlertResponse
-		extends AbstractAuditable
-		implements Auditable {
+public class EarlyAlertResponse extends AbstractAuditable implements Auditable {
 
 	private static final long serialVersionUID = 7109630326339706214L;
 

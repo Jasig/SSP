@@ -79,7 +79,7 @@ public class EarlyAlertResponseTOFactoryImpl extends
 
 		model.setEarlyAlertOutreachIds(new HashSet<EarlyAlertOutreach>());
 		if (tObject.getEarlyAlertOutreachIds() != null) {
-			for (UUID obj : tObject.getEarlyAlertOutreachIds()) {
+			for (final UUID obj : tObject.getEarlyAlertOutreachIds()) {
 				model.getEarlyAlertOutreachIds().add(
 						earlyAlertOutreachService.load(obj));
 			}
@@ -87,7 +87,7 @@ public class EarlyAlertResponseTOFactoryImpl extends
 
 		model.setEarlyAlertReferralIds(new HashSet<EarlyAlertReferral>());
 		if (tObject.getEarlyAlertReferralIds() != null) {
-			for (UUID obj : tObject.getEarlyAlertReferralIds()) {
+			for (final UUID obj : tObject.getEarlyAlertReferralIds()) {
 				model.getEarlyAlertReferralIds().add(
 						earlyAlertReferralService.load(obj));
 			}

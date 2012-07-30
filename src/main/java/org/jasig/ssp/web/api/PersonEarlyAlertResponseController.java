@@ -115,11 +115,9 @@ public class PersonEarlyAlertResponseController extends
 		}
 
 		final PagingWrapper<EarlyAlertResponse> data = service
-				.getAllForEarlyAlert(
-						earlyAlert,
-						SortingAndPaging.createForSingleSort(status, start,
-								limit, sort, sortDirection, "createdDate"));
-
+				.getAllForEarlyAlert(earlyAlert, SortingAndPaging
+						.createForSingleSort(status, start, limit, sort,
+								sortDirection, "createdDate"));
 		return new PagedResponse<EarlyAlertResponseTO>(true,
 				data.getResults(), factory.asTOList(data.getRows()));
 	}

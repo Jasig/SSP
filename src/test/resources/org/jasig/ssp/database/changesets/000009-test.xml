@@ -36,7 +36,7 @@
 			</delete>
 		</rollback>
 	</changeSet>
-	
+
 	<changeSet id="" author="daniel.bower">
 		<update tableName="person_program_status">
 			<column name="expiration_date"></column>
@@ -49,4 +49,25 @@
 			</update>
 		</rollback>
 	</changeSet>
+
+	<changeSet id="add sample early alert response" author="jon.adams">
+		<insert tableName="early_alert_response">
+			<column name="id" value="99d80dc0-4ea0-4a73-a98e-24a47421ac63" />
+			<column name="created_date" valueDate="2012-07-30T00:00:00" />
+			<column name="modified_date" valueDate="2012-07-30T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" valueDate="1" />
+			<column name="early_alert_id" value="74891747-36aa-409c-8b1f-76d3eaf9028e" />
+			<column name="early_alert_outcome_id" value="9a98ff78-92af-4681-8111-adb3300cbe1c" />
+			<column name="early_alert_outcome_other_description" value="some test outcome comment" />
+			<column name="comment" value="test comment here" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert_response">
+				<where>id = '99d80dc0-4ea0-4a73-a98e-24a47421ac63'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
 </databaseChangeLog>
