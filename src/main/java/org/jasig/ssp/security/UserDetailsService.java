@@ -3,8 +3,10 @@ package org.jasig.ssp.security;
 import java.util.Collection;
 
 import org.codehaus.plexus.util.StringUtils;
+import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.exception.EmailNotFoundException;
+import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.security.exception.UserNotEnabledException;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -47,7 +49,19 @@ public class UserDetailsService implements SspUserDetailsService {
 			LOGGER.info(
 					"Unable to load {}'s record., creating user in ssp",
 					username);
-			person = personService.createUserAccount(username, authorities);
+			try {
+				person = personService.createUserAccount(username, authorities);
+			} catch ( ObjectExistsException ee ) {
+				try {
+					person = personService.personFromUsername(username);
+				} catch ( ObjectNotFoundException eee ) {
+					throw new UnableToCreateAccountException(
+							"Couldn't create account with username" + username
+							+ " because an account with that username seemed"
+							+ " to already exist, but was unable to load that"
+							+ " existing account.", eee);
+				}
+			}
 		}
 
 		final boolean enabled = person.getEnabled();
