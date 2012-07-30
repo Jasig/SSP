@@ -354,5 +354,36 @@
 			</delete>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="Add additional external_person data" author="alexander.leader">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip adding columns to external_person in integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		
+		<insert tableName="external_person">
+			<column name="school_id" value="u1234938"/>
+			<column name="username" value="andrew.advisor"/>
+			<column name="first_name" value="Andrew"/>
+			<column name="last_name" value="Advisor"/>
+			<column name="middle_name" value="Love"/>
+			<column name="birth_date" valueDate="1953-01-10"/>
+			<column name="primary_email_address" value="test@sinclair.edu"/>
+			<column name="address_line_1" value="444 West Third Street"/>
+			<column name="city" value="Dayton"/>
+			<column name="state" value="OH"/>
+			<column name="zip_code" value="45402"/>
+			<column name="home_phone" value="908-123-4567"/>
+			<column name="work_phone" value="123-456-7654"/>
+			<column name="actual_start_year" value="2012"/>
+			<column name="actual_start_term" value="AU"/>
+			<column name="gender" value="M"/>
+			<column name="is_local" value="Y"/>
+			<column name="balance_owed" value="0.00"/>
+		</insert>
+	</changeSet>
 
 </databaseChangeLog>
