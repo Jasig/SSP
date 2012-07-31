@@ -1,11 +1,14 @@
 package org.jasig.ssp.model
 
 import static org.junit.Assert.*
+
 import org.junit.Test
 
 import com.google.common.collect.Sets
 
-class AuditableTest {
+class AuditableTest implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	class AuditableSubClass extends AbstractAuditable{
 
