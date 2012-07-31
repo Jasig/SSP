@@ -9,9 +9,11 @@ import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -63,13 +65,16 @@ public class EarlyAlertDaoTest {
 	private transient EarlyAlertDao dao;
 
 	@Autowired
-	private transient SecurityServiceInTestEnvironment securityService;
-
-	@Autowired
 	private transient CampusService campusService;
 
 	@Autowired
 	private transient PersonService personService;
+
+	@Autowired
+	private transient SessionFactory sessionFactory;
+
+	@Autowired
+	private transient SecurityServiceInTestEnvironment securityService;
 
 	@Before
 	public void setUp() {
@@ -86,7 +91,7 @@ public class EarlyAlertDaoTest {
 	 */
 	@Test
 	public void testSaveNew() throws ObjectNotFoundException {
-		final EarlyAlert saved = dao.save(createTestEarlyAlert());
+		final EarlyAlert saved = dao.save(createTestClosedEarlyAlert());
 
 		assertNotNull("Id should have been automatically generated.",
 				saved.getId());
@@ -132,8 +137,8 @@ public class EarlyAlertDaoTest {
 
 	@Test
 	public void uuidGeneration() throws ObjectNotFoundException {
-		final EarlyAlert obj = dao.save(createTestEarlyAlert());
-		final EarlyAlert obj2 = dao.save(createTestEarlyAlert());
+		final EarlyAlert obj = dao.save(createTestClosedEarlyAlert());
+		final EarlyAlert obj2 = dao.save(createTestClosedEarlyAlert());
 
 		assertNotNull("Generated ID should not have been null.", obj.getId());
 		assertNotNull("Generated ID should not have been null.", obj2.getId());
@@ -144,7 +149,7 @@ public class EarlyAlertDaoTest {
 
 	@Test
 	public void testHashCode() throws ObjectNotFoundException {
-		final EarlyAlert obj = createTestEarlyAlert();
+		final EarlyAlert obj = createTestClosedEarlyAlert();
 		assertNotEquals("HashCodes should not have matched.", obj.hashCode(),
 				new EarlyAlert().hashCode());
 		assertEquals("HashCodes should have matched.",
@@ -159,12 +164,12 @@ public class EarlyAlertDaoTest {
 	 * @return a new sample message to use for testing
 	 * @throws ObjectNotFoundException
 	 */
-	private EarlyAlert createTestEarlyAlert() throws ObjectNotFoundException {
+	private EarlyAlert createTestClosedEarlyAlert()
+			throws ObjectNotFoundException {
 		final EarlyAlert obj = new EarlyAlert();
-		obj.setClosedDate(null);
-		obj.setClosedDate(new Date());
 		obj.setPerson(personService.get(PERSON_ID));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setClosedDate(new Date());
 		obj.setClosedById(PERSON_ID);
 		obj.setCourseName(EARLY_ALERT_COURSE_NAME);
 		obj.setCampus(campusService.get(UUID
@@ -189,27 +194,69 @@ public class EarlyAlertDaoTest {
 	@Test
 	public void getCountOfActiveAlertsForPeopleIds()
 			throws ObjectNotFoundException {
-		final EarlyAlert obj = createTestEarlyAlert();
-		obj.setClosedDate(null);
-		obj.setClosedById(null);
-		final EarlyAlert saved = dao.save(obj);
+		// arrange
+		final UUID randomUuid = UUID.randomUUID();
+
+		final EarlyAlert earlyAlert = createTestClosedEarlyAlert();
+		earlyAlert.setClosedDate(null);
+		earlyAlert.setClosedById(null);
+		final EarlyAlert saved = dao.save(earlyAlert);
+
+		final EarlyAlert earlyAlert2 = createTestClosedEarlyAlert();
+		earlyAlert2.setClosedDate(null);
+		earlyAlert2.setClosedById(null);
+		earlyAlert2.setObjectStatus(ObjectStatus.INACTIVE);
+		final EarlyAlert saved2 = dao.save(earlyAlert2);
+		sessionFactory.getCurrentSession().flush();
 
 		final Collection<UUID> peopleIds = Lists.newArrayList();
 		peopleIds.add(PERSON_ID);
+		peopleIds.add(randomUuid);
 
 		try {
-			dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
+			final Map<UUID, Number> result = dao
+					.getCountOfActiveAlertsForPeopleIds(peopleIds);
+			assertEquals("Count of ActiveAlertsForPeopleIds was not expected.",
+					2, result.size());
+			assertEquals("Count of PERSON_ID was not expected.", 2,
+					result.get(PERSON_ID).intValue());
+			assertEquals("Count of randomUuid was not expected.", 0,
+					result.get(randomUuid).intValue());
 		} finally {
 			dao.delete(saved);
+			dao.delete(saved2);
 		}
 	}
 
 	@Test
-	public void getCountOfActiveAlertsForPeopleIdsTTEmpty()
+	public void getCountOfActiveAlertsForPeopleIdsWithoutNew()
 			throws ObjectNotFoundException {
 		final Collection<UUID> peopleIds = Lists.newArrayList();
 		peopleIds.add(PERSON_ID);
 
-		dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
+		final Map<UUID, Number> count = dao
+				.getCountOfActiveAlertsForPeopleIds(peopleIds);
+		assertEquals("Count of ActiveAlertsForPeopleIds was not expected.", 1,
+				count.size());
+		assertEquals("Count of PERSON_ID was not expected.", 1,
+				count.get(PERSON_ID).intValue());
+	}
+
+	@Test
+	public void getCountOfActiveAlertsForPeopleIdsEmpty()
+			throws ObjectNotFoundException {
+		final Collection<UUID> peopleIds = Lists.newArrayList();
+
+		final Map<UUID, Number> count = dao
+				.getCountOfActiveAlertsForPeopleIds(peopleIds);
+		assertEquals("Count of ActiveAlertsForPeopleIds was not expected.", 0,
+				count.size());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void getCountOfActiveAlertsForPeopleIdsNull()
+			throws ObjectNotFoundException {
+		dao.getCountOfActiveAlertsForPeopleIds(null);
+		fail("Exception should have been thrown.");
 	}
 }
