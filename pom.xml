@@ -41,6 +41,11 @@
 					<artifactId>sqlserver-jdbc4</artifactId>
 					<version>3.0</version>
 				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>JTDS</id>
+			<dependencies>
 				<dependency>
 					<groupId>net.sourceforge.jtds</groupId>
 					<artifactId>jtds</artifactId>
