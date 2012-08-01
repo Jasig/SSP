@@ -100,6 +100,8 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	private static final UUID CAMPUS_ID = UUID
 			.fromString("901E104B-4DC7-43F5-A38E-581015E204E1");
 
+	private static final String EXTERNAL_STUDENT = "u1234938";
+
 	private static final String COURSE_NAME = "Some Really Fancy Course Name";
 
 	@Autowired
@@ -349,13 +351,13 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		final EarlyAlertTO obj = createEarlyAlert();
 		obj.setPersonId(null);
 		final EarlyAlertTO saved = controller.create(PERSON_ID, obj);
-		assertNotNull("Saved instance should not have been null.", saved);
+		assertNotNull("Saved object should not have been null.", saved);
 
 		final UUID savedId = saved.getId();
-		assertNotNull("Saved instance identifier should not have been null.",
+		assertNotNull("Saved identifier should not have been null.",
 				savedId);
 
-		assertEquals("Saved instance Person ID values did not match.",
+		assertEquals("Saved Person ID values did not match.",
 				PERSON_ID,
 				saved.getPersonId());
 
@@ -596,6 +598,55 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		assertEquals(
 				"Should have included 2 Early Alerts. (One existing, one new)",
 				2, earlyAlerts.getRows().size());
+	}
+
+	/**
+	 * Test the {@link PersonEarlyAlertController#create(UUID, EarlyAlertTO)}
+	 * actions for a student that only exists in the external database.
+	 * 
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
+	 */
+	@Test
+	public void testControllerCreateWithExternalStudent()
+			throws ObjectNotFoundException, ValidationException {
+		// arrange
+		final EarlyAlertTO obj = new EarlyAlertTO();
+		obj.setCampusId(CAMPUS_ID);
+
+		final Set<EarlyAlertReasonTO> earlyAlertReasonIds = Sets.newHashSet();
+		earlyAlertReasonIds.add(new EarlyAlertReasonTO(EARLY_ALERT_REASON_ID,
+				""));
+		obj.setEarlyAlertReasonIds(earlyAlertReasonIds);
+
+		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
+				.newHashSet();
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_ID1, ""));
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
+				EARLY_ALERT_SUGGESTION_ID2, ""));
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+
+		// act
+		final EarlyAlertTO saved = controller.create(EXTERNAL_STUDENT, obj);
+		assertNotNull("Saved instance should not have been null.", saved);
+
+		final UUID savedId = saved.getId();
+		assertNotNull("Saved instance identifier should not have been null.",
+				savedId);
+
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		session.clear();
+
+		final Person newStudent = personService.get(saved.getPersonId());
+
+		// assert
+		assertNotNull("New person should have been created.", newStudent);
+		assertEquals("New person did not match student ids.", EXTERNAL_STUDENT,
+				newStudent.getSchoolId());
 	}
 
 	/**

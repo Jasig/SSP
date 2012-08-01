@@ -48,7 +48,7 @@ public class AppointmentDaoTest {
 	@Autowired
 	private transient PersonService personService;
 
-	private Person james;
+	private Person james; // NOPMD
 
 	@Before
 	public void setUp() throws ObjectNotFoundException {
@@ -104,7 +104,6 @@ public class AppointmentDaoTest {
 		final Appointment appt = dao
 				.getCurrentAppointmentForPerson(securityService
 						.currentUser().getPerson());
-		assertNotNull(appt);
+		assertNotNull("Appointment should not have been null.", appt);
 	}
-
 }

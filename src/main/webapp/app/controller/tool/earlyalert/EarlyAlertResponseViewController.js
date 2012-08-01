@@ -75,7 +75,12 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		{			
 		   record.set('earlyAlertReferralIds', selectedReferrals);
 		}else{
-		   record.data.referrals=null;
+		   // AAL : 08/01/12 : Commented line below as it was adding a "referrals" property to the API call
+				// and this property isn't valid per the api spec.  Added the setting of the earlyAlertReferralIds
+				// property to the empty array when none are selected.  By default this value was being set to an
+				// empty string which isn't valid per the api spec and was throwing an exception on the server.
+		   // record.data.referrals=null;
+		   record.set('earlyAlertReferralIds', []);
 		}		
 		
 		// set the early alert id for the response

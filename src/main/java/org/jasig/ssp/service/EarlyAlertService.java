@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Message;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
@@ -32,6 +33,22 @@ public interface EarlyAlertService
 	EarlyAlert create(EarlyAlert obj) throws ObjectNotFoundException,
 			ValidationException;
 
+	/**
+	 * Count how many open early alerts exist for the specified people
+	 * (students).
+	 * 
+	 * <p>
+	 * An 'active' means it has not been closed (has a null closedDate) and has
+	 * an ObjectStatus of {@link ObjectStatus#ACTIVE}.
+	 * <p>
+	 * If list is empty, no results will be returned.
+	 * 
+	 * @param peopleIds
+	 *            personIds for all the students for which to count early
+	 *            alerts; required
+	 * @return Map of students (personId) with the count of open early alerts
+	 *         for each.
+	 */
 	Map<UUID, Number> getCountOfActiveAlertsForPeopleIds(
 			final Collection<UUID> peopleIds);
 

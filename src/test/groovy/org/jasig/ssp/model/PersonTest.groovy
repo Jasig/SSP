@@ -2,12 +2,13 @@ package org.jasig.ssp.model
 
 import static org.junit.Assert.*
 
-import java.util.UUID
-
 import org.junit.Test
 
 
-class PersonTest {
+class PersonTest implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	class AuditableSubClass extends AbstractAuditable{
 
 		private static final long serialVersionUID = 312482021529627624L;
