@@ -3,7 +3,6 @@ package org.jasig.ssp.web.api;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +12,8 @@ import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.transferobject.TransferObject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -49,6 +50,9 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @ContextConfiguration("../ControllerIntegrationTests-context.xml")
 public abstract class AbstractControllerHttpTestSupport<C extends AbstractBaseController, TO extends TransferObject<T>, T extends Auditable> { // NOPMD
 	// Class needs to be abstract so it won't try to run tests on it
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(AbstractControllerHttpTestSupport.class);
 
 	@Autowired
 	protected transient ApplicationContext applicationContext;
@@ -110,17 +114,21 @@ public abstract class AbstractControllerHttpTestSupport<C extends AbstractBaseCo
 	}
 
 	/**
-	 * This method finds the handler for a given request URI.
+	 * This method finds the handler for a given request URI, or throws an
+	 * exception if none were found.
 	 * 
+	 * <p>
 	 * It will also ensure that the URI Parameters i.e. /context/test/{name} are
 	 * added to the request
 	 * 
 	 * @param request
-	 * @return
-	 * @throws Exception
+	 *            the request for which to find a handler
+	 * @return The handler that agreed to handle the specified request.
+	 * @throws NoSuchMethodException
+	 *             if no acceptable handlers could be found
 	 */
 	protected Object getHandler(final MockHttpServletRequest request)
-			throws Exception { // NOPMD by jon.adams on 5/16/12 12:00 PM
+			throws NoSuchMethodException {
 		HandlerExecutionChain chain = null; // NOPMD by jon.adams on 5/14/12
 
 		final Map<String, HandlerMapping> map = applicationContext
@@ -132,17 +140,28 @@ public abstract class AbstractControllerHttpTestSupport<C extends AbstractBaseCo
 
 			try {
 				chain = mapping.getHandler(request);
-			} catch (HttpRequestMethodNotSupportedException e) {
+			} catch (final HttpRequestMethodNotSupportedException exc) {
 				// ignore and try next
+				LOGGER.info(
+						mapping.getClass().getName()
+								+ " handler determined it will not handle the request. Message: "
+								+ exc.getMessage(), exc);
+			} catch (final Exception exc) {
+				throw new RuntimeException(exc); // NOPMD
 			}
 
-			if (chain != null) {
+			if (chain == null) {
+				// ignore and try next
+				LOGGER.debug(mapping.getClass().getName()
+						+ " handler determined it will not handle the request.");
+			} else {
+				// found one. quit looking for more.
 				break;
 			}
 		}
 
 		if (chain == null) {
-			throw new InvalidParameterException(
+			throw new NoSuchMethodException(
 					"Unable to find handler for request URI: "
 							+ request.getRequestURI());
 		}
