@@ -136,11 +136,21 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	{
 	    	successFunc = function(response,view){
 		    	var r = Ext.decode(response.responseText);
-		    	if (r)
+		    	var challengeReferral = null;
+		    	if (r.rows != null)
 		    	{
-		    		me.task.set('name', r.name);
-		    		me.task.set('description', r.description);
-		    		me.task.set('challengeReferralId', r.id);
+		    		Ext.Array.each(r.rows,function(item,index){
+		    			if (item.id==id)
+		    			{
+		    				challengeReferral = item;
+		    			}
+		    		});
+		    		if (challengeReferral != null)
+		    		{
+			    		me.task.set('name', challengeReferral.name);
+			    		me.task.set('description', challengeReferral.description);
+			    		me.task.set('challengeReferralId', challengeReferral.id);
+		    		}
 		    		me.task.set('challengeId', challengeId);
 		    		me.task.set('confidentialityLevel', {id: confidentialityLevelId});
 		    		me.appEventsController.getApplication().fireEvent('loadTask');
@@ -148,7 +158,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 			};
 	    	
 	    	me.apiProperties.makeRequest({
-				url: me.apiProperties.createUrl( me.challengeReferralUrl+'/'+id ),
+				url: me.apiProperties.createUrl( me.challengeReferralUrl ), // +'/'+id
 				method: 'GET',
 				jsonData: '',
 				successFunc: successFunc 
