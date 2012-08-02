@@ -263,7 +263,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		{
     			personProgramStatus = new Ssp.model.PersonProgramStatus();
     			personProgramStatus.set('programStatusId',Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
-    			personProgramStatus.set('effectiveDate', now() );
+    			personProgramStatus.set('effectiveDate', Ext.Date.now() );
     			me.personProgramStatusService.save( 
     					r.id, 
     					personProgramStatus.data, 

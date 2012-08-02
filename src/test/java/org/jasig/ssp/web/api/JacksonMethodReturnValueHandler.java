@@ -9,6 +9,8 @@ import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TransferObject;
 import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
@@ -38,6 +40,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class JacksonMethodReturnValueHandler implements
 		HandlerMethodReturnValueHandler {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(JacksonMethodReturnValueHandler.class);
+
 	public final static String KEY = "JacksonMethodReturnValueHandler_ObjectKey";
 
 	@Override
@@ -60,6 +65,8 @@ public class JacksonMethodReturnValueHandler implements
 			Class<?> currentClass = paramType;
 			while ((currentClass != null) && !Object.class.equals(currentClass)) {
 				if (valid.equals(currentClass)) {
+					LOGGER.trace("Handler determined it will handle type: "
+							+ paramType.getName());
 					return true;
 				}
 
@@ -67,6 +74,8 @@ public class JacksonMethodReturnValueHandler implements
 			}
 		}
 
+		LOGGER.warn("Handler determined it will not handle type: "
+				+ paramType.getName());
 		return false;
 	}
 

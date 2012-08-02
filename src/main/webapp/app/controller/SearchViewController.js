@@ -434,7 +434,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   		}
 	   		personProgramStatus = new Ssp.model.PersonProgramStatus();
 	   		personProgramStatus.set('programStatusId', programStatusId );
-	   		personProgramStatus.set('effectiveDate', now() );
+	   		personProgramStatus.set('effectiveDate', Ext.Date.now() );
 	   		me.personProgramStatusService.save( 
 	   				personId, 
 	   				personProgramStatus.data, 

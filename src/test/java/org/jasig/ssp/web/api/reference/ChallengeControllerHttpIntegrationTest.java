@@ -48,6 +48,8 @@ public class ChallengeControllerHttpIntegrationTest
 	@Autowired
 	private transient ChallengeController controller;
 
+	private static final String BASE_REQUEST_URI = "/1/reference/challenge/";
+
 	private static final UUID CHALLENGE_ID = UUID
 			.fromString("f5bb0a62-1756-4ea2-857d-5821ee44a1d0");
 
@@ -71,31 +73,25 @@ public class ChallengeControllerHttpIntegrationTest
 	 * {@link ChallengeController#getAll(org.jasig.ssp.model.ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
-	 * @throws Exception
-	 *             Thrown if the controller throws any exceptions.
+	 * @throws NoSuchMethodException
+	 *             Thrown if the mapping could not be found.
 	 */
 	@Test
-	public void testControllerGetAllRequest() throws Exception {
-		// Request URI, but do not include any Spring configuration roots, but
-		// do include class-level root paths. Example:
-		// "/reference/controllerlevelmapping/mymethodmapping"
-		final String requestUri = "/1/reference/challenge/";
-		final Object handler;
-		final HandlerMethod expectedHandlerMethod;
-
+	public void testControllerGetAllRequest() throws NoSuchMethodException {
 		request.setMethod(RequestMethod.GET.toString());
-		request.setRequestURI(requestUri);
+		request.setRequestURI(BASE_REQUEST_URI);
 
-		handler = getHandler(request);
+		final Object handler = getHandler(request);
 
 		// Lookup the expected handler that Spring should have pulled.
 		// HandlerMethod(controller, action (method) name, parameters)
-		expectedHandlerMethod = new HandlerMethod(controller, "getAll",
+		final HandlerMethod expectedHandlerMethod = new HandlerMethod(
+				controller, "getAll",
 				ObjectStatus.class, Integer.class, Integer.class, String.class,
 				String.class);
 
-		Assert.assertEquals("Correct handler found for request url: "
-				+ requestUri, expectedHandlerMethod.toString(),
+		Assert.assertEquals("Correct handler found for request url should be: "
+				+ BASE_REQUEST_URI, expectedHandlerMethod.toString(),
 				handler.toString());
 	}
 
@@ -107,14 +103,15 @@ public class ChallengeControllerHttpIntegrationTest
 	 * <p>
 	 * Assumes that there is some sample data in the Challenges database.
 	 * 
+	 * @throws NoSuchMethodException
+	 *             Thrown if the mapping could not be found.
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerGetAllResponse() throws Exception {
-		final String requestUri = "/1/reference/challenge/";
+	public void testControllerGetAllResponse() throws Exception { // NOPMD
 		request.setMethod(RequestMethod.GET.toString());
-		request.setRequestURI(requestUri);
+		request.setRequestURI(BASE_REQUEST_URI);
 
 		final Object handler = getHandler(request);
 
@@ -123,7 +120,7 @@ public class ChallengeControllerHttpIntegrationTest
 				Integer.class, String.class, String.class);
 
 		Assert.assertEquals("Correct handler found for request url: "
-				+ requestUri, expectedHandlerMethod.toString(),
+				+ BASE_REQUEST_URI, expectedHandlerMethod.toString(),
 				handler.toString());
 
 		Assert.assertNotNull("Response mock object should not have been null.",
@@ -135,7 +132,7 @@ public class ChallengeControllerHttpIntegrationTest
 		assertNotNull("Response was not handled.", mav);
 
 		@SuppressWarnings("unchecked")
-		PagedResponse<ChallengeTO> result = (PagedResponse<ChallengeTO>) getModelObject(mav);
+		final PagedResponse<ChallengeTO> result = (PagedResponse<ChallengeTO>) getModelObject(mav);
 
 		assertNotNull(
 				"Return object from the controller should not have been null.",
@@ -156,9 +153,10 @@ public class ChallengeControllerHttpIntegrationTest
 	 * @throws Exception
 	 *             Thrown if the controller throws any exceptions.
 	 */
+	// some installations fail on this test, but not the developer's
 	@Ignore
 	@Test
-	public void testControllerGet() throws Exception {
+	public void testControllerGet() throws Exception { // NOPMD
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -177,17 +175,16 @@ public class ChallengeControllerHttpIntegrationTest
 		// "/reference/controllerlevelmapping/mymethodmapping"
 		final String requestUri = "/1/reference/challenge/"
 				+ CHALLENGE_ID.toString();
-		final Object handler;
-		final HandlerMethod expectedHandlerMethod;
 
 		request.setMethod(RequestMethod.GET.toString());
 		request.setRequestURI(requestUri);
 
-		handler = getHandler(request);
+		final Object handler = getHandler(request);
 
 		// Lookup the expected handler that Spring should have pulled.
 		// HandlerMethod(controller, action (method) name, parameters)
-		expectedHandlerMethod = new HandlerMethod(controller, "get", UUID.class);
+		final HandlerMethod expectedHandlerMethod = new HandlerMethod(
+				controller, "get", UUID.class);
 
 		// For the most part we will be expecting HandlerMethod objects to be
 		// returned for our controllers.
@@ -227,7 +224,7 @@ public class ChallengeControllerHttpIntegrationTest
 	 *             Thrown if the controller throws any exceptions.
 	 */
 	@Test
-	public void testControllerDelete() throws Exception {
+	public void testControllerDelete() throws Exception { // NOPMD
 		final String requestUri = "/1/reference/challenge/"
 				+ CHALLENGE_ID.toString();
 
