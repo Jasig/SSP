@@ -131,7 +131,7 @@ public class PersonJournalEntryControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final JournalEntryTO obj = controller.get(PERSON_ID,
+		final JournalEntryTO obj = controller.byId(PERSON_ID,
 				UUID.randomUUID());
 
 		assertNull(
@@ -151,7 +151,7 @@ public class PersonJournalEntryControllerIntegrationTest {
 	@Test(expected = ObjectNotFoundException.class)
 	public void testControllerGet() throws ObjectNotFoundException,
 			ValidationException {
-		final JournalEntryTO journalEntry = controller.get(PERSON_ID,
+		final JournalEntryTO journalEntry = controller.byId(PERSON_ID,
 				JOURNAL_ENTRY_ID);
 
 		assertNull(
@@ -231,7 +231,7 @@ public class PersonJournalEntryControllerIntegrationTest {
 		session.flush();
 		session.clear();
 
-		final JournalEntryTO reloaded = controller.get(savedId, PERSON_ID);
+		final JournalEntryTO reloaded = controller.byId(savedId, PERSON_ID);
 		assertFalse("JournalEntryDetails should not have been empty.", reloaded
 				.getJournalEntryDetails().isEmpty());
 
@@ -261,7 +261,8 @@ public class PersonJournalEntryControllerIntegrationTest {
 		session.flush();
 		session.clear();
 
-		final JournalEntryTO reloadedAgain = controller.get(savedId, PERSON_ID);
+		final JournalEntryTO reloadedAgain = controller
+				.byId(savedId, PERSON_ID);
 		assertEquals(
 				"JournalEntryDetails did not have the expected number of entries.",
 				2, reloadedAgain.getJournalEntryDetails().size());
@@ -276,7 +277,7 @@ public class PersonJournalEntryControllerIntegrationTest {
 
 		try {
 			// ObjectNotFoundException expected at this point
-			final JournalEntryTO afterDeletion = controller.get(savedId,
+			final JournalEntryTO afterDeletion = controller.byId(savedId,
 					PERSON_ID);
 			assertNull(
 					"Instance should not be able to get loaded after it has been deleted.",
@@ -333,7 +334,7 @@ public class PersonJournalEntryControllerIntegrationTest {
 		session.flush();
 		session.clear();
 
-		final JournalEntryTO reloaded = controller.get(savedId, PERSON_ID);
+		final JournalEntryTO reloaded = controller.byId(savedId, PERSON_ID);
 		assertNotNull("Reloaded entry should not have been null.", reloaded);
 		assertNull("Track should have been null.", reloaded.getJournalTrack());
 	}
@@ -395,7 +396,7 @@ public class PersonJournalEntryControllerIntegrationTest {
 
 		session.clear();
 
-		final JournalEntryTO reloaded = controller.get(savedId, PERSON_ID);
+		final JournalEntryTO reloaded = controller.byId(savedId, PERSON_ID);
 		assertFalse("JournalEntryDetails should have had entries.", reloaded
 				.getJournalEntryDetails().isEmpty());
 		assertEquals("Details list did not have the expected item count.", 2,

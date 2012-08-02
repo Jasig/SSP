@@ -79,7 +79,7 @@ public class ConfidentialityDisclosureAgreementControllerIntegrationTest {
 				controller);
 
 		final ConfidentialityDisclosureAgreementTO obj = controller
-				.get(CONFIDENTIALITYDISCLOSUREAGREEMENT_ID);
+				.byId(CONFIDENTIALITYDISCLOSUREAGREEMENT_ID);
 
 		assertNotNull(
 				"Returned ConfidentialityDisclosureAgreementTO from the controller should not have been null.",
@@ -108,7 +108,7 @@ public class ConfidentialityDisclosureAgreementControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ConfidentialityDisclosureAgreementTO obj = controller.get(UUID
+		final ConfidentialityDisclosureAgreementTO obj = controller.byId(UUID
 				.randomUUID());
 
 		assertNull(

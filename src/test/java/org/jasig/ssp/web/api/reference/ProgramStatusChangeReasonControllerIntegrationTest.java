@@ -78,7 +78,7 @@ public class ProgramStatusChangeReasonControllerIntegrationTest {
 				controller);
 
 		final ProgramStatusChangeReasonTO obj = controller
-				.get(PROGRAM_STATUS_CHANGE_REASON_ID);
+				.byId(PROGRAM_STATUS_CHANGE_REASON_ID);
 
 		assertNotNull(
 				"Returned ProgramStatusChangeReasonTO from the controller should not have been null.",
@@ -105,7 +105,7 @@ public class ProgramStatusChangeReasonControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ProgramStatusChangeReasonTO obj = controller.get(UUID
+		final ProgramStatusChangeReasonTO obj = controller.byId(UUID
 				.randomUUID());
 
 		assertNull(

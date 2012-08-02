@@ -55,7 +55,7 @@ public class TermControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final TermTO obj = controller.get(TERM_CODE);
+		final TermTO obj = controller.byId(TERM_CODE);
 
 		assertNotNull(
 				"Returned TermTO from the controller should not have been null.",
@@ -81,7 +81,7 @@ public class TermControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final TermTO obj = controller.get("invalid id");
+		final TermTO obj = controller.byId("invalid id");
 
 		assertNull(
 				"Returned TermTO from the controller should have been null.",

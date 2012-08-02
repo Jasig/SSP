@@ -134,7 +134,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EarlyAlertTO obj = controller.get(PERSON_ID, UUID.randomUUID());
+		final EarlyAlertTO obj = controller.byId(PERSON_ID, UUID.randomUUID());
 
 		assertNull(
 				"Returned EarlyAlertTO from the controller should have been null.",
@@ -206,7 +206,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		assertTrue("Response should have returned success.",
 				response.isSuccess());
 
-		final EarlyAlertTO afterDeletion = controller.get(savedId,
+		final EarlyAlertTO afterDeletion = controller.byId(savedId,
 				PERSON_ID);
 		// ObjectNotFoundException expected at this point
 		assertNull(
@@ -225,7 +225,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	@Test
 	public void testControllerGet() throws ObjectNotFoundException,
 			ValidationException {
-		final EarlyAlertTO ea = controller.get(EARLY_ALERT_ID, PERSON_ID);
+		final EarlyAlertTO ea = controller.byId(EARLY_ALERT_ID, PERSON_ID);
 		assertEquals("Person instance does not match expected.", PERSON_ID,
 				ea.getPersonId());
 	}
@@ -242,7 +242,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 	@Test(expected = ObjectNotFoundException.class)
 	public void testControllerGetNotFound() throws ObjectNotFoundException,
 			ValidationException {
-		controller.get(UUID.randomUUID(), PERSON_ID);
+		controller.byId(UUID.randomUUID(), PERSON_ID);
 		fail("Exception should have been thrown.");
 	}
 
@@ -274,7 +274,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		session.clear();
 
 		// Reload data to make sure it filters correctly
-		final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
+		final EarlyAlertTO reloaded = controller.byId(savedId, PERSON_ID);
 
 		final Set<EarlyAlertSuggestionTO> suggestions = reloaded
 				.getEarlyAlertSuggestionIds();

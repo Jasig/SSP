@@ -56,7 +56,7 @@ public class ConfigControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ConfigTO obj = controller.get(CONFIG_ID);
+		final ConfigTO obj = controller.byId(CONFIG_ID);
 
 		assertNotNull(
 				"Returned ConfigTO from the controller should not have been null.",
@@ -82,7 +82,7 @@ public class ConfigControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ConfigTO obj = controller.get(UUID.randomUUID());
+		final ConfigTO obj = controller.byId(UUID.randomUUID());
 
 		assertNull(
 				"Returned ConfigTO from the controller should have been null.",

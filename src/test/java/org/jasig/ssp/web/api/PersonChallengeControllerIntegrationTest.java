@@ -88,7 +88,7 @@ public class PersonChallengeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final PersonChallengeTO obj = controller.get(PERSON_ID,
+		final PersonChallengeTO obj = controller.byId(PERSON_ID,
 				UUID.randomUUID());
 
 		assertNull(
@@ -145,7 +145,7 @@ public class PersonChallengeControllerIntegrationTest {
 		assertTrue("Deletion response did not return success.",
 				response.isSuccess());
 
-		final PersonChallengeTO afterDeletion = controller.get(savedId,
+		final PersonChallengeTO afterDeletion = controller.byId(savedId,
 				PERSON_ID);
 		// ObjectNotFoundException expected at this point
 		assertNull(

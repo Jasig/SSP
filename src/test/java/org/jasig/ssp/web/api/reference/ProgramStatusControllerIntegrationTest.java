@@ -78,7 +78,7 @@ public class ProgramStatusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ProgramStatusTO obj = controller.get(PROGRAMSTATUS_ID);
+		final ProgramStatusTO obj = controller.byId(PROGRAMSTATUS_ID);
 
 		assertNotNull(
 				"Returned ProgramStatusTO from the controller should not have been null.",
@@ -104,7 +104,7 @@ public class ProgramStatusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ProgramStatusTO obj = controller.get(UUID.randomUUID());
+		final ProgramStatusTO obj = controller.byId(UUID.randomUUID());
 
 		assertNull(
 				"Returned ProgramStatusTO from the controller should have been null.",

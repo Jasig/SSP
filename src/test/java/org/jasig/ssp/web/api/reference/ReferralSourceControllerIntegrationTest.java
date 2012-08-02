@@ -70,7 +70,7 @@ public class ReferralSourceControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ReferralSourceTO obj = controller.get(REFERRAL_SOURCE_ID);
+		final ReferralSourceTO obj = controller.byId(REFERRAL_SOURCE_ID);
 
 		assertNotNull(
 				"Returned ReferralSourceTO from the controller should not have been null.",
@@ -94,7 +94,7 @@ public class ReferralSourceControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ReferralSourceTO obj = controller.get(UUID.randomUUID());
+		final ReferralSourceTO obj = controller.byId(UUID.randomUUID());
 
 		assertNull(
 				"Returned ReferralSourceTO from the controller should have been null.",

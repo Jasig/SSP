@@ -88,7 +88,8 @@ public class EarlyAlertReferralControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EarlyAlertReferralTO obj = controller.get(EARLYALERT_REFERRAL_ID);
+		final EarlyAlertReferralTO obj = controller
+				.byId(EARLYALERT_REFERRAL_ID);
 
 		assertNotNull(
 				"Returned EarlyAlertReferralTO from the controller should not have been null.",
@@ -114,7 +115,7 @@ public class EarlyAlertReferralControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EarlyAlertReferralTO obj = controller.get(UUID.randomUUID());
+		final EarlyAlertReferralTO obj = controller.byId(UUID.randomUUID());
 
 		assertNull(
 				"Returned EarlyAlertReferralTO from the controller should have been null.",

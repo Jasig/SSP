@@ -108,7 +108,7 @@ public class PersonEarlyAlertResponseController extends
 		// Run getAll for the specified person
 		final Person person = personService.get(personId);
 		final EarlyAlert earlyAlert = earlyAlertService.get(earlyAlertId);
-		if (earlyAlert == null || earlyAlert.getPerson() == null
+		if ((earlyAlert == null) || (earlyAlert.getPerson() == null)
 				|| !earlyAlert.getPerson().equals(person)) {
 			throw new ValidationException(
 					"Early Alert and Person ids do not match.");
@@ -124,7 +124,7 @@ public class PersonEarlyAlertResponseController extends
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	EarlyAlertResponseTO get(final @PathVariable UUID id,
+	EarlyAlertResponseTO byId(final @PathVariable UUID id,
 			@PathVariable final UUID personId) throws ObjectNotFoundException,
 			ValidationException {
 

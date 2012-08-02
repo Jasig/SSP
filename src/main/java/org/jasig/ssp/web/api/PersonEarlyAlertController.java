@@ -72,7 +72,7 @@ public class PersonEarlyAlertController extends
 	@Override
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	EarlyAlertTO get(final @PathVariable @NotNull UUID id,
+	EarlyAlertTO byId(final @PathVariable @NotNull UUID id,
 			@PathVariable @NotNull final UUID personId)
 			throws ObjectNotFoundException,
 			ValidationException {
@@ -80,7 +80,7 @@ public class PersonEarlyAlertController extends
 			throw new ValidationException("Missing person identifier in path.");
 		}
 
-		return super.get(id, personId);
+		return super.byId(id, personId);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class PersonEarlyAlertController extends
 					"Missing or invalid early alert data.");
 		}
 
-		if (obj.getPersonId() != null && !personId.equals(obj.getPersonId())) {
+		if ((obj.getPersonId() != null) && !personId.equals(obj.getPersonId())) {
 			throw new ValidationException(
 					"Person identifier in path, did not match the person"
 							+ " identifier in the early alert data. Those values must"
@@ -108,8 +108,8 @@ public class PersonEarlyAlertController extends
 		}
 
 		// TEMPORARY check until the issue in SSP-338 is fixed
-		if (obj.getEarlyAlertReasonIds() != null
-				&& obj.getEarlyAlertReasonIds().size() > 1) {
+		if ((obj.getEarlyAlertReasonIds() != null)
+				&& (obj.getEarlyAlertReasonIds().size() > 1)) {
 			throw new ValidationException(
 					"Early alerts may not have more than one reason.");
 		}
@@ -122,7 +122,7 @@ public class PersonEarlyAlertController extends
 		final EarlyAlertTO earlyAlertTO = super.create(personId, obj);
 
 		// send e-mail to student if requested
-		if (obj.getSendEmailToStudent() != null
+		if ((obj.getSendEmailToStudent() != null)
 				&& Boolean.TRUE.equals(obj.getSendEmailToStudent())) {
 			try {
 				service.sendMessageToStudent(factory.from(earlyAlertTO));

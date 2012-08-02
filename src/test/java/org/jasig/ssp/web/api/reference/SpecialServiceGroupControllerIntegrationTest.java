@@ -71,7 +71,7 @@ public class SpecialServiceGroupControllerIntegrationTest {
 				controller);
 
 		final SpecialServiceGroupTO obj = controller
-				.get(SPECIAL_SERVICE_GROUP_ID);
+				.byId(SPECIAL_SERVICE_GROUP_ID);
 
 		assertNotNull(
 				"Returned SpecialServiceGroupTO from the controller should not have been null.",
@@ -95,7 +95,7 @@ public class SpecialServiceGroupControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final SpecialServiceGroupTO obj = controller.get(UUID.randomUUID());
+		final SpecialServiceGroupTO obj = controller.byId(UUID.randomUUID());
 
 		assertNull(
 				"Returned SpecialServiceGroupTO from the controller should have been null.",

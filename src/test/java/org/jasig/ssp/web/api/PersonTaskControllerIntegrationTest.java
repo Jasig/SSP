@@ -221,7 +221,7 @@ public class PersonTaskControllerIntegrationTest {
 		assertTrue("Deletion response did not return success.",
 				response.isSuccess());
 
-		final TaskTO afterDeletion = controller.get(savedId, PERSON_ID);
+		final TaskTO afterDeletion = controller.byId(savedId, PERSON_ID);
 		// ObjectNotFoundException expected at this point
 		assertNull(
 				"Instance should not be able to get loaded after it has been deleted.",

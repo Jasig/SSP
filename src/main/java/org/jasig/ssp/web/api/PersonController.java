@@ -94,7 +94,7 @@ public class PersonController extends RestController<PersonTO, Person> {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
-	PersonTO get(final @PathVariable UUID id) throws ObjectNotFoundException {
+	PersonTO byId(final @PathVariable UUID id) throws ObjectNotFoundException {
 		final Person model = service.get(id);
 		if (model == null) {
 			return null;

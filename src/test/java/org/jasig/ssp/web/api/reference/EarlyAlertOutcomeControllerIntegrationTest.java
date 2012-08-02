@@ -85,7 +85,7 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EarlyAlertOutcomeTO obj = controller.get(EARLYALERT_OUTCOME_ID);
+		final EarlyAlertOutcomeTO obj = controller.byId(EARLYALERT_OUTCOME_ID);
 
 		assertNotNull(
 				"Returned EarlyAlertOutcomeTO from the controller should not have been null.",
@@ -108,7 +108,7 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 	public void testControllerGetDeleted() throws ObjectNotFoundException,
 			ValidationException {
 		final EarlyAlertOutcomeTO obj = controller
-				.get(EARLY_ALERT_OUTCOME_DELETED_ID);
+				.byId(EARLY_ALERT_OUTCOME_DELETED_ID);
 
 		assertNull(
 				"Controller should not have returned a deleted item.",
@@ -131,7 +131,7 @@ public class EarlyAlertOutcomeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EarlyAlertOutcomeTO obj = controller.get(UUID.randomUUID());
+		final EarlyAlertOutcomeTO obj = controller.byId(UUID.randomUUID());
 
 		assertNull(
 				"Returned EarlyAlertOutcomeTO from the controller should have been null.",

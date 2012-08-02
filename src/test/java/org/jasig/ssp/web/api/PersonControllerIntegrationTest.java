@@ -100,7 +100,7 @@ public class PersonControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final PersonTO obj = controller.get(PERSON_ID);
+		final PersonTO obj = controller.byId(PERSON_ID);
 
 		assertNotNull(
 				"Returned PersonTO from the controller should not have been null.",
@@ -125,7 +125,7 @@ public class PersonControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final PersonTO obj = controller.get(UUID.randomUUID());
+		final PersonTO obj = controller.byId(UUID.randomUUID());
 
 		assertNull(
 				"Returned PersonTO from the controller should have been null.",
@@ -260,7 +260,7 @@ public class PersonControllerIntegrationTest {
 		session.flush();
 		session.clear();
 
-		final PersonTO reloaded = controller.get(person.getId());
+		final PersonTO reloaded = controller.byId(person.getId());
 
 		// assert
 		assertEquals("Active program status name did not match.",

@@ -97,7 +97,7 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final PersonProgramStatusTO obj = controller.get(PERSON_ID,
+		final PersonProgramStatusTO obj = controller.byId(PERSON_ID,
 				UUID.randomUUID());
 
 		assertNull(
@@ -161,7 +161,7 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 		assertTrue("Deletion response did not return success.",
 				response.isSuccess());
 
-		final PersonProgramStatusTO afterDeletion = controller.get(savedId,
+		final PersonProgramStatusTO afterDeletion = controller.byId(savedId,
 				PERSON_ID);
 		// ObjectNotFoundException expected at this point
 		assertNull(
@@ -204,7 +204,7 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 				obj2);
 		assertNotNull("Saved instance should not have been null.", saved2);
 
-		final PersonProgramStatusTO autoExpired = controller.get(savedId,
+		final PersonProgramStatusTO autoExpired = controller.byId(savedId,
 				PERSON_ID);
 		assertNotNull(
 				"Saved instance identifier should not have been null.",
@@ -251,7 +251,7 @@ public class PersonProgramStatusControllerIntegrationTest { // NOPMD by jon
 				obj2);
 		assertNotNull("Saved instance should not have been null.", saved2);
 
-		final PersonProgramStatusTO autoExpired = controller.get(savedId,
+		final PersonProgramStatusTO autoExpired = controller.byId(savedId,
 				PERSON_ID);
 		assertNotNull(
 				"Saved instance identifier should not have been null.",

@@ -76,7 +76,7 @@ public class MessageTemplateControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final MessageTemplateTO obj = controller.get(MESSAGETEMPLATE_ID);
+		final MessageTemplateTO obj = controller.byId(MESSAGETEMPLATE_ID);
 
 		assertNotNull(
 				"Returned MessageTemplateTO from the controller should not have been null.",
@@ -102,7 +102,7 @@ public class MessageTemplateControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final MessageTemplateTO obj = controller.get(UUID.randomUUID());
+		final MessageTemplateTO obj = controller.byId(UUID.randomUUID());
 
 		assertNull(
 				"Returned MessageTemplateTO from the controller should have been null.",

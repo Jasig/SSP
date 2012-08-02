@@ -79,7 +79,7 @@ public class JournalTrackControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final JournalTrackTO obj = controller.get(JOURNALTRACK_ID);
+		final JournalTrackTO obj = controller.byId(JOURNALTRACK_ID);
 
 		assertNotNull(
 				"Returned JournalTrackTO from the controller should not have been null.",
@@ -106,7 +106,7 @@ public class JournalTrackControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final JournalTrackTO obj = controller.get(UUID.randomUUID());
+		final JournalTrackTO obj = controller.byId(UUID.randomUUID());
 
 		assertNull(
 				"Returned JournalTrackTO from the controller should have been null.",

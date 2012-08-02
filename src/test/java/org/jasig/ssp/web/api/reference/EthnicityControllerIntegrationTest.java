@@ -77,7 +77,7 @@ public class EthnicityControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EthnicityTO obj = controller.get(ETHNICITY_ID);
+		final EthnicityTO obj = controller.byId(ETHNICITY_ID);
 
 		assertNotNull(
 				"Returned EthnicityTO from the controller should not have been null.",
@@ -103,7 +103,7 @@ public class EthnicityControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EthnicityTO obj = controller.get(UUID.randomUUID());
+		final EthnicityTO obj = controller.byId(UUID.randomUUID());
 
 		assertNull(
 				"Returned EthnicityTO from the controller should have been null.",

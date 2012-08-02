@@ -63,7 +63,7 @@ public abstract class RestController<TO extends TransferObject<T>, T extends Aud
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
-	public abstract TO get(UUID id) throws ObjectNotFoundException,
+	public abstract TO byId(UUID id) throws ObjectNotFoundException,
 			ValidationException;
 
 	/**

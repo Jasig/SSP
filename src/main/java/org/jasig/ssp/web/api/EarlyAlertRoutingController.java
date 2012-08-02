@@ -128,7 +128,7 @@ public class EarlyAlertRoutingController
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	EarlyAlertRoutingTO get(
+	EarlyAlertRoutingTO byId(
 			final @PathVariable UUID campusId,
 			final @PathVariable UUID id)
 			throws ObjectNotFoundException {
