@@ -102,7 +102,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EarlyAlertResponseTO obj = controller.byId(UUID.randomUUID(),
+		final EarlyAlertResponseTO obj = controller.get(UUID.randomUUID(),
 				PERSON_ID);
 
 		assertNull(
@@ -232,7 +232,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 
 		try {
 			// ObjectNotFoundException expected at this point
-			final EarlyAlertResponseTO afterDeletion = controller.byId(savedId,
+			final EarlyAlertResponseTO afterDeletion = controller.get(savedId,
 					PERSON_ID);
 			assertNull(
 					"Instance should not be able to get loaded after it has been deleted.",
@@ -283,7 +283,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 				PERSON_ID, saved.getEarlyAlertId(), saved);
 		session.flush();
 		session.clear();
-		final EarlyAlertResponseTO reloaded = controller.byId(updated.getId(),
+		final EarlyAlertResponseTO reloaded = controller.get(updated.getId(),
 				PERSON_ID);
 
 		// assert
@@ -304,7 +304,7 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 	public void testControllerGet() throws ObjectNotFoundException,
 			ValidationException {
 		// arrange, act
-		final EarlyAlertResponseTO earlyAlert = controller.byId(
+		final EarlyAlertResponseTO earlyAlert = controller.get(
 				EARLY_ALERT_RESPONSE_ID, PERSON_ID);
 
 		// assert

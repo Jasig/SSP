@@ -64,8 +64,7 @@ public class TermController extends AbstractExternalController<TermTO, Term> {
 	@RequestMapping(value = "/{code}", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	TermTO byId(final @PathVariable String code)
-			throws ObjectNotFoundException,
+	TermTO get(final @PathVariable String code) throws ObjectNotFoundException,
 			ValidationException {
 		final Term model = getService().getByCode(code);
 		if (model == null) {

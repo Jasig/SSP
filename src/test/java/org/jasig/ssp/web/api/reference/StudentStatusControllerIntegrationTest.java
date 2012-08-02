@@ -69,7 +69,7 @@ public class StudentStatusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final StudentStatusTO obj = controller.byId(STUDENTSTATUS_ID);
+		final StudentStatusTO obj = controller.get(STUDENTSTATUS_ID);
 
 		assertNotNull(
 				"Returned StudentStatusTO from the controller should not have been null.",
@@ -92,7 +92,7 @@ public class StudentStatusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final StudentStatusTO obj = controller.byId(UUID.randomUUID());
+		final StudentStatusTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned StudentStatusTO from the controller should have been null.",

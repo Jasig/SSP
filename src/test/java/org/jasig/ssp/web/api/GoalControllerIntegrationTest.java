@@ -92,7 +92,7 @@ public class GoalControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final GoalTO obj = controller.byId(PERSON_ID,
+		final GoalTO obj = controller.get(PERSON_ID,
 				UUID.randomUUID());
 
 		assertNull(
@@ -156,7 +156,7 @@ public class GoalControllerIntegrationTest {
 
 		try {
 			// ObjectNotFoundException expected at this point
-			final GoalTO afterDeletion = controller.byId(savedId,
+			final GoalTO afterDeletion = controller.get(savedId,
 					PERSON_ID);
 			assertNull(
 					"Instance should not be able to get loaded after it has been deleted.",

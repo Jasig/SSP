@@ -109,7 +109,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	TO byId(final @PathVariable UUID id) throws ObjectNotFoundException,
+	TO get(final @PathVariable UUID id) throws ObjectNotFoundException,
 			ValidationException {
 		final T model = getService().get(id);
 		if (model == null) {

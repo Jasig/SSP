@@ -77,7 +77,7 @@ public class CitizenshipControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final CitizenshipTO obj = controller.byId(CITIZENSHIP_ID);
+		final CitizenshipTO obj = controller.get(CITIZENSHIP_ID);
 
 		assertNotNull(
 				"Returned CitizenshipTO from the controller should not have been null.",
@@ -104,7 +104,7 @@ public class CitizenshipControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final CitizenshipTO obj = controller.byId(UUID.randomUUID());
+		final CitizenshipTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned CitizenshipTO from the controller should have been null.",

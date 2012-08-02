@@ -78,7 +78,7 @@ public class StudentTypeControllerIntegrationTest {
 				controller);
 
 		final StudentTypeTO obj = controller
-				.byId(STUDENT_TYPE_ID);
+				.get(STUDENT_TYPE_ID);
 
 		assertNotNull(
 				"Returned StudentTypeTO from the controller should not have been null.",
@@ -105,7 +105,7 @@ public class StudentTypeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final StudentTypeTO obj = controller.byId(UUID
+		final StudentTypeTO obj = controller.get(UUID
 				.randomUUID());
 
 		assertNull(

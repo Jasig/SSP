@@ -94,7 +94,7 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 	@Test
 	public void testControllerGet() throws ObjectNotFoundException,
 			ValidationException {
-		final ChallengeTO obj = controller.byId(CHALLENGE_ID);
+		final ChallengeTO obj = controller.get(CHALLENGE_ID);
 
 		assertNotNull(
 				"Returned ChallengeTO from the controller should not have been null.",
@@ -120,7 +120,7 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ChallengeTO obj = controller.byId(UUID.randomUUID());
+		final ChallengeTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned ChallengeTO from the controller should have been null.",
@@ -299,7 +299,7 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 				controller.delete(CHALLENGE_DELETED_ID).isSuccess());
 
 		try {
-			controller.byId(CHALLENGE_DELETED_ID);
+			controller.get(CHALLENGE_DELETED_ID);
 			fail("Get should have thrown exception for a deleted item."); // NOPMD
 		} catch (final ObjectNotFoundException exc) { // NOPMD
 			/*
@@ -312,7 +312,7 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 	@Test(expected = ValidationException.class)
 	public void testContollerSaveWithoutId() throws ValidationException,
 			ObjectNotFoundException {
-		final ChallengeTO challenge = controller.byId(CHALLENGE_ID);
+		final ChallengeTO challenge = controller.get(CHALLENGE_ID);
 		challenge.setDescription("New description");
 		challenge.setId(null); // set invalid ID
 		controller.save(null, challenge);
@@ -322,7 +322,7 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 	@Test
 	public void testContollerSave() throws ValidationException,
 			ObjectNotFoundException {
-		final ChallengeTO challenge = controller.byId(CHALLENGE_ID);
+		final ChallengeTO challenge = controller.get(CHALLENGE_ID);
 		challenge.setDescription("New description");
 		challenge.setSelfHelpGuideQuestion(TEST_STRING1);
 		challenge.setDefaultConfidentialityLevelId(CONFIDENTIALITY_LEVEL_ID);
@@ -332,7 +332,7 @@ public class ChallengeControllerIntegrationTest { // NOPMD many methods allowed
 		session.flush();
 		session.clear();
 
-		final ChallengeTO reloaded = controller.byId(saved.getId());
+		final ChallengeTO reloaded = controller.get(saved.getId());
 		assertEquals("Description does not match.", "New description",
 				reloaded.getDescription());
 		assertEquals("Self-Help Guide Question does not match.", TEST_STRING1,

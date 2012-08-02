@@ -70,7 +70,7 @@ public class FundingSourceControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final FundingSourceTO obj = controller.byId(FUNDINGSOURCE_ID);
+		final FundingSourceTO obj = controller.get(FUNDINGSOURCE_ID);
 
 		assertNotNull(
 				"Returned FundingSourceTO from the controller should not have been null.",
@@ -93,7 +93,7 @@ public class FundingSourceControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final FundingSourceTO obj = controller.byId(UUID.randomUUID());
+		final FundingSourceTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned FundingSourceTO from the controller should have been null.",

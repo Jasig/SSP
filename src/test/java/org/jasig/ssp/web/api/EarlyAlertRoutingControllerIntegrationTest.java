@@ -85,7 +85,7 @@ public class EarlyAlertRoutingControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final EarlyAlertRoutingTO obj = controller.byId(CAMPUS_ID,
+		final EarlyAlertRoutingTO obj = controller.get(CAMPUS_ID,
 				UUID.randomUUID());
 
 		assertNull(
@@ -170,7 +170,7 @@ public class EarlyAlertRoutingControllerIntegrationTest {
 
 		try {
 			// ObjectNotFoundException expected at this point
-			final EarlyAlertRoutingTO afterDeletion = controller.byId(savedId,
+			final EarlyAlertRoutingTO afterDeletion = controller.get(savedId,
 					PERSON_ID);
 			assertNull(
 					"Instance should not be able to get loaded after it has been deleted.",
@@ -213,8 +213,7 @@ public class EarlyAlertRoutingControllerIntegrationTest {
 
 		session.clear();
 
-		final EarlyAlertRoutingTO reloaded = controller
-				.byId(CAMPUS_ID, savedId);
+		final EarlyAlertRoutingTO reloaded = controller.get(CAMPUS_ID, savedId);
 
 		assertEquals("Campus was not filled automatically.", CAMPUS_ID,
 				reloaded.getCampusId());

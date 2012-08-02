@@ -159,7 +159,7 @@ public class PersonControllerHttpIntegrationTest
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final PersonTO obj = controller.byId(PERSON_ID);
+		final PersonTO obj = controller.get(PERSON_ID);
 
 		assertNotNull(
 				"Returned PersonTO from the controller should not have been null.",
@@ -182,7 +182,7 @@ public class PersonControllerHttpIntegrationTest
 		// Lookup the expected handler that Spring should have pulled.
 		// HandlerMethod(controller, action (method) name, parameters)
 		final HandlerMethod expectedHandlerMethod = new HandlerMethod(
-				controller, "byId", UUID.class);
+				controller, "get", UUID.class);
 
 		// For the most part we will be expecting HandlerMethod objects to be
 		// returned for our controllers.

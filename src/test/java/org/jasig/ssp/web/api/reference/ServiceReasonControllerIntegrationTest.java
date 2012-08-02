@@ -70,7 +70,7 @@ public class ServiceReasonControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ServiceReasonTO obj = controller.byId(SERVICE_REASON_ID);
+		final ServiceReasonTO obj = controller.get(SERVICE_REASON_ID);
 
 		assertNotNull(
 				"Returned ServiceReasonTO from the controller should not have been null.",
@@ -94,7 +94,7 @@ public class ServiceReasonControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ServiceReasonTO obj = controller.byId(UUID.randomUUID());
+		final ServiceReasonTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned ServiceReasonTO from the controller should have been null.",

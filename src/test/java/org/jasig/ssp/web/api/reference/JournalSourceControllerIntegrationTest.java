@@ -70,7 +70,7 @@ public class JournalSourceControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final JournalSourceTO obj = controller.byId(JOURNALSOURCE_ID);
+		final JournalSourceTO obj = controller.get(JOURNALSOURCE_ID);
 
 		assertNotNull(
 				"Returned JournalSourceTO from the controller should not have been null.",
@@ -94,7 +94,7 @@ public class JournalSourceControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final JournalSourceTO obj = controller.byId(UUID.randomUUID());
+		final JournalSourceTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned JournalSourceTO from the controller should have been null.",

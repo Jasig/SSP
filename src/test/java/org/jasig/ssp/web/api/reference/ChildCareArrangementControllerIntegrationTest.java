@@ -78,7 +78,7 @@ public class ChildCareArrangementControllerIntegrationTest {
 				controller);
 
 		final ChildCareArrangementTO obj = controller
-				.byId(CHILDCAREARRANGEMENT_ID);
+				.get(CHILDCAREARRANGEMENT_ID);
 
 		assertNotNull(
 				"Returned ChildCareArrangementTO from the controller should not have been null.",
@@ -105,7 +105,7 @@ public class ChildCareArrangementControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ChildCareArrangementTO obj = controller.byId(UUID.randomUUID());
+		final ChildCareArrangementTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned ChildCareArrangementTO from the controller should have been null.",
