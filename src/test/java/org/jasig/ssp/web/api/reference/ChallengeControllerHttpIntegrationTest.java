@@ -161,7 +161,7 @@ public class ChallengeControllerHttpIntegrationTest
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final ChallengeTO obj = controller.byId(CHALLENGE_ID);
+		final ChallengeTO obj = controller.get(CHALLENGE_ID);
 
 		assertNotNull(
 				"Returned ChallengeTO from the controller should not have been null.",

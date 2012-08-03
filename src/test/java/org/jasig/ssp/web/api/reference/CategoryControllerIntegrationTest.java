@@ -84,7 +84,7 @@ public class CategoryControllerIntegrationTest {
 	@Test
 	public void testControllerGet() throws ObjectNotFoundException,
 			ValidationException {
-		final CategoryTO obj = controller.byId(CATEGORY_ID);
+		final CategoryTO obj = controller.get(CATEGORY_ID);
 
 		assertNotNull(
 				"Returned CategoryTO from the controller should not have been null.",
@@ -125,7 +125,7 @@ public class CategoryControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final CategoryTO obj = controller.byId(UUID.randomUUID());
+		final CategoryTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned CategoryTO from the controller should have been null.",

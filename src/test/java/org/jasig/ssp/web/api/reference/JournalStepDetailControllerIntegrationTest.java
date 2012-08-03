@@ -70,7 +70,7 @@ public class JournalStepDetailControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final JournalStepDetailTO obj = controller.byId(JOURNALSTEPDETAIL_ID);
+		final JournalStepDetailTO obj = controller.get(JOURNALSTEPDETAIL_ID);
 
 		assertNotNull(
 				"Returned JournalStepDetailTO from the controller should not have been null.",
@@ -94,7 +94,7 @@ public class JournalStepDetailControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final JournalStepDetailTO obj = controller.byId(UUID.randomUUID());
+		final JournalStepDetailTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned JournalStepDetailTO from the controller should have been null.",

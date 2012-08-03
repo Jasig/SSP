@@ -83,7 +83,7 @@ public class AppointmentControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final AppointmentTO obj = controller.byId(PERSON_ID,
+		final AppointmentTO obj = controller.get(PERSON_ID,
 				UUID.randomUUID());
 
 		assertNull(
@@ -155,7 +155,7 @@ public class AppointmentControllerIntegrationTest {
 
 		try {
 			// ObjectNotFoundException expected at this point
-			final AppointmentTO afterDeletion = controller.byId(savedId,
+			final AppointmentTO afterDeletion = controller.get(savedId,
 					PERSON_ID);
 			assertNull(
 					"Instance should not be able to get loaded after it has been deleted.",
@@ -202,7 +202,7 @@ public class AppointmentControllerIntegrationTest {
 
 		session.clear();
 
-		final AppointmentTO reloaded = controller.byId(savedId, PERSON_ID);
+		final AppointmentTO reloaded = controller.get(savedId, PERSON_ID);
 
 		assertEquals("Person ID was not filled automatically.", PERSON_ID,
 				reloaded.getPersonId());

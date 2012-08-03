@@ -64,7 +64,7 @@ public class CampusControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final CampusTO obj = controller.byId(UUID.randomUUID());
+		final CampusTO obj = controller.get(UUID.randomUUID());
 
 		assertNull(
 				"Returned CampusTO from the controller should have been null.",

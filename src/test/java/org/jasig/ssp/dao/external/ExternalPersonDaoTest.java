@@ -30,6 +30,7 @@ public class ExternalPersonDaoTest {
 	@Autowired
 	private transient ExternalPersonDao dao;
 
+	@SuppressWarnings("null")
 	@Test
 	public void getBySchoolId() {
 		ExternalPerson person = null;

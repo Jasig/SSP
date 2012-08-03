@@ -87,7 +87,7 @@ public abstract class AbstractRestrictedPersonAssocController<T extends Restrict
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	TO byId(final @PathVariable UUID id,
+	TO get(final @PathVariable UUID id,
 			@PathVariable final UUID personId) throws ObjectNotFoundException,
 			ValidationException {
 
