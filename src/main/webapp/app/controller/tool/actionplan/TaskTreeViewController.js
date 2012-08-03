@@ -157,6 +157,15 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 		    	}		
 			};
 	    	
+			
+			// TODO: This fix is a temp solution for the SSP-381
+			// but that returns a 405 method not allowed
+			// for get and put calls that require an id.
+			// This method call should be replaced with a
+			// get call after the 381 bug has been resolved.
+			// Note: the issue appears to work fine under
+			// most local environments and not under a number
+			// of server environments where SSP has been deployed.
 	    	me.apiProperties.makeRequest({
 				url: me.apiProperties.createUrl( me.challengeReferralUrl ), // +'/'+id
 				method: 'GET',
