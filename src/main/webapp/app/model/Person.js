@@ -120,6 +120,11 @@ Ext.define('Ssp.model.Person', {
     setPropsNullForSave: function( jsonData ){
 		delete jsonData.studentIntakeCompleteDate;
 		delete jsonData.currentProgramStatusName;
+
+		if ( jsonData.studentType == "")
+		{
+			jsonData.studentType = null;
+		}
 		
 		if ( jsonData.coach == "")
 		{
