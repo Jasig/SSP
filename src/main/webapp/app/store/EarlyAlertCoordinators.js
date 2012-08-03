@@ -8,7 +8,7 @@ Ext.define('Ssp.store.EarlyAlertCoordinators', {
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {
-						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('person')),
+						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')),
 						autoLoad: false
 					});
 		return me.callParent(arguments);
