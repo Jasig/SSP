@@ -41,11 +41,11 @@ public class JournalEntry
 	private ConfidentialityLevel confidentialityLevel;
 
 	@ManyToOne
-	@JoinColumn(name = "journal_source_id", updatable = false, nullable = false)
+	@JoinColumn(name = "journal_source_id", nullable = false)
 	private JournalSource journalSource;
 
 	@ManyToOne
-	@JoinColumn(name = "journal_track_id", updatable = false, nullable = true)
+	@JoinColumn(name = "journal_track_id", nullable = true)
 	private JournalTrack journalTrack;
 
 	/**
